@@ -243,6 +243,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     modalRef: BsModalRef;
     public selectedRangeLabel: any = "";
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /**True, if get accounts request in process */
+    public isGetAccountsInProcess: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -310,9 +312,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      */
     public openBulkPaymentModal(template: TemplateRef<any>, item?: any): void {
         this.isBulkPaymentShow = true;
-        if (item) {
-            this.selectedAccForPayment = null;
-            if (this.isBankAccountAddedAccount(item)) {
+        this.selectedAccForPayment = null;
+        if (item && this.selectedAccountsList.length < 2) {
+            if (item.bankPaymentDetails) {
                 this.selectedAccForPayment = item;
             }
         } else {
@@ -1100,6 +1102,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      */
     private getAccounts(fromDate: string, toDate: string, groupUniqueName: string, pageNumber?: number, refresh?: string, count: number = PAGINATION_LIMIT, query?: string,
         sortBy: string = '', order: string = 'asc'): void {
+        this.isGetAccountsInProcess = true;
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : 'false';
         fromDate = (fromDate) ? fromDate : '';
@@ -1136,8 +1139,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                     this.sundryCreditorsAccounts = _.cloneDeep(res.body.results);
 
                 }
+                this.selectedAccountsList = [];
+                this.selectedCheckedContacts = [];
                 this.detectChanges();
             }
+            this.isGetAccountsInProcess = false;
         });
     }
 
@@ -1228,6 +1234,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.isBulkPaymentShow = false;
         this.selectedAccForPayment = null;
         this.bulkPaymentModalRef.hide();
+        this.selectedAccountsList = [];
+        this.toggleAllSelection(false);
+        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr);
     }
 
     /**

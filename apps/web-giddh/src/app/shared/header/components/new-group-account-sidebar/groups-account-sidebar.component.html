@@ -23,7 +23,7 @@
                         <li *ngIf="item.isGroup" class="list-item sidebarTooltip">
                             <a href="javascript:void(0);" id="subGrp_{{item.name}}" nav-vr-item class="list-item"
                                 (click)="onGroupClick(item,i)" [ngClass]="{
-            'isActive': ((activeGroupUniqueName | async) === item?.uniqueName) && !(activeAccount | async),
+            'isActive': ((activeGroupUniqueName$ | async) === item?.uniqueName) && !(activeAccount | async),
             'isParent':item?.isOpen
           }" tooltip="{{item.synonyms}}" placement="bottom">
                                 {{ item.name }}

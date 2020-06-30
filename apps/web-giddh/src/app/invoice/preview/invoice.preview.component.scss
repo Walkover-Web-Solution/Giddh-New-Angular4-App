@@ -87,6 +87,7 @@
 
 .dropdown-menu {
     margin-top: 0;
+    min-width: 100%;
 }
 
 .input-h .td_in_searchBox .input-container input {
@@ -201,7 +202,7 @@ td.card-header.clearfix {
     padding-right: 20px;
 }
 
-.invoiceNameDownload {
+.invoice-name-download {
     position: relative;
     text-align: right;
 }
@@ -459,6 +460,14 @@ span.icon-export-icon {
 /* responsive */
 
 @media (max-width: 768px) {
+    .invoice-name-download {
+        a{
+            padding-right: 0 !important;
+        }
+        .icon-download{
+            display: none;
+        }
+    }
     .search-icon-block {
         display: flex;
     }

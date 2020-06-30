@@ -76,6 +76,7 @@ VERSION:  1
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
+@import "../../assets/css/color.scss";
 
 html,
 body {
@@ -3241,12 +3242,14 @@ ul.pills li {
 .h32 {
     height: 32px;
 }
-
 .compoundEntry td,
-.compoundEntry td input,
+.compoundEntry td input{
+    background-color: transparent !important;
+}
+
 .compoundEntry td:hover,
 .compoundEntry td input:hover {
-    background: rgba(254, 205, 81, 0.1) !important;
+    background: transparent !important;
 }
 
 .uncEntry td,
@@ -3270,7 +3273,7 @@ ul.pills li {
     border-radius: 2px;
     position: relative;
     padding: 6px;
-    z-index: 1;
+    z-index: 2;
     -webkit-box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
     -moz-box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
     box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);

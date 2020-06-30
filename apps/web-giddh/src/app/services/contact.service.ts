@@ -30,7 +30,7 @@ export class ContactService {
     }
 
     /**
-     *To ger contact details
+     *To get contact details
      *
      * @param {string} fromDate From date
      * @param {string} toDate To date

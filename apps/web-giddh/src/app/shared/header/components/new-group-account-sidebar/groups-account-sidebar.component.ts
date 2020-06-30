@@ -45,7 +45,8 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     public isUpdateAccountSuccess$: Observable<boolean>;
 
     public isDeleteGroupSuccess$: Observable<boolean>;
-    public activeGroupUniqueName: Observable<string>;
+    /** Active group unique name observable */
+    public activeGroupUniqueName$: Observable<string>;
     @Input() public padLeft: number = 30;
     @Input() public isSearchingGroups: boolean = false;
     public breadcrumbPath: string[] = [];
@@ -57,6 +58,8 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private navigateStack: any[] = [];
+    /** Active group observable */
+    private activeGroup$: Observable<any>;
     public currentGroup: any;
     public currentGroupIndex: number = 0;
 
@@ -65,7 +68,8 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
         private accountsAction: AccountsAction, private _generalServices: GeneralService, private _cdRef: ChangeDetectorRef) {
         this.mc = new GroupAccountSidebarVM(this._cdRef, this.store);
         this.activeGroup = this.store.select(state => state.groupwithaccounts.activeGroup).pipe(takeUntil(this.destroyed$));
-        this.activeGroupUniqueName = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
+        this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
+        this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).pipe(takeUntil(this.destroyed$));
         this.activeAccount = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
         this.isUpdateGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupSuccess).pipe(takeUntil(this.destroyed$));
         this.isUpdateAccountSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -76,8 +80,17 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     public ngOnChanges(changes: SimpleChanges) {
         if (changes['groups']) {
             this.resetData();
-
+            let activeGroup;
+            this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
             if (this.currentGroup !== undefined) {
+                if (activeGroup) {
+                    this.currentGroup.name = activeGroup.name;
+                    this.currentGroup.uniqueName = activeGroup.uniqueName;
+                    if (this.currentGroupIndex === 0) {
+                        const currentUpdatedGroup = this.groups.find(group => this.currentGroup.uniqueName === group.uniqueName);
+                        this.currentGroup.groups = currentUpdatedGroup.groups;
+                    }
+                }
                 this.onGroupClick(this.currentGroup, this.currentGroupIndex);
             }
         }

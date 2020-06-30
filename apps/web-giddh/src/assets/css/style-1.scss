@@ -3187,7 +3187,7 @@ ul.pills li {
 .compoundEntry td input,
 .compoundEntry td:hover,
 .compoundEntry td input:hover {
-    background: rgba(254, 205, 81, 0.1) !important;
+    background: transparent !important;
 }
 
 .uncEntry td,
@@ -3211,7 +3211,7 @@ ul.pills li {
     border-radius: 2px;
     position: relative;
     padding: 6px;
-    z-index: 1;
+    z-index: 2;
     -webkit-box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
     -moz-box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
     box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
@@ -5110,8 +5110,13 @@ perfect-scrollbar.ps-show-active
 }
 
 .customItem:hover {
-    background-color: #e3e4ed !important;
+    background-color: $lavender !important;
     color: #5b64c9 !important;
+    &:hover {
+        .pull-left.ellp {
+            color: $chetwode-blue !important;
+        }
+    }
 }
 
 .or-line::before {

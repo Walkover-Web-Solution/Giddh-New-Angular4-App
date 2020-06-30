@@ -53,11 +53,6 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
         stateDetailsRequest.lastState = 'pages/onboarding';
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
-        //
-        this.loadAPI = new Promise((resolve) => {
-            this.loadScript();
-            resolve(true);
-        });
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.companyCountry = res.country;
@@ -105,31 +100,6 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
 
     public openScheduleModal() {
         this._generalService.invokeEvent.next("openschedulemodal");
-    }
-    public loadScript() {
-        let isFound = false;
-        let scripts = document.getElementsByTagName('script');
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < scripts.length; ++i) {
-            if (scripts[i].getAttribute('src') != null && scripts[i].getAttribute('src').includes('loader')) {
-                isFound = true;
-            }
-        }
-
-        if (!isFound) {
-            let dynamicScripts = ['https://random-scripts.herokuapp.com/superform/superform.js'];
-
-            // tslint:disable-next-line:prefer-for-of
-            for (let i = 0; i < dynamicScripts.length; i++) {
-                let node = document.createElement('script');
-                node.src = dynamicScripts[i];
-                node.type = 'text/javascript';
-                node.async = false;
-                node.charset = 'utf-8';
-                document.getElementsByTagName('head')[0].appendChild(node);
-            }
-
-        }
     }
 
     public sidebarStatusChange(event) {

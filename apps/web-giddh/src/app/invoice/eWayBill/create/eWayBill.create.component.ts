@@ -144,6 +144,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this._invoiceService.IsUserLoginEwayBill().subscribe(res => {
             if (res.status === 'success') {
                 this.isUserlogedIn = true;
+                if (res.body && res.body.gstIn) {
+                    this.invoiceBillingGstinNo = this.generateEwayBillform.toGstIn = res.body.gstIn;
+                }
             } else {
                 this.isUserlogedIn = false;
             }

@@ -545,6 +545,43 @@ sh-select:focus {
 .input-wrapper.ipad-view-datepicker {
     display: none;
 }
+.transaction-mapped-table{
+    font-size: 14px;
+    .transaction-mapped{
+        padding: 0 !important;
+        position: static;
+        th{
+            border: none;
+            padding-top: 10px;
+            &:first-child{
+                padding-right: 12px;
+            }
+        }
+
+    }
+    .transaction-mapped-head{
+        th{
+            border-bottom: none !important;
+        }
+    }
+    .ledger-row{
+        td{
+            border-bottom: none !important;
+            &:last-child{
+                border-right: none !important;
+            }
+            .d-flex{
+                span{
+                    input[type="checkbox"]{
+                        margin-right: 5px;
+                        margin-left: 5px;
+                        height: 18px;
+                    }
+                }
+            }   
+        }
+    }
+}
 /*responsive*/
 .modal-ledger {
     width: 70%;

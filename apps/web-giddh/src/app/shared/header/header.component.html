@@ -180,7 +180,7 @@
                 <div class="giddh-logo" (click)="forceOpenNavigation = true;">
 
                     <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen"  [attachOutsideOnClick]="true" (clickOutside)="closeUserMenu(dropdown)"-->
-                    <li class="company-name pos-rel" [autoClose]="false" dropdown #dropdown="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false">
+                    <li class="company-name pos-rel" (click)="toggleBodyScroll()" [autoClose]="false" dropdown #dropdown="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false; toggleBodyScroll();">
                         <a id="cmpWrp" href="javascript:void(0)" class="clearfix z1 " dropdownToggle>
                             <ng-template #companyBranchNameAlias> {{ (selectedCompany | async)?.name }}<span *ngIf="(selectedCompany | async)?.nameAlias"> ( {{  (selectedCompany | async)?.nameAlias }}
                             )</span>
@@ -212,7 +212,7 @@
                         <li [hidden]="isTodaysDateSelected" class="border-none pl-0">
                             <button class="btn btn-link" (click)="dateSelectedCallback()">Today</button>
                         </li>
-                        <li class="not-today">
+                        <li class="not-today cursor-pointer">
                             <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
                             <!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
                             <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
@@ -487,7 +487,7 @@
                         <li [hidden]="isTodaysDateSelected" class="border-none pl-0">
                             <button class="btn btn-link">Today</button>
                         </li>
-                        <li class="daterang-picker not-today">
+                        <li class="daterang-picker not-today cursor-pointer">
                             <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
                             <!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
                             <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />

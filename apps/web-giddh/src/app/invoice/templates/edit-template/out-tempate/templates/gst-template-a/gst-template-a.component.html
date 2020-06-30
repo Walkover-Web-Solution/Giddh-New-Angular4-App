@@ -97,14 +97,27 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="docTitle" *ngIf="fieldsAndVisibility.header.formNameTaxInvoice?.display">
-                    <h2 [ngStyle]=" { 'color': inputTemplate.templateColor, 'font-size': inputTemplate.fontDefault + 'px' } " [title]="fieldsAndVisibility.header.formNameTaxInvoice?.label">
-                        <hr [ngStyle]="{ 'background-color': inputTemplate.templateColor} " />
-                    </h2>
-                </div>
-                <ng-container *ngIf="!fieldsAndVisibility.header.formNameTaxInvoice?.display ">
-                    <div class="green-row " [ngStyle]="{ 'border-color': inputTemplate.templateColor, 'font-size': inputTemplate.fontDefault + 'px' } ">
+                <ng-container *ngIf="(!fieldsAndVisibility.header.formNameInvoice?.label && fieldsAndVisibility.header.formNameTaxInvoice?.label) || (fieldsAndVisibility.header.formNameInvoice?.label && fieldsAndVisibility.header.formNameTaxInvoice?.label)">
+                    <div class="docTitle" *ngIf="fieldsAndVisibility.header.formNameTaxInvoice?.display">
+                        <h2 [ngStyle]=" { 'color': inputTemplate.templateColor, 'font-size': inputTemplate.fontDefault + 'px' } " [title]="fieldsAndVisibility.header.formNameTaxInvoice?.label">
+                            <hr [ngStyle]="{ 'background-color': inputTemplate.templateColor} " />
+                        </h2>
                     </div>
+                    <ng-container *ngIf="!fieldsAndVisibility.header.formNameTaxInvoice?.display ">
+                        <div class="green-row " [ngStyle]="{ 'border-color': inputTemplate.templateColor, 'font-size': inputTemplate.fontDefault + 'px' } ">
+                        </div>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="(fieldsAndVisibility.header.formNameInvoice?.label && !fieldsAndVisibility.header.formNameTaxInvoice?.label) || (!fieldsAndVisibility.header.formNameInvoice?.label && !fieldsAndVisibility.header.formNameTaxInvoice?.label) ">
+                    <div class="docTitle" *ngIf="fieldsAndVisibility.header.formNameInvoice?.display">
+                        <h2 [ngStyle]=" { 'color': inputTemplate.templateColor, 'font-size': inputTemplate.fontDefault + 'px' } " [title]="fieldsAndVisibility.header.formNameInvoice?.label">
+                            <hr [ngStyle]="{ 'background-color': inputTemplate.templateColor} " />
+                        </h2>
+                    </div>
+                    <ng-container *ngIf="!fieldsAndVisibility.header.formNameInvoice?.display ">
+                        <div class="green-row " [ngStyle]="{ 'border-color': inputTemplate.templateColor, 'font-size': inputTemplate.fontDefault + 'px' } ">
+                        </div>
+                    </ng-container>
                 </ng-container>
             </header>
             <table class="warehouse-table" cellspacing="0" cellpadding="0" *ngIf="fieldsAndVisibility?.header?.warehouseAddress?.display">

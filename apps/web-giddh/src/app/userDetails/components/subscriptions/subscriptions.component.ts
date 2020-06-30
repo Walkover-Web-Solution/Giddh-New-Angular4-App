@@ -13,7 +13,7 @@ import { CompanyResponse, SubscriptionRequest, CreateCompanyUsersPlan } from '..
 import { GeneralService } from '../../../services/general.service';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { CompanyActions } from '../../../actions/company.actions';
-import { GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { DEFAULT_SIGNUP_TRIAL_PLAN } from '../../../app.constant';
 
@@ -67,7 +67,6 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
     public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
 
     constructor(private store: Store<AppState>, private _subscriptionsActions: SubscriptionsActions, private modalService: BsModalService, private _route: Router, private activeRoute: ActivatedRoute, private subscriptionService: SubscriptionsService, private generalService: GeneralService, private settingsProfileActions: SettingsProfileActions, private companyActions: CompanyActions) {
-        this.store.dispatch(this._subscriptionsActions.SubscribedCompanies());
         this.subscriptions$ = this.store.pipe(select(s => s.subscriptions.subscriptions), takeUntil(this.destroyed$));
         this.companies$ = this.store.select(cmp => cmp.session.companies).pipe(takeUntil(this.destroyed$));
         this.activeCompanyUniqueName$ = this.store.pipe(select(cmp => cmp.session.companyUniqueName), takeUntil(this.destroyed$));
@@ -98,6 +97,8 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
             if (res && res.status === "success") {
                 if (!res.body || !res.body[0]) {
                     this.isPlanShow = true;
+                } else {
+                    this.store.dispatch(this._subscriptionsActions.SubscribedCompaniesResponse(res));
                 }
             } else {
                 this.isPlanShow = true;
@@ -105,8 +106,17 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         });
 
         this.subscriptions$.subscribe(userSubscriptions => {
-            this.subscriptions = userSubscriptions;
-            this.allSubscriptions = userSubscriptions;
+            this.isLoading = false;
+            if(userSubscriptions && userSubscriptions.length > 0) {
+                userSubscriptions.forEach(userSubscription => {
+                    if(userSubscription.createdAt) {
+                        userSubscription.createdAt = moment(userSubscription.createdAt, "DD-MM-YYYY HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                    }
+
+                    this.subscriptions.push(userSubscription);
+                    this.allSubscriptions.push(userSubscription);
+                });
+            }
             this.showCurrentCompanyPlan();
         });
 
