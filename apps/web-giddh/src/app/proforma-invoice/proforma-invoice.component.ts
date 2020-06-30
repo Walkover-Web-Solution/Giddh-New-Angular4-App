@@ -1443,7 +1443,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invoiceList = [];
             this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((res: any) => {
                 _.map(res.body, (invoice) => {
-                    this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice });
+                    let invoiceAlreadyInList = this.invoiceList.find(i => i.value === invoice.invoiceUniqueName);
+                    if (!invoiceAlreadyInList) {
+                        this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice });
+                    }
                 });
                 _.uniqBy(this.invoiceList, 'value');
             });

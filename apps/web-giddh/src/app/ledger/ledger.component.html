@@ -587,7 +587,7 @@
                                                         <!--<input type="checkbox"/>-->
                                                     </span>
                                                     <input type="text" name="ledgDate" [maxlength]="10" #bs="bsDatepicker" class="form-control dateStep focusUnset" style="padding-left: 7px !important;" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="lc.blankLedger.entryDate"
-                                                        [placeholder]="lc.formatPlaceholder" [outsideClick]="true" (click)="$event.stopPropagation()" autocomplete="off" />
+                                                        [placeholder]="lc.formatPlaceholder" [outsideClick]="true" (click)="$event.stopPropagation()" autocomplete="off" (ngModelChange)="getInvoiceListsForCreditNote(true)"/>
 
                                                 </div>
                                             </td>
