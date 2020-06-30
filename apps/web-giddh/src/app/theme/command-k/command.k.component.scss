@@ -126,10 +126,12 @@
                 height: 50px;
             }
             .item-icon {
-                // margin-right: 22px;
                 color: #979797;
                 width: 2.7rem;
                 font-size: 14px;
+                .icon-account {
+                    font-size: 20px;
+                }
                 .icon-group {
                     font-size: 16px;
                 }

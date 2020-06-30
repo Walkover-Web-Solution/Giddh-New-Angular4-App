@@ -5,8 +5,7 @@
             <p dropdownToggle (click)="openMobileSidebar()">{{companyInitials}}</p>
             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                 <li>
-                    <mobile-home-sidebar
-                        (closeMobileSidebar)="sideNavOpen ? (mobileSideNav.hide()) : ''; sideNavOpen ? closeMobileSidebar() : ''">
+                    <mobile-home-sidebar (closeMobileSidebar)="sideNavOpen ? (mobileSideNav.hide()) : ''; sideNavOpen ? closeMobileSidebar() : ''">
                     </mobile-home-sidebar>
                 </li>
             </ul>
@@ -55,7 +54,8 @@
                 [hidden]="item.type !== 'GROUP'">
                 <div class="single-search-group cursor-pointer" *ngIf="item.type === 'GROUP'" (click)="itemSelected(item)">
                     <div class="group-icon">
-                        <img src="{{imgPath}}mobile-home-icon/customer-group.svg">
+                        <span class="icon-group-folder"></span>
+                       
                     </div>
                     <div class="group-name">
                         <h4>{{item.name}}</h4>
@@ -77,7 +77,7 @@
                 [hidden]="item.type !== 'ACCOUNT'">
                 <div class="single-search-group cursor-pointer" *ngIf="item.type === 'ACCOUNT'" (click)="itemSelected(item)">
                     <div class="group-icon">
-                        A/C
+                        <span class="icon-account"></span>
                     </div>
                     <div class="group-name">
                         <h4>{{item.name}}</h4>

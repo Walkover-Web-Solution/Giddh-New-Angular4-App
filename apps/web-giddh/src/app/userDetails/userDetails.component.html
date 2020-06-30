@@ -153,7 +153,7 @@
                 <td class="ico-btn text-center">
                 </td>
             </tr> -->
-                                <tr *ngFor="let session of userSessionList">
+                                <tr *ngFor="let session of userSessionList; index as sessionIndex">
                                     <td>{{ session.ipAddress }}</td>
                                     <td>{{ moment(session.createdAt).format('DD/MM/YYYY') }}</td>
                                     <td>{{ moment(session.createdAt).format('LTS') }}</td>
@@ -161,7 +161,7 @@
                                     <td> {{ session.userAgent }}</td>
                                     <td class="ico-btn text-center">
                                         <span *ngIf="userSessionId === session.sessionId">Current</span>
-                                        <button type="button" class="btn btn-xs" (click)="deleteSession(session.sessionId)" *ngIf="userSessionId !== session.sessionId">
+                                        <button type="button" class="btn btn-xs" (click)="deleteSession(session.sessionId, sessionIndex)" *ngIf="userSessionId !== session.sessionId">
                                             <i class="icon-trash" aria-hidden="true" tooltip="Delete"></i>
 
                                         </button>
