@@ -26,10 +26,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-account:before {
+  content: "\e954";
+}
+.icon-group-folder:before {
+  content: "\e955";
+}
+.icon-menu:before {
+  content: "\e956";
+}
 .icon-back-arrow:before {
   content: "\e900";
 }
-
 .icon-log:before {
   content: "\e001";
 }
