@@ -53,7 +53,7 @@ export class AsideHelpSupportComponent implements OnInit {
         if (isElectron) {
             (window as any).require("electron").shell.openExternal('https://calendly.com/sales-accounting-software/talk-to-sale');
         } else if (isCordova) {
-            // todo: scheduleNow in cordova
+            //
         } else {
             this.openScheduleCalendlyModel();
         }
@@ -68,7 +68,6 @@ export class AsideHelpSupportComponent implements OnInit {
     public openScheduleCalendlyModel(): void {
         this.store.dispatch(this.generalActions.isOpenCalendlyModel(true));
     }
-
 
     /**
      * This will fetch the updated app version
