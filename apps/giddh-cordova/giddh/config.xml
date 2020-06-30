@@ -47,8 +47,6 @@
             <uses-permission android:name="android.permission.CAMERA" />
             <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
             <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-            <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
-            <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
         </config-file>
         <preference name="server-path" value="/app2/mobile" />
         <provider android:authorities="${applicationId}.opener.provider" android:exported="false" android:grantUriPermissions="true" android:name="io.github.pwlin.cordova.plugins.fileopener2.FileProvider">
@@ -133,7 +131,6 @@
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.4.1" />
     <plugin name="cordova-plugin-inappbrowser-popup-bridge" spec="^1.0.22" />
-    <plugin name="cordova-plugin-inappbrowser" spec="~4.0.0" />
     <plugin name="cordova-plugin-statusbar" spec="2.4.3" />
     <plugin name="cordova-plugin-wkwebview-engine" spec="git+https://github.com/apache/cordova-plugin-wkwebview-engine.git" />
     <plugin name="cordova-plugin-useragent" spec="^1.0.6" />
