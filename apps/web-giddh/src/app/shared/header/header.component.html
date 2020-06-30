@@ -504,7 +504,7 @@
                         <span [ngClass]="{'notification': isMobileSite}">
                             <img src="{{imgPath}}notification.svg" class="mr-15">
                         </span>
-                        <button id="add-manage" type="button" class="btn btn-gray btn-sm d-inline-flex mr-15 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
+                        <button id="add-manage" *ngIf="!isMobileSite" type="button" class="btn btn-gray btn-sm d-inline-flex mr-15 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
                             <i class="icon-plus"></i>
                         </button>
                         <div class="btn-group cp d-inline-flex help-setting-icons" dropdown>
@@ -674,8 +674,8 @@
         </div>
     </div>
 </ng-template>
-<div class="overlay-cal" *ngIf="isCalendlyModelActivate">
-    <div id="scheduleCall" class="tab-pane active vertical-center modal-body">
+<div class="overlay-cal">
+    <div id="scheduleCall" class="tab-pane active vertical-center modal-body"  *ngIf="isCalendlyModelActivate">
         <div class="calendly-box" #reder>
             <div class="calendly-inline-widget">
                 <button id="close" class="close-2" (click)="hideScheduleCalendlyModel()"><i class="icon-cross" ></i></button>
@@ -858,3 +858,12 @@
         </div>
     </div>
 </ng-template>
+
+<div class="filings-empty-state" *ngIf="isCalendlyModelActivate">
+    <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+    <div class="spinner2">
+        <div class="cube1"></div>
+        <div class="cube2"></div>
+    </div>
+    <div class="empty-msg"><span> Loading Data. </span></div>
+</div>

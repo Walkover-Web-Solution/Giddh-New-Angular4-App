@@ -12,7 +12,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
-
+import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({
     selector: 'export-ledger',
     templateUrl: './exportLedger.component.html',
@@ -35,15 +35,19 @@ export class ExportLedgerComponent implements OnInit {
     public emailData: string = '';
     public withInvoiceNumber: boolean = false;
     public universalDate$: Observable<any>;
+    public isMobileScreen: boolean = true;
     /** Columnar report in balance type for Credit/Debit as +/- sign */
     public balanceTypeAsSign: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _ledgerService: LedgerService, private _toaster: ToasterService, private _permissionDataService: PermissionDataService, private store: Store<AppState>) {
+    constructor(private breakPointObservar: BreakpointObserver,private _ledgerService: LedgerService, private _toaster: ToasterService, private _permissionDataService: PermissionDataService, private store: Store<AppState>) {
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ])
         this._permissionDataService.getData.forEach(f => {
             if (f.name === 'LEDGER') {
                 let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');

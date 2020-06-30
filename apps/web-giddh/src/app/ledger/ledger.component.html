@@ -407,7 +407,7 @@
                                 <td class="transction-date pl-15 pr-15 pt-05" colspan="2">{{transactionDate}}</td>
                             </tr>
                             <tr class="second-row" *ngFor="let transactions of allTransactionsList[transactionDate];">
-                                <td class="pl-15 pr-15 relative" (dblclick)="showUpdateLedgerModal(transactions)" (keydown.enter)="showUpdateLedgerModal(transactions)" [ngClass]="{compoundEntry: transactions.entryUniqueName === lc.selectedTxnUniqueName || transactions.isChecked}" tooltip="{{transactions.description}}"
+                                <td class="pl-15 pr-15 relative" [ngClass]="{compoundEntry: transactions.entryUniqueName === lc.selectedTxnUniqueName || transactions.isChecked}" tooltip="{{transactions.description}}"
                                     (mouseover)="entryHovered(transactions.entryUniqueName)" (mouseout)="selectedTrxWhileHovering = ''">
                                     <span class="pull-left account-holder-checkbox">
                                         <input type="checkbox" [ngClass]="{'d-none': (selectedTrxWhileHovering !== transactions.entryUniqueName && !(transactions.isChecked) && checkedTrxWhileHovering.length === 0)}" class="d-none" [(ngModel)]="transactions.isChecked" (click)="entrySelected($event, transactions.entryUniqueName)">
