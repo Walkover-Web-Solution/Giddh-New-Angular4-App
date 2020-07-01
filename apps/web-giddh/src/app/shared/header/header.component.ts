@@ -852,11 +852,38 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.asideSettingMenuState = (show && this.asideSettingMenuState === 'out') ? 'in' : 'out';
         this.toggleBodyClass();
 
+<<<<<<< HEAD
         if (this.asideSettingMenuState === "in") {
             document.querySelector('body').classList.add('mobile-setting-sidebar');
         } else {
             document.querySelector('body').classList.remove('mobile-setting-sidebar');
         }
+=======
+    /**
+     * This will close the settings popup if click outside of popup
+     *
+     * @memberof HeaderComponent
+     */
+    public closeSettingPaneOnOutsideClick():void {
+        setTimeout(() => {
+            if (this.asideSettingMenuState === "in") {
+                this.asideSettingMenuState = 'out';
+            }
+        }, 50);
+    }
+
+    /**
+     * This will close the help popup if click outside of popup
+     *
+     * @memberof HeaderComponent
+     */
+    public closeHelpPaneOnOutsideClick():void {
+        setTimeout(() => {
+            if (this.asideHelpSupportMenuState === "in") {
+                this.asideHelpSupportMenuState = 'out';
+            }
+        }, 50);
+>>>>>>> 60975f455... resolve PR issue
     }
 
     /**
