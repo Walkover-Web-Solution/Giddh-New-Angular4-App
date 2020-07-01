@@ -56,9 +56,9 @@ export default class AppUpdaterV1 {
             );
 
         });
-        autoUpdater.on('error', (error) => {
-            dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString())
-        })
+        // autoUpdater.on('error', (error) => {
+        //     dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString())
+        // })
         autoUpdater.checkForUpdatesAndNotify();
 
     }
