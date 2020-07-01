@@ -494,7 +494,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         if (this.isSubscribedPlanHaveAdditionalCharges) {
-            if(!isCordova) {
+            if(!this.isMobileSite) {
                 this.openCrossedTxLimitModel(this.crossedTxLimitModel);
             }
         }
@@ -735,7 +735,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
 
         if (this.selectedPlanStatus === 'expired') {// active expired
-            if(!isCordova) {
+            if(!this.isMobileSite) {
                 this.openExpiredPlanModel(this.expiredPlanModel);
             }
         }
