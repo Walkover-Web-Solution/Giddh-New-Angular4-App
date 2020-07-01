@@ -869,7 +869,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      *
      * @memberof HeaderComponent
      */
-    public closeSettingPanOnOutsideClick() {
+    public closeSettingPaneOnOutsideClick():void {
         setTimeout(() => {
             if (this.asideSettingMenuState === "in") {
                 this.asideSettingMenuState = 'out';
@@ -882,7 +882,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      *
      * @memberof HeaderComponent
      */
-    public closeHelpPanOnOutsideClick() {
+    public closeHelpPaneOnOutsideClick():void {
         setTimeout(() => {
             if (this.asideHelpSupportMenuState === "in") {
                 this.asideHelpSupportMenuState = 'out';
