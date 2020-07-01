@@ -96,7 +96,7 @@ tfoot {
     margin-top: 0;
 }
 
-.pending-tabel .nested_table>tbody tr td {
+.pending-table .nested_table>tbody tr td {
     border: 0 !important;
     padding: 0px !important;
 }
@@ -262,7 +262,7 @@ span.close-modal.cp.pull-right {
         background: transparent;
         border: none;
     }
-    .pending-tabel{
+    .pending-table{
         margin-top: 5px !important;
     }
     .justify-content-sm {
@@ -276,10 +276,10 @@ span.close-modal.cp.pull-right {
         width: 100% !important;
         float: left;
     }
-    .pending-tabel .nested_table>tbody tr td {
+    .pending-table .nested_table>tbody tr td {
         padding: 0 !important;
     }
-    .pending-tabel tr td {
+    .pending-table tr td {
         padding: 5px 10px 5px 50% !important;
     }
     .onMobileView tbody .nested_table td {
