@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { fromEvent as observableFromEvent, Observable, ReplaySubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 
@@ -39,7 +39,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
 		private inventoryService: InventoryService,
 		private invViewService: InvViewService,
 		private _toasty: ToasterService) {
-		this.store.select(s => s.inventory.groupsWithStocks).pipe(takeUntil(this.destroyed$)).subscribe((data: any) => {
+		this.store.pipe(select(inventoryStore => inventoryStore.inventory.groupsWithStocks),takeUntil(this.destroyed$)).subscribe((data: any) => {
 			this.stockGroupData = data;
 		});
 		this.sidebarRect = window.screen.height;
