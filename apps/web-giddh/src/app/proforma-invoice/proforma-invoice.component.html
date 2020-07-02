@@ -364,17 +364,17 @@
                             <!-- region invoice no, invoice date, Expiry date -->
                             <div class="row mTB1">
                                 <div class="col-sm-2">
-                                    <label> {{ invoiceNoLabel }}</label>
+                                    <label> {{ invoiceNoLabel }} </label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
                                         <!-- Enabled for CR/DR update flow -->
-                                        <input *ngIf="selectedVoucherType !== 'credit note'" type="text" name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo" [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="(isUpdateMode && !(isCreditNote || isDebitNote || isPurchaseInvoice)) ? 'disabled' : null" [(ngModel)]="invFormData.voucherDetails.voucherNumber"
+                                        <input *ngIf="(selectedVoucherType !== 'credit note' && !(isUpdateMode && isCreditNote))" type="text" name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo" [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="(isUpdateMode && !(isDebitNote || isPurchaseInvoice)) ? 'disabled' : null" [(ngModel)]="invFormData.voucherDetails.voucherNumber"
                                         />
 
-                                        <ng-container *ngIf="selectedVoucherType === 'credit note'">
+                                        <ng-container *ngIf="(selectedVoucherType === 'credit note') || (isUpdateMode && isCreditNote)">
                                             <sh-select [options]="invoiceList" placeholder="Select Accounts"
-                                                [notFoundLink]="false" (selected)="creditNoteInvoiceSelected($event)"
+                                                [notFoundLink]="false" [(ngModel)]="selectedInvoice" [ngModelOptions]="{standalone: true}" (selected)="creditNoteInvoiceSelected($event)"
                                                 [multiple]="false" [ItemHeight]="67" [showClear]="false"
                                                 [useInBuiltFilterForFlattenAc]="true">
                                                 <ng-template #optionTemplate let-option="option">
