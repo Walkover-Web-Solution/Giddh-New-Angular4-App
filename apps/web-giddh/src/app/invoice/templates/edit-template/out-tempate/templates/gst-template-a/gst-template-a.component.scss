@@ -513,3 +513,9 @@
     height: 60px;
     min-width: 40px;
   }
+  .header-table {
+    vertical-align: bottom;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
