@@ -1432,7 +1432,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     /**
      * Get Invoice list for credit note
-     * 
+     *
      * @memberof ProformaComponent
      */
     public getInvoiceListsForCreditNote(): void {
@@ -1455,16 +1455,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice });
                     }
                 });
-                _.uniqBy(this.invoiceList, 'value');
                 console.log(this.invFormData);
-                // let selectedInvoice = this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0];
-                // let invoiceSelected = {
-                //     label: selectedInvoice.invoiceNumber,
-                //     value: selectedInvoice.invoiceUniqueName,
-                //     invoice: selectedInvoice
-                // };
-                // this.selectedInvoice = invoiceSelected.value;
-                // this.invoiceList.push(invoiceSelected);
+                let selectedInvoice = this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0];
+                let invoiceSelected = {
+                    label: selectedInvoice.invoiceNumber,
+                    value: selectedInvoice.invoiceUniqueName,
+                    invoice: selectedInvoice
+                };
+                this.invoiceList.push(invoiceSelected);
+                _.uniqBy(this.invoiceList, 'value');
+                this.selectedInvoice = invoiceSelected.value;
             });
         }
     }
@@ -4043,6 +4043,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         //code for voucher details
         voucherDetails.voucherDate = result.date ? result.date : '';
+        voucherDetails.invoiceLinkingRequest = result.invoiceLinkingRequest;
         if (this.isPendingVoucherType) {
             result.balanceTotal = result.grandTotal;
         } else {

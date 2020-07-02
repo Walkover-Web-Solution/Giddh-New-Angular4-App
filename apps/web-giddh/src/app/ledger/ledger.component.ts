@@ -888,7 +888,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     /**
      * Get Invoice list for credit note
-     * 
+     *
      * @param {any} event Selected invoice for credit note
      * @memberof LedgerComponent
      */

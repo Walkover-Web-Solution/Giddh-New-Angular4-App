@@ -913,20 +913,21 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @param {any} event Selected invoice for credit note
      * @memberof NewLedgerEntryPanelComponent
      */
-    public creditNoteInvoiceSelected(ev): void {
-        this.blankLedger.invoiceLinkingRequest = {
-            linkedInvoices: [
-                {
-                    invoiceUniqueName: ev.value
-                }
-            ]
+    public creditNoteInvoiceSelected(event: any): void {
+        if (event && event.value && event.invoice) {
+            this.blankLedger.invoiceLinkingRequest = {
+                linkedInvoices: [
+                    {
+                        invoiceUniqueName: event.value
+                    }
+                ]
+            }
+            this.selectedInvoiceAmount = event.invoice.balanceDue.amountForAccount;
         }
-        this.selectedInvoiceAmount = ev.invoice.balanceDue.amountForAccount;
-        console.log(this.selectedInvoiceForCreditNote);
     }
 
-    public removeSelectedInvoice(invoice: ShSelectComponent){
-        invoice.forceClearReactive.status = true;
+    public removeSelectedInvoice() {
+        this.forceClear$ = observableOf({ status: true });
         this.selectedInvoiceForCreditNote = null;
     }
 

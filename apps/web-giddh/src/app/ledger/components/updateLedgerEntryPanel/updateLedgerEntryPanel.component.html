@@ -919,7 +919,7 @@
                                         <sh-select [options]="invoiceList" placeholder="Select Accounts"
                                             [(ngModel)]="selectedInvoice" [notFoundLink]="false"
                                             (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"
-                                            [ItemHeight]="67" [showClear]="false" [useInBuiltFilterForFlattenAc]="true">
+                                            [ItemHeight]="67" [showClear]="false">
                                             <ng-template #optionTemplate let-option="option">
                                                 <a href="javascript:void(0)" class="list-item sh-template">
                                                     <div class="item">{{ option.label }}
