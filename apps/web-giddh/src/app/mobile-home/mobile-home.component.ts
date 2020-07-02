@@ -143,7 +143,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     @HostListener('window:scroll', ['$event'])
-    public onWindowScroll(e): void {
+    public onWindowScroll(event: any): void {
         if (window.pageYOffset > 100) {
             let element = document.getElementById('navbar');
             element.classList.add('sticky');

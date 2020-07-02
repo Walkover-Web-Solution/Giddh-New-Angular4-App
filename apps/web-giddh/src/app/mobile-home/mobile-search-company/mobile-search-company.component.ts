@@ -30,6 +30,11 @@ export class MobileSearchCompanyComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof MobileSearchCompanyComponent
+     */
     public ngOnInit(): void {
         document.querySelector('body').classList.add('remove-header-lower-layer');
 
@@ -83,7 +88,7 @@ export class MobileSearchCompanyComponent implements OnInit, OnDestroy {
      * @param {KeyboardEvent} [e]
      * @memberof MobileSearchCompanyComponent
      */
-    public focusInSearchBox(e?: KeyboardEvent): void {
+    public focusInSearchBox(event?: KeyboardEvent): void {
         if (this.searchElement) {
             this.searchElement.nativeElement.focus();
         }
