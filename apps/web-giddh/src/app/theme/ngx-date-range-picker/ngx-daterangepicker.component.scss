@@ -715,12 +715,13 @@ $input-height: 3rem !default;
         margin: 0;
         padding-right: 15px;
         position: absolute;
-        bottom: 15px;
+        bottom: 0;
         background-color: $white;
         padding-top: 9px;
         z-index: 999 !important;
         right: 0;
         width: calc(100% - 218px);
+        padding-bottom: 10px;
     }
     button {
         &:focus {

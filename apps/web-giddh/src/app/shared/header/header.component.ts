@@ -851,14 +851,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.asideHelpSupportMenuState = 'out';
         this.asideSettingMenuState = (show && this.asideSettingMenuState === 'out') ? 'in' : 'out';
         this.toggleBodyClass();
-
-<<<<<<< HEAD
-        if (this.asideSettingMenuState === "in") {
-            document.querySelector('body').classList.add('mobile-setting-sidebar');
-        } else {
-            document.querySelector('body').classList.remove('mobile-setting-sidebar');
-        }
-=======
+    }
     /**
      * This will close the settings popup if click outside of popup
      *
@@ -883,7 +876,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.asideHelpSupportMenuState = 'out';
             }
         }, 50);
->>>>>>> 60975f455... resolve PR issue
     }
 
     /**

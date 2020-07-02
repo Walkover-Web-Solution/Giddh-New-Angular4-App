@@ -9309,6 +9309,11 @@ span#HW_badge_cont:nth-child(3){
     top: 0;
     z-index: 9;
 }
+.digit-blue {
+    .tooltip-inner{
+        margin-left: 10px !important;
+    }
+}
 /* responsive */
 
 @media (max-width: 1440px) {
