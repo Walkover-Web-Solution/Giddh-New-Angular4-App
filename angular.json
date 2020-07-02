@@ -251,7 +251,7 @@
           "builder": "ngx-build-plus:dev-server",
           "options": {
             "host": "localhost",
-            "baseHref": "https://dev.giddh.com",
+            "baseHref": "http://localhost:3000",
             "port": 3000,
             "baseUrl": "localhost:3000",
             "browserTarget": "web-giddh:build",

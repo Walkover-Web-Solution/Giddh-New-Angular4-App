@@ -100,7 +100,7 @@
                                                         (!dbtSelect.isOpen && txn.particular.uniqueName) ||
                                                         (dbtSelect.isOpen && dbtSelect.filter))">To</span>
                                                 <sh-select id="dbtID" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" (keydown)="keydownPressed($event)" [options]="vm.flatternAccountList4Select | async" #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)" (selected)="selectAccount($event,txn, dbtSelect)"
-                                                    [showClear]="false" [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" (onShow)="dbs.hide()" [useInBuiltFilterForFlattenAc]="true" [defaultValue]="txn.particular.name" [placeholder]="'To Select Accounts'">
+                                                    [showClear]="false" [fixedValue]="txn.particular.name" [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" (onShow)="dbs.hide()" [useInBuiltFilterForFlattenAc]="true" [defaultValue]="txn.particular.name" [placeholder]="'To Select Accounts'">
 
                                                     <ng-template #optionTemplate let-option="option">
 
@@ -251,7 +251,7 @@
                                                         (!crdSelect.isOpen && txn.particular.uniqueName) ||
                                                         (crdSelect.isOpen && crdSelect.filter))">By</span>
                                                 <sh-select id="crdID" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" (keydown)="keydownPressed($event)" [options]="vm.flatternAccountList4Select | async" #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)" (selected)="selectAccount($event,txn, crdSelect)"
-                                                    (onShow)="cbs.hide()" [showClear]="false" [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true" [defaultValue]="txn.particular.name" [placeholder]="'By Select Accounts'">
+                                                    (onShow)="cbs.hide()" [showClear]="false" [fixedValue]="txn.particular.name" [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67" [useInBuiltFilterForFlattenAc]="true" [defaultValue]="txn.particular.name" [placeholder]="'By Select Accounts'">
 
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
