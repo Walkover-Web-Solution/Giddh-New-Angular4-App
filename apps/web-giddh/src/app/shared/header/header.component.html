@@ -437,14 +437,16 @@
     <header class="clearfix header-container mobileHeader">
         <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
             <div class="container-fluid  mrB1 ">
-                <div class="upperLayerHeader">
+                <div class="upper-layer-header">
                     <ul class="nav navbar-nav">
                         <!-- (isOpenChange)="sideBarStateChange($event)" -->
                         <li class="hamburger_menu cp pull-left">
                             <button class="btn mrR0" placement="right" (click)="redirectToMobileHome()">
                                 <i class="icon-home-icon"></i>
+                                
                             </button>
                             <span class="setting-menu-icon" (click)="toggleSidebarPane(true, true)"> <i class="icon-bar"></i> </span>
+                            <span class="mobile-back-btn" (click)="redirectToMobileHome()"><i class="icon-back-arrow"></i></span>
                         </li>
                         <li class="hamburger_menu cp pull-left" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
                             <h4 class="inline text-capitalize" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
@@ -502,7 +504,7 @@
                         <span [ngClass]="{'notification': isMobileSite}">
                             <img src="{{imgPath}}notification.svg" class="mr-15">
                         </span>
-                        <button id="add-manage" type="button" class="btn btn-gray btn-sm d-inline-flex mr-15 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
+                        <button id="add-manage" *ngIf="!isMobileSite" type="button" class="btn btn-gray btn-sm d-inline-flex mr-15 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
                             <i class="icon-plus"></i>
                         </button>
                         <div class="btn-group cp d-inline-flex help-setting-icons" dropdown>
@@ -838,11 +840,11 @@
 </ng-template>
 
 <!--help & support sidebar  -->
-<div class="help-support-aside" *ngIf="asideHelpSupportMenuState === 'in'">
+<div class="help-support-aside" *ngIf="asideHelpSupportMenuState === 'in'" (clickOutside)="closeHelpPaneOnOutsideClick()">
     <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
 </div>
 <!-- setting aside pane -->
-<div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'">
+<div class="help-support-aside" *ngIf="asideSettingMenuState === 'in'" (clickOutside)="closeSettingPaneOnOutsideClick()">
     <perfect-scrollbar [scrollIndicators]="true">
         <aside-setting [ngClass]="{'setting-sidebar': isMobileSidebar}" (closeAsideEvent)="toggleSidebarPane(false, false)"></aside-setting>
     </perfect-scrollbar>
@@ -856,3 +858,12 @@
         </div>
     </div>
 </ng-template>
+
+<div class="filings-empty-state" *ngIf="isCalendlyModelActivate">
+    <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+    <div class="spinner2">
+        <div class="cube1"></div>
+        <div class="cube2"></div>
+    </div>
+    <div class="empty-msg"><span> Loading Data. </span></div>
+</div>

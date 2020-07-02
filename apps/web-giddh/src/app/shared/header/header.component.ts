@@ -291,10 +291,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         /* This will get the date range picker configurations */
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
             if (config) {
-                // removed today and yesterday option from universal datepicker
-                // if (config && config.ranges && config.ranges.length && config.ranges[0] && config.ranges[0].name && config.ranges[0].name === 'Today') {
-                //         delete config.ranges[0];
-                // }
                 let configDatePicker = cloneDeep(config);
                 if (configDatePicker && configDatePicker.ranges) {
                     let modifiedRanges = [];
@@ -498,7 +494,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         if (this.isSubscribedPlanHaveAdditionalCharges) {
-            this.openCrossedTxLimitModel(this.crossedTxLimitModel);
+            if(!this.isMobileSite) {
+                this.openCrossedTxLimitModel(this.crossedTxLimitModel);
+            }
         }
         this.manageGroupsAccountsModal.onHidden.subscribe(e => {
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
@@ -737,8 +735,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
 
         if (this.selectedPlanStatus === 'expired') {// active expired
-            this.openExpiredPlanModel(this.expiredPlanModel);
+            if(!this.isMobileSite) {
+                this.openExpiredPlanModel(this.expiredPlanModel);
+            }
         }
+
         this.session$.subscribe((s) => {
             if (s === userLoginStateEnum.notLoggedIn) {
                 this.router.navigate(['/login']);
@@ -834,10 +835,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleHelpSupportPane(show: boolean): void {
-        this.asideSettingMenuState = 'out';
-        document.querySelector('body').classList.remove('mobile-setting-sidebar');
-        this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
-        this.toggleBodyClass();
+        setTimeout(() => {
+            this.asideSettingMenuState = 'out';
+            document.querySelector('body').classList.remove('mobile-setting-sidebar');
+            this.asideHelpSupportMenuState = (show && this.asideHelpSupportMenuState === 'out') ? 'in' : 'out';
+            this.toggleBodyClass();
+        }, (this.asideHelpSupportMenuState === 'out') ? 100 : 0);
     }
     /**
      * This will toggle the settings popup
@@ -847,16 +850,44 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
-        this.isMobileSidebar = isMobileSidebar;
-        this.asideHelpSupportMenuState = 'out';
-        this.asideSettingMenuState = (show && this.asideSettingMenuState === 'out') ? 'in' : 'out';
-        this.toggleBodyClass();
+        setTimeout(() => {
+            this.isMobileSidebar = isMobileSidebar;
+            this.asideHelpSupportMenuState = 'out';
+            this.asideSettingMenuState = (show && this.asideSettingMenuState === 'out') ? 'in' : 'out';
+            this.toggleBodyClass();
 
-        if (this.asideSettingMenuState === "in") {
-            document.querySelector('body').classList.add('mobile-setting-sidebar');
-        } else {
-            document.querySelector('body').classList.remove('mobile-setting-sidebar');
-        }
+            if (this.asideSettingMenuState === "in") {
+                document.querySelector('body').classList.add('mobile-setting-sidebar');
+            } else {
+                document.querySelector('body').classList.remove('mobile-setting-sidebar');
+            }
+        }, (this.asideSettingMenuState === 'out') ? 100 : 0);
+    }
+
+    /**
+     * This will close the settings popup if click outside of popup
+     *
+     * @memberof HeaderComponent
+     */
+    public closeSettingPaneOnOutsideClick():void {
+        setTimeout(() => {
+            if (this.asideSettingMenuState === "in") {
+                this.asideSettingMenuState = 'out';
+            }
+        }, 50);
+    }
+
+    /**
+     * This will close the help popup if click outside of popup
+     *
+     * @memberof HeaderComponent
+     */
+    public closeHelpPaneOnOutsideClick():void {
+        setTimeout(() => {
+            if (this.asideHelpSupportMenuState === "in") {
+                this.asideHelpSupportMenuState = 'out';
+            }
+        }, 50);
     }
 
     /**
@@ -1097,15 +1128,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public logout() {
         if (isElectron) {
-            // this._aunthenticationServer.GoogleProvider.signOut();
             this.store.dispatch(this.loginAction.ClearSession());
-
         } else if (isCordova) {
             (window as any).plugins.googleplus.logout(
                 (msg) => {
                     this.store.dispatch(this.loginAction.ClearSession());
-                    // this.store.pipe(select(p=>p.session.user))
-                    // alert(msg); // do something useful instead of alerting
                 }
             );
         } else {
@@ -1366,12 +1393,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
         if (!this.modalService.getModalsCount()) {
-            this.modelRefExpirePlan = this.modalService.show(template);
+            this.modelRefExpirePlan = this.modalService.show(template,
+                Object.assign({}, { class: 'subscription-upgrade' })
+            );
         }
     }
 
     public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
         this.modelRefCrossLimit = this.modalService.show(template);
+         
     }
 
     /**
@@ -1610,7 +1640,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (acc) {
                 this.isLedgerAccSelected = true;
                 this.selectedLedgerName = acc.uniqueName;
-                this.selectedPage = 'ledger - ' + acc.name;
+                if(this.isMobileSite) {
+                    this.selectedPage = acc.name;
+                } else {
+                    this.selectedPage = 'ledger - ' + acc.name;
+                }
                 return this.navigateToUser = false;
             }
         });
@@ -1711,7 +1745,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
             if (!this.isMobileSite && this.dateFieldPosition) {
-                this.dateFieldPosition.x -= 60;
+                this.dateFieldPosition.x -= 150;
             }
         }
         this.modalRef = this.modalService.show(
@@ -1785,7 +1819,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleBodyScroll(): void {
-        if(this.companyDropdown.isOpen) {
+        if(this.companyDropdown.isOpen && !this.isMobileSite) {
             document.querySelector('body').classList.add('prevent-body-scroll');
         } else {
             document.querySelector('body').classList.remove('prevent-body-scroll');
