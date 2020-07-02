@@ -120,6 +120,7 @@
                                                     [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
                                                     [ItemHeight]="67" (onShow)="dbs.hide()"
                                                     [useInBuiltFilterForFlattenAc]="true"
+                                                    [fixedValue]="txn.particular.name"
                                                     [defaultValue]="txn.particular.name"
                                                     [placeholder]="'To Select Accounts'">
 
@@ -304,6 +305,7 @@
                                                     [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
                                                     [useInBuiltFilterForFlattenAc]="true"
                                                     [defaultValue]="txn.particular.name"
+                                                    [fixedValue]="txn.particular.name"
                                                     [placeholder]="'By Select Accounts'">
 
                                                     <ng-template #optionTemplate let-option="option">
