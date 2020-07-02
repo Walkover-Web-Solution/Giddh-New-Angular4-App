@@ -72,7 +72,7 @@
     .onMobileView tbody tr {
         box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
         background: $white;
-        border-bottom: 1px solid #dfdfdf;
+        border-bottom: none;
         cursor: pointer;
         display: block;
         padding: 5px 0 10px 0px;
@@ -4018,6 +4018,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .modal-header {
     position: relative;
     background: $midnight-blue !important;
+    border-radius: 5px 5px 0 0;
 }
 
 .close_modal {
@@ -8510,6 +8511,7 @@ ul.dropdown-menu p.lead.pd {
     color: #484848 !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
+    border-radius: 4px;
 }
 
 #invoice-setting ul.nav-tabs>li {
@@ -8591,6 +8593,7 @@ ul.dropdown-menu p.lead.pd {
 #tab-integration .nav-tabs>li a {
     border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
     font-size: 18px;
+    border-radius: 4px;
 }
 
 #tab-integration .nav-tabs>li a:hover {
@@ -8616,13 +8619,13 @@ ul.dropdown-menu p.lead.pd {
     margin-top: 24px;
 }
 
-.date-advanceSearch .icon-calender {
+.date-advance-search .icon-calender {
     height: 36px !important;
     border-right: 1px solid $gainsboro !important;
     color: #999999 !important;
 }
 
-.date-advanceSearch .input-group input.form-control {
+.date-advance-search .input-group input.form-control {
     border-color: $gainsboro !important;
 }
 
@@ -9238,10 +9241,13 @@ ngx-daterangepicker-material {
     height: 14px !important;
     line-height: 14px !important;
 }
-
-
+.HW_badge.HW_softHidden{
+    display: none !important;
+}
+span#HW_badge_cont:nth-child(3){
+    display: none;
+}
 /*notofication css end*/
-
 .setting-sidebar-open .desktop-header {
     padding-left: 215px;
 }
@@ -9277,6 +9283,32 @@ ngx-daterangepicker-material {
 
 .icon-home-icon {
     color: $white;
+}
+.remove-header-lower-layer{
+    .container-fluid.mrB1{
+        margin-bottom: 0;
+        .lower-layer-header{
+            display: none !important;
+        }
+        .upper-layer-header{
+            padding-top: 10px;
+            padding-bottom: 5px;
+        }
+    }
+    .padding-top-fixed-mobile{
+        padding-top: 50px;
+    }
+    
+}
+.mobile-sidebar-open:after{
+    position: absolute;
+    content: '';
+    background-color: rgba(0,0,0,0.5);
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 9;
 }
 .HW_badge.HW_softHidden{
     display: none !important;
@@ -9531,6 +9563,7 @@ span#HW_badge_cont:nth-child(3){
         padding: 5px 10px 5px 0% !important;
         text-align: center;
         width: 100%;
+        margin-bottom: 0;
     }
     #middleBody .horizontal-form,
     .view_forms .horizontal-form {
@@ -9597,8 +9630,22 @@ span#HW_badge_cont:nth-child(3){
 }
 
 @media (max-width: 767px) {
+
+    .remove-header-lower-layer{
+        .mobile-back-btn{
+            display: inline-flex !important;
+        }
+        .hamburger_menu {
+            .btn{
+                display: none !important;
+            }
+        }
+    }
     .HW_badge_cont {
         left: -6px !important;
+        z-index: 991;
+        top: -25px !important;
+        position: absolute;
     }
     .setting-sidebar-open .desktop-header {
         padding-left: 0;
@@ -9704,6 +9751,7 @@ span#HW_badge_cont:nth-child(3){
         height: 100%;
         width: 100%;
         top: 0;
+        display: none;
     }
     .user_dropdown>li>a .glyphicon-menu-right {
         transform: rotate(90deg);
@@ -9756,7 +9804,7 @@ span#HW_badge_cont:nth-child(3){
     }
     .ledg-head .custom-tabs .nav.nav-tabs {
         left: 0;
-        top: 90px;
+        top: 95px;
         padding-top: 0 !important;
         position: fixed;
     }
@@ -9927,7 +9975,7 @@ span#HW_badge_cont:nth-child(3){
         width: 100%;
     }
     .on-setting-page .setting-menu-icon,
-    .on-user-page .setting-menu-icon {
+    .on-user-page .setting-menu-icon{
         display: inline-flex !important;
     }
     .setting-data {
@@ -9949,6 +9997,9 @@ span#HW_badge_cont:nth-child(3){
     }
     .ledg-head .custom-tabs .nav.nav-tabs {
         padding-top: 0 !important;
+    }
+    .digit-blue .tooltip.bs-tooltip-top{
+        display: block !important;
     }
 }
 
@@ -9989,6 +10040,13 @@ span#HW_badge_cont:nth-child(3){
     .pagination>li>span {
         padding: 6px 6px;
     }
+    // header .hamburger_menu h4 {
+    //     white-space: nowrap;
+    //     overflow: hidden;
+    //     text-overflow: ellipsis;
+    //     min-height: 20px;
+    //     width: calc(100% - 30px);
+    // }
 }
 
 @media (max-width: 360px) {

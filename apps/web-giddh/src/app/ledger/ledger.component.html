@@ -3,7 +3,7 @@
        <i class="fa fa-ellipsis-v"></i>
     </button>
     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-        <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onOpenAdvanceSearch()">Advance Search</a></li>
+        <!-- <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onOpenAdvanceSearch()">Advance Search</a></li> -->
         <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="showShareLedgerModal()">Share ledger</a></li>
         <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="showExportLedgerModal()">Export</a></li>
     </ul>
@@ -33,9 +33,10 @@
                             <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput" id="BulkUploadfileInput" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
                         </div>
                     </div>
+                    <!-- [ngClass]="{'class-1':condition1==condition2, 'class-2': condition3==condition4}" -->
                     <div class="single-search-box d-flex" *ngIf="checkedTrxWhileHovering.length === 0">
-                        <span [ngClass]="!isAdvanceSearchImplemented ? 'full-width-input':'default-width-input'">
-                            <!-- {'full-width-input':!isAdvanceSearchImplemented} -->
+                        <span [ngClass]="{'default-width-input': (searchText || isAdvanceSearchImplemented) && isMobileScreen, 
+                                         'full-width-input': (searchText || !isAdvanceSearchImplemented) && isMobileScreen }">
                             <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control"
                                 (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
                             <i class="icon-search1 pos-abs"></i>
@@ -80,7 +81,7 @@
 
             <div class="col-md-4 col-sm-4  col-xs-12 text-center col-xs-12 daterngoption" *ngIf="!isMobileScreen">
                 <!-- (hideDaterangepicker)="selectedDate($event)"  -->
-                <div class="advanceSearchByDate date-advanceSearch">
+                <div class="advanceSearchByDate date-advance-search">
                     <!-- <span class="icon-calender "></span> -->
                     <span class="inputWrapper">
                         <!-- <input type="text" class="form-control daterange_picker_ledger" daterangepicker
@@ -231,7 +232,6 @@
                                             <td class="width100 pos-rel" *ngIf="txn.type === 'DEBIT'">
                                                 <table class="width100">
                                                     <tbody class="ledger-main">
-                                                        <!-- [(ngModel)]="txn.isChecked" -->
                                                         <tr class="ledger-row" [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
                                                            
                                                             <td class="col-xs-3 col-md-3 col-lg-3">
@@ -417,7 +417,7 @@
                                 <td class="transction-date pl-15 pr-15 pt-05" colspan="2">{{transactionDate}}</td>
                             </tr>
                             <tr class="second-row" *ngFor="let transactions of allTransactionsList[transactionDate];">
-                                <td class="pl-15 pr-15 relative" (dblclick)="showUpdateLedgerModal(transactions)" (keydown.enter)="showUpdateLedgerModal(transactions)" [ngClass]="{compoundEntry: transactions.entryUniqueName === lc.selectedTxnUniqueName || transactions.isChecked}" tooltip="{{transactions.description}}"
+                                <td class="pl-15 pr-15 relative" [ngClass]="{compoundEntry: transactions.entryUniqueName === lc.selectedTxnUniqueName || transactions.isChecked}" tooltip="{{transactions.description}}"
                                     (mouseover)="entryHovered(transactions.entryUniqueName)" (mouseout)="selectedTrxWhileHovering = ''">
                                     <span class="pull-left account-holder-checkbox">
                                         <input type="checkbox" [ngClass]="{'d-none': (selectedTrxWhileHovering !== transactions.entryUniqueName && !(transactions.isChecked) && checkedTrxWhileHovering.length === 0)}" class="d-none" [(ngModel)]="transactions.isChecked" (click)="entrySelected($event, transactions.entryUniqueName)">
@@ -1030,11 +1030,11 @@
                         <h1>Opening Balance</h1>
 
                         <h3 class="digit-blue">
-                            {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.forwardedBalance?.amount | giddhCurrency}} {{ ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
+                            {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.forwardedBalance?.amount | giddhCurrency}} {{ ledgerTxnBalance?.forwardedBalance?.amount > 0 ? (ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr') : '' }}
                         </h3>
 
                         <h3 class="digit-blue font-12 subTotal" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                            {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedForwardedBalance?.amount | giddhCurrency}} {{ ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
+                            {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedForwardedBalance?.amount | giddhCurrency}} {{ ledgerTxnBalance?.convertedForwardedBalance?.amount > 0 ? (ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT' ? 'Dr' : 'Cr') : '' }}
                         </h3>
 
                     </div>
@@ -1104,11 +1104,13 @@
                     <div class="ledger-state-box">
                         <h1>Closing Balance</h1>
                         <div class="d-flex" style="justify-content: space-between;flex-direction: column">
-                            <h3 class="digit-blue">
-                                {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.closingBalance?.amount | giddhCurrency}} {{ ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
+                            <h3 class="digit-blue" container="body">
+                               <button class="no-btn" [tooltip]="(ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? lc.ledgerUnderStandingObj.balanceText.dr : lc.ledgerUnderStandingObj.balanceText.cr)" triggers="click">{{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.closingBalance?.amount | giddhCurrency}} {{ ledgerTxnBalance?.closingBalance?.amount > 0 ? (ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr') : '' }}</button> 
                             </h3>
-                            <h3 class="digit-blue" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                                {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedClosingBalance?.amount | giddhCurrency}} {{ ledgerTxnBalance?.convertedClosingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr' }}
+                            <h3 class="digit-blue" container="body" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                <button class="no-btn"  [tooltip]="(ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? lc.ledgerUnderStandingObj.balanceText.dr : lc.ledgerUnderStandingObj.balanceText.cr)" triggers="click"> 
+                                     {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedClosingBalance?.amount | giddhCurrency}} {{ ledgerTxnBalance?.convertedClosingBalance?.amount > 0 ? (ledgerTxnBalance?.convertedClosingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr') : '' }}
+                                     </button>
                             </h3>
                         </div>
                     </div>
