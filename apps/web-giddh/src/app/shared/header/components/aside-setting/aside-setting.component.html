@@ -13,7 +13,7 @@
             <div class="back-to-main-slider">
                 <a href="javascript:;">
                     <span *ngIf="!isMobileScreen" (click)="goToPreviousPage()">
-                        <img src="{{imgPath}}back.svg">
+                        <i class="icon-back-arrow"></i>
                         Back
                     </span>
                     <span *ngIf="isMobileScreen" (click)="closeAsidePane($event)">

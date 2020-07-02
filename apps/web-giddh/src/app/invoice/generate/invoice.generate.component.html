@@ -23,48 +23,30 @@
         <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline">
             <div class="d-flex">
                 <div class="d-flex form-group mobile-width-100">
-                    <div class="form-group date-advanceSearch" style="flex: 1 1 auto;">
-
+                    <div class="form-group date-advance-search pending-advance-search" style="flex: 1 1 auto;">
                         <div class="input-group" id="dp-parent" style="margin-right:8px; margin-bottom:0;">
                             <!-- <span class="icon-calender"></span> -->
                             <span class="input-wrapper">
                             <input type="text" name="dateRangeGenerate" id="dateRangeGenerate" daterangepicker
                                 [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)"
                                 class="form-control" />
-
-                            <!--                        <input type="text"-->
-                            <!--                               [(ngModel)]="selectedDateRange"-->
-                            <!--                               ngxDaterangepickerMd-->
-                            <!--                               [alwaysShowCalendars]="true"-->
-                            <!--                               [ranges]="datePickerOptions.ranges"-->
-                            <!--                               [showClearButton]="false"-->
-                            <!--                               [showCancel]="true"-->
-                            <!--                               [showDropdowns]="true"-->
-                            <!--                               [locale]="{applyLabel: 'Done'}"-->
-                            <!--                               (datesUpdated)="dateRangeChanged($event)"-->
-                            <!--                               [keepCalendarOpeningWithRange]="true"-->
-                            <!--                               [showRangeLabelOnInput]="false"-->
-                            <!--                               name="selectedDateRange"-->
-                            <!--                               class="form-control"-->
-                            <!--                               placeholder="Select please..."/>-->
-
                         </span>
-                        </div>
                         <button class="clear-filter btn btn-filter align-items-center d-flex justify-content-center" *ngIf="!isUniversalDateApplicable && isMobileView" (click)="resetDateSearch()">
-                        <span class="icon-cross"></span> Clear Filter
-                    </button>
-                        <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(false)">
-                        Generate Multiple
-                    </button>
-
-                        <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(true)">
-                        Generate Compound
-                    </button>
-
-                        <button placement="top" tooltip="Works only for single entry." *ngIf="!isMobileView" [hidden]="selectedLedgerItems.length === 0  || !togglePrevGenBtn" class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate
-                    </button>
-
-
+                            <span class="icon-cross"></span> Clear Filter
+                            </button>
+                       
+                    </div>
+                        
+                        <span>
+                            <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(false)">
+                                Generate Multiple
+                            </button>
+                            <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(true)">
+                                Generate Compound
+                            </button>
+                                <button placement="top" tooltip="Works only for single entry." *ngIf="!isMobileView" [hidden]="selectedLedgerItems.length === 0  || !togglePrevGenBtn" class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate
+                            </button>
+                        </span>
                     </div>
 
                     <!-- <div class="form-group">
@@ -88,7 +70,7 @@
             </div>
         </form>
 
-        <table class="table basic table-bordered pending-tabel onMobileView mt-15">
+        <table class="table basic table-bordered pending-table onMobileView mt-15">
 
             <thead class="t-h-bg1">
                 <tr>
