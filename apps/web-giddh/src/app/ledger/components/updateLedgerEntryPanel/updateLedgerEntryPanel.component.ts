@@ -1253,7 +1253,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             ]
         }
-        this.selectedInvoiceAmount = ev.invoice.balanceDue.amountForAccount;
     }
 
     public openHeaderDropDown() {

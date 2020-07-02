@@ -331,10 +331,11 @@
                                 <div class="form-group">
                                     <label class="default_clr">Voucher No.</label>
 
-                                    <sh-select [options]="invoiceList" placeholder="Select Accounts"
-                                        [notFoundLink]="false" (selected)="creditNoteInvoiceSelected($event)"
-                                        [multiple]="false" [ItemHeight]="67" [showClear]="false"
-                                        [useInBuiltFilterForFlattenAc]="true">
+                                    <sh-select [options]="invoiceList" #invoice placeholder="Select Invoice"
+                                        [(ngModel)]="selectedInvoiceForCreditNote" [notFoundLink]="false"
+                                        [forceClearReactive]="forceClear$ | async"
+                                        (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"
+                                        [ItemHeight]="67" [showClear]="false" [useInBuiltFilterForFlattenAc]="true">
                                         <ng-template #optionTemplate let-option="option">
                                             <a href="javascript:void(0)" class="list-item sh-template">
                                                 <div class="item">{{ option.label }}
@@ -350,6 +351,10 @@
                                         </ng-template>
                                     </sh-select>
                                 </div>
+                            </td>
+
+                            <td *ngIf="selectedInvoiceForCreditNote" class="pdR1 pt-2 hidden-xs" (click)="removeSelectedInvoice(invoice)">
+                                &times; Remove Invoice
                             </td>
 
                             <td *ngIf="shouldShowAdvanceReceipt" class="pdR1 pt-2 hidden-xs">
@@ -456,7 +461,7 @@
                     <label class="pull-left cp fs16">
 
                         <input class="pull-left" type="checkbox" name="generateInvoice"
-                            [disabled]="isAdvanceReceipt && blankLedger.generateInvoice ? 'disabled' : null"
+                            [disabled]="(isAdvanceReceipt && blankLedger.generateInvoice || blankLedger.voucherType == 'credit note') ? 'disabled' : null"
                             [(ngModel)]="blankLedger.generateInvoice">
                         Generate Voucher
                     </label>

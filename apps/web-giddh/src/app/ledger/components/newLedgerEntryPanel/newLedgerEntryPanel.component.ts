@@ -32,7 +32,7 @@ import { forEach, sumBy } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { ReconcileRequest, ReconcileResponse, TransactionsResponse } from '../../../models/api-models/Ledger';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, IForceClear } from '../../../models/api-models/Sales';
 import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
@@ -160,6 +160,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public totalTdElementWidth: number = 0;
     /** Amount of invoice select for credit note */
     public selectedInvoiceAmount: number = 0;
+    /** Selected invoice for credit note */
+    public selectedInvoiceForCreditNote: any = null;
+    /** Clear selected invoice */
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     /** Default warehouse for a company */
     public defaultWarehouse: string;
     /** List of warehouses for a company */
@@ -918,6 +922,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             ]
         }
         this.selectedInvoiceAmount = ev.invoice.balanceDue.amountForAccount;
+        console.log(this.selectedInvoiceForCreditNote);
+    }
+
+    public removeSelectedInvoice(invoice: ShSelectComponent){
+        invoice.forceClearReactive.status = true;
+        this.selectedInvoiceForCreditNote = null;
     }
 
     public getInvoiveListsData(e: any) {

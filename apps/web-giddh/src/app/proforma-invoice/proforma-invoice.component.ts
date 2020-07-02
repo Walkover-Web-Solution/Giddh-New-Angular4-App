@@ -224,6 +224,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public invFormData: VoucherClass;
     /** Invoice list array */
     public invoiceList: any[];
+    /** Selected invoice for credit note */
+    public selectedInvoice: any = null;
     public customerAcList$: Observable<IOption[]>;
     public bankAccounts$: Observable<IOption[]>;
     public salesAccounts$: Observable<IOption[]> = observableOf(null);
@@ -1454,6 +1456,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                 });
                 _.uniqBy(this.invoiceList, 'value');
+                console.log(this.invFormData);
+                // let selectedInvoice = this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0];
+                // let invoiceSelected = {
+                //     label: selectedInvoice.invoiceNumber,
+                //     value: selectedInvoice.invoiceUniqueName,
+                //     invoice: selectedInvoice
+                // };
+                // this.selectedInvoice = invoiceSelected.value;
+                // this.invoiceList.push(invoiceSelected);
             });
         }
     }
