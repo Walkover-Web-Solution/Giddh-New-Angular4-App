@@ -13,6 +13,7 @@ import { Router, NavigationStart } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
+import { DatePickerDefaultRangeEnum } from '../../app.constant';
 
 const moment = _moment;
 
@@ -1138,11 +1139,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public mouseUp(e: MouseWheelEvent): void {
-        this.isOnScrollActive = true;
-        if (e.deltaY < 0) {
-            this.scrollSubject$.next("top");
-        } else {
-            this.scrollSubject$.next("bottom");
+        if (!this.isOnScrollActive) {
+            this.isOnScrollActive = true;
+            if (e.deltaY < 0) {
+                this.scrollSubject$.next("top");
+            } else {
+                this.scrollSubject$.next("bottom");
+            }
         }
     }
 
@@ -1721,6 +1724,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             if (res && res.body && res.body.financialYears && res.body.financialYears.length > 0) {
                 let currentFinancialYear;
                 let lastFinancialYear;
+                let allFinancialYears = [];
 
                 res.body.financialYears.forEach(key => {
                     let financialYearStarts = moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
@@ -1732,33 +1736,53 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
                         lastFinancialYear = { start: moment(moment(key.financialYearStarts.split("-").reverse().join("-")).subtract(1, 'year').toDate()), end: moment(moment(key.financialYearEnds.split("-").reverse().join("-")).subtract(1, 'year').toDate()) };
                     }
+
+                    if(allFinancialYears.indexOf(moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("YYYY")) === -1) {
+                        allFinancialYears.push(moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("YYYY"));
+                    }
+
+                    if(allFinancialYears.indexOf(moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("YYYY")) === -1) {
+                        allFinancialYears.push(moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("YYYY"));
+                    }
                 });
 
                 if (this.ranges && this.ranges.length > 0) {
                     let loop = 0;
+                    let ranges = [];
                     this.ranges.forEach(key => {
-                        if (key.name === "All Time") {
-                            this.ranges[loop].value = [
+                        if (key.name === DatePickerDefaultRangeEnum.AllTime) {
+                            ranges[loop] = key;
+
+                            ranges[loop].value = [
                                 moment(moment(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate()),
                                 moment()
                             ];
-                        }
+                            loop++;
+                        } else if (key.name === DatePickerDefaultRangeEnum.ThisFinancialYearToDate && currentFinancialYear) {
+                            ranges[loop] = key;
 
-                        if (key.name === "This Financial Year to Date" && currentFinancialYear) {
-                            this.ranges[loop].value = [
+                            ranges[loop].value = [
                                 currentFinancialYear,
                                 moment()
                             ];
-                        }
+                            loop++;
+                        } else if (key.name === DatePickerDefaultRangeEnum.LastFinancialYear) {
+                            if(lastFinancialYear && lastFinancialYear.start && lastFinancialYear.end && allFinancialYears.indexOf(lastFinancialYear.start.format("YYYY")) > -1) {
+                                ranges[loop] = key;
 
-                        if (key.name === "Last Financial Year" && lastFinancialYear && lastFinancialYear.start && lastFinancialYear.end) {
-                            this.ranges[loop].value = [
-                                lastFinancialYear.start,
-                                lastFinancialYear.end
-                            ];
+                                ranges[loop].value = [
+                                    lastFinancialYear.start,
+                                    lastFinancialYear.end
+                                ];
+                                loop++;
+                            }
+                        } else {
+                            ranges[loop] = key;
+                            loop++;
                         }
-                        loop++;
                     });
+
+                    this.ranges = ranges;
 
                     if (this.minDate === undefined) {
                         this.minDate = moment(moment(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate());
