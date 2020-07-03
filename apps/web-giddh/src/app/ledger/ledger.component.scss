@@ -64,14 +64,14 @@ input {
     min-width: auto;
     padding-left: 27px !important;
     border-radius: 20px !important;
-    
+
 }
 .ledg-head {
     .single-search-box{
         position: relative;
         i{
             color: $gray;
-            left:9px;top:10px;   
+            left:9px;top:10px;
         }
     }
 }
@@ -416,7 +416,7 @@ sh-select:focus {
         width: 18px;
     }
 }
- 
+
 .ledg-head .advanc-search-block {
     height: 34px;
     vertical-align: middle;
@@ -545,6 +545,14 @@ sh-select:focus {
 .input-wrapper.ipad-view-datepicker {
     display: none;
 }
+.no-btn,
+.no-btn:active,
+.no-btn:focus{
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    padding-left: 0;
+}
 .transaction-mapped-table{
     font-size: 14px;
     .transaction-mapped{
@@ -578,7 +586,7 @@ sh-select:focus {
                         height: 18px;
                     }
                 }
-            }   
+            }
         }
     }
 }
@@ -756,12 +764,12 @@ sh-select:focus {
         .single-search-box{
             position: relative;
             width: calc(100% - 215px);
-            margin-right: 15px;
+            margin-right: 13px;
             .full-width-input{
-                width: 100%;  
+                width: 100%;
             }
             .default-width-input{
-                width: calc(100% - 115px); 
+                width: calc(100% - 115px);
             }
             input[type="search"] {
                 min-width: 150px;
@@ -878,7 +886,7 @@ sh-select:focus {
         .ledger-head{
             th{
                 padding: 0 0 10px !important;
-            }    
+            }
         }
         .ledger-ellipse{
             top: 0;
@@ -895,7 +903,7 @@ sh-select:focus {
                 display: flex;
             }
     }
-    .ledg-head{    
+    .ledg-head{
         .single-search-box{
             position: relative;
             width: calc(100% - 45px);
@@ -905,12 +913,12 @@ sh-select:focus {
         }
         .ipad-view-datepicker{
             display: none;
-        }  
+        }
     }
     .ledger-section{
         padding-top: 0;
         .transactions-page{
-            margin-top: 15px !important;
+            margin-top: 18px !important;
         }
     }
 }
@@ -935,6 +943,11 @@ sh-select:focus {
             .clear-filter-btn{
                 font-size: 12px;
             }
+        }
+    }
+    .ledg-head {
+        .single-search-box{
+            margin-right:5px;
         }
     }
 }

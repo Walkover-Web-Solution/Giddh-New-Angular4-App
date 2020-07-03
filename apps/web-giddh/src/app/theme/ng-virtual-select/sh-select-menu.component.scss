@@ -24,6 +24,12 @@
     width: 100%;
     word-break: break-word;
     height: auto !important;
+    &:hover {
+        background: $lavender;
+    }
+}
+.item:hover a {
+  color: $chetwode-blue !important;
 }
 
 .item.selected {

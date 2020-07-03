@@ -1,4 +1,28 @@
 @import "../../assets/css/color.scss";
+.mobile-item-icon:hover{
+    -webkit-animation-name: pulse;
+    animation-name: pulse;
+    animation-duration:1s;
+    cursor: pointer;
+    animation-timing-function: ease-in-out;
+    box-shadow: 0px 10px 50px 0 rgba(0, 0, 0, 0.1);
+
+
+}
+@keyframes pulse {
+    0% {
+        -webkit-transform: scaleX(1);
+        transform: scaleX(1);
+    }
+    50% {
+        -webkit-transform: scale3d(1.05, 1.05, 1.05);
+        transform: scale3d(1.05, 1.05, 1.05);
+    }
+    100% {
+        -webkit-transform: scaleX(1);
+        transform: scaleX(1);
+    }
+}
 .mobile-home-view {
     max-width: 767px;
     width: 100%;
@@ -17,7 +41,7 @@
         }
     }
     .mobile-item-wrapper{
-        padding: 0 8px 15px; 
+        padding: 0 8px 15px;
         margin-bottom: 0;
         .mobile-single-item {
             float: left;
@@ -47,8 +71,9 @@
                 align-items: center;
                 justify-content: center;
                 background-color: $white;
-                border-radius: 11px;    
+                border-radius: 11px;
                 margin-bottom: 8px;
+                transform: scaleX(1);
                 img{
                     width: 58px;
                     border-radius: 5px;
@@ -61,7 +86,7 @@
             }
             .mobile-item-name{
                 h4{
-                    font-size:9px;
+                    font-size:10px;
                     color: $midnight-blue;
                     text-align: center;
                     font-family: 'opensans-semibold';
@@ -83,7 +108,7 @@
                     }
                 }
                 .mobile-item-name{
-                    h4{        
+                    h4{
                         color:$midnight-blue;
                         text-overflow: ellipsis;
                         overflow: hidden;
@@ -100,11 +125,18 @@
         .single-search-group {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
+            padding: 7px 15px;
+            margin: 5px -15px 5px;
+            &:hover{
+                background-color: $lavender-light !important;
+            }
             .group-icon{
                 padding-right: 10px;
                 color: $gray;
                 font-size: 12px;
+                .icon-account {
+                    font-size: 11px;
+                }
             }
             .group-name{
                 h4{
@@ -137,12 +169,20 @@
     padding: 0 15px;;
     width: 100%;
     .dropdown-menu{
-        border-radius: 10px;
-        border: none;
-        padding: 15px 0;
+        left: -1px !important;
+        position: fixed;
+        top: -3px !important;
+        z-index: 9999;
+        border-radius: 0;
+        box-shadow: none;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        padding: 0;
+        max-width: 280px;
         li{
             a{
-                padding: 5px 15px;
+                padding: 10px 15px;
                 margin-bottom: 3px;
                 background-color: transparent;
                 letter-spacing: 0;
@@ -169,13 +209,15 @@
             justify-content: center;
             align-items: center;
             height: 36px;
+            width: 36px;
+            cursor: pointer;
         }
     }
     .account-search{
         margin: 0;
         padding: 15px 0 15px 10px;
         width: calc(100% - 36px);
-        position: relative;  
+        position: relative;
         .input-group{
             background-color: $white;
             border-radius: 50px;
@@ -250,7 +292,33 @@
             padding-left: 0;
             white-space: nowrap;
         }
-    } 
+    }
+}
+.top-button{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    position: fixed;
+    background-color: $midnight-blue;
+    color: $white;
+    bottom: 15px;
+    right: 15px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.06), 0 2px 32px 0 rgba(0, 0, 0, 0.16);
+    cursor: pointer;
+    transition: .5s ease;
+    opacity: 0;
+    visibility: hidden;
+        i {
+            font-size: 20px;
+            transform: rotate(180deg);
+        }
+}
+.top-button.sticky {
+    visibility: visible;
+    opacity: 1;
 }
 /*responsive*/
 @media(max-width:320px){

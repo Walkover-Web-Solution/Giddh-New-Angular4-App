@@ -396,9 +396,13 @@ export class CompanyService {
             }), catchError((e) => this.errorHandler.HandleCatch<string, ReportsRequestModel>(e, ReportsRequestModel)));
     }
 
-	/*
-  * get registered sales
-  * */
+	/**
+     * To get registered sales
+     *
+     * @param {ReportsRequestModel} request Request body
+     * @returns
+     * @memberof CompanyService
+     */
     public getPurchaseRegister(request: ReportsRequestModel) {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.get(this.config.apiUrl + COMPANY_API.GET_REGISTERED_PURCHASE
@@ -451,13 +455,9 @@ export class CompanyService {
      * @memberof CompanyService
      */
     public bulkVendorPayment(companyUniqueName: string, bankTransferRequest: GetOTPRequest): Observable<BaseResponse<BulkPaymentResponse, GetOTPRequest>> {
-        if (this.companyUniqueName) {
             return this._http.post(this.config.apiUrl + COMPANY_API.BULK_PAYMENT.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), bankTransferRequest).pipe(map((res) => {
                 return res;
             }), catchError((e) => this.errorHandler.HandleCatch<BulkPaymentResponse, GetOTPRequest>(e, bankTransferRequest)));
-        } else {
-            return observableEmpty();
-        }
     }
 
     /**
@@ -470,13 +470,9 @@ export class CompanyService {
      * @memberof CompanyService
      */
     public bulkVendorPaymentConfirm(companyUniqueName: string, urn: string, requestObject: BulkPaymentConfirmRequest): Observable<BaseResponse<BulkPaymentResponse, BulkPaymentConfirmRequest>> {
-        if (this.companyUniqueName) {
             return this._http.post(this.config.apiUrl + COMPANY_API.BULK_PAYMENT_CONFIRM.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':urn', urn), requestObject).pipe(map((res) => {
                 return res;
             }), catchError((e) => this.errorHandler.HandleCatch<BulkPaymentResponse, BulkPaymentConfirmRequest>(e, BulkPaymentConfirmRequest)));
-        } else {
-            return observableEmpty();
-        }
     }
 
     /**
