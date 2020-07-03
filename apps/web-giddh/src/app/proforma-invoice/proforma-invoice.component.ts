@@ -328,6 +328,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     };
     /** Rate should have precision up to 4 digits for better calculation */
     public ratePrecision = RATE_FIELD_PRECISION;
+    /** Force clear for invoice drop down */
+    public invoiceForceClearReactive$: Observable<IForceClear> = observableOf({ status: false });
     public selectedCompany: any;
     public formFields: any[] = [];
 
@@ -480,7 +482,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.companyActions.getTax());
-        // this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
+        this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
         this.store.dispatch(this._invoiceActions.getInvoiceSetting());
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
@@ -1453,25 +1455,25 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             this.invoiceList = [];
             this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
-                // _.map(res.body, (invoice) => {
-                //     let invoiceAlreadyInList = this.invoiceList.find(i => i.value === invoice.invoiceUniqueName);
-                //     if (!invoiceAlreadyInList) {
-                //         this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice });
-                //     }
-                // });
                 if (response && response.body) {
-                    response.body.forEach(invoice => this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice }))
-                    const selectedInvoice = this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0];
+                    if (response.body.length) {
+                        response.body.forEach(invoice => this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice }))
+                    } else {
+                        this.invoiceForceClearReactive$ = observableOf({ status: true });
+                    }
                     let invoiceSelected;
-                    if (selectedInvoice) {
-                        invoiceSelected = {
-                            label: selectedInvoice.invoiceNumber,
-                            value: selectedInvoice.invoiceUniqueName,
-                            invoice: selectedInvoice
-                        };
-                        const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
-                        if (!linkedInvoice) {
-                            this.invoiceList.push(invoiceSelected);
+                    if (this.isUpdateMode) {
+                        const selectedInvoice = this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0];
+                        if (selectedInvoice) {
+                            invoiceSelected = {
+                                label: selectedInvoice.invoiceNumber,
+                                value: selectedInvoice.invoiceUniqueName,
+                                invoice: selectedInvoice
+                            };
+                            const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
+                            if (!linkedInvoice) {
+                                this.invoiceList.push(invoiceSelected);
+                            }
                         }
                     }
                     _.uniqBy(this.invoiceList, 'value');
@@ -1663,6 +1665,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isMlngAddrCollapsed = true;
         this.isOthrDtlCollapsed = false;
         this.forceClear$ = observableOf({ status: true });
+        this.invoiceForceClearReactive$ = observableOf({ status: true });
         this.isCustomerSelected = false;
         this.selectedFileName = '';
         this.selectedWarehouse = '';
