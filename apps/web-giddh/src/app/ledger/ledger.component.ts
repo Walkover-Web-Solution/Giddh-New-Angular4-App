@@ -584,7 +584,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.transactionData$.subscribe((lt: any) => {
             if (lt) {
                 // set date picker to and from date, as what we got from api in case of today selected from universal date
-                if (lt.from && lt.to) {
+                if (lt.from && lt.to && this.todaySelected) {
                     let dateRange = { fromDate: '', toDate: '' };
                     dateRange = this.generalService.dateConversionToSetComponentDatePicker(lt.from, lt.to);
                     this.selectedDateRange = { startDate: moment(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: moment(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
