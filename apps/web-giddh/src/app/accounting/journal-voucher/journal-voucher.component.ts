@@ -65,15 +65,16 @@ export const PAGE_SHORTCUT_MAPPING = [
     //         uniqueName: 'purchases',
     //         gridType: 'voucher'
     //     }
-    // }, {
-    //     keyCode: 117, // 'F6',
-    //     key: FUNCTIONAL_KEYS.F6,
-    //     inputForFn: {
-    //         page: 'Receipt',
-    //         uniqueName: 'null',
-    //         gridType: 'voucher'
-    //     }
-    // },
+    // }, 
+    {
+        keyCode: 117, // 'F6',
+        key: FUNCTIONAL_KEYS.F6,
+        inputForFn: {
+            page: 'Receipt',
+            uniqueName: 'null',
+            gridType: 'voucher'
+        }
+    },
     // {
     //     keyCode: 118, // 'F7',
     //     key: FUNCTIONAL_KEYS.F7,

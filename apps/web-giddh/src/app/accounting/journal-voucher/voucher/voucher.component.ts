@@ -99,9 +99,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChildren('toAmountField') public toAmountFields: QueryList<ElementRef>;
     /** List of both date picker used (one in voucher date and other in check clearance date) */
     @ViewChildren(BsDatepickerDirective) bsDatePickers: QueryList<BsDatepickerDirective>;
-    public showInvNo:false;
-    public debtorDetailFormShow:boolean = false;
-    public debtorFormStatic:boolean = true; 
+    public showInvNo: false;
+    public debtorDetailFormShow: boolean = false;
+    public debtorFormStatic: boolean = true;
     public showLedgerAccountList: boolean = false;
     public selectedInput: 'by' | 'to' = 'by';
     public requestObj: any = {};
@@ -239,36 +239,40 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             template,
             Object.assign({}, { class: 'modal-lg' })
         );
-     }
+    }
 
-     public selectRef: IOption[] = [
-        { label: "Receipt", value: "Receipt"}, 
-        { label: "Advance Receipt", value: "Advance Receipt"}, 
-        { label: "Against  Reference", value: "Against  Reference"} 
-        ];
+    public selectRef: IOption[] = [
+        { label: "Receipt", value: "Receipt" },
+        { label: "Advance Receipt", value: "Advance Receipt" },
+        { label: "Against  Reference", value: "Against  Reference" }
+    ];
+
     public selectTax: IOption[] = [
-            { label: "Receipt", value: "Receipt"}, 
-            { label: "Advance Receipt", value: "Advance Receipt"}, 
-            { label: "Against  Reference", value: "Against  Reference"} 
-        ];
-    public selectCrDr: IOption[] = [
-            { label: "To/Cr", value: "To/Cr"}, 
-            { label: "To/Dr", value: "To/Dr"}
+        { label: "Receipt", value: "Receipt" },
+        { label: "Advance Receipt", value: "Advance Receipt" },
+        { label: "Against  Reference", value: "Against  Reference" }
     ];
 
-    public SelectInvNoDateAmount:  IOption[] = [
-        { label: "84358; 25/06/2020; 5000 cr.", value: "84358; 25/06/2020; 5000 cr."}, 
-        { label: "848; 25/06/2020; 5000 cr", value: "848; 25/06/2020; 5000 cr."}
+    public selectCrDr: IOption[] = [
+        { label: "To/Cr", value: "To/Cr" },
+        { label: "To/Dr", value: "To/Dr" }
     ];
- 
-public shoewDebtorForm(){
-    this.debtorDetailFormShow = !this.debtorDetailFormShow;
-    this.debtorFormStatic = !this.debtorFormStatic;
-}
-public closeDebtorDetailForm(){
-    this.debtorDetailFormShow = !this.debtorDetailFormShow;
-    this.debtorFormStatic = !this.debtorFormStatic;
-}
+
+    public SelectInvNoDateAmount: IOption[] = [
+        { label: "84358; 25/06/2020; 5000 cr.", value: "84358; 25/06/2020; 5000 cr." },
+        { label: "848; 25/06/2020; 5000 cr", value: "848; 25/06/2020; 5000 cr." }
+    ];
+
+    public shoewDebtorForm() {
+        this.debtorDetailFormShow = !this.debtorDetailFormShow;
+        this.debtorFormStatic = !this.debtorFormStatic;
+    }
+
+    public closeDebtorDetailForm() {
+        this.debtorDetailFormShow = !this.debtorDetailFormShow;
+        this.debtorFormStatic = !this.debtorFormStatic;
+    }
+
     public ngOnInit() {
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
@@ -786,7 +790,21 @@ public closeDebtorDetailForm(){
         this.requestObj.description = '';
         setTimeout(() => {
             this.newEntryObj();
-            this.requestObj.transactions[0].type = 'by';
+
+            switch(this.currentVoucher) {
+                case VOUCHERS.CONTRA:
+                    this.requestObj.transactions[0].type = 'by';
+                    break;
+
+                case VOUCHERS.RECEIPT:
+                    this.requestObj.transactions[0].type = 'to';
+                    break;
+
+                default:
+                    this.requestObj.transactions[0].type = 'by';
+                    break;
+            }
+            
         }, 100);
     }
 
