@@ -486,6 +486,7 @@ export class VoucherDetailsClass {
     public taxesTotal?: [];
     public totalDepositAmount?: number;
     public cashInvoice?: string;
+    public invoiceLinkingRequest?: IInvoiceLinkingRequest;
 
     constructor() {
         this.customerName = null;
@@ -504,6 +505,17 @@ export class VoucherDetailsClass {
         this.deposit = 0;
         this.totalDepositAmount = 0;
     }
+}
+
+/** Model invoice linking request */
+export class IInvoiceLinkingRequest {
+    public linkedInvoices: ILinkedInvoice[];
+}
+
+/** Model linked invoice */
+export class ILinkedInvoice {
+    public invoiceUniqueName: string;
+    public invoiceNumber?: string;
 }
 
 export class TemplateDetailsClass {

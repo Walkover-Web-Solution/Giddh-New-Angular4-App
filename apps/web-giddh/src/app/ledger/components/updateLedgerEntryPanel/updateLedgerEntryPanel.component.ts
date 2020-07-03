@@ -161,6 +161,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public totalTdElementWidth: number = 0;
     public multiCurrencyAccDetails: IFlattenAccountsResultItem = null;
     public selectedPettycashEntry$: Observable<PettyCashResonse>;
+    /** Amount of invoice select for credit note */
+    public selectedInvoiceAmount: number = 0;
+    /** Selected invoice for credit note */
+    public selectedInvoice: any = null;
     public accountPettyCashStream: any;
     /**To check tourist scheme applicable or not */
     public isTouristSchemeApplicable: boolean = false;
@@ -236,7 +240,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public ngOnInit() {
         this.store.pipe(select(state => state.ledger.refreshLedger), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response === true) {
+            if (response === true) {
                 this.store.dispatch(this._ledgerAction.refreshLedger(false));
                 this.entryAccountUniqueName = "";
                 this.closeUpdateLedgerModal.emit();
@@ -471,10 +475,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                     //#region transaction assignment process
                     this.vm.selectedLedger = resp[1];
+
+                    if (this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === 'credit note') {
+                        this.getInvoiceListsForCreditNote();
+                    }
                     // Check the RCM checkbox if API returns subvoucher as Reverse charge
 
                     /** To check advance receipts adjustment for Tx (Using list of invoice is there or not)*/
-                    if (this.vm && this.vm.selectedLedger && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices.length) {
+                    if (this.vm && this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustmentsForInvoice && this.vm.selectedLedger.voucherAdjustmentsForInvoice.adjustedInvoices && this.vm.selectedLedger.voucherAdjustmentsForInvoice.adjustedInvoices.length) {
                         this.isAdjustedInvoicesWithAdvanceReceipt = true;
                         this.calculateInclusiveTaxesForAdvanceReceiptsInvoices();
                     } else {
@@ -1049,12 +1057,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         delete requestObj['tdsTaxes'];
         delete requestObj['tcsTaxes'];
 
+        if (requestObj.voucherType !== 'credit note') {
+            requestObj.invoiceLinkingRequest = null;
+        }
+
         // if no petty cash mode then do normal update ledger request
         if (!this.isPettyCash) {
             requestObj['handleNetworkDisconnection'] = true;
             requestObj['refreshLedger'] = false;
 
-            if(this.entryAccountUniqueName && this.entryAccountUniqueName !== this.changedAccountUniq) {
+            if (this.entryAccountUniqueName && this.entryAccountUniqueName !== this.changedAccountUniq) {
                 requestObj['refreshLedger'] = true;
             }
 
@@ -1160,9 +1172,45 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
                 });
             });
+        } else if (e.value === 'credit note') {
+            this.getInvoiceListsForCreditNote();
+            this.vm.selectedLedger.generateInvoice = true;
         } else {
             this.invoiceList = [];
         }
+    }
+
+    /**
+     * Get Invoice list for credit note
+     * 
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public getInvoiceListsForCreditNote(): void {
+        let request = {
+            "accountUniqueNames": [this.vm.selectedLedger.particular.uniqueName, this.vm.selectedLedger.transactions[0].particular.name.toLowerCase()],
+            "voucherType": "credit note"
+        }
+        let date;
+        if (typeof this.vm.selectedLedger.entryDate === 'string') {
+            date = this.vm.selectedLedger.entryDate;
+        } else {
+            date = moment(this.vm.selectedLedger.entryDate).format(GIDDH_DATE_FORMAT);
+        }
+        this.invoiceList = [];
+        this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((res: any) => {
+            _.map(res.body, (invoice) => {
+                this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice });
+            });
+            _.uniqBy(this.invoiceList, 'value');
+            let selectedInvoice = this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices[0];
+            let invoiceSelected = {
+                label: selectedInvoice.invoiceNumber,
+                value: selectedInvoice.invoiceUniqueName,
+                invoice: selectedInvoice
+            };
+            this.selectedInvoice = invoiceSelected.value;
+            this.invoiceList.push(invoiceSelected);
+        });
     }
 
     public getInvoiveLists() {
@@ -1178,8 +1226,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
                 });
             });
-        } else {
-            this.invoiceList = [];
         }
     }
 
@@ -1190,6 +1236,22 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         } else {
             let indx = this.vm.selectedLedger.invoicesToBePaid.indexOf(invoiceNo.label);
             this.vm.selectedLedger.invoicesToBePaid.splice(indx, 1);
+        }
+    }
+
+    /**
+     * Selected invoice for credit note
+     *
+     * @param {any} event Selected invoice for credit note
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public creditNoteInvoiceSelected(ev): void {
+        this.vm.selectedLedger.invoiceLinkingRequest = {
+            linkedInvoices: [
+                {
+                    invoiceUniqueName: ev.value
+                }
+            ]
         }
     }
 
@@ -1456,12 +1518,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public adjustedInvoiceAmountChange(): void {
-        if (this.vm.selectedLedger && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices) {
+        if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustmentsForInvoice && this.vm.selectedLedger.voucherAdjustmentsForInvoice.adjustedInvoices) {
             let totalAmount: number = 0;
-            this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices.forEach(item => {
+            this.vm.selectedLedger.voucherAdjustmentsForInvoice.adjustedInvoices.forEach(item => {
                 totalAmount = Number(totalAmount) + Number(item.adjustedAmount.amountForAccount);
             });
-            this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.totalAdjustmentAmount = totalAmount;
+            this.vm.selectedLedger.voucherAdjustmentsForInvoice.totalAdjustmentAmount = totalAmount;
             this.checkAdjustedAmountExceed(Number(totalAmount));
             this.calculateInclusiveTaxesForAdvanceReceiptsInvoices();
         }
@@ -1473,7 +1535,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public calculateInclusiveTaxesForAdvanceReceiptsInvoices(): void {
-        this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices.map(item => {
+        this.vm.selectedLedger.voucherAdjustmentsForInvoice.adjustedInvoices.map(item => {
             item.taxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.adjustedAmount.amountForAccount, item.taxRate, 0);
         });
     }

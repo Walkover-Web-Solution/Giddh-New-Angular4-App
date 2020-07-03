@@ -232,8 +232,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
         this.isTransactionRequestInProcess$ = this.store.select(p => p.ledger.transactionInprogress).pipe(takeUntil(this.destroyed$));
         this.ledgerBulkActionSuccess$ = this.store.select(p => p.ledger.ledgerBulkActionSuccess).pipe(takeUntil(this.destroyed$));
-        this.store.dispatch(this._generalActions.getFlattenAccount());
-        this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
+
+        this.lc.flattenAccountListStream$.pipe(take(1)).subscribe((data) => {
+            if (!data) {
+                this.store.dispatch(this._generalActions.getFlattenAccount());
+            }
+        });
+        // this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         this.store.dispatch(this._settingsTagActions.GetALLTags());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
@@ -886,6 +891,34 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Get Invoice list for credit note
+     *
+     * @param {any} event Selected invoice for credit note
+     * @memberof LedgerComponent
+     */
+    public getInvoiceListsForCreditNote(ev): void {
+        if (ev && this.selectedTxnAccUniqueName && this.accountUniquename) {
+            let request = {
+                "accountUniqueNames": [this.selectedTxnAccUniqueName, this.accountUniquename],
+                "voucherType": "credit note"
+            }
+            let date;
+            if (typeof this.lc.blankLedger.entryDate === 'string') {
+                date = this.lc.blankLedger.entryDate;
+            } else {
+                date = moment(this.lc.blankLedger.entryDate).format(GIDDH_DATE_FORMAT);
+            }
+            this.invoiceList = [];
+            this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((res: any) => {
+                _.map(res.body, (invoice) => {
+                    this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice });
+                });
+                _.uniqBy(this.invoiceList, 'value');
+            });
+        }
+    }
+
     public saveBankTransaction() {
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject();
         blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
@@ -1192,7 +1225,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (blankTransactionObj.otherTaxType === 'tds') {
                 delete blankTransactionObj['tcsCalculationMethod'];
             }
-
             this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
         } else {
             this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
