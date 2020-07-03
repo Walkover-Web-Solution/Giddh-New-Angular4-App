@@ -544,15 +544,15 @@
                         </td>
                         <td class="word-wrap" data-title="Parent Group" *ngIf="showFieldFilter.parentGroup">
                             {{account.groupUniqueName}}</td>
-                        <td class="word-wrap text-right" data-title="Opening" *ngIf="showFieldFilter.openingBalance">
-                            {{account.openingBalance?.amount |giddhCurrency}}
+                        <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.openingBalance?.type === 'CREDIT' && account.openingBalance?.amount}" data-title="Opening" *ngIf="showFieldFilter.openingBalance">
+                            <span *ngIf="account.openingBalance?.type === 'CREDIT' && account.openingBalance?.amount">-</span>{{account.openingBalance?.amount |giddhCurrency}}
                         </td>
                         <td class="word-wrap text-right" data-title=" Receipts">
                             {{account.debitTotal |giddhCurrency}}</td>
                         <td class="word-wrap text-right" data-title=" Sales">
                             {{account.creditTotal |giddhCurrency}}</td>
-                        <td class="word-wrap text-right" data-title="Closing">
-                            {{account.closingBalance?.amount |giddhCurrency}}
+                        <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.closingBalance?.type === 'CREDIT' && account.closingBalance?.amount}" data-title="Closing">
+                            <span *ngIf="account.closingBalance?.type === 'CREDIT' && account.closingBalance?.amount">-</span>{{account.closingBalance?.amount |giddhCurrency}}
                         </td>
                         <td class="text-lowercase word-wrap" *ngIf="showFieldFilter.email" data-title="Email">
                             {{account.email || '-' }}</td>
@@ -717,15 +717,15 @@
                         <td class="word-wrap" data-title="Parent Group" *ngIf="showFieldFilter.parentGroup">
                             <div class="table-email">{{account.groupUniqueName}}</div>
                         </td>
-                        <td class="word-wrap text-right" data-title="Opening" *ngIf="showFieldFilter.openingBalance">
-                            {{account.openingBalance?.amount |giddhCurrency}}
+                        <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.openingBalance?.type === 'DEBIT' && account.openingBalance?.amount}" data-title="Opening" *ngIf="showFieldFilter.openingBalance">
+                            <span *ngIf="account.openingBalance?.type === 'DEBIT' && account.openingBalance?.amount">-</span>{{account.openingBalance?.amount | giddhCurrency}}
                         </td>
                         <td class="word-wrap text-right" data-title="Purchase">
                             {{account.creditTotal |giddhCurrency}}</td>
                         <td class="word-wrap text-right" data-title="Payment">
                             {{account.debitTotal |giddhCurrency}}</td>
-                        <td class="word-wrap text-right" data-title="Closing">
-                            {{account.closingBalance?.amount |giddhCurrency}}
+                        <td [ngClass]="{'word-wrap text-right': true, 'negative-balance': account.closingBalance?.type === 'DEBIT' && account.closingBalance?.amount}" data-title="Closing">
+                            <span *ngIf="account.closingBalance?.type === 'DEBIT' && account.closingBalance?.amount">-</span>{{account.closingBalance?.amount | giddhCurrency}}
                         </td>
                         <td class="word-wrap text-lowercase" *ngIf="showFieldFilter.email " data-title="Email">
                             <div class="table-email ">{{account.email || '-' }}</div>
