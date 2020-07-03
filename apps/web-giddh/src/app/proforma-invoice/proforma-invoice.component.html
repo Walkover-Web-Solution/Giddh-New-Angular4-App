@@ -375,8 +375,7 @@
                                         <ng-container *ngIf="(selectedVoucherType === 'credit note') || (isUpdateMode && isCreditNote)">
                                             <sh-select [options]="invoiceList" placeholder="Select Accounts"
                                                 [notFoundLink]="false" [(ngModel)]="selectedInvoice" [ngModelOptions]="{standalone: true}" (selected)="creditNoteInvoiceSelected($event)"
-                                                [multiple]="false" [ItemHeight]="67" [showClear]="false"
-                                                [useInBuiltFilterForFlattenAc]="true">
+                                                [multiple]="false" [ItemHeight]="67" [showClear]="false">
                                                 <ng-template #optionTemplate let-option="option">
                                                     <a href="javascript:void(0)" class="list-item sh-template">
                                                         <div class="item">{{ option.label }}
@@ -386,7 +385,7 @@
                                                         </div>
                                                         <div class="item_unq">
                                                             (Due:
-                                                            {{ option.invoice?.balanceDue.amountForAccount | giddhCurrency }})
+                                                            {{ option.invoice?.balanceDue?.amountForAccount | giddhCurrency }})
                                                         </div>
                                                     </a>
                                                 </ng-template>

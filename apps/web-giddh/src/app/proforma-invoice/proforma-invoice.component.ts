@@ -1117,6 +1117,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.accountDetails.currencySymbol = '';
                         }
                         this.invFormData = obj;
+                        this.getInvoiceListsForCreditNote();
                     } else {
                         this.invoiceDataFound = false;
                     }
@@ -1433,38 +1434,49 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /**
      * Get Invoice list for credit note
      *
+     * @param {string} voucherDate Date of voucher
      * @memberof ProformaComponent
      */
-    public getInvoiceListsForCreditNote(): void {
+    public getInvoiceListsForCreditNote(voucherDate?: string): void {
         if (this.invFormData && this.invFormData.voucherDetails && this.invFormData.voucherDetails.customerUniquename) {
             let request = {
-                "accountUniqueNames": [this.invFormData.voucherDetails.customerUniquename, 'sales'],
-                "voucherType": "credit note"
+                accountUniqueNames: [this.invFormData.voucherDetails.customerUniquename, 'sales'],
+                voucherType: VoucherTypeEnum.creditNote
             }
             let date;
-            if (typeof this.invFormData.voucherDetails.voucherDate === 'string') {
+            if (voucherDate) {
+                date = voucherDate;
+            } else if (typeof this.invFormData.voucherDetails.voucherDate === 'string') {
                 date = this.invFormData.voucherDetails.voucherDate;
             } else {
                 date = moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
             }
             this.invoiceList = [];
-            this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((res: any) => {
-                _.map(res.body, (invoice) => {
-                    let invoiceAlreadyInList = this.invoiceList.find(i => i.value === invoice.invoiceUniqueName);
-                    if (!invoiceAlreadyInList) {
-                        this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice });
+            this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
+                // _.map(res.body, (invoice) => {
+                //     let invoiceAlreadyInList = this.invoiceList.find(i => i.value === invoice.invoiceUniqueName);
+                //     if (!invoiceAlreadyInList) {
+                //         this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice });
+                //     }
+                // });
+                if (response && response.body) {
+                    response.body.forEach(invoice => this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice }))
+                    const selectedInvoice = this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0];
+                    let invoiceSelected;
+                    if (selectedInvoice) {
+                        invoiceSelected = {
+                            label: selectedInvoice.invoiceNumber,
+                            value: selectedInvoice.invoiceUniqueName,
+                            invoice: selectedInvoice
+                        };
+                        const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
+                        if (!linkedInvoice) {
+                            this.invoiceList.push(invoiceSelected);
+                        }
                     }
-                });
-                console.log(this.invFormData);
-                let selectedInvoice = this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0];
-                let invoiceSelected = {
-                    label: selectedInvoice.invoiceNumber,
-                    value: selectedInvoice.invoiceUniqueName,
-                    invoice: selectedInvoice
-                };
-                this.invoiceList.push(invoiceSelected);
-                _.uniqBy(this.invoiceList, 'value');
-                this.selectedInvoice = invoiceSelected.value;
+                    _.uniqBy(this.invoiceList, 'value');
+                    this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
+                }
             });
         }
     }
@@ -1909,8 +1921,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 type: this.invoiceType,
                 exchangeRate: exRate,
                 dueDate: data.voucherDetails.dueDate,
-                deposit,
-                invoiceLinkingRequest: data.voucherDetails.invoiceLinkingRequest
+                deposit
             } as GenericRequestForGenerateSCD;
             // set voucher type
             requestObject.voucher.voucherDetails.voucherType = this.parseVoucherType(this.invoiceType);
@@ -1958,8 +1969,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 type: this.invoiceType,
                 attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
                 templateDetails: data.templateDetails,
-                subVoucher: (this.isRcmEntry) ? Subvoucher.ReverseCharge : '',
-                invoiceLinkingRequest: data.voucherDetails.invoiceLinkingRequest
+                subVoucher: (this.isRcmEntry) ? Subvoucher.ReverseCharge : ''
             } as PurchaseRecordRequest;
         }
 
@@ -2005,6 +2015,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 if (this.isCreditNote || this.isDebitNote) {
                     updatedData['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
+                }
+                if (this.isCreditNote) {
+                    updatedData['invoiceLinkingRequest'] = data.voucherDetails.invoiceLinkingRequest;
                 }
             }
             if (this.isPurchaseInvoice) {
@@ -2624,7 +2637,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.bankAccounts$ = observableOf(this.updateBankAccountObject(item.additional.currency));
             }
 
-            if (this.selectedVoucherType === 'credit note') {
+            if (this.selectedVoucherType === VoucherTypeEnum.creditNote) {
                 this.getInvoiceListsForCreditNote();
             }
         }
@@ -3174,6 +3187,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 } as GenericRequestForGenerateSCD;
                 if (this.isCreditNote || this.isDebitNote) {
                     requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
+                }
+                if (this.isCreditNote && this.selectedInvoice) {
+                    requestObject['invoiceLinkingRequest'] = {
+                        linkedInvoices: [{
+                            invoiceUniqueName: this.selectedInvoice
+                        }]
+                    };
                 }
 
                 /** Tourist scheme is applicable only for voucher type 'sales invoice' and 'cash invoice' and company country code 'AE'   */
@@ -4118,7 +4138,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (selectedDate === modelDate && this.invFormData && this.invFormData.voucherDetails && this.invFormData.voucherDetails.voucherDate && this.invFormData.accountDetails && this.invFormData.accountDetails.uniqueName) {
             this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, moment(selectedDate).format(GIDDH_DATE_FORMAT));
         }
-        this.getInvoiceListsForCreditNote();
+        if (selectedDate && modelDate && selectedDate !== modelDate && this.isCreditNote) {
+            this.getInvoiceListsForCreditNote(moment(selectedDate).format(GIDDH_DATE_FORMAT));
+        }
     }
 
     /**
