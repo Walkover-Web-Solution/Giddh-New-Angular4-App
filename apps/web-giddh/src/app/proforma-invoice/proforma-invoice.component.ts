@@ -1500,25 +1500,25 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             this.invoiceList = [];
             this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
+                // _.map(res.body, (invoice) => {
+                //     let invoiceAlreadyInList = this.invoiceList.find(i => i.value === invoice.invoiceUniqueName);
+                //     if (!invoiceAlreadyInList) {
+                //         this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice });
+                //     }
+                // });
                 if (response && response.body) {
-                    if (response.body.length) {
-                        response.body.forEach(invoice => this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice }))
-                    } else {
-                        this.invoiceForceClearReactive$ = observableOf({ status: true });
-                    }
+                    response.body.forEach(invoice => this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice }))
+                    const selectedInvoice = this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0];
                     let invoiceSelected;
-                    if (this.isUpdateMode) {
-                        const selectedInvoice = this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0];
-                        if (selectedInvoice) {
-                            invoiceSelected = {
-                                label: selectedInvoice.invoiceNumber,
-                                value: selectedInvoice.invoiceUniqueName,
-                                invoice: selectedInvoice
-                            };
-                            const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
-                            if (!linkedInvoice) {
-                                this.invoiceList.push(invoiceSelected);
-                            }
+                    if (selectedInvoice) {
+                        invoiceSelected = {
+                            label: selectedInvoice.invoiceNumber,
+                            value: selectedInvoice.invoiceUniqueName,
+                            invoice: selectedInvoice
+                        };
+                        const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
+                        if (!linkedInvoice) {
+                            this.invoiceList.push(invoiceSelected);
                         }
                     }
                     _.uniqBy(this.invoiceList, 'value');
