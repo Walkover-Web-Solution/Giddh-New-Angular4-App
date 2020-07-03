@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public signupVerifyForm: FormGroup;
     public isLoginWithPasswordSuccessNotVerified$: Observable<boolean>;
     public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
-
+    public isLoading: boolean = false;
 
     public showForgotPassword: boolean = false;
     public forgotStep: number = 0;
