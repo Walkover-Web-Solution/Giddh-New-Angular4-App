@@ -20,7 +20,8 @@
                         [(ngModel)]="emailTypeSelected" [value]="emailTypeDetail">
                     <label for="detailed" class="radio-custom-label">Detailed</label>
                 </span>
-                <span class="pd0 mrR3">
+
+                <span class="pd0 mrR3 columnar-radio">
                     <input id="columnar" class="radio-custom cp ml0" type="radio" name="emailTypeSelected" (ngModelChange)="handleReportTypeChange($event)"
                         [(ngModel)]="emailTypeSelected" [value]="emailTypeColumnar">
                     <label for="columnar" class="radio-custom-label">Columnar</label>
@@ -74,7 +75,7 @@
                 </label>
             </div>
             <button class="btn-success btn" (click)="exportLedger()">Download</button>
-            <button class="btn-success btn" [hidden]="emailTypeSelected !== 'columnar'" (click)="showColumnarReport()">Show</button>
+            <button class="btn-success btn show-columnar-button" [hidden]="emailTypeSelected !== 'columnar'" (click)="showColumnarReport()">Show</button>
             <div class="modal_wrap" [hidden]="emailTypeSelected === 'columnar'">
                 <div class="clearfix"></div>
                 <h3 class="pdT1 pdB1">Or</h3>

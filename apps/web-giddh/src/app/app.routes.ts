@@ -20,6 +20,9 @@ import { BillingDetailComponent } from './billing-details/billingDetail.componen
 import { TokenVerifyComponent } from './login/token-verify.component';
 import {AppLoginSuccessComponent} from "./app-login-success/app-login-success";
 import { MobileHomeComponent } from "./mobile-home/mobile-home.component";
+import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mobile-home-sidebar.component';
+import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
+
 
 export const ROUTES: Routes = [
     {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -127,6 +130,9 @@ export const ROUTES: Routes = [
             { path: 'select-plan', component: SelectPlanComponent, canActivate: [NeedsAuthorization] },
             { path: 'billing-detail', component: BillingDetailComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-home', component: MobileHomeComponent, canActivate: [NeedsAuthorization] },
+            { path: 'mobile-home-sidebar', component: MobileHomeSidebarComponent, canActivate: [NeedsAuthorization] },
+            { path: 'mobile-search-company', component: MobileSearchCompanyComponent, canActivate: [NeedsAuthorization] },
+            
             { path: 'tallysync', loadChildren: './tallysync/tallysync.module#TallysyncModule', canActivate: [NeedsAuthorization] },
 
             {

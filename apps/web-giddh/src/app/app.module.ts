@@ -63,6 +63,8 @@ import {TokenVerifyComponent} from './login/token-verify.component';
 import {AppLoginSuccessComponent} from "./app-login-success/app-login-success";
 import { ExceptionLogService } from './services/exception-log.service';
 import { MobileHomeComponent } from './mobile-home/mobile-home.component';
+import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mobile-home-sidebar.component';
+import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -124,6 +126,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         SocialLoginCallbackComponent,
         SelectPlanComponent,
         MobileHomeComponent,
+        MobileHomeSidebarComponent,
+        MobileSearchCompanyComponent
         // SignupComponent
     ],
     /**

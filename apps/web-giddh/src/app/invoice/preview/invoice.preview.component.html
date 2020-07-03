@@ -1,7 +1,7 @@
 <ng-container>
     <div class="invoice-container">
         <!-- For desktop screen sizes -->
-        <div class="d-flex date-advanceSearch" id="dateRangePickerParent">
+        <div class="d-flex date-advance-search" id="dateRangePickerParent">
             <!-- Invoice filter section -->
             <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate class="form-inline input-grp-dateRangePicker pr">
                 <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
@@ -384,7 +384,7 @@
                                 <div>
                                     <div dropdown container="body" class="icon-ellipse selectAction">
                                         <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic"></a>
-                                        <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu" aria-labelledby="edit-model-basic">
+                                        <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right width-150" role="menu" aria-labelledby="edit-model-basic">
                                             <ul class="selectActionDropdown">
                                                 <li (click)="onPerformAction(item, 'paid')">
                                                     <a class="cp" href="javascript:void(0)">Paid</a>

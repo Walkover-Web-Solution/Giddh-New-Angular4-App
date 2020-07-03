@@ -1,6 +1,6 @@
 @import "../../../../assets/css/color.scss";
 .active {
-    color: $jacksons-purple !important;
+    color: $chetwode-blue !important;
 }
 
 .stock-grp-list li > i:focus {
@@ -22,7 +22,7 @@
 .stock-grp-list .active a,
 s.tock-grp-list .active i,
 .stock-grp-list .active .btn-link i {
-    color: $jacksons-purple !important;
+    color: $chetwode-blue !important;
 }
 
 .stock-grp-list .active {
@@ -60,4 +60,16 @@ stock-list ::ng-deep.in-list a div {
 }
 .stock-grp-list li .btn {
     line-height: 14px;
+}
+.stock-grp-list {
+    li {
+        .item-group {
+            &:hover {
+                a {
+                    color: $chetwode-blue !important;
+                }
+                background-color: $lavender;
+            }
+        }
+    }
 }

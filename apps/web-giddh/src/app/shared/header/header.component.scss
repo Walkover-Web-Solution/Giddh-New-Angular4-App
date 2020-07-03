@@ -512,10 +512,7 @@ span.icon-support.dropdown-toggle {
 .other a {
     color: $extra-dark-gray;
     text-transform: uppercase;
-    // font-family:$opensans-semibold;
 }
-
-
 .showMoreOpt {
     font-size: 14px;
     padding: 0 15px;
@@ -647,6 +644,7 @@ ul.sub-list {
     z-index: 9999;
     width: 40px;
     height: 40px;
+    transition: 2s linear;
 }
 .head-nav {
     background: #f1f1f1;
@@ -740,11 +738,12 @@ ul.sub-list {
         top: 7px;
     }
     .lower-layer-header {
-        padding-top: 10px;
+        padding-top: 5px;
     }
     .hamburger_menu button {
-        width: 30px;
-        i{
+        width: 32px;
+        padding: 4px 4px 3px 0;
+        i {
             font-size: 20px !important;
         }
     }
@@ -775,7 +774,7 @@ ul.sub-list {
         width: 270px;
         left: -270px;
     }
-    .upperLayerHeader {
+    .upper-layer-header {
         padding-top: 5px;
         .navbar-nav{
             margin-bottom: 5px;
@@ -791,6 +790,7 @@ ul.sub-list {
     }
     .nav-left-bar {
         top: 0;
+        display: none;
     }
     .mobile_menu_icon {
         position: absolute;
@@ -811,7 +811,7 @@ ul.sub-list {
     .nav-left-bar.open .mobile_menu_icon {
         display: flex;
     }
-    .upperLayerHeader .open .dropdown-menu {
+    .upper-layer-header .open .dropdown-menu {
         background-color: #fff;
         -webkit-background-clip: padding-box;
         background-clip: padding-box;
@@ -844,6 +844,7 @@ ul.sub-list {
         }
         .notification{
             height: 25px;
+             position: relative;
         }
     }
     .calender-addone {
@@ -875,22 +876,28 @@ ul.sub-list {
     }
     .plan-wrapper{
         padding: 15px 0 0;
+        display: none;
         .white-row{
             margin: 0 15px;
         }
     }
     .setting-menu-icon{
-        padding: 0 10px 0 3px;
+        padding: 4px 10px 4px 4px;
         display: none;
-        width: 30px;
+        width: 32px;
         text-align: center;
+    }
+    .mobile-back-btn{
+        display: none;
+        color: #fff;
+        margin-right: 10px;
     }
     .not-today{
         margin-right: 5px;
     }
     .date-range-picker{
-        max-width: 190px;
-        min-width: 190px;
+        max-width: 195px;
+        min-width: 195px;
         font-size: 12px !important;
     }
 }
@@ -938,6 +945,5 @@ ul.sub-list {
     }
     .not-today{
         padding-right: 0 !important;
-        padding-left: 0 !important;
     }
 }
