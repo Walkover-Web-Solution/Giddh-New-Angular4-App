@@ -250,16 +250,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public invFormData: VoucherClass;
     /** Invoice list array */
     public invoiceList: any[];
-<<<<<<< HEAD
-<<<<<<< HEAD
     /** Selected invoice for credit note */
     public selectedInvoice: any = null;
-=======
->>>>>>> e978513f2... create voucher with credit note
-=======
-    /** Selected invoice for credit note */
-    public selectedInvoice: any = null;
->>>>>>> aedb9bdab... bug fixes
+
     public customerAcList$: Observable<IOption[]>;
     public bankAccounts$: Observable<IOption[]>;
     public salesAccounts$: Observable<IOption[]> = observableOf(null);
@@ -364,6 +357,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public ratePrecision = RATE_FIELD_PRECISION;
     /** Rate precision value that will be sent to API */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
+    /** Force clear for invoice drop down */
+    public invoiceForceClearReactive$: Observable<IForceClear> = observableOf({ status: false });
     public selectedCompany: any;
     public formFields: any[] = [];
 
@@ -1505,25 +1500,25 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             this.invoiceList = [];
             this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
-                // _.map(res.body, (invoice) => {
-                //     let invoiceAlreadyInList = this.invoiceList.find(i => i.value === invoice.invoiceUniqueName);
-                //     if (!invoiceAlreadyInList) {
-                //         this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice });
-                //     }
-                // });
                 if (response && response.body) {
-                    response.body.forEach(invoice => this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice }))
-                    const selectedInvoice = this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0];
+                    if (response.body.length) {
+                        response.body.forEach(invoice => this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice }))
+                    } else {
+                        this.invoiceForceClearReactive$ = observableOf({ status: true });
+                    }
                     let invoiceSelected;
-                    if (selectedInvoice) {
-                        invoiceSelected = {
-                            label: selectedInvoice.invoiceNumber,
-                            value: selectedInvoice.invoiceUniqueName,
-                            invoice: selectedInvoice
-                        };
-                        const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
-                        if (!linkedInvoice) {
-                            this.invoiceList.push(invoiceSelected);
+                    if (this.isUpdateMode) {
+                        const selectedInvoice = this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0];
+                        if (selectedInvoice) {
+                            invoiceSelected = {
+                                label: selectedInvoice.invoiceNumber,
+                                value: selectedInvoice.invoiceUniqueName,
+                                invoice: selectedInvoice
+                            };
+                            const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
+                            if (!linkedInvoice) {
+                                this.invoiceList.push(invoiceSelected);
+                            }
                         }
                     }
                     _.uniqBy(this.invoiceList, 'value');
@@ -1721,7 +1716,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isGenDtlCollapsed = true;
         this.isMlngAddrCollapsed = true;
         this.isOthrDtlCollapsed = false;
-        this.forceClear$ = observableOf({status: true});
+        this.forceClear$ = observableOf({ status: true });
+        this.invoiceForceClearReactive$ = observableOf({ status: true });
         this.isCustomerSelected = false;
         this.selectedFileName = '';
         this.selectedWarehouse = '';
@@ -2269,7 +2265,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             trx.amount = 0;
         }
-        
+
         if (trx.isStockTxn) {
             trx.rate = Number((trx.amount / trx.quantity).toFixed(this.highPrecisionRate));
         }
