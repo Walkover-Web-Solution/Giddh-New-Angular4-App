@@ -25,6 +25,14 @@
                 <div *ngIf="fieldsAndVisibility.header.gstin" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['gstin'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> GSTIN
                 </div>
+                <ng-template>
+                    <div class="form-group clearfix customField">
+                        <input checked type="checkbox">
+                        <span>
+                            <input class="form-control" type="text" value="Registered under Composition Scheme">
+                        </span>
+                    </div>
+                </ng-template>
                 <!-- <div *ngIf="fieldsAndVisibility.header.pan" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[2].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> PAN</div> -->
                 <div *ngIf="voucherType==='sales'|| voucherType===''">
                     <div *ngIf="fieldsAndVisibility.header.invoiceDate" class="form-group">
