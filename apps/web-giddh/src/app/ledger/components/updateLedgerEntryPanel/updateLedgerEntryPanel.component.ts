@@ -669,6 +669,148 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             });
 
+        this.flattenAccountListStream$.subscribe((repsonse) => {
+            this.vm.flatternAccountList = repsonse;
+            let stockListFormFlattenAccount: IFlattenAccountsResultItem;
+            if (this.vm.flatternAccountList && this.vm.flatternAccountList.length && this.activeAccount) {
+                stockListFormFlattenAccount = repsonse.find((acc) => acc.uniqueName === this.activeAccount.uniqueName);
+            }
+            let accountsArray: IOption[] = [];
+            let accountsForBaseAccountArray: IOption[] = [];
+            let isStockableAccount: boolean = false;
+            // check if current account category is type 'income' or 'expenses'
+            let parentAcc = this.activeAccount.parentGroups[0].uniqueName;
+            let incomeAccArray = ['revenuefromoperations', 'otherincome'];
+            let expensesAccArray = ['operatingcost', 'indirectexpenses'];
+            let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
+            isStockableAccount = this.activeAccount.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
+            if (isStockableAccount) {
+                // stocks from ledger account
+                this.vm.flatternAccountList.map(acc => {
+                    // normal entry
+                    accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+
+                    // normal merge account entry
+                    if (acc.mergedAccounts && acc.mergedAccounts !== '') {
+                        let mergeAccs = acc.mergedAccounts.split(',');
+                        mergeAccs.map(m => m.trim()).forEach(ma => {
+                            accountsArray.push({
+                                value: ma,
+                                label: ma,
+                                additional: acc
+                            });
+                        });
+                    }
+
+                    // check if taxable or round off account then don't assign stocks
+                    let notRoundOff = acc.uniqueName === 'roundoff';
+                    let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
+                    if (!isTaxAccount && !notRoundOff && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
+                        stockListFormFlattenAccount.stocks.map(as => {
+                            // stock entry
+                            accountsArray.push({
+                                value: `${acc.uniqueName}#${as.uniqueName}`,
+                                label: acc.name + '(' + as.uniqueName + ')',
+                                additional: Object.assign({}, acc, { stock: as })
+                            });
+                            // normal merge account entry
+                            if (acc.mergedAccounts && acc.mergedAccounts !== '') {
+                                let mergeAccs = acc.mergedAccounts.split(',');
+                                mergeAccs.map(m => m.trim()).forEach(ma => {
+                                    accountsArray.push({
+                                        value: `${ma}#${as.uniqueName}`,
+                                        label: ma + '(' + as.uniqueName + ')',
+                                        additional: Object.assign({}, acc, { stock: as })
+                                    });
+                                });
+                            }
+                        });
+                    }
+
+                    // add current account entry in base account array
+                    accountsForBaseAccountArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                });
+
+            } else {
+                this.vm.flatternAccountList.map(acc => {
+                    if (acc.stocks) {
+                        acc.stocks.map(as => {
+                            accountsArray.push({
+                                value: `${acc.uniqueName}#${as.uniqueName}`,
+                                label: `${acc.name} (${as.uniqueName})`,
+                                additional: Object.assign({}, acc, { stock: as })
+                            });
+                        });
+                        accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                    } else {
+                        accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+
+                        // add current account entry in base account array
+                        accountsForBaseAccountArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                    }
+                    // normal merge account entry
+                    if (acc.mergedAccounts && acc.mergedAccounts !== '') {
+                        let mergeAccs = acc.mergedAccounts.split(',');
+                        mergeAccs.map(m => m.trim()).forEach(ma => {
+                            accountsArray.push({
+                                value: ma,
+                                label: ma,
+                                additional: acc
+                            });
+                        });
+                    }
+                });
+            }
+            this.vm.selectedLedger.transactions.map(t => {
+                if (this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
+                    let category = this.vm.getCategoryNameFromAccount(t.particular.uniqueName);
+                    if (this.vm.isValidCategory(category)) {
+                        /**
+                         * replace transaction amount with the actualAmount key that we got in response of get-ledger
+                         * because of ui and api follow different calculation pattern,
+                         * so transaction amount of income/ expenses account differ from both the side
+                         * so overcome this issue api provides the actual amount which was added by user while creating entry
+                         */
+                        t.amount = this.vm.selectedLedger.actualAmount;
+                        // if transaction is stock transaction then also update inventory amount and recalculate inventory rate
+                        if (t.inventory) {
+                            t.inventory.amount = this.vm.selectedLedger.actualAmount;
+                            t.inventory.rate = this.vm.selectedLedger.actualRate;
+                        }
+                    }
+                }
+
+                if (t.inventory) {
+                    // TODO: Prateek start
+                    let findStocks = accountsArray.find(f => f.value === t.particular.uniqueName + '#' + t.inventory.stock.uniqueName);
+                    if (findStocks) {
+                        let findUnitRates = findStocks.additional.stock;
+                        if (findUnitRates && findUnitRates.accountStockDetails && findUnitRates.accountStockDetails.unitRates.length) {
+                            let tempUnitRates = findUnitRates.accountStockDetails.unitRates;
+                            tempUnitRates.map(tmp => tmp.code = tmp.stockUnitCode);
+                            t.unitRate = tempUnitRates;
+                        } else {
+                            t.unitRate = [{
+                                code: t.inventory.unit.code,
+                                rate: t.inventory.rate,
+                                stockUnitCode: t.inventory.unit.code
+                            }];
+                        }
+                    } else {
+                        t.unitRate = [{
+                            code: t.inventory.unit.code,
+                            rate: t.inventory.rate,
+                            stockUnitCode: t.inventory.unit.code
+                        }];
+                    }
+                    // TODO: Prateek end
+                    t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
+                }
+            });
+            this.vm.flatternAccountList4Select = observableOf(orderBy(accountsArray, 'label'));
+            this.vm.flatternAccountList4BaseAccount = orderBy(accountsForBaseAccountArray, 'label');
+        });
+
         // check if delete entry is success
         this.isDeleteTrxEntrySuccess$.subscribe(del => {
             if (del) {
