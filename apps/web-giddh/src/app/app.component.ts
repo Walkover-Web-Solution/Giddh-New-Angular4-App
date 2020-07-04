@@ -77,7 +77,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     this._generalService.invokeEvent.next('logoutCordova');
                     this.router.navigate(['login']);
                 } else {
-                    window.location.href = AppUrl + 'login';
+                    this.router.navigate(['/login']);
                 }
             }
         }
