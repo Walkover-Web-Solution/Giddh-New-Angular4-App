@@ -64,6 +64,12 @@ thead th {
     color: rgba(0, 0, 0, 0.4) !important;
     font-size: 16px;
 }
+.dashboard-datepicker {
+    max-width: 190px;
+    min-width: 190px;
+    border-radius: 30px;
+    border: 1px solid $gainsboro;
+}
 @media(max-width:768px){
     .debtors-table {
         margin-bottom: 30px;

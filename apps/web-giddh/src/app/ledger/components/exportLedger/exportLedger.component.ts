@@ -12,7 +12,8 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
-
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { download } from '@giddh-workspaces/utils';
 @Component({
     selector: 'export-ledger',
     templateUrl: './exportLedger.component.html',
@@ -35,15 +36,19 @@ export class ExportLedgerComponent implements OnInit {
     public emailData: string = '';
     public withInvoiceNumber: boolean = false;
     public universalDate$: Observable<any>;
+    public isMobileScreen: boolean = true;
     /** Columnar report in balance type for Credit/Debit as +/- sign */
     public balanceTypeAsSign: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _ledgerService: LedgerService, private _toaster: ToasterService, private _permissionDataService: PermissionDataService, private store: Store<AppState>) {
+    constructor(private breakPointObservar: BreakpointObserver,private _ledgerService: LedgerService, private _toaster: ToasterService, private _permissionDataService: PermissionDataService, private store: Store<AppState>) {
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ])
         this._permissionDataService.getData.forEach(f => {
             if (f.name === 'LEDGER') {
                 let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
@@ -77,18 +82,16 @@ export class ExportLedgerComponent implements OnInit {
         exportRequest.from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
         exportRequest.to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
 
-        //delete body.dataToSend;
-
         this._ledgerService.ExportLedger(exportRequest, this.accountUniqueName, body.dataToSend, exportByInvoiceNumber).subscribe(response => {
             if (response.status === 'success') {
                 if (response.body) {
                     if (response.body.status === "success") {
                         if (response.queryString.fileType === 'xlsx') {
                             let blob = base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);
-                            return saveAs(blob, `${this.accountUniqueName}.xlsx`);
+                            return download(`${this.accountUniqueName}.xlsx`, blob, 'application/vnd.ms-excel');
                         } else if (response.queryString.fileType === 'pdf') {
                             let blob = base64ToBlob(response.body.response, 'application/pdf', 512);
-                            return saveAs(blob, `${this.accountUniqueName}.pdf`);
+                            return download(`${this.accountUniqueName}.pdf`, blob, 'application/pdf');
                         }
                     } else if (response.body.message) {
                         this._toaster.infoToast(response.body.message);

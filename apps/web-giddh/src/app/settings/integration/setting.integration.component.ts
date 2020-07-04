@@ -80,6 +80,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     private isSellerUpdate: Observable<boolean> = observableOf(false);
     /** user who is logged in currently */
     private loggedInUserEmail: string;
+    /** List of integrated bank */
     public integratedBankList: IntegratedBankList;
     /** Add bank form reference */
     public addBankForm: FormGroup;
@@ -105,6 +106,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public selecetdUpdateIndex: number;
     public isEcommerceShopifyUserVerified: boolean = false;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    /** List OTP type  */
     public typeOTPList: IOption[] =
         [
             { label: "Bank OTP", value: "BANK" },
@@ -313,7 +315,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
 
-        this.store.pipe(select(stores => stores.settings.usersWithCompanyPermissions),  takeUntil(this.destroyed$)).subscribe(resp => {
+        this.store.pipe(select(stores => stores.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(resp => {
             if (resp) {
                 let data = _.cloneDeep(resp);
                 let sortedArr = _.groupBy(this.prepareDataForUI(data), 'emailId');
@@ -798,12 +800,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
- * To select Max limit (Max bank or custom)
- *
- * @param {*} event  reference event
- * @param {number} index index number
- * @memberof SettingIntegrationComponent
- */
+     * To select Max limit (Max bank or custom)
+     *
+     * @param {*} event  reference event
+     * @param {number} index index number
+     * @memberof SettingIntegrationComponent
+     */
     public selectedMaxOrCustomField(index: number, isUpdate: boolean, parentIndex?: number, event?: any): void {
 
         if (!isUpdate) {
@@ -1164,6 +1166,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         return;
     }
 
+    /**
+     * Prepare amount range array of bank integration
+     *
+     * @param {*} [addressObj=null]
+     * @memberof SettingIntegrationComponent
+     */
     public filledAmountRangesForm(addressObj: any = null) {
         const transactions = this.addBankForm.get('userAmountRanges') as FormArray;
         transactions.push(this.initialUserAmountRangesForm(addressObj));

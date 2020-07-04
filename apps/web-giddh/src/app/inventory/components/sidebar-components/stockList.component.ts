@@ -53,7 +53,6 @@ export class StockListComponent implements OnInit, OnDestroy {
         this.sub = this.route.params.subscribe(params => {
             this.groupUniqueName = params['groupUniqueName'];
         });
-
     }
 
     public ngOnDestroy() {

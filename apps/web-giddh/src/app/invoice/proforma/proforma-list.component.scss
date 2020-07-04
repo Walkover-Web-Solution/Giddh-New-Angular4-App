@@ -134,7 +134,7 @@
 .icon-pointer .activeTextColor {
     color: $deep-sky-blue;
 }
-.date-advanceSearch {
+.date-advance-search {
     justify-content: space-between;
 }
 .mobile-search {
@@ -321,7 +321,7 @@ span.icon-advance-search {
         margin-bottom: 5px;
         font-size: 14px;
     }
-    .date-advanceSearch {
+    .date-advance-search {
         display: block;
     }
     .form-group div {
@@ -335,7 +335,7 @@ span.icon-advance-search {
     .smallLoading {
         top: 5px;
     }
-    .date-advanceSearch .btn-wrapper{
+    .date-advance-search .btn-wrapper{
         display: none;
     }
 }
