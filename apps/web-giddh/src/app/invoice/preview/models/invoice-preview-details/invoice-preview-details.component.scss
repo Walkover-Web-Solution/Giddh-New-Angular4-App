@@ -198,6 +198,14 @@
     margin-bottom: 35px;
     z-index: -9;
     height: 100%;
+    .expand-button{
+        position: absolute;
+        right: 15px;
+        font-size: 14px;
+        span{
+            margin-right: 5px;
+        }
+    }
     .error {
         display: flex;
         justify-content: center;
@@ -478,9 +486,17 @@ label.labeled {
         background: #28ab00;
         color: $white;
     }
-    .aquaColor a {
-        color: #0c8fe6;
+    .aqua-color a {
+        color: $deep-sky-blue;
         font-size: 12px;
+    }
+}
+.linked-purchase-order{
+    .purchase-order-number{
+        color: $gray;
+        .aqua-color {
+            color: $deep-sky-blue;
+        }
     }
 }
 
