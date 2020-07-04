@@ -628,7 +628,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             }
                             this.shouldShowWarehouse = true;
                         } else {
-                            initialAccounts.push({ label: t.particular.name, value: t.particular.uniqueName, additional: t });
+                            initialAccounts.push({ label: t.particular.name, value: t.particular.uniqueName, additional: {
+                                ...t,
+                                uniqueName: t.particular.uniqueName
+                            }});
                         }
                     });
                     this.vm.flatternAccountList4Select = observableOf(orderBy(initialAccounts, 'label'));
