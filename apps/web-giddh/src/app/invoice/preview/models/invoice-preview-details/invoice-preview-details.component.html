@@ -216,6 +216,9 @@
                                                     class="fa fa-trash"></i></a>
                                             </span>
                                         </div>
+                                        <div class="history-btn">
+                                            <button class="btn btn-primary" (click)="toggleAccountAsidePane()"><img src="../../../assets/images/history-icon.svg"> History</button>
+                                        </div>
 
                                     </div>
                                 </div>
@@ -280,11 +283,20 @@
 
                             </div>
                         </div>
-
+                        <div class="linked-purchase-order font-14 mt-15">
+                            <p><span class="icon-file-path"></span> Linked Purchase Order(s):</p>
+                            <div class="purchase-order-number">
+                                <a class="aqua-color">PO934850 </a> | <a class="aqua-color">PO934850 </a> | <a class="aqua-color">PO934850 </a>
+                            </div>
+                        </div>
                     </div>
                     <!-- class="invoice-image-section" [style.height.px]="invoiceImageSectionViewHeight" -->
 
                     <div *ngIf="!isMobileView" class="invoice-image-section">
+                        <div class="relative">
+                            <div class="pos-rel" *ngIf="isVoucherDownloading || isFileUploading">
+                                <div class="loader"></div>
+                            </div>
 
                         <div class="pos-rel" *ngIf="isVoucherDownloading || isFileUploading">
                             <div class="loader"></div>
@@ -376,6 +388,28 @@
     <!-- endregion -->
 
 </div>
+<div class="aside-overlay" *ngIf="orderHistoryAsideState === 'in'"></div>
+<div *ngIf="orderHistoryAsideState === 'in'">
+    <!-- <aside-order-history (closeAsideEvent)="toggleOrderHistoryAsidePane($event)" >
+    </aside-order-history> -->
+</div>
+
+<ng-template #template>
+    <div>
+      
+      <button type="button" class="close pull-right cursor-pointer" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview class="fixed-ng2pdfview pdf-preview" [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
+            <ng2-pdfjs-viewer pagemode="none" *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')" viewerId="MyUniqueID" [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
+                [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="testPagesLoaded($event);" [openFile]="false" [viewBookmark]="false" [download]="false">
+            </ng2-pdfjs-viewer>
+            <img *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')" class="image-preview" [src]="imagePreviewSource" />
+        </div>
+    </div>
+</ng-template>
 
 <!-- region send email modal-->
 <div bsModal #showEmailSendModal="bs-modal" class="modal fade" role="dialog"

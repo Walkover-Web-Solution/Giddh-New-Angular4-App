@@ -74,6 +74,18 @@
 .icon-history-icon:before {
   content: "\e900";
 }
+.icon-advance-filter:before {
+  content: "\e900";
+}
+.icon-copy-small:before {
+  content: "\e901";
+}
+.icon-enevlop:before {
+  content: "\e902";
+}
+.icon-tick:before {
+  content: "\e903";
+}
 .icon-log:before {
   content: "\e001";
 }
@@ -119,17 +131,65 @@
 .icon-journal:before {
   content: "\e016";
 }
-.icon-advance-filter:before {
-  content: "\e901";
-}
-.icon-copy-small:before {
-  content: "\e902";
-}
-.icon-enevlop:before {
-  content: "\e903";
-}
-.icon-tick:before {
+.icon-branch:before {
   content: "\e904";
+}
+.icon-company-profile:before {
+  content: "\e905";
+}
+.icon-discount:before {
+  content: "\e906";
+}
+.icon-financial-year:before {
+  content: "\e907";
+}
+.icon-integration:before {
+  content: "\e908";
+}
+.icon-invoice-managment:before {
+  content: "\e909";
+}
+.icon-linked-accounts:before {
+  content: "\e90a";
+}
+.icon-manage-user:before {
+  content: "\e90b";
+}
+.icon-subscription:before {
+  content: "\e90c";
+}
+.icon-tags:before {
+  content: "\e90d";
+}
+.icon-taxes:before {
+  content: "\e90e";
+}
+.icon-trigger:before {
+  content: "\e90f";
+}
+.icon-user:before {
+  content: "\e910";
+}
+.icon-warehouse:before {
+  content: "\e911";
+}
+.icon-help-support-icon:before {
+  content: "\e912";
+}
+.icon-back-arrow:before {
+  content: "\e913";
+}
+.icon-home-icon:before {
+  content: "\e914";
+}
+.icon-generate-invoice:before {
+  content: "\e915";
+}
+.icon-no-selected:before {
+  content: "\e916";
+}
+.icon-edit-pencil:before {
+  content: "\e917";
 }
 .icon-help-support-icon:before {
   content: "\e913";
