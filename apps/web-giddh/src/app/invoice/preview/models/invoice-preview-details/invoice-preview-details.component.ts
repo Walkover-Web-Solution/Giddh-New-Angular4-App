@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, TemplateRef , ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { fromEvent, ReplaySubject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil, take } from 'rxjs/operators';
 import { InvoiceSetting } from '../../../../models/interfaces/invoice.setting.interface';
@@ -14,7 +14,7 @@ import { ReceiptService } from '../../../../services/receipt.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
 import { ProformaActions } from '../../../../actions/proforma/proforma.actions';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective, BsModalService, BsModalRef } from 'ngx-bootstrap';
 import { Router } from '@angular/router';
 import { InvoiceReceiptActions } from '../../../../actions/invoice/receipt/receipt.actions';
 import { GeneralActions } from '../../../../actions/general/general.actions';
@@ -64,7 +64,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @Output() public refreshDataAfterVoucherUpdate: EventEmitter<boolean> = new EventEmitter();
     /** Event emmiter when advance receipt action selected */
     @Output() public onOpenAdvanceReceiptModal: EventEmitter<boolean> = new EventEmitter();
-
+    modalRef: BsModalRef;
     public filteredData: InvoicePreviewDetailsVm[] = [];
     public showEditMode: boolean = false;
     public isSendSmsEnabled: boolean = false;
@@ -100,6 +100,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public proformaListComponent: ProformaListComponent;
     /** To check is selected account/customer have advance receipts */
     public isAccountHaveAdvanceReceipts: boolean = false;
+    public orderHistoryAsideState: string = 'out';
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -115,7 +116,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private _generalService: GeneralService,
         private purchaseRecordService: PurchaseRecordService,
         private sanitizer: DomSanitizer,
-        private salesService: SalesService) {
+        private salesService: SalesService,
+        private modalService: BsModalService) {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).subscribe(result => {
@@ -222,7 +224,21 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.invoiceDetailViewHeight = this.invoiceDetailView.nativeElement.offsetHeight;
         this.invoiceImageSectionViewHeight = this.invoiceDetailWrapperHeight - this.invoiceDetailViewHeight - 90;
     }
+    public toggleOrderHistoryAsidePane(event?): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.orderHistoryAsideState = this.orderHistoryAsideState === 'out' ? 'in' : 'out';
 
+        this.toggleBodyClass();
+    }
+    // public toggleBodyClass() {
+    //     if (this.orderHistoryAsideState === 'in') {
+    //         document.querySelector('body').classList.add('fixed');
+    //     } else {
+    //         document.querySelector('body').classList.remove('fixed');
+    //     }
+    // }
     public toggleEditMode() {
         this.store.dispatch(this._generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
         this.showEditMode = !this.showEditMode;
@@ -234,7 +250,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     public toggleBodyClass() {
-        if (!this.showEditMode) {
+        if (!this.showEditMode || this.orderHistoryAsideState === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');
@@ -256,7 +272,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         }
         this.showEditMode = false;
     }
-
+    openModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template,
+        Object.assign({}, { class: 'preview-lightbox modal-lg' })
+        );
+    }
     public getVoucherVersions() {
         let request = new ProformaGetAllVersionRequest();
         request.accountUniqueName = this.selectedItem.account.uniqueName;

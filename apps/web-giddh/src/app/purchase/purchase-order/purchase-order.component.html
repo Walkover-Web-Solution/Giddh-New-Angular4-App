@@ -10,7 +10,7 @@
                         </span>
                     </div>
                     <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
-                        <span class="icon-advance-search"></span>
+                        <span class="icon-advance-filter"></span>
                     </div>
 
                     <!-- <div class="search-icon-block" (click)="openModal(template)">
@@ -54,7 +54,7 @@
             </div>
             <div class="btn-wrapper">
                 <button class="btn btn-pink desktop-view-btn mr-0" [routerLink]="['/pages/purchase-management/create-purchase-order']">+
-                    New Purchase
+                    New Bill
                 </button>
             </div>
         </div>
@@ -134,7 +134,7 @@
                     23/05/2020
                 </td>
                 <td>
-                    2355989
+                  <span routerLink="['/pages/purchase-management/purchase-order-invoice-preview']">2355989</span>  
                 </td>
                 <td>
                     Walkover Web solution
@@ -151,16 +151,16 @@
                     Open</span>
                     <div class="action-icon ml-15">
                         <a tooltip="Convert to bill">
-                            <img src="../../../assets/images/tick.svg">
+                            <span class="icon-tick font-12"></span>
                         </a>
                         <a tooltip="send Email">
-                            <img src="../../../assets/images/mail-icon.svg">
+                            <span class="icon-enevlop font-12"></span>
                         </a>
                          <a tooltip="Copy">
-                             <img src="../../../assets/images/copy-icon-gray.svg">
+                            <span class="icon-copy-small font-12"></span>
                          </a>
                          <a tooltip="Delete">
-                             <i class="icon-trash"></i>
+                             <i class="icon-trash font-12"></i>
                          </a>
                     </div>
                 </td>

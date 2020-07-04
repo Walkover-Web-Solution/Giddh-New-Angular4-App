@@ -441,7 +441,7 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .invoice-footer h1 {
-    font-size: 28px;
+    font-size: 18px;
     color: #333;
     display: inline-block;
 }
@@ -456,6 +456,44 @@ div.remove-capitalize {
 
 span.icon-export-icon {
     color: $gray;
+}
+.giddh-table{
+    tr{
+        td{
+                .action-icon {
+                    display: flex;
+                    align-items: center;
+                    border: 1px solid $gainsboro;
+                    display: none;
+                    a{
+                        width: 30px;
+                        font-size: 20px;
+                        color: $gray;
+                        border-right: 1px solid $gainsboro;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;         
+                        padding: 0 5px;
+                        cursor: pointer;
+                        align-items: stretch;
+                        height: 30px;
+                        align-items: center;
+                        background-color: $white;
+                    
+                    }
+                    &:last-child{
+                        border-right:none !important;  
+                    }
+                }
+            }
+        }
+        &:hover{
+            td{
+            .action-icon {
+                display: flex !important;
+            }
+        }
+        }
 }
 /* responsive */
 

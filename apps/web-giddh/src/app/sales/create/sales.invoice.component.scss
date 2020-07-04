@@ -6,7 +6,7 @@ $greyClr: #6d6d6d;
 /**
 # margin mixin pass direction and number
 */
-
+@import "../../../assets/css/color.scss";
 @mixin marg($d, $num) {
     @if $d== "B" {
         margin-bottom: $num;
@@ -1020,14 +1020,14 @@ section.staticInvoiceTable {
     top: 110px;
 }
 
-.p-4.aquaColor.add-line-bulk-item {
+.p-4.aqua-color.add-line-bulk-item {
     position: relative;
     height: 33px;
     width: 470% !important;
 }
 
-.aquaColor a {
-    color: #0c8fe6;
+.aqua-color a {
+    color: $deep-sky-blue;
     font-size: 12px;
 }
 

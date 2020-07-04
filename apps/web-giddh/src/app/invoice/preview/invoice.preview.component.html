@@ -12,7 +12,7 @@
                         </span>
                     </div>
                     <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
-                        <span class="icon-advance-search" (click)="toggleAdvanceSearchPopup(false)"></span>
+                        <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup(false)"></span>
                     </div>
 
                     <div class="search-icon-block" (click)="openModal(template)">
@@ -74,7 +74,7 @@
                 </div>
                 <div *ngIf="selectedVoucher === 'purchase'" class="btn-wrapper">
                     <button class="btn btn-pink desktop-view-btn" (click)="goToInvoice('purchase')">+
-                        New Purchase
+                        New Bill
                     </button>
                 </div>
                 <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
@@ -186,7 +186,7 @@
         <!-- For mobile screen sizes ends -->
 
         <div class="invoice-preview  table-responsive">
-            <table class="table basic table-bordered mt-15 invoice-table desktop-table  table-responsive">
+            <table class="table basic table-bordered mt-15 invoice-table desktop-table  giddh-table table-responsive">
 
                 <!--sales-->
                 <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
@@ -205,10 +205,10 @@
                         </th>
 
                         <th width="13%" class="td_in_searchBox" #searchInvoiceContainer (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-                            <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Invoice No.', fieldName: 'invoiceNumber',
+                            <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Bill#', fieldName: 'invoiceNumber',
              formControl: voucherNumberInput}"></ng-container>
                         </th>
-
+                        <th>Purchase Order</th>
                         <th width="19%" class="td_in_searchBox" #searchCustomerContainer (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
                             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
             title: (selectedVoucher === 'purchase') ? 'Vendor' : 'Customer'}"></ng-container>
@@ -216,7 +216,7 @@
 
                         <th width="10%">
                             <div class="d-flex">
-                                <div class="">Invoice Date</div>
+                                <div class="">Bill Date</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'voucherDate'}">
                                     </ng-container>
@@ -226,7 +226,7 @@
 
                         <th width="12%">
                             <div class="d-flex justify-content-end">
-                                <div class=" text-right"> Total Amt.</div>
+                                <div class=" text-right"> Amount</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}">
                                     </ng-container>
@@ -344,7 +344,7 @@
                                 </small>
                             </span>
                         </td>
-
+                        <td>PO82479</td>
                         <!-- Customer -->
                         <td [ngClass]="{'cp': selectedVoucher !== 'purchase'}" (dblclick)="(selectedVoucher !== 'purchase') ? modalUniqueName = item.uniqueName : ''" class="no-dbl-click-select" (clickOutside)="modalUniqueName = ''">
 
@@ -411,6 +411,20 @@
                         <!--for cancelled status-->
                         <td *ngIf="(selectedVoucher !== 'purchase') && item.balanceStatus === 'cancel'">
                             <span>{{ item.balanceStatus}}</span>
+                            <div class="action-icon ml-15">
+                                <a tooltip="Convert to bill">
+                                    <span class="icon-tick font-12"></span>
+                                </a>
+                                <a tooltip="send Email">
+                                    <span class="icon-enevlop font-12"></span>
+                                </a>
+                                 <a tooltip="Copy">
+                                    <span class="icon-copy-small font-12"></span>
+                                 </a>
+                                 <a tooltip="Delete">
+                                     <i class="icon-trash font-12"></i>
+                                 </a>
+                            </div>
                         </td>
 
                     </tr>
@@ -580,6 +594,20 @@
 
                                 <div *ngIf="item.balanceStatus === 'cancel'">
                                     <span>{{ item.balanceStatus}}</span>
+                                    <div class="action-icon ml-15">
+                                        <a tooltip="Convert to bill">
+                                            <span class="icon-tick font-12"></span>
+                                        </a>
+                                        <a tooltip="send Email">
+                                            <span class="icon-enevlop font-12"></span>
+                                        </a>
+                                         <a tooltip="Copy">
+                                            <span class="icon-copy-small font-12"></span>
+                                         </a>
+                                         <a tooltip="Delete">
+                                             <i class="icon-trash font-12"></i>
+                                         </a>
+                                    </div>
                                 </div>
                             </div>
                         </td>

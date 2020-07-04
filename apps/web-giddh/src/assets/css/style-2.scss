@@ -9332,6 +9332,19 @@ span#HW_badge_cont:nth-child(3){
         width: 100%;
     }
 }
+.preview-lightbox{
+    img{
+        width:100%
+    }
+    .close{
+        width: 30px;
+        height: 30px;
+        opacity: 1;
+    }
+    .moday-body{
+        padding: 30px 15px;
+    }
+}
 /* responsive */
 
 @media (max-width: 1440px) {

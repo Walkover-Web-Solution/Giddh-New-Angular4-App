@@ -1311,12 +1311,12 @@ section.newtable {
     font-size: 14px;
 }
 
-.aquaColor a {
-    color: #0c8fe6;
+.aqua-color a {
+    color: $deep-sky-blue;
     font-size: 12px;
 }
 
-.aquaColor i {
+.aqua-color i {
     font-size: 16px;
 }
 
@@ -1330,7 +1330,7 @@ section.newtable {
     position: relative;
 }
 
-.p-4.aquaColor.add-line-bulk-item {
+.p-4.aqua-color.add-line-bulk-item {
     position: relative;
     height: 33px;
     width: 470% !important;

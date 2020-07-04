@@ -128,7 +128,7 @@
                                                 <!-- endregion -->
 
                                                 <!-- region previous details commented for multicurrency changes-->
-                                                <div class="d-flex cp aquaColor" #copyPreviousEstimate *ngIf="!isPurchaseInvoice && !(isPendingVoucherType && isCashInvoice) && invFormData.voucherDetails.customerName && lastInvoices.length && !isUpdateMode" style="align-items: center;margin-left: 2%">
+                                                <div class="d-flex cp aqua-color" #copyPreviousEstimate *ngIf="!isPurchaseInvoice && !(isPendingVoucherType && isCashInvoice) && invFormData.voucherDetails.customerName && lastInvoices.length && !isUpdateMode" style="align-items: center;margin-left: 2%">
                                                     <a href="javascript: void 0" (click)="showLastEstimateModal = !showLastEstimateModal">
                                                         <i class="fa fa-files-o"></i> Copy Previous {{ invoiceType | voucherTypeToNamePipe | titlecase}} Invoices
                                                     </a>
@@ -139,12 +139,12 @@
                                             </div>
 
                                             <!-- region Unregistered Business / customer details -->
-                                            <div class="d-flex aquaColor" *ngIf="invFormData.voucherDetails.customerName">
+                                            <div class="d-flex aqua-color" *ngIf="invFormData.voucherDetails.customerName">
 
                                                 <ng-container *ngTemplateOutlet="gstTreatmentModal;context:{ $implicit: showGstTreatmentModal}">
                                                 </ng-container>
 
-                                                <span style="margin-right: 5px" class="cp aquaColor" *ngIf="!isCashInvoice && !isUpdateMode">
+                                                <span style="margin-right: 5px" class="cp aqua-color" *ngIf="!isCashInvoice && !isUpdateMode">
                                                     <a href="javascript:void(0)"
                                                        (click)="getCustomerDetails()">{{!isPurchaseInvoice ? 'Customer' : 'Vendor'}}
                                                         Details</a>
@@ -361,6 +361,22 @@
                                 </div>
                             </div>
                             <!-- end warehouse field -->
+
+                            <!-- Link purchase order (make it functional)-->
+                            <div class="row mTB1" hidden>
+                                <div class="col-sm-2">
+                                    <label>Link Purchase Order</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="col-sm-6 pl-0">
+                                       <sh-select></sh-select>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end Link purchase order -->
+
+
                             <!-- region invoice no, invoice date, Expiry date -->
                             <div class="row mTB1">
                                 <div class="col-sm-2">
@@ -965,7 +981,7 @@
     </tbody>
 
     <!-- region add bulk items -->
-    <div class="p-4 aquaColor add-line-bulk-item" style="width: max-content;">
+    <div class="p-4 aqua-color add-line-bulk-item" style="width: max-content;">
         <a href="javascript:void 0" (click)="addBlankRow(null)">+ Add New Line</a>
         <span style="font-size:14px; color: #c5c5c5;"> | </span>
         <a (click)="showBulkItemModal = true; bulkItemsModal.show()" href="javascript:void 0">+ Add
