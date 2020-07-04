@@ -22,6 +22,7 @@
                                 <strong *ngIf="fieldsAndVisibility.header.formNameInvoice?.label && !fieldsAndVisibility.header.formNameTaxInvoice?.label">{{fieldsAndVisibility.header.formNameInvoice?.label}}</strong>
                                 <strong *ngIf="(!fieldsAndVisibility.header.formNameInvoice?.label && fieldsAndVisibility.header.formNameTaxInvoice?.label) || (fieldsAndVisibility.header.formNameInvoice?.label && fieldsAndVisibility.header.formNameTaxInvoice?.label)">{{fieldsAndVisibility.header.formNameTaxInvoice?.label}}</strong>
                             </h4>
+                            <p class="mt-05" *ngIf="fieldsAndVisibility.header.gstComposition?.display">{{(fieldsAndVisibility.header.gstComposition?.label) ? fieldsAndVisibility.header.gstComposition?.label : "Registered under Composition Scheme"}}</p>
                             <p class="mt-05">
                                 <ng-container *ngIf="voucherType==='sales'">
                                     <span *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">{{(fieldsAndVisibility.header.invoiceNumber?.label?.length > 0) ? fieldsAndVisibility.header.invoiceNumber?.label
