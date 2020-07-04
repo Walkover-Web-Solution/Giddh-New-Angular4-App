@@ -7,8 +7,8 @@
   <div class="modal-body">
     <div class="receipt-entry-content">
       <div class="receipt-entry-top-detail">
-          <h5 class="mb-05">Bill wise Details for: Debtor Name</h5>
-          <p>Upto: ₹25,000 Cr</p>
+          <h5 class="mb-05">Bill wise Details for: {{transaction?.selectedAccount?.name}}</h5>
+          <p>Upto: {{transaction?.amount | giddhCurrency}} Cr</p>
       </div>
       <div class="receipt-entry-form">
           <div class="form-fields">

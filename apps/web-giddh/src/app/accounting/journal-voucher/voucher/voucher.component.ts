@@ -167,7 +167,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public accountAsideMenuState: string = 'out';
     /** Category of accounts to display based on voucher type */
     public categoryOfAccounts: string;
-    modalRef: BsModalRef;
+    public modalRef: BsModalRef;
+    /* This will hold the transaction details to use in adjustment popup */
+    public currentTransaction: any;
+
+
+
     constructor(
         private _accountService: AccountService,
         private _ledgerActions: LedgerActions,
@@ -234,11 +239,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
     }
 
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(
-            template,
-            Object.assign({}, { class: 'modal-lg' })
-        );
+
+    public openAdjustmentModal(event: KeyboardEvent, transaction: any, template: TemplateRef<any>): void {
+        this.currentTransaction = transaction;
+
+        if(event.keyCode === 9 || event.keyCode === 13) {
+            this.modalRef = this.modalService.show(
+                template,
+                Object.assign({}, { class: 'modal-lg' })
+            );
+        }
     }
 
     public selectRef: IOption[] = [
@@ -278,6 +288,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.journalDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.dateEntered();
             }
         });
 
@@ -787,11 +798,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         } else {
             this.journalDate = moment().format(GIDDH_DATE_FORMAT);
         }
+        this.dateEntered();
         this.requestObj.description = '';
         setTimeout(() => {
             this.newEntryObj();
 
-            switch(this.currentVoucher) {
+            switch (this.currentVoucher) {
                 case VOUCHERS.CONTRA:
                     this.requestObj.transactions[0].type = 'by';
                     break;
@@ -804,7 +816,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     this.requestObj.transactions[0].type = 'by';
                     break;
             }
-            
+
         }, 100);
     }
 
@@ -1017,7 +1029,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public dateEntered() {
-        const date = moment(this.journalDate, 'DD-MM-YYYY');
+        const date = moment(this.journalDate, GIDDH_DATE_FORMAT);
         if (moment(date).format('dddd') !== 'Invalid date') {
             this.displayDay = moment(date).format('dddd');
         } else {
@@ -1270,10 +1282,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             let accList: IOption[] = [];
             this.allAccounts.forEach((acc: IFlattenAccountsResultItem) => {
                 if (this.activeCompany && acc.currency === this.activeCompany.baseCurrency) {
-                    if (this.requestObj.voucherType === "Contra") {
+                    if (this.requestObj.voucherType === VOUCHERS.CONTRA) {
                         const isContraAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash' || pg.uniqueName === 'currentliabilities'));
                         const isDisallowedAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'sundrycreditors' || pg.uniqueName === 'dutiestaxes'));
                         if (isContraAccount && !isDisallowedAccount) {
+                            accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+                        }
+                    } else if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
+                        const isReceiptAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash' || pg.uniqueName === 'currentliabilities' || pg.uniqueName === 'sundrycreditors' || pg.uniqueName === 'sundrydebtors'));
+                        if (isReceiptAccount) {
                             accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
                         }
                     } else {
