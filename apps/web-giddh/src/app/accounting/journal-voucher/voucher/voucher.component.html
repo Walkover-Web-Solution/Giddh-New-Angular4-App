@@ -62,8 +62,7 @@
                                         <span class="mr-15">2,000.00</span>
                                         <span>cr</span>
                                     </div>
-                                    <div class="debtor-details-form pb-1 pt-05"
-                                        *ngIf="debtorDetailFormShow && transaction.type === 'to'">
+                                    <div class="debtor-details-form pb-1 pt-05" *ngIf="debtorDetailFormShow && transaction.type === 'to'">
                                         <div class="form-fields">
                                             <div class="single-field relative">
                                                 <label>Type</label>
@@ -173,7 +172,7 @@
                                         (ngModelChange)="calModAmt(transaction.amount, transaction, i)" />
                                 </td>
                                 <td>
-                                    <input (click)="openModal(receiptEntry)" onReturn
+                                    <input (keydown)="openAdjustmentModal($event, transaction, receiptEntry)" onReturn
                                         [disabled]="!transaction.selectedAccount.name || transaction.type !== 'to'"
                                         [hidden]="transaction.type !== 'to'" type="text"
                                         class="form-control text-right debit-credit" #toAmountField
@@ -287,5 +286,5 @@
 
 <!-- Recipt entry modal -->
 <ng-template #receiptEntry>
-    <receipt-entry></receipt-entry>
+    <receipt-entry [transaction]="currentTransaction"></receipt-entry>
 </ng-template>
