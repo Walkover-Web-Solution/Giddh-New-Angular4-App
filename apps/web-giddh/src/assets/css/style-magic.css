@@ -3244,12 +3244,12 @@ ul.pills li {
 }
 .compoundEntry td,
 .compoundEntry td input{
-    background-color: transparent !important;
+    background-color: rgba(254, 205, 81, 0.1) !important;
 }
 
 .compoundEntry td:hover,
 .compoundEntry td input:hover {
-    background: transparent !important;
+    background: rgba(254, 205, 81, 0.1) !important;
 }
 
 .uncEntry td,
