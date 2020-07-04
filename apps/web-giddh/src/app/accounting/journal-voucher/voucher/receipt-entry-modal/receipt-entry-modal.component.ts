@@ -1,4 +1,4 @@
-import { TemplateRef,Component, OnInit } from '@angular/core';
+import { TemplateRef,Component, OnInit, Input } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { IOption } from '../../../../theme/ng-select/option.interface';
 @Component({
@@ -6,13 +6,16 @@ import { IOption } from '../../../../theme/ng-select/option.interface';
     templateUrl: './receipt-entry-modal.component.html',
     styleUrls: [ './receipt-entry-modal.component.scss'],
 })
+
 export class ReceiptEntryModalComponent implements OnInit {
-    public showInvNo:false;
-    modalRef: BsModalRef;
+    @Input() public transaction: any;
+    public showInvNo: boolean = false;
+    public modalRef: BsModalRef;
     
-    constructor(
-        private modalService: BsModalService
-    ){}
+    constructor(private modalService: BsModalService) {
+
+    }
+
     public selectRef: IOption[] = [
         { label: "Receipt", value: "Receipt"}, 
         { label: "Advance Receipt", value: "Advance Receipt"}, 
@@ -32,9 +35,8 @@ export class ReceiptEntryModalComponent implements OnInit {
         { label: "84358; 25/06/2020; 5000 cr.", value: "84358; 25/06/2020; 5000 cr."}, 
         { label: "848; 25/06/2020; 5000 cr", value: "848; 25/06/2020; 5000 cr."}
     ];
-    public ngOnInit(){
+
+    public ngOnInit(): void {
         
     }
-
-
 }
