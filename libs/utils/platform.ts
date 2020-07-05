@@ -110,8 +110,7 @@ export function download(filename, data, mimeType) {
                     );
                 },
                 (err) => {
-                    //alert("Unable to download");
-                    //console.error(err);
+                   
                 }
             );
         });
