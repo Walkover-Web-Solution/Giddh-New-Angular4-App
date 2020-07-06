@@ -716,9 +716,9 @@ $input-height: 3rem !default;
         padding-right: 15px;
         position: absolute;
         bottom: 15px;
-        background-color: #fff;
+        background-color: $white;
         padding-top: 9px;
-        z-index: 99;
+        z-index: 999 !important;
         right: 0;
         width: calc(100% - 218px);
     }
@@ -1669,7 +1669,7 @@ td span {
         position: absolute !important;
         bottom: 0 !important;
         right: 0 !important;
-        background-color: #ffffff !important;
+        background-color: $white !important;
         z-index: 99999 !important;
         width: 100% !important;
         margin: 0 !important;

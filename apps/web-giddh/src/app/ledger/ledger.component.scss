@@ -545,6 +545,51 @@ sh-select:focus {
 .input-wrapper.ipad-view-datepicker {
     display: none;
 }
+.no-btn,
+.no-btn:active,
+.no-btn:focus{
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    padding-left: 0;
+}
+.transaction-mapped-table{
+    font-size: 14px;
+    .transaction-mapped{
+        padding: 0 !important;
+        position: static;
+        th{
+            border: none;
+            padding-top: 10px;
+            &:first-child{
+                padding-right: 12px;
+            }
+        }
+
+    }
+    .transaction-mapped-head{
+        th{
+            border-bottom: none !important;
+        }
+    }
+    .ledger-row{
+        td{
+            border-bottom: none !important;
+            &:last-child{
+                border-right: none !important;
+            }
+            .d-flex{
+                span{
+                    input[type="checkbox"]{
+                        margin-right: 5px;
+                        margin-left: 5px;
+                        height: 18px;
+                    }
+                }
+            }   
+        }
+    }
+}
 /*responsive*/
 .modal-ledger {
     width: 70%;
@@ -719,7 +764,7 @@ sh-select:focus {
         .single-search-box{
             position: relative;
             width: calc(100% - 215px);
-            margin-right: 15px;
+            margin-right: 13px;
             .full-width-input{
                 width: 100%;  
             }
@@ -873,7 +918,7 @@ sh-select:focus {
     .ledger-section{
         padding-top: 0;
         .transactions-page{
-            margin-top: 15px !important;
+            margin-top: 18px !important;
         }
     }
 }
@@ -898,6 +943,11 @@ sh-select:focus {
             .clear-filter-btn{
                 font-size: 12px;
             }
+        }
+    }
+    .ledg-head {
+        .single-search-box{
+            margin-right:5px;
         }
     }
 }

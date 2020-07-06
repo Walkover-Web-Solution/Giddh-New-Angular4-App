@@ -1,33 +1,25 @@
-<div class="box clearfix">
+<div class="box clearfix" *ngIf="!(getCompanyProfileInProgress$ | async)">
     <div class="row">
         <form (ngSubmit)="updateProfile(companyProfileObj)" class="col-lg-10 col-md-11">
             <div class="row">
                 <div class="form-group col-lg-3 col-sm-4 col-xs-12">
                     <label>Company Name</label><br>
-                    <input type="text" placeholder="Company name" class="form-control"
-                        [(ngModel)]="companyProfileObj.name" name="name"
-                        (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
+                    <input type="text" placeholder="Company name" class="form-control" [(ngModel)]="companyProfileObj.name" name="name" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
                     <!-- (keydown)="keyDownSubject$.next($event)" -->
                 </div>
                 <div class="form-group col-lg-3 col-sm-4 col-xs-12">
                     <label>Unique Name</label><br>
-                    <input type="text" placeholder="Unique Name" [readonly]="true" class="form-control"
-                        [(ngModel)]="companyProfileObj.uniqueName" name="uniqueName"
-                        (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
+                    <input type="text" placeholder="Unique Name" [readonly]="true" class="form-control" [(ngModel)]="companyProfileObj.uniqueName" name="uniqueName" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
                 </div>
                 <div class="form-group col-lg-3 col-sm-4 col-xs-12">
                     <label>Email Address</label><br>
-                    <input type="text" placeholder="Email Address" class="form-control"
-                        [(ngModel)]="companyProfileObj.email" name="email"
-                        (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
+                    <input type="text" placeholder="Email Address" class="form-control" [(ngModel)]="companyProfileObj.email" name="email" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-lg-3 col-sm-4 col-xs-12">
                     <label>Contact No.</label>
-                    <input type="text" placeholder="Contact Number" class="form-control"
-                        [(ngModel)]="companyProfileObj.contactNo" #mobileNumberField name="contactNo"
-                        (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
+                    <input type="tel" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo" #mobileNumberField name="contactNo" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
                     <!-- commented temporary due to static countryCode  -->
                     <!-- <div class="input-group ">
   <span class="input-group-addon">+{{countryCode}}</span>
@@ -40,8 +32,7 @@
                         <label>Currency</label><br>
                         <div class="custom-select pos-rel">
                             <!--              <sh-select [options]="currencySource$ | async" placeholder="Currency" [isFilterEnabled]="true" name="baseCurrency" [(ngModel)]="companyProfileObj.baseCurrency" [defaultValue]="companyProfileObj.baseCurrency" (selected)="changeEventOfForm('baseCurrency')"></sh-select>-->
-                            <input type="text" placeholder="Currency" class="form-control" disabled
-                                [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" />
+                            <input type="text" placeholder="Currency" class="form-control" disabled [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" />
                         </div>
 
                     </div>
@@ -110,9 +101,7 @@
             <div class="row">
                 <div class="form-group col-lg-3 col-sm-4 col-xs-12">
                     <label>Address</label><br>
-                    <textarea rows="4" style="height: 170px;" type="text" placeholder="Address" class="form-control"
-                        [(ngModel)]="companyProfileObj.address" name="address"
-                        (keydown)="pushToUpdate($event);keyDownSubject$.next($event)"></textarea>
+                    <textarea rows="4" style="height: 170px;" type="text" placeholder="Address" class="form-control" [(ngModel)]="companyProfileObj.address" name="address" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)"></textarea>
                 </div>
                 <div class="form-group col-lg-3 col-sm-4 col-xs-12">
                     <div class="clearfix">
@@ -120,19 +109,13 @@
                             <label>Country</label><br>
                             <!--              <sh-select placeholder="Select Country" name="country_dd" [(ngModel)]="companyProfileObj.country"-->
                             <!--                [options]="countrySource$ | async" [ItemHeight]="33" (selected)="checkCountry($event)" [defaultValue]="companyProfileObj.countryV2.countryName"></sh-select>-->
-                            <input type="text" placeholder="Country" disabled class="form-control"
-                                *ngIf="companyProfileObj.countryV2 !== undefined"
-                                [(ngModel)]="companyProfileObj.countryV2.countryName" name="country" />
+                            <input type="text" placeholder="Country" disabled class="form-control" *ngIf="companyProfileObj.countryV2 !== undefined" [(ngModel)]="companyProfileObj.countryV2.countryName" name="country" />
                         </div>
 
                         <div class="form-group select2-parent">
                             <label>State</label><br>
-                            <sh-select placeholder="Select state" name="state_dd" [(ngModel)]="companyProfileObj.state"
-                                [options]="statesSource$ | async" [ItemHeight]="33" (selected)="selectState($event)"
-                                [hidden]="!states" [defaultValue]="selectedState"></sh-select>
-                            <input type="text" placeholder="State" class="form-control"
-                                [(ngModel)]="companyProfileObj.state" [hidden]="states" name="state"
-                                (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
+                            <sh-select placeholder="Select state" name="state_dd" [(ngModel)]="companyProfileObj.state" [options]="statesSource$ | async" [ItemHeight]="33" (selected)="selectState($event)" [hidden]="!states" [defaultValue]="selectedState"></sh-select>
+                            <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state" [hidden]="states" name="state" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
                         </div>
                     </div>
                     <!-- Removed city label G0-1822 -->
@@ -166,10 +149,7 @@
                         <div class="form-group col-xs-12 col-sm-12 col-md-6">
                             <label>Digits After Decimal</label><br>
                             <div class="custom-select pos-rel ">
-                                <sh-select [options]="decimalDigitSource " placeholder="select type "
-                                    [isFilterEnabled]="true " name="digitafterdecimal "
-                                    [(ngModel)]="companyProfileObj.balanceDecimalPlaces"
-                                    (selected)="checkDigitAfterDecimal($event) "></sh-select>
+                                <sh-select [options]="decimalDigitSource " placeholder="select type " [isFilterEnabled]="true " name="digitafterdecimal " [(ngModel)]="companyProfileObj.balanceDecimalPlaces" (selected)="checkDigitAfterDecimal($event) "></sh-select>
                             </div>
                             <!-- <input type="text " placeholder="Currency " class="form-control " [(ngModel)]="companyProfileObj.baseCurrency " name="baseCurrency " /> -->
                         </div>
@@ -177,16 +157,12 @@
                             <label>Number System</label><br>
                             <div class="custom-select pos-rel ">
                                 <!-- <sh-select [options]="numberSystemSource " placeholder="Select type " [isFilterEnabled]="true " name="numberSystem " [(ngModel)]="companyProfileObj.balanceDisplayFormat " (selected)="checkNumberSystem($event) "></sh-select> -->
-                                <sh-select #shnumberSystemSource [options]="numberSystemSource " name="numberSystem "
-                                    [(ngModel)]="companyProfileObj.balanceDisplayFormat "
-                                    (selected)="checkNumberSystem($event) " [placeholder]=" 'Select type'
+                                <sh-select #shnumberSystemSource [options]="numberSystemSource " name="numberSystem " [(ngModel)]="companyProfileObj.balanceDisplayFormat " (selected)="checkNumberSystem($event) " [placeholder]=" 'Select type'
                                     " [ItemHeight]="41 ">
                                     <ng-template #optionTemplate let-option="option ">
                                         <ng-container>
-                                            <a href="javascript:void(0) " class="list-item "
-                                                style="border-bottom: 1px solid #ccc; ">
-                                                <p class="numberSystem ">{{ option.label }} <span
-                                                        class="pull-right ">{{ option.additional.type}}</span></p>
+                                            <a href="javascript:void(0) " class="list-item " style="border-bottom: 1px solid #ccc; ">
+                                                <p class="numberSystem ">{{ option.label }} <span class="pull-right ">{{ option.additional.type}}</span></p>
                                             </a>
                                         </ng-container>
                                     </ng-template>
@@ -199,17 +175,13 @@
                         <div *ngIf="companyProfileObj.branchCount>0" class="form-group">
                             <label>Branch Unique Name</label><br>
                             <div class="custom-select pos-rel">
-                                <input type="text" [(ngModel)]="companyProfileObj.nameAlias"
-                                    placeholder="Branch unique name" name="nameAlias" class="form-control"
-                                    (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
+                                <input type="text" [(ngModel)]="companyProfileObj.nameAlias" placeholder="Branch unique name" name="nameAlias" class="form-control" (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
                             <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
                         </div>
                         <div *ngIf="companyProfileObj.branchCount==0" class="form-group">
                             <label>Headquarter Unique Name</label><br>
                             <div class="custom-select pos-rel">
-                                <input type="text" [(ngModel)]="companyProfileObj.nameAlias"
-                                    placeholder="Headquarter unique name" name="nameAlias" class="form-control"
-                                    (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
+                                <input type="text" [(ngModel)]="companyProfileObj.nameAlias" placeholder="Headquarter unique name" name="nameAlias" class="form-control" (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
                             <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
                         </div>
                     </div>
@@ -222,17 +194,13 @@
                 <div class="col-xs-12" *ngIf="formFields['taxName'] !== undefined">
                     <hr>
                     <br />
-                    <h3 class="mrB1"> Add <span
-                            *ngIf="companyProfileObj.addresses !== undefined && companyProfileObj.addresses.length >= 1">More</span>
-                        {{formFields['taxName'].label}}
-                        (Note: Check to set to default)</h3>
+                    <h3 class="mrB1"> Add <span *ngIf="companyProfileObj.addresses !== undefined && companyProfileObj.addresses.length >= 1">More</span> {{formFields['taxName'].label}} (Note: Check to set to default)</h3>
                     <button type="button" (click)="addGst()" class="btn btn-primary"><i class="fa fa-plus"
                             aria-hidden="true"></i>
                         Add
                     </button>
                     <div *ngIf="companyProfileObj.addresses !== undefined && companyProfileObj.addresses.length > 0">
-                        <div *ngFor="let gst of companyProfileObj.addresses; let i = index" class="mrT1 company_gst"
-                            [ngClass]="{'mrT2': i != gst.length-1, 'bdrB': i != gst.length-1}">
+                        <div *ngFor="let gst of companyProfileObj.addresses; let i = index" class="mrT1 company_gst" [ngClass]="{'mrT2': i != gst.length-1, 'bdrB': i != gst.length-1}">
                             <div class="row">
                                 <div class="col-lg-3 col-sm-4 col-xs-12">
                                     <div class="row">
@@ -241,26 +209,14 @@
                                                 <label for="" class="d-block">{{formFields['taxName'].label}}</label>
                                                 <div class="input-group width-100">
                                                     <div class="input-group-addon">
-                                                        <input id="checkbox-{{i}}" class="checkbox-custom"
-                                                            (click)="setGstAsDefault(i, $event)"
-                                                            [(ngModel)]="gst.isDefault" name="isDefault+{{i}}"
-                                                            tooltip="Default {{formFields['taxName'].label}}"
-                                                            placement="bottom" (change)="checkGstDetails()"
-                                                            type="checkbox">
-                                                        <label for="checkbox-{{i}}"
-                                                            class="checkbox-custom-label"></label>
+                                                        <input id="checkbox-{{i}}" class="checkbox-custom" (click)="setGstAsDefault(i, $event)" [(ngModel)]="gst.isDefault" name="isDefault+{{i}}" tooltip="Default {{formFields['taxName'].label}}" placement="bottom" (change)="checkGstDetails()" type="checkbox">
+                                                        <label for="checkbox-{{i}}" class="checkbox-custom-label"></label>
 
                                                     </div>
-                                                    <input type="text" placeholder="{{formFields['taxName'].label}}"
-                                                        class="form-control" (keyup)="setChildState(gstNumberField, i);"
-                                                        #gstNumberField
-                                                        (blur)="setChildState(gstNumberField, i); checkGstNumValidation(gstNumberField);gstKeyDownSubject$.next($event)"
+                                                    <input type="text" placeholder="{{formFields['taxName'].label}}" class="form-control" (keyup)="setChildState(gstNumberField, i);" #gstNumberField (blur)="setChildState(gstNumberField, i); checkGstNumValidation(gstNumberField);gstKeyDownSubject$.next($event)"
                                                         [(ngModel)]="gst.taxNumber" name="newgstNumber+{{i}}" />
                                                     <div class="input-group-addon">
-                                                        <i class="fa fa-trash-o cp" (click)="removeGstEntry(i)"
-                                                            aria-hidden="true" style="font-size:18px;"
-                                                            tooltip="Delete {{formFields['taxName'].label}}"
-                                                            placement="right"></i>
+                                                        <i class="fa fa-trash-o cp" (click)="removeGstEntry(i)" aria-hidden="true" style="font-size:18px;" tooltip="Delete {{formFields['taxName'].label}}" placement="right"></i>
                                                     </div>
                                                 </div>
                                             </div>
@@ -268,10 +224,7 @@
                                         <div class="col-xs-12">
                                             <div class="form-group select2-parent">
                                                 <label>State</label><br>
-                                                <sh-select [disabled]="gst.stateCode"
-                                                    (selected)="stateSelected($event, i)" [defaultValue]="getState(gst)" placeholder="Select state"
-                                                    name="newstateCode+{{i}}" [options]="statesSource$ | async"
-                                                    [(ngModel)]="gst.stateCode"></sh-select>
+                                                <sh-select [disabled]="gst.stateCode" (selected)="stateSelected($event, i)" [defaultValue]="getState(gst)" placeholder="Select state" name="newstateCode+{{i}}" [options]="statesSource$ | async" [(ngModel)]="gst.stateCode"></sh-select>
                                             </div>
                                         </div>
                                     </div>
@@ -279,9 +232,7 @@
                                 <div class="col-lg-3 col-sm-4 col-xs-12">
                                     <div class="form-group">
                                         <label>Address</label><br>
-                                        <textarea rows="4" type="text" placeholder="Address" class="form-control"
-                                            [(ngModel)]="gst.address" #gstAddressField name="newaddress+{{i}}"
-                                            (keydown)="gstKeyDownSubject$.next($event)"></textarea>
+                                        <textarea rows="4" type="text" placeholder="Address" class="form-control" [(ngModel)]="gst.address" #gstAddressField name="newaddress+{{i}}" (keydown)="gstKeyDownSubject$.next($event)"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -302,5 +253,11 @@
             <button type="button" class="btn btn-primary" (click)="onReset()">Cancel</button>
         </div> -->
         </form>
+    </div>
+</div>
+<div class="no-data mrT2 loader-main" *ngIf="(getCompanyProfileInProgress$ | async)">
+    <div class="spinner2">
+        <div class="cube1"></div>
+        <div class="cube2"></div>
     </div>
 </div>

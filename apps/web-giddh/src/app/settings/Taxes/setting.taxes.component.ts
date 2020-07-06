@@ -46,32 +46,7 @@ const taxDuration = [
             transition('out => in', animate('400ms ease-in-out'))
         ]),
     ],
-    styles: [`
-
-  @media(max-width:768px){
-    .custom-select {
-      width: 120px;
-    }
-    .table-responsive>.table>tbody>tr>td, .table-responsive>.table>tbody>tr>th, .table-responsive>.table>tfoot>tr>td, .table-responsive>.table>tfoot>tr>th, .table-responsive>.table>thead>tr>td, .table-responsive>.table>thead>tr>th {
-    white-space: initial !important;
-}
-.table-responsive{
-  border:none !important;
-  padding: 0 3px;
-}
-.box {
-  padding: 0;
-  background-color: transparent;
-
-  }
-  .basic {
-    background: transparent;
-}
-.col-xs-12.pdT2,.section-head{
-  padding-top:0;
-}
-
-  `]
+    styleUrls: ['./setting.taxes.component.scss'],
 })
 export class SettingTaxesComponent implements OnInit {
 

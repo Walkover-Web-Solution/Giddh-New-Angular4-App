@@ -81,37 +81,37 @@ export function download(filename, data, mimeType) {
                                         cordova.plugins.fileOpener2.open(url, mimeType, {
                                             error: (err) => {
                                                 // debugger;
-                                                console.error(err);
-                                                alert("Unable to download");
+                                                //console.error(err);
+                                                alert("No app available to open this type of file.");
                                             },
                                             success: () => {
                                                 // debugger;
-                                                console.log("success with opening the file");
+                                                //alert("success with opening the file");
                                             }
                                         });
                                     };
 
                                     fileWriter.onerror = (err) => {
-                                        alert("Unable to download");
-                                        console.error(err);
+                                        //alert("Unable to download");
+                                        //console.error(err);
                                     };
                                 },
                                 (err) => {
                                     // failed
-                                    alert("Unable to download");
-                                    console.error(err);
+                                    //alert("Unable to download");
+                                    //console.error(err);
                                 }
                             );
                         },
                         (err) => {
-                            alert("Unable to download");
-                            console.error(err);
+                            //alert("Unable to download");
+                            //console.error(err);
                         }
                     );
                 },
                 (err) => {
-                    alert("Unable to download");
-                    console.error(err);
+                    //alert("Unable to download");
+                    //console.error(err);
                 }
             );
         });
