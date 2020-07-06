@@ -190,6 +190,11 @@ tr.aging-table-top td {
     max-width: 1170px;
     width: 100%;
     -moz-transform: translate(1px, 0);
+    th,td{
+        &:first-child{
+            min-width:250px;
+        }
+    }
 }
 
 .table-aging-report {
