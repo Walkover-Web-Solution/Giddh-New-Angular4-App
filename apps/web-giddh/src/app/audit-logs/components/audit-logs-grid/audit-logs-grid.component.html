@@ -26,12 +26,10 @@
             <label class="pull-left mrL2">Company:</label>
             <p class="pull-left mrL">{{log.companyName}}</p>
         </div>
-        <div
-            *ngIf="log.log && log.log.sharedWith && log.log.sharedWith != undefined && log.log.sharedWith.name.length > 0">
+        <div *ngIf="log.log && log.log.sharedWith && log.log.sharedWith != undefined && log.log.sharedWith.name.length > 0">
             <label class="pull-left mrL2">Shared with:</label>
             <p class="pull-left mrL">{{log.log.sharedWith.name}}
-                <span
-                    ng-if="log.log.sharedWith.email && log.log.sharedWith.email != null && log.log.sharedWith.email.length > 0">
+                <span ng-if="log.log.sharedWith.email && log.log.sharedWith.email != null && log.log.sharedWith.email.length > 0">
                     | {{log.log.sharedWith.email}}</span>
             </p>
         </div>
@@ -57,14 +55,13 @@
                     <td>{{i + 1}}</td>
                     <td>{{log.log.entryDate}}</td>
                     <td>{{transaction.particular.name}} ({{transaction.particular.uniqueName}})</td>
-                    <td>{{transaction.amount| number:'1.2-2'}}</td>
+                    <td>{{transaction.amount |giddhCurrency}}</td>
                     <td>{{transaction.type}}</td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <div class="mrT text-center"
-        *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
+    <div class="mrT text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
         <label>Updated</label>
         <table class="table table-bordered">
             <thead>
@@ -109,8 +106,7 @@
             </tbody>
         </table>
     </div>
-    <div class="mrT text-center"
-        *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
+    <div class="mrT text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
         <label>Updated</label>
         <table class="table table-bordered">
             <thead>
@@ -162,6 +158,5 @@
         <p>You can use the filters on the left to fetch logs.</p>
     </div>
 </section>
-<button class='btn btn-success pull-left mrT2 mrB2' [ladda]="loadMoreInProcess$ | async" (click)='loadMoreLogs()'
-    *ngIf='(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)'>Load More
+<button class='btn btn-success pull-left mrT2 mrB2' [ladda]="loadMoreInProcess$ | async" (click)='loadMoreLogs()' *ngIf='(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)'>Load More
 </button>

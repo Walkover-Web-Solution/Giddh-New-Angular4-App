@@ -11,6 +11,8 @@ import { DecimalDigitsModule } from 'apps/web-giddh/src/app/shared/helpers/direc
 import { ModalModule, PaginationComponent, PaginationModule, TooltipModule } from 'ngx-bootstrap';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { ExportDaybookComponent } from './export-daybook/export-daybook.component';
+import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
@@ -26,6 +28,8 @@ import { ExportDaybookComponent } from './export-daybook/export-daybook.componen
         ShSelectModule,
         TooltipModule,
         ElementViewChildModule,
+        CurrencyModule,
+        NgxMaskModule.forRoot(),
     ],
     entryComponents: [
         PaginationComponent

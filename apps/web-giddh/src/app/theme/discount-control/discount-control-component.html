@@ -3,16 +3,13 @@
 
     <a id="discount">
         <div class="multi-select adjust">
-            <input type="text" decimalDigitsDirective name="" class="form-control text-right cursor-pointer"
-                (focus)="discountMenu = true;hideOtherPopups.emit(true)" [(ngModel)]="discountSum" [mask]="maskInput"
-                [prefix]="prefixInput" [suffix]="suffixInput" readonly (blur)="discountInputBlur($event)"
-                style="padding-right:22px !important;" />
+            <input type="text" decimalDigitsDirective name="" class="form-control text-right cursor-pointer" (focus)="discountMenu = true;hideOtherPopups.emit(true)" [(ngModel)]="discountSum" [mask]="inputMaskFormat" [prefix]="prefixInput" [suffix]="suffixInput"
+                readonly (blur)="discountInputBlur($event)" style="padding-right:22px !important;" />
             <!-- <span class="caret cp no-select" (click)="discountMenu = true;hideOtherPopups.emit(true)"></span> -->
         </div>
     </a>
 
-    <div class="my-dropdown-menu pd" (click)="$event.stopPropagation()" style="padding: 10px;"
-        [ngStyle]="{'display': discountMenu ? 'block': 'none'}" #disInptEle>
+    <div class="my-dropdown-menu pd" (click)="$event.stopPropagation()" style="padding: 10px;" [ngStyle]="{'display': discountMenu ? 'block': 'none'}" #disInptEle>
 
         <div>
 
@@ -21,9 +18,7 @@
                 <label class="mr-1 align-items-center d-flex" style="width: 50px">Percent</label>
 
                 <div class="pos-rel">
-                    <input type="text" class="form-control text-right cursor-pointer" [disabled]="!discountFromPer"
-                        decimalDigitsDirective [(ngModel)]="discountPercentageModal" (blur)="discountInputBlur($event)"
-                        (input)="discountFromInput('PERCENTAGE', $event)"
+                    <input type="text" class="form-control text-right cursor-pointer" [disabled]="!discountFromPer" decimalDigitsDirective [(ngModel)]="discountPercentageModal" (blur)="discountInputBlur($event)" (input)="discountFromInput('PERCENTAGE', $event)" [mask]="inputMaskFormat"
                         style="width: 100px;padding-right: 20px !important;">
                     <i class="fa fa-percent pos-abs" style="top: 9px;right: 6px;color: #acb0b9;"></i>
                 </div>
@@ -32,9 +27,7 @@
 
             <div class="d-flex mb-1">
                 <label class="mr-1 align-items-center d-flex" style="width: 50px">Value</label>
-                <input type="text" class="form-control text-right cursor-pointer" [disabled]="!discountFromVal"
-                    decimalDigitsDirective [(ngModel)]="discountFixedValueModal"
-                    (input)="discountFromInput('FIX_AMOUNT', $event)" style="width: 100px">
+                <input type="text" class="form-control text-right cursor-pointer" [disabled]="!discountFromVal" decimalDigitsDirective [(ngModel)]="discountFixedValueModal" (input)="discountFromInput('FIX_AMOUNT', $event)" style="width: 100px" [mask]="inputMaskFormat">
             </div>
 
         </div>
