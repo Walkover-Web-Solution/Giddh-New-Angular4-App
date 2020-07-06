@@ -21,9 +21,14 @@
                 <div class="form-group" *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['warehouseAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company/Warehouse Address
                 </div>
-
-                <div *ngIf="fieldsAndVisibility.header.gstin" class="form-group">
+                <div *ngIf="fieldsAndVisibility.header.gstin && customTemplate?.templateType !== 'gst_template_e'" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['gstin'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> GSTIN
+                </div>
+                <div class="form-group clearfix customField" *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
+                    <input type="checkbox" name="gstCompositionLabel" [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
+                    <span>
+                        <input class="form-control" maxlength="70" type="text" name="gstComposition" placeholder="Registered under Composition Scheme" [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].label" (ngModelChange)='onFieldChange(null, null, null)'>
+                    </span>
                 </div>
                 <!-- <div *ngIf="fieldsAndVisibility.header.pan" class="form-group"><input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[2].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked/> PAN</div> -->
                 <div *ngIf="voucherType==='sales'|| voucherType===''">
@@ -534,6 +539,9 @@
                 </ng-container>
                 <div *ngIf="fieldsAndVisibility.footer.companyName" class="form-group">
                     <input type="checkbox" checked [(ngModel)]="customTemplate.sections['footer'].data['companyName'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" /> Company Name
+                </div>
+                <div *ngIf="fieldsAndVisibility.header.gstin && customTemplate?.templateType === 'gst_template_e'" class="form-group">
+                    <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['gstin'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> GSTIN
                 </div>
                 <div *ngIf="fieldsAndVisibility.footer.companyAddress" class="form-group">
                     <input type="checkbox" name="cad" [(ngModel)]="customTemplate.sections['footer'].data['companyAddress'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Address
