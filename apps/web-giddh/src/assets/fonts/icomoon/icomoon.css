@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?3ned1i');
-  src:  url('fonts/icomoon.eot?3ned1i#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?3ned1i') format('truetype'),
-    url('fonts/icomoon.woff?3ned1i') format('woff'),
-    url('fonts/icomoon.svg?3ned1i#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?ai868m');
+  src:  url('fonts/icomoon.eot?ai868m#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?ai868m') format('truetype'),
+    url('fonts/icomoon.woff?ai868m') format('woff'),
+    url('fonts/icomoon.svg?ai868m#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,17 +25,17 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-account:before {
-  content: "\e954";
-}
-.icon-group-folder:before {
-  content: "\e955";
-}
-.icon-menu:before {
-  content: "\e956";
-}
-.icon-back-arrow:before {
+.icon-advance-filter:before {
   content: "\e900";
+}
+.icon-copy-small:before {
+  content: "\e901";
+}
+.icon-enevlop:before {
+  content: "\e902";
+}
+.icon-tick:before {
+  content: "\e903";
 }
 .icon-log:before {
   content: "\e001";
@@ -82,254 +82,395 @@
 .icon-journal:before {
   content: "\e016";
 }
-.icon-home-icon:before {
-  content: "\e901";
-}
-.icon-generate-invoice:before {
-  content: "\e902";
-}
-.icon-no-selected:before {
-  content: "\e903";
-}
-.icon-edit-pencil:before {
+.icon-branch:before {
   content: "\e904";
 }
-.icon-collapse:before {
+.icon-company-profile:before {
   content: "\e905";
 }
-.icon-info:before {
+.icon-discount:before {
   content: "\e906";
 }
-.icon-expandIcon:before {
+.icon-financial-year:before {
   content: "\e907";
 }
-.icon-advance-search:before {
+.icon-integration:before {
   content: "\e908";
 }
-.icon-copy:before {
+.icon-invoice-managment:before {
   content: "\e909";
 }
-.icon-edit:before {
+.icon-linked-accounts:before {
   content: "\e90a";
 }
-.icon-expand:before {
+.icon-manage-user:before {
   content: "\e90b";
 }
-.icon-eye:before {
+.icon-subscription:before {
   content: "\e90c";
 }
-.icon-favorite-selected:before {
+.icon-tags:before {
   content: "\e90d";
 }
-.icon-filter:before {
+.icon-taxes:before {
   content: "\e90e";
 }
-.icon-sort-asc:before {
+.icon-trigger:before {
   content: "\e90f";
 }
-.icon-sort-dsc:before {
+.icon-user:before {
   content: "\e910";
 }
-.icon-collapse-icon:before {
+.icon-warehouse:before {
   content: "\e911";
 }
-.icon-info-icon:before {
+.icon-help-support-icon:before {
   content: "\e912";
 }
-.icon-traingle-info:before {
+.icon-back-arrow:before {
   content: "\e913";
 }
-.icon-cash:before {
+.icon-home-icon:before {
   content: "\e914";
 }
-.icon-atm-card:before {
+.icon-generate-invoice:before {
   content: "\e915";
 }
-.icon-folder-group:before {
+.icon-no-selected:before {
   content: "\e916";
 }
-.icon-file-path:before {
+.icon-edit-pencil:before {
   content: "\e917";
 }
-.icon-image:before {
-  content: "\e919";
-}
-.icon-arrow-down-2:before {
+.icon-collapse:before {
   content: "\e918";
 }
-.icon-Revert:before {
+.icon-info:before {
+  content: "\e919";
+}
+.icon-expandIcon:before {
   content: "\e91a";
 }
-.icon-payment:before {
+.icon-advance-search:before {
   content: "\e91b";
 }
-.icon-edit-ico:before {
+.icon-copy:before {
   content: "\e91c";
 }
-.icon-copy-icon:before {
+.icon-edit:before {
   content: "\e91d";
 }
-.icon-divide-ico:before {
+.icon-expand:before {
   content: "\e91e";
 }
-.icon-estimate1:before {
+.icon-eye:before {
   content: "\e91f";
 }
-.icon-invoice-icon:before {
+.icon-favorite-selected:before {
   content: "\e920";
 }
-.icon-sales-order:before {
+.icon-filter:before {
   content: "\e921";
 }
-.icon-card:before {
+.icon-sort-asc:before {
   content: "\e922";
 }
-.icon-chat2:before {
+.icon-sort-dsc:before {
   content: "\e923";
 }
-.icon-ecomm:before {
+.icon-collapse-icon:before {
   content: "\e924";
 }
-.icon-mail:before {
+.icon-info-icon:before {
   content: "\e925";
 }
-.icon-group:before {
+.icon-traingle-info:before {
   content: "\e926";
 }
-.icon-bar:before {
+.icon-cash:before {
   content: "\e927";
 }
-.icon-Search:before {
+.icon-atm-card:before {
   content: "\e928";
 }
-.icon-add:before {
+.icon-folder-group:before {
   content: "\e929";
 }
-.icon-cross:before {
+.icon-file-path:before {
   content: "\e92a";
 }
-.icon-inventory:before {
+.icon-arrow-down-2:before {
   content: "\e92b";
 }
-.icon-caret-down:before {
+.icon-image:before {
   content: "\e92c";
 }
-.icon-edit1:before {
+.icon-Revert:before {
   content: "\e92d";
 }
-.icon-arrow-down:before {
+.icon-payment:before {
   content: "\e92e";
 }
-.icon-child:before {
+.icon-edit-ico:before {
   content: "\e92f";
 }
-.icon-download:before {
+.icon-copy-icon:before {
   content: "\e930";
 }
-.icon-share:before {
+.icon-divide-ico:before {
   content: "\e931";
 }
-.icon-magic_link:before {
+.icon-estimate1:before {
   content: "\e932";
 }
-.icon-dropdown:before {
+.icon-invoice-icon:before {
   content: "\e933";
 }
-.icon-plus:before {
+.icon-sales-order:before {
   content: "\e934";
 }
-.icon-search:before {
+.icon-card:before {
   content: "\e935";
 }
-.icon-building:before {
+.icon-chat2:before {
   content: "\e936";
 }
-.icon-options:before {
+.icon-ecomm:before {
   content: "\e937";
 }
-.icon-minus:before {
+.icon-mail:before {
   content: "\e938";
 }
-.icon-trash:before {
+.icon-group:before {
   content: "\e939";
 }
-.icon-checkbox-icon:before {
+.icon-bar:before {
   content: "\e93a";
 }
-.icon-checkboxfill-icon:before {
+.icon-Search:before {
   content: "\e93b";
 }
-.icon-dots-three-vertical:before {
+.icon-add:before {
   content: "\e93c";
 }
-.icon-calender:before {
+.icon-cross:before {
   content: "\e93d";
 }
-.icon-car:before {
+.icon-inventory:before {
   content: "\e93e";
 }
-.icon-download1:before {
+.icon-caret-down:before {
   content: "\e93f";
 }
-.icon-edit11:before {
+.icon-edit1:before {
   content: "\e940";
 }
-.icon-plane:before {
+.icon-arrow-down:before {
   content: "\e941";
 }
-.icon-read:before {
+.icon-child:before {
   content: "\e942";
 }
-.icon-search2:before {
+.icon-download:before {
   content: "\e943";
 }
-.icon-ship:before {
+.icon-share:before {
   content: "\e944";
 }
-.icon-train:before {
+.icon-magic_link:before {
   content: "\e945";
 }
-.icon-file:before {
+.icon-dropdown:before {
   content: "\e946";
 }
-.icon-link:before {
+.icon-plus:before {
   content: "\e947";
 }
-.icon-pass:before {
+.icon-search:before {
   content: "\e948";
 }
-.icon-vol:before {
+.icon-building:before {
   content: "\e949";
 }
-.icon-support:before {
+.icon-options:before {
   content: "\e94a";
 }
-.icon-summary:before {
+.icon-minus:before {
   content: "\e94b";
 }
-.icon-hand_icon:before {
+.icon-trash:before {
   content: "\e94c";
 }
-.icon-users:before {
+.icon-checkbox-icon:before {
   content: "\e94d";
 }
-.icon-folder1:before {
+.icon-checkboxfill-icon:before {
   content: "\e94e";
 }
-.icon-switch-icon:before {
+.icon-dots-three-vertical:before {
   content: "\e94f";
 }
-.icon-rupees:before {
+.icon-calender:before {
   content: "\e950";
 }
-.icon-export-icon:before {
+.icon-car:before {
   content: "\e951";
 }
-.icon-edit-pencil1:before {
+.icon-download1:before {
   content: "\e952";
 }
-.icon-customise-columns:before {
+.icon-edit11:before {
   content: "\e953";
+}
+.icon-plane:before {
+  content: "\e954";
+}
+.icon-read:before {
+  content: "\e955";
+}
+.icon-search2:before {
+  content: "\e956";
+}
+.icon-ship:before {
+  content: "\e957";
+}
+.icon-train:before {
+  content: "\e958";
+}
+.icon-file:before {
+  content: "\e959";
+}
+.icon-link:before {
+  content: "\e95a";
+}
+.icon-pass:before {
+  content: "\e95b";
+}
+.icon-vol:before {
+  content: "\e95c";
+}
+.icon-support:before {
+  content: "\e95d";
+}
+.icon-summary:before {
+  content: "\e95e";
+}
+.icon-hand_icon:before {
+  content: "\e95f";
+}
+.icon-users:before {
+  content: "\e960";
+}
+.icon-folder1:before {
+  content: "\e961";
+}
+.icon-switch-icon:before {
+  content: "\e962";
+}
+.icon-rupees:before {
+  content: "\e963";
+}
+.icon-export-icon:before {
+  content: "\e964";
+}
+.icon-edit-pencil1:before {
+  content: "\e965";
+}
+.icon-customise-columns:before {
+  content: "\e966";
+}
+.icon-account:before {
+  content: "\e967";
+}
+.icon-group-folder:before {
+  content: "\e968";
+}
+.icon-menu:before {
+  content: "\e969";
+}
+.icon-balance-sheet:before {
+  content: "\e96a";
+}
+.icon-cash-invoice:before {
+  content: "\e96b";
+}
+.icon-company-import:before {
+  content: "\e96c";
+}
+.icon-credit-debit-note:before {
+  content: "\e96d";
+}
+.icon-credit-note:before {
+  content: "\e96e";
+}
+.icon-customer:before {
+  content: "\e96f";
+}
+.icon-day-book:before {
+  content: "\e970";
+}
+.icon-E-way-bill:before {
+  content: "\e971";
+}
+.icon-estimate:before {
+  content: "\e972";
+}
+.icon-gstr:before {
+  content: "\e973";
+}
+.icon-import-from-tally:before {
+  content: "\e974";
+}
+.icon-import-trial-balance:before {
+  content: "\e975";
+}
+.icon-invoice1:before {
+  content: "\e976";
+}
+.icon-journal-voucher:before {
+  content: "\e977";
+}
+.icon-uniE97A:before {
+  content: "\e97a";
+}
+.icon-new-old-invoices:before {
+  content: "\e981";
+}
+.icon-onboarding:before {
+  content: "\e982";
+}
+.icon-profit-loss:before {
+  content: "\e983";
+}
+.icon-proforma:before {
+  content: "\e984";
+}
+.icon-purchase-management:before {
+  content: "\e985";
+}
+.icon-purchase-record:before {
+  content: "\e986";
+}
+.icon-search-app:before {
+  content: "\e987";
+}
+.icon-settings-taxes:before {
+  content: "\e988";
+}
+.icon-subscription1:before {
+  content: "\e989";
+}
+.icon-trial-balance:before {
+  content: "\e98a";
+}
+.icon-user1:before {
+  content: "\e98b";
+}
+.icon-vat:before {
+  content: "\e98c";
+}
+.icon-aging-report:before {
+  content: "\e98d";
 }
 .icon-folderminus:before {
   content: "\f2332";
