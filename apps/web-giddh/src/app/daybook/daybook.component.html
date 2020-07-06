@@ -114,8 +114,8 @@
                         <td data-title="Particular">{{ entry.particular.name }}</td>
                         <td data-title="Vch. Name">{{ entry.voucherName }}</td>
                         <td class="text-right" data-title="Vch. No.">{{ entry.voucherNo }}</td>
-                        <td class="text-right" data-title="Debit Amt">{{ entry.debitAmount || '-' }}</td>
-                        <td class="text-right" data-title="Credit Amt">{{ entry.creditAmount || '-' }}</td>
+                        <td class="text-right" data-title="Debit Amt">{{ entry.debitAmount || 0 |giddhCurrency }}</td>
+                        <td class="text-right" data-title="Credit Amt">{{ entry.creditAmount || 0 |giddhCurrency}}</td>
                         <td *ngIf="isEntryExpanded" colspan="7"> </td>
                     </tr>
                     <ng-container *ngIf="entry !== undefined && entry.isExpanded">
@@ -125,22 +125,26 @@
                             <td class="hideTD"></td>
                             <td class="hideTD"></td>
                             <td class="text-right" data-title="Debit Amt">
-                                <span *ngIf="details.type === 'DEBIT'">{{ details.amount}}</span>
+                                <span *ngIf="details.type === 'DEBIT'">{{ details.amount || 0 |giddhCurrency}}</span>
                                 <span *ngIf="details.type !== 'DEBIT'">-</span>
 
                             </td>
                             <td class="text-right" data-title="Credit Amt">
-                                <span *ngIf="details.type === 'CREDIT'">{{ details.amount}}</span>
+                                <span *ngIf="details.type === 'CREDIT'">{{ details.amount|| 0  |giddhCurrency}}</span>
                                 <span *ngIf="details.type !== 'CREDIT'">-</span>
                             </td>
                             <ng-container *ngIf="isEntryExpanded">
                                 <td>{{details.inventory?details.inventory.stock.name:''}}
                                 </td>
-                                <td class=" text-right">{{details.inventory?details.inventory.quantity:''}}
+                                <td *ngIf="details.inventory" class=" text-right">{{details.inventory.quantity |giddhCurrency}}
+                                </td>
+                                <td *ngIf="!details.inventory" class=" text-right">{{'-'}}
                                 </td>
                                 <td>{{details.inventory?details.inventory.unit.name:''}}
                                 </td>
-                                <td class=" text-right">{{details.inventory?details.inventory.rate:''}}
+                                <td *ngIf="details.inventory" class=" text-right">{{details.inventory.rate |giddhCurrency}}
+                                </td>
+                                <td *ngIf="!details.inventory" class=" text-right">{{'-'}}
                                 </td>
                                 <td>{{details.inventory?details.inventory.hsnNumber? details.inventory.hsnNumber: details.inventory.sacNumber:''}}
                                 </td>
@@ -162,9 +166,9 @@
         </div>
 
         <div class=" mrT2 text-center">
-            <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems}}
+            <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems  |giddhCurrency}}
                 Transactions
-                | {{(daybookData$ | async)?.totalPages}} Pages
+                | {{(daybookData$ | async)?.totalPages  |giddhCurrency}} Pages
             </small>
             <small class="grey" *ngIf="!((daybookData$ | async)?.totalItems)">0 Transactions | 0 Pages</small>
         </div>

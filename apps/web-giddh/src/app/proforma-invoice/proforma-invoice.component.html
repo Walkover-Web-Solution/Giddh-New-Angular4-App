@@ -622,7 +622,7 @@
                                     </td>
                                     <td class="text-right stockUnit">
                                         <div class="wrap-td-data">
-                                            {{transaction.quantity}} {{transaction.stockUnit}}
+                                            {{transaction.quantity | giddhCurrency}} {{transaction.stockUnit}}
                                         </div>
                                     </td>
                                     <td class="text-right tra-rate item-rate " style="height:1px;">
@@ -691,7 +691,7 @@
                                                     <span *ngIf="entry.isOtherTaxApplicable">
                                                         {{ entry.otherTaxModal?.appliedOtherTax?.name }} : <span
                                                     *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}
-                                                        </span>{{ entry.otherTaxSum }}
+                                                        </span>{{ entry.otherTaxSum | giddhCurrency}}
                                                     </span>
                                                 </div>
                                                 <div class="texIncurrency" *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && !isPurchaseInvoice">
@@ -833,7 +833,7 @@
 
                                     <td class="text-right stockUnit">
                                         <input type="text" [disabled]="!transaction.isStockTxn" (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity" decimalDigitsDirective name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity"
-                                        />
+                                            [mask]="inputMaskFormat" />
 
                                         <select class="form-control" [disabled]="!transaction.isStockTxn" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit" (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
                                         <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
