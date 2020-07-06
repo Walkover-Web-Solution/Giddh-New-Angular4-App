@@ -16,6 +16,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 })
 export class CreatePurchaseOrderComponent implements OnInit {
     public modelRef: BsModalRef;
+    public isInvalidfield:boolean = true;
     public modalRef: BsModalRef;
     public  isMulticurrencyAccount : true;
     constructor(

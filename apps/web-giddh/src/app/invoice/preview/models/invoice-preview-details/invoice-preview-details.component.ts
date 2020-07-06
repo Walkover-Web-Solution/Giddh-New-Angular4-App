@@ -276,6 +276,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.modalRef = this.modalService.show(template,
         Object.assign({}, { class: 'preview-lightbox modal-lg' })
         );
+        $('.modal-backdrop').addClass('preview-lightbox-overlay');
     }
     public getVoucherVersions() {
         let request = new ProformaGetAllVersionRequest();

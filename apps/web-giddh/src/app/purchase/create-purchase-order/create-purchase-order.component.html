@@ -1,4 +1,4 @@
-<form>
+<form class="create-purchase-order-form">
     <div class="clearfix">
         <div class="clearfix wrapper-customer-table  pdT2">
             <div class="customer-purchase-table">
@@ -13,74 +13,74 @@
                                     <!-- added multicurrency feature make it functional to change into appropriate currency -->
                                     <span class="sp-rupees" *ngIf='isMulticurrencyAccount'>
                                         <span *ngIf="isMulticurrencyAccount">currency symbol</span>
-                                    <span>0.00</span>
+                                        <span>0.00</span>
                                     </span>
                                     <span class="sp-rupees" *ngIf='!isMulticurrencyAccount'>0.00</span>
                                 </p>
                             </div>
                         </div>
-                         <!-- region customer section -->
-                         <div class="clearfix">
+                        <!-- region customer section -->
+                        <div class="clearfix">
                             <div class="row mb-1">
                                 <!-- region customer name -->
                                 <div class="col-sm-2">
-                                    <label>Vendor Name<span
-                                        class="red-text">*</span></label>
+                                    <label>Vendor Name<span class="red-text">*</span></label>
                                 </div>
-                                 <!-- region customer dropdown -->
-                                 <div class="col-sm-7 select-customer-name">
+                                <!-- region customer dropdown -->
+                                <div class="col-sm-7 select-customer-name">
                                     <div class="clearfix d-flex flex-column">
                                         <div class="d-flex flex-column">
                                             <!-- region if not cashinvoice show customer dropdown -->
-                                           <sh-select class="mb-05"></sh-select>
+                                            <sh-select class="mb-05"></sh-select>
                                             <!-- endregion -->
-                                             <p><small>Pending Purchase order of selected vendor</small></p>
-                                             <p class="font-14"><a href="javascript(void)">PO84709832 |</a>
-                                                <a  href="javascript(void)"> PO02948023 |</a>                        
-                                            </p>
+                                            <div hidden>
+                                                <p><small>Pending Purchase order of selected vendor</small></p>
+                                                <p class="font-14"><a href="javascript(void)">PO84709832 |</a>
+                                                    <a href="javascript(void)"> PO02948023 |</a>
+
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- endregion -->
                             </div>
-                            <div class="row mb-1">
+                            <div class="row mb-1 source-supply">
                                 <!-- region customer name -->
                                 <div class="col-sm-2">
-                                    <label>Source of Supply<span
-                                        class="red-text">*</span></label>
+                                    <label>Source of Supply<span class="red-text">*</span></label>
                                 </div>
-                                 <!-- region customer dropdown -->
-                                 <div class="col-sm-7 select-customer-name">
+                                <!-- region customer dropdown -->
+                                <div class="col-sm-7 select-customer-name">
                                     <div class="clearfix d-flex flex-column">
                                         <div class="d-flex flex-column">
                                             <!-- region if not cashinvoice show customer dropdown -->
-                                           <sh-select></sh-select>
-                                            <!-- endregion -->
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- endregion -->
-                            </div>
-                            <div class="row mb-1">
-                                <!-- region customer name -->
-                                <div class="col-sm-2">
-                                    <label>Destination of Supply<span
-                                        class="red-text">*</span></label>
-                                </div>
-                                 <!-- region customer dropdown -->
-                                 <div class="col-sm-7 select-customer-name">
-                                    <div class="clearfix d-flex flex-column">
-                                        <div class="d-flex flex-column">
-                                            <!-- region if not cashinvoice show customer dropdown -->
-                                           <sh-select></sh-select>
+                                            <sh-select></sh-select>
                                             <!-- endregion -->
                                         </div>
                                     </div>
                                 </div>
                                 <!-- endregion -->
                             </div>
-                            
-                         </div>
+                            <div class="row mb-1">
+                                <!-- region customer name -->
+                                <div class="col-sm-2">
+                                    <label>Destination of Supply<span class="red-text">*</span></label>
+                                </div>
+                                <!-- region customer dropdown -->
+                                <div class="col-sm-7 select-customer-name">
+                                    <div class="clearfix d-flex flex-column">
+                                        <div class="d-flex flex-column">
+                                            <!-- region if not cashinvoice show customer dropdown -->
+                                            <sh-select></sh-select>
+                                            <!-- endregion -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- endregion -->
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -88,11 +88,10 @@
                 <div class="inner-container">
                     <div class="row mb-1">
                         <div class="col-sm-2">
-                            <label>Deliver To<span
-                                class="red-text">*</span></label>
+                            <label>Deliver To<span class="red-text">*</span></label>
                         </div>
-                         <!-- region customer dropdown -->
-                         <div class="col-sm-9 select-customer-name">
+                        <!-- region customer dropdown -->
+                        <div class="col-sm-9 select-customer-name">
                             <section class="form-inline">
 
                                 <div class="wrap-billing-address clearfix">
@@ -105,24 +104,29 @@
                                                 <label>Billing Address</label>
 
                                                 <div class="billing-address clearfix">
-                                                    <textarea name="billingDetails.address" class="form-control" rows="3" autocomplete="off" autofocus="off" aria-autocomplete="none"></textarea>
+                                                    <textarea name="billingDetails.address" class="form-control"
+                                                        rows="3" autocomplete="off" autofocus="off"
+                                                        aria-autocomplete="none"></textarea>
 
                                                     <div>
                                                         <div class="col-sm-6 pd ">
                                                             <label class="sales-country-label">
-                                                               India
+                                                                India
                                                             </label>
                                                         </div>
 
                                                         <div class="col-sm-6 pd" #billingState>
-                                                            <sh-select [placeholder]="'State'" class="select-border-bottom">
+                                                            <sh-select [placeholder]="'State'"
+                                                                class="select-border-bottom">
                                                             </sh-select>
                                                         </div>
 
                                                         <div class="col-sm-12 pd">
-                                                            
-                                                            <input maxLength="15" autocomplete="None" type="text" name="billingDetails.gstNumber" class="form-control input-custom"  placeholder="GSTIN" >
-                                                              
+
+                                                            <input maxLength="15" autocomplete="None" type="text"
+                                                                name="billingDetails.gstNumber"
+                                                                class="form-control input-custom" placeholder="GSTIN">
+
                                                             <!-- <input maxLength="15" autocomplete="None" type="text" name="billingDetails.gstNumber" class="form-control input-custom" *ngIf="showTRNNo" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" (change)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
                                                                 placeholder="TRN" /> -->
                                                         </div>
@@ -144,7 +148,8 @@
                                                 </label>
 
                                                 <div class="billing-address">
-                                                    <textarea [readonly]="" name="shippingDetails.address" class="form-control" rows="3" autocomplete="off"></textarea>
+                                                    <textarea [readonly]="" name="shippingDetails.address"
+                                                        class="form-control" rows="3" autocomplete="off"></textarea>
                                                     <div class="clearfix">
 
                                                         <div class="form-group">
@@ -153,17 +158,19 @@
                                                                 <div class="form-group">
 
                                                                     <label class="sales-country-label">
-                                                                       India
+                                                                        India
                                                                     </label>
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-sm-6 pd select-border-bottom" >
+                                                            <div class="col-sm-6 pd select-border-bottom">
                                                                 <sh-select></sh-select>
                                                             </div>
 
                                                             <div class="col-sm-12 pd">
-                                                                <input [readonly]="" autocomplete="None" maxLength="15" type="text"  class="form-control input-custom"  placeholder="GSTIN" >
+                                                                <input [readonly]="" autocomplete="None" maxLength="15"
+                                                                    type="text" class="form-control input-custom"
+                                                                    placeholder="GSTIN">
                                                                 <!-- <input [readonly]="" maxLength="15" autocomplete="None" type="text" name="shippingDetails.gstNumber" class="form-control input-custom" >
                                                                     placeholder="TRN" /> -->
                                                             </div>
@@ -180,72 +187,74 @@
                         </div>
                         <!-- endregion -->
                     </div>
-                <div class="row mb-1">
+                    <div class="row mb-1">
                         <!-- region customer name -->
                         <div class="col-sm-2">
-                            <label>Order Date<span
-                                class="red-text">*</span></label>
+                            <label>Order Date<span class="red-text">*</span></label>
                         </div>
-                         <!-- region customer dropdown -->
-                         <div class="col-sm-7 select-customer-name">
-                             <input type="text" class="form-control" placeholder="Select Date">
+                        <!-- region customer dropdown -->
+                        <div class="col-sm-7 select-customer-name">
+                            <input type="text" class="form-control" placeholder="Select Date">
                         </div>
                         <!-- endregion -->
                     </div>
-                <div class="row mb-1">
-                    <!-- region customer name -->
-                    <div class="col-sm-2">
-                        <label>Warehouse<span
-                            class="red-text">*</span></label>
-                    </div>
-                     <!-- region customer dropdown -->
-                     <div class="col-sm-7 select-customer-name">
-                        <div class="clearfix d-flex flex-column">
-                            <div class="d-flex flex-column">
-                                <!-- region if not cashinvoice show customer dropdown -->
-                               <sh-select></sh-select>
-                                <!-- endregion -->
+                    <div class="row mb-1">
+                        <!-- region customer name -->
+                        <div class="col-sm-2">
+                            <label>Warehouse<span class="red-text">*</span></label>
+                        </div>
+                        <!-- region customer dropdown -->
+                        <div class="col-sm-7 select-customer-name">
+                            <div class="clearfix d-flex flex-column">
+                                <div class="d-flex flex-column">
+                                    <!-- region if not cashinvoice show customer dropdown -->
+                                    <sh-select></sh-select>
+                                    <!-- endregion -->
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- endregion -->
-                </div>
-                <div class="row mb-1">
-                    <!-- region customer name -->
-                    <div class="col-sm-2">
-                        <label>Order #</label>
-                    </div>
-                     <!-- region customer dropdown -->
-                     <div class="col-sm-9 select-customer-name order-expected-delivery d-flex">
-                        <!-- region if not cashinvoice show customer dropdown -->
-                        <div class="col-sm-6 pl-0">
-                            <sh-select></sh-select>
-                        </div>
                         <!-- endregion -->
-                        <div class="col-sm-6 invoice-due-date">
-                            <div class="d-flex">
+                    </div>
+                    <div class="row mb-1">
+                        <!-- region customer name -->
+                        <div class="col-sm-2">
+                            <label>Order #</label>
+                        </div>
+                        <!-- region customer dropdown -->
+                        <div class="col-sm-9 select-customer-name order-expected-delivery d-flex">
+                            <!-- region if not cashinvoice show customer dropdown -->
+                            <div class="col-sm-6 pl-0">
+                                <sh-select></sh-select>
+                            </div>
+                            <!-- endregion -->
+                            <div class="col-sm-6 invoice-due-date">
+                                <div class="d-flex">
                                     <label>Expected Delivery</label>
                                     <input type="text" class="form-control" placeholder="Select Date">
+                                </div>
                             </div>
                         </div>
+                        <!-- endregion -->
                     </div>
-                    <!-- endregion -->
-                </div>
-                <div class="row mTB1">
-                    <div class="col-sm-2">
-                        <label></label>
-                    </div>
-                    <div class="col-sm-7">
+                    <div class="row mTB1">
+                        <div class="col-sm-2">
+                            <label></label>
+                        </div>
+                        <div class="col-sm-7">
                             <input id="reverse-charge" name="rcmEntry" class="checkbox-custom" type="checkbox">
-                            <label container="body" placement="bottom" containerClass="purchase-invoice-rcm" for="reverse-charge" class="checkbox-custom-label">
+                            <label container="body" placement="bottom" containerClass="purchase-invoice-rcm"
+                                for="reverse-charge" class="checkbox-custom-label">
                                 Is this transaction applicable for reverse charge?
                             </label>
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
     </div>
+    <ng-container>
+        <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img " />
+    </ng-container>
     <section class="static-purchase-table create-purchase-order-table clearfix mb-2 bg-white container-fluid">
         <table class="table table-custom-invoice  basic">
             <thead>
@@ -261,130 +270,130 @@
                 </tr>
             </thead>
             <tbody>
-                    <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature) -->
-                    <!-- region static entries-->
-                    <tr class="entries-row set-active">
-                        <td>1</td>
-                        <td>
-                            <div class="product-name">
-                                <label class="selectAccountLabel">Click to
+                <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature) -->
+                <!-- region static entries-->
+                <tr class="entries-row set-active">
+                    <td>1</td>
+                    <td>
+                        <div class="product-name">
+                            <label class="select-account-label">Click to
                                 Select
                                 Account</label> Purchase oreder
 
-                            </div>
+                        </div>
 
-                            <div class="sku-number">
-                                <label>SKU:</label>Number
-                            </div>
+                        <div class="sku-number">
+                            <label>SKU:</label>Number
+                        </div>
 
-                            <div class="discription">
-                               Dummy text here
+                        <div class="description">
+                            Dummy text here
 
-                            </div>
-                            <p class="small text-muted sku-custom-fields">
-                               5454545dummy</p>
-                            <div class="date-hsn-code">
+                        </div>
+                        <p class="small text-muted sku-custom-fields">
+                            5454545dummy</p>
+                        <div class="date-hsn-code">
 
-                                <div class="row">
+                            <div class="row">
 
-                                    <div class="col-xs-6 pdR0">
-                                        <div class="entry-date">
-                                            <label>Entry Date: </label> 20-12-2020
-                                            <span class="edit-icon cp" hidden>
+                                <div class="col-xs-6 pdR0">
+                                    <div class="entry-date">
+                                        <label>Entry Date: </label> 20-12-2020
+                                        <span class="edit-icon cp" hidden>
+                                            <img src="assets/images/edit-pencilicon.svg">
+                                        </span>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-6 pdL0">
+                                    <div class="hsn-code text-right">
+                                        <label>HSN/SAC:</label>
+                                        <span>
+                                            2522525dummy number
+                                            <span class="edit-icon cp">
                                                 <img src="assets/images/edit-pencilicon.svg">
                                             </span>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-xs-6 pdL0">
-                                        <div class="hsn-code text-right">
-                                            <label>HSN/SAC:</label>
-                                            <span>
-                                                2522525dummy number
-                                            <span class="edit-icon cp">
-                                                    <img src="assets/images/edit-pencilicon.svg">
-                                                </span>
-                                            </span>
-                                        </div>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
-                        </td>
-                        <td class="text-right stock-unit">
-                            <div class="wrap-td-data">
-                              20dummy
-                            </div>
-                        </td>
-                        <td class="text-right tra-rate item-rate " style="height:1px;">
-                            <div>
-                                <div class="td_Wrapper">
-                                    <div style="flex: 1;">
-                                        <div class="wrap-td-data"> <span>
-                                               $</span> 200
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div  class="differ-currency" hidden>
-                                    <span>$</span>
-                                    <span>200</span>
-
-                                </div>
-                            </div>
-                        </td>
-                        <td class="text-right  item-amount" style="height:1px;">
+                        </div>
+                    </td>
+                    <td class="text-right stock-unit">
+                        <div class="wrap-td-data">
+                            20dummy
+                        </div>
+                    </td>
+                    <td class="text-right tra-rate item-rate " style="height:1px;">
+                        <div>
                             <div class="td_Wrapper">
                                 <div style="flex: 1;">
-                                    <div class="wrap-td-data"><span>$
-                                        </span>200.00</div>
+                                    <div class="wrap-td-data"> <span>
+                                            $</span> 200
+                                    </div>
                                 </div>
                             </div>
+
                             <div class="differ-currency" hidden>
-                                <span>&</span>
+                                <span>$</span>
                                 <span>200</span>
-                            </div>
-                        </td>
-                        <td class="item-discount" style="height:1px;">
-                            <div class=" text-right td_Wrapper">
 
-                                <div style="flex: 1;">
-                                    <div class="wrap-td-data"> <span>$
-                                        </span>0.00</div>
-                                </div>
                             </div>
-                            <div class="differ-currency" hidden>
-                                <span>$</span>
-                                <span>0.00</span>
+                        </div>
+                    </td>
+                    <td class="text-right  item-amount" style="height:1px;">
+                        <div class="td_Wrapper">
+                            <div style="flex: 1;">
+                                <div class="wrap-td-data"><span>$
+                                    </span>200.00</div>
                             </div>
+                        </div>
+                        <div class="differ-currency" hidden>
+                            <span>&</span>
+                            <span>200</span>
+                        </div>
+                    </td>
+                    <td class="item-discount" style="height:1px;">
+                        <div class=" text-right td_Wrapper">
 
-                        </td>
-                        <td class="text-right item-tax" style="height:1px;">
-                            <div class="td_Wrapper">
-                                <div style="flex:1;">
-                                    <div class="wrap-td-data"><span>$
-                                        </span>0.00</div>
-                                </div>
+                            <div style="flex: 1;">
+                                <div class="wrap-td-data"> <span>$
+                                    </span>0.00</div>
                             </div>
-                            <div class="differ-currency" hidden>
-                                <span>$</span>
-                                <span>0.00</span>
+                        </div>
+                        <div class="differ-currency" hidden>
+                            <span>$</span>
+                            <span>0.00</span>
+                        </div>
+
+                    </td>
+                    <td class="text-right item-tax" style="height:1px;">
+                        <div class="td_Wrapper">
+                            <div style="flex:1;">
+                                <div class="wrap-td-data"><span>$
+                                    </span>0.00</div>
                             </div>
-                        </td>
-                        <td class="text-right item-tax dlt-abs" style="height:1px;">
-                            <div class="td_Wrapper">
-                                <div style="flex:1;">
-                                    <div class="wrap-td-data">
-                                        <span><span>$
-                                            </span>0.00</span>
-                                        <br>
-                                        <!-- <span *ngIf="entry.isOtherTaxApplicable">
+                        </div>
+                        <div class="differ-currency" hidden>
+                            <span>$</span>
+                            <span>0.00</span>
+                        </div>
+                    </td>
+                    <td class="text-right item-tax dlt-abs" style="height:1px;">
+                        <div class="td_Wrapper">
+                            <div style="flex:1;">
+                                <div class="wrap-td-data">
+                                    <span><span>$
+                                        </span>0.00</span>
+                                    <br>
+                                    <!-- <span *ngIf="entry.isOtherTaxApplicable">
                                             {{ entry.otherTaxModal?.appliedOtherTax?.name }} : <span
                                         *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}
                                             </span>{{ entry.otherTaxSum }}
                                         </span>
                                     </div>
-                                    <div class="texIncurrency" *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && !isPurchaseInvoice">
+                                    <div class="tax-in-currency" *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && !isPurchaseInvoice">
                                         {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                                         <span>{{baseCurrencySymbol}}</span>
                                         <span>{{entry.otherTaxSum * exchangeRate | giddhCurrency}}</span>
@@ -402,173 +411,173 @@
                                     <i class="icon-trash" aria-hidden="true"></i>
                                 </span>
                             </div>
+                        </div>
+                    </td>
+
+                </tr>
+                <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
+                <tr class="entries-row default-active">
+                    <td>1</td>
+                    <td>
+
+                        <div class="product-name">
+                            <div class="ng-select-wrap">
+                                <sh-select></sh-select>
                             </div>
-                            </td>
+                        </div>
 
-                    </tr>
-                    <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
-                    <tr class="entries-row default-active">
-                        <td>1</td>
-                        <td>
-
-                            <div class="product-name">
-                                <div class="ng-select-wrap">
-                                    <sh-select></sh-select>
-                                </div>
+                        <div>
+                            <div class="sku-number">
+                                <label>SKU:</label>Number
                             </div>
 
-                            <div>
-                                <div class="sku-number">
-                                    <label>SKU:</label>Number
-                                </div>
-
-                                <div class="discription">
-                                    <textarea type="text" placeholder="Add Description" class="form-control">
+                            <div class="description">
+                                <textarea type="text" placeholder="Add Description" class="form-control">
       </textarea>
-                                    <p class="small text-muted sku-custom-fields">
-                                       4454555</p>
-                                </div>
+                                <p class="small text-muted sku-custom-fields">
+                                    4454555</p>
+                            </div>
 
-                                <!-- region entry date/ hsncode -->
-                                <div class="date-hsn-code">
-                                    <div class="row">
-                                        <div class="col-xs-6 pdR0">
-                                            <div class="entry-date">
-                                                <label>Entry Date: </label>
-                                                <span hidden>
-                                                    <input type="text">
+                            <!-- region entry date/ hsncode -->
+                            <div class="date-hsn-code">
+                                <div class="row">
+                                    <div class="col-xs-6 pdR0">
+                                        <div class="entry-date">
+                                            <label>Entry Date: </label>
+                                            <span hidden>
+                                                <input type="text">
+                                                <span class="edit-icon cp">
+                                                    <img src="assets/images/edit-pencilicon.svg">
+                                                </span>
+                                            </span>
+
+                                            <span hidden>
+                                                20-12-2020
+                                            </span>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-6 pdL0">
+                                        <div class="wrap-hsn-box">
+                                            <div class="hsn-code text-right">
+                                                <label>HSN/SAC:</label>
+                                                <span>
+                                                    45454545
+                                                    <span class="update-text" hidden>Update
+                                                    </span>
                                                     <span class="edit-icon cp">
                                                         <img src="assets/images/edit-pencilicon.svg">
                                                     </span>
                                                 </span>
-
-                                                <span  hidden>
-                                                   20-12-2020
-                                                </span>
-
                                             </div>
-                                        </div>
 
-                                        <div class="col-xs-6 pdL0">
-                                            <div class="wrap-hsn-box">
-                                                <div class="hsn-code text-right">
-                                                    <label>HSN/SAC:</label>
-                                                    <span>
-                                                       45454545
-                                                    <span class="update-text" hidden>Update
-                                                        </span>
-                                                    <span class="edit-icon cp">
-                                                            <img src="assets/images/edit-pencilicon.svg">
-                                                        </span>
-                                                    </span>
-                                                </div>
-
-                                                <div class="hsn-code-dropdown" hidden>
-                                                    <label>HSN/SAC</label>
-                                                    <input type="text" maxLength="10" placeholder="HSN/SAC Number" />
-                                                    <input type="text" maxLength="10" placeholder="HSN/SAC Number"/>
-                                                    <a>
-                                                    </a>
-                                                    <div class="btn-group m-t-10">
-                                                        <button class="btn btn-sm btn-success" type="button">Save
+                                            <div class="hsn-code-dropdown" hidden>
+                                                <label>HSN/SAC</label>
+                                                <input type="text" maxLength="10" placeholder="HSN/SAC Number" />
+                                                <input type="text" maxLength="10" placeholder="HSN/SAC Number" />
+                                                <a>
+                                                </a>
+                                                <div class="btn-group m-t-10">
+                                                    <button class="btn btn-sm btn-success" type="button">Save
                                                     </button>
-                                                        <button class="btn btn-sm btn-primary" type="button">
+                                                    <button class="btn btn-sm btn-primary" type="button">
                                                         Cancel
                                                     </button>
-                                                    </div>
                                                 </div>
-
                                             </div>
+
                                         </div>
                                     </div>
-
                                 </div>
-                                <!-- endregion -->
+
                             </div>
-                        </td>
+                            <!-- endregion -->
+                        </div>
+                    </td>
 
-                        <td class="text-right stock-unit">
-                            <input type="text" placeholder="Quantity" class="text-right form-control" />
+                    <td class="text-right stock-unit">
+                        <input type="text" placeholder="Quantity" class="text-right form-control" />
 
-                            <select class="form-control mt-05">
+                        <select class="form-control mt-05">
                             <!-- <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
                                 {{stock.text}}
                             </option> -->
                         </select>
-                        </td>
+                    </td>
 
-                        <td class="text-right item-rate" style="
+                    <td class="text-right item-rate" style="
           height: 1px;">
-                            <div class="td_Wrapper">
+                        <div class="td_Wrapper">
 
-                                <div style="flex: 1;">
-                                    <input type="text"  placeholder="Rate" class="form-control transaction-rate text-right"/>
-                                </div>
-                                <!-- please add condition for show and hide -->
-                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                            <div style="flex: 1;">
+                                <input type="text" placeholder="Rate"
+                                    class="form-control transaction-rate text-right" />
+                            </div>
+                            <!-- please add condition for show and hide -->
+                            <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                     <span>{{baseCurrencySymbol}}</span>
                                     <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span>
                                 </div> -->
-                            </div>
-                        </td>
+                        </div>
+                    </td>
 
-                        <td class="text-right item-amount" style="height:1px;">
-                            <div class="td_Wrapper">
-                                <div style="flex: 1;">
-                                    <input type="text" placeholder="Amount" class="text-right form-control" />
-                                </div>
-                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                    <td class="text-right item-amount" style="height:1px;">
+                        <div class="td_Wrapper">
+                            <div style="flex: 1;">
+                                <input type="text" placeholder="Amount" class="text-right form-control" />
+                            </div>
+                            <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                     <span>{{baseCurrencySymbol}}</span>
                                     <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
                                 </div> -->
-                            </div>
-                        </td>
+                        </div>
+                    </td>
 
-                        <td class="item-discount" style="height:1px;">
-                            <div class="td_Wrapper">
-                                <div class="text-right" style="flex:1;">
-                                    <!-- <discount-control-component #discountComponent [discountMenu]="false" [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum" [showHeaderText]="false" (hideOtherPopups)="closeTaxControlPopup()" (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
+                    <td class="item-discount" style="height:1px;">
+                        <div class="td_Wrapper">
+                            <div class="text-right" style="flex:1;">
+                                <!-- <discount-control-component #discountComponent [discountMenu]="false" [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum" [showHeaderText]="false" (hideOtherPopups)="closeTaxControlPopup()" (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
                                         [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol" [suffixInput]="selectedSuffixForCurrency">
                                     </discount-control-component> -->
-                                    <sh-select></sh-select>
-                                </div>
-                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                <sh-select></sh-select>
+                            </div>
+                            <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                     <span>{{baseCurrencySymbol}}</span>
                                     <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span>
                                 </div> -->
-                            </div>
-                        </td>
+                        </div>
+                    </td>
 
-                        <td class="pos-rel dropdown-container item-tax" style="height:1px;">
-                            <div class="td_Wrapper">
-                                <div class="text-right" style="flex:1;">
-                                    <sh-select></sh-select>
-                                    <!-- <tax-control [taxes]="companyTaxesList" [date]="entry.entry-date" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="allowedSelectionOfAType"
+                    <td class="pos-rel dropdown-container item-tax" style="height:1px;">
+                        <div class="td_Wrapper">
+                            <div class="text-right" style="flex:1;">
+                                <sh-select></sh-select>
+                                <!-- <tax-control [taxes]="companyTaxesList" [date]="entry.entry-date" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="allowedSelectionOfAType"
                                         [showHeading]="false" [rootClass]="'create-purchase-order-table'" (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)" (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol"
                                         [suffixInput]="selectedSuffixForCurrency">
                                     </tax-control> -->
-                                    
-                                </div>
 
-                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                            </div>
+
+                            <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                     <span>{{baseCurrencySymbol}}</span>
                                     <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span>
                                 </div> -->
-                            </div>
-                        </td>
+                        </div>
+                    </td>
 
-                        <td class="text-right item-total dlt-abs">
-                            <div class="td_Wrapper">
+                    <td class="text-right item-total dlt-abs">
+                        <div class="td_Wrapper">
 
-                                <div style="flex:1;">
-                                    <input type="text" class="form-control text-right"  
-                                       />
+                            <div style="flex:1;">
+                                <input type="text" class="form-control text-right" />
 
-                                    <!-- <div *ngIf="isTcsTdsApplicable" class="wrap-otherTax">
+                                <!-- <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
                                         <input type="checkbox" class="other-taxes-checkobx" [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable" name="entry.isOtherTaxApplicable_{{entryIdx}}" id="entry.isOtherTaxApplicable_{{entryIdx}}" (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
                                         <label for="entry.isOtherTaxApplicable_{{entryIdx}}" *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable" style="font-size:13px;vertical-align: middle">Other Tax?</label>
                                     </div> -->
-                                    <!-- <div *ngIf="entry.isOtherTaxApplicable" class="mt-1">
+                                <!-- <div *ngIf="entry.isOtherTaxApplicable" class="mt-1">
 
                                         <span>
 
@@ -589,7 +598,7 @@
 
                                 </div> -->
                             </div>
-                            <!-- <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && !isPurchaseInvoice" class="texIncurrency" style="color:#999;">
+                            <!-- <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && !isPurchaseInvoice" class="tax-in-currency" style="color:#999;">
                                 {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                 <span>{{baseCurrencySymbol}}</span> :
                                 <span>{{entry.otherTaxSum * exchangeRate | giddhCurrency}}</span>
@@ -603,14 +612,14 @@
                             <!-- <ng-container *ngTemplateOutlet="otherTaxesModal;context: {$implicit: entry }">
                             </ng-container> -->
 
-</div>
+                        </div>
 
-<div class="trash-icon-delete">
-<span class="cp">
-                                    <i class="icon-trash" aria-hidden="true"></i>
-                                </span>
-</div>
-</td>
+                        <div class="trash-icon-delete">
+                            <span class="cp">
+                                <i class="icon-trash" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
             <!-- region add bulk items -->
@@ -626,227 +635,226 @@
                         <!-- region other details-->
                         <div>
                             <div class="collapse-pane clearfix">
-        
+
                                 <div class="collapse-pane-heading">
-        
+
                                     <div class="ico-box-wrap">
                                         <div class="ico-box">
                                             <span aria-hidden="true" class="icon-minus"></span>
                                         </div>
                                     </div>
-        
+
                                     <div class="ico-head">Other Details</div>
                                 </div>
-        
+
                                 <div class="clearfix max-600 pdL3 mr0">
-        
+
                                     <div class="row">
-        
-                                        <div class="form-group col-xs-4">
-                                            <input type="text"  class="form-control"/>
+
+                                        <div class="form-group col-xs-4" [ngClass]="{'mb-3': isInvalidfield}">
+                                            <input type="text" class="form-control" />
                                             <p class="text-danger">
                                                 Invalid Date
                                             </p>
                                         </div>
-        
-                                        <div class="form-group col-xs-4">
-                                            <input type="text" name="shippedVia" class="form-control"  />
+
+                                        <div class="form-group col-xs-4"  [ngClass]="{'mb-3': isInvalidfield}">
+                                            <input type="text" name="shippedVia" class="form-control" />
                                         </div>
-        
-                                        <div class="form-group col-xs-4">
+
+                                        <div class="form-group col-xs-4"  [ngClass]="{'mb-3': isInvalidfield}">
                                             <input type="text" name="trackingNumber" class="form-control" />
                                         </div>
-        
+
                                     </div>
-        
+
                                     <div class="row">
-        
-                                        <div class="form-group col-xs-4">
-                                            <input type="text" name="customField1" class="form-control"/>
+
+                                        <div class="form-group col-xs-4"  [ngClass]="{'mb-3': isInvalidfield}">
+                                            <input type="text" name="customField1" class="form-control" />
                                         </div>
-        
-                                        <div class="form-group col-xs-4">
-                                            <input type="text" name="customField2"  class="form-control"/>
+
+                                        <div class="form-group col-xs-4  [ngClass]="{'mb-3': isInvalidfield}"">
+                                            <input type="text" name="customField2" class="form-control" />
                                         </div>
-        
-                                        <div class="form-group col-xs-4">
-                                            <input type="text" name="customField3"  class="form-control"/>
+
+                                        <div class="form-group col-xs-4"  [ngClass]="{'mb-3': isInvalidfield}"> 
+                                            <input type="text" name="customField3" class="form-control" />
                                         </div>
-        
+
                                     </div>
-        
+
                                 </div>
-        
+
                             </div>
                         </div>
                         <!-- endregion -->
-        
+
                         <!-- region note/messages -->
                         <div class="pt-1 pl-0 max-600">
-        
+
                             <label class="mrB1">Note</label>
                             <textarea style="height:120px !important" class="form-control" name="message2">
                         </textarea>
                         </div>
                         <!-- endregion -->
-        
+
                         <!-- region attachment -->
                         <div class="pdT1 pl0 max-600 pos-rel">
-        
+
                             <label class="mrB1"><i class="glyphicon glyphicon-paperclip"></i>
-                                                Attachment</label>
-        
+                                Attachment</label>
+
                             <label class="custom-file-label form-control cp pos-rel" for="invoiceFile">
-                                                <em >Drag/Drop file or click here</em>
-                                                <em  class="text-success"></em>
-                                                <span class="text-success" hidden>
-                                                    <i class="fa fa-check"></i></span>
-                                                <input type="file" name="invoiceFile" id="invoiceFile">
+                                <em>Drag/Drop file or click here</em>
+                                <em class="text-success"></em>
+                                <span class="text-success" hidden>
+                                    <i class="fa fa-check"></i></span>
+                                <input type="file" name="invoiceFile" id="invoiceFile">
                             </label>
-        
+
                         </div>
                         <!-- endregion -->
-        
+
                     </td>
                     <!-- region total section -->
                     <td colspan="4">
-        
-                        <section class="table-sec form-group">
-        
+
+                        <section class="table-section form-group">
+
                             <div class="table-row">
                                 <div class="table-cell">Total Amount</div>
                                 <div class="table-cell figure-cell">
                                     <span>&</span>0.00
                                 </div>
                             </div>
-        
+
                             <div class="table-row">
                                 <div class="table-cell">Discount</div>
                                 <div class="table-cell figure-cell">
                                     <span>$</span> 0.00
                                 </div>
                             </div>
-        
+
                             <div class="table-row">
                                 <div class="table-cell">Taxable Value</div>
                                 <div class="table-cell figure-cell">
                                     <span>$</span>0.00
                                 </div>
                             </div>
-        
+
                             <div class="table-row" hidden>
                                 <div class="table-cell">Tax</div>
                                 <div class="table-cell figure-cell">
                                     <span>$</span>0.00
                                 </div>
                             </div>
-        
+
                             <div class="table-row">
                                 <div class="table-cell">CESS</div>
                                 <div class="table-cell figure-cell"><span>$</span>0.00
                                 </div>
                             </div>
                             <div class="table-row">
-        
+
                                 <div class="table-cell">
                                     <strong>Round Off</strong>
                                 </div>
-        
+
                                 <div class="table-cell figure-cell">
                                     <strong> <span>$</span> 0.00</strong>
                                 </div>
-        
+
                             </div>
-        
+
                             <div class="table-row ">
-        
+
                                 <div class="table-cell bigger-dollar">
                                     <strong>Total <span></span></strong>
                                 </div>
-        
+
                                 <div class="table-cell figure-cell">
                                     <strong><span>$</span>0.00</strong>
                                 </div>
-        
+
                             </div>
                             <!-- multicurrency feature (editable grand total make it functional) -->
                             <div class="table-row" hidden>
                                 <div class="table-cell bigger-dollar">
                                     <strong>Total <span></span></strong>
                                 </div>
-        
+
                                 <div class="table-cell figure-cell">
                                     <input type="text" class="form-control">
                                 </div>
                             </div>
-        
+
                             <div class="table-row" hidden>
                                 <div class="table-cell">TCS</div>
                                 <div class="table-cell figure-cell"><span>$</span>0.00</div>
                             </div>
-        
+
                             <div class="table-row" hidden>
                                 <div class="table-cell">TDS</div>
                                 <div class="table-cell figure-cell"><span>$</span>0.00
                                 </div>
                             </div>
-        
+
                             <!--region balance due for non-purchase-->
                             <div class="table-row">
-        
+
                                 <div class="table-cell deposite-section" hidden>
-        
+
                                     <div class="btn-group">
-        
+
                                         <div id="deposit-dropdown" class="form-group pd1">
                                             <p>Deposit</p>
                                             <ul>
                                                 <ng-container>
                                                     <li role="menuitem" class="mt-1 ">
                                                         <div class="clearfix payment-mode deposit-payment-mode">
-        
-                                                            <div class="pull-right balanceDueText">
+
+                                                            <div class="pull-right balance-due-text">
                                                                 <div class="clearfix mb-1 text-left">
                                                                     <span class="pd0 mr-2 d-inline-block">
-                                                                                            <input class="radio-custom cp ml0"
-                                                                                                   name="advanceReceipt"
-                                                                                                   id="adjustAmountNo"
-                                                                                                   type="radio">
-                                                                                            <label class="radio-custom-label"
-                                                                                                   for="adjustAmountNo">No</label>
-                                                                                        </span>
+                                                                        <input class="radio-custom cp ml0"
+                                                                            name="advanceReceipt" id="adjustAmountNo"
+                                                                            type="radio">
+                                                                        <label class="radio-custom-label"
+                                                                            for="adjustAmountNo">No</label>
+                                                                    </span>
                                                                     <span class="pd0 d-inline-block">
-                                                                                            <input class="radio-custom cp ml0"
-                                                                                                   name="advanceReceipt"
-                                                                                                   id="adjustAmountYes"
-                                                                                                   type="radio">
-                                                                                            <label class="radio-custom-label"
-                                                                                                   for="adjustAmountYes">Yes</label>
-                                                                                        </span>
+                                                                        <input class="radio-custom cp ml0"
+                                                                            name="advanceReceipt" id="adjustAmountYes"
+                                                                            type="radio">
+                                                                        <label class="radio-custom-label"
+                                                                            for="adjustAmountYes">Yes</label>
+                                                                    </span>
                                                                 </div>
-        
+
                                                                 <div class="clearfix">
                                                                     <span class="pull-left">
-                                                                                            <p class="text-light mb-0">Advance
-                                                                                                Receipt</p>
-                                                                                            <p class="text-light">
-                                                                                                0.00
-                                                                                            </p>
-                                                                                        </span>
-                                                                    <a href="javascript:void(0)" class="font-12 pl-1 color-primary"><i
-                                                                                        class="icon-edit11"></i></a>
+                                                                        <p class="text-light mb-0">Advance
+                                                                            Receipt</p>
+                                                                        <p class="text-light">
+                                                                            0.00
+                                                                        </p>
+                                                                    </span>
+                                                                    <a href="javascript:void(0)"
+                                                                        class="font-12 pl-1 color-primary"><i
+                                                                            class="icon-edit11"></i></a>
                                                                 </div>
                                                             </div>
-        
+
                                                             <label class="pull-right">Adjust Amount</label>
                                                         </div>
                                                     </li>
                                                 </ng-container>
-        
-                                                <ng-container >
+
+                                                <ng-container>
                                                     <li role="menuitem" class="mt-1 ">
                                                         <div class="clearfix payment-mode">
-        
+
                                                             <sh-select class="text-left">
                                                                 <!-- <ng-template #optionTemplate1 let-option="option">
                                                                     <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -860,40 +868,41 @@
                                                             <label class="pull-right">Payment Mode</label>
                                                         </div>
                                                     </li>
-        
-                                                    <li class="clearfix mt-1" >
-                                                        <input type="text" placeholder="Amount" name="dueAmount" class="form-control amount-field text-right pull-right max100"/>
+
+                                                    <li class="clearfix mt-1">
+                                                        <input type="text" placeholder="Amount" name="dueAmount"
+                                                            class="form-control amount-field text-right pull-right max100" />
                                                         <label class="pull-right">Amount</label>
                                                     </li>
-        
+
                                                     <li class="clearfix mt-1">
                                                         <span class="amount-field pull-right max100 amount-filed-cash">
-                                                                            <span >$</span> 0.00</span>
+                                                            <span>$</span> 0.00</span>
                                                         <label class="pull-right">Amount</label>
                                                     </li>
-        
+
                                                     <li class="clearfix mt-1 bigger-dollar">
                                                         <strong class="pull-right balance-due-text"> <span>
-                                                            <!-- {{invFormData.accountDetails.currencySymbol}} -->
-                                                        </span>
-                                                                            <ng-container >
-                                                                                <!-- {{adjustPaymentBalanceDueData | giddhCurrency }} -->
-                                                                            </ng-container>
-                                                                            <ng-container >
-                                                                                <!-- {{invFormData.voucherDetails.balanceDue | giddhCurrency }} -->
-                                                                            </ng-container>
-                                                                        </strong>
+                                                                <!-- {{invFormData.accountDetails.currencySymbol}} -->
+                                                            </span>
+                                                            <ng-container>
+                                                                <!-- {{adjustPaymentBalanceDueData | giddhCurrency }} -->
+                                                            </ng-container>
+                                                            <ng-container>
+                                                                <!-- {{invFormData.voucherDetails.balanceDue | giddhCurrency }} -->
+                                                            </ng-container>
+                                                        </strong>
                                                         <strong class="pull-right">Balance Due</strong>
                                                     </li>
                                                 </ng-container>
                                             </ul>
                                         </div>
-        
+
                                     </div>
                                 </div>
                             </div>
                             <!--endregion-->
-        
+
                             <!-- region balance due for purchase -->
                             <div class="table-row">
                                 <div class="table-cell">
@@ -910,9 +919,839 @@
                     <td></td>
                 </tr>
             </tfoot>
-            </table>
+        </table>
     </section>
 </form>
+<!-- region mobile view -->
+<div class="show-in-mobile">
+    <div class="card-invoice-table-wrapper">
+        <!-- *ngFor="let transaction of entry.transactions;" for below ng-container -->
+        <ng-container >
+            <!-- region static entry -->
+            <div class="card-invoice-table">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="single-card-row">
+                            <div class="product-name">
+                                <label class="card-label">Product/Service Description</label>
+                                <label class="select-account-label">Click
+                                    to Select
+                                    Account</label>
+                                <p>Dummy account</p>
+                                <span>Stock detail name</span>
+                            </div>
+
+                            <p class="description">
+                                Transctioon Description
+                            </p>
+                            <p class="small text-muted sku-custom-fields">
+                                SKU</p>
+
+                            <div class="date-hsn-code pdR0">
+                                <div class="row">
+
+                                    <div class="col-xs-6">
+                                        <div class="entry-date">
+                                            <label>Entry Date:04-07-2020
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-6 pdL0">
+                                        <div class="hsn-code text-right">
+                                            <label>HSN/SAC:525582285</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="single-card-row">
+                            <div class="qty-unit">
+                                <label class="card-label">Qty/Unit</label>
+                                <p>20KG</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-xs-6">
+                        <div class="single-card-row">
+                            <div class="card-rate">
+                                <label class="card-label">Rate</label>
+                                <!-- *ngIf="transaction.rate > 0 || transaction.isStockTxn" -->
+                                <div >
+                                    <p>
+                                        <!--  <span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                                        {{invFormData.accountDetails.currencySymbol}}
+                                        </span>  -->
+                                        20000
+                                    </p>
+                                    <!-- <div *ngIf="isMulticurrencyAccount && !isPurchaseInvoice" class="differ-currency">
+                                        <span>$</span>
+                                        <span>20000</span>
+
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="single-card-row">
+                            <div class="card-amount">
+                                <label class="card-label">Amount</label>
+                                <p>
+                                    <!--<span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                    {{invFormData.accountDetails.currencySymbol}}
+                                    </span> -->
+                                    20000
+                                </p>
+
+                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                    <span>$</span>
+                                    <span>20000</span>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <div class="single-card-row">
+                            <div class="card-discount">
+                                <label class="card-label">Discount</label>
+                                <p> <span>$</span>200
+                                </p>
+                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                    <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="single-card-row">
+                            <div class="card-tax">
+                                <label class="card-label">Tax</label>
+                                <p><!-- <span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                        {{invFormData.accountDetails.currencySymbol}}
+                                    </span> -->
+                                    
+                                    <!-- {{entry.taxSum}}  --> 20%
+                                </p>
+                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                    <span>$</span>
+                                    <span>20000</span>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <div class="single-card-row">
+                            <div class="card-total">
+                                <label class="card-label">Total</label>
+                                <p><span>$</span>20000
+                                </p>
+                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                    <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{transaction.total * exchangeRate | giddhCurrency}}</span>
+
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- (click)="setActiveIndx(entryIdx);$event.stopPropagation()" use this for below div -->
+                <div class="edit-card">
+                    <img src="assets/images/edit-pencilicon.svg">
+                </div>
+                <!-- (click)="removeTransaction(entryIdx)" use this for below div -->
+                <div class="del-card">
+                    <i class="icon-trash" aria-hidden="true"></i>
+                </div>
+
+            </div>
+            <!-- endregion -->
+
+            <!-- region dynamic entry -->
+            <div class="card-invoice-table edit-card-invoice-table">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="single-card-row">
+                            <div class="product-name">
+                                <label class="card-label">Product/Service Description</label>
+                                <div class="product-name">
+                                    <div class="ng-select-wrap">
+                                        <!-- <sh-select [options]="salesAccounts$ | async" [(ngModel)]="transaction.fakeAccForSelect2" name="transaction.fakeAccForSelect2_{{entryIdx}}" (selected)="onSelectSalesAccount($event,transaction, entry)" [placeholder]="'Select A/cc'" [notFoundLink]="true"
+                                            [forceClearReactive]="forceClear$ | async" (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67" (onClear)="onClearSalesAccount(transaction)" [useInBuiltFilterForFlattenAc]="true">
+
+                                            <ng-template #optionTemplate let-option="option">
+                                                <ng-container *ngIf="!option.additional?.stock">
+                                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                        <div class="item">{{ option.label }}</div>
+                                                        <div class="item_unq">
+                                                            {{ option.additional?.uniqueName }}</div>
+                                                    </a>
+                                                </ng-container>
+                                                <ng-container *ngIf="option.additional?.stock">
+                                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                        <div class="item">{{ option.label }}</div>
+                                                        <div class="item_unq">
+                                                            {{ option.additional?.uniqueName }}</div>
+                                                        <div class="item_stock">Stock: {{ option.additional?.stock.uniqueName }}
+                                                        </div>
+                                                    </a>
+                                                </ng-container>
+                                            </ng-template>
+                                        </sh-select> -->
+                                        <sh-select></sh-select>
+                                    </div>
+                                </div>
+                                <!-- *ngIf="transaction.fakeAccForSelect2" for below -->
+                                <div >
+                                    <div class="sku-number">
+                                        <label>SKU:</label>Number
+                                    </div>
+
+                                    <div class="description">
+                                        <!-- name="transaction.description_{{entryIdx}}" [(ngModel)]="transaction.description" for beelow textarea  -->
+                                        <textarea type="text" placeholder="Add Description" class="form-control">
+                                      </textarea>
+                                        <!-- *ngIf="transaction.sku-custom-fields" for below -->
+                                        <p class="small text-muted sku-custom-fields">
+                                            <!-- {{transaction.sku-custom-fields}}  -->
+                                            SKU number
+
+                                        </p>
+                                    </div>
+
+                                    <!-- region entry date/ hsncode -->
+                                    <div class="date-hsn-code">
+
+                                        <div class="row">
+                                            <div class="col-xs-6 pdR0">
+                                                <div class="entry-date">
+                                                    <label>Entry Date: </label>
+
+                                                    <!-- <span *ngIf="!isUpdateMode">
+                                                                    <input type="text"
+                                                                           [placeholder]="giddhDateFormat" bsDatepicker
+                                                                           name="transaction.date_{{entryIdx}}"
+                                                                           id="transaction.date_{{entryIdx}}"
+                                                                           class="form-control text-left"
+                                                                           [(ngModel)]="entry.entryDate"
+                                                                           [disabled]="isUpdateMode"
+                                                                           (onShown)="hsnDropdownShow = false"
+                                                                           [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                                                           #dp="bsDatepicker" />
+                                                                    <span class="edit-icon cp" (click)="dp.toggle()"
+                                                                          [attr.aria-expanded]="dp.isOpen">
+                                                                        <img
+                                                                            src="assets/images/edit-pencilicon.svg">
+                                                                    </span>
+                                                    </span> -->
+                                                    <!--  *ngIf="isUpdateMode" for below span -->
+                                                    <span>
+                                                        <!-- {{ entry.entryDate | date: 'dd-MM-yyyy'}} --> 04-07-2020
+                                                    </span>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-6 pdL0">
+                                                <div class="wrap-hsn-box">
+                                                    <!-- (click)="toggleHsnSacDropDown(transaction)" below div -->
+                                                    <div class="hsn-code text-right"
+                                                        >
+                                                        <label>HSN/SAC:</label>
+                                                        <span>
+                                                            <!-- {{(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber }} -->
+                                                            225252552
+                                                            <!--  *ngIf="!transaction.hsnNumber && !transaction.sacNumber" for below -->
+                                                            <span class="update-text">Update
+                                                            </span>
+                                                            <span class="edit-icon cp">
+                                                                <img src="assets/images/edit-pencilicon.svg">
+                                                            </span>
+                                                        </span>
+                                                    </div>
+                                                    <!-- *ngIf="hsnDropdownShow"below div -->
+                                                    <div class="hsn-code-dropdown" hidden>
+                                                        <label>HSN/SAC</label>
+                                                        <!-- <input type="text" maxLength="10" placeholder="HSN/SAC Number"
+                                                            name="transaction.hsnNumber_{{entryIdx}}"
+                                                            *ngIf="(inventorySettings?.manageInventory || !transaction.sacNumberExists)"
+                                                            [(ngModel)]="transaction.hsnNumber" />
+                                                        <input type="text" maxLength="10" placeholder="HSN/SAC Number"
+                                                            name="transaction.hsnNumber_{{entryIdx}}"
+                                                            *ngIf="!(inventorySettings?.manageInventory || !transaction.sacNumberExists)"
+                                                            [(ngModel)]="transaction.sacNumber" /> -->
+                                                        <a>
+                                                        </a>
+                                                        <div class="btn-group m-t-10">
+                                                            <!-- (click)="hsnDropdownShow=!hsnDropdownShow"  -->
+                                                            <button class="btn btn-sm btn-success" type="button">
+                                                                Save
+                                                            </button>
+                                                            <!-- 
+                                                                (click)="hideHsnSacEditPopup(transaction) -->
+                                                            <button class="btn btn-sm btn-primary" type="button">
+                                                                Cancel
+                                                            </button>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- endregion -->
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row quantity-unit-width-100">
+                    <div class="col-xs-6">
+
+                        <div class="single-card-row">
+                            <div class="qty-unit">
+
+                                <div class="row">
+
+                                    <div class="col-xs-6 pr-0">
+                                        <label class="card-label text-right">Qty</label>
+                                        <!-- <input type="text" [disabled]="!transaction.isStockTxn"
+                                            (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity"
+                                            decimalDigitsDirective name="transaction.quantity_{{entryIdx}}"
+                                            class="form-control text-right" [(ngModel)]="transaction.quantity" /> -->
+                                            <sh-select></sh-select>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <label class="card-label text-right">Unit</label>
+                                        <!-- <select class="form-control" [disabled]="!transaction.isStockTxn"
+                                            name="transaction.stockUnit_{{entryIdx}}"
+                                            [(ngModel)]="transaction.stockUnit"
+                                            (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
+                                            <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
+                                                {{stock.text}}
+                                            </option>
+                                        </select> -->
+                                        <sh-select></sh-select>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-xs-6">
+
+                        <div class="single-card-row">
+
+                            <div class="card-rate">
+                                <label class="card-label text-right">Rate</label>
+                                <div style="flex: 1;">
+                                    <!-- <input type="text" [disabled]="!transaction.isStockTxn"
+                                        (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)"
+                                        placeholder="Rate" name="transaction.rate_{{entryIdx}}"
+                                        class="form-control transaction-rate text-right" [(ngModel)]="transaction.rate"
+                                        [prefix]="invFormData.accountDetails.currencySymbol"
+                                        [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
+                                        [customDecimalPlaces]="ratePrecision" /> -->
+                                        <sh-select></sh-select>
+                                </div>
+                                <!-- please add condition for show and hide -->
+                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                    <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span>
+                                </div> -->
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-6">
+
+                        <div class="single-card-row">
+
+                            <div class="card-amount">
+
+                                <label class="card-label text-right">Amount</label>
+                                <div style="flex: 1;">
+                                    <!-- <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction)"
+                                        (click)="transactionAmountClicked(transaction)" placeholder="Amount"
+                                        name="transaction.amount_{{entryIdx}}" class="form-control text-right"
+                                        [(ngModel)]="transaction.amount" decimalDigitsDirective
+                                        [prefix]="invFormData.accountDetails.currencySymbol"
+                                        [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" /> -->
+                                        <sh-select></sh-select>
+                                </div>
+                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                    <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
+                                </div> -->
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6">
+
+                        <div class="single-card-row">
+
+                            <div class="card-discount">
+                                <label class="card-label text-right">Discount</label>
+                                <div class="text-right">
+
+                                    <!-- <discount-control-component #discountComponent [discountMenu]="false"
+                                        [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum"
+                                        [showHeaderText]="false" (hideOtherPopups)="closeTaxControlPopup()"
+                                        (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
+                                        [maskInput]="inputMaskFormat"
+                                        [prefixInput]="invFormData.accountDetails.currencySymbol"
+                                        [suffixInput]="selectedSuffixForCurrency">
+                                    </discount-control-component> -->
+                                    <sh-select></sh-select>
+
+                                </div>
+                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                    <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span>
+                                </div> -->
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-6">
+
+                        <div class="single-card-row">
+                            <div class="card-tax">
+                                <label class="card-label text-right">Tax</label>
+
+                                <div class="text-right" style="flex:1;">
+                                    <!-- <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
+                                        [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue"
+                                        [applicableTaxes]="transaction.applicableTaxes"
+                                        [exceptTaxTypes]="exceptTaxTypes"
+                                        [allowedSelectionOfAType]="allowedSelectionOfAType" [showHeading]="false"
+                                        [rootClass]="'salseInvoicetable'"
+                                        (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
+                                        (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat"
+                                        [prefixInput]="invFormData.accountDetails.currencySymbol"
+                                        [suffixInput]="selectedSuffixForCurrency">
+                                    </tax-control> -->
+                                    <sh-select></sh-select>
+                                </div>
+                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                    <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span>
+                                </div> -->
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <div class="single-card-row">
+                            <div class="card-total">
+                                <label class="card-label text-right">Total</label>
+                                <div style="flex:1;">
+                                    <!-- <input type="tel" name="transaction.total_{{entryIdx}}"
+                                        class="form-control text-right"
+                                        (blur)="calculateTransactionValueInclusively(entry, transaction)"
+                                        [(ngModel)]="transaction.total" decimalDigitsDirective
+                                        [prefix]="invFormData.accountDetails.currencySymbol"
+                                        [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" /> -->
+                                        <!-- *ngIf="isTcsTdsApplicable" below div -->
+                                        <input type="tel" class="form-control">
+                                    <div  class="wrap-other-tax">
+                                        <!-- <input type="checkbox" class="other-taxes-checkobx"
+                                            [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable"
+                                            name="entry.isOtherTaxApplicable_{{entryIdx}}"
+                                            id="entry.isOtherTaxApplicable_{{entryIdx}}"
+                                            (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
+                                        <label for="entry.isOtherTaxApplicable_{{entryIdx}}"
+                                            *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable"
+                                            style="font-size:13px;vertical-align: middle">Other
+                                            Tax?</label> -->
+                                    </div>
+                                    <!-- *ngIf="entry.isOtherTaxApplicable" below div -->
+                                    <div  class="mt-1 other-taxes">
+
+                                        <span>
+
+                                            <div class="d-flex align-items-center">
+                                                <span class="mr-05">
+                                                    <!--  (click)="toggleOtherTaxesAsidePane(true, entryIdx)" -->
+                                                    <a href="javascript: void 0">
+                                                        <img src="assets/images/edit-pencilicon.svg">
+                                                    </a>
+                                                </span>
+
+                                                <!-- <input class="text-right form-control other-taxes-input"
+                                                    disabled="disabled" [(ngModel)]="entry.otherTaxSum"
+                                                    [prefix]="invFormData.accountDetails.currencySymbol"
+                                                    [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
+                                                    name="entry.otherTaxesSum_{{entryIdx}}" /> -->
+                                            </div>
+
+                                            <p
+                                                style="margin-top: 5px; font-size: 12px; text-transform: capitalize; margin-bottom: 20px;">
+                                                <!-- {{ entry.otherTaxModal?.appliedOtherTax?.name}}  -->
+                                                Applicable tax
+                                            
+                                            </p>
+                                        </span>
+
+                                    </div>
+                                </div>
+                                <!-- *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && !isPurchaseInvoice" for below div -->
+                                <div 
+                                    class="tax-in-currency">
+                                    <!-- {{ entry.otherTaxModal?.appliedOtherTax?.name }} -->
+                                    <span>
+                                        <!-- {{baseCurrencySymbol}} -->
+                                        $
+                                    </span> :
+                                    <span>
+                                        <!-- {{entry.otherTaxSum * exchangeRate | giddhCurrency}} -->
+                                        20000
+                                    </span>
+                                </div>
+                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                    <span>{{baseCurrencySymbol}}</span>
+                                    <span>{{transaction.total * exchangeRate | giddhCurrency}}</span>
+                                </div> -->
+
+                                <!-- <ng-container *ngTemplateOutlet="otherTaxesModal;context: {$implicit: entry }">
+                                </ng-container> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="save-card-data pointer">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                </div>
+                <!--  (click)="removeTransaction(entryIdx)" for below div -->
+                <div class="del-card pointer">
+                    <i class="icon-trash" aria-hidden="true"></i>
+                </div>
+
+            </div>
+            <!-- endregion -->
+        </ng-container>
+
+    </div>
+    <!-- (click)="addBlankRow(null)" below div -->
+    <div class="add-btn">
+        <button class="btn btn-sm btn-success">Add More</button>
+    </div>
+
+    <div class="other-detail-card">
+        <div>
+            <div class="collapse-pane clearfix">
+                <!--  (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed" below div -->
+                <div class="collapse-pane-heading">
+                    <div class="ico-box-wrap">
+                        <div class="ico-box">
+                            <!-- [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'"  below div -->
+                            <span aria-hidden="true"></span>
+                        </div>
+                    </div>
+                    <div class="ico-head">Other Details</div>
+                </div>
+
+                <!-- [collapse]="isOthrDtlCollapsed" below div -->
+                <div  class="clearfix max-600  mr0">
+
+                    <div class="row">
+
+                        <div class="form-group col-xs-4">
+                            <!-- <input type="text" #shippingDate="ngModel"
+                                [placeholder]="templatePlaceholder?.shippedDateLabel" bsDatepicker name="shippingDate"
+                                [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control"
+                                [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" /> -->
+                                <input type="text" class="form-control">
+                                <!-- *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" below p  -->
+                            <p class="text-danger" >
+                                Invalid Date</p>
+                        </div>
+
+                        <div class="form-group col-xs-4">
+                            <!-- <input type="text" name="shippedVia"
+                                [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control"
+                                [placeholder]="templatePlaceholder?.shippedViaLabel || 'Ship Via'" /> -->
+                                <input type="text" class="form-control"> 
+                        </div>
+
+                        <div class="form-group col-xs-4">
+                            <!-- <input type="text" name="trackingNumber"
+                                [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control"
+                                [placeholder]="templatePlaceholder?.trackingNumber || 'Tracking No.'" /> -->
+                                <input type="text" class="form-control">
+                        </div>
+
+                        <div class="form-group col-xs-4">
+                            <!-- <input type="text" name="customField1"
+                                [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control"
+                                [placeholder]="templatePlaceholder?.customField1Label || 'Field 1'" /> -->
+                                <input type="text" class="form-control">
+                        </div>
+
+                        <div class="form-group col-xs-4">
+                            <!-- <input type="text" name="customField2"
+                                [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control"
+                                [placeholder]="templatePlaceholder?.customField2Label || 'Field 2'" /> -->
+                                <input type="text" class="form-control">
+                        </div>
+
+                        <div class="form-group col-xs-4">
+                            <!-- <input type="text" name="customField3"
+                                [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control"
+                                [placeholder]="templatePlaceholder?.customField3Label || 'Field 3'" /> -->
+                                <input type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="pdT1 pl0 max-600">
+                <label class="mrB1">Message</label>
+                <!-- [(ngModel)]="invFormData.templateDetails.other.message2" -->
+                <textarea class="form-control" name="message2"></textarea>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="total-amount-description">
+
+        <section class="table-section form-group">
+
+            <div class="table-row">
+                <div class="table-cell">Total Amount</div>
+                <div class="table-cell figure-cell">
+                    <!-- <span
+                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                        {{invFormData.accountDetails.currencySymbol}}
+                    </span>
+                        {{invFormData.voucherDetails.subTotal | giddhCurrency}} -->
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="table-cell">Discount</div>
+                <div class="table-cell figure-cell">
+                    <!-- <span
+                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.totalDiscount * -1 | giddhCurrency}} -->
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="table-cell">Taxable Value</div>
+                <div class="table-cell figure-cell">
+                    <!-- <span
+                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.totalTaxableValue | giddhCurrency}} -->
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="table-cell">Tax</div>
+                <div class="table-cell figure-cell">
+                    <!-- <span
+                    
+                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.gstTaxesTotal | giddhCurrency}} -->
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="table-cell">CESS</div>
+                <div class="table-cell figure-cell">
+                    <!-- <span
+                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.cessTotal | giddhCurrency}} -->
+                </div>
+            </div>
+            <div class="table-row">
+
+                <div class="table-cell">
+                    <strong>Round Off</strong>
+                </div>
+
+                <div class="table-cell figure-cell">
+                     <strong><!-- <span
+                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
+                        {{calculatedRoundOff | giddhCurrency}}
+                     -->
+                    </strong>
+                </div>
+
+            </div>
+            <div class="table-row">
+                <div class="table-cell">
+                    <strong>Total
+                        <!-- <span
+                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span> -->
+                        
+                        </strong>
+                </div>
+
+                <div class="table-cell figure-cell">
+                    <strong>
+                        <!-- <span
+                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.grandTotal | giddhCurrency}} -->
+                    </strong>
+                </div>
+            </div>
+            <div class="table-row">
+                <div class="table-cell bigger-dollar">
+                    <strong>Total <span>
+                        <!-- {{baseCurrencySymbol}} -->
+                        22222
+                    </span>
+                    </strong>
+                </div>
+
+                <div class="table-cell figure-cell">
+                    <!-- <input #grandTotalInr type="text" class="form-control" name="grandTotalMulDum"
+                        [prefix]="baseCurrencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
+                        [(ngModel)]="grandTotalMulDum" (blur)="updateExchangeRate(grandTotalInr.value)"> -->
+                        <input type="text">
+
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="table-cell">TCS</div>
+                <div class="table-cell figure-cell">
+                    <!-- {{invFormData.voucherDetails.tcsTotal | giddhCurrency}} -->
+                
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div class="table-cell">TDS</div>
+                <div class="table-cell figure-cell">
+                    <!-- {{invFormData.voucherDetails.tdsTotal | giddhCurrency}} -->
+                </div>
+            </div>
+            <!--region balance due for non-purchase 
+                 *ngIf="((isSalesInvoice || isCashInvoice) && !isUpdateMode ) add below div
+            -->
+            <div class="table-row">
+
+                <div class="table-cell deposite-section" hidden>
+
+                    <div class="btn-group"> 
+                        <!-- (click)="clickedInside($event)"  -->
+                        <div id="deposit-dropdown" class="form-group pd1">
+                            <p>Deposit</p>
+                            <ul>
+
+
+
+                                <li role="menuitem" class="mt-1 ">
+                                    <div class="clearfix payment-mode deposit-payment-mode">
+
+                                        <!-- <sh-select class="pull-right " name="depositAccountUniqueName"
+                                            [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName"
+                                            (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'"
+                                            [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
+                                            [multiple]="false" [ItemHeight]="33"
+                                            [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
+                                            <ng-template #optionTemplate1 let-option="option">
+                                                <a href="javascript:void(0)" class="list-item"
+                                                    style="border-bottom: 1px solid #ccc;">
+                                                    <div class="item">{{ option.label }}</div>
+                                                    <div class="item_unq">{{ option.value }}</div>
+                                                </a>
+                                            </ng-template>
+                                        </sh-select> -->
+                                        <sh-select></sh-select>
+                                        
+                                        <label class="pull-right">Payment Mode</label>
+                                    </div>
+                                </li>
+
+                                <li class="clearfix mt-1">
+                                    <!-- <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount"
+                                        name="dueAmount" class="form-control amountField text-right pull-right max100"
+                                        [(ngModel)]="depositAmount" [prefix]="depositCurrSymbol"
+                                        [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" /> -->
+
+                                    <label class="pull-right">Amount</label>
+                                </li>
+
+                                <li class="clearfix mt-1">
+                                    <span class="amountField pull-right max100 amount-filed-cash">
+                                        <!-- <span
+                                            *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
+                                        {{invFormData.voucherDetails.balanceDue | giddhCurrency}} -->
+                                    
+                                    </span>
+                                    <label class="pull-right">Amount</label>
+                                </li>
+
+                                <li class="clearfix mt-1 bigger-dollar">
+                                    <strong class="pull-right balance-due-text"> 
+                                        <!-- <span
+                                            *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
+                                        {{invFormData.voucherDetails.balanceDue | giddhCurrency}} -->
+                                    </strong>
+                                    <strong class="pull-right">Balance Due</strong>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--endregion-->
+
+            <!-- region balance due for purchase -->
+            <div class="table-row">
+                <div class="table-cell">
+                    <strong>Balance Due</strong>
+                </div>
+                <div class="table-cell figure-cell">
+                    <!-- <strong>{{invFormData.voucherDetails.balanceDue | giddhCurrency}}</strong> -->
+                </div>
+            </div>
+            <!-- endregion -->
+
+        </section>
+
+    </div>
+</div>
+<!-- endregion -->
+
 <section class="clearfix">
 
     <section id="actionPane" class="text-center">
@@ -925,82 +1764,86 @@
 
                 <!-- region purchase invoice -->
                 <span class="d-inline-block v-align-middle">
-                                <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
+                    <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
                             class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
                         </button> -->
-                                <button type="button" class="btn btn-default">Save</button>
-                            </span>
+                    <button type="button" class="btn btn-default">Save</button>
+                </span>
                 <!-- endregion -->
 
                 <!-- region non purchase -->
                 <span class="d-inline-block v-align-middle" hidden>
-                 <button type="button" class="btn btn-default">Generate<span>Cash </span> &amp; Update A/c
-                </button>
-
-                <div class="btn-group" dropdown [dropup]="true">
-                    <button type="button" class="btn btn-default generate-invoice">Generate<span>Cash</span></button>
-                    <button id="button-split" type="button" dropdownToggle class="btn btn-default dropdown-toggle dropdown-toggle-split" aria-controls="dropdown-split">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Split button!</span>
+                    <button type="button" class="btn btn-default">Generate<span>Cash </span> &amp; Update A/c
                     </button>
 
-                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
+                    <div class="btn-group" dropdown [dropup]="true">
+                        <button type="button"
+                            class="btn btn-default generate-invoice">Generate<span>Cash</span></button>
+                        <button id="button-split" type="button" dropdownToggle
+                            class="btn btn-default dropdown-toggle dropdown-toggle-split"
+                            aria-controls="dropdown-split">
+                            <span class="caret"></span>
+                            <span class="sr-only">Split button!</span>
+                        </button>
 
-                        <li role="menuitem">
-                            <a class="dropdown-item cp">Create & Send</a>
-                        </li>
+                        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                            aria-labelledby="button-basic">
 
-                        <li role="menuitem">
-                            <a class="dropdown-item cp">Create& Print</a>
-                        </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp">Create & Send</a>
+                            </li>
 
-                        <li role="menuitem">
-                            <a class="dropdown-item cp">Generate & Recurring</a>
-                        </li>
-                    </ul>
-                </div>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp">Create& Print</a>
+                            </li>
+
+                            <li role="menuitem">
+                                <a class="dropdown-item cp">Generate & Recurring</a>
+                            </li>
+                        </ul>
+                    </div>
                 </span>
                 <!-- endregion -->
 
                 <!-- region proforma/estimates -->
                 <span class="d-inline-block v-align-middle" hidden>
 
-                                <div class="btn-group" dropdown [dropup]="true">
+                    <div class="btn-group" dropdown [dropup]="true">
 
-                                    <button type="button"
-                                            class="btn btn-default">Create </button>
+                        <button type="button" class="btn btn-default">Create </button>
 
-                                    <button id="button-split2" type="button" dropdownToggle
-                                            class="btn btn-default dropdown-toggle dropdown-toggle-split"
-                                            aria-controls="dropdown-split">
-                                        <span class="caret"></span>
-                <span class="sr-only">Split button!</span>
-                </button>
+                        <button id="button-split2" type="button" dropdownToggle
+                            class="btn btn-default dropdown-toggle dropdown-toggle-split"
+                            aria-controls="dropdown-split">
+                            <span class="caret"></span>
+                            <span class="sr-only">Split button!</span>
+                        </button>
 
-                <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
-                    <li role="menuitem">
-                        <a class="dropdown-item cp">Create & Send</a>
-                    </li>
+                        <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                            aria-labelledby="button-basic">
+                            <li role="menuitem">
+                                <a class="dropdown-item cp">Create & Send</a>
+                            </li>
 
-                    <li role="menuitem">
-                        <a class="dropdown-item cp">Create & Print</a>
-                    </li>
-                </ul>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp">Create & Print</a>
+                            </li>
+                        </ul>
+                    </div>
+                </span>
+                <!-- endregion -->
+
             </div>
-            </span>
             <!-- endregion -->
 
-        </div>
-        <!-- endregion -->
+            <!-- region update mode -->
+            <div class="pull-right pr" hidden>
 
-        <!-- region update mode -->
-        <div class="pull-right pr" hidden>
+                <button type="button" class="btn btn-danger d-inline-block v-align-middle">Cancel</button>
 
-            <button type="button" class="btn btn-danger d-inline-block v-align-middle">Cancel</button>
-
-            <button type="button" class="btn btn-default">Update<span> Cash</span></button>
-        </div>
-        <!-- endregion -->
+                <button type="button" class="btn btn-default">Update<span> Cash</span></button>
+            </div>
+            <!-- endregion -->
 
         </div>
     </section>

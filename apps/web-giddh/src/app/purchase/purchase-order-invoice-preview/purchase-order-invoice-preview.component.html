@@ -523,9 +523,3 @@
     </div>
     <!-- endregion -->
 </div>
-
-<div class="aside-overlay" *ngIf="orderHistoryAsideState === 'in'"></div>
-<div *ngIf="orderHistoryAsideState === 'in'">
-    <aside-order-history (closeAsideEvent)="toggleOrderHistoryAsidePane($event)" >
-    </aside-order-history>
-</div>

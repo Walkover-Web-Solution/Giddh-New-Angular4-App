@@ -259,16 +259,16 @@
                             <div class="preview-not-supported-attachment" *ngIf="attachedDocumentType?.type === 'unsupported'">
                                 <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and PDF (.pdf); to print other formats, download them. </span>
                             </div>
-
+                            <div class="expand-button cursor-pointer text-gray" (click)="openModal(template)">
+                                <span class="icon-collapse-icon"></span>Expand
+                            </div>
                             <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview class="fixed-ng2pdfview pdf-preview" [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
                                 <ng2-pdfjs-viewer pagemode="none" *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')" viewerId="MyUniqueID" [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
                                     [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="testPagesLoaded($event);" [openFile]="false" [viewBookmark]="false" [download]="false">
                                 </ng2-pdfjs-viewer>
                                 <img *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')" class="image-preview" [src]="imagePreviewSource" />
                             </div>
-                            <div class="expand-button cursor-pointer text-gray" (click)="openModal(template)">
-                                <span class="icon-collapse-icon"></span>Expand
-                            </div>
+                            
                             <div *ngIf="shouldShowUploadAttachment" class="upload-excel max500 center-block box mrT2 dashed-bdr">
                                 <input type="file" id="csv-upload-input" placeholder="Upload an EXCEL or CSV file" droppable="true" class="form-control" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)" />
                                 <div class="clearfix pos-rel width100">
@@ -330,7 +330,7 @@
 </div>
 
 <ng-template #template>
-    <div>
+    <div class="relative header-close-btn">
       
       <button type="button" class="close pull-right cursor-pointer" aria-label="Close" (click)="modalRef.hide()">
         <span aria-hidden="true">&times;</span>

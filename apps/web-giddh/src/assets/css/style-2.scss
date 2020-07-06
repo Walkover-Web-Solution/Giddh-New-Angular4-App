@@ -9332,6 +9332,9 @@ span#HW_badge_cont:nth-child(3){
         width: 100%;
     }
 }
+.preview-lightbox-overlay{
+    z-index: 999 !important;
+}
 .preview-lightbox{
     img{
         width:100%
@@ -9344,7 +9347,13 @@ span#HW_badge_cont:nth-child(3){
     .moday-body{
         padding: 30px 15px;
     }
+    .header-close-btn{
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+    }
 }
+
 /* responsive */
 
 @media (max-width: 1440px) {
