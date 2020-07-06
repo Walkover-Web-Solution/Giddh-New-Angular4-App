@@ -658,11 +658,11 @@
                                             </p>
                                         </div>
 
-                                        <div class="form-group col-xs-4"  [ngClass]="{'mb-3': isInvalidfield}">
+                                        <div class="form-group col-xs-4" [ngClass]="{'mb-3': isInvalidfield}">
                                             <input type="text" name="shippedVia" class="form-control" />
                                         </div>
 
-                                        <div class="form-group col-xs-4"  [ngClass]="{'mb-3': isInvalidfield}">
+                                        <div class="form-group col-xs-4" [ngClass]="{'mb-3': isInvalidfield}">
                                             <input type="text" name="trackingNumber" class="form-control" />
                                         </div>
 
@@ -670,15 +670,15 @@
 
                                     <div class="row">
 
-                                        <div class="form-group col-xs-4"  [ngClass]="{'mb-3': isInvalidfield}">
+                                        <div class="form-group col-xs-4" [ngClass]="{'mb-3': isInvalidfield}">
                                             <input type="text" name="customField1" class="form-control" />
                                         </div>
 
-                                        <div class="form-group col-xs-4  [ngClass]="{'mb-3': isInvalidfield}"">
+                                        <div class="form-group col-xs-4" [ngClass]="{'mb-3': isInvalidfield}">
                                             <input type="text" name="customField2" class="form-control" />
                                         </div>
 
-                                        <div class="form-group col-xs-4"  [ngClass]="{'mb-3': isInvalidfield}"> 
+                                        <div class="form-group col-xs-4" [ngClass]="{'mb-3': isInvalidfield}">
                                             <input type="text" name="customField3" class="form-control" />
                                         </div>
 
@@ -921,836 +921,838 @@
             </tfoot>
         </table>
     </section>
-</form>
-<!-- region mobile view -->
-<div class="show-in-mobile">
-    <div class="card-invoice-table-wrapper">
-        <!-- *ngFor="let transaction of entry.transactions;" for below ng-container -->
-        <ng-container >
-            <!-- region static entry -->
-            <div class="card-invoice-table">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="single-card-row">
-                            <div class="product-name">
-                                <label class="card-label">Product/Service Description</label>
-                                <label class="select-account-label">Click
-                                    to Select
-                                    Account</label>
-                                <p>Dummy account</p>
-                                <span>Stock detail name</span>
-                            </div>
+    <!-- region mobile view -->
+    <div class="show-in-mobile">
+        <div class="card-invoice-table-wrapper">
+            <!-- *ngFor="let transaction of entry.transactions;" for below ng-container -->
+            <ng-container>
+                <!-- region static entry -->
+                <div class="card-invoice-table">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="single-card-row">
+                                <div class="product-name">
+                                    <label class="card-label">Product/Service Description</label>
+                                    <label class="select-account-label">Click
+                                        to Select
+                                        Account</label>
+                                    <p>Dummy account</p>
+                                    <span>Stock detail name</span>
+                                </div>
 
-                            <p class="description">
-                                Transctioon Description
-                            </p>
-                            <p class="small text-muted sku-custom-fields">
-                                SKU</p>
+                                <p class="description">
+                                    Transctioon Description
+                                </p>
+                                <p class="small text-muted sku-custom-fields">
+                                    SKU</p>
 
-                            <div class="date-hsn-code pdR0">
-                                <div class="row">
+                                <div class="date-hsn-code pdR0">
+                                    <div class="row">
 
-                                    <div class="col-xs-6">
-                                        <div class="entry-date">
-                                            <label>Entry Date:04-07-2020
-                                            </label>
+                                        <div class="col-xs-6">
+                                            <div class="entry-date">
+                                                <label>Entry Date:04-07-2020
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="col-xs-6 pdL0">
-                                        <div class="hsn-code text-right">
-                                            <label>HSN/SAC:525582285</label>
+                                        <div class="col-xs-6 pdL0">
+                                            <div class="hsn-code text-right">
+                                                <label>HSN/SAC:525582285</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="single-card-row">
-                            <div class="qty-unit">
-                                <label class="card-label">Qty/Unit</label>
-                                <p>20KG</p>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="single-card-row">
+                                <div class="qty-unit">
+                                    <label class="card-label">Qty/Unit</label>
+                                    <p>20KG</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="single-card-row">
+                                <div class="card-rate">
+                                    <label class="card-label">Rate</label>
+                                    <!-- *ngIf="transaction.rate > 0 || transaction.isStockTxn" -->
+                                    <div>
+                                        <p>
+                                            <!--  <span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                                            {{invFormData.accountDetails.currencySymbol}}
+                                            </span>  -->
+                                            20000
+                                        </p>
+                                        <!-- <div *ngIf="isMulticurrencyAccount && !isPurchaseInvoice" class="differ-currency">
+                                            <span>$</span>
+                                            <span>20000</span>
+
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="single-card-row">
+                                <div class="card-amount">
+                                    <label class="card-label">Amount</label>
+                                    <p>
+                                        <!--<span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                        {{invFormData.accountDetails.currencySymbol}}
+                                        </span> -->
+                                        20000
+                                    </p>
+
+                                    <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                        <span>$</span>
+                                        <span>20000</span>
+                                    </div> -->
+                                </div>
                             </div>
                         </div>
 
+                        <div class="col-xs-6">
+                            <div class="single-card-row">
+                                <div class="card-discount">
+                                    <label class="card-label">Discount</label>
+                                    <p> <span>$</span>200
+                                    </p>
+                                    <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                        <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="col-xs-6">
-                        <div class="single-card-row">
-                            <div class="card-rate">
-                                <label class="card-label">Rate</label>
-                                <!-- *ngIf="transaction.rate > 0 || transaction.isStockTxn" -->
-                                <div >
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="single-card-row">
+                                <div class="card-tax">
+                                    <label class="card-label">Tax</label>
                                     <p>
-                                        <!--  <span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                                        {{invFormData.accountDetails.currencySymbol}}
-                                        </span>  -->
-                                        20000
+                                        <!-- <span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                            {{invFormData.accountDetails.currencySymbol}}
+                                        </span> -->
+
+                                        <!-- {{entry.taxSum}}  --> 20%
                                     </p>
-                                    <!-- <div *ngIf="isMulticurrencyAccount && !isPurchaseInvoice" class="differ-currency">
+                                    <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
                                         <span>$</span>
                                         <span>20000</span>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="single-card-row">
+                                <div class="card-total">
+                                    <label class="card-label">Total</label>
+                                    <p><span>$</span>20000
+                                    </p>
+                                    <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                        <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{transaction.total * exchangeRate | giddhCurrency}}</span>
 
                                     </div> -->
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="single-card-row">
-                            <div class="card-amount">
-                                <label class="card-label">Amount</label>
-                                <p>
-                                    <!--<span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                    {{invFormData.accountDetails.currencySymbol}}
-                                    </span> -->
-                                    20000
-                                </p>
-
-                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                    <span>$</span>
-                                    <span>20000</span>
-                                </div> -->
-                            </div>
-                        </div>
+                    <!-- (click)="setActiveIndx(entryIdx);$event.stopPropagation()" use this for below div -->
+                    <div class="edit-card">
+                        <img src="assets/images/edit-pencilicon.svg">
+                    </div>
+                    <!-- (click)="removeTransaction(entryIdx)" use this for below div -->
+                    <div class="del-card">
+                        <i class="icon-trash" aria-hidden="true"></i>
                     </div>
 
-                    <div class="col-xs-6">
-                        <div class="single-card-row">
-                            <div class="card-discount">
-                                <label class="card-label">Discount</label>
-                                <p> <span>$</span>200
-                                </p>
-                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                    <span>{{baseCurrencySymbol}}</span>
-                                    <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span>
-                                </div> -->
-                            </div>
-                        </div>
-                    </div>
                 </div>
+                <!-- endregion -->
 
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="single-card-row">
-                            <div class="card-tax">
-                                <label class="card-label">Tax</label>
-                                <p><!-- <span *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                        {{invFormData.accountDetails.currencySymbol}}
-                                    </span> -->
-                                    
-                                    <!-- {{entry.taxSum}}  --> 20%
-                                </p>
-                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                    <span>$</span>
-                                    <span>20000</span>
-                                </div> -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xs-6">
-                        <div class="single-card-row">
-                            <div class="card-total">
-                                <label class="card-label">Total</label>
-                                <p><span>$</span>20000
-                                </p>
-                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                    <span>{{baseCurrencySymbol}}</span>
-                                    <span>{{transaction.total * exchangeRate | giddhCurrency}}</span>
-
-                                </div> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- (click)="setActiveIndx(entryIdx);$event.stopPropagation()" use this for below div -->
-                <div class="edit-card">
-                    <img src="assets/images/edit-pencilicon.svg">
-                </div>
-                <!-- (click)="removeTransaction(entryIdx)" use this for below div -->
-                <div class="del-card">
-                    <i class="icon-trash" aria-hidden="true"></i>
-                </div>
-
-            </div>
-            <!-- endregion -->
-
-            <!-- region dynamic entry -->
-            <div class="card-invoice-table edit-card-invoice-table">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="single-card-row">
-                            <div class="product-name">
-                                <label class="card-label">Product/Service Description</label>
+                <!-- region dynamic entry -->
+                <div class="card-invoice-table edit-card-invoice-table">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="single-card-row">
                                 <div class="product-name">
-                                    <div class="ng-select-wrap">
-                                        <!-- <sh-select [options]="salesAccounts$ | async" [(ngModel)]="transaction.fakeAccForSelect2" name="transaction.fakeAccForSelect2_{{entryIdx}}" (selected)="onSelectSalesAccount($event,transaction, entry)" [placeholder]="'Select A/cc'" [notFoundLink]="true"
-                                            [forceClearReactive]="forceClear$ | async" (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67" (onClear)="onClearSalesAccount(transaction)" [useInBuiltFilterForFlattenAc]="true">
+                                    <label class="card-label">Product/Service Description</label>
+                                    <div class="product-name">
+                                        <div class="ng-select-wrap">
+                                            <!-- <sh-select [options]="salesAccounts$ | async" [(ngModel)]="transaction.fakeAccForSelect2" name="transaction.fakeAccForSelect2_{{entryIdx}}" (selected)="onSelectSalesAccount($event,transaction, entry)" [placeholder]="'Select A/cc'" [notFoundLink]="true"
+                                                [forceClearReactive]="forceClear$ | async" (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67" (onClear)="onClearSalesAccount(transaction)" [useInBuiltFilterForFlattenAc]="true">
 
-                                            <ng-template #optionTemplate let-option="option">
-                                                <ng-container *ngIf="!option.additional?.stock">
-                                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                                                        <div class="item">{{ option.label }}</div>
-                                                        <div class="item_unq">
-                                                            {{ option.additional?.uniqueName }}</div>
-                                                    </a>
-                                                </ng-container>
-                                                <ng-container *ngIf="option.additional?.stock">
-                                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                                                        <div class="item">{{ option.label }}</div>
-                                                        <div class="item_unq">
-                                                            {{ option.additional?.uniqueName }}</div>
-                                                        <div class="item_stock">Stock: {{ option.additional?.stock.uniqueName }}
-                                                        </div>
-                                                    </a>
-                                                </ng-container>
-                                            </ng-template>
-                                        </sh-select> -->
-                                        <sh-select></sh-select>
-                                    </div>
-                                </div>
-                                <!-- *ngIf="transaction.fakeAccForSelect2" for below -->
-                                <div >
-                                    <div class="sku-number">
-                                        <label>SKU:</label>Number
-                                    </div>
-
-                                    <div class="description">
-                                        <!-- name="transaction.description_{{entryIdx}}" [(ngModel)]="transaction.description" for beelow textarea  -->
-                                        <textarea type="text" placeholder="Add Description" class="form-control">
-                                      </textarea>
-                                        <!-- *ngIf="transaction.sku-custom-fields" for below -->
-                                        <p class="small text-muted sku-custom-fields">
-                                            <!-- {{transaction.sku-custom-fields}}  -->
-                                            SKU number
-
-                                        </p>
-                                    </div>
-
-                                    <!-- region entry date/ hsncode -->
-                                    <div class="date-hsn-code">
-
-                                        <div class="row">
-                                            <div class="col-xs-6 pdR0">
-                                                <div class="entry-date">
-                                                    <label>Entry Date: </label>
-
-                                                    <!-- <span *ngIf="!isUpdateMode">
-                                                                    <input type="text"
-                                                                           [placeholder]="giddhDateFormat" bsDatepicker
-                                                                           name="transaction.date_{{entryIdx}}"
-                                                                           id="transaction.date_{{entryIdx}}"
-                                                                           class="form-control text-left"
-                                                                           [(ngModel)]="entry.entryDate"
-                                                                           [disabled]="isUpdateMode"
-                                                                           (onShown)="hsnDropdownShow = false"
-                                                                           [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                                           #dp="bsDatepicker" />
-                                                                    <span class="edit-icon cp" (click)="dp.toggle()"
-                                                                          [attr.aria-expanded]="dp.isOpen">
-                                                                        <img
-                                                                            src="assets/images/edit-pencilicon.svg">
-                                                                    </span>
-                                                    </span> -->
-                                                    <!--  *ngIf="isUpdateMode" for below span -->
-                                                    <span>
-                                                        <!-- {{ entry.entryDate | date: 'dd-MM-yyyy'}} --> 04-07-2020
-                                                    </span>
-
-                                                </div>
-                                            </div>
-
-                                            <div class="col-xs-6 pdL0">
-                                                <div class="wrap-hsn-box">
-                                                    <!-- (click)="toggleHsnSacDropDown(transaction)" below div -->
-                                                    <div class="hsn-code text-right"
-                                                        >
-                                                        <label>HSN/SAC:</label>
-                                                        <span>
-                                                            <!-- {{(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber }} -->
-                                                            225252552
-                                                            <!--  *ngIf="!transaction.hsnNumber && !transaction.sacNumber" for below -->
-                                                            <span class="update-text">Update
-                                                            </span>
-                                                            <span class="edit-icon cp">
-                                                                <img src="assets/images/edit-pencilicon.svg">
-                                                            </span>
-                                                        </span>
-                                                    </div>
-                                                    <!-- *ngIf="hsnDropdownShow"below div -->
-                                                    <div class="hsn-code-dropdown" hidden>
-                                                        <label>HSN/SAC</label>
-                                                        <!-- <input type="text" maxLength="10" placeholder="HSN/SAC Number"
-                                                            name="transaction.hsnNumber_{{entryIdx}}"
-                                                            *ngIf="(inventorySettings?.manageInventory || !transaction.sacNumberExists)"
-                                                            [(ngModel)]="transaction.hsnNumber" />
-                                                        <input type="text" maxLength="10" placeholder="HSN/SAC Number"
-                                                            name="transaction.hsnNumber_{{entryIdx}}"
-                                                            *ngIf="!(inventorySettings?.manageInventory || !transaction.sacNumberExists)"
-                                                            [(ngModel)]="transaction.sacNumber" /> -->
-                                                        <a>
+                                                <ng-template #optionTemplate let-option="option">
+                                                    <ng-container *ngIf="!option.additional?.stock">
+                                                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                            <div class="item">{{ option.label }}</div>
+                                                            <div class="item_unq">
+                                                                {{ option.additional?.uniqueName }}</div>
                                                         </a>
-                                                        <div class="btn-group m-t-10">
-                                                            <!-- (click)="hsnDropdownShow=!hsnDropdownShow"  -->
-                                                            <button class="btn btn-sm btn-success" type="button">
-                                                                Save
-                                                            </button>
-                                                            <!-- 
-                                                                (click)="hideHsnSacEditPopup(transaction) -->
-                                                            <button class="btn btn-sm btn-primary" type="button">
-                                                                Cancel
-                                                            </button>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                    </ng-container>
+                                                    <ng-container *ngIf="option.additional?.stock">
+                                                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                            <div class="item">{{ option.label }}</div>
+                                                            <div class="item_unq">
+                                                                {{ option.additional?.uniqueName }}</div>
+                                                            <div class="item_stock">Stock: {{ option.additional?.stock.uniqueName }}
+                                                            </div>
+                                                        </a>
+                                                    </ng-container>
+                                                </ng-template>
+                                            </sh-select> -->
+                                            <sh-select></sh-select>
+                                        </div>
+                                    </div>
+                                    <!-- *ngIf="transaction.fakeAccForSelect2" for below -->
+                                    <div>
+                                        <div class="sku-number">
+                                            <label>SKU:</label>Number
                                         </div>
 
-                                    </div>
-                                    <!-- endregion -->
-                                </div>
+                                        <div class="description">
+                                            <!-- name="transaction.description_{{entryIdx}}" [(ngModel)]="transaction.description" for beelow textarea  -->
+                                            <textarea type="text" placeholder="Add Description" class="form-control">
+                                          </textarea>
+                                            <!-- *ngIf="transaction.sku-custom-fields" for below -->
+                                            <p class="small text-muted sku-custom-fields">
+                                                <!-- {{transaction.sku-custom-fields}}  -->
+                                                SKU number
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                            </p>
+                                        </div>
 
-                <div class="row quantity-unit-width-100">
-                    <div class="col-xs-6">
+                                        <!-- region entry date/ hsncode -->
+                                        <div class="date-hsn-code">
 
-                        <div class="single-card-row">
-                            <div class="qty-unit">
+                                            <div class="row">
+                                                <div class="col-xs-6 pdR0">
+                                                    <div class="entry-date">
+                                                        <label>Entry Date: </label>
 
-                                <div class="row">
+                                                        <!-- <span *ngIf="!isUpdateMode">
+                                                                        <input type="text"
+                                                                               [placeholder]="giddhDateFormat" bsDatepicker
+                                                                               name="transaction.date_{{entryIdx}}"
+                                                                               id="transaction.date_{{entryIdx}}"
+                                                                               class="form-control text-left"
+                                                                               [(ngModel)]="entry.entryDate"
+                                                                               [disabled]="isUpdateMode"
+                                                                               (onShown)="hsnDropdownShow = false"
+                                                                               [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                                                               #dp="bsDatepicker" />
+                                                                        <span class="edit-icon cp" (click)="dp.toggle()"
+                                                                              [attr.aria-expanded]="dp.isOpen">
+                                                                            <img
+                                                                                src="assets/images/edit-pencilicon.svg">
+                                                                        </span>
+                                                        </span> -->
+                                                        <!--  *ngIf="isUpdateMode" for below span -->
+                                                        <span>
+                                                            <!-- {{ entry.entryDate | date: 'dd-MM-yyyy'}} -->
+                                                            04-07-2020
+                                                        </span>
 
-                                    <div class="col-xs-6 pr-0">
-                                        <label class="card-label text-right">Qty</label>
-                                        <!-- <input type="text" [disabled]="!transaction.isStockTxn"
-                                            (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity"
-                                            decimalDigitsDirective name="transaction.quantity_{{entryIdx}}"
-                                            class="form-control text-right" [(ngModel)]="transaction.quantity" /> -->
-                                            <sh-select></sh-select>
-                                    </div>
-                                    <div class="col-xs-6">
-                                        <label class="card-label text-right">Unit</label>
-                                        <!-- <select class="form-control" [disabled]="!transaction.isStockTxn"
-                                            name="transaction.stockUnit_{{entryIdx}}"
-                                            [(ngModel)]="transaction.stockUnit"
-                                            (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
-                                            <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
-                                                {{stock.text}}
-                                            </option>
-                                        </select> -->
-                                        <sh-select></sh-select>
+                                                    </div>
+                                                </div>
 
-                                    </div>
-                                </div>
+                                                <div class="col-xs-6 pdL0">
+                                                    <div class="wrap-hsn-box">
+                                                        <!-- (click)="toggleHsnSacDropDown(transaction)" below div -->
+                                                        <div class="hsn-code text-right">
+                                                            <label>HSN/SAC:</label>
+                                                            <span>
+                                                                <!-- {{(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber }} -->
+                                                                225252552
+                                                                <!--  *ngIf="!transaction.hsnNumber && !transaction.sacNumber" for below -->
+                                                                <span class="update-text">Update
+                                                                </span>
+                                                                <span class="edit-icon cp">
+                                                                    <img src="assets/images/edit-pencilicon.svg">
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                        <!-- *ngIf="hsnDropdownShow"below div -->
+                                                        <div class="hsn-code-dropdown" hidden>
+                                                            <label>HSN/SAC</label>
+                                                            <!-- <input type="text" maxLength="10" placeholder="HSN/SAC Number"
+                                                                name="transaction.hsnNumber_{{entryIdx}}"
+                                                                *ngIf="(inventorySettings?.manageInventory || !transaction.sacNumberExists)"
+                                                                [(ngModel)]="transaction.hsnNumber" />
+                                                            <input type="text" maxLength="10" placeholder="HSN/SAC Number"
+                                                                name="transaction.hsnNumber_{{entryIdx}}"
+                                                                *ngIf="!(inventorySettings?.manageInventory || !transaction.sacNumberExists)"
+                                                                [(ngModel)]="transaction.sacNumber" /> -->
+                                                            <a>
+                                                            </a>
+                                                            <div class="btn-group m-t-10">
+                                                                <!-- (click)="hsnDropdownShow=!hsnDropdownShow"  -->
+                                                                <button class="btn btn-sm btn-success" type="button">
+                                                                    Save
+                                                                </button>
+                                                                <!--
+                                                                    (click)="hideHsnSacEditPopup(transaction) -->
+                                                                <button class="btn btn-sm btn-primary" type="button">
+                                                                    Cancel
+                                                                </button>
+                                                            </div>
 
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-xs-6">
-
-                        <div class="single-card-row">
-
-                            <div class="card-rate">
-                                <label class="card-label text-right">Rate</label>
-                                <div style="flex: 1;">
-                                    <!-- <input type="text" [disabled]="!transaction.isStockTxn"
-                                        (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)"
-                                        placeholder="Rate" name="transaction.rate_{{entryIdx}}"
-                                        class="form-control transaction-rate text-right" [(ngModel)]="transaction.rate"
-                                        [prefix]="invFormData.accountDetails.currencySymbol"
-                                        [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                                        [customDecimalPlaces]="ratePrecision" /> -->
-                                        <sh-select></sh-select>
-                                </div>
-                                <!-- please add condition for show and hide -->
-                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                    <span>{{baseCurrencySymbol}}</span>
-                                    <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span>
-                                </div> -->
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xs-6">
-
-                        <div class="single-card-row">
-
-                            <div class="card-amount">
-
-                                <label class="card-label text-right">Amount</label>
-                                <div style="flex: 1;">
-                                    <!-- <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction)"
-                                        (click)="transactionAmountClicked(transaction)" placeholder="Amount"
-                                        name="transaction.amount_{{entryIdx}}" class="form-control text-right"
-                                        [(ngModel)]="transaction.amount" decimalDigitsDirective
-                                        [prefix]="invFormData.accountDetails.currencySymbol"
-                                        [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" /> -->
-                                        <sh-select></sh-select>
-                                </div>
-                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                    <span>{{baseCurrencySymbol}}</span>
-                                    <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
-                                </div> -->
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="col-xs-6">
-
-                        <div class="single-card-row">
-
-                            <div class="card-discount">
-                                <label class="card-label text-right">Discount</label>
-                                <div class="text-right">
-
-                                    <!-- <discount-control-component #discountComponent [discountMenu]="false"
-                                        [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum"
-                                        [showHeaderText]="false" (hideOtherPopups)="closeTaxControlPopup()"
-                                        (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
-                                        [maskInput]="inputMaskFormat"
-                                        [prefixInput]="invFormData.accountDetails.currencySymbol"
-                                        [suffixInput]="selectedSuffixForCurrency">
-                                    </discount-control-component> -->
-                                    <sh-select></sh-select>
-
-                                </div>
-                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                    <span>{{baseCurrencySymbol}}</span>
-                                    <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span>
-                                </div> -->
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="col-xs-6">
-
-                        <div class="single-card-row">
-                            <div class="card-tax">
-                                <label class="card-label text-right">Tax</label>
-
-                                <div class="text-right" style="flex:1;">
-                                    <!-- <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
-                                        [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue"
-                                        [applicableTaxes]="transaction.applicableTaxes"
-                                        [exceptTaxTypes]="exceptTaxTypes"
-                                        [allowedSelectionOfAType]="allowedSelectionOfAType" [showHeading]="false"
-                                        [rootClass]="'salseInvoicetable'"
-                                        (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
-                                        (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat"
-                                        [prefixInput]="invFormData.accountDetails.currencySymbol"
-                                        [suffixInput]="selectedSuffixForCurrency">
-                                    </tax-control> -->
-                                    <sh-select></sh-select>
-                                </div>
-                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                    <span>{{baseCurrencySymbol}}</span>
-                                    <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span>
-                                </div> -->
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xs-6">
-                        <div class="single-card-row">
-                            <div class="card-total">
-                                <label class="card-label text-right">Total</label>
-                                <div style="flex:1;">
-                                    <!-- <input type="tel" name="transaction.total_{{entryIdx}}"
-                                        class="form-control text-right"
-                                        (blur)="calculateTransactionValueInclusively(entry, transaction)"
-                                        [(ngModel)]="transaction.total" decimalDigitsDirective
-                                        [prefix]="invFormData.accountDetails.currencySymbol"
-                                        [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" /> -->
-                                        <!-- *ngIf="isTcsTdsApplicable" below div -->
-                                        <input type="tel" class="form-control">
-                                    <div  class="wrap-other-tax">
-                                        <!-- <input type="checkbox" class="other-taxes-checkobx"
-                                            [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable"
-                                            name="entry.isOtherTaxApplicable_{{entryIdx}}"
-                                            id="entry.isOtherTaxApplicable_{{entryIdx}}"
-                                            (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
-                                        <label for="entry.isOtherTaxApplicable_{{entryIdx}}"
-                                            *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable"
-                                            style="font-size:13px;vertical-align: middle">Other
-                                            Tax?</label> -->
-                                    </div>
-                                    <!-- *ngIf="entry.isOtherTaxApplicable" below div -->
-                                    <div  class="mt-1 other-taxes">
-
-                                        <span>
-
-                                            <div class="d-flex align-items-center">
-                                                <span class="mr-05">
-                                                    <!--  (click)="toggleOtherTaxesAsidePane(true, entryIdx)" -->
-                                                    <a href="javascript: void 0">
-                                                        <img src="assets/images/edit-pencilicon.svg">
-                                                    </a>
-                                                </span>
-
-                                                <!-- <input class="text-right form-control other-taxes-input"
-                                                    disabled="disabled" [(ngModel)]="entry.otherTaxSum"
-                                                    [prefix]="invFormData.accountDetails.currencySymbol"
-                                                    [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                                                    name="entry.otherTaxesSum_{{entryIdx}}" /> -->
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <p
-                                                style="margin-top: 5px; font-size: 12px; text-transform: capitalize; margin-bottom: 20px;">
-                                                <!-- {{ entry.otherTaxModal?.appliedOtherTax?.name}}  -->
-                                                Applicable tax
-                                            
-                                            </p>
-                                        </span>
-
+                                        </div>
+                                        <!-- endregion -->
                                     </div>
-                                </div>
-                                <!-- *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && !isPurchaseInvoice" for below div -->
-                                <div 
-                                    class="tax-in-currency">
-                                    <!-- {{ entry.otherTaxModal?.appliedOtherTax?.name }} -->
-                                    <span>
-                                        <!-- {{baseCurrencySymbol}} -->
-                                        $
-                                    </span> :
-                                    <span>
-                                        <!-- {{entry.otherTaxSum * exchangeRate | giddhCurrency}} -->
-                                        20000
-                                    </span>
-                                </div>
-                                <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                    <span>{{baseCurrencySymbol}}</span>
-                                    <span>{{transaction.total * exchangeRate | giddhCurrency}}</span>
-                                </div> -->
 
-                                <!-- <ng-container *ngTemplateOutlet="otherTaxesModal;context: {$implicit: entry }">
-                                </ng-container> -->
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="save-card-data pointer">
-                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                </div>
-                <!--  (click)="removeTransaction(entryIdx)" for below div -->
-                <div class="del-card pointer">
-                    <i class="icon-trash" aria-hidden="true"></i>
-                </div>
+                    <div class="row quantity-unit-width-100">
+                        <div class="col-xs-6">
 
-            </div>
-            <!-- endregion -->
-        </ng-container>
+                            <div class="single-card-row">
+                                <div class="qty-unit">
 
-    </div>
-    <!-- (click)="addBlankRow(null)" below div -->
-    <div class="add-btn">
-        <button class="btn btn-sm btn-success">Add More</button>
-    </div>
+                                    <div class="row">
 
-    <div class="other-detail-card">
-        <div>
-            <div class="collapse-pane clearfix">
-                <!--  (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed" below div -->
-                <div class="collapse-pane-heading">
-                    <div class="ico-box-wrap">
-                        <div class="ico-box">
-                            <!-- [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'"  below div -->
-                            <span aria-hidden="true"></span>
+                                        <div class="col-xs-6 pr-0">
+                                            <label class="card-label text-right">Qty</label>
+                                            <!-- <input type="text" [disabled]="!transaction.isStockTxn"
+                                                (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity"
+                                                decimalDigitsDirective name="transaction.quantity_{{entryIdx}}"
+                                                class="form-control text-right" [(ngModel)]="transaction.quantity" /> -->
+                                            <sh-select></sh-select>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <label class="card-label text-right">Unit</label>
+                                            <!-- <select class="form-control" [disabled]="!transaction.isStockTxn"
+                                                name="transaction.stockUnit_{{entryIdx}}"
+                                                [(ngModel)]="transaction.stockUnit"
+                                                (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
+                                                <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
+                                                    {{stock.text}}
+                                                </option>
+                                            </select> -->
+                                            <sh-select></sh-select>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-xs-6">
+
+                            <div class="single-card-row">
+
+                                <div class="card-rate">
+                                    <label class="card-label text-right">Rate</label>
+                                    <div style="flex: 1;">
+                                        <!-- <input type="text" [disabled]="!transaction.isStockTxn"
+                                            (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)"
+                                            placeholder="Rate" name="transaction.rate_{{entryIdx}}"
+                                            class="form-control transaction-rate text-right" [(ngModel)]="transaction.rate"
+                                            [prefix]="invFormData.accountDetails.currencySymbol"
+                                            [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
+                                            [customDecimalPlaces]="ratePrecision" /> -->
+                                        <sh-select></sh-select>
+                                    </div>
+                                    <!-- please add condition for show and hide -->
+                                    <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                        <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span>
+                                    </div> -->
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
-                    <div class="ico-head">Other Details</div>
-                </div>
-
-                <!-- [collapse]="isOthrDtlCollapsed" below div -->
-                <div  class="clearfix max-600  mr0">
 
                     <div class="row">
 
-                        <div class="form-group col-xs-4">
-                            <!-- <input type="text" #shippingDate="ngModel"
-                                [placeholder]="templatePlaceholder?.shippedDateLabel" bsDatepicker name="shippingDate"
-                                [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control"
-                                [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" /> -->
-                                <input type="text" class="form-control">
-                                <!-- *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" below p  -->
-                            <p class="text-danger" >
-                                Invalid Date</p>
+                        <div class="col-xs-6">
+
+                            <div class="single-card-row">
+
+                                <div class="card-amount">
+
+                                    <label class="card-label text-right">Amount</label>
+                                    <div style="flex: 1;">
+                                        <!-- <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction)"
+                                            (click)="transactionAmountClicked(transaction)" placeholder="Amount"
+                                            name="transaction.amount_{{entryIdx}}" class="form-control text-right"
+                                            [(ngModel)]="transaction.amount" decimalDigitsDirective
+                                            [prefix]="invFormData.accountDetails.currencySymbol"
+                                            [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" /> -->
+                                        <sh-select></sh-select>
+                                    </div>
+                                    <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                        <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{(transaction.amount * exchangeRate || 0) | giddhCurrency}}</span>
+                                    </div> -->
+                                </div>
+
+                            </div>
                         </div>
 
-                        <div class="form-group col-xs-4">
-                            <!-- <input type="text" name="shippedVia"
-                                [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control"
-                                [placeholder]="templatePlaceholder?.shippedViaLabel || 'Ship Via'" /> -->
-                                <input type="text" class="form-control"> 
-                        </div>
+                        <div class="col-xs-6">
 
-                        <div class="form-group col-xs-4">
-                            <!-- <input type="text" name="trackingNumber"
-                                [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control"
-                                [placeholder]="templatePlaceholder?.trackingNumber || 'Tracking No.'" /> -->
-                                <input type="text" class="form-control">
-                        </div>
+                            <div class="single-card-row">
 
-                        <div class="form-group col-xs-4">
-                            <!-- <input type="text" name="customField1"
-                                [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control"
-                                [placeholder]="templatePlaceholder?.customField1Label || 'Field 1'" /> -->
-                                <input type="text" class="form-control">
-                        </div>
+                                <div class="card-discount">
+                                    <label class="card-label text-right">Discount</label>
+                                    <div class="text-right">
 
-                        <div class="form-group col-xs-4">
-                            <!-- <input type="text" name="customField2"
-                                [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control"
-                                [placeholder]="templatePlaceholder?.customField2Label || 'Field 2'" /> -->
-                                <input type="text" class="form-control">
-                        </div>
+                                        <!-- <discount-control-component #discountComponent [discountMenu]="false"
+                                            [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum"
+                                            [showHeaderText]="false" (hideOtherPopups)="closeTaxControlPopup()"
+                                            (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
+                                            [maskInput]="inputMaskFormat"
+                                            [prefixInput]="invFormData.accountDetails.currencySymbol"
+                                            [suffixInput]="selectedSuffixForCurrency">
+                                        </discount-control-component> -->
+                                        <sh-select></sh-select>
 
-                        <div class="form-group col-xs-4">
-                            <!-- <input type="text" name="customField3"
-                                [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control"
-                                [placeholder]="templatePlaceholder?.customField3Label || 'Field 3'" /> -->
-                                <input type="text" class="form-control">
+                                    </div>
+                                    <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                        <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{entry.discountSum * exchangeRate | giddhCurrency}}</span>
+                                    </div> -->
+                                </div>
+
+                            </div>
                         </div>
                     </div>
+
+                    <div class="row">
+
+                        <div class="col-xs-6">
+
+                            <div class="single-card-row">
+                                <div class="card-tax">
+                                    <label class="card-label text-right">Tax</label>
+
+                                    <div class="text-right" style="flex:1;">
+                                        <!-- <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
+                                            [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue"
+                                            [applicableTaxes]="transaction.applicableTaxes"
+                                            [exceptTaxTypes]="exceptTaxTypes"
+                                            [allowedSelectionOfAType]="allowedSelectionOfAType" [showHeading]="false"
+                                            [rootClass]="'salseInvoicetable'"
+                                            (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)"
+                                            (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat"
+                                            [prefixInput]="invFormData.accountDetails.currencySymbol"
+                                            [suffixInput]="selectedSuffixForCurrency">
+                                        </tax-control> -->
+                                        <sh-select></sh-select>
+                                    </div>
+                                    <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                        <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{(entry.taxSum + entry.cessSum) * exchangeRate | giddhCurrency}}</span>
+                                    </div> -->
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="single-card-row">
+                                <div class="card-total">
+                                    <label class="card-label text-right">Total</label>
+                                    <div style="flex:1;">
+                                        <!-- <input type="tel" name="transaction.total_{{entryIdx}}"
+                                            class="form-control text-right"
+                                            (blur)="calculateTransactionValueInclusively(entry, transaction)"
+                                            [(ngModel)]="transaction.total" decimalDigitsDirective
+                                            [prefix]="invFormData.accountDetails.currencySymbol"
+                                            [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" /> -->
+                                        <!-- *ngIf="isTcsTdsApplicable" below div -->
+                                        <input type="tel" class="form-control">
+                                        <div class="wrap-other-tax">
+                                            <!-- <input type="checkbox" class="other-taxes-checkobx"
+                                                [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable"
+                                                name="entry.isOtherTaxApplicable_{{entryIdx}}"
+                                                id="entry.isOtherTaxApplicable_{{entryIdx}}"
+                                                (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
+                                            <label for="entry.isOtherTaxApplicable_{{entryIdx}}"
+                                                *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable"
+                                                style="font-size:13px;vertical-align: middle">Other
+                                                Tax?</label> -->
+                                        </div>
+                                        <!-- *ngIf="entry.isOtherTaxApplicable" below div -->
+                                        <div class="mt-1 other-taxes">
+
+                                            <span>
+
+                                                <div class="d-flex align-items-center">
+                                                    <span class="mr-05">
+                                                        <!--  (click)="toggleOtherTaxesAsidePane(true, entryIdx)" -->
+                                                        <a href="javascript: void 0">
+                                                            <img src="assets/images/edit-pencilicon.svg">
+                                                        </a>
+                                                    </span>
+
+                                                    <!-- <input class="text-right form-control other-taxes-input"
+                                                        disabled="disabled" [(ngModel)]="entry.otherTaxSum"
+                                                        [prefix]="invFormData.accountDetails.currencySymbol"
+                                                        [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
+                                                        name="entry.otherTaxesSum_{{entryIdx}}" /> -->
+                                                </div>
+
+                                                <p
+                                                    style="margin-top: 5px; font-size: 12px; text-transform: capitalize; margin-bottom: 20px;">
+                                                    <!-- {{ entry.otherTaxModal?.appliedOtherTax?.name}}  -->
+                                                    Applicable tax
+
+                                                </p>
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                    <!-- *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && !isPurchaseInvoice" for below div -->
+                                    <div class="tax-in-currency text-right">
+                                        <!-- {{ entry.otherTaxModal?.appliedOtherTax?.name }} -->
+                                        <span>
+                                            <!-- {{baseCurrencySymbol}} -->
+                                            $
+                                        </span> :
+                                        <span>
+                                            <!-- {{entry.otherTaxSum * exchangeRate | giddhCurrency}} -->
+                                            20000
+                                        </span>
+                                    </div>
+                                    <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                        <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{transaction.total * exchangeRate | giddhCurrency}}</span>
+                                    </div> -->
+
+                                    <!-- <ng-container *ngTemplateOutlet="otherTaxesModal;context: {$implicit: entry }">
+                                    </ng-container> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="save-card-data pointer">
+                        <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                    </div>
+                    <!--  (click)="removeTransaction(entryIdx)" for below div -->
+                    <div class="del-card pointer">
+                        <i class="icon-trash" aria-hidden="true"></i>
+                    </div>
+
+                </div>
+                <!-- endregion -->
+            </ng-container>
+
+        </div>
+        <!-- (click)="addBlankRow(null)" below div -->
+        <div class="add-btn">
+            <button class="btn btn-sm btn-success">Add More</button>
+        </div>
+
+        <div class="other-detail-card">
+            <div>
+                <div class="collapse-pane clearfix">
+                    <!--  (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed" below div -->
+                    <div class="collapse-pane-heading">
+                        <div class="ico-box-wrap">
+                            <div class="ico-box">
+                                <!-- [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'"  below div -->
+                                <span aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <div class="ico-head">Other Details</div>
+                    </div>
+
+                    <!-- [collapse]="isOthrDtlCollapsed" below div -->
+                    <div class="clearfix max-600  mr0">
+
+                        <div class="row">
+
+                            <div class="form-group col-xs-4">
+                                <!-- <input type="text" #shippingDate="ngModel"
+                                    [placeholder]="templatePlaceholder?.shippedDateLabel" bsDatepicker name="shippingDate"
+                                    [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control"
+                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                    [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" /> -->
+                                <input type="text" class="form-control">
+                                <!-- *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" below p  -->
+                                <p class="text-danger">
+                                    Invalid Date</p>
+                            </div>
+
+                            <div class="form-group col-xs-4">
+                                <!-- <input type="text" name="shippedVia"
+                                    [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control"
+                                    [placeholder]="templatePlaceholder?.shippedViaLabel || 'Ship Via'" /> -->
+                                <input type="text" class="form-control">
+                            </div>
+
+                            <div class="form-group col-xs-4">
+                                <!-- <input type="text" name="trackingNumber"
+                                    [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control"
+                                    [placeholder]="templatePlaceholder?.trackingNumber || 'Tracking No.'" /> -->
+                                <input type="text" class="form-control">
+                            </div>
+
+                            <div class="form-group col-xs-4">
+                                <!-- <input type="text" name="customField1"
+                                    [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control"
+                                    [placeholder]="templatePlaceholder?.customField1Label || 'Field 1'" /> -->
+                                <input type="text" class="form-control">
+                            </div>
+
+                            <div class="form-group col-xs-4">
+                                <!-- <input type="text" name="customField2"
+                                    [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control"
+                                    [placeholder]="templatePlaceholder?.customField2Label || 'Field 2'" /> -->
+                                <input type="text" class="form-control">
+                            </div>
+
+                            <div class="form-group col-xs-4">
+                                <!-- <input type="text" name="customField3"
+                                    [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control"
+                                    [placeholder]="templatePlaceholder?.customField3Label || 'Field 3'" /> -->
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="pdT1 pl0 max-600">
+                    <label class="mrB1">Message</label>
+                    <!-- [(ngModel)]="invFormData.templateDetails.other.message2" -->
+                    <textarea class="form-control" name="message2"></textarea>
                 </div>
 
             </div>
+        </div>
 
-            <div class="pdT1 pl0 max-600">
-                <label class="mrB1">Message</label>
-                <!-- [(ngModel)]="invFormData.templateDetails.other.message2" -->
-                <textarea class="form-control" name="message2"></textarea>
-            </div>
+        <div class="total-amount-description">
+
+            <section class="table-section form-group">
+
+                <div class="table-row">
+                    <div class="table-cell">Total Amount</div>
+                    <div class="table-cell figure-cell">
+                        <!-- <span
+                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                            {{invFormData.accountDetails.currencySymbol}}
+                        </span>
+                            {{invFormData.voucherDetails.subTotal | giddhCurrency}} -->
+                    </div>
+                </div>
+
+                <div class="table-row">
+                    <div class="table-cell">Discount</div>
+                    <div class="table-cell figure-cell">
+                        <!-- <span
+                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.totalDiscount * -1 | giddhCurrency}} -->
+                    </div>
+                </div>
+
+                <div class="table-row">
+                    <div class="table-cell">Taxable Value</div>
+                    <div class="table-cell figure-cell">
+                        <!-- <span
+                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.totalTaxableValue | giddhCurrency}} -->
+                    </div>
+                </div>
+
+                <div class="table-row">
+                    <div class="table-cell">Tax</div>
+                    <div class="table-cell figure-cell">
+                        <!-- <span
+
+                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.gstTaxesTotal | giddhCurrency}} -->
+                    </div>
+                </div>
+
+                <div class="table-row">
+                    <div class="table-cell">CESS</div>
+                    <div class="table-cell figure-cell">
+                        <!-- <span
+                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.cessTotal | giddhCurrency}} -->
+                    </div>
+                </div>
+                <div class="table-row">
+
+                    <div class="table-cell">
+                        <strong>Round Off</strong>
+                    </div>
+
+                    <div class="table-cell figure-cell">
+                        <strong>
+                            <!-- <span
+                                *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
+                            {{calculatedRoundOff | giddhCurrency}}
+                         -->
+                        </strong>
+                    </div>
+
+                </div>
+                <div class="table-row">
+                    <div class="table-cell">
+                        <strong>Total
+                            <!-- <span
+                                *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span> -->
+
+                        </strong>
+                    </div>
+
+                    <div class="table-cell figure-cell">
+                        <strong>
+                            <!-- <span
+                                *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.grandTotal | giddhCurrency}} -->
+                        </strong>
+                    </div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell bigger-dollar">
+                        <strong>Total <span>
+                                <!-- {{baseCurrencySymbol}} -->
+                                22222
+                            </span>
+                        </strong>
+                    </div>
+
+                    <div class="table-cell figure-cell">
+                        <!-- <input #grandTotalInr type="text" class="form-control" name="grandTotalMulDum"
+                            [prefix]="baseCurrencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
+                            [(ngModel)]="grandTotalMulDum" (blur)="updateExchangeRate(grandTotalInr.value)"> -->
+                        <input type="text">
+
+                    </div>
+                </div>
+
+                <div class="table-row">
+                    <div class="table-cell">TCS</div>
+                    <div class="table-cell figure-cell">
+                        <!-- {{invFormData.voucherDetails.tcsTotal | giddhCurrency}} -->
+
+                    </div>
+                </div>
+
+                <div class="table-row">
+                    <div class="table-cell">TDS</div>
+                    <div class="table-cell figure-cell">
+                        <!-- {{invFormData.voucherDetails.tdsTotal | giddhCurrency}} -->
+                    </div>
+                </div>
+                <!--region balance due for non-purchase
+                     *ngIf="((isSalesInvoice || isCashInvoice) && !isUpdateMode ) add below div
+                -->
+                <div class="table-row">
+
+                    <div class="table-cell deposite-section" hidden>
+
+                        <div class="btn-group">
+                            <!-- (click)="clickedInside($event)"  -->
+                            <div id="deposit-dropdown" class="form-group pd1">
+                                <p>Deposit</p>
+                                <ul>
+
+
+
+                                    <li role="menuitem" class="mt-1 ">
+                                        <div class="clearfix payment-mode deposit-payment-mode">
+
+                                            <!-- <sh-select class="pull-right " name="depositAccountUniqueName"
+                                                [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName"
+                                                (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'"
+                                                [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
+                                                [multiple]="false" [ItemHeight]="33"
+                                                [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
+                                                <ng-template #optionTemplate1 let-option="option">
+                                                    <a href="javascript:void(0)" class="list-item"
+                                                        style="border-bottom: 1px solid #ccc;">
+                                                        <div class="item">{{ option.label }}</div>
+                                                        <div class="item_unq">{{ option.value }}</div>
+                                                    </a>
+                                                </ng-template>
+                                            </sh-select> -->
+                                            <sh-select></sh-select>
+
+                                            <label class="pull-right">Payment Mode</label>
+                                        </div>
+                                    </li>
+
+                                    <li class="clearfix mt-1">
+                                        <!-- <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount"
+                                            name="dueAmount" class="form-control amountField text-right pull-right max100"
+                                            [(ngModel)]="depositAmount" [prefix]="depositCurrSymbol"
+                                            [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" /> -->
+
+                                        <label class="pull-right">Amount</label>
+                                    </li>
+
+                                    <li class="clearfix mt-1">
+                                        <span class="amountField pull-right max100 amount-filed-cash">
+                                            <!-- <span
+                                                *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
+                                            {{invFormData.voucherDetails.balanceDue | giddhCurrency}} -->
+
+                                        </span>
+                                        <label class="pull-right">Amount</label>
+                                    </li>
+
+                                    <li class="clearfix mt-1 bigger-dollar">
+                                        <strong class="pull-right balance-due-text">
+                                            <!-- <span
+                                                *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
+                                            {{invFormData.voucherDetails.balanceDue | giddhCurrency}} -->
+                                        </strong>
+                                        <strong class="pull-right">Balance Due</strong>
+                                    </li>
+
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--endregion-->
+
+                <!-- region balance due for purchase -->
+                <div class="table-row">
+                    <div class="table-cell">
+                        <strong>Balance Due</strong>
+                    </div>
+                    <div class="table-cell figure-cell">
+                        <!-- <strong>{{invFormData.voucherDetails.balanceDue | giddhCurrency}}</strong> -->
+                    </div>
+                </div>
+                <!-- endregion -->
+
+            </section>
 
         </div>
     </div>
+    <!-- endregion -->
+</form>
 
-    <div class="total-amount-description">
-
-        <section class="table-section form-group">
-
-            <div class="table-row">
-                <div class="table-cell">Total Amount</div>
-                <div class="table-cell figure-cell">
-                    <!-- <span
-                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                        {{invFormData.accountDetails.currencySymbol}}
-                    </span>
-                        {{invFormData.voucherDetails.subTotal | giddhCurrency}} -->
-                </div>
-            </div>
-
-            <div class="table-row">
-                <div class="table-cell">Discount</div>
-                <div class="table-cell figure-cell">
-                    <!-- <span
-                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.totalDiscount * -1 | giddhCurrency}} -->
-                </div>
-            </div>
-
-            <div class="table-row">
-                <div class="table-cell">Taxable Value</div>
-                <div class="table-cell figure-cell">
-                    <!-- <span
-                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.totalTaxableValue | giddhCurrency}} -->
-                </div>
-            </div>
-
-            <div class="table-row">
-                <div class="table-cell">Tax</div>
-                <div class="table-cell figure-cell">
-                    <!-- <span
-                    
-                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.gstTaxesTotal | giddhCurrency}} -->
-                </div>
-            </div>
-
-            <div class="table-row">
-                <div class="table-cell">CESS</div>
-                <div class="table-cell figure-cell">
-                    <!-- <span
-                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.cessTotal | giddhCurrency}} -->
-                </div>
-            </div>
-            <div class="table-row">
-
-                <div class="table-cell">
-                    <strong>Round Off</strong>
-                </div>
-
-                <div class="table-cell figure-cell">
-                     <strong><!-- <span
-                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
-                        {{calculatedRoundOff | giddhCurrency}}
-                     -->
-                    </strong>
-                </div>
-
-            </div>
-            <div class="table-row">
-                <div class="table-cell">
-                    <strong>Total
-                        <!-- <span
-                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span> -->
-                        
-                        </strong>
-                </div>
-
-                <div class="table-cell figure-cell">
-                    <strong>
-                        <!-- <span
-                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>{{invFormData.voucherDetails.grandTotal | giddhCurrency}} -->
-                    </strong>
-                </div>
-            </div>
-            <div class="table-row">
-                <div class="table-cell bigger-dollar">
-                    <strong>Total <span>
-                        <!-- {{baseCurrencySymbol}} -->
-                        22222
-                    </span>
-                    </strong>
-                </div>
-
-                <div class="table-cell figure-cell">
-                    <!-- <input #grandTotalInr type="text" class="form-control" name="grandTotalMulDum"
-                        [prefix]="baseCurrencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                        [(ngModel)]="grandTotalMulDum" (blur)="updateExchangeRate(grandTotalInr.value)"> -->
-                        <input type="text">
-
-                </div>
-            </div>
-
-            <div class="table-row">
-                <div class="table-cell">TCS</div>
-                <div class="table-cell figure-cell">
-                    <!-- {{invFormData.voucherDetails.tcsTotal | giddhCurrency}} -->
-                
-                </div>
-            </div>
-
-            <div class="table-row">
-                <div class="table-cell">TDS</div>
-                <div class="table-cell figure-cell">
-                    <!-- {{invFormData.voucherDetails.tdsTotal | giddhCurrency}} -->
-                </div>
-            </div>
-            <!--region balance due for non-purchase 
-                 *ngIf="((isSalesInvoice || isCashInvoice) && !isUpdateMode ) add below div
-            -->
-            <div class="table-row">
-
-                <div class="table-cell deposite-section" hidden>
-
-                    <div class="btn-group"> 
-                        <!-- (click)="clickedInside($event)"  -->
-                        <div id="deposit-dropdown" class="form-group pd1">
-                            <p>Deposit</p>
-                            <ul>
-
-
-
-                                <li role="menuitem" class="mt-1 ">
-                                    <div class="clearfix payment-mode deposit-payment-mode">
-
-                                        <!-- <sh-select class="pull-right " name="depositAccountUniqueName"
-                                            [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName"
-                                            (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'"
-                                            [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
-                                            [multiple]="false" [ItemHeight]="33"
-                                            [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
-                                            <ng-template #optionTemplate1 let-option="option">
-                                                <a href="javascript:void(0)" class="list-item"
-                                                    style="border-bottom: 1px solid #ccc;">
-                                                    <div class="item">{{ option.label }}</div>
-                                                    <div class="item_unq">{{ option.value }}</div>
-                                                </a>
-                                            </ng-template>
-                                        </sh-select> -->
-                                        <sh-select></sh-select>
-                                        
-                                        <label class="pull-right">Payment Mode</label>
-                                    </div>
-                                </li>
-
-                                <li class="clearfix mt-1">
-                                    <!-- <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount"
-                                        name="dueAmount" class="form-control amountField text-right pull-right max100"
-                                        [(ngModel)]="depositAmount" [prefix]="depositCurrSymbol"
-                                        [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" /> -->
-
-                                    <label class="pull-right">Amount</label>
-                                </li>
-
-                                <li class="clearfix mt-1">
-                                    <span class="amountField pull-right max100 amount-filed-cash">
-                                        <!-- <span
-                                            *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
-                                        {{invFormData.voucherDetails.balanceDue | giddhCurrency}} -->
-                                    
-                                    </span>
-                                    <label class="pull-right">Amount</label>
-                                </li>
-
-                                <li class="clearfix mt-1 bigger-dollar">
-                                    <strong class="pull-right balance-due-text"> 
-                                        <!-- <span
-                                            *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
-                                        {{invFormData.voucherDetails.balanceDue | giddhCurrency}} -->
-                                    </strong>
-                                    <strong class="pull-right">Balance Due</strong>
-                                </li>
-
-                            </ul>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <!--endregion-->
-
-            <!-- region balance due for purchase -->
-            <div class="table-row">
-                <div class="table-cell">
-                    <strong>Balance Due</strong>
-                </div>
-                <div class="table-cell figure-cell">
-                    <!-- <strong>{{invFormData.voucherDetails.balanceDue | giddhCurrency}}</strong> -->
-                </div>
-            </div>
-            <!-- endregion -->
-
-        </section>
-
-    </div>
-</div>
-<!-- endregion -->
 
 <section class="clearfix">
 
@@ -1763,11 +1765,11 @@
                 <button type="button" class="btn btn-danger d-inline-block v-align-middle">Clear</button>
 
                 <!-- region purchase invoice -->
-                <span class="d-inline-block v-align-middle">
+                <span>
                     <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
-                            class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
+                            class="btn btn-default d-inline-block v-align-middle" *ngIf="isCustomerSelected">Save &amp; Update A/c
                         </button> -->
-                    <button type="button" class="btn btn-default">Save</button>
+                    <button type="button" class="btn btn-default d-inline-block v-align-middle">Save</button>
                 </span>
                 <!-- endregion -->
 
