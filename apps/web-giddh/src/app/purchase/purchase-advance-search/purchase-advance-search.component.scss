@@ -1,0 +1,22 @@
+@media (max-width: 767px) {
+    .selectStatus,
+    .discriptionField {
+        padding-right: 0;
+    }
+    .due-amount {
+        .col-xs-12 {
+            padding-right: 0;
+        }
+    }
+    .status-description {
+        .col-xs-12 {
+            padding-right: 0 !important;
+        }
+    }
+    .total-amount {
+        .col-xs-12 {
+            padding-right: 0 !important;
+            margin-bottom: 10px;
+        }
+    }
+}

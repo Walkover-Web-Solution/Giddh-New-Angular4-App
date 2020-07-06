@@ -1,5 +1,5 @@
 <form class="create-purchase-order-form">
-    <div class="clearfix">
+    <div class="clearfix" *ngIf="isMobileScreen">
         <div class="clearfix wrapper-customer-table  pdT2">
             <div class="customer-purchase-table">
                 <div class="inner-container">
@@ -86,6 +86,23 @@
             </div>
             <div class="customer-purchase-table bg-white pdB2 pdT2">
                 <div class="inner-container">
+                    <div class="row mb-1">
+                        <!-- region customer name -->
+                        <div class="col-sm-2">
+                            <label>Warehouse<span class="red-text">*</span></label>
+                        </div>
+                        <!-- region customer dropdown -->
+                        <div class="col-sm-7 select-customer-name">
+                            <div class="clearfix d-flex flex-column">
+                                <div class="d-flex flex-column">
+                                    <!-- region if not cashinvoice show customer dropdown -->
+                                    <sh-select></sh-select>
+                                    <!-- endregion -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- endregion -->
+                    </div>
                     <div class="row mb-1">
                         <div class="col-sm-2">
                             <label>Deliver To<span class="red-text">*</span></label>
@@ -198,23 +215,7 @@
                         </div>
                         <!-- endregion -->
                     </div>
-                    <div class="row mb-1">
-                        <!-- region customer name -->
-                        <div class="col-sm-2">
-                            <label>Warehouse<span class="red-text">*</span></label>
-                        </div>
-                        <!-- region customer dropdown -->
-                        <div class="col-sm-7 select-customer-name">
-                            <div class="clearfix d-flex flex-column">
-                                <div class="d-flex flex-column">
-                                    <!-- region if not cashinvoice show customer dropdown -->
-                                    <sh-select></sh-select>
-                                    <!-- endregion -->
-                                </div>
-                            </div>
-                        </div>
-                        <!-- endregion -->
-                    </div>
+
                     <div class="row mb-1">
                         <!-- region customer name -->
                         <div class="col-sm-2">
@@ -252,10 +253,11 @@
             </div>
         </div>
     </div>
-    <ng-container>
+    <ng-container *ngIf="isMobileScreen">
         <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img " />
     </ng-container>
-    <section class="static-purchase-table create-purchase-order-table clearfix mb-2 bg-white container-fluid">
+    <section *ngIf="isMobileScreen"
+        class="static-purchase-table create-purchase-order-table clearfix mb-2 bg-white container-fluid">
         <table class="table table-custom-invoice  basic">
             <thead>
                 <tr>
@@ -276,9 +278,10 @@
                     <td>1</td>
                     <td>
                         <div class="product-name">
-                            <label class="select-account-label">Click to
+                            <label class="select-account-label" hidden>Click to
                                 Select
-                                Account</label> Purchase oreder
+                                Account</label>
+                            Purchase oreder
 
                         </div>
 
@@ -922,7 +925,7 @@
         </table>
     </section>
     <!-- region mobile view -->
-    <div class="show-in-mobile">
+    <div class="show-in-mobile" *ngIf="!isMobileScreen">
         <div class="card-invoice-table-wrapper">
             <!-- *ngFor="let transaction of entry.transactions;" for below ng-container -->
             <ng-container>
@@ -1850,4 +1853,6 @@
         </div>
     </section>
 </section>
+
+
 <!-- endregion -->

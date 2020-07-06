@@ -13,10 +13,13 @@
                         <input type="text" placeholder="search">
 
                         <div class="btn-group" dropdown [autoClose]="true" hidden>
-                            <button id="button-basic2" dropdownToggle type="button" class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv" aria-controls="dropdown-basic3">
+                            <button id="button-basic2" dropdownToggle type="button"
+                                class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv"
+                                aria-controls="dropdown-basic3">
                                 + New Invoice <span class="caret"></span>
                             </button>
-                            <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu ddl-width-small" role="menu" aria-labelledby="button-basic2">
+                            <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu ddl-width-small" role="menu"
+                                aria-labelledby="button-basic2">
                                 <li role="menuitem">
                                     <a class="dropdown-item" href="javascript:void(0)">Cash Invoice</a>
                                 </li>
@@ -39,7 +42,7 @@
 
                                         <div class="invoice-number-date">
                                             <span class="order-number">
-                                               201830
+                                                201830
                                             </span>
                                             <span class="order-date">
                                                 | 02 Jul 2020
@@ -54,7 +57,7 @@
 
                                     <div class="col-xs-5">
                                         <div class="inovice-amount pull-right">
-                                           12000
+                                            12000
                                         </div>
                                     </div>
                                 </div>
@@ -69,7 +72,7 @@
             <div class="col-sm-8 col-xs-12 pd0 invoice-detail-wrapper">
 
                 <div class="scroll-half">
-                    <div class="invoice-detail" >
+                    <div class="invoice-detail">
 
                         <div class="invoice-detail-header">
 
@@ -91,14 +94,18 @@
                                         <!-- region for proforma and estimates -->
                                         <div class="btn-group change-status-dropdown pull-right" dropdown>
 
-                                        
 
-                                            <button id="button-basic" dropdownToggle type="button" class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic">Change Status
+
+                                            <button id="button-basic" dropdownToggle type="button"
+                                                class="btn btn-pink dropdown-toggle"
+                                                aria-controls="dropdown-basic">Change Status
                                                 <span class="caret"></span>
                                             </button>
 
-                                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                                                <li class="cp" role="menuitem"><a class="dropdown-item">Convert to Bill</a></li>
+                                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                                aria-labelledby="button-basic">
+                                                <li class="cp" role="menuitem"><a class="dropdown-item">Convert to
+                                                        Bill</a></li>
 
                                                 <li class="cp" role="menuitem"><a class="dropdown-item">Copy</a></li>
 
@@ -113,38 +120,43 @@
 
                                         </div>
                                         <!-- endregion -->
- 
+
 
                                         <div class="edit-action-btn-groups pull-right">
                                             <span>
-                                                <a href="javascript:void 0" tooltip="Edit" placement="top"><i class="fa fa-pencil"></i></a>
+                                                <a href="javascript:void 0" tooltip="Edit" placement="top"><i
+                                                        class="fa fa-pencil"></i></a>
                                             </span>
 
                                             <span class="pos-rel">
                                                 <a href="javascript:void 0" tooltip="Send Email" placement="top"><i
-                                                    class="fa fa-envelope-o"></i></a>
+                                                        class="fa fa-envelope-o"></i></a>
                                             </span>
 
                                             <span>
-                                                <a href="javascript:void 0" tooltip="Print" placement="top"><i class="fa fa-print"></i></a>
-                                            </span>
-
-                                            <span >
-                                                <a href="javascript:void 0" tooltip="Download" placement="top"><i class="fa fa-file-pdf-o"></i></a>
+                                                <a href="javascript:void 0" tooltip="Print" placement="top"><i
+                                                        class="fa fa-print"></i></a>
                                             </span>
 
                                             <span>
-                                                <a href="javascript:void 0" tooltip="Download" placement="top"><i class="icon-download"></i></a>
+                                                <a href="javascript:void 0" tooltip="Download" placement="top"><i
+                                                        class="fa fa-file-pdf-o"></i></a>
+                                            </span>
+
+                                            <span>
+                                                <a href="javascript:void 0" tooltip="Download" placement="top"><i
+                                                        class="icon-download"></i></a>
                                             </span>
 
                                             <span>
                                                 <a href="javascript:void 0" tooltip="Delete" placement="top"><i
-                                                    class="fa fa-trash"></i></a>
+                                                        class="fa fa-trash"></i></a>
                                             </span>
                                         </div>
 
                                         <div class="history-btn">
-                                            <button class="btn btn-primary" (click)="toggleOrderHistoryAsidePane()"><img src="../../../assets/images/history-icon.svg"> History</button>
+                                            <button class="btn btn-primary" (click)="toggleOrderHistoryAsidePane()"><img
+                                                    src="../../../assets/images/history-icon.svg"> History</button>
                                         </div>
 
                                     </div>
@@ -165,10 +177,12 @@
                             </span>
                         </div>
                         <div class="preview-not-supported-attachment" hidden>
-                            <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and PDF (.pdf); to print other formats, download them. </span>
+                            <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and PDF
+                                (.pdf); to print other formats, download them. </span>
                         </div>
                         <div class="upload-excel center-block box mrT2 dashed-border">
-                            <input type="file" id="csv-upload-input" placeholder="Upload an EXCEL or CSV file" droppable="true" class="form-control"/>
+                            <input type="file" id="csv-upload-input" placeholder="Upload an EXCEL or CSV file"
+                                droppable="true" class="form-control" />
                             <div class="clearfix pos-rel width100">
                                 <div class="file-input-wrapper text-center">
                                     <div class="clearfix mrB2">
@@ -178,14 +192,18 @@
                                         <label class="clearfix text-light-2">Drop file to upload</label>
                                         <div class="mrT3">
                                             <label class="file-uplod-penal" for="csv-upload-input"> <span>Browse
-                                                        file</span></label>
+                                                    file</span></label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="fixed-ng2pdfview pdf-preview" hidden>
+                            <img class="image-preview" />
+                        </div>
                         <!-- template -->
-                        <body  id="default">
+
+                        <body id="default">
                             <!--class="disabled-area"-->
                             <div>
                                 <div id="Template-header">
@@ -198,7 +216,8 @@
                                                             <tbody>
                                                                 <tr>
                                                                     <td>
-                                                                        <strong class="eastern-blue-text">All Mobile Shop </strong>
+                                                                        <strong class="eastern-blue-text">All Mobile
+                                                                            Shop </strong>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -209,12 +228,12 @@
                                                             </tbody>
                                                         </table>
                                                     </td>
-                        
+
                                                     <td class="pull-right">
                                                         <table>
                                                             <tbody>
                                                                 <ng-container>
-                                                                    <tr >
+                                                                    <tr>
                                                                         <td>
                                                                             <strong>Order Date</strong>
                                                                         </td>
@@ -229,8 +248,8 @@
                                                                         <td>20170911-1</td>
                                                                     </tr>
                                                                 </ng-container>
-                                                            
-                                                              
+
+
                                                             </tbody>
                                                         </table>
                                                     </td>
@@ -246,14 +265,16 @@
                                                 <td class="text-left">
                                                     <p>Company Details:</p>
                                                     <p><strong>Walkover Web Solutions Pvt</strong></p>
-                                                    <p>Ltd. 405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, Near Greater Kailash Hospital, Indore 452001(M. P.)</p>
+                                                    <p>Ltd. 405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, Near
+                                                        Greater Kailash Hospital, Indore 452001(M. P.)</p>
                                                     <p>GSTIN:23AAAAAA000A1Z0</p>
                                                 </td>
-                        
+
                                                 <td class="text-left">
                                                     <p>Shipped From:</p>
                                                     <p><strong>Walkover Web Solutions Pvt</strong></p>
-                                                    <p>405 Agrawal Traders, 10/2, Old Palasia, MG Road, Ujjain 456001 (M. P.)</p>
+                                                    <p>405 Agrawal Traders, 10/2, Old Palasia, MG Road, Ujjain 456001
+                                                        (M. P.)</p>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -263,7 +284,7 @@
                                             <tr>
                                                 <td class="text-left">
                                                     <p class="strong">
-                                                       Attention To:
+                                                        Attention To:
                                                     </p>
                                                     <p>Green Soft Solutions</p>
                                                     <p>5 A.B. Road</p>
@@ -289,7 +310,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                   
+
                                 </div>
                                 <div id="Template-table">
                                     <article>
@@ -297,12 +318,12 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-right">
-                                                       #
+                                                        #
                                                     </th>
-                                                    <th  class="text-left">
+                                                    <th class="text-left">
                                                         Date
                                                     </th>
-                                                    <th  class="text-left">
+                                                    <th class="text-left">
                                                         Item
                                                     </th>
                                                     <th class="text-right ">
@@ -314,9 +335,9 @@
                                                     <th class="text-right">
                                                         Rate/Item
                                                     </th>
-                                                  
+
                                                     <th class="text-right">
-                                                      Dis/Item
+                                                        Dis/Item
                                                     </th>
                                                     <th class="text-right">
                                                         Taxable Value
@@ -342,7 +363,7 @@
                                                 <tr>
                                                     <td class="text-right">1</td>
                                                     <td class="text-left ">
-                                                        
+
                                                         <p>10-09- 2017</p>
                                                     </td>
                                                     <td class="text-left">
@@ -356,8 +377,8 @@
                                                     <td class="text-right "><span></span>1000.00
                                                         <p><span></span>15.00</p>
                                                     </td>
-                                                    
-                                                    <td  class="text-right">
+
+                                                    <td class="text-right">
                                                         <span></span>1700.00
                                                         <p><span></span>24.79</p>
                                                     </td>
@@ -374,7 +395,7 @@
                                                         <p><span></span>29.25</p>
                                                     </td>
                                                 </tr>
-                                              
+
                                             </tbody>
                                             <tfoot>
                                                 <tr>
@@ -389,7 +410,7 @@
                                                     <th class="text-right text-right nowrap">&nbsp; <span>6 No.</span>
                                                     </th>
                                                     <!-- added by sadique -->
-                                                    
+
                                                     <th class="text-right ">
                                                         0.000
                                                     </th>
@@ -397,12 +418,12 @@
                                                     </th>
                                                     <!--SGST-->
                                                     <th class="text-right "><span></span>918.00
-                        
+
                                                     </th>
                                                     <!--CGST-->
-                                                    <th  class="text-right "><span></span>918.00
+                                                    <th class="text-right "><span></span>918.00
                                                     </th>
-                                                   
+
                                                 </tr>
                                             </tfoot>
                                         </table>
@@ -423,7 +444,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                       Total Tax
+                                                        Total Tax
                                                     </td>
                                                     <td>
                                                         <span></span> 966.00
@@ -462,7 +483,7 @@
                                             </table>
                                         </article>
                                     </div>
-                        
+
                                     <div class="clearfix">
                                         <aside>
                                             <table cellpadding="0" cellspacing="0" class="subfooter">
@@ -471,22 +492,25 @@
                                                         <td class="text-left">
                                                             <ng-container>
                                                                 <p class="font-12">
-                                                                    <span class="mb-2">*Tax to be paid on Reverse Charge.<br>
+                                                                    <span class="mb-2">*Tax to be paid on Reverse
+                                                                        Charge.<br>
                                                                         <span>
-                                                                            All payments to be made in cash. <br> Contact us for queries on these quotations. <br>
+                                                                            All payments to be made in cash. <br>
+                                                                            Contact us for queries on these quotations.
+                                                                            <br>
                                                                         </span>
                                                                     </span>
                                                                 </p>
                                                             </ng-container>
-                                                          
+
                                                         </td>
                                                         <td class="text-center">
-                                                            <small>All Mobile Shop   
+                                                            <small>All Mobile Shop
                                                             </small>
                                                             <hr>
                                                             <ng-container>
                                                                 <strong class="slogan-pre-line ">
-                                                                    <small>All Mobile Shop                                                                      
+                                                                    <small>All Mobile Shop
                                                                     </small>
                                                                 </strong>
                                                             </ng-container>
@@ -495,7 +519,8 @@
                                                     <tr>
                                                         <td class="text-left">
                                                             <strong>
-                                                                <h4 class="eastern-blue-text">Thank You for your business.</h4>
+                                                                <h4 class="eastern-blue-text">Thank You for your
+                                                                    business.</h4>
                                                             </strong>
                                                         </td>
                                                     </tr>
@@ -504,14 +529,15 @@
                                         </aside>
                                         <footer class="company-address">
                                             <p class="font-10">
-                                                405-406, Capt. C. S. Naidu Arcade Near Greater Kailash Hospital 10/2, 10/2, New Palasia, Indore, Woking, Madhya Pradesh 452001
+                                                405-406, Capt. C. S. Naidu Arcade Near Greater Kailash Hospital 10/2,
+                                                10/2, New Palasia, Indore, Woking, Madhya Pradesh 452001
                                             </p>
                                         </footer>
                                     </div>
                                 </div>
                             </div>
                         </body>
-                        
+
                         <!-- template end -->
 
 
