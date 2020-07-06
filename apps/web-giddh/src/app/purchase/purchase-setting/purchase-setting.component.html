@@ -1,0 +1,228 @@
+<section id="setting-tab-wrapper" class="setting-tab-data">
+    <div id="invoice-setting" class="invoce-controll mt-15">
+        <tabset class="tab-integraton">
+            <tab>
+                <ng-template tabHeading>
+                    <span class="icon-mail"></span> Integration
+                </ng-template>
+                <div class="single-tab-block">
+                    <div class="box clearfix mb-2">
+
+                        <h4 class="clearfix bdrB">Integration<span>(These settings will be applicable on Purchase Order
+                                and
+                                Bill)</span>
+                        </h4>
+
+                        <div class="clearfix">
+
+                            <div class="row">
+
+                                <div class="col-xs-12 col-sm-3 lh34"><label>From Email</label></div>
+
+                                <div class="col-xs-12 col-sm-9">
+
+                                    <div class="row">
+
+                                        <div class="col-sm-5 col-xs-12">
+
+                                            <div class="form-group">
+                                                <div class="relative" [ngClass]="{'input-group': true}">
+
+                                                    <!-- name="invoiceEmail"
+                                                    [(ngModel)]='invoiceSetting.email' (ngModelChange)="onChangeEmail($event)" -->
+
+                                                    <input type="email" class="form-control"
+                                                        placeholder="Enter email id" />
+                                                    <!-- *ngIf="!invoiceSetting.emailVerified" -->
+                                                    <span class="verified-icon"><i class="icon-tick"
+                                                            tooltip="Unverified"></i></span>
+                                                    <!-- *ngIf="invoiceSetting.emailVerified" -->
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-6 row">
+                                            <div class="btn-wrapper">
+                                                <!-- (click)="verfiyEmail(invoiceSetting.email)"
+                                                    [disabled]="!isEmailChanged && (!invoiceSetting.email || invoiceSetting.email.length < 4 || invoiceSetting.emailVerified)" -->
+                                                <button class="btn btn-success mr-1">
+                                                    Verify
+                                                </button>
+                                                <!-- (click)="deleteEmail(invoiceSetting.email)"
+                                                    [disabled]="!invoiceSetting.email || invoiceSetting.email.length < 4" -->
+                                                <button class="btn btn-danger">Delete
+                                                </button>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="clearfix  pdT1">
+
+                            <div class="row">
+                                <div class="col-sm-3 col-xs-12">
+                                    <!-- [(ngModel)]="companyEmailSettings.sendThroughGmail"
+                                        name="sendThroughGmail" [disabled]="!isGmailIntegrated" -->
+                                    <input type="checkbox" class="show-on-mobile" />
+                                    <label>Send email through Gmail</label>
+                                </div>
+
+                                <div class="col-xs-9 form-group" style="display: flex;align-items: center">
+                                    <!-- [(ngModel)]="companyEmailSettings.sendThroughGmail"
+                                        name="sendThroughGmail" [disabled]="!isGmailIntegrated" -->
+                                    <input type="checkbox" class="hide-on-mobile" />
+                                    <span class="ml-1 integrated-email">
+                                        <!-- [href]="gmailAuthCodeUrl$ | async" -->
+                                        <a>Integrate Gmail</a>
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </tab>
+            <tab>
+                <ng-template tabHeading>
+                    <span class="icon-sales-order"></span> Pur. Order
+                </ng-template>
+                <div class="sales-order-tab single-tab-block">
+
+                    <div class="box clearfix mb-2">
+
+                        <h4 class="clearfix bdrB">Purchase Order <span></span></h4>
+                        <div class="clearfix">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3 lh34"><label>Default expiry days</label></div>
+                                <div class="col-xs-12 col-sm-9">
+                                    <div class="defaultExpiry">
+                                        <div>
+                                            <div class="form-group">
+                                                <div class="expiry-days" [ngClass]="{'input-group': true}">
+                                                    <!-- name="proformaDuePeriod"
+                                                    decimalDigitsDirective maxlength="3" [(ngModel)]="proformaSetting.duePeriod"
+                                                    -->
+                                                    <input type="tel" class="form-control" placeholder="00" />
+                                                    <span class="ml-05"> Days </span>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix  pdT1">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!-- [(ngModel)]="proformaSetting.autoChangeStatusOnExp"
+                                            name="proformaAutoChange" -->
+                                        <input type="checkbox" class="show-on-mobile" />
+                                        <label>Auto change status (on expiry)</label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-9 form-group">
+                                        <!-- [(ngModel)]="proformaSetting.autoChangeStatusOnExp"
+                                            name="proformaAutoChange"  -->
+                                        <input type="checkbox" class="hide-on-mobile" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix pdT1">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!--  [(ngModel)]="proformaSetting.sendSms" class="pull-left"
+                                            name="proformaCreatePaymentEntry" -->
+                                        <input type="checkbox" class="show-on-mobile" />
+                                        <label>Enable send proforma via SMS</label></div>
+                                    <div class="col-xs-12 col-sm-9 ">
+                                        <div class="form-group clearfix">
+                                            <!-- [(ngModel)]="proformaSetting.sendSms" class="pull-left"
+                                                name="proformaCreatePaymentEntry" -->
+                                            <input type="checkbox" class="hide-on-mobile" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix pdT1">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <label>Custom Purchase Order#</label></div>
+                                    <div class="col-xs-12 col-sm-9 ">
+                                        <div class="form-group clearfix">
+                                            <input type="checkbox" class="hide-on-mobile" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </tab>
+            <tab>
+
+                <ng-template tabHeading>
+                    <span class="icon-invoice-icon"></span>Pur. Bill
+                </ng-template>
+
+                <div class="single-tab-block">
+
+                    <div class="box clearfix mb-2">
+                        <h4 class="clearfix bdrB"><span>Purchase Bill</span></h4>
+                        <div class="clearfix">
+                            <div class="clearfix">
+
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <label>Bill Lock Date</label>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-9">
+                                        <div class="form-group mb-0 bill-lock-date">
+                                            <!-- name="invoiceLockDate"
+                                                bsDatepicker #dp="bsDatepicker" [(ngModel)]="invoiceSetting.lockDate"
+                                                [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY'}" -->
+                                            <input type="text" class="form-control">
+                                            <!--  (click)="dp.toggle()" -->
+                                            <span class="icon-calender"></span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="clearfix  pdT1">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <!--  name="invoiceStatusPayment" [(ngModel)]="invoiceSetting.showSeal" -->
+                                        <input type="checkbox" class="show-on-mobile" /> <label>Show narration to
+                                            ledger</label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-9 form-group">
+                                        <input type="checkbox" class="hide-on-mobile" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </tab>
+        </tabset>
+    </div>
+</section>

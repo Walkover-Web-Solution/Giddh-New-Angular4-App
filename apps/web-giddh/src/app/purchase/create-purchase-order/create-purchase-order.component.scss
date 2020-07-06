@@ -1,7 +1,7 @@
-@import '../../../assets/css/color.scss';
-.create-purchase-order-form{
+@import "../../../assets/css/color.scss";
+.create-purchase-order-form {
     position: relative;
-    &:before{
+    &:before {
         position: absolute;
         content: "";
         left: 0;
@@ -9,7 +9,7 @@
         height: 100%;
         bottom: 0;
         top: 130px;
-        opacity: .6;
+        opacity: 0.6;
         z-index: 98;
         background: #f7f8fa;
     }
@@ -26,19 +26,20 @@
         .inner-container {
             max-width: 1120px;
             width: 100%;
-            .source-supply{
+            .source-supply {
                 margin-top: 80px;
             }
             .show-for-small-screen {
                 display: none;
             }
-            .select-customer-name{
-                sh-select, input[type="text"]{
+            .select-customer-name {
+                sh-select,
+                input[type="text"] {
                     width: 62.7%;
                     float: left;
                 }
             }
-            .wrap-billing-address{
+            .wrap-billing-address {
                 .billing-address {
                     background: $white;
                     border: 1px solid $gainsboro;
@@ -60,7 +61,8 @@
                             outline: none !important;
                         }
                     }
-                    input, .form-control{
+                    input,
+                    .form-control {
                         background-color: transparent !important;
                         background: transparent !important;
                         padding-left: 0 !important;
@@ -71,7 +73,7 @@
                     .sales-country-label {
                         margin-bottom: 0;
                         vertical-align: middle;
-                        line-height: 2.0;
+                        line-height: 2;
                         border-bottom: 1px solid $gainsboro;
                         padding-left: 6px;
                         border-bottom-color: rgb(214, 214, 214);
@@ -82,40 +84,38 @@
                         border-bottom: 1px solid $gainsboro;
                         width: 100%;
                     }
-                    sh-select{
+                    sh-select {
                         width: 100%;
                     }
                 }
-            
-        }
-        .invoice-due-date {
-            position: absolute;
-            width: 100%;
-            left: 0;
-            margin-left: 48%;
-        }
-        .order-expected-delivery{
-            sh-select{
+            }
+            .invoice-due-date {
+                position: absolute;
                 width: 100%;
+                left: 0;
+                margin-left: 48%;
             }
-            .invoice-due-date{
-               input{
-                width: 200px;
-                margin-left: 20px;}
+            .order-expected-delivery {
+                sh-select {
+                    width: 100%;
+                }
+                .invoice-due-date {
+                    input {
+                        width: 200px;
+                        margin-left: 20px;
+                    }
+                }
             }
-        }
-       
         }
     }
-    .create-purchase-order-table{
-        .select-account-label{
+    .create-purchase-order-table {
+        .select-account-label {
             font-size: 14px;
             color: $gainsboro;
             padding-bottom: 3px;
             display: block;
         }
     }
-  
 }
 .tip_img {
     max-width: 375px;
@@ -259,7 +259,7 @@
 }
 
 .table {
-    tbody+tbody {
+    tbody + tbody {
         border: 0;
     }
 }
@@ -285,7 +285,7 @@ ng-select.splSales {
     text-align: center;
 }
 
-.table>thead>tr th {
+.table > thead > tr th {
     font-weight: 100;
 }
 
@@ -612,7 +612,7 @@ section.newtable {
     padding-left: 30px;
 }
 
-.newtable .row>div {
+.newtable .row > div {
     padding: 0;
 }
 
@@ -625,9 +625,9 @@ section.newtable {
 }
 
 .table-custom-invoice {
-    >thead {
-        >tr {
-            >th {
+    > thead {
+        > tr {
+            > th {
                 border: 1px solid $gainsboro !important;
                 padding: 10px 8px;
                 white-space: nowrap;
@@ -649,14 +649,13 @@ section.newtable {
                 &:last-child {
                     //border-right: none !important;
                     vertical-align: middle !important;
-        
                 }
             }
         }
     }
-    >tbody {
-        >tr {
-            >td {
+    > tbody {
+        > tr {
+            > td {
                 border: 1px solid $gainsboro !important;
                 padding: 10px 8px;
                 white-space: nowrap;
@@ -676,17 +675,17 @@ section.newtable {
         }
     }
 }
-.table-custom-invoice.table>tfoot>tr>td {
+.table-custom-invoice.table > tfoot > tr > td {
     border-top: none;
 }
 
-.table-custom-invoice>thead>tr>th:first-child {
+.table-custom-invoice > thead > tr > th:first-child {
     max-width: 40px;
     width: 40px;
     min-width: 40px;
 }
 
-.table-custom-invoice>tbody>tr>td:first-child {
+.table-custom-invoice > tbody > tr > td:first-child {
     max-width: 40px;
     width: 40px;
     min-width: 40px;
@@ -795,16 +794,16 @@ strong {
     height: 33px;
     width: 470% !important;
 }
-.aqua-color  {
-    a{
-    color: $primary;
-    font-size: 12px;
+.aqua-color {
+    a {
+        color: $primary;
+        font-size: 12px;
+    }
+    span {
+        font-size: 14px;
+        color: $very-light-gray;
+    }
 }
-span{
-    font-size:14px; color: $very-light-gray;
-}
-}
-
 
 .add-line-bulk-item a:focus {
     text-decoration: underline;
@@ -824,11 +823,11 @@ span.eligible-ITC {
         font-size: 10px;
     }
 }
-.deposit-payment-mode{
+.deposit-payment-mode {
     display: flex;
     align-items: center;
     flex-direction: row-reverse;
-    label{
+    label {
         padding-bottom: 0;
     }
 }
@@ -975,7 +974,7 @@ span.eligible-ITC {
     min-height: 80vh;
 }
 
-.bg-white{
+.bg-white {
     background-color: $white;
 }
 #actionPane {
@@ -997,13 +996,13 @@ span.eligible-ITC {
     }
 }
 @media (max-width: 990px) {
-        .wrap-billing-address .bill-add {
-            width: 100%;
-            max-width: 50.01%;
-        }
-        .wrap-billing-address .bill-add:nth-child(2) {
-            margin-top: 20px;
-        }
+    .wrap-billing-address .bill-add {
+        width: 100%;
+        max-width: 50.01%;
+    }
+    .wrap-billing-address .bill-add:nth-child(2) {
+        margin-top: 20px;
+    }
 }
 @media (max-width: 768px) {
     .tip_img {
@@ -1014,40 +1013,42 @@ span.eligible-ITC {
     .wrapper-customer-table {
         .customer-purchase-table {
             padding-right: 15px;
-            .inner-container { 
+            .inner-container {
                 .invoice-due-date {
                     margin-left: 46%;
-                }    
-                 .select-customer-name{
-                    sh-select, input[type="text"]{
+                }
+                .select-customer-name {
+                    sh-select,
+                    input[type="text"] {
                         width: 100%;
                         float: left;
                     }
                 }
             }
         }
-    .customer-purchase-table {
-        .inner-container {
+        .customer-purchase-table {
+            .inner-container {
                 .wrapper-customer-table {
                     padding-top: 15px;
                     .show-for-small-screen {
                         padding: 0 15px;
                         display: block;
                     }
-                    
                 }
             }
+        }
+        .wrap-billing-address .bill-add {
+            width: 100%;
+            max-width: 100%;
+            padding-right: 15px !important;
+        }
     }
-    .wrap-billing-address .bill-add {
-        width: 100%;
-        max-width: 100%;
-        padding-right: 15px !important;
-    }
-    
-}
     .tip_img {
         left: 15px;
         top: 100px;
+    }
+    .create-purchase-order-form:before {
+        top: 160px;
     }
 }
 @media (max-width: 840px) {
@@ -1100,7 +1101,7 @@ span.eligible-ITC {
         display: block;
         margin-top: 5px;
     }
-   
+
     #actionPane .btn-danger {
         margin-bottom: 5px;
     }
@@ -1111,21 +1112,29 @@ span.eligible-ITC {
     #actionPane .generate-invoice {
         min-width: 189px;
     }
-    .order-expected-delivery{
-        flex-direction: column;
-        .col-sm-6{
-            padding: 0;
-        }
-        .invoice-due-date{
-            padding: 0;
-            margin-left: 0;
-            position: static;
-            .d-flex{
-                flex-direction: column;
-                input{               
-                    margin-left: 0;
-                    width: 100% !important;
-
+    .wrapper-customer-table {
+        .customer-purchase-table {
+            .inner-container {
+                .order-expected-delivery {
+                    flex-direction: column;
+                    .col-sm-6 {
+                        padding: 0;
+                    }
+                    .invoice-due-date {
+                        padding: 0;
+                        margin-left: 0 !important;
+                        position: static;
+                        .d-flex {
+                            flex-direction: column;
+                            input {
+                                margin-left: 0;
+                                width: 100% !important;
+                            }
+                        }
+                    }
+                }
+                .source-supply {
+                    margin-top: 50px;
                 }
             }
         }
