@@ -8,7 +8,7 @@
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['companyName'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Name
                 </div>
                 <div class="form-group" *ngIf="customTemplate?.templateType === 'gst_template_e'">
-                    <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null);changeInvoiceHeader($event)" checked /> Document Title: This is your
+                    <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display" (ngModelChange)="changeInvoiceHeader($event);onChangeFieldVisibility(null, null, null)" checked /> Document Title: This is your
                     <div class="ml-3">
                         <input type="text" [maxlength]="15" class="form-control" name="title" [(ngModel)]="customTemplate.sections['header'].data['formNameInvoice'].label" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['header'].data['formNameInvoice'].display"
                         />
@@ -103,7 +103,7 @@
                 <h3>Form</h3>
                 <!-- *ngIf="fieldsAndVisibility.header.formNameTaxInvoice" -->
                 <div class="form-group">
-                    <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null);changeInvoiceHeader($event)" checked /> Document Title
+                    <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display" (ngModelChange)="changeInvoiceHeader($event);onChangeFieldVisibility(null, null, null);" checked /> Document Title
                     <!-- <div class="ml-3 mrT1">Invoice
               <input type="text" [maxlength]="15" class="form-control" name="tl" [(ngModel)]='customTemplate.sections[0].content[22].label'
                   (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[23].display"
