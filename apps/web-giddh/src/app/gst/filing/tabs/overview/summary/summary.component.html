@@ -2,8 +2,7 @@
 
     <div class="gstr-transactions-summary" *ngIf="isTransactionSummary">
         <h4 class="clearfix gstr-summary-title">Transaction Summary</h4>
-        <p style="padding-top:6px;" class="text-muted half">A summary of all the transactions in the current filing
-            period which are ready to be pushed to GSTN.</p>
+        <p style="padding-top:6px;" class="text-muted half">A summary of all the transactions in the current filing period which are ready to be pushed to GSTN.</p>
     </div>
 
 
@@ -70,16 +69,13 @@
                 <tbody>
 
                     <ng-container *ngFor="let item of gstrOverviewData.summary">
-                        <tr (click)="viewTransactions(item)" class="row-hover"
-                            [ngClass]="{'cp-none': item.gstReturnType === 'hsnsac' ||  item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'}">
+                        <tr (click)="viewTransactions(item)" class="row-hover" [ngClass]="{'cp-none': item.gstReturnType === 'hsnsac' ||  item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'}">
                             <!-- <td></td> -->
                             <td [ngSwitch]="true" data-title="Discription">
-                                <ng-container
-                                    *ngSwitchCase="item.gstReturnType === 'b2b' || item.gstReturnType === 'b2bur'">
+                                <ng-container *ngSwitchCase="item.gstReturnType === 'b2b' || item.gstReturnType === 'b2bur'">
                                     <img src="{{imgPath}}b2b.svg" class="icon text-bottom" />
                                 </ng-container>
-                                <ng-container
-                                    *ngSwitchCase="item.gstReturnType === 'b2cs' || item.gstReturnType === 'b2cl'">
+                                <ng-container *ngSwitchCase="item.gstReturnType === 'b2cs' || item.gstReturnType === 'b2cl'">
                                     <img src="{{imgPath}}b2cs.svg" class="icon text-bottom" />
                                 </ng-container>
                                 <ng-container *ngSwitchCase="item.gstReturnType === 'export'">
@@ -88,8 +84,7 @@
                                 <ng-container *ngSwitchCase="item.gstReturnType === 'nil'">
                                     <img src="{{imgPath}}nil.svg" class="icon text-bottom" />
                                 </ng-container>
-                                <ng-container
-                                    *ngSwitchCase="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers' || item.gstReturnType === 'cdnUr' || item.gstReturnType === 'cdnr' || item.gstReturnType === 'imps'">
+                                <ng-container *ngSwitchCase="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers' || item.gstReturnType === 'cdnUr' || item.gstReturnType === 'cdnr' || item.gstReturnType === 'imps'">
                                     <img src="{{imgPath}}cdn.svg" class="icon text-bottom" />
                                 </ng-container>
                                 <ng-container *ngSwitchCase="item.gstReturnType === 'advance-receipt' || item.gstReturnType === 'advance-payments'">
@@ -108,29 +103,22 @@
                                 </ng-container>
                                 <span style="margin-left: 5px;"> {{item?.name}}</span>
                             </td>
-                            <td class="text-center" data-title="Total Transactions"
-                                *ngIf="item.gstReturnType !== 'CreditNote/DebitNote/RefundVouchers'">
+                            <td class="text-center" data-title="Total Transactions" *ngIf="item.gstReturnType !== 'CreditNote/DebitNote/RefundVouchers'">
                                 <a href="javascript:void(0)">
                                     {{item?.totalTransactions}} </a>
                             </td>
-                            <td class="text-center" data-title="Total Transactions"
-                                *ngIf="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'">
+                            <td class="text-center" data-title="Total Transactions" *ngIf="item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'">
                                 -
                             </td>
-                            <td class="text-right" data-title="Taxable Amount"> <i
-                                    class="fa fa-inr"></i>{{item?.taxableAmount | number: '1.2-2'}}
+                            <td class="text-right" data-title="Taxable Amount"> <i class="fa fa-inr"></i>{{item?.taxableAmount |giddhCurrency}}
                             </td>
-                            <td class="text-right" data-title="TIGST"> <i
-                                    class="fa fa-inr"></i>{{item?.igstAmount | number: '1.2-2'}}
+                            <td class="text-right" data-title="TIGST"> <i class="fa fa-inr"></i>{{item?.igstAmount |giddhCurrency}}
                             </td>
-                            <td class="text-right" data-title="CGST"> <i
-                                    class="fa fa-inr"></i>{{item?.cgstAmount | number: '1.2-2'}}
+                            <td class="text-right" data-title="CGST"> <i class="fa fa-inr"></i>{{item?.cgstAmount |giddhCurrency}}
                             </td>
-                            <td class="text-right" data-title="SGST"> <i
-                                    class="fa fa-inr"></i>{{item?.sgstAmount | number: '1.2-2'}}
+                            <td class="text-right" data-title="SGST"> <i class="fa fa-inr"></i>{{item?.sgstAmount |giddhCurrency}}
                             </td>
-                            <td class="text-right" data-title="CESS"> <i
-                                    class="fa fa-inr"></i>{{item?.cessAmount | number: '1.2-2'}}
+                            <td class="text-right" data-title="CESS"> <i class="fa fa-inr"></i>{{item?.cessAmount |giddhCurrency}}
                             </td>
                         </tr>
 
@@ -143,19 +131,14 @@
                                 <td class="text-center" data-title="Total Transactions"><a href="javascript:void(0)">
                                         {{item?.totalTransactions}} </a>
                                 </td>
-                                <td class="text-right" data-title="Taxable Amount"> <i
-                                        class="fa fa-inr"></i>{{item?.taxableAmount | number: '1.2-2'}}</td>
-                                <td class="text-right" data-title="IGST"> <i
-                                        class="fa fa-inr"></i>{{item?.igstAmount | number: '1.2-2'}}
+                                <td class="text-right" data-title="Taxable Amount"> <i class="fa fa-inr"></i>{{item?.taxableAmount |giddhCurrency}}</td>
+                                <td class="text-right" data-title="IGST"> <i class="fa fa-inr"></i>{{item?.igstAmount |giddhCurrency}}
                                 </td>
-                                <td class="text-right" data-title="CGST"> <i
-                                        class="fa fa-inr"></i>{{item?.cgstAmount | number: '1.2-2'}}
+                                <td class="text-right" data-title="CGST"> <i class="fa fa-inr"></i>{{item?.cgstAmount |giddhCurrency}}
                                 </td>
-                                <td class="text-right" data-title="SGST"> <i
-                                        class="fa fa-inr"></i>{{item?.sgstAmount | number: '1.2-2'}}
+                                <td class="text-right" data-title="SGST"> <i class="fa fa-inr"></i>{{item?.sgstAmount |giddhCurrency}}
                                 </td>
-                                <td class="text-right" data-title="CESS"> <i
-                                        class="fa fa-inr"></i>{{item?.cessAmount | number: '1.2-2'}}
+                                <td class="text-right" data-title="CESS"> <i class="fa fa-inr"></i>{{item?.cessAmount |giddhCurrency}}
                                 </td>
                             </tr>
                         </ng-container>

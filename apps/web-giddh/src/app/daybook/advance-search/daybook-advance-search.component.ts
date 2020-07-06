@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { createSelector } from 'reselect';
@@ -98,6 +98,8 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 	private fromDate: string = '';
 	private toDate: string = '';
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+       /** Mask format for decimal number and comma separation  */
+    public inputMaskFormat: string = '';
 
 	constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _daybookActions: DaybookActions, private _accountService: AccountService) {
 
@@ -167,6 +169,20 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 				});
 			}
 		})).pipe(takeUntil(this.destroyed$));
+
+		// Get groups with accounts
+		this._groupService.GetFlattenGroupsAccounts().pipe(takeUntil(this.destroyed$)).subscribe(data => {
+			if (data.status === 'success') {
+				let groups: IOption[] = [];
+				data.body.results.map(d => {
+					groups.push({ label: d.groupName, value: d.groupUniqueName });
+				});
+				this.groups$ = observableOf(groups);
+			}
+		});
+         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+        });
 	}
 
 	public ngOnChanges(changes: SimpleChanges) {
