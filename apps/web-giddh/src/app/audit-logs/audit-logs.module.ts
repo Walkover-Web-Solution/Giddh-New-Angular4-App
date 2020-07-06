@@ -9,6 +9,7 @@ import { AuditLogsRoutingModule } from './audit-logs.routing.module';
 import { AuditLogsGridComponent } from './components/audit-logs-grid/audit-logs-grid.component';
 import { AuditLogsSidebarComponent } from './components/sidebar-components/audit-logs.sidebar.component';
 import { AuditLogsServiceModule } from './services/audit-logs.service.module';
+import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 
 @NgModule({
     declarations: [
@@ -31,7 +32,8 @@ import { AuditLogsServiceModule } from './services/audit-logs.service.module';
         BsDatepickerModule,
         LaddaModule,
         ShSelectModule,
-        AuditLogsServiceModule
+        AuditLogsServiceModule,
+        CurrencyModule
     ],
 })
 export class AuditLogsModule {
