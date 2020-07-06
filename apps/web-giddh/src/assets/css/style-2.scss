@@ -1940,7 +1940,7 @@ header .navbar {
 .open > .dropdown-toggle.btn-primary,
 .btn-primary:active:focus,
 .btn-primary:active:hover,
-.open>.dropdown-toggle.btn-primary:focus {
+.open > .dropdown-toggle.btn-primary:focus {
     background: $chetwode-blue;
     color: $white;
     border-color: $chetwode-blue;
@@ -9411,33 +9411,33 @@ span#HW_badge_cont:nth-child(3) {
 
 
 /*flex css start*/
-.flex-column{
+.flex-column {
     flex-direction: column;
 }
 /*flex css start*/
-.select-border-bottom{
-    .form-control{
+.select-border-bottom {
+    .form-control {
         border: none;
         border-bottom: 1px solid #d9d9d9;
         width: 100%;
     }
 }
-.preview-lightbox-overlay{
+.preview-lightbox-overlay {
     z-index: 999 !important;
 }
-.preview-lightbox{
-    img{
-        width:100%
+.preview-lightbox {
+    img {
+        width: 100%;
     }
-    .close{
+    .close {
         width: 30px;
         height: 30px;
         opacity: 1;
     }
-    .moday-body{
+    .moday-body {
         padding: 30px 15px;
     }
-    .header-close-btn{
+    .header-close-btn {
         display: flex;
         align-items: flex-end;
         justify-content: flex-end;
@@ -9496,6 +9496,16 @@ span#HW_badge_cont:nth-child(3) {
     }
     .groups-buttons {
         height: auto;
+    }
+    #setting-tab-wrapper .tab-integraton .nav-tabs {
+        display: inline-block;
+        width: 100%;
+        white-space: nowrap;
+    }
+    #setting-tab-wrapper .tab-integraton .nav-tabs > li > a {
+        width: 90px;
+        height: 90px;
+        font-size: 14px;
     }
 }
 
@@ -10035,7 +10045,7 @@ span#HW_badge_cont:nth-child(3) {
     //     padding-top: 126px;
     // }
     .padding-top-fixed-mobile {
-        padding-top: 90px;
+        padding-top: 95px;
     }
     //.page-has-tabs .padding-top-fixed-mobile,
     //.on-user-page .padding-top-fixed-mobile {
@@ -10045,7 +10055,7 @@ span#HW_badge_cont:nth-child(3) {
         padding-top: 85px !important;
     }
     .on-setting-page .padding-top-fixed-mobile {
-        padding-top: 90px !important;
+        padding-top: 95px !important;
     }
     ngx-daterangepicker-material {
         position: fixed;
@@ -10218,6 +10228,9 @@ span#HW_badge_cont:nth-child(3) {
     }
     .welcome_header:after {
         bottom: 0;
+    }
+    #setting-tab-wrapper .tab-integraton .nav-tabs {
+        overflow-y: hidden;
     }
 }
 

@@ -11,7 +11,7 @@
     cursor: pointer;
 }
 
-.basic>thead>tr>th {
+.basic > thead > tr > th {
     border-right: 1px solid #c6c4c4;
 }
 
@@ -80,7 +80,7 @@
     color: $deep-sky-blue;
 }
 
-.dropdown-menu>li>a:hover {
+.dropdown-menu > li > a:hover {
     color: $chetwode-blue !important;
     background: #eeeff9 !important;
 }
@@ -145,7 +145,6 @@
     outline: none !important;
 }
 
-
 /* my css */
 
 .card {
@@ -166,8 +165,8 @@
     width: 100%;
 }
 
-.card .basic>tbody>tr>td,
-.card .basic>thead>tr>th {
+.card .basic > tbody > tr > td,
+.card .basic > thead > tr > th {
     padding: 5px 14px;
     border: none !important;
 }
@@ -457,52 +456,51 @@ div.remove-capitalize {
 span.icon-export-icon {
     color: $gray;
 }
-.giddh-table{
-    tr{
-        td{
-                .action-icon {
+.giddh-table {
+    tr {
+        td {
+            .action-icon {
+                display: flex;
+                align-items: center;
+                border: 1px solid $gainsboro;
+                display: none;
+                a {
+                    width: 30px;
+                    font-size: 20px;
+                    color: $gray;
+                    border-right: 1px solid $gainsboro;
                     display: flex;
                     align-items: center;
-                    border: 1px solid $gainsboro;
-                    display: none;
-                    a{
-                        width: 30px;
-                        font-size: 20px;
-                        color: $gray;
-                        border-right: 1px solid $gainsboro;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;         
-                        padding: 0 5px;
-                        cursor: pointer;
-                        align-items: stretch;
-                        height: 30px;
-                        align-items: center;
-                        background-color: $white;
-                    
-                    }
-                    &:last-child{
-                        border-right:none !important;  
-                    }
+                    justify-content: center;
+                    padding: 0 5px;
+                    cursor: pointer;
+                    align-items: stretch;
+                    height: 30px;
+                    align-items: center;
+                    background-color: $white;
+                }
+                &:last-child {
+                    border-right: none !important;
                 }
             }
         }
-        &:hover{
-            td{
+    }
+    &:hover {
+        td {
             .action-icon {
                 display: flex !important;
             }
         }
-        }
+    }
 }
 /* responsive */
 
 @media (max-width: 768px) {
     .invoice-name-download {
-        a{
+        a {
             padding-right: 0 !important;
         }
-        .icon-download{
+        .icon-download {
             display: none;
         }
     }
@@ -585,7 +583,7 @@ span.icon-export-icon {
         box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3) !important;
         display: block;
     }
-    .date-advance-search .dropdown-menu>li>a {
+    .date-advance-search .dropdown-menu > li > a {
         padding: 8px 10px;
     }
     .paginationWrapper {
@@ -627,7 +625,7 @@ span.icon-export-icon {
         font-size: 18px !important;
     }
     .invoice-container {
-        padding-top: 55px;
+        padding-top: 15px;
     }
     .total-due-sale-wrap {
         display: block !important;

@@ -23,6 +23,7 @@ import { PurchaseOrderInvoicePreviewComponent } from './purchase-order-invoice-p
 import { OrderHistoryComponent } from './order-history/order-history.component'
 import { ReconcileDesignComponent } from './purchase-invoice/reconcileDesign/reconcileDesign.component';
 import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
+import { PurchaseSettingComponent } from './purchase-setting/purchase-setting.component';
 import { PurchaseComponent } from './purchase.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
@@ -41,7 +42,8 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
         AsideMenuPurchaseInvoiceSettingComponent,
         ReconcileDesignComponent,
         PurchaseRecordComponent,
-        OrderHistoryComponent],
+        OrderHistoryComponent,
+        PurchaseSettingComponent],
     imports: [
         PurchaseRoutingModule,
         CollapseModule,
