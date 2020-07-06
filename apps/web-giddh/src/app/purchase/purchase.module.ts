@@ -25,6 +25,7 @@ import { ReconcileDesignComponent } from './purchase-invoice/reconcileDesign/rec
 import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
 import { PurchaseSettingComponent } from './purchase-setting/purchase-setting.component';
 import { PurchaseComponent } from './purchase.component';
+import { PurchaseAdvanceSearchComponent } from './purchase-advance-search/purchase-advance-search.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
@@ -43,7 +44,8 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
         ReconcileDesignComponent,
         PurchaseRecordComponent,
         OrderHistoryComponent,
-        PurchaseSettingComponent],
+        PurchaseSettingComponent,
+        PurchaseAdvanceSearchComponent],
     imports: [
         PurchaseRoutingModule,
         CollapseModule,

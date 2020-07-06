@@ -23,9 +23,9 @@ export class PurchaseOrderComponent implements OnInit {
     public isMobileSite: boolean;
     public selectedDateRangeUi: any;
     public selectOverDate: IOption[] = [
-        { label: "rakesh", value: "1234"}, { label: "rakesh2", value: "1235"}, 
-        { label: "rakesh", value: "1234"}, 
-        { label: "rakesh3", value: "1235"} ];
+        { label: "rakesh", value: "1234" }, { label: "rakesh2", value: "1235" },
+        { label: "rakesh", value: "1234" },
+        { label: "rakesh3", value: "1235" }];
 
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     constructor(
@@ -49,10 +49,13 @@ export class PurchaseOrderComponent implements OnInit {
     }
     openModalBulkUpdate(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(
-          template,
-          Object.assign({}, { class: 'modal-sm' })
+            template,
+            Object.assign({}, { class: 'modal-sm' })
         );
-      }
+    }
+    openModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template);
+    }
 
 
 }
