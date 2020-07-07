@@ -1,0 +1,417 @@
+@import "../../../../../assets/css/color.scss";
+/*invoice table*/
+.modal-title {
+    color: $white;
+}
+.strong {
+    font-weight: bold;
+}
+.font-11 {
+    font-size: 11px !important;
+}
+.font-10 {
+    font-size: 10px !important;
+}
+/*
+  .font-12 {
+  font-size: 12px !important;
+  } */
+.pb-1 {
+    padding-bottom: 10px;
+}
+p {
+    line-height: 17px;
+}
+/* heading */
+#default header h1 {
+    /* color: #df4927; */
+    font-size: 14px;
+}
+#default header h2 {
+    /* color: #df4927; */
+    font-size: 14px;
+    font-weight: bold;
+}
+/* table */
+#default table {
+    /* font-size: 93%; */
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: inherit;
+}
+
+/* page */
+
+#default {
+    overflow: auto;
+    background: $white;
+    padding: 0;
+    font-size: 14px;
+    max-width: 760px;
+    margin: 20px auto;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+#default::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+#default::-webkit-scrollbar-track {
+    background: $white-smoke;
+}
+
+/* Handle */
+#default::-webkit-scrollbar-thumb {
+    background: $gainsboro;
+    border-radius: 20px;
+}
+
+/* Handle on hover */
+#default::-webkit-scrollbar-thumb:hover {
+    background: $gainsboro;
+    border-radius: 20px;
+}
+#default body {
+    box-sizing: border-box;
+    font-size: 12px;
+    margin: 0 auto;
+    padding: 0.1in;
+    letter-spacing: 0;
+    width: 100%;
+    background: $white;
+    border-radius: 1px;
+}
+
+/* header */
+
+#default header {
+    background: $white;
+    padding: 10px 15px;
+    border-bottom: 2px solid #e1443e;
+}
+
+#default header:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+.pull-right tr td {
+    text-align: right !important;
+}
+
+#default .meta {
+    padding: 0 15px;
+    /* margin-bottom: 10px; */
+}
+
+#default .meta tbody tr td,
+#default .meta tbody tr th {
+    border: 0;
+    padding: 5px 0;
+}
+
+#default .meta tbody tr th {
+    background: none;
+    border: 0;
+    padding: 0;
+    text-align: left;
+    color: $nero;
+}
+
+.hidden-label {
+    opacity: 0;
+}
+
+#default .meta tbody tr td {
+    padding: 6px 0;
+    line-height: 1.3rem;
+}
+#default header figure {
+    margin: 0 0 0.3em 0;
+    width: 100%;
+    padding: 0px;
+}
+
+#default header figure p {
+    margin: 0 0 0.25em;
+}
+
+#default header span {
+    margin: 0 0 0 1em;
+    max-height: 25%;
+    max-width: 60%;
+    position: relative;
+}
+
+#default header img {
+    max-height: 100%;
+    max-width: 120px;
+    float: left;
+    margin-bottom: 0;
+}
+
+#default header table tr td {
+    border: 0;
+    display: table-cell;
+    vertical-align: baseline;
+}
+
+/* article */
+
+#default article {
+    margin-bottom: 10px;
+}
+
+#default article:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+#default article h1 {
+    clip: rect(0 0 0 0);
+    position: absolute;
+}
+
+#default article address {
+    float: left;
+    font-weight: bold;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+.warehouse-table {
+    width: 100%;
+    border-bottom: 1px solid $light-gray;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    padding-right: 0px;
+    padding-left: 0px;
+    &:last-child {
+        border-bottom: none;
+    }
+}
+.warehouse-table tbody tr td {
+    padding: 0px 20px 5px 10px;
+}
+/* table items */
+
+#default table.item {
+    clear: both;
+    width: 100%;
+    table-layout: auto;
+}
+
+#default table.item th,
+#default table.item tfoot tr th {
+    position: relative;
+    padding: 8px 7px;
+    line-height: 1.2rem;
+    background-color: $white-smoke;
+    font-size: 12px;
+}
+#default table.item tfoot tr th {
+    padding-right: 7px;
+    border-top: 1px solid $light-gray;
+}
+/* tcs */
+.tcs hr {
+    margin-top: 50px;
+    width: 100%;
+    border-bottom: 1px solid $cinnabar-orange;
+}
+.tcs table {
+    margin: 50px 0px;
+    clear: both;
+    width: 100%;
+    border-collapse: collapse !important;
+}
+.tcs table td,
+.tcs table th {
+    border-radius: 0;
+    padding: 5px;
+    border: 1px solid $light-gray;
+    vertical-align: top;
+    text-align: right;
+}
+
+.tcs table td:first-child {
+    text-align: left;
+}
+
+.tcs table th,
+.tcs table tfoot tr th {
+    position: relative;
+    padding: 5px;
+    font-weight: bold;
+}
+
+.tcs table th,
+.tcs table tfoot tr th {
+    position: relative;
+    padding: 5px;
+    text-align: right;
+}
+
+.tcs table th:first-child,
+.tcs table tfoot tr th:first-child {
+    text-align: left;
+}
+
+.br0 {
+    border-right: 0px !important;
+}
+
+.bl0 {
+    border-left: 0px !important;
+}
+
+.title-template {
+    font-size: 20px;
+    font-family: "opensans-semibold";
+}
+#default table.item td {
+    border-radius: 0;
+    padding: 7px;
+    border-top: 1px solid $light-gray;
+    line-height: 1.2rem;
+    vertical-align: top;
+}
+
+#default table.item td p {
+    color: $zambezi;
+}
+
+#default table.balance {
+    width: 85%;
+    float: right;
+    margin: 10px 7px 10px;
+}
+
+#default table.balance th,
+#default table.balance td {
+    width: 50%;
+    text-align: right;
+    padding: 0 2px;
+    /* font-size: 11px; */
+}
+
+/* aside */
+
+#default aside h1 {
+    border: none;
+    border-width: 0 0 1px;
+    margin: 0 0 1em;
+}
+
+#default aside h1 {
+    border-color: $nobel;
+    border-bottom-style: solid;
+}
+
+/*footer*/
+
+#default footer {
+    border-top: 1px solid $eastern-blue;
+    padding: 16px 0px 30px 0;
+    margin: 8px 0 0;
+    background: $white;
+}
+#default .company-address p {
+    max-width: 400px;
+    margin: 0 auto;
+    width: 100%;
+}
+#default aside {
+    line-height: 1.5rem;
+}
+
+#default .subfooter {
+    padding: 10px 15px 0px 15px;
+}
+
+#default .subfooter hr {
+    width: 100%;
+    border-bottom: 1px solid $very-light-gray;
+    margin: 3px 0;
+}
+
+#default .subfooter h4 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#default .docTitle {
+    width: 100%;
+    line-height: 20px;
+    text-align: center;
+    height: 26px;
+    position: relative;
+}
+
+#default .docTitle h2 {
+    text-align: center;
+    position: absolute;
+    right: 0;
+    left: 0;
+    width: 100%;
+}
+
+#default .docTitle h2:after {
+    content: attr(title);
+    width: auto;
+    position: relative;
+    background: $white;
+    margin: 0 auto;
+    padding: 6px 16px;
+    right: 0;
+    line-height: 24px;
+    vertical-align: middle;
+    z-index: 0;
+    left: 0;
+}
+
+#default .docTitle h2.no-content:after {
+    content: "";
+    background: transparent;
+}
+
+#default p {
+    margin: 0;
+}
+
+#default h2 {
+    margin: 0;
+    font-size: inherit;
+}
+
+#default table.item th .bgClr {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: aqua;
+    left: 0;
+    right: 0;
+    width: 100%;
+    opacity: 0.05;
+    z-index: 0;
+}
+
+.docTitle hr {
+    position: absolute;
+    height: 2px;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+}
+
+strong {
+    font-weight: bold;
+}

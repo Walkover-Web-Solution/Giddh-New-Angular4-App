@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, TemplateRef , ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, TemplateRef, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { fromEvent, ReplaySubject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil, take } from 'rxjs/operators';
 import { InvoiceSetting } from '../../../../models/interfaces/invoice.setting.interface';
@@ -257,6 +257,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         }
     }
 
+
     /**
      * To call when voucher change for preview
      *
@@ -274,10 +275,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
     openModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(template,
-        Object.assign({}, { class: 'preview-lightbox modal-lg' })
+            Object.assign({}, { class: 'preview-lightbox modal-lg' })
         );
         $('.modal-backdrop').addClass('preview-lightbox-overlay');
     }
+
     public getVoucherVersions() {
         let request = new ProformaGetAllVersionRequest();
         request.accountUniqueName = this.selectedItem.account.uniqueName;
