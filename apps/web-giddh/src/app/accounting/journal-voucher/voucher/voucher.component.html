@@ -283,8 +283,7 @@
     [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService">
 </aside-inventory-stock-group>
 
-
 <!-- Recipt entry modal -->
 <ng-template #receiptEntry>
-    <receipt-entry [transaction]="currentTransaction"></receipt-entry>
+    <receipt-entry [transaction]="currentTransaction" [activeCompany]="activeCompany" (entriesList)="handleEntries($event)"></receipt-entry>
 </ng-template>
