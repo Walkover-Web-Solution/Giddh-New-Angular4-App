@@ -605,8 +605,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             // TODO: Prateek end
                             const unitRates = cloneDeep(this.vm.selectedLedger.unitRates);
                             if (unitRates && unitRates.length) {
-                                t.unitRate = unitRates.map(rate => rate.code = rate.stockUnitCode);
-                                console.log(t);
+                                unitRates.forEach(rate => rate.code = rate.stockUnitCode);
+                                t.unitRate = unitRates;
                             } else {
                                 t.unitRate = [{
                                     code: t.inventory.unit.code,
