@@ -45,6 +45,113 @@
                                 </div>
                                 <!-- endregion -->
                             </div>
+                            <div class="row mb-1 delivery-from-field">
+                                <div class="col-sm-2">
+                                    <label>Deliver From<span class="red-text">*</span></label>
+                                </div>
+                                <!-- region customer dropdown -->
+                                <div class="col-sm-9 select-customer-name">
+                                    <section class="form-inline">
+
+                                        <div class="wrap-billing-address clearfix">
+
+                                            <div class="row">
+                                                <!-- region billing address -->
+                                                <div class="col-sm-6 bill-add">
+
+                                                    <div class="form-group">
+                                                        <label>Billing Address</label>
+
+                                                        <div class="billing-address clearfix">
+                                                            <textarea name="billingDetails.address" class="form-control"
+                                                                rows="3" autocomplete="off" autofocus="off"
+                                                                aria-autocomplete="none"></textarea>
+
+                                                            <div>
+                                                                <div class="col-sm-6 pd ">
+                                                                    <label class="sales-country-label">
+                                                                        India
+                                                                    </label>
+                                                                </div>
+
+                                                                <div class="col-sm-6 pd" #billingState>
+                                                                    <sh-select [placeholder]="'State'"
+                                                                        class="select-border-bottom">
+                                                                    </sh-select>
+                                                                </div>
+
+                                                                <div class="col-sm-12 pd">
+
+                                                                    <input maxLength="15" autocomplete="None"
+                                                                        type="text" name="billingDetails.gstNumber"
+                                                                        class="form-control input-custom"
+                                                                        placeholder="GSTIN">
+
+                                                                    <!-- <input maxLength="15" autocomplete="None" type="text" name="billingDetails.gstNumber" class="form-control input-custom" *ngIf="showTRNNo" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" (change)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
+                                                                                            placeholder="TRN" /> -->
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <!-- endregion -->
+
+                                                <!-- region shipping address -->
+                                                <div class="col-sm-6 bill-add">
+
+                                                    <div class="form-group p0 width100">
+                                                        <label>
+                                                            <input type="checkbox" autocomplete="None" name=""> Shipping
+                                                            Address
+                                                            Same as Billing Address
+                                                        </label>
+
+                                                        <div class="billing-address">
+                                                            <textarea [readonly]="" name="shippingDetails.address"
+                                                                class="form-control" rows="3"
+                                                                autocomplete="off"></textarea>
+                                                            <div class="clearfix">
+
+                                                                <div class="form-group">
+
+                                                                    <div class="col-sm-6 pd ">
+                                                                        <div class="form-group">
+
+                                                                            <label class="sales-country-label">
+                                                                                India
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-sm-6 pd select-border-bottom">
+                                                                        <sh-select></sh-select>
+                                                                    </div>
+
+                                                                    <div class="col-sm-12 pd">
+                                                                        <input [readonly]="" autocomplete="None"
+                                                                            maxLength="15" type="text"
+                                                                            class="form-control input-custom"
+                                                                            placeholder="GSTIN">
+                                                                        <!-- <input [readonly]="" maxLength="15" autocomplete="None" type="text" name="shippingDetails.gstNumber" class="form-control input-custom" >
+                                                                                                placeholder="TRN" /> -->
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- endregion -->
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                                <!-- endregion -->
+                            </div>
+
+
                             <div class="row mb-1 source-supply">
                                 <!-- region customer name -->
                                 <div class="col-sm-2">

@@ -50,6 +50,7 @@ import { InvoiceAdvanceSearchComponent } from './preview/models/advanceSearch/in
 import { InvoiceRendererComponent } from './invoice.renderer.component';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { InvoiceBulkUpdateModalComponent } from './preview/models/bulkUpdateModal/invoiceBulkUpdateModal.component';
+import { PurchaseBillTemplateComponent } from './preview/models/purchase-bill-template-preview/purchase-bill-template-preview.component'
 import { EWayBillCreateComponent } from './eWayBill/create/eWayBill.create.component';
 import { GenerateEWayBillComponent } from './preview/models/generateEWayBill/generateEWayBill.component';
 import { EWayBillCredentialsComponent } from './eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component';
@@ -124,6 +125,7 @@ const INVOICE_ROUTES: Routes = [
         InvoiceAdvanceSearchComponent,
         InvoiceRendererComponent,
         InvoiceBulkUpdateModalComponent,
+        PurchaseBillTemplateComponent,
         GenerateEWayBillComponent,
         EWayBillCreateComponent,
         EWayBillComponent,
@@ -183,7 +185,7 @@ const INVOICE_ROUTES: Routes = [
         InvoicePreviewComponent
     ],
     entryComponents: [DownloadOrSendInvoiceOnMailComponent, PreviewDownloadReceiptComponent,
-    ReceiptUpdateComponent],
+        ReceiptUpdateComponent],
     providers: [InvoiceUiDataService, {
         provide: FONT_PICKER_CONFIG,
         useValue: DEFAULT_FONT_PICKER_CONFIG
