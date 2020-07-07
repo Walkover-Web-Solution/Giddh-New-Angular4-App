@@ -312,6 +312,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                 this.isIndianCompany = profile.countryV2.alpha2CountryCode === 'IN' ? true : false;
+                if(!this.isIndianCompany && this.selectedTabParent === 4) {
+                    this.selectedTabParent = 0;
+                    this.selectTab(this.selectedTabParent);
+                }
             }
         });
 
@@ -651,7 +655,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public selectTab(id: number) {
-        this.integrationTab.tabs[id].active = true;
+        if(this.integrationTab.tabs[id] && this.integrationTab.tabs[id] !== undefined) {
+            this.integrationTab.tabs[id].active = true;
+        }
     }
 
     public openNewRegistartionForm() {
