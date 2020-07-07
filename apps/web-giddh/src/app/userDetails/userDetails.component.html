@@ -37,14 +37,17 @@
                             <b>Note: </b>Format should be like 9898989898</p>
                     </form>
 
-                    <div class="pd2 clearfix" *ngIf="showVerificationBox" style="padding-top:0;">
+                    <div class="clearfix" *ngIf="showVerificationBox" style="padding-top:0;">
                         <hr>
-                        <h1 class="mrT2">Enter verification Code</h1>
-                        <div class="max350 mrT">
-                            <input class="form-control" type="text" placeholder="Verification Code" [(ngModel)]="oneTimePassword" />
+                        <h1 class="mrT2 max350">
+                            <span>Enter verification Code</span>
+                            <!--<button class="btn-link pull-right pr-0">Resend</button>-->
+                        </h1>
+                        <div class="mrT">
+                            <input class="form-control max350 pull-left" type="text" placeholder="Verification Code" [(ngModel)]="oneTimePassword" />
+                            <button class="btn btn-success mrL1" [ladda]="isVerifyAddNewMobileNoInProcess$ | async" (click)="verifyNumber()">Verify
+                                </button>
                         </div>
-                        <button class="btn btn-success mrT" [ladda]="isVerifyAddNewMobileNoInProcess$ | async" (click)="verifyNumber()">Verify
-                        </button>
                     </div>
                     <section class="row">
                         <div class="container adjust-width pull-left">

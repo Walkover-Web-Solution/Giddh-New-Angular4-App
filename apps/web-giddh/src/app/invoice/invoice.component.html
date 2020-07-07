@@ -2,7 +2,7 @@
     <nav class="navbar">
         <div class="invoce-controll">
             <div class="row" style="margin: 0 !important;">
-                <div class="btn-group" dropdown *ngIf="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note' && tabsDropdown">
+               <!-- <div class="btn-group" dropdown *ngIf="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note' && tabsDropdown">
                     <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle" aria-controls="dropdown-basic"></button>
                         <ul id="dropdown1-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                             <li role="menuitem">
@@ -18,7 +18,7 @@
                                 <a class="dropdown-item cp">Template</a>
                             </li>
                         </ul>
-                </div>
+                </div>-->
                 <div class="btn-group tabs-dropdown" dropdown *ngIf="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note' && tabsDropdown">
                     <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle" aria-controls="dropdown-basic">
                         Estimates
