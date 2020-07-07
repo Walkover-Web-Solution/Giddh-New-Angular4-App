@@ -247,7 +247,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
     }
 
-
     public openAdjustmentModal(event: KeyboardEvent, transaction: any, template: TemplateRef<any>): void {
         this.currentTransaction = transaction;
 
@@ -1436,5 +1435,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 break;
         }
         this.store.dispatch(this.generalAction.setPageTitle(currentPageObj));
+    }
+
+    public handleEntries(event): void {
+        console.log(event);
+        this.modalRef.hide();
     }
 }
