@@ -15,20 +15,16 @@
                         (click)="openModal(purchaseAdvanceSearch)">
                         <span class="icon-advance-filter"></span>
                     </div>
-
-                    <!-- <div class="search-icon-block" (click)="openModal(template)">
-                        <i class="icon-search"></i>
-                    </div> -->
                 </div>
             </form>
 
 
             <!-- Invoice filter section ends -->
-            <!-- <div class="clear-filter" *ngIf="showAdvanceSearchIcon" (click)="resetAdvanceSearch()">
+            <div class="clear-filter" *ngIf="showAdvanceSearchIcon" (click)="resetAdvanceSearch()">
                 <button class="btn btn-filter">
                     <span class="icon-cross"></span> Clear Filter
                 </button>
-            </div> -->
+            </div>
         </div>
         <div class="d-flex add-invoice">
             <div>
@@ -66,128 +62,130 @@
             </div>
         </div>
     </div>
-    <table class="table basic mt-15 table-bordered giddh-table table-responsive on-mobile-view">
-        <thead class="t-h-bg1">
-            <tr>
-                <th style="min-width:50px; width: 4%">
-                    <div class="table-checkbox-field">
-                        <img src="assets/images/unchecked.png">
-                        <!-- <img src="assets/images/checked.png"> -->
-                    </div>
-                </th>
-
-                <th>
-                    <div class="table-checkbox-field">
-                        #
-                    </div>
-                </th>
-
-                <th width="5%" class="td_in_searchBox">
-                    Date
-                </th>
-
-                <th width="20%" class="td_in_searchBox">
-                    Purchase Order
-                </th>
-
-                <th width="10%">
-                    <div class="d-flex">
-                        <div class="">Vendor name</div>
-                        <div class="icon-pointer">
-
+    <div class="table-responsive">
+        <table class="table basic mt-15 table-bordered giddh-table on-mobile-view">
+            <thead class="t-h-bg1">
+                <tr>
+                    <th style="min-width:50px; width: 4%">
+                        <div class="table-checkbox-field">
+                            <img src="assets/images/unchecked.png">
+                            <!-- <img src="assets/images/checked.png"> -->
                         </div>
-                    </div>
-                </th>
+                    </th>
 
-                <th width="12%">
-                    <div class="d-flex justify-content-end">
-                        <div class="text-right"> Total Amt.</div>
-                        <div class="icon-pointer">
-
+                    <th>
+                        <div class="table-checkbox-field">
+                            #
                         </div>
-                    </div>
-                </th>
+                    </th>
 
-                <th width="12%">
-                    <div class="d-flex">
-                        <div>Expected Delivery</div>
-                        <div class="icon-pointer">
+                    <th width="5%" class="td_in_searchBox">
+                        Date
+                    </th>
 
+                    <th width="20%" class="td_in_searchBox">
+                        Purchase Order
+                    </th>
+
+                    <th width="10%">
+                        <div class="d-flex">
+                            <div class="">Vendor name</div>
+                            <div class="icon-pointer">
+
+                            </div>
                         </div>
-                    </div>
-                </th>
+                    </th>
 
-                <th width="25%">
-                    <div class="d-flex">
-                        <div class="">Status</div>
-                        <div class="icon-pointer">
+                    <th width="12%">
+                        <div class="d-flex justify-content-end">
+                            <div class="text-right"> Total Amt.</div>
+                            <div class="icon-pointer">
 
+                            </div>
                         </div>
-                    </div>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td data-title="" class="table-checkbox-field">
-                    <div class="table-checkbox-field">
-                        <img src="assets/images/unchecked.png" />
-                    </div>
-                </td>
-                <td data-title="#">
-                    1
-                </td>
-                <td data-title="Date">
-                    23/05/2020
-                </td>
-                <td data-title="Purchase Order">
-                    <span routerLink="['/pages/purchase-management/purchase-order-invoice-preview']">2355989</span>
-                </td>
-                <td data-title="Vendor Name">
-                    Walkover Web solution
-                </td>
-                <td data-title="Total Amt." class="text-right">
-                    1000
-                </td>
-                <td data-title="Expected Delivery">
-                    <span hidden>Delivery in 7 days</span>
-                    <span>23/05/2020</span>
-                </td>
-                <td data-title="status" class="d-flex align-items-center">
-                    <span class="d-flex">
-                        Open</span>
-                    <div class="action-icon ml-15">
-                        <a tooltip="Convert to bill">
-                            <span class="icon-tick font-12"></span>
-                        </a>
-                        <a tooltip="send Email">
-                            <span class="icon-enevlop font-12"></span>
-                        </a>
-                        <a tooltip="Copy">
-                            <span class="icon-copy-small font-12"></span>
-                        </a>
-                        <a tooltip="Delete">
-                            <i class="icon-trash font-12"></i>
-                        </a>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
+                    </th>
 
+                    <th width="12%">
+                        <div class="d-flex">
+                            <div>Expected Delivery</div>
+                            <div class="icon-pointer">
 
-        <tbody hidden>
-            <tr>
-                <td colspan="8">
-                    <div class="no-data mrT2 loader-main">
-                        <div class="spinner2">
-                            <div class="cube1"></div>
-                            <div class="cube2"></div>
+                            </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    </th>
+
+                    <th width="25%">
+                        <div class="d-flex">
+                            <div class="">Status</div>
+                            <div class="icon-pointer">
+
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-title="" class="table-checkbox-field">
+                        <div class="table-checkbox-field">
+                            <img src="assets/images/unchecked.png" />
+                        </div>
+                    </td>
+                    <td data-title="#">
+                        1
+                    </td>
+                    <td data-title="Date">
+                        23/05/2020
+                    </td>
+                    <td data-title="Purchase Order">
+                        <span routerLink="['/pages/purchase-management/purchase-order-invoice-preview']">2355989</span>
+                    </td>
+                    <td data-title="Vendor Name">
+                        Walkover Web solution
+                    </td>
+                    <td data-title="Total Amt." class="text-right">
+                        1000
+                    </td>
+                    <td data-title="Expected Delivery">
+                        <span hidden>Delivery in 7 days</span>
+                        <span>23/05/2020</span>
+                    </td>
+                    <td data-title="status" class="d-flex align-items-center">
+                        <span class="d-flex">
+                            Open</span>
+                        <div class="action-icon ml-15">
+                            <a tooltip="Convert to bill">
+                                <span class="icon-tick font-12"></span>
+                            </a>
+                            <a tooltip="send Email">
+                                <span class="icon-enevlop font-12"></span>
+                            </a>
+                            <a tooltip="Copy">
+                                <span class="icon-copy-small font-12"></span>
+                            </a>
+                            <a tooltip="Delete">
+                                <i class="icon-trash font-12"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+
+
+            <tbody hidden>
+                <tr>
+                    <td colspan="8">
+                        <div class="no-data mrT2 loader-main">
+                            <div class="spinner2">
+                                <div class="cube1"></div>
+                                <div class="cube2"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 <ng-template #template>
     <div class="purchase-order-bulk-update">

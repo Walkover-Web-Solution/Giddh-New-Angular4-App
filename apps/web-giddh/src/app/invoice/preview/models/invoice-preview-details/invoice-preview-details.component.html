@@ -12,27 +12,36 @@
                     <div class="invoice-search-box">
                         <input type="text" placeholder="search" #searchElement>
 
-                        <div class="btn-group" dropdown *ngIf="voucherType === 'sales' && !isMobileView" [autoClose]="true">
-                            <button id="button-basic2" dropdownToggle type="button" class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv" aria-controls="dropdown-basic3">
+                        <div class="btn-group" dropdown *ngIf="voucherType === 'sales' && !isMobileView"
+                            [autoClose]="true">
+                            <button id="button-basic2" dropdownToggle type="button"
+                                class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv"
+                                aria-controls="dropdown-basic3">
                                 + New Invoice <span class="caret"></span>
                             </button>
-                            <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu ddl-width-small" role="menu" aria-labelledby="button-basic2">
+                            <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu ddl-width-small" role="menu"
+                                aria-labelledby="button-basic2">
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)" (click)="goToInvoice('cash')">Cash Invoice</a>
+                                    <a class="dropdown-item" href="javascript:void(0)"
+                                        (click)="goToInvoice('cash')">Cash Invoice</a>
                                 </li>
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)" (click)="goToInvoice('sales')">Sales Invoice</a>
+                                    <a class="dropdown-item" href="javascript:void(0)"
+                                        (click)="goToInvoice('sales')">Sales Invoice</a>
                                 </li>
                             </ul>
                         </div>
 
-                        <button class="btn btn-pink" *ngIf="voucherType !== 'sales' && !isMobileView" (click)="goToInvoice()">+ New
+                        <button class="btn btn-pink" *ngIf="voucherType !== 'sales' && !isMobileView"
+                            (click)="goToInvoice()">+ New
                             {{voucherType | voucherTypeToNamePipe}}</button>
                     </div>
 
                     <ul class="invoice-sidebar">
                         <perfect-scrollbar>
-                            <li class="singleInvoiceDetail cp" *ngFor="let item of filteredData" [ngClass]="{'activeItem': item.uniqueName === selectedItem.uniqueName}" (click)="selectVoucher(item)">
+                            <li class="singleInvoiceDetail cp" *ngFor="let item of filteredData"
+                                [ngClass]="{'activeItem': item.uniqueName === selectedItem.uniqueName}"
+                                (click)="selectVoucher(item)">
 
                                 <div class="row">
 
@@ -78,7 +87,8 @@
 
                                 <div class="col-sm-4 col-xs-12 pd0">
                                     <div class="invoice-num-holder">
-                                        <h3 class="invoice-num"> {{selectedItem?.voucherNumber ? selectedItem?.voucherNumber : '-'}}</h3>
+                                        <h3 class="invoice-num">
+                                            {{selectedItem?.voucherNumber ? selectedItem?.voucherNumber : '-'}}</h3>
                                         <p class="acc-holderName">{{selectedItem?.account.name}}</p>
                                     </div>
                                 </div>
@@ -90,21 +100,30 @@
                                             <img src="assets/images/multiply.svg"></span>
 
                                         <!-- region for proforma and estimates -->
-                                        <div class="btn-group changeStatus-dropdown pull-right" dropdown *ngIf="only4ProformaEstimates">
+                                        <div class="btn-group changeStatus-dropdown pull-right" dropdown
+                                            *ngIf="only4ProformaEstimates">
 
                                             <label class="labeled text-capitalize">
                                                 {{ selectedItem.voucherStatus }}</label>
 
-                                            <button id="button-basic" dropdownToggle type="button" class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic">Change Status
+                                            <button id="button-basic" dropdownToggle type="button"
+                                                class="btn btn-pink dropdown-toggle"
+                                                aria-controls="dropdown-basic">Change Status
                                                 <span class="caret"></span>
                                             </button>
 
-                                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                                                <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('accepted')"><a class="dropdown-item">Accepted</a></li>
+                                            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                                aria-labelledby="button-basic">
+                                                <li class="cp" role="menuitem"
+                                                    (click)="updateVoucherAction.emit('accepted')"><a
+                                                        class="dropdown-item">Accepted</a></li>
 
-                                                <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('decline')"><a class="dropdown-item">Declined</a></li>
+                                                <li class="cp" role="menuitem"
+                                                    (click)="updateVoucherAction.emit('decline')"><a
+                                                        class="dropdown-item">Declined</a></li>
 
-                                                <li (click)="updateVoucherAction.emit('ConvertToSalesOrder')" *ngIf="voucherType === 'estimate' || voucherType === 'estimates'">
+                                                <li (click)="updateVoucherAction.emit('ConvertToSalesOrder')"
+                                                    *ngIf="voucherType === 'estimate' || voucherType === 'estimates'">
                                                     <a class="cp" href="javascript:void(0)">Convert to Proforma</a>
                                                 </li>
 
@@ -112,33 +131,49 @@
                                                     <a class="cp" href="javascript:void(0)">Convert to Invoice</a>
                                                 </li>
 
-                                                <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('expired')"><a class="dropdown-item">Expired</a></li>
+                                                <li class="cp" role="menuitem"
+                                                    (click)="updateVoucherAction.emit('expired')"><a
+                                                        class="dropdown-item">Expired</a></li>
                                             </ul>
 
                                         </div>
                                         <!-- endregion -->
 
                                         <!-- region for invoice -->
-                                        <div class="btn-group changeStatus-dropdown pull-right" dropdown *ngIf="!only4ProformaEstimates && selectedItem?.voucherType !== 'purchase'">
+                                        <div class="btn-group changeStatus-dropdown pull-right" dropdown
+                                            *ngIf="!only4ProformaEstimates && selectedItem?.voucherType !== 'purchase'">
 
                                             <label *ngIf="selectedItem.voucherStatus === 'cancel'" class="labeled">
                                                 {{ selectedItem.voucherStatus }}
                                             </label>
 
-                                            <button id="button-basic2" dropdownToggle type="button" class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2" *ngIf="selectedItem.voucherStatus !== 'cancel'">Change Status <span class="caret"></span>
+                                            <button id="button-basic2" dropdownToggle type="button"
+                                                class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2"
+                                                *ngIf="selectedItem.voucherStatus !== 'cancel'">Change Status <span
+                                                    class="caret"></span>
                                             </button>
 
-                                            <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic2">
-                                                <li class="cp" role="menuitem" (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"><a class="dropdown-item">Paid</a></li>
-                                                <li *ngIf="voucherType === 'sales'" (click)="openInvoiceAdvanceReceiptModal()">
+                                            <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu" role="menu"
+                                                aria-labelledby="button-basic2">
+                                                <li class="cp" role="menuitem"
+                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"><a
+                                                        class="dropdown-item">Paid</a></li>
+                                                <li *ngIf="voucherType === 'sales'"
+                                                    (click)="openInvoiceAdvanceReceiptModal()">
                                                     <a class="cp" href="javascript:void(0)">Adjust Amount</a>
                                                 </li>
 
-                                                <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('unpaid')"><a class="dropdown-item">Unpaid</a></li>
+                                                <li class="cp" role="menuitem"
+                                                    (click)="updateVoucherAction.emit('unpaid')"><a
+                                                        class="dropdown-item">Unpaid</a></li>
 
-                                                <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('hold')"><a class="dropdown-item">Hold</a></li>
+                                                <li class="cp" role="menuitem"
+                                                    (click)="updateVoucherAction.emit('hold')"><a
+                                                        class="dropdown-item">Hold</a></li>
 
-                                                <li class="cp" role="menuitem" (click)="updateVoucherAction.emit('cancel')"><a class="dropdown-item">Cancel</a></li>
+                                                <li class="cp" role="menuitem"
+                                                    (click)="updateVoucherAction.emit('cancel')"><a
+                                                        class="dropdown-item">Cancel</a></li>
                                             </ul>
 
                                         </div>
@@ -147,38 +182,44 @@
                                         <div class="edit-action-btn-grps pull-right">
                                             <span *ngIf="!isMobileView">
                                                 <a href="javascript:void 0" tooltip="Edit" placement="top"
-                                                   (click)="toggleEditMode()"><i class="fa fa-pencil"></i></a>
+                                                    (click)="toggleEditMode()"><i class="fa fa-pencil"></i></a>
                                             </span>
 
                                             <span class="pos-rel" *ngIf="selectedItem?.voucherType !== 'purchase'">
                                                 <a href="javascript:void 0" tooltip="Send Email" placement="top"
-                                                   (click)="showEmailSendModal.toggle()"><i
-                                                    class="fa fa-envelope-o"></i></a>
+                                                    (click)="showEmailSendModal.toggle()"><i
+                                                        class="fa fa-envelope-o"></i></a>
                                             </span>
 
-                                            <span *ngIf="shouldShowPrintDocument" [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading}">
+                                            <span *ngIf="shouldShowPrintDocument"
+                                                [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading}">
                                                 <a href="javascript:void 0" tooltip="Print" placement="top"
-                                                   (click)="printVoucher()"><i class="fa fa-print"></i></a>
+                                                    (click)="printVoucher()"><i class="fa fa-print"></i></a>
                                             </span>
 
-                                            <span *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')" [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
+                                            <span
+                                                *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
+                                                [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
                                                 <a href="javascript:void 0" tooltip="Download" placement="top"
-                                                   (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
+                                                    (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
                                             </span>
 
-                                            <span *ngIf="selectedItem.voucherType === 'purchase' && attachedDocumentType?.type !== 'pdf'" [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
+                                            <span
+                                                *ngIf="selectedItem.voucherType === 'purchase' && attachedDocumentType?.type !== 'pdf'"
+                                                [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
                                                 <a href="javascript:void 0" tooltip="Download" placement="top"
-                                                   (click)="downloadFile()"><i class="icon-download"></i></a>
+                                                    (click)="downloadFile()"><i class="icon-download"></i></a>
                                             </span>
 
                                             <span>
                                                 <a href="javascript:void 0" tooltip="Delete" placement="top"
-                                                   (click)="deleteConfirmationModel.toggle()"><i
-                                                    class="fa fa-trash"></i></a>
+                                                    (click)="deleteConfirmationModel.toggle()"><i
+                                                        class="fa fa-trash"></i></a>
                                             </span>
                                         </div>
                                         <div class="history-btn">
-                                            <button class="btn btn-primary" (click)="toggleAccountAsidePane()"><img src="../../../assets/images/history-icon.svg"> History</button>
+                                            <button class="btn btn-primary" (click)="toggleAccountAsidePane()"><img
+                                                    src="../../../assets/images/history-icon.svg"> History</button>
                                         </div>
 
                                     </div>
@@ -187,16 +228,20 @@
                             </div>
                         </div>
 
-                        <div class="payment-detail" *ngIf="!only4ProformaEstimates && (selectedItem?.voucherType !== 'purchase')">
+                        <div class="payment-detail"
+                            *ngIf="!only4ProformaEstimates && (selectedItem?.voucherType !== 'purchase')">
 
                             <div class="clearfix">
 
-                                <div class="col-sm-4 pd0" *ngIf="(selectedItem.voucherType !== 'credit note' && selectedItem.voucherType !== 'debit note') &&
+                                <div class="col-sm-4 pd0"
+                                    *ngIf="(selectedItem.voucherType !== 'credit note' && selectedItem.voucherType !== 'debit note') &&
                                     (selectedItem.voucherStatus !== 'paid' && selectedItem.voucherStatus !== 'cancel')">
                                     <div class="single-paymentDetail clearfix pr-4">
                                         <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
-                                        <p class="payment-content"> Receive payments in cash/check and record payments manually. </p>
-                                        <a href="javascript: void 0" (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()">Receive
+                                        <p class="payment-content"> Receive payments in cash/check and record payments
+                                            manually. </p>
+                                        <a href="javascript: void 0"
+                                            (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()">Receive
                                             Payment</a>
                                     </div>
                                 </div>
@@ -205,7 +250,8 @@
                                 <div class="col-sm-4 pd0">
                                     <div class="single-paymentDetail clearfix">
                                         <div class="payment-icon"><img src="assets/images/send-icon.svg"></div>
-                                        <p class="payment-content">You can now email this invoice to your customer or mark it as sent. </p>
+                                        <p class="payment-content">You can now email this invoice to your customer or
+                                            mark it as sent. </p>
                                         <a href="javascript: void 0" (click)="showEmailSendModal.show()">Send
                                             Invoice</a>
                                     </div>
@@ -220,7 +266,8 @@
                                 <div style="padding: 10px 0 10px 10px;" *ngIf="moreLogsDisplayed">
                                     <a href="javascript:void 0" (click)="filterVoucherVersions(false)">Less Details</a>
                                 </div>
-                                <div style="padding: 10px 0 10px 10px;" *ngIf="filteredVoucherVersions.length && !moreLogsDisplayed">
+                                <div style="padding: 10px 0 10px 10px;"
+                                    *ngIf="filteredVoucherVersions.length && !moreLogsDisplayed">
                                     <a href="javascript:void 0" (click)="filterVoucherVersions(true)">More Details</a>
                                 </div>
 
@@ -229,7 +276,8 @@
                                         <span class="small-circle"></span>
                                         <span class="aboutPaymentLog">{{ log.estimateDate }},
                                             <span *ngIf="voucherType==='estimates'">estimate</span>
-                                        <span *ngIf="voucherType!=='estimates'">{{voucherType}}</span> {{ log.action }} for {{ log.grandTotal }} by {{ log.user.name }}</span>
+                                            <span *ngIf="voucherType!=='estimates'">{{voucherType}}</span>
+                                            {{ log.action }} for {{ log.grandTotal }} by {{ log.user.name }}</span>
                                     </li>
                                 </ul>
 
@@ -239,7 +287,8 @@
                         <div class="linked-purchase-order font-14 mt-15">
                             <p><span class="icon-file-path"></span> Linked Purchase Order(s):</p>
                             <div class="purchase-order-number">
-                                <a class="aqua-color">PO934850 </a> | <a class="aqua-color">PO934850 </a> | <a class="aqua-color">PO934850 </a>
+                                <a class="aqua-color" (click)="openModal(purchaseBillTemplate)">PO934850 </a> | <a
+                                    class="aqua-color">PO934850 </a> | <a class="aqua-color">PO934850 </a>
                             </div>
                         </div>
                     </div>
@@ -251,41 +300,434 @@
                                 <div class="loader"></div>
                             </div>
 
-                            <div *ngIf="isVoucherDownloadError && (!isVoucherDownloading || !isFileUploading)" class="error">
+                            <div *ngIf="isVoucherDownloadError && (!isVoucherDownloading || !isFileUploading)"
+                                class="error">
                                 <span>
                                     Invoice Preview is not available right now!Please try again..
                                 </span>
                             </div>
-                            <div class="preview-not-supported-attachment" *ngIf="attachedDocumentType?.type === 'unsupported'">
-                                <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and PDF (.pdf); to print other formats, download them. </span>
+                            <div class="preview-not-supported-attachment"
+                                *ngIf="attachedDocumentType?.type === 'unsupported'">
+                                <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and
+                                    PDF (.pdf); to print other formats, download them. </span>
                             </div>
                             <div class="expand-button cursor-pointer text-gray" (click)="openModal(template)">
                                 <span class="icon-collapse-icon"></span>Expand
                             </div>
-                            <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview class="fixed-ng2pdfview pdf-preview" [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
-                                <ng2-pdfjs-viewer pagemode="none" *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')" viewerId="MyUniqueID" [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
-                                    [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="testPagesLoaded($event);" [openFile]="false" [viewBookmark]="false" [download]="false">
+                            <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview
+                                class="fixed-ng2pdfview pdf-preview"
+                                [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
+                                <ng2-pdfjs-viewer pagemode="none"
+                                    *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
+                                    viewerId="MyUniqueID"
+                                    [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
+                                    [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="testPagesLoaded($event);"
+                                    [openFile]="false" [viewBookmark]="false" [download]="false">
                                 </ng2-pdfjs-viewer>
-                                <img *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')" class="image-preview" [src]="imagePreviewSource" />
+                                <img *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')"
+                                    class="image-preview" [src]="imagePreviewSource" />
                             </div>
-                            
-                            <div *ngIf="shouldShowUploadAttachment" class="upload-excel max500 center-block box mrT2 dashed-bdr">
-                                <input type="file" id="csv-upload-input" placeholder="Upload an EXCEL or CSV file" droppable="true" class="form-control" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)" />
+
+                            <div *ngIf="shouldShowUploadAttachment"
+                                class="upload-excel max500 center-block box mrT2 dashed-bdr">
+                                <input type="file" id="csv-upload-input" placeholder="Upload an EXCEL or CSV file"
+                                    droppable="true" class="form-control" [options]="fileUploadOptions" ngFileSelect
+                                    [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)" />
                                 <div class="clearfix pos-rel width100">
                                     <div class="file-input-wrapper text-center">
                                         <div class="clearfix mrB2">
                                             <img src="assets/images/new/import_icon.svg" />
                                         </div>
                                         <div class="clearfix pdR2 pdL2">
-                                            <label class="clearfix text-light-2" style="font-size: 14px">Drop file to upload</label>
+                                            <label class="clearfix text-light-2" style="font-size: 14px">Drop file to
+                                                upload</label>
                                             <div class="mrT3">
                                                 <label class="file-uplod-penal" for="csv-upload-input"> <span>Browse
-                                                            file</span></label>
+                                                        file</span></label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- template -->
+
+                            <body id="default">
+                                <!--class="disabled-area"-->
+                                <div class="pl-3 pr-3">
+                                    <div id="Template-header">
+                                        <header class="mb-1">
+                                            <table cellspacing="0" cellpadding="0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-left" width="30%">
+                                                            <table class="numDetail">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <img src="../../../assets/images/walkover-logo.svg"
+                                                                                alt="">
+                                                                        </td>
+                                                                    </tr>
+
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+
+                                                        <td class="pull-right">
+                                                            <table>
+                                                                <tbody>
+                                                                    <ng-container>
+                                                                        <tr>
+                                                                            <td colspan="3">
+                                                                                <h3 class="text-right title-template">
+                                                                                    Purchase Bill</h3>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>
+                                                                                <span
+                                                                                    class="mb-0">Delivery</span>11/09/2017
+                                                                            </td>
+                                                                            <td>
+                                                                                <span class="mb-0">
+                                                                                    #2543464859457</span>
+                                                                            </td>
+                                                                            <td>
+                                                                                <span class="mb-0">PO Date:</span>
+                                                                                20/12/2020
+                                                                            </td>
+                                                                        </tr>
+                                                                    </ng-container>
+
+
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </header>
+
+
+                                        <table class="warehouse-table" cellspacing="0" cellpadding="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-left">
+                                                        <p class="mb-05">
+                                                            From
+                                                        </p>
+                                                        <p class="strong"><strong>Walkover Web Solutions Pvt.
+                                                                Ltd.</strong>
+                                                        </p>
+                                                        <p>405-406, Capt. C. S. Naidu Arcade Near Greater Kailash
+                                                            Hospital
+                                                        </p>
+                                                        <p>I10/2, 10/2, New Palasia, Indore, Woking, Madhya Pradesh
+                                                            452001</p>
+                                                        <p>GSTIN:23AAAAAA000A1Z0</p>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <p class="mb-05">
+                                                            Shipped From
+                                                        </p>
+                                                        <p class="strong"><strong>Walkover Web Solutions Pvt.
+                                                                Ltd.</strong>
+                                                        </p>
+                                                        <p>405-406, Capt. C. S. Naidu Arcade Near Greater Kailash
+                                                            Hospital
+                                                        </p>
+                                                        <p>I10/2, 10/2, New Palasia, Indore, Woking, Madhya Pradesh
+                                                            452001</p>
+                                                        <p>GSTIN:23AAAAAA000A1Z0</p>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <table class="warehouse-table">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-left">
+                                                        <p class="mb-05">
+                                                            Bill To:
+                                                        </p>
+                                                        <p class="strong"><strong>Walkover Web Solutions Pvt.
+                                                                Ltd.</strong>
+                                                        </p>
+                                                        <p>405-406, Capt. C. S. Naidu Arcade Near Greater Kailash
+                                                            Hospital
+                                                        </p>
+                                                        <p>I10/2, 10/2, New Palasia, Indore, Woking, Madhya Pradesh
+                                                            452001</p>
+                                                        <p>GSTIN:23AAAAAA000A1Z0</p>
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <p class="mb-05">
+                                                            Shipped To:
+                                                        </p>
+                                                        <p class="strong"><strong>Walkover Web Solutions Pvt.
+                                                                Ltd.</strong>
+                                                        </p>
+                                                        <p>405-406, Capt. C. S. Naidu Arcade Near Greater Kailash
+                                                            Hospital
+                                                        </p>
+                                                        <p>I10/2, 10/2, New Palasia, Indore, Woking, Madhya Pradesh
+                                                            452001</p>
+                                                        <p>GSTIN:23AAAAAA000A1Z0</p>
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <div id="Template-table">
+                                        <article>
+                                            <table id="item" class="item" cellpadding="0" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-right">
+                                                            #
+                                                        </th>
+                                                        <th class="text-left">
+                                                            Item
+                                                        </th>
+                                                        <th class="text-right ">
+                                                            HSN/SAC
+                                                        </th>
+                                                        <th class="text-right">
+                                                            Qty
+                                                        </th>
+                                                        <th class="text-right">
+                                                            Rate/Item
+                                                        </th>
+
+                                                        <th class="text-right">
+                                                            Dis/Item
+                                                        </th>
+                                                        <th class="text-right">
+                                                            Taxable Value
+                                                        </th>
+                                                        <th class="text-right">
+                                                            SGST
+                                                        </th>
+                                                        <th class="text-right">
+                                                            CGST
+                                                        </th>
+                                                        <th class="text-right">
+                                                            CESS
+                                                        </th>
+                                                        <th class="text-right">
+                                                            Taxes
+                                                        </th>
+                                                        <th class="text-right">
+                                                            Total
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-right">1</td>
+                                                        <td class="text-left">
+                                                            <span>Dummy Product Edition 1 </span>
+                                                        </td>
+                                                        <td class="text-right ">12345
+                                                            <p>(H)</p>
+                                                        </td>
+                                                        <td class="text-right nowrap">2 No.
+                                                        </td>
+                                                        <td class="text-right "><span></span>1000.00
+                                                            <p><span></span>15.00</p>
+                                                        </td>
+
+                                                        <td class="text-right">
+                                                            <span></span>1700.00
+                                                            <p><span></span>24.79</p>
+                                                        </td>
+                                                        <td class="text-right"><span></span>306.00
+                                                            <p>@18.00%</p>
+                                                        </td>
+                                                        <td class="text-right" hidden><span></span>306.00
+                                                            <p>@18.00%</p>
+                                                        </td>
+                                                        <td class="text-right" hidden><span></span>0.00
+                                                            <p>@0%</p>
+                                                        </td>
+                                                        <td class="text-right ">
+                                                            0.000
+                                                        </td>
+                                                        <td class="text-right ">
+                                                            0.000
+                                                        </td>
+                                                        <td class="text-right ">
+                                                            0.000
+                                                        </td>
+                                                        <td class="text-right ">
+                                                            0.000
+                                                        </td>
+                                                        <td class="text-right "><span></span>2006.00
+                                                            <p><span></span>29.25</p>
+                                                        </td>
+                                                    </tr>
+
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>&nbsp;
+                                                        </th>
+                                                        <th class="text-right ">&nbsp;
+                                                        </th>
+                                                        <th class="text-right ">&nbsp;
+                                                        </th>
+                                                        <th class="text-right ">&nbsp;
+                                                        </th>
+                                                        <th class="text-right ">&nbsp;
+                                                        </th>
+                                                        <th class="text-right ">&nbsp;
+                                                        </th>
+                                                        <th class="text-right ">&nbsp;
+                                                        </th>
+                                                        <th class="text-right text-right nowrap">&nbsp; <span>6
+                                                                No.</span>
+                                                        </th>
+                                                        <!-- added by sadique -->
+
+                                                        <th class="text-right ">
+                                                            0.000
+                                                        </th>
+                                                        <th class="text-right "><span></span>7200.00
+                                                        </th>
+                                                        <!--SGST-->
+                                                        <th class="text-right "><span></span>918.00
+
+                                                        </th>
+                                                        <!--CGST-->
+                                                        <th class="text-right "><span></span>918.00
+                                                        </th>
+
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </article>
+                                    </div>
+                                    <div id="Template-footer">
+                                        <div class="clearfix">
+                                            <article>
+                                                <table class="balance">
+                                                    <tr>
+                                                        <td>
+                                                            <!-- {{fieldsAndVisibility.footer.taxableAmount?.label}}-->
+                                                            Taxable Amount
+                                                        </td>
+                                                        <td>
+                                                            <span></span> 7200.00
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            Total Tax
+                                                        </td>
+                                                        <td>
+                                                            <span></span> 966.00
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td class="strong ">
+                                                            Invoice Total(INR)
+                                                        </td>
+                                                        <td class="strong">
+                                                            <span></span>10166.00
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            Total (In words)
+                                                        </td>
+                                                        <td>
+                                                            Ten Thousand One Hundred Sixty Six Only
+                                                            <div class="inner mr-0">&nbsp;</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="strong ">
+                                                            Invoice Total(USD)
+                                                        </td>
+                                                        <td class="strong">
+                                                            <span></span>10166.00
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            Total (In words)
+                                                        </td>
+                                                        <td>
+                                                            Ten Thousand One Hundred Sixty Six Only
+                                                            <div class="inner mr-0">&nbsp;</div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr hidden>
+                                                        <td>TCS</td>
+                                                        <td><span></span>2900.00</td>
+                                                    </tr>
+                                                    <tr hidden>
+                                                        <td>TDS</td>
+                                                        <td><span></span>3480.00</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="strong">Total Due</td>
+                                                        <td><span class="strong"></span>27380.00</td>
+                                                    </tr>
+                                                </table>
+                                            </article>
+                                        </div>
+
+                                        <div class="clearfix">
+                                            <aside class="pb-5">
+                                                <table cellpadding="0" cellspacing="0" class="subfooter">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="text-left">
+                                                                <ng-container>
+                                                                    <p class="strong">Note</p>
+                                                                    <p class="font-12">
+                                                                        <span class="mb-2">Content whatever written in
+                                                                            note
+                                                                            section at the time of creating Purchase
+                                                                            Order.
+                                                                            Lorem Ipsum dummy text will come here.
+                                                                        </span>
+                                                                    </p>
+                                                                </ng-container>
+
+                                                            </td>
+                                                            <td class="text-right">
+                                                                <p class="strong"> Company Name will come here</p>
+                                                            </td>
+                                                        </tr>
+                                                        <!-- <tr>
+                                                                                    <td class="text-left">
+                                                                                        <strong>
+                                                                                            <h4 class="eastern-blue-text">Thank You for your
+                                                                                                business.</h4>
+                                                                                        </strong>
+                                                                                    </td>
+                                                                                </tr> -->
+                                                    </tbody>
+                                                </table>
+                                            </aside>
+                                            <!-- <footer class="company-address">
+                                                                        <p class="font-10">
+                                                                            405-406, Capt. C. S. Naidu Arcade Near Greater Kailash Hospital 10/2,
+                                                                            10/2, New Palasia, Indore, Woking, Madhya Pradesh 452001
+                                                                        </p>
+                                                                    </footer> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </body>
+
+                            <!-- template end -->
                         </div>
                     </div>
                 </div>
@@ -313,7 +755,10 @@
             </div>
 
             <div class="invoice-editBody">
-                <proforma-invoice-component [accountUniqueName]="selectedItem.account.uniqueName" [selectedItem]="selectedItem" [invoiceNo]="(voucherType !== 'purchase') ? selectedItem?.voucherNumber : selectedItem?.uniqueName" [invoiceType]="voucherType" (cancelVoucherUpdate)="toggleEditMode()">
+                <proforma-invoice-component [accountUniqueName]="selectedItem.account.uniqueName"
+                    [selectedItem]="selectedItem"
+                    [invoiceNo]="(voucherType !== 'purchase') ? selectedItem?.voucherNumber : selectedItem?.uniqueName"
+                    [invoiceType]="voucherType" (cancelVoucherUpdate)="toggleEditMode()">
                 </proforma-invoice-component>
             </div>
 
@@ -331,23 +776,29 @@
 
 <ng-template #template>
     <div class="relative header-close-btn">
-      
-      <button type="button" class="close pull-right cursor-pointer" aria-label="Close" (click)="modalRef.hide()">
-        <span aria-hidden="true">&times;</span>
-      </button>
+
+        <button type="button" class="close pull-right cursor-pointer" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="modal-body">
-        <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview class="fixed-ng2pdfview pdf-preview" [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
-            <ng2-pdfjs-viewer pagemode="none" *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')" viewerId="MyUniqueID" [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
-                [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="testPagesLoaded($event);" [openFile]="false" [viewBookmark]="false" [download]="false">
+        <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview class="fixed-ng2pdfview pdf-preview"
+            [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
+            <ng2-pdfjs-viewer pagemode="none"
+                *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
+                viewerId="MyUniqueID" [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
+                [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="testPagesLoaded($event);" [openFile]="false"
+                [viewBookmark]="false" [download]="false">
             </ng2-pdfjs-viewer>
-            <img *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')" class="image-preview" [src]="imagePreviewSource" />
+            <img *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')"
+                class="image-preview" [src]="imagePreviewSource" />
         </div>
     </div>
 </ng-template>
 
 <!-- region send email modal-->
-<div bsModal #showEmailSendModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true, ignoreBackdropClick: true}" tabindex="-1">
+<div bsModal #showEmailSendModal="bs-modal" class="modal fade" role="dialog"
+    [config]="{keyboard:true, ignoreBackdropClick: true}" tabindex="-1">
 
     <div class="modal-dialog semdMailModal">
 
@@ -413,7 +864,9 @@
             <!--      </div>-->
             <!-- endregion -->
 
-            <app-send-email-invoice-component [voucherType]="voucherType" (successEvent)="sendEmail.emit($event);showEmailSendModal.hide()" [selectedItem]='selectedItem' (cancelEvent)="showEmailSendModal.hide()">
+            <app-send-email-invoice-component [voucherType]="voucherType"
+                (successEvent)="sendEmail.emit($event);showEmailSendModal.hide()" [selectedItem]='selectedItem'
+                (cancelEvent)="showEmailSendModal.hide()">
             </app-send-email-invoice-component>
 
         </div>
@@ -423,7 +876,8 @@
 <!-- endregion -->
 
 <!-- region download modal-->
-<div bsModal #downloadVoucherModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true, ignoreBackdropClick: true}" tabindex="-1">
+<div bsModal #downloadVoucherModal="bs-modal" class="modal fade" role="dialog"
+    [config]="{keyboard:true, ignoreBackdropClick: true}" tabindex="-1">
 
     <div class="modal-dialog semdMailModal">
 
@@ -439,10 +893,13 @@
 <!-- endregion -->
 
 <!-- region delete confirmation model -->
-<div bsModal #deleteConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
+<div bsModal #deleteConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
+    tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <confirm-modal [body]="only4ProformaEstimates ? 'Do you want to delete the voucher(s)?' : selectedItem.voucherType === 'purchase' ? 'Do you want to delete the selected records?' : 'Do you want to delete the voucher/invoice?'" (cancelCallBack)="deleteConfirmationModel.toggle()"
+            <confirm-modal
+                [body]="only4ProformaEstimates ? 'Do you want to delete the voucher(s)?' : selectedItem.voucherType === 'purchase' ? 'Do you want to delete the selected records?' : 'Do you want to delete the voucher/invoice?'"
+                (cancelCallBack)="deleteConfirmationModel.toggle()"
                 (successCallBack)="deleteVoucher.emit(true);deleteConfirmationModel.toggle()"></confirm-modal>
         </div>
     </div>
@@ -453,9 +910,15 @@
 <div bsModal #receivePaymentPopup="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <invoice-payment-model *ngIf="receivePaymentPopup.isShown" [selectedInvoiceForPayment]="selectedItem" (closeModelEvent)="processPaymentEvent.emit($event);receivePaymentPopup.toggle()">
+            <invoice-payment-model *ngIf="receivePaymentPopup.isShown" [selectedInvoiceForPayment]="selectedItem"
+                (closeModelEvent)="processPaymentEvent.emit($event);receivePaymentPopup.toggle()">
             </invoice-payment-model>
         </div>
     </div>
 </div>
 <!-- endregion -->
+
+
+<ng-template #purchaseBillTemplate>
+    <purchase-bill-template></purchase-bill-template>
+</ng-template>
