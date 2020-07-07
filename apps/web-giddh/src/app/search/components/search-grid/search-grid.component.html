@@ -83,16 +83,16 @@
                     <td>{{item.uniqueName}}</td>
                     <td>{{item.parent}}</td>
                     <td class="alR">
-                        {{item.openingBalance | giddhCurrency) }}
+                        {{item.openingBalance | giddhCurrency }}
                         <span *ngIf="item.openingBalance > 0">
                             <span class="text-success" *ngIf="item.openBalanceType === 'DEBIT'">Dr</span>
                         <span class="text-danger" *ngIf="item.openBalanceType === 'CREDIT'">Cr</span>
                         </span>
                     </td>
-                    <td class="alR">{{item.debitTotal | giddhCurrency) }}</td>
-                    <td class="alR">{{item.creditTotal | giddhCurrency)}}</td>
+                    <td class="alR">{{item.debitTotal | giddhCurrency }}</td>
+                    <td class="alR">{{item.creditTotal | giddhCurrency}}</td>
                     <td class="alR">
-                        {{item.closingBalance | giddhCurrency) }}
+                        {{item.closingBalance | giddhCurrency }}
                         <span *ngIf="item.closingBalance > 0">
                             <span class="text-success" *ngIf="item.closeBalanceType === 'DEBIT'">Dr</span>
                         <span class="text-danger" *ngIf="item.closeBalanceType === 'CREDIT'">Cr</span>
