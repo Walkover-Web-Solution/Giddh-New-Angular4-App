@@ -603,11 +603,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             //     }];
                             // }
                             // TODO: Prateek end
-                            t.unitRate = [{
-                                code: t.inventory.unit.code,
-                                rate: t.inventory.rate,
-                                stockUnitCode: t.inventory.unit.code
-                            }];
+                            const unitRates = cloneDeep(this.vm.selectedLedger.unitRates);
+                            if (unitRates && unitRates.length) {
+                                t.unitRate = unitRates.map(rate => rate.code = rate.stockUnitCode);
+                                console.log(t);
+                            } else {
+                                t.unitRate = [{
+                                    code: t.inventory.unit.code,
+                                    rate: t.inventory.rate,
+                                    stockUnitCode: t.inventory.unit.code
+                                }];
+                            }
                             initialAccounts.push({
                                 label: `${t.particular.name}(${t.inventory.stock.uniqueName})`,
                                 value: `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`,
@@ -629,7 +635,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             }
                             this.shouldShowWarehouse = true;
                         } else {
-                            initialAccounts.push({ label: t.particular.name, value: t.particular.uniqueName, additional: {
+                            initialAccounts.push({
+                                label: t.particular.name,
+                                value: t.particular.uniqueName,
+                                additional: {
                                 ...t,
                                 uniqueName: t.particular.uniqueName
                             }});
@@ -764,52 +773,52 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         }
                     });
                 }
-                this.vm.selectedLedger.transactions.map(t => {
-                    if (this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
-                        let category = this.vm.getCategoryNameFromAccount(t.particular.uniqueName);
-                        if (this.vm.isValidCategory(category)) {
-                            /**
-                             * replace transaction amount with the actualAmount key that we got in response of get-ledger
-                             * because of ui and api follow different calculation pattern,
-                             * so transaction amount of income/ expenses account differ from both the side
-                             * so overcome this issue api provides the actual amount which was added by user while creating entry
-                             */
-                            t.amount = this.vm.selectedLedger.actualAmount;
-                            // if transaction is stock transaction then also update inventory amount and recalculate inventory rate
-                            if (t.inventory) {
-                                t.inventory.amount = this.vm.selectedLedger.actualAmount;
-                                t.inventory.rate = this.vm.selectedLedger.actualRate;
-                            }
-                        }
-                    }
+                // this.vm.selectedLedger.transactions.map(t => {
+                //     if (this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
+                //         let category = this.vm.getCategoryNameFromAccount(t.particular.uniqueName);
+                //         if (this.vm.isValidCategory(category)) {
+                //             /**
+                //              * replace transaction amount with the actualAmount key that we got in response of get-ledger
+                //              * because of ui and api follow different calculation pattern,
+                //              * so transaction amount of income/ expenses account differ from both the side
+                //              * so overcome this issue api provides the actual amount which was added by user while creating entry
+                //              */
+                //             t.amount = this.vm.selectedLedger.actualAmount;
+                //             // if transaction is stock transaction then also update inventory amount and recalculate inventory rate
+                //             if (t.inventory) {
+                //                 t.inventory.amount = this.vm.selectedLedger.actualAmount;
+                //                 t.inventory.rate = this.vm.selectedLedger.actualRate;
+                //             }
+                //         }
+                //     }
 
-                    if (t.inventory) {
-                        // TODO: Prateek start
-                        let findStocks = accountsArray.find(f => f.value === t.particular.uniqueName + '#' + t.inventory.stock.uniqueName);
-                        if (findStocks) {
-                            let findUnitRates = findStocks.additional.stock;
-                            if (findUnitRates && findUnitRates.accountStockDetails && findUnitRates.accountStockDetails.unitRates.length) {
-                                let tempUnitRates = findUnitRates.accountStockDetails.unitRates;
-                                tempUnitRates.map(tmp => tmp.code = tmp.stockUnitCode);
-                                t.unitRate = tempUnitRates;
-                            } else {
-                                t.unitRate = [{
-                                    code: t.inventory.unit.code,
-                                    rate: t.inventory.rate,
-                                    stockUnitCode: t.inventory.unit.code
-                                }];
-                            }
-                        } else {
-                            t.unitRate = [{
-                                code: t.inventory.unit.code,
-                                rate: t.inventory.rate,
-                                stockUnitCode: t.inventory.unit.code
-                            }];
-                        }
-                        // TODO: Prateek end
-                        t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
-                    }
-                });
+                //     // if (t.inventory) {
+                //     //     // TODO: Prateek start
+                //     //     let findStocks = accountsArray.find(f => f.value === t.particular.uniqueName + '#' + t.inventory.stock.uniqueName);
+                //     //     if (findStocks) {
+                //     //         let findUnitRates = findStocks.additional.stock;
+                //     //         if (findUnitRates && findUnitRates.accountStockDetails && findUnitRates.accountStockDetails.unitRates.length) {
+                //     //             let tempUnitRates = findUnitRates.accountStockDetails.unitRates;
+                //     //             tempUnitRates.map(tmp => tmp.code = tmp.stockUnitCode);
+                //     //             t.unitRate = tempUnitRates;
+                //     //         } else {
+                //     //             t.unitRate = [{
+                //     //                 code: t.inventory.unit.code,
+                //     //                 rate: t.inventory.rate,
+                //     //                 stockUnitCode: t.inventory.unit.code
+                //     //             }];
+                //     //         }
+                //     //     } else {
+                //     //         t.unitRate = [{
+                //     //             code: t.inventory.unit.code,
+                //     //             rate: t.inventory.rate,
+                //     //             stockUnitCode: t.inventory.unit.code
+                //     //         }];
+                //     //     }
+                //     //     // TODO: Prateek end
+                //     //     t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
+                //     // }
+                // });
                 this.vm.flatternAccountList4Select = observableOf(orderBy(accountsArray, 'label'));
                 this.vm.flatternAccountList4BaseAccount = orderBy(accountsForBaseAccountArray, 'label');
             }
