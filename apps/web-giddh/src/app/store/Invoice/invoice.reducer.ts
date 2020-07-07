@@ -31,7 +31,9 @@ export interface InvoiceState {
     };
     invoiceActionUpdated: boolean;
     exportInvoiceInprogress: boolean;
-    exportInvoicebase64Data: any
+    exportInvoicebase64Data: any,
+    // To check get all ledgr data API call in progress
+    isGetAllLedgerDataInProgress: boolean
 
 }
 
@@ -53,7 +55,8 @@ export const initialState: InvoiceState = {
     },
     invoiceActionUpdated: false,
     exportInvoiceInprogress: false,
-    exportInvoicebase64Data: null
+    exportInvoicebase64Data: null,
+    isGetAllLedgerDataInProgress: false
 };
 
 export function InvoiceReducer(state = initialState, action: CustomActions): InvoiceState {
@@ -79,10 +82,16 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             }
             return state;
         }
+        case INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE: {
+            let newState = _.cloneDeep(state);
+            newState.isGetAllLedgerDataInProgress = true;
+            return Object.assign({}, state, newState);
+        }
         case INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE_RESPONSE: {
             let newState = _.cloneDeep(state);
             newState.isBulkInvoiceGenerated = false;
             newState.isBulkInvoiceGeneratedWithoutErrors = false;
+            newState.isGetAllLedgerDataInProgress = false;
             let res: BaseResponse<GetAllLedgersOfInvoicesResponse, CommonPaginatedRequest> = action.payload;
             if (res.status === 'success') {
                 let body = _.cloneDeep(res.body);
