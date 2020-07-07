@@ -456,7 +456,7 @@
                                         </div>
                                         <div class="form-group col-sm-4 col-md-2">
                                             <ng-container *ngIf="index===0">
-                                                <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approval Name"></i></div></label>
+                                                <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approver Name"></i></div></label>
                                             </ng-container>
                                             <div class="custom-select select-caret pos-rel">
                                                 <sh-select [options]="typeOTPList" formControlName="otpType" (selected)="selectedOtpType($event,index, false)" required name="otpType">
@@ -465,7 +465,7 @@
                                         </div>
                                         <div class="form-group col-sm-4 col-md-2">
                                             <ng-container *ngIf="index===0">
-                                                <label class="d-flex relative info-icon">Approval Name <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i></div></label>
+                                                <label class="d-flex relative info-icon">Approver Name <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i></div></label>
 
                                             </ng-container>
                                             <div class="custom-select select-caret pos-rel" *ngIf="item.get('otpType').value !=='BANK'">
@@ -584,7 +584,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-md-2">
                                     <ng-container *ngIf="index===0">
-                                        <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approval Name"></i></div></label>
+                                        <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approver Name"></i></div></label>
                                     </ng-container>
                                     <div class="custom-select select-caret pos-rel">
                                         <sh-select [options]="typeOTPList" [(ngModel)]="item.otpType" (ngModelChange)="selectedOtpType($event, index, true, parentIndex)" [disabled]="isBankUpdateInEdit !== parentIndex" required name="otpType{{parentIndex}}{{index}}">
@@ -593,7 +593,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-md-2">
                                     <ng-container *ngIf="index===0">
-                                        <label class="d-flex relative info-icon">Approval Name <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i></div></label>
+                                        <label class="d-flex relative info-icon">Approver Name <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i></div></label>
 
                                     </ng-container>
                                     <div class="custom-select select-caret pos-rel" *ngIf="item.otpType!=='BANK'">
@@ -726,7 +726,7 @@
                                 </div>
                             </div>
                             <div class="form-group col-sm-4 col-md-2">
-                                <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Approval Name <span class="required">*</span>
+                                <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Approver Name <span class="required">*</span>
                                 <i class="icon-info cursor-pointer"  tooltip="Content here.."></i>
                             </label></ng-container>
                                 <div class="custom-select select-caret pos-rel" *ngIf="item.otpType!=='BANK'">
@@ -849,7 +849,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-md-2">
                                     <ng-container *ngIf="index===0">
-                                        <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approval Name"></i></div></label>
+                                        <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approver Name"></i></div></label>
                                     </ng-container>
                                     <div class="custom-select select-caret pos-rel">
                                         <sh-select [options]="typeOTPList" formControlName="otpType" (selected)="selectedOtpType($event,index, false)" required name="otpType">
@@ -858,7 +858,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-md-2">
                                     <ng-container *ngIf="index===0">
-                                        <label class="d-flex relative info-icon">Approval Name <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i></div></label>
+                                        <label class="d-flex relative info-icon">Approver Name <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i></div></label>
 
                                     </ng-container>
                                     <div class="custom-select select-caret pos-rel" *ngIf="item.get('otpType').value !=='BANK'">

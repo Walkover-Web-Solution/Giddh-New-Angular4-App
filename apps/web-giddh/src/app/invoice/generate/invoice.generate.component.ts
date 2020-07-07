@@ -183,6 +183,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public baseCurrency: string = '';
     /** Selected account unique name */
     public selectedAccountUniqueName: string = '';
+     /** is get ledger data API call in progress */
+    public getLedgerDataInProcess$: Observable<boolean> = of(false);
 
     constructor(
         private modalService: BsModalService,
@@ -204,6 +206,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.isBulkInvoiceGeneratedWithoutErr$ = this.store.select(p => p.invoice.isBulkInvoiceGeneratedWithoutErrors).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
         this.voucherDetailsInProcess$ = this.store.select(p => p.receipt.voucherDetailsInProcess).pipe(takeUntil(this.destroyed$));
+        this.getLedgerDataInProcess$ = this.store.pipe(select(state => state.invoice.isGetAllLedgerDataInProgress),takeUntil(this.destroyed$));
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).subscribe(result => {
