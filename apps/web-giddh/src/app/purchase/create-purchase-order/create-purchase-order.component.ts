@@ -29,7 +29,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
     ngOnInit() {
         this._breakPointObservar.observe([
             '(max-width: 767px)'
-        ])
+        ]);
     }
 
 

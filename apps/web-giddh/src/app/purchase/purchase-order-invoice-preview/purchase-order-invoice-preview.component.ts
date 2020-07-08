@@ -5,7 +5,7 @@ import {
     BsModalService,
     ModalDirective,
     ModalOptions,
-    TabsetComponent, 
+    TabsetComponent,
     PopoverDirective
 } from 'ngx-bootstrap'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -17,7 +17,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 export class PurchaseOrderInvoicePreviewComponent implements OnInit {
     public modelRef: BsModalRef;
     public modalRef: BsModalRef;
-    public  isMulticurrencyAccount : true;
+    public isMulticurrencyAccount: true;
     public orderHistoryAsideState: string = 'out';
     constructor(
         private modalService: BsModalService,
@@ -40,5 +40,8 @@ export class PurchaseOrderInvoicePreviewComponent implements OnInit {
             document.querySelector('body').classList.remove('fixed');
         }
     }
-  
+    openModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template);
+    }
+
 }
