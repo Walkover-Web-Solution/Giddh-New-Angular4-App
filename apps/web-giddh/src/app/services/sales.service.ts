@@ -182,4 +182,15 @@ export class SalesService {
                 catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
     }
 
+    public getInvoiceListForReceiptVoucher(voucherDate: any, model: any): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + SALES_API_V2.GET_INVOICE_LIST_FOR_RECEIPT_VOUCHER;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName).replace(':voucherDate', voucherDate), model).pipe(map((res) => {
+            let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
+            data.request = model;
+            return data;
+        }),
+        catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
+    }
+
 }

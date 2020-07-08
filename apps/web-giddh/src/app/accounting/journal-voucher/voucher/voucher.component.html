@@ -285,5 +285,5 @@
 
 <!-- Recipt entry modal -->
 <ng-template #receiptEntry>
-    <receipt-entry [transaction]="currentTransaction" [activeCompany]="activeCompany" (entriesList)="handleEntries($event)"></receipt-entry>
+    <receipt-entry [transaction]="currentTransaction" [activeCompany]="activeCompany" [voucherDate]="journalDate" (entriesList)="handleEntries($event)"></receipt-entry>
 </ng-template>
