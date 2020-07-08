@@ -415,7 +415,7 @@ button.btn.btn-filter span.icon-cross {
 
 .inputWrapper {
     display: block !important;
-    width: 196px !important;
+    width: 200px !important;
     position: relative;
     height: 36px !important;
 }
@@ -631,7 +631,7 @@ span.icon-export-icon {
         font-size: 18px !important;
     }
     .invoice-container {
-        padding-top: 15px;
+        padding-top: 10px;
     }
     .total-due-sale-wrap {
         display: block !important;
@@ -639,14 +639,18 @@ span.icon-export-icon {
     .totalDueSale {
         padding-bottom: 5px;
     }
+    .invoice-table {
+        margin-bottom: 22px;
+    }
 }
 
 @media (max-width: 575px) {
     button.btn.btn-filter {
         width: 100%;
         justify-content: center;
-        margin-bottom: 5px;
+        margin-bottom: 0;
         font-size: 14px;
+        margin-top: 15px;
     }
     .invoce-controll .nav.nav-tabs {
         margin-bottom: 28px;

@@ -435,10 +435,10 @@
                             20dummy
                         </div>
                     </td>
-                    <td class="text-right tra-rate item-rate " style="height:1px;">
+                    <td class="text-right tra-rate item-rate ">
                         <div>
-                            <div class="td_Wrapper">
-                                <div style="flex: 1;">
+                            <div class="td-Wrapper">
+                                <div>
                                     <div class="wrap-td-data"> <span>
                                             $</span> 200
                                     </div>
@@ -452,9 +452,9 @@
                             </div>
                         </div>
                     </td>
-                    <td class="text-right  item-amount" style="height:1px;">
-                        <div class="td_Wrapper">
-                            <div style="flex: 1;">
+                    <td class="text-right  item-amount">
+                        <div class="td-Wrapper">
+                            <div>
                                 <div class="wrap-td-data"><span>$
                                     </span>200.00</div>
                             </div>
@@ -464,10 +464,10 @@
                             <span>200</span>
                         </div>
                     </td>
-                    <td class="item-discount" style="height:1px;">
-                        <div class=" text-right td_Wrapper">
+                    <td class="item-discount">
+                        <div class=" text-right td-Wrapper">
 
-                            <div style="flex: 1;">
+                            <div>
                                 <div class="wrap-td-data"> <span>$
                                     </span>0.00</div>
                             </div>
@@ -478,9 +478,9 @@
                         </div>
 
                     </td>
-                    <td class="text-right item-tax" style="height:1px;">
-                        <div class="td_Wrapper">
-                            <div style="flex:1;">
+                    <td class="text-right item-tax">
+                        <div class="td-Wrapper">
+                            <div>
                                 <div class="wrap-td-data"><span>$
                                     </span>0.00</div>
                             </div>
@@ -490,9 +490,9 @@
                             <span>0.00</span>
                         </div>
                     </td>
-                    <td class="text-right item-tax dlt-abs" style="height:1px;">
-                        <div class="td_Wrapper">
-                            <div style="flex:1;">
+                    <td class="text-right item-tax delete-btn-absolute">
+                        <div class="td-Wrapper">
+                            <div>
                                 <div class="wrap-td-data">
                                     <span><span>$
                                         </span>0.00</span>
@@ -618,9 +618,9 @@
 
                     <td class="text-right item-rate" style="
           height: 1px;">
-                        <div class="td_Wrapper">
+                        <div class="td-Wrapper">
 
-                            <div style="flex: 1;">
+                            <div>
                                 <input type="text" placeholder="Rate"
                                     class="form-control transaction-rate text-right" />
                             </div>
@@ -632,9 +632,9 @@
                         </div>
                     </td>
 
-                    <td class="text-right item-amount" style="height:1px;">
-                        <div class="td_Wrapper">
-                            <div style="flex: 1;">
+                    <td class="text-right item-amount">
+                        <div class="td-Wrapper">
+                            <div>
                                 <input type="text" placeholder="Amount" class="text-right form-control" />
                             </div>
                             <!-- <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
@@ -644,9 +644,9 @@
                         </div>
                     </td>
 
-                    <td class="item-discount" style="height:1px;">
-                        <div class="td_Wrapper">
-                            <div class="text-right" style="flex:1;">
+                    <td class="item-discount">
+                        <div class="td-Wrapper">
+                            <div class="text-right">
                                 <!-- <discount-control-component #discountComponent [discountMenu]="false" [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum" [showHeaderText]="false" (hideOtherPopups)="closeTaxControlPopup()" (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
                                         [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol" [suffixInput]="selectedSuffixForCurrency">
                                     </discount-control-component> -->
@@ -659,9 +659,9 @@
                         </div>
                     </td>
 
-                    <td class="pos-rel dropdown-container item-tax" style="height:1px;">
-                        <div class="td_Wrapper">
-                            <div class="text-right" style="flex:1;">
+                    <td class="pos-rel dropdown-container item-tax">
+                        <div class="td-Wrapper">
+                            <div class="text-right">
                                 <sh-select></sh-select>
                                 <!-- <tax-control [taxes]="companyTaxesList" [date]="entry.entry-date" [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue" [applicableTaxes]="transaction.applicableTaxes" [exceptTaxTypes]="exceptTaxTypes" [allowedSelectionOfAType]="allowedSelectionOfAType"
                                         [showHeading]="false" [rootClass]="'create-purchase-order-table'" (taxAmountSumEvent)="calculateWhenTrxAltered(entry, transaction)" (hideOtherPopups)="closeDiscountPopup()" [maskInput]="inputMaskFormat" [prefixInput]="invFormData.accountDetails.currencySymbol"
@@ -677,22 +677,23 @@
                         </div>
                     </td>
 
-                    <td class="text-right item-total dlt-abs">
-                        <div class="td_Wrapper">
+                    <td class="text-right item-total delete-btn-absolute">
+                        <div class="td-Wrapper">
 
-                            <div style="flex:1;">
-                                <input type="text" class="form-control text-right" />
+                            <div>
+                                <input type="text" class="form-control">
+                                <input type="checkbox" class="form-control text-right" /> Other Tax ?
 
                                 <!-- <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
                                         <input type="checkbox" class="other-taxes-checkobx" [(ngModel)]="entry.isOtherTaxApplicable" *ngIf="!entry.isOtherTaxApplicable" name="entry.isOtherTaxApplicable_{{entryIdx}}" id="entry.isOtherTaxApplicable_{{entryIdx}}" (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
-                                        <label for="entry.isOtherTaxApplicable_{{entryIdx}}" *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable" style="font-size:13px;vertical-align: middle">Other Tax?</label>
+                                        <label for="entry.isOtherTaxApplicable_{{entryIdx}}" *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable">Other Tax?</label>
                                     </div> -->
                                 <!-- <div *ngIf="entry.isOtherTaxApplicable" class="mt-1">
 
                                         <span>
 
-                                            <div style="display: flex;align-items: center">
-                                                <span style="margin-right: 5px">
+                                            <div>
+                                                <span class="mr-05">
                                                     <a href="javascript: void 0"
                                                        (click)="toggleOtherTaxesAsidePane(true, entryIdx)">
                                                         <img src="assets/images/edit-pencilicon.svg">
@@ -702,13 +703,13 @@
                                         />
                                     </div>
 
-                                    <p style="margin-top: 5px; font-size: 12px; text-transform: capitalize; margin-bottom: 20px;">
+                                    <p class="applicable-tax">
                                         {{ entry.otherTaxModal?.appliedOtherTax?.name}}</p>
                                     </span>
 
                                 </div> -->
                             </div>
-                            <!-- <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && !isPurchaseInvoice" class="tax-in-currency" style="color:#999;">
+                            <!-- <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && !isPurchaseInvoice" class="tax-in-currency">
                                 {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                 <span>{{baseCurrencySymbol}}</span> :
                                 <span>{{entry.otherTaxSum * exchangeRate | giddhCurrency}}</span>
@@ -733,7 +734,7 @@
                 </tr>
             </tbody>
             <!-- region add bulk items -->
-            <div class="p-4 aqua-color add-line-bulk-item" style="width: max-content;">
+            <div class="p-4 aqua-color add-line-bulk-item">
                 <a href="javascript:void 0">+ Add New Line</a>
                 <span> | </span>
                 <a href="javascript:void 0">+ Add Bulk Entries</a>
@@ -967,7 +968,7 @@
 
                                                             <sh-select class="text-left">
                                                                 <!-- <ng-template #optionTemplate1 let-option="option">
-                                                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                                    <a href="javascript:void(0)" class="list-item">
                                                                         <div class="item">{{ option.label }}
                                                                         </div>
                                                                         <div class="item_unq">{{ option.value }}
@@ -1207,14 +1208,14 @@
 
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container *ngIf="!option.additional?.stock">
-                                                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                        <a href="javascript:void(0)" class="list-item">
                                                             <div class="item">{{ option.label }}</div>
                                                             <div class="item_unq">
                                                                 {{ option.additional?.uniqueName }}</div>
                                                         </a>
                                                     </ng-container>
                                                     <ng-container *ngIf="option.additional?.stock">
-                                                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                        <a href="javascript:void(0)" class="list-item">
                                                             <div class="item">{{ option.label }}</div>
                                                             <div class="item_unq">
                                                                 {{ option.additional?.uniqueName }}</div>
@@ -1376,7 +1377,7 @@
 
                                 <div class="card-rate">
                                     <label class="card-label text-right">Rate</label>
-                                    <div style="flex: 1;">
+                                    <div>
                                         <!-- <input type="text" [disabled]="!transaction.isStockTxn"
                                             (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)"
                                             placeholder="Rate" name="transaction.rate_{{entryIdx}}"
@@ -1407,7 +1408,7 @@
                                 <div class="card-amount">
 
                                     <label class="card-label text-right">Amount</label>
-                                    <div style="flex: 1;">
+                                    <div>
                                         <!-- <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction)"
                                             (click)="transactionAmountClicked(transaction)" placeholder="Amount"
                                             name="transaction.amount_{{entryIdx}}" class="form-control text-right"
@@ -1462,7 +1463,7 @@
                                 <div class="card-tax">
                                     <label class="card-label text-right">Tax</label>
 
-                                    <div class="text-right" style="flex:1;">
+                                    <div class="text-right">
                                         <!-- <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
                                             [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue"
                                             [applicableTaxes]="transaction.applicableTaxes"
@@ -1489,7 +1490,7 @@
                             <div class="single-card-row">
                                 <div class="card-total">
                                     <label class="card-label text-right">Total</label>
-                                    <div style="flex:1;">
+                                    <div>
                                         <!-- <input type="tel" name="transaction.total_{{entryIdx}}"
                                             class="form-control text-right"
                                             (blur)="calculateTransactionValueInclusively(entry, transaction)"
@@ -1505,8 +1506,7 @@
                                                 id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                 (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
                                             <label for="entry.isOtherTaxApplicable_{{entryIdx}}"
-                                                *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable"
-                                                style="font-size:13px;vertical-align: middle">Other
+                                                *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable">Other
                                                 Tax?</label> -->
                                         </div>
                                         <!-- *ngIf="entry.isOtherTaxApplicable" below div -->
@@ -1529,8 +1529,7 @@
                                                         name="entry.otherTaxesSum_{{entryIdx}}" /> -->
                                                 </div>
 
-                                                <p
-                                                    style="margin-top: 5px; font-size: 12px; text-transform: capitalize; margin-bottom: 20px;">
+                                                <p class="applicable-tax">
                                                     <!-- {{ entry.otherTaxModal?.appliedOtherTax?.name}}  -->
                                                     Applicable tax
 
@@ -1752,7 +1751,7 @@
                         <!-- <input #grandTotalInr type="text" class="form-control" name="grandTotalMulDum"
                             [prefix]="baseCurrencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                             [(ngModel)]="grandTotalMulDum" (blur)="updateExchangeRate(grandTotalInr.value)"> -->
-                        <input type="text">
+                        <input type="text" class="form-control">
 
                     </div>
                 </div>
@@ -1797,7 +1796,7 @@
                                                 [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
                                                 <ng-template #optionTemplate1 let-option="option">
                                                     <a href="javascript:void(0)" class="list-item"
-                                                        style="border-bottom: 1px solid #ccc;">
+                                                    >
                                                         <div class="item">{{ option.label }}</div>
                                                         <div class="item_unq">{{ option.value }}</div>
                                                     </a>
@@ -1875,11 +1874,11 @@
                 <button type="button" class="btn btn-danger d-inline-block v-align-middle">Clear</button>
 
                 <!-- region purchase invoice -->
-                <span>
+                <span class="d-inline-block v-align-middle">
                     <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
                             class="btn btn-default d-inline-block v-align-middle" *ngIf="isCustomerSelected">Save &amp; Update A/c
                         </button> -->
-                    <button type="button" class="btn btn-default d-inline-block v-align-middle">Save</button>
+                    <button type="button" class="btn btn-default">Save</button>
                 </span>
                 <!-- endregion -->
 

@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <div class="d-flex justify-content-between mt-15">
+    <div class="d-flex justify-content-between mt-15 purchase-order-header">
         <div class="d-flex date-advanceSearch">
             <!-- Invoice filter section -->
             <form #invoiceForm="ngForm" novalidate class="form-inline">
@@ -15,16 +15,17 @@
                         (click)="openModal(purchaseAdvanceSearch)">
                         <span class="icon-advance-filter"></span>
                     </div>
+                    <div class="search-icon-block" (click)="openModal(searchModal)">
+                        <i class="icon-search"></i>
+                    </div>
                 </div>
             </form>
-
-
-            <!-- Invoice filter section ends -->
-            <div class="clear-filter" *ngIf="showAdvanceSearchIcon" (click)="resetAdvanceSearch()">
-                <button class="btn btn-filter">
-                    <span class="icon-cross"></span> Clear Filter
-                </button>
-            </div>
+        </div>
+        <!-- Invoice filter section ends -->
+        <div class="clear-filter" hidden>
+            <button class="btn btn-filter mr-0">
+                <span class="icon-cross"></span> Clear Filter
+            </button>
         </div>
         <div class="d-flex add-invoice">
             <div>
@@ -62,11 +63,52 @@
             </div>
         </div>
     </div>
+    <div class="mobile-search">
+        <div class="clear-filter mr-1">
+            <button class="btn btn-filter mr-0">
+                <span class="icon-cross"></span> Clear Filter
+            </button>
+        </div>
+        <div>
+            <div class="btn-group" dropdown #dp="bs-dropdown">
+                <button dropdownToggle type="button" class="btn btn-primary desktop-view-btn dropdown-toggle"
+                    aria-controls="dropdown-basic">
+                    More
+                    <span class="caret"></span>
+                </button>
+                <ul *dropdownMenu class="dropdown-menu fixedDropdownPlus" role="menu" aria-labelledby="button-basic">
+                    <li role="menuitem">
+                        <a class="dropdown-item cp" href="javascript:void(0)"
+                            (click)="openModalBulkUpdate(template)">Bulk
+                            Update</a>
+                    </li>
+                    <li role="menuitem">
+                        <a class="dropdown-item cp" href="javascript:void(0)">
+                            Convert to bill</a>
+                    </li>
+                    <li role="menuitem">
+                        <a class="dropdown-item cp" href="javascript:void(0)">
+                            Expired</a>
+                    </li>
+                    <li role="menuitem">
+                        <a class="dropdown-item cp" href="javascript:void(0)">Delete</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="btn-wrapper">
+            <button class="btn btn-pink desktop-view-btn mr-0"
+                [routerLink]="['/pages/purchase-management/create-purchase-order']">+
+                New Order
+            </button>
+        </div>
+    </div>
     <div class="table-responsive">
         <table class="table basic mt-15 table-bordered giddh-table on-mobile-view">
             <thead class="t-h-bg1">
                 <tr>
-                    <th style="min-width:50px; width: 4%">
+                    <!-- functioanlity should be like proform/estimate module -->
+                    <th style="min-width:50px; width: 4%" hidden>
                         <div class="table-checkbox-field">
                             <img src="assets/images/unchecked.png">
                             <!-- <img src="assets/images/checked.png"> -->
@@ -126,13 +168,18 @@
             </thead>
             <tbody>
                 <tr>
-                    <td data-title="" class="table-checkbox-field">
-                        <div class="table-checkbox-field">
-                            <img src="assets/images/unchecked.png" />
-                        </div>
-                    </td>
+
+
                     <td data-title="#">
                         1
+                        <!-- make this dynamic , functionality should be like proforma invoice for mobile view only  -->
+                        <div class="mh18_img" class="justify-content-sm-start check-uncheck" hidden>
+                            <img src="assets/images/unchecked.png" />
+                            <img src="assets/images/checked.png" />
+                        </div>
+                        <div class="download-purchase-order">
+                            <i class="icon-download"></i>
+                        </div>
                     </td>
                     <td data-title="Date">
                         23/05/2020
@@ -161,10 +208,10 @@
                                 <span class="icon-enevlop font-12"></span>
                             </a>
                             <a tooltip="Copy">
-                                <span class="icon-copy-small font-12"></span>
+                                <span class="icon-copy-small font-14"></span>
                             </a>
                             <a tooltip="Delete">
-                                <i class="icon-trash font-12"></i>
+                                <i class="icon-trash"></i>
                             </a>
                         </div>
                     </td>
@@ -186,7 +233,36 @@
             </tbody>
         </table>
     </div>
+    <pagination class="pagination" [totalItems]="30"></pagination>
 </div>
+<ng-template #searchModal>
+    <div class="modal-header">
+        <h4 class="modal-title bg pull-left">Search here...</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                <div class="input-container">
+                    <input type="text" placeholder="Search Invoice No." class=" form-control" />
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                <div class="input-container">
+                    <input type="text" placeholder="Search Customer Name" class=" form-control" />
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-6 mt-2">
+                <button class="btn btn-pink">Submit</button>
+            </div>
+
+        </div>
+
+    </div>
+</ng-template>
+
 <ng-template #template>
     <div class="purchase-order-bulk-update">
         <div class="modal-header">

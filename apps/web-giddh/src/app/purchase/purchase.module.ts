@@ -26,6 +26,7 @@ import { PurchaseRecordComponent } from './purchase-record/component/purchase-re
 import { PurchaseSettingComponent } from './purchase-setting/purchase-setting.component';
 import { PurchaseComponent } from './purchase.component';
 import { PurchaseAdvanceSearchComponent } from './purchase-advance-search/purchase-advance-search.component';
+import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
@@ -45,7 +46,8 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
         PurchaseRecordComponent,
         OrderHistoryComponent,
         PurchaseSettingComponent,
-        PurchaseAdvanceSearchComponent],
+        PurchaseAdvanceSearchComponent,
+        PurchaseSendEmailModalComponent],
     imports: [
         PurchaseRoutingModule,
         CollapseModule,

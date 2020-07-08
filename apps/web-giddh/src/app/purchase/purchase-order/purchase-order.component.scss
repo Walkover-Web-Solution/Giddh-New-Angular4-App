@@ -51,7 +51,28 @@
         color: $gray;
         background: $white;
         color: $gray;
+        &:hover {
+            background: #eaeaea;
+        }
     }
+}
+.search-icon-block {
+    display: none;
+}
+
+button.btn.btn-filter {
+    background: #e4e4e4;
+    border: 1px solid #e4e4e4;
+    font-size: 14px;
+    color: #1a237e;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 10px;
+}
+
+button.btn.btn-filter span.icon-cross {
+    margin-right: 5px;
 }
 
 .giddh-table {
@@ -140,11 +161,79 @@
         }
     }
 }
+.mobile-search {
+    display: none;
+}
+.check-uncheck,
+.download-purchase-order {
+    display: none;
+}
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 @media (max-width: 768px) {
     .action-icon {
         display: flex !important;
         width: 120px;
         margin-left: 0;
         margin-top: 5px;
+    }
+    .mobile-search {
+        display: flex;
+        flex-direction: row;
+        display: flex;
+        margin-top: 0;
+    }
+    .add-invoice {
+        display: none;
+    }
+    .search-icon-block {
+        display: flex !important;
+    }
+    .full-width-on-mobile {
+        width: 100%;
+        margin: 5px 0;
+    }
+    .download-purchase-order {
+        width: 30px;
+        height: 30px;
+        border: 1px solid $gainsboro;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        right: 15px;
+        top: 3px;
+        border-radius: 2px;
+        background-color: $white;
+    }
+}
+@media (max-width: 575px) {
+    .purchase-order-header {
+        width: 100%;
+        flex-direction: column;
+        form {
+            width: 100%;
+            .form-group {
+                display: flex;
+                margin-right: 0;
+            }
+        }
+        .date-advanceSearch {
+            width: 100%;
+        }
+        button.btn.btn-filter {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+    .mobile-search {
+        margin-top: 0;
+        display: flex;
+    }
+    .check-uncheck {
+        display: flex;
     }
 }
