@@ -575,7 +575,7 @@ section.static-purchase-table {
 }
 
 .wrap-billing-address.clearfix {
-    margin-top: 10px;
+    margin-top: 0;
     margin-bottom: 5px;
 }
 
@@ -716,30 +716,30 @@ table.table.table-custom-invoice.basic {
     width: 12%;
 }
 
-.td_Wrapper {
+.td-Wrapper {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
-.default-active .td_Wrapper {
+.default-active .td-Wrapper {
     height: 100%;
 }
 
-.set-active .td_Wrapper {
+.set-active .td-Wrapper {
     height: 80%;
     display: initial;
 }
 
-.set-active td:last-child .td_Wrapper {
+.set-active td:last-child .td-Wrapper {
     height: 105% !important;
 }
 
-.set-active.isOtherTax td:last-child .td_Wrapper .differ-currency {
+.set-active.isOtherTax td:last-child .td-Wrapper .differ-currency {
     margin-bottom: 14px;
 }
 
-.dlt-abs {
+.delete-btn-absolute {
     position: relative;
 }
 
@@ -989,6 +989,12 @@ span.eligible-ITC {
         transform: translateY(0) !important;
     }
 }
+.applicable-tax {
+    margin-top: 5px;
+    font-size: 12px;
+    text-transform: capitalize;
+    margin-bottom: 20px;
+}
 @media (min-width: 768px) {
     .wrapper-customer-table {
         .wrap-billing-address .form-group {
@@ -1015,14 +1021,30 @@ span.eligible-ITC {
         .customer-purchase-table {
             padding-right: 15px;
             .inner-container {
-                .invoice-due-date {
-                    margin-left: 46%;
+                .order-expected-delivery {
+                    flex-direction: column;
+                    .invoice-due-date {
+                        padding: 0;
+                        margin-left: 0 !important;
+                        position: static;
+                        margin-top: 15px;
+                        .d-flex {
+                            flex-direction: column;
+                            input {
+                                margin-left: 0;
+                                width: 100% !important;
+                            }
+                        }
+                    }
                 }
                 .select-customer-name {
                     sh-select,
                     input[type="text"] {
                         width: 100%;
                         float: left;
+                    }
+                    .wrap-billing-address {
+                        margin-bottom: 0;
                     }
                 }
             }
@@ -1103,12 +1125,15 @@ span.eligible-ITC {
         margin-top: 5px;
     }
 
-    #actionPane .btn-danger {
-        margin-bottom: 5px;
+    #actionPane {
+        .btn-danger,
+        .btn-default {
+            margin-bottom: 5px;
+        }
     }
     #actionPane .update-mode {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
     }
     #actionPane .generate-invoice {
         min-width: 189px;
@@ -1120,18 +1145,6 @@ span.eligible-ITC {
                     flex-direction: column;
                     .col-sm-6 {
                         padding: 0;
-                    }
-                    .invoice-due-date {
-                        padding: 0;
-                        margin-left: 0 !important;
-                        position: static;
-                        .d-flex {
-                            flex-direction: column;
-                            input {
-                                margin-left: 0;
-                                width: 100% !important;
-                            }
-                        }
                     }
                 }
                 .delivery-from-field {

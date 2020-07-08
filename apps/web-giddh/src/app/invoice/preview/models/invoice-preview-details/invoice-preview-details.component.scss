@@ -199,9 +199,11 @@
     z-index: -9;
     height: 100%;
     .expand-button {
-        position: absolute;
+        position: relative;
         right: 15px;
         font-size: 14px;
+        text-align: right;
+        margin-top: 15px;
         span {
             margin-right: 5px;
         }
@@ -605,7 +607,7 @@ p {
     padding: 0;
     font-size: 14px;
     max-width: 760px;
-    margin: 20px auto;
+    margin: 20px auto 120px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 

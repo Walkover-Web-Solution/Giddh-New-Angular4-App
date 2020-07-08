@@ -1,0 +1,51 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Send Mail</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+
+    <div class="row mrB1">
+        <div class="col-sm-12">
+            <input type="text" class="form-control" placeholder="Enter email addresses">
+        </div>
+    </div>
+
+    <div class="clearfix">
+        <h3 class="fs16 mrB">Invoice Copy</h3>
+        <hr>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="Transport">
+                Transport
+            </label>
+        </div>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" value="Customer">
+                Customer
+            </label>
+        </div>
+    </div>
+
+
+    <!-- region buttons -->
+    <div class="row mrT2 mrB1">
+        <div class="col-sm-12">
+
+            <div class="btn-group" role="group" aria-label="Basic example">
+
+                <button type="button" class="btn btn-success">Send
+                </button>
+
+                <button type="button" class="btn btn-danger">Cancel</button>
+
+            </div>
+        </div>
+    </div>
+    <!-- endregion -->
+
+</div>

@@ -129,7 +129,8 @@
                                             </span>
 
                                             <span class="pos-rel">
-                                                <a href="javascript:void 0" tooltip="Send Email" placement="top"><i
+                                                <a href="javascript:void 0" tooltip="Send Email" placement="top"
+                                                    (click)="openModal(sendEmailModal)"><i
                                                         class="fa fa-envelope-o"></i></a>
                                             </span>
 
@@ -576,3 +577,6 @@
     </div>
     <!-- endregion -->
 </div>
+<ng-template #sendEmailModal>
+    <purchase-send-email-modal></purchase-send-email-modal>
+</ng-template>

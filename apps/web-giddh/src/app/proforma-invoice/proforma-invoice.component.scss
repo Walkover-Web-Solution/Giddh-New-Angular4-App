@@ -1494,30 +1494,30 @@ label.salesCountryLabel {
     width: 12%;
 }
 
-.td_Wrapper {
+.td-Wrapper {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
-.defaultActive .td_Wrapper {
+.defaultActive .td-Wrapper {
     height: 100%;
 }
 
-.set-active .td_Wrapper {
+.set-active .td-Wrapper {
     height: 80%;
     display: initial;
 }
 
-.set-active td:last-child .td_Wrapper {
+.set-active td:last-child .td-Wrapper {
     height: 105% !important;
 }
 
-.set-active.isOtherTax td:last-child .td_Wrapper .differ-currency {
+.set-active.isOtherTax td:last-child .td-Wrapper .differ-currency {
     margin-bottom: 14px;
 }
 
-.dlt-abs {
+.delete-btn-absolute {
     position: relative;
 }
 
