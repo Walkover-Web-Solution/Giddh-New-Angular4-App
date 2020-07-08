@@ -470,8 +470,8 @@
 
         <div class="pull-right">
             <input type="file" [hidden]="true" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect
-                   [uploadInput]="uploadInput" (uploadOutput)="onWebUpload($event)" #webFileInput>
-          <label class="upload_div pr-15" [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}" (click)="onUploadOutput()">
+                   [uploadInput]="uploadInput" (uploadOutput)="onWebUpload($event)" #webFileInput (click)="onUploadOutput()">
+          <label class="upload_div pr-15" [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
 
             <label for="invoiceFile" class="cp fs16">
               <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
