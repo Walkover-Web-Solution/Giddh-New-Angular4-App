@@ -55,8 +55,8 @@
                             <input type="text" [(ngModel)]="currentTxn.inventory.unit.rate"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
-                                [mask]="inputMaskFormat" [customDecimalPlaces]="4"
-                                (ngModelChange)="changePrice($event)" name="unitPrice"
+                                [mask]="inputMaskFormat" [customDecimalPlaces]="ratePrecision"
+                                (ngModelChange)="changePrice($event)" name="unitPrice" (keyup)="isInclusiveEntry = false"
                                 class="form-control text-right" />
                             <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
