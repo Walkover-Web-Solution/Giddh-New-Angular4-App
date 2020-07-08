@@ -174,7 +174,8 @@ $input-height: 3rem !default;
         }
         th {
             font-size: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
             font: 400 14px system-ui;
         }
         th,
@@ -190,7 +191,8 @@ $input-height: 3rem !default;
         }
     }
     .calendar-table {
-        border: $md-drppicker-calendar-border-size solid $md-drppicker-calendar-border-color;
+        border: $md-drppicker-calendar-border-size solid
+            $md-drppicker-calendar-border-color;
         padding: $md-drppicker-calendar-margin;
         border-radius: $md-drppicker-calendar-border-radius;
         background-color: $md-drppicker-calendar-bg-color;
@@ -217,7 +219,8 @@ $input-height: 3rem !default;
         text-align: center;
         width: $md-drppicker-cell-width;
         height: $md-drppicker-cell-height;
-        border: $md-drppicker-cell-border-size solid $md-drppicker-cell-border-color;
+        border: $md-drppicker-cell-border-size solid
+            $md-drppicker-cell-border-color;
         white-space: nowrap;
         cursor: pointer;
         height: 2em;
@@ -433,7 +436,7 @@ $input-height: 3rem !default;
             padding: 0;
         }
     }
-    th.month>div {
+    th.month > div {
         position: relative;
         display: inline-block;
     }
@@ -448,7 +451,8 @@ $input-height: 3rem !default;
         cursor: not-allowed;
     }
     .label-input {
-        border: $md-drppicker-control-border-size solid $md-drppicker-control-border-color;
+        border: $md-drppicker-control-border-size solid
+            $md-drppicker-control-border-color;
         border-radius: $md-drppicker-control-border-radius;
         color: $md-drppicker-control-color;
         height: $md-drppicker-control-line-height;
@@ -459,7 +463,8 @@ $input-height: 3rem !default;
         padding: 0 0 0 28px;
         width: 100%;
         &.active {
-            border: $md-drppicker-control-active-border-size solid $md-drppicker-control-active-border-color;
+            border: $md-drppicker-control-active-border-size solid
+                $md-drppicker-control-active-border-color;
             border-radius: $md-drppicker-control-active-border-radius;
         }
     }
@@ -622,11 +627,12 @@ $input-height: 3rem !default;
         margin: 0;
         padding-right: 15px;
         position: absolute;
-        bottom: 15px;
+        bottom: 0;
         background-color: #fff;
         padding-top: 9px;
         z-index: 999;
         right: 0;
+        padding-bottom: 15px;
         width: calc(100% - 218px);
     }
     button {
@@ -709,7 +715,7 @@ $input-height: 3rem !default;
 }
 
 .md-drppicker td.in-range.in-range-start.in-range-end span {
-    background-color: $portage!important;
+    background-color: $portage !important;
     border-radius: 50%;
     color: $nero;
     border-color: $gray;
@@ -852,7 +858,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     }
 }
 
-@media(min-width:768px) {
+@media (min-width: 768px) {
     .custom-select-btn {
         display: none;
     }
@@ -1302,7 +1308,7 @@ tr:first-child.in-range-hovered.available {
     }
 }
 
-@media(min-height:767px) {
+@media (min-height: 767px) {
     .ranges-perfect-scrollbar {
         overflow: initial !important;
         .ps {
@@ -1311,10 +1317,9 @@ tr:first-child.in-range-hovered.available {
     }
 }
 
-
 /*media query*/
 
-@media(max-width:767px) {
+@media (max-width: 767px) {
     .md-drppicker {
         flex-direction: column;
         z-index: 999;
@@ -1564,7 +1569,7 @@ tr:first-child.in-range-hovered.available {
     }
 }
 
-@media(max-width:375px) {
+@media (max-width: 375px) {
     .md-drppicker {
         .calender-container {
             .calender-container-wrapper {
@@ -1583,7 +1588,7 @@ tr:first-child.in-range-hovered.available {
     }
 }
 
-@media(max-height:767px) {
+@media (max-height: 767px) {
     .drops-down-right {
         height: 470px;
         overflow: hidden !important;
