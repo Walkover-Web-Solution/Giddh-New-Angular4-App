@@ -13,7 +13,8 @@ import {
     OnInit,
     SimpleChanges,
     ViewChild,
-    TemplateRef
+    TemplateRef,
+    HostListener
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
@@ -81,6 +82,33 @@ export interface PayNowRequest {
 })
 
 export class ContactComponent implements OnInit, OnDestroy, OnChanges {
+    isShow: boolean;
+    topPosToStartShowing = 100;
+    @HostListener('window:scroll')
+    checkScroll() {
+        
+      // window의 scroll top
+      // Both window.pageYOffset and document.documentElement.scrollTop returns the same result in all the cases. window.pageYOffset is not supported below IE 9.
+  
+      const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+  
+      console.log('[scroll]', scrollPosition);
+      
+      if (scrollPosition >= this.topPosToStartShowing) {
+        this.isShow = true;
+      } else {
+        this.isShow = false;
+      }
+    }
+  
+    // TODO: Cross browsing
+    scrollTop() {
+      window.scroll({ 
+        top: 0, 
+        left: 0, 
+        behavior: 'smooth' 
+      });
+    }
     /** Stores the current range of date picker */
     public selectedDateRange: any;
     public selectedDateRangeUi: any;

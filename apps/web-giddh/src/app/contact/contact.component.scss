@@ -316,6 +316,11 @@ span.inputAddon {
     width: 200px;
     border: none;
 }
+.is-mobile{
+    margin-bottom:10px !important;
+    margin-top:0;
+}
+
 /*responsive*/
 @media (max-width: 768px) {
     .aging-table > tbody > tr input[type="checkbox"] {
@@ -399,19 +404,16 @@ span.inputAddon {
         width: 100%;
     }
     .customer-footer-box {
-        padding-bottom: 10px;
-        float: right !important;
+        float: left !important;
     }
     .form-inline{
         position: relative;
         .dis{
-            position: absolute;
-            left: 0;
-            top: 0;
+            display:none;
             }
             .header-left{
-                width: calc(100% - 50px);
-                margin-left: 45px;
+                width: calc(100% - 100px);
+                margin-left: 100px;
                 .form-group {
                     vertical-align: bottom !important;
                     margin-bottom: 5px;
@@ -421,14 +423,18 @@ span.inputAddon {
                     }
                 }
             }
+            .moreBtn{
+                display:none;
+            }
     }
 
     .customer-footer-box {
         padding-top: 0;
         float: left !important;
+        margin-top: -38px;
     }
     .customer-footer-box + .btn-group {
-        float: left !important;
+        display:none;
     }
     .customer-right-wrap {
         position: relative;
@@ -436,15 +442,47 @@ span.inputAddon {
     .pagination-main .mt-5 {
         margin-top: 0px;
     }
-    .paginationWrapper {
-        margin-bottom: 0px !important;
-    }
     .customer-name,
     .vendor-customer-name {
         padding-right: 20px !important;
     }
     .customer-name .icon-ellipse {
         top: 8px;
+    }
+    .icon-options{
+        display:none;
+    }
+
+    .vendor-name-field{
+        .table-checkbox{
+            input[type="checkbox"]{
+                display:none;
+            }
+        }
+        .icon-ellipse{
+            display:none;
+        }
+    }
+    .scroll-top{
+        position: fixed;
+        bottom: 20px;
+        right: 10px;
+        font-size: 24px;
+        text-align: center;
+        background:#1b1f6d;
+        border-radius: 90px;
+        padding: 10px;
+        z-index: 99;
+        color:#fff;
+        height: 60px;
+        width: 60px;
+        img{
+            width:100%;
+            vertical-align:top;
+        }
+    }
+    .is-desktop{
+        display:none;
     }
 }
 @media (max-width: 575px) {
@@ -456,8 +494,7 @@ span.inputAddon {
         }
     }
     .customer-footer-box {
-        padding-bottom: 10px;
-        float: none !important;
+        padding-bottom: 0px;
         .customer-inner-box{
             display: flex;
             align-items: center;
@@ -470,6 +507,12 @@ span.inputAddon {
             }
         }
     }
+
+    .form-inline{
+        .header-left {
+            padding-top: 10px;
+        }
+    } 
     .customer-right-wrap h4.mb-1.pdR2 {
         margin-bottom: 10px;
     }
@@ -504,9 +547,6 @@ span.inputAddon {
         text-align: left !important;
         padding-left: 15px;
     }
-    .customer-footer-box {
-        padding-top: 10px;
-    }
 
     .pos-rel.word-wrap .icon-dots-three-vertical {
         display: block;
@@ -527,6 +567,17 @@ span.inputAddon {
     }
 }
 @media (min-width: 768px) {
+
+    .is-mobile{
+        display:none;
+    }
+
+    .scroll-top{
+        display:none;
+    }
+    .result-btn{
+        display:none;
+    }
     .onMobileView.btn-group {
         display: none;
     }
