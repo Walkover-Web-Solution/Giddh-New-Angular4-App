@@ -489,6 +489,22 @@ export class GeneralService {
     }
 
     /**
+    * This is to allow only digits
+    *
+    * @param {*} event
+    * @returns {boolean}
+    * @memberof GeneralService
+    */
+    public allowOnlyNumbers(event: any): boolean {
+        if (event.keyCode >= 48 && event.keyCode <= 57) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    /**
      * To get date range from DD-MM-YYYY to MM-DD-YYYY to set date in component datepicker
      *
      * @param {string} fromDate
