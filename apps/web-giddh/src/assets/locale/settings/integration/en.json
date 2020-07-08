@@ -74,7 +74,8 @@
         "max_limit_alert": "You can not select max bank limit more than 1",
         "amount_upto": "Amount Upto",
         "select_otp": "Select OTP",
-        "approver_name": "Approver Name"
+        "approver_name": "Approver Name",
+        "select_otp_tooltip": "The OTP will reach the person selected in Approver Name"
 
     }
 }
