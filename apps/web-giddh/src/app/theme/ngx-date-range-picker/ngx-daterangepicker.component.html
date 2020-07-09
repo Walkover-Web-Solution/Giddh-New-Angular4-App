@@ -257,10 +257,11 @@
                 <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"
                     [config]="{suppressScrollX: false, suppressScrollY: false}" [style.max-height.px]="280" (psScrollUp)="scrollUp()" (psScrollDown)="scrollDown()" (psYReachStart)="setCalendarToActiveMonth('start')" (psYReachEnd)="setCalendarToActiveMonth('end')">
                     <div *ngIf="showCalInRanges && !showMonthPicker" (mousewheel)="mouseUp($event)" (touchmove)="mouseUp($event)">
-                        <div *ngFor="let calendarMonth of calendarMonths;">
-                            <div class="calendar" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
-                                <div class="calendar-table" *ngIf="calendarMonth && calendarMonth.start"
-                                    (mouseenter)="setActiveMonth(calendarMonth, 'start');">
+                        <div *ngFor="let calendarMonth of calendarMonths; let calendarIndex = index;">
+                            <div class="calendar calendar-placeholder" *ngIf="!(calendarIndex >= startIndex && calendarIndex <= endIndex)" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">{{calendarIndex}}</div>
+                            <div class="calendar" *ngIf="calendarIndex >= startIndex && calendarIndex <= endIndex" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
+                                {{calendarIndex}}
+                                <div class="calendar-table" *ngIf="calendarMonth && calendarMonth.start" (mouseenter)="setActiveMonth(calendarMonth, 'start');">
                                     <table class="table-condensed">
                                         <thead>
                                             <tr>
@@ -369,8 +370,8 @@
                             </div>
                             <!-- start date calendar container -->
                             <!-- end date calendar container -->
-                            <div class="calendar right"
-                                *ngIf="showCalInRanges && !singleDatePicker && !showMonthPicker">
+                            <div class="calendar right calendar-placeholder" *ngIf="showCalInRanges && !singleDatePicker && !showMonthPicker && !(calendarIndex >= startIndex && calendarIndex <= endIndex)">{{calendarIndex}}</div>
+                            <div class="calendar right" *ngIf="showCalInRanges && !singleDatePicker && !showMonthPicker && (calendarIndex >= startIndex && calendarIndex <= endIndex)">
                                 <div class="calendar-table">
                                     <table class="table-condensed" *ngIf="calendarMonth && calendarMonth.end"
                                         (mouseenter)="setActiveMonth(calendarMonth, 'end');">
