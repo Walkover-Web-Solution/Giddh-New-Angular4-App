@@ -86,14 +86,7 @@ export class DataFormatter {
             });
         };
 
-        this.exportData.forEach(group => {
-            total = this.calculateTotal(group, total);
-        });
-
-        total.cr = Number(total.dr.toString().substring(0, total.dr.toString().indexOf(".") + 5));
-        total.dr = Number(total.dr.toString().substring(0, total.dr.toString().indexOf(".") + 5));
-        total.ob = Number(total.ob.toString().substring(0, total.ob.toString().indexOf(".") + 5));
-        total.cb = Number(total.cb.toString().substring(0, total.cb.toString().indexOf(".") + 5));
+        total = this.calculateGrandTotal(total);
 
         createCsv(this.exportData);
         let data: any[] = [];
@@ -151,15 +144,8 @@ export class DataFormatter {
             });
         };
 
-        this.exportData.forEach(group => {
-            total = this.calculateTotal(group, total);
-        });
+        total = this.calculateGrandTotal(total);
 
-        total.cr = Number(total.dr.toString().substring(0, total.dr.toString().indexOf(".") + 5));
-        total.dr = Number(total.dr.toString().substring(0, total.dr.toString().indexOf(".") + 5));
-        total.ob = Number(total.ob.toString().substring(0, total.ob.toString().indexOf(".") + 5));
-        total.cb = Number(total.cb.toString().substring(0, total.cb.toString().indexOf(".") + 5));
-        
         createCsv(this.exportData, 0);
         let data: any[] = [];
         data.push(this.suffixRecordType(total.ob));
@@ -183,7 +169,26 @@ export class DataFormatter {
 
         total.cr += group.creditTotal;
         total.dr += group.debitTotal;
-        
+
+        return total;
+    }
+
+    /**
+     * This will calculate grand total
+     *
+     * @param {*} total
+     * @returns {Total}
+     * @memberof DataFormatter
+     */
+    public calculateGrandTotal(total): Total {
+        this.exportData.forEach(group => {
+            total = this.calculateTotal(group, total);
+        });
+
+        total.cr = Number(total.dr.toString().substring(0, total.dr.toString().indexOf(".") + 5));
+        total.dr = Number(total.dr.toString().substring(0, total.dr.toString().indexOf(".") + 5));
+        total.ob = Number(total.ob.toString().substring(0, total.ob.toString().indexOf(".") + 5));
+        total.cb = Number(total.cb.toString().substring(0, total.cb.toString().indexOf(".") + 5));
         return total;
     }
 
