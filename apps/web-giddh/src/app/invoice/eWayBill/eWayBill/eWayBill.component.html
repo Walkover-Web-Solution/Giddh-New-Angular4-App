@@ -41,7 +41,7 @@
                                         </div>
                                     </th>
 
-                                    <th class="td_in_searchBox nowrap" #searchInvoiceContainer>
+                                    <th class="td-search-box nowrap" #searchInvoiceContainer>
 
                                         <div [hidden]="showSearchInvoiceNo">
                                             <span> INVOICE NO.</span>
@@ -57,7 +57,7 @@
 
                                     </th>
 
-                                    <th style="width:20%" class="td_in_searchBox nowrap" #searchCustomerContainer>
+                                    <th style="width:20%" class="td-search-box nowrap" #searchCustomerContainer>
                                         <!-- clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerUniqueName')" -->
                                         <div [hidden]="showSearchCustomer">
                                             <span> CUSTOMER NAME</span>
@@ -373,13 +373,13 @@
 
                         <span class="pd0 mrR3">
                             <input id="regular" class="radio-custom cp ml0" type="radio" name="vehicleType" required
-                            [(ngModel)]="updateEwayVehicleform.vehicleType" value="R">
+                                [(ngModel)]="updateEwayVehicleform.vehicleType" value="R">
                             <label for="regular" class="radio-custom-label">Regular</label>
                         </span>
 
                         <span class="pd0 mrR3">
-                            <input id="dimensionalCargo" class="radio-custom cp ml0" type="radio" name="vehicleType" required
-                            value="O" [(ngModel)]="updateEwayVehicleform.vehicleType">
+                            <input id="dimensionalCargo" class="radio-custom cp ml0" type="radio" name="vehicleType"
+                                required value="O" [(ngModel)]="updateEwayVehicleform.vehicleType">
                             <label for="dimensionalCargo" class="radio-custom-label">Over Dimensional Cargo</label>
                         </span>
 

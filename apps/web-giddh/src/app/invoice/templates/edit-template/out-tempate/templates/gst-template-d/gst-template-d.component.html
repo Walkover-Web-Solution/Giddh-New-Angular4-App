@@ -86,7 +86,7 @@
             </tbody>
         </table>
     </div>
-    <div id="Template-table" class="pos-rel" (click)="onClickSection('table')"
+    <div id="template-table" class="pos-rel" (click)="onClickSection('table')"
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table">
             <i class="fa fa-pencil"></i>
@@ -98,8 +98,9 @@
                     <th *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">
                         {{(fieldsAndVisibility.table.sNo?.label?.length > 0) ? fieldsAndVisibility.table.sNo?.label : 'S No'}}
                     </th>
-                    <th *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display" class="text-left">
-                            {{(fieldsAndVisibility.table.item?.display && fieldsAndVisibility.table.item?.label?.length > 0) ? fieldsAndVisibility.table.item?.label : (fieldsAndVisibility.table.date?.display && fieldsAndVisibility.table.date?.label?.length > 0) ? fieldsAndVisibility.table.date?.label : (fieldsAndVisibility.table.item?.display) ? 'Item' : 'Date'}}
+                    <th *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display"
+                        class="text-left">
+                        {{(fieldsAndVisibility.table.item?.display && fieldsAndVisibility.table.item?.label?.length > 0) ? fieldsAndVisibility.table.item?.label : (fieldsAndVisibility.table.date?.display && fieldsAndVisibility.table.date?.label?.length > 0) ? fieldsAndVisibility.table.date?.label : (fieldsAndVisibility.table.item?.display) ? 'Item' : 'Date'}}
                     </th>
                     <th *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right">
                         {{(fieldsAndVisibility.table.hsnSac?.label?.length > 0) ? fieldsAndVisibility.table.hsnSac?.label : 'HSN/SAC'}}
@@ -128,9 +129,11 @@
                 </tr>
                 <tr>
                     <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">1</td>
-                    <td *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display" class="text-left">
+                    <td *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display"
+                        class="text-left">
                         <span *ngIf="fieldsAndVisibility.table.item?.display">Dummy Product Edition 1 </span>
-                        <p *ngIf="fieldsAndVisibility.table.date?.display" [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'} ">10-09- 2017</p>
+                        <p *ngIf="fieldsAndVisibility.table.date?.display"
+                            [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'} ">10-09- 2017</p>
                     </td>
                     <td *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right">123456 (H)</td>
                     <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">2.00 Kg</td>
@@ -143,10 +146,12 @@
                 </tr>
                 <tr>
                     <td *ngIf="fieldsAndVisibility.table.sNo?.display" class="text-right">2</td>
-                    <td *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display" class="text-left">
-                            <span *ngIf="fieldsAndVisibility.table.item?.display">Dummy Product Edition 2 </span>
-                            <p *ngIf="fieldsAndVisibility.table.date?.display" [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'} ">10-09- 2017</p>
-                        </td>
+                    <td *ngIf="fieldsAndVisibility.table.item?.display || fieldsAndVisibility.table.date?.display"
+                        class="text-left">
+                        <span *ngIf="fieldsAndVisibility.table.item?.display">Dummy Product Edition 2 </span>
+                        <p *ngIf="fieldsAndVisibility.table.date?.display"
+                            [ngStyle]="{ 'font-size': inputTemplate.fontSmall + 'px'} ">10-09- 2017</p>
+                    </td>
                     <td *ngIf="fieldsAndVisibility.table.hsnSac?.display" class="text-right">54321 (H)</td>
                     <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">1.00 Nos
                     </td>
@@ -277,7 +282,7 @@
         </table> -->
     </div>
 
-    <div id="Template-footer" class="clearfix pos-rel" (click)="onClickSection('footer')"
+    <div id="template-footer" class="clearfix pos-rel" (click)="onClickSection('footer')"
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
             <i class="fa fa-pencil"></i>

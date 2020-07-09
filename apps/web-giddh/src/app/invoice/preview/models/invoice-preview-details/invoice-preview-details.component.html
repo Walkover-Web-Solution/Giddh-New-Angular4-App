@@ -15,12 +15,11 @@
                         <div class="btn-group" dropdown *ngIf="voucherType === 'sales' && !isMobileView"
                             [autoClose]="true">
                             <button id="button-basic2" dropdownToggle type="button"
-                                class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv"
-                                aria-controls="dropdown-basic3">
+                                class="btn btn-pink dropdown-toggle dropdown-btn-new" aria-controls="dropdown-basic3">
                                 + New Invoice <span class="caret"></span>
                             </button>
-                            <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu ddl-width-small" role="menu"
-                                aria-labelledby="button-basic2">
+                            <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu dropdown-width-small"
+                                role="menu" aria-labelledby="button-basic2">
                                 <li role="menuitem">
                                     <a class="dropdown-item" href="javascript:void(0)"
                                         (click)="goToInvoice('cash')">Cash Invoice</a>
@@ -361,7 +360,7 @@
                                                 <tbody>
                                                     <tr>
                                                         <td class="text-left" width="30%">
-                                                            <table class="numDetail">
+                                                            <table class="number-detail-series">
                                                                 <tbody>
                                                                     <tr>
                                                                         <td>
@@ -481,7 +480,7 @@
                                         </table>
 
                                     </div>
-                                    <div id="Template-table">
+                                    <div id="template-table">
                                         <article>
                                             <table id="item" class="item" cellpadding="0" cellspacing="0">
                                                 <thead>
@@ -610,7 +609,7 @@
                                             </table>
                                         </article>
                                     </div>
-                                    <div id="Template-footer">
+                                    <div id="template-footer">
                                         <div class="clearfix">
                                             <article>
                                                 <table class="balance">
@@ -768,11 +767,11 @@
     <!-- endregion -->
 
 </div>
-<div class="aside-overlay" *ngIf="orderHistoryAsideState === 'in'"></div>
+<!-- <div class="aside-overlay" *ngIf="orderHistoryAsideState === 'in'"></div>
 <div *ngIf="orderHistoryAsideState === 'in'">
-    <!-- <aside-order-history (closeAsideEvent)="toggleOrderHistoryAsidePane($event)" >
-    </aside-order-history> -->
-</div>
+    <aside-order-history (closeAsideEvent)="toggleOrderHistoryAsidePane($event)">
+    </aside-order-history>
+</div> -->
 
 <ng-template #template>
     <div class="relative header-close-btn">

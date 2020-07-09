@@ -11,6 +11,7 @@ import {
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
+import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({
     selector: 'purchase-order',
     templateUrl: './purchase-order.component.html',
@@ -21,6 +22,7 @@ export class PurchaseOrderComponent implements OnInit {
     public modelRef: BsModalRef;
     public modalRef: BsModalRef;
     public isMobileSite: boolean;
+    public isMobileScreen: boolean = true;
     public selectedDateRangeUi: any;
     public selectOverDate: IOption[] = [
         { label: "rakesh", value: "1234" }, { label: "rakesh2", value: "1235" },
@@ -31,8 +33,14 @@ export class PurchaseOrderComponent implements OnInit {
     constructor(
         private modalService: BsModalService,
         private generalService: GeneralService,
+        private _breakPointObservar: BreakpointObserver,
     ) { }
     ngOnInit() {
+        this._breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
     }
 
     public showGiddhDatepicker(element: any): void {

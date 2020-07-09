@@ -92,7 +92,7 @@
   text-align: right !important;
 }
 
-#default header .numDetail strong {
+#default header .number-detail-series strong {
   width: 50px;
   float: left;
 }
@@ -215,7 +215,7 @@ header img {
 #default table.item tfoot tr th {
   font-weight: bold;
 } */
-/* 
+/*
 #default table.item tfoot tr th {
   border-top: 1px solid rgba(89, 89, 89, 0.6);
 } */
@@ -397,7 +397,7 @@ footer p {
 
 <body ng-reflect-ng-style="[object Object]" class="ng-star-inserted" style="font-family: &quot;open sans&quot;; padding: 10px;"><div><div id="Template-header" ng-reflect-ng-class="[object Object]"><!--bindings={
   "ng-reflect-ng-if": "false"
-}--><header><table><tbody><tr><td><img alt="" class="pull-left max-width-180" ng-reflect-ng-style="[object Object]" src="null" hidden="" style="max-width: 70px;"></td><td class="text-right"><h2 ng-reflect-ng-style="[object Object]" style="color: rgb(246, 52, 7);">TAX INVOICE</h2></td></tr></tbody></table></header><table><tbody><tr><td style="padding-bottom: 10px;"><table><tbody><tr><td style="width: 70px;"><strong>Billed to:</strong></td><td><strong>Mr. Alok Gangrade (Mob. 9876543210)</strong></td></tr><tr><td><strong>Address:</strong></td><td>Green Soft Solutions <br>24 Building Name, <br>3rd Floor 15 A.B. Road <br>Indore (M.P.) 452000</td></tr><tr><td style="padding: 2px 0;"><strong>GSTIN</strong></td><td style="padding: 2px 0;">23AAACW9768L1ZO</td></tr><tr><td><strong>Shipped at:</strong></td><td>Green Soft Solutions <br>24 Building Name, <br>3rd Floor 15 A.B. Road <br>Indore (M.P.) 452000</td></tr></tbody></table></td><td style="text-align: right; padding-bottom: 10px;"><p style="padding-bottom: 4px;"><strong>Invoice No.</strong> 201770323-64</p><p style="padding-bottom: 4px;"><strong>Invoice Date</strong> 23/06/2017</p><p style="padding-bottom: 4px;"><strong>Due Date</strong> 23/06/2017</p><strong style="padding-top: 29px; display: block;">Walkover Web Solutions Private Limited</strong><p>405-406, Capt. C. S. Naydu Arcade, 10/2, <br> near Greater Kailash Hospital, Old<br> Palasia, Indore 452001(M. P.)</p><p><strong>GSTIN</strong> 22BBBBBB000A1Z0</p></td></tr></tbody></table></div><table style="padding-bottom:5px;"><tbody><tr><td>Ship Date</td><td>Ship Via</td><td>Tracking No.</td><td>Field 1</td><td>Field 2</td><td>Field 3</td></tr><tr><td>30/06/2017</td><td>FedEx</td><td>21654</td><td>Custom</td><td>Custom</td><td>Custom</td></tr></tbody></table><div id="Template-table" ng-reflect-ng-class="[object Object]"><!--bindings={
+}--><header><table><tbody><tr><td><img alt="" class="pull-left max-width-180" ng-reflect-ng-style="[object Object]" src="null" hidden="" style="max-width: 70px;"></td><td class="text-right"><h2 ng-reflect-ng-style="[object Object]" style="color: rgb(246, 52, 7);">TAX INVOICE</h2></td></tr></tbody></table></header><table><tbody><tr><td style="padding-bottom: 10px;"><table><tbody><tr><td style="width: 70px;"><strong>Billed to:</strong></td><td><strong>Mr. Alok Gangrade (Mob. 9876543210)</strong></td></tr><tr><td><strong>Address:</strong></td><td>Green Soft Solutions <br>24 Building Name, <br>3rd Floor 15 A.B. Road <br>Indore (M.P.) 452000</td></tr><tr><td style="padding: 2px 0;"><strong>GSTIN</strong></td><td style="padding: 2px 0;">23AAACW9768L1ZO</td></tr><tr><td><strong>Shipped at:</strong></td><td>Green Soft Solutions <br>24 Building Name, <br>3rd Floor 15 A.B. Road <br>Indore (M.P.) 452000</td></tr></tbody></table></td><td style="text-align: right; padding-bottom: 10px;"><p style="padding-bottom: 4px;"><strong>Invoice No.</strong> 201770323-64</p><p style="padding-bottom: 4px;"><strong>Invoice Date</strong> 23/06/2017</p><p style="padding-bottom: 4px;"><strong>Due Date</strong> 23/06/2017</p><strong style="padding-top: 29px; display: block;">Walkover Web Solutions Private Limited</strong><p>405-406, Capt. C. S. Naydu Arcade, 10/2, <br> near Greater Kailash Hospital, Old<br> Palasia, Indore 452001(M. P.)</p><p><strong>GSTIN</strong> 22BBBBBB000A1Z0</p></td></tr></tbody></table></div><table style="padding-bottom:5px;"><tbody><tr><td>Ship Date</td><td>Ship Via</td><td>Tracking No.</td><td>Field 1</td><td>Field 2</td><td>Field 3</td></tr><tr><td>30/06/2017</td><td>FedEx</td><td>21654</td><td>Custom</td><td>Custom</td><td>Custom</td></tr></tbody></table><div id="template-table" ng-reflect-ng-class="[object Object]"><!--bindings={
   "ng-reflect-ng-if": "false"
 }--><article><table cellpadding="0" cellspacing="0" class="item"><thead><tr><!--bindings={
   "ng-reflect-ng-if": "true"
@@ -613,7 +613,7 @@ footer p {
   "ng-reflect-ng-if": "true"
 }--><th class="text-right ng-star-inserted" ng-reflect-ng-style="[object Object]" style="background-color: rgb(255, 246, 244);">58200.00</th><th class="text-right" ng-reflect-ng-style="[object Object]" style="background-color: rgb(255, 246, 244);">3080.00</th><th class="text-right" ng-reflect-ng-style="[object Object]" style="background-color: rgb(255, 246, 244);">3080.00</th><th class="text-right" ng-reflect-ng-style="[object Object]" style="background-color: rgb(255, 246, 244);">00.00</th><!--bindings={
   "ng-reflect-ng-if": "true"
-}--><th class="text-right ng-star-inserted" ng-reflect-ng-style="[object Object]" style="background-color: rgb(255, 246, 244);">64360.00</th></tr></tfoot></table></article></div><div id="Template-footer" ng-reflect-ng-class="[object Object]"><!--bindings={
+}--><th class="text-right ng-star-inserted" ng-reflect-ng-style="[object Object]" style="background-color: rgb(255, 246, 244);">64360.00</th></tr></tfoot></table></article></div><div id="template-footer" ng-reflect-ng-class="[object Object]"><!--bindings={
   "ng-reflect-ng-if": "false"
 }--><aside><table class="balance"><tbody><!--bindings={
   "ng-reflect-ng-if": "true"

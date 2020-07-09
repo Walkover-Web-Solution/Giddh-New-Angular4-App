@@ -1,21 +1,21 @@
 <form class="create-purchase-order-form">
-    <div class="clearfix" *ngIf="isMobileScreen">
+    <div class="clearfix">
         <div class="clearfix wrapper-customer-table  pdT2">
             <div class="customer-purchase-table">
                 <div class="inner-container">
                     <div class="inner-container">
-                        <div class="show-for-small-screen">
+                        <div class="total-purchase-amount">
                             <div class="text-right">
-                                <p class="fs20 b pbR1">
-                                    <span class="balance-due">Balance Due</span>
-                                    <span class="sp-rupees" *ngIf="isMulticurrencyAccount"> currency symbol
+                                <p class="pr-1">
+                                    <span class="balance-due">Total Amount</span>
+                                    <span class="total-amount-order" *ngIf="isMulticurrencyAccount"> currency symbol
                                         <strong>0.00</strong></span>
                                     <!-- added multicurrency feature make it functional to change into appropriate currency -->
-                                    <span class="sp-rupees" *ngIf='isMulticurrencyAccount'>
+                                    <span class="total-amount-order" *ngIf='isMulticurrencyAccount'>
                                         <span *ngIf="isMulticurrencyAccount">currency symbol</span>
                                         <span>0.00</span>
                                     </span>
-                                    <span class="sp-rupees" *ngIf='!isMulticurrencyAccount'>0.00</span>
+                                    <span class="total-amount-order" *ngIf='!isMulticurrencyAccount'>0.00</span>
                                 </p>
                             </div>
                         </div>
@@ -360,10 +360,10 @@
             </div>
         </div>
     </div>
-    <ng-container *ngIf="isMobileScreen">
-        <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img " />
+    <ng-container>
+        <img src="assets/images/new/search_customer.svg" class="img-responsive search-arrow-image " />
     </ng-container>
-    <section *ngIf="isMobileScreen"
+    <section *ngIf="!isMobileScreen"
         class="static-purchase-table create-purchase-order-table clearfix mb-2 bg-white container-fluid">
         <table class="table table-custom-invoice  basic">
             <thead>
@@ -1033,7 +1033,7 @@
         </table>
     </section>
     <!-- region mobile view -->
-    <div class="show-in-mobile" *ngIf="!isMobileScreen">
+    <div class="show-in-mobile" *ngIf="isMobileScreen">
         <div class="card-invoice-table-wrapper">
             <!-- *ngFor="let transaction of entry.transactions;" for below ng-container -->
             <ng-container>

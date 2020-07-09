@@ -114,7 +114,7 @@
                     <th class="text-center bdrB" width="20%" colspan="2">Closing Stock</th>
                 </tr>
                 <tr class="bdrT">
-                    <th colspan="2" class="bdrR td_in_searchBox max-width-140"
+                    <th colspan="2" class="bdrR td-search-box max-width-140"
                         (clickOutside)="clickedOutside($event,null, 'product')">
                         <div [hidden]="showProductSearch">
                             <span>Product Name</span>
@@ -128,7 +128,7 @@
                         </div>
                     </th>
                     <!-- in case of all entity with group -->
-                    <th colspan="2" class="bdrR td_in_searchBox max-width-140"
+                    <th colspan="2" class="bdrR td-search-box max-width-140"
                         *ngIf="GroupStockReportRequest.branchDetails==='allEntity'"
                         (clickOutside)="clickedOutside($event,null, 'source')">
                         <div [hidden]="showSourceSearch">
@@ -346,7 +346,8 @@
                         <td class="bdrB bdrR" colspan="2">
                             <span class="justify-content-between d-flex align-items-start">
                                 <span>{{txn.stockName}}</span>
-                                <span class="unit-badge pull-right text-light nowrap">{{txn.openingBalance?.stockUnit}}</span>
+                                <span
+                                    class="unit-badge pull-right text-light nowrap">{{txn.openingBalance?.stockUnit}}</span>
                             </span>
                         </td>
                         <!-- in case of all entity with group -->
@@ -398,7 +399,8 @@
                 </tr>
             </tbody>
 
-            <tbody *ngIf="(groupStockReport && groupStockReport.count < 1 && !groupStockReportInProcess) || groupNotFoundMessage">
+            <tbody
+                *ngIf="(groupStockReport && groupStockReport.count < 1 && !groupStockReportInProcess) || groupNotFoundMessage">
                 <tr>
                     <!-- in case of all entity with group -->
                     <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'"
@@ -407,7 +409,8 @@
                         class="text-center empty_table">
                         <!-- in case of all entity with group -->
                         <img src="assets/images/search-data-not-found.svg" />
-                        <h1 [class.group-not-found]="groupNotFoundMessage">{{ (groupNotFoundMessage) ? groupNotFoundMessage : 'No Report Found !!' }}</h1>
+                        <h1 [class.group-not-found]="groupNotFoundMessage">
+                            {{ (groupNotFoundMessage) ? groupNotFoundMessage : 'No Report Found !!' }}</h1>
                     </td>
                 </tr>
             </tbody>
@@ -455,7 +458,8 @@
                                                 *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems}}</span>
                                         </div>
                                         <div class="mt-1">
-                                            <span class="text-orange d-block">{{groupStockReport.profit | giddhCurrency}}
+                                            <span
+                                                class="text-orange d-block">{{groupStockReport.profit | giddhCurrency}}
                                                 ({{dateRangePickerCmp?.nativeElement?.value | replaceHyphens}})</span>
                                         </div>
                                     </h4>

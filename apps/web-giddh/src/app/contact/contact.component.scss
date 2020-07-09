@@ -276,31 +276,32 @@ span.inputAddon {
     position: relative;
     padding-right: 10px !important;
 }
-.comment-field{
+.comment-field {
     min-width: 170px;
 }
-.customer-name-filed , .vendor-name-field {
+.customer-name-filed,
+.vendor-name-field {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
-.customer-name .icon-ellipse{
+.customer-name .icon-ellipse {
     height: 20px;
     width: 20px;
 }
-.icon-ellipse.open.show{
+.icon-ellipse.open.show {
     display: inline-block !important;
 }
-.due-as-on{
+.due-as-on {
     display: flex;
     justify-content: center;
     align-items: center;
-    strong{
+    strong {
         width: 80px;
         padding-left: 10px;
     }
 }
-.form-control[readonly]{
+.form-control[readonly] {
     background-color: inherit !important;
     display: inline-block !important;
     width: 200px;
@@ -344,7 +345,7 @@ span.inputAddon {
         width: 100%;
         background: #fff;
         padding: 10px 5px;
-        z-index:1;
+        z-index: 1;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
     }
     td.pos-rel.word-wrap.customer-name.cursor-pointer,
@@ -375,7 +376,7 @@ span.inputAddon {
     }
 }
 @media (max-width: 767px) {
-    .date-range-picker{
+    .date-range-picker {
         height: 26px !important;
     }
     span.inputAddon {
@@ -392,25 +393,25 @@ span.inputAddon {
         padding-bottom: 10px;
         float: right !important;
     }
-    .form-inline{
+    .form-inline {
         position: relative;
-        .dis{
+        .dis {
             position: absolute;
             left: 0;
             top: 0;
-            }
-            .header-left{
-                width: calc(100% - 50px);
-                margin-left: 45px;
-                .form-group {
-                    vertical-align: bottom !important;
-                    margin-bottom: 5px;
-                    max-width: 100%;
-                    input{
-                        width: 100%;
-                    }
+        }
+        .header-left {
+            width: calc(100% - 50px);
+            margin-left: 45px;
+            .form-group {
+                vertical-align: bottom !important;
+                margin-bottom: 5px;
+                max-width: 100%;
+                input {
+                    width: 100%;
                 }
             }
+        }
     }
 
     .customer-footer-box {
@@ -441,20 +442,20 @@ span.inputAddon {
     .customer-footer-box + .btn-group {
         float: none !important;
         width: 100%;
-        button{
+        button {
             width: 100%;
         }
     }
     .customer-footer-box {
         padding-bottom: 10px;
         float: none !important;
-        .customer-inner-box{
+        .customer-inner-box {
             display: flex;
             align-items: center;
             padding-top: 6px;
-            h5{
+            h5 {
                 font-size: 16px;
-                .numbertotal{
+                .numbertotal {
                     font-size: 20px;
                 }
             }
@@ -525,30 +526,30 @@ span.inputAddon {
     }
 }
 
-.td_in_searchBox div {
+.td-search-box div {
     display: flex;
 }
 
-.td_in_searchBox div span {
+.td-search-box div span {
     flex: 1 1 auto;
     padding-left: 8px;
 }
 
-.td_in_searchBox div i {
+.td-search-box div i {
     margin-top: 3px;
     color: #8080808c;
     padding-right: 8px;
     cursor: pointer;
 }
 
-.td_in_searchBox {
+.td-search-box {
     padding: 0px !important;
     position: relative;
 }
-.td_in_searchBox .input-container {
+.td-search-box .input-container {
     position: relative;
 }
-.td_in_searchBox .input-container input {
+.td-search-box .input-container input {
     min-height: 38px;
     width: 100%;
     padding: 8px;
@@ -556,7 +557,7 @@ span.inputAddon {
     border: 0px;
 }
 
-.td_in_searchBox .input-container i {
+.td-search-box .input-container i {
     position: absolute;
     right: 0px;
     top: 9px;

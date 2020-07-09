@@ -489,7 +489,7 @@ textarea:focus {
     opacity: 0.7;
 }
 
-.tip_img {
+.search-arrow-image {
     max-width: 375px;
     left: 10px;
     position: absolute;
@@ -497,11 +497,11 @@ textarea:focus {
     z-index: 99;
 }
 
-.tip_img.for_purchase_invoice {
+.search-arrow-image.for_purchase_invoice {
     top: 120px;
 }
 
-.cashinvoice_tipImg.tip_img {
+.cashinvoice_tipImg.search-arrow-image {
     max-width: 215px;
 }
 

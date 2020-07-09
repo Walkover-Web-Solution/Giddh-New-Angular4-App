@@ -28,8 +28,11 @@ export class CreatePurchaseOrderComponent implements OnInit {
     ) { }
     ngOnInit() {
         this._breakPointObservar.observe([
-            '(max-width: 767px)'
-        ]);
+            '(max-width: 768px)'
+        ]).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
     }
 
 

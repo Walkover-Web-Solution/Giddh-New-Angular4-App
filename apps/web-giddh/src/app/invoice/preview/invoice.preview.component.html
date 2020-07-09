@@ -24,12 +24,14 @@
 
 
             <!-- Invoice filter section ends -->
-            <div class="clear-filter" *ngIf="showAdvanceSearchIcon" (click)="resetAdvanceSearch()">
-                <button class="btn btn-filter">
+            <div class="clear-filter visible-on-desktop" *ngIf="showAdvanceSearchIcon" (click)="resetAdvanceSearch()">
+                <button class="btn btn-default">
                     <span class="icon-cross"></span> Clear Filter
                 </button>
             </div>
             <div class="d-flex add-invoice">
+
+
                 <!-- E-way bill generation and export to excel for a single selected item in invoice sizes -->
                 <div
                     *ngIf="(selectedVoucher !== 'purchase' && selectedItems.length > 0) || (selectedItems.length === 1 && selectedVoucher === 'purchase')">
@@ -70,8 +72,7 @@
                 <!-- Section to create New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
                 <div class="btn-group desktop-view-btn" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
                     <button id="ddl-newinv" dropdownToggle type="button"
-                        class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv"
-                        aria-controls="dropdown-ddl-newinv">
+                        class="btn btn-pink dropdown-toggle dropdown-btn-new" aria-controls="dropdown-ddl-newinv">
                         + New Invoice
                         <span class="caret"></span>
                     </button>
@@ -112,78 +113,84 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="more-export-btn d-flex mt-1">
-                        <div style="height: 30px; " *ngIf="selectedItems.length === 1">
-                            <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown"
-                                (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;">
-                                <button dropdownToggle type="button"
-                                    class="btn mr-15 more-btn-dropdown btn-default dropdown-toggle"
-                                    aria-controls="dropdown-basic">
-                                    More
-                                    <span class="caret"></span>
-                                </button>
-                                <ul *dropdownMenu class="dropdown-menu fixedDropdownPlus" role="menu"
-                                    aria-labelledby="button-basic">
-                                    <li role="menuitem">
-                                        <a class="dropdown-item cp" href="javascript:void(0)"
-                                            (click)="toggleEwayBillPopup()"
-                                            *ngIf="selectedVoucher === 'sales' && !isMobileView">
-                                            Generate E-way Bill</a>
-                                    </li>
-                                    <li role="menuitem">
-                                        <a class="dropdown-item cp" href="javascript:void(0)"
-                                            (click)="onDeleteBtnClick()">Delete</a>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="clear-filter visible-on-mobile" *ngIf="showAdvanceSearchIcon"
+                            (click)="resetAdvanceSearch()">
+                            <button class="btn btn-default">
+                                <span class="icon-cross"></span> Clear Filter
+                            </button>
                         </div>
-                        <button class="btn btn-default mr-15" tooltip="Export" (click)="exportCsvDownload()"
-                            [ladda]="exportInvoiceRequestInProcess$ | async"
-                            *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported"
-                            data-spinner-size="20px">
-                            <span class="icon-export-icon"></span>
-                        </button>
-
-                        <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
-                            <button id="ddl-newinv" dropdownToggle type="button"
-                                class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv"
-                                aria-controls="dropdown-ddl-newinv">
-                                + New Invoice
+                    </div>
+                    <div *ngIf="selectedItems.length === 1">
+                        <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
+                            style="margin-bottom: 10px;display: inline-block !important;">
+                            <button dropdownToggle type="button"
+                                class="btn mr-15 more-btn-dropdown btn-default dropdown-toggle"
+                                aria-controls="dropdown-basic">
+                                More
                                 <span class="caret"></span>
                             </button>
-                            <ul id="dropdown-ddl-newinv" *dropdownMenu class="dropdown-menu" role="menu"
-                                aria-labelledby="ddl-newinv">
+                            <ul *dropdownMenu class="dropdown-menu fixedDropdownPlus" role="menu"
+                                aria-labelledby="button-basic">
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript: void 0"
-                                        (click)="goToInvoice('cash')">Cash Invoice</a>
+                                    <a class="dropdown-item cp" href="javascript:void(0)"
+                                        (click)="toggleEwayBillPopup()"
+                                        *ngIf="selectedVoucher === 'sales' && !isMobileView">
+                                        Generate E-way Bill</a>
                                 </li>
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript: void 0"
-                                        (click)="goToInvoice('sales')">Sales Invoice</a>
+                                    <a class="dropdown-item cp" href="javascript:void(0)"
+                                        (click)="onDeleteBtnClick()">Delete</a>
                                 </li>
                             </ul>
+                        </div>
+                    </div>
+                    <button class="btn btn-default mr-15" tooltip="Export" (click)="exportCsvDownload()"
+                        [ladda]="exportInvoiceRequestInProcess$ | async"
+                        *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported"
+                        data-spinner-size="20px">
+                        <span class="icon-export-icon"></span>
+                    </button>
+
+                    <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
+                        <button id="ddl-newinv" dropdownToggle type="button"
+                            class="btn btn-pink dropdown-toggle dropdown-btn-new" aria-controls="dropdown-ddl-newinv">
+                            + New Invoice
+                            <span class="caret"></span>
+                        </button>
+                        <ul id="dropdown-ddl-newinv" *dropdownMenu class="dropdown-menu" role="menu"
+                            aria-labelledby="ddl-newinv">
+                            <li role="menuitem">
+                                <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('cash')">Cash
+                                    Invoice</a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item" href="javascript: void 0" (click)="goToInvoice('sales')">Sales
+                                    Invoice</a>
+                            </li>
+                        </ul>
 
 
-                        </div>
-                        <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-                            <button class="btn btn-pink" style="margin: 0 !important;"
-                                (click)="goToInvoice('credit note')">+ New Cr.
-                                Note
-                            </button>
-                        </div>
-                        <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-                            <button class="btn btn-pink" style="margin: 0 !important;"
-                                (click)="goToInvoice('debit note')">+ New Dr.
-                                Note
-                            </button>
-                        </div>
-
+                    </div>
+                    <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
+                        <button class="btn btn-pink" style="margin: 0 !important;"
+                            (click)="goToInvoice('credit note')">+ New Cr.
+                            Note
+                        </button>
+                    </div>
+                    <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
+                        <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('debit note')">+
+                            New Dr.
+                            Note
+                        </button>
                     </div>
 
                 </div>
+
             </div>
-            <!-- Invoice E-way bill, export to excel for a single selected item along with
-            New Sales Invoice, Cash Invoice, Credit Note and Debit Note ends -->
         </div>
+        <!-- Invoice E-way bill, export to excel for a single selected item along with
+            New Sales Invoice, Cash Invoice, Credit Note and Debit Note ends -->
+
         <!-- For mobile screen sizes -->
 
 
@@ -240,13 +247,13 @@
                             </div>
                         </th>
 
-                        <th width="13%" class="td_in_searchBox" #searchInvoiceContainer
+                        <th width="13%" class="td-search-box" #searchInvoiceContainer
                             (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
                             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Bill#', fieldName: 'invoiceNumber',
              formControl: voucherNumberInput}"></ng-container>
                         </th>
                         <th>Purchase Order</th>
-                        <th width="19%" class="td_in_searchBox" #searchCustomerContainer
+                        <th width="19%" class="td-search-box" #searchCustomerContainer
                             (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
                             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
             title: (selectedVoucher === 'purchase') ? 'Vendor' : 'Customer'}"></ng-container>
@@ -318,13 +325,13 @@
                             </div>
                         </th>
 
-                        <th width="25%" class="td_in_searchBox" #searchInvoiceContainer
+                        <th width="25%" class="td-search-box" #searchInvoiceContainer
                             (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
                             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, fieldName: 'invoiceNumber',formControl: voucherNumberInput,
             title: selectedVoucher === 'credit note' ? 'Cr Note No.' : 'Dr Note No.'}"></ng-container>
                         </th>
 
-                        <th width="25%" class="td_in_searchBox" #searchCustomerContainer
+                        <th width="25%" class="td-search-box" #searchCustomerContainer
                             (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
                             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
             title: 'Customer'}"></ng-container>
@@ -620,7 +627,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div class="td_in_searchBox" #searchCustomerContainer
+                            <div class="td-search-box" #searchCustomerContainer
                                 (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
                                 <div [hidden]="showCustomerSearch">
                                     <strong> Customer</strong>
@@ -737,132 +744,138 @@
                 class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit" [rotate]="false"
                 previousText="&#9668;" nextText="&#9658;" (pageChanged)="pageChanged($event)"></pagination>
         </div>
-    </div>
 
-    <!--No Entry-->
-    <div class="no-data mrT2" *ngIf="!voucherData && !(isGetAllRequestInProcess$ | async)">
-        <h1>No Entry found in sales!</h1>
-        <h1>Have to do some sales before creating invoice</h1>
-    </div>
 
-    <!--no data-->
-    <div class="no-data" *ngIf="voucherData && voucherData.items.length === 0 && !(isGetAllRequestInProcess$ | async)">
-        <h1>No entries found within given criteria.</h1>
-        <h1>Do search with some other dates</h1>
-    </div>
-
-    <!-- Delete invoice confirmation model -->
-    <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
-        tabindex="-1">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <delete-role-confirmation-model
-                    [module]="(selectedVoucher !== 'purchase') ? selectedVoucher : 'purchaselist'"
-                    [selectedInvoiceForDelete]="selectedInvoice" (confirmDeleteEvent)="deleteConfirmedInvoice()"
-                    (closeModelEvent)="closeConfirmationPopup()">
-                </delete-role-confirmation-model>
-            </div>
+        <!--No Entry-->
+        <div class="no-data mrT2" *ngIf="!voucherData && !(isGetAllRequestInProcess$ | async)">
+            <h1>No Entry found in sales!</h1>
+            <h1>Have to do some sales before creating invoice</h1>
         </div>
-    </div>
 
-    <!-- Perform action on invoice model -->
-    <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
-        tabindex="-1">
-        <div class="modal-dialog modal-md perform-payment">
-            <div class="modal-content">
-                <invoice-payment-model *ngIf="performActionOnInvoiceModel.isShown"
-                    [selectedInvoiceForPayment]="selectedInvoice" (closeModelEvent)="closePerformActionPopup($event)">
-                </invoice-payment-model>
-            </div>
+        <!--no data-->
+        <div class="no-data"
+            *ngIf="voucherData && voucherData.items.length === 0 && !(isGetAllRequestInProcess$ | async)">
+            <h1>No entries found within given criteria.</h1>
+            <h1>Do search with some other dates</h1>
         </div>
-    </div>
 
-    <!-- Download or Send Invoice on mail -->
-    <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
-        tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div element-view-container-ref #downloadOrSendMailComponent=elementviewcontainerref>
+        <!-- Delete invoice confirmation model -->
+        <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
+            tabindex="-1">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <delete-role-confirmation-model
+                        [module]="(selectedVoucher !== 'purchase') ? selectedVoucher : 'purchaselist'"
+                        [selectedInvoiceForDelete]="selectedInvoice" (confirmDeleteEvent)="deleteConfirmedInvoice()"
+                        (closeModelEvent)="closeConfirmationPopup()">
+                    </delete-role-confirmation-model>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- modal dialog -->
-    <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
-        <div class="modal-dialog gray modal-liquid">
-            <div class="modal-content">
-                <invoice-generate-model *ngIf="showInvoiceGenerateModal" (closeEvent)="closeInvoiceModel($event)">
-                </invoice-generate-model>
+        <!-- Perform action on invoice model -->
+        <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
+            tabindex="-1">
+            <div class="modal-dialog modal-md perform-payment">
+                <div class="modal-content">
+                    <invoice-payment-model *ngIf="performActionOnInvoiceModel.isShown"
+                        [selectedInvoiceForPayment]="selectedInvoice"
+                        (closeModelEvent)="closePerformActionPopup($event)">
+                    </invoice-payment-model>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!--advance_seearch Modal-->
-    <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <invoice-advance-search-component #advanceSearchComponent
-                    [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : (selectedVoucher === 'purchase') ? selectedVoucher : 'invoice'"
-                    [request]="advanceSearchFilter" (applyFilterEvent)="applyAdvanceSearch($event)"
-                    (closeModelEvent)="toggleAdvanceSearchPopup(true)">
-                </invoice-advance-search-component>
+        <!-- Download or Send Invoice on mail -->
+        <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
+            tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div element-view-container-ref #downloadOrSendMailComponent=elementviewcontainerref>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!--bulk update modal-->
-    <div bsModal #bulkUpdate="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <invoice-bulk-update-modal-component (closeModelEvent)="toggleBulkUpdatePopup(true)"
-                    [voucherType]="selectedVoucher" [selectedInvoices]="selectedInvoicesList">
-                </invoice-bulk-update-modal-component>
+        <!-- modal dialog -->
+        <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
+            tabindex="-1">
+            <div class="modal-dialog gray modal-liquid">
+                <div class="modal-content">
+                    <invoice-generate-model *ngIf="showInvoiceGenerateModal" (closeEvent)="closeInvoiceModel($event)">
+                    </invoice-generate-model>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!--EwayBill-->
-    <div bsModal #eWayBill="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <app-generate-ewaybill-modal (closeModelEvent)="toggleEwayBillPopup()">
-                </app-generate-ewaybill-modal>
+        <!--advance_seearch Modal-->
+        <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <invoice-advance-search-component #advanceSearchComponent
+                        [type]="selectedVoucher === 'debit note' || selectedVoucher === 'credit note' ? 'drcr' : (selectedVoucher === 'purchase') ? selectedVoucher : 'invoice'"
+                        [request]="advanceSearchFilter" (applyFilterEvent)="applyAdvanceSearch($event)"
+                        (closeModelEvent)="toggleAdvanceSearchPopup(true)">
+                    </invoice-advance-search-component>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!--total sale & Total Due-->
-    <div class=" mt-5 invoice-footer" *ngIf="!selectedInvoiceForDetails">
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex total-due-sale-wrap">
-            <div class="col-sm-6 totalDueSale">
-                <h3>
-                    Total
-                    {{!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note') ? (selectedVoucher === 'purchase') ? ' Purchases:' : ' Sale:' : ':' }}
-                </h3>
-                <h1>{{baseCurrencySymbol}}{{ totalSale | giddhCurrency }}<span *ngIf="baseCurrency==='INR'">/-</span>
-                </h1>
-            </div>
-            <div *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'purchase')"
-                class="col-sm-6 totalDueSale">
-                <h3>Total Due:</h3>
-                <h1>{{baseCurrencySymbol}}{{ totalDue | giddhCurrency }}<span *ngIf="baseCurrency==='INR'">/-</span>
-                </h1>
+        <!--bulk update modal-->
+        <div bsModal #bulkUpdate="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <invoice-bulk-update-modal-component (closeModelEvent)="toggleBulkUpdatePopup(true)"
+                        [voucherType]="selectedVoucher" [selectedInvoices]="selectedInvoicesList">
+                    </invoice-bulk-update-modal-component>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- region invoice-preview-details -->
-    <div *ngIf="selectedInvoiceForDetails">
-        <invoice-preview-details-component [selectedItem]="selectedInvoiceForDetails" [items]="itemsListForDetails"
-            [invoiceSetting]="invoiceSetting" (deleteVoucher)="deleteConfirmedInvoice()" (sendEmail)="sendEmail($event)"
-            (closeEvent)="invoicePreviewClosed()" (onOpenAdvanceReceiptModal)="openAdvanceReceiptModal($event)"
-            (processPaymentEvent)="closePerformActionPopup($event)" [voucherType]="selectedVoucher"
-            (updateVoucherAction)="onPerformAction(null, $event)" [appSideMenubarIsOpen]="appSideMenubarIsOpen"
-            (refreshDataAfterVoucherUpdate)="getVoucher(isUniversalDateApplicable)"></invoice-preview-details-component>
-    </div>
-    <!-- endregion -->
+        <!--EwayBill-->
+        <div bsModal #eWayBill="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <app-generate-ewaybill-modal (closeModelEvent)="toggleEwayBillPopup()">
+                    </app-generate-ewaybill-modal>
+                </div>
+            </div>
+        </div>
 
+        <!--total sale & Total Due-->
+        <div class=" mt-5 invoice-footer" *ngIf="!selectedInvoiceForDetails">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex total-due-sale-wrap">
+                <div class="col-sm-6 totalDueSale">
+                    <h3>
+                        Total
+                        {{!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note') ? (selectedVoucher === 'purchase') ? ' Purchases:' : ' Sale:' : ':' }}
+                    </h3>
+                    <h1>{{baseCurrencySymbol}}{{ totalSale | giddhCurrency }}<span
+                            *ngIf="baseCurrency==='INR'">/-</span>
+                    </h1>
+                </div>
+                <div *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'purchase')"
+                    class="col-sm-6 totalDueSale">
+                    <h3>Total Due:</h3>
+                    <h1>{{baseCurrencySymbol}}{{ totalDue | giddhCurrency }}<span *ngIf="baseCurrency==='INR'">/-</span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+
+        <!-- region invoice-preview-details -->
+        <div *ngIf="selectedInvoiceForDetails">
+            <invoice-preview-details-component [selectedItem]="selectedInvoiceForDetails" [items]="itemsListForDetails"
+                [invoiceSetting]="invoiceSetting" (deleteVoucher)="deleteConfirmedInvoice()"
+                (sendEmail)="sendEmail($event)" (closeEvent)="invoicePreviewClosed()"
+                (onOpenAdvanceReceiptModal)="openAdvanceReceiptModal($event)"
+                (processPaymentEvent)="closePerformActionPopup($event)" [voucherType]="selectedVoucher"
+                (updateVoucherAction)="onPerformAction(null, $event)" [appSideMenubarIsOpen]="appSideMenubarIsOpen"
+                (refreshDataAfterVoucherUpdate)="getVoucher(isUniversalDateApplicable)">
+            </invoice-preview-details-component>
+        </div>
+        <!-- endregion -->
+    </div>
 </ng-container>
 
 <!-- region search template -->

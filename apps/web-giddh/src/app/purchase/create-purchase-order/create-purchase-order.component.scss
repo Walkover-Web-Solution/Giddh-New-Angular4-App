@@ -11,7 +11,7 @@
         top: 130px;
         opacity: 0.6;
         z-index: 98;
-        background: #f7f8fa;
+        background: $alice-blue-light;
         display: none;
     }
 }
@@ -30,8 +30,23 @@
             .delivery-from-field {
                 margin-top: 80px;
             }
-            .show-for-small-screen {
-                display: none;
+            .total-purchase-amount {
+                position: absolute;
+                right: 15px;
+                top: 0;
+                .balance-due {
+                    display: block;
+                    color: $nero;
+                    line-height: 1.2rem;
+                    font-size: 14px;
+                    font-weight: 500;
+                }
+                .total-amount-order {
+                    display: block;
+                    font-size: 26px;
+                    line-height: 1.2;
+                    font-family: "opensans-semibold";
+                }
             }
             .select-customer-name {
                 sh-select,
@@ -118,7 +133,7 @@
         }
     }
 }
-.tip_img {
+.search-arrow-image {
     max-width: 375px;
     left: 198px;
     position: absolute;
@@ -769,11 +784,6 @@ strong {
     font-family: "opensans-bold";
     font-weight: 500;
 }
-
-.show-for-small-screen {
-    display: none;
-}
-
 .card-invoice-table .differ-currency {
     text-align: left;
     padding-left: 0;
@@ -833,7 +843,7 @@ span.eligible-ITC {
     }
 }
 
-.cashinvoice_tipImg.tip_img {
+.cashinvoice_tipImg.search-arrow-image {
     max-width: 215px;
 }
 
@@ -1001,6 +1011,9 @@ span.eligible-ITC {
             display: block !important;
         }
     }
+    .search-arrow-image {
+        left: 143px;
+    }
 }
 @media (max-width: 990px) {
     .wrap-billing-address .bill-add {
@@ -1009,11 +1022,6 @@ span.eligible-ITC {
     }
     .wrap-billing-address .bill-add:nth-child(2) {
         margin-top: 20px;
-    }
-}
-@media (max-width: 768px) {
-    .tip_img {
-        left: 143px;
     }
 }
 @media (max-width: 767px) {
@@ -1047,16 +1055,15 @@ span.eligible-ITC {
                         margin-bottom: 0;
                     }
                 }
+                .total-purchase-amount {
+                    position: static;
+                }
             }
         }
         .customer-purchase-table {
             .inner-container {
                 .wrapper-customer-table {
                     padding-top: 15px;
-                    .show-for-small-screen {
-                        padding: 0 15px;
-                        display: block;
-                    }
                 }
             }
         }
@@ -1066,9 +1073,9 @@ span.eligible-ITC {
             padding-right: 15px !important;
         }
     }
-    .tip_img {
+    .search-arrow-image {
         left: 15px;
-        top: 100px;
+        top: 160px;
     }
     .create-purchase-order-form:before {
         top: 160px;
@@ -1087,8 +1094,8 @@ span.eligible-ITC {
         margin-bottom: 0;
     }
     .show-in-mobile {
-        background: #fff;
-        border-top: 1px solid #ddd;
+        background: $white;
+        border-top: 1px solid $gainsboro;
         padding-right: 15px;
         padding-left: 15px;
     }
@@ -1103,8 +1110,8 @@ span.eligible-ITC {
     }
     .other-taxes-input {
         width: 99px;
-        background-color: #eee;
-        border: 1px solid #eee;
+        background-color: $whisper-color;
+        border: 1px solid $gainsboro;
         padding: 3px;
         font-size: 13px;
     }
@@ -1159,7 +1166,7 @@ span.eligible-ITC {
     .quantity-unit-width-100 .col-xs-6 {
         width: 100%;
     }
-    .tip_img {
+    .search-arrow-image {
         max-width: 270px;
     }
     .qty-unit .col-xs-6:first-child {

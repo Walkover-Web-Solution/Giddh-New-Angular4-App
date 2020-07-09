@@ -6,20 +6,16 @@
 
             <!-- region sidebar -->
             <div class="col-sm-4 col-xs-12 pd0 invoice-sidebar-wrapper">
-
                 <div>
-
                     <div class="invoice-search-box">
                         <input type="text" placeholder="search">
-
                         <div class="btn-group" dropdown [autoClose]="true" hidden>
                             <button id="button-basic2" dropdownToggle type="button"
-                                class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv"
-                                aria-controls="dropdown-basic3">
+                                class="btn btn-pink dropdown-toggle dropdown-btn-new" aria-controls="dropdown-basic3">
                                 + New Invoice <span class="caret"></span>
                             </button>
-                            <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu ddl-width-small" role="menu"
-                                aria-labelledby="button-basic2">
+                            <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu dropdown-width-small"
+                                role="menu" aria-labelledby="button-basic2">
                                 <li role="menuitem">
                                     <a class="dropdown-item" href="javascript:void(0)">Cash Invoice</a>
                                 </li>
@@ -35,11 +31,8 @@
                     <ul class="invoice-sidebar">
                         <perfect-scrollbar>
                             <li class="single-invoice-detail cp">
-
                                 <div class="row">
-
                                     <div class="col-xs-7">
-
                                         <div class="invoice-number-date">
                                             <span class="order-number">
                                                 201830
@@ -93,9 +86,6 @@
 
                                         <!-- region for proforma and estimates -->
                                         <div class="btn-group change-status-dropdown pull-right" dropdown>
-
-
-
                                             <button id="button-basic" dropdownToggle type="button"
                                                 class="btn btn-pink dropdown-toggle"
                                                 aria-controls="dropdown-basic">Change Status
@@ -168,7 +158,7 @@
                     </div>
                     <div class="invoice-image-section">
 
-                        <div class="pos-rel">
+                        <div class="relative">
                             <div class="loader"></div>
                         </div>
 
@@ -189,7 +179,7 @@
                                     <div class="clearfix mrB2">
                                         <img src="assets/images/new/import_icon.svg" />
                                     </div>
-                                    <div class="clearfix pdR2 pdL2">
+                                    <div class="clearfix pr-2 pd-2">
                                         <label class="clearfix text-light-2">Drop file to upload</label>
                                         <div class="mrT3">
                                             <label class="file-uplod-penal" for="csv-upload-input"> <span>Browse
@@ -213,7 +203,7 @@
                                             <tbody>
                                                 <tr>
                                                     <td class="text-left" width="30%">
-                                                        <table class="numDetail">
+                                                        <table class="number-detail-series">
                                                             <tbody>
                                                                 <tr>
                                                                     <td>
@@ -323,7 +313,7 @@
                                     </table>
 
                                 </div>
-                                <div id="Template-table">
+                                <div id="template-table">
                                     <article>
                                         <table id="item" class="item" cellpadding="0" cellspacing="0">
                                             <thead>
@@ -451,7 +441,7 @@
                                         </table>
                                     </article>
                                 </div>
-                                <div id="Template-footer">
+                                <div id="template-footer">
                                     <div class="clearfix">
                                         <article>
                                             <table class="balance">
@@ -565,10 +555,7 @@
                                 </div>
                             </div>
                         </body>
-
                         <!-- template end -->
-
-
                     </div>
                 </div>
 
@@ -580,3 +567,8 @@
 <ng-template #sendEmailModal>
     <purchase-send-email-modal></purchase-send-email-modal>
 </ng-template>
+<!-- <div class="aside-overlay" *ngIf="orderHistoryAsideState === 'in'"></div>
+<div *ngIf="orderHistoryAsideState === 'in'">
+    <aside-order-history (closeAsideEvent)="toggleOrderHistoryAsidePane($event)">
+    </aside-order-history>
+</div> -->

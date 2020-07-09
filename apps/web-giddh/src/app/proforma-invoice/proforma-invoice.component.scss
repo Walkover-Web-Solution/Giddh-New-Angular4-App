@@ -496,7 +496,7 @@ textarea:focus {
     opacity: 0.7;
 }
 
-.tip_img {
+.search-arrow-image {
     max-width: 375px;
     left: 198px;
     position: absolute;
@@ -504,7 +504,7 @@ textarea:focus {
     z-index: 97;
 }
 
-.tip_img.for_purchase_invoice {
+.search-arrow-image.for_purchase_invoice {
     top: 230px;
 }
 
@@ -1054,7 +1054,7 @@ section.newtable {
     border-top: none;
 }
 
-.cashinvoice_tipImg.tip_img {
+.cashinvoice_tipImg.search-arrow-image {
     max-width: 215px;
 }
 
@@ -1615,7 +1615,7 @@ span.eligible-ITC {
 }
 
 @media (max-width: 990px) {
-    .tip_img {
+    .search-arrow-image {
         left: 181px;
     }
     .wrap-billing-address .bill-add {
@@ -1690,7 +1690,7 @@ span.eligible-ITC {
 }
 
 @media (max-width: 768px) {
-    .tip_img {
+    .search-arrow-image {
         left: 143px;
     }
 }
@@ -1716,15 +1716,15 @@ span.eligible-ITC {
     .wrapperCustomerTable {
         padding-top: 0;
     }
-    .tip_img {
+    .search-arrow-image {
         left: 15px;
         top: 80px;
     }
-    .slaesPrEsti .tip_img {
+    .slaesPrEsti .search-arrow-image {
         left: 15px;
         top: 130px;
     }
-    .forMultiCurrency.slaesPrEsti .tip_img {
+    .forMultiCurrency.slaesPrEsti .search-arrow-image {
         top: 160px;
     }
     .selectCustomerName sales-sh-select {
@@ -1773,7 +1773,7 @@ span.eligible-ITC {
     .quantityUnitW100 .col-xs-6 {
         width: 100%;
     }
-    .tip_img {
+    .search-arrow-image {
         max-width: 270px;
     }
     .qty-unit .col-xs-6:first-child {

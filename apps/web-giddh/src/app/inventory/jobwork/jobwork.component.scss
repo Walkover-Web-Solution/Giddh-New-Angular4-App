@@ -25,13 +25,13 @@
 .flex-fill {
     flex: 1 1 auto;
 }
-.td_in_searchBox div {
+.td-search-box div {
     display: flex;
 }
-.td_in_searchBox div span {
+.td-search-box div span {
     padding-left: 13px;
 }
-.td_in_searchBox div i {
+.td-search-box div i {
     margin-top: 1px;
     color: #757bb9;
     padding-right: 8px;
@@ -40,10 +40,10 @@
     align-items: center;
     padding-left: 10px;
 }
-.td_in_searchBox {
+.td-search-box {
     padding: 0px !important;
 }
-.td_in_searchBox .input-container input {
+.td-search-box .input-container input {
     height: 50px;
     min-width: 100%;
     padding: 11px;
@@ -52,7 +52,7 @@
     border: none;
     background-color: #f2f2f2;
 }
-.td_in_searchBox .input-container i {
+.td-search-box .input-container i {
     position: absolute;
     right: 0px;
     top: 10px;
@@ -68,7 +68,7 @@
 }
 .icon-pointer .glyphicon:hover {
 }
-.td_in_searchBox div i:hover {
+.td-search-box div i:hover {
     color: #999;
 }
 

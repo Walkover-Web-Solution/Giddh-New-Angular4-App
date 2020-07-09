@@ -1,5 +1,5 @@
 @import "../../../../assets/css/color.scss";
-.td_in_searchBox {
+.td-search-box {
     div {
         i {
             margin-top: 1px;
@@ -13,7 +13,7 @@
     }
 }
 
-.td_in_searchBox div {
+.td-search-box div {
     display: flex;
 }
 .d-flex {
@@ -23,7 +23,7 @@
     position: relative;
     input.form-control {
         padding-left: 35px !important;
-        background-image: url("../../../../assets/images/calender.svg") !important;
+        background-image: url("../../../../assets/images/calender-icon.svg") !important;
         background-size: 17px !important;
         background-position: 9px 8px !important;
         background-repeat: no-repeat !important;
@@ -128,13 +128,12 @@
     color: #333;
     display: block;
 }
-.giddh-table .td_in_searchBox {
+.giddh-table .td-search-box {
     padding-right: 10px !important;
 }
 .entry-date {
     padding-left: 0 !important;
 }
-
 
 @media only screen and (max-width: 767px) {
     .invoice-footer {

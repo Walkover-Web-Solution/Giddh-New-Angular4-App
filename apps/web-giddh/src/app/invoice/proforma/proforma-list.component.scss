@@ -24,16 +24,16 @@
     display: flex;
 }
 
-.td_in_searchBox div {
+.td-search-box div {
     display: flex;
 }
 
-.td_in_searchBox div span {
+.td-search-box div span {
     /*flex: 1 1 auto;*/
     padding: 8px 0 8px 10px;
 }
 
-.td_in_searchBox div i {
+.td-search-box div i {
     margin-top: 1px;
     color: $wild-blue-yonder;
     padding-right: 8px;
@@ -43,15 +43,15 @@
     padding-left: 10px;
 }
 
-.td_in_searchBox div i:hover {
+.td-search-box div i:hover {
     color: $deep-sky-blue;
 }
 
-.td_in_searchBox {
+.td-search-box {
     padding: 0 !important;
 }
 
-.td_in_searchBox .input-container input {
+.td-search-box .input-container input {
     height: 50px;
     min-width: 100%;
     padding: 11px;
@@ -61,7 +61,7 @@
     background-color: #f2f2f2;
 }
 
-.td_in_searchBox .input-container i {
+.td-search-box .input-container i {
     position: absolute;
     right: 10px;
     top: 12px;
@@ -76,7 +76,7 @@
     margin-top: 0;
 }
 
-.input-h .td_in_searchBox .input-container input {
+.input-h .td-search-box .input-container input {
     height: 50px !important;
 }
 
@@ -187,7 +187,7 @@ ul.selectActionDropdown {
 .input-group input.form-control {
     padding-left: 35px !important;
     border-color: $chetwode-blue;
-    background-image: url("../../../assets/images/calender.svg") !important;
+    background-image: url("../../../assets/images/calender-icon.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
     background-repeat: no-repeat !important;

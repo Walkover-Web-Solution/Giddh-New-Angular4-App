@@ -752,19 +752,19 @@
 
             <!-- region search_customer image -->
             <ng-container *ngIf="isSalesInvoice && !isCashInvoice">
-                <img src="assets/images/new/search_customer.svg" class="img-responsive tip_img "
+                <img src="assets/images/new/search_customer.svg" class="img-responsive search-arrow-image "
                     *ngIf="!invFormData.voucherDetails.customerName" />
             </ng-container>
 
             <!-- need to show this image on purchase invoice module -->
             <ng-container *ngIf="isPurchaseInvoice">
-                <img src="assets/images/new/search-vendor.svg" class="img-responsive tip_img "
+                <img src="assets/images/new/search-vendor.svg" class="img-responsive search-arrow-image "
                     *ngIf="!invFormData.voucherDetails.customerName" />
             </ng-container>
 
             <ng-container *ngIf="isCashInvoice">
                 <img src="assets/images/new/search_customer_Cash Invoice.svg"
-                    class="img-responsive  cashinvoice_tipImg tip_img "
+                    class="img-responsive  cashinvoice_tipImg search-arrow-image "
                     *ngIf="!invFormData.voucherDetails.customerName" />
             </ng-container>
             <!-- endregion -->

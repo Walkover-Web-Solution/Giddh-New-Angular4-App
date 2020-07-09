@@ -13,7 +13,8 @@
                     </div>
 
                     <div class="advance-icon" style="align-items: center">
-                        <span class="icon-advance-search" (click)="toggleAdvanceSearchPopup()" tooltip="Advance Search"></span>
+                        <span class="icon-advance-search" (click)="toggleAdvanceSearchPopup()"
+                            tooltip="Advance Search"></span>
                         <!-- -->
                     </div>
                     <div class="search-icon-block" (click)="openModal(template)">
@@ -49,7 +50,8 @@
                     <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
 
                         <li role="menuitem">
-                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleConfirmationModel(true)">Delete</a>
+                            <a class="dropdown-item cp" href="javascript:void(0)"
+                                (click)="toggleConfirmationModel(true)">Delete</a>
                         </li>
 
                     </ul>
@@ -115,7 +117,8 @@
                     <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
 
                         <li role="menuitem">
-                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="toggleConfirmationModel(true)">Delete</a>
+                            <a class="dropdown-item cp" href="javascript:void(0)"
+                                (click)="toggleConfirmationModel(true)">Delete</a>
                         </li>
 
                     </ul>
@@ -129,29 +132,31 @@
 
     <ng-template #template>
         <div class="modal-header">
-          <h4 class="modal-title bg pull-left">Search here...</h4>
-          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-            <span aria-hidden="true">&times;</span>
-          </button>
+            <h4 class="modal-title bg pull-left">Search here...</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-6 col-xs-6 full-width-on-mobile">
-                        <div class="input-container">
-                            <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox name="voucherNumberInput" [formControl]="voucherNumberInput" />
-                        </div>
+            <div class="row">
+                <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                    <div class="input-container">
+                        <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox
+                            name="voucherNumberInput" [formControl]="voucherNumberInput" />
                     </div>
-                    <div class="col-sm-6 col-xs-6 full-width-on-mobile">
-                        <div class="input-container">
-                            <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xs-6 mt-2">
-                        <button class="btn btn-pink">Submit</button>
-                    </div>
-                   
                 </div>
-            
+                <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                    <div class="input-container">
+                        <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox
+                            name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xs-6 mt-2">
+                    <button class="btn btn-pink">Submit</button>
+                </div>
+
+            </div>
+
         </div>
     </ng-template>
 
@@ -179,7 +184,7 @@
                             </div>
                         </th>
 
-                        <th width="13%" class="td_in_searchBox" #searchVoucherNumberContainer
+                        <th width="13%" class="td-search-box" #searchVoucherNumberContainer
                             (clickOutside)="clickedOutside($event, searchVoucherNumberContainer, 'voucherNumber')">
 
                             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showVoucherNoSearch,
@@ -189,7 +194,7 @@
 
                         </th>
 
-                        <th width="19%" class="td_in_searchBox" #searchCustomerContainer
+                        <th width="19%" class="td-search-box" #searchCustomerContainer
                             (clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerName')">
 
                             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, title: 'Customer', fieldName: 'customerName',
@@ -307,7 +312,11 @@
                             {{item.invoiceDate}}
                         </td>
                         <!-- <td class="text-right" data-title="Total Amt.">{{item.grandTotal | giddhCurrency}}</td> -->
-                        <td class="text-right" [tooltip]="(voucherType === 'proformas' || voucherType === 'estimates') ? grandTotalPopupTemplate : ''" container="body" containerClass="invoice-preview">{{item?.amount?.currencyForAccount?.symbol}} {{item.amount?.amountForAccount | giddhCurrency}}
+                        <td class="text-right"
+                            [tooltip]="(voucherType === 'proformas' || voucherType === 'estimates') ? grandTotalPopupTemplate : ''"
+                            container="body" containerClass="invoice-preview">
+                            {{item?.amount?.currencyForAccount?.symbol}}
+                            {{item.amount?.amountForAccount | giddhCurrency}}
                         </td>
                         <ng-template #grandTotalPopupTemplate><span [innerHTML]="item.grandTotalTooltipText"></span>
                         </ng-template>
@@ -513,10 +522,12 @@
     </div>
 
     <!-- Delete Proforma/Estimate confirmation model -->
-    <div bsModal #deleteConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
+    <div bsModal #deleteConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
+        tabindex="-1">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <delete-role-confirmation-model [module]="voucherType+'list'" (confirmDeleteEvent)="deleteVoucher()" (closeModelEvent)="toggleConfirmationModel()">
+                <delete-role-confirmation-model [module]="voucherType+'list'" (confirmDeleteEvent)="deleteVoucher()"
+                    (closeModelEvent)="toggleConfirmationModel()">
                 </delete-role-confirmation-model>
             </div>
         </div>
