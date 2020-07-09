@@ -581,10 +581,9 @@
                                                     </span>
                                                 </span>
                                             </div>
-
+                                            <!-- for edit and enter hsn code -->
                                             <div class="hsn-code-dropdown" hidden>
                                                 <label>HSN/SAC</label>
-                                                <input type="text" maxLength="10" placeholder="HSN/SAC Number" />
                                                 <input type="text" maxLength="10" placeholder="HSN/SAC Number" />
                                                 <a>
                                                 </a>
@@ -914,16 +913,17 @@
                             <!--region balance due for non-purchase-->
                             <div class="table-row">
 
-                                <div class="table-cell deposite-section" hidden>
+                                <div class="table-cell deposite-section">
 
                                     <div class="btn-group">
 
                                         <div id="deposit-dropdown" class="form-group pd1">
-                                            <p>Deposit</p>
+                                            <p class="text-left">Deposit</p>
                                             <ul>
                                                 <ng-container>
-                                                    <li role="menuitem" class="mt-1 ">
-                                                        <div class="clearfix payment-mode deposit-payment-mode">
+                                                    <li role="menuitem" class="mt-1">
+                                                        <!-- may it will be used for advance receipt -->
+                                                        <div class="clearfix payment-mode deposit-payment-mode" hidden>
 
                                                             <div class="pull-right balance-due-text">
                                                                 <div class="clearfix mb-1 text-left">
@@ -964,7 +964,7 @@
 
                                                 <ng-container>
                                                     <li role="menuitem" class="mt-1 ">
-                                                        <div class="clearfix payment-mode">
+                                                        <div class="clearfix payment-mode deposit-payment-mode" hidden>
 
                                                             <sh-select class="text-left">
                                                                 <!-- <ng-template #optionTemplate1 let-option="option">
