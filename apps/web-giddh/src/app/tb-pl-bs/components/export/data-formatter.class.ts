@@ -66,7 +66,7 @@ export class DataFormatter {
                         data1.push(account.creditTotal);
                         data1.push(`${account.closingBalance.amount}${this.recType.transform(account.closingBalance)}`);
                         formatable.setRowData(data1, 0);
-                        total = this.calculateTotal(group, total);
+                        //total = this.calculateTotal(group, total);
                         // }
                     });
                 }
@@ -85,6 +85,9 @@ export class DataFormatter {
                 });
             });
         };
+
+        total = this.calculateGrandTotal(total);
+
         createCsv(this.exportData);
         let data: any[] = [];
         data.push(this.suffixRecordType(total.ob));
@@ -131,7 +134,6 @@ export class DataFormatter {
                                 data1.push(`${acc.closingBalance.amount}${this.recType.transform(acc.closingBalance)}`);
                                 formatable.setRowData(data1, strIndex);
                                 data1 = [];
-                                total = this.calculateTotal(group, total);
                             }
                         });
                     }
@@ -141,6 +143,9 @@ export class DataFormatter {
                 }
             });
         };
+
+        total = this.calculateGrandTotal(total);
+
         createCsv(this.exportData, 0);
         let data: any[] = [];
         data.push(this.suffixRecordType(total.ob));
@@ -149,6 +154,7 @@ export class DataFormatter {
         data.push(this.suffixRecordType(total.cb));
         formatable.setFooter(data);
     }
+
     public calculateTotal = (group: ChildGroup, total: Total): Total => {
         if (group.forwardedBalance.type === 'DEBIT') {
             total.ob = total.ob + group.forwardedBalance.amount;
@@ -160,8 +166,24 @@ export class DataFormatter {
         } else {
             total.cb = total.cb - group.closingBalance.amount;
         }
+
         total.cr += group.creditTotal;
         total.dr += group.debitTotal;
+
+        return total;
+    }
+
+    /**
+     * This will calculate grand total
+     *
+     * @param {*} total
+     * @returns {Total}
+     * @memberof DataFormatter
+     */
+    public calculateGrandTotal(total): Total {
+        this.exportData.forEach(group => {
+            total = this.calculateTotal(group, total);
+        });
 
         total.cr = Number(total.dr.toString().substring(0, total.dr.toString().indexOf(".") + 5));
         total.dr = Number(total.dr.toString().substring(0, total.dr.toString().indexOf(".") + 5));
@@ -169,6 +191,7 @@ export class DataFormatter {
         total.cb = Number(total.cb.toString().substring(0, total.cb.toString().indexOf(".") + 5));
         return total;
     }
+
     private firstCapital = (s: string) => s[0].toUpperCase() + s.slice(1);
     private suffixRecordType = (balance: number): string => {
         if (balance < 0) {
