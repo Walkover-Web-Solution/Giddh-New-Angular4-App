@@ -575,10 +575,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                 }
                             }
                         }
-
-                        // if (!this.isMultiCurrencyAvailable) {
-                        //   this.isMultiCurrencyAvailable = !!t.convertedAmountCurrency;
-                        // }
                         if (t.inventory) {
                             // TODO: Prateek start
                             // let findStocks = accountsArray.find(f => f.value === t.particular.uniqueName + '#' + t.inventory.stock.uniqueName);
