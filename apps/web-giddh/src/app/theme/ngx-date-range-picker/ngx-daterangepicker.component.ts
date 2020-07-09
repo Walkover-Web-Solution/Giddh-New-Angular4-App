@@ -1139,11 +1139,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public mouseUp(e: MouseWheelEvent): void {
-        this.isOnScrollActive = true;
-        if (e.deltaY < 0) {
-            this.scrollSubject$.next("top");
-        } else {
-            this.scrollSubject$.next("bottom");
+        if (!this.isOnScrollActive) {
+            this.isOnScrollActive = true;
+            if (e.deltaY < 0) {
+                this.scrollSubject$.next("top");
+            } else {
+                this.scrollSubject$.next("bottom");
+            }
         }
     }
 
