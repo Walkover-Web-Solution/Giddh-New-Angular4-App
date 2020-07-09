@@ -389,7 +389,7 @@
     [ngStyle]="{ 'font-family': inputTemplate.font, 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
     <!--class="disabled-area"-->
     <div>
-        <div id="Template-header"
+        <div id="template-header"
             [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }"
             (click)="onClickSection('header')">
             <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header"><i

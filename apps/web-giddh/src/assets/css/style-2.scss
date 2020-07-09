@@ -10457,3 +10457,6 @@ span#HW_badge_cont:nth-child(3) {
 body.prevent-body-scroll {
     overflow-y: hidden !important;
 }
+.hide-payment-tab ul li:nth-child(5) {
+    display: none;
+}

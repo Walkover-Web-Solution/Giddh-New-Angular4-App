@@ -186,8 +186,8 @@ a[vr-item]:focus {
 
 .left_fixed_header > li > a.active .label,
 .left_fixed_header > li > a.active .label > span {
-    color:$nero;
- }
+    color: $nero;
+}
 
 .left_fixed_header > li > a .label {
     display: table-cell;
@@ -271,7 +271,7 @@ a[vr-item]:focus {
     padding-left: 15px;
     padding-right: 15px;
     font-family: "opensans-semibold";
-    img{
+    img {
         width: 18px;
     }
 }
@@ -419,7 +419,7 @@ a[vr-item]:focus {
 .d-inline-block {
     display: inline-block !important;
 }
-.notification{
+.notification {
     padding: 0 !important;
     margin-right: 10px !important;
 }
@@ -429,7 +429,7 @@ a[vr-item]:focus {
     border: 1px solid $white;
     border-radius: 20px;
     padding: 0 10px;
-    img{
+    img {
         vertical-align: bottom;
         display: inline-block;
         position: relative;
@@ -446,7 +446,7 @@ a[vr-item]:focus {
 }
 
 .universal-date li input:focus {
-    border:none;
+    border: none;
 }
 .header-date {
     padding: 5px 11px;
@@ -466,7 +466,7 @@ a[vr-item]:focus {
     font-size: 14px;
     border-radius: 2px 0 0 2px;
     display: inline-flex;
-    top:2px;
+    top: 2px;
 }
 
 .not-today .calender-addone {
@@ -475,7 +475,7 @@ a[vr-item]:focus {
 }
 
 #add-manage.btn-gray {
-    background:transparent;
+    background: transparent;
     color: $white;
     position: relative;
     padding-left: 15px;
@@ -485,7 +485,7 @@ a[vr-item]:focus {
     border: 1px solid $white;
     border-radius: 20px;
     margin-right: 15px;
-    i{
+    i {
         font-size: 12px;
         padding-right: 5px;
     }
@@ -504,7 +504,7 @@ span.icon-support.dropdown-toggle {
 .not-today .date-range-picker {
     height: 32px;
 }
-.date-range-picker{
+.date-range-picker {
     max-width: 210px;
     min-width: 210px;
 }
@@ -516,7 +516,7 @@ span.icon-support.dropdown-toggle {
 .showMoreOpt {
     font-size: 14px;
     padding: 0 15px;
-    font-family: 'opensans-semibold';
+    font-family: "opensans-semibold";
     color: $deep-sky-blue;
 }
 
@@ -655,37 +655,37 @@ ul.sub-list {
     top: 60px;
     z-index: 10;
 }
-.help-setting-icons{
+.help-setting-icons {
     color: $white;
-    img{
+    img {
         width: 18px;
         vertical-align: top;
         margin-top: 2px;
     }
 }
-.help-support-aside{
+.help-support-aside {
     top: 60px;
 }
-.show-more-module a{
+.show-more-module a {
     font-size: 14px;
     color: $deep-sky-blue !important;
-    font-family: 'opensans-semibold';
+    font-family: "opensans-semibold";
 }
 /*notification css*/
 .white-row {
     background-color: $white;
     padding: 10px 15px;
-    margin-bottom:10px;
+    margin-bottom: 10px;
     font-size: 16px;
     box-shadow: 1px 1px 3px #00000029;
     margin-top: 10px;
-    p{
-        font-family: 'opensans-semibold';
+    p {
+        font-family: "opensans-semibold";
         font-size: 14px;
     }
     .click-here {
         color: $chetwode-blue;
-        cursor:pointer;
+        cursor: pointer;
     }
 
     span.icon-traingle-info {
@@ -702,8 +702,8 @@ ul.sub-list {
 .white-row.menu_open {
     margin-left: 215px;
 }
-.setting-sidebar{
-    box-shadow:-2px -2px 15px rgba(0, 0, 0, 0.2)
+.setting-sidebar {
+    box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2);
 }
 /* responsive */
 @media (max-height: 800px) {
@@ -747,36 +747,35 @@ ul.sub-list {
             font-size: 20px !important;
         }
     }
-
 }
 @media (max-width: 767px) {
-.notification{
-    margin-right: 0 !important;
-}
-.universal-date .btn-link {
-    border-bottom: none;
-    text-align: left;
-    height: 24px !important;
-    display: none !important;
-}
-.close-2 {
-    top: 65px;
-    right: 66px;
-    background-color: $white;
-    width: 35px;
-    height: 35px;
-    position: fixed;
-}
-.desktop-header{
-    display: none;
-}
+    .notification {
+        margin-right: 0 !important;
+    }
+    .universal-date .btn-link {
+        border-bottom: none;
+        text-align: left;
+        height: 24px !important;
+        display: none !important;
+    }
+    .close-2 {
+        top: 65px;
+        right: 66px;
+        background-color: $white;
+        width: 35px;
+        height: 35px;
+        position: fixed;
+    }
+    .desktop-header {
+        display: none;
+    }
     .nav-left-bar {
         width: 270px;
         left: -270px;
     }
     .upper-layer-header {
         padding-top: 5px;
-        .navbar-nav{
+        .navbar-nav {
             margin-bottom: 5px;
             display: flex;
             .hamburger_menu {
@@ -821,10 +820,10 @@ ul.sub-list {
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     }
 
-    .lower-layer-header{
+    .lower-layer-header {
         display: flex;
         justify-content: space-between;
-        #add-manage.btn-gray{
+        #add-manage.btn-gray {
             padding-left: 0;
             padding-right: 0;
             width: 25px;
@@ -832,19 +831,19 @@ ul.sub-list {
             display: flex;
             justify-content: center;
             align-items: center;
-            i{
+            i {
                 padding-right: 0;
             }
         }
-        .help-setting-icons{
-            img{
+        .help-setting-icons {
+            img {
                 width: 25px;
                 margin-top: 0;
             }
         }
-        .notification{
+        .notification {
             height: 25px;
-             position: relative;
+            position: relative;
         }
     }
     .calender-addone {
@@ -868,34 +867,34 @@ ul.sub-list {
     .cText.head-nav {
         display: none;
     }
-    .universal-date li{
+    .universal-date li {
         display: block;
     }
     .universal-date li input {
-       height: 32px;
+        height: 32px;
     }
-    .plan-wrapper{
+    .plan-wrapper {
         padding: 15px 0 0;
         display: none;
-        .white-row{
+        .white-row {
             margin: 0 15px;
         }
     }
-    .setting-menu-icon{
+    .setting-menu-icon {
         padding: 4px 10px 4px 4px;
         display: none;
         width: 32px;
         text-align: center;
     }
-    .mobile-back-btn{
+    .mobile-back-btn {
         display: none;
         color: #fff;
         margin-right: 10px;
     }
-    .not-today{
+    .not-today {
         margin-right: 5px;
     }
-    .date-range-picker{
+    .date-range-picker {
         max-width: 195px;
         min-width: 195px;
         font-size: 12px !important;
@@ -919,7 +918,7 @@ ul.sub-list {
     }
 }
 @media (max-width: 679px) {
-    .close-2{
+    .close-2 {
         top: 52px;
         right: 35px;
     }
@@ -944,7 +943,7 @@ ul.sub-list {
     .lower-layer-header {
         padding-top: 5px;
     }
-    .not-today{
+    .not-today {
         padding-right: 0 !important;
     }
 }

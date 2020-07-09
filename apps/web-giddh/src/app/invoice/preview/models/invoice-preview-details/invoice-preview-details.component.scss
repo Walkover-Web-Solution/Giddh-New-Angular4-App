@@ -194,10 +194,11 @@
 
 .invoice-image-section {
     text-align: center;
-    background-color: $white;
+    background-color: $alice-blue-light;
     margin-bottom: 35px;
     z-index: -9;
     height: 100%;
+    margin-top: 20px;
     .expand-button {
         position: relative;
         right: 15px;
@@ -516,15 +517,17 @@ label.labeled {
 .dropdown-btn-new {
     padding: 5px 16px !important;
 }
-
-.upload-excel {
-    display: flex;
-    height: 320px;
-    position: relative;
-    align-items: center;
-    justify-content: center;
+.upload-file-wrapper {
+    background-color: $white;
+    padding-bottom: 15px;
+    .upload-excel {
+        display: flex;
+        height: 320px;
+        position: relative;
+        align-items: center;
+        justify-content: center;
+    }
 }
-
 .max500 {
     max-width: 500px;
 }

@@ -158,7 +158,7 @@
 }
 .invoice-image-section {
     text-align: center;
-    background-color: $white;
+    background-color: $alice-blue-light;
     margin-bottom: 35px;
     z-index: -9;
     height: 100vh;
@@ -250,6 +250,7 @@ span.close-modal.cp.pull-right {
 
 .invoice-detail-wrapper {
     height: 100vh;
+    background-color: $alice-blue-light;
 }
 
 .invoice-editWrapper {
@@ -336,13 +337,16 @@ span.close-modal.cp.pull-right {
 .dropdown-btn-new {
     padding: 5px 16px !important;
 }
-
-.upload-excel {
-    display: flex;
-    height: 320px;
-    position: relative;
-    align-items: center;
-    justify-content: center;
+.upload-file-wrapper {
+    background-color: $white;
+    padding-top: 15px;
+    .upload-excel {
+        display: flex;
+        height: 320px;
+        position: relative;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 .upload-excel {

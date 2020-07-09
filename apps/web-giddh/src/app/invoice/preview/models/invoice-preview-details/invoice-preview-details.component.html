@@ -217,8 +217,8 @@
                                             </span>
                                         </div>
                                         <div class="history-btn">
-                                            <button class="btn btn-primary" (click)="toggleAccountAsidePane()"><img
-                                                    src="../../../assets/images/history-icon.svg"> History</button>
+                                            <button class="btn btn-primary" (click)="toggleAccountAsidePane()">
+                                                <i class="icon-history-icon font-12"></i> History</button>
                                         </div>
 
                                     </div>
@@ -310,7 +310,7 @@
                                 <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and
                                     PDF (.pdf); to print other formats, download them. </span>
                             </div>
-                            <div class="expand-button cursor-pointer text-gray" (click)="openModal(template)">
+                            <div class="expand-button cursor-pointer text-gray" (click)="openModal(template)" hidden>
                                 <span class="icon-collapse-icon"></span>Expand
                             </div>
                             <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview
@@ -327,22 +327,25 @@
                                     class="image-preview" [src]="imagePreviewSource" />
                             </div>
 
-                            <div *ngIf="shouldShowUploadAttachment"
-                                class="upload-excel max500 center-block box mrT2 dashed-bdr">
-                                <input type="file" id="csv-upload-input" placeholder="Upload an EXCEL or CSV file"
-                                    droppable="true" class="form-control" [options]="fileUploadOptions" ngFileSelect
-                                    [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)" />
-                                <div class="clearfix pos-rel width100">
-                                    <div class="file-input-wrapper text-center">
-                                        <div class="clearfix mrB2">
-                                            <img src="assets/images/new/import_icon.svg" />
-                                        </div>
-                                        <div class="clearfix pdR2 pdL2">
-                                            <label class="clearfix text-light-2" style="font-size: 14px">Drop file to
-                                                upload</label>
-                                            <div class="mrT3">
-                                                <label class="file-uplod-penal" for="csv-upload-input"> <span>Browse
-                                                        file</span></label>
+                            <div class="upload-file-wrapper">
+                                <div *ngIf="shouldShowUploadAttachment"
+                                    class="upload-excel max500 center-block box mrT2 dashed-bdr">
+                                    <input type="file" id="csv-upload-input" placeholder="Upload an EXCEL or CSV file"
+                                        droppable="true" class="form-control" [options]="fileUploadOptions" ngFileSelect
+                                        [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)" />
+                                    <div class="clearfix pos-rel width100">
+                                        <div class="file-input-wrapper text-center">
+                                            <div class="clearfix mrB2">
+                                                <img src="assets/images/new/import_icon.svg" />
+                                            </div>
+                                            <div class="clearfix pdR2 pdL2">
+                                                <label class="clearfix text-light-2" style="font-size: 14px">Drop file
+                                                    to
+                                                    upload</label>
+                                                <div class="mrT3">
+                                                    <label class="file-uplod-penal" for="csv-upload-input"> <span>Browse
+                                                            file</span></label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -354,7 +357,7 @@
                             <body id="default">
                                 <!--class="disabled-area"-->
                                 <div class="pl-3 pr-3">
-                                    <div id="Template-header">
+                                    <div id="template-header">
                                         <header class="mb-1">
                                             <table cellspacing="0" cellpadding="0">
                                                 <tbody>
@@ -386,7 +389,7 @@
                                                                         <tr>
                                                                             <td>
                                                                                 <span
-                                                                                    class="mb-0">Delivery</span>11/09/2017
+                                                                                    class="mb-0">Delivery:</span>11/09/2017
                                                                             </td>
                                                                             <td>
                                                                                 <span class="mb-0">

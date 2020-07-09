@@ -122,16 +122,18 @@ export function download(filename, data, mimeType) {
 
 export function isIOSCordova() {
     // Depending on the device, a few examples are:
-//   - "Android"
-//   - "BlackBerry 10"
-//   - "browser"
-//   - "iOS"
-//   - "WinCE"
-//   - "Tizen"
-//   - "Mac OS X"
-//     debugger;
-    const devicePlatform = device.platform;
-    return isCordova() && device.platform === "iOS";
+    //   - "Android"
+    //   - "BlackBerry 10"
+    //   - "browser"
+    //   - "iOS"
+    //   - "WinCE"
+    //   - "Tizen"
+    //   - "Mac OS X"
+    //     debugger;
+    if (window.cordova && cordova.platformId !== "browser") {
+        const devicePlatform = device.platform;
+        return isCordova() && device.platform === "iOS";
+    }
 }
 
 /**
@@ -139,15 +141,17 @@ export function isIOSCordova() {
  */
 export function isAndroidCordova() {
     // Depending on the device, a few examples are:
-//   - "Android"
-//   - "BlackBerry 10"
-//   - "browser"
-//   - "iOS"
-//   - "WinCE"
-//   - "Tizen"
-//   - "Mac OS X"
-//     debugger;
-    const devicePlatform = device.platform;
-    return isCordova() && device.platform === "Android";
+    //   - "Android"
+    //   - "BlackBerry 10"
+    //   - "browser"
+    //   - "iOS"
+    //   - "WinCE"
+    //   - "Tizen"
+    //   - "Mac OS X"
+    //     debugger;
+    if (window.cordova && cordova.platformId !== "browser") {
+        const devicePlatform = device.platform;
+        return isCordova() && device.platform === "Android";
+    }
 }
 
