@@ -1,5 +1,5 @@
 import { map, switchMap } from 'rxjs/operators';
-import { StockUnitRequest } from '../../models/api-models/Inventory';
+import {StockUnitRequest, StockUnitResponse} from '../../models/api-models/Inventory';
 import { CUSTOM_STOCK_UNIT_ACTIONS } from './inventory.const';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
@@ -10,6 +10,8 @@ import { Observable } from 'rxjs';
 import { InventoryService } from '../../services/inventory.service';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CustomActions } from '../../store/customActions';
+import * as moment from "moment";
+import Base = moment.unitOfTime.Base;
 
 @Injectable()
 export class CustomStockUnitAction {
@@ -42,9 +44,9 @@ export class CustomStockUnitAction {
         .ofType(CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT).pipe(
             switchMap((action: CustomActions) => {
                 return this._inventoryService.UpdateStockUnit(action.payload.unit, action.payload.code).pipe(
-                    map((r) => this.validateResponse(r, {
+                    map((r: BaseResponse<StockUnitResponse, StockUnitRequest>) => this.validateResponse(r, {
                         type: CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT_RESPONSE,
-                        payload: action.payload
+                        payload: r.body
                     }, true, 'Unit Updated Successfully')));
             }));
 
