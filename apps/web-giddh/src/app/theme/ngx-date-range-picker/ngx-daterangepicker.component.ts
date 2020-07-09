@@ -1910,11 +1910,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         let oldCurrentMonthIndex = this.currentMonthIndex;
 
         if (side === "start") {
-            if (this.initialCalendarMonths === true) {
+            //if (this.initialCalendarMonths === true) {
                 this.calendarMonths = [];
                 this.renderedCalendarMonths = [];
                 this.monthYearPosition = [];
-            }
+            //}
 
             if (this.activeMonthHover === false) {
                 this.activeMonth = this.calendarVariables.start;
@@ -1979,24 +1979,24 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.currentMonthIndex = this.monthYearPosition.indexOf(key);
         }
 
-        if (this.calendarMonths && this.calendarMonths.length > 9) {
-            if (this.isPreviousMonth) {
-                // this.endIndex = (this.monthYearPosition[currentMonthIndex + 4]) ? currentMonthIndex + 4 : currentMonthIndex;
-                // this.startIndex = (this.monthYearPosition[this.endIndex - 5]) ? (this.endIndex - 5) : 0;
-                //this.startIndex = (this.monthYearPosition[this.currentMonthIndex - 6]) ? this.currentMonthIndex - 6 : 0;
-                //this.endIndex = (this.monthYearPosition[this.startIndex + 5]) ? (this.startIndex + 5) : this.monthYearPosition.length;
-            } else {
-                /*if(this.currentMonthIndex > oldCurrentMonthIndex) {
-                    this.startIndex = (this.monthYearPosition[this.currentMonthIndex - 6]) ? this.currentMonthIndex - 6 : 0;
-                    this.endIndex = (this.monthYearPosition[this.startIndex + 5]) ? (this.startIndex + 5) : this.monthYearPosition.length;
-                }*/
-            }
+        // if (this.calendarMonths && this.calendarMonths.length > 9) {
+        //     if (this.isPreviousMonth) {
+        //         this.endIndex = (this.monthYearPosition[currentMonthIndex + 4]) ? currentMonthIndex + 4 : currentMonthIndex;
+        //         this.startIndex = (this.monthYearPosition[this.endIndex - 5]) ? (this.endIndex - 5) : 0;
+        //         this.startIndex = (this.monthYearPosition[this.currentMonthIndex - 6]) ? this.currentMonthIndex - 6 : 0;
+        //         this.endIndex = (this.monthYearPosition[this.startIndex + 5]) ? (this.startIndex + 5) : this.monthYearPosition.length;
+        //     } else {
+        //         /*if(this.currentMonthIndex > oldCurrentMonthIndex) {
+        //             this.startIndex = (this.monthYearPosition[this.currentMonthIndex - 6]) ? this.currentMonthIndex - 6 : 0;
+        //             this.endIndex = (this.monthYearPosition[this.startIndex + 5]) ? (this.startIndex + 5) : this.monthYearPosition.length;
+        //         }*/
+        //     }
 
-            this.startIndex = (this.currentMonthIndex > 3) ? this.currentMonthIndex - 3 : 0;
-            this.endIndex = this.startIndex + 5;
-        }
-        //console.log(this.monthYearPosition);
-        console.log(this.currentMonthIndex + " : " + this.startIndex + " : " + this.endIndex+ " : " + existingMonthsLength);
+        //     this.startIndex = (this.currentMonthIndex > 3) ? this.currentMonthIndex - 3 : 0;
+        //     this.endIndex = this.startIndex + 5;
+        // }
+        //console.log(this.calendarVariables);
+        //console.log(this.currentMonthIndex + " : " + this.startIndex + " : " + this.endIndex+ " : " + existingMonthsLength);
     }
 
     /**
