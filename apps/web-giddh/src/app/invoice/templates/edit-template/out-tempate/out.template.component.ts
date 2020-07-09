@@ -32,7 +32,9 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 	public companyUniqueName: string;
 	public voucherType = 'default';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* Company unique name observable */
     public companyUniqueName$: Observable<string>;
+    /* This will hold the value if Gst Composition will show/hide */
     public showGstComposition: boolean = false;
 
 	constructor(
