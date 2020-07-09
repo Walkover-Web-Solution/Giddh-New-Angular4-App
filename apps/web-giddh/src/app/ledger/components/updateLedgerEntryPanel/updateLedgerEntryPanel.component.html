@@ -917,7 +917,7 @@
                                         <label class="default_clr">Invoice No.</label>
 
                                         <sh-select [options]="invoiceList" placeholder="Select Accounts"
-                                            [(ngModel)]="selectedInvoice" [notFoundLink]="false"
+                                            [(ngModel)]="selectedInvoice" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
                                             (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"
                                             [ItemHeight]="67" [showClear]="false">
                                             <ng-template #optionTemplate let-option="option">
@@ -936,7 +936,10 @@
                                         </sh-select>
                                     </div>
                                 </td>
-
+                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'credit note' && selectedInvoice" class="cp remove-invoice pdR2 hidden-xs" (click)="removeSelectedInvoice()">
+                                    <span class=“remove-invoice-icon”>×</span>
+                                    <span class="remove-invoice-label">Remove</span>
+                                </td>
                                 <td class="pdR1">
                                     <div class="form-group">
                                         <label class="default_clr">Voucher No.</label>

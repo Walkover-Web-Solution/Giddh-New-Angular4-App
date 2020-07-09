@@ -257,7 +257,7 @@
             </tbody>
         </table>
 
-        <div class="pd1 mrB mrT" style="background: #fff;" *ngIf="showAdvanced">
+        <div class="pd1 mrB mrT more-details" style="background: #fff;" *ngIf="showAdvanced">
 
             <div class="">
 
@@ -353,8 +353,9 @@
                                 </div>
                             </td>
 
-                            <td *ngIf="selectedInvoiceForCreditNote" class="pdR1 pt-2 hidden-xs" (click)="removeSelectedInvoice(invoice)">
-                                &times; Remove Invoice
+                            <td *ngIf="blankLedger.voucherType == 'credit note' && selectedInvoiceForCreditNote" class="cp remove-invoice pdR1 pt-1 hidden-xs" (click)="removeSelectedInvoice()">
+                                <span class=“remove-invoice-icon”>×</span>
+                                <span class="label">Remove</span>
                             </td>
 
                             <td *ngIf="shouldShowAdvanceReceipt" class="pdR1 pt-2 hidden-xs">
@@ -461,7 +462,7 @@
                     <label class="pull-left cp fs16">
 
                         <input class="pull-left" type="checkbox" name="generateInvoice"
-                            [disabled]="(isAdvanceReceipt && blankLedger.generateInvoice || blankLedger.voucherType == 'credit note') ? 'disabled' : null"
+                            [disabled]="(isAdvanceReceipt && blankLedger.generateInvoice || selectedInvoiceForCreditNote) ? 'disabled' : null"
                             [(ngModel)]="blankLedger.generateInvoice">
                         Generate Voucher
                     </label>
