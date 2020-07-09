@@ -9,21 +9,22 @@
             </div>
             <ng-template #template>
                 <div class="modal-header">
-                  <h4 class="modal-title bg pull-left">Search here...</h4>
-                  <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+                    <h4 class="modal-title bg pull-left">Search here...</h4>
+                    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-view">
                         <div class="form-group">
                             <label class="d-block">Invoice Type</label>
                             <div class="ng-select-wrap">
-                                <sh-select name="invoiceType" [placeholder]="'Select Account'" [(ngModel)]="filter.status"
-                                    [options]="invoiceTypeOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
-                                    [useInBuiltFilterForIOptionTypeItems]="true">
+                                <sh-select name="invoiceType" [placeholder]="'Select Account'"
+                                    [(ngModel)]="filter.status" [options]="invoiceTypeOptions" [notFoundLink]="false"
+                                    [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">
                                     <ng-template #optionTemplate let-option="option">
-                                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                        <a href="javascript:void(0)" class="list-item"
+                                            style="border-bottom: 1px solid #ccc;">
                                             <div class="item">{{ option.label }}</div>
                                         </a>
                                     </ng-template>
@@ -34,24 +35,26 @@
                             <label class="d-block">Interval</label>
                             <div class="ng-select-wrap">
                                 <sh-select name="interval" [placeholder]="'Select Account'" [options]="intervalOptions"
-                                    [notFoundLink]="false" [multiple]="false" [(ngModel)]="filter.duration" [ItemHeight]="33"
-                                    [useInBuiltFilterForIOptionTypeItems]="true">
+                                    [notFoundLink]="false" [multiple]="false" [(ngModel)]="filter.duration"
+                                    [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">
                                     <ng-template #optionTemplate let-option="option">
-                                        <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                        <a href="javascript:void(0)" class="list-item"
+                                            style="border-bottom: 1px solid #ccc;">
                                             <div class="item">{{ option.label }}</div>
                                         </a>
                                     </ng-template>
                                 </sh-select>
                             </div>
-                        </div>  
+                        </div>
                         <div class="form-group">
                             <label class="d-block">Last Invoice Date</label>
                             <div class="input-group">
-                                <input name="lastInvoiceDate" placeholder="Select Date" [(ngModel)]="filter.lastInvoiceDate"
-                                    type="text" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" autocomplete="off"
-                                    class="form-control" bsDatepicker required>
+                                <input name="lastInvoiceDate" placeholder="Select Date"
+                                    [(ngModel)]="filter.lastInvoiceDate" type="text"
+                                    [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" autocomplete="off" class="form-control"
+                                    bsDatepicker required>
                             </div>
-                        </div>    
+                        </div>
                         <div class="form-group search-invoice-filed">
                             <div class="searchInvoiceNo">
                                 <label class="d-block">Search Invoice No.</label>
@@ -66,12 +69,13 @@
                             <div class="searchCustomerNo">
                                 <div class="input-container">
                                     <label class="d-block">Search Customer Name</label>
-                                    <input type="text" placeholder="Search Customer Name" class="w100" name="customerName"
-                                        [formControl]="customerNameInput" #customerSearch class="form-control" />
+                                    <input type="text" placeholder="Search Customer Name" class="w100"
+                                        name="customerName" [formControl]="customerNameInput" #customerSearch
+                                        class="form-control" />
                                     <!-- <i class="icon-search" (click)="showCustomerNameSearch = false;"></i> -->
                                 </div>
                             </div>
-                        </div>     
+                        </div>
                         <div class="form-group">
                             <button class="btn btn-success btn-sm">Search</button>
                             <a class="cp" href="javascript: void 0">
@@ -79,10 +83,10 @@
                                     tooltip="Reset Filter" *ngIf="showResetFilterButton" (click)="resetFilter()"></i>
                             </a>
                         </div>
-                    </div>  
+                    </div>
                 </div>
             </ng-template>
-            <div class="reccuring-form" *ngIf="!isMobileScreen">     
+            <div class="reccuring-form" *ngIf="!isMobileScreen">
                 <div class="form-group mrR1">
                     <label class="d-block">Invoice Type</label>
                     <div class="ng-select-wrap">
@@ -212,8 +216,10 @@
 
                     <th style="width:4%" *ngIf="selectedItems.length > 0">
                         <div class="mh18_img" style="justify-content: center;display: flex">
-                            <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
-                            <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+                            <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
+                                (click)="toggleAllItems(true)">
+                            <img src="assets/images/checked.png" *ngIf="allItemsSelected"
+                                (click)="toggleAllItems(false)">
                         </div>
                     </th>
 
@@ -223,7 +229,7 @@
                         </div>
                     </th>
 
-                    <th width="20%" class="td_in_searchBox" #searchInvoiceContainer
+                    <th width="20%" class="td-search-box" #searchInvoiceContainer
                         (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
 
                         <div [hidden]="showInvoiceNumberSearch">
@@ -240,7 +246,7 @@
 
                     </th>
 
-                    <th width="20%" class="td_in_searchBox" #searchCustomerContainer
+                    <th width="20%" class="td-search-box" #searchCustomerContainer
                         (clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerName')">
 
                         <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerNameSearch, title: 'Customer Name', fieldName: 'customerName',
@@ -253,7 +259,8 @@
                             <div class="">Interval</div>
 
                             <div class="icon-pointer">
-                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'duration'}"></ng-container>
+                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'duration'}">
+                                </ng-container>
 
                             </div>
                         </div>
@@ -282,7 +289,8 @@
                         <div class="d-flex">
                             <div class="">Status</div>
                             <div class="icon-pointer">
-                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'status'}"></ng-container>
+                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'status'}">
+                                </ng-container>
 
 
 
@@ -317,7 +325,8 @@
                         <div class="mh18_img justify-content-sm" style="justify-content: center;display: flex">
                             <img *ngIf="!col?.isSelected" src="assets/images/unchecked.png"
                                 (click)="toggleItem(col, true)" />
-                            <img *ngIf="col?.isSelected" src="assets/images/checked.png" (click)="toggleItem(col, false)" />
+                            <img *ngIf="col?.isSelected" src="assets/images/checked.png"
+                                (click)="toggleItem(col, false)" />
                         </div>
                     </td>
 
