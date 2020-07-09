@@ -60,7 +60,7 @@ import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-sele
 import { EMAIL_REGEX_PATTERN } from '../shared/helpers/universalValidations';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { Configuration, Subvoucher, RATE_FIELD_PRECISION } from '../app.constant';
+import { Configuration, Subvoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
@@ -322,8 +322,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         shippedDateLabel: '',
         trackingNumber: ''
     };
-    /** Rate should have precision up to 4 digits for better calculation */
+    /** Rate precision value that will be visible on UI */
     public ratePrecision = RATE_FIELD_PRECISION;
+    /** Rate precision value that will be sent to API */
+    public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
     public selectedCompany: any;
     public formFields: any[] = [];
 
@@ -2114,7 +2116,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
         trx.amount = Number(trx.amount);
         if (trx.isStockTxn) {
-            trx.rate = giddhRoundOff((trx.amount / trx.quantity), this.ratePrecision);
+            trx.rate = Number((trx.amount / trx.quantity).toFixed(this.highPrecisionRate));
         }
 
         if (this.isUpdateMode && (this.isEstimateInvoice || this.isProformaInvoice)) {
@@ -2192,7 +2194,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         // Calculate stock unit rate with amount
         if (transaction.isStockTxn) {
-            transaction.rate = giddhRoundOff((transaction.amount / transaction.quantity), this.ratePrecision);
+            transaction.rate = Number((transaction.amount / transaction.quantity).toFixed(this.highPrecisionRate));
         }
         this.calculateSubTotal();
         this.calculateTotalDiscount();
