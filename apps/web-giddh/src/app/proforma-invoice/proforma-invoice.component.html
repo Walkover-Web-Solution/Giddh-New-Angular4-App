@@ -381,7 +381,7 @@
                                                         <div class="item">{{ option.label }}
                                                         </div>
                                                         <div class="item_unq">
-                                                            (Dated: {{ option.invoice?.invoiceDate}})
+                                                            (Dated: {{ option.invoice?.voucherDate}})
                                                         </div>
                                                         <div class="item_unq">
                                                             (Due:
@@ -391,6 +391,10 @@
                                                 </ng-template>
                                             </sh-select>
                                         </ng-container>
+                                    </div>
+                                    <div *ngIf="isCreditNote && selectedInvoice" class="cp col-sm-6 remove-invoice" (click)="removeSelectedInvoice()">
+                                        <span class=“remove-invoice-icon”>×</span>
+                                        <span class="remove-invoice-label">Remove</span>
                                     </div>
                                     <div class="col-sm-6 invoiceDateDueDate">
                                         <div class="form-inline">
