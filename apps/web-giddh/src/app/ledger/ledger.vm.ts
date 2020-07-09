@@ -399,6 +399,7 @@ export interface IInventoryUnit {
     stockUnitCode: string;
     code: string;
     rate: number;
+    highPrecisionRate?: number;
 }
 
 /**
