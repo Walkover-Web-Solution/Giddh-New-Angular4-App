@@ -957,11 +957,6 @@ table.table.customerInvoiceTable {
     width: 100%;
 }
 
-.wrapperCustomerTable {
-    overflow-x: hidden !important;
-    min-height: 470px;
-}
-
 .customerInvoiceTable td {
     padding: 8px 15px;
 }
@@ -1600,6 +1595,18 @@ span.eligible-ITC {
     flex-direction: row-reverse;
     label{
         padding-bottom: 0;
+    }
+}
+.remove-invoice {
+    span:first-child {
+        font-size: 25px;
+        vertical-align: middle;
+        color: $gray;
+    }
+    .label {
+        vertical-align: middle;
+        color: $gray;
+        font-size: 13px;
     }
 }
 

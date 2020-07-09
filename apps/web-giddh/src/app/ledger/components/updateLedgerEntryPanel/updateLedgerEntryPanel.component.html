@@ -925,7 +925,7 @@
                                                     <div class="item">{{ option.label }}
                                                     </div>
                                                     <div class="item_unq">
-                                                        (Dated: {{ option.invoice?.invoiceDate}})
+                                                        (Dated: {{ option.invoice?.voucherDate}})
                                                     </div>
                                                     <div class="item_unq">
                                                         (Due:
@@ -936,7 +936,7 @@
                                         </sh-select>
                                     </div>
                                 </td>
-                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'credit note' && selectedInvoice" class="cp remove-invoice pdR2 hidden-xs" (click)="removeSelectedInvoice()">
+                                <td *ngIf="vm.selectedLedger.voucher.shortCode === 'credit note' && selectedInvoice" class="cp remove-invoice pdR2 hidden-xs" (click)="removeSelectedInvoice()">
                                     <span class=“remove-invoice-icon”>×</span>
                                     <span class="remove-invoice-label">Remove</span>
                                 </td>

@@ -341,7 +341,7 @@
                                                 <div class="item">{{ option.label }}
                                                 </div>
                                                 <div class="item_unq">
-                                                    (Dated: {{ option.invoice?.invoiceDate}})
+                                                    (Dated: {{ option.invoice?.voucherDate}})
                                                 </div>
                                                 <div class="item_unq">
                                                     (Due:
@@ -353,7 +353,7 @@
                                 </div>
                             </td>
 
-                            <td *ngIf="blankLedger.voucherType == 'credit note' && selectedInvoiceForCreditNote" class="cp remove-invoice pdR1 pt-1 hidden-xs" (click)="removeSelectedInvoice()">
+                            <td *ngIf="blankLedger.voucherType === 'credit note' && selectedInvoiceForCreditNote" class="cp remove-invoice pdR1 pt-1 hidden-xs" (click)="removeSelectedInvoice()">
                                 <span class=“remove-invoice-icon”>×</span>
                                 <span class="label">Remove</span>
                             </td>

@@ -30,7 +30,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, } from '../models/api-models/Ledger';
-import { SalesOtherTaxesModal } from '../models/api-models/Sales';
+import { SalesOtherTaxesModal, VoucherTypeEnum } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
@@ -899,10 +899,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public getInvoiceListsForCreditNote(ev): void {
         if (ev && this.selectedTxnAccUniqueName && this.accountUniquename) {
-            let request = {
-                "accountUniqueNames": [this.selectedTxnAccUniqueName, this.accountUniquename],
-                "voucherType": "credit note"
-            }
+            const request = {
+                accountUniqueNames: [this.selectedTxnAccUniqueName, this.accountUniquename],
+                voucherType: VoucherTypeEnum.creditNote
+            };
             let date;
             if (typeof this.lc.blankLedger.entryDate === 'string') {
                 date = this.lc.blankLedger.entryDate;
@@ -910,11 +910,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 date = moment(this.lc.blankLedger.entryDate).format(GIDDH_DATE_FORMAT);
             }
             this.invoiceList = [];
-            this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((res: any) => {
-                _.map(res.body, (invoice) => {
-                    this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice });
-                });
-                _.uniqBy(this.invoiceList, 'value');
+            this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
+                if (response && response.body && response.body.results) {
+                    response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber, value: invoice.uniqueName, invoice }))
+                    _.uniqBy(this.invoiceList, 'value');
+                }
             });
         }
     }

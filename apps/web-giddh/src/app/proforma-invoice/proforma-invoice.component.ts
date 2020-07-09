@@ -1464,8 +1464,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invoiceList = [];
             this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
                 if (response && response.body) {
-                    if (response.body.length) {
-                        response.body.forEach(invoice => this.invoiceList.push({ label: invoice.invoiceNumber, value: invoice.invoiceUniqueName, invoice }))
+                    if (response.body.results && response.body.results.length) {
+                        response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber, value: invoice.uniqueName, invoice }))
                     } else {
                         this.invoiceForceClearReactive$ = observableOf({ status: true });
                     }
@@ -1489,6 +1489,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             });
         }
+    }
+
+    public removeSelectedInvoice(): void {
+        this.invoiceForceClearReactive$ = observableOf({ status: true });
+        this.selectedInvoice = '';
     }
 
     public prepareInvoiceTypeFlags() {
