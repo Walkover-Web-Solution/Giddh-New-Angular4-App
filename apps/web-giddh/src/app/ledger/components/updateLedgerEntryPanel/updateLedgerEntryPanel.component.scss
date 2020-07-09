@@ -240,6 +240,25 @@ span.eligible-ITC {
         width: 100%;
     }
 }
+.advanced {
+    table.xs-table-block {
+        tbody tr {
+            td.remove-invoice {
+                span:first-child {
+                    font-size: 25px;
+                    vertical-align: middle;
+                    color: $gray;
+                    padding-right: 8px;
+                }
+                .remove-invoice-label {
+                    vertical-align: middle;
+                    color: $gray;
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+}
 
 
 /* responsive */

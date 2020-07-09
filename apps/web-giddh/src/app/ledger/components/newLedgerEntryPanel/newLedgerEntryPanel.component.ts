@@ -936,6 +936,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.shouldShowAdvanceReceipt = true;
             this.clickUnpaidInvoiceList.emit(true);
         } else if (e.value === 'credit note') {
+            this.shouldShowAdvanceReceipt = false;
             this.getInvoiceListsForCreditNote.emit(true);
             this.blankLedger.generateInvoice = true;
         } else {
