@@ -32,7 +32,7 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
 	@Input() public imageSignatureSrc: string;
 	@Input() public showImageSignature: boolean;
 	@Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
-
+    @Input() public showGstComposition: boolean = false;
 	@Input() public voucherType: string;
 
 	@Output() public sectionName: EventEmitter<string> = new EventEmitter();
