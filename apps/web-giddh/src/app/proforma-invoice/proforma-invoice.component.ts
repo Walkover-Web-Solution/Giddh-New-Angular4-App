@@ -252,7 +252,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public invoiceList: any[];
     /** Selected invoice for credit note */
     public selectedInvoice: any = null;
-
     public customerAcList$: Observable<IOption[]>;
     public bankAccounts$: Observable<IOption[]>;
     public salesAccounts$: Observable<IOption[]> = observableOf(null);
