@@ -838,15 +838,24 @@ span.eligible-ITC {
     display: flex;
     align-items: center;
     flex-direction: row-reverse;
+}
+.deposite-section {
+    transform: translateX(120px);
     label {
-        padding-bottom: 0;
+        display: block;
+        font-weight: 400;
+        margin-bottom: 0;
+    }
+    sh-select {
+        float: right;
+        width: 129px;
+        margin-left: 20px;
+    }
+    .amount-field {
+        min-width: 129px !important;
+        margin-left: 20px;
     }
 }
-
-.cashinvoice_tipImg.search-arrow-image {
-    max-width: 215px;
-}
-
 .tax-in-currency {
     margin-bottom: 7px;
     color: $nobel !important;
@@ -1075,10 +1084,7 @@ span.eligible-ITC {
     }
     .search-arrow-image {
         left: 15px;
-        top: 160px;
-    }
-    .create-purchase-order-form:before {
-        top: 160px;
+        top: 150px;
     }
 }
 @media (max-width: 840px) {
