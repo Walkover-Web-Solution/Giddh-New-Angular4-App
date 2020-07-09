@@ -57,7 +57,7 @@
                     </span>
                     <span *ngIf="!isMobileScreen" class="advance-icon d-flex advance-search-filter pointer" [tooltip]="'Advance Search'" [placement]="'top'" [ngStyle]="{'margin-left': checkedTrxWhileHovering.length === 0 ? '7px': '0px'}">
                         <!-- <i class="icon-advance-search" aria-hidden="true" (click)="onOpenAdvanceSearch()"></i> -->
-                        <img src="{{imgPath}}advance-filter.svg" (click)="onOpenAdvanceSearch()">
+                        <span class="icon-advance-filter" (click)="onOpenAdvanceSearch()"></span>
                     </span>
                     <a class="cp mrL1 clear-filter-btn" *ngIf="isAdvanceSearchImplemented && !isMobileScreen" href="javascript:;" (click)="resetAdvanceSearch()" tooltip="Reset Advance Search">
                         <i aria-hidden="true" class="glyphicon glyphicon-refresh"></i> Clear Filter
