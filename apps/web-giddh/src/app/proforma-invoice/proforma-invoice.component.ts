@@ -224,16 +224,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public invFormData: VoucherClass;
     /** Invoice list array */
     public invoiceList: any[];
-<<<<<<< HEAD
-<<<<<<< HEAD
     /** Selected invoice for credit note */
     public selectedInvoice: any = null;
-=======
->>>>>>> e978513f2... create voucher with credit note
-=======
-    /** Selected invoice for credit note */
-    public selectedInvoice: any = null;
->>>>>>> aedb9bdab... bug fixes
     public customerAcList$: Observable<IOption[]>;
     public bankAccounts$: Observable<IOption[]>;
     public salesAccounts$: Observable<IOption[]> = observableOf(null);
