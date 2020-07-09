@@ -74,6 +74,7 @@ export class StockUnitResponse implements IStockUnitResponse {
     public name: string;
     public parentStockUnit?: IStockItem;
     public quantityPerUnit: number;
+    public displayQuantityPerUnit?: number;
 }
 
 /**
