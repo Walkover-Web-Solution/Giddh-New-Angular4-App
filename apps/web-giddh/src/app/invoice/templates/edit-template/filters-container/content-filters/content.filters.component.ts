@@ -48,6 +48,7 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold the value if Gst Composition will show/hide */
     public showGstComposition: boolean = false;
 
     constructor(private store: Store<AppState>, private _invoiceUiDataService: InvoiceUiDataService,
