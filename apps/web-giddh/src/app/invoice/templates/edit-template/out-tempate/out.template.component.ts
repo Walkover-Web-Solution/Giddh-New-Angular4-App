@@ -49,7 +49,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 			this.companyUniqueName = ss.companyUniqueName;
         });
         
-        this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+        this.companyUniqueName$ = this.store.select(state => state.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
 
         this.companyUniqueName$.pipe(take(1)).subscribe(activeCompanyUniqueName => {
             if (companies) {
