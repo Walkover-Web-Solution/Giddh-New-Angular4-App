@@ -30,6 +30,7 @@ export class GstTemplateEComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
     @Input() public logoSrc: string;
     @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
+    /* This will hold the value if Gst Composition will show/hide */
     @Input() public showGstComposition: boolean = false;
     @Input() public voucherType = '';
     @Input() public imageSignatureSrc: string;
