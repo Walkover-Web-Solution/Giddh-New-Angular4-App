@@ -463,6 +463,17 @@ span.inputAddon {
             display:none;
         }
     }
+
+    .customer-name-filed{
+        .table-checkbox{
+            input[type="checkbox"]{
+                display:none;
+            }
+        }
+        .icon-ellipse{
+            display:none;
+        }
+    }
     .scroll-top{
         position: fixed;
         bottom: 20px;
