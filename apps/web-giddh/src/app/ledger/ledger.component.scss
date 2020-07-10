@@ -64,14 +64,14 @@ input {
     min-width: auto;
     padding-left: 27px !important;
     border-radius: 20px !important;
-    
 }
 .ledg-head {
-    .single-search-box{
+    .single-search-box {
         position: relative;
-        i{
+        i {
             color: $gray;
-            left:9px;top:10px;   
+            left: 9px;
+            top: 10px;
         }
     }
 }
@@ -291,7 +291,7 @@ sh-select:focus {
     display: none;
 }
 .ledg-head .icomoon_ico {
-    color:$gray;
+    color: $gray;
     width: 36px;
     height: 36px;
     border: 1px solid $gainsboro;
@@ -354,7 +354,7 @@ sh-select:focus {
     content: "";
     height: 1px;
     width: 32%;
-    background-color:$gainsboro;
+    background-color: $gainsboro;
     left: -33%;
     top: 17px;
 }
@@ -369,7 +369,7 @@ sh-select:focus {
 }
 
 .ledger-head {
-    margin-top:25px;
+    margin-top: 25px;
 }
 .ledger-stat h1 {
     color: $nero;
@@ -412,11 +412,11 @@ sh-select:focus {
     margin-right: 7px;
     border-radius: 50%;
     background-color: $white;
-    img{
+    img {
         width: 18px;
     }
 }
- 
+
 .ledg-head .advanc-search-block {
     height: 34px;
     vertical-align: middle;
@@ -471,7 +471,7 @@ sh-select:focus {
 .ledger-main .ledger-row:hover {
     background-color: transparent;
 }
-.date-range-picker{
+.date-range-picker {
     background-color: $white !important;
     text-decoration-line: none;
     text-decoration-style: none;
@@ -489,115 +489,119 @@ sh-select:focus {
     height: 36px;
     min-width: 220px !important;
     border-radius: 30px;
-    &:focus{
+    &:focus {
         border-color: $chetwode-blue;
-
     }
 }
-.ipad-view-datepicker{
-    .date-range-picker{
+.ipad-view-datepicker {
+    .date-range-picker {
         border: 1px solid $gainsboro;
         border-radius: 20px;
         width: 203px !important;
     }
 }
 /*mobile ledger view css*/
-.mobile-ledger-view{
+.mobile-ledger-view {
     margin: 0 -15px;
-    table{
+    table {
         width: 100%;
-    tbody{
-        background-color:$white;
-        .transction-date{
-            font-size: 16px;
-            font-family: 'opensans-semibold';
-        }
-        td{
-            padding-top: 8px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #d1d1d1;
-            font-size: 14px;
-        }
-        .second-row{
-            td{
-                &:first-child{
-                    border-right: 1px solid #d9d9d9;
-                    width: 60%;
-                }
-                span.account-holder-checkbox {
-                    width: 20px;
-                    margin-right: 3px;
-                }
-                span.account-holder-name {
-                    float: left;
-                    width: 82%;
-                    display: inline-flex;
+        tbody {
+            background-color: $white;
+            .transction-date {
+                font-size: 16px;
+                font-family: "opensans-semibold";
+            }
+            td {
+                padding-top: 8px;
+                padding-bottom: 8px;
+                border-bottom: 1px solid #d1d1d1;
+                font-size: 14px;
+            }
+            .second-row {
+                td {
+                    &:first-child {
+                        border-right: 1px solid #d9d9d9;
+                        width: 60%;
+                    }
+                    span.account-holder-checkbox {
+                        width: 20px;
+                        margin-right: 3px;
+                    }
+                    span.account-holder-name {
+                        float: left;
+                        width: 82%;
+                        display: inline-flex;
+                    }
                 }
             }
         }
     }
 }
-}
 
-.debit-credit-amount{
-    justify-content: space-between
+.debit-credit-amount {
+    justify-content: space-between;
 }
 .input-wrapper.ipad-view-datepicker {
     display: none;
 }
 .no-btn,
 .no-btn:active,
-.no-btn:focus{
+.no-btn:focus {
     background-color: transparent !important;
     border: none !important;
     outline: none !important;
     padding-left: 0;
 }
-.transaction-mapped-table{
+.transaction-mapped-table {
     font-size: 14px;
-    .transaction-mapped{
+    .transaction-mapped {
         padding: 0 !important;
         position: static;
-        th{
+        th {
             border: none;
             padding-top: 10px;
-            &:first-child{
+            &:first-child {
                 padding-right: 12px;
             }
         }
-
     }
-    .transaction-mapped-head{
-        th{
+    .transaction-mapped-head {
+        th {
             border-bottom: none !important;
         }
     }
-    .ledger-row{
-        td{
+    .ledger-row {
+        td {
             border-bottom: none !important;
-            &:last-child{
+            &:last-child {
                 border-right: none !important;
             }
-            .d-flex{
-                span{
-                    input[type="checkbox"]{
+            .d-flex {
+                span {
+                    input[type="checkbox"] {
                         margin-right: 5px;
                         margin-left: 5px;
                         height: 18px;
                     }
                 }
-            }   
+            }
         }
+    }
+    .transaction-table-row table td {
+        border-bottom: 1px solid #d9d9d9;
+    }
+    .transaction-table-row table:last-child td {
+        border-bottom: none;
     }
 }
 /*responsive*/
 .modal-ledger {
     width: 70%;
 }
-.ledger-head{
+.ledger-head {
     position: relative;
 }
-.ledger-head{
+.ledger-head {
     position: sticky;
     top: 60px;
     z-index: 1;
@@ -650,8 +654,8 @@ sh-select:focus {
     .ledger-head-top {
         width: 100% !important;
         justify-content: flex-end;
-        a{
-            &:last-child{
+        a {
+            &:last-child {
                 margin-right: 0;
             }
         }
@@ -661,14 +665,14 @@ sh-select:focus {
         padding: 0;
     }
     .ledg-head input[type="search"] {
-        min-width:170px;
+        min-width: 170px;
     }
     .debit-credit-amount {
         display: flex !important;
         flex-direction: column;
     }
 }
-@media only screen and (max-width:991px) {
+@media only screen and (max-width: 991px) {
     .ledg-head table td[class*="col-"],
     .ledg-head table td .select2-container {
         border-bottom: 0px solid #ccc;
@@ -758,48 +762,48 @@ sh-select:focus {
         display: block;
     }
     .ledg-head {
-        .ipad-view-datepicker{
+        .ipad-view-datepicker {
             display: block;
         }
-        .single-search-box{
+        .single-search-box {
             position: relative;
             width: calc(100% - 215px);
             margin-right: 13px;
-            .full-width-input{
-                width: 100%;  
+            .full-width-input {
+                width: 100%;
             }
-            .default-width-input{
-                width: calc(100% - 115px); 
+            .default-width-input {
+                width: calc(100% - 115px);
             }
             input[type="search"] {
                 min-width: 150px;
                 border-radius: 20px !important;
             }
-            .clear-filter-btn{
+            .clear-filter-btn {
                 text-align: center;
-                 width: 110px;
-                 padding: 0;
-                 display: flex;
+                width: 110px;
+                padding: 0;
+                display: flex;
                 align-items: center;
                 justify-content: center;
-                 i{
+                i {
                     left: -3px;
                     top: 0;
                     color: $midnight-blue;
-                 }
+                }
             }
         }
     }
-    .ledger-section{
+    .ledger-section {
         padding-top: 30px;
     }
-    .transaction-in-short{
+    .transaction-in-short {
         margin-bottom: 0;
     }
-    .search-ledger-field{
+    .search-ledger-field {
         margin-right: 0 !important;
         justify-content: space-between;
-        .ledger-datepicker{
+        .ledger-datepicker {
             width: 36px;
             height: 36px;
             background-color: #fff;
@@ -811,47 +815,47 @@ sh-select:focus {
             display: none;
         }
     }
-    .ledger-ellipse{
+    .ledger-ellipse {
         position: absolute;
         top: 66px;
         z-index: 991;
         right: 0px;
-        .btn{
+        .btn {
             background-color: transparent;
             color: $nero;
             font-size: 18px;
         }
-        ul{
+        ul {
             left: auto !important;
             right: 15px !important;
             top: 30px !important;
             border-radius: 10px;
             border: none;
             padding: 15px 0;
-            li{
-                a{
+            li {
+                a {
                     padding: 5px 15px;
                     margin-bottom: 3px;
-                    background-color:transparent;
+                    background-color: transparent;
                 }
             }
         }
     }
-    .select-all-icons{
+    .select-all-icons {
         display: flex;
         align-items: center;
-        button{
+        button {
             border-radius: 50%;
             height: 32px;
             width: 32px;
         }
     }
-    .search-ledger-wrapper{
+    .search-ledger-wrapper {
         width: 100% !important;
     }
-    .download-invoice-ledger{
-        top:8px;
-        i{
+    .download-invoice-ledger {
+        top: 8px;
+        i {
             top: 0;
             color: $gray;
         }
@@ -860,11 +864,11 @@ sh-select:focus {
         display: block !important;
         width: 100%;
     }
-    .hidden-xs{
-        display: none!important;
+    .hidden-xs {
+        display: none !important;
     }
 }
-@media(min-width:768px){
+@media (min-width: 768px) {
     .ledger-book:before {
         content: " ";
         height: calc(100% - 220px);
@@ -882,42 +886,42 @@ sh-select:focus {
         border-right: 1px solid $gainsboro;
     }
 }
-@media(max-width:767px){
-        .ledger-head{
-            th{
-                padding: 0 0 10px !important;
-            }    
+@media (max-width: 767px) {
+    .ledger-head {
+        th {
+            padding: 0 0 10px !important;
         }
-        .ledger-ellipse{
-            top: 0;
-            right: 0px;
-            position: fixed;
-            .btn{
-                background-color: transparent;
-                color: $white;
-                font-size: 18px;
-            }
-        }
-        .search-ledger-field{
-            .ledger-datepicker{
-                display: flex;
-            }
     }
-    .ledg-head{    
-        .single-search-box{
+    .ledger-ellipse {
+        top: 0;
+        right: 0px;
+        position: fixed;
+        .btn {
+            background-color: transparent;
+            color: $white;
+            font-size: 18px;
+        }
+    }
+    .search-ledger-field {
+        .ledger-datepicker {
+            display: flex;
+        }
+    }
+    .ledg-head {
+        .single-search-box {
             position: relative;
             width: calc(100% - 45px);
-            .default-width-input{
+            .default-width-input {
                 width: calc(100% - 100px);
             }
         }
-        .ipad-view-datepicker{
+        .ipad-view-datepicker {
             display: none;
-        }  
+        }
     }
-    .ledger-section{
+    .ledger-section {
         padding-top: 0;
-        .transactions-page{
+        .transactions-page {
             margin-top: 18px !important;
         }
     }
@@ -926,7 +930,7 @@ sh-select:focus {
     .stat-block {
         padding-left: 15px;
     }
-    .ledger-btn .col-xs-6{
+    .ledger-btn .col-xs-6 {
         width: 100% !important;
         margin-bottom: 5px;
     }
@@ -939,15 +943,15 @@ sh-select:focus {
         margin-top: 7px;
     }
     .ledg-head {
-        .single-search-box{
-            .clear-filter-btn{
+        .single-search-box {
+            .clear-filter-btn {
                 font-size: 12px;
             }
         }
     }
     .ledg-head {
-        .single-search-box{
-            margin-right:5px;
+        .single-search-box {
+            margin-right: 5px;
         }
     }
 }
