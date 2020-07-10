@@ -1595,6 +1595,18 @@ span.eligible-ITC {
         padding-bottom: 0;
     }
 }
+.remove-invoice {
+    span:first-child {
+        font-size: 25px;
+        vertical-align: middle;
+        color: $gray;
+    }
+    .label {
+        vertical-align: middle;
+        color: $gray;
+        font-size: 13px;
+    }
+}
 
 /* resposnvie */
 

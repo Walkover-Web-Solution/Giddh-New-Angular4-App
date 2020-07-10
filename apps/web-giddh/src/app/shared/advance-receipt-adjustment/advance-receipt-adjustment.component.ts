@@ -203,6 +203,14 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public getAllAdvanceReceipts(): void {
+        this.adjustVoucherOptions = [];
+        this.adjustVoucherForm.adjustments.forEach(item => {
+            if (item) {
+                item.voucherDate = item.voucherDate.replace(/-/g, '/');
+                this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+            }
+        });
         if (this.adjustPayment && this.adjustPayment.customerUniquename && this.adjustPayment.voucherDate) {
             this.getAllAdvanceReceiptsRequest.accountUniqueName = this.adjustPayment.customerUniquename;
             this.getAllAdvanceReceiptsRequest.invoiceDate = this.adjustPayment.voucherDate;
@@ -210,7 +218,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                 if (res.status === 'success') {
                     this.allAdvanceReceiptResponse = res.body
                     if (res.body && res.body.length) {
-                        this.adjustVoucherOptions = [];
                         if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
                             this.allAdvanceReceiptResponse.forEach(item => {
                                 if (item) {
@@ -396,7 +403,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             if (this.adjustVoucherForm.tdsTaxUniqueName === '') {
                 if (this.tdsTypeBox && this.tdsTypeBox.nativeElement)
                     this.tdsTypeBox.nativeElement.classList.add('error-box');
-                    isValid = false;
+                isValid = false;
             } else if (this.adjustVoucherForm.tdsAmount === 0) {
                 if (this.tdsAmountBox && this.tdsAmountBox.nativeElement) {
                     this.tdsAmountBox.nativeElement.classList.add('error-box');
@@ -575,7 +582,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     public checkValidations(): void {
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
             this.adjustVoucherForm.adjustments.forEach((item, key) => {
-                if ((!item.voucherNumber && item.dueAmount.amountForAccount) || (item.voucherNumber && !item.dueAmount.amountForAccount) || (!item.voucherNumber && !item.dueAmount.amountForAccount && key>0)) {
+                if ((!item.voucherNumber && item.dueAmount.amountForAccount) || (item.voucherNumber && !item.dueAmount.amountForAccount) || (!item.voucherNumber && !item.dueAmount.amountForAccount && key > 0)) {
                     this.isInvalidForm = true;
                 } else {
                     this.isInvalidForm = false;
