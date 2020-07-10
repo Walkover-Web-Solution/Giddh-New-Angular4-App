@@ -161,5 +161,5 @@ span.eligible-ITC {
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg) } }
 .sh-template {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $very-light-gray;
 }
