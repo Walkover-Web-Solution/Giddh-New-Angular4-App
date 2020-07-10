@@ -1,33 +1,33 @@
-import { of as observableOf, ReplaySubject } from 'rxjs';
+import {of as observableOf, ReplaySubject} from 'rxjs';
 
-import { take, takeUntil } from 'rxjs/operators';
-import { LogsRequest } from '../../../models/api-models/Logs';
-import { UserDetails } from '../../../models/api-models/loginModels';
-import { CompanyResponse } from '../../../models/api-models/Company';
-import { CompanyService } from '../../../services/companyService.service';
-import { GroupService } from '../../../services/group.service';
-import { AccountService } from '../../../services/account.service';
-import { AppState } from '../../../store';
-import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { Store } from '@ngrx/store';
+import {map, take, takeUntil} from 'rxjs/operators';
+import {LogsRequest} from '../../../models/api-models/Logs';
+import {UserDetails} from '../../../models/api-models/loginModels';
+import {CompanyResponse} from '../../../models/api-models/Company';
+import {CompanyService} from '../../../services/companyService.service';
+import {GroupService} from '../../../services/group.service';
+import {AccountService} from '../../../services/account.service';
+import {AppState} from '../../../store';
+import {GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI} from '../../../shared/helpers/defaultDateFormat';
+import {Store} from '@ngrx/store';
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import * as moment from 'moment/moment';
-import { FormBuilder } from '@angular/forms';
-import { AuditLogsSidebarVM } from './Vm';
+import {FormBuilder} from '@angular/forms';
+import {AuditLogsSidebarVM} from './Vm';
 import * as _ from '../../../lodash-optimized';
-import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import {AuditLogsActions} from '../../../actions/audit-logs/audit-logs.actions';
+import {BsDatepickerConfig} from 'ngx-bootstrap/datepicker';
+import {IOption} from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
     selector: 'audit-logs-sidebar',
     templateUrl: './audit-logs.sidebar.component.html',
     styles: [`
-    .ps {
-      overflow: visible !important
-    }
-  `]
+        .ps {
+            overflow: visible !important
+        }
+    `]
 })
 export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     public vm: AuditLogsSidebarVM;
@@ -36,7 +36,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private _fb: FormBuilder, private _accountService: AccountService,
-        private _groupService: GroupService, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions, private bsConfig: BsDatepickerConfig) {
+                private _groupService: GroupService, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions, private bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.showWeekNumbers = false;
@@ -57,15 +57,31 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                 return state.session.user.user;
             }
         }).pipe(takeUntil(this.destroyed$));
-        this._accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
-                let accounts: IOption[] = [];
-                data.body.results.map(d => {
-                    accounts.push({ label: d.name, value: d.uniqueName });
-                });
-                this.vm.accounts$ = observableOf(accounts);
+
+        // this._accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        //     if (data.status === 'success') {
+        //         let accounts: IOption[] = [];
+        //         data.body.results.map(d => {
+        //             accounts.push({ label: d.name, value: d.uniqueName });
+        //         });
+        //         this.vm.accounts$ = observableOf(accounts);
+        //     }
+        // });
+
+        /* previously we were get data from api now we are getting data from general store */
+
+        this.vm.accounts$ = this.store.select(state => state.general.flattenAccounts).pipe(takeUntil(this.destroyed$), map(accounts => {
+            if(accounts && accounts.length) {
+                return accounts.map(account => {
+                    return {
+                        label: account.name,
+                        value: account.uniqueName
+                    }
+                })
+            } else {
+                return [];
             }
-        });
+        }))
         let selectedCompany: CompanyResponse = null;
         let loginUser: UserDetails = null;
         this.vm.selectedCompany.pipe(take(1)).subscribe((c) => selectedCompany = c);
@@ -74,7 +90,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             if (data.status === 'success') {
                 let users: IOption[] = [];
                 data.body.map((d) => {
-                    users.push({ label: d.userName, value: d.userUniqueName, additional: d });
+                    users.push({label: d.userName, value: d.userUniqueName, additional: d});
                 });
                 this.vm.canManageCompany = true;
                 this.vm.users$ = observableOf(users);
@@ -90,7 +106,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                 let accountList = this.flattenGroup(data, []);
                 let groups: IOption[] = [];
                 accountList.map((d: any) => {
-                    groups.push({ label: d.name, value: d.uniqueName });
+                    groups.push({label: d.name, value: d.uniqueName});
                 });
                 this.vm.groups$ = observableOf(groups);
             }
@@ -108,7 +124,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                 name: listItem.name,
                 uniqueName: listItem.uniqueName
             });
-            listItem = Object.assign({}, listItem, { parentGroups: [] });
+            listItem = Object.assign({}, listItem, {parentGroups: []});
             listItem.parentGroups = newParents;
             if (listItem.groups.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
