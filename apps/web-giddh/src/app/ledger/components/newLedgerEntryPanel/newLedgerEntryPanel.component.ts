@@ -32,7 +32,7 @@ import { forEach, sumBy } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { ReconcileRequest, ReconcileResponse, TransactionsResponse } from '../../../models/api-models/Ledger';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, IForceClear } from '../../../models/api-models/Sales';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, IForceClear, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
@@ -926,16 +926,27 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
     }
 
-    public removeSelectedInvoice() {
+    /**
+     * Removes the selected invoice for credit note
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public removeSelectedInvoice(): void {
         this.forceClear$ = observableOf({ status: true });
         this.selectedInvoiceForCreditNote = null;
     }
 
-    public getInvoiveListsData(e: any) {
-        if (e.value === 'rcpt') {
+    /**
+     * Fetches the invoice list data for a voucher
+     *
+     * @param {*} event Contains the selected voucher details
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public getInvoiceListsData(event: any) {
+        if (event.value === 'rcpt') {
             this.shouldShowAdvanceReceipt = true;
             this.clickUnpaidInvoiceList.emit(true);
-        } else if (e.value === 'credit note') {
+        } else if (event.value === VoucherTypeEnum.creditNote) {
             this.shouldShowAdvanceReceipt = false;
             this.getInvoiceListsForCreditNote.emit(true);
             this.blankLedger.generateInvoice = true;
