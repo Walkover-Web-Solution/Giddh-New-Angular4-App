@@ -1,16 +1,15 @@
 import {map, switchMap, tap} from 'rxjs/operators';
-import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
-import { ToasterService } from '../../../services/toaster.service';
-import { Action, Store } from '@ngrx/store';
-import { AppState } from '../../../store/roots';
-import { Observable } from 'rxjs';
-import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { Router } from '@angular/router';
-import { SETTINGS_TAXES_ACTIONS } from './settings.taxes.const';
-import { SettingsTaxesService } from '../../../services/settings.taxes.service';
-import { CustomActions } from '../../../store/customActions';
-import {ITax} from "../../../models/interfaces/tax.interface";
+import {Injectable} from '@angular/core';
+import {Actions, Effect} from '@ngrx/effects';
+import {ToasterService} from '../../../services/toaster.service';
+import {Action, Store} from '@ngrx/store';
+import {AppState} from '../../../store/roots';
+import {Observable} from 'rxjs';
+import {BaseResponse} from '../../../models/api-models/BaseResponse';
+import {Router} from '@angular/router';
+import {SETTINGS_TAXES_ACTIONS} from './settings.taxes.const';
+import {SettingsTaxesService} from '../../../services/settings.taxes.service';
+import {CustomActions} from '../../../store/customActions';
 import {GeneralActions} from "../../general/general.actions";
 
 @Injectable()
@@ -34,7 +33,7 @@ export class SettingsTaxesActions {
                 } else {
                     this.toasty.successToast('Tax Created Successfully.');
                 }
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }));
 
     @Effect()
@@ -55,7 +54,7 @@ export class SettingsTaxesActions {
                 } else {
                     this.toasty.successToast('Tax Updated Successfully.');
                 }
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }));
 
     @Effect()
@@ -64,8 +63,7 @@ export class SettingsTaxesActions {
             switchMap((action: CustomActions) => {
                 return this.settingsTaxesService.DeleteTax(action.payload.value).pipe(
                     tap(resp => {
-                        debugger;
-                        if(action.payload.linkedAccount) {
+                        if (action.payload.linkedAccount) {
                             this.store.dispatch(this.generalActions.updateCurrentLiabilities(action.payload.linkedAccount));
                         }
                     }),
@@ -82,7 +80,7 @@ export class SettingsTaxesActions {
                 } else {
                     this.toasty.successToast('Tax Deleted Successfully.');
                 }
-                return { type: 'EmptyAction' };
+                return {type: 'EmptyAction'};
             }));
 
     @Effect()
@@ -94,11 +92,11 @@ export class SettingsTaxesActions {
             }));
 
     constructor(private action$: Actions,
-        private toasty: ToasterService,
-        private router: Router,
-        private store: Store<AppState>,
-        private generalActions: GeneralActions,
-        private settingsTaxesService: SettingsTaxesService) {
+                private toasty: ToasterService,
+                private router: Router,
+                private store: Store<AppState>,
+                private generalActions: GeneralActions,
+                private settingsTaxesService: SettingsTaxesService) {
     }
 
     public CreateTax(value): CustomActions {
@@ -146,7 +144,7 @@ export class SettingsTaxesActions {
         };
     }
 
-    public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+    public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
         if (response.status === 'error') {
             if (showToast) {
                 this.toasty.errorToast(response.message);

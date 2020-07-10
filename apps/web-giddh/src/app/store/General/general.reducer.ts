@@ -1,24 +1,37 @@
-import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
-import { GENERAL_ACTIONS } from '../../actions/general/general.const';
-import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { AccountMergeRequest, AccountMoveRequest, AccountRequestV2, AccountResponse, AccountResponseV2, FlattenAccountsResponse } from '../../models/api-models/Account';
-import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { States } from '../../models/api-models/Company';
-import { GroupCreateRequest, GroupResponse, GroupUpateRequest, MoveGroupRequest, MoveGroupResponse } from '../../models/api-models/Group';
+import {GroupsWithAccountsResponse} from '../../models/api-models/GroupsWithAccounts';
+import {GENERAL_ACTIONS} from '../../actions/general/general.const';
+import {BaseResponse} from '../../models/api-models/BaseResponse';
+import {
+    AccountMergeRequest,
+    AccountMoveRequest,
+    AccountRequestV2,
+    AccountResponse,
+    AccountResponseV2,
+    FlattenAccountsResponse
+} from '../../models/api-models/Account';
+import {IFlattenAccountsResultItem} from '../../models/interfaces/flattenAccountsResultItem.interface';
+import {States} from '../../models/api-models/Company';
+import {
+    GroupCreateRequest,
+    GroupResponse,
+    GroupUpateRequest,
+    MoveGroupRequest,
+    MoveGroupResponse
+} from '../../models/api-models/Group';
 import * as _ from '../../lodash-optimized';
-import { cloneDeep } from '../../lodash-optimized';
-import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
-import { AccountsAction } from '../../actions/accounts.actions';
-import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
-import { CustomActions } from '../customActions';
-import { COMMON_ACTIONS } from '../../actions/common.const';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
-import { IUlist } from '../../models/interfaces/ulist.interface';
-import { INameUniqueName } from '../../models/api-models/Inventory';
-import { SALES_ACTIONS } from '../../actions/sales/sales.const';
-import { CurrentPage } from '../../models/api-models/Common';
+import {cloneDeep} from '../../lodash-optimized';
+import {GroupWithAccountsAction} from '../../actions/groupwithaccounts.actions';
+import {IGroupsWithAccounts} from '../../models/interfaces/groupsWithAccounts.interface';
+import {AccountsAction} from '../../actions/accounts.actions';
+import {IAccountsInfo} from '../../models/interfaces/accountInfo.interface';
+import {CustomActions} from '../customActions';
+import {COMMON_ACTIONS} from '../../actions/common.const';
+import {IFlattenGroupsAccountsDetail} from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
+import {IPaginatedResponse} from '../../models/interfaces/paginatedResponse.interface';
+import {IUlist} from '../../models/interfaces/ulist.interface';
+import {INameUniqueName} from '../../models/api-models/Inventory';
+import {SALES_ACTIONS} from '../../actions/sales/sales.const';
+import {CurrentPage} from '../../models/api-models/Common';
 
 export interface GeneralState {
     groupswithaccounts: GroupsWithAccountsResponse[];
@@ -94,29 +107,29 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             return state;
         }
         case GENERAL_ACTIONS.RESET_STATES_LIST: {
-            return { ...state, states: null };
+            return {...state, states: null};
         }
         // NEW LOGIC FOR FLATTEN ACCOUNTS AND GROUPS
         case GENERAL_ACTIONS.RESET_SMART_LIST: {
-            return { ...state, smartList: [] };
+            return {...state, smartList: []};
         }
 
         case GENERAL_ACTIONS.SET_SMART_LIST: {
             let data: IUlist[] = action.payload;
-            return { ...state, smartList: data };
+            return {...state, smartList: data};
         }
 
         case GENERAL_ACTIONS.RESET_COMBINED_LIST: {
-            return { ...state, smartCombinedList: [] };
+            return {...state, smartCombinedList: []};
         }
 
         case GENERAL_ACTIONS.SET_COMBINED_LIST: {
             let data: IUlist[] = action.payload;
-            return { ...state, smartCombinedList: data };
+            return {...state, smartCombinedList: data};
         }
 
         case GENERAL_ACTIONS.FLATTEN_GROUPS_REQ: {
-            return { ...state, flattenGroups: [] };
+            return {...state, flattenGroups: []};
         }
 
         case GENERAL_ACTIONS.FLATTEN_GROUPS_RES: {
@@ -129,7 +142,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                     item.uNameStr = o.uNameStr;
                     return item;
                 });
-                return { ...state, flattenGroups: arr };
+                return {...state, flattenGroups: arr};
             }
             return state;
         }
@@ -152,7 +165,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE: {
             let activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
             if (activeGrpData.status === 'success') {
-                Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
+                Object.assign({}, activeGrpData.body, {isOpen: true, isActive: true});
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 updateActiveGroupFunc(groupArray, activeGrpData.queryString.groupUniqueName, activeGrpData.body, false);
                 return {
@@ -342,7 +355,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
 
         case GENERAL_ACTIONS.SET_APP_HEADER_TITLE: {
             return {
-                ...state, headerTitle: { uniqueName: action.payload.uniqueName, additional: action.payload.additional }
+                ...state, headerTitle: {uniqueName: action.payload.uniqueName, additional: action.payload.additional}
             }
         }
 
@@ -358,21 +371,29 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         }
         case GENERAL_ACTIONS.UPDATE_CURRENT_LIABILITIES: {
             let updatedGroupsWithAccounts = [...state.groupswithaccounts];
+            let flattenAccountsArray = [...state.flattenAccounts];
             const updatedcurrentliabilities = {
                 ...updatedGroupsWithAccounts.find(x => x.uniqueName === 'currentliabilities')
             };
-            if(updatedcurrentliabilities && updatedcurrentliabilities.groups && updatedcurrentliabilities.groups.length) {
-            updatedcurrentliabilities.groups = updatedcurrentliabilities.groups.filter(x => x.uniqueName !== action.payload);
+            if (updatedcurrentliabilities && updatedcurrentliabilities.groups && updatedcurrentliabilities.groups.length) {
+                updatedcurrentliabilities.groups.map(f => {
+                    if (f.uniqueName === 'dutiestaxes' && f.category === 'liabilities') {
+                        f.accounts = f.accounts.filter(s => s.uniqueName !== action.payload)
+                    }
+                    return f;
+                })
             }
             updatedGroupsWithAccounts = updatedGroupsWithAccounts.map(x => {
-                if(x.uniqueName === 'currentliabilities') {
+                if (x.uniqueName === 'currentliabilities') {
                     return updatedcurrentliabilities;
                 }
                 return x;
             });
+            flattenAccountsArray = flattenAccountsArray.filter(f => f.uniqueName !== action.payload)
             return {
                 ...state,
-                groupswithaccounts: [...updatedGroupsWithAccounts]
+                groupswithaccounts: [...updatedGroupsWithAccounts],
+                flattenAccounts: flattenAccountsArray
             }
         }
         default:
@@ -496,7 +517,7 @@ const addCreatedAccountFunc = (groups: IGroupsWithAccounts[], aData: AccountResp
 };
 
 const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
-    aData: AccountResponseV2, grpUniqueName: string, accountUniqueName: string, result: boolean): boolean => {
+                           aData: AccountResponseV2, grpUniqueName: string, accountUniqueName: string, result: boolean): boolean => {
     if (result) {
         return result;
     }
@@ -594,8 +615,8 @@ const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: str
 
 // consume array and return array on string
 const provideStrings = (arr: any[]) => {
-    let o = { nameStr: [], uNameStr: [] };
-    let b = { nameStr: '', uNameStr: '' };
+    let o = {nameStr: [], uNameStr: []};
+    let b = {nameStr: '', uNameStr: ''};
     try {
         arr.forEach((item: INameUniqueName) => {
             o.nameStr.push(item.name);
