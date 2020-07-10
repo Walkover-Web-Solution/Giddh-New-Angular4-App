@@ -15,29 +15,29 @@ export class AuditLogsSidebarVM {
 	public moment = moment;
 	public maxDate: Date = moment().toDate();
 	public filters: IOption[] = [
-		{ label: 'All', value: 'All' },
-		{ label: 'create', value: 'create' },
-		{ label: 'delete', value: 'delete' },
-		{ label: 'share', value: 'share' },
-		{ label: 'unshare', value: 'unshare' },
-		{ label: 'move', value: 'move' },
-		{ label: 'merge', value: 'merge' },
-		{ label: 'unmerge', value: 'unmerge' },
-		{ label: 'delete-all', value: 'delete-all' },
-		{ label: 'update', value: 'update' },
-		{ label: 'master-import', value: 'master-import' },
-		{ label: 'daybook-import', value: 'daybook-import' },
-		{ label: 'ledger-excel-import', value: 'ledger-excel-import' }
+		// { label: 'All', value: 'All' },
+		// { label: 'create', value: 'create' },
+		// { label: 'delete', value: 'delete' },
+		// { label: 'share', value: 'share' },
+		// { label: 'unshare', value: 'unshare' },
+		// { label: 'move', value: 'move' },
+		// { label: 'merge', value: 'merge' },
+		// { label: 'unmerge', value: 'unmerge' },
+		// { label: 'delete-all', value: 'delete-all' },
+		// { label: 'update', value: 'update' },
+		// { label: 'master-import', value: 'master-import' },
+		// { label: 'daybook-import', value: 'daybook-import' },
+		// { label: 'ledger-excel-import', value: 'ledger-excel-import' }
 	];
 	public entities: IOption[] = [
-		{ label: 'All', value: 'All' },
-		{ label: 'company', value: 'company' },
-		{ label: 'group', value: 'group' },
-		{ label: 'account', value: 'account' },
-		{ label: 'ledger', value: 'ledger' },
-		{ label: 'voucher', value: 'voucher' },
-		{ label: 'logs', value: 'logs' },
-		{ label: 'invoice', value: 'invoice' },
+		// { label: 'All', value: 'All' },
+		// { label: 'company', value: 'company' },
+		// { label: 'group', value: 'group' },
+		// { label: 'account', value: 'account' },
+		// { label: 'ledger', value: 'ledger' },
+		// { label: 'voucher', value: 'voucher' },
+		// { label: 'logs', value: 'logs' },
+		// { label: 'invoice', value: 'invoice' },
 	];
 	public getLogsInprocess$: Observable<boolean>;
 	public dateOptions: IOption[] = [{ label: 'Date Range', value: '1' }, { label: 'Entry/Log Date', value: '0' }];
