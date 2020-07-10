@@ -980,6 +980,7 @@ ul.sub-list {
 .tab-integraton .nav-tabs>li {
     margin-right: 25px;
 }
+
 .customer-footer-box .numbertotal {
     font-size: 26px;
     color: $chetwode-blue;
@@ -1699,25 +1700,27 @@ modal-container.modal {
 
 .custom-datepicker i {
     position: absolute;
-    left: 10px;
+    left: 12px;
     top: 4px;
     z-index: 9;
+    font-size: 17px;
 }
 
 .custom-datepicker input {
     background: $white !important;
-    font-size: 12px;
+    font-size: 14px;
     border-radius: 90px;
     position: relative;
-    font-weight: 600;
-    width: 195px !important;
+    width: 230px !important;
+    max-width: 230px;
     display: block;
-    padding-left: 15px !important;
+    padding-left: 25px !important;
     border: 1px solid $gainsboro;
+    height: 36px;
 }
 
 .custom-datepicker i img {
-    width: 12px;
+    width: 14px;
 }
 
 .subscription-collapse .panel-group {
@@ -1742,17 +1745,22 @@ modal-container.modal {
 .subscription-collapse .panel-default>.panel-heading+.panel-collapse>.panel-body {
     border: 0px solid;
 }
+
 .payment-success-modal {
-    transform: translate(0,-0%) !important;
+    transform: translate(0, -0%) !important;
 }
+
 .payment-success-modal {
     .payment-img img {
         width: 80px;
     }
 }
+
 .tooltip-box .tooltip {
     width: 150px;
 }
+
+
 /* my css end */
 
 
@@ -5140,9 +5148,11 @@ label {
     height: 97%;
     min-height: 97%;
 }
+
 .groups-buttons {
     height: 400px;
 }
+
 
 /* .tooltip.bottom .tooltip-arrow {
     position: relative;
@@ -6091,16 +6101,25 @@ ng-select .select_drop i {
 }
 
 virtual-scroll .scrollable-content .item>a {
-    color: #333;
-    padding: 6px;
+    color: $nero;
+    padding: 3px 10px;
     display: table-cell;
     vertical-align: middle;
     height: 100%;
 }
 
+virtual-scroll .scrollable-content .item:hover>a {
+    color: $chetwode-blue !important;
+}
+
+virtual-scroll .scrollable-content .item>a .item_unq,
+virtual-scroll .scrollable-content .item>a .item_stock {
+    color: $moody-blue;
+}
+
 .customerInvoiceForm virtual-scroll .scrollable-content .item>a {
-    color: #333;
-    padding: 0 6px;
+    color: $nero;
+    padding: 3px 10px;
     display: flex;
     vertical-align: middle;
     height: 100%;
@@ -6112,7 +6131,8 @@ virtual-scroll .scrollable-content .item>a {
     white-space: initial;
 }
 
-virtual-scroll .scrollable-content .item.selected>a {
+virtual-scroll .scrollable-content .item.selected>a,
+virtual-scroll .scrollable-content .item.hilighted>a {
     color: $chetwode-blue !important;
 }
 
@@ -6833,7 +6853,7 @@ table td[class*=col-]:last-child {
 }
 
 .illustration_box img {
-    opacity: .7;
+    opacity: 0.7;
     max-width: 400px;
     margin: 0 auto;
     width: 100%;
@@ -9203,7 +9223,7 @@ ngx-daterangepicker-material {
 
 .HW_badge {
     transition: none !important;
-    transform: scale(1.0) !important;
+    transform: scale(1) !important;
     position: absolute !important;
 }
 
@@ -9221,6 +9241,14 @@ ngx-daterangepicker-material {
     width: 14px !important;
     height: 14px !important;
     line-height: 14px !important;
+}
+
+.HW_badge.HW_softHidden {
+    display: none !important;
+}
+
+span#HW_badge_cont:nth-child(3) {
+    display: none;
 }
 
 
@@ -9262,15 +9290,47 @@ ngx-daterangepicker-material {
 .icon-home-icon {
     color: $white;
 }
-.HW_badge.HW_softHidden{
+
+.remove-header-lower-layer {
+    .container-fluid.mrB1 {
+        margin-bottom: 0;
+        .lower-layer-header {
+            display: none !important;
+        }
+        .upper-layer-header {
+            padding-top: 10px;
+            padding-bottom: 5px;
+        }
+    }
+    .padding-top-fixed-mobile {
+        padding-top: 50px;
+    }
+}
+
+.mobile-sidebar-open:after {
+    position: absolute;
+    content: "";
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 9;
+}
+
+.HW_badge.HW_softHidden {
     display: none !important;
 }
-span#HW_badge_cont:nth-child(3){
+
+span#HW_badge_cont:nth-child(3) {
     display: none !important;
 }
-.giddh-datepicker{
+
+.giddh-datepicker {
     cursor: pointer !important;
 }
+
+
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9568,6 +9628,16 @@ span#HW_badge_cont:nth-child(3){
 }
 
 @media (max-width: 767px) {
+    .remove-header-lower-layer {
+        .mobile-back-btn {
+            display: inline-flex !important;
+        }
+        .hamburger_menu {
+            .btn {
+                display: none !important;
+            }
+        }
+    }
     .HW_badge_cont {
         left: -6px !important;
     }
@@ -9862,7 +9932,7 @@ span#HW_badge_cont:nth-child(3){
         padding-top: 40px;
         &:after {
             position: absolute;
-            content: '';
+            content: "";
             background-color: rgba(0, 0, 0, 0.4);
             width: 100% !important;
             height: 125%;
@@ -9910,7 +9980,7 @@ span#HW_badge_cont:nth-child(3){
     }
     .mobile-setting-sidebar:after {
         position: absolute;
-        content: '';
+        content: "";
         background-color: rgba(0, 0, 0, 0.5);
         width: 100%;
         height: 100vh;
@@ -9920,6 +9990,9 @@ span#HW_badge_cont:nth-child(3){
     }
     .ledg-head .custom-tabs .nav.nav-tabs {
         padding-top: 0 !important;
+    }
+    .digit-blue .tooltip.bs-tooltip-top {
+        display: block !important;
     }
 }
 
@@ -10163,7 +10236,7 @@ span#HW_badge_cont:nth-child(3){
     }
 }
 
-@media(min-width:480px) and (max-width:667px) {
+@media (min-width: 480px) and (max-width: 667px) {
     .edit-modal {
         margin: 20px auto;
         padding-top: 0;
@@ -10302,9 +10375,11 @@ span#HW_badge_cont:nth-child(3){
 .giddh-datepicker-modal {
     margin: 0 !important;
 }
+
 body.prevent-body-scroll {
     overflow-y: hidden !important;
 }
+
 .hide-payment-tab ul li:nth-child(5) {
     display: none;
 }
