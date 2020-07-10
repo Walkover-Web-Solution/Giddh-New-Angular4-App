@@ -1,11 +1,12 @@
 <h1 class="page-title" *ngIf="(logs$ | async).length > 0"> Audit Logs</h1>
 <br />
+<!--  -->
 <section class="audit-log" *ngFor="let log of (logs$ | async); let i = index">
     <h1>{{log.operationType}}
         <span *ngIf="log && log.accountName && log.accountName != null"> - {{log.accountName}}
             ({{log.accountUniqueName}})</span>
     </h1>
-    <div class="mrT border-top-btm clearfix">
+    <div class="audit-log-detail mt-05 clearfix">
         <div class="d-flex user-basic-detail">
             <div>
                 <label>Entity:</label>
@@ -37,11 +38,11 @@
                 </p>
             </div>
             <div>
-                <label>Opening Balance</label>
+                <label>Opening Balance:</label>
                 <p>0.00</p>
             </div>
             <div>
-                <label>Closing Balance</label>
+                <label>Closing Balance:</label>
                 <p>0.00</p>
             </div>
             <div *ngIf="log && log.log && log.log.description != undefined && log.log.description.length > 0">
@@ -65,19 +66,19 @@
                         <label>
                             State:
                         </label>
-                        <p>Madhya Pradesh</p>
+                        <p class="ml-05">Madhya Pradesh</p>
                     </div>
                     <div class="mr-05">
                         <label>
                             GSTIN:
                         </label>
-                        <p>1234567890gst</p>
+                        <p class="ml-05">1234567890gst</p>
                     </div>
                     <div class="mr-05">
                         <label>
                             State:
                         </label>
-                        <p>India</p>
+                        <p class="ml-05">India</p>
                     </div>
                 </div>
                 <div class="single-address-row" *ngIf="showSingleAdd">
@@ -92,19 +93,19 @@
                         <label>
                             State:
                         </label>
-                        <p>Madhya Pradesh</p>
+                        <p class="ml-05">Madhya Pradesh</p>
                     </div>
                     <div class="mr-05">
                         <label>
                             GSTIN:
                         </label>
-                        <p>1234567890gst</p>
+                        <p class="ml-05">1234567890gst</p>
                     </div>
                     <div class="mr-05">
                         <label>
-                            State:
+                            Country:
                         </label>
-                        <p>India</p>
+                        <p class="ml-05">India</p>
                     </div>
                 </div>
             </div>
