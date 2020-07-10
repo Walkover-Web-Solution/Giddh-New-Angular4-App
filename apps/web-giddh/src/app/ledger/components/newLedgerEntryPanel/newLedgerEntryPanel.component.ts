@@ -942,7 +942,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @param {*} event Contains the selected voucher details
      * @memberof NewLedgerEntryPanelComponent
      */
-    public getInvoiceListsData(event: any) {
+    public getInvoiceListsData(event: any): void {
         if (event.value === 'rcpt') {
             this.shouldShowAdvanceReceipt = true;
             this.clickUnpaidInvoiceList.emit(true);
