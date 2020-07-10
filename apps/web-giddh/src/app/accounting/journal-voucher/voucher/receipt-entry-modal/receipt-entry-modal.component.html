@@ -14,7 +14,7 @@
             <div class="form-fields" *ngFor="let entry of receiptEntries; let i = index;">
                 <div class="single-field relative">
                     <label *ngIf="i === 0">Type</label>
-                    <sh-select [options]="selectRef" #referenceType placeholder="Type" name="type" [(ngModel)]="entry.type"></sh-select>
+                    <sh-select [options]="adjustmentTypes" #referenceType placeholder="Type" name="type" [(ngModel)]="entry.type"></sh-select>
                     <i class="icon-arrow-down"></i>
                 </div>
                 <div class="single-field" *ngIf="entry.type !== 'againstReference'">
@@ -23,7 +23,7 @@
                 </div>
                 <div class="single-field relative" *ngIf="entry.type !== 'againstReference'">
                     <label *ngIf="i === 0">Tax (Optional) </label>
-                    <sh-select [options]="taxListSource$ | async" placeholder="Select Tax" name="tax" [(ngModel)]="entry.tax" [disabled]="entry.type === 'receipt'"></sh-select>
+                    <sh-select [options]="taxListSource$ | async" placeholder="Select Tax" name="tax" [(ngModel)]="entry.tax.uniqueName" [disabled]="entry.type === 'receipt'" (selected)="onSelectTax($event, entry)"></sh-select>
                     <i class="icon-arrow-down"></i>
                 </div>
                 <div class="single-field relative" *ngIf="entry.type === 'againstReference'" [ngClass]="{'set-width': entry.type === 'againstReference'}">

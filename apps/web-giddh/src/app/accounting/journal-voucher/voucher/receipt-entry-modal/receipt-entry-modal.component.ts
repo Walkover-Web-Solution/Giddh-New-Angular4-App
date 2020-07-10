@@ -3,12 +3,13 @@ import { BsModalRef } from 'ngx-bootstrap';
 import { IOption } from '../../../../theme/ng-select/option.interface';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
-import { SettingsTaxesActions } from 'apps/web-giddh/src/app/actions/settings/taxes/settings.taxes.action';
 import { takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { ReplaySubject, of as observableOf, Observable } from 'rxjs';
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
+import { adjustmentTypes } from "../../../../shared/helpers/adjustmentTypes";
+import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 
 @Component({
     selector: 'receipt-entry',
@@ -28,17 +29,13 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     public modalRef: BsModalRef;
     public pendingInvoiceList: any[] = [];
     public pendingInvoiceListSource$: Observable<IOption[]> = observableOf([]);
-    public selectRef: IOption[] = [
-        { label: "Receipt", value: "receipt" },
-        { label: "Advance Receipt", value: "advanceReceipt" },
-        { label: "Against  Reference", value: "againstReference" }
-    ];
+    public adjustmentTypes: IOption[] = [];
     public totalEntries: number = 0;
     public isValidForm: boolean = false;
     public amountErrorMessage: string = "Amount can't be greater than Credit Amount.";
     public invoiceAmountErrorMessage: string = "Amount can't be greater than Invoice Balance Due.";
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public taxList: IOption[] = [];
+    public taxList: any[] = [];
     public taxListSource$: Observable<IOption[]> = observableOf([]);
     public pendingInvoicesList: any[] = [];
     public pendingInvoicesListParams: any = {
@@ -46,21 +43,21 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         voucherType: "receipt"
     };
 
-    constructor(private toaster: ToasterService, private settingsTaxesActions: SettingsTaxesActions, private store: Store<AppState>,
-        private salesService: SalesService) {
+    constructor(private toaster: ToasterService, private store: Store<AppState>, private salesService: SalesService, private companyActions: CompanyActions) {
 
     }
 
     public ngOnInit(): void {
+        adjustmentTypes.map(c => {
+            this.adjustmentTypes.push({ label: c.label, value: c.value });
+        });
+
         if (this.transaction && this.transaction.selectedAccount) {
             this.pendingInvoicesListParams.accountUniqueNames.push(this.transaction.selectedAccount.UniqueName);
             this.getInvoiceListForReceiptVoucher();
         }
 
-        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode) {
-            this.getTaxList(this.activeCompany.countryV2.alpha2CountryCode);
-        }
-
+        this.getTaxList();
         this.addNewEntry();
     }
 
@@ -69,7 +66,12 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
             this.receiptEntries[this.totalEntries] = {
                 type: '',
                 note: '',
-                tax: '',
+                tax: {
+                    name: '',
+                    uniqueName: '',
+                    percent: 0,
+                    value: 0
+                },
                 invoiceNo: '',
                 amount: 0
             }
@@ -84,6 +86,12 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     }
 
     public validateEntry(entry: any): void {
+        if (entry.amount && !isNaN(Number(entry.amount)) && entry.tax.percent) {
+            entry.tax.value = Number(entry.amount) / entry.tax.percent;
+        } else {
+            entry.tax.value = 0;
+        }
+
         let receiptTotal = 0;
 
         this.receiptEntries.forEach(receipt => {
@@ -129,15 +137,19 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         }
     }
 
-    public getTaxList(countryCode): void {
-        this.store.pipe(select(state => state.settings.taxes), takeUntil(this.destroyed$)).subscribe(res => {
+    public getTaxList(): void {
+        this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
+                let taxList: IOption[] = [];
                 Object.keys(res.taxes).forEach(key => {
-                    this.taxList.push({ label: res.taxes[key].label, value: res.taxes[key].value });
+                    taxList.push({ label: res.taxes[key].name, value: res.taxes[key].taxType });
+
+                    this.taxList[res.taxes[key].taxType] = [];
+                    this.taxList[res.taxes[key].taxType] = res.taxes[key];
                 });
-                this.taxListSource$ = observableOf(this.taxList);
+                this.taxListSource$ = observableOf(taxList);
             } else {
-                this.store.dispatch(this.settingsTaxesActions.GetTaxList(countryCode));
+                this.store.dispatch(this.companyActions.getTax());
             }
         });
     }
@@ -161,5 +173,16 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
                 this.pendingInvoiceListSource$ = observableOf(pendingInvoiceList);
             }
         });
+    }
+
+    public onSelectTax(event: any, entry: any): void {
+        entry.tax.name = this.taxList[event.value].name;
+        entry.tax.percent = this.taxList[event.value].taxDetail[0].taxValue;
+
+        if (entry.amount && !isNaN(Number(entry.amount)) && entry.tax.percent) {
+            entry.tax.value = Number(entry.amount) / entry.tax.percent;
+        } else {
+            entry.tax.value = 0;
+        }
     }
 }
