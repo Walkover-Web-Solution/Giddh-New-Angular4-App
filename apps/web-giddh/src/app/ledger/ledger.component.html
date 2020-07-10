@@ -226,11 +226,10 @@
                                 <table class="table">
                                     <thead>
                                         <tr class="dgreyBg">
-                                            <th width="28%">Date
-                                                <span class="small">(DD-MM-YYYY)</span>
+                                            <th class="col-xs-3 col-md-3 col-lg-3">Date
                                             </th>
-                                            <th width="44%">Particular</th>
-                                            <th width="28%" class="alR">Amount</th>
+                                            <th class="col-xs-5 col-md-6 col-lg-6">Particular</th>
+                                            <th class="col-xs-4 col-md-3 col-lg-3 alR" class="alR">Amount</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -240,11 +239,10 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th width="28%">Date
-                                                <span class="small">(DD-MM-YYYY)</span>
+                                            <th class="col-xs-3 col-md-3 col-lg-3">Date
                                             </th>
-                                            <th width="44%">Particular</th>
-                                            <th width="28%" class="alR">Amount</th>
+                                            <th class="col-xs-5 col-md-6 col-lg-6">Particular</th>
+                                            <th class="col-xs-4 col-md-3 col-lg-3 alR">Amount</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -254,18 +252,18 @@
                         <tr>
                             <td class="nopad bdrL bdrR" colspan="3">
                                 <table class="width100" *ngFor="let item of lc.bankTransactionsData;"
-                                    (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
+                                    (clickOutside)="hideBankLedgerPopup(true)">
                                     <tbody>
-                                        <tr *ngFor="let txn of item.transactions;"
-                                            (click)="showBankLedgerPopup(txn, item);">
-                                            <td class="width100 pos-rel" *ngIf="txn.type === 'DEBIT'">
+                                        <tr *ngFor="let txn of item.transactions;">
+                                            <td class="width100 pos-rel">
                                                 <table class="width100">
                                                     <tbody class="ledger-main">
-                                                        <tr class="ledger-row"
+                                                        <tr class="ledger-row" (click)="$event.stopPropagation()"
                                                             [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
                                                             <td class="col-xs-3 col-md-3 col-lg-3">
-                                                                <div class="d-flex align-items-center">
-                                                                    <span>
+                                                                <div class="d-flex align-items-center"
+                                                                    *ngIf="txn.type === 'DEBIT'">
+                                                                    <span class="pl-05">
                                                                         <input type="checkbox"
                                                                             (click)="selectEntryForBulkAction($event, item)" /></span>
                                                                     <span class="ml-05">
@@ -279,47 +277,53 @@
                                                             </td>
                                                             <td
                                                                 class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger">
-                                                                <sh-select [options]="lc.flattenAccountList | async"
-                                                                    [(ngModel)]="txn.particular"
-                                                                    (selected)="selectAccount($event,txn)"
-                                                                    [placeholder]="'Select Accounts'"
-                                                                    [notFoundLink]="true"
-                                                                    (noResultsClicked)="showQuickAccountModal()"
-                                                                    [showClear]="false" [multiple]="false"
-                                                                    [ItemHeight]="67"
-                                                                    [useInBuiltFilterForFlattenAc]="true">
-                                                                    <ng-template #optionTemplate let-option="option">
-                                                                        <ng-container *ngIf="!option.additional?.stock">
-                                                                            <a href="javascript:void(0)"
-                                                                                class="list-item"
-                                                                                style="border-bottom: 1px solid #ccc;">
-                                                                                <div class="item">{{ option.label }}
-                                                                                </div>
-                                                                                <div class="item_unq">
-                                                                                    {{ option.additional?.uniqueName }}
-                                                                                </div>
-                                                                            </a>
-                                                                        </ng-container>
-                                                                        <ng-container *ngIf="option.additional?.stock">
-                                                                            <a href="javascript:void(0)"
-                                                                                class="list-item"
-                                                                                style="border-bottom: 1px solid #ccc;">
-                                                                                <div class="item">{{ option.label }}
-                                                                                </div>
-                                                                                <div class="item_unq">
-                                                                                    {{ option.additional?.uniqueName }}
-                                                                                </div>
-                                                                                <div class="item_stock">Stock:
-                                                                                    {{ option.additional?.stock.name }}
-                                                                                </div>
-                                                                            </a>
-                                                                        </ng-container>
-                                                                    </ng-template>
-                                                                </sh-select>
-                                                                <ul class="no-result-template"
-                                                                    *ngIf="lc.noAccountChosenForNewEntry">
-                                                                    <li>Create New Account</li>
-                                                                </ul>
+                                                                <div *ngIf="txn.type === 'DEBIT'"
+                                                                    (click)="showBankLedgerPopup(txn, item);">
+                                                                    <sh-select [options]="lc.flattenAccountList | async"
+                                                                        [(ngModel)]="txn.particular"
+                                                                        (selected)="selectAccount($event,txn)"
+                                                                        [placeholder]="'Select Accounts'"
+                                                                        [notFoundLink]="true"
+                                                                        (noResultsClicked)="showQuickAccountModal()"
+                                                                        [showClear]="false" [multiple]="false"
+                                                                        [ItemHeight]="67"
+                                                                        [useInBuiltFilterForFlattenAc]="true">
+                                                                        <ng-template #optionTemplate
+                                                                            let-option="option">
+                                                                            <ng-container
+                                                                                *ngIf="!option.additional?.stock">
+                                                                                <a href="javascript:void(0)"
+                                                                                    class="list-item"
+                                                                                    style="border-bottom: 1px solid #ccc;">
+                                                                                    <div class="item">{{ option.label }}
+                                                                                    </div>
+                                                                                    <div class="item_unq">
+                                                                                        {{ option.additional?.uniqueName }}
+                                                                                    </div>
+                                                                                </a>
+                                                                            </ng-container>
+                                                                            <ng-container
+                                                                                *ngIf="option.additional?.stock">
+                                                                                <a href="javascript:void(0)"
+                                                                                    class="list-item"
+                                                                                    style="border-bottom: 1px solid #ccc;">
+                                                                                    <div class="item">{{ option.label }}
+                                                                                    </div>
+                                                                                    <div class="item_unq">
+                                                                                        {{ option.additional?.uniqueName }}
+                                                                                    </div>
+                                                                                    <div class="item_stock">Stock:
+                                                                                        {{ option.additional?.stock.name }}
+                                                                                    </div>
+                                                                                </a>
+                                                                            </ng-container>
+                                                                        </ng-template>
+                                                                    </sh-select>
+                                                                    <ul class="no-result-template"
+                                                                        *ngIf="lc.noAccountChosenForNewEntry">
+                                                                        <li>Create New Account</li>
+                                                                    </ul>
+                                                                </div>
                                                             </td>
 
                                                             <td class="col-xs-4 col-md-3 col-lg-3  pos-rel">
@@ -327,14 +331,16 @@
                                                                     decimalDigitsDirective [DecimalPlaces]="2"
                                                                     [(ngModel)]="txn.amount"
                                                                     (input)="needToReCalculate.next(true)"
-                                                                    (click)="blankLedgerAmountClick()">
+                                                                    (click)="blankLedgerAmountClick()"
+                                                                    *ngIf="txn.type === 'DEBIT'"
+                                                                    (click)="showBankLedgerPopup(txn, item);">
                                                             </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
                                                 <!--new ledge popup-->
                                                 <div class="pos-abs entry-modal"
-                                                    *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
+                                                    *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id && txn.type === 'DEBIT'">
                                                     <new-ledger-entry-panel #newLedPanel
                                                         [trxRequest]="advanceSearchRequest" [isBankTransaction]="true"
                                                         [blankLedger]="item" [currentTxn]="lc.currentBlankTxn"
@@ -358,15 +364,15 @@
                                 <table class="width100" *ngFor="let item of lc.bankTransactionsData;"
                                     (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                                     <tbody>
-                                        <tr *ngFor="let txn of item.transactions;"
-                                            (click)="showBankLedgerPopup(txn, item);">
-                                            <td class="width100 pos-rel" *ngIf="txn.type === 'CREDIT'">
+                                        <tr *ngFor="let txn of item.transactions;">
+                                            <td class="width100 pos-rel">
                                                 <table class="width100">
                                                     <tbody class="ledger-main">
                                                         <tr class="ledger-row">
                                                             <td class="col-xs-3 col-md-3 col-lg-3">
-                                                                <div class="d-flex align-items-center">
-                                                                    <span>
+                                                                <div class="d-flex align-items-center"
+                                                                    *ngIf="txn.type === 'CREDIT'">
+                                                                    <span class="pl-05">
                                                                         <input type="checkbox"
                                                                             [(ngModel)]="txn.isChecked"
                                                                             (click)="selectEntryForBulkAction($event, item)" />
@@ -384,48 +390,54 @@
                                                             </td>
                                                             <td
                                                                 class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger ">
-                                                                <sh-select [options]="lc.flattenAccountList | async"
-                                                                    [(ngModel)]="txn.particular"
-                                                                    (selected)="selectAccount($event,txn)"
-                                                                    [placeholder]="'Select Accounts'"
-                                                                    [notFoundLink]="true"
-                                                                    (noResultsClicked)="showQuickAccountModal()"
-                                                                    [multiple]="false" [ItemHeight]="67"
-                                                                    [showClear]="false"
-                                                                    [useInBuiltFilterForFlattenAc]="true">
-                                                                    <ng-template #optionTemplate let-option="option">
-                                                                        <ng-container *ngIf="!option.additional?.stock">
-                                                                            <a href="javascript:void(0)"
-                                                                                class="list-item"
-                                                                                style="border-bottom: 1px solid #ccc;">
-                                                                                <div class="item">{{ option.label }}
-                                                                                </div>
-                                                                                <div class="item_unq">
-                                                                                    {{ option.additional?.uniqueName }}
-                                                                                </div>
-                                                                                <!-- <span class="list-item" style="visibility: hidden;font-size:11px">&nbsp;</span> -->
-                                                                            </a>
-                                                                        </ng-container>
-                                                                        <ng-container *ngIf="option.additional?.stock">
-                                                                            <a href="javascript:void(0)"
-                                                                                class="list-item"
-                                                                                style="border-bottom: 1px solid #ccc;">
-                                                                                <div class="item">{{ option.label }}
-                                                                                </div>
-                                                                                <div class="item_unq">
-                                                                                    {{ option.additional?.uniqueName }}
-                                                                                </div>
-                                                                                <div class="item_stock">Stock:
-                                                                                    {{ option.additional?.stock.name }}
-                                                                                </div>
-                                                                            </a>
-                                                                        </ng-container>
-                                                                    </ng-template>
-                                                                </sh-select>
-                                                                <ul class="no-result-template"
-                                                                    *ngIf="lc.noAccountChosenForNewEntry">
-                                                                    <li>Create New Account</li>
-                                                                </ul>
+                                                                <div *ngIf="txn.type === 'CREDIT'"
+                                                                    (click)="showBankLedgerPopup(txn, item);">
+                                                                    <sh-select [options]="lc.flattenAccountList | async"
+                                                                        [(ngModel)]="txn.particular"
+                                                                        (selected)="selectAccount($event,txn)"
+                                                                        [placeholder]="'Select Accounts'"
+                                                                        [notFoundLink]="true"
+                                                                        (noResultsClicked)="showQuickAccountModal()"
+                                                                        [multiple]="false" [ItemHeight]="67"
+                                                                        [showClear]="false"
+                                                                        [useInBuiltFilterForFlattenAc]="true">
+                                                                        <ng-template #optionTemplate
+                                                                            let-option="option">
+                                                                            <ng-container
+                                                                                *ngIf="!option.additional?.stock">
+                                                                                <a href="javascript:void(0)"
+                                                                                    class="list-item"
+                                                                                    style="border-bottom: 1px solid #ccc;">
+                                                                                    <div class="item">{{ option.label }}
+                                                                                    </div>
+                                                                                    <div class="item_unq">
+                                                                                        {{ option.additional?.uniqueName }}
+                                                                                    </div>
+                                                                                    <!-- <span class="list-item" style="visibility: hidden;font-size:11px">&nbsp;</span> -->
+                                                                                </a>
+                                                                            </ng-container>
+                                                                            <ng-container
+                                                                                *ngIf="option.additional?.stock">
+                                                                                <a href="javascript:void(0)"
+                                                                                    class="list-item"
+                                                                                    style="border-bottom: 1px solid #ccc;">
+                                                                                    <div class="item">{{ option.label }}
+                                                                                    </div>
+                                                                                    <div class="item_unq">
+                                                                                        {{ option.additional?.uniqueName }}
+                                                                                    </div>
+                                                                                    <div class="item_stock">Stock:
+                                                                                        {{ option.additional?.stock.name }}
+                                                                                    </div>
+                                                                                </a>
+                                                                            </ng-container>
+                                                                        </ng-template>
+                                                                    </sh-select>
+                                                                    <ul class="no-result-template"
+                                                                        *ngIf="lc.noAccountChosenForNewEntry">
+                                                                        <li>Create New Account</li>
+                                                                    </ul>
+                                                                </div>
                                                             </td>
 
                                                             <td class="col-xs-4 col-md-3 col-lg-3 pos-rel">
@@ -433,14 +445,16 @@
                                                                     decimalDigitsDirective [DecimalPlaces]="2"
                                                                     [(ngModel)]="txn.amount"
                                                                     (input)="needToReCalculate.next(true)"
-                                                                    (click)="blankLedgerAmountClick()">
+                                                                    (click)="blankLedgerAmountClick()"
+                                                                    *ngIf="txn.type === 'CREDIT'"
+                                                                    (click)="showBankLedgerPopup(txn, item);">
                                                             </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
                                                 <!--new ledge popup-->
                                                 <div class="pos-abs entry-modal"
-                                                    *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
+                                                    *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id && txn.type === 'CREDIT'">
                                                     <new-ledger-entry-panel #newLedPanel
                                                         [trxRequest]="advanceSearchRequest" [isBankTransaction]="true"
                                                         [blankLedger]="item" [currentTxn]="lc.currentBlankTxn"
