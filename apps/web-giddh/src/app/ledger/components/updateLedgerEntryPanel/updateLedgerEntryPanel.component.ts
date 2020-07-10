@@ -199,7 +199,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     constructor(
         private _accountService: AccountService,
-        private _ledgerService: LedgerService,
+        private ledgerService: LedgerService,
         private generalService: GeneralService,
         private _ledgerAction: LedgerActions,
         private _loaderService: LoaderService,
@@ -1098,7 +1098,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
-        this._ledgerService.DownloadAttachement(fileName).subscribe(d => {
+        this.ledgerService.DownloadAttachement(fileName).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
                 return saveAs(blob, d.body.name);
@@ -1114,7 +1114,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         downloadRequest.invoiceNumber = [invoiceName];
         downloadRequest.voucherType = voucherType;
 
-        this._ledgerService.DownloadInvoice(downloadRequest, this.activeAccount.uniqueName).subscribe(d => {
+        this.ledgerService.DownloadInvoice(downloadRequest, this.activeAccount.uniqueName).subscribe(d => {
             if (d.status === 'success') {
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.activeAccount.name} - ${invoiceName}.pdf`);
@@ -1167,7 +1167,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @param {*} event Contains the selected voucher details
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public getInvoiceListsData(event: any) {
+    public getInvoiceListsData(event: any): void {
         if (event.value === 'rcpt') {
             if (this.isPettyCash && !this.accountUniqueName) {
                 this._toasty.errorToast('Please Select ' + this.pettyCashBaseAccountTypeString + '  for entry..');
@@ -1175,7 +1175,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
 
             this.invoiceList = [];
-            this._ledgerService.GetInvoiceList({ accountUniqueName: this.accountUniqueName, status: 'unpaid' }).subscribe((res: any) => {
+            this.ledgerService.GetInvoiceList({ accountUniqueName: this.accountUniqueName, status: 'unpaid' }).subscribe((res: any) => {
                 _.map(res.body.invoiceList, (o) => {
                     this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
                 });
@@ -1205,7 +1205,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             date = moment(this.vm.selectedLedger.entryDate).format(GIDDH_DATE_FORMAT);
         }
         this.invoiceList = [];
-        this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
+        this.ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
             if (response && response.body) {
                 if (response.body.results) {
                     response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber, value: invoice.uniqueName, invoice }))
@@ -1249,7 +1249,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
 
             this.invoiceList = [];
-            this._ledgerService.GetInvoiceList({ accountUniqueName: this.accountUniqueName, status: 'unpaid' }).subscribe((res: any) => {
+            this.ledgerService.GetInvoiceList({ accountUniqueName: this.accountUniqueName, status: 'unpaid' }).subscribe((res: any) => {
                 _.map(res.body.invoiceList, (o) => {
                     this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
                 });
@@ -1427,7 +1427,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         let from = this.vm.selectedCurrency === 0 ? this.vm.baseCurrencyDetails.code : this.vm.foreignCurrencyDetails.code;
         let to = this.vm.selectedCurrency === 0 ? this.vm.foreignCurrencyDetails.code : this.vm.baseCurrencyDetails.code;
         let date = moment().format('DD-MM-YYYY');
-        return this._ledgerService.GetCurrencyRateNewApi(from, to, date).toPromise();
+        return this.ledgerService.GetCurrencyRateNewApi(from, to, date).toPromise();
     }
 
     /**
