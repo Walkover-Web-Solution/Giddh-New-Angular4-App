@@ -1,29 +1,25 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-between mt-15 purchase-order-header">
         <div class="d-flex date-advanceSearch">
-            <!-- Invoice filter section -->
             <form #invoiceForm="ngForm" novalidate class="form-inline">
                 <div class="form-group mrR1 d-flex">
                     <div class="input-group">
                         <span class="input-wrapper">
-                            <input type="text" name="dateRange" daterangepicker (click)="showGiddhDatepicker($event)"
+                            <input type="text" name="dateRange" (click)="showGiddhDatepicker($event)"
                                 [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                                 class="giddh-datepicker form-control date-range-picker" />
                         </span>
                     </div>
                     <div class="advance-icon" style="align-items: center" tooltip="Advance Search"
-                        (click)="openModal(purchaseAdvanceSearch)">
+                        (click)="openAdvanceSearchModal(purchaseAdvanceSearch)">
                         <span class="icon-advance-filter"></span>
-                    </div>
-                    <div class="search-icon-block" *ngIf="isMobileScreen" (click)="openModal(searchModal)">
-                        <i class="icon-search"></i>
                     </div>
                 </div>
             </form>
         </div>
-        <!-- Invoice filter section ends -->
-        <div class="clear-filter" hidden>
-            <button class="btn btn-default mr-0">
+        <div class="clear-filter"
+            *ngIf="showClearFilterButton()">
+            <button class="btn btn-default mr-0" (click)="clearFilter()">
                 <span class="icon-cross"></span> Clear Filter
             </button>
         </div>
@@ -37,14 +33,14 @@
                     </button>
                     <ul *dropdownMenu class="dropdown-menu fixedDropdownPlus" role="menu"
                         aria-labelledby="button-basic">
-                        <li role="menuitem">
+                        <!-- <li role="menuitem">
                             <a class="dropdown-item cp" href="javascript:void(0)"
                                 (click)="openModalBulkUpdate(template)">Bulk Update</a>
                         </li>
                         <li role="menuitem">
                             <a class="dropdown-item cp" href="javascript:void(0)">
                                 Convert to bill</a>
-                        </li>
+                        </li> -->
                         <li role="menuitem">
                             <a class="dropdown-item cp" href="javascript:void(0)">
                                 Expired</a>
@@ -64,8 +60,9 @@
         </div>
     </div>
     <div class="mobile-search">
-        <div class="clear-filter mr-1">
-            <button class="btn btn-default mr-0">
+        <div class="clear-filter mr-1"
+            *ngIf="showClearFilterButton()">
+            <button class="btn btn-default mr-0" (click)="clearFilter()">
                 <span class="icon-cross"></span> Clear Filter
             </button>
         </div>
@@ -77,7 +74,7 @@
                     <span class="caret"></span>
                 </button>
                 <ul *dropdownMenu class="dropdown-menu fixedDropdownPlus" role="menu" aria-labelledby="button-basic">
-                    <li role="menuitem">
+                    <!-- <li role="menuitem">
                         <a class="dropdown-item cp" href="javascript:void(0)"
                             (click)="openModalBulkUpdate(template)">Bulk
                             Update</a>
@@ -85,7 +82,7 @@
                     <li role="menuitem">
                         <a class="dropdown-item cp" href="javascript:void(0)">
                             Convert to bill</a>
-                    </li>
+                    </li> -->
                     <li role="menuitem">
                         <a class="dropdown-item cp" href="javascript:void(0)">
                             Expired</a>
@@ -119,19 +116,25 @@
                     </th>
 
                     <th width="5%" class="td-search-box">
-                        Date
+                        <div>Date</div>
+                        <div class="icon-pointer">
+                            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'purchaseDate'}"></ng-container>
+                        </div>
                     </th>
 
-                    <th width="20%" class="td-search-box">
-                        Purchase Order
+                    <th width="20%" class="td-search-box" (clickOutside)="showPurchaseOrderNumberSearch = false">
+                        <span [hidden]="showPurchaseOrderNumberSearch">Purchase Order#</span>
+                        <i class="icon-search" (click)="showInlineSearch('purchaseOrderNumber', searchBox);" [hidden]="showPurchaseOrderNumberSearch"></i>
+                        <div class="input-container" [hidden]="!showPurchaseOrderNumberSearch">
+                            <input type="text" placeholder="Search Purchase Order#" class="w100" #searchBox [(ngModel)]="purchaseOrderPostRequest.purchaseOrderNumber" (keyup)="columnSearch()" (keydown)="columnSearch()" />
+                        </div>
                     </th>
 
-                    <th width="10%">
-                        <div class="d-flex">
-                            <div class="">Vendor name</div>
-                            <div class="icon-pointer">
-
-                            </div>
+                    <th width="20%" class="td-search-box" (clickOutside)="showVendorNameSearch = false">
+                        <span [hidden]="showVendorNameSearch">Vendor Name</span>
+                        <i class="icon-search" (click)="showInlineSearch('vendorName', searchBox);" [hidden]="showVendorNameSearch"></i>
+                        <div class="input-container" [hidden]="!showVendorNameSearch">
+                            <input type="text" placeholder="Search Vendor Name" class="w100" #searchBox [(ngModel)]="purchaseOrderGetRequest.search" (keyup)="columnSearch()" (keydown)="columnSearch()" />
                         </div>
                     </th>
 
@@ -139,7 +142,7 @@
                         <div class="d-flex justify-content-end">
                             <div class="text-right"> Total Amt.</div>
                             <div class="icon-pointer">
-
+                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}"></ng-container>
                             </div>
                         </div>
                     </th>
@@ -148,14 +151,15 @@
                         <div class="d-flex">
                             <div>Expected Delivery</div>
                             <div class="icon-pointer">
-
+                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'dueDate'}">
+                                </ng-container>
                             </div>
                         </div>
                     </th>
 
                     <th width="25%">
                         <div class="d-flex">
-                            <div class="">Status</div>
+                            <div>Status</div>
                             <div class="icon-pointer">
 
                             </div>
@@ -163,12 +167,10 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-
-
+            <tbody *ngIf="!isLoading && purchaseOrders.items && purchaseOrders.items.length > 0">
+                <tr *ngFor="let row of purchaseOrders.items; let i = index;">
                     <td data-title="#">
-                        1
+                        {{ (purchaseOrderGetRequest.count * (purchaseOrderGetRequest.page - 1)) + (i+1) }}
                         <!-- make this dynamic , functionality should be like proforma invoice for mobile view only  -->
                         <div class="mh18_img" class="justify-content-sm-start check-uncheck" hidden>
                             <img src="assets/images/unchecked.png" />
@@ -179,29 +181,30 @@
                         </div>
                     </td>
                     <td data-title="Date">
-                        23/05/2020
+                        {{row.voucherDate}}
                     </td>
                     <td data-title="Purchase Order">
-                        <span routerLink="['/pages/purchase-management/purchase-order-invoice-preview']">2355989</span>
+                        <a
+                            routerLink="['/pages/purchase-management/purchase-order-invoice-preview/'+row.uniqueName]">{{row.voucherNumber}}</a>
                     </td>
                     <td data-title="Vendor Name">
-                        Walkover Web solution
+                        {{row.vendor?.name}}
                     </td>
                     <td data-title="Total Amt." class="text-right">
-                        1000
+                        {{row.amountForAccount}}
                     </td>
                     <td data-title="Expected Delivery">
                         <span hidden>Delivery in 7 days</span>
-                        <span>23/05/2020</span>
+                        <span>{{row.dueDate}}</span>
                     </td>
                     <td data-title="status" class="d-flex align-items-center">
                         <span class="d-flex">
-                            Open</span>
+                            {{row.status}}</span>
                         <div class="action-icon ml-15">
                             <a tooltip="Convert to bill">
                                 <span class="icon-tick font-12"></span>
                             </a>
-                            <a tooltip="send Email">
+                            <a tooltip="Send Email">
                                 <span class="icon-enevlop font-12"></span>
                             </a>
                             <a tooltip="Copy">
@@ -214,9 +217,14 @@
                     </td>
                 </tr>
             </tbody>
-
-
-            <tbody hidden>
+            <tbody *ngIf="!isLoading && !purchaseOrders.totalItems">
+                <tr>
+                    <td colspan="7" class="text-center empty_table">
+                        <h1>No Record Found !!</h1>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody *ngIf="isLoading">
                 <tr>
                     <td colspan="8">
                         <div class="no-data mrT2 loader-main">
@@ -230,36 +238,9 @@
             </tbody>
         </table>
     </div>
-    <pagination class="pagination" [totalItems]="30"></pagination>
+    <pagination *ngIf="purchaseOrders.totalPages > 0" class="pagination" [totalItems]="purchaseOrders.totalItems"
+        [maxSize]="5" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
 </div>
-<ng-template #searchModal>
-    <div class="modal-header">
-        <h4 class="modal-title bg pull-left">Search here...</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        <div class="row">
-            <div class="col-sm-6 col-xs-6 full-width-on-mobile">
-                <div class="input-container">
-                    <input type="text" placeholder="Search Invoice No." class=" form-control" />
-                </div>
-            </div>
-            <div class="col-sm-6 col-xs-6 full-width-on-mobile">
-                <div class="input-container">
-                    <input type="text" placeholder="Search Customer Name" class=" form-control" />
-                </div>
-            </div>
-            <div class="col-sm-6 col-xs-6 mt-2">
-                <button class="btn btn-pink">Submit</button>
-            </div>
-
-        </div>
-
-    </div>
-</ng-template>
-
 <ng-template #template>
     <div class="purchase-order-bulk-update">
         <div class="modal-header">
@@ -273,7 +254,7 @@
                 <div class="d-flex flex-column">
                     <p class="mb-3">Choose a field from the dropdown and update with new information.</p>
                     <div class="d-flex justify-content-between mb-3 modal-form">
-                        <sh-select class="mr-15" [options]="selectOverDate"></sh-select>
+                        <sh-select class="mr-15"></sh-select>
                         <div class="select-date">
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Select date">
@@ -294,7 +275,36 @@
         </div>
     </div>
 </ng-template>
-<!-- region search_customer image -->
 <ng-template #purchaseAdvanceSearch>
-    <purchase-advance-search></purchase-advance-search>
+    <purchase-advance-search [purchaseOrderPostRequest]="purchaseOrderPostRequest"
+        (closeModelEvent)="advanceSearchCallback($event)"></purchase-advance-search>
+</ng-template>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions.ranges" [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true" [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true"
+                [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>
+<ng-template #sortTemplate let-column="column">
+    <div class="icon-sort-asc" *ngIf="purchaseOrderGetRequest.sortBy !== column"
+        (click)="sortPurchaseOrders('asc', column)"
+        [ngClass]="{'activeTextColor': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'}">
+    </div>
+    <div class="icon-sort-asc"
+        *ngIf="purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'"
+        (click)="sortPurchaseOrders('desc', column)"
+        [ngClass]="{'activeTextColor': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'asc'}">
+    </div>
+    <div class="icon-sort-dsc"
+        *ngIf="purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'"
+        (click)="sortPurchaseOrders('asc', column)"
+        [ngClass]="{'activeTextColor': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'}">
+    </div>
 </ng-template>
