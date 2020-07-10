@@ -10,8 +10,6 @@ import { Observable } from 'rxjs';
 import { InventoryService } from '../../services/inventory.service';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CustomActions } from '../../store/customActions';
-import * as moment from "moment";
-import Base = moment.unitOfTime.Base;
 
 @Injectable()
 export class CustomStockUnitAction {
