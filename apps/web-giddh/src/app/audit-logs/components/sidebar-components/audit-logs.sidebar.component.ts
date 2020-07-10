@@ -68,7 +68,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         //     }
         // });
 
-        /* previously we were get data from api now we are getting data from general store */
+        /* previously we were getting data from api now we are getting data from general store */
 
         this.vm.accounts$ = this.store.select(state => state.general.flattenAccounts).pipe(takeUntil(this.destroyed$), map(accounts => {
             if(accounts && accounts.length) {
