@@ -19,6 +19,7 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { GeneralService } from '../../../services/general.service';
 import { LogsService } from '../../../services/logs.service';
+import { IForceClear } from '../../../models/api-models/Sales';
 
 @Component({
     selector: 'audit-logs-form',
@@ -63,6 +64,16 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** Audit log filter form data */
     public auditLogFilterForm: any[] = [];
+    /** To clear entity sh-select options   */
+    public forceClearEntity$: Observable<IForceClear> = observableOf({ status: false });
+    /** To clear operations sh-select options   */
+    public forceClearOperations$: Observable<IForceClear> = observableOf({ status: false });
+    /** To clear account sh-select options   */
+    public forceClearAccount$: Observable<IForceClear> = observableOf({ status: false });
+    /** To clear group sh-select options   */
+    public forceClearGroup$: Observable<IForceClear> = observableOf({ status: false });
+    /** To clear user sh-select options   */
+    public forceClearUser$: Observable<IForceClear> = observableOf({ status: false });
     /* Active company unique name */
     public activeCompanyUniqueName$: Observable<string>;
 
@@ -116,7 +127,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         // To get audit log form filter
-        // this.getFormFilter();
+        this.getFormFilter();
         this.auditLogFormVM.groupsList$.subscribe(data => {
             if (data && data.length) {
                 let accountList = this.flattenGroup(data, []);
@@ -247,6 +258,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
 
     public resetFilters() {
         this.auditLogFormVM.reset();
+        this.resetAuditLogForm();
         this.store.dispatch(this.auditLogsActions.ResetLogs());
     }
     // end
@@ -267,7 +279,6 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                     response.body.forEach(element => {
                         this.auditLogFormVM.entities.push({ label: element.entity, value: element.entity });
                     });
-                    console.log(this.auditLogFilterForm);
                 }
             }
 
@@ -277,22 +288,68 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     /**
      * To prepare operation dropdown data according to selected entity type
      *
-     * @param {*} selectEntity
+     * @param {any} selectEntity  Selected entity type
      * @memberof AuditLogsFormComponent
      */
-    public prepareOperationFormData(selectEntity) {
+    public prepareOperationFormData(selectEntity: any) {
         console.log(selectEntity);
         if (selectEntity.filter) {
-            let selectedEntityObject = this.auditLogFilterForm.filter(element =>  element.entity === selectEntity.filter);
-            selectedEntityObject[0].operations.map(element=>{
-                element = {label: element,value: element};
-            });
-             this.auditLogFormVM.filters = selectedEntityObject[0].operations;
-            console.log(selectedEntityObject);
+            this.getOperationsFilterData(selectEntity.filter);
+            // let selectedEntityObject = this.auditLogFilterForm.filter(element => element.entity === selectEntity.filter);
+            // selectedEntityObject[0].operations.map(element => {
+            //     element = { label: element, value: element };
+            // });
+            // this.auditLogFormVM.filters = selectedEntityObject[0].operations;
+            // console.log(selectedEntityObject);
         } else {
-           this.auditLogFormVM.filters = [];
+            this.auditLogFormVM.filters = [];
         }
     }
+
+
+    /**
+     * To get operations dropdown data according to select entity type
+     *
+     * @param {string} entityType Selected entity type
+     * @memberof AuditLogsFormComponent
+     */
+    public getOperationsFilterData(entityType: string) {
+        this.auditLogFormVM.filters = [];
+        if (entityType) {
+            let selectedEntityObject = this.auditLogFilterForm.filter(element => element.entity === entityType);
+            selectedEntityObject[0].operations.map(element => {
+                let operatios: IOption = { label: element, value: element };
+                this.auditLogFormVM.filters.push(operatios);
+            });
+        }
+    }
+
+    /**
+     * To reset form values
+     *
+     * @memberof AuditLogsFormComponent
+     */
+    public resetAuditLogForm() {
+        this.forceClearEntity$ = observableOf({ status: true });
+        this.forceClearGroup$ = observableOf({ status: true });
+        this.forceClearAccount$ = observableOf({ status: true });
+        this.forceClearGroup$ = observableOf({ status: true });
+        this.forceClearUser$ = observableOf({ status: true });
+    }
+
+    /**
+     * To select entity type
+     *
+     * @param {IOption} event Selected item object
+     * @memberof AuditLogsFormComponent
+     */
+    public selectedEntityType(event: IOption) {
+        if (event && event.value) {
+            this.getOperationsFilterData(event.value);
+        }
+    }
+
+
     /**
      *To show the datepicker
      *
