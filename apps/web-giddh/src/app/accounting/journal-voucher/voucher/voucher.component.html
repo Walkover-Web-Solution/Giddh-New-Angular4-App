@@ -50,17 +50,15 @@
                                         {{transaction.selectedAccount.type === 'DEBIT' ? 'Dr.' : 'Cr.'}}
                                     </span>
 
-                                    <!-- Need to make it dymanic and show it only TO row -->
-                                    <div class="debtor-details pb-1 pt-05"
-                                        *ngIf="debtorFormStatic && transaction.type === 'to'"
-                                        (click)="shoewDebtorForm()">
-                                        <span class="mr-15">Receipt</span>
-                                        <span class="mr-15">samplename</span>
-                                        <span class="mr-15">200 (10%)</span>
-                                        <!-- showing below field if receipt type is against reference -->
-                                        <span class="mr-15" *ngIf="showInvNo">84358; 25/06/2020; 5000 cr.</span>
-                                        <span class="mr-15">2,000.00</span>
-                                        <span>cr</span>
+                                    <div *ngIf="transaction.type === 'to' && transaction.voucherAdjustments && transaction.voucherAdjustments.length > 0">
+                                        <div class="debtor-details pb-1 pt-05" *ngFor="let adjustment of transaction.voucherAdjustments;">
+                                            <span class="mr-15">{{adjustment.type}}</span>
+                                            <span class="mr-15">{{adjustment.note}}</span>
+                                            <span class="mr-15" *ngIf="adjustment.tax && adjustment.tax.uniqueName">{{adjustment.tax.value | giddhCurrency}} ({{adjustment.tax.percent}}%)</span>
+                                            <span class="mr-15" *ngIf="adjustment.invoiceNo">{{adjustment.invoiceNo}}; 25/06/2020; 5000 cr.</span>
+                                            <span class="mr-15">{{adjustment.amount | giddhCurrency}}</span>
+                                            <span>cr</span>
+                                        </div>
                                     </div>
                                     <div class="debtor-details-form pb-1 pt-05" *ngIf="debtorDetailFormShow && transaction.type === 'to'">
                                         <div class="form-fields">
