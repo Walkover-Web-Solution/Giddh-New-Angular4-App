@@ -1,4 +1,4 @@
-import { map, switchMap } from 'rxjs/operators';
+import {map, switchMap, tap} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
@@ -10,6 +10,8 @@ import { Router } from '@angular/router';
 import { SETTINGS_TAXES_ACTIONS } from './settings.taxes.const';
 import { SettingsTaxesService } from '../../../services/settings.taxes.service';
 import { CustomActions } from '../../../store/customActions';
+import {ITax} from "../../../models/interfaces/tax.interface";
+import {GeneralActions} from "../../general/general.actions";
 
 @Injectable()
 export class SettingsTaxesActions {
@@ -60,7 +62,13 @@ export class SettingsTaxesActions {
     public DeleteTax$: Observable<Action> = this.action$
         .ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX).pipe(
             switchMap((action: CustomActions) => {
-                return this.settingsTaxesService.DeleteTax(action.payload).pipe(
+                return this.settingsTaxesService.DeleteTax(action.payload.value).pipe(
+                    tap(resp => {
+                        debugger;
+                        if(action.payload.linkedAccount) {
+                            this.store.dispatch(this.generalActions.updateCurrentLiabilities(action.payload.linkedAccount));
+                        }
+                    }),
                     map(response => this.DeleteTaxResponse(response)));
             }));
 
@@ -89,6 +97,7 @@ export class SettingsTaxesActions {
         private toasty: ToasterService,
         private router: Router,
         private store: Store<AppState>,
+        private generalActions: GeneralActions,
         private settingsTaxesService: SettingsTaxesService) {
     }
 
@@ -120,10 +129,13 @@ export class SettingsTaxesActions {
         };
     }
 
-    public DeleteTax(value: string): CustomActions {
+    public DeleteTax(value: string, linkedAccountUniqueName: string = null): CustomActions {
         return {
             type: SETTINGS_TAXES_ACTIONS.DELETE_TAX,
-            payload: value
+            payload: {
+                value,
+                linkedAccount: linkedAccountUniqueName
+            },
         };
     }
 
