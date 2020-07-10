@@ -6,38 +6,111 @@
             ({{log.accountUniqueName}})</span>
     </h1>
     <div class="mrT border-top-btm clearfix">
-        <div>
-            <label class="pull-left">Entity:</label>
-            <p class="pull-left mrL">{{log.entityType}}</p>
+        <div class="d-flex user-basic-detail">
+            <div>
+                <label>Entity:</label>
+                <p>{{log.entityType}}</p>
+            </div>
+            <div>
+                <label>Date:</label>
+                <p>{{log.createdAt}}</p>
+            </div>
+            <div>
+                <label>User:</label>
+                <p>{{log.user.name}}</p>
+            </div>
+            <div *ngIf="log && log.groupName && log.groupName != null">
+                <label>Group:</label>
+                <p>{{log.groupName}}</p>
+            </div>
+            <div>
+                <label>Company:</label>
+                <p>{{log.companyName}}</p>
+            </div>
+            <div
+                *ngIf="log.log && log.log.sharedWith && log.log.sharedWith != undefined && log.log.sharedWith.name.length > 0">
+                <label>Shared with:</label>
+                <p>{{log.log.sharedWith.name}}
+                    <span
+                        ng-if="log.log.sharedWith.email && log.log.sharedWith.email != null && log.log.sharedWith.email.length > 0">
+                        | {{log.log.sharedWith.email}}</span>
+                </p>
+            </div>
+            <div>
+                <label>Opening Balance</label>
+                <p>0.00</p>
+            </div>
+            <div>
+                <label>Closing Balance</label>
+                <p>0.00</p>
+            </div>
+            <div *ngIf="log && log.log && log.log.description != undefined && log.log.description.length > 0">
+                <label>Description:</label>
+                <p>{{log.log.description}}</p>
+            </div>
         </div>
-        <div>
-            <label class="pull-left mrL2">Date:</label>
-            <p class="pull-left mrL">{{log.createdAt}}</p>
-        </div>
-        <div>
-            <label class="pull-left mrL2">User:</label>
-            <p class="pull-left mrL">{{log.user.name}}</p>
-        </div>
-        <div *ngIf="log && log.groupName && log.groupName != null">
-            <label class="pull-left mrL2">Group:</label>
-            <p class="pull-left mrL">{{log.groupName}}</p>
-        </div>
-        <div>
-            <label class="pull-left mrL2">Company:</label>
-            <p class="pull-left mrL">{{log.companyName}}</p>
-        </div>
-        <div
-            *ngIf="log.log && log.log.sharedWith && log.log.sharedWith != undefined && log.log.sharedWith.name.length > 0">
-            <label class="pull-left mrL2">Shared with:</label>
-            <p class="pull-left mrL">{{log.log.sharedWith.name}}
-                <span
-                    ng-if="log.log.sharedWith.email && log.log.sharedWith.email != null && log.log.sharedWith.email.length > 0">
-                    | {{log.log.sharedWith.email}}</span>
-            </p>
-        </div>
-        <div *ngIf="log && log.log && log.log.description != undefined && log.log.description.length > 0">
-            <label class="pull-left mrL2">Description:</label>
-            <p class="pull-left mrL">{{log.log.description}}</p>
+
+        <div class="address-row-wrapper d-flex">
+            <div class="address-row mt-05">
+                <div class="single-address-row">
+                    <div class="mr-05">
+                        <label>
+                            Address:
+                        </label>
+                        <p class="address-field">405-406, Capt. C. S. Naidu Arcade Near Greater
+                            Kailash Hospital
+                        </p>
+                    </div>
+                    <div class="mr-05">
+                        <label>
+                            State:
+                        </label>
+                        <p>Madhya Pradesh</p>
+                    </div>
+                    <div class="mr-05">
+                        <label>
+                            GSTIN:
+                        </label>
+                        <p>1234567890gst</p>
+                    </div>
+                    <div class="mr-05">
+                        <label>
+                            State:
+                        </label>
+                        <p>India</p>
+                    </div>
+                </div>
+                <div class="single-address-row" *ngIf="showSingleAdd">
+                    <div class="mr-05">
+                        <label>
+                            Address:
+                        </label>
+                        <p class="address-field">405-406, Capt. C. S. Naidu Arcade Near Greater Kailash Hospital
+                        </p>
+                    </div>
+                    <div class="mr-05">
+                        <label>
+                            State:
+                        </label>
+                        <p>Madhya Pradesh</p>
+                    </div>
+                    <div class="mr-05">
+                        <label>
+                            GSTIN:
+                        </label>
+                        <p>1234567890gst</p>
+                    </div>
+                    <div class="mr-05">
+                        <label>
+                            State:
+                        </label>
+                        <p>India</p>
+                    </div>
+                </div>
+            </div>
+            <div class="angle-right-icon" (click)="openAllAddress()">
+                <i class="icon-arrow-down"></i>
+            </div>
         </div>
     </div>
 
