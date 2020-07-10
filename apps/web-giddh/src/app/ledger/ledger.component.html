@@ -252,13 +252,13 @@
                         <tr class="transaction-table-row">
                             <td class="nopad bdrL bdrR" colspan="3">
                                 <table class="width100" *ngFor="let item of lc.bankTransactionsData;"
-                                    (clickOutside)="hideBankLedgerPopup(true)">
+                                    (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                                     <tbody>
                                         <tr *ngFor="let txn of item.transactions;">
                                             <td class="width100 pos-rel">
                                                 <table class="width100">
                                                     <tbody class="ledger-main">
-                                                        <tr class="ledger-row" (click)="$event.stopPropagation()"
+                                                        <tr class="ledger-row"
                                                             [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
 
                                                             <td class="col-xs-3 col-md-3 col-lg-3">
