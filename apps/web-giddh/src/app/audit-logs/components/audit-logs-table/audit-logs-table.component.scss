@@ -1,3 +1,36 @@
 // .audit-log-viewport {
 //     height: 90vh;
 // }
+.user-basic-detail {
+    align-items: center;
+    justify-content: space-between;
+    label {
+        font-weight: 600;
+    }
+}
+.address-row-wrapper {
+    justify-content: space-between;
+    .address-row {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        .single-address-row {
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            label {
+                font-weight: 600;
+            }
+            .address-field {
+                white-space: normal;
+                width: 100%;
+                max-width: 560px;
+                word-break: break-word;
+            }
+        }
+    }
+    .angle-right-icon {
+        padding: 2px 10px;
+        cursor: pointer;
+    }
+}

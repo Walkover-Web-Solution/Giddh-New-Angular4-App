@@ -9,10 +9,12 @@ import { AppState } from '../../../store/roots';
 
 @Component({
     selector: 'audit-logs-table',  // <home></home>
-    templateUrl: './audit-logs-table.component.html'
+    templateUrl: './audit-logs-table.component.html',
+    styleUrls: ['audit-logs-table.component.scss']
 })
 export class AuditLogsTableComponent implements OnInit, OnDestroy {
     public page$: Observable<number>;
+    public showSingleAdd: boolean = false;
     public totalPages$: Observable<number>;
     public totalElements$: Observable<number>;
     public size$: Observable<number>;
@@ -48,5 +50,8 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
             let page = r.currentPage + 1;
             this.store.dispatch(this._auditLogsActions.LoadMoreLogs(request, page));
         });
+    }
+    public openAllAddress() {
+        this.showSingleAdd = !this.showSingleAdd;
     }
 }
