@@ -1,0 +1,84 @@
+<h1 class="page-title" style="margin-left:0; margin-bottom:15px;">
+    Apply Log Filters</h1>
+<!-- <div class="clearfix mrT2">
+    <label>Filter By:</label>
+    <sh-select [options]="auditLogFormVM.dateOptions" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="auditLogFormVM.selectedDateOption"></sh-select>
+</div> -->
+<div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+    <i><img src="assets/images/custom-calender.svg"></i>
+    <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
+</div>
+<!-- <div class="clearfix mrT2" *ngIf="auditLogFormVM.selectedDateOption == '1'">
+    <label>From date</label>
+    <input type="text" name="from" [placeholder]="giddhDateFormat" #fromdp="bsDatepicker" bsDatepicker [(ngModel)]="auditLogFormVM.selectedFromDate" class="form-control" />
+
+</div>
+
+<div class="clearfix mrT2" *ngIf="auditLogFormVM.selectedDateOption == '1'">
+    <label>To date</label>
+    <input type="text" name="to" [placeholder]="giddhDateFormat" #todp="bsDatepicker" bsDatepicker [(ngModel)]="auditLogFormVM.selectedToDate" class="form-control" />
+
+</div> -->
+
+<!-- <div class="clearfix mrT2" *ngIf="auditLogFormVM.selectedDateOption == '0'">
+    <div class="row" style="margin-left:0">
+        <p class="input-group pull-left" for="entryDate">
+            <label>Entry Date
+                <input id="entryDate" type="radio" name="entryDate" [(ngModel)]="auditLogFormVM.logOrEntry" value="entryDate" />
+            </label>
+        </p>
+        <p class="input-group pull-left mrL2" for="logDate">
+            <label>Log Date
+                <input id="logDate" type="radio" name="logDate" [(ngModel)]="auditLogFormVM.logOrEntry" value="logDate" />
+            </label>
+        </p>
+        <br />
+    </div>
+
+    <div class="input-group">
+        <input type="text" name="logdate" [placeholder]="giddhDateFormat" #logdate="bsDatepicker" bsDatepicker [(ngModel)]="auditLogFormVM.selectedLogDate" class="form-control" [placement]="'right'" />
+    </div>
+
+</div> -->
+<div class="clearfix mrT2">
+    <label>Select Entity</label>
+    <sh-select [options]="auditLogFormVM.entities" #selectEntity [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="auditLogFormVM.selectedEntity"></sh-select>
+</div>
+
+<div class="clearfix mrT2">
+    <label>Select Operation</label>
+    <sh-select [options]="auditLogFormVM.filters" [placeholder]="'Select Option'" (click)="prepareOperationFormData(selectEntity)" [(ngModel)]="auditLogFormVM.selectedOperation"></sh-select>
+</div>
+
+<div class="clearfix mrT2">
+    <label>Select Account</label>
+    <sh-select [options]="auditLogFormVM.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="genralCustomFilter" [(ngModel)]="auditLogFormVM.selectedAccountUnq"></sh-select>
+</div>
+
+<div class="clearfix mrT2">
+    <label>Select Group</label>
+    <sh-select [options]="auditLogFormVM.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="genralCustomFilter" [(ngModel)]="auditLogFormVM.selectedGroupUnq"></sh-select>
+    <!--<select2 [data]="auditLogFormVM.groups$ | async" [options]="auditLogFormVM.options" [value]="auditLogFormVM.selectedGroupUnq" (valueChanged)="selectGroup($event)"></select2>-->
+</div>
+
+
+<div class="clearfix mrT2">
+    <label>Select User</label>
+    <sh-select [options]="auditLogFormVM.users$ | async" [customFilter]="customUserFilter" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="auditLogFormVM.selectedUserUnq"></sh-select>
+</div>
+
+<button class='btn btn-success pull-left mrT2' [ladda]="auditLogFormVM.getLogsInprocess$ | async" (click)='getLogfilters()'>Get Logs
+</button>
+<button class="btn btn-warning pull-left mrT2 mrL" (click)="resetFilters()">Reset</button>
+
+<br />
+
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions.ranges" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+                [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>
