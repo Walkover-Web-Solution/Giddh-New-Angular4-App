@@ -373,21 +373,21 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             let updatedGroupsWithAccounts = [...state.groupswithaccounts];
             let flattenAccountsArray = [...state.flattenAccounts];
             const updatedcurrentliabilities = {
-                ...updatedGroupsWithAccounts.find(x => x.uniqueName === 'currentliabilities')
+                ...updatedGroupsWithAccounts.find(account => account.uniqueName === 'currentliabilities')
             };
             if (updatedcurrentliabilities && updatedcurrentliabilities.groups && updatedcurrentliabilities.groups.length) {
-                updatedcurrentliabilities.groups.map(f => {
-                    if (f.uniqueName === 'dutiestaxes' && f.category === 'liabilities') {
-                        f.accounts = f.accounts.filter(s => s.uniqueName !== action.payload)
+                updatedcurrentliabilities.groups.map(group => {
+                    if (group.uniqueName === 'dutiestaxes' && group.category === 'liabilities') {
+                        group.accounts = group.accounts.filter(s => s.uniqueName !== action.payload)
                     }
-                    return f;
+                    return group;
                 })
             }
-            updatedGroupsWithAccounts = updatedGroupsWithAccounts.map(x => {
-                if (x.uniqueName === 'currentliabilities') {
+            updatedGroupsWithAccounts = updatedGroupsWithAccounts.map(account => {
+                if (account.uniqueName === 'currentliabilities') {
                     return updatedcurrentliabilities;
                 }
-                return x;
+                return account;
             });
             flattenAccountsArray = flattenAccountsArray.filter(f => f.uniqueName !== action.payload)
             return {
