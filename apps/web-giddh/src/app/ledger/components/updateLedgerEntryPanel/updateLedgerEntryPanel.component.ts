@@ -1059,7 +1059,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         delete requestObj['tdsTaxes'];
         delete requestObj['tcsTaxes'];
 
-        if (requestObj.voucherType !== 'credit note') {
+        if (requestObj.voucherType !== VoucherTypeEnum.creditNote) {
             requestObj.invoiceLinkingRequest = null;
         }
 
@@ -1161,8 +1161,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         //
     }
 
-    public getInvoiveListsData(e: any) {
-        if (e.value === 'rcpt') {
+    /**
+     * Fetches the invoice list data for a voucher
+     *
+     * @param {*} event Contains the selected voucher details
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public getInvoiceListsData(event: any) {
+        if (event.value === 'rcpt') {
             if (this.isPettyCash && !this.accountUniqueName) {
                 this._toasty.errorToast('Please Select ' + this.pettyCashBaseAccountTypeString + '  for entry..');
                 return;
@@ -1174,7 +1180,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
                 });
             });
-        } else if (e.value === 'credit note') {
+        } else if (event.value === VoucherTypeEnum.creditNote) {
             this.getInvoiceListsForCreditNote();
             this.vm.selectedLedger.generateInvoice = true;
         } else {
@@ -1201,7 +1207,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.invoiceList = [];
         this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
             if (response && response.body) {
-                if (response.body.results.length) {
+                if (response.body.results) {
                     response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber, value: invoice.uniqueName, invoice }))
                 } else {
                     this.forceClear$ = observableOf({ status: true });
@@ -1225,6 +1231,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
     }
 
+    /**
+     * Removes the selected invoice for credit note
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
     public removeSelectedInvoice(): void {
         this.forceClear$ = observableOf({ status: true });
         this.selectedInvoice = '';

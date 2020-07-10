@@ -482,7 +482,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.companyActions.getTax());
-        this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
+        // this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
         this.store.dispatch(this._invoiceActions.getInvoiceSetting());
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
@@ -1428,7 +1428,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.voucherTypeChanged = true;
         this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
         this.selectedVoucherType = val;
-        if (this.selectedVoucherType === 'credit note') {
+        if (this.selectedVoucherType === VoucherTypeEnum.creditNote) {
             this.getInvoiceListsForCreditNote();
         }
     }
@@ -1483,6 +1483,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
+    /**
+     * Removes the selected invoice for credit note
+     *
+     * @memberof ProformaInvoiceComponent
+     */
     public removeSelectedInvoice(): void {
         this.invoiceForceClearReactive$ = observableOf({ status: true });
         this.selectedInvoice = '';
