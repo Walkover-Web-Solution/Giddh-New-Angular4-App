@@ -4,68 +4,69 @@
         <i class="icon-cross text-right close_modal" (click)="onCancel()"></i>
     </div>
     <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
-        <form name="newRole" novalidate autocomplete="off">
-            <!-- region proforma || estimates-->
+        <form name="purchaseOrderAdvanceSearch" novalidate autocomplete="off">
             <div class="modal_wrap mrB2">
-
                 <div class="row">
-
                     <div class="col-sm-4 col-xs-12">
                         <label>Estimation Date</label>
                     </div>
-
                     <div class="col-sm-8 col-xs-12">
-
                         <div>
-
                             <div style="padding: 0">
-                                <input type="text" class="form-control" />
+                                <input type="text" class="form-control" (click)="showGiddhDatepicker($event)"
+                                    [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" />
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
                 <div class="row mt-2 mb-2">
-
                     <div class="col-sm-4 col-xs-12">
                         <label>Total Amt</label>
                     </div>
-
                     <div class="col-sm-8 col-xs-12">
-
                         <div class="total-amount">
                             <div class="col-sm-8 col-xs-6" style="padding-left: 0">
-                                <sh-select></sh-select>
+                                <sh-select placeholder="Select Range" name="grandTotal" [options]="filtersForAmount"
+                                    [(ngModel)]="purchaseOrderPostRequest.grandTotalOperation" [ItemHeight]="33"
+                                    [defaultValue]="selectedGrandTotalOperator">
+                                </sh-select>
                             </div>
                             <div class="col-sm-4 col-xs-6" style="padding: 0">
-                                <input class="form-control" placeholder="00" type="tel">
+                                <input class="form-control" placeholder="00" type="tel" name="grandTotal"
+                                    [(ngModel)]="purchaseOrderPostRequest.grandTotal" decimalDigitsDirective
+                                    [DecimalPlaces]="4">
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div class="row mt-2 mb-2">
-
                     <div class="col-sm-4 col-xs-12">
                         <label>Select Status</label>
                     </div>
-
                     <div class="col-sm-8 col-xs-12">
-                        <sh-select></sh-select>
+                        <sh-select placeholder="Select Status" name="statuses" [options]="filtersForStatus"
+                            [multiple]="true" [(ngModel)]="purchaseOrderPostRequest.statuses" [ItemHeight]="33">
+                        </sh-select>
                     </div>
                 </div>
-
-
             </div>
-            <!-- endregion -->
             <div class="pull-right">
-                <button type="submit" class="btn btn-md btn-success mrR1">Search</button>
-                <button type="submit" class="btn btn-md btn-cancel">Cancel</button>
+                <button type="submit" class="btn btn-md btn-success mrR1" (click)="onSearch()">Search</button>
+                <button type="submit" class="btn btn-md btn-cancel" (click)="onCancel()">Cancel</button>
             </div>
         </form>
-
     </div>
 </div>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions.ranges" [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true" [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true"
+                [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

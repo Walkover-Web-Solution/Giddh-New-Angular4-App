@@ -23,7 +23,7 @@ const INVOICE_ROUTES: Routes = [
             { path: '', redirectTo: 'purchase', pathMatch: 'full' },
             { path: 'invoice', component: PurchaseInvoiceComponent },
             { path: 'create-purchase-order', component: CreatePurchaseOrderComponent },
-            { path: 'purchase-order-page', component: PurchaseOrderComponent },
+            { path: 'purchase-order', component: PurchaseOrderComponent },
             { path: 'purchase-order-invoice-preview', component: PurchaseOrderInvoicePreviewComponent },
             { path: 'purchase-setting', component: PurchaseSettingComponent },
             { path: 'purchase', component: PurchaseRecordComponent },
