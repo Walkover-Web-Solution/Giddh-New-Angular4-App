@@ -1,4 +1,5 @@
 import { ILogRequest, ILogsItem } from '../interfaces/logs.interface';
+import { IOption } from '../../theme/ng-select/ng-select';
 
 /**
  * Model for Audit Logs api request
@@ -33,4 +34,9 @@ export class LogsResponse {
     public totalPages: number;
     public size: number;
     public totalElements: number;
+}
+// Get audit log filter form
+export class AuditLogFilterForm {
+    public entity: string;
+    public operations: string[];
 }

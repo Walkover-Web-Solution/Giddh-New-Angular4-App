@@ -47,4 +47,15 @@ export class LogsService {
         return this._http.get(`${this.config.apiUrl}${LOGS_API.GET_FILTERS}`, {}).pipe(
             catchError((error) => this.errorHandler.HandleCatch<LogsResponse, LogsRequest>(error)));
     }
+
+    /**
+    * API call to get selected filters operations
+    *
+    * @returns {Observable<BaseResponse<LogsResponse, LogsRequest>>} Observable of service call to carry out further operations
+    * @memberof LogsService
+    */
+    public getAuditLogFormFilters(): Observable<BaseResponse<any, any>> {
+        return this._http.get(`${this.config.apiUrl}${LOGS_API.GET_AUDIT_LOG_FORM_FILTERS}`).pipe(
+            catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
 }
