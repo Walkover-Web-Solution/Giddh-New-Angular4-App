@@ -356,7 +356,25 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                 ...state, isCalendlyModelOpen: action.payload
             }
         }
-
+        case GENERAL_ACTIONS.UPDATE_CURRENT_LIABILITIES: {
+            let updatedGroupsWithAccounts = [...state.groupswithaccounts];
+            const updatedcurrentliabilities = {
+                ...updatedGroupsWithAccounts.find(x => x.uniqueName === 'currentliabilities')
+            };
+            if(updatedcurrentliabilities && updatedcurrentliabilities.groups && updatedcurrentliabilities.groups.length) {
+            updatedcurrentliabilities.groups = updatedcurrentliabilities.groups.filter(x => x.uniqueName !== action.payload);
+            }
+            updatedGroupsWithAccounts = updatedGroupsWithAccounts.map(x => {
+                if(x.uniqueName === 'currentliabilities') {
+                    return updatedcurrentliabilities;
+                }
+                return x;
+            });
+            return {
+                ...state,
+                groupswithaccounts: [...updatedGroupsWithAccounts]
+            }
+        }
         default:
             return state;
     }
