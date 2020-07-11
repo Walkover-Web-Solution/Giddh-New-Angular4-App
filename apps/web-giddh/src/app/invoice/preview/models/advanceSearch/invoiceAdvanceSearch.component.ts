@@ -233,11 +233,6 @@ export class InvoiceAdvanceSearchComponent implements OnInit {
     }
 
     public onCancel() {
-        if (this.allShSelect) {
-            this.allShSelect.forEach(f => {
-                f.clear();
-            });
-        }
         this.request = new InvoiceFilterClassForInvoicePreview();
         this.closeModelEvent.emit(true);
     }
