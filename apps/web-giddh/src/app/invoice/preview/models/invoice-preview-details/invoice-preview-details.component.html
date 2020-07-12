@@ -248,8 +248,7 @@
                                             mark it as sent. </p>
                                         <a href="javascript: void 0"
                                            (click)="showEmailSendModal.show()">
-                                            {{selectedItem.voucherType === 'credit note' ? 'Send Credit Note' :
-                                            selectedItem.voucherType === 'debit note' ? 'Send Debit Note' : 'SendInvoice'}}
+                                            {{(selectedItem.voucherType === 'credit note') || (selectedItem.voucherType === 'debit note') ? 'Send Note' : 'Send Invoice'}}
                                         </a>
                                     </div>
                                 </div>
