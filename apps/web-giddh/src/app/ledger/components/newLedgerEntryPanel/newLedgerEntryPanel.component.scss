@@ -2,6 +2,24 @@
 
 .ledger-panel {
     overflow: visible;
+    .more-details {
+        .cheq {
+            table {
+                td.remove-invoice {
+                    span:first-child {
+                        font-size: 25px;
+                        vertical-align: middle;
+                        color: $gray;
+                    }
+                    .label {
+                        vertical-align: middle;
+                        color: $gray;
+                        font-size: 13px;
+                    }
+                }
+            }
+        }
+    }
 }
 
 .ledger-panel table tbody tr td a {
@@ -77,6 +95,7 @@ span.eligible-ITC {
     width: 115px;
     font-size: 12px;
 }
+
 @media only screen and (max-width: 767px) {
     .ledger-panel .btn {
         margin-bottom: 13px;
@@ -129,4 +148,7 @@ span.eligible-ITC {
     .xs-justify-content-start {
         justify-content: start;
     }
+}
+.sh-template {
+    border-bottom: 1px solid $very-light-gray;
 }

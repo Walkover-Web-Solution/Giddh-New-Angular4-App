@@ -350,7 +350,7 @@
                                                         (saveBlankLedger)="saveBankTransaction()"
                                                         (clickedOutsideEvent)="hideBankLedgerPopup($event)"
                                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
-                                                        [invoiceList]="invoiceList"
+                                                        [invoiceList]="invoiceList" (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
                                                         [isTouristSchemeApplicable]="isTouristSchemeApplicable">
                                                     </new-ledger-entry-panel>
                                                 </div>
@@ -461,7 +461,7 @@
                                                         [needToReCalculate]="needToReCalculate"
                                                         (changeTransactionType)="toggleTransactionType($event)"
                                                         [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
-                                                        (saveBlankLedger)="saveBankTransaction()"
+                                                        (saveBlankLedger)="saveBankTransaction()" (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
                                                         (clickedOutsideEvent)="hideBankLedgerPopup($event)"
                                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                                         [invoiceList]="invoiceList">
@@ -749,7 +749,7 @@
                                                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                         [(ngModel)]="lc.blankLedger.entryDate"
                                                         [placeholder]="lc.formatPlaceholder" [outsideClick]="true"
-                                                        (click)="$event.stopPropagation()" autocomplete="off" />
+                                                        (click)="$event.stopPropagation()" autocomplete="off" (ngModelChange)="getInvoiceListsForCreditNote(true)"/>
 
                                                 </div>
                                             </td>
@@ -843,6 +843,7 @@
                                         (resetBlankLedger)="resetBlankTransaction()"
                                         (saveBlankLedger)="saveBlankTransaction()"
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
+                                        (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                         [invoiceList]="invoiceList"
                                         [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
@@ -1114,6 +1115,7 @@
                                         (saveBlankLedger)="saveBlankTransaction()"
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
+                                        (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
                                         [invoiceList]="invoiceList"
                                         [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
                                         [shouldShowItcSection]="shouldShowItcSection"

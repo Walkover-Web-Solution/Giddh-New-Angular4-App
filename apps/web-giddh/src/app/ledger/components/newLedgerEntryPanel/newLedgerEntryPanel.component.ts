@@ -31,8 +31,8 @@ import { LoaderService } from '../../../loader/loader.service';
 import { forEach, sumBy } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
-import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
+import { ReconcileRequest, ReconcileResponse, TransactionsResponse } from '../../../models/api-models/Ledger';
+import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, IForceClear, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
@@ -115,6 +115,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
     @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
     @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
+    /** Emit event for getting invoice list for credit note linking */
+    @Output() public getInvoiceListsForCreditNote: EventEmitter<any> = new EventEmitter();
     @ViewChild('entryContent') public entryContent: ElementRef;
     @ViewChild('sh') public sh: ShSelectComponent;
     @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
@@ -156,6 +158,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
     public companyTaxesList: TaxResponse[] = [];
     public totalTdElementWidth: number = 0;
+    /** Amount of invoice select for credit note */
+    public selectedInvoiceAmount: number = 0;
+    /** Selected invoice for credit note */
+    public selectedInvoiceForCreditNote: any = null;
+    /** Clear selected invoice */
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     /** Default warehouse for a company */
     public defaultWarehouse: string;
     /** List of warehouses for a company */
@@ -881,7 +889,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         });
 
         if (classList && classList instanceof Array) {
-            const shouldNotClose  = classList.some((className: DOMTokenList) => {
+            const shouldNotClose = classList.some((className: DOMTokenList) => {
                 if (!className) {
                     return;
                 }
@@ -906,13 +914,51 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.blankLedger.invoicesToBePaid.splice(indx, 1);
         }
         // this.selectedInvoice.emit(this.selectedInvoices);
-
     }
 
-    public getInvoiveListsData(e: any) {
-        if (e.value === 'rcpt') {
+    /**
+     * Selected invoice for credit note
+     *
+     * @param {any} event Selected invoice for credit note
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public creditNoteInvoiceSelected(event: any): void {
+        if (event && event.value && event.invoice) {
+            this.blankLedger.invoiceLinkingRequest = {
+                linkedInvoices: [
+                    {
+                        invoiceUniqueName: event.value
+                    }
+                ]
+            }
+            this.selectedInvoiceAmount = event.invoice.balanceDue.amountForAccount;
+        }
+    }
+
+    /**
+     * Removes the selected invoice for credit note
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public removeSelectedInvoice(): void {
+        this.forceClear$ = observableOf({ status: true });
+        this.selectedInvoiceForCreditNote = null;
+    }
+
+    /**
+     * Fetches the invoice list data for a voucher
+     *
+     * @param {*} event Contains the selected voucher details
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public getInvoiceListsData(event: any): void {
+        if (event.value === 'rcpt') {
             this.shouldShowAdvanceReceipt = true;
             this.clickUnpaidInvoiceList.emit(true);
+        } else if (event.value === VoucherTypeEnum.creditNote) {
+            this.shouldShowAdvanceReceipt = false;
+            this.getInvoiceListsForCreditNote.emit(true);
+            this.blankLedger.generateInvoice = true;
         } else {
             this.shouldShowAdvanceReceipt = false;
             this.isAdvanceReceipt = false;
