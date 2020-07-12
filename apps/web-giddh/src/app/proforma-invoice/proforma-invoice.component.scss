@@ -1596,6 +1596,12 @@ span.eligible-ITC {
     }
 }
 .remove-invoice {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    height: 33px;
+    font-size: 14px;
     span:first-child {
         font-size: 25px;
         vertical-align: middle;
@@ -1606,6 +1612,9 @@ span.eligible-ITC {
         color: $gray;
         font-size: 13px;
     }
+}
+.for-mobile-screen {
+    display: none;
 }
 
 /* resposnvie */
@@ -1646,6 +1655,10 @@ span.eligible-ITC {
     .cashInvoiceInput {
         max-width: 63% !important;
         width: 100% !important;
+    }
+    .for-mobile-screen {
+        display: flex !important;
+        float: right;
     }
 }
 
@@ -1698,6 +1711,12 @@ span.eligible-ITC {
 @media (max-width: 768px) {
     .tip_img {
         left: 143px;
+    }
+    .for-mobile-screen {
+        display: flex !important;
+        position: absolute;
+        right: 0;
+        float: none;
     }
 }
 
