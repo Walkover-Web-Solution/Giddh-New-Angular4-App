@@ -5,7 +5,7 @@ import {IGroupsWithStocksHierarchyMinItem} from '../../../models/interfaces/grou
 import {InventoryDownloadRequest, StockReportRequest, StockReportResponse} from '../../../models/api-models/Inventory';
 import {StockReportActions} from '../../../actions/inventory/stocks-report.actions';
 import {AppState} from '../../../store';
-import {Store} from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 
 import {
     AfterViewInit,
@@ -241,7 +241,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public selectedCmp: CompanyResponse;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public advanceSearchModalShow: boolean = false;
-    public UpdateStockSuccess$: Observable<boolean>;
+    public updateStockSuccess$: Observable<boolean>;
 
     /**
      * TypeScript public modifiers
@@ -261,7 +261,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             selectedEntity: ['allEntity'],
             selectedTransactionType: ['all']
         });
-        this.UpdateStockSuccess$ = this.store.select(s => s.inventory.UpdateStockSuccess).pipe(takeUntil(this.destroyed$));
+        this.updateStockSuccess$ = this.store.pipe(select(s => s.inventory.UpdateStockSuccess) ,takeUntil(this.destroyed$));
     }
 
     public findStockNameFromId(grps: IGroupsWithStocksHierarchyMinItem[], stockUniqueName: string): string {
@@ -389,7 +389,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         });
         this.resetFilter(false);
 
-        this.UpdateStockSuccess$.subscribe(s => {
+        this.updateStockSuccess$.subscribe(s => {
             if (s) {
                 this.initReport();
             }
