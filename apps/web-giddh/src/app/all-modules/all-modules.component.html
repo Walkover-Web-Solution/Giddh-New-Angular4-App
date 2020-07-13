@@ -44,6 +44,7 @@
                 <p><a href="javascript:void(0)" [routerLink]="['/pages/new-vs-old-invoices']">Sales Bifurcation</a></p>
                 <p><a href="javascript:void(0)" [routerLink]="['/pages/daybook']">Daybook</a></p>
                 <p><a href="javascript:void(0)" [routerLink]="['/pages/audit-logs']">Audit Log</a></p>
+                <p><a href="javascript:void(0)" [routerLink]="['/pages/audit-logs/New']">Audit Log v2</a></p>
                 <p><a href="javascript:void(0)" [routerLink]="['/pages/search']">Search</a></p>
                 <p><a href="javascript:void(0)" [routerLink]="['/pages/trial-balance-and-profit-loss']" [queryParams]="{ tab: 'trial-balance', tabIndex: 0 }">Trial Balance</a></p>
                 <p><a href="javascript:void(0)" [routerLink]="['/pages/trial-balance-and-profit-loss']" [queryParams]="{ tab: 'trial-balance', tabIndex: 1 }">P&L, B/S</a></p>
@@ -51,10 +52,8 @@
 
             <div class="col-md-3 col-sm-3 mb-5 col-xs-6">
                 <p>Others</p>
-                <p><a href="javascript:void(0)"
-                    *ngIf="activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode == 'IN'" [routerLink]="['/pages/gstfiling']">GSTR</a></p>
-                <p><a href="javascript:void(0)"
-                    *ngIf="activeCompany && activeCompany.countryV2 && vatSupportedCountries?.includes(activeCompany.countryV2.alpha2CountryCode)" [routerLink]="['/pages/vat-report']">Vat
+                <p><a href="javascript:void(0)" *ngIf="activeCompany && activeCompany.countryV2 && activeCompany.countryV2.alpha2CountryCode == 'IN'" [routerLink]="['/pages/gstfiling']">GSTR</a></p>
+                <p><a href="javascript:void(0)" *ngIf="activeCompany && activeCompany.countryV2 && vatSupportedCountries?.includes(activeCompany.countryV2.alpha2CountryCode)" [routerLink]="['/pages/vat-report']">Vat
                     Report</a></p>
                 <p><a href="javascript:void(0)" [routerLink]="['/pages/invoice/ewaybill']">E-way Bill</a></p>
                 <p><a href="javascript:void(0)" [routerLink]="['/pages/settings/taxes']" [queryParams]="{ tab: 'taxes', tabIndex: 0 }">Settings</a></p>

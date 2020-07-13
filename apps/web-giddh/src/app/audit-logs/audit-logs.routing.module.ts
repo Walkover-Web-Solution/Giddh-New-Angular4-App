@@ -10,7 +10,7 @@ import { AuditLogsComponent } from './audit-logs.component';
                 path: '', component: AuditLogsComponent, canActivate: [NeedsAuthentication],
             },
             {
-                path: 'New', component: AuditLogsComponent, canActivate: [NeedsAuthentication],
+                path: ':version', component: AuditLogsComponent, canActivate: [NeedsAuthentication],
             }
         ])
     ],
