@@ -1835,7 +1835,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      *
      * @memberof HeaderComponent
      */
-    public navigateToAllModules() {
+    public navigateToAllModules(): void {
         if(this.isAllModuleOpen) {
            this.location.back();
         } else {

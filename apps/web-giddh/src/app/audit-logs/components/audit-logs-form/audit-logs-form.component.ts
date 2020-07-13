@@ -31,11 +31,10 @@ import { IForceClear } from '../../../models/api-models/Sales';
   `]
 })
 export class AuditLogsFormComponent implements OnInit, OnDestroy {
+    /** Audit log form object */
     public auditLogFormVM: AuditLogsSidebarVM;
+    /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
     /** directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
@@ -76,6 +75,8 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     public forceClearUser$: Observable<IForceClear> = observableOf({ status: false });
     /* Active company unique name */
     public activeCompanyUniqueName$: Observable<string>;
+    /** To destroy observers */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>,
         private accountService: AccountService,
@@ -87,7 +88,6 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         private generalService: GeneralService) {
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
-
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.showWeekNumbers = false;
@@ -95,11 +95,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         this.auditLogFormVM = new AuditLogsSidebarVM();
         this.auditLogFormVM.getLogsInprocess$ = this.store.pipe(select(state => state.auditlog.getLogInProcess), takeUntil(this.destroyed$));
         this.auditLogFormVM.groupsList$ = this.store.pipe(select(state => state.general.groupswithaccounts), takeUntil(this.destroyed$));
-        this.auditLogFormVM.user$ = this.store.select(state => {
-            if (state.session.user) {
-                return state.session.user.user;
-            }
-        }).pipe(takeUntil(this.destroyed$));
+        this.auditLogFormVM.user$ = this.store.pipe(select(state => { if (state.session.user) { return state.session.user.user; } }), takeUntil(this.destroyed$));
         this.accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let accounts: IOption[] = [];
@@ -158,6 +154,14 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * To filter flatten groups
+     *
+     * @param {any[]} rawList Row list to filter
+     * @param {any[]} [parents=[]] Parent list
+     * @returns
+     * @memberof AuditLogsFormComponent
+     */
     public flattenGroup(rawList: any[], parents: any[] = []) {
         let listOfFlattenGroup;
         listOfFlattenGroup = _.map(rawList, (listItem) => {
@@ -188,50 +192,39 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public selectDateOption(v) {
-        this.auditLogFormVM.selectedDateOption = v.value || '';
-    }
-
-    public selectEntityOption(v) {
-        this.auditLogFormVM.selectedEntity = v.value || '';
-    }
-
-    public selectOperationOption(v) {
-        this.auditLogFormVM.selectedOperation = v.value || '';
-    }
-
-    public selectAccount(v) {
-        this.auditLogFormVM.selectedAccountUnq = v.value || '';
-    }
-
-    public clearDate(model: string) {
-        this.auditLogFormVM[model] = '';
-    }
-
-    public setToday(model: string) {
-        this.auditLogFormVM[model] = new Date();
-    }
-
-    public selectGroup(v) {
-        this.auditLogFormVM.selectedGroupUnq = v.value || '';
-    }
-
-    public selectUser(v) {
-        this.auditLogFormVM.selectedUserUnq = v.value || '';
-    }
-
-    public getLogfilters() {
+    /**
+     * API call to get filtered audit logs
+     *
+     * @memberof AuditLogsFormComponent
+     */
+    public getLogfilters(): void {
         let getAuditLogsRequest: GetAuditLogsRequest = new GetAuditLogsRequest();
-        getAuditLogsRequest = _.cloneDeep(this.prepareAuditlogFormRequest()); 
+        getAuditLogsRequest = _.cloneDeep(this.prepareAuditlogFormRequest());
         this.store.dispatch(this.auditLogsActions.getAuditLogs(getAuditLogsRequest, 1));
     }
 
-    public customUserFilter(term: string, item: IOption) {
+    /**
+     * Generate  custom users filter
+     *
+     * @param {string} term term to filter with
+     * @param {IOption} item term to filter for
+     * @returns
+     * @memberof AuditLogsFormComponent
+     */
+    public customUserFilter(term: string, item: IOption): any {
         return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 ||
             (item.additional && item.additional.userEmail && item.additional.userEmail.toLocaleLowerCase().indexOf(term) > -1));
     }
 
-    public genralCustomFilter(term: string, item: IOption) {
+    /**
+     * Generate custom filters
+     *
+     * @param {string} term term to filter with
+     * @param {IOption} item term to filter for
+     * @returns
+     * @memberof AuditLogsFormComponent
+     */
+    public genralCustomFilter(term: string, item: IOption): any {
         return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
     }
 
@@ -240,12 +233,12 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      *
      * @memberof AuditLogsFormComponent
      */
-    public resetFilters() {
+    public resetFilters(): void {
         this.auditLogFormVM.reset();
         this.resetAuditLogForm();
         this.store.dispatch(this.auditLogsActions.ResetLogs());
     }
-    // end
+
 
     /**
      * To get audit log form filter
@@ -274,7 +267,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      * @param {any} selectEntity  Selected entity type
      * @memberof AuditLogsFormComponent
      */
-    public prepareOperationFormData(selectEntity: any) {
+    public prepareOperationFormData(selectEntity: any): void {
         if (selectEntity.filter) {
             this.getOperationsFilterData(selectEntity.filter);
         } else {
@@ -289,7 +282,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      * @param {string} entityType Selected entity type
      * @memberof AuditLogsFormComponent
      */
-    public getOperationsFilterData(entityType: string) {
+    public getOperationsFilterData(entityType: string): any {
         this.auditLogFormVM.filters = [];
         if (entityType) {
             let selectedEntityObject = this.auditLogFilterForm.filter(element => {
@@ -312,7 +305,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      *
      * @memberof AuditLogsFormComponent
      */
-    public resetAuditLogForm() {
+    public resetAuditLogForm(): void {
         this.forceClearEntity$ = observableOf({ status: true });
         this.forceClearGroup$ = observableOf({ status: true });
         this.forceClearAccount$ = observableOf({ status: true });
@@ -327,7 +320,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      * @param {IOption} event Selected item object
      * @memberof AuditLogsFormComponent
      */
-    public selectedEntityType(event: IOption) {
+    public selectedEntityType(event: IOption): void {
         if (event && event.value) {
             this.getOperationsFilterData(event.value);
         }
