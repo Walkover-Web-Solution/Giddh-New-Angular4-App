@@ -370,29 +370,10 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             }
         }
         case GENERAL_ACTIONS.UPDATE_CURRENT_LIABILITIES: {
-            let updatedGroupsWithAccounts = [...state.groupswithaccounts];
             let flattenAccountsArray = [...state.flattenAccounts];
-            const updatedcurrentliabilities = {
-                ...updatedGroupsWithAccounts.find(account => account.uniqueName === 'currentliabilities')
-            };
-            if (updatedcurrentliabilities && updatedcurrentliabilities.groups && updatedcurrentliabilities.groups.length) {
-                updatedcurrentliabilities.groups.map(group => {
-                    if (group.uniqueName === 'dutiestaxes' && group.category === 'liabilities') {
-                        group.accounts = group.accounts.filter(s => s.uniqueName !== action.payload)
-                    }
-                    return group;
-                })
-            }
-            updatedGroupsWithAccounts = updatedGroupsWithAccounts.map(account => {
-                if (account.uniqueName === 'currentliabilities') {
-                    return updatedcurrentliabilities;
-                }
-                return account;
-            });
             flattenAccountsArray = flattenAccountsArray.filter(f => f.uniqueName !== action.payload)
             return {
                 ...state,
-                groupswithaccounts: [...updatedGroupsWithAccounts],
                 flattenAccounts: flattenAccountsArray
             }
         }
