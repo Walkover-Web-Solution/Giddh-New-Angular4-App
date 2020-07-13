@@ -52,10 +52,10 @@
 
                                     <div *ngIf="transaction.type === 'to' && transaction.voucherAdjustments && transaction.voucherAdjustments.length > 0">
                                         <div class="debtor-details pb-1 pt-05" *ngFor="let adjustment of transaction.voucherAdjustments;">
-                                            <span class="mr-15">{{adjustment.type}}</span>
+                                            <span class="mr-15">{{adjustmentTypes[adjustment.type]}}</span>
                                             <span class="mr-15">{{adjustment.note}}</span>
                                             <span class="mr-15" *ngIf="adjustment.tax && adjustment.tax.uniqueName">{{adjustment.tax.value | giddhCurrency}} ({{adjustment.tax.percent}}%)</span>
-                                            <span class="mr-15" *ngIf="adjustment.invoiceNo">{{adjustment.invoiceNo}}; 25/06/2020; 5000 cr.</span>
+                                            <span class="mr-15" *ngIf="adjustment.invoice && adjustment.invoice.number">{{adjustment.invoice.number}}; {{adjustment.invoice.date}}; {{adjustment.invoice.amount}}</span>
                                             <span class="mr-15">{{adjustment.amount | giddhCurrency}}</span>
                                             <span>cr</span>
                                         </div>
@@ -99,7 +99,7 @@
                                         </div>
                                     </div>
 
-                                    <table *ngIf="requestObj.voucherType !== 'Contra'">
+                                    <table *ngIf="requestObj.voucherType !== 'Contra' && requestObj.voucherType !== 'Receipt'">
                                         <tbody>
                                             <ng-container *ngIf="transaction.inventory && transaction.inventory.length">
                                                 <tr *ngFor="let inventory of transaction.inventory;let idx=index;let l=last"

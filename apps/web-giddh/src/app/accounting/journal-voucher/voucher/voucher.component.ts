@@ -43,6 +43,7 @@ import { VsForDirective } from '../../../theme/ng2-vs-for/ng2-vs-for';
 import { QuickAccountComponent } from '../../../theme/quick-account-component/quickAccount.component';
 import { KeyboardService } from '../../keyboard.service';
 import { KEYS, VOUCHERS } from '../journal-voucher.component';
+import { adjustmentTypes } from "../../../shared/helpers/adjustmentTypes";
 
 const CustomShortcode = [
     { code: 'F9', route: 'purchase' }
@@ -170,7 +171,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public modalRef: BsModalRef;
     /* This will hold the transaction details to use in adjustment popup */
     public currentTransaction: any;
-
+    public adjustmentTypes: any[] = [];
 
 
     constructor(
@@ -240,13 +241,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public openAdjustmentModal(event: KeyboardEvent, transaction: any, template: TemplateRef<any>): void {
-        this.currentTransaction = transaction;
+        if(transaction && transaction.amount && Number(transaction.amount) > 0) {
+            this.currentTransaction = transaction;
 
-        if(event.keyCode === 9 || event.keyCode === 13) {
-            this.modalRef = this.modalService.show(
-                template,
-                Object.assign({}, { class: 'modal-lg' })
-            );
+            if(event.keyCode === 9 || event.keyCode === 13) {
+                this.modalRef = this.modalService.show(
+                    template,
+                    Object.assign({}, { class: 'modal-lg' })
+                );
+            }
         }
     }
 
@@ -367,6 +370,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     this.setAccount(createdAccountDetails);
                 }
             }
+        });
+
+        adjustmentTypes.map(type => {
+            this.adjustmentTypes[type.value] = type.label;
         });
     }
 

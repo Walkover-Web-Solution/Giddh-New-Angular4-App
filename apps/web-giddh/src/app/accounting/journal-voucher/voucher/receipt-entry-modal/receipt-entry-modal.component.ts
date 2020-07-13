@@ -34,7 +34,6 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     public isValidForm: boolean = false;
     public amountErrorMessage: string = "Amount can't be greater than Credit Amount.";
     public invoiceAmountErrorMessage: string = "Amount can't be greater than Invoice Balance Due.";
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public taxList: any[] = [];
     public taxListSource$: Observable<IOption[]> = observableOf([]);
     public pendingInvoicesList: any[] = [];
@@ -42,29 +41,36 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         accountUniqueNames: [],
         voucherType: "receipt"
     };
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private toaster: ToasterService, private store: Store<AppState>, private salesService: SalesService, private companyActions: CompanyActions) {
 
     }
 
     public ngOnInit(): void {
-        adjustmentTypes.map(c => {
-            this.adjustmentTypes.push({ label: c.label, value: c.value });
+        adjustmentTypes.map(type => {
+            this.adjustmentTypes.push({ label: type.label, value: type.value });
         });
 
         if (this.transaction && this.transaction.selectedAccount) {
+            if(this.transaction.voucherAdjustments) {
+                this.receiptEntries = this.transaction.voucherAdjustments;
+                this.totalEntries = this.receiptEntries.length;
+            } else {
+                this.addNewEntry();
+            }
+
             this.pendingInvoicesListParams.accountUniqueNames.push(this.transaction.selectedAccount.UniqueName);
             this.getInvoiceListForReceiptVoucher();
         }
 
         this.getTaxList();
-        this.addNewEntry();
     }
 
     public addNewEntry(): void {
         if (this.totalEntries === 0 || (this.receiptEntries[this.totalEntries - 1] && this.receiptEntries[this.totalEntries - 1] !== undefined && Number(this.receiptEntries[this.totalEntries - 1].amount) > 0)) {
             this.receiptEntries[this.totalEntries] = {
-                type: '',
+                type: 'receipt',
                 note: '',
                 tax: {
                     name: '',
@@ -72,7 +78,12 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
                     percent: 0,
                     value: 0
                 },
-                invoiceNo: '',
+                invoice: {
+                    number: '',
+                    date: '',
+                    amount: 0,
+                    uniqueName: ''
+                },
                 amount: 0
             }
             this.totalEntries++;
@@ -86,6 +97,14 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     }
 
     public validateEntry(entry: any): void {
+        if (!entry.amount) {
+            this.toaster.clearAllToaster();
+            this.toaster.errorToast("Please enter amount");
+        } else if (isNaN(Number(entry.amount)) || entry.amount <= 0) {
+            this.toaster.clearAllToaster();
+            this.toaster.errorToast("Please enter valid amount");
+        }
+
         if (entry.amount && !isNaN(Number(entry.amount)) && entry.tax.percent) {
             entry.tax.value = Number(entry.amount) / entry.tax.percent;
         } else {
@@ -100,7 +119,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
 
         if (receiptTotal < this.transaction.amount) {
             if (entry.type === "againstReference") {
-                let invoiceBalanceDue = Number(this.pendingInvoiceList[entry.invoiceNo].balanceDue.amountForAccount);
+                let invoiceBalanceDue = Number(this.pendingInvoiceList[entry.invoice.uniqueName].balanceDue.amountForAccount);
                 if (invoiceBalanceDue >= entry.amount) {
                     this.addNewEntry();
                 } else if (invoiceBalanceDue < entry.amount) {
@@ -114,6 +133,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
             this.toaster.clearAllToaster();
             this.toaster.errorToast(this.amountErrorMessage);
         } else {
+            entry.amount = Number(entry.amount);
             this.isValidForm = true;
         }
     }
@@ -161,14 +181,14 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
 
     public getInvoiceListForReceiptVoucher(): void {
         this.salesService.getInvoiceListForReceiptVoucher(this.voucherDate, this.pendingInvoicesListParams).subscribe(response => {
-            if (response && response.status === "success" && response.body && response.body.length > 0) {
+            if (response && response.status === "success" && response.body && response.body.results && response.body.results.length > 0) {
                 let pendingInvoiceList: IOption[] = [];
 
-                Object.keys(response.body).forEach(key => {
-                    this.pendingInvoiceList[response.body[key].invoiceUniqueName] = [];
-                    this.pendingInvoiceList[response.body[key].invoiceUniqueName] = response.body[key];
+                Object.keys(response.body.results).forEach(key => {
+                    this.pendingInvoiceList[response.body.results[key].uniqueName] = [];
+                    this.pendingInvoiceList[response.body.results[key].uniqueName] = response.body.results[key];
 
-                    pendingInvoiceList.push({ label: response.body[key].invoiceNumber + ", " + response.body[key].invoiceDate + ", " + response.body[key].balanceDue.amountForAccount + " cr.", value: response.body[key].invoiceUniqueName });
+                    pendingInvoiceList.push({ label: response.body.results[key].voucherNumber + ", " + response.body.results[key].voucherDate + ", " + response.body.results[key].balanceDue.amountForAccount + " cr.", value: response.body.results[key].uniqueName });
                 });
                 this.pendingInvoiceListSource$ = observableOf(pendingInvoiceList);
             }
@@ -176,13 +196,75 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     }
 
     public onSelectTax(event: any, entry: any): void {
-        entry.tax.name = this.taxList[event.value].name;
-        entry.tax.percent = this.taxList[event.value].taxDetail[0].taxValue;
+        if (event && event.value) {
+            entry.tax.name = this.taxList[event.value].name;
+            entry.tax.percent = this.taxList[event.value].taxDetail[0].taxValue;
 
-        if (entry.amount && !isNaN(Number(entry.amount)) && entry.tax.percent) {
-            entry.tax.value = Number(entry.amount) / entry.tax.percent;
+            if (entry.amount && !isNaN(Number(entry.amount)) && entry.tax.percent) {
+                entry.tax.value = Number(entry.amount) / entry.tax.percent;
+            } else {
+                entry.tax.value = 0;
+            }
         } else {
-            entry.tax.value = 0;
+            entry.tax = {
+                name: '',
+                uniqueName: '',
+                percent: 0,
+                value: 0
+            }
+        }
+    }
+
+    public onSelectInvoice(event: any, entry: any): void {
+        if (event && event.value) {
+            entry.invoice = {
+                number: this.pendingInvoiceList[event.value].voucherNumber,
+                date: this.pendingInvoiceList[event.value].voucherDate,
+                amount: this.pendingInvoiceList[event.value].balanceDue.amountForAccount + " cr.",
+                uniqueName: event.value
+            };
+        } else {
+            entry.invoice = {
+                number: '',
+                date: '',
+                amount: 0,
+                uniqueName: ''
+            };
+        }
+    }
+
+    public removeReceiptEntry(index: number): void {
+        let receiptEntries = [];
+        let loop = 0;
+        this.receiptEntries.forEach(entry => {
+            if (loop !== index) {
+                receiptEntries.push(entry);
+            }
+            loop++;
+        });
+
+        this.receiptEntries = receiptEntries;
+        this.totalEntries--;
+
+        this.validateEntries();
+    }
+
+    public closePopup(): void {
+        this.entriesList.emit(this.transaction);
+    }
+
+    public validateEntries(): void {
+        let receiptTotal = 0;
+
+        this.receiptEntries.forEach(receipt => {
+            receiptTotal += Number(receipt.amount);
+        });
+
+        if (receiptTotal !== this.transaction.amount) {
+            this.isValidForm = false;
+            this.addNewEntry();
+        } else {
+            this.isValidForm = true;
         }
     }
 }
