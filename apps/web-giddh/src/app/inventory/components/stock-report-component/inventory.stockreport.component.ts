@@ -389,8 +389,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         });
         this.resetFilter(false);
 
-        this.updateStockSuccess$.subscribe(s => {
-            if (s) {
+        this.updateStockSuccess$.subscribe(stock => {
+            if (stock) {
                 this.initReport();
             }
         })
