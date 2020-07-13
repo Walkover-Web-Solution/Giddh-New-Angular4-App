@@ -2,13 +2,13 @@
     <div class="row">
         <div class="col-xs-3 max350">
             <!--sidebar-->
-            <!-- <audit-logs-sidebar></audit-logs-sidebar> -->
-            <audit-logs-form></audit-logs-form>
+            <audit-logs-sidebar *ngIf="!isNewVersion"></audit-logs-sidebar>
+            <audit-logs-form *ngIf="isNewVersion"></audit-logs-form>
             <!--/sidebar-->
         </div>
         <div class="col-xs-9">
-            <!-- <audit-logs-grid></audit-logs-grid> -->
-            <audit-logs-table></audit-logs-table>
+            <audit-logs-grid *ngIf="!isNewVersion"></audit-logs-grid>
+            <audit-logs-table *ngIf="isNewVersion"></audit-logs-table>
         </div>
     </div>
 </div>
