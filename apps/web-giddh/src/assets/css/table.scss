@@ -23,6 +23,13 @@
         border-top: 1px solid $gainsboro !important;
         border-bottom: none !important;
         white-space: nowrap;
+        .d-flex{
+            align-items: center;
+        }
+        .icon-pointer{
+            margin-left: 6px;
+            cursor: pointer;
+        }
     }
     thead > tr > th.td-search-box {
         min-width: 190px !important;
