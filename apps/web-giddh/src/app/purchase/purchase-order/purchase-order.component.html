@@ -17,8 +17,7 @@
                 </div>
             </form>
         </div>
-        <div class="clear-filter"
-            *ngIf="showClearFilterButton()">
+        <div class="clear-filter" *ngIf="showClearFilterButton()">
             <button class="btn btn-default mr-0" (click)="clearFilter()">
                 <span class="icon-cross"></span> Clear Filter
             </button>
@@ -60,8 +59,7 @@
         </div>
     </div>
     <div class="mobile-search">
-        <div class="clear-filter mr-1"
-            *ngIf="showClearFilterButton()">
+        <div class="clear-filter mr-1" *ngIf="showClearFilterButton()">
             <button class="btn btn-default mr-0" (click)="clearFilter()">
                 <span class="icon-cross"></span> Clear Filter
             </button>
@@ -105,7 +103,7 @@
             <thead class="t-h-bg1">
                 <tr>
                     <!-- functioanlity should be like proform/estimate module -->
-                    <th>
+                    <th width="3%">
                         <div class="table-checkbox-field">
                             #
                             <div class="table-checkbox-field" hidden>
@@ -115,39 +113,53 @@
                         </div>
                     </th>
 
-                    <th width="5%" class="td-search-box">
-                        <div>Date</div>
-                        <div class="icon-pointer">
-                            <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'purchaseDate'}"></ng-container>
-                        </div>
-                    </th>
-
-                    <th width="20%" class="td-search-box" (clickOutside)="showPurchaseOrderNumberSearch = false">
-                        <span [hidden]="showPurchaseOrderNumberSearch">Purchase Order#</span>
-                        <i class="icon-search" (click)="showInlineSearch('purchaseOrderNumber', searchBox);" [hidden]="showPurchaseOrderNumberSearch"></i>
-                        <div class="input-container" [hidden]="!showPurchaseOrderNumberSearch">
-                            <input type="text" placeholder="Search Purchase Order#" class="w100" #searchBox [(ngModel)]="purchaseOrderPostRequest.purchaseOrderNumber" (keyup)="columnSearch()" (keydown)="columnSearch()" />
-                        </div>
-                    </th>
-
-                    <th width="20%" class="td-search-box" (clickOutside)="showVendorNameSearch = false">
-                        <span [hidden]="showVendorNameSearch">Vendor Name</span>
-                        <i class="icon-search" (click)="showInlineSearch('vendorName', searchBox);" [hidden]="showVendorNameSearch"></i>
-                        <div class="input-container" [hidden]="!showVendorNameSearch">
-                            <input type="text" placeholder="Search Vendor Name" class="w100" #searchBox [(ngModel)]="purchaseOrderGetRequest.search" (keyup)="columnSearch()" (keydown)="columnSearch()" />
-                        </div>
-                    </th>
-
-                    <th width="12%">
-                        <div class="d-flex justify-content-end">
-                            <div class="text-right"> Total Amt.</div>
+                    <th width="10%" class="td-search-box">
+                        <div class="d-flex">
+                            <div>Date</div>
                             <div class="icon-pointer">
-                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}"></ng-container>
+                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'purchaseDate'}">
+                                </ng-container>
                             </div>
                         </div>
                     </th>
 
-                    <th width="12%">
+                    <th width="15%" class="td-search-box" (clickOutside)="showPurchaseOrderNumberSearch = false">
+                        <div>
+                            <span [hidden]="showPurchaseOrderNumberSearch">Purchase Order#</span>
+                            <i class="icon-search" (click)="showInlineSearch('purchaseOrderNumber', searchBox);"
+                                [hidden]="showPurchaseOrderNumberSearch"></i>
+                        </div>
+                        <div class="input-container" [hidden]="!showPurchaseOrderNumberSearch">
+                            <input type="text" placeholder="Search Purchase Order#" class="w100" #searchBox
+                                [(ngModel)]="purchaseOrderPostRequest.purchaseOrderNumber" (keyup)="columnSearch()"
+                                (keydown)="columnSearch()" />
+                        </div>
+                    </th>
+
+                    <th width="15%" class="td-search-box" (clickOutside)="showVendorNameSearch = false">
+                        <div>
+                            <span [hidden]="showVendorNameSearch">Vendor Name</span>
+                            <i class="icon-search" (click)="showInlineSearch('vendorName', searchBox);"
+                                [hidden]="showVendorNameSearch"></i>
+                        </div>
+                        <div class="input-container" [hidden]="!showVendorNameSearch">
+                            <input type="text" placeholder="Search Vendor Name" class="w100" #searchBox
+                                [(ngModel)]="purchaseOrderGetRequest.search" (keyup)="columnSearch()"
+                                (keydown)="columnSearch()" />
+                        </div>
+                    </th>
+
+                    <th width="15%">
+                        <div class="d-flex justify-content-end">
+                            <div class="text-right"> Total Amt.</div>
+                            <div class="icon-pointer">
+                                <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}">
+                                </ng-container>
+                            </div>
+                        </div>
+                    </th>
+
+                    <th width="15%">
                         <div class="d-flex">
                             <div>Expected Delivery</div>
                             <div class="icon-pointer">
@@ -157,7 +169,7 @@
                         </div>
                     </th>
 
-                    <th width="25%">
+                    <th width="15%">
                         <div class="d-flex">
                             <div>Status</div>
                             <div class="icon-pointer">
