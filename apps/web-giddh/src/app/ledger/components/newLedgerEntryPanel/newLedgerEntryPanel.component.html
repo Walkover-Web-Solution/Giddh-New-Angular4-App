@@ -59,8 +59,8 @@
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
                                 [mask]="inputMaskFormat" [customDecimalPlaces]="ratePrecision"
-                                (ngModelChange)="changePrice($event)" name="unitPrice" (keyup)="isInclusiveEntry = false"
-                                class="form-control text-right" />
+                                (ngModelChange)="changePrice($event)" name="unitPrice"
+                                (keyup)="isInclusiveEntry = false" class="form-control text-right" />
                             <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn?.convertedRate | giddhCurrency: ratePrecision: true}}
@@ -354,7 +354,8 @@
                                 </div>
                             </td>
 
-                            <td *ngIf="blankLedger.voucherType === 'credit note' && selectedInvoiceForCreditNote" class="cp remove-invoice pdR1 pt-1 hidden-xs" (click)="removeSelectedInvoice()">
+                            <td *ngIf="blankLedger.voucherType === 'credit note' && selectedInvoiceForCreditNote"
+                                class="cp remove-invoice pdR1 pt-1 hidden-xs" (click)="removeSelectedInvoice()">
                                 <span class=“remove-invoice-icon”>×</span>
                                 <span class="label">Remove</span>
                             </td>
@@ -506,19 +507,22 @@
                     </ul>
                 </div>
 
-        <div class="pull-right">
-            <input type="file" [hidden]="true" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect
-                [uploadInput]="uploadInput" (uploadOutput)="onWebUpload($event)" #webFileInput (click)="onUploadOutput()">
-            <label class="upload_div pr-15" [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
+                <div class="pull-right">
+                    <input type="file" [hidden]="true" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions"
+                        ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onWebUpload($event)" #webFileInput
+                        (click)="onUploadOutput()">
+                    <label class="upload_div pr-15"
+                        [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
 
-                <label for="invoiceFile" class="cp fs16">
-                    <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
-            </label>
-            <div class="file_attached clearfix text-right pr-15" *ngIf="blankLedger.attachedFile.length > 0">
-                <span>{{ blankLedger.attachedFileName }}</span>
-                <label class="remove cp text-danger pl-1" (click)="showDeleteAttachedFileModal()">(remove)</label>
-            </div>
-        </div>
+                        <label for="invoiceFile" class="cp fs16">
+                            <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
+                    </label>
+                    <div class="file_attached clearfix text-right pr-15" *ngIf="blankLedger.attachedFile.length > 0">
+                        <span>{{ blankLedger.attachedFileName }}</span>
+                        <label class="remove cp text-danger pl-1"
+                            (click)="showDeleteAttachedFileModal()">(remove)</label>
+                    </div>
+                </div>
 
 
             </div>
@@ -541,7 +545,7 @@
                         to CR
                     </button>
 
-                    <button id="saveLedger" class="btn btn-success btn-sm" [disabled]="isFileUploading"
+                    <button id="saveLedger" class="btn btn-success btn-sm mr-0" [disabled]="isFileUploading"
                         [ladda]="isLedgerCreateInProcess$ | async" (click)="saveLedger()">Save
                     </button>
                 </div>
