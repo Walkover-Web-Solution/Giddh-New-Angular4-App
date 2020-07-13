@@ -71,4 +71,414 @@ export class AuditLogsSidebarVM {
 		this.selectedDateOption = '';
 
 	}
+
+    public getJSON() {
+        return {
+    "status": "success",
+    "body": {
+        "page": 1,
+        "count": 50,
+        "totalPages": 1,
+        "totalItems": 9,
+        "results": [
+            {
+                "operationType": "MOVE",
+                "user": {
+                    "name": "Aditya Kumar Chandeliya",
+                    "uniqueName": "adityakumar@giddh.com",
+                    "email": "adityakumar@giddh.com",
+                    "isVerified": true
+                },
+                "date": 1594365582160,
+                "dateString": "10-07-2020 12:49:42",
+                "details": {
+                    "source": {
+                        "name": "G1",
+                        "uniqueName": "g1",
+                        "id": null
+                    },
+                    "target": {
+                        "name": "G2",
+                        "uniqueName": "g2",
+                        "id": null
+                    },
+                    "entity": {
+                        "name": "Account 1",
+                        "uniqueName": "account1",
+                        "group": {
+                            "name": "G2",
+                            "uniqueName": "g2",
+                            "id": 312
+                        },
+                        "bankDetails": null,
+                        "addresses": [
+                            {
+                                "address": "",
+                                "gstIn": "",
+                                "state": {
+                                    "name": "Himachal Pradesh",
+                                    "code": "HP",
+                                    "alias": null
+                                },
+                                "country": {
+                                    "countryName": "India",
+                                    "countryCode": "IN"
+                                }
+                            }
+                        ],
+                        "old": null
+                    },
+                    "searchableIds": null,
+                    "type": null
+                }
+            },
+            {
+                "operationType": "UNMERGE",
+                "user": {
+                    "name": "Aditya Kumar Chandeliya",
+                    "uniqueName": "adityakumar@giddh.com",
+                    "email": "adityakumar@giddh.com",
+                    "isVerified": true
+                },
+                "date": 1594365565618,
+                "dateString": "10-07-2020 12:49:25",
+                "details": {
+                    "type": "DELETE",
+                    "source": {
+                        "name": "Account 1",
+                        "uniqueName": "account1",
+                        "id": 180
+                    },
+                    "entity": {
+                        "name": "Account 2",
+                        "uniqueName": "1594365565351a73efnupucnvnhklsrrfalr4x120mm4tz76f2yhk",
+                        "group": {
+                            "name": "G1",
+                            "uniqueName": "g1",
+                            "id": 307
+                        },
+                        "bankDetails": null,
+                        "addresses": [
+                            {
+                                "address": "some address 1",
+                                "gstIn": "",
+                                "state": {
+                                    "name": "Himachal Pradesh",
+                                    "code": "HP",
+                                    "alias": null
+                                },
+                                "country": {
+                                    "countryName": "India",
+                                    "countryCode": "IN"
+                                }
+                            },
+                            {
+                                "address": "some second address",
+                                "gstIn": "",
+                                "state": {
+                                    "name": "Himachal Pradesh",
+                                    "code": "HP",
+                                    "alias": null
+                                },
+                                "country": {
+                                    "countryName": "India",
+                                    "countryCode": "IN"
+                                }
+                            }
+                        ],
+                        "old": null
+                    },
+                    "searchableIds": [
+                        181,
+                        180
+                    ]
+                }
+            },
+            {
+                "operationType": "MERGE",
+                "user": {
+                    "name": "Aditya Kumar Chandeliya",
+                    "uniqueName": "adityakumar@giddh.com",
+                    "email": "adityakumar@giddh.com",
+                    "isVerified": true
+                },
+                "date": 1594365120695,
+                "dateString": "10-07-2020 12:42:00",
+                "details": {
+                    "source": [
+                        {
+                            "name": "Account 2",
+                            "uniqueName": "account2",
+                            "id": 181
+                        },
+                        {
+                            "name": "Account 3",
+                            "uniqueName": "account3",
+                            "id": 182
+                        }
+                    ],
+                    "target": {
+                        "name": "Account 1",
+                        "uniqueName": "account1",
+                        "id": 180
+                    },
+                    "type": "TARGET",
+                    "searchableIds": [
+                        181,
+                        182,
+                        180
+                    ]
+                }
+            },
+            {
+                "operationType": "MERGE",
+                "user": {
+                    "name": "Aditya Kumar Chandeliya",
+                    "uniqueName": "adityakumar@giddh.com",
+                    "email": "adityakumar@giddh.com",
+                    "isVerified": true
+                },
+                "date": 1594365120679,
+                "dateString": "10-07-2020 12:42:00",
+                "details": {
+                    "source": [
+                        {
+                            "name": "Account 3",
+                            "uniqueName": "account3",
+                            "id": 182
+                        }
+                    ],
+                    "target": {
+                        "name": "Account 1",
+                        "uniqueName": "account1",
+                        "id": 180
+                    },
+                    "type": "SOURCE",
+                    "searchableIds": [
+                        182,
+                        180
+                    ]
+                }
+            },
+            {
+                "operationType": "MERGE",
+                "user": {
+                    "name": "Aditya Kumar Chandeliya",
+                    "uniqueName": "adityakumar@giddh.com",
+                    "email": "adityakumar@giddh.com",
+                    "isVerified": true
+                },
+                "date": 1594365120586,
+                "dateString": "10-07-2020 12:42:00",
+                "details": {
+                    "source": [
+                        {
+                            "name": "Account 2",
+                            "uniqueName": "account2",
+                            "id": 181
+                        }
+                    ],
+                    "target": {
+                        "name": "Account 1",
+                        "uniqueName": "account1",
+                        "id": 180
+                    },
+                    "type": "SOURCE",
+                    "searchableIds": [
+                        181,
+                        180
+                    ]
+                }
+            },
+            {
+                "operationType": "CREATE",
+                "user": {
+                    "name": "Aditya Kumar Chandeliya",
+                    "uniqueName": "adityakumar@giddh.com",
+                    "email": "adityakumar@giddh.com",
+                    "isVerified": true
+                },
+                "date": 1594364983701,
+                "dateString": "10-07-2020 12:39:43",
+                "details": {
+                    "name": "Account 4",
+                    "uniqueName": "account4",
+                    "group": {
+                        "name": "G1",
+                        "uniqueName": "g1",
+                        "id": 307
+                    },
+                    "bankDetails": null,
+                    "addresses": [
+                        {
+                            "address": "",
+                            "gstIn": "",
+                            "state": {
+                                "name": "Himachal Pradesh",
+                                "code": "HP",
+                                "alias": null
+                            },
+                            "country": {
+                                "countryName": "India",
+                                "countryCode": "IN"
+                            }
+                        }
+                    ],
+                    "old": null
+                }
+            },
+            {
+                "operationType": "CREATE",
+                "user": {
+                    "name": "Aditya Kumar Chandeliya",
+                    "uniqueName": "adityakumar@giddh.com",
+                    "email": "adityakumar@giddh.com",
+                    "isVerified": true
+                },
+                "date": 1594364968407,
+                "dateString": "10-07-2020 12:39:28",
+                "details": {
+                    "name": "Account 3",
+                    "uniqueName": "account3",
+                    "group": {
+                        "name": "G1",
+                        "uniqueName": "g1",
+                        "id": 307
+                    },
+                    "bankDetails": null,
+                    "addresses": [
+                        {
+                            "address": "account 3 address akjsfhjkas",
+                            "gstIn": "",
+                            "state": {
+                                "name": "Himachal Pradesh",
+                                "code": "HP",
+                                "alias": null
+                            },
+                            "country": {
+                                "countryName": "India",
+                                "countryCode": "IN"
+                            }
+                        },
+                        {
+                            "address": "Account 3 some address ",
+                            "gstIn": "",
+                            "state": {
+                                "name": "Himachal Pradesh",
+                                "code": "HP",
+                                "alias": null
+                            },
+                            "country": {
+                                "countryName": "India",
+                                "countryCode": "IN"
+                            }
+                        }
+                    ],
+                    "old": null
+                }
+            },
+            {
+                "operationType": "CREATE",
+                "user": {
+                    "name": "Aditya Kumar Chandeliya",
+                    "uniqueName": "adityakumar@giddh.com",
+                    "email": "adityakumar@giddh.com",
+                    "isVerified": true
+                },
+                "date": 1594364912088,
+                "dateString": "10-07-2020 12:38:32",
+                "details": {
+                    "name": "Account 2",
+                    "uniqueName": "account2",
+                    "group": {
+                        "name": "G1",
+                        "uniqueName": "g1",
+                        "id": 307
+                    },
+                    "bankDetails": null,
+                    "addresses": [
+                        {
+                            "address": "some address 1",
+                            "gstIn": "",
+                            "state": {
+                                "name": "Himachal Pradesh",
+                                "code": "HP",
+                                "alias": null
+                            },
+                            "country": {
+                                "countryName": "India",
+                                "countryCode": "IN"
+                            }
+                        },
+                        {
+                            "address": "some second address",
+                            "gstIn": "",
+                            "state": {
+                                "name": "Himachal Pradesh",
+                                "code": "HP",
+                                "alias": null
+                            },
+                            "country": {
+                                "countryName": "India",
+                                "countryCode": "IN"
+                            }
+                        }
+                    ],
+                    "old": null
+                }
+            },
+            {
+                "operationType": "CREATE",
+                "user": {
+                    "name": "Aditya Kumar Chandeliya",
+                    "uniqueName": "adityakumar@giddh.com",
+                    "email": "adityakumar@giddh.com",
+                    "isVerified": true
+                },
+                "date": 1594364774929,
+                "dateString": "10-07-2020 12:36:14",
+                "details": {
+                    "name": "Account 1",
+                    "uniqueName": "account1",
+                    "group": {
+                        "name": "G1",
+                        "uniqueName": "g1",
+                        "id": 307
+                    },
+                    "bankDetails": null,
+                    "addresses": [
+                        {
+                            "address": "",
+                            "gstIn": "",
+                            "state": {
+                                "name": "Himachal Pradesh",
+                                "code": "HP",
+                                "alias": null
+                            },
+                            "country": {
+                                "countryName": "India",
+                                "countryCode": "IN"
+                            }
+                        }
+                    ],
+                    "old": null
+                }
+            }
+        ],
+        "size": 9,
+        "fromDate": null,
+        "toDate": null,
+        "openingBalance": {
+            "amount": 0.0000,
+            "type": "DEBIT"
+        },
+        "closingBalance": {
+            "amount": 0.0000,
+            "type": "DEBIT"
+        },
+        "debitTotal": 0,
+        "creditTotal": 0
+    }
+      };
+        }
 }

@@ -8,7 +8,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { LOGS_API } from './apiurls/logs.api';
-import { LogsRequest, LogsResponse } from '../models/api-models/Logs';
+import { LogsRequest, LogsResponse, GetAuditLogsRequest, AuditLogsResponse } from '../models/api-models/Logs';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
@@ -58,4 +58,26 @@ export class LogsService {
         return this._http.get(`${this.config.apiUrl}${LOGS_API.GET_AUDIT_LOG_FORM_FILTERS}`).pipe(
             catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
+
+    /**
+     * API call to get audit log  
+     *
+     * @param {LogsRequest} model Request model
+     * @param {number} [page=1] Page number
+     * @returns {Observable<BaseResponse<any, GetAuditLogsRequest>>}
+     * @memberof LogsService
+     */
+    public getAuditLogs(model: GetAuditLogsRequest, page: number = 1): Observable<BaseResponse<AuditLogsResponse, GetAuditLogsRequest>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.post(this.config.apiUrl + LOGS_API.GET_AUDIT_LOGS_V2.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<AuditLogsResponse, GetAuditLogsRequest> = res;
+                data.request = model;
+                data.queryString = { page };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<AuditLogsResponse, GetAuditLogsRequest>(e, model, { page })));
+    }
+
 }

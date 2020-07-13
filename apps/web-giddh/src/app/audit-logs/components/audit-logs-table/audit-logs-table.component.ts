@@ -1,11 +1,12 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { ILogsItem } from '../../../models/interfaces/logs.interface';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import * as _ from '../../../lodash-optimized';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store/roots';
+import { AuditLogsSidebarVM } from '../audit-logs-form/Vm';
 
 @Component({
     selector: 'audit-logs-table',  // <home></home>
@@ -21,6 +22,10 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
     public logs$: Observable<ILogsItem[]>;
     public loadMoreInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public logsJSON: any;
+    /** Audit log response list */
+    public auditLogs$: Observable<any[]>;
+
 
     /**
      * TypeScript public modifiers
@@ -33,10 +38,12 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
         this.totalPages$ = this.store.select(p => p.auditlog.totalPages);
         this.page$ = this.store.select(p => p.auditlog.currentPage);
         //
+         this.auditLogs$ = this.store.pipe(select( state=> state.auditlog.auditLogs), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         //
+        this.getFilteredLogs();
     }
 
     public ngOnDestroy() {
@@ -53,5 +60,14 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
     }
     public openAllAddress() {
         this.showSingleAdd = !this.showSingleAdd;
+    }
+
+    public getFilteredLogs() {
+        let auditLogFormVM = new AuditLogsSidebarVM();
+        this.logsJSON = auditLogFormVM.getJSON();
+        console.log('logsJSON====', this.logsJSON);
+        this.auditLogs$.subscribe(res=>{
+            console.log("store audit lg res:==", res);
+        })
     }
 }

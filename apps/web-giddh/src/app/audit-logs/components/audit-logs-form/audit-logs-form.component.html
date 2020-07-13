@@ -41,7 +41,7 @@
 
 </div> -->
 <div class="clearfix mrT2">
-    <label>Select Entity</label>
+    <label>Select Entity <sup class="text-danger">*</sup></label>
     <sh-select [options]="auditLogFormVM.entities" #selectEntity [isFilterEnabled]="true" [placeholder]="'Select Option'" (selected)="selectedEntityType($event)" [(ngModel)]="auditLogFormVM.selectedEntity" [forceClearReactive]="forceClearEntity$ | async"></sh-select>
 </div>
 
@@ -67,7 +67,7 @@
     <sh-select [options]="auditLogFormVM.users$ | async" [customFilter]="customUserFilter" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="auditLogFormVM.selectedUserUnq" [forceClearReactive]="forceClearUser$ | async"></sh-select>
 </div>
 
-<button class='btn btn-success pull-left mrT2' [ladda]="auditLogFormVM.getLogsInprocess$ | async" (click)='getLogfilters()'>Get Logs
+<button class='btn btn-success pull-left mrT2' [ladda]="auditLogFormVM.getLogsInprocess$ | async" [disabled]="!auditLogFormVM.selectedEntity" (click)='getLogfilters()'>Get Logs
 </button>
 <button class="btn btn-warning pull-left mrT2 mrL" (click)="resetFilters()">Reset</button>
 

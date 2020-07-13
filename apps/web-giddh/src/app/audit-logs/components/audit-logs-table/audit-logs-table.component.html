@@ -28,12 +28,10 @@
                 <label>Company:</label>
                 <p>{{log.companyName}}</p>
             </div>
-            <div
-                *ngIf="log.log && log.log.sharedWith && log.log.sharedWith != undefined && log.log.sharedWith.name.length > 0">
+            <div *ngIf="log.log && log.log.sharedWith && log.log.sharedWith != undefined && log.log.sharedWith.name.length > 0">
                 <label>Shared with:</label>
                 <p>{{log.log.sharedWith.name}}
-                    <span
-                        ng-if="log.log.sharedWith.email && log.log.sharedWith.email != null && log.log.sharedWith.email.length > 0">
+                    <span ng-if="log.log.sharedWith.email && log.log.sharedWith.email != null && log.log.sharedWith.email.length > 0">
                         | {{log.log.sharedWith.email}}</span>
                 </p>
             </div>
@@ -56,10 +54,30 @@
                 <div class="single-address-row">
                     <div class="mr-05">
                         <label>
+                            Bank Name:
+                        </label>
+                        <p class="address-field"> HDFC Bank Ltd
+                        </p>
+                    </div>
+                    <div class="mr-05">
+                        <label>
+                            Account Number:
+                        </label>
+                        <p class="ml-05">12345678906768787</p>
+                    </div>
+                    <div class="mr-05">
+                        <label>
+                            IFSC Code:
+                        </label>
+                        <p class="ml-05"> CHDFC0127</p>
+                    </div>
+                </div>
+                <div class="single-address-row">
+                    <div class="mr-05">
+                        <label>
                             Address:
                         </label>
-                        <p class="address-field">405-406, Capt. C. S. Naidu Arcade Near Greater
-                            Kailash Hospital
+                        <p class="address-field">405-406, Capt. C. S. Naidu Arcade Near Greater Kailash Hospital
                         </p>
                     </div>
                     <div class="mr-05">
@@ -76,7 +94,7 @@
                     </div>
                     <div class="mr-05">
                         <label>
-                            State:
+                            Country:
                         </label>
                         <p class="ml-05">India</p>
                     </div>
@@ -137,8 +155,7 @@
             </tbody>
         </table>
     </div>
-    <div class="mrT text-center"
-        *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
+    <div class="mrT text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
         <label>Updated</label>
         <table class="table table-bordered">
             <thead>
@@ -183,8 +200,7 @@
             </tbody>
         </table>
     </div>
-    <div class="mrT text-center"
-        *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
+    <div class="mrT text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
         <label>Updated</label>
         <table class="table table-bordered">
             <thead>
@@ -236,6 +252,5 @@
         <p>You can use the filters on the left to fetch logs.</p>
     </div>
 </section>
-<button class='btn btn-success pull-left mrT2 mrB2' [ladda]="loadMoreInProcess$ | async" (click)='loadMoreLogs()'
-    *ngIf='(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)'>Load More
+<button class='btn btn-success pull-left mrT2 mrB2' [ladda]="loadMoreInProcess$ | async" (click)='loadMoreLogs()' *ngIf='(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)'>Load More
 </button>

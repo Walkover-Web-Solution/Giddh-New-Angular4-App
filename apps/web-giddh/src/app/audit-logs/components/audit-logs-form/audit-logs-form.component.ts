@@ -1,6 +1,6 @@
 import { of as observableOf, ReplaySubject, Observable } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { LogsRequest, AuditLogFilterForm } from '../../../models/api-models/Logs';
+import { LogsRequest, AuditLogFilterForm, GetAuditLogsRequest } from '../../../models/api-models/Logs';
 import { UserDetails } from '../../../models/api-models/loginModels';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { CompanyService } from '../../../services/companyService.service';
@@ -221,30 +221,9 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     }
 
     public getLogfilters() {
-        let reqBody: LogsRequest = new LogsRequest();
-        reqBody.operation = this.auditLogFormVM.selectedOperation === 'All' ? '' : this.auditLogFormVM.selectedOperation;
-        reqBody.entity = this.auditLogFormVM.selectedEntity === 'All' ? '' : this.auditLogFormVM.selectedEntity;
-        reqBody.userUniqueName = this.auditLogFormVM.selectedUserUnq;
-        reqBody.accountUniqueName = this.auditLogFormVM.selectedAccountUnq;
-        reqBody.groupUniqueName = this.auditLogFormVM.selectedGroupUnq;
-
-        if (this.auditLogFormVM.selectedDateOption === '0') {
-            reqBody.fromDate = null;
-            reqBody.toDate = null;
-            if (this.auditLogFormVM.logOrEntry === 'logDate') {
-                reqBody.logDate = this.auditLogFormVM.selectedLogDate ? moment(this.auditLogFormVM.selectedLogDate).format(GIDDH_DATE_FORMAT) : '';
-                reqBody.entryDate = null;
-            } else if (this.auditLogFormVM.logOrEntry === 'entryDate') {
-                reqBody.entryDate = this.auditLogFormVM.selectedLogDate ? moment(this.auditLogFormVM.selectedLogDate).format(GIDDH_DATE_FORMAT) : '';
-                reqBody.logDate = null;
-            }
-        } else {
-            reqBody.logDate = null;
-            reqBody.entryDate = null;
-            reqBody.fromDate = this.fromDate;
-            reqBody.toDate = this.toDate;
-        }
-        this.store.dispatch(this.auditLogsActions.GetLogs(reqBody, 1));
+        let getAuditLogsRequest: GetAuditLogsRequest = new GetAuditLogsRequest();
+        getAuditLogsRequest = _.cloneDeep(this.prepareAuditlogFormRequest()); 
+        this.store.dispatch(this.auditLogsActions.getAuditLogs(getAuditLogsRequest, 1));
     }
 
     public customUserFilter(term: string, item: IOption) {
@@ -256,6 +235,11 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
     }
 
+    /**
+     * To reset audit log form
+     *
+     * @memberof AuditLogsFormComponent
+     */
     public resetFilters() {
         this.auditLogFormVM.reset();
         this.resetAuditLogForm();
@@ -270,14 +254,13 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      */
     public getFormFilter(): void {
         this.audotLogsService.getAuditLogFormFilters().subscribe((response) => {
-            console.log(response);
             if (response && response.status === 'success') {
                 if (response.body) {
                     this.auditLogFilterForm = response.body;
                     this.auditLogFormVM.filters = [];
                     this.auditLogFormVM.entities = [];
                     response.body.forEach(element => {
-                        this.auditLogFormVM.entities.push({ label: element.entity, value: element.entity });
+                        this.auditLogFormVM.entities.push({ label: element.entity, value: element.entity.toLocaleLowerCase() });
                     });
                 }
             }
@@ -292,15 +275,8 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsFormComponent
      */
     public prepareOperationFormData(selectEntity: any) {
-        console.log(selectEntity);
         if (selectEntity.filter) {
             this.getOperationsFilterData(selectEntity.filter);
-            // let selectedEntityObject = this.auditLogFilterForm.filter(element => element.entity === selectEntity.filter);
-            // selectedEntityObject[0].operations.map(element => {
-            //     element = { label: element, value: element };
-            // });
-            // this.auditLogFormVM.filters = selectedEntityObject[0].operations;
-            // console.log(selectedEntityObject);
         } else {
             this.auditLogFormVM.filters = [];
         }
@@ -316,11 +292,18 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     public getOperationsFilterData(entityType: string) {
         this.auditLogFormVM.filters = [];
         if (entityType) {
-            let selectedEntityObject = this.auditLogFilterForm.filter(element => element.entity === entityType);
-            selectedEntityObject[0].operations.map(element => {
-                let operatios: IOption = { label: element, value: element };
-                this.auditLogFormVM.filters.push(operatios);
+            let selectedEntityObject = this.auditLogFilterForm.filter(element => {
+                if (element.entity.toLocaleLowerCase() === entityType.toLocaleLowerCase()) {
+                    return element;
+                }
             });
+            if (selectedEntityObject && selectedEntityObject.length) {
+                selectedEntityObject[0].operations.map(element => {
+                    let operatios: IOption = { label: element, value: element.toLocaleLowerCase() };
+                    this.auditLogFormVM.filters.push(operatios);
+                });
+            }
+
         }
     }
 
@@ -335,6 +318,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         this.forceClearAccount$ = observableOf({ status: true });
         this.forceClearGroup$ = observableOf({ status: true });
         this.forceClearUser$ = observableOf({ status: true });
+        this.forceClearOperations$ = observableOf({ status: true });
     }
 
     /**
@@ -396,5 +380,22 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         }
     }
 
-
+    /**
+     * To prepare get audit log request model
+     *
+     * @returns {GetAuditLogsRequest} Audit log request model
+     * @memberof AuditLogsFormComponent
+     */
+    public prepareAuditlogFormRequest(): GetAuditLogsRequest {
+        let getAuditLogsRequest: GetAuditLogsRequest = new GetAuditLogsRequest();
+        getAuditLogsRequest.entity = this.auditLogFormVM.selectedEntity;
+        getAuditLogsRequest.operation = this.auditLogFormVM.selectedOperation;
+        getAuditLogsRequest.fromDate = this.fromDate;
+        getAuditLogsRequest.toDate = this.toDate;
+        return getAuditLogsRequest;
+        // Note:- *commenting* we will use in next build
+        // getAuditLogsRequest.userUniqueName = this.auditLogFormVM.selectedUserUnq;
+        // getAuditLogsRequest.accountUniqueName = this.auditLogFormVM.selectedAccountUnq;
+        // getAuditLogsRequest.groupUniqueName = this.auditLogFormVM.selectedGroupUnq;
+    }
 }
