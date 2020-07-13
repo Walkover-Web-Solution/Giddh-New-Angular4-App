@@ -30,6 +30,7 @@ import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-
 import { PurchaseRoutingModule } from './purchase.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
+import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 
 /**
  * Created by kunalsaxena on 9/1/17.
@@ -66,7 +67,8 @@ import { SharedModule } from '../shared/shared.module';
         PerfectScrollbarModule,
         InvoiceRoutingModule,
         ShSelectModule,
-        SharedModule
+        SharedModule,
+        SalesShSelectModule
     ],
     entryComponents: [],
     exports: [
