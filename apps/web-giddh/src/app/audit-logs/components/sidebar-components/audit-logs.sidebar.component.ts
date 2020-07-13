@@ -58,16 +58,6 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             }
         }).pipe(takeUntil(this.destroyed$));
 
-        // this._accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-        //     if (data.status === 'success') {
-        //         let accounts: IOption[] = [];
-        //         data.body.results.map(d => {
-        //             accounts.push({ label: d.name, value: d.uniqueName });
-        //         });
-        //         this.vm.accounts$ = observableOf(accounts);
-        //     }
-        // });
-
         /* previously we were getting data from api now we are getting data from general store */
 
         this.vm.accounts$ = this.store.select(state => state.general.flattenAccounts).pipe(takeUntil(this.destroyed$), map(accounts => {
