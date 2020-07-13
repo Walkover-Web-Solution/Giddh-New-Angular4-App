@@ -6,6 +6,7 @@ export const AUDIT_LOGS_ACTIONS = {
     AUDIT_LOGS_RESET: 'AUDIT_LOGS_RESET'
 };
 
+/** Audit logs version 2 constants for action  */
 export const AUDIT_LOGS_ACTIONS_V2 = {
     GET_LOGS_REQUEST: 'GET_LOGS_REQUEST',
     GET_LOGS_RESPONSE_V2: 'GET_LOGS_RESPONSE_V2',
