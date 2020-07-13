@@ -58,7 +58,6 @@
 <div class="clearfix mrT2">
     <label>Select Group</label>
     <sh-select [options]="auditLogFormVM.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="genralCustomFilter" [(ngModel)]="auditLogFormVM.selectedGroupUnq" [forceClearReactive]="forceClearGroup$ | async"></sh-select>
-    <!--<select2 [data]="auditLogFormVM.groups$ | async" [options]="auditLogFormVM.options" [value]="auditLogFormVM.selectedGroupUnq" (valueChanged)="selectGroup($event)"></select2>-->
 </div>
 
 
