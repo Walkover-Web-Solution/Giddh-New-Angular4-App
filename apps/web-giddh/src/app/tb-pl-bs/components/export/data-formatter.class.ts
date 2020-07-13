@@ -185,7 +185,7 @@ export class DataFormatter {
             total = this.calculateTotal(group, total);
         });
 
-        total.cr = Number(total.dr.toString().substring(0, total.dr.toString().indexOf(".") + 5));
+        total.cr = Number(total.cr.toString().substring(0, total.cr.toString().indexOf(".") + 5));
         total.dr = Number(total.dr.toString().substring(0, total.dr.toString().indexOf(".") + 5));
         total.ob = Number(total.ob.toString().substring(0, total.ob.toString().indexOf(".") + 5));
         total.cb = Number(total.cb.toString().substring(0, total.cb.toString().indexOf(".") + 5));

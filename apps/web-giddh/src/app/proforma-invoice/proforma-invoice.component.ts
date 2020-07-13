@@ -248,6 +248,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isOthrDtlCollapsed: boolean = false;
     public typeaheadNoResultsOfCustomer: boolean = false;
     public invFormData: VoucherClass;
+    /** Invoice list array */
+    public invoiceList: any[];
+    /** Selected invoice for credit note */
+    public selectedInvoice: any = null;
     public customerAcList$: Observable<IOption[]>;
     public bankAccounts$: Observable<IOption[]>;
     public salesAccounts$: Observable<IOption[]> = observableOf(null);
@@ -352,6 +356,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public ratePrecision = RATE_FIELD_PRECISION;
     /** Rate precision value that will be sent to API */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
+    /** Force clear for invoice drop down */
+    public invoiceForceClearReactive$: Observable<IForceClear> = observableOf({ status: false });
     public selectedCompany: any;
     public formFields: any[] = [];
 
@@ -918,7 +924,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     this.prdSerAcListForCred.push({
                                         value: `${item.uniqueName}#${as.uniqueName}`,
                                         label: `${item.name} (${as.name})`,
-                                        additional: Object.assign({}, item, {stock: as})
+                                        additional: Object.assign({}, item, { stock: as })
                                     });
                                 });
                             } else {
@@ -1152,6 +1158,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.accountDetails.currencySymbol = '';
                         }
                         this.invFormData = obj;
+                        this.getInvoiceListsForCreditNote();
                     } else {
                         this.invoiceDataFound = false;
                     }
@@ -1462,6 +1469,69 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.voucherTypeChanged = true;
         this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
         this.selectedVoucherType = val;
+        if (this.selectedVoucherType === VoucherTypeEnum.creditNote) {
+            this.getInvoiceListsForCreditNote();
+        }
+    }
+
+    /**
+     * Get Invoice list for credit note
+     *
+     * @param {string} voucherDate Date of voucher
+     * @memberof ProformaComponent
+     */
+    public getInvoiceListsForCreditNote(voucherDate?: string): void {
+        if (this.invFormData && this.invFormData.voucherDetails && this.invFormData.voucherDetails.customerUniquename) {
+            let request = {
+                accountUniqueNames: [this.invFormData.voucherDetails.customerUniquename, 'sales'],
+                voucherType: VoucherTypeEnum.creditNote
+            }
+            let date;
+            if (voucherDate) {
+                date = voucherDate;
+            } else if (typeof this.invFormData.voucherDetails.voucherDate === 'string') {
+                date = this.invFormData.voucherDetails.voucherDate;
+            } else {
+                date = moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
+            }
+            this.invoiceList = [];
+            this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
+                if (response && response.body) {
+                    if (response.body.results && response.body.results.length) {
+                        response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber, value: invoice.uniqueName, invoice }))
+                    } else {
+                        this.invoiceForceClearReactive$ = observableOf({ status: true });
+                    }
+                    let invoiceSelected;
+                    if (this.isUpdateMode) {
+                        const selectedInvoice = this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0];
+                        if (selectedInvoice) {
+                            invoiceSelected = {
+                                label: selectedInvoice.invoiceNumber,
+                                value: selectedInvoice.invoiceUniqueName,
+                                invoice: selectedInvoice
+                            };
+                            const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
+                            if (!linkedInvoice) {
+                                this.invoiceList.push(invoiceSelected);
+                            }
+                        }
+                    }
+                    _.uniqBy(this.invoiceList, 'value');
+                    this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
+                }
+            });
+        }
+    }
+
+    /**
+     * Removes the selected invoice for credit note
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public removeSelectedInvoice(): void {
+        this.invoiceForceClearReactive$ = observableOf({ status: true });
+        this.selectedInvoice = '';
     }
 
     public prepareInvoiceTypeFlags() {
@@ -1518,6 +1588,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         //---------------------//
 
+    }
+
+    /**
+     * Selected invoice for credit note
+     *
+     * @param {any} event Selected invoice for credit note
+     * @memberof ProformaInvoiceComponent
+     */
+    public creditNoteInvoiceSelected(ev): void {
+        this.invFormData.voucherDetails.invoiceLinkingRequest = {
+            linkedInvoices: [
+                {
+                    invoiceUniqueName: ev.value
+                }
+            ]
+        }
     }
 
     public getAllFlattenAc() {
@@ -1637,6 +1723,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isMlngAddrCollapsed = true;
         this.isOthrDtlCollapsed = false;
         this.forceClear$ = observableOf({status: true});
+        this.invoiceForceClearReactive$ = observableOf({ status: true });
         this.isCustomerSelected = false;
         this.selectedFileName = '';
         this.selectedWarehouse = '';
@@ -1989,6 +2076,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 if (this.isCreditNote || this.isDebitNote) {
                     updatedData['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
+                }
+                if (this.isCreditNote) {
+                    updatedData['invoiceLinkingRequest'] = data.voucherDetails.invoiceLinkingRequest;
                 }
             }
             if (this.isPurchaseInvoice) {
@@ -2607,6 +2697,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.isSalesInvoice && this.isMulticurrencyAccount) {
                 this.bankAccounts$ = observableOf(this.updateBankAccountObject(item.additional.currency));
             }
+
+            if (this.selectedVoucherType === VoucherTypeEnum.creditNote) {
+                this.getInvoiceListsForCreditNote();
+            }
         }
         /** To reset advance receipt data */
         this.resetAdvanceReceiptAdjustData();
@@ -3156,6 +3250,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 } as GenericRequestForGenerateSCD;
                 if (this.isCreditNote || this.isDebitNote) {
                     requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
+                }
+                if (this.isCreditNote && this.selectedInvoice) {
+                    requestObject['invoiceLinkingRequest'] = {
+                        linkedInvoices: [{
+                            invoiceUniqueName: this.selectedInvoice
+                        }]
+                    };
                 }
 
                 /** Tourist scheme is applicable only for voucher type 'sales invoice' and 'cash invoice' and company country code 'AE'   */
@@ -4030,6 +4131,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         //code for voucher details
         voucherDetails.voucherDate = result.date ? result.date : '';
+        voucherDetails.invoiceLinkingRequest = result.invoiceLinkingRequest;
         if (this.isPendingVoucherType) {
             result.balanceTotal = result.grandTotal;
         } else {
@@ -4103,6 +4205,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         if (selectedDate === modelDate && this.invFormData && this.invFormData.voucherDetails && this.invFormData.voucherDetails.voucherDate && this.invFormData.accountDetails && this.invFormData.accountDetails.uniqueName) {
             this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, moment(selectedDate).format(GIDDH_DATE_FORMAT));
+        }
+        if (selectedDate && modelDate && selectedDate !== modelDate && this.isCreditNote) {
+            this.getInvoiceListsForCreditNote(moment(selectedDate).format(GIDDH_DATE_FORMAT));
         }
     }
 
