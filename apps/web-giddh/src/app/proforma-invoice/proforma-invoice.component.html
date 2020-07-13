@@ -1166,14 +1166,8 @@
                                         <div class="td-Wrapper">
 
                                             <div style="flex: 1;">
-                                                <input type="text" [disabled]="!transaction.isStockTxn"
-                                                    (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)"
-                                                    placeholder="Rate" name="transaction.rate_{{entryIdx}}"
-                                                    class="form-control transaction-rate text-right"
-                                                    [(ngModel)]="transaction.rate"
-                                                    [prefix]="invFormData.accountDetails.currencySymbol"
-                                                    [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                                                    [customDecimalPlaces]="ratePrecision" />
+                                                <input type="text" [disabled]="!transaction.isStockTxn" (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control transaction-rate text-right"
+                                                    [(ngModel)]="transaction.rate" [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" [customDecimalPlaces]="highPrecisionRate" />
                                             </div>
                                             <!-- please add condition for show and hide -->
                                             <div class="differ-currency"
@@ -2109,6 +2103,16 @@
 
                                         </div>
 
+                                <div class="card-rate">
+                                    <label class="card-label text-right">Rate</label>
+                                    <div style="flex: 1;">
+                                        <input type="text" [disabled]="!transaction.isStockTxn" (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control transaction-rate text-right"
+                                            [(ngModel)]="transaction.rate" [prefix]="invFormData.accountDetails.currencySymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" [customDecimalPlaces]="highPrecisionRate" />
+                                    </div>
+                                    <!-- please add condition for show and hide -->
+                                    <div class="differ-currency" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
+                                        <span>{{baseCurrencySymbol}}</span>
+                                        <span>{{((transaction.rate * exchangeRate) ? transaction.rate * exchangeRate : 0) | giddhCurrency: ratePrecision:true}}</span>
                                     </div>
                                 </div>
 

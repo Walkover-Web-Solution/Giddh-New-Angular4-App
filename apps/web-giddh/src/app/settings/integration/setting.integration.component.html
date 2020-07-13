@@ -597,24 +597,7 @@
 
                                         </ng-container>
                                         <div class="custom-select select-caret pos-rel" *ngIf="item.otpType!=='BANK'">
-                                            <sh-select [options]="approvalNameList" class="text-left" [disabled]="isBankUpdateInEdit !== parentIndex" [(ngModel)]="item.approvalUniqueName" name="approvalUniqueName{{parentIndex}}{{index}}" required [placeholder]="'Select Bank'" [multiple]="false">
-                                                <ng-template #optionTemplate let-option="option">
-                                                    <a href="javascript:void(0)" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative">
-                                                        <div class="item">
-                                                            <p>{{option?.label}}</p>
-                                                            <p>{{option?.additional[0]?.mobileNumber}}</p>
-                                                            <img src="assets/images/blue-check.svg" class="check-search" alt="">
-                                                        </div>
-                                                    </a>
-                                                    <fieldset disabled href="javascript:void(0)" *ngIf="!option?.additional[0]?.mobileVerified" class="list-item relative text-light disabled disabled-list-item">
-                                                        <div class="item">
-                                                            <p>{{option?.label}}</p>
-                                                            <p>Unverifed</p>
-                                                            <img src="assets/images/close-round.svg" class="check-search" alt="">
-                                                        </div>
-                                                    </fieldset>
-                                                </ng-template>
-                                            </sh-select>
+                                            <input type="text" class="form-control" placeholder="Registered" disabled name="approvalUniqueName{{index}}" [value]="item.approvalDetails.name">
                                         </div>
                                         <div class="custom-select select-caret pos-rel" *ngIf="item.otpType==='BANK'">
                                             <input type="text" class="form-control" [disabled]="item.otpType==='BANK' || isBankUpdateInEdit !== parentIndex" placeholder="Registered" name="approvalUniqueName{{index}}">

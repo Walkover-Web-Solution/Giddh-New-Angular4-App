@@ -587,6 +587,12 @@ sh-select:focus {
             }
         }
     }
+    .transaction-table-row table td {
+        border-bottom: 1px solid #d9d9d9;
+    }
+    .transaction-table-row table:last-child td {
+        border-bottom: none;
+    }
 }
 /*responsive*/
 .modal-ledger {
