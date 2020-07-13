@@ -9377,7 +9377,9 @@ span#HW_badge_cont:nth-child(3) {
         justify-content: flex-end;
     }
 }
-
+.estimation-date-modal{
+    z-index: 99999;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
