@@ -59,8 +59,8 @@
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
                                 [mask]="inputMaskFormat" [customDecimalPlaces]="ratePrecision"
-                                (ngModelChange)="changePrice($event)" name="unitPrice" (keyup)="isInclusiveEntry = false"
-                                class="form-control text-right" />
+                                (ngModelChange)="changePrice($event)" name="unitPrice"
+                                (keyup)="isInclusiveEntry = false" class="form-control text-right" />
                             <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                 <ng-container *ngTemplateOutlet="totalWithCurrencySymbol"></ng-container>
                                 {{ currentTxn?.convertedRate | giddhCurrency: ratePrecision: true}}
@@ -463,7 +463,11 @@
                     <label class="pull-left cp fs16">
 
                         <input class="pull-left" type="checkbox" name="generateInvoice"
+<<<<<<< HEAD
                             [disabled]="(isAdvanceReceipt && blankLedger.generateInvoice || selectedInvoiceForCreditNote) ? 'disabled' : null"
+=======
+                            [disabled]="isAdvanceReceipt && blankLedger.generateInvoice ? 'disabled' : null"
+>>>>>>> 7020af7dc... shalinee | stage | GIDK-525 | alignment proper
                             [(ngModel)]="blankLedger.generateInvoice">
                         Generate Voucher
                     </label>
@@ -506,6 +510,7 @@
                     </ul>
                 </div>
 
+<<<<<<< HEAD
         <div class="pull-right">
             <input type="file" [hidden]="true" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect
                 [uploadInput]="uploadInput" (uploadOutput)="onWebUpload($event)" #webFileInput (click)="onUploadOutput()">
@@ -519,6 +524,24 @@
                 <label class="remove cp text-danger pl-1" (click)="showDeleteAttachedFileModal()">(remove)</label>
             </div>
         </div>
+=======
+                <div class="pull-right">
+                    <input type="file" [hidden]="true" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions"
+                        ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onWebUpload($event)" #webFileInput
+                        (click)="onUploadOutput()">
+                    <label class="upload_div pr-15"
+                        [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
+
+                        <label for="invoiceFile" class="cp fs16">
+                            <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
+                    </label>
+                    <div class="file_attached clearfix text-right pr-15" *ngIf="blankLedger.attachedFile.length > 0">
+                        <span>{{ blankLedger.attachedFileName }}</span>
+                        <label class="remove cp text-danger pl-1"
+                            (click)="showDeleteAttachedFileModal()">(remove)</label>
+                    </div>
+                </div>
+>>>>>>> 7020af7dc... shalinee | stage | GIDK-525 | alignment proper
 
 
             </div>
@@ -541,7 +564,7 @@
                         to CR
                     </button>
 
-                    <button id="saveLedger" class="btn btn-success btn-sm" [disabled]="isFileUploading"
+                    <button id="saveLedger" class="btn btn-success btn-sm mr-0" [disabled]="isFileUploading"
                         [ladda]="isLedgerCreateInProcess$ | async" (click)="saveLedger()">Save
                     </button>
                 </div>
