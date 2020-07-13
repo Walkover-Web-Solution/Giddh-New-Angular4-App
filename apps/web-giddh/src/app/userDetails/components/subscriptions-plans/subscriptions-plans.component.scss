@@ -98,7 +98,7 @@
     }
 }
 .your-account {
-    margin: 30px 0px 0 15px;
+    margin: 30px 0px 20px 15px;
     position: relative;
 }
 .inner-your-account {
@@ -109,7 +109,6 @@
     box-shadow: 0px 3px 6px $black-russian;
     border: 1px solid $gainsboro;
     transition: .5s all ease;
-    margin-bottom: 20px;
 }
 .inner-your-account:hover, .inner-your-account.active {
     background: $lavender;
@@ -297,7 +296,7 @@
             display: none;
         }
         .plan-list {
-            min-height: 305px;
+            min-height: 240px !important;
         }
     }
     .plans-box {
