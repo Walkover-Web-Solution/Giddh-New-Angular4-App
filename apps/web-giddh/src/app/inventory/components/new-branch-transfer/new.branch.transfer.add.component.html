@@ -345,9 +345,10 @@
                                     <div *ngIf="activeRow !== i">
                                         <div *ngIf="product.name">{{product.name}}</div>
                                         <div *ngIf="product.skuCode">SKU Code: {{product.skuCode}}</div>
-                                        <div *ngIf="(inventorySettings?.manageInventory || !product.sacNumber)">HSN/SAC Code: {{product.hsnNumber}}</div>
+                                        <div *ngIf="product.hsnNumber && (inventorySettings?.manageInventory || !product.sacNumber)">HSN/SAC Code: {{product.hsnNumber}}</div>
                                         <div *ngIf="(!inventorySettings?.manageInventory && product.sacNumber)">HSN/SAC Code: {{product.sacNumber}}</div>
                                         <div *ngIf="product.description">{{product.description}}</div>
+                                        <div *ngIf="(!product.name && !product.description && !(product.hsnNumber || product.sacNumber) && !product.skuCode)" style="color: #ccc;">Enter product details</div>
                                     </div>
                                     <div class="pos-rel">
                                         <div class="hsnCode text-right" (click)="focusHsnNumber();" *ngIf="activeRow == i">
@@ -420,6 +421,7 @@
                                         </div>
                                         <div *ngIf="destination.warehouse.address">{{destination.warehouse.address}}
                                         </div>
+                                        <div *ngIf="(!destination.name && !destination.warehouse.name && !destination.warehouse.taxNumber && !destination.warehouse.address)" style="color: #ccc">Enter receiver's details</div>
                                     </div>
                                 </td>
                                 <td>
@@ -472,6 +474,7 @@
                                         <div *ngIf="source.warehouse.name">{{source.warehouse.name}}</div>
                                         <div *ngIf="source.warehouse.taxNumber">{{source.warehouse.taxNumber}}</div>
                                         <div *ngIf="source.warehouse.address">{{source.warehouse.address}}</div>
+                                        <div *ngIf="(!source.name && !source.warehouse.name && !source.warehouse.taxNumber && !source.warehouse.address)" style="color: #ccc">Enter sender's details</div>
                                     </div>
                                 </td>
                                 <td>
