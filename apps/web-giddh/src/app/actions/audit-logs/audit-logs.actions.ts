@@ -82,6 +82,14 @@ export class AuditLogsActions {
         };
     }
 
+    /**
+     * Action to get new audit logs
+     *
+     * @param {GetAuditLogsRequest} request to get audit logs request object
+     * @param {number} page Page number
+     * @returns {CustomActions}
+     * @memberof AuditLogsActions
+     */
     public getAuditLogs(request: GetAuditLogsRequest, page: number): CustomActions {
         return {
             type: AUDIT_LOGS_ACTIONS_V2.GET_LOGS_REQUEST,
