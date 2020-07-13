@@ -125,6 +125,11 @@
 }
 .associated-company-name{
     flex-direction: column;
+    p{
+        img{
+            width: 16px;
+        }
+    }
     .custom-dropdown{
         right: 0;
         top: 13px;
