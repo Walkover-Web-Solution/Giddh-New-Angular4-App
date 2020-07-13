@@ -40,7 +40,7 @@
                                                 <div class="item_unq">
                                                     <p class="font-12 text-gray mb-0">(Dated: {{option.additional.voucherDate}})
                                                     </p>
-                                                    <p class="font-12 text-gray mb-0">(Amount: {{currencySymbol}}{{option?.additional?.dueAmount?.amountForAccount}})
+                                                    <p class="font-12 text-gray mb-0">(Amount: {{currencySymbol}}{{option?.additional?.balanceDue?.amountForAccount}})
                                                     </p>
                                                 </div>
                                             </a>
@@ -55,7 +55,7 @@
                                 <label>Amount<span class="text-danger">* </span> <span class="text-light">
                                         (Inclusive Tax)</span></label>
                                 <!-- decimalDigitsDirective -->
-                                <input required decimalDigitsDirective type="text" class="form-control" placeholder="Enter Amount" name="amount{{entryIdx}}" [(ngModel)]="entry.dueAmount.amountForAccount" (ngModelChange)="calculateTax(entry, entryIdx);" [prefix]="currencySymbol" [mask]="inputMaskFormat">
+                                <input required decimalDigitsDirective type="text" class="form-control" placeholder="Enter Amount" name="amount{{entryIdx}}" [(ngModel)]="entry.balanceDue.amountForAccount" (ngModelChange)="calculateTax(entry, entryIdx);" [prefix]="currencySymbol" [mask]="inputMaskFormat">
                             </div>
                         </div>
                         <div class="col-sm-2">
