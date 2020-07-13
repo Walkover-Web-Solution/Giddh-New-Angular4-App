@@ -3,8 +3,16 @@
 <!--  -->
 <section class="audit-log" *ngFor="let log of (this.auditLogs$ | async); let parentIndex = index">
     <h1>{{log.operationType}}
-        <span *ngIf="log &&log?.details && log?.details?.name && log?.details?.uniqueName != null"> - {{log.details.name}}
-            ({{log.details.uniqueName}})</span>
+        <span *ngIf="log &&log?.details && log?.details?.name && log.operationType!='MOVE' && log.operationType != 'MERGE' && log?.details?.uniqueName != null"> - {{log.details.name}}({{log.details.uniqueName}})</span>
+        <ng-container *ngIf="log && log?.details && log?.details?.type && log.operationType==='MERGE'">
+            <span *ngIf="log?.details?.type==='TARGET' && log?.details?.target"> - {{log?.details?.target?.name}}({{log?.details?.target.uniqueName}})</span>
+            <ng-container *ngFor="let source of log?.details?.source">
+                <span *ngIf="log?.details?.type==='SOURCE' && log?.details?.source"> - {{source.name}}({{source.uniqueName}})|</span>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="log.operationType==='MOVE'">
+            <span *ngIf="log && log?.details && log?.details?.entity"> - {{log?.details?.entity.name}}({{log?.details?.entity.uniqueName}})</span>
+        </ng-container>
     </h1>
     <div class="audit-log-detail mt-05 clearfix">
         <div class="d-flex user-basic-detail">
@@ -18,19 +26,19 @@
             </div>
             <div>
                 <label>User:</label>
-                <p>{{log.user.name}}</p>
+                <p>{{log?.user.name}}</p>
             </div>
             <div>
                 <label>Email:</label>
-                <p>{{log.user.email}}</p>
+                <p>{{log?.user.email}}</p>
             </div>
             <div>
                 <label>Mobile No.:</label>
-                <p>{{log.user.mobile}}</p>
+                <p>{{log?.user.mobile}}</p>
             </div>
             <div *ngIf="log && log?.details && log?.details?.group && log?.details?.group?.name != null">
                 <label>Group:</label>
-                <p>{{log.details.group.name}}</p>
+                <p>{{log?.details?.group.name}}</p>
             </div>
             <div *ngIf="log && log?.details && log?.operationType !=='MERGE' && log?.details?.source != undefined">
                 <label>Source:</label>
@@ -42,7 +50,7 @@
                 <ng-container *ngFor="let source of log?.details?.source">
                     <p>
                         <span *ngIf="source.name">
-                         {{source.name}} |</span>
+                         {{source?.name}} |</span>
                     </p>
                 </ng-container>
 
@@ -88,20 +96,20 @@
                             <label>
                             Bank Name:
                         </label>
-                            <p class="address-field"> {{bank.bankName}}
+                            <p class="address-field"> {{bank?.bankName}}
                             </p>
                         </div>
                         <div class="mr-05">
                             <label>
                             A/c Number:
                         </label>
-                            <p class="ml-05">{{bank.accountNumber}}</p>
+                            <p class="ml-05">{{bank?.accountNumber}}</p>
                         </div>
                         <div class="mr-05">
                             <label>
                             IFSC Code:
                         </label>
-                            <p class="ml-05"> {{bank.ifscCode}}</p>
+                            <p class="ml-05"> {{bank?.ifscCode}}</p>
                         </div>
                     </ng-container>
                 </div>
@@ -112,14 +120,14 @@
                                 <label>
                             Address:
                         </label>
-                                <p class="address-field">{{item.address}}
+                                <p class="address-field">{{item?.address}}
                                 </p>
                             </div>
                             <div class="mr-05" *ngIf="item?.state">
                                 <label>
                             State:
                         </label>
-                                <p class="ml-05">{{item?.state.name}}</p>
+                                <p class="ml-05">{{item?.state?.name}}</p>
                             </div>
                             <div class="mr-05">
                                 <label>
@@ -131,7 +139,7 @@
                                 <label>
                             Country:
                         </label>
-                                <p class="ml-05">{{item?.country.countryName}}</p>
+                                <p class="ml-05">{{item?.country?.countryName}}</p>
                             </div>
                         </div>
 
@@ -142,7 +150,7 @@
                                 <label>
                             Address:
                         </label>
-                                <p class="address-field">{{item.address}}
+                                <p class="address-field">{{item?.address}}
                                 </p>
                             </div>
                             <div class="mr-05" *ngIf="item?.state">
