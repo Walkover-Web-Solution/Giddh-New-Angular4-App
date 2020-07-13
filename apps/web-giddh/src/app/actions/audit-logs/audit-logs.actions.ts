@@ -3,15 +3,15 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { LogsService } from '../../services/logs.service';
 import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
-import { LogsRequest, LogsResponse } from '../../models/api-models/Logs';
+import { LogsRequest, LogsResponse, GetAuditLogsRequest, AuditLogsResponse } from '../../models/api-models/Logs';
 /**
  * Created by ad on 04-07-2017.
  */
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { AUDIT_LOGS_ACTIONS } from './audit-logs.const';
+import { AUDIT_LOGS_ACTIONS, AUDIT_LOGS_ACTIONS_V2 } from './audit-logs.const';
 import { CustomActions } from '../../store/customActions';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class AuditLogsActions {
     @Effect() private GET_LOGS$: Observable<Action> = this.action$
         .ofType(AUDIT_LOGS_ACTIONS.GET_LOGS).pipe(
             switchMap((action: CustomActions) => {
-                return this._logService.GetAuditLogs(action.payload.request, action.payload.page).pipe(
+                return this.logService.GetAuditLogs(action.payload.request, action.payload.page).pipe(
                     map((r) => this.validateResponse<LogsResponse, LogsRequest>(r, {
                         type: AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE,
                         payload: r
@@ -32,7 +32,7 @@ export class AuditLogsActions {
     @Effect() private LoadMore$: Observable<Action> = this.action$
         .ofType(AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS).pipe(
             switchMap((action: CustomActions) => {
-                return this._logService.GetAuditLogs(action.payload.request, action.payload.page).pipe(
+                return this.logService.GetAuditLogs(action.payload.request, action.payload.page).pipe(
                     map((r) => this.validateResponse<LogsResponse, LogsRequest>(r, {
                         type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS_RESPONSE,
                         payload: r
@@ -42,10 +42,24 @@ export class AuditLogsActions {
                     })));
             }));
 
+
+    @Effect() private getAuditLogs$: Observable<Action> = this.action$
+        .pipe(ofType(AUDIT_LOGS_ACTIONS_V2.GET_LOGS_REQUEST),
+            switchMap((action: CustomActions) => {
+                return this.logService.getAuditLogs(action.payload.request, action.payload.page).pipe(
+                    map((response) => this.validateResponse<AuditLogsResponse, GetAuditLogsRequest>(response, {
+                        type: AUDIT_LOGS_ACTIONS_V2.GET_LOGS_RESPONSE_V2,
+                        payload: response
+                    }, true, {
+                        type: AUDIT_LOGS_ACTIONS_V2.GET_LOGS_RESPONSE_V2,
+                        payload: response
+                    })));
+            }));
+
     constructor(private action$: Actions,
         private _toasty: ToasterService,
         private store: Store<AppState>,
-        private _logService: LogsService) {
+        private logService: LogsService) {
     }
 
     public GetLogs(request: LogsRequest, page: number): CustomActions {
@@ -68,6 +82,12 @@ export class AuditLogsActions {
         };
     }
 
+    public getAuditLogs(request: GetAuditLogsRequest, page: number): CustomActions {
+        return {
+            type: AUDIT_LOGS_ACTIONS_V2.GET_LOGS_REQUEST,
+            payload: { request, page }
+        };
+    }
     private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
         if (response.status === 'error') {
             if (showToast) {
