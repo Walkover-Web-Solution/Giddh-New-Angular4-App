@@ -1,4 +1,4 @@
-import { take } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -20,7 +20,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.route.params.subscribe(response => {
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isNewVersion = false;
                 if (response.version && response.version && String(response.version).toLocaleLowerCase() === 'new') {

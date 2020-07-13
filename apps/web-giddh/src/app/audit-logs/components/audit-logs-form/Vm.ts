@@ -34,7 +34,7 @@ export class AuditLogsSidebarVM {
     /** Selected entry type */
     public selectedEntity: string = '';
     /** Selected user unique name */
-    public selectedUserUnq: string = '';
+    public selectedUserUniqueName: string = '';
     /** Selected group unique name */
     public selectedGroupUnq: string = '';
     /** Selected from date */
@@ -47,11 +47,11 @@ export class AuditLogsSidebarVM {
      *
      * @memberof AuditLogsSidebarVM
      */
-    public reset() {
+    public reset(): void {
         this.canManageCompany = false;
         this.selectedOperation = '';
         this.selectedEntity = '';
-        this.selectedUserUnq = '';
+        this.selectedUserUniqueName = '';
         this.selectedGroupUnq = '';
         this.selectedFromDate = moment().toDate();
         this.selectedToDate = moment().toDate();
