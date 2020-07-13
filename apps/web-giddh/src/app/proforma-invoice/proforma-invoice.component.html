@@ -1057,7 +1057,7 @@
                                         </div>
                                         <em *ngIf="selectedFileName && !isFileUploading" class="text-success">{{selectedFileName}}</em>
                                         <span class="text-success"><i class="fa fa-check"
-                                                                      *ngIf="selectedFileName"></i></span>
+                                                                      *ngIf="selectedFileName && !isFileUploading"></i></span>
                                         <input type="file" name="invoiceFile" id="invoiceFile"
                                                [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
                                                (uploadOutput)="onUploadOutput($event)"
