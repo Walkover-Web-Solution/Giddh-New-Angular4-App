@@ -494,7 +494,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.isAdjustedInvoicesWithAdvanceReceipt = false;
                     }
 
-                    if (this.vm.selectedLedger && this.vm.selectedLedger.advanceReceiptAdjustment && this.vm.selectedLedger.advanceReceiptAdjustment.adjustments && this.vm.selectedLedger.advanceReceiptAdjustment.adjustments.length) {
+                    if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments && this.vm.selectedLedger.voucherAdjustments.adjustments.length) {
                         this.isAdjustedWithAdvanceReceipt = true;
                         this.calculateInclusiveTaxesForAdvanceReceipts();
                     } else {
@@ -1586,10 +1586,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     * @memberof UpdateLedgerEntryPanelComponent
     */
     public adjustedReceiptsAmountChange(): void {
-        if (this.vm.selectedLedger && this.vm.selectedLedger.advanceReceiptAdjustment && this.vm.selectedLedger.advanceReceiptAdjustment.adjustments) {
+        if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
             let totalAmount: number = 0;
-            this.vm.selectedLedger.advanceReceiptAdjustment.adjustments.forEach(item => {
-                totalAmount = Number(totalAmount) + Number(item.dueAmount.amountForAccount);
+            this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(item => {
+                totalAmount = Number(totalAmount) + Number(item.balanceDue.amountForAccount);
             });
             this.totalAdjustedAmount = totalAmount;
             this.checkAdjustedAmountExceed(Number(totalAmount));
@@ -1604,9 +1604,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public calculateInclusiveTaxesForAdvanceReceipts(): void {
         let totalAmount: number = 0;
-        this.vm.selectedLedger.advanceReceiptAdjustment.adjustments.map(item => {
-            item.calculatedTaxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.dueAmount.amountForAccount, item.taxRate, 0);
-            totalAmount = Number(totalAmount) + Number(item.dueAmount.amountForAccount);
+        this.vm.selectedLedger.voucherAdjustments.adjustments.map(item => {
+            item.calculatedTaxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.balanceDue.amountForAccount, item.taxRate, 0);
+            totalAmount = Number(totalAmount) + Number(item.balanceDue.amountForAccount);
         });
         this.totalAdjustedAmount = totalAmount;
     }
