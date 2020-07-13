@@ -7,6 +7,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store/roots';
 import { AuditLogsSidebarVM } from '../audit-logs-form/Vm';
+import { GetAuditLogsRequest } from '../../../models/api-models/Logs';
 
 @Component({
     selector: 'audit-logs-table',  // <home></home>
@@ -25,6 +26,10 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
     public logsJSON: any;
     /** Audit log response list */
     public auditLogs$: Observable<any[]>;
+    /** Audit log request */
+    public auditLogsRequest$: Observable<GetAuditLogsRequest>;
+    /** To show hide field */
+    public isShowMultipleDataIndex: number = null;
 
 
     /**
@@ -38,7 +43,9 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
         this.totalPages$ = this.store.select(p => p.auditlog.totalPages);
         this.page$ = this.store.select(p => p.auditlog.currentPage);
         //
-         this.auditLogs$ = this.store.pipe(select( state=> state.auditlog.auditLogs), takeUntil(this.destroyed$));
+        this.auditLogs$ = this.store.pipe(select(state => state.auditlog.auditLogs), takeUntil(this.destroyed$));
+        this.auditLogsRequest$ = this.store.pipe(select(state => state.auditlog.auditLogsRequest), takeUntil(this.destroyed$));
+
     }
 
     public ngOnInit() {
@@ -58,16 +65,28 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
             this.store.dispatch(this._auditLogsActions.LoadMoreLogs(request, page));
         });
     }
-    public openAllAddress() {
+
+    /**
+     * To open hide field
+     *
+     * @param {number} index Index number
+     * @memberof AuditLogsTableComponent
+     */
+    public openAllAddress(index: number) {
         this.showSingleAdd = !this.showSingleAdd;
+        this.isShowMultipleDataIndex = index;
     }
 
     public getFilteredLogs() {
         let auditLogFormVM = new AuditLogsSidebarVM();
         this.logsJSON = auditLogFormVM.getJSON();
-        console.log('logsJSON====', this.logsJSON);
-        this.auditLogs$.subscribe(res=>{
-            console.log("store audit lg res:==", res);
-        })
+        // used for testing purpose ignire it for now we will remove it in next build
+        this.auditLogs$.subscribe(res => {
+            console.log("stored audit response:==", res);
+        });
+        // used for testing purpose ignire it for now we will remove it in next build
+        this.auditLogsRequest$.subscribe(res => {
+            console.log("store audit Request--", res);
+        });
     }
 }

@@ -15,6 +15,7 @@ export interface AuditLogsState {
     LoadMoreInProcess: boolean;
     currentLogsRequest?: LogsRequest;
     currentPage?: number;
+    auditLogsRequest?: GetAuditLogsRequest;
     auditLogs: any
 }
 
@@ -27,7 +28,8 @@ export const initialState: AuditLogsState = {
     LoadMoreInProcess: false,
     currentLogsRequest: null,
     currentPage: 0,
-    auditLogs: []
+    auditLogsRequest: null,
+    auditLogs: [],
 };
 
 export function auditLogsReducer(state = initialState, action: CustomActions): AuditLogsState {
@@ -84,8 +86,8 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
         }
 
         case AUDIT_LOGS_ACTIONS_V2.GET_LOGS_REQUEST: {
-               newState = _.cloneDeep(state);
-               newState.getLogInProcess = true;
+            newState = _.cloneDeep(state);
+            newState.getLogInProcess = true;
             return Object.assign({}, state, newState);
         }
         case AUDIT_LOGS_ACTIONS_V2.GET_LOGS_RESPONSE_V2: {
@@ -94,12 +96,12 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
             if (auditLogsData.status === 'success') {
                 newState = _.cloneDeep(state);
                 newState.currentPage = 1;
-                newState.currentLogsRequest = data.request;
+                newState.auditLogsRequest = auditLogsData.request;
                 newState.auditLogs = auditLogsData.body.results;
                 newState.getLogInProcess = false;
                 // newState.size = data.body.size;
                 newState.totalElements = auditLogsData.body.totalItems;
-                newState.totalPages = data.body.totalPages;
+                newState.totalPages = auditLogsData.body.totalPages;
                 return newState;
             }
             return Object.assign({}, state, { getLogInProcess: false });
