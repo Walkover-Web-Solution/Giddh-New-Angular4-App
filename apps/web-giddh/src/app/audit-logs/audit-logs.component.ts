@@ -29,7 +29,6 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
             } else {
                 this.isNewVersion = false;
             }
-            console.log('params:', response);
         });
         let companyUniqueName = null;
         this.store.select(c => c.session.companyUniqueName).pipe(take(1)).subscribe(s => companyUniqueName = s);

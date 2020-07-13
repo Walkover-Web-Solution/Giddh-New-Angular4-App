@@ -15,54 +15,60 @@ import { GetAuditLogsRequest } from '../../../models/api-models/Logs';
     styleUrls: ['audit-logs-table.component.scss']
 })
 export class AuditLogsTableComponent implements OnInit, OnDestroy {
-    public page$: Observable<number>;
-    public showSingleAdd: boolean = false;
+    /** To toggle multiple line show/hide for address*/
+    public showSingleAddress: boolean = false;
+    /** Total pages in audit log response*/
     public totalPages$: Observable<number>;
-    public totalElements$: Observable<number>;
-    public size$: Observable<number>;
-    public logs$: Observable<ILogsItem[]>;
+    /** To load more audit logs call in process observers */
     public loadMoreInProcess$: Observable<boolean>;
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public logsJSON: any;
+    /** Page count for audit log request */
+    public page$: Observable<number>;
     /** Audit log response list */
     public auditLogs$: Observable<any[]>;
     /** Audit log request */
     public auditLogsRequest$: Observable<GetAuditLogsRequest>;
     /** To show hide field */
     public isShowMultipleDataIndex: number = null;
+    /** To destroy observers */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-
-    /**
-     * TypeScript public modifiers
-     */
-    constructor(private store: Store<AppState>, private _auditLogsActions: AuditLogsActions) {
-        this.loadMoreInProcess$ = this.store.select(p => p.auditlog.LoadMoreInProcess).pipe(takeUntil(this.destroyed$));
-        this.logs$ = this.store.select(p => p.auditlog.logs);
-        this.size$ = this.store.select(p => p.auditlog.size);
-        this.totalElements$ = this.store.select(p => p.auditlog.totalElements);
-        this.totalPages$ = this.store.select(p => p.auditlog.totalPages);
-        this.page$ = this.store.select(p => p.auditlog.currentPage);
-        //
+    constructor(private store: Store<AppState>, private auditLogsActions: AuditLogsActions) {
+        this.loadMoreInProcess$ = this.store.pipe(select(state => state.auditlog.LoadMoreInProcess), takeUntil(this.destroyed$));
+        this.totalPages$ = this.store.pipe(select(state => state.auditlog.totalPages), takeUntil(this.destroyed$));
+        this.page$ = this.store.pipe(select(state => state.auditlog.currentPage), takeUntil(this.destroyed$));
         this.auditLogs$ = this.store.pipe(select(state => state.auditlog.auditLogs), takeUntil(this.destroyed$));
         this.auditLogsRequest$ = this.store.pipe(select(state => state.auditlog.auditLogsRequest), takeUntil(this.destroyed$));
-
     }
 
+    /**
+     *  Component lifecycle call stack 
+     *
+     * @memberof AuditLogsTableComponent
+     */
     public ngOnInit() {
-        //
         this.getFilteredLogs();
     }
 
+    /**
+     *  Component lifecycle call stack 
+     *
+     * @memberof AuditLogsTableComponent
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * To load more new data of audit logs
+     *
+     * @memberof AuditLogsTableComponent
+     */
     public loadMoreLogs() {
-        this.store.select(p => p.auditlog).pipe(take(1)).subscribe((r) => {
-            let request = _.cloneDeep(r.currentLogsRequest);
-            let page = r.currentPage + 1;
-            this.store.dispatch(this._auditLogsActions.LoadMoreLogs(request, page));
+        this.store.pipe(select(state => state.auditlog), take(1)).subscribe((response) => {
+            let request = _.cloneDeep(response.auditLogsRequest);
+            let page = response.currentPage + 1;
+            this.store.dispatch(this.auditLogsActions.getAuditLogs(request, page));
         });
     }
 
@@ -73,13 +79,16 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsTableComponent
      */
     public openAllAddress(index: number) {
-        this.showSingleAdd = !this.showSingleAdd;
+        this.showSingleAddress = !this.showSingleAddress;
         this.isShowMultipleDataIndex = index;
     }
 
+    /**
+     * To get filter log request response
+     *
+     * @memberof AuditLogsTableComponent
+     */
     public getFilteredLogs() {
-        let auditLogFormVM = new AuditLogsSidebarVM();
-        this.logsJSON = auditLogFormVM.getJSON();
         // used for testing purpose ignire it for now we will remove it in next build
         this.auditLogs$.subscribe(res => {
             console.log("stored audit response:==", res);

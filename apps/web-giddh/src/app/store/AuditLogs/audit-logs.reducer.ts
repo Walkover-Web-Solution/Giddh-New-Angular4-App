@@ -92,10 +92,9 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
         }
         case AUDIT_LOGS_ACTIONS_V2.GET_LOGS_RESPONSE_V2: {
             auditLogsData = action.payload as BaseResponse<AuditLogsResponse, GetAuditLogsRequest>;
-            console.log('auditLogsData response', auditLogsData);
             if (auditLogsData.status === 'success') {
                 newState = _.cloneDeep(state);
-                newState.currentPage = 1;
+                newState.currentPage = auditLogsData.body.page;
                 newState.auditLogsRequest = auditLogsData.request;
                 newState.auditLogs = auditLogsData.body.results;
                 newState.getLogInProcess = false;

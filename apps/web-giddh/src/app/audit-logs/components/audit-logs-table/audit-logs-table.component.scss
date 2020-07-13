@@ -1,8 +1,6 @@
-// .audit-log-viewport {
-//     height: 90vh;
-// }
+@import "../../../../assets/css/color.scss";
 .audit-log-detail {
-    border-top: 1px solid #d9d9d9;
+    border-top: 1px solid $gainsboro;
     padding: 8px 0;
     .user-basic-detail {
         align-items: center;

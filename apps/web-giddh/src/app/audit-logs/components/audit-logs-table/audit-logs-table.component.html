@@ -137,7 +137,7 @@
 
 
 
-                        <div class="single-address-row" *ngIf="index>0 && showSingleAdd && isShowMultipleDataIndex===parentIndex">
+                        <div class="single-address-row" *ngIf="index>0 && showSingleAddress && isShowMultipleDataIndex===parentIndex">
                             <div class="mr-05" *ngIf="item.address">
                                 <label>
                             Address:
@@ -166,7 +166,7 @@
                         </div>
                     </ng-container>
                 </ng-container>
-                <!-- <div class="single-address-row" *ngIf="showSingleAdd">
+                <!-- <div class="single-address-row" *ngIf="showSingleAddress">
                     <div class="mr-05">
                         <label>
                             Address:
@@ -195,8 +195,8 @@
                 </div> -->
             </div>
             <div class="angle-right-icon" (click)="openAllAddress(parentIndex)" *ngIf="log?.details?.addresses?.length>1">
-                <i class="icon-arrow-down" *ngIf="showSingleAdd"></i>
-                <i class="icon-arrow-down" *ngIf="!showSingleAdd"></i>
+                <i class="icon-arrow-down" *ngIf="showSingleAddress"></i>
+                <i class="icon-arrow-down" *ngIf="!showSingleAddress"></i>
             </div>
         </div>
     </div>
