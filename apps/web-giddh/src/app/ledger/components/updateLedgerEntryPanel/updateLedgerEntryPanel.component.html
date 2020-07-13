@@ -659,7 +659,7 @@
                             {{ vm.baseCurrencyDetails?.symbol}}{{totalAdjustedAmount | giddhCurrency}}
                         </p>
                         <div class="clearfix adjustment-field">
-                            <div class="row" *ngFor="let item of vm.selectedLedger?.advanceReceiptAdjustment?.adjustments; let entryIdx = index;">
+                            <div class="row" *ngFor="let item of vm.selectedLedger?.voucherAdjustments?.adjustments; let entryIdx = index;">
                                 <div class="col-md-4 col-sm-5 pr-05">
                                     <div class="form-group">
                                         <label>Adjustment Voucher<span class="text-danger">*</span>
@@ -671,10 +671,10 @@
                                     <div class="form-group">
                                         <label>Amount<span class="text-danger">*</span> <span class="text-light font-12 ml-05">(Inclusive
                             Tax)</span></label>
-                                        <input type="text" class="form-control mb-1" name="amountForAccount" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective [(ngModel)]="item.dueAmount.amountForAccount"
+                                        <input type="text" class="form-control mb-1" name="amountForAccount" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective [(ngModel)]="item.balanceDue.amountForAccount"
                                             disabled>
                                         <input type="text" class="form-control mb-1" name="amountForAccount" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedReceiptsAmountChange()" *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
-                                            [(ngModel)]="item.dueAmount.amountForAccount">
+                                            [(ngModel)]="item.balanceDue.amountForAccount">
                                     </div>
                                 </div>
                                 <div class="col-sm-2 pl-05">

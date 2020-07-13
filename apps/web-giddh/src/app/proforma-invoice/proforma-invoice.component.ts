@@ -85,7 +85,7 @@ import { PurchaseRecordService } from '../services/purchase-record.service';
 import { CommonActions } from '../actions/common.actions';
 import { PurchaseRecordActions } from '../actions/purchase-record/purchase-record.action';
 import { AdvanceReceiptAdjustmentComponent } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.component';
-import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal } from '../models/api-models/AdvanceReceiptsAdjust';
+import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../models/api-models/AdvanceReceiptsAdjust';
 import { CurrentCompanyState } from '../store/Company/company.reducer';
 import { CustomTemplateState } from '../store/Invoice/invoice.template.reducer';
 
@@ -397,7 +397,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** Inventory Settings */
     public inventorySettings: any;
     public companyCountryCode: string = '';
-    public advanceReceiptAdjustmentData: AdvanceReceiptAdjustment;
+    public advanceReceiptAdjustmentData: VoucherAdjustments;
     public adjustPaymentBalanceDueData: number = 0;
     public totalAdvanceReceiptsAdjustedAmount: number = 0;
     public isAdjustAmount = false;
@@ -473,7 +473,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private modalService: BsModalService
     ) {
         this.getInventorySettings();
-        this.advanceReceiptAdjustmentData = new AdvanceReceiptAdjustment();
+        this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
         this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
@@ -1012,12 +1012,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.passportNumber = '';
                         }
                     }
-                    //  If last invoice copied then no need to add advanceReceiptAdjustment as pre-fill ref:- G0-5554
+                    //  If last invoice copied then no need to add voucherAdjustments as pre-fill ref:- G0-5554
                     if (this.isSalesInvoice) {
-                        if (results[1] && results[1].advanceReceiptAdjustment && results[1].advanceReceiptAdjustment.adjustments && results[1].advanceReceiptAdjustment.adjustments.length && !this.isLastInvoiceCopied) {
+                        if (results[1] && results[1].voucherAdjustments && results[1].voucherAdjustments.adjustments && results[1].voucherAdjustments.adjustments.length && !this.isLastInvoiceCopied) {
                             this.isInvoiceAdjustedWithAdvanceReceipts = true;
-                            this.calculateAdjustedVoucherTotal(results[1].advanceReceiptAdjustment.adjustments);
-                            this.advanceReceiptAdjustmentData = results[1].advanceReceiptAdjustment;
+                            this.calculateAdjustedVoucherTotal(results[1].voucherAdjustments.adjustments);
+                            this.advanceReceiptAdjustmentData = results[1].voucherAdjustments;
                         } else {
                             this.isInvoiceAdjustedWithAdvanceReceipts = false;
                         }
@@ -1875,15 +1875,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             /** Advance receipts adjustment for sales invoice*/
             if (this.isSalesInvoice && this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
                 if (this.advanceReceiptAdjustmentData.adjustments.length) {
-                    requestObject.advanceReceiptAdjustment = this.advanceReceiptAdjustmentData;
-                    requestObject.advanceReceiptAdjustment.adjustments.map(item => {
+                    requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
+                    requestObject.voucherAdjustments.adjustments.map(item => {
                         if (item && item.voucherDate) {
                             item.voucherDate = item.voucherDate.replace(/\//g, '-');
                         }
                     });
                 } else {
                     this.advanceReceiptAdjustmentData.adjustments = [];
-                    requestObject.advanceReceiptAdjustment = this.advanceReceiptAdjustmentData;
+                    requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
                 }
 
             }
@@ -3125,11 +3125,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 /** Advance receipts adjustment for sales invoice*/
                 if (this.isSalesInvoice) {
                     if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments && this.advanceReceiptAdjustmentData.adjustments.length) {
-                        requestObject.advanceReceiptAdjustment = this.advanceReceiptAdjustmentData;
+                        const adjustments = cloneDeep(this.advanceReceiptAdjustmentData.adjustments);
+                        adjustments.forEach(adjustment => {
+                            adjustment.adjustmentAmount = adjustment.balanceDue;
+                            delete adjustment.balanceDue;
+                        })
+                        requestObject.voucherAdjustments = {
+                            adjustments
+                        };
                     } else {
                         if (this.advanceReceiptAdjustmentData) {
                             this.advanceReceiptAdjustmentData.adjustments = [];
-                            requestObject.advanceReceiptAdjustment = this.advanceReceiptAdjustmentData;
+                            requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
                         }
                     }
                 }
@@ -4756,10 +4763,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /**
      * To get all advance adjusted data
      *
-     * @param {{ adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
+     * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
      * @memberof ProformaInvoiceComponent
      */
-    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }) {
+    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }) {
 
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
         // this.invFormData.voucherDetails.balanceDue = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
@@ -4789,7 +4796,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let totalAmount = 0;
             if (adjustments) {
                 adjustments.forEach((item) => {
-                    totalAmount += Number(item.dueAmount ? item.dueAmount.amountForAccount : 0);
+                    totalAmount += Number(item.balanceDue ? item.balanceDue.amountForAccount : 0);
                 });
             }
             this.totalAdvanceReceiptsAdjustedAmount = totalAmount;

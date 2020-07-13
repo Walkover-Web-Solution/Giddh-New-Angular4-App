@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, Input, ViewChild, ElementRef } from '@angular/core';
-import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal, AdvanceReceiptRequest, Adjustment } from '../../models/api-models/AdvanceReceiptsAdjust';
+import { VoucherAdjustments, AdjustAdvancePaymentModal, AdvanceReceiptRequest, Adjustment } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
 import { SalesService } from '../../services/sales.service';
@@ -62,20 +62,20 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         tdsTotal: 0,
     }
 
-    public adjustVoucherForm: AdvanceReceiptAdjustment;
+    public adjustVoucherForm: VoucherAdjustments;
     public getAllAdvanceReceiptsRequest: AdvanceReceiptRequest = {
         accountUniqueName: '',
         invoiceDate: ''
     };
-    public advanceReceiptAdjustmentPreUpdatedData: AdvanceReceiptAdjustment;
+    public advanceReceiptAdjustmentPreUpdatedData: VoucherAdjustments;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     @Input() public invoiceFormDetails;
     @Input() public isUpdateMode;
     @Input() public depositAmount = 0;
     // To use pre adjusted data which was adjusted earlier or in other trasaction by user
-    @Input() public advanceReceiptAdjustmentUpdatedData: AdvanceReceiptAdjustment;
+    @Input() public advanceReceiptAdjustmentUpdatedData: VoucherAdjustments;
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @Output() public submitClicked: EventEmitter<{ adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
+    @Output() public submitClicked: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
 
     constructor(private store: Store<AppState>, private salesService: SalesService, private toaster: ToasterService) {
 
@@ -87,7 +87,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public ngOnInit() {
-        this.adjustVoucherForm = new AdvanceReceiptAdjustment();
+        this.adjustVoucherForm = new VoucherAdjustments();
         this.onClear();
         if (this.advanceReceiptAdjustmentUpdatedData) {
             this.advanceReceiptAdjustmentPreUpdatedData = cloneDeep(this.advanceReceiptAdjustmentUpdatedData);
@@ -160,7 +160,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             adjustments: [
                 {
                     voucherNumber: '',
-                    dueAmount: {
+                    balanceDue: {
                         amountForAccount: 0,
                         amountForCompany: 0
                     },
@@ -380,16 +380,16 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         });
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
             this.adjustVoucherForm.adjustments.forEach((item, key) => {
-                if (!item.voucherNumber && item.dueAmount.amountForAccount) {
+                if (!item.voucherNumber && item.balanceDue.amountForAccount) {
                     isValid = false;
                     form.controls[`voucherName${key}`].markAsTouched();
-                } else if (item.voucherNumber && !item.dueAmount.amountForAccount) {
+                } else if (item.voucherNumber && !item.balanceDue.amountForAccount) {
                     isValid = false;
                     form.controls[`amount${key}`].markAsTouched();
                 }
             });
             this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.filter(item => {
-                return item.voucherNumber !== '' || item.dueAmount.amountForAccount > 0;
+                return item.voucherNumber !== '' || item.balanceDue.amountForAccount > 0;
             });
         }
         if (this.isTaxDeducted) {
@@ -510,21 +510,21 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                 return item.voucherNumber === entryData.voucherNumber;
             });
         }
-        if (selectedVoucherOptions && selectedVoucherPreAdjusted && selectedVoucherOptions.additional.dueAmount && selectedVoucherPreAdjusted.dueAmount) {
-            excessAmount = selectedVoucherOptions.additional.dueAmount.amountForAccount + selectedVoucherPreAdjusted.dueAmount.amountForAccount;
+        if (selectedVoucherOptions && selectedVoucherPreAdjusted && selectedVoucherOptions.additional.balanceDue && selectedVoucherPreAdjusted.balanceDue) {
+            excessAmount = selectedVoucherOptions.additional.balanceDue.amountForAccount + selectedVoucherPreAdjusted.balanceDue.amountForAccount;
         } else {
-            if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.dueAmount) {
-                excessAmount = selectedVoucherOptions.additional.dueAmount.amountForAccount;
+            if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.balanceDue) {
+                excessAmount = selectedVoucherOptions.additional.balanceDue.amountForAccount;
             }
         }
         // To restrict user to enter amount less or equal selected voucher amount
-        if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.dueAmount && this.adjustVoucherForm.adjustments[index].dueAmount.amountForAccount > excessAmount) {
-            this.adjustVoucherForm.adjustments[index].dueAmount.amountForAccount = cloneDeep(excessAmount);
-            entry.dueAmount.amountForAccount = excessAmount;
+        if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.balanceDue && this.adjustVoucherForm.adjustments[index].balanceDue.amountForAccount > excessAmount) {
+            this.adjustVoucherForm.adjustments[index].balanceDue.amountForAccount = cloneDeep(excessAmount);
+            entry.balanceDue.amountForAccount = excessAmount;
             this.adjustVoucherForm.adjustments = cloneDeep(this.adjustVoucherForm.adjustments);
         }
-        if (entry && entry.taxRate && entry.dueAmount.amountForAccount) {
-            let taxAmount = this.calculateInclusiveTaxAmount(entry.dueAmount.amountForAccount, entry.taxRate);
+        if (entry && entry.taxRate && entry.balanceDue.amountForAccount) {
+            let taxAmount = this.calculateInclusiveTaxAmount(entry.balanceDue.amountForAccount, entry.taxRate);
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = Number(taxAmount);
         } else {
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = 0.0;
@@ -543,8 +543,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails.balanceDue;
             let totalAmount: number = 0;
             this.adjustVoucherForm.adjustments.forEach(item => {
-                if (item && item.dueAmount && item.dueAmount.amountForAccount) {
-                    totalAmount += Number(item.dueAmount.amountForAccount);
+                if (item && item.balanceDue && item.balanceDue.amountForAccount) {
+                    totalAmount += Number(item.balanceDue.amountForAccount);
                 }
             });
             // this.adjustPayment.balanceDue = Number(this.adjustPayment.grandTotal.) - Number(totalAmount);
@@ -575,7 +575,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     public checkValidations(): void {
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
             this.adjustVoucherForm.adjustments.forEach((item, key) => {
-                if ((!item.voucherNumber && item.dueAmount.amountForAccount) || (item.voucherNumber && !item.dueAmount.amountForAccount) || (!item.voucherNumber && !item.dueAmount.amountForAccount && key>0)) {
+                if ((!item.voucherNumber && item.balanceDue.amountForAccount) || (item.voucherNumber && !item.balanceDue.amountForAccount) || (!item.voucherNumber && !item.balanceDue.amountForAccount && key>0)) {
                     this.isInvalidForm = true;
                 } else {
                     this.isInvalidForm = false;
