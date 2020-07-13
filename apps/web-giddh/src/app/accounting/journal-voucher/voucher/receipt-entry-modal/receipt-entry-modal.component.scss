@@ -17,23 +17,42 @@
         font-size: 14px;
         flex-direction: column;
         min-height: 200px;
+
+            .form-fields{
+                &:first-child{
+                .single-field {
+                    label{
+                        display: flex;
+                    }
+                    .icon-arrow-down, .icon-cross{
+                        top: 36px;
+                    }
+                }
+            }
+        }
         .form-fields{
             display: flex;
             align-items: center;
             justify-content: space-between;
+            margin-bottom: 15px;
+            .receipt-type, .select-tax{
+                min-width: 180px;
+            }
             .single-field {
                 margin-right: 15px;
                 label{
                     margin-bottom: 5px;
+                    display: none;
                 }
                 &.set-width{
-                    width: 30%;
+                    width: 100%;
+                    max-width: 375px;
                 }
-                .icon-arrow-down{
+                .icon-arrow-down, .icon-cross{
                     font-size: 14px;
                     position: absolute;
                     right: 5px;
-                    top: 36px;
+                    top: 12px;
                     color: $nero;
                 }
             }
