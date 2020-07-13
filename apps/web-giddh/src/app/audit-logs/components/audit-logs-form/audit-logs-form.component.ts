@@ -24,11 +24,7 @@ import { IForceClear } from '../../../models/api-models/Sales';
 @Component({
     selector: 'audit-logs-form',
     templateUrl: './audit-logs-form.component.html',
-    styles: [`
-    .ps {
-      overflow: visible !important
-    }
-  `]
+    styleUrls: ['audit-logs-form.component.scss']
 })
 export class AuditLogsFormComponent implements OnInit, OnDestroy {
     /** Audit log form object */
@@ -106,12 +102,12 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
             }
         });
         let loginUser: UserDetails = null;
-        this.auditLogFormVM.user$.pipe(take(1)).subscribe((c) => loginUser = c);
+        this.auditLogFormVM.user$.pipe(take(1)).subscribe((response) => loginUser = response);
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let users: IOption[] = [];
-                data.body.map((d) => {
-                    users.push({ label: d.userName, value: d.userUniqueName, additional: d });
+                data.body.map((item) => {
+                    users.push({ label: item.userName, value: item.userUniqueName, additional: item });
                 });
                 this.auditLogFormVM.canManageCompany = true;
                 this.auditLogFormVM.users$ = observableOf(users);
@@ -121,15 +117,20 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         });
     }
 
-    public ngOnInit() {
+    /**
+     * Component lifecycle hook
+     *
+     * @memberof AuditLogsFormComponent
+     */
+    public ngOnInit(): void {
         // To get audit log form filter
         this.getFormFilter();
         this.auditLogFormVM.groupsList$.subscribe(data => {
             if (data && data.length) {
                 let accountList = this.flattenGroup(data, []);
                 let groups: IOption[] = [];
-                accountList.map((d: any) => {
-                    groups.push({ label: d.name, value: d.uniqueName });
+                accountList.map((item: any) => {
+                    groups.push({ label: item.name, value: item.uniqueName });
                 });
                 this.auditLogFormVM.groups$ = observableOf(groups);
             }
@@ -162,7 +163,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      * @returns
      * @memberof AuditLogsFormComponent
      */
-    public flattenGroup(rawList: any[], parents: any[] = []) {
+    public flattenGroup(rawList: any[], parents: any[] = []): any {
         let listOfFlattenGroup;
         listOfFlattenGroup = _.map(rawList, (listItem) => {
             let newParents;
@@ -185,6 +186,11 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         return _.flatten(listOfFlattenGroup);
     }
 
+    /**
+     *Component lifecycle hook
+     *
+     * @memberof AuditLogsFormComponent
+     */
     public ngOnDestroy() {
         this.auditLogFormVM.reset();
         this.store.dispatch(this.auditLogsActions.ResetLogs());
@@ -224,7 +230,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      * @returns
      * @memberof AuditLogsFormComponent
      */
-    public genralCustomFilter(term: string, item: IOption): any {
+    public generalCustomFilter(term: string, item: IOption): any {
         return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
     }
 
@@ -257,8 +263,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                     });
                 }
             }
-
-        })
+        });
     }
 
     /**
@@ -309,7 +314,6 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         this.forceClearEntity$ = observableOf({ status: true });
         this.forceClearGroup$ = observableOf({ status: true });
         this.forceClearAccount$ = observableOf({ status: true });
-        this.forceClearGroup$ = observableOf({ status: true });
         this.forceClearUser$ = observableOf({ status: true });
         this.forceClearOperations$ = observableOf({ status: true });
     }
@@ -387,7 +391,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         getAuditLogsRequest.toDate = this.toDate;
         return getAuditLogsRequest;
         // Note:- *commenting* we will use in next build
-        // getAuditLogsRequest.userUniqueName = this.auditLogFormVM.selectedUserUnq;
+        // getAuditLogsRequest.userUniqueName = this.auditLogFormVM.selectedUserUniqueName;
         // getAuditLogsRequest.accountUniqueName = this.auditLogFormVM.selectedAccountUnq;
         // getAuditLogsRequest.groupUniqueName = this.auditLogFormVM.selectedGroupUnq;
     }
