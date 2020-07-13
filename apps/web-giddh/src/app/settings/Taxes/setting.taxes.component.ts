@@ -169,8 +169,10 @@ export class SettingTaxesComponent implements OnInit {
         this.taxConfirmationModel.hide();
         if (userResponse) {
             if (this.confirmationFor === 'delete' && this.newTaxObj.taxType === 'others') {
-                let linkedAccountUniqueName = this.newTaxObj.accounts[0].uniqueName;
-                this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj.uniqueName, linkedAccountUniqueName));
+                if (this.newTaxObj && this.newTaxObj.accounts && this.newTaxObj.accounts.length) {
+                    let linkedAccountUniqueName = this.newTaxObj.accounts[0].uniqueName;
+                    this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj.uniqueName, linkedAccountUniqueName));
+                }
             } else if (this.confirmationFor === 'delete') {
                 this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj.uniqueName));
             } else if (this.confirmationFor === 'edit') {

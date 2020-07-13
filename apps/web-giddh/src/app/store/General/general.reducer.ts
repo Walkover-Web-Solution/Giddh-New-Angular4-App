@@ -371,7 +371,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         }
         case GENERAL_ACTIONS.UPDATE_CURRENT_LIABILITIES: {
             let flattenAccountsArray = [...state.flattenAccounts];
-            flattenAccountsArray = flattenAccountsArray.filter(f => f.uniqueName !== action.payload)
+            flattenAccountsArray = flattenAccountsArray.filter(account => account.uniqueName !== action.payload)
             return {
                 ...state,
                 flattenAccounts: flattenAccountsArray
