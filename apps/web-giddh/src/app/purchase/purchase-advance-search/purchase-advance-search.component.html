@@ -12,7 +12,7 @@
                     </div>
                     <div class="col-sm-8 col-xs-12">
                         <div>
-                            <div style="padding: 0">
+                            <div>
                                 <input type="text" class="form-control" (click)="showGiddhDatepicker($event)"
                                     [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" />
                             </div>
@@ -25,13 +25,13 @@
                     </div>
                     <div class="col-sm-8 col-xs-12">
                         <div class="total-amount">
-                            <div class="col-sm-8 col-xs-6" style="padding-left: 0">
+                            <div class="col-sm-8 col-xs-6 pl-0">
                                 <sh-select placeholder="Select Range" name="grandTotal" [options]="filtersForAmount"
                                     [(ngModel)]="purchaseOrderPostRequest.grandTotalOperation" [ItemHeight]="33"
                                     [defaultValue]="selectedGrandTotalOperator">
                                 </sh-select>
                             </div>
-                            <div class="col-sm-4 col-xs-6" style="padding: 0">
+                            <div class="col-sm-4 col-xs-6">
                                 <input class="form-control" placeholder="00" type="tel" name="grandTotal"
                                     [(ngModel)]="purchaseOrderPostRequest.grandTotal" decimalDigitsDirective
                                     [DecimalPlaces]="4">
