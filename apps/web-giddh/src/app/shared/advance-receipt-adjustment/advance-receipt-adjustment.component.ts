@@ -11,6 +11,7 @@ import { ReplaySubject } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { ToasterService } from '../../services/toaster.service';
 import { cloneDeep } from '../../lodash-optimized';
+import { AdjustedVoucherType } from '../../app.constant';
 
 
 @Component({
@@ -37,7 +38,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     public inputMaskFormat: string = '';
     public isInvalidForm: boolean = false;
     /** Message for toaster when due amount get negative  */
-    public exceedDueErrorMessage: string = 'The adjusted amount of the linked invoice\'s is more than this receipt due amount';
+    public exceedDueErrorMessage: string = 'The adjusted amount of the linked invoice is more than this receipt due amount';
     /** Exceed Amount from invoice amount after adjustment */
     public exceedDueAmount: number = 0;
 
@@ -74,6 +75,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     @Input() public depositAmount = 0;
     // To use pre adjusted data which was adjusted earlier or in other trasaction by user
     @Input() public advanceReceiptAdjustmentUpdatedData: VoucherAdjustments;
+    /** Stores the type of voucher adjustment */
+    @Input() public adjustedVoucherType: AdjustedVoucherType;
+
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public submitClicked: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
 
@@ -106,9 +110,35 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.invoiceFormDetails.voucherDetails.tdsTotal = this.invoiceFormDetails.voucherDetails.tdsTotal || 0;
             this.assignVoucherDetails();
         }
-        this.getAllAdvanceReceipts();
+        console.log('Invoice form details: ', this.invoiceFormDetails);
+        if (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt) {
+            const requestObject = {
+                accountUniqueNames: [this.invoiceFormDetails.voucherDetails.customerUniquename, this.invoiceFormDetails.activeAccountUniqueName],
+                voucherType: 'receipt'
+            }
+            this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate).subscribe((response) => {
+                console.log('Response received: ', response);
+                if (response && response.body) {
+                    this.allAdvanceReceiptResponse = response.body.results
+                    this.adjustVoucherOptions = [];
+                    if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
+                        this.allAdvanceReceiptResponse.forEach(item => {
+                            if (item) {
+                                item.voucherDate = item.voucherDate.replace(/-/g, '/');
+                                this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                                this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                            }
+                        });
+                    } else {
+                        this.toaster.warningToast("There is no advanced receipt for adjustment.");
+                    }
+                }
+            });
+        } else {
+            this.getAllAdvanceReceipts();
+        }
         if (this.isUpdateMode) {
-            this.calculateBalanceDue()
+            this.calculateBalanceDue();
         }
         this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
             if (obj && obj.taxes) {
@@ -499,6 +529,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public calculateTax(entryData: Adjustment, index: number): void {
+        entryData.balanceDue.amountForCompany = entryData.balanceDue.amountForAccount;
         let entry: Adjustment = cloneDeep(entryData);
         // Object of selected voucher
         let selectedVoucherOptions;

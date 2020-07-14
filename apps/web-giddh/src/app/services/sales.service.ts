@@ -182,4 +182,20 @@ export class SalesService {
                 catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
     }
 
+    /**
+     * This will download/JSON to show the columnar report
+     *
+     * @param {any} model voucher type & account unique name
+     * @param {string} date Date in GIDDH_DATE_FORMAT
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof LedgerService
+     */
+    public getInvoiceList(model: any, date: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.post(this.config.apiUrl + SALES_API_V2.GET_VOUCHER_INVOICE_LIST
+            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            .replace(':voucherDate', encodeURIComponent(date)), model
+        ).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error, model)));
+    }
+
 }
