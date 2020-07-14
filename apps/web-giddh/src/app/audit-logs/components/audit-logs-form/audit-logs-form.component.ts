@@ -80,7 +80,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         private auditLogsActions: AuditLogsActions,
         private bsConfig: BsDatepickerConfig,
         private modalService: BsModalService,
-        private audotLogsService: LogsService,
+        private auditLogsService: LogsService,
         private generalService: GeneralService) {
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -91,7 +91,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         this.auditLogFormVM = new AuditLogsSidebarVM();
         this.auditLogFormVM.getLogsInprocess$ = this.store.pipe(select(state => state.auditlog.getLogInProcess), takeUntil(this.destroyed$));
         this.auditLogFormVM.groupsList$ = this.store.pipe(select(state => state.general.groupswithaccounts), takeUntil(this.destroyed$));
-        this.auditLogFormVM.user$ = this.store.pipe(select(state => { if (state.session.user) { return state.session.user.user; } }), takeUntil(this.destroyed$));
+        this.auditLogFormVM.user$ = this.store.pipe(select(state => { if (state.session.user) { return state.session.user.user; } }), take(1));
         this.accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let accounts: IOption[] = [];
@@ -203,9 +203,9 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      *
      * @memberof AuditLogsFormComponent
      */
-    public getLogfilters(): void {
+    public getLogFilters(): void {
         let getAuditLogsRequest: GetAuditLogsRequest = new GetAuditLogsRequest();
-        getAuditLogsRequest = _.cloneDeep(this.prepareAuditlogFormRequest());
+        getAuditLogsRequest = _.cloneDeep(this.prepareAuditLogFormRequest());
         this.store.dispatch(this.auditLogsActions.getAuditLogs(getAuditLogsRequest, 1));
     }
 
@@ -252,7 +252,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsFormComponent
      */
     public getFormFilter(): void {
-        this.audotLogsService.getAuditLogFormFilters().subscribe((response) => {
+        this.auditLogsService.getAuditLogFormFilters().subscribe((response) => {
             if (response && response.status === 'success') {
                 if (response.body) {
                     this.auditLogFilterForm = response.body;
@@ -383,7 +383,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      * @returns {GetAuditLogsRequest} Audit log request model
      * @memberof AuditLogsFormComponent
      */
-    public prepareAuditlogFormRequest(): GetAuditLogsRequest {
+    public prepareAuditLogFormRequest(): GetAuditLogsRequest {
         let getAuditLogsRequest: GetAuditLogsRequest = new GetAuditLogsRequest();
         getAuditLogsRequest.entity = this.auditLogFormVM.selectedEntity;
         getAuditLogsRequest.operation = this.auditLogFormVM.selectedOperation;

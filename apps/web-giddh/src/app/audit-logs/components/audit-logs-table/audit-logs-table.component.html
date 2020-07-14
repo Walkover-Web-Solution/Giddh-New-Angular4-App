@@ -3,14 +3,14 @@
 <!--  -->
 <section class="audit-log" *ngFor="let log of (this.auditLogs$ | async); let parentIndex = index">
     <h1>{{log.operationType}}
-        <span *ngIf="log &&log?.details && log?.details?.name && log.operationType!='MOVE' && log.operationType != 'MERGE' && log?.details?.uniqueName != null"> - {{log.details.name}}({{log.details.uniqueName}})</span>
+        <span *ngIf="log &&log?.details && log?.details?.name && log?.operationType!='MOVE' && log?.operationType != 'MERGE' && log?.details?.uniqueName != null"> - {{log.details.name}}({{log.details.uniqueName}})</span>
         <ng-container *ngIf="log && log?.details && log?.details?.type && log.operationType==='MERGE'">
             <span *ngIf="log?.details?.type==='TARGET' && log?.details?.target"> - {{log?.details?.target?.name}}({{log?.details?.target.uniqueName}})</span>
             <ng-container *ngFor="let source of log?.details?.source">
-                <span *ngIf="log?.details?.type==='SOURCE' && log?.details?.source"> - {{source.name}}({{source.uniqueName}})|</span>
+                <span *ngIf="log?.details?.type==='SOURCE' && log?.details?.source"> - {{source?.name}}({{source?.uniqueName}})|</span>
             </ng-container>
         </ng-container>
-        <ng-container *ngIf="log.operationType==='MOVE'">
+        <ng-container *ngIf="log?.operationType==='MOVE'">
             <span *ngIf="log && log?.details && log?.details?.entity"> - {{log?.details?.entity.name}}({{log?.details?.entity.uniqueName}})</span>
         </ng-container>
     </h1>
@@ -22,27 +22,27 @@
             </div>
             <div>
                 <label>Date:</label>
-                <p>{{log.dateString}}</p>
+                <p>{{log?.dateString}}</p>
             </div>
             <div>
                 <label>User:</label>
-                <p>{{log?.user.name}}</p>
+                <p>{{log?.user?.name}}</p>
             </div>
             <div>
                 <label>Email:</label>
-                <p>{{log?.user.email}}</p>
+                <p>{{log?.user?.email}}</p>
             </div>
             <div>
                 <label>Mobile No.:</label>
-                <p>{{log?.user.mobile}}</p>
+                <p>{{log?.user?.mobile}}</p>
             </div>
             <div *ngIf="log && log?.details && log?.details?.group && log?.details?.group?.name != null">
                 <label>Group:</label>
-                <p>{{log?.details?.group.name}}</p>
+                <p>{{log?.details?.group?.name}}</p>
             </div>
             <div *ngIf="log && log?.details && log?.operationType !=='MERGE' && log?.details?.source != undefined">
                 <label>Source:</label>
-                <p>{{log?.details?.source.name}}
+                <p>{{log?.details?.source?.name}}
                 </p>
             </div>
             <div *ngIf="log && log?.details && log?.operationType ==='MERGE' && log?.details?.source != undefined && log?.details?.source.length">
@@ -91,7 +91,7 @@
         <div class="address-row-wrapper d-flex">
             <div class="address-row mt-05">
                 <div class="single-address-row" *ngIf="log && log?.details && log?.details?.bankDetails && log?.details?.bankDetails.length">
-                    <ng-container *ngFor="let bank of log.details.bankDetails; let bankIndex = index">
+                    <ng-container *ngFor="let bank of log?.details?.bankDetails; let bankIndex = index">
                         <div class="mr-05">
                             <label>
                             Bank Name:
@@ -113,8 +113,8 @@
                         </div>
                     </ng-container>
                 </div>
-                <ng-container *ngIf="log && log.details && log.details.addresses && log.details.addresses.length">
-                    <ng-container *ngFor="let item of log.details.addresses; let index = index">
+                <ng-container *ngIf="log && log?.details && log?.details?.addresses && log?.details?.addresses.length">
+                    <ng-container *ngFor="let item of log?.details?.addresses; let index = index">
                         <div class="single-address-row" *ngIf="index===0">
                             <div class="mr-05" *ngIf="item.address">
                                 <label>
@@ -146,7 +146,7 @@
 
 
                         <div class="single-address-row" *ngIf="index>0 && showSingleAddress && isShowMultipleDataIndex===parentIndex">
-                            <div class="mr-05" *ngIf="item.address">
+                            <div class="mr-05" *ngIf="item?.address">
                                 <label>
                             Address:
                         </label>
@@ -157,7 +157,7 @@
                                 <label>
                             State:
                         </label>
-                                <p class="ml-05">{{item?.state.name}}</p>
+                                <p class="ml-05">{{item?.state?.name}}</p>
                             </div>
                             <div class="mr-05">
                                 <label>
@@ -169,7 +169,7 @@
                                 <label>
                             Country:
                         </label>
-                                <p class="ml-05">{{item?.country.countryName}}</p>
+                                <p class="ml-05">{{item?.country?.countryName}}</p>
                             </div>
                         </div>
                     </ng-container>
@@ -209,7 +209,7 @@
         </div>
     </div>
 
-    <div class="mrT" *ngIf="log.log != null && log.log.transactions != undefined && log.log.transactions.length > 0">
+    <div class="mrT" *ngIf="log?.log != null && log?.log?.transactions != undefined && log?.log?.transactions.length > 0">
         <table class="table table-bordered ">
             <thead>
                 <tr>
@@ -221,12 +221,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let transaction of log.log.transactions; let i = index">
+                <tr *ngFor="let transaction of log?.log?.transactions; let i = index">
                     <td>{{i + 1}}</td>
-                    <td>{{log.log.entryDate}}</td>
-                    <td>{{transaction.particular.name}} ({{transaction.particular.uniqueName}})</td>
-                    <td>{{transaction.amount| number:'1.2-2'}}</td>
-                    <td>{{transaction.type}}</td>
+                    <td>{{log?.log?.entryDate}}</td>
+                    <td>{{transaction?.particular?.name}} ({{transaction?.particular?.uniqueName}})</td>
+                    <td>{{transaction?.amount| number:'1.2-2'}}</td>
+                    <td>{{transaction?.type}}</td>
                 </tr>
             </tbody>
         </table>
