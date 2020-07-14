@@ -876,7 +876,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="trash-icon-delete" (click)="removeTransaction(entryIdx)">
+                                        <div class="trash-icon-delete cp" (click)="removeTransaction(entryIdx)">
                                             <span class="cp">
                                                 <i class="icon-trash" aria-hidden="true"></i>
                                             </span>
@@ -1245,7 +1245,7 @@
 
                                                 <div class="row">
 
-                                                    <div class="form-group col-xs-4">
+                                                    <div class="form-group col-xs-4 mb-0">
                                                         <input type="text" #shippingDate="ngModel"
                                                             [placeholder]="templatePlaceholder?.shippedDateLabel"
                                                             bsDatepicker name="shippingDate"
@@ -1259,14 +1259,14 @@
                                                         </p>
                                                     </div>
 
-                                                    <div class="form-group col-xs-4">
+                                                    <div class="form-group col-xs-4 mb-0">
                                                         <input type="text" name="shippedVia"
                                                             [(ngModel)]="invFormData.templateDetails.other.shippedVia"
                                                             class="form-control"
                                                             [placeholder]="templatePlaceholder?.shippedViaLabel || 'Ship Via'" />
                                                     </div>
 
-                                                    <div class="form-group col-xs-4">
+                                                    <div class="form-group col-xs-4 mb-0">
                                                         <input type="text" name="trackingNumber"
                                                             [(ngModel)]="invFormData.templateDetails.other.trackingNumber"
                                                             class="form-control"
@@ -1277,21 +1277,21 @@
 
                                                 <div class="row">
 
-                                                    <div class="form-group col-xs-4">
+                                                    <div class="form-group col-xs-4 mb-0">
                                                         <input type="text" name="customField1"
                                                             [(ngModel)]="invFormData.templateDetails.other.customField1"
                                                             class="form-control"
                                                             [placeholder]="templatePlaceholder?.customField1Label || 'Field 1'" />
                                                     </div>
 
-                                                    <div class="form-group col-xs-4">
+                                                    <div class="form-group col-xs-4 mb-0">
                                                         <input type="text" name="customField2"
                                                             [(ngModel)]="invFormData.templateDetails.other.customField2"
                                                             class="form-control"
                                                             [placeholder]="templatePlaceholder?.customField2Label || 'Field 2'" />
                                                     </div>
 
-                                                    <div class="form-group col-xs-4">
+                                                    <div class="form-group col-xs-4 mb-0">
                                                         <input type="text" name="customField3"
                                                             [(ngModel)]="invFormData.templateDetails.other.customField3"
                                                             class="form-control"
@@ -1450,7 +1450,7 @@
                                                 <div class="btn-group">
 
                                                     <div (click)="clickedInside($event)" id="deposit-dropdown"
-                                                        class="form-group pd1">
+                                                        class="form-group pd1 mb-0">
                                                         <p>Deposit</p>
                                                         <ul>
                                                             <ng-container
@@ -1504,7 +1504,7 @@
                                                                             </div>
                                                                         </div>
 
-                                                                        <label class="pull-right">Adjust Amount</label>
+                                                                        <label class="pull-left pt-1">Adjust Amount</label>
                                                                     </div>
                                                                 </li>
                                                             </ng-container>
@@ -1537,7 +1537,7 @@
                                                                                 </a>
                                                                             </ng-template>
                                                                         </sh-select>
-                                                                        <label class="pull-right">Payment Mode</label>
+                                                                        <label class="pull-left pt-1">Payment Mode</label>
                                                                     </div>
                                                                 </li>
 
@@ -1549,7 +1549,7 @@
                                                                         [prefix]="depositCurrSymbol"
                                                                         [suffix]="selectedSuffixForCurrency"
                                                                         [mask]="inputMaskFormat" />
-                                                                    <label class="pull-right">Amount</label>
+                                                                    <label class="pull-left pt-1">Amount</label>
                                                                 </li>
 
                                                                 <li class="clearfix mrT1" *ngIf="isCashInvoice">
@@ -1558,7 +1558,7 @@
                                                                         <span
                                                                             *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span> {{invFormData.voucherDetails.balanceDue
                                                 | giddhCurrency}}</span>
-                                                                    <label class="pull-right">Amount</label>
+                                                                    <label class="pull-left pt-1">Amount</label>
                                                                 </li>
 
                                                                 <li class="clearfix mrT1 biggerDollar"
@@ -1574,7 +1574,7 @@
                                                                             {{invFormData.voucherDetails.balanceDue | giddhCurrency }}
                                                                         </ng-container>
                                                                     </strong>
-                                                                    <strong class="pull-right">Balance Due</strong>
+                                                                    <strong class="pull-left">Balance Due</strong>
                                                                 </li>
                                                             </ng-container>
                                                         </ul>
