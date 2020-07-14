@@ -245,17 +245,17 @@
                     </div>
                 </perfect-scrollbar>
                 <!-- start date calendar container -->
-                <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"
+                <!-- <perfect-scrollbar fxFlex="auto" [scrollIndicators]="true"
                     [config]="{suppressScrollX: false, suppressScrollY: false}" [style.max-height.px]="280"
                     (psScrollUp)="scrollUp()" (psScrollDown)="scrollDown()"
-                    (psYReachStart)="setCalendarToActiveMonth('start')" (psYReachEnd)="setCalendarToActiveMonth('end')">
-                    <div *ngIf="showCalInRanges && !showMonthPicker" (mousewheel)="mouseUp($event)"
-                        (touchmove)="mouseUp($event)">
-                        <div *ngFor="let calendarMonth of calendarMonths;">
+                    (psYReachStart)="setCalendarToActiveMonth('start')" (psYReachEnd)="setCalendarToActiveMonth('end')"> -->
+                <cdk-virtual-scroll-viewport itemSize="itemsPerPage" style="height: 250px;">
+                    <div *cdkVirtualFor="let calendarMonth of (calendarMonths$ | async); let i = index;" class="example-item">    
+                        <div *ngIf="showCalInRanges && !showMonthPicker" (mousewheel)="mouseUp($event)" (touchmove)="mouseUp($event)">
                             <div class="calendar" *ngIf="calendarMonth && calendarMonth.start" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
                                 <div class="calendar-table"
                                     (mouseenter)="setActiveMonth(calendarMonth, 'start');">
-                                    <table class="table-condensed" hidden>
+                                    <table class="table-condensed" *ngIf="false">
                                         <thead>
                                             <tr>
                                                 <th colspan="5" class="month drp-animate">
@@ -504,9 +504,10 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
+                        </div>    
                     </div>
-                </perfect-scrollbar>
+                </cdk-virtual-scroll-viewport>
+                <!-- </perfect-scrollbar> -->
                 <!-- end date calendar container -->
             </div>
         </div>
