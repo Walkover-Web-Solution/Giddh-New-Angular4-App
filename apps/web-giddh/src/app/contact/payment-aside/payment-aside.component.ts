@@ -16,6 +16,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { FormGroup, NgForm, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { cloneDeep } from '../../lodash-optimized';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
+import { GeneralService } from '../../services/general.service';
 @Component({
     selector: 'payment-aside',
     templateUrl: './payment-aside.component.html',
@@ -126,7 +127,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         private _companyActions: CompanyActions,
         private accountsAction: AccountsAction,
         private _companyService: CompanyService,
-        private _toaster: ToasterService
+        private _toaster: ToasterService,
+        private generalService: GeneralService
     ) {
         this.userDetails$ = this.store.select(p => p.session.user);
         this.userDetails$.pipe(take(1)).subscribe(p => this.user = p);
@@ -629,5 +631,16 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public removeTransactionsDetailsForm(index: number): void {
         const transactions = this.addAccountBulkPaymentForm.get('bankPaymentTransactions') as FormArray;
         transactions.removeAt(index);
+    }
+
+    /**
+     * This is to allow only digits
+     *
+     * @param {*} event
+     * @returns {boolean}
+     * @memberof PaymentAsideComponent
+     */
+    public allowOnlyNumbers(event: any): boolean {
+        return this.generalService.allowOnlyNumbers(event);
     }
 }
