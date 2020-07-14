@@ -5811,7 +5811,9 @@ datepicker-inner .well table tbody tr td .btn-default {
 
 datepicker-inner .well table tbody tr td .btn-default:hover {
     background: $chetwode-blue !important;
-    color: $white;
+    color: $white !important;
+    text-decoration: none;
+    border-radius: 3px;
 }
 
 datepicker-inner .well table tbody tr td .btn-default:hover span {
@@ -5837,9 +5839,10 @@ datepicker-inner .well table tbody tr td button.btn.btn-default.btn-link:hover .
 
 datepicker-inner .well {
     background-color: $white;
-    border-top: 0;
+    border: none !important;
     box-shadow: none;
     margin: 0;
+    padding: 0;
 }
 
 datepicker-inner .well table button.btn.btn-default.btn-sm {
