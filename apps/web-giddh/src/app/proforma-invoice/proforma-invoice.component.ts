@@ -427,6 +427,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public excludeTax: boolean = false;
     /* This will hold the company country name */
     public companyCountryName: string = '';
+    public hasVoucherEntry: boolean;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -4318,8 +4319,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     handleOutsideClick(): void {
         this.activeIndx = null;
+        this.checkVoucherEntries();
     }
 
+    checkVoucherEntries() {
+        if (this.invFormData.entries && this.invFormData.entries.length) {
+            let validLineItem;
+            for (let i = 0; i < this.invFormData.entries.length; i++) {
+                validLineItem = this.invFormData.entries[i].transactions.find(transaction => (transaction.accountUniqueName && transaction.accountUniqueName !== '' && transaction.amount > 0));
+                if (validLineItem) {
+                    break;
+                }
+            }
+            this.hasVoucherEntry = !!validLineItem;
+        } else {
+            this.hasVoucherEntry = false;
+        }
+    }
     /**
      * Validates the taxes entry and returns false if anyone of the entry
      * has no taxes

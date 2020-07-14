@@ -1991,10 +1991,12 @@
 
                 <!-- region purchase invoice -->
                 <span class="d-inline-block v-align-middle" *ngIf="isPurchaseInvoice">
-                                <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
-                            class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
-                        </button> -->
-                                <button type="button" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
+<!--                                <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"-->
+<!--                            class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c-->
+<!--                        </button>-->
+                                <button type="button"
+                                        [disabled]="!hasVoucherEntry"
+                                        (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default">Save
                                 </button>
                             </span>
@@ -2003,22 +2005,23 @@
                 <!-- region non purchase -->
                 <span class="d-inline-block v-align-middle" *ngIf="!isPurchaseInvoice && (!isProformaInvoice  && !isEstimateInvoice)">
 
-                                <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
+                                <button type="button" [disabled]="!hasVoucherEntry" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
                                         class="btn btn-default" *ngIf="isCustomerSelected && !isPendingVoucherType">Generate
                                     <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                         Cash
                                     </span> &amp; Update A/c
                 </button>
 
-                <div class="btn-group" dropdown [dropup]="true">
+                <div class="btn-group" dropdown [dropup]="true" [isDisabled]="!hasVoucherEntry">
 
-                    <button type="button" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)" class="btn btn-default generateInvoie">Generate
+                    <button type="button" [disabled]="!hasVoucherEntry" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)" class="btn btn-default generateInvoie">Generate
                                         <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                             Cash
                                         </span>
                                     </button>
 
-                    <button id="button-split" type="button" dropdownToggle class="btn btn-default dropdown-toggle dropdown-toggle-split" aria-controls="dropdown-split" *ngIf="invoiceType === 'sales'">
+                    <button id="button-split" type="button"
+                            dropdownToggle class="btn btn-default dropdown-toggle dropdown-toggle-split" aria-controls="dropdown-split" *ngIf="invoiceType === 'sales'">
                                         <span class="caret"></span>
                                         <span class="sr-only">Split button!</span>
                                     </button>
@@ -2046,21 +2049,23 @@
                 <!-- region proforma/estimates -->
                 <span class="d-inline-block v-align-middle" *ngIf="isProformaInvoice || isEstimateInvoice">
 
-                                <div class="btn-group" dropdown [dropup]="true">
+                                <div class="btn-group" dropdown [dropup]="true" [isDisabled]="!hasVoucherEntry">
 
                                     <button type="button"
+                                            [disabled]="!hasVoucherEntry"
                                             (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                                             class="btn btn-default">Create
                                     </button>
 
                                     <button id="button-split2" type="button" dropdownToggle
                                             class="btn btn-default dropdown-toggle dropdown-toggle-split"
-                                            aria-controls="dropdown-split">
+                                            aria-controls="dropdown-split"
+                                    >
                                         <span class="caret"></span>
                 <span class="sr-only">Split button!</span>
                 </button>
 
-                <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
+                <ul id="dropdown-basic2"  *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-basic">
                     <li role="menuitem">
                         <a class="dropdown-item cp" (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">Create
                                                 & Send</a>
@@ -2084,7 +2089,7 @@
             <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">Cancel
                             </button>
 
-            <button type="button" class="btn btn-default" (click)="submitUpdateForm(invoiceForm)">
+            <button type="button" class="btn btn-default" [disabled]="!hasVoucherEntry" (click)="submitUpdateForm(invoiceForm)">
                                 Update
                                 <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                     Cash
