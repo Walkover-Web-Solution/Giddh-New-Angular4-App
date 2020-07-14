@@ -36,11 +36,13 @@ export class AuditLogsSidebarVM {
     /** Selected user unique name */
     public selectedUserUniqueName: string = '';
     /** Selected group unique name */
-    public selectedGroupUnq: string = '';
+    public selectedGroupUniqueName: string = '';
     /** Selected from date */
     public selectedFromDate: Date;
     /** Selected to date */
     public selectedToDate: Date;
+     /** Selected account unique name */
+    public selectedAccountUniqueName: string = '';
 
     /**
      * To reset selected filter for audit log
@@ -52,7 +54,8 @@ export class AuditLogsSidebarVM {
         this.selectedOperation = '';
         this.selectedEntity = '';
         this.selectedUserUniqueName = '';
-        this.selectedGroupUnq = '';
+        this.selectedGroupUniqueName = '';
+        this.selectedAccountUniqueName = '';
         this.selectedFromDate = moment().toDate();
         this.selectedToDate = moment().toDate();
     }
