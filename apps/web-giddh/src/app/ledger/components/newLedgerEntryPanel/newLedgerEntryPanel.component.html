@@ -19,7 +19,7 @@
                                 <tbody>
                                     <tr>
                                         <td class="text-right width-70"
-                                            ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}">
+                                            [ngClass]="{'width55': ledgerCtrl.selectedTxn.panel.unit != undefined}">
                                             <label class="mr-05 font-12">Qty</label>
                                             <input type="text" name="" class="form-control text-right"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
