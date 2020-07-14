@@ -104,13 +104,13 @@ tfoot td .tableSec.form-group {
     font-size: 26px;
     font-family: opensans-semibold;
 }
-.multiple-products-wrapper form{
+.multiple-products-wrapper form {
     padding-bottom: 60px;
 }
-.multiple-products-wrapper  table thead{
+.multiple-products-wrapper table thead {
     border-top: 1px solid $gainsboro;
 }
-.multiple-products-wrapper  table tbody {
+.multiple-products-wrapper table tbody {
     border-bottom: 1px solid $gainsboro;
 }
 #actionPane {
@@ -206,7 +206,7 @@ tfoot td .tableSec.form-group {
 .branch-transfer-report .input-group input.form-control {
     padding-left: 35px !important;
     border-color: $gainsboro;
-    background-image: url("../../../../assets/images/calender.svg") !important;
+    background-image: url("../../../../assets/images/calender-icon.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
     background-repeat: no-repeat !important;
@@ -235,28 +235,28 @@ tfoot td .tableSec.form-group {
     left: auto !important;
 }
 
-.td_in_searchBox div {
+.td-search-box div {
     display: flex;
 }
 
-.td_in_searchBox div span {
+.td-search-box div span {
     padding-right: 8px;
 }
 
-.td_in_searchBox div i {
+.td-search-box div i {
     margin-top: 3px;
     color: #8080808c;
     padding-right: 8px;
     cursor: pointer;
 }
 
-.td_in_searchBox {
+.td-search-box {
     padding: 0 0 0 10px !important;
 }
-.td_in_searchBox .input-container {
+.td-search-box .input-container {
     position: relative;
 }
-.td_in_searchBox .input-container input {
+.td-search-box .input-container input {
     min-height: 38px;
     width: 100%;
     padding: 8px;
@@ -264,12 +264,12 @@ tfoot td .tableSec.form-group {
     border: 0px;
 }
 
-.td_in_searchBox .input-container i {
+.td-search-box .input-container i {
     position: absolute;
     right: 0px;
     top: 9px;
 }
-.td_in_searchBox .input-container input {
+.td-search-box .input-container input {
     height: 50px;
     min-width: 100%;
     padding: 11px;

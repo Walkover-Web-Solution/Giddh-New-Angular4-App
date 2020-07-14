@@ -24,7 +24,7 @@
         border-bottom: none !important;
         white-space: nowrap;
     }
-    thead > tr > th.td_in_searchBox{
+    thead > tr > th.td-search-box {
         min-width: 190px !important;
     }
     tbody > tr > td {
@@ -72,7 +72,7 @@
         color: $deep-sky-blue;
         opacity: 1;
     }
-    .td_in_searchBox {
+    .td-search-box {
         padding: 0px !important;
         position: relative;
 
@@ -120,20 +120,20 @@
             background: transparent;
         }
         tbody tr:last-child td {
-            border-bottom: 0px solid!important;
+            border-bottom: 0px solid !important;
         }
     }
     /*card responsive code*/
     .on-mobile-view {
-        display: block;  
-       .table-bordered > tfoot > tr > td {
+        display: block;
+        .table-bordered > tfoot > tr > td {
             border: none;
         }
         .table-bordered {
             border: none;
             background: transparent;
             margin-top: 0;
-        } 
+        }
     }
     table.on-mobile-view {
         background: transparent;
@@ -146,7 +146,7 @@
                 display: none;
             }
         }
-         tbody {
+        tbody {
             display: block;
             width: 100%;
         }
@@ -156,7 +156,7 @@
         tbody > tr:hover td {
             background: transparent;
         }
-         tbody tr {
+        tbody tr {
             box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
             background: #fff;
             border-bottom: none;
@@ -211,13 +211,13 @@
             text-align: left;
             white-space: normal !important;
             word-break: inherit;
-
         }
 
-        tbody tr td.no-entries{
+        tbody tr td.no-entries {
             padding: 20px 0 0 !important;
             border-top: none !important;
-            &:before, &:after{
+            &:before,
+            &:after {
                 display: none;
             }
         }

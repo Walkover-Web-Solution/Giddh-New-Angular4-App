@@ -1,11 +1,13 @@
 <ng-container *ngIf="!showEditMode">
     <div class="invoice-genrate-container">
         <div style="height: 44px;" *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'">
-            <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;">
-                <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle" aria-controls="dropdown-basic">
-                {{ selectedVoucher | titlecase}}
-                <span class="caret"></span>
-            </button>
+            <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
+                style="margin-bottom: 10px;display: inline-block !important;">
+                <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
+                    aria-controls="dropdown-basic">
+                    {{ selectedVoucher | titlecase}}
+                    <span class="caret"></span>
+                </button>
                 <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
 
                     <li role="menuitem" (click)="changeDebitOrCredit('debit note')">
@@ -27,24 +29,29 @@
                         <div class="input-group" id="dp-parent" style="margin-right:8px; margin-bottom:0;">
                             <!-- <span class="icon-calender"></span> -->
                             <span class="input-wrapper">
-                            <input type="text" name="dateRangeGenerate" id="dateRangeGenerate" daterangepicker
-                                [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)"
-                                class="form-control" />
-                        </span>
-                        <button class="clear-filter btn btn-filter align-items-center d-flex justify-content-center" *ngIf="!isUniversalDateApplicable && isMobileView" (click)="resetDateSearch()">
-                            <span class="icon-cross"></span> Clear Filter
+                                <input type="text" name="dateRangeGenerate" id="dateRangeGenerate" daterangepicker
+                                    [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)"
+                                    class="form-control" />
+                            </span>
+                            <button class="clear-filter btn btn-filter align-items-center d-flex justify-content-center"
+                                *ngIf="!isUniversalDateApplicable && isMobileView" (click)="resetDateSearch()">
+                                <span class="icon-cross"></span> Clear Filter
                             </button>
-                       
-                    </div>
-                        
+
+                        </div>
+
                         <span>
-                            <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(false)">
+                            <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary"
+                                (click)="generateBulkInvoice(false)">
                                 Generate Multiple
                             </button>
-                            <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(true)">
+                            <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary"
+                                (click)="generateBulkInvoice(true)">
                                 Generate Compound
                             </button>
-                                <button placement="top" tooltip="Works only for single entry." *ngIf="!isMobileView" [hidden]="selectedLedgerItems.length === 0  || !togglePrevGenBtn" class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate
+                            <button placement="top" tooltip="Works only for single entry." *ngIf="!isMobileView"
+                                [hidden]="selectedLedgerItems.length === 0  || !togglePrevGenBtn"
+                                class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate
                             </button>
                         </span>
                     </div>
@@ -62,10 +69,12 @@
 
                 </div>
 
-                <div class="clear-filter align-items-center d-flex justify-content-center" [ngClass]="{'width-100' : selectedLedgerItems.length === 0}" *ngIf="!isUniversalDateApplicable && !isMobileView" (click)="resetDateSearch()">
+                <div class="clear-filter align-items-center d-flex justify-content-center"
+                    [ngClass]="{'width-100' : selectedLedgerItems.length === 0}"
+                    *ngIf="!isUniversalDateApplicable && !isMobileView" (click)="resetDateSearch()">
                     <button class="btn btn-filter">
-                    <span class="icon-cross"></span> Clear Filter
-                </button>
+                        <span class="icon-cross"></span> Clear Filter
+                    </button>
                 </div>
             </div>
         </form>
@@ -77,8 +86,10 @@
                     <th style="width:4%" *ngIf="selectedLedgerItems.length > 0">
 
                         <div class="mh18_img" style="justify-content: center;display: flex">
-                            <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
-                            <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+                            <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
+                                (click)="toggleAllItems(true)">
+                            <img src="assets/images/checked.png" *ngIf="allItemsSelected"
+                                (click)="toggleAllItems(false)">
                         </div>
                     </th>
 
@@ -100,7 +111,8 @@
 
                     </th>
 
-                    <th style="width:20%" class="td_in_searchBox" #searchParticularContainer (clickOutside)="clickedOutside($event, searchParticularContainer, 'particular')">
+                    <th style="width:20%" class="td-search-box" #searchParticularContainer
+                        (clickOutside)="clickedOutside($event, searchParticularContainer, 'particular')">
 
                         <div [hidden]="showParticularSearch">
                             <span> Particular</span>
@@ -109,7 +121,8 @@
                         </div>
 
                         <div class="input-container" [hidden]="!showParticularSearch">
-                            <input type="text" placeholder="Search Particular" class="w100" [formControl]="particularInput" #particularSearch />
+                            <input type="text" placeholder="Search Particular" class="w100"
+                                [formControl]="particularInput" #particularSearch />
                             <i class="icon-search" (click)="showParticularSearch = false;"></i>
                         </div>
                     </th>
@@ -125,7 +138,8 @@
                         </div>
                     </th>
 
-                    <th style="width:20%" class="td_in_searchBox" #searchAccountContainer (clickOutside)="clickedOutside($event, searchAccountContainer, 'accountUniqueName')">
+                    <th style="width:20%" class="td-search-box" #searchAccountContainer
+                        (clickOutside)="clickedOutside($event, searchAccountContainer, 'accountUniqueName')">
 
                         <div [hidden]="showAccountSearch">
                             <span> Account</span>
@@ -134,7 +148,8 @@
                         </div>
 
                         <div class="input-container" [hidden]="!showAccountSearch">
-                            <input type="text" placeholder="Search Account" class="w100" [formControl]="accountUniqueNameInput" #accountUniqueNameSearch />
+                            <input type="text" placeholder="Search Account" class="w100"
+                                [formControl]="accountUniqueNameInput" #accountUniqueNameSearch />
                             <!--<i class="icon-search" (click)="showAccountSearch = false;"></i>-->
                         </div>
 
@@ -151,7 +166,8 @@
                         </div>
                     </th>
 
-                    <th style="width:20%" class="td_in_searchBox" #searchDescContainer (clickOutside)="clickedOutside($event, searchDescContainer, 'description')">
+                    <th style="width:20%" class="td-search-box" #searchDescContainer
+                        (clickOutside)="clickedOutside($event, searchDescContainer, 'description')">
 
                         <div [hidden]="showDescSearch">
                             <span> Description</span>
@@ -172,21 +188,28 @@
             </thead>
 
 
-            <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''" (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
+            <tbody (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
+                (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''">
 
-                <tr *ngFor="let item of ledgersData?.results; let i = index;" [ngClass]="{'danger': item.hasGenerationErr}" (mouseover)="hoveredItemForAction = item.uniqueName">
+                <tr *ngFor="let item of ledgersData?.results; let i = index;"
+                    [ngClass]="{'danger': item.hasGenerationErr}" (mouseover)="hoveredItemForAction = item.uniqueName">
 
-                    <td class="mh18_img" data-title="#" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedLedgerItems.length > 0">
-                        <div class="mh18_img justify-content-sm" style="justify-content: center;display: flex" data-title="#">
-                            <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)" />
-                            <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)" />
+                    <td class="mh18_img" data-title="#"
+                        *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedLedgerItems.length > 0">
+                        <div class="mh18_img justify-content-sm" style="justify-content: center;display: flex"
+                            data-title="#">
+                            <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
+                                (click)="toggleItem(item, true)" />
+                            <img *ngIf="item.isSelected" src="assets/images/checked.png"
+                                (click)="toggleItem(item, false)" />
                         </div>
                         <div *ngIf="item.hasGenerationErr">
                             <i class='fa fa-info-circle' placement="right" [tooltip]="item.errMsg"></i>
                         </div>
                     </td>
 
-                    <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedLedgerItems.length === 0" data-title="#">
+                    <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedLedgerItems.length === 0"
+                        data-title="#">
                         <div style="justify-content: center;display: flex" class="justify-content-sm">
                             {{ i + 1}}
                         </div>
@@ -199,8 +222,9 @@
                             <tr *ngFor="let transaction of item.transactions">
                                 <td>
                                     {{transaction.particular.name}}
-                                    <span *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}}
-                                    )</span>
+                                    <span
+                                        *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}}
+                                        )</span>
                                 </td>
 
                             </tr>
@@ -220,16 +244,21 @@
                     <!-- <ng-template #amountPopupTemplate><span [innerHTML]="item.totalTooltipText"></span>
                         </ng-template> -->
 
-                    <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''" data-title="Account">
+                    <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
+                        (clickOutside)="modalUniqueName = ''" data-title="Account">
                         {{item.account.name}}
-                        <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component [accountUniqueName]="item.account.uniqueName" [from]="this.ledgerSearchRequest.from" [to]="this.ledgerSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
+                        <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component
+                            [accountUniqueName]="item.account.uniqueName" [from]="this.ledgerSearchRequest.from"
+                            [to]="this.ledgerSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
                         </div>
                     </td>
 
-                    <td class="text-right" data-title="Total" [tooltip]="totalPopupTemplate">{{item.accountCurrencySymbol}}{{item.total.amount | giddhCurrency}}</td>
+                    <td class="text-right" data-title="Total" [tooltip]="totalPopupTemplate">
+                        {{item.accountCurrencySymbol}}{{item.total.amount | giddhCurrency}}</td>
                     <ng-template #totalPopupTemplate><span [innerHTML]="item.totalTooltipText"></span>
                     </ng-template>
-                    <td data-title="Description" class="pending-table-description">{{ item.description ? item.description : '-' }}</td>
+                    <td data-title="Description" class="pending-table-description">
+                        {{ item.description ? item.description : '-' }}</td>
                     <!--<td><textarea type="text" placeholder="Enter Description" rows="1" class="pending-textaerea"></textarea></td>-->
 
 
@@ -254,7 +283,9 @@
 
     <div *ngIf="ledgersData?.totalItems > 20" class="paginationWrapper">
         <div class="alC">
-            <pagination [totalItems]="ledgersData.totalItems" [(ngModel)]="ledgersData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+            <pagination [totalItems]="ledgersData.totalItems" [(ngModel)]="ledgersData.page" [maxSize]="5"
+                class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false"
+                (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>
 
@@ -279,13 +310,15 @@
                 </span> -->
 
         <span class="close-modal cp pull-right " (click)="closeModel() ">
-                    <img src="assets/images/multiply.svg ">
-                </span>
+            <img src="assets/images/multiply.svg ">
+        </span>
 
         <!-- </div> -->
 
         <div class="invoice-edit-body ">
-            <proforma-invoice-component [accountUniqueName]="selectedAccountUniqueName" [selectedItem]="selectedItem" [invoiceNo]="(voucherType !=='purchase' ) ? selectedItem?.voucherNumber : selectedItem?.uniqueName " [invoiceType]="selectedVoucher
+            <proforma-invoice-component [accountUniqueName]="selectedAccountUniqueName" [selectedItem]="selectedItem"
+                [invoiceNo]="(voucherType !=='purchase' ) ? selectedItem?.voucherNumber : selectedItem?.uniqueName "
+                [invoiceType]="selectedVoucher
     " (cancelVoucherUpdate)="closeModel() ">
             </proforma-invoice-component>
         </div>

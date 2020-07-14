@@ -54,6 +54,7 @@ import { PurchaseRecordActions } from '../../actions/purchase-record/purchase-re
 import { Location } from '@angular/common';
 import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { SalesService } from '../../services/sales.service';
+import { OrderHistoryComponent } from '../../purchase/order-history/order-history.component';
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */

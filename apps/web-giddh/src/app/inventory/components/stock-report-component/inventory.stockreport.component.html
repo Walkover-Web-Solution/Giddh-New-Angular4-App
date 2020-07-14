@@ -142,7 +142,7 @@
                             </ul>
                         </div>
                     </th>
-                    <th class="td_in_searchBox" width="15%" (clickOutside)="clickedOutside($event,null, 'account')">
+                    <th class="td-search-box" width="15%" (clickOutside)="clickedOutside($event,null, 'account')">
                         <div [hidden]="showAccountSearch">
                             <span>Account Name</span>
                             <i class="icon-search" (click)="showAccountSearchBox()"></i>
@@ -378,7 +378,8 @@
                 <tr>
                     <td colspan="10" class="text-center empty_table">
                         <img src="assets/images/search-data-not-found.svg" />
-                        <h1 [class.stock-not-found]="stockNotFoundMessage">{{ (stockNotFoundMessage) ? stockNotFoundMessage : 'No Report Found !!' }}</h1>
+                        <h1 [class.stock-not-found]="stockNotFoundMessage">
+                            {{ (stockNotFoundMessage) ? stockNotFoundMessage : 'No Report Found !!' }}</h1>
                     </td>
                 </tr>
             </tbody>
@@ -407,10 +408,10 @@
                         <div class="col-xs-6 p0">
                             <h4 class="text-light text-left">Profit/Loss</h4>
                         </div>
-                            <div class="col-xs-12 p0">
-                                <h4 class="text-orange text-left">&nbsp;{{stockReport.profit | giddhCurrency}}
-                                    ({{dateRangePickerCmp.value | replaceHyphens}})</h4>
-                            </div>
+                        <div class="col-xs-12 p0">
+                            <h4 class="text-orange text-left">&nbsp;{{stockReport.profit | giddhCurrency}}
+                                ({{dateRangePickerCmp.value | replaceHyphens}})</h4>
+                        </div>
                     </div>
                     <div class="col-sm-2 pr-0">
                         <div class="row">

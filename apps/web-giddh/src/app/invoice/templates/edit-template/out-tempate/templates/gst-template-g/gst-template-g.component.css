@@ -372,11 +372,11 @@ contenteditable {
     color: #4b4c4f;
 }
 
-.numDetail td:first-child {
+.number-detail-series td:first-child {
     width: 30%;
 }
 
-.numDetail td:last-child {
+.number-detail-series td:last-child {
     width: 70%;
 }
 

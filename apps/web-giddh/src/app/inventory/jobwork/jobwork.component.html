@@ -99,7 +99,7 @@
                                             </div>
                                         </div>
                                     </th>
-                                    <th class="bdrR td_in_searchBox" *ngIf="type ==='person'" width="15%"
+                                    <th class="bdrR td-search-box" *ngIf="type ==='person'" width="15%"
                                         (clickOutside)="clickedOutside($event,null, 'product')">
                                         <div [hidden]="showProductSearch">
                                             <span>Product Name</span>
@@ -129,7 +129,7 @@
                                             </ul>
                                         </div>
                                     </th>
-                                    <th class="bdrR bdrB td_in_searchBox" width="15%"
+                                    <th class="bdrR bdrB td-search-box" width="15%"
                                         (clickOutside)="clickedOutside($event,null, 'sender')">
                                         <div [hidden]="showSenderSearch">
                                             <span>Sender's Name</span>
@@ -141,7 +141,7 @@
                                             <!-- <i class="icon-search" (click)="showSenderSearch = false;"></i> -->
                                         </div>
                                     </th>
-                                    <th class="bdrR bdrB td_in_searchBox" width="15%"
+                                    <th class="bdrR bdrB td-search-box" width="15%"
                                         (clickOutside)="clickedOutside($event,null, 'receiver')">
                                         <div [hidden]="showReceiverSearch">
                                             <span>Receiver's Name</span>

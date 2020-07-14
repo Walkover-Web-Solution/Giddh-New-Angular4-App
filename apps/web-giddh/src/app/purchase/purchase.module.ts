@@ -17,10 +17,19 @@ import {
     AsideMenuPurchaseInvoiceSettingComponent,
 } from './purchase-invoice/aside-menu/aside-menu-purchase-invoice-setting.component';
 import { PurchaseInvoiceComponent } from './purchase-invoice/purchase.invoice.component';
+import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
+import { CreatePurchaseOrderComponent } from './create-purchase-order/create-purchase-order.component';
+import { PurchaseOrderInvoicePreviewComponent } from './purchase-order-invoice-preview/purchase-order-invoice-preview.component'
+import { OrderHistoryComponent } from './order-history/order-history.component'
 import { ReconcileDesignComponent } from './purchase-invoice/reconcileDesign/reconcileDesign.component';
 import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
+import { PurchaseSettingComponent } from './purchase-setting/purchase-setting.component';
 import { PurchaseComponent } from './purchase.component';
+import { PurchaseAdvanceSearchComponent } from './purchase-advance-search/purchase-advance-search.component';
+import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { SharedModule } from '../shared/shared.module';
 
 /**
  * Created by kunalsaxena on 9/1/17.
@@ -29,10 +38,17 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
 @NgModule({
     declarations: [
         PurchaseInvoiceComponent,
+        PurchaseOrderComponent,
+        CreatePurchaseOrderComponent,
+        PurchaseOrderInvoicePreviewComponent,
         PurchaseComponent,
         AsideMenuPurchaseInvoiceSettingComponent,
         ReconcileDesignComponent,
-        PurchaseRecordComponent],
+        PurchaseRecordComponent,
+        OrderHistoryComponent,
+        PurchaseSettingComponent,
+        PurchaseAdvanceSearchComponent,
+        PurchaseSendEmailModalComponent],
     imports: [
         PurchaseRoutingModule,
         CollapseModule,
@@ -48,11 +64,13 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
         AlertModule,
         ElementViewChildModule,
         PerfectScrollbarModule,
-        InvoiceRoutingModule
+        InvoiceRoutingModule,
+        ShSelectModule,
+        SharedModule
     ],
     entryComponents: [],
     exports: [
-        AsideMenuPurchaseInvoiceSettingComponent
+        AsideMenuPurchaseInvoiceSettingComponent,
     ]
 })
 export class PurchaseModule {

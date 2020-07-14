@@ -24,7 +24,7 @@
                         <th (click)="sortReverseChargeList('entryDate')">Entry Date <span
                                 [ngClass]="{'sortingIcon icon-pointer': true, 'activeTextColor' : reverseChargeReportGetRequest.sortBy === 'entryDate', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'entryDate' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'entryDate'), 'icon-sort-dsc': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'entryDate')}"></span>
                         </th>
-                        <th width="13%" class="bdrR bdrB td_in_searchBox">
+                        <th width="13%" class="bdrR bdrB td-search-box">
                             <div [hidden]="inlineSearch == 'suppliersName'">
                                 <span>Supplier's Name</span>
                                 <i class="icon-search" (click)="focusOnColumnSearch('suppliersName');"></i>
@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                         </th>
-                        <th width="13%" class="bdrR bdrB td_in_searchBox">
+                        <th width="13%" class="bdrR bdrB td-search-box">
                             <div [hidden]="inlineSearch == 'invoiceNumber'">
                                 <span>Invoice No.</span>
                                 <i class="icon-search" (click)="focusOnColumnSearch('invoiceNumber');"></i>
@@ -67,11 +67,11 @@
                                     [(ngModel)]="reverseChargeReportPostRequest.invoiceNumber" />
                             </div>
                         </th>
-                        <th class="td_in_searchBox" (click)="sortReverseChargeList('supplierInvoiceDate')">Supplier's
+                        <th class="td-search-box" (click)="sortReverseChargeList('supplierInvoiceDate')">Supplier's
                             Invoice Date <span
                                 [ngClass]="{'sortingIcon icon-pointer': true, 'activeTextColor' : reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'supplierInvoiceDate' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate'), 'icon-sort-dsc': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate')}"></span>
                         </th>
-                        <th width="13%" class="bdrR bdrB td_in_searchBox">
+                        <th width="13%" class="bdrR bdrB td-search-box">
                             <div [hidden]="inlineSearch == 'supplierCountry'">
                                 <span>Supplier's Country</span>
                                 <i class="icon-search" (click)="focusOnColumnSearch('supplierCountry');"></i>

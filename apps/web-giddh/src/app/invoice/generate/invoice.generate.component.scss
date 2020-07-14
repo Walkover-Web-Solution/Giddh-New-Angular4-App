@@ -10,7 +10,6 @@ table {
     table-layout: fixed;
 }
 
-
 /* .table.basic tbody tr td {
     background-color: #fff;
 }
@@ -23,7 +22,6 @@ table {
     max-height: 20px;
     cursor: pointer;
 }
-
 
 /*
 .table.basic>tbody>tr>td>table tbody tr td {
@@ -42,44 +40,43 @@ tfoot {
     display: flex;
 }
 
-
 /*td-in-searchbox_style*/
 
-.td_in_searchBox div {
+.td-search-box div {
     display: flex;
 }
 
-.td_in_searchBox div span {
+.td-search-box div span {
     flex: 1 1 auto;
     padding-left: 8px;
 }
 
-.td_in_searchBox div i {
+.td-search-box div i {
     margin-top: 3px;
     color: #8080808c;
     padding-right: 8px;
     cursor: pointer;
 }
 
-.td_in_searchBox {
+.td-search-box {
     padding: 0px !important;
     position: relative;
 }
 
-.td_in_searchBox .input-container input {
+.td-search-box .input-container input {
     height: 41px;
     width: 100%;
     padding: 11px;
     padding-right: 40px;
 }
 
-.td_in_searchBox .input-container i {
+.td-search-box .input-container i {
     position: absolute;
     right: 10px;
     top: 12px;
 }
 
-.basic>thead>tr>th {
+.basic > thead > tr > th {
     border-right: 1px solid $gainsboro;
 }
 
@@ -87,7 +84,7 @@ tfoot {
     cursor: pointer;
 }
 
-.dropdown-menu>li>a:hover {
+.dropdown-menu > li > a:hover {
     color: $chetwode-blue;
     background: #e5e5e5;
 }
@@ -96,7 +93,7 @@ tfoot {
     margin-top: 0;
 }
 
-.pending-table .nested_table>tbody tr td {
+.pending-table .nested_table > tbody tr td {
     border: 0 !important;
     padding: 0px !important;
 }
@@ -136,7 +133,7 @@ tfoot {
 }
 
 .input-group input.form-control {
-    background-image: url("../../../assets/images/calender.svg") !important;
+    background-image: url("../../../assets/images/calender-icon.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
     background-repeat: no-repeat !important;
@@ -247,11 +244,11 @@ span.close-modal.cp.pull-right {
 }
 
 // responsive
-@media(max-width:1023px){
-    .pending-advance-search{
-        .input-group{
+@media (max-width: 1023px) {
+    .pending-advance-search {
+        .input-group {
             display: flex;
-            .clear-filter{
+            .clear-filter {
                 margin-left: 15px !important;
             }
         }
@@ -262,7 +259,7 @@ span.close-modal.cp.pull-right {
         background: transparent;
         border: none;
     }
-    .pending-table{
+    .pending-table {
         margin-top: 5px !important;
     }
     .justify-content-sm {
@@ -276,7 +273,7 @@ span.close-modal.cp.pull-right {
         width: 100% !important;
         float: left;
     }
-    .pending-table .nested_table>tbody tr td {
+    .pending-table .nested_table > tbody tr td {
         padding: 0 !important;
     }
     .pending-table tr td {
@@ -317,7 +314,7 @@ span.close-modal.cp.pull-right {
     }
 }
 
-@media(max-width:767px) {
+@media (max-width: 767px) {
     .invoice-genrate-container {
         padding-top: 55px;
     }
@@ -331,20 +328,20 @@ span.close-modal.cp.pull-right {
         margin-bottom: 0 !important;
         width: 120px;
     }
-    .pending-advance-search{
+    .pending-advance-search {
         width: 100%;
         margin-bottom: 0;
         flex-direction: column !important;
-        div#dp-parent{
+        div#dp-parent {
             width: 100% !important;
             display: flex;
             justify-content: space-between;
             flex-direction: column;
-            .input-wrapper{
+            .input-wrapper {
                 width: 100% !important;
                 max-width: 196px;
             }
-            .clear-filter{
+            .clear-filter {
                 float: right;
                 width: 100% !important;
                 margin-top: 10px !important;
@@ -352,17 +349,17 @@ span.close-modal.cp.pull-right {
                 margin-left: 0 !important;
             }
         }
-       span{
-           .btn{
-               margin-bottom: 0 !important;
-               margin-top: 10px !important;
-           }
-       } 
+        span {
+            .btn {
+                margin-bottom: 0 !important;
+                margin-top: 10px !important;
+            }
+        }
     }
 }
-@media(max-width:575px){
-    .pending-advance-search{
-        button{
+@media (max-width: 575px) {
+    .pending-advance-search {
+        button {
             margin-top: 10px !important;
             width: 100% !important;
         }
@@ -393,7 +390,7 @@ span.close-modal.cp.pull-right {
     display: inline-block;
 }
 
-@media(max-width:320px) {
+@media (max-width: 320px) {
     .form-inline .form-group {
         flex-direction: column;
     }
