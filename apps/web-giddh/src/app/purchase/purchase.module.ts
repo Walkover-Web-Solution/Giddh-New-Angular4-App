@@ -31,6 +31,7 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
+import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
 
 /**
  * Created by kunalsaxena on 9/1/17.
@@ -49,7 +50,8 @@ import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.
         OrderHistoryComponent,
         PurchaseSettingComponent,
         PurchaseAdvanceSearchComponent,
-        PurchaseSendEmailModalComponent],
+        PurchaseSendEmailModalComponent
+    ],
     imports: [
         PurchaseRoutingModule,
         CollapseModule,
@@ -68,7 +70,8 @@ import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.
         InvoiceRoutingModule,
         ShSelectModule,
         SharedModule,
-        SalesShSelectModule
+        SalesShSelectModule,
+        GenericAsideMenuAccountModule
     ],
     entryComponents: [],
     exports: [
