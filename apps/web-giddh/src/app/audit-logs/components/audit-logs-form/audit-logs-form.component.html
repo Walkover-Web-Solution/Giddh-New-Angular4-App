@@ -52,18 +52,18 @@
 
 <div class="clearfix mrT2">
     <label>Select Account</label>
-    <sh-select [options]="auditLogFormVM.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="genralCustomFilter" [(ngModel)]="auditLogFormVM.selectedAccountUnq" [forceClearReactive]="forceClearAccount$ | async"></sh-select>
+    <sh-select [options]="auditLogFormVM.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="generalCustomFilter" [(ngModel)]="auditLogFormVM.selectedAccountUniqueName" [forceClearReactive]="forceClearAccount$ | async"></sh-select>
 </div>
 
 <div class="clearfix mrT2">
     <label>Select Group</label>
-    <sh-select [options]="auditLogFormVM.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="genralCustomFilter" [(ngModel)]="auditLogFormVM.selectedGroupUnq" [forceClearReactive]="forceClearGroup$ | async"></sh-select>
+    <sh-select [options]="auditLogFormVM.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="generalCustomFilter" [(ngModel)]="auditLogFormVM.selectedGroupUniqueName" [forceClearReactive]="forceClearGroup$ | async"></sh-select>
 </div>
 
 
 <div class="clearfix mrT2">
     <label>Select User</label>
-    <sh-select [options]="auditLogFormVM.users$ | async" [customFilter]="customUserFilter" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="auditLogFormVM.selectedUserUnq" [forceClearReactive]="forceClearUser$ | async"></sh-select>
+    <sh-select [options]="auditLogFormVM.users$ | async" [customFilter]="customUserFilter" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="auditLogFormVM.selectedUserUniqueName" [forceClearReactive]="forceClearUser$ | async"></sh-select>
 </div>
 
 <button class='btn btn-success pull-left mrT2' [ladda]="auditLogFormVM.getLogsInprocess$ | async" [disabled]="!auditLogFormVM.selectedEntity" (click)='getLogfilters()'>Get Logs
