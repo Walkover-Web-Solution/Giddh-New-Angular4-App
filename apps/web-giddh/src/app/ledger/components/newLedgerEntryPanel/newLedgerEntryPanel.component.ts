@@ -18,7 +18,7 @@ import {
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
-import { Configuration, Subvoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { BsDatepickerDirective, ModalDirective, PopoverDirective } from 'ngx-bootstrap';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
@@ -28,7 +28,7 @@ import { take, takeUntil } from 'rxjs/operators';
 
 import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../../common/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
-import { forEach, sumBy } from '../../../lodash-optimized';
+import { forEach, sumBy, cloneDeep } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { ReconcileRequest, ReconcileResponse, TransactionsResponse } from '../../../models/api-models/Ledger';
@@ -55,6 +55,7 @@ import { IOSFilePicker } from "@ionic-native/file-picker/ngx";
 import { FileTransfer } from "@ionic-native/file-transfer/ngx";
 import { FileChooser } from "@ionic-native/file-chooser/ngx";
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
+import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -194,6 +195,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ratePrecision = RATE_FIELD_PRECISION;
     /** Rate precision value that will be sent to API */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
+    /** True when user checks the adjust receipt checkbox */
+    public isAdjustReceiptSelected: boolean;
+    /** True when user checks the adjust advance receipt */
+    public isAdjustAdvanceReceiptSelected: boolean;
+    /** Stores the details for adjustment component */
+    public adjustVoucherConfiguration: any;
+    /** Adjustment modal */
+    @ViewChild('adjustPaymentModal') public adjustPaymentModal: ModalDirective;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -240,6 +249,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }, {
             label: 'Credit Note',
             value: 'credit note'
+        }, {
+            label: 'Advance Receipt',
+            value: 'advance-receipt',
+            subVoucher: SubVoucher.AdvanceReceipt
         }]);
     }
 
@@ -312,8 +325,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         });
 
         this.shouldShowAdvanceReceipt = (this.blankLedger) ? this.blankLedger.voucherType === 'rcpt' : false;
-        this.isAdvanceReceipt = (this.currentTxn) ? this.currentTxn['subVoucher'] === Subvoucher.AdvanceReceipt : false;
-        this.isRcmEntry = (this.currentTxn) ? this.currentTxn['subVoucher'] === Subvoucher.ReverseCharge : false;
+        this.isAdvanceReceipt = (this.currentTxn) ? this.currentTxn['subVoucher'] === SubVoucher.AdvanceReceipt : false;
+        this.isRcmEntry = (this.currentTxn) ? this.currentTxn['subVoucher'] === SubVoucher.ReverseCharge : false;
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         // this.baseCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.baseCurrencyDetails) : cloneDeep(this.foreignCurrencyDetails);
         // this.foreignCurrencyToDisplay = this.selectedCurrency === 0 ? cloneDeep(this.foreignCurrencyDetails) : cloneDeep(this.baseCurrencyDetails);
@@ -395,7 +408,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public addToDrOrCr(type: string, e: Event) {
         e.stopPropagation();
-        if ((this.isRcmEntry || this.isAdvanceReceipt) && !this.validateTaxes()) {
+        if (this.isRcmEntry && !this.validateTaxes()) {
             if (this.taxControll && this.taxControll.taxInputElement && this.taxControll.taxInputElement.nativeElement) {
                 // Taxes are mandatory for RCM and Advance Receipt entries
                 this.taxControll.taxInputElement.nativeElement.classList.add('error-box');
@@ -407,6 +420,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             type,
             warehouse: this.selectedWarehouse
         });
+        this.blankLedger.voucherType = '';
+        this.blankLedger.generateInvoice = false;
     }
 
     public calculateDiscount(total: number) {
@@ -615,9 +630,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.blankLedger.compoundTotal = giddhRoundOff((creditTotal - debitTotal), this.giddhBalanceDecimalPlaces);
         }
         this.blankLedger.convertedCompoundTotal = this.calculateConversionRate(this.blankLedger.compoundTotal);
-        if (this.currentTxn && this.currentTxn.selectedAccount) {
-            // this.calculateConversionRate();
-        }
     }
 
     public saveLedger() {
@@ -633,6 +645,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.transactions.map((transaction) => {
             if (transaction.inventory && !transaction.inventory.warehouse) {
                 transaction.inventory.warehouse = { name: '', uniqueName: this.selectedWarehouse };
+            }
+            if (transaction.voucherAdjustments && transaction.voucherAdjustments.adjustments && transaction.voucherAdjustments.adjustments.length > 0) {
+                transaction.voucherAdjustments.adjustments.forEach((adjustment: any) => {
+                    adjustment.adjustmentAmount = adjustment.balanceDue;
+                    delete adjustment.balanceDue;
+                })
             }
         });
         this.saveBlankLedger.emit(true);
@@ -953,12 +971,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public getInvoiceListsData(event: any): void {
         if (event.value === 'rcpt') {
-            this.shouldShowAdvanceReceipt = true;
-            this.clickUnpaidInvoiceList.emit(true);
+            this.shouldShowAdvanceReceipt = false;
+            this.isAdvanceReceipt = false;
+            // this.clickUnpaidInvoiceList.emit(true);
         } else if (event.value === VoucherTypeEnum.creditNote) {
             this.shouldShowAdvanceReceipt = false;
             this.getInvoiceListsForCreditNote.emit(true);
             this.blankLedger.generateInvoice = true;
+        } else if (event.value === 'advance-receipt') {
+            this.shouldShowAdvanceReceipt = true;
+            this.isAdvanceReceipt = true;
+            this.handleAdvanceReceiptChange();
         } else {
             this.shouldShowAdvanceReceipt = false;
             this.isAdvanceReceipt = false;
@@ -1139,7 +1162,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.isRcmEntry = !this.isRcmEntry;
         }
-        this.currentTxn['subVoucher'] = this.isRcmEntry ? Subvoucher.ReverseCharge : '';
+        this.currentTxn['subVoucher'] = this.isRcmEntry ? SubVoucher.ReverseCharge : '';
         if (this.rcmPopup) {
             this.rcmPopup.hide();
         }
@@ -1152,10 +1175,92 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public handleAdvanceReceiptChange(): void {
-        this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? Subvoucher.AdvanceReceipt : '';
+        this.currentTxn['subVoucher'] = this.isAdvanceReceipt ? SubVoucher.AdvanceReceipt : '';
         this.blankLedger.generateInvoice = this.isAdvanceReceipt;
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         this.calculateTax();
+    }
+
+    /**
+     * Receipt adjustment handler
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public handleReceiptAdjustment(): void {
+        if (this.isAdjustReceiptSelected) {
+            this.prepareAdjustVoucherConfiguration();
+            this.openAdjustPaymentModal();
+        } else {
+            // this.removeAdjustment();
+        }
+    }
+
+    /**
+     * Advance Receipt adjustment handler
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public handleAdvanceReceiptAdjustment(): void {
+        if (this.isAdjustAdvanceReceiptSelected) {
+            this.prepareAdjustVoucherConfiguration();
+            this.openAdjustPaymentModal();
+        } else {
+            // this.removeAdjustment();
+        }
+    }
+
+    /**
+     * Toggle Tourist scheme checkbox then reset passport number
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public touristSchemeApplicableToggle(): void {
+        this.blankLedger.passportNumber = '';
+    }
+
+    /**
+     * To make value alphanumeric
+     *
+     * @param {*} event Template ref to get value
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public allowAlphanumericChar(event: any): void {
+        if (event && event.value) {
+            this.blankLedger.passportNumber = this.generalService.allowAlphanumericChar(event.value)
+        }
+    }
+
+    public getAdjustedPaymentData(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
+        console.log(event);
+        if (event && event.adjustPaymentData && event.adjustVoucherData) {
+            const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
+            adjustments.forEach(adjustment => {
+                adjustment.adjustmentAmount = adjustment.balanceDue;
+                // delete adjustment.balanceDue;
+            })
+            this.currentTxn.voucherAdjustments = {
+                adjustments,
+                totalAdjustmentAmount: event.adjustPaymentData.totalAdjustedAmount,
+                tdsTaxUniqueName: null,
+                tdsAmount: null,
+                description: null
+            };
+            console.log(this.currentTxn);
+            if (!adjustments.length)  {
+                // No adjustments done clear the adjustment checkbox
+                if (this.currentTxn['subVoucher'] === SubVoucher.AdvanceReceipt) {
+                    this.isAdjustAdvanceReceiptSelected = false;
+                } else {
+                    this.isAdjustReceiptSelected = false;
+                }
+            }
+        }
+
+        this.adjustPaymentModal.hide();
+    }
+
+    private removeAdjustment(): void {
+        this.currentTxn.voucherAdjustments = null;
     }
 
     /**
@@ -1183,14 +1288,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         return taxes.length > 0;
     }
 
-    /**
-     * Toggle Tourist scheme checkbox then reset passport number
-     *
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public touristSchemeApplicableToggle(): void {
-        this.blankLedger.passportNumber = '';
-    }
 
     /**
     * Merges the involved accounts (current ledger account and particular account) taxes
@@ -1214,16 +1311,40 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         return mergedAccountTaxes;
     }
 
-
     /**
-     * To make value alphanumeric
+     * Prepares the voucher adjustment configuration
      *
-     * @param {*} event Template ref to get value
+     * @private
      * @memberof NewLedgerEntryPanelComponent
      */
-    public allowAlphanumericChar(event: any): void {
-        if (event && event.value) {
-            this.blankLedger.passportNumber = this.generalService.allowAlphanumericChar(event.value)
-        }
+    private prepareAdjustVoucherConfiguration(): void {
+        this.adjustVoucherConfiguration = {
+            voucherDetails: {
+                voucherDate: this.blankLedger.entryDate,
+                tcsTotal: 0,
+                tdsTotal: 0,
+                balanceDue: this.currentTxn.total,
+                grandTotal: this.currentTxn.total,
+                customerName: this.currentTxn.selectedAccount ? this.currentTxn.selectedAccount.name : '',
+                customerUniquename: this.currentTxn.selectedAccount ? this.currentTxn.selectedAccount.uniqueName : '',
+                totalTaxableValue: this.currentTxn.total,
+                subTotal: this.currentTxn.total,
+            },
+            accountDetails: {
+                currencySymbol: this.currentTxn.selectedAccount ? this.currentTxn.selectedAccount.currencySymbol : this.blankLedger.baseCurrencyToDisplay.symbol
+            },
+            activeAccountUniqueName: this.activeAccount.uniqueName
+        };
+        console.log('Reached', this.currentTxn);
+    }
+
+    /**
+     * To open advance receipts adjustment pop up
+     *
+     * @private
+     * @memberof ProformaInvoiceComponent
+     */
+    private openAdjustPaymentModal() {
+        this.adjustPaymentModal.show();
     }
 }

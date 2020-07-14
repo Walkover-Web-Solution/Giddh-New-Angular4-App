@@ -285,7 +285,7 @@
                                     [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
                             </td>
 
-                            <td class="pdR1" *ngIf="blankLedger.voucherType == 'rcpt'">
+                            <!-- <td class="pdR1" *ngIf="blankLedger.voucherType == 'rcpt'">
                                 <div class="form-group">
                                     <label class="default_clr">Invoice No.</label>
 
@@ -311,20 +311,12 @@
                                     </div>
 
                                 </div>
+                            </td> -->
 
-
-                                <!-- <sh-select [options]="invoiceList" [placeholder]="'Select Invoice'" [multiple]="false" [ItemHeight]="33"
-    [useInBuiltFilterForFlattenAc]="true">
-    <ng-template #optionTemplate let-option="option">
-            <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                <div class="item">{{ option.label }}</div>
-            </a>
-    </ng-template>
-</sh-select> -->
-                                <!--
-                <sh-select [options]="invoiceList" [isFilterEnabled]="true"
-                [placeholder]="'Select Invoice'" [ItemHeight]="'auto'"
-                [style.width.px]="161"></sh-select> -->
+                            <td *ngIf="blankLedger.voucherType == 'rcpt' && !shouldShowAdvanceReceipt" class="pdR1 pt-2 hidden-xs">
+                                <input type="checkbox" name="advanceReceipt" (change)="handleReceiptAdjustment()"
+                                    [(ngModel)]="isAdjustReceiptSelected">
+                                Adjust Receipt
                             </td>
 
                             <td class="pdR1" *ngIf="blankLedger.voucherType == 'credit note'">
@@ -359,10 +351,10 @@
                                 <span class="label">Remove</span>
                             </td>
 
-                            <td *ngIf="shouldShowAdvanceReceipt" class="pdR1 pt-2 hidden-xs">
-                                <input type="checkbox" name="advanceReceipt" (change)="handleAdvanceReceiptChange()"
-                                    [(ngModel)]="isAdvanceReceipt">
-                                Advance Receipt
+                            <td *ngIf="blankLedger.voucherType == 'advance-receipt' && shouldShowAdvanceReceipt" class="pdR1 pt-2 hidden-xs">
+                                <input type="checkbox" name="advanceReceipt" (change)="handleAdvanceReceiptAdjustment()"
+                                    [(ngModel)]="isAdjustAdvanceReceiptSelected">
+                                Adjust Advance Receipt
                             </td>
 
                         </tr>
@@ -636,3 +628,15 @@
     <confirmation-modal [configuration]="rcmConfiguration" (buttonClicked)="handleRcmChange($event)">
     </confirmation-modal>
 </ng-template>
+<div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <advance-receipt-adjustment-component *ngIf="isAdjustAdvanceReceiptSelected || isAdjustReceiptSelected"
+                #advanceReceiptComponent [adjustedVoucherType]="blankLedger.voucherType"
+                [invoiceFormDetails]="adjustVoucherConfiguration"
+                [advanceReceiptAdjustmentUpdatedData]="currentTxn.voucherAdjustments" (closeModelEvent)="adjustPaymentModal.hide()"
+                (submitClicked)="getAdjustedPaymentData($event)">
+            </advance-receipt-adjustment-component>
+        </div>
+    </div>
+</div>
