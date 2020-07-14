@@ -66,6 +66,35 @@ export class Account {
     public currency: Currency;
 }
 
+export class OtherSalesItemClass {
+    public shippingDate: any;
+    public shippedVia: string;
+    public trackingNumber: string;
+    public customField1: string;
+    public customField2: string;
+    public customField3: string;
+    public message1?: string;
+    public message2?: string;
+    public slogan?: any;
+
+    constructor() {
+        this.shippingDate = null;
+        this.shippedVia = null;
+        this.trackingNumber = null;
+        this.customField1 = null;
+        this.customField2 = null;
+        this.customField3 = null;
+    }
+}
+
+export class TemplateDetails {
+    public other: OtherSalesItemClass;
+
+    constructor() {
+        this.other = new OtherSalesItemClass();
+    }
+}
+
 export class PurchaseOrder {
     public type: string;
     public date: string;
@@ -76,6 +105,7 @@ export class PurchaseOrder {
     public entries: Entries;
     public company: Company; 
     public warehouse: NameUniqueName;
+    public templateDetails: TemplateDetails;
 
     constructor() {
         this.type = "purchase";
@@ -94,5 +124,7 @@ export class PurchaseOrder {
         this.company.shippingDetails.state = new StateCode();
         this.warehouse = new NameUniqueName();
         this.entries = new Entries();
+
+        this.templateDetails = new TemplateDetails();
     }
 }

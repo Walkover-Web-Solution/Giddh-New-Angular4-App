@@ -10,18 +10,37 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { SalesActions } from '../../actions/sales/sales.action';
-import { AccountResponseV2 } from '../../models/api-models/Account';
+import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';
 import { PurchaseOrder, StateCode } from '../../models/api-models/Purchase';
 import { SalesService } from '../../services/sales.service';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { WarehouseDetails } from '../../ledger/ledger.vm';
 import { SettingsUtilityService } from '../../settings/services/settings-utility.service';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
+import { ToasterService } from '../../services/toaster.service';
+import { OnboardingFormRequest } from '../../models/api-models/Common';
+import { CommonActions } from '../../actions/common.actions';
+import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'create-purchase-order',
     templateUrl: './create-purchase-order.component.html',
-    styleUrls: ['./create-purchase-order.component.scss']
+    styleUrls: ['./create-purchase-order.component.scss'],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 
 export class CreatePurchaseOrderComponent implements OnInit {
@@ -50,6 +69,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
     public autoFillVendorShipping: boolean = true;
     public autoFillCompanyShipping: boolean = true;
     public statesSource: IOption[] = [];
+    public companyStatesSource: IOption[] = [];
     public showLoader: boolean = true;
     /** Stores warehouses for a company */
     public warehouses: Array<any>;
@@ -57,12 +77,41 @@ export class CreatePurchaseOrderComponent implements OnInit {
     public shouldShowWarehouse: boolean;
     /* This will hold the company country name */
     public companyCountryName: string = '';
+    public companyCountryCode: string = '';
+    public vendorNotFoundText: string = 'Add Vendor';
+    public accountAsideMenuState: string = 'out';
+    public asideMenuStateForProductService: string = 'out';
+    public asideMenuStateForRecurringEntry: string = 'out';
+    public asideMenuStateForOtherTaxes: string = 'out';
+    // variable for checking do we really need to show loader, issue ref :- when we open aside pan loader is displayed unnecessary
+    private shouldShowLoader: boolean = true;
+    public selectedGroupUniqueNameForAddEditAccountModal: string = 'sundrycreditors';
+    public selectedVendorForDetails: string = '';
+    public isVendorSelected = false;
+    private createAccountIsSuccess$: Observable<boolean>;
+    private updateAccountSuccess$: Observable<boolean>;
+    private createdAccountDetails$: Observable<AccountResponseV2>;
+    private updatedAccountDetails$: Observable<AccountResponseV2>;
+    public formFields: any[] = [];
+    /** True, if the Giddh supports the taxation of the country (not supported now: UK, US, Nepal, Australia) */
+    public shouldShowTrnGstField: boolean = false;
+    public selectedCompany: any;
+    public showGSTINNo: boolean;
+    public showTRNNo: boolean;
+    public isValidGstinNumber: boolean = false;
+    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
-    constructor(private store: Store<AppState>, private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions) {
+    constructor(private store: Store<AppState>, private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions) {
         this.flattenAccountListStream$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$));
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
+
+        this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
+        this.createdAccountDetails$ = this.store.pipe(select(state => state.sales.createdAccountDetails), takeUntil(this.destroyed$));
+        this.updatedAccountDetails$ = this.store.pipe(select(state => state.sales.updatedAccountDetails), takeUntil(this.destroyed$));
+        this.updateAccountSuccess$ = this.store.pipe(select(state => state.sales.updateAccountSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -72,54 +121,138 @@ export class CreatePurchaseOrderComponent implements OnInit {
             this.isMobileScreen = result.matches;
         });
 
+        this.store.pipe(select(state => {
+            if (!state.session.companies) {
+                return;
+            }
+            state.session.companies.forEach(cmp => {
+                if (cmp.uniqueName === state.session.companyUniqueName) {
+                    this.selectedCompany = cmp;
+                }
+            });
+        })).subscribe();
+
         this.createVendorList();
         this.initializeWarehouse();
 
         this.selectedAccountDetails$.subscribe(async accountDetails => {
             if (accountDetails && !this.isUpdateMode) {
-                console.log(accountDetails);
-
-                this.vendorCountry = "";
-
                 if (accountDetails.country) {
-                    this.vendorCountry = accountDetails.country.countryName;
-                    await this.getUpdatedStateCodes(accountDetails.country.countryCode);
+                    await this.getUpdatedStateCodes(accountDetails.country.countryCode, false);
                 }
 
-                if (accountDetails.addresses && accountDetails.addresses.length > 0) {
-                    this.purchaseOrder.account.billingDetails.address = [];
-                    this.purchaseOrder.account.billingDetails.address.push(accountDetails.addresses[0].address);
-                    this.purchaseOrder.account.billingDetails.gstNumber = accountDetails.addresses[0].gstNumber;
-                    this.purchaseOrder.account.billingDetails.state.name = accountDetails.addresses[0].state.name;
-                    this.purchaseOrder.account.billingDetails.state.code = (accountDetails.addresses[0].state) ? (accountDetails.addresses[0].state.code) ? accountDetails.addresses[0].state.code : accountDetails.addresses[0].state.stateGstCode : accountDetails.addresses[0].stateCode;
-                    this.purchaseOrder.account.billingDetails.stateCode = this.purchaseOrder.account.billingDetails.state.code;
-                    this.purchaseOrder.account.billingDetails.stateName = accountDetails.addresses[0].state.name;
-                    this.purchaseOrder.account.billingDetails.panNumber = "";
-
-                    this.purchaseOrder.account.shippingDetails.address = [];
-                    this.purchaseOrder.account.shippingDetails.address.push(accountDetails.addresses[0].address);
-                    this.purchaseOrder.account.shippingDetails.gstNumber = accountDetails.addresses[0].gstNumber;
-                    this.purchaseOrder.account.shippingDetails.state.name = accountDetails.addresses[0].state.name;
-                    this.purchaseOrder.account.shippingDetails.state.code = (accountDetails.addresses[0].state) ? (accountDetails.addresses[0].state.code) ? accountDetails.addresses[0].state.code : accountDetails.addresses[0].state.stateGstCode : accountDetails.addresses[0].stateCode;
-                    this.purchaseOrder.account.shippingDetails.stateCode = this.purchaseOrder.account.shippingDetails.state.code;
-                    this.purchaseOrder.account.shippingDetails.stateName = accountDetails.addresses[0].state.name;
-                    this.purchaseOrder.account.shippingDetails.panNumber = "";
-                }
+                this.updateVendorDetails(accountDetails);
             }
         });
 
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
             this.companyCountryName = profile.country;
-            console.log(profile);
+
+            if (profile && profile.countryV2) {
+                this.companyCountryCode = profile.countryV2.alpha2CountryCode;
+                this.getUpdatedStateCodes(profile.countryV2.alpha2CountryCode, true);
+            }
         });
+
+        // create account success then hide aside pane
+        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response && this.accountAsideMenuState === 'in') {
+                this.toggleAccountAsidePane();
+            }
+        });
+
+        this.createdAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(async accountDetails => {
+            if (accountDetails) {
+                if (accountDetails.country) {
+                    await this.getUpdatedStateCodes(accountDetails.country.countryCode, false);
+                }
+                this.updateVendorDetails(accountDetails);
+            }
+        });
+
+        this.updatedAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
+        });
+
+        this.updateAccountSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
+            if (response && this.accountAsideMenuState === 'in') {
+                this.toggleAccountAsidePane();
+            }
+        });
+
+        this.store.pipe(select(state => state.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                if (res.fields) {
+                    this.formFields = [];
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
+                if (this.formFields && this.formFields['taxName']) {
+                    this.shouldShowTrnGstField = true;
+                } else {
+                    this.shouldShowTrnGstField = false;
+                }
+            }
+        });
+    }
+
+    public updateVendorDetails(accountDetails: any): void {
+        console.log(accountDetails);
+        if (accountDetails) {
+            this.purchaseOrder.account.uniqueName = accountDetails.uniqueName;
+            this.purchaseOrder.account.customerName = accountDetails.name;
+            this.purchaseOrder.account.name = accountDetails.name;
+            this.purchaseOrder.account.email = accountDetails.email;
+            this.purchaseOrder.account.mobileNumber = accountDetails.mobileNo;
+            this.purchaseOrder.account.currency.code = accountDetails.currency;
+
+            this.vendorCountry = "";
+
+            if (accountDetails.country) {
+                this.showGstAndTrnUsingCountry(accountDetails.country.countryCode, accountDetails.country.countryName);
+                this.vendorCountry = accountDetails.country.countryName;
+            } else {
+                this.showGstAndTrnUsingCountry('', '');
+            }
+
+            if (accountDetails.addresses && accountDetails.addresses.length > 0) {
+                this.purchaseOrder.account.billingDetails.address = [];
+                this.purchaseOrder.account.billingDetails.address.push(accountDetails.addresses[0].address);
+                this.purchaseOrder.account.billingDetails.gstNumber = accountDetails.addresses[0].gstNumber;
+                this.purchaseOrder.account.billingDetails.state.name = accountDetails.addresses[0].state.name;
+                this.purchaseOrder.account.billingDetails.state.code = (accountDetails.addresses[0].state) ? (accountDetails.addresses[0].state.code) ? accountDetails.addresses[0].state.code : accountDetails.addresses[0].state.stateGstCode : accountDetails.addresses[0].stateCode;
+                this.purchaseOrder.account.billingDetails.stateCode = this.purchaseOrder.account.billingDetails.state.code;
+                this.purchaseOrder.account.billingDetails.stateName = accountDetails.addresses[0].state.name;
+                this.purchaseOrder.account.billingDetails.panNumber = "";
+
+                this.purchaseOrder.account.shippingDetails.address = [];
+                this.purchaseOrder.account.shippingDetails.address.push(accountDetails.addresses[0].address);
+                this.purchaseOrder.account.shippingDetails.gstNumber = accountDetails.addresses[0].gstNumber;
+                this.purchaseOrder.account.shippingDetails.state.name = accountDetails.addresses[0].state.name;
+                this.purchaseOrder.account.shippingDetails.state.code = (accountDetails.addresses[0].state) ? (accountDetails.addresses[0].state.code) ? accountDetails.addresses[0].state.code : accountDetails.addresses[0].state.stateGstCode : accountDetails.addresses[0].stateCode;
+                this.purchaseOrder.account.shippingDetails.stateCode = this.purchaseOrder.account.shippingDetails.state.code;
+                this.purchaseOrder.account.shippingDetails.stateName = accountDetails.addresses[0].state.name;
+                this.purchaseOrder.account.shippingDetails.panNumber = "";
+            }
+
+            console.log(this.purchaseOrder);
+        }
     }
 
     public createVendorList(): void {
         let sundryCreditorsAcList = [];
         this.flattenAccountListStream$.subscribe(items => {
             if (items && items.length > 0) {
+                let existingAccounts = [];
                 items.forEach(item => {
-                    if (item.parentGroups.some(p => p.uniqueName === 'sundrycreditors')) {
+                    if (item.parentGroups.some(group => group.uniqueName === 'sundrycreditors') && existingAccounts.indexOf(item.uniqueName) === -1) {
+                        existingAccounts.push(item.uniqueName);
+
                         sundryCreditorsAcList.push({
                             label: item.name,
                             value: item.uniqueName,
@@ -153,10 +286,6 @@ export class CreatePurchaseOrderComponent implements OnInit {
 
     }
 
-    public addNewAccount(): void {
-
-    }
-
     public getAccountDetails(accountUniqueName: string): void {
         this.store.dispatch(this.salesAction.getAccountDetailsForSales(accountUniqueName));
     }
@@ -166,7 +295,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
         let stateCode = event.value;
 
         if (isBilling) {
-            if(addressType === "vendor") {
+            if (addressType === "vendor") {
                 // update account details address if it's billing details
                 if (this.vendorBillingState && this.vendorBillingState.nativeElement) {
                     this.vendorBillingState.nativeElement.classList.remove('error-box');
@@ -184,7 +313,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
                 this.purchaseOrder.company.billingDetails.stateCode = stateCode;
             }
         } else {
-            if(addressType === "vendor") {
+            if (addressType === "vendor") {
                 if (this.vendorShippingState && this.vendorShippingState.nativeElement) {
                     this.vendorShippingState.nativeElement.classList.remove('error-box');
                 }
@@ -210,8 +339,8 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
-    public autoFillVendorShippingDetails(addressType: string): void {
-        if(addressType === "vendor") {
+    public autoFillShippingDetails(addressType: string): void {
+        if (addressType === "vendor") {
             // auto fill shipping address
             if (this.autoFillVendorShipping) {
                 this.purchaseOrder.account.shippingDetails = _.cloneDeep(this.purchaseOrder.account.billingDetails);
@@ -232,20 +361,24 @@ export class CreatePurchaseOrderComponent implements OnInit {
 
     /**
      * Returns the promise once the state list is successfully
-     * fetched to carry outn further operations
+     * fetched to carry out further operations
      *
      * @private
      * @param {*} countryCode Country code for the user
      * @returns Promise to carry out further operations
      * @memberof CreatePurchaseOrderComponent
      */
-    private getUpdatedStateCodes(countryCode: any): Promise<any> {
+    private getUpdatedStateCodes(countryCode: any, isCompanyStates: boolean): Promise<any> {
         this.startLoader(true);
         return new Promise((resolve: Function) => {
             if (countryCode) {
                 this.salesService.getStateCode(countryCode).subscribe(resp => {
                     this.startLoader(false);
-                    this.statesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : []);
+                    if (!isCompanyStates) {
+                        this.statesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : []);
+                    } else {
+                        this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : []);
+                    }
                     resolve();
                 }, () => {
                     resolve();
@@ -308,5 +441,142 @@ export class CreatePurchaseOrderComponent implements OnInit {
                 }
             }
         });
+    }
+
+    public addNewAccount(): void {
+        this.selectedVendorForDetails = null;
+        this.isVendorSelected = false;
+        this.toggleAccountAsidePane();
+    }
+
+    public toggleAccountAsidePane(event?): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
+    public toggleBodyClass(): void {
+        if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in' || this.asideMenuStateForRecurringEntry === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
+            // don't show loader when aside menu is opened
+            this.shouldShowLoader = false;
+
+            /* add fixed class only in crete mode not in update mode
+                - because fixed class is already added in update mode due to double scrolling issue
+             */
+            if (!this.isUpdateMode) {
+                document.querySelector('body').classList.add('fixed');
+            }
+        } else {
+            // reset show loader variable because no aside pane is open
+            this.shouldShowLoader = true;
+
+            /* remove fixed class only in crete mode not in update mode
+                - because fixed class is needed in update mode due to double scrolling issue
+            */
+
+            if (!this.isUpdateMode) {
+                document.querySelector('body').classList.remove('fixed');
+            }
+        }
+    }
+
+    public addNewSidebarAccount(item: AddAccountRequest): void {
+        this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
+    }
+
+    public updateSidebarAccount(item: UpdateAccountRequest): void {
+        this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item));
+    }
+
+    /**
+     * get state code using Tax number to prefill state
+     *
+     * @param {string} type billingDetails || shipping
+     * @param {SalesShSelectComponent} statesEle state input box
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public getStateCode(type: string, statesEle: SalesShSelectComponent) {
+        let gstVal = _.cloneDeep(this.purchaseOrder.account[type].gstNumber).toString();
+        if (gstVal && gstVal.length >= 2) {
+            const selectedState = this.statesSource.find(item => item.stateGstCode === gstVal.substring(0, 2));
+            if (selectedState) {
+                this.purchaseOrder.account[type].stateCode = selectedState.value;
+                this.purchaseOrder.account[type].state.code = selectedState.value;
+
+            } else {
+                this.purchaseOrder.account[type].stateCode = null;
+                this.purchaseOrder.account[type].state.code = null;
+                this.toaster.clearAllToaster();
+            }
+            statesEle.disabled = true;
+        } else {
+            statesEle.disabled = false;
+            this.purchaseOrder.account[type].stateCode = null;
+            this.purchaseOrder.account[type].state.code = null;
+        }
+        this.checkGstNumValidation(gstVal);
+    }
+
+    /**
+     * To check Tax number validation using regex get by API
+     *
+     * @param {*} value Value to be validated
+     * @param {string} fieldName Field name for which the value is validated
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public checkGstNumValidation(value, fieldName: string = '') {
+        this.isValidGstinNumber = false;
+        if (value) {
+            if (this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
+                for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+                    let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                    if (regex.test(value)) {
+                        this.isValidGstinNumber = true;
+                    }
+                }
+            } else {
+                this.isValidGstinNumber = true;
+            }
+            if (!this.isValidGstinNumber) {
+                this.startLoader(false);
+                if (fieldName) {
+                    this.toaster.errorToast(`Invalid ${this.formFields['taxName'].label} in ${fieldName}! Please fix and try again`);
+                } else {
+                    this.toaster.errorToast(`Invalid ${this.formFields['taxName'].label}! Please fix and try again`);
+                }
+            }
+        }
+    }
+
+    private showGstAndTrnUsingCountry(code: string, name: string): void {
+        if (this.selectedCompany.country === name) {
+            if (name === 'India') {
+                this.showGSTINNo = true;
+                this.showTRNNo = false;
+                this.getOnboardingForm('IN')
+            } else if (this.vatSupportedCountries.includes(code)) {
+                this.showGSTINNo = false;
+                this.showTRNNo = true;
+                this.getOnboardingForm(code);
+            }
+        } else {
+            this.showGSTINNo = false;
+            this.showTRNNo = false;
+        }
+    }
+
+    /**
+     *
+     * To fetch regex call for onboarding countries (gulf)
+     * @param {*} countryCode
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public getOnboardingForm(countryCode) {
+        let onboardingFormRequest = new OnboardingFormRequest();
+        onboardingFormRequest.formName = 'onboarding';
+        onboardingFormRequest.country = countryCode;
+        this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
     }
 }

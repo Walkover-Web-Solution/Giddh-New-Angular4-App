@@ -95,7 +95,9 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
 
     { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase' },
     { type: 'MENU', name: 'Reports > Receipt (Beta)', uniqueName: '/pages/reports/receipt' },
-    { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' }
+    { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' },
+    { type: 'MENU', name: 'Purchase Orders', uniqueName: '/pages/purchase-management/purchase-order' },
+    { type: 'MENU', name: 'New Purchase Order', uniqueName: '/pages/purchase-management/create-purchase-order' },
 ];
 export let HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['journal-voucher', 'inventory',
     'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
