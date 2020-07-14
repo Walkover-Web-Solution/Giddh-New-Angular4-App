@@ -226,6 +226,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         // Contra allows cash or bank so selecting default category as bank
                         this.categoryOfAccounts = 'currentassets';
                         break;
+                    case VOUCHERS.RECEIPT:
+                        // Receipt allows cash or bank so selecting default category as bank
+                        this.categoryOfAccounts = '';
+                        break;    
                     default:
                         // TODO: Add other category cases as they are developed
                         break;
@@ -249,7 +253,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public openAdjustmentModal(event: KeyboardEvent, transaction: any, template: TemplateRef<any>): void {
-        if(transaction && transaction.amount && Number(transaction.amount) > 0) {
+        if(this.requestObj.voucherType === VOUCHERS.RECEIPT && transaction && transaction.type === "to" && transaction.amount && Number(transaction.amount) > 0) {
             this.currentTransaction = transaction;
 
             if(event.keyCode === 9 || event.keyCode === 13) {
@@ -743,6 +747,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         if (this.totalCreditAmount === this.totalDebitAmount) {
             if (this.validatePaymentAndReceipt(data)) {
+
+                if(this.requestObj.voucherType === VOUCHERS.RECEIPT) {
+
+                }
+
                 _.forEach(data.transactions, (element: any) => {
                     element.type = (element.type === 'by') ? 'credit' : 'debit';
                 });
@@ -856,6 +865,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * ngOnDestroy() on component destroy
      */
     public ngOnDestroy() {
+        if(this.modalRef) {
+            this.modalRef.hide();
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
