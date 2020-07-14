@@ -407,7 +407,7 @@ hr {
 }
 
 ::ng-deep #monthPicker .btn-info > .text-success {
-    color: #2680EB !important;
+    color: $chetwode-blue !important;
 }
 ::ng-deep #monthPicker .btn-info:hover .text-success {
     color: #fff !important;
@@ -468,7 +468,7 @@ hr {
 }
 /*responsive*/
 @media (max-width: 767px) {
-  
+
     .return-content {
         background-color: #fff;
     }
