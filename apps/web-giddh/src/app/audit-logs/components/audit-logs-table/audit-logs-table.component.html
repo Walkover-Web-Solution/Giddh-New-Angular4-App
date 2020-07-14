@@ -1,0 +1,332 @@
+<h1 class="page-title" *ngIf="(this.auditLogs$ | async).length > 0"> Audit Logs</h1>
+<br />
+<!--  -->
+<section class="audit-log" *ngFor="let log of (this.auditLogs$ | async); let parentIndex = index">
+    <h1>{{log.operationType}}
+        <span *ngIf="log &&log?.details && log?.details?.name && log?.operationType!='MOVE' && log?.operationType != 'MERGE' && log?.details?.uniqueName != null"> - {{log.details.name}}({{log.details.uniqueName}})</span>
+        <ng-container *ngIf="log && log?.details && log?.details?.type && log.operationType==='MERGE'">
+            <span *ngIf="log?.details?.type==='TARGET' && log?.details?.target"> - {{log?.details?.target?.name}}({{log?.details?.target.uniqueName}})</span>
+            <ng-container *ngFor="let source of log?.details?.source">
+                <span *ngIf="log?.details?.type==='SOURCE' && log?.details?.source"> - {{source?.name}}({{source?.uniqueName}})|</span>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="log?.operationType==='MOVE'">
+            <span *ngIf="log && log?.details && log?.details?.entity"> - {{log?.details?.entity.name}}({{log?.details?.entity.uniqueName}})</span>
+        </ng-container>
+    </h1>
+    <div class="audit-log-detail mt-05 clearfix">
+        <div class="d-flex user-basic-detail">
+            <div *ngIf="(auditLogsRequest$ | async)">
+                <label>Entity:</label>
+                <p>{{ (auditLogsRequest$ | async).entity}}</p>
+            </div>
+            <div>
+                <label>Date:</label>
+                <p>{{log?.dateString}}</p>
+            </div>
+            <div>
+                <label>User:</label>
+                <p>{{log?.user?.name}}</p>
+            </div>
+            <div>
+                <label>Email:</label>
+                <p>{{log?.user?.email}}</p>
+            </div>
+            <div>
+                <label>Mobile No.:</label>
+                <p>{{log?.user?.mobile}}</p>
+            </div>
+            <div *ngIf="log && log?.details && log?.details?.group && log?.details?.group?.name != null">
+                <label>Group:</label>
+                <p>{{log?.details?.group?.name}}</p>
+            </div>
+            <div *ngIf="log && log?.details && log?.operationType !=='MERGE' && log?.details?.source != undefined">
+                <label>Source:</label>
+                <p>{{log?.details?.source?.name}}
+                </p>
+            </div>
+            <div *ngIf="log && log?.details && log?.operationType ==='MERGE' && log?.details?.source != undefined && log?.details?.source.length">
+                <label>Source:</label>
+                <ng-container *ngFor="let source of log?.details?.source">
+                    <p>
+                        <span *ngIf="source.name">
+                         {{source?.name}} |</span>
+                    </p>
+                </ng-container>
+
+            </div>
+            <div *ngIf="log && log?.details && log?.details.target && log?.details.target != undefined">
+                <label>Target:</label>
+                <p>{{log?.details.target.name}}</p>
+            </div>
+            <div *ngIf="log && log?.details && log?.details?.entity">
+                <label>Account:</label>
+                <p>{{log?.details?.entity.name}}</p>
+            </div>
+            <!-- <div>
+                <label>Company:</label>
+                <p>{{log.companyName}}</p>
+            </div>
+            <div *ngIf="log.log && log.log.sharedWith && log.log.sharedWith != undefined && log.log.sharedWith.name.length > 0">
+                <label>Shared with:</label>
+                <p>{{log.log.sharedWith.name}}
+                    <span ng-if="log.log.sharedWith.email && log.log.sharedWith.email != null && log.log.sharedWith.email.length > 0">
+                        | {{log.log.sharedWith.email}}</span>
+                </p>
+            </div>
+            <div>
+                <label>Opening Balance:</label>
+                <p>0.00</p>
+            </div>
+            <div>
+                <label>Closing Balance:</label>
+                <p>0.00</p>
+            </div>
+            <div *ngIf="log && log.log && log.log.description != undefined && log.log.description.length > 0">
+                <label>Description:</label>
+                <p>{{log.log.description}}</p>
+            </div> -->
+        </div>
+
+        <div class="address-row-wrapper d-flex">
+            <div class="address-row mt-05">
+                <div class="single-address-row" *ngIf="log && log?.details && log?.details?.bankDetails && log?.details?.bankDetails.length">
+                    <ng-container *ngFor="let bank of log?.details?.bankDetails; let bankIndex = index">
+                        <div class="mr-05">
+                            <label>
+                            Bank Name:
+                        </label>
+                            <p class="address-field"> {{bank?.bankName}}
+                            </p>
+                        </div>
+                        <div class="mr-05">
+                            <label>
+                            A/c Number:
+                        </label>
+                            <p class="ml-05">{{bank?.accountNumber}}</p>
+                        </div>
+                        <div class="mr-05">
+                            <label>
+                            IFSC Code:
+                        </label>
+                            <p class="ml-05"> {{bank?.ifscCode}}</p>
+                        </div>
+                    </ng-container>
+                </div>
+                <ng-container *ngIf="log && log?.details && log?.details?.addresses && log?.details?.addresses.length">
+                    <ng-container *ngFor="let item of log?.details?.addresses; let index = index">
+                        <div class="single-address-row" *ngIf="index===0">
+                            <div class="mr-05" *ngIf="item.address">
+                                <label>
+                            Address:
+                        </label>
+                                <p class="address-field">{{item?.address}}
+                                </p>
+                            </div>
+                            <div class="mr-05" *ngIf="item?.state">
+                                <label>
+                            State:
+                        </label>
+                                <p class="ml-05">{{item?.state?.name}}</p>
+                            </div>
+                            <div class="mr-05">
+                                <label>
+                            GSTIN:
+                        </label>
+                                <p class="ml-05">{{item?.gstIn}}</p>
+                            </div>
+                            <div class="mr-05" *ngIf="item?.country">
+                                <label>
+                            Country:
+                        </label>
+                                <p class="ml-05">{{item?.country?.countryName}}</p>
+                            </div>
+                        </div>
+
+
+
+                        <div class="single-address-row" *ngIf="index>0 && showSingleAddress && isShowMultipleDataIndex===parentIndex">
+                            <div class="mr-05" *ngIf="item?.address">
+                                <label>
+                            Address:
+                        </label>
+                                <p class="address-field">{{item?.address}}
+                                </p>
+                            </div>
+                            <div class="mr-05" *ngIf="item?.state">
+                                <label>
+                            State:
+                        </label>
+                                <p class="ml-05">{{item?.state?.name}}</p>
+                            </div>
+                            <div class="mr-05">
+                                <label>
+                            GSTIN:
+                        </label>
+                                <p class="ml-05">{{item?.gstIn}}</p>
+                            </div>
+                            <div class="mr-05" *ngIf="item?.country">
+                                <label>
+                            Country:
+                        </label>
+                                <p class="ml-05">{{item?.country?.countryName}}</p>
+                            </div>
+                        </div>
+                    </ng-container>
+                </ng-container>
+                <!-- <div class="single-address-row" *ngIf="showSingleAddress">
+                    <div class="mr-05">
+                        <label>
+                            Address:
+                        </label>
+                        <p class="address-field">405-406, Capt. C. S. Naidu Arcade Near Greater Kailash Hospital
+                        </p>
+                    </div>
+                    <div class="mr-05">
+                        <label>
+                            State:
+                        </label>
+                        <p class="ml-05">Madhya Pradesh</p>
+                    </div>
+                    <div class="mr-05">
+                        <label>
+                            GSTIN:
+                        </label>
+                        <p class="ml-05">1234567890gst</p>
+                    </div>
+                    <div class="mr-05">
+                        <label>
+                            Country:
+                        </label>
+                        <p class="ml-05">India</p>
+                    </div>
+                </div> -->
+            </div>
+            <div class="angle-right-icon" (click)="openAllAddress(parentIndex)" *ngIf="log?.details?.addresses?.length>1">
+                <i class="icon-arrow-down" *ngIf="showSingleAddress"></i>
+                <i class="icon-arrow-down" *ngIf="!showSingleAddress"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="mrT" *ngIf="log?.log != null && log?.log?.transactions != undefined && log?.log?.transactions.length > 0">
+        <table class="table table-bordered ">
+            <thead>
+                <tr>
+                    <th class="col-xs-3 text-center">#</th>
+                    <th class="col-xs-3 text-center">Date</th>
+                    <th class="col-xs-3 text-center">Particular</th>
+                    <th class="col-xs-3 text-center">Amount</th>
+                    <th class="col-xs-3 text-center">Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let transaction of log?.log?.transactions; let i = index">
+                    <td>{{i + 1}}</td>
+                    <td>{{log?.log?.entryDate}}</td>
+                    <td>{{transaction?.particular?.name}} ({{transaction?.particular?.uniqueName}})</td>
+                    <td>{{transaction?.amount| number:'1.2-2'}}</td>
+                    <td>{{transaction?.type}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="mrT text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
+        <label>Updated</label>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="col-xs-3 text-center">#</th>
+                    <th class="col-xs-3 text-center">Date</th>
+                    <th class="col-xs-3 text-center">Particular</th>
+                    <th class="col-xs-3 text-center">Amount</th>
+                    <th class="col-xs-3 text-center">Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let transaction of log.log.updated.transactions; let i = index">
+                    <td>{{i + 1}}</td>
+                    <td>{{log.log.updated.entryDate}}</td>
+                    <td>{{transaction.particular.name}} ({{transaction.particular.uniqueName}})</td>
+                    <td>{{transaction.amount}}</td>
+                    <td>{{transaction.type}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <label>Old</label>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="col-xs-3 text-center">#</th>
+                    <th class="col-xs-3 text-center">Date</th>
+                    <th class="col-xs-3 text-center">Particular</th>
+                    <th class="col-xs-3 text-center">Amount</th>
+                    <th class="col-xs-3 text-center">Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let transaction of log.log.old.transactions; let i = index">
+                    <td>{{i + 1}}</td>
+                    <td>{{log.log.old.entryDate}}</td>
+                    <td>{{transaction.particular.name}} ({{transaction.particular.uniqueName}})</td>
+                    <td>{{transaction.amount}}</td>
+                    <td>{{transaction.type}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="mrT text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
+        <label>Updated</label>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="col-xs-3 text-center">Opening Balance Date</th>
+                    <th class="col-xs-2 text-center">Opening Balance</th>
+                    <th class="col-xs-3 text-center">email</th>
+                    <th class="col-xs-3 text-center">Name</th>
+                    <th class="col-xs-4 text-center">Unique Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{log.log.updated.openingBalanceDate}}</td>
+                    <td>{{log.log.updated.openingBalance}}</td>
+                    <td>{{log.log.updated.email}}</td>
+                    <td>{{log.log.updated.name}}</td>
+                    <td>{{log.log.updated.uniqueName}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <label>Old</label>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="col-xs-3 text-center">Opening Balance Date</th>
+                    <th class="col-xs-2 text-center">Opening Balance</th>
+                    <th class="col-xs-3 text-center">email</th>
+                    <th class="col-xs-3 text-center">Name</th>
+                    <th class="col-xs-4 text-center">Unique Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{log.log.old.openingBalanceDate}}</td>
+                    <td>{{log.log.old.openingBalance}}</td>
+                    <td>{{log.log.old.email}}</td>
+                    <td>{{log.log.old.name}}</td>
+                    <td>{{log.log.old.uniqueName}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+<section class="no-logs" *ngIf="(auditLogs$ | async).length < 1">
+    <div class="no-data">
+        <h1>Sorry, No Logs Found!</h1>
+        <p>You can use the filters on the left to fetch logs.</p>
+    </div>
+</section>
+<button class='btn btn-success pull-left mrT2 mrB2' [ladda]="loadMoreInProcess$ | async" (click)='loadMoreLogs()' *ngIf='(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)'>Load More
+</button>

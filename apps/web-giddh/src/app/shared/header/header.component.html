@@ -346,7 +346,7 @@
                 <!-- Main menu -->
                 <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
                     <h6 class="mrB1">MENU
-                        <a [routerLink]="['/pages/all-modules']">
+                        <a (click)="navigateToAllModules()">
                             <img src="{{imgPath}}angle-round-icon.svg" class="pull-right" *ngIf="!isMobileSite" tooltip="Menu" placement="bottom" container="body">
                         </a>
                     </h6>
@@ -373,7 +373,7 @@
                         </a>
                     </li>
                     <li id="other" class="show-more-module">
-                        <a [routerLink]="['/pages/all-modules']">Show More...</a>
+                        <a (click)="navigateToAllModules()">Show More...</a>
                     </li>
                 </ul>
             </perfect-scrollbar>
