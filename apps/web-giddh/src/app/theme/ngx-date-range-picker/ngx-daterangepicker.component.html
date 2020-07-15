@@ -250,7 +250,7 @@
                     (psScrollUp)="scrollUp()" (psScrollDown)="scrollDown()"
                     (psYReachStart)="setCalendarToActiveMonth('start')" (psYReachEnd)="setCalendarToActiveMonth('end')"> -->
                 <cdk-virtual-scroll-viewport itemSize="itemsPerPage" style="height: 250px;">
-                    <div *cdkVirtualFor="let calendarMonth of (calendarMonths$ | async); let i = index;" class="example-item">    
+                    <div *cdkVirtualFor="let calendarMonth of calendarMonths; let i = index;" class="example-item">
                         <div *ngIf="showCalInRanges && !showMonthPicker" (mousewheel)="mouseUp($event)" (touchmove)="mouseUp($event)">
                             <div class="calendar" *ngIf="calendarMonth && calendarMonth.start" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
                                 <div class="calendar-table"
@@ -438,11 +438,11 @@
                                                 <div class="th-div">
                                                         <ng-container
                                                         *ngIf="!calendarMonth.end.maxDate || calendarMonth.end.maxDate.isAfter(calendarMonth.end.calendar.lastDay) && (!linkedCalendars || singleDatePicker || true)">
-                                        
+
                                                     </ng-container>
                                                     <ng-container
                                                         *ngIf="!(!calendarMonth.end.maxDate || calendarMonth.end.maxDate.isAfter(calendarMonth.end.calendar.lastDay) && (!linkedCalendars || singleDatePicker || true))">
-                                            
+
                                                     </ng-container>
                                                 </div>
 
@@ -504,7 +504,7 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>    
+                        </div>
                     </div>
                 </cdk-virtual-scroll-viewport>
                 <!-- </perfect-scrollbar> -->
