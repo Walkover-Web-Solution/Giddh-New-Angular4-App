@@ -1281,15 +1281,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         return valid;
     }
 
-    /** Note We have to use param 'b' as this need mapping on sh-select custome filter params
+    /** Note We have to use param 'postItem' as this need mapping on sh-select custome filter params
      * To apply custom sorting on approver list 
      *
-     * @param {IOption} a Params to sort selected item
-     * @param {IOption} b Params to sort selected item
+     * @param {IOption} preItem Params to sort selected item
+     * @param {IOption} postItem Params to sort selected item
      * @returns
      * @memberof SettingIntegrationComponent
      */
-    public customApproverNameListSorting(a: IOption, b: IOption): any {
-        return (parseInt(a.label));
+    public customApproverNameListSorting(preItem: IOption, postItem: IOption): any {
+        return (parseInt(preItem.label));
     }
 }
