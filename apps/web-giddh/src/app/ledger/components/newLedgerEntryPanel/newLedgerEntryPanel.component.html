@@ -416,7 +416,7 @@
 
                     <label class="pull-left cp fs16">
 
-                        <input class="pull-left" type="checkbox" name="generateInvoice" [disabled]="isAdvanceReceipt && blankLedger.generateInvoice ? 'disabled' : null"
+                        <input class="pull-left" type="checkbox" name="generateInvoice" [disabled]="(isAdvanceReceipt || isAdjustReceiptSelected) && blankLedger.generateInvoice ? 'disabled' : null"
                             [(ngModel)]="blankLedger.generateInvoice">
                         Generate Voucher
                     </label>
@@ -589,10 +589,10 @@
 <div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <advance-receipt-adjustment-component *ngIf="isAdjustAdvanceReceiptSelected || isAdjustReceiptSelected"
+            <advance-receipt-adjustment-component *ngIf="adjustPaymentModal.isShown && (isAdjustAdvanceReceiptSelected || isAdjustReceiptSelected)"
                 #advanceReceiptComponent [adjustedVoucherType]="blankLedger.voucherType"
                 [invoiceFormDetails]="adjustVoucherConfiguration"
-                [advanceReceiptAdjustmentUpdatedData]="currentTxn.voucherAdjustments" (closeModelEvent)="adjustPaymentModal.hide()"
+                [advanceReceiptAdjustmentUpdatedData]="currentTxn.voucherAdjustments" (closeModelEvent)="closeAdjustmentModal($event)"
                 (submitClicked)="getAdjustedPaymentData($event)">
             </advance-receipt-adjustment-component>
         </div>

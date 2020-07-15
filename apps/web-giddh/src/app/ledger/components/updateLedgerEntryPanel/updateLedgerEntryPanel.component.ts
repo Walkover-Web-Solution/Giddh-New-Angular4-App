@@ -474,18 +474,26 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     // Check the RCM checkbox if API returns subvoucher as Reverse charge
 
                     /** To check advance receipts adjustment for Tx (Using list of invoice is there or not)*/
-                    if (this.vm && this.vm.selectedLedger && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices.length) {
-                        this.isAdjustedInvoicesWithAdvanceReceipt = true;
-                        this.calculateInclusiveTaxesForAdvanceReceiptsInvoices();
-                    } else {
-                        this.isAdjustedInvoicesWithAdvanceReceipt = false;
-                    }
+                    // if (this.vm && this.vm.selectedLedger && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices.length) {
+                    //     this.isAdjustedInvoicesWithAdvanceReceipt = true;
+                    //     this.calculateInclusiveTaxesForAdvanceReceiptsInvoices();
+                    // } else {
+                    //     this.isAdjustedInvoicesWithAdvanceReceipt = false;
+                    // }
 
                     if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments && this.vm.selectedLedger.voucherAdjustments.adjustments.length) {
-                        this.isAdjustedWithAdvanceReceipt = true;
-                        this.calculateInclusiveTaxesForAdvanceReceipts();
-                    } else {
-                        this.isAdjustedWithAdvanceReceipt = false;
+                        if (this.vm.selectedLedger.voucherAdjustments.adjustments.every(adjustment => adjustment.voucherType === 'sales')) {
+                            this.isAdjustedInvoicesWithAdvanceReceipt = true;
+                            this.calculateInclusiveTaxesForAdvanceReceiptsInvoices();
+                        } else {
+                            this.isAdjustedInvoicesWithAdvanceReceipt = false;
+                        }
+                        if (this.vm.selectedLedger.voucherAdjustments.adjustments.every(adjustment => adjustment.voucherType === 'receipt')) {
+                            this.isAdjustedWithAdvanceReceipt = true;
+                            this.calculateInclusiveTaxesForAdvanceReceipts();
+                        } else {
+                            this.isAdjustedWithAdvanceReceipt = false;
+                        }
                     }
                     this.isRcmEntry = (this.vm.selectedLedger.subVoucher === SubVoucher.ReverseCharge);
                     this.isAdvanceReceipt = (this.vm.selectedLedger.subVoucher === SubVoucher.AdvanceReceipt);
@@ -1456,12 +1464,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public adjustedInvoiceAmountChange(): void {
-        if (this.vm.selectedLedger && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices) {
+        if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
             let totalAmount: number = 0;
-            this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices.forEach(item => {
-                totalAmount = Number(totalAmount) + Number(item.adjustedAmount.amountForAccount);
+            this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(item => {
+                totalAmount = Number(totalAmount) + Number(item.adjustmentAmount.amountForAccount);
             });
-            this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.totalAdjustmentAmount = totalAmount;
+            this.vm.selectedLedger.voucherAdjustments.totalAdjustmentAmount = totalAmount;
             this.checkAdjustedAmountExceed(Number(totalAmount));
             this.calculateInclusiveTaxesForAdvanceReceiptsInvoices();
         }
@@ -1473,8 +1481,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public calculateInclusiveTaxesForAdvanceReceiptsInvoices(): void {
-        this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices.map(item => {
-            item.taxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.adjustedAmount.amountForAccount, item.taxRate, 0);
+        this.vm.selectedLedger.voucherAdjustments.adjustments.map(item => {
+            item.calculatedTaxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.adjustmentAmount.amountForAccount, item.taxRate, 0);
         });
     }
 
@@ -1503,8 +1511,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public calculateInclusiveTaxesForAdvanceReceipts(): void {
         let totalAmount: number = 0;
         this.vm.selectedLedger.voucherAdjustments.adjustments.map(item => {
-            item.calculatedTaxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.balanceDue.amountForAccount, item.taxRate, 0);
-            totalAmount = Number(totalAmount) + Number(item.balanceDue.amountForAccount);
+            item.calculatedTaxAmount = this.generalService.calculateInclusiveOrExclusiveTaxes(true, item.adjustmentAmount.amountForAccount, item.taxRate, 0);
+            totalAmount = Number(totalAmount) + Number(item.adjustmentAmount.amountForAccount);
         });
         this.totalAdjustedAmount = totalAmount;
     }
@@ -1538,6 +1546,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.adjustedReceiptsAmountChange();
         }
     }
+
     /**
      * Advance receipt adjustment remove model action response
      *

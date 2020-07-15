@@ -928,11 +928,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public getInvoiveListsData(event: any): void {
-        if (event.value === 'rcpt') {
-            this.shouldShowAdvanceReceipt = false;
-            this.isAdvanceReceipt = false;
-            // this.clickUnpaidInvoiceList.emit(true);
-        } else if (event.value === 'advance-receipt') {
+        this.removeAdjustment();
+        if (event.value === 'advance-receipt') {
             this.shouldShowAdvanceReceipt = true;
             this.isAdvanceReceipt = true;
             this.handleAdvanceReceiptChange();
@@ -940,6 +937,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.shouldShowAdvanceReceipt = false;
             this.isAdvanceReceipt = false;
         }
+        this.handleAdvanceReceiptChange();
     }
 
     public getInvoiveLists() {
@@ -1144,8 +1142,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.isAdjustReceiptSelected) {
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
+            this.blankLedger.generateInvoice = true;
         } else {
-            // this.removeAdjustment();
+            this.removeAdjustment();
         }
     }
 
@@ -1159,7 +1158,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
         } else {
-            // this.removeAdjustment();
+            this.removeAdjustment();
         }
     }
 
@@ -1210,6 +1209,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         }
 
+        this.adjustPaymentModal.hide();
+    }
+
+    public closeAdjustmentModal(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
+        if (event && event.adjustPaymentData &&
+            !event.adjustVoucherData.adjustments.length) {
+            if (this.currentTxn['subVoucher'] === SubVoucher.AdvanceReceipt) {
+                this.isAdjustAdvanceReceiptSelected = false;
+            } else {
+                this.isAdjustReceiptSelected = false;
+            }
+            this.blankLedger.generateInvoice = false;
+        }
         this.adjustPaymentModal.hide();
     }
 
