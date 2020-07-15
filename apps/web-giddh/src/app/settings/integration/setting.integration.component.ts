@@ -1289,7 +1289,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @returns
      * @memberof SettingIntegrationComponent
      */
-    public customApproverNameListSorting(a: IOption, b: IOption) {
+    public customApproverNameListSorting(a: IOption, b: IOption): any {
         return (parseInt(a.label));
     }
 }
