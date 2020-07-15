@@ -246,7 +246,7 @@
                 </perfect-scrollbar>
                 <!-- start date calendar container -->
                 <cdk-virtual-scroll-viewport [itemSize]="160" style="height: 284px;" *ngIf="showCalInRanges && !showMonthPicker">
-                    <div *cdkVirtualFor="let calendarMonth of calendarMonths; let i = index;" (mousewheel)="mouseUp($event)" (touchmove)="mouseUp($event)">
+                    <div *cdkVirtualFor="let calendarMonth of calendarMonths; let i = index;" (wheel)="mouseUp($event)" (touchmove)="mouseUp($event)">
                         <div class="calendar" *ngIf="calendarMonth && calendarMonth.start" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
                             <div class="calendar-table"
                                 (mouseenter)="setActiveMonth(calendarMonth, 'start');">
