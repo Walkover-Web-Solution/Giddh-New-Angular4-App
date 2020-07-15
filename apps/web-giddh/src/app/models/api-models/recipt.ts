@@ -1,5 +1,5 @@
 import { InvoiceFilterClassForInvoicePreview } from './Invoice';
-import { AmountClassMulticurrency, ILinkedInvoice } from "./Sales";
+import { AmountClassMulticurrency, IInvoiceLinkingRequest } from "./Sales";
 
 export class InvoiceReceiptFilter extends InvoiceFilterClassForInvoicePreview {
 
@@ -47,7 +47,7 @@ export interface ReceiptItem {
 	isSelected?: boolean;
 	cashInvoice: boolean;
     accountCurrencySymbol?: string;
-    linkedInvoices?: ILinkedInvoice[];
+    invoiceLinkingRequest?: IInvoiceLinkingRequest;
 }
 
 export interface ReciptResponse {
