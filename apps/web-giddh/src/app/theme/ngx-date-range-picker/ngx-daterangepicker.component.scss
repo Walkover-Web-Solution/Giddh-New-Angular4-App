@@ -172,12 +172,8 @@ $input-height: 3rem !default;
                 border: none;
             }
         }
-<<<<<<< HEAD
-        th {
-=======
 
         th, .th-div {
->>>>>>> 297d5095a... aditi | staging | GIDK-758 | table replaced by div
             font-size: 100%;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
                 Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -216,22 +212,14 @@ $input-height: 3rem !default;
         border-radius: $md-drppicker-calendar-border-radius;
         background-color: $md-drppicker-calendar-bg-color;
     }
-<<<<<<< HEAD
-    table {
-=======
 
     table, .table-condensed {
->>>>>>> 297d5095a... aditi | staging | GIDK-758 | table replaced by div
         width: 100%;
         margin: 0;
         border-collapse: collapse;
     }
-<<<<<<< HEAD
-    th {
-=======
 
     th, .th-div {
->>>>>>> 297d5095a... aditi | staging | GIDK-758 | table replaced by div
         color: #988c8c;
     }
     th.month.drp-animate, .month.drp-animate {
@@ -300,10 +288,6 @@ $input-height: 3rem !default;
             color: #ccc;
         }
     }
-<<<<<<< HEAD
-    td {
-        margin: 0.25em 0;
-=======
 
     /* new calendar */
     .td-div, .th-div{
@@ -369,7 +353,6 @@ $input-height: 3rem !default;
     }
     td, .td-div {
         margin: 0em 0;
->>>>>>> 297d5095a... aditi | staging | GIDK-758 | table replaced by div
         &.off {
             &,
             &.in-range,
@@ -480,18 +463,12 @@ $input-height: 3rem !default;
             }
         }
     }
-<<<<<<< HEAD
-    th {
-=======
 
     th, .th-div {
->>>>>>> 297d5095a... aditi | staging | GIDK-758 | table replaced by div
         &.month {
             width: auto;
         }
     }
-<<<<<<< HEAD
-=======
 
     .d-flex{
         display:flex;
@@ -501,7 +478,6 @@ $input-height: 3rem !default;
     }
     /* new calendar */
 
->>>>>>> 297d5095a... aditi | staging | GIDK-758 | table replaced by div
     // disabled controls
     td,
     option {
@@ -511,8 +487,6 @@ $input-height: 3rem !default;
             text-decoration: line-through;
         }
     }
-<<<<<<< HEAD
-=======
 
     /* new calendar */
     .td-div,
@@ -525,7 +499,6 @@ $input-height: 3rem !default;
     }
     /* new calendar */
 
->>>>>>> 297d5095a... aditi | staging | GIDK-758 | table replaced by div
     select {
         display: inline-block;
         background-color: $select-background;
@@ -569,8 +542,6 @@ $input-height: 3rem !default;
         position: relative;
         display: inline-block;
     }
-<<<<<<< HEAD
-=======
 
     /* new calendar */
     .th-div.month > div {
@@ -579,7 +550,6 @@ $input-height: 3rem !default;
     }
     /* new calendar */
 
->>>>>>> 297d5095a... aditi | staging | GIDK-758 | table replaced by div
     .calendar-time {
         text-align: center;
         margin: 4px auto 0 auto;
@@ -865,8 +835,6 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     border: none !important;
 }
 
-<<<<<<< HEAD
-=======
 /* new calendar */
 .md-drppicker .td-div.in-range.in-range-start::before {
     border-radius: 50% 0 0 50% !important;
@@ -891,7 +859,6 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
 }
 /* new calendar */
 
->>>>>>> 297d5095a... aditi | staging | GIDK-758 | table replaced by div
 .invalid-date.error-msg {
     font-size: 12px;
     position: absolute;
@@ -1137,8 +1104,6 @@ td span {
     display: block;
 }
 
-<<<<<<< HEAD
-=======
 /* new calendar */
 .td-div span {
     position: relative;
@@ -1156,7 +1121,6 @@ td span {
 }
 /* new calendar */
 
->>>>>>> 297d5095a... aditi | staging | GIDK-758 | table replaced by div
 .se {
     width: 270px;
     opacity: 0;
@@ -1327,10 +1291,6 @@ td span {
     border: none;
     border-top: 1px solid transparent;
 }
-<<<<<<< HEAD
-
-.md-drppicker .calendar td.hide-date {
-=======
 .md-drppicker .calendar .th-div,
 .md-drppicker .calendar .td-div {
     height: 28px;
@@ -1338,7 +1298,6 @@ td span {
     border-top: 1px solid transparent;
 }
 .md-drppicker .calendar .td-div.hide-date {
->>>>>>> 297d5095a... aditi | staging | GIDK-758 | table replaced by div
     visibility: hidden;
 }
 
