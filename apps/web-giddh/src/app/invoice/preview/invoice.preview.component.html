@@ -298,6 +298,13 @@
                             </div>
                         </th>
 
+                        <!-- Linked invoices -->
+                        <th *ngIf="selectedVoucher === 'credit note'">
+                            <div class="d-flex">
+                                <div>Linked Invoice</div>
+                            </div>
+                        </th>
+
                         <th>
                             <div class="d-flex">
                                 <div class="flex-fill text-right ">Total amount</div>
@@ -448,6 +455,9 @@
                         </td>
                         <!-- Date -->
                         <td>{{item.voucherDate}}</td>
+
+                        <!-- Linked invoices -->
+                        <td *ngIf="selectedVoucher === 'credit note'">{{item.invoiceLinkingRequest?.linkedInvoices?.length ? item.invoiceLinkingRequest?.linkedInvoices[0].invoiceNumber : '-'}}</td>
 
                         <!-- Total Amount with multicurrency for CR/DR note -->
                         <td *ngIf="(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" [tooltip]="grandTotalPopupTemplate" class="text-right">{{item.accountCurrencySymbol}} {{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
