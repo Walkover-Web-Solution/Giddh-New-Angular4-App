@@ -1792,7 +1792,16 @@ tr:first-child.in-range-hovered.available {
         width: 79%;
     }
 }
-
+@media(max-width:330px){
+    .md-drppicker .calendar {
+        .th-div, .td-div{
+            min-width: 44px;
+        }
+    }
+    cdk-virtual-scroll-viewport{
+            height: calc(100vh - 180px);
+    }
+}
 @media (max-height: 767px) {
     .drops-down-right {
         height: 470px;
