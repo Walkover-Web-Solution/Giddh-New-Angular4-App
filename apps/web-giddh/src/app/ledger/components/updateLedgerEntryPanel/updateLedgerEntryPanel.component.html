@@ -728,51 +728,43 @@
                     </div>
 
                     <!-- Advance receipts adjusted Invoice -->
-                    <div class="clearfix adjust-receipt font-14"
-                        *ngIf="isAdjustedInvoicesWithAdvanceReceipt && vm.selectedLedger && vm.selectedLedger.voucherGeneratedType ==='receipt'">
+                    <div class="clearfix adjust-receipt font-14" *ngIf="isAdjustedInvoicesWithAdvanceReceipt">
                         <p class="bold">Adjusted Amount
                             <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
                                 (click)="openAdjustInvoiceEditMode();$event.stopPropagation();"><i
                                     class="icon-edit11 font-10"></i></a>
                         </p>
                         <p class="font-12 text-light mb-1">
-                            {{ vm.baseCurrencyDetails?.symbol}}{{vm.selectedLedger?.voucherAdjustmentsForInvoice?.totalAdjustmentAmount | giddhCurrency}}
+                            {{ vm.baseCurrencyDetails?.symbol}}{{vm.selectedLedger?.voucherAdjustments?.totalAdjustmentAmount | giddhCurrency}}
                         </p>
                         <div class="clearfix adjustment-field">
-                            <div class="row"
-                                *ngFor="let item of vm.selectedLedger?.voucherAdjustmentsForInvoice?.adjustedInvoices; let entryIdx = index;">
+                            <div class="row" *ngFor="let item of vm.selectedLedger?.voucherAdjustments?.adjustments; let entryIdx = index;">
                                 <div class="col-md-4 col-sm-5 pr-05">
                                     <div class="form-group">
-                                        <label>Adjustment Invoices
+                                        <label>Adjustment Vouchers
                                             <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" class="form-control mb-1" [(ngModel)]="item.invoiceNumber"
-                                            disabled>
+                                        <input type="text" class="form-control mb-1" [(ngModel)]="item.voucherNumber" disabled>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-5 pl-05 pr-05">
                                     <div class="form-group">
-                                        <label>Amount<span class="text-danger">*</span> <span
+                                        <label>Amount<span class="text-danger">*</span> <span *ngIf="item.voucherType === 'receipt' && isAdvanceReceipt"
                                                 class="text-light font-12 ml-05">(Inclusive
                                                 Tax)</span></label>
-                                        <input type="text" class="form-control mb-1"
-                                            *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
-                                            [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
-                                            decimalDigitsDirective [(ngModel)]="item.adjustedAmount.amountForAccount"
-                                            disabled>
-                                        <input type="text" class="form-control mb-1" decimalDigitsDirective
-                                            [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
-                                            (blur)="adjustedInvoiceAmountChange()"
-                                            *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
-                                            [(ngModel)]="item.adjustedAmount.amountForAccount">
+                                        <input type="text" class="form-control mb-1" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
+                                            [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective
+                                            [(ngModel)]="item.adjustmentAmount.amountForAccount" disabled>
+                                        <input type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat"
+                                            [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedInvoiceAmountChange()"
+                                            *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode" [(ngModel)]="item.adjustmentAmount.amountForAccount">
                                     </div>
                                 </div>
-                                <div class="col-sm-2 pl-05">
+                                <div *ngIf="item.voucherType === 'receipt'" class="col-sm-2 pl-05">
                                     <div class="form-group">
                                         <label>Tax</label>
-                                        <input type="text" class="form-control mb-1" decimalDigitsDirective
-                                            [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
-                                            [(ngModel)]="item.taxAmount" disabled>
+                                        <input type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat"
+                                            [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.calculatedTaxAmount" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -783,8 +775,7 @@
                     </div>
                     <!-- End advance receipts adjusted Invoice -->
                     <!--Adjusted advance receipts list  -->
-                    <div class="clearfix adjust-receipt font-14"
-                        *ngIf="isAdjustedWithAdvanceReceipt && vm.selectedLedger.voucherGeneratedType ==='sales'">
+                    <div class="clearfix adjust-receipt font-14" *ngIf="isAdjustedWithAdvanceReceipt">
                         <p class="bold">Adjusted Receipts
                             <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
                                 (click)="openAdjustInvoiceEditMode();$event.stopPropagation();"><i
@@ -871,7 +862,7 @@
                                 </td>
 
                                 <td class="pdR1"
-                                    *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur'      ||     vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'pay')">
+                                    *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur' || vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'pay')">
                                     <div class="form-group">
                                         <label class="default_clr">Invoice No.</label>
                                         <input type="text" placeholder="Invoice no." class="form-control"
@@ -879,7 +870,7 @@
                                     </div>
                                 </td>
 
-                                <td class="pdR1" *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'">
+                                <!-- <td class="pdR1" *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'">
 
                                     <div class="form-group">
 
@@ -904,7 +895,7 @@
                                         </div>
                                     </div>
 
-                                </td>
+                                </td> -->
 
                                 <td class="pdR1" *ngIf="vm.selectedLedger.voucher.shortCode == 'credit note'">
                                     <div class="form-group">

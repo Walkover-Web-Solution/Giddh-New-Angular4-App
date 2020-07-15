@@ -970,28 +970,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public getInvoiceListsData(event: any): void {
-        if (event.value === 'rcpt') {
-            this.shouldShowAdvanceReceipt = false;
-            this.isAdvanceReceipt = false;
-            // this.clickUnpaidInvoiceList.emit(true);
+        this.removeAdjustment();
+        if (event.value === 'advance-receipt') {
+            this.shouldShowAdvanceReceipt = true;
+            this.isAdvanceReceipt = true;
         } else if (event.value === VoucherTypeEnum.creditNote) {
             this.shouldShowAdvanceReceipt = false;
             this.getInvoiceListsForCreditNote.emit(true);
             this.blankLedger.generateInvoice = true;
-        } else if (event.value === 'advance-receipt') {
-            this.shouldShowAdvanceReceipt = true;
-            this.isAdvanceReceipt = true;
-            this.handleAdvanceReceiptChange();
         } else {
             this.shouldShowAdvanceReceipt = false;
             this.isAdvanceReceipt = false;
         }
-    }
-
-    public getInvoiveLists() {
-        if (this.blankLedger.voucherType === 'rcpt') {
-            this.clickUnpaidInvoiceList.emit(true);
-        }
+        this.handleAdvanceReceiptChange();
     }
 
     public toggleBodyClass() {
@@ -1190,8 +1181,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.isAdjustReceiptSelected) {
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
+            this.blankLedger.generateInvoice = true;
         } else {
-            // this.removeAdjustment();
+            this.removeAdjustment();
         }
     }
 
@@ -1205,7 +1197,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
         } else {
-            // this.removeAdjustment();
+            this.removeAdjustment();
         }
     }
 
@@ -1256,6 +1248,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         }
 
+        this.adjustPaymentModal.hide();
+    }
+
+    public closeAdjustmentModal(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
+        if (event && event.adjustPaymentData &&
+            !event.adjustVoucherData.adjustments.length) {
+            if (this.currentTxn['subVoucher'] === SubVoucher.AdvanceReceipt) {
+                this.isAdjustAdvanceReceiptSelected = false;
+            } else {
+                this.isAdjustReceiptSelected = false;
+            }
+            this.blankLedger.generateInvoice = false;
+        }
         this.adjustPaymentModal.hide();
     }
 

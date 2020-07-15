@@ -239,7 +239,7 @@
         <table class="width100 mrT">
             <tbody>
                 <tr>
-                    <td class="primary_clr" (click)="getInvoiveLists(); showAdvanced = !showAdvanced">
+                    <td class="primary_clr" (click)="showAdvanced = !showAdvanced">
                         <i class="fa cp"
                             [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
                         <button class="no-btn pdL0">&nbsp;More Details</button>
@@ -455,7 +455,7 @@
                     <label class="pull-left cp fs16">
 
                         <input class="pull-left" type="checkbox" name="generateInvoice"
-                            [disabled]="(isAdvanceReceipt && blankLedger.generateInvoice || selectedInvoiceForCreditNote) ? 'disabled' : null"
+                            [disabled]="(isAdvanceReceipt || isAdjustReceiptSelected || selectedInvoiceForCreditNote) && blankLedger.generateInvoice ? 'disabled' : null"
                             [(ngModel)]="blankLedger.generateInvoice">
                         Generate Voucher
                     </label>
@@ -631,10 +631,10 @@
 <div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <advance-receipt-adjustment-component *ngIf="isAdjustAdvanceReceiptSelected || isAdjustReceiptSelected"
+            <advance-receipt-adjustment-component *ngIf="adjustPaymentModal.isShown && (isAdjustAdvanceReceiptSelected || isAdjustReceiptSelected)"
                 #advanceReceiptComponent [adjustedVoucherType]="blankLedger.voucherType"
                 [invoiceFormDetails]="adjustVoucherConfiguration"
-                [advanceReceiptAdjustmentUpdatedData]="currentTxn.voucherAdjustments" (closeModelEvent)="adjustPaymentModal.hide()"
+                [advanceReceiptAdjustmentUpdatedData]="currentTxn.voucherAdjustments" (closeModelEvent)="closeAdjustmentModal($event)"
                 (submitClicked)="getAdjustedPaymentData($event)">
             </advance-receipt-adjustment-component>
         </div>
