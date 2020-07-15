@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, ViewChild, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap';
 import { IOption } from '../../../../theme/ng-select/option.interface';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
-import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -22,8 +21,6 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     @Input() public activeCompany: any;
     @Input() public voucherDate: any;
     @Output() public entriesList: EventEmitter<any> = new EventEmitter();
-
-    @ViewChild('referenceType') public referenceType: ShSelectComponent;
 
     public receiptEntries: any[] = [];
     public modalRef: BsModalRef;
@@ -56,6 +53,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
             if(this.transaction.voucherAdjustments) {
                 this.receiptEntries = this.transaction.voucherAdjustments;
                 this.totalEntries = this.receiptEntries.length;
+                this.validateEntries(false);
             } else {
                 this.addNewEntry();
             }
@@ -246,14 +244,14 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         this.receiptEntries = receiptEntries;
         this.totalEntries--;
 
-        this.validateEntries();
+        this.validateEntries(true);
     }
 
     public closePopup(): void {
         this.entriesList.emit(this.transaction);
     }
 
-    public validateEntries(): void {
+    public validateEntries(addEntryIfInvalid: boolean): void {
         let receiptTotal = 0;
 
         this.receiptEntries.forEach(receipt => {
@@ -262,7 +260,9 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
 
         if (receiptTotal !== this.transaction.amount) {
             this.isValidForm = false;
-            this.addNewEntry();
+            if(addEntryIfInvalid) {
+                this.addNewEntry();
+            }
         } else {
             this.isValidForm = true;
         }
