@@ -2,6 +2,7 @@ import { CompanyResponse } from '../../../models/api-models/Company';
 import { RecTypePipe } from '../../../shared/helpers/pipes/recType/recType.pipe';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { Total } from './tb-export-csv.component';
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 
 export interface IFormatable {
     setHeader(selectedCompany: CompanyResponse);
@@ -185,10 +186,11 @@ export class DataFormatter {
             total = this.calculateTotal(group, total);
         });
 
-        total.cr = Number(total.cr.toString().substring(0, total.cr.toString().indexOf(".") + 5));
-        total.dr = Number(total.dr.toString().substring(0, total.dr.toString().indexOf(".") + 5));
-        total.ob = Number(total.ob.toString().substring(0, total.ob.toString().indexOf(".") + 5));
-        total.cb = Number(total.cb.toString().substring(0, total.cb.toString().indexOf(".") + 5));
+        total.cr = giddhRoundOff(total.cr, 2);
+        total.dr = giddhRoundOff(total.dr, 2);
+        total.ob = giddhRoundOff(total.ob, 2);
+        total.cb = giddhRoundOff(total.cb, 2);
+
         return total;
     }
 
