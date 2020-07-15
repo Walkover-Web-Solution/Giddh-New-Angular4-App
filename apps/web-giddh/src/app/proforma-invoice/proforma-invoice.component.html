@@ -175,7 +175,7 @@
                                                     <div class="col-sm-6 bill-add">
 
                                                         <div class="form-group">
-                                                            <label>Billing Address</label>
+                                                            <label class="pb-0">Billing Address</label>
 
                                                             <div class="billing-address clearfix">
                                                                 <textarea name="billingDetails.address" class="form-control" (keyup)="autoFillShippingDetails()" rows="3" autocomplete="off" [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]" autofocus="off" aria-autocomplete="none" #customerBillingAddress></textarea>
@@ -211,7 +211,7 @@
                                                     <div class="col-sm-6 bill-add">
 
                                                         <div class="form-group p0 width100">
-                                                            <label>
+                                                            <label class="pb-0">
                                                                 <input type="checkbox" autocomplete="None"
                                                                        (change)="autoFillShippingDetails()"
                                                                        name="autoFillShipping"
@@ -995,7 +995,7 @@
 
                             <div class="row">
 
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-xs-4 mb-0">
                                     <input type="text" #shippingDate="ngModel" [placeholder]="templatePlaceholder?.shippedDateLabel" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                         [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
                                     <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
@@ -1003,11 +1003,11 @@
                                     </p>
                                 </div>
 
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-xs-4 mb-0">
                                     <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" [placeholder]="templatePlaceholder?.shippedViaLabel || 'Ship Via'" />
                                 </div>
 
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-xs-4 mb-0">
                                     <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" [placeholder]="templatePlaceholder?.trackingNumber || 'Tracking No.'" />
                                 </div>
 
@@ -1015,15 +1015,15 @@
 
                             <div class="row">
 
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-xs-4 mb-0">
                                     <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" [placeholder]="templatePlaceholder?.customField1Label || 'Field 1'" />
                                 </div>
 
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-xs-4 mb-0">
                                     <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" [placeholder]="templatePlaceholder?.customField2Label || 'Field 2'" />
                                 </div>
 
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-xs-4 mb-0">
                                     <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" [placeholder]="templatePlaceholder?.customField3Label || 'Field 3'" />
                                 </div>
 
@@ -1232,14 +1232,14 @@
                                                             </a>
                                                         </ng-template>
                                                     </sh-select>
-                                                    <label class="pull-right">Payment Mode</label>
+                                                    <label class="pull-left pt-1">Payment Mode</label>
                                                 </div>
                                             </li>
 
                                             <li class="clearfix mrT1" *ngIf="isSalesInvoice">
                                                 <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount" name="dueAmount" class="form-control amountField text-right pull-right max100" [(ngModel)]="depositAmount" [prefix]="depositCurrSymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                                 />
-                                                <label class="pull-right">Amount</label>
+                                                <label class="pull-left pt-1">Amount</label>
                                             </li>
 
                                             <li class="clearfix mrT1" *ngIf="isCashInvoice">
@@ -1247,7 +1247,7 @@
                                                                     <span
                                                                         *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span> {{invFormData.voucherDetails.balanceDue
                                                 | giddhCurrency}}</span>
-                                                <label class="pull-right">Amount</label>
+                                                <label class="pull-left pt-1">Amount</label>
                                             </li>
 
                                             <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
@@ -1260,7 +1260,7 @@
                                                                         {{invFormData.voucherDetails.balanceDue | giddhCurrency }}
                                                                     </ng-container>
                                                                 </strong>
-                                                <strong class="pull-right">Balance Due</strong>
+                                                <strong class="pull-left">Balance Due</strong>
                                             </li>
                                         </ng-container>
                                     </ul>
@@ -1777,30 +1777,30 @@
 
                     <div class="row">
 
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-4 mb-0">
                             <input type="text" #shippingDate="ngModel" [placeholder]="templatePlaceholder?.shippedDateLabel" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                 [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
                             <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                 Invalid Date</p>
                         </div>
 
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-4 mb-0">
                             <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" [placeholder]="templatePlaceholder?.shippedViaLabel || 'Ship Via'" />
                         </div>
 
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-4 mb-0">
                             <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" [placeholder]="templatePlaceholder?.trackingNumber || 'Tracking No.'" />
                         </div>
 
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-4 mb-0">
                             <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" [placeholder]="templatePlaceholder?.customField1Label || 'Field 1'" />
                         </div>
 
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-4 mb-0">
                             <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" [placeholder]="templatePlaceholder?.customField2Label || 'Field 2'" />
                         </div>
 
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-4 mb-0">
                             <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" [placeholder]="templatePlaceholder?.customField3Label || 'Field 3'" />
                         </div>
                     </div>
@@ -1924,21 +1924,21 @@
                                                 </a>
                                             </ng-template>
                                         </sh-select>
-                                        <label class="pull-right">Payment Mode</label>
+                                        <label class="pull-left pt-1">Payment Mode</label>
                                     </div>
                                 </li>
 
                                 <li class="clearfix mrT1" *ngIf="isSalesInvoice">
                                     <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount" name="dueAmount" class="form-control amountField text-right pull-right max100" [(ngModel)]="depositAmount" [prefix]="depositCurrSymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                     />
-                                    <label class="pull-right">Amount</label>
+                                    <label class="pull-left pt-1">Amount</label>
                                 </li>
 
                                 <li class="clearfix mrT1" *ngIf="isCashInvoice">
                                     <span class="amountField pull-right max100 amountFiledCash">
                                                         <span
                                                             *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span> {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</span>
-                                    <label class="pull-right">Amount</label>
+                                    <label class="pull-left pt-1">Amount</label>
                                 </li>
 
                                 <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
@@ -1946,7 +1946,7 @@
                                                         *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
                                                         {{invFormData.voucherDetails.balanceDue | giddhCurrency}}
                                                     </strong>
-                                    <strong class="pull-right">Balance Due</strong>
+                                    <strong class="pull-left">Balance Due</strong>
                                 </li>
 
                             </ul>
