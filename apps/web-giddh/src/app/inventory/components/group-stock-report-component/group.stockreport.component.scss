@@ -275,7 +275,6 @@ td.brNone {
     justify-content: center;
     align-items: center;
     font-size: 18px;
-    margin-left: 10px;
     border: 1px solid #5b64c9;
     border-radius: 2px;
     color: #1a237e;
@@ -312,4 +311,14 @@ button.btn.btn-filter {
 }
 .group-not-found {
     text-transform: none;
+}
+.icon-btn{
+    border: 1px solid $gainsboro;
+    height: 36px;
+    width: 36px;
+    margin-top: 0;
+    background-color: $white;
+    .strong{
+        font-weight: bold;
+    }
 }

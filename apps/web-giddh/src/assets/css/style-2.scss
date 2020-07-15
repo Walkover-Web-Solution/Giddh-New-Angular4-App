@@ -1756,6 +1756,7 @@ modal-container.modal {
 }
 .sh-select-border .menu .scrollable-content > .item {
     border-bottom: 1px solid $gainsboro;
+    height: initial !important;
 }
 /* my css end */
 
@@ -9297,7 +9298,6 @@ span#HW_badge_cont:nth-child(3){
     .padding-top-fixed-mobile{
         padding-top: 50px;
     }
-    
 }
 .mobile-sidebar-open:after{
     position: absolute;

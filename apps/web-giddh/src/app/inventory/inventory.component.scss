@@ -64,8 +64,15 @@
 .inventory-controll .container-fluid {
     .branch-warehouse-filter {
         width: 100%;
+        sh-select{
+            min-width: 175px;
+        }
     }
     .branch-filter {
         margin-right: 15px;
+    }
+    .warehouse-filter{
+        max-width: 250px;
+        width: 100%;
     }
 }

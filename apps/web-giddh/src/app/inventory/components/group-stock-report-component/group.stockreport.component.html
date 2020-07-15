@@ -66,10 +66,14 @@
             </div>
             <div class="clearfix">
 
-                <div class="btn-group " dropdown [autoClose]="true" placement="bottom right">
+                <div class="btn-group" dropdown [autoClose]="true" placement="bottom right">
+                    <button class="btn-link icon-btn mr-1" tooltip="Edit group">
+                        <i class="fa fa-pencil"></i>
+                    </button>
                     <button id="button-alignment" dropdownToggle type="button"
-                        class="btn-link mrT cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
-                        <i class="icon-download"></i> Download
+                        class="btn-link mrT cp mr-1 dropdown-toggle icon-btn" aria-controls="dropdown-alignment"
+                        tooltip="Download">
+                        <i class="icon-download strong"></i>
                     </button>
                     <ul id="dropdown-alignment" *dropdownMenu
                         class="dropdown-menu dropdown-menu-right dropdown-menu-download" role="menu"
@@ -346,7 +350,8 @@
                         <td class="bdrB bdrR" colspan="2">
                             <span class="justify-content-between d-flex align-items-start">
                                 <span>{{txn.stockName}}</span>
-                                <span class="unit-badge pull-right text-light nowrap">{{txn.openingBalance?.stockUnit}}</span>
+                                <span
+                                    class="unit-badge pull-right text-light nowrap">{{txn.openingBalance?.stockUnit}}</span>
                             </span>
                         </td>
                         <!-- in case of all entity with group -->
@@ -398,7 +403,8 @@
                 </tr>
             </tbody>
 
-            <tbody *ngIf="(groupStockReport && groupStockReport.count < 1 && !groupStockReportInProcess) || groupNotFoundMessage">
+            <tbody
+                *ngIf="(groupStockReport && groupStockReport.count < 1 && !groupStockReportInProcess) || groupNotFoundMessage">
                 <tr>
                     <!-- in case of all entity with group -->
                     <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'"
@@ -407,7 +413,8 @@
                         class="text-center empty_table">
                         <!-- in case of all entity with group -->
                         <img src="assets/images/search-data-not-found.svg" />
-                        <h1 [class.group-not-found]="groupNotFoundMessage">{{ (groupNotFoundMessage) ? groupNotFoundMessage : 'No Report Found !!' }}</h1>
+                        <h1 [class.group-not-found]="groupNotFoundMessage">
+                            {{ (groupNotFoundMessage) ? groupNotFoundMessage : 'No Report Found !!' }}</h1>
                     </td>
                 </tr>
             </tbody>
@@ -455,7 +462,8 @@
                                                 *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems}}</span>
                                         </div>
                                         <div class="mt-1">
-                                            <span class="text-orange d-block">{{groupStockReport.profit | giddhCurrency}}
+                                            <span
+                                                class="text-orange d-block">{{groupStockReport.profit | giddhCurrency}}
                                                 ({{dateRangePickerCmp?.nativeElement?.value | replaceHyphens}})</span>
                                         </div>
                                     </h4>
