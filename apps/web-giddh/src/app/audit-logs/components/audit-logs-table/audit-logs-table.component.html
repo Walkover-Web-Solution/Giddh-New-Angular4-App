@@ -4,7 +4,7 @@
 <section class="audit-log" *ngFor="let log of (this.auditLogs$ | async); let parentIndex = index">
     <h1>{{log.operationType}}
         <!-- For account start header -->
-        <span *ngIf="log &&log?.details && (auditLogsRequest$ | async)?.entity==='account' && log?.details?.name && log?.operationType!='MOVE' && log?.operationType != 'MERGE' && log?.details?.uniqueName != null"> - {{log?.details.name}}({{log?.details.uniqueName}})</span>
+        <span *ngIf="log && log?.details && log?.details?.name && log?.operationType!='MOVE' && log?.operationType != 'MERGE' && log?.details?.uniqueName != null"> - {{log?.details.name}}({{log?.details.uniqueName}})</span>
         <ng-container *ngIf="log && log?.details && log?.details?.type && log.operationType==='MERGE'">
             <span *ngIf="log?.details?.type==='TARGET' && log?.details?.target"> - {{log?.details?.target?.name}}({{log?.details?.target.uniqueName}})</span>
             <ng-container *ngFor="let source of log?.details?.source">
@@ -80,7 +80,10 @@
                 <label>Group:</label>
                 <p>{{ log?.details?.stockGroup?.name}}</p>
             </div>
-
+            <div *ngIf="log && log?.details && log?.details?.stockUnit && log?.details?.stockUnit?.name != undefined">
+                <label>Unit:</label>
+                <p>{{ log?.details?.stockUnit?.name}}</p>
+            </div>
             <!-- <div>
                 <label>Company:</label>
                 <p>{{log.companyName}}</p>
@@ -106,8 +109,8 @@
             </div> -->
         </div>
         <!-- stocks -->
-        <div class="address-row-wrapper d-flex">
-            <div class="address-row mt-05">
+        <div class="address-row-wrapper d-flex" *ngIf="log?.details?.purchases?.account && log?.details?.sales?.account">
+            <div class="address-row mt-05" *ngIf="log?.details?.purchases?.account">
                 <div class="single-address-row">
                     <span>
                         Purchase:-
@@ -116,20 +119,20 @@
                         <label>
                             Account:
                         </label>
-                        <p class="address-field"> asdhasldj
+                        <p class="address-field"> {{ log?.details?.purchases?.account?.name}}
                         </p>
                     </div>
                     <div class="mr-05">
                         <label>
                             Unit:
                         </label>
-                        <p class="ml-05"> Numbers asd</p>
+                        <p class="ml-05"> {{ log?.details?.purchases?.unit?.name}}</p>
                     </div>
                     <div class="mr-05">
                         <label>
                             Rate:
                         </label>
-                        <p class="ml-05"> 200/-</p>
+                        <p class="ml-05">{{ log?.details?.purchases?.rate}}</p>
                     </div>
                     <span>
                         Sales:-
@@ -138,20 +141,20 @@
                         <label>
                             Account:
                         </label>
-                        <p class="address-field">Ram
+                        <p class="address-field">{{ log?.details?.sales?.account?.name}}
                         </p>
                     </div>
                     <div class="mr-05">
                         <label>
                             Unit:
                         </label>
-                        <p class="ml-05">Kilo</p>
+                        <p class="ml-05">{{ log?.details?.sales?.unit?.name}}</p>
                     </div>
                     <div class="mr-05">
                         <label>
                             Rate:
                         </label>
-                        <p class="ml-05">490/-</p>
+                        <p class="ml-05">{{ log?.details?.sales?.rate}}</p>
                     </div>
                 </div>
             </div>
