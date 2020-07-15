@@ -50,7 +50,7 @@
                                         {{transaction.selectedAccount.type === 'DEBIT' ? 'Dr.' : 'Cr.'}}
                                     </span>
 
-                                    <div *ngIf="transaction.type === 'to' && transaction.voucherAdjustments && transaction.voucherAdjustments.length > 0">
+                                    <!-- <div *ngIf="transaction.type === 'to' && transaction.voucherAdjustments && transaction.voucherAdjustments.length > 0">
                                         <div class="debtor-details pb-1 pt-05" *ngFor="let adjustment of transaction.voucherAdjustments;">
                                             <span class="mr-15">{{adjustmentTypes[adjustment.type]}}</span>
                                             <span class="mr-15">{{adjustment.note}}</span>
@@ -59,43 +59,48 @@
                                             <span class="mr-15">{{adjustment.amount | giddhCurrency}}</span>
                                             <span>cr</span>
                                         </div>
-                                    </div>
-                                    <div class="debtor-details-form pb-1 pt-05" *ngIf="debtorDetailFormShow && transaction.type === 'to'">
-                                        <div class="form-fields">
+                                    </div> -->
+                                    <div class="debtor-details-form pb-1 pt-05" *ngIf="transaction.type === 'to' && transaction.voucherAdjustments && transaction.voucherAdjustments.length > 0">
+                                        <div class="form-fields" *ngFor="let entry of receiptEntries; let i = index;">
                                             <div class="single-field relative">
-                                                <label>Type</label>
-                                                <sh-select [options]="selectRef" placeholder="Receipt"></sh-select>
+                                                <label *ngIf="i === 0">Type</label>
+                                                <sh-select [options]="adjustmentTypes" placeholder="Type" name="type"
+                                                    [(ngModel)]="entry.type" class="receipt-type"></sh-select>
                                                 <i class="icon-arrow-down"></i>
+                                            </div>
+                                            <div class="single-field" *ngIf="entry.type !== 'againstReference'">
+                                                <label *ngIf="i === 0">Note</label>
+                                                <input type="text" class="form-control" placeholder="Notes" name="notes" [(ngModel)]="entry.note">
+                                            </div>
+                                            <div class="single-field relative" *ngIf="entry.type !== 'againstReference'">
+                                                <label *ngIf="i === 0">Tax (Optional) </label>
+                                                <sh-select [options]="taxListSource$ | async" placeholder="Select Tax" name="tax"
+                                                    [(ngModel)]="entry.tax.uniqueName" [disabled]="entry.type === 'receipt'"
+                                                    (selected)="onSelectTax($event, entry)" class="select-tax"></sh-select>
+                                                <i class="icon-arrow-down"></i>
+                                            </div>
+                                            <div class="single-field relative" *ngIf="entry.type === 'againstReference'"
+                                                [ngClass]="{'set-width': entry.type === 'againstReference'}">
+                                                <label *ngIf="i === 0">Inv No., Date, Amount</label>
+                                                <sh-select [options]="pendingInvoiceListSource$ | async" name="invoiceNo"
+                                                    placeholder="Inv No., Date, Amount" [(ngModel)]="entry.invoice.uniqueName"
+                                                    (selected)="onSelectInvoice($event, entry)"></sh-select>
+                                                <i class="icon-arrow-down"></i>
+                                            </div>
+                                            <div class="single-field relative">
+                                                <label *ngIf="i === 0">Amount</label>
+                                                <input type="tel" class="form-control" placeholder="Enter Amount" name="amount"
+                                                    [(ngModel)]="entry.amount" (keydown)="validateAmount($event, entry)"
+                                                    (blur)="validateEntry(entry)" decimalDigitsDirective [DecimalPlaces]="2">
+                                                <a href="javascript:;" (click)="removeReceiptEntry(i)" *ngIf="receiptEntries.length > 1"><i
+                                                        class="icon-cross"></i></a>
                                             </div>
                                             <div class="single-field">
-                                                <label>Note</label>
-                                                <input type="text" class="form-control" placeholder="Note">
-                                            </div>
-                                            <div class="single-field relative">
-                                                <label>Tax (Optional) </label>
-                                                <sh-select [options]="selectTax" placeholder="Select Tax"></sh-select>
-                                                <i class="icon-arrow-down"></i>
-                                            </div>
-                                            <!-- showing below field if receipt type is against reference -->
-                                            <div class="single-field relative" *ngIf="showInvNo"
-                                                [ngClass]="{'set-width': showInvNo}">
-                                                <label>Inv No., Date, Amount</label>
-                                                <sh-select [options]="SelectInvNoDateAmount"></sh-select>
-                                                <i class="icon-arrow-down"></i>
-                                            </div>
-                                            <div class="single-field">
-                                                <label>Amount</label>
-                                                <input type="tel" class="form-control" placeholder="Enter Amount">
-                                            </div>
-                                            <div class="single-field cr-dr-field">
                                                 <p>
                                                     <label class="d-block">&nbsp;</label>
                                                     To/Cr
                                                 </p>
                                             </div>
-                                            <span (click)="closeDebtorDetailForm()">
-                                                <i class="icon-cross"></i>
-                                            </span>
                                         </div>
                                     </div>
 
