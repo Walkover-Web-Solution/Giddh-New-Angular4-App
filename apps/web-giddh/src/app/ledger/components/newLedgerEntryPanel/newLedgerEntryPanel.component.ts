@@ -974,6 +974,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public getInvoiceListsData(event: any): void {
+        this.removeAdjustment();
         if (event.value === 'rcpt') {
             this.shouldShowAdvanceReceipt = true;
             this.clickUnpaidInvoiceList.emit(true);
@@ -990,6 +991,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.shouldShowAdvanceReceipt = false;
             this.isAdvanceReceipt = false;
         }
+        this.handleAdvanceReceiptChange();
     }
 
     public getInvoiveLists() {
@@ -1194,8 +1196,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.isAdjustReceiptSelected) {
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
+            this.blankLedger.generateInvoice = true;
         } else {
-            // this.removeAdjustment();
+            this.removeAdjustment();
         }
     }
 
@@ -1209,7 +1212,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
         } else {
-            // this.removeAdjustment();
+            this.removeAdjustment();
         }
     }
 
@@ -1260,6 +1263,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         }
 
+        this.adjustPaymentModal.hide();
+    }
+
+    public closeAdjustmentModal(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
+        if (event && event.adjustPaymentData &&
+            !event.adjustVoucherData.adjustments.length) {
+            if (this.currentTxn['subVoucher'] === SubVoucher.AdvanceReceipt) {
+                this.isAdjustAdvanceReceiptSelected = false;
+            } else {
+                this.isAdjustReceiptSelected = false;
+            }
+            this.blankLedger.generateInvoice = false;
+        }
         this.adjustPaymentModal.hide();
     }
 

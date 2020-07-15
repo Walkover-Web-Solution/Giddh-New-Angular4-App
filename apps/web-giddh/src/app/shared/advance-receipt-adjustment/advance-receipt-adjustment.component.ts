@@ -11,7 +11,7 @@ import { ReplaySubject } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { ToasterService } from '../../services/toaster.service';
 import { cloneDeep } from '../../lodash-optimized';
-import { AdjustedVoucherType } from '../../app.constant';
+import { AdjustedVoucherType, SubVoucher } from '../../app.constant';
 
 
 @Component({
@@ -78,7 +78,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     /** Stores the type of voucher adjustment */
     @Input() public adjustedVoucherType: AdjustedVoucherType;
 
-    @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @Output() public closeModelEvent: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
     @Output() public submitClicked: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
 
     constructor(private store: Store<AppState>, private salesService: SalesService, private toaster: ToasterService) {
@@ -101,6 +101,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             } else {
                 this.isTaxDeducted = false;
             }
+        } else {
+            this.onClear();
         }
         if (this.invoiceFormDetails && this.invoiceFormDetails.voucherDetails) {
             if (typeof this.invoiceFormDetails.voucherDetails.voucherDate !== 'string') {
@@ -114,7 +116,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         if (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt) {
             const requestObject = {
                 accountUniqueNames: [this.invoiceFormDetails.voucherDetails.customerUniquename, this.invoiceFormDetails.activeAccountUniqueName],
-                voucherType: 'receipt'
+                voucherType: 'receipt',
+                subVoucherType: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
             }
             this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate).subscribe((response) => {
                 console.log('Response received: ', response);
@@ -172,7 +175,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         //     this.toaster.warningToast('The adjusted amount of the linked invoice\'s is more than this receipt due amount');
         //     return;
         // }
-        this.closeModelEvent.emit(true);
+        this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.filter(item => {
+            return item.voucherNumber !== '' || item.balanceDue.amountForAccount > 0;
+        });
+        this.closeModelEvent.emit({
+            adjustVoucherData: this.adjustVoucherForm,
+            adjustPaymentData: this.adjustPayment
+        });
     }
 
     /**
