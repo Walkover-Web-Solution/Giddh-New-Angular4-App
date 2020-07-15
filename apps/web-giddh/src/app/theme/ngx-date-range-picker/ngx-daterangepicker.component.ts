@@ -221,8 +221,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public currentFinancialYearUniqueName: string = "";
     public isOnScrollActive: boolean = false;
     public imgPath: string = '';
-    public calendarMonths$: Subject<any> = new Subject();
-    public itemsPerPage: number = 50;
+    public itemsPerPage: number = 12;
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>) {
         this.choosedDate = new EventEmitter();
@@ -398,7 +397,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public openModalWithClass(template: TemplateRef<any>): void {
         this.inlineStartDate = _.cloneDeep(this.startDate);
         this.inlineEndDate = _.cloneDeep(this.endDate);
-        
+
 
         this.viewOnlyStartDate = this.inlineStartDate.format(GIDDH_DATE_FORMAT);
         this.viewOnlyEndDate = this.inlineEndDate.format(GIDDH_DATE_FORMAT);
@@ -1961,8 +1960,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 this.calendarMonths[existingMonthsLength].end = this.calendarVariables.end;
             }
         }
-        
-        this.calendarMonths$.next(this.calendarMonths);
+        this.calendarMonths = [...this.calendarMonths];
         this._ref.detectChanges();
     }
 
