@@ -3,7 +3,8 @@
 <!--  -->
 <section class="audit-log" *ngFor="let log of (this.auditLogs$ | async); let parentIndex = index">
     <h1>{{log.operationType}}
-        <span *ngIf="log &&log?.details && log?.details?.name && log?.operationType!='MOVE' && log?.operationType != 'MERGE' && log?.details?.uniqueName != null"> - {{log.details.name}}({{log.details.uniqueName}})</span>
+        <!-- For account start header -->
+        <span *ngIf="log &&log?.details && (auditLogsRequest$ | async)?.entity==='account' && log?.details?.name && log?.operationType!='MOVE' && log?.operationType != 'MERGE' && log?.details?.uniqueName != null"> - {{log?.details.name}}({{log?.details.uniqueName}})</span>
         <ng-container *ngIf="log && log?.details && log?.details?.type && log.operationType==='MERGE'">
             <span *ngIf="log?.details?.type==='TARGET' && log?.details?.target"> - {{log?.details?.target?.name}}({{log?.details?.target.uniqueName}})</span>
             <ng-container *ngFor="let source of log?.details?.source">
@@ -13,6 +14,13 @@
         <ng-container *ngIf="log?.operationType==='MOVE'">
             <span *ngIf="log && log?.details && log?.details?.entity"> - {{log?.details?.entity.name}}({{log?.details?.entity.uniqueName}})</span>
         </ng-container>
+        <!-- For account start header -->
+        <!-- For Stock start header -->
+        <ng-container *ngIf="log && log?.details && log?.details?.stockGroup && log?.details?.stockGroup?.uniqueName != undefined">
+            <span *ngIf="log && log?.details && log?.details?.entity"> - {{log?.details?.name}}({{log?.details?.uniqueName}})</span>
+        </ng-container>
+        <!-- For Stock end header -->
+
     </h1>
     <div class="audit-log-detail mt-05 clearfix">
         <div class="d-flex user-basic-detail">
@@ -63,6 +71,16 @@
                 <label>Account:</label>
                 <p>{{log?.details?.entity.name}}</p>
             </div>
+
+            <div *ngIf="log && log?.details && log?.details?.stockGroup && log?.details?.stockGroup?.uniqueName != undefined">
+                <label>Stock:</label>
+                <p>{{log?.details?.name}}</p>
+            </div>
+            <div *ngIf="log && log?.details && log?.details?.stockGroup && log?.details?.stockGroup?.uniqueName != undefined">
+                <label>Group:</label>
+                <p>{{ log?.details?.stockGroup?.name}}</p>
+            </div>
+
             <!-- <div>
                 <label>Company:</label>
                 <p>{{log.companyName}}</p>
@@ -87,6 +105,60 @@
                 <p>{{log.log.description}}</p>
             </div> -->
         </div>
+        <!-- stocks -->
+        <div class="address-row-wrapper d-flex">
+            <div class="address-row mt-05">
+                <div class="single-address-row">
+                    <span>
+                        Purchase:-
+                    </span>
+                    <div class="mr-05">
+                        <label>
+                            Account:
+                        </label>
+                        <p class="address-field"> asdhasldj
+                        </p>
+                    </div>
+                    <div class="mr-05">
+                        <label>
+                            Unit:
+                        </label>
+                        <p class="ml-05"> Numbers asd</p>
+                    </div>
+                    <div class="mr-05">
+                        <label>
+                            Rate:
+                        </label>
+                        <p class="ml-05"> 200/-</p>
+                    </div>
+                    <span>
+                        Sales:-
+                    </span>
+                    <div class="mr-05">
+                        <label>
+                            Account:
+                        </label>
+                        <p class="address-field">Ram
+                        </p>
+                    </div>
+                    <div class="mr-05">
+                        <label>
+                            Unit:
+                        </label>
+                        <p class="ml-05">Kilo</p>
+                    </div>
+                    <div class="mr-05">
+                        <label>
+                            Rate:
+                        </label>
+                        <p class="ml-05">490/-</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- stocks end -->
 
         <div class="address-row-wrapper d-flex">
             <div class="address-row mt-05">
