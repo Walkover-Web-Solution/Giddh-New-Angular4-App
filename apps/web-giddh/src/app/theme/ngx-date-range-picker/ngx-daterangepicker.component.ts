@@ -99,6 +99,7 @@ export interface DateRangeClicked {
 })
 
 export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges {
+    /* This will check if scrolling reached bottom or top */
     @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
     modalRef: BsModalRef;
@@ -360,11 +361,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.endDate = this.inputEndDate;
         }
 
-        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll.measureScrollOffset('top') === 0)).subscribe(event => {
+        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll.measureScrollOffset('top') === 0), takeUntil(this.destroyed$)).subscribe(event => {
             this.setCalendarToActiveMonth('start');
         });
 
-        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll.measureScrollOffset('bottom') === 0)).subscribe(event => {
+        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll.measureScrollOffset('bottom') === 0), takeUntil(this.destroyed$)).subscribe(event => {
             this.setCalendarToActiveMonth('end');
         });
     }
