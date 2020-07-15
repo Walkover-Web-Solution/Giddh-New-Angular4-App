@@ -1,21 +1,23 @@
-import {NavigationEnd, NavigationStart, Router} from '@angular/router';
-import {isCordova} from '@giddh-workspaces/utils';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { isCordova } from '@giddh-workspaces/utils';
 /**
  * Angular 2 decorators and services
  */
-import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
-import {Store} from '@ngrx/store';
-import {AppState} from './store/roots';
-import {GeneralService} from './services/general.service';
-import {pick} from './lodash-optimized';
-import {VersionCheckService} from './version-check.service';
-import {ReplaySubject} from 'rxjs';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {BreakpointObserver} from '@angular/cdk/layout';
-import {DbService} from './services/db.service';
-import {reassignNavigationalArray} from './models/defaultMenus'
-import {Configuration} from "./app.constant";
+import { Store, select } from '@ngrx/store';
+import { AppState } from './store/roots';
+import { GeneralService } from './services/general.service';
+import { pick } from './lodash-optimized';
+import { VersionCheckService } from './version-check.service';
+import { ReplaySubject } from 'rxjs';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { DbService } from './services/db.service';
+import { reassignNavigationalArray } from './models/defaultMenus'
+import { Configuration } from "./app.constant";
+import { LoginActions } from './actions/login.action';
+import { takeUntil } from 'rxjs/operators';
 
 /**
  * App Component
@@ -31,8 +33,8 @@ import {Configuration} from "./app.constant";
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
-    public sideMenu: { isopen: boolean } = {isopen: true};
-    public companyMenu: { isopen: boolean } = {isopen: false};
+    public sideMenu: { isopen: boolean } = { isopen: true };
+    public companyMenu: { isopen: boolean } = { isopen: false };
     public isProdMode: boolean = false;
     public isElectron: boolean = false;
     public isCordova: boolean = false;
@@ -42,22 +44,22 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private newVersionAvailableForWebApp: boolean = false;
 
     constructor(private store: Store<AppState>,
-                private router: Router,
-                private _generalService: GeneralService,
-                private _cdr: ChangeDetectorRef,
-                private _versionCheckService: VersionCheckService,
-                private sanitizer: DomSanitizer,
-                private breakpointObserver: BreakpointObserver,
-                private dbServices: DbService
+        private router: Router,
+        private _generalService: GeneralService,
+        private _cdr: ChangeDetectorRef,
+        private _versionCheckService: VersionCheckService,
+        private sanitizer: DomSanitizer,
+        private breakpointObserver: BreakpointObserver,
+        private dbServices: DbService
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
         this.isCordova = isCordova();
-        this.store.select(s => s.session).subscribe(ss => {
+        this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe(ss => {
             if (ss.user && ss.user.session && ss.user.session.id) {
                 let a = pick(ss.user, ['isNewUser']);
                 a.isNewUser = true;
-                this._generalService.user = {...ss.user.user, ...a};
+                this._generalService.user = { ...ss.user.user, ...a };
                 if (ss.user.statusCode !== 'AUTHENTICATE_TWO_WAY') {
                     this._generalService.sessionId = ss.user.session.id;
                 }
@@ -67,6 +69,18 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
             this._generalService.companyUniqueName = ss.companyUniqueName;
         });
+        if (!(this._generalService.user && this._generalService.sessionId)) {
+            if (!window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
+                if (PRODUCTION_ENV && !(isElectron || this.isCordova)) {
+                    window.location.href = 'https://giddh.com/login/';
+                } else if (this.isCordova) {
+                    this._generalService.invokeEvent.next('logoutCordova');
+                    this.router.navigate(['login']);
+                } else {
+                    window.location.href = AppUrl + 'login';
+                }
+            }
+        }
         this._generalService.IAmLoaded.subscribe(s => {
             this.IAmLoaded = s;
         });
@@ -88,7 +102,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
         if (Configuration.isElectron) {
             // electronOauth2
-            const {ipcRenderer} = (window as any).require("electron");
+            const { ipcRenderer } = (window as any).require("electron");
             // google
             const t = ipcRenderer.send("take-server-environment", {
                 STAGING_ENV,
@@ -147,7 +161,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
                 localStorage.setItem('lastState', redirectState);
-                return window.location.reload(true);
+                window.location.reload();
+                return;
             }
             if (!(evt instanceof NavigationEnd)) {
                 return;

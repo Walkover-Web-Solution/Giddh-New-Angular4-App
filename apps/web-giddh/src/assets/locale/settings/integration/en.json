@@ -56,6 +56,7 @@
         "shopify_connected_message" : "Your company is successfully connected with Shopify.",
         "connect_shopify" : "Connect with Shopify"
     },
+<<<<<<< HEAD
     "payment" : {
         "tab_heading" : "Payment",
         "icici_bank_name" : "ICICI Bank",
@@ -71,5 +72,28 @@
         "connection_request_message" : "Congratulations!! A request has been sent to your account, go to <a href='https://www.icicibank.com/' target='_blank'>ICICI portal</a> and accept it.",
         "note" : "Once it is done you can link your ICICI account/s and make payment directly through GIDDH.",
         "add_more" : "Add More ID"
+=======
+    "payment": {
+        "tab_heading": "Payment",
+        "icici_bank_name": "ICICI Bank",
+        "corporate_id_label": "Corporate ID",
+        "corporate_id_placeholder": "Enter Corporate ID",
+        "user_id_label": "User ID",
+        "user_id_placeholder": "Enter User ID",
+        "account_number_label": "Account Number",
+        "account_number_placeholder": "Enter Account Number",
+        "alias_id_label": "Alias ID",
+        "alias_id_placeholder": "Enter Alias ID",
+        "accounts": "Accounts",
+        "connection_request_message": "Congratulations!! A request has been sent to your account, go to <a href='https://www.icicibank.com/' target='_blank'>ICICI portal</a> and accept it.",
+        "note": "Once it is done you can link your ICICI account/s and make payment directly through GIDDH.",
+        "add_more": "Add More ID",
+        "max_limit_alert": "You can not select max bank limit more than 1",
+        "amount_upto": "Amount Upto",
+        "select_otp": "Select OTP",
+        "approver_name": "Approver Name",
+        "select_otp_tooltip": "The OTP will reach the person selected in Approver Name"
+
+>>>>>>> staging
     }
 }

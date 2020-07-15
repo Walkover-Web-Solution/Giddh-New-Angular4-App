@@ -12,68 +12,94 @@
                     <div class="d-flex">
                         <div class="form-group mr-15 select-bank">
                             <label>Select Bank<span class="red-text">*</span></label>
-                            <sh-select *ngIf="selectIntegratedBankList.length > 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankName" class="text-left" name="urn" required placeholder="'Select Bank'" (selected)="selectBank($event);" [multiple]="false">
+                            <div class="relative">
+                                <img *ngIf="(isGetAllIntegratedBankInProgress$ | async)" class="dropdown-loader"
+                                    src="assets/images/loader.gif" alt="">
+                                <sh-select [options]="selectIntegratedBankList" [disabled]="isPayClicked" #selectBankEle
+                                    [multiple]="false" [ItemHeight]="33" [fixedValue]="selectedBankName"
+                                    [isFilterEnabled]="true" class="text-left" [(ngModel)]="selectedBankUniqueName"
+                                    name="selectedBankUniqueName" required placeholder="Select Bank"
+                                    (click)="setBankName($event, selectBankEle);" (selected)="selectBank($event);"
+                                    [multiple]="false">
+                                    <ng-template #optionTemplate let-option="option">
+                                        <a href="javascript:void(0)" class="list-item">
+                                            <div class="item">{{option?.label}}</div>
+                                            <div class="item_unq">
+                                                <p class="font-12 text-gray mb-0">A/c No.:
+                                                    {{option?.additional?.accountNo}}
+                                                </p>
+                                            </div>
+                                            <div class="item_unq">
+                                                <p class="font-12 text-gray mb-0">Clo Bal:
+                                                    {{option?.additional?.effectiveBal | giddhCurrency}} dr.
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </ng-template>
+                                </sh-select>
+                            </div>
+                            <!-- <sh-select *ngIf="selectIntegratedBankList.length === 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankUrn" class="text-left" name="urn" required placeholder="'Select Bank'" (ngModelChange)="selectBank($event);" [multiple]="false">
                                 <ng-template #optionTemplate let-option="option">
                                     <a href="javascript:void(0)" class="list-item">
                                         <div class="item">{{option?.label}}</div>
                                         <div class="item_unq">
-                                            <p class="font-12 text-gray mb-0">(Acc. No.: {{option?.additional?.accountNo}})
+                                            <p class="font-12 text-gray mb-0">Clo Bal: {{option?.additional?.effectiveBal | giddhCurrency}} dr.
                                             </p>
                                         </div>
                                     </a>
                                 </ng-template>
-                            </sh-select>
-                            <sh-select *ngIf="selectIntegratedBankList.length === 1" [options]="selectIntegratedBankList" [(ngModel)]="selectedBankUrn" class="text-left" name="urn" required placeholder="'Select Bank'" (ngModelChange)="selectBank($event);" [multiple]="false">
-                                <ng-template #optionTemplate let-option="option">
-                                    <a href="javascript:void(0)" class="list-item">
-                                        <div class="item">{{option?.label}}</div>
-                                        <div class="item_unq">
-                                            <p class="font-12 text-gray mb-0">(Acc. No.: {{option?.additional?.accountNo}})
-                                            </p>
-                                        </div>
-                                    </a>
-                                </ng-template>
-                            </sh-select>
-                            <!-- <p class="mb-1"><small class="text-gray">Bal {{totalAvailableBalance}} dr.</small></p> -->
+                            </sh-select> -->
+                            <p *ngIf="totalAvailableBalance"><small class="text-gray">Bal
+                                    {{totalAvailableBalance | giddhCurrency}} dr.</small></p>
                         </div>
                         <div class="form-group mr-15">
                             <label>Total Amount<span class="red-text">*</span></label>
-                            <input type="text" class="form-control" decimalDigitsDirective disabled [mask]="inputMaskFormat" [(ngModel)]="totalSelectedAccountAmount" name="amount">
+                            <input type="text" class="form-control" decimalDigitsDirective disabled
+                                [mask]="inputMaskFormat" [(ngModel)]="totalSelectedAccountAmount" name="amount">
                         </div>
                         <div class="form-group mr-15" *ngIf="isPayClicked">
                             <label class="relative d-flex">Enter OTP<span class="red-text">*</span>
-                                <p class="resend-btn" *ngIf="!timerOn"><a href="javascript:void();"
+                                <p class="resend-btn" *ngIf="!timerOn"><a href="javascript:void(0);"
                                         (click)="reSendOTP()" class="btn-link">Resend</a></p>
                                 <!-- make timer dynamic -->
-                                <p class="resend-btn timer-count" *ngIf="timerOn"><a
-                                        href="javascript:void();" class="btn-link">{{timerCountDown$ | async}}</a></p>
+                                <p class="resend-btn timer-count" *ngIf="timerOn"><a href="javascript:void(0);"
+                                        class="btn-link">{{timerCountDown$ | async}}</a></p>
                             </label>
-                            <input type="text" class="form-control" placeholder="Enter OTP" required name="receivedOtp" [(ngModel)]="receivedOtp">
+                            <input type="text" class="form-control" placeholder="Enter OTP" required name="receivedOtp"
+                                (keypress)="allowOnlyNumbers($event)" [(ngModel)]="receivedOtp">
                         </div>
                         <div class="form-group mr-15">
                             <label class="d-flex"> &nbsp; </label>
-                            <button type="button" *ngIf="!isPayClicked" class="btn btn-success" [disabled]="!adjustAdvancePaymentForm.form.valid" (click)="payClicked()">Pay</button>
-                            <button *ngIf="isPayClicked" class="btn btn-success" [disabled]="!adjustAdvancePaymentForm.form.valid" (click)="confirmOTP()">Confirm</button>
-                            <button type="button" *ngIf="isPayClicked" class="btn btn-primary" (click)="clickedCancelOtp();">Cancel OTP</button>
+                            <button type="button" *ngIf="!isPayClicked" class="btn btn-success"
+                                [disabled]="!isBankSelectedForBulkPayment || !isValidData"
+                                (click)="payClicked()">Pay</button>
+
+                            <button *ngIf="isPayClicked" class="btn btn-success"
+                                [disabled]="!isBankSelectedForBulkPayment || !isValidData || !receivedOtp"
+                                (click)="confirmOTP()">Confirm</button>
+                            <button type="button" *ngIf="isPayClicked" class="btn btn-primary"
+                                (click)="clickedCancelOtp();">Cancel OTP</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-3" *ngIf="otpReceiverNameMessage">
-                    <p class="otp-success-msg text-right"> <span>
-                        <img src="{{imgPath}}checked-success.svg">
+                    <p class="otp-success-msg text-right"> <span class="mr-1 d-inline-block">
+                            <img src="{{imgPath}}checked-success.svg">
                         </span>{{otpReceiverNameMessage}}</p>
                 </div>
 
             </div>
             <div class="selected-bank-details">
                 <!-- loop should in below div -->
-                <ng-container *ngFor="let item of selectedAccForBulkPayment;let entryIdx = index; let first = first; let last = last">
+                <ng-container
+                    *ngFor="let item of selectedAccForBulkPayment;let entryIdx = index; let first = first; let last = last">
                     <div class="mb-2">
                         <div class="account-holder-name">
                             <p>{{item.name}}</p>
                             <p class="text-gray due-amount hidden-xs">
                                 Total Due:{{item.totalDueAmount | giddhCurrency}}
-                                <span class="red-text cursor-pointer" (click)="removeSelectedAccount(item); removeTransactionsDetailsForm(entryIdx)"><i
+                                <span class="red-text cursor-pointer" *ngIf="selectedAccForBulkPayment.length > 1"
+                                    (click)="removeSelectedAccount(item); removeTransactionsDetailsForm(entryIdx)"><i
                                         class="icon-trash mr-05"></i>Remove</span>
                             </p>
                         </div>
@@ -109,11 +135,18 @@
                                 <div class="d-flex">
                                     <div class="form-group pr-15">
                                         <label>Amount<span class="text-danger">*</span></label>
-                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}" [(ngModel)]="item.closingBalance.amount" decimalDigitsDirective type="text" required [disabled]="isPayClicked">
+                                        <input class="form-control" name="closingBalanceAmount{{entryIdx}}"
+                                            maxLength="12" decimalDigitsDirective
+                                            (blur)="getTotalAmount();preventZero(item.closingBalanceAmount, entryIdx)"
+                                            [mask]="inputMaskFormat" [(ngModel)]="item.closingBalanceAmount" type="text"
+                                            [required]="!isPayClicked" [disabled]="isPayClicked">
+
                                     </div>
                                     <div class="form-group remark-block">
                                         <label>Remark<span class="text-danger">*</span></label>
-                                        <textarea rows="1" name="remark{{entryIdx}}" id="{{entryIdx}}" [(ngModel)]="item.remarks" autocomplete="off" required type="text" class="form-control" placeholder="Remark"></textarea>
+                                        <textarea rows="1" name="remark{{entryIdx}}" id="{{entryIdx}}"
+                                            [(ngModel)]="item.remarks" autocomplete="off" required type="text"
+                                            class="form-control" placeholder="Remark"></textarea>
                                     </div>
                                 </div>
                             </div>

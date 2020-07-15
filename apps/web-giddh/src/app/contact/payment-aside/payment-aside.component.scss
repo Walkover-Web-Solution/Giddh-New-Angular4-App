@@ -170,6 +170,13 @@ form label {
         }
     }
 }
+.dropdown-loader {
+    position: absolute;
+    width: 18px;
+    z-index: 9;
+    right: 8px;
+    top: 9px;
+}
 @media (max-width: 1100px) {
     .payment-top-form {
         .otp-success-msg {

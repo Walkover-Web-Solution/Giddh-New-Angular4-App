@@ -6,7 +6,7 @@
 
             <div class="pull-left d-flex wrap-searching-aging">
 
-                <div class="form-group searchField max250">
+                <div class="form-group searchField max250" [ngClass]="{'default-width':isAdvanceSearchApplied}">
                     <input type="text" placeholder="Name/amount" class="form-control" [(ngModel)]="searchStr"
                         (ngModelChange)="searchStr$.next($event)" style="width:210px" />
 
@@ -15,17 +15,15 @@
                     </span>
                 </div>
 
-                <div class=" cp">
+                <div class="cp advance-clear-filter-icons">
 
                     <div class="advance-icon" tooltip="Advance Search">
-
-                        <span class="icon-advance-search" (click)="toggleAdvanceSearchPopup()"></span>
-
+                        <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup()"></span>
                     </div>
 
                     <span style="line-height: 2.1" class="ml-1" *ngIf="isAdvanceSearchApplied">
                         <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()">
-                            <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
+                            <i aria-hidden="true" class="glyphicon glyphicon-refresh"
                                 tooltip="Reset Filter"></i>
                         </a>
                     </span>

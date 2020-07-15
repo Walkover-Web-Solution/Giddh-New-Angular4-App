@@ -1,3 +1,4 @@
+@import "../../../../assets/css/color.scss";
 .width-160 {
     width: 160px;
 }
@@ -11,12 +12,10 @@
     top: 0;
     right: 0;
 }
-
 .radio_theme {
     height: 14px;
     width: 14px;
 }
-
 .radio_theme:checked:after {
     content: " ";
     left: 4px;
@@ -32,6 +31,7 @@
     text-align: left;
     border: 1px solid #c4c0c0;
     padding-left: 7px !important;
+    background: $white;
 }
 .btn.dropdown-toggle .caret {
     position: absolute;
@@ -68,3 +68,12 @@ ul#dropdown-nested li .caret {
     border-top: 6px dashed;
     color: #a9a9a9;
 }
+.sales-register-menu {
+    min-width: 195px !important;
+}
+@media (max-width: 767px) {
+    .xs-pr-0 {
+        padding-right: 0px !important;
+    }
+}
+

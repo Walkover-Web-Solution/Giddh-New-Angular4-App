@@ -1,17 +1,16 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class VersionCheckService {
 
-    public onVersionChange$: Subject<boolean> = new Subject();
+    public onVersionChange$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     // this will be replaced by actual hash post-build.js
     private currentHash = '{{POST_BUILD_ENTERS_HASH_HERE}}';
 
     constructor(private http: HttpClient) {
-        this.onVersionChange$.next(false);
     }
 
     /**

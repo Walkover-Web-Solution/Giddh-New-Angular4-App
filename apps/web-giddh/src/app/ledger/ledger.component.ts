@@ -5,7 +5,7 @@ import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
 import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { QuickAccountComponent } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.component';
 import { saveAs } from 'file-saver';
@@ -475,9 +475,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (params['from'] && params['to']) {
                 let from = params['from'];
                 let to = params['to'];
-
-                this.selectedDateRange = { startDate: moment(from), endDate: moment(to) };
-                this.selectedDateRangeUi = moment(from).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(to).format(GIDDH_NEW_DATE_FORMAT_UI);
+                // Set date range to component date picker
+                let dateRange = { fromDate: '', toDate: '' };
+                dateRange = this.generalService.dateConversionToSetComponentDatePicker(from, to);
+                this.selectedDateRange = { startDate: moment(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: moment(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
+                this.selectedDateRangeUi = moment(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
 
                 this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                     dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
@@ -582,19 +584,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.transactionData$.subscribe((lt: any) => {
             if (lt) {
                 // set date picker to and from date, as what we got from api in case of today selected from universal date
-                if (lt.from && lt.to) {
-                    let fromDate = lt.from.split('-');
-                    let toDate = lt.to.split('-');
-                    let fromDateInMMDDYYY;
-                    let toDateInMMDDYYY;
-                    if (fromDate && fromDate.length) {
-                        fromDateInMMDDYYY = fromDate[1] +'-'+ fromDate[0]+'-'+ fromDate[2];
-                    }
-                    if (toDate && toDate.length) {
-                        toDateInMMDDYYY = toDate[1] +'-'+  toDate[0] +'-'+  toDate[2]
-                    }
-                    this.selectedDateRange = { startDate: moment(fromDateInMMDDYYY), endDate: moment(toDateInMMDDYYY) };
-                    this.selectedDateRangeUi = moment(fromDateInMMDDYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(toDateInMMDDYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
+                if (lt.from && lt.to && this.todaySelected) {
+                    let dateRange = { fromDate: '', toDate: '' };
+                    dateRange = this.generalService.dateConversionToSetComponentDatePicker(lt.from, lt.to);
+                    this.selectedDateRange = { startDate: moment(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: moment(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
+                    this.selectedDateRangeUi = moment(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
 
                 this.ledgerTransactions = lt;
@@ -992,7 +986,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this._ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
             if (d.status === 'success') {
-                // debugger;
                 let blob = base64ToBlob(d.body, 'application/pdf', 512);
                 download(`${activeAccount.name} - ${invoiceName}.pdf`, blob, 'application/pdf');
             } else {
@@ -1080,7 +1073,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public hideNewLedgerEntryPopup(event?) {
-        if (event) {
+        if (event && event.path) {
             let classList = event.path.map(m => {
                 return m.classList;
             });

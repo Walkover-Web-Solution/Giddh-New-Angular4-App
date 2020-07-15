@@ -87,6 +87,7 @@
 
 .dropdown-menu {
     margin-top: 0;
+    min-width: 100%;
 }
 
 .input-h .td_in_searchBox .input-container input {
@@ -201,7 +202,7 @@ td.card-header.clearfix {
     padding-right: 20px;
 }
 
-.invoiceNameDownload {
+.invoice-name-download {
     position: relative;
     text-align: right;
 }
@@ -241,7 +242,7 @@ td.card-header.clearfix {
     margin-bottom: 0;
 }
 
-.date-advanceSearch {
+.date-advance-search {
     justify-content: space-between;
 }
 
@@ -459,6 +460,14 @@ span.icon-export-icon {
 /* responsive */
 
 @media (max-width: 768px) {
+    .invoice-name-download {
+        a{
+            padding-right: 0 !important;
+        }
+        .icon-download{
+            display: none;
+        }
+    }
     .search-icon-block {
         display: flex;
     }
@@ -484,7 +493,7 @@ span.icon-export-icon {
         max-width: 100% !important;
         min-width: 100% !important;
     }
-    .date-advanceSearch .dropdown-menu.show.fixedDropdownPlus {
+    .date-advance-search .dropdown-menu.show.fixedDropdownPlus {
         left: auto !important;
         right: 8px !important;
         top: 100%;
@@ -493,7 +502,7 @@ span.icon-export-icon {
         bottom: 188px;
         border: none;
     }
-    .date-advanceSearch .dropdown-menu.show.fixedDropdownPlus:after {
+    .date-advance-search .dropdown-menu.show.fixedDropdownPlus:after {
         position: absolute;
         width: 20px;
         height: 20px;
@@ -538,14 +547,14 @@ span.icon-export-icon {
         box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3) !important;
         display: block;
     }
-    .date-advanceSearch .dropdown-menu>li>a {
+    .date-advance-search .dropdown-menu>li>a {
         padding: 8px 10px;
     }
     .paginationWrapper {
         top: 0px;
     }
     .input-grp-dateRangePicker .form-group {
-        margin-bottom: 10px;
+        margin-bottom: 2px;
     }
     .invoice-preview {
         padding-bottom: 0px;
@@ -553,7 +562,7 @@ span.icon-export-icon {
     .desktop-view-btn {
         display: none;
     }
-    .date-advanceSearch {
+    .date-advance-search {
         .add-invoice {
             display: none;
         }
@@ -611,7 +620,7 @@ span.icon-export-icon {
         width: 100%;
         margin: 5px 0;
     }
-    .date-advanceSearch {
+    .date-advance-search {
         flex-direction: column;
     }
 }

@@ -110,7 +110,7 @@
                                             (click)="signInWithProviders('google')"><i class="ico-google">
                                                 <img src="./assets/images/new/google_ico.svg" />
                                             </i><span>Signup with Google</span></a></li>
-                                    <!-- 
+                                    <!--
                                         commented code may be it will be used in future
                                         <li class="linkedin-ico"><a href="javascript:void(0);"
                                             (click)="signInWithProviders('linkedin')"><i class="fa fa-linkedin"></i></a>
@@ -119,14 +119,12 @@
                                 </ul>
                                 <div class="login-with" *ngIf="loginUsing !== 'userName'">
                                     <!--  -->
-                                    Signup with <a href="javascript:void(0);" (click)="loginUsing = 'userName'">email
-                                        and
-                                        password</a>
+                                    Signup with <a class="bold" href="javascript:void(0);" (click)="loginUsing = 'userName'"> email and password</a>
                                     <!-- ,<a href="javascript:void(0);" (click)="loginUsing = 'email'">Email</a> -->
                                 </div>
-                                <div class="mrT1">
-                                    Already have an account? <a routerLink="/login"
-                                        class="btn btn-sm btn-secondary mrL">Login</a>
+                                <div class="d-flex align-items-center account mt-1">
+                                    <p class="mb-0 mr-2 bold text-light-2">Already have an account?</p> <a routerLink="/login"
+                                        class="btn btn-sm btn-secondary">Login</a>
                                 </div>
                             </div>
 

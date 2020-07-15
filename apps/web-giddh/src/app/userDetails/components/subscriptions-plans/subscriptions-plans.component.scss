@@ -79,23 +79,26 @@
 .select-plan-head {
     text-align: center;
     background: $lavender;
-    font-size: 24px;
-    padding: 15px;
+    font-size: 18px;
+    padding: 20px 15px;
     h2 {
         color: $midnight-blue;
         font-weight: bold;
     }
 }
 .plans-box {
-    padding: 24px 30px;
+    padding: 10px 30px 10px;
+    p.total-price {
+        margin: 0 -8px;
+    }
     .btn-green.btn-round {
-        padding: 8px 30px;
+        padding: 6px 30px;
         display: block;
         margin-right: 0px;
     }
 }
 .your-account {
-    margin: 90px 0px 30px 50px;
+    margin: 30px 0px 20px 15px;
     position: relative;
 }
 .inner-your-account {
@@ -106,7 +109,6 @@
     box-shadow: 0px 3px 6px $black-russian;
     border: 1px solid $gainsboro;
     transition: .5s all ease;
-    margin-bottom: 20px;
 }
 .inner-your-account:hover, .inner-your-account.active {
     background: $lavender;
@@ -123,19 +125,21 @@
     background: $white;
 }
 .your-account:after {
-    top: -35px;
-    left: -25px;
+    top: -10px;
+    left: -10px;
 }
 .your-account:before {
-    top: -70px;
-    left: -50px;
+    top: -20px;
+    left: -20px;
 }
+
 .plan-list {
     list-style-type: none;
-    min-height: 300px;
+    min-height: 290px;
+    margin-top: 5px;
     li {
         font-size: 14px;
-        padding: 10px 0;
+        padding: 8px 0;
         position: relative;
         position: relative;
         display: flex;
@@ -143,13 +147,20 @@
     }
 }
 .inner-your-account > h3 {
-    font-size: 18px;
+    font-size: 16px;
     color: $midnight-blue;
     font-weight: bold;
+    margin-bottom: 5px;
+    .plans-head-top{
+        h3{
+            font-size: 18px !important;
+            margin-bottom: 0 !important;
+        }
+    }
 }
 .plan-footer {
      .success-btn {
-        padding: 8px 60px;
+        padding: 6px 60px;
         margin: 10px 0;
     }
 }
@@ -255,7 +266,6 @@
 }
 .main-row-plans {
     display: flex;
-    flex-wrap: wrap;
 }
 .btn-green:focus {
     color: $white;
@@ -276,6 +286,77 @@
     border-color: $very-light-gray;
     color: $night-rider;
     font-family: "opensans-semibold" !important;
+    margin-bottom: 15px !important;
+}
+.single-plan-for-company{
+    .your-account {
+        margin: 15px 0;
+        &:before,
+        &:after{
+            display: none;
+        }
+        .plan-list {
+            min-height: 245px !important;
+        }
+    }
+    .plans-box {
+        p{
+            margin: 0;
+        }
+    }
+}
+
+@media (min-width: 1367px) {
+    .select-plan-block {
+        height: 97%;
+        .plans-box{
+            display: flex;
+            flex-direction: column;
+            .your-account {
+                .plan-list {
+                    min-height: 230px;
+                }
+            }
+        }
+    }
+}
+@media only screen and (max-width: 1366px) {
+    .your-account {
+        margin: 30px 0px 0 15px;
+    }
+    .your-account:after {
+        top: -10px;
+        left: -10px;
+    }
+    .your-account:before {
+        top: -20px;
+        left: -20px;
+    }
+    .inner-your-account {
+        padding: 15px;
+    }
+    .plan-list {
+        list-style-type: none;
+        min-height: 150px;
+    }
+    .single-plan-for-company {
+        .your-account {
+            .plan-list {
+                min-height: 165px;
+            }
+        }
+    }
+    .select-plan-head {
+        padding: 10px 15px;
+    }
+    .plan-list {
+        li {
+            padding: 5px 0;
+        }
+    }
+    .plan-msg {
+        margin-bottom: 10px;
+    }
 }
 @media only screen and (max-width: 1600px) {
     .transactions-popup {
@@ -293,15 +374,15 @@
 @media only screen and (max-width: 1199px) {
     .main-row-plans {
         width: 100%;
-        overflow-y: hidden;
-        white-space: nowrap;
-        overflow-x: scroll;
         margin-bottom: 15px;
+        display: block;
     }
     .main-row-plans .col-sm-4 {
         width: 50%;
         display: inline-block;
-        white-space: normal;
+    }
+    .main-row-plans .col-sm-4:last-child {
+        margin-left: 25%;
     }
     .main-row-plans::-webkit-scrollbar {
         height: 5px;
@@ -320,6 +401,9 @@
 }
 
 @media only screen and (max-width: 767px) {
+    .main-row-plans .col-sm-4:last-child {
+        margin-left: auto;
+    }
     .plan-list {
         min-height: initial;
         margin-bottom: 10px;
@@ -375,7 +459,7 @@
         margin-bottom: 15px;
     }
     .welcome-msg{
-        margin-top: 55px;
+        margin-top: 15px;
         .plan-msg{
             margin-bottom:15px;
         }

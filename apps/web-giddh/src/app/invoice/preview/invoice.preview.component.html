@@ -1,7 +1,7 @@
 <ng-container>
     <div class="invoice-container">
         <!-- For desktop screen sizes -->
-        <div class="d-flex date-advanceSearch" id="dateRangePickerParent">
+        <div class="d-flex date-advance-search" id="dateRangePickerParent">
             <!-- Invoice filter section -->
             <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate class="form-inline input-grp-dateRangePicker pr">
                 <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
@@ -12,7 +12,7 @@
                         </span>
                     </div>
                     <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
-                        <span class="icon-advance-search" (click)="toggleAdvanceSearchPopup(false)"></span>
+                        <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup(false)"></span>
                     </div>
 
                     <div class="search-icon-block" (click)="openModal(template)">
@@ -384,7 +384,7 @@
                                 <div>
                                     <div dropdown container="body" class="icon-ellipse selectAction">
                                         <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic"></a>
-                                        <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu" aria-labelledby="edit-model-basic">
+                                        <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right width-150" role="menu" aria-labelledby="edit-model-basic">
                                             <ul class="selectActionDropdown">
                                                 <li (click)="onPerformAction(item, 'paid')">
                                                     <a class="cp" href="javascript:void(0)">Paid</a>
@@ -503,8 +503,8 @@
                                 <strong> Invoice No.</strong>
                             </div>
                             <div class="col-xs-6 p-0">
-                                <div class="invoiceNameDownload">
-                                    <a class="invoiceNumberA" style="cursor: pointer">
+                                <div class="invoice-name-download">
+                                    <a class="invoiceNumberA">
                                         {{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
                                     <span class="icon-download"></span>
                                 </div>
@@ -558,7 +558,7 @@
                                         <div class="flex-fill selectAction">
                                             <span [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>
                                         </div>
-                                        <div class="click-dropdwon">
+                                        <div class="click-dropdwon" [attachOutsideOnClick]="true" (clickOutside)="showMoreBtn = false" [exclude]="'.dropdown-menu'">
                                             <i class="fa fa-ellipsis-v" (click)="showMoreBtn=!showMoreBtn;selectedItemForMoreBtn = item.voucherNumber"></i>
                                             <ul class="dropdown-menu displayBlock" *ngIf="showMoreBtn && selectedItemForMoreBtn === item.voucherNumber">
                                                 <li (click)="onPerformAction(item, 'paid')">

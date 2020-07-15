@@ -47,6 +47,10 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public selectedIPRange: string = 'IP Address';
     public createPermissionInProcess$: Observable<boolean>;
     public dateRangePickerValue: Date[] = [];
+    /** To open model */
+    public opened = false;
+    /** To show model */
+    public show: boolean = false;
     // private methods
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -69,9 +73,11 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         if (this.userdata) {
-            let from: any = this.userdata.from ? moment(this.userdata.from, GIDDH_DATE_FORMAT) : moment().subtract(30, 'days');
-            let to: any = this.userdata.to ? moment(this.userdata.to, GIDDH_DATE_FORMAT) : moment();
-            this.dateRangePickerValue = [from._d, to._d];
+            if (this.userdata.from && this.userdata.to) {
+                let from: any = moment(this.userdata.from, GIDDH_DATE_FORMAT);
+                let to: any = moment(this.userdata.to, GIDDH_DATE_FORMAT);
+                this.dateRangePickerValue = [from._d, to._d];
+            }
             this.initAcForm(this.userdata);
         } else {
             this.initAcForm();

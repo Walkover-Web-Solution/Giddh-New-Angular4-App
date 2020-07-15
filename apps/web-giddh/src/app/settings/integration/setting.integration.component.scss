@@ -90,4 +90,22 @@
             margin-left: 0 !important;
         }
     }
+    .plus-cross-btn {
+        label{
+            display: none;
+        }
+        i {
+           float: right;
+           margin-right: 15px;
+        }
+    }
+    .update-btn-wrapper{
+        label{
+            display: none;
+        }
+        .btn{
+            margin-right: 0;
+            margin-left: 15px;
+        }
+    }
 }

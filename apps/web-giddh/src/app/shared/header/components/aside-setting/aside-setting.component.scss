@@ -20,7 +20,7 @@
         z-index: 1;
         transform: rotate(45deg);
     }
-   
+
 }
 :host.setting-sidebar{
     position: fixed;
@@ -118,8 +118,8 @@
         font-size: 14px;
         font-family:'opensans-semibold';
         li{
-            padding: 4px 20px;
-            margin-bottom:8px;
+            padding: 6px 20px;
+            margin-bottom:0px;
             a{
                 cursor: pointer;
                 img{
@@ -159,12 +159,20 @@
         .back-to-main-slider{
             display: block;
             padding: 10px 15px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             img{
                 width: 15px;
             }
-            i{
-                display: none;
+            a{
+                color: $cornflower-blue;
+                span{
+                    display: flex;
+                    align-items: center;
+                    i{
+                        margin-right: 10px;
+                    }
+                }
+
             }
         }
         .help-aside-body {
@@ -174,10 +182,11 @@
             .setting-items{
                 ul{
                     li{
-                        padding: 4px 15px;
+                        padding: 0px;
                         a{
                             display: flex;
                             align-items: flex-start;
+                            padding: 7px 15px;
                         }
                     }
                 }
@@ -185,7 +194,7 @@
         }
     }
 }
-@media(max-width:767px){
+@media(max-width:767px) {
     :host.setting-sidebar{
     position: fixed;
     top: 0;
@@ -201,7 +210,7 @@
         a{
             display: flex;
             align-items: center;
-            color: $white;
+            color: $white !important;
             span{
                 display: flex;
                 align-items: center;
@@ -226,7 +235,18 @@
                 }
             }
         }
-    }  
+        .help-aside-body {
+            .setting-items {
+                ul {
+                    li {
+                        a {
+                            padding: 10px 15px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 @media (max-width: 768px) {
     :host {

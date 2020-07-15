@@ -36,3 +36,17 @@ span.caret {
     width: 260px !important;
     padding-bottom: 80px;
 }
+ul#dropdown-nested li .dropdown-menu {
+    display: block !important;
+    right: auto;
+    top: 0;
+    left: 184px;
+    visibility: hidden;
+    opacity: 0;
+    transition: .5s all ease;
+}
+ul#dropdown-nested li:hover .dropdown-menu {
+    visibility: visible;
+    opacity: 1;
+    transition: .5s all ease;
+}
