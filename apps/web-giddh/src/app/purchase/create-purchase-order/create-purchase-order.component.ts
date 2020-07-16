@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, TemplateRef, ViewChildren, QueryList } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap'
+import { BsModalRef, BsModalService, BsDatepickerDirective, PopoverDirective } from 'ngx-bootstrap'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { IOption } from '../../theme/ng-select/ng-select';
@@ -22,8 +22,61 @@ import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-s
 import { ToasterService } from '../../services/toaster.service';
 import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
-import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { VAT_SUPPORTED_COUNTRIES, RATE_FIELD_PRECISION } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum } from '../../models/api-models/Sales';
+import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
+import { TaxResponse } from '../../models/api-models/Company';
+import { IContentCommon } from '../../models/api-models/Invoice';
+import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
+import { cloneDeep } from '../../lodash-optimized';
+import { InvoiceActions } from '../../actions/invoice/invoice.actions';
+import * as moment from 'moment/moment';
+import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
+import { TaxControlComponent } from '../../theme/tax-control/tax-control.component';
+import { SettingsDiscountActions } from '../../actions/settings/discount/settings.discount.action';
+import { CompanyActions } from '../../actions/company.actions';
+import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../common/confirmation-modal/confirmation-modal.interface';
+import { NgForm } from '@angular/forms';
+
+const THEAD_ARR_READONLY = [
+    {
+        display: true,
+        label: '#'
+    },
+    {
+        display: true,
+        label: 'Product/Service  Description '
+    },
+    {
+        display: true,
+        label: 'Qty/Unit'
+    },
+    {
+        display: true,
+        label: 'Rate'
+    },
+    {
+        display: true,
+        label: 'Amount'
+    },
+    {
+        display: true,
+        label: 'Discount'
+    },
+    {
+        display: true,
+        label: 'Tax'
+    },
+    {
+        display: true,
+        label: 'Total'
+    },
+    {
+        display: true,
+        label: ''
+    }
+];
 
 @Component({
     selector: 'create-purchase-order',
@@ -53,11 +106,20 @@ export class CreatePurchaseOrderComponent implements OnInit {
     @ViewChild('companyBillingState') companyBillingState: ElementRef;
     /** Shipping state instance */
     @ViewChild('companyShippingState') companyShippingState: ElementRef;
+    /** RCM popup instance */
+    @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
+    @ViewChild('invoiceForm', { read: NgForm }) public invoiceForm: NgForm;
+
+    @ViewChildren(BsDatepickerDirective) public datePickers: QueryList<BsDatepickerDirective>;
+    @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
+    @ViewChildren('description') public description: QueryList<ElementRef>;
+    @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
+    @ViewChild(TaxControlComponent) public taxControlComponent: TaxControlComponent;
 
     public modelRef: BsModalRef;
     public isInvalidfield: boolean = true;
     public modalRef: BsModalRef;
-    public isMulticurrencyAccount: true;
+    public isMulticurrencyAccount: boolean = false;
     public isMobileScreen: boolean = true;
     public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     public customerAcList$: Observable<IOption[]>;
@@ -101,12 +163,47 @@ export class CreatePurchaseOrderComponent implements OnInit {
     public isValidGstinNumber: boolean = false;
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    public salesAccounts$: Observable<IOption[]> = observableOf(null);
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    public hsnDropdownShow: boolean = false;
+    /** Inventory Settings */
+    public inventorySettings: any;
+    /* This will hold the currently editing hsn/sac code */
+    public editingHsnSac: any = "";
+    public companyTaxesList: TaxResponse[] = [];
+    public theadArrReadOnly: IContentCommon[] = THEAD_ARR_READONLY;
+    public allowedSelectionOfAType: any = { type: [], count: 1 };
+    public activeIndx: number;
+    /** Rate should have precision up to 4 digits for better calculation */
+    public ratePrecision = RATE_FIELD_PRECISION;
+    public applyRoundOff: boolean = true;
+    /* This will hold if we need to hide total tax and have to exclude tax amount from total invoice amount */
+    public excludeTax: boolean = false;
+    public calculatedRoundOff: number = 0;
+    public exchangeRate = 1;
+    public grandTotalMulDum;
+    private entriesListBeforeTax: SalesEntryClass[];
+    /** True, if the entry contains RCM applicable taxes */
+    public isRcmEntry: boolean = false;
+    public universalDate: any;
+    public moment = moment;
+    public isPurchaseInvoice: boolean = false;
+    public baseCurrencySymbol: string = '';
+    public customerAccount: any = { email: '' };
+    public companyCurrency: string;
+    /** RCM modal configuration */
+    public rcmConfiguration: ConfirmationModalConfiguration;
+    public selectedSuffixForCurrency: string = '';
 
-    constructor(private store: Store<AppState>, private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions) {
+    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService) {
+        this.getInventorySettings();
+        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.flattenAccountListStream$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$));
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
+        this.store.dispatch(this.settingsDiscountAction.GetDiscount());
+        this.store.dispatch(this.companyActions.getTax());
 
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
         this.createdAccountDetails$ = this.store.pipe(select(state => state.sales.createdAccountDetails), takeUntil(this.destroyed$));
@@ -146,11 +243,28 @@ export class CreatePurchaseOrderComponent implements OnInit {
         });
 
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
-            this.companyCountryName = profile.country;
+            if (profile) {
+                this.companyCountryName = profile.country;
+                this.baseCurrencySymbol = profile.baseCurrencySymbol;
+                this.companyCurrency = profile.baseCurrency || 'INR';
 
-            if (profile && profile.countryV2) {
-                this.companyCountryCode = profile.countryV2.alpha2CountryCode;
-                this.getUpdatedStateCodes(profile.countryV2.alpha2CountryCode, true);
+                if (profile.addresses && profile.addresses.length > 0) {
+                    let companyAddresses = profile.addresses;
+
+                    companyAddresses.forEach(address => {
+                        if(address.isDefault === true) {
+                            this.purchaseOrder.company.billingDetails.address = address.address;
+                            this.purchaseOrder.company.billingDetails.state.code = address.stateCode;
+                            this.purchaseOrder.company.billingDetails.gstNumber = address.taxNumber;
+                            this.purchaseOrder.company.shippingDetails.gstNumber = address.taxNumber;
+                        }
+                    });
+                }
+
+                if (profile.countryV2) {
+                    this.companyCountryCode = profile.countryV2.alpha2CountryCode;
+                    this.getUpdatedStateCodes(profile.countryV2.alpha2CountryCode, true);
+                }
             }
         });
 
@@ -170,8 +284,10 @@ export class CreatePurchaseOrderComponent implements OnInit {
             }
         });
 
-        this.updatedAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
+        this.updatedAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(accountDetails => {
+            if (accountDetails) {
+                this.updateVendorDetails(accountDetails);
+            }
         });
 
         this.updateAccountSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -199,6 +315,59 @@ export class CreatePurchaseOrderComponent implements OnInit {
                 }
             }
         });
+
+        // get tax list and assign values to local vars
+        this.store.pipe(select(state => state.company.isGetTaxesSuccess), takeUntil(this.destroyed$)).subscribe(isGetTaxes => {
+            if (isGetTaxes) {
+                this.store.pipe(select(state => state.company.taxes), takeUntil(this.destroyed$)).subscribe((tax: TaxResponse[]) => {
+                    if (tax) {
+                        this.companyTaxesList = tax;
+                        this.theadArrReadOnly.forEach((item: IContentCommon) => {
+                            // show tax label
+                            if (item.label === 'Tax') {
+                                item.display = true;
+                            }
+                            return item;
+                        });
+                        this.companyTaxesList.forEach((tax) => {
+                            if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
+                                this.allowedSelectionOfAType.type.push(tax.taxType);
+                            }
+                        });
+                    } else {
+                        this.companyTaxesList = [];
+                        this.allowedSelectionOfAType.type = [];
+                    }
+                });
+            }
+        });
+
+        // listen for universal date
+        this.store.pipe(select((state: AppState) => state.session.applicationDate)).subscribe((dateObj: Date[]) => {
+            if (dateObj) {
+                try {
+                    this.universalDate = moment(dateObj[1]).toDate();
+                    this.assignDates();
+                } catch (e) {
+                    this.universalDate = new Date();
+                }
+            }
+        });
+
+        console.log(this.purchaseOrder);
+    }
+
+    public assignDates() {
+        let date = _.cloneDeep(this.universalDate);
+        this.purchaseOrder.voucherDetails.voucherDate = date;
+
+        this.purchaseOrder.entries.forEach((entry: SalesEntryClass) => {
+            entry.transactions.forEach((txn: SalesTransactionItemClass) => {
+                if (!txn.accountUniqueName) {
+                    entry.entryDate = date;
+                }
+            });
+        });
     }
 
     public updateVendorDetails(accountDetails: any): void {
@@ -210,6 +379,10 @@ export class CreatePurchaseOrderComponent implements OnInit {
             this.purchaseOrder.account.email = accountDetails.email;
             this.purchaseOrder.account.mobileNumber = accountDetails.mobileNo;
             this.purchaseOrder.account.currency.code = accountDetails.currency;
+            this.purchaseOrder.accountDetails.currencySymbol = accountDetails.currencySymbol || '';
+            this.purchaseOrder.accountDetails.uniqueName = accountDetails.uniqueName;
+
+            this.isMulticurrencyAccount = accountDetails.currencySymbol !== this.baseCurrencySymbol;
 
             this.vendorCountry = "";
 
@@ -246,6 +419,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
 
     public createVendorList(): void {
         let sundryCreditorsAcList = [];
+        let stockAccountsList = [];
         this.flattenAccountListStream$.subscribe(items => {
             if (items && items.length > 0) {
                 let existingAccounts = [];
@@ -259,7 +433,34 @@ export class CreatePurchaseOrderComponent implements OnInit {
                             additional: item
                         });
                     }
+
+                    if (item.parentGroups.some(group => group.uniqueName === 'operatingcost' || group.uniqueName === 'indirectexpenses')) {
+                        if (item.stocks) {
+                            // normal entry
+                            stockAccountsList.push({
+                                value: item.uniqueName,
+                                label: item.name,
+                                additional: item
+                            });
+
+                            // stock entry
+                            item.stocks.map(as => {
+                                stockAccountsList.push({
+                                    value: `${item.uniqueName}#${as.uniqueName}`,
+                                    label: `${item.name} (${as.name})`,
+                                    additional: Object.assign({}, item, { stock: as })
+                                });
+                            });
+                        } else {
+                            stockAccountsList.push({
+                                value: item.uniqueName,
+                                label: item.name,
+                                additional: item
+                            });
+                        }
+                    }
                 });
+                this.salesAccounts$ = observableOf(_.orderBy(stockAccountsList, 'label'));
                 this.customerAcList$ = observableOf(_.orderBy(sundryCreditorsAcList, 'label'));
             }
         });
@@ -278,6 +479,16 @@ export class CreatePurchaseOrderComponent implements OnInit {
 
     public onSelectVendor(item: IOption): void {
         if (item.value) {
+            this.purchaseOrder.voucherDetails.customerName = item.label;
+            this.purchaseOrder.accountDetails.name = '';
+
+            if (item.additional) {
+                this.customerAccount.email = item.additional.email;
+                // If currency of item is null or undefined then treat it to be equivalent of company currency
+                item.additional['currency'] = item.additional.currency || this.companyCurrency;
+                this.isMulticurrencyAccount = item.additional.currency !== this.companyCurrency;
+            }
+
             this.getAccountDetails(item.value);
         }
     }
@@ -421,6 +632,11 @@ export class CreatePurchaseOrderComponent implements OnInit {
                 this.warehouses = warehouseData.formattedWarehouses;
                 let defaultWarehouseUniqueName = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
                 let defaultWarehouseName = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.name : '';
+                
+                if(warehouseData.defaultWarehouse) {
+                    this.autoFillWarehouseAddress(warehouseData.defaultWarehouse);
+                }
+
                 if (warehouse) {
                     // Update flow is carried out and we have received warehouse details
                     this.purchaseOrder.warehouse.uniqueName = warehouse.uniqueName;
@@ -441,6 +657,21 @@ export class CreatePurchaseOrderComponent implements OnInit {
                 }
             }
         });
+    }
+
+    public onSelectWarehouse(warehouse: any): void {
+        this.autoFillWarehouseAddress(warehouse);
+    }
+
+    public autoFillWarehouseAddress(warehouse: any): void {
+        if(warehouse) {
+            this.purchaseOrder.company.shippingDetails.address = [];
+            this.purchaseOrder.company.shippingDetails.address.push(warehouse.address);
+            this.purchaseOrder.company.shippingDetails.state.code = warehouse.stateCode;
+        } else {
+            this.purchaseOrder.company.shippingDetails.address = [];
+            this.purchaseOrder.company.shippingDetails.state.code = "";
+        }
     }
 
     public addNewAccount(): void {
@@ -578,5 +809,680 @@ export class CreatePurchaseOrderComponent implements OnInit {
         onboardingFormRequest.formName = 'onboarding';
         onboardingFormRequest.country = countryCode;
         this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
+    }
+
+    public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass): any {
+        if (selectedAcc.value && selectedAcc.additional.uniqueName) {
+
+            let o = _.cloneDeep(selectedAcc.additional);
+
+            // check if we have quantity in additional object. it's for only bulk add mode
+            txn.quantity = o.quantity ? o.quantity : (o.stock) ? 1 : null;
+            txn.applicableTaxes = [];
+            txn.sku_and_customfields = null;
+
+            // description with sku and custom fields
+            if ((o.stock)) {
+                let description = [];
+                let skuCodeHeading = o.stock.skuCodeHeading ? o.stock.skuCodeHeading : 'SKU Code';
+                if (o.stock.skuCode) {
+                    description.push(skuCodeHeading + ':' + o.stock.skuCode);
+                }
+
+                let customField1Heading = o.stock.customField1Heading ? o.stock.customField1Heading : 'Custom field 1';
+                if (o.stock.customField1Value) {
+                    description.push(customField1Heading + ':' + o.stock.customField1Value);
+                }
+
+                let customField2Heading = o.stock.customField2Heading ? o.stock.customField2Heading : 'Custom field 2';
+                if (o.stock.customField2Value) {
+                    description.push(customField2Heading + ':' + o.stock.customField2Value);
+                }
+
+                txn.sku_and_customfields = description.join(', ');
+            }
+            //------------------------
+
+            // assign taxes and create fluctuation
+            if (o.stock && o.stock.stockTaxes && o.stock.stockTaxes.length) {
+                o.stock.stockTaxes.forEach(t => {
+                    let tax = this.companyTaxesList.find(f => f.uniqueName === t);
+                    if (tax) {
+                        switch (tax.taxType) {
+                            case 'tcsrc':
+                            case 'tcspay':
+                            case 'tdsrc':
+                            case 'tdspay':
+                                entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
+                                entry.isOtherTaxApplicable = true;
+                                break;
+                            default:
+                                txn.applicableTaxes.push(t);
+                                break;
+                        }
+                    }
+                });
+            } else {
+                // assign taxes for non stock accounts
+                txn.applicableTaxes = o.applicableTaxes;
+            }
+
+            txn.accountName = o.name;
+            txn.accountUniqueName = o.uniqueName;
+
+            if (o.stocks && o.stock) {
+                // set rate auto
+                txn.rate = null;
+                let obj: IStockUnit = {
+                    id: o.stock.stockUnit.code,
+                    text: o.stock.stockUnit.name
+                };
+                txn.stockList = [];
+                if (o.stock && o.stock.accountStockDetails.unitRates.length) {
+                    txn.stockList = this.prepareUnitArr(o.stock.accountStockDetails.unitRates);
+                    txn.stockUnit = txn.stockList[0].id;
+                    txn.rate = txn.stockList[0].rate;
+                } else {
+                    txn.stockList.push(obj);
+                    txn.stockUnit = o.stock.stockUnit.code;
+                }
+                txn.stockDetails = _.omit(o.stock, ['accountStockDetails', 'stockUnit']);
+                txn.isStockTxn = true;
+            } else {
+                txn.isStockTxn = false;
+                txn.stockUnit = null;
+                txn.stockDetails = null;
+                txn.stockList = [];
+                // reset fields
+                txn.rate = null;
+                txn.quantity = null;
+                txn.amount = 0;
+                txn.taxableValue = 0;
+                this.handleWarehouseVisibility();
+            }
+            txn.sacNumber = null;
+            txn.sacNumberExists = false;
+            txn.hsnNumber = null;
+
+            if (txn.stockDetails && txn.stockDetails.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !txn.stockDetails.sacNumber)) {
+                txn.hsnNumber = txn.stockDetails.hsnNumber;
+                txn.hsnOrSac = 'hsn';
+            }
+            if (txn.stockDetails && txn.stockDetails.sacNumber && this.inventorySettings && this.inventorySettings.manageInventory === false) {
+                txn.sacNumber = txn.stockDetails.sacNumber;
+                txn.sacNumberExists = true;
+                txn.hsnOrSac = 'sac';
+            }
+
+            if (!o.stock && o.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !o.sacNumber)) {
+                txn.hsnNumber = o.hsnNumber;
+                txn.hsnOrSac = 'hsn';
+            }
+            if (!o.stock && o.sacNumber && this.inventorySettings && !this.inventorySettings.manageInventory && this.inventorySettings.manageInventory === false) {
+                txn.sacNumber = o.sacNumber;
+                txn.sacNumberExists = true;
+                txn.hsnOrSac = 'sac';
+            }
+
+            setTimeout(() => {
+                let description = this.description.toArray();
+                if (description && description[this.activeIndx]) {
+                    description[this.activeIndx].nativeElement.focus();
+                }
+            }, 200);
+            this.calculateStockEntryAmount(txn);
+            this.calculateWhenTrxAltered(entry, txn);
+            return txn;
+        } else {
+            txn.isStockTxn = false;
+            txn.amount = 0;
+            txn.accountName = null;
+            txn.accountUniqueName = null;
+            txn.hsnOrSac = 'sac';
+            txn.total = null;
+            txn.rate = null;
+            txn.sacNumber = null;
+            txn.sacNumberExists = false;
+            txn.taxableValue = 0;
+            txn.applicableTaxes = [];
+
+            setTimeout(() => {
+                let description = this.description.toArray();
+                if (description && description[this.activeIndx]) {
+                    description[this.activeIndx].nativeElement.focus();
+                }
+            }, 200);
+            return txn;
+        }
+    }
+
+    public onNoResultsClicked(index: any): void {
+
+    }
+
+    public onClearSalesAccount(transaction: any): void {
+
+    }
+
+    /**
+     * This function is used to get inventory settings from store
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public getInventorySettings(): void {
+        this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
+            if (settings && settings.companyInventorySettings) {
+                this.inventorySettings = settings.companyInventorySettings;
+            }
+        });
+    }
+
+    /**
+     * toggle hsn/sac dropdown
+     * and hide all open date-pickers because it's overlapping
+     * hsn/sac dropdown
+     */
+    public toggleHsnSacDropDown(transaction: any): void {
+        if (this.datePickers && this.datePickers.length) {
+            this.datePickers.forEach(datePicker => {
+                if (datePicker.isOpen) {
+                    datePicker.hide();
+                }
+            });
+        }
+
+        if (this.inventorySettings && (this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
+            this.editingHsnSac = transaction.hsnNumber;
+        }
+
+        if (this.inventorySettings && !(this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
+            this.editingHsnSac = transaction.sacNumber;
+        }
+
+        console.log(this.inventorySettings);
+
+        this.hsnDropdownShow = !this.hsnDropdownShow;
+    }
+
+    /**
+     * This will hide the edit hsn/sac popup
+     *
+     * @param {*} transaction
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public hideHsnSacEditPopup(transaction: any): void {
+        if (this.inventorySettings && (this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
+            transaction.hsnNumber = this.editingHsnSac;
+        }
+
+        if (this.inventorySettings && !(this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
+            transaction.sacNumber = this.editingHsnSac;
+        }
+
+        console.log(this.editingHsnSac);
+
+        this.hsnDropdownShow = !this.hsnDropdownShow;
+    }
+
+    /**
+     * Returns true, if any of the single item is stock
+     *
+     * @private
+     * @returns {boolean} True, if item entries contains stock item
+     * @memberof ProformaInvoiceComponent
+     */
+    private isStockItemPresent(): boolean {
+        const entries = this.purchaseOrder.entries;
+        for (let entry = 0; entry < entries.length; entry++) {
+            const transactions = entries[entry].transactions;
+            for (let transaction = 0; transaction < transactions.length; transaction++) {
+                const item = transactions[transaction];
+                if (item.isStockTxn) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Handles the warehouse visibility when items in the list
+     * changes from stock to non-stock or vice-versa
+     *
+     * @private
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private handleWarehouseVisibility(): void {
+        // Non stock item got selected, search if there is any stock item along with non-stock item
+        const isStockItemPresent = this.isStockItemPresent();
+        if (!isStockItemPresent) {
+            // None of the item were stock item, hide the warehouse section which is applicable only for stocks
+            this.shouldShowWarehouse = false;
+        }
+    }
+
+    public prepareUnitArr(unitArr) {
+        let unitArray = [];
+        _.forEach(unitArr, (item) => {
+            unitArray.push({ id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate });
+        });
+        return unitArray;
+    }
+
+    public calculateStockEntryAmount(trx: SalesTransactionItemClass) {
+        trx.amount = Number(trx.quantity) * Number(trx.rate);
+    }
+
+    public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
+        trx.amount = Number(trx.amount);
+        if (trx.isStockTxn) {
+            trx.rate = giddhRoundOff((trx.amount / trx.quantity), this.ratePrecision);
+        }
+
+        if (this.isUpdateMode) {
+            this.applyRoundOff = true;
+        }
+
+        this.calculateTotalDiscountOfEntry(entry, trx, false);
+        this.calculateEntryTaxSum(entry, trx, false);
+        this.calculateEntryTotal(entry, trx);
+        this.calculateOtherTaxes(entry.otherTaxModal, entry);
+        this.calculateTcsTdsTotal();
+    }
+
+    public calculateTotalDiscountOfEntry(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true) {
+        let percentageListTotal = entry.discounts.filter(f => f.isActive)
+            .filter(s => s.discountType === 'PERCENTAGE')
+            .reduce((pv, cv) => {
+                return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+            }, 0) || 0;
+
+        let fixedListTotal = entry.discounts.filter(f => f.isActive)
+            .filter(s => s.discountType === 'FIX_AMOUNT')
+            .reduce((pv, cv) => {
+                return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+            }, 0) || 0;
+
+        let perFromAmount = ((percentageListTotal * trx.amount) / 100);
+        entry.discountSum = perFromAmount + fixedListTotal;
+        if (isNaN(entry.discountSum)) {
+            entry.discountSum = 0;
+        }
+
+        if (calculateEntryTotal) {
+            this.calculateEntryTotal(entry, trx);
+        }
+        trx.taxableValue = Number(trx.amount) - entry.discountSum;
+        if (isNaN(trx.taxableValue)) {
+            trx.taxableValue = 0;
+        }
+    }
+
+    public calculateEntryTaxSum(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true) {
+        let taxPercentage: number = 0;
+        let cessPercentage: number = 0;
+        entry.taxes.filter(f => f.isChecked).forEach(tax => {
+            if (tax.type === 'gstcess') {
+                cessPercentage += tax.amount;
+            } else {
+                taxPercentage += tax.amount;
+            }
+        });
+
+        entry.taxSum = giddhRoundOff(((taxPercentage * (trx.amount - entry.discountSum)) / 100), 2);
+        entry.cessSum = giddhRoundOff(((cessPercentage * (trx.amount - entry.discountSum)) / 100), 2);
+
+        if (isNaN(entry.taxSum)) {
+            entry.taxSum = 0;
+        }
+
+        if (isNaN(entry.cessSum)) {
+            entry.cessSum = 0;
+        }
+
+        if (calculateEntryTotal) {
+            this.calculateEntryTotal(entry, trx);
+        }
+    }
+
+    public calculateEntryTotal(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
+        if (this.excludeTax) {
+            trx.total = giddhRoundOff((trx.amount - entry.discountSum), 2);
+        } else {
+            trx.total = giddhRoundOff((trx.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+        }
+
+        this.calculateSubTotal();
+        this.calculateTotalDiscount();
+        this.calculateTotalTaxSum();
+        this.calculateGrandTotal();
+    }
+
+    /**
+     * Calculate the complete transaction values inclusively
+     *
+     * @param {SalesEntryClass} entry Entry value
+     * @param {SalesTransactionItemClass} transaction Current transaction
+     * @memberof ProformaInvoiceComponent
+     */
+    public calculateTransactionValueInclusively(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+        // Calculate discount
+        let percentageDiscountTotal = entry.discounts.filter(discount => discount.isActive)
+            .filter(activeDiscount => activeDiscount.discountType === 'PERCENTAGE')
+            .reduce((pv, cv) => {
+                return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+            }, 0) || 0;
+
+        let fixedDiscountTotal = entry.discounts.filter(discount => discount.isActive)
+            .filter(activeDiscount => activeDiscount.discountType === 'FIX_AMOUNT')
+            .reduce((pv, cv) => {
+                return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+            }, 0) || 0;
+
+        // Calculate tax
+        let taxPercentage: number = 0;
+        let cessPercentage: number = 0;
+        let taxTotal: number = 0;
+        entry.taxes.filter(tax => tax.isChecked).forEach(selectedTax => {
+            if (selectedTax.type === 'gstcess') {
+                cessPercentage += selectedTax.amount;
+            } else {
+                taxPercentage += selectedTax.amount;
+            }
+            taxTotal += selectedTax.amount;
+        });
+
+        // Calculate amount with inclusive tax
+        transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
+            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), 2);
+        let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), 2);
+        entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, 2);
+        if (isNaN(entry.discountSum)) {
+            entry.discountSum = 0;
+        }
+        transaction.taxableValue = Number(transaction.amount) - entry.discountSum;
+        if (isNaN(transaction.taxableValue)) {
+            transaction.taxableValue = 0;
+        }
+        entry.taxSum = giddhRoundOff(((taxPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
+        entry.cessSum = giddhRoundOff(((cessPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
+        if (isNaN(entry.taxSum)) {
+            entry.taxSum = 0;
+        }
+
+        if (isNaN(entry.cessSum)) {
+            entry.cessSum = 0;
+        }
+        // Calculate stock unit rate with amount
+        if (transaction.isStockTxn) {
+            transaction.rate = giddhRoundOff((transaction.amount / transaction.quantity), this.ratePrecision);
+        }
+        this.calculateSubTotal();
+        this.calculateTotalDiscount();
+        this.calculateTotalTaxSum();
+        this.calculateGrandTotal();
+        this.calculateOtherTaxes(entry.otherTaxModal, entry);
+        this.calculateTcsTdsTotal();
+    }
+
+    public calculateTotalDiscount() {
+        let discount = 0;
+        this.purchaseOrder.entries.forEach(f => {
+            discount += f.discountSum;
+        });
+        this.purchaseOrder.voucherDetails.totalDiscount = discount;
+    }
+
+    public calculateTotalTaxSum() {
+        let taxes = 0;
+        let cess = 0;
+
+        this.purchaseOrder.entries.forEach(f => {
+            taxes += f.taxSum;
+        });
+
+        this.purchaseOrder.entries.forEach(f => {
+            cess += f.cessSum;
+        });
+
+        this.purchaseOrder.voucherDetails.gstTaxesTotal = taxes;
+        this.purchaseOrder.voucherDetails.cessTotal = cess;
+        this.purchaseOrder.voucherDetails.totalTaxableValue = this.purchaseOrder.voucherDetails.subTotal - this.purchaseOrder.voucherDetails.totalDiscount;
+    }
+
+    public calculateTcsTdsTotal() {
+        let tcsSum: number = 0;
+        let tdsSum: number = 0;
+
+        this.purchaseOrder.entries.forEach(entry => {
+            tcsSum += entry.otherTaxType === 'tcs' ? entry.otherTaxSum : 0;
+            tdsSum += entry.otherTaxType === 'tds' ? entry.otherTaxSum : 0;
+        });
+
+        this.purchaseOrder.voucherDetails.tcsTotal = tcsSum;
+        this.purchaseOrder.voucherDetails.tdsTotal = tdsSum;
+    }
+
+    public calculateSubTotal() {
+        let count: number = 0;
+        this.purchaseOrder.entries.forEach(f => {
+            count += f.transactions.reduce((pv, cv) => {
+                return pv + Number(cv.amount);
+            }, 0);
+        });
+
+        if (isNaN(count)) {
+            count = 0;
+        }
+        this.purchaseOrder.voucherDetails.subTotal = count;
+    }
+
+    public calculateGrandTotal() {
+
+        let calculatedGrandTotal = 0;
+        calculatedGrandTotal = this.purchaseOrder.voucherDetails.grandTotal = this.purchaseOrder.entries.reduce((pv, cv) => {
+            return pv + cv.transactions.reduce((pvt, cvt) => pvt + cvt.total, 0);
+        }, 0);
+
+        if (isNaN(calculatedGrandTotal)) {
+            calculatedGrandTotal = 0;
+        }
+
+        //Save the Grand Total for Edit
+        if (calculatedGrandTotal > 0) {
+            if (this.applyRoundOff) {
+                this.calculatedRoundOff = Number((Math.round(calculatedGrandTotal) - calculatedGrandTotal).toFixed(2));
+            } else {
+                this.calculatedRoundOff = Number((calculatedGrandTotal - calculatedGrandTotal).toFixed(2));
+            }
+
+            calculatedGrandTotal = Number((calculatedGrandTotal + this.calculatedRoundOff).toFixed(2));
+        } else if (calculatedGrandTotal === 0) {
+            this.calculatedRoundOff = 0;
+        }
+        this.purchaseOrder.voucherDetails.grandTotal = calculatedGrandTotal;
+        this.grandTotalMulDum = calculatedGrandTotal * this.exchangeRate;
+    }
+
+    public calculateOtherTaxes(modal: SalesOtherTaxesModal, entryObj?: SalesEntryClass) {
+        let entry: SalesEntryClass;
+        entry = entryObj ? entryObj : this.purchaseOrder.entries[this.activeIndx];
+
+        let taxableValue = 0;
+        let totalTaxes = 0;
+
+        if (!entry) {
+            return;
+        }
+        if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
+            let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
+            if (!modal.appliedOtherTax.name) {
+                entry.otherTaxModal.appliedOtherTax.name = tax.name;
+            }
+            if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
+
+                if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+                    taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+                } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                    let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
+                    taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+                }
+                entry.otherTaxType = 'tcs';
+            } else {
+                taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+                entry.otherTaxType = 'tds';
+            }
+
+            totalTaxes += tax.taxDetail[0].taxValue;
+
+            entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
+            entry.otherTaxModal = modal;
+        } else {
+            entry.otherTaxSum = 0;
+            entry.isOtherTaxApplicable = false;
+            entry.otherTaxModal = new SalesOtherTaxesModal();
+            entry.tcsTaxList = [];
+            entry.tdsTaxList = [];
+        }
+        if (this.activeIndx !== undefined && this.activeIndx !== null && !entryObj) {
+            this.purchaseOrder.entries = cloneDeep(this.entriesListBeforeTax);
+            this.purchaseOrder.entries[this.activeIndx] = entry;
+        }
+    }
+
+    /**
+     * Outside click handler for transaction row
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public handleOutsideClick(): void {
+        this.activeIndx = null;
+    }
+
+    public setActiveIndx(index: number): void {
+        this.activeIndx = index;
+        try {
+            if (this.isRcmEntry) {
+                this.purchaseOrder.entries[index].transactions[0]['requiredTax'] = false;
+            }
+        } catch (error) {
+
+        }
+    }
+
+    public transactionAmountClicked(transaction: SalesTransactionItemClass): void {
+        if (Number(transaction.amount) === 0) {
+            transaction.amount = undefined;
+        }
+    }
+
+    public addBlankRow(txn: SalesTransactionItemClass): void {
+        if (!txn) {
+            let entry: SalesEntryClass = new SalesEntryClass();
+            if (this.isUpdateMode) {
+                entry.entryDate = this.purchaseOrder.entries[0] ? this.purchaseOrder.entries[0].entryDate : this.universalDate || new Date();
+                entry.isNewEntryInUpdateMode = true;
+            } else {
+                entry.entryDate = this.universalDate || new Date();
+            }
+            this.purchaseOrder.entries.push(entry);
+            setTimeout(() => {
+                this.activeIndx = this.purchaseOrder.entries.length ? this.purchaseOrder.entries.length - 1 : 0;
+                this.onBlurDueDate(this.activeIndx);
+            }, 200);
+        } else {
+            // if transaction is valid then add new row else show toasty
+            if (!txn.isValid()) {
+                this.toaster.warningToast('Product/Service can\'t be empty');
+                return;
+            }
+            let entry: SalesEntryClass = new SalesEntryClass();
+            this.purchaseOrder.entries.push(entry);
+            setTimeout(() => {
+                this.activeIndx = this.purchaseOrder.entries.length ? this.purchaseOrder.entries.length - 1 : 0;
+                this.onBlurDueDate(this.activeIndx);
+            }, 200);
+        }
+    }
+
+    public removeTransaction(entryIdx: number): void {
+        if (this.activeIndx === entryIdx) {
+            this.activeIndx = null;
+        }
+        this.purchaseOrder.entries = cloneDeep(this.purchaseOrder.entries.filter((entry, index) => entryIdx !== index));
+        this.calculateAffectedThingsFromOtherTaxChanges();
+        if (this.purchaseOrder.entries.length === 0) {
+            this.addBlankRow(null);
+        }
+        this.handleWarehouseVisibility();
+    }
+
+    public onBlurDueDate(index): void {
+        if (this.purchaseOrder.voucherDetails.customerUniquename || this.purchaseOrder.voucherDetails.customerName) {
+            this.setActiveIndx(index);
+            setTimeout(() => {
+                let selectAccount = this.selectAccount.toArray();
+                if (selectAccount !== undefined && selectAccount[index] !== undefined) {
+                    selectAccount[index].show('');
+                }
+            }, 200);
+        }
+    }
+
+    public calculateAffectedThingsFromOtherTaxChanges(): void {
+        this.calculateTcsTdsTotal();
+        this.calculateGrandTotal();
+    }
+
+    public closeDiscountPopup(): void {
+        if (this.discountComponent) {
+            this.discountComponent.hideDiscountMenu();
+        }
+    }
+
+    public closeTaxControlPopup(): void {
+        if (this.taxControlComponent) {
+            this.taxControlComponent.showTaxPopup = false;
+        }
+    }
+
+    public getCustomerDetails() {
+        this.selectedVendorForDetails = this.purchaseOrder.accountDetails.uniqueName;
+        this.toggleAccountAsidePane();
+    }
+
+    /**
+     * Toggle the RCM checkbox based on user confirmation
+     *
+     * @param {*} event Click event
+     * @memberof ProformaInvoiceComponent
+     */
+    public toggleRcmCheckbox(event: any): void {
+        event.preventDefault();
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked);
+    }
+
+    /**
+     * RCM change handler, triggerreed when the user performs any
+     * action with the RCM popup
+     *
+     * @param {string} action Action performed by user
+     * @memberof ProformaInvoiceComponent
+     */
+    public handleRcmChange(action: string): void {
+        if (action === CONFIRMATION_ACTIONS.YES) {
+            // Toggle the state of RCM as user accepted the terms of RCM modal
+            this.isRcmEntry = !this.isRcmEntry;
+        }
+        if (this.rcmPopup) {
+            this.rcmPopup.hide();
+        }
+    }
+
+    public addAccountFromShortcut(): void {
+        if (this.purchaseOrder && this.purchaseOrder.voucherDetails && !this.purchaseOrder.voucherDetails.customerName) {
+            this.selectedVendorForDetails = null;
+            this.toggleAccountAsidePane();
+        }
     }
 }
