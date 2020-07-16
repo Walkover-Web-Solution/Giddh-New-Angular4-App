@@ -9,7 +9,7 @@ import { AccountService } from '../../../services/account.service';
 import { AppState } from '../../../store';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { Store, select } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
 import * as moment from 'moment/moment';
 import { AuditLogsSidebarVM } from './Vm';
 import * as _ from '../../../lodash-optimized';
@@ -32,31 +32,31 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    // @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
-    /* This will store modal reference */
-    public modalRef: BsModalRef;
-    /* This will store selected date range to use in api */
-    public selectedDateRange: any;
-    /* This will store selected date range to show on UI */
-    public selectedDateRangeUi: any;
-    /* This will store available date ranges */
-    public datePickerOptions: any;
+    // /* This will store modal reference */
+    // public modalRef: BsModalRef;
+    // /* This will store selected date range to use in api */
+    // public selectedDateRange: any;
+    // /* This will store selected date range to show on UI */
+    // public selectedDateRangeUi: any;
+    // /* This will store available date ranges */
+    // public datePickerOptions: any;
     /* Moment object */
     public moment = moment;
-    /* Selected from date */
-    public fromDate: string;
-    /* Selected to date */
-    public toDate: string;
+    // /* Selected from date */
+    // public fromDate: string;
+    // /* Selected to date */
+    // public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /* Universal date observer */
-    public universalDate$: Observable<any>;
+    // public universalDate$: Observable<any>;
     /* Active company details */
     public activeCompany: any;
     /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
+    // public dateFieldPosition: any = { x: 0, y: 0 };
     /** Audit log filter form data */
     public auditLogFilterForm: any[] = [];
     /** To clear entity sh-select options   */
@@ -73,6 +73,11 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     public activeCompanyUniqueName$: Observable<string>;
     /** To destroy observers */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** From date value of parent datepicker */
+    @Input() public fromDate: string;
+    /** To date value of parent datepicker */
+    @Input() public toDate: string;
+
 
     constructor(private store: Store<AppState>,
         private accountService: AccountService,
@@ -83,7 +88,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         private auditLogsService: LogsService,
         private generalService: GeneralService) {
 
-        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+        // this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.showWeekNumbers = false;
@@ -137,22 +142,22 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         });
         this.auditLogFormVM.reset();
 
-        /** Universal date observer */
-        this.universalDate$.subscribe(dateObj => {
-            if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-            }
-        });
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                this.datePickerOptions = config;
-            }
-        });
+        // /** Universal date observer */
+        // this.universalDate$.subscribe(dateObj => {
+        //     if (dateObj) {
+        //         let universalDate = _.cloneDeep(dateObj);
+        //         this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+        //         this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        //         this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+        //         this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+        //     }
+        // });
+        // /* This will get the date range picker configurations */
+        // this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
+        //     if (config) {
+        //         this.datePickerOptions = config;
+        //     }
+        // });
     }
 
     /**
@@ -331,51 +336,51 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     }
 
 
-    /**
-     *To show the datepicker
-     *
-     * @param {*} element
-     * @memberof AuditLogsFormComponent
-     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
-        );
-    }
+    // /**
+    //  *To show the datepicker
+    //  *
+    //  * @param {*} element
+    //  * @memberof AuditLogsFormComponent
+    //  */
+    // public showGiddhDatepicker(element: any): void {
+    //     if (element) {
+    //         this.dateFieldPosition = this.generalService.getPosition(element.target);
+    //     }
+    //     this.modalRef = this.modalService.show(
+    //         this.datepickerTemplate,
+    //         Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+    //     );
+    // }
 
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof AuditLogsFormComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
-    }
+    // /**
+    //  * This will hide the datepicker
+    //  *
+    //  * @memberof AuditLogsFormComponent
+    //  */
+    // public hideGiddhDatepicker(): void {
+    //     this.modalRef.hide();
+    // }
 
-    /**
-     * Call back function for date/range selection in datepicker
-     *
-     * @param {*} value
-     * @memberof AuditLogsFormComponent
-     */
-    public dateSelectedCallback(value: any): void {
-        this.selectedRangeLabel = "";
+    // /**
+    //  * Call back function for date/range selection in datepicker
+    //  *
+    //  * @param {*} value
+    //  * @memberof AuditLogsFormComponent
+    //  */
+    // public dateSelectedCallback(value: any): void {
+    //     this.selectedRangeLabel = "";
 
-        if (value && value.name) {
-            this.selectedRangeLabel = value.name;
-        }
-        this.hideGiddhDatepicker();
-        if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-        }
-    }
+    //     if (value && value.name) {
+    //         this.selectedRangeLabel = value.name;
+    //     }
+    //     this.hideGiddhDatepicker();
+    //     if (value && value.startDate && value.endDate) {
+    //         this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+    //         this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+    //         this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+    //         this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+    //     }
+    // }
 
     /**
      * To prepare get audit log request model
