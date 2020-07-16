@@ -41,7 +41,7 @@
                     <label *ngIf="i === 0">Amount</label>
                     <input type="tel" class="form-control" placeholder="Enter Amount" name="amount"
                         [(ngModel)]="entry.amount" (keydown)="validateAmount($event, entry)"
-                        (blur)="validateEntry(entry)" decimalDigitsDirective [DecimalPlaces]="2">
+                        (blur)="validateEntry(entry)" decimalDigitsDirective [DecimalPlaces]="2" (ngModelChange)="formatAmount(entry)">
                     <a href="javascript:;" (click)="removeReceiptEntry(i)" *ngIf="receiptEntries.length > 1"><i
                             class="icon-cross"></i></a>
                 </div>
