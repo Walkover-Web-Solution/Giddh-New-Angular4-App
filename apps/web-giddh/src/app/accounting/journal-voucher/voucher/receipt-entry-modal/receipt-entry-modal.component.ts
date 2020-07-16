@@ -50,7 +50,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         });
 
         if (this.transaction && this.transaction.selectedAccount) {
-            if(this.transaction.voucherAdjustments) {
+            if (this.transaction.voucherAdjustments) {
                 this.receiptEntries = this.transaction.voucherAdjustments;
                 this.totalEntries = this.receiptEntries.length;
                 this.validateEntries(false);
@@ -66,7 +66,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     }
 
     public addNewEntry(): void {
-        if (this.totalEntries === 0 || (this.receiptEntries[this.totalEntries - 1] && this.receiptEntries[this.totalEntries - 1] !== undefined && Number(this.receiptEntries[this.totalEntries - 1].amount) > 0)) {
+        if (this.totalEntries === 0 || (this.receiptEntries[this.totalEntries - 1] && this.receiptEntries[this.totalEntries - 1] !== undefined && parseFloat(this.receiptEntries[this.totalEntries - 1].amount) > 0)) {
             this.receiptEntries[this.totalEntries] = {
                 type: 'receipt',
                 note: '',
@@ -98,13 +98,13 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         if (!entry.amount) {
             this.toaster.clearAllToaster();
             this.toaster.errorToast("Please enter amount");
-        } else if (isNaN(Number(entry.amount)) || entry.amount <= 0) {
+        } else if (isNaN(parseFloat(entry.amount)) || entry.amount <= 0) {
             this.toaster.clearAllToaster();
             this.toaster.errorToast("Please enter valid amount");
         }
 
-        if (entry.amount && !isNaN(Number(entry.amount)) && entry.tax.percent) {
-            entry.tax.value = Number(entry.amount) / entry.tax.percent;
+        if (entry.amount && !isNaN(parseFloat(entry.amount)) && entry.tax.percent) {
+            entry.tax.value = parseFloat(entry.amount) / entry.tax.percent;
         } else {
             entry.tax.value = 0;
         }
@@ -112,12 +112,12 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         let receiptTotal = 0;
 
         this.receiptEntries.forEach(receipt => {
-            receiptTotal += Number(receipt.amount);
+            receiptTotal += parseFloat(receipt.amount);
         });
 
         if (receiptTotal < this.transaction.amount) {
             if (entry.type === "againstReference") {
-                let invoiceBalanceDue = Number(this.pendingInvoiceList[entry.invoice.uniqueName].balanceDue.amountForAccount);
+                let invoiceBalanceDue = parseFloat(this.pendingInvoiceList[entry.invoice.uniqueName].balanceDue.amountForAccount);
                 if (invoiceBalanceDue >= entry.amount) {
                     this.addNewEntry();
                 } else if (invoiceBalanceDue < entry.amount) {
@@ -131,7 +131,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
             this.toaster.clearAllToaster();
             this.toaster.errorToast(this.amountErrorMessage);
         } else {
-            entry.amount = Number(entry.amount);
+            entry.amount = parseFloat(entry.amount);
             this.isValidForm = true;
         }
     }
@@ -140,7 +140,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         let receiptTotal = 0;
 
         this.receiptEntries.forEach(receipt => {
-            receiptTotal += Number(receipt.amount);
+            receiptTotal += parseFloat(receipt.amount);
         });
 
         if (receiptTotal < this.transaction.amount) {
@@ -160,10 +160,10 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
             if (res) {
                 let taxList: IOption[] = [];
                 Object.keys(res.taxes).forEach(key => {
-                    taxList.push({ label: res.taxes[key].name, value: res.taxes[key].taxType });
+                    taxList.push({ label: res.taxes[key].name, value: res.taxes[key].uniqueName });
 
-                    this.taxList[res.taxes[key].taxType] = [];
-                    this.taxList[res.taxes[key].taxType] = res.taxes[key];
+                    this.taxList[res.taxes[key].uniqueName] = [];
+                    this.taxList[res.taxes[key].uniqueName] = res.taxes[key];
                 });
                 this.taxListSource$ = observableOf(taxList);
             } else {
@@ -198,8 +198,8 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
             entry.tax.name = this.taxList[event.value].name;
             entry.tax.percent = this.taxList[event.value].taxDetail[0].taxValue;
 
-            if (entry.amount && !isNaN(Number(entry.amount)) && entry.tax.percent) {
-                entry.tax.value = Number(entry.amount) / entry.tax.percent;
+            if (entry.amount && !isNaN(parseFloat(entry.amount)) && entry.tax.percent) {
+                entry.tax.value = parseFloat(entry.amount) / entry.tax.percent;
             } else {
                 entry.tax.value = 0;
             }
@@ -255,16 +255,20 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         let receiptTotal = 0;
 
         this.receiptEntries.forEach(receipt => {
-            receiptTotal += Number(receipt.amount);
+            receiptTotal += parseFloat(receipt.amount);
         });
 
         if (receiptTotal !== this.transaction.amount) {
             this.isValidForm = false;
-            if(addEntryIfInvalid) {
+            if (addEntryIfInvalid) {
                 this.addNewEntry();
             }
         } else {
             this.isValidForm = true;
         }
+    }
+
+    public formatAmount(entry): void {
+        entry.amount = Number(entry.amount);
     }
 }
