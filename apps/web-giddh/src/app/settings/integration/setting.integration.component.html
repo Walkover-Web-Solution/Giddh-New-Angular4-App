@@ -469,7 +469,7 @@
 
                                                 </ng-container>
                                                 <div class="custom-select select-caret pos-rel" *ngIf="item.get('otpType').value !=='BANK'">
-                                                    <sh-select [options]="approvalNameList" class="text-left" formControlName="approvalUniqueName" name="approvalUniqueName" [placeholder]="'Select Bank'" [multiple]="false">
+                                                    <sh-select [options]="approvalNameList" class="text-left" formControlName="approvalUniqueName" name="approvalUniqueName" [placeholder]="'Select Bank'" [customSorting]="customApproverNameListSorting" [multiple]="false">
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a href="javascript:void(0)" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative">
                                                                 <div class="item">
@@ -845,7 +845,7 @@
 
                                         </ng-container>
                                         <div class="custom-select select-caret pos-rel" *ngIf="item.get('otpType').value !=='BANK'">
-                                            <sh-select [options]="approvalNameList" class="text-left" formControlName="approvalUniqueName" name="approvalUniqueName" [placeholder]="'Select Bank'" [multiple]="false">
+                                            <sh-select [options]="approvalNameList" class="text-left" formControlName="approvalUniqueName" name="approvalUniqueName" [placeholder]="'Select Bank'" [customSorting]="customApproverNameListSorting" [multiple]="false">
                                                 <ng-template #optionTemplate let-option="option">
                                                     <a href="javascript:void(0)" *ngIf="option?.additional[0]?.mobileVerified" class="list-item relative">
                                                         <div class="item">

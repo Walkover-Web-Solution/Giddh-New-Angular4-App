@@ -292,7 +292,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         });
                     });
                 }
-                this.addBankForm.reset();
+                if (this.addBankForm) {
+                    this.addBankForm.reset();
+                }
                 this.isBankUpdateInEdit = null;
             }
         });
@@ -312,7 +314,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
                 this.isIndianCompany = profile.countryV2.alpha2CountryCode === 'IN' ? true : false;
-                if(!this.isIndianCompany && this.selectedTabParent === 4) {
+                if (!this.isIndianCompany && this.selectedTabParent === 4) {
                     this.selectedTabParent = 0;
                     this.selectTab(this.selectedTabParent);
                 }
@@ -655,7 +657,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public selectTab(id: number) {
-        if(this.integrationTab.tabs[id] && this.integrationTab.tabs[id] !== undefined) {
+        if (this.integrationTab.tabs[id] && this.integrationTab.tabs[id] !== undefined) {
             this.integrationTab.tabs[id].active = true;
         }
     }
@@ -1278,5 +1280,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }
         this.isUpdateBankFormValid$ = of(valid);
         return valid;
+    }
+
+    /** Note We have to use param 'postItem' as this need mapping on sh-select custome filter params
+     * To apply custom sorting on approver list 
+     *
+     * @param {IOption} preItem Params to sort selected item
+     * @param {IOption} postItem Params to sort selected item
+     * @returns
+     * @memberof SettingIntegrationComponent
+     */
+    public customApproverNameListSorting(preItem: IOption, postItem: IOption): any {
+        return (parseInt(preItem.label));
     }
 }
