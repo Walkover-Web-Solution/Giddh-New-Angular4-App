@@ -370,5 +370,6 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
      */
     public changeInvoiceHeader(event: boolean): void {
         this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
+        this.onChangeFieldVisibility(null,null,null);
     }
 }
