@@ -32,6 +32,10 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
+import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
+import { TaxControlModule } from '../theme/tax-control/tax-control.module';
+import { DiscountControlModule } from '../theme/discount-control/discount-control.module';
 
 /**
  * Created by kunalsaxena on 9/1/17.
@@ -71,7 +75,11 @@ import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-acco
         ShSelectModule,
         SharedModule,
         SalesShSelectModule,
-        GenericAsideMenuAccountModule
+        GenericAsideMenuAccountModule,
+        CurrencyModule,
+        NgxMaskModule.forRoot(),
+        TaxControlModule,
+        DiscountControlModule
     ],
     entryComponents: [],
     exports: [

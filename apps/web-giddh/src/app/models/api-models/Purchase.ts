@@ -1,3 +1,5 @@
+import { SalesEntryClass, VoucherDetailsClass, AccountDetailsClass } from './Sales';
+
 export class StateCode {
     name: string;
     code: string;
@@ -18,6 +20,22 @@ export class Address {
     public panNumber: string;
 }
 
+export class Transaction {
+    public account: {
+        name: string;
+        uniqueName: string;
+    };
+    public amount: {
+        amountForAccount: string;
+        amountForCompany: string;
+        type: string;
+    }
+}
+
+export class Tax {
+    uniqueName: string;
+}
+
 export class Entries {
     public uniqueName: string;
     public voucherType: string;
@@ -26,24 +44,21 @@ export class Entries {
     public date: string;
     public hsnNumber: string;
     public sacNumber: string;
-    public transactions: [
-        {
-            account: {
-                name: string;
-                uniqueName: string;
-            },
-            amount: {
-                amountForAccount: string;
-                amountForCompany: string;
-                type: string;
-            }
-        }
-    ];
-    public taxes: [
-        {
-            uniqueName: string;
-        }
-    ]
+    public sacNumberExists: boolean;
+    public transactions: Transaction;
+    public taxes: Tax;
+
+    constructor() {
+        this.uniqueName = "";
+        this.voucherType = "";
+        this.voucherNumber = "";
+        this.description = "";
+        this.date = "";
+        this.hsnNumber = "";
+        this.sacNumber = "";
+        this.transactions = new Transaction();
+        this.taxes = new Tax();
+    }
 }
 
 export class Company {
@@ -102,10 +117,12 @@ export class PurchaseOrder {
     public number: string;
     public exchangeRate: string;
     public account: Account;
-    public entries: Entries;
+    public entries: SalesEntryClass[];
     public company: Company; 
     public warehouse: NameUniqueName;
     public templateDetails: TemplateDetails;
+    public voucherDetails: VoucherDetailsClass;
+    public accountDetails: AccountDetailsClass;
 
     constructor() {
         this.type = "purchase";
@@ -123,7 +140,9 @@ export class PurchaseOrder {
         this.company.shippingDetails = new Address();
         this.company.shippingDetails.state = new StateCode();
         this.warehouse = new NameUniqueName();
-        this.entries = new Entries();
+        this.accountDetails = new AccountDetailsClass();
+        this.entries = [new SalesEntryClass()];
+        this.voucherDetails = new VoucherDetailsClass();
 
         this.templateDetails = new TemplateDetails();
     }
