@@ -1,6 +1,6 @@
 <div class="container-fluid">
-    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)" *ngIf="isNewVersion">
-        <div>
+    <div class="mt-15 custom-datepicker-wrapper">
+        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)" *ngIf="isNewVersion">
             <i><img src="assets/images/custom-calender.svg"></i>
             <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
         </div>

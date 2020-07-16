@@ -14,7 +14,8 @@ import { GeneralActions } from '../actions/general/general.actions';
 
 @Component({
     selector: 'audit-logs',
-    templateUrl: './audit-logs.component.html'
+    templateUrl: './audit-logs.component.html',
+    styleUrls: ['audit-logs.component.scss']
 })
 export class AuditLogsComponent implements OnInit, OnDestroy {
     /** To check module for new version  */
@@ -58,7 +59,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
                 this.isNewVersion = false;
                 if (response.version && response.version && String(response.version).toLocaleLowerCase() === 'new') {
                     this.isNewVersion = true;
-                     this.store.dispatch(this.generalActions.setAppTitle('pages/audit-logs'));
+                     this.store.dispatch(this.generalActions.setAppTitle('/pages/audit-logs/New'));
                 }
             } else {
                 this.isNewVersion = false;
