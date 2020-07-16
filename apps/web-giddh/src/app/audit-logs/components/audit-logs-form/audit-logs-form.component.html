@@ -50,12 +50,12 @@
     <sh-select [options]="auditLogFormVM.filters" [placeholder]="'Select Option'" (click)="prepareOperationFormData(selectEntity)" [(ngModel)]="auditLogFormVM.selectedOperation" [forceClearReactive]="forceClearOperations$ | async"></sh-select>
 </div>
 
-<div class="clearfix mrT2">
+<div class="clearfix mrT2" *ngIf="!auditLogFormVM.selectedEntity || auditLogFormVM.selectedEntity ==='account' || auditLogFormVM.selectedEntity ==='entry' || auditLogFormVM.selectedEntity ==='ledger'">
     <label>Select Account</label>
     <sh-select [options]="auditLogFormVM.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="generalCustomFilter" [(ngModel)]="auditLogFormVM.selectedAccountUniqueName" [forceClearReactive]="forceClearAccount$ | async"></sh-select>
 </div>
 
-<div class="clearfix mrT2">
+<div class="clearfix mrT2" *ngIf="!auditLogFormVM.selectedEntity || auditLogFormVM.selectedEntity ==='account' || auditLogFormVM.selectedEntity ==='group'">
     <label>Select Group</label>
     <sh-select [options]="auditLogFormVM.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="generalCustomFilter" [(ngModel)]="auditLogFormVM.selectedGroupUniqueName" [forceClearReactive]="forceClearGroup$ | async"></sh-select>
 </div>
