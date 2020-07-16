@@ -300,7 +300,7 @@
                         </div>
                         <!-- region customer dropdown -->
                         <div class="col-sm-7 select-customer-name">
-                            <input type="text" class="form-control" placeholder="Select Date" name="purchaseOrderDate" [(ngModel)]="purchaseOrder.date" bsDatepicker>
+                            <input type="text" class="form-control" placeholder="Select Date" name="purchaseOrderDate" [(ngModel)]="purchaseOrder.voucherDetails.voucherDate" bsDatepicker>
                         </div>
                         <!-- endregion -->
                     </div>
@@ -841,7 +841,7 @@
             <div class="p-4 aqua-color add-line-bulk-item" style="width: max-content;">
                 <a href="javascript:void 0" (click)="addBlankRow(null)">+ Add New Line</a>
                 <span style="font-size:14px; color: #c5c5c5;"> | </span>
-                <a (click)="showBulkItemModal = true; bulkItemsModal.show()" href="javascript:void 0">+ Add
+                <a (click)="showBulkItemModal = true; bulkItemsModal.show()" href="javascript:void(0)">+ Add
                     Bulk
                     Entries</a>
             </div>
@@ -1740,7 +1740,7 @@
                     <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
                             class="btn btn-default d-inline-block v-align-middle" *ngIf="isCustomerSelected">Save &amp; Update A/c
                         </button> -->
-                    <button type="button" class="btn btn-default">Save</button>
+                    <button type="button" class="btn btn-default" (click)="onSubmitInvoiceForm(invoiceForm)">Save</button>
                 </span>
                 <!-- endregion -->
 
@@ -1830,3 +1830,12 @@
     [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}" *ngIf="accountAsideMenuState === 'in'"
     [selectedAccountUniqueName]="selectedVendorForDetails" (onShortcutPress)="toggleAccountAsidePane()"
     (addEvent)="addNewSidebarAccount($event)" (updateEvent)="updateSidebarAccount($event)"></generic-aside-menu-account>
+
+<!-- region bulk items -->
+<div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" [config]="{ animated: true,keyboard: false,backdrop: false,ignoreBackdropClick: true }">
+    <ng-container *ngIf="showBulkItemModal">
+        <proforma-add-bulk-items-component [data]="salesAccounts$ | async" (saveItemsEvent)="addBulkStockItems($event)"
+            (closeEvent)="bulkItemsModal.hide()"></proforma-add-bulk-items-component>
+    </ng-container>
+</div>
+<!-- endregion -->
