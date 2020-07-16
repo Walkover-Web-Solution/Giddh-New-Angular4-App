@@ -36,10 +36,8 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { DiscountControlModule } from '../theme/discount-control/discount-control.module';
-
-/**
- * Created by kunalsaxena on 9/1/17.
- */
+import { ProformaAddBulkItemsComponent } from '../proforma-invoice/components/proforma-add-bulk-items/proforma-add-bulk-items.component';
+import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
 
 @NgModule({
     declarations: [
@@ -79,7 +77,8 @@ import { DiscountControlModule } from '../theme/discount-control/discount-contro
         CurrencyModule,
         NgxMaskModule.forRoot(),
         TaxControlModule,
-        DiscountControlModule
+        DiscountControlModule,
+        ProformaInvoiceModule
     ],
     entryComponents: [],
     exports: [
