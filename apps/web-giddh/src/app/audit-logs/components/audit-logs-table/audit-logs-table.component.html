@@ -82,7 +82,7 @@
             </div>
             <div *ngIf="log && log?.details && log?.details?.stockUnit && log?.details?.stockUnit?.name != undefined">
                 <label>Unit:</label>
-                <p>{{ log?.details?.stockUnit?.name}}</p>
+                <p>{{ log?.details?.stockUnit?.name}} ({{ log?.details?.stockUnit?.code}})</p>
             </div>
             <!-- <div>
                 <label>Company:</label>
@@ -122,18 +122,20 @@
                         <p class="address-field"> {{ log?.details?.purchases?.account?.name}}
                         </p>
                     </div>
-                    <div class="mr-05">
-                        <label>
+                    <ng-container *ngFor="let item of log?.details?.purchases?.unitRates">
+                        <div class="mr-05">
+                            <label>
                             Unit:
                         </label>
-                        <p class="ml-05"> {{ log?.details?.purchases?.unit?.name}}</p>
-                    </div>
-                    <div class="mr-05">
-                        <label>
+                            <p class="ml-05"> {{ item.unit?.name}}({{item.unit?.code}})</p>
+                        </div>
+                        <div class="mr-05">
+                            <label>
                             Rate:
                         </label>
-                        <p class="ml-05">{{ log?.details?.purchases?.rate}}</p>
-                    </div>
+                            <p class="ml-05">{{ item?.rate |giddhCurrency }} |</p>
+                        </div>
+                    </ng-container>
                     <span>
                         Sales:-
                     </span>
@@ -144,18 +146,20 @@
                         <p class="address-field">{{ log?.details?.sales?.account?.name}}
                         </p>
                     </div>
-                    <div class="mr-05">
-                        <label>
+                    <ng-container *ngFor="let item of log?.details?.sales?.unitRates">
+                        <div class="mr-05">
+                            <label>
                             Unit:
                         </label>
-                        <p class="ml-05">{{ log?.details?.sales?.unit?.name}}</p>
-                    </div>
-                    <div class="mr-05">
-                        <label>
+                            <p class="ml-05"> {{ item.unit?.name}}({{item.unit?.code}})</p>
+                        </div>
+                        <div class="mr-05">
+                            <label>
                             Rate:
                         </label>
-                        <p class="ml-05">{{ log?.details?.sales?.rate}}</p>
-                    </div>
+                            <p class="ml-05">{{ item?.rate |giddhCurrency }} |</p>
+                        </div>
+                    </ng-container>
                 </div>
             </div>
         </div>
