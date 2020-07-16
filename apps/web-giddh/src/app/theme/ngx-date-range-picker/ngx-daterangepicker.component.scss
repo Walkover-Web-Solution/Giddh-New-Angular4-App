@@ -259,7 +259,7 @@ $input-height: 3rem !default;
     }
 
     th, .th-div {
-        color: #988c8c;
+        color: $opium;
     }
     th.month.drp-animate, .month.drp-animate {
         font-size: 12px;
@@ -330,7 +330,7 @@ $input-height: 3rem !default;
 
         &.week {
             font-size: 80%;
-            color: #ccc;
+            color: $very-light-gray;
         }
     }
 
@@ -393,7 +393,7 @@ $input-height: 3rem !default;
 
         &.week {
             font-size: 80%;
-            color: #ccc;
+            color: $very-light-gray;
         }
     }
     td, .td-div {
@@ -535,7 +535,7 @@ $input-height: 3rem !default;
     td,
     option {
         &.disabled {
-            color: #999;
+            color: $nobel;
             cursor: not-allowed;
             text-decoration: line-through;
         }
@@ -545,7 +545,7 @@ $input-height: 3rem !default;
     .td-div,
     option {
         &.disabled {
-            color: #999;
+            color: $nobel;
             cursor: not-allowed;
             text-decoration: line-through;
         }
@@ -576,8 +576,8 @@ $input-height: 3rem !default;
         &.ampm-select {
             width: 50px;
             margin: 0 auto;
-            background: #eee;
-            border: 1px solid #eee;
+            background: $whisper-light;
+            border: 1px solid $whisper-light;
             padding: 2px;
             outline: 0;
             font-size: 12px;
@@ -615,7 +615,7 @@ $input-height: 3rem !default;
     }
 
     .calendar-time select.disabled {
-        color: #ccc;
+        color: $very-light-gray;
         cursor: not-allowed;
     }
 
@@ -667,7 +667,7 @@ $input-height: 3rem !default;
     /* ranges */
     .show-ranges {
         .drp-calendar.left {
-            border-left: 1px solid #ddd;
+            border-left: 1px solid$gainsboro-light;
         }
     }
 
@@ -707,7 +707,7 @@ $input-height: 3rem !default;
                             position: absolute;
                             z-index: 1017;
                             min-width: 96px;
-                            background-color: white;
+                            background-color:$white;
                             box-shadow: 0px 2px 8px $moody-blue;
                             left: 28px;
                             top: -3px;
@@ -886,7 +886,7 @@ $input-height: 3rem !default;
         background-color: $white !important;
 
         svg {
-            color: #eb3232;
+            color: $red;
             fill: currentColor;
         }
     }
@@ -1145,7 +1145,7 @@ td:hover span {
 /* new calendar */
 
 .md-drppicker td.end-date.active {
-    background-color: white !important;
+    background-color:$white!important;
 
     span {
         background-color: $portage !important;
@@ -1165,7 +1165,7 @@ td:hover span {
 
 /* new calendar */
 .md-drppicker .td-div.end-date.active {
-    background-color: white !important;
+    background-color:$white !important;
 
     span {
         background-color: $portage !important;
@@ -1223,7 +1223,7 @@ td span {
 
 .d-container {
     width: 100%;
-    background-color: white;
+    background-color: $white;
     z-index: 100;
     // overflow-x: hidden;
     // overflow-y: auto;
@@ -1329,7 +1329,7 @@ td span {
 }
 .btn-angle-down {
     position: relative;
-    background-color: #ddd;
+    background-color:$gainsboro-light;
 }
 
 .angle-down {
@@ -1516,7 +1516,7 @@ td span {
                     position: absolute;
                     z-index: 1017;
                     min-width: 96px;
-                    background-color: white;
+                    background-color: $white;
                     box-shadow: 0px 2px 8px $moody-blue;
                     left: 28px;
                     top: -3px;
