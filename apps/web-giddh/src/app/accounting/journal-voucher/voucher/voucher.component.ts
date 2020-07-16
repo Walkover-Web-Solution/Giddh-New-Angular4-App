@@ -202,8 +202,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private generalAction: GeneralActions,
         private fb: FormBuilder, public bsConfig: BsDatepickerConfig,
         private salesAction: SalesActions,
-        private modalService: BsModalService, 
-        private salesService: SalesService, 
+        private modalService: BsModalService,
+        private salesService: SalesService,
         private companyActions: CompanyActions) {
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -239,7 +239,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     case VOUCHERS.RECEIPT:
                         // Receipt allows cash or bank so selecting default category as bank
                         this.categoryOfAccounts = '';
-                        break;    
+                        break;
                     default:
                         // TODO: Add other category cases as they are developed
                         break;
@@ -263,10 +263,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public openAdjustmentModal(event: KeyboardEvent, transaction: any, template: TemplateRef<any>): void {
-        if(this.requestObj.voucherType === VOUCHERS.RECEIPT && transaction && transaction.type === "to" && transaction.amount && Number(transaction.amount) > 0) {
+        if (this.requestObj.voucherType === VOUCHERS.RECEIPT && transaction && transaction.type === "to" && transaction.amount && Number(transaction.amount) > 0) {
             this.currentTransaction = transaction;
 
-            if(event.keyCode === 9 || event.keyCode === 13) {
+            if (event.keyCode === 9 || event.keyCode === 13) {
                 this.modalRef = this.modalService.show(
                     template,
                     Object.assign({}, { class: 'modal-lg' })
@@ -598,7 +598,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             transaction.currentBalance = '';
             transaction.selectedAccount.type = '';
 
-            if(this.requestObj.voucherType === VOUCHERS.RECEIPT) {
+            if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
+                this.pendingInvoicesListParams.accountUniqueNames = [];
                 this.pendingInvoicesListParams.accountUniqueNames.push(transaction.selectedAccount.UniqueName);
                 this.getInvoiceListForReceiptVoucher();
             }
@@ -685,7 +686,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 reqField.focus();
             }
             if (!this.requestObj.transactions.length) {
-                this.newEntryObj('by');
+                if (this.requestObj.voucherType === VOUCHERS.CONTRA) {
+                    this.newEntryObj('by');
+                } else if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
+                    this.newEntryObj('to');
+                }
             }
         } else {
             this.calModAmt(amount, transactionObj, index);
@@ -763,13 +768,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (this.totalCreditAmount === this.totalDebitAmount) {
             if (this.validatePaymentAndReceipt(data)) {
 
-                if(this.requestObj.voucherType === VOUCHERS.RECEIPT) {
+                if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
                     let adjustmentParentEntry = data.transactions[0];
                     let voucherAdjustments = adjustmentParentEntry.voucherAdjustments;
-                    if(voucherAdjustments && voucherAdjustments.length > 0) {
+                    if (voucherAdjustments && voucherAdjustments.length > 0) {
                         let totalTransactions = data.transactions.length;
                         voucherAdjustments.forEach(adjustment => {
-                            if(adjustment.type === "receipt" || adjustment.type === "advanceReceipt") {
+                            if (adjustment.type === "receipt" || adjustment.type === "advanceReceipt") {
                                 data.transactions[totalTransactions] = {
                                     amount: Number(adjustment.amount),
                                     applyApplicableTaxes: adjustmentParentEntry.applyApplicableTaxes,
@@ -906,7 +911,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * ngOnDestroy() on component destroy
      */
     public ngOnDestroy() {
-        if(this.modalRef) {
+        if (this.modalRef) {
             this.modalRef.hide();
         }
         this.destroyed$.next(true);
@@ -1510,10 +1515,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (res) {
                 let taxList: IOption[] = [];
                 Object.keys(res.taxes).forEach(key => {
-                    taxList.push({ label: res.taxes[key].name, value: res.taxes[key].taxType });
+                    taxList.push({ label: res.taxes[key].name, value: res.taxes[key].uniqueName });
 
-                    this.taxList[res.taxes[key].taxType] = [];
-                    this.taxList[res.taxes[key].taxType] = res.taxes[key];
+                    this.taxList[res.taxes[key].uniqueName] = [];
+                    this.taxList[res.taxes[key].uniqueName] = res.taxes[key];
                 });
                 this.taxListSource$ = observableOf(taxList);
             } else {
@@ -1543,8 +1548,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             entry.tax.name = this.taxList[event.value].name;
             entry.tax.percent = this.taxList[event.value].taxDetail[0].taxValue;
 
-            if (entry.amount && !isNaN(Number(entry.amount)) && entry.tax.percent) {
-                entry.tax.value = Number(entry.amount) / entry.tax.percent;
+            if (entry.amount && !isNaN(parseFloat(entry.amount)) && entry.tax.percent) {
+                entry.tax.value = parseFloat(entry.amount) / entry.tax.percent;
             } else {
                 entry.tax.value = 0;
             }
@@ -1596,7 +1601,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let receiptTotal = 0;
 
         this.receiptEntries.forEach(receipt => {
-            receiptTotal += Number(receipt.amount);
+            receiptTotal += parseFloat(receipt.amount);
         });
 
         if (receiptTotal !== this.adjustmentTransaction.amount) {
@@ -1608,7 +1613,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public addNewAdjustmentEntry(): void {
-        if (this.totalEntries === 0 || (this.receiptEntries[this.totalEntries - 1] && this.receiptEntries[this.totalEntries - 1] !== undefined && Number(this.receiptEntries[this.totalEntries - 1].amount) > 0)) {
+        if (this.totalEntries === 0 || (this.receiptEntries[this.totalEntries - 1] && this.receiptEntries[this.totalEntries - 1] !== undefined && parseFloat(this.receiptEntries[this.totalEntries - 1].amount) > 0)) {
             this.receiptEntries[this.totalEntries] = {
                 type: 'receipt',
                 note: '',
@@ -1640,13 +1645,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (!entry.amount) {
             this._toaster.clearAllToaster();
             this._toaster.errorToast("Please enter amount");
-        } else if (isNaN(Number(entry.amount)) || entry.amount <= 0) {
+        } else if (isNaN(parseFloat(entry.amount)) || entry.amount <= 0) {
             this._toaster.clearAllToaster();
             this._toaster.errorToast("Please enter valid amount");
         }
 
-        if (entry.amount && !isNaN(Number(entry.amount)) && entry.tax.percent) {
-            entry.tax.value = Number(entry.amount) / entry.tax.percent;
+        if (entry.amount && !isNaN(parseFloat(entry.amount)) && entry.tax.percent) {
+            entry.tax.value = parseFloat(entry.amount) / entry.tax.percent;
         } else {
             entry.tax.value = 0;
         }
@@ -1654,12 +1659,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let receiptTotal = 0;
 
         this.receiptEntries.forEach(receipt => {
-            receiptTotal += Number(receipt.amount);
+            receiptTotal += parseFloat(receipt.amount);
         });
 
         if (receiptTotal < this.adjustmentTransaction.amount) {
             if (entry.type === "againstReference") {
-                let invoiceBalanceDue = Number(this.pendingInvoiceList[entry.invoice.uniqueName].balanceDue.amountForAccount);
+                let invoiceBalanceDue = parseFloat(this.pendingInvoiceList[entry.invoice.uniqueName].balanceDue.amountForAccount);
                 if (invoiceBalanceDue >= entry.amount) {
                     this.addNewAdjustmentEntry();
                 } else if (invoiceBalanceDue < entry.amount) {
@@ -1673,7 +1678,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this._toaster.clearAllToaster();
             this._toaster.errorToast(this.amountErrorMessage);
         } else {
-            entry.amount = Number(entry.amount);
+            entry.amount = parseFloat(entry.amount);
             this.isValidForm = true;
         }
     }
