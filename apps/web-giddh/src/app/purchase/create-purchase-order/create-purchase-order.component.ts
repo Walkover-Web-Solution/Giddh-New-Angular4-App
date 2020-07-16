@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, TemplateRef, ViewChildren, QueryList } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { BsModalRef, BsModalService, BsDatepickerDirective, PopoverDirective } from 'ngx-bootstrap'
+import { BsModalRef, BsModalService, BsDatepickerDirective, PopoverDirective, ModalDirective } from 'ngx-bootstrap'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { IOption } from '../../theme/ng-select/ng-select';
@@ -24,7 +24,7 @@ import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
 import { VAT_SUPPORTED_COUNTRIES, RATE_FIELD_PRECISION } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum } from '../../models/api-models/Sales';
+import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems } from '../../models/api-models/Sales';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { TaxResponse } from '../../models/api-models/Company';
 import { IContentCommon } from '../../models/api-models/Invoice';
@@ -38,6 +38,7 @@ import { SettingsDiscountActions } from '../../actions/settings/discount/setting
 import { CompanyActions } from '../../actions/company.actions';
 import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../common/confirmation-modal/confirmation-modal.interface';
 import { NgForm } from '@angular/forms';
+import { EMAIL_REGEX_PATTERN } from '../../shared/helpers/universalValidations';
 
 const THEAD_ARR_READONLY = [
     {
@@ -109,6 +110,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
     /** RCM popup instance */
     @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
     @ViewChild('invoiceForm', { read: NgForm }) public invoiceForm: NgForm;
+    @ViewChild('bulkItemsModal') public bulkItemsModal: ModalDirective;
 
     @ViewChildren(BsDatepickerDirective) public datePickers: QueryList<BsDatepickerDirective>;
     @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
@@ -194,6 +196,8 @@ export class CreatePurchaseOrderComponent implements OnInit {
     /** RCM modal configuration */
     public rcmConfiguration: ConfirmationModalConfiguration;
     public selectedSuffixForCurrency: string = '';
+    public fetchedConvertedRate: number = 0;
+    public showBulkItemModal: boolean = false;
 
     constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService) {
         this.getInventorySettings();
@@ -252,7 +256,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
                     let companyAddresses = profile.addresses;
 
                     companyAddresses.forEach(address => {
-                        if(address.isDefault === true) {
+                        if (address.isDefault === true) {
                             this.purchaseOrder.company.billingDetails.address = address.address;
                             this.purchaseOrder.company.billingDetails.state.code = address.stateCode;
                             this.purchaseOrder.company.billingDetails.gstNumber = address.taxNumber;
@@ -354,7 +358,9 @@ export class CreatePurchaseOrderComponent implements OnInit {
             }
         });
 
-        console.log(this.purchaseOrder);
+        this.bulkItemsModal.onHidden.subscribe(() => {
+            this.showBulkItemModal = false;
+        });
     }
 
     public assignDates() {
@@ -632,8 +638,8 @@ export class CreatePurchaseOrderComponent implements OnInit {
                 this.warehouses = warehouseData.formattedWarehouses;
                 let defaultWarehouseUniqueName = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
                 let defaultWarehouseName = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.name : '';
-                
-                if(warehouseData.defaultWarehouse) {
+
+                if (warehouseData.defaultWarehouse) {
                     this.autoFillWarehouseAddress(warehouseData.defaultWarehouse);
                 }
 
@@ -664,7 +670,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
     }
 
     public autoFillWarehouseAddress(warehouse: any): void {
-        if(warehouse) {
+        if (warehouse) {
             this.purchaseOrder.company.shippingDetails.address = [];
             this.purchaseOrder.company.shippingDetails.address.push(warehouse.address);
             this.purchaseOrder.company.shippingDetails.state.code = warehouse.stateCode;
@@ -1483,6 +1489,195 @@ export class CreatePurchaseOrderComponent implements OnInit {
         if (this.purchaseOrder && this.purchaseOrder.voucherDetails && !this.purchaseOrder.voucherDetails.customerName) {
             this.selectedVendorForDetails = null;
             this.toggleAccountAsidePane();
+        }
+    }
+
+    public onSubmitInvoiceForm(form?: NgForm): any {
+        let data: VoucherClass = _.cloneDeep(this.purchaseOrder);
+
+        // special check if gst no filed is visible then and only then check for gst validation
+        if (data.accountDetails && data.accountDetails.billingDetails && data.accountDetails.shippingDetails && data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
+            this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber, 'Billing Address');
+            if (!this.isValidGstinNumber) {
+                this.startLoader(false);
+                return;
+            }
+            this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, 'Shipping Address');
+            if (!this.isValidGstinNumber) {
+                this.startLoader(false);
+                return;
+            }
+        }
+
+        if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
+            this.startLoader(false);
+            this.toaster.errorToast('Due date cannot be less than Order Date');
+            return;
+        }
+
+        data.entries = data.entries.filter((entry, indx) => {
+            if (!entry.transactions[0].accountUniqueName && indx !== 0) {
+                this.purchaseOrder.entries.splice(indx, 1);
+            }
+            return entry.transactions[0].accountUniqueName;
+        });
+
+        data.entries = data.entries.map(entry => {
+            // filter active discounts
+            entry.discounts = entry.discounts.filter(dis => dis.isActive);
+
+            // filter active taxes
+            entry.taxes = entry.taxes.filter(tax => tax.isChecked);
+            return entry;
+        });
+
+        if (data.accountDetails) {
+            if (!data.accountDetails.uniqueName) {
+                this.toaster.warningToast('Customer Name can\'t be empty');
+                this.startLoader(false);
+                return;
+            }
+            if (data.accountDetails.email) {
+                if (!EMAIL_REGEX_PATTERN.test(data.accountDetails.email)) {
+                    this.startLoader(false);
+                    this.toaster.warningToast('Invalid Email Address.');
+                    return;
+                }
+            }
+        }
+
+        // replace /n to br for (shipping and billing)
+
+        if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
+            data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].trim();
+            data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
+            data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0].split('<br />');
+        }
+        if (data.accountDetails.billingDetails.address && data.accountDetails.billingDetails.address.length && data.accountDetails.billingDetails.address[0].length > 0) {
+            data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].trim();
+            data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].replace(/\n/g, '<br />');
+            data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0].split('<br />');
+        }
+
+        // convert date object
+        data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
+        data.voucherDetails.dueDate = this.convertDateForAPI(data.voucherDetails.dueDate);
+        data.templateDetails.other.shippingDate = this.convertDateForAPI(data.templateDetails.other.shippingDate);
+
+        let txnErr: boolean;
+
+        // check for valid entries and transactions
+        if (data.entries) {
+            _.forEach(data.entries, (entry) => {
+                _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
+                    // convert date object
+                    entry.entryDate = this.convertDateForAPI(entry.entryDate);
+                    txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), 2) : 0;
+
+                    // will get errors of string and if not error then true boolean
+                    if (!txn.isValid()) {
+                        this.toaster.warningToast('Product/Service can\'t be empty');
+                        txnErr = true;
+                        return false;
+                    } else {
+                        txnErr = false;
+                    }
+                });
+            });
+        } else {
+            this.startLoader(false);
+            this.toaster.warningToast('At least a single entry needed to generate sales-invoice');
+            return;
+        }
+
+        // if txn has errors
+        if (txnErr) {
+            this.startLoader(false);
+            return false;
+        }
+
+        // set voucher type
+        data.entries = data.entries.map((entry) => {
+            entry.voucherType = VoucherTypeEnum.purchase;
+            entry.taxList = entry.taxes.map(m => m.uniqueName);
+            entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
+
+            if (entry.isOtherTaxApplicable) {
+                entry.taxList.push(entry.otherTaxModal.appliedOtherTax.uniqueName);
+            }
+
+            if (entry.otherTaxType === 'tds') {
+                delete entry['tcsCalculationMethod'];
+            }
+            return entry;
+        });
+
+        let requestObject = {
+            type: "purchase",
+            date: data.voucherDetails.voucherDate,
+            dueDate: data.voucherDetails.dueDate,
+            number: this.purchaseOrder.number || '',
+            exchangeRate: this.exchangeRate,
+            account: data.accountDetails,
+            entries: data.entries,
+            company: this.purchaseOrder.company,
+            warehouse: this.purchaseOrder.warehouse,
+            templateDetails: data.templateDetails
+        };
+
+        console.log(requestObject);
+    }
+
+    public convertDateForAPI(val: any): string {
+        if (val) {
+            // To check val is DD-MM-YY format already so it will be string then return val
+            if (typeof val === 'string') {
+                if (val.includes('-')) {
+                    return val;
+                } else {
+                    return '';
+                }
+            } else {
+                try {
+                    return moment(val).format(GIDDH_DATE_FORMAT);
+                } catch (error) {
+                    return '';
+                }
+            }
+        } else {
+            return '';
+        }
+    }
+
+    public addBulkStockItems(items: SalesAddBulkStockItems[]): void {
+        let salesAccs: IOption[] = [];
+        this.salesAccounts$.pipe(take(1)).subscribe(data => salesAccs = data);
+
+        for (const item of items) {
+            let salesItem: IOption = salesAccs.find(sItem => sItem.value === item.uniqueName);
+            if (salesItem) {
+
+                // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
+                salesItem.additional = { ...salesItem.additional, quantity: item.quantity };
+                let lastIndex = -1;
+                let blankItemIndex = this.purchaseOrder.entries.findIndex(sItem => !sItem.transactions[0].accountUniqueName);
+
+                if (blankItemIndex > -1) {
+                    lastIndex = blankItemIndex;
+                    this.purchaseOrder.entries[lastIndex] = new SalesEntryClass();
+                } else {
+                    this.purchaseOrder.entries.push(new SalesEntryClass());
+                    lastIndex = this.purchaseOrder.entries.length - 1;
+                }
+
+                this.activeIndx = lastIndex;
+                this.purchaseOrder.entries[lastIndex].entryDate = this.universalDate;
+                this.purchaseOrder.entries[lastIndex].transactions[0].fakeAccForSelect2 = salesItem.value;
+                this.purchaseOrder.entries[lastIndex].isNewEntryInUpdateMode = true;
+                this.onSelectSalesAccount(salesItem, this.purchaseOrder.entries[lastIndex].transactions[0], this.purchaseOrder.entries[lastIndex]);
+                this.calculateStockEntryAmount(this.purchaseOrder.entries[lastIndex].transactions[0]);
+                this.calculateWhenTrxAltered(this.purchaseOrder.entries[lastIndex], this.purchaseOrder.entries[lastIndex].transactions[0]);
+            }
         }
     }
 }
