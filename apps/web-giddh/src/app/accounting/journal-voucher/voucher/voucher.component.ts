@@ -772,6 +772,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     let adjustmentParentEntry = data.transactions[0];
                     let voucherAdjustments = adjustmentParentEntry.voucherAdjustments;
                     if (voucherAdjustments && voucherAdjustments.length > 0) {
+                        let byEntry = data.transactions[1];
                         let totalTransactions = data.transactions.length;
                         voucherAdjustments.forEach(adjustment => {
                             if (adjustment.type === "receipt" || adjustment.type === "advanceReceipt") {
@@ -782,7 +783,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                                     discounts: [],
                                     inventory: [],
                                     isInclusiveTax: adjustmentParentEntry.isInclusiveTax,
-                                    particular: adjustmentParentEntry.particular,
+                                    particular: byEntry.particular,
                                     selectedAccount: adjustmentParentEntry.selectedAccount,
                                     stocks: null,
                                     taxes: [], // need to make this dynamic
