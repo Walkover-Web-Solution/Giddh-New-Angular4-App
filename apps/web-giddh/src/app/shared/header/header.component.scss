@@ -469,9 +469,13 @@ a[vr-item]:focus {
     top: 2px;
 }
 
-.not-today .calender-addone {
+.not-today{
+    padding:0px !important;
+    border:0px !important;
+    .calender-addone {
     position: absolute;
     padding: 8px 8px;
+}
 }
 
 #add-manage.btn-gray {
