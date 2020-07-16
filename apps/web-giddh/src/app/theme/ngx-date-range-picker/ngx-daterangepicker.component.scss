@@ -1732,10 +1732,17 @@ cdk-virtual-scroll-viewport{
     }
     .md-drppicker .calendar {
         max-width: 100%;
-        .th-div, .td-div{
-            min-width: 50px;
+        .th-div{
+            min-width: 14%;
+            span{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 28px;
+                }
         }
          .td-div{
+             min-width: 14%;
              span{
                  margin-left: 10px;
              }
