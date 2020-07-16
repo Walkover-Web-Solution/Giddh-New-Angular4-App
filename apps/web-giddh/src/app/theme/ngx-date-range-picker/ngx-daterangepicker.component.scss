@@ -1052,12 +1052,8 @@ td:hover span {
 /* new calendar */
 
 .md-drppicker td.end-date.active {
-<<<<<<< HEAD
-    background-color: white !important;
-=======
     background-color:$white!important;
 
->>>>>>> e376fe3d8... shalinee | TEST | GIDK-739 | change color var
     span {
         background-color: $portage !important;
         color: $nero !important;
