@@ -4,20 +4,20 @@
 <section class="audit-log" *ngFor="let log of (this.auditLogs$ | async); let parentIndex = index">
     <h1>{{log.operationType}}
         <!-- For account start header -->
-        <span *ngIf="log && log?.details && log?.details?.name && log?.operationType!='MOVE' && log?.operationType != 'MERGE' && log?.details?.uniqueName != null"> - {{log?.details.name}}({{log?.details.uniqueName}})</span>
-        <ng-container *ngIf="log && log?.details && log?.details?.type && log.operationType==='MERGE'">
+        <span *ngIf="log?.details?.name && log?.operationType!='MOVE' && log?.operationType != 'MERGE' && log?.details?.uniqueName != null"> - {{log?.details.name}}({{log?.details.uniqueName}})</span>
+        <ng-container *ngIf="log?.details?.type && log.operationType==='MERGE'">
             <span *ngIf="log?.details?.type==='TARGET' && log?.details?.target"> - {{log?.details?.target?.name}}({{log?.details?.target.uniqueName}})</span>
             <ng-container *ngFor="let source of log?.details?.source">
                 <span *ngIf="log?.details?.type==='SOURCE' && log?.details?.source"> - {{source?.name}}({{source?.uniqueName}})|</span>
             </ng-container>
         </ng-container>
         <ng-container *ngIf="log?.operationType==='MOVE'">
-            <span *ngIf="log && log?.details && log?.details?.entity"> - {{log?.details?.entity.name}}({{log?.details?.entity.uniqueName}})</span>
+            <span *ngIf="log?.details?.entity"> - {{log?.details?.entity.name}}({{log?.details?.entity.uniqueName}})</span>
         </ng-container>
         <!-- For account start header -->
         <!-- For Stock start header -->
-        <ng-container *ngIf="log && log?.details && log?.details?.stockGroup && log?.details?.stockGroup?.uniqueName != undefined">
-            <span *ngIf="log && log?.details && log?.details?.entity"> - {{log?.details?.name}}({{log?.details?.uniqueName}})</span>
+        <ng-container *ngIf="log?.details?.stockGroup && log?.details?.stockGroup?.uniqueName != undefined">
+            <span *ngIf="log?.details?.entity"> - {{log?.details?.name}}({{log?.details?.uniqueName}})</span>
         </ng-container>
         <!-- For Stock end header -->
 
@@ -44,16 +44,16 @@
                 <label>Mobile No.:</label>
                 <p>{{log?.user?.mobile}}</p>
             </div>
-            <div *ngIf="log && log?.details && log?.details?.group && log?.details?.group?.name != null">
+            <div *ngIf="log?.details && log?.details?.group && log?.details?.group?.name != null">
                 <label>Group:</label>
                 <p>{{log?.details?.group?.name}}</p>
             </div>
-            <div *ngIf="log && log?.details && log?.operationType !=='MERGE' && log?.details?.source != undefined">
+            <div *ngIf="log?.details && log?.operationType !=='MERGE' && log?.details?.source != undefined">
                 <label>Source:</label>
                 <p>{{log?.details?.source?.name}}
                 </p>
             </div>
-            <div *ngIf="log && log?.details && log?.operationType ==='MERGE' && log?.details?.source != undefined && log?.details?.source.length">
+            <div *ngIf="log?.details && log?.operationType ==='MERGE' && log?.details?.source != undefined && log?.details?.source.length">
                 <label>Source:</label>
                 <ng-container *ngFor="let source of log?.details?.source">
                     <p>
@@ -63,24 +63,24 @@
                 </ng-container>
 
             </div>
-            <div *ngIf="log && log?.details && log?.details.target && log?.details.target != undefined">
+            <div *ngIf="log?.details && log?.details?.target && log?.details?.target != undefined">
                 <label>Target:</label>
                 <p>{{log?.details.target.name}}</p>
             </div>
-            <div *ngIf="log && log?.details && log?.details?.entity">
+            <div *ngIf="log?.details && log?.details?.entity">
                 <label>Account:</label>
                 <p>{{log?.details?.entity.name}}</p>
             </div>
 
-            <div *ngIf="log && log?.details && log?.details?.stockGroup && log?.details?.stockGroup?.uniqueName != undefined">
+            <div *ngIf="log?.details && log?.details?.stockGroup && log?.details?.stockGroup?.uniqueName != undefined">
                 <label>Stock:</label>
                 <p>{{log?.details?.name}}</p>
             </div>
-            <div *ngIf="log && log?.details && log?.details?.stockGroup && log?.details?.stockGroup?.uniqueName != undefined">
+            <div *ngIf="log?.details && log?.details?.stockGroup && log?.details?.stockGroup?.uniqueName != undefined">
                 <label>Group:</label>
                 <p>{{ log?.details?.stockGroup?.name}}</p>
             </div>
-            <div *ngIf="log && log?.details && log?.details?.stockUnit && log?.details?.stockUnit?.name != undefined">
+            <div *ngIf="log?.details && log?.details?.stockUnit && log?.details?.stockUnit?.name != undefined">
                 <label>Unit:</label>
                 <p>{{ log?.details?.stockUnit?.name}} ({{ log?.details?.stockUnit?.code}})</p>
             </div>
