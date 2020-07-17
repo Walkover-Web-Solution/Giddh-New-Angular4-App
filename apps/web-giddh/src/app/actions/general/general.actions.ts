@@ -1,4 +1,4 @@
-import {map, switchMap} from 'rxjs/operators';
+import {map, switchMap, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Actions, Effect} from '@ngrx/effects';
 import {GroupService} from '../../services/group.service';
@@ -74,9 +74,7 @@ export class GeneralActions {
                             const matchedIndex = items.aidata.accounts.findIndex(item => item && item.uniqueName && item.uniqueName === payload.oldUniqueName);
                             if (matchedIndex > -1) {
                                 items.aidata.accounts = items.aidata.accounts.map(item => {
-
                                     if (item && item.uniqueName && item.uniqueName === payload.oldUniqueName) {
-
                                         return {
                                             ...item,
                                             uniqueName: payload.newUniqueName,
@@ -86,7 +84,7 @@ export class GeneralActions {
                                     }
                                     return item
                                 });
-                                this._dbService.insertFreshData(items).subscribe(() => {
+                                 return this._dbService.insertFreshData(items).pipe(map( () => {
                                     if (this._activatedRoute.children.length) {
                                         debugger;
                                         let child = this._activatedRoute.children[0]
@@ -104,11 +102,14 @@ export class GeneralActions {
                                             }
                                         }
                                     }
-                                    return of(this.updateIndexDbComplete())
-                                });
+                                    return this.updateIndexDbComplete()
+                                }));
                             } else {
                                 return of(this.updateIndexDbComplete());
                             }
+                        }
+                        default : {
+                            return of(this.updateIndexDbComplete())
                         }
                     }
                 } else {

@@ -61,7 +61,7 @@ const initialState: GeneralState = {
     headerTitle: null,
     currentPage: null,
     isCalendlyModelOpen: false,
-    updateIndexComplete: false,
+    updateIndexDbComplete: false,
     updateIndexDbInProcess: false
 };
 
