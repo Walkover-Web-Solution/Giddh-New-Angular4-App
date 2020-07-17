@@ -199,5 +199,5 @@ if (PRODUCTION_ENV || isElectron || isCordova) {
 export enum AdjustedVoucherType {
     Receipt = 'rcpt',
     AdvanceReceipt = 'advance-receipt',
-    Invoice = 'invoice'
+    Sales = 'sal'
 }

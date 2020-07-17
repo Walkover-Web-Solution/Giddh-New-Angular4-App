@@ -77,6 +77,11 @@ span.eligible-ITC {
     width: 115px;
     font-size: 12px;
 }
+.advance-receipt-edit{
+    i {
+        color: $deep-sky-blue;
+    }
+}
 @media only screen and (max-width: 767px) {
     .ledger-panel .btn {
         margin-bottom: 13px;

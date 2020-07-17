@@ -204,6 +204,7 @@ span.eligible-ITC {
     padding: 10px;
     border: 1px solid $gainsboro;
     margin-top: 10px;
+    position: relative;
 }
 
 .pr-05 {
@@ -240,7 +241,24 @@ span.eligible-ITC {
         width: 100%;
     }
 }
-
+.icon-info{
+    color: $gray;
+    cursor: pointer;
+    padding: 5px;
+}
+.adusted-info {
+    position: absolute;
+    background-color: #fff;
+    padding: 15px;
+    z-index: 1;
+    max-width: 360px;
+    left: 135px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    color: $nero;
+    .info-text{
+        font-family: 'opensans-regular';
+    }
+}
 
 /* responsive */
 

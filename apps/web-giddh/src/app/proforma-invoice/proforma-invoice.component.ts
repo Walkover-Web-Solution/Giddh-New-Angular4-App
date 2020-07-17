@@ -1018,6 +1018,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             this.isInvoiceAdjustedWithAdvanceReceipts = true;
                             this.calculateAdjustedVoucherTotal(results[1].voucherAdjustments.adjustments);
                             this.advanceReceiptAdjustmentData = results[1].voucherAdjustments;
+                            this.adjustPaymentData.totalAdjustedAmount = results[1].voucherAdjustments.totalAdjustmentAmount;
+                            this.isAdjustAmount = true;
                         } else {
                             this.isInvoiceAdjustedWithAdvanceReceipts = false;
                         }
@@ -3133,20 +3135,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 /** Advance receipts adjustment for sales invoice*/
                 if (this.isSalesInvoice) {
-                    if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments && this.advanceReceiptAdjustmentData.adjustments.length) {
-                        const adjustments = cloneDeep(this.advanceReceiptAdjustmentData.adjustments);
-                        adjustments.forEach(adjustment => {
-                            adjustment.adjustmentAmount = adjustment.balanceDue;
-                            delete adjustment.balanceDue;
-                        })
-                        requestObject.voucherAdjustments = {
-                            adjustments
-                        };
-                    } else {
-                        if (this.advanceReceiptAdjustmentData) {
-                            this.advanceReceiptAdjustmentData.adjustments = [];
-                            requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
-                        }
+                    if (!this.advanceReceiptAdjustmentData) {
+                        this.advanceReceiptAdjustmentData.adjustments = [];
+                        requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
                     }
                 }
 

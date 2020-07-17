@@ -318,19 +318,14 @@
                                     [(ngModel)]="isAdjustAdvanceReceiptSelected">
                                 Adjust Advance Receipt
                             </td>
+                            <td (click)="(blankLedger.voucherType == 'advance-receipt') ? handleAdvanceReceiptAdjustment() : (blankLedger.voucherType == 'rcpt') ? handleReceiptAdjustment() : ''"
+                                class="cp pdR1 pt-2" *ngIf="currentTxn?.voucherAdjustments?.totalAdjustmentAmount">
+                                <span class="text-gray advance-receipt-edit ml-05">
+                                    <i class="fa fa-pencil"></i>
+                                    Adjusted Amt.: {{currentTxn?.voucherAdjustments?.totalAdjustmentAmount}}</span>
+                            </td>
 
                         </tr>
-                    </table>
-
-                    <table *ngIf="shouldShowAdvanceReceipt" class="hidden-lg hidden-md hidden-sm">
-                        <tbody>
-                            <tr>
-                                <td class="pdR1 pt-1">
-                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdvanceReceipt"
-                                        (change)="handleAdvanceReceiptChange($event)"> Advance Receipt
-                                </td>
-                            </tr>
-                        </tbody>
                     </table>
 
                     <table class="mrT1">
