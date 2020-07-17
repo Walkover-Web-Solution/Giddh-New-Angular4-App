@@ -770,11 +770,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
                 if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
                     let adjustmentParentEntry = data.transactions[0];
-                    let voucherAdjustments = adjustmentParentEntry.voucherAdjustments;
+                    let voucherAdjustments = this.receiptEntries;
+                    let totalAdjustmentAmount = 0;
                     if (voucherAdjustments && voucherAdjustments.length > 0) {
+                        data.voucherAdjustments = {};
+                        data.voucherAdjustments.adjustments = [];
                         let byEntry = data.transactions[1];
                         let totalTransactions = data.transactions.length;
+                        let adjustmentsCount = 0;
+
                         voucherAdjustments.forEach(adjustment => {
+                            totalAdjustmentAmount += Number(adjustment.amount);
+
                             if (adjustment.type === "receipt" || adjustment.type === "advanceReceipt") {
                                 data.transactions[totalTransactions] = {
                                     amount: Number(adjustment.amount),
@@ -786,21 +793,36 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                                     particular: byEntry.particular,
                                     selectedAccount: adjustmentParentEntry.selectedAccount,
                                     stocks: null,
-                                    taxes: [], // need to make this dynamic
+                                    taxes: [adjustment.tax.uniqueName],
                                     total: Number(adjustment.amount),
                                     type: adjustmentParentEntry.type,
                                     subVoucher: (adjustment.type === "advanceReceipt") ? "ADVANCE_RECEIPT" : ""
                                 };
+                                totalTransactions++;
                             } else {
-
+                                data.voucherAdjustments.adjustments[adjustmentsCount] = {
+                                    uniqueName: adjustment.invoice.uniqueName,
+                                    adjustmentAmount: {
+                                        amountForAccount: Number(adjustment.amount),
+                                        amountForCompany: Number(adjustment.amount)
+                                    },
+                                    voucherType: adjustment.invoice.type
+                                };
+                                adjustmentsCount++;
                             }
-                            totalTransactions++;
                         });
+                    }
+
+                    if(totalAdjustmentAmount !== this.totalCreditAmount) {
+                        this._toaster.errorToast('Total credit amount and adjustment amount should be equal.', 'Error');
+                        return false;
                     }
                 }
 
                 _.forEach(data.transactions, (element: any) => {
-                    element.type = (element.type === 'by') ? 'credit' : 'debit';
+                    if(element) {
+                        element.type = (element.type === 'by') ? 'credit' : 'debit';
+                    }
                 });
                 let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
                 let indexOfMaxAmountEntry = _.findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
@@ -1505,9 +1527,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public handleEntries(event): void {
         this.receiptEntries = event.voucherAdjustments;
+        this.totalEntries = (this.receiptEntries) ? this.receiptEntries.length : 0;
         this.adjustmentTransaction = event;
         this.getTaxList();
-        console.log(this.adjustmentTransaction);
         this.modalRef.hide();
     }
 
@@ -1570,14 +1592,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 number: this.pendingInvoiceList[event.value].voucherNumber,
                 date: this.pendingInvoiceList[event.value].voucherDate,
                 amount: this.pendingInvoiceList[event.value].balanceDue.amountForAccount + " cr.",
-                uniqueName: event.value
+                uniqueName: event.value,
+                type: this.pendingInvoiceList[event.value].voucherType
             };
         } else {
             entry.invoice = {
                 number: '',
                 date: '',
                 amount: 0,
-                uniqueName: ''
+                uniqueName: '',
+                type: ''
             };
         }
     }
@@ -1628,7 +1652,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     number: '',
                     date: '',
                     amount: 0,
-                    uniqueName: ''
+                    uniqueName: '',
+                    type: ''
                 },
                 amount: 0
             }

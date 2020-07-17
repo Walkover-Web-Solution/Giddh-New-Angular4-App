@@ -80,7 +80,8 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
                     number: '',
                     date: '',
                     amount: 0,
-                    uniqueName: ''
+                    uniqueName: '',
+                    type: ''
                 },
                 amount: 0
             }
@@ -132,7 +133,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
             this.toaster.errorToast(this.amountErrorMessage);
         } else {
             entry.amount = parseFloat(entry.amount);
-            this.isValidForm = true;
+            this.validateEntries(false);
         }
     }
 
@@ -219,14 +220,16 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
                 number: this.pendingInvoiceList[event.value].voucherNumber,
                 date: this.pendingInvoiceList[event.value].voucherDate,
                 amount: this.pendingInvoiceList[event.value].balanceDue.amountForAccount + " cr.",
-                uniqueName: event.value
+                uniqueName: event.value,
+                type: this.pendingInvoiceList[event.value].voucherType
             };
         } else {
             entry.invoice = {
                 number: '',
                 date: '',
                 amount: 0,
-                uniqueName: ''
+                uniqueName: '',
+                type: ''
             };
         }
     }
