@@ -25,6 +25,7 @@ export class Adjustment {
     calculatedTaxAmount?: number;
     adjustmentAmount?: DueAmount;
     voucherType?: string;
+    subVoucher?: string;
 
     constructor() {
         this.voucherNumber = '';

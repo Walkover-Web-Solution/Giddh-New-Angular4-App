@@ -1,4 +1,11 @@
-//commenting due to design change (clear by designer)
-// .error-box.select-error {
-//     border: 0px;
-// }
+@import "../../../assets/css/color.scss";
+.vouchar-form {
+    .form-group {
+        margin-bottom: 5px;
+    }
+}
+p {
+    a {
+        color: $deep-sky-blue;
+    }
+}
