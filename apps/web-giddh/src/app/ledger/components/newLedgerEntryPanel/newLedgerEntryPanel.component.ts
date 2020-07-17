@@ -650,7 +650,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 transaction.voucherAdjustments.adjustments.forEach((adjustment: any) => {
                     adjustment.adjustmentAmount = adjustment.balanceDue;
                     delete adjustment.balanceDue;
-                })
+                });
             }
         });
         this.saveBlankLedger.emit(true);
@@ -1347,7 +1347,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * To open advance receipts adjustment pop up
      *
      * @private
-     * @memberof ProformaInvoiceComponent
+     * @memberof NewLedgerEntryPanelComponent
      */
     private openAdjustPaymentModal() {
         this.adjustPaymentModal.show();

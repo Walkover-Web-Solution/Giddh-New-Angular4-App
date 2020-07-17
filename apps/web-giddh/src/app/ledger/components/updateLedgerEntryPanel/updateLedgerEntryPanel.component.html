@@ -728,7 +728,7 @@
                     </div>
 
                     <!-- Advance receipts adjusted Invoice -->
-                    <div class="clearfix adjust-receipt font-14" *ngIf="isAdjustedInvoicesWithAdvanceReceipt">
+                    <div class="clearfix adjust-receipt font-14" *ngIf="isAdjustedInvoicesWithAdvanceReceipt && (isAdjustAdvanceReceiptSelected)">
                         <p class="bold">Adjusted Amount
                             <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
                                 (click)="openAdjustInvoiceEditMode();$event.stopPropagation();"><i
@@ -775,11 +775,22 @@
                     </div>
                     <!-- End advance receipts adjusted Invoice -->
                     <!--Adjusted advance receipts list  -->
-                    <div class="clearfix adjust-receipt font-14" *ngIf="isAdjustedWithAdvanceReceipt">
-                        <p class="bold">Adjusted Receipts
-                            <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
-                                (click)="openAdjustInvoiceEditMode();$event.stopPropagation();"><i
-                                    class="icon-edit11 font-10"></i></a>
+                    <div class="clearfix adjust-receipt font-14" *ngIf="isAdjustedWithAdvanceReceipt && (isAdjustAdvanceReceiptSelected)">
+                        <p class="bold">Adjusted Vouchers
+                            <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" (click)="openAdjustInvoiceEditMode();$event.stopPropagation();">
+                                <i class="icon-edit11 font-10"></i>
+                                <!-- adjusted static code start  -->
+                                <i class="icon-info"></i>
+                                <div class="adusted-info">
+                                    <p class="mb-1"><strong>Adjustment</strong></p>
+                                    <p class="info-text">The selected entry is a part of Invoice# 43242. All the
+                                        adjustment will reflect
+                                        to subsequent entries as well. Here we
+                                        are adjusting the Invoice not just the selected entry.</p>
+                                </div>
+                                <!-- adjusted static code end  -->
+                                <i class="icon-edit11 font-10"></i>
+                            </a>
                         </p>
                         <p class="font-12 text-light mb-1">
                             {{ vm.baseCurrencyDetails?.symbol}}{{totalAdjustedAmount | giddhCurrency}}
@@ -801,10 +812,10 @@
                                         <input type="text" class="form-control mb-1" name="amountForAccount"
                                             *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" [mask]="vm.inputMaskFormat"
                                             [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective
-                                            [(ngModel)]="item.balanceDue.amountForAccount" disabled>
+                                            [(ngModel)]="item.adjustmentAmount.amountForAccount" disabled>
                                         <input type="text" class="form-control mb-1" name="amountForAccount" decimalDigitsDirective
                                             [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedReceiptsAmountChange()"
-                                            *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode" [(ngModel)]="item.balanceDue.amountForAccount">
+                                            *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode" [(ngModel)]="item.adjustmentAmount.amountForAccount">
                                     </div>
                                 </div>
                                 <div class="col-sm-2 pl-05">
@@ -939,9 +950,11 @@
 
                         <table>
                             <tr>
-                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'" class="pdR1 pb-1">
-                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdvanceReceipt"
-                                        (change)="handleAdvanceReceiptChange()"> Advance Receipt
+                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'advance-receipt' && isAdvanceReceipt" class="pdR1 pb-1">
+                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdjustAdvanceReceiptSelected" (change)="handleAdvanceReceiptAdjustment()">Adjust Advance Receipt
+                                </td>
+                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt' && !isAdvanceReceipt" class="pdR1 pb-1">
+                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdjustReceiptSelected" (change)="handleAdvanceReceiptAdjustment()">Adjust Receipt
                                 </td>
                             </tr>
                         </table>
@@ -1174,6 +1187,19 @@
                 [message]='removeAdvanceReceiptConfirmationMessage' [flag]="confirmationFlag"
                 (closeModelEvent)="onAdvanceReceiptRemoveCloseConfirmationModal($event)">
             </delete-template-confirmation-modal>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <advance-receipt-adjustment-component *ngIf="adjustPaymentModal.isShown && (isAdjustAdvanceReceiptSelected || isAdjustReceiptSelected)"
+                #advanceReceiptComponent [adjustedVoucherType]="vm.selectedLedger.voucher.shortCode"
+                [invoiceFormDetails]="adjustVoucherConfiguration"
+                [advanceReceiptAdjustmentUpdatedData]="vm.selectedLedger.voucherAdjustments" (closeModelEvent)="closeAdjustmentModal($event)"
+                (submitClicked)="getAdjustedPaymentData($event)">
+            </advance-receipt-adjustment-component>
         </div>
     </div>
 </div>
