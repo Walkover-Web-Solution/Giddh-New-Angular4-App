@@ -4,4 +4,5 @@ export interface IOption {
     disabled?: boolean;
     isHilighted?: boolean;
     additional?: any;
+    subVoucher?: string;
 }
