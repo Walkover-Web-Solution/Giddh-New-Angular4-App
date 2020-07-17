@@ -515,7 +515,7 @@
                         [ngClass]="{hide:blankLedger?.generateInvoice || blankLedger?.attachedFile}">
 
                         <label for="invoiceFile" class="cp fs16">
-                            <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
+                            <i [ngClass]="!isFileUploading ? 'glyphicon glyphicon-paperclip' : 'fa fa-spinner rotate'"></i> Attach file</label>
                     </label>
                     <div class="file_attached clearfix text-right pr-15" *ngIf="blankLedger.attachedFile.length > 0">
                         <span>{{ blankLedger.attachedFileName }}</span>
