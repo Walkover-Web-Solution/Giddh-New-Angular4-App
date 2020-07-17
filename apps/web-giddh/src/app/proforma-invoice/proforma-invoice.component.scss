@@ -485,7 +485,7 @@ textarea:focus {
     background: transparent !important;
     box-shadow: none !important;
     border-radius: 0 !important;
-    font-size: 16px;
+    font-size: 24px;
     // color: #393a3d;
     padding: 0;
 }
@@ -1594,13 +1594,6 @@ span.eligible-ITC {
     label {
         padding-bottom: 0;
     }
-}
-
-.proforma-dropdown{
-    position: absolute;
-    margin-top: -36px;
-    z-index: 99;
-    margin-left: 220px;
 }
 
 /* resposnvie */
