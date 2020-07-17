@@ -215,7 +215,9 @@
                         <li class="not-today cursor-pointer">
                             <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
                             <!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
+                            <div class="input-date">
                             <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
+                            </div>
                         </li>
                         <!-- <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
 
@@ -490,7 +492,9 @@
                         <li class="daterang-picker not-today cursor-pointer">
                             <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
                             <!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
+                            <div class="input-date">
                             <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
+                            </div>
                         </li>
                         <!-- <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
                             <label class="btn btn-link">&nbsp;</label>
