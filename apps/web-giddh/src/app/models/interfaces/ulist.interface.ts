@@ -10,6 +10,7 @@ export interface IUlist extends INameUniqueName, IHelpersForSearch {
 	type?: 'GROUP' | 'MENU' | 'ACCOUNT';
 	time?: number;
 	parentGroups?: INameUniqueName[];
+    route?: string;
 	pIndex?: number;
 	isRemoved?: boolean;
 	isInvalidState?: boolean;
@@ -24,3 +25,11 @@ export interface Igtbl {
 	groups: IUlist[];
 	accounts: IUlist[];
 }
+
+export interface UpdateDbRequest extends INameUniqueName {
+    oldUniqueName: string;
+    newUniqueName: string;
+    latestName: string;
+    type: 'menus' | 'groups' | 'accounts'
+}
+
