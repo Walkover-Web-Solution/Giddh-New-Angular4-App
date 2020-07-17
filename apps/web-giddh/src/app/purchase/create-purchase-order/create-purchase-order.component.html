@@ -522,7 +522,6 @@
                         (click)="$event.stopPropagation();">
                         <td>{{ entryIdx + 1 }}</td>
                         <td>
-
                             <div class="productName">
                                 <div class="ng-select-wrap">
                                     <sh-select [options]="salesAccounts$ | async" #selectAccount
@@ -746,10 +745,6 @@
                                         [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
                                         [suffixInput]="selectedSuffixForCurrency">
                                     </tax-control>
-                                    <!-- TODO: After design finalization
-                                    <span class="eligible-ITC">Eligible for ITC <span
-                                        class="icon-edit"></span>
-                                </span> -->
                                 </div>
 
                                 <div class="differ-currency"
@@ -1740,7 +1735,7 @@
                     <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
                             class="btn btn-default d-inline-block v-align-middle" *ngIf="isCustomerSelected">Save &amp; Update A/c
                         </button> -->
-                    <button type="button" class="btn btn-default" (click)="onSubmitInvoiceForm(invoiceForm)">Save</button>
+                    <button type="button" class="btn btn-default" (click)="onSubmitForm()">Save</button>
                 </span>
                 <!-- endregion -->
 

@@ -36,31 +36,6 @@ export class Tax {
     uniqueName: string;
 }
 
-export class Entries {
-    public uniqueName: string;
-    public voucherType: string;
-    public voucherNumber: string;
-    public description: string;
-    public date: string;
-    public hsnNumber: string;
-    public sacNumber: string;
-    public sacNumberExists: boolean;
-    public transactions: Transaction;
-    public taxes: Tax;
-
-    constructor() {
-        this.uniqueName = "";
-        this.voucherType = "";
-        this.voucherNumber = "";
-        this.description = "";
-        this.date = "";
-        this.hsnNumber = "";
-        this.sacNumber = "";
-        this.transactions = new Transaction();
-        this.taxes = new Tax();
-    }
-}
-
 export class Company {
     public billingDetails: Address;
     public shippingDetails: Address;
@@ -118,15 +93,13 @@ export class PurchaseOrder {
     public exchangeRate: string;
     public account: Account;
     public entries: SalesEntryClass[];
-    public company: Company; 
+    public company: Company;
     public warehouse: NameUniqueName;
     public templateDetails: TemplateDetails;
     public voucherDetails: VoucherDetailsClass;
     public accountDetails: AccountDetailsClass;
 
     constructor() {
-        this.type = "purchase";
-
         this.account = new Account();
         this.account.billingDetails = new Address();
         this.account.billingDetails.state = new StateCode();
