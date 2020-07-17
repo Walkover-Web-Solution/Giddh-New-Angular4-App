@@ -24,7 +24,7 @@ import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
 import { VAT_SUPPORTED_COUNTRIES, RATE_FIELD_PRECISION } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems } from '../../models/api-models/Sales';
+import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, GenericRequestForGenerateSCD, PurchaseRecordRequest, SalesEntryClassMulticurrency, AmountClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency } from '../../models/api-models/Sales';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { TaxResponse } from '../../models/api-models/Company';
 import { IContentCommon } from '../../models/api-models/Invoice';
@@ -39,6 +39,7 @@ import { CompanyActions } from '../../actions/company.actions';
 import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../common/confirmation-modal/confirmation-modal.interface';
 import { NgForm } from '@angular/forms';
 import { EMAIL_REGEX_PATTERN } from '../../shared/helpers/universalValidations';
+import { PurchaseOrderService } from '../../services/purchase-order.service';
 
 const THEAD_ARR_READONLY = [
     {
@@ -198,8 +199,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
     public selectedSuffixForCurrency: string = '';
     public fetchedConvertedRate: number = 0;
     public showBulkItemModal: boolean = false;
+    /** Stores the unique name of default warehouse of a company */
+    public defaultWarehouse: string;
+    /** Stores the unique name of selected warehouse */
+    public selectedWarehouse: string;
 
-    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService) {
+    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService) {
         this.getInventorySettings();
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.flattenAccountListStream$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$));
@@ -418,8 +423,6 @@ export class CreatePurchaseOrderComponent implements OnInit {
                 this.purchaseOrder.account.shippingDetails.stateName = accountDetails.addresses[0].state.name;
                 this.purchaseOrder.account.shippingDetails.panNumber = "";
             }
-
-            console.log(this.purchaseOrder);
         }
     }
 
@@ -638,13 +641,14 @@ export class CreatePurchaseOrderComponent implements OnInit {
                 this.warehouses = warehouseData.formattedWarehouses;
                 let defaultWarehouseUniqueName = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
                 let defaultWarehouseName = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.name : '';
-
+                this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
                 if (warehouseData.defaultWarehouse) {
                     this.autoFillWarehouseAddress(warehouseData.defaultWarehouse);
                 }
 
                 if (warehouse) {
                     // Update flow is carried out and we have received warehouse details
+                    this.selectedWarehouse = warehouse.uniqueName;
                     this.purchaseOrder.warehouse.uniqueName = warehouse.uniqueName;
                     this.purchaseOrder.warehouse.name = warehouse.name;
                     this.shouldShowWarehouse = true;
@@ -656,6 +660,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
                         this.shouldShowWarehouse = false;
                     } else {
                         // Create flow is carried out
+                        this.selectedWarehouse = String(this.defaultWarehouse);
                         this.purchaseOrder.warehouse.uniqueName = String(defaultWarehouseUniqueName);
                         this.purchaseOrder.warehouse.name = String(defaultWarehouseName);
                         this.shouldShowWarehouse = true;
@@ -820,39 +825,38 @@ export class CreatePurchaseOrderComponent implements OnInit {
     public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass): any {
         if (selectedAcc.value && selectedAcc.additional.uniqueName) {
 
-            let o = _.cloneDeep(selectedAcc.additional);
+            let additional = _.cloneDeep(selectedAcc.additional);
 
             // check if we have quantity in additional object. it's for only bulk add mode
-            txn.quantity = o.quantity ? o.quantity : (o.stock) ? 1 : null;
+            txn.quantity = additional.quantity ? additional.quantity : (additional.stock) ? 1 : null;
             txn.applicableTaxes = [];
             txn.sku_and_customfields = null;
 
             // description with sku and custom fields
-            if ((o.stock)) {
+            if ((additional.stock)) {
                 let description = [];
-                let skuCodeHeading = o.stock.skuCodeHeading ? o.stock.skuCodeHeading : 'SKU Code';
-                if (o.stock.skuCode) {
-                    description.push(skuCodeHeading + ':' + o.stock.skuCode);
+                let skuCodeHeading = additional.stock.skuCodeHeading ? additional.stock.skuCodeHeading : 'SKU Code';
+                if (additional.stock.skuCode) {
+                    description.push(skuCodeHeading + ':' + additional.stock.skuCode);
                 }
 
-                let customField1Heading = o.stock.customField1Heading ? o.stock.customField1Heading : 'Custom field 1';
-                if (o.stock.customField1Value) {
-                    description.push(customField1Heading + ':' + o.stock.customField1Value);
+                let customField1Heading = additional.stock.customField1Heading ? additional.stock.customField1Heading : 'Custom field 1';
+                if (additional.stock.customField1Value) {
+                    description.push(customField1Heading + ':' + additional.stock.customField1Value);
                 }
 
-                let customField2Heading = o.stock.customField2Heading ? o.stock.customField2Heading : 'Custom field 2';
-                if (o.stock.customField2Value) {
-                    description.push(customField2Heading + ':' + o.stock.customField2Value);
+                let customField2Heading = additional.stock.customField2Heading ? additional.stock.customField2Heading : 'Custom field 2';
+                if (additional.stock.customField2Value) {
+                    description.push(customField2Heading + ':' + additional.stock.customField2Value);
                 }
 
                 txn.sku_and_customfields = description.join(', ');
             }
-            //------------------------
 
             // assign taxes and create fluctuation
-            if (o.stock && o.stock.stockTaxes && o.stock.stockTaxes.length) {
-                o.stock.stockTaxes.forEach(t => {
-                    let tax = this.companyTaxesList.find(f => f.uniqueName === t);
+            if (additional.stock && additional.stock.stockTaxes && additional.stock.stockTaxes.length) {
+                additional.stock.stockTaxes.forEach(stockTax => {
+                    let tax = this.companyTaxesList.find(tax => tax.uniqueName === stockTax);
                     if (tax) {
                         switch (tax.taxType) {
                             case 'tcsrc':
@@ -863,36 +867,36 @@ export class CreatePurchaseOrderComponent implements OnInit {
                                 entry.isOtherTaxApplicable = true;
                                 break;
                             default:
-                                txn.applicableTaxes.push(t);
+                                txn.applicableTaxes.push(stockTax);
                                 break;
                         }
                     }
                 });
             } else {
                 // assign taxes for non stock accounts
-                txn.applicableTaxes = o.applicableTaxes;
+                txn.applicableTaxes = additional.applicableTaxes;
             }
 
-            txn.accountName = o.name;
-            txn.accountUniqueName = o.uniqueName;
+            txn.accountName = additional.name;
+            txn.accountUniqueName = additional.uniqueName;
 
-            if (o.stocks && o.stock) {
+            if (additional.stocks && additional.stock) {
                 // set rate auto
                 txn.rate = null;
                 let obj: IStockUnit = {
-                    id: o.stock.stockUnit.code,
-                    text: o.stock.stockUnit.name
+                    id: additional.stock.stockUnit.code,
+                    text: additional.stock.stockUnit.name
                 };
                 txn.stockList = [];
-                if (o.stock && o.stock.accountStockDetails.unitRates.length) {
-                    txn.stockList = this.prepareUnitArr(o.stock.accountStockDetails.unitRates);
+                if (additional.stock && additional.stock.accountStockDetails.unitRates.length) {
+                    txn.stockList = this.prepareUnitArr(additional.stock.accountStockDetails.unitRates);
                     txn.stockUnit = txn.stockList[0].id;
                     txn.rate = txn.stockList[0].rate;
                 } else {
                     txn.stockList.push(obj);
-                    txn.stockUnit = o.stock.stockUnit.code;
+                    txn.stockUnit = additional.stock.stockUnit.code;
                 }
-                txn.stockDetails = _.omit(o.stock, ['accountStockDetails', 'stockUnit']);
+                txn.stockDetails = _.omit(additional.stock, ['accountStockDetails', 'stockUnit']);
                 txn.isStockTxn = true;
             } else {
                 txn.isStockTxn = false;
@@ -920,12 +924,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
                 txn.hsnOrSac = 'sac';
             }
 
-            if (!o.stock && o.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !o.sacNumber)) {
-                txn.hsnNumber = o.hsnNumber;
+            if (!additional.stock && additional.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !additional.sacNumber)) {
+                txn.hsnNumber = additional.hsnNumber;
                 txn.hsnOrSac = 'hsn';
             }
-            if (!o.stock && o.sacNumber && this.inventorySettings && !this.inventorySettings.manageInventory && this.inventorySettings.manageInventory === false) {
-                txn.sacNumber = o.sacNumber;
+            if (!additional.stock && additional.sacNumber && this.inventorySettings && !this.inventorySettings.manageInventory && this.inventorySettings.manageInventory === false) {
+                txn.sacNumber = additional.sacNumber;
                 txn.sacNumberExists = true;
                 txn.hsnOrSac = 'sac';
             }
@@ -1005,8 +1009,6 @@ export class CreatePurchaseOrderComponent implements OnInit {
             this.editingHsnSac = transaction.sacNumber;
         }
 
-        console.log(this.inventorySettings);
-
         this.hsnDropdownShow = !this.hsnDropdownShow;
     }
 
@@ -1024,8 +1026,6 @@ export class CreatePurchaseOrderComponent implements OnInit {
         if (this.inventorySettings && !(this.inventorySettings.manageInventory || !transaction.sacNumberExists)) {
             transaction.sacNumber = this.editingHsnSac;
         }
-
-        console.log(this.editingHsnSac);
 
         this.hsnDropdownShow = !this.hsnDropdownShow;
     }
@@ -1492,7 +1492,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
-    public onSubmitInvoiceForm(form?: NgForm): any {
+    public onSubmitForm(): any {
         let data: VoucherClass = _.cloneDeep(this.purchaseOrder);
 
         // special check if gst no filed is visible then and only then check for gst validation
@@ -1612,20 +1612,96 @@ export class CreatePurchaseOrderComponent implements OnInit {
             return entry;
         });
 
-        let requestObject = {
+        let postRequestObject = {
             type: "purchase",
             date: data.voucherDetails.voucherDate,
             dueDate: data.voucherDetails.dueDate,
             number: this.purchaseOrder.number || '',
             exchangeRate: this.exchangeRate,
-            account: data.accountDetails,
+            account: this.purchaseOrder.account,
             entries: data.entries,
             company: this.purchaseOrder.company,
             warehouse: this.purchaseOrder.warehouse,
             templateDetails: data.templateDetails
         };
 
-        console.log(requestObject);
+        let updatedData = this.updateData(postRequestObject, data);
+
+        let getRequestObject = {
+            companyUniqueName: this.selectedCompany.uniqueName,
+            accountUniqueName: data.accountDetails.uniqueName
+        };
+
+        this.purchaseOrderService.create(getRequestObject, updatedData).subscribe(response => {
+            console.log(response);
+        });
+    }
+
+    public updateData(obj: any, data: VoucherClass): any {
+        if (obj.voucher) {
+            delete obj.voucher;
+        }
+
+        let salesEntryClassArray: SalesEntryClassMulticurrency[] = [];
+        let entries = data.entries;
+
+        entries.forEach(entry => {
+            let salesEntryClass = new SalesEntryClassMulticurrency();
+            salesEntryClass.voucherType = entry.voucherType;
+            salesEntryClass.uniqueName = entry.uniqueName;
+            salesEntryClass.description = entry.description;
+            salesEntryClass.date = entry.entryDate;
+            entry.taxList.forEach(t => {
+                salesEntryClass.taxes.push({ uniqueName: t });
+            });
+            entry.transactions.forEach(transaction => {
+                let transactionClassMul = new TransactionClassMulticurrency();
+                transactionClassMul.account.uniqueName = transaction.accountUniqueName;
+                transactionClassMul.account.name = transaction.accountName;
+                transactionClassMul.amount.amountForAccount = transaction.amount;
+                salesEntryClass.hsnNumber = transaction.hsnNumber;
+                salesEntryClass.sacNumber = transaction.sacNumber;
+                salesEntryClass.description = transaction.description;
+                if (transaction.isStockTxn) {
+                    let saalesAddBulkStockItems = new SalesAddBulkStockItems();
+                    saalesAddBulkStockItems.name = transaction.stockDetails.name;
+                    saalesAddBulkStockItems.uniqueName = transaction.stockDetails.uniqueName;
+                    saalesAddBulkStockItems.quantity = transaction.quantity;
+                    saalesAddBulkStockItems.rate = {};
+                    saalesAddBulkStockItems.rate.amountForAccount = transaction.rate;
+                    saalesAddBulkStockItems.sku = transaction.stockDetails.skuCode;
+                    saalesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
+                    saalesAddBulkStockItems.stockUnit.code = transaction.stockUnit;
+
+                    transactionClassMul.stock = saalesAddBulkStockItems;
+                }
+                salesEntryClass.transactions.push(transactionClassMul);
+            });
+
+            entry.discounts.forEach(discount => {
+                salesEntryClass.discounts.push(new DiscountMulticurrency(discount));
+            });
+
+            salesEntryClassArray.push(salesEntryClass);
+        });
+
+        obj.templateDetails = data.templateDetails;
+        obj.entries = salesEntryClassArray;
+
+        obj.account.billingDetails.countryName = this.vendorCountry;
+        obj.account.billingDetails.stateCode = obj.account.billingDetails.state.code;
+        obj.account.billingDetails.stateName = obj.account.billingDetails.state.name;
+
+        obj.account.shippingDetails.countryName = this.vendorCountry;
+        obj.account.shippingDetails.stateCode = obj.account.shippingDetails.state.code;
+        obj.account.shippingDetails.stateName = obj.account.shippingDetails.state.name;
+
+        delete obj.account.customerName;
+
+        if (this.shouldShowWarehouse) {
+            obj['warehouse'] = { name: '', uniqueName: this.selectedWarehouse };
+        }
+        return obj;
     }
 
     public convertDateForAPI(val: any): string {
