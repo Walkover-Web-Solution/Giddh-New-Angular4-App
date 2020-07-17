@@ -576,11 +576,11 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
             return Object.assign({}, state, { updateCustomStockInProcess: true });
         case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT_RESPONSE:
             return Object.assign({}, state, {
-                stockUnits: state.stockUnits.map(p => {
-                    if(p.code === action.payload.code ) {
+                stockUnits: state.stockUnits.map(unit => {
+                    if(unit.code === action.payload.code ) {
                         return action.payload
                     }
-                    return p
+                    return unit
                 }), // p.code === action.payload.code ? action.payload.unit : p),
                 updateCustomStockInProcess: false
             });
