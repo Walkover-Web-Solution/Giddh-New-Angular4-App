@@ -86,7 +86,6 @@ export class GeneralActions {
                                 });
                                  return this._dbService.insertFreshData(items).pipe(map( () => {
                                     if (this._activatedRoute.children.length) {
-                                        debugger;
                                         let child = this._activatedRoute.children[0]
                                         if (child.children.length) {
                                             let child2 = child.children[0];
