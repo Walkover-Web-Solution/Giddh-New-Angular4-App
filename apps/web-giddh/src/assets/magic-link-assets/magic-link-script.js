@@ -212,13 +212,16 @@ var app = new Vue({
             var unq = ledger.uniqueName;
             ledger.isCompoundEntry = true;
             var ledgerData = this.ledgerData;
-            ledgerData.ledgersTransactions.ledgers.forEach(function(lgr) {
-                if (unq === lgr.uniqueName) {
-                    lgr.isCompoundEntry = true;
-                } else {
-                    lgr.isCompoundEntry = false;
-                }
-            });
+
+            if( ledgerData && ledgerData.ledgersTransactions && ledgerData.ledgersTransactions.ledgers) {
+                ledgerData.ledgersTransactions.ledgers.forEach(function (lgr) {
+                    if (unq === lgr.uniqueName) {
+                        lgr.isCompoundEntry = true;
+                    } else {
+                        lgr.isCompoundEntry = false;
+                    }
+                });
+            }
             this.ledgerData = {};
             this.ledgerData = ledgerData;
         },
@@ -285,7 +288,28 @@ var app = new Vue({
                 this.$toaster.error('Magic link ID not found.');
             }
         },
-        downloadPurchaseInvoice: function(invoiceNum) {
+        downloadAttachedFile: function (attachedFileUniqueName, attachedFileName ) {
+            var id = this.getParameterByName('id');
+            var apiBaseUrl = this.getApi();
+            if (id) {
+                axios.get(apiBaseUrl + 'magic-link/' + id + '/ledger/upload/' + attachedFileUniqueName)
+                    .then(response => {
+                        // JSON responses are automatically parsed.
+                        if (response.status === 200 && response.data.status === 'success') {
+                            var blobData = this.base64ToBlob(response.data.body.uploadedFile, 'image/'+response.data.body.fileType, 512);
+                            return saveAs(blobData, response.data.body.name);
+                        } else {
+                            this.$toaster.error('Attachment ' + attachedFileName + ' cannot be downloaded now.');
+                        }
+                    })
+                    .catch(e => {
+                        this.$toaster.error('Attachment ' + attachedFileName + ' cannot be downloaded now.');
+                    })
+            } else {
+                this.$toaster.error('Magic link ID not found.');
+            }
+        },
+        downloadPurchaseInvoice: function (invoiceNum) {
             this.$toaster.error('Invoice for ' + invoiceNum + ' cannot be downloaded now.');
         },
         base64ToBlob: function(b64Data, contentType, sliceSize) {
