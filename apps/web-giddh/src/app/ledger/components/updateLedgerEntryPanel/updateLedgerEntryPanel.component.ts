@@ -1530,7 +1530,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
             let totalAmount: number = 0;
             this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(item => {
-                totalAmount = Number(totalAmount) + Number(item.balanceDue.amountForAccount);
+                totalAmount = Number(totalAmount) + Number(item.adjustmentAmount.amountForAccount);
             });
             this.totalAdjustedAmount = totalAmount;
             this.checkAdjustedAmountExceed(Number(totalAmount));
