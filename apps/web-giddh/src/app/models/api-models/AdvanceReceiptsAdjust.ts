@@ -1,31 +1,12 @@
-export class AdvanceReceiptAdjustment {
+export class VoucherAdjustments {
     tdsTaxUniqueName: string;
     tdsAmount: TdsAmount;
     description: string;
     adjustments: Adjustment[] = [];
+    totalAdjustmentAmount?: number;
 }
 
-export class Adjustment {
-    voucherNumber: string;
-    dueAmount: DueAmount;
-    voucherDate: string;
-    taxRate: number;
-    uniqueName: string;
-    taxUniqueName: string;
-    calculatedTaxAmount?: number;
-
-    constructor() {
-        this.voucherNumber = '';
-        this.voucherDate = '';
-        this.taxRate = 0;
-        this.uniqueName = '';
-        this.taxUniqueName = '';
-        // tslint:disable-next-line: no-use-before-declare
-        this.dueAmount = new DueAmount();
-        this.calculatedTaxAmount = 0;
-    }
-}
-
+/** Due amount class used in voucher adjustment */
 export class DueAmount {
     amountForAccount: number;
     amountForCompany: number;
@@ -35,11 +16,34 @@ export class DueAmount {
     }
 }
 
+export class Adjustment {
+    voucherNumber: string;
+    balanceDue: DueAmount;
+    voucherDate: string;
+    taxRate: number;
+    uniqueName: string;
+    taxUniqueName: string;
+    calculatedTaxAmount?: number;
+    adjustmentAmount?: DueAmount;
+    voucherType?: string;
+    subVoucher?: string;
+
+    constructor() {
+        this.voucherNumber = '';
+        this.voucherDate = '';
+        this.taxRate = 0;
+        this.uniqueName = '';
+        this.taxUniqueName = '';
+        // tslint:disable-next-line: no-use-before-declare
+        this.balanceDue = new DueAmount();
+        this.adjustmentAmount = new DueAmount();
+        this.calculatedTaxAmount = 0;
+    }
+}
+
 export interface TdsAmount {
     amountForAccount?: number;
 }
-
-
 
 export class AdjustAdvancePaymentModal {
     customerName: string;

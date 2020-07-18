@@ -51,8 +51,8 @@ export enum OnBoardingType {
 /** Pagination limit for every module */
 export const PAGINATION_LIMIT = 50;
 
-/** Subvoucher type */
-export enum Subvoucher {
+/** SubVoucher type */
+export enum SubVoucher {
     ReverseCharge = 'REVERSE_CHARGE',
     AdvanceReceipt = 'ADVANCE_RECEIPT'
 }
@@ -193,4 +193,11 @@ if (PRODUCTION_ENV || isElectron || isCordova) {
     DEFAULT_POPULAR_PLAN = "Oak";
 } else {
     DEFAULT_POPULAR_PLAN = "Popular Plan";
+}
+
+/** Type of voucher that is adjusted */
+export enum AdjustedVoucherType {
+    Receipt = 'rcpt',
+    AdvanceReceipt = 'advance-receipt',
+    Sales = 'sal'
 }

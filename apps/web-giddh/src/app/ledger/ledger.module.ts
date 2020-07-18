@@ -47,6 +47,7 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { SettingsServiceModule } from '../settings/settings-service.module';
 import { LedgerColumnarReportTableComponent } from './components/ledger-columnar-report-table/ledger.columnar.report.table.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
+import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
 
 @NgModule({
     declarations: [
@@ -76,7 +77,7 @@ import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
         ReactiveFormsModule,
         TaxControlModule.forRoot(),
         LedgerRoutingModule,
-        ModalModule,
+        ModalModule.forRoot(),
         TooltipModule,
         PaginationModule,
         NgxUploaderModule,
@@ -105,6 +106,7 @@ import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
         NgxMaskModule.forRoot(),
         NgbTooltipModule,
         SettingsServiceModule,
+        AdvanceReceiptAdjustmentModule,
         NgxDaterangepickerMd.forRoot()
     ],
 })

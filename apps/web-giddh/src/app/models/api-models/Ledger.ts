@@ -3,7 +3,7 @@ import { IClosingBalance, IForwardBalance, ILedger, ILedgerTransactionItem, ITot
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from './Sales';
 import { PettyCashEntryStatus } from './Expences';
-import { AdvanceReceiptAdjustment } from './AdvanceReceiptsAdjust';
+import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
 
 /*
  * Model for ledger create api request
@@ -124,9 +124,8 @@ export class LedgerResponse {
     public reverseChargeTaxableAmount?: number;
     public passportNumber?: string;
     public touristSchemeApplicable?: boolean;
-    public voucherAdjustmentsForInvoice?: VoucherAdjustmentsForInvoice;
-    public advanceReceiptAdjustment?: AdvanceReceiptAdjustment;
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
+    public voucherAdjustments?: VoucherAdjustments
 }
 /** Model for Ledger Advance receipts for invoices */
 export class VoucherAdjustmentsForInvoice {
