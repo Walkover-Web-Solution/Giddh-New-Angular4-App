@@ -72,12 +72,12 @@ export class GeneralActions {
                         case "accounts": {
                             const matchedIndex = items.aidata.accounts.findIndex(item => item && item.uniqueName && item.uniqueName === payload.oldUniqueName);
                             if (matchedIndex > -1) {
-                                items.aidata.accounts = [...items.aidata.accounts, items.aidata.accounts[matchedIndex] = {
+                                items.aidata.accounts[matchedIndex] = {
                                     ...items.aidata.accounts[matchedIndex],
                                     uniqueName: payload.newUniqueName,
                                     name: payload.name,
                                     route: items.aidata.accounts[matchedIndex].route.replace(payload.oldUniqueName, payload.newUniqueName)
-                                }]
+                                }
                                 return this._dbService.insertFreshData(items).pipe(map(() => {
                                     if (this.route.url.includes('/ledger/' + payload.oldUniqueName)) {
                                         this.route.navigate(['pages', 'ledger', payload.newUniqueName]);
@@ -231,22 +231,27 @@ export class GeneralActions {
         }
     }
 
-    /** Update index db action while updating any account **/
+    /** Update index db action while updating any account
+     * it will initiate update index db with new updated account info for accounts in sidebar *
+     * **/
 
-    public updateIndexDb(payload: UpdateDbRequest) {
+    public updateIndexDb(payload: UpdateDbRequest): CustomActions {
         return {
             type: GENERAL_ACTIONS.UPDATE_INDEX_DB,
             payload: payload
         }
     }
 
-    public updateIndexDbComplete() {
+    /** UpdateIndexDbComplete calls after update index db finished and data has been updated in index db.**/
+
+    public updateIndexDbComplete(): CustomActions {
         return {
             type: GENERAL_ACTIONS.UPDATE_INDEX_DB_COMPLETE,
         }
     }
 
-    public updateUiFromDb() {
+    /** UpdateUIFromDB calls after ui has changed with new data from index db **/
+    public updateUiFromDb() : CustomActions {
         return {
             type: GENERAL_ACTIONS.UPDATE_UI_FROM_DB
         }
