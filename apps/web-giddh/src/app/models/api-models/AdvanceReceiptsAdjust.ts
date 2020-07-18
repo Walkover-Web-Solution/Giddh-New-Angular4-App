@@ -6,6 +6,7 @@ export class VoucherAdjustments {
     totalAdjustmentAmount?: number;
 }
 
+/** Due amount class used in voucher adjustment */
 export class DueAmount {
     amountForAccount: number;
     amountForCompany: number;

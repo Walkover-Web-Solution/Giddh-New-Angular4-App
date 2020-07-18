@@ -991,12 +991,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.handleAdvanceReceiptChange();
     }
 
-    public getInvoiveLists() {
-        if (this.blankLedger.voucherType === 'rcpt') {
-            this.clickUnpaidInvoiceList.emit(true);
-        }
-    }
-
     public toggleBodyClass() {
         if (this.asideMenuStateForOtherTaxes === 'in') {
             document.querySelector('body').classList.add('fixed');
@@ -1234,6 +1228,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
     }
 
+    /**
+     * Payment adjustment handler
+     *
+     * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}} event Adjustment handler
+     * @memberof NewLedgerEntryPanelComponent
+     */
     public getAdjustedPaymentData(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
         console.log(event);
         if (event && event.adjustPaymentData && event.adjustVoucherData) {
@@ -1263,6 +1263,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.adjustPaymentModal.hide();
     }
 
+    /**
+     * Close voucher adjustment modal handler
+     *
+     * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}} event Close event
+     * @memberof NewLedgerEntryPanelComponent
+     */
     public closeAdjustmentModal(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
         if (event && event.adjustPaymentData &&
             !event.adjustVoucherData.adjustments.length) {
@@ -1276,6 +1282,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.adjustPaymentModal.hide();
     }
 
+    /**
+     * Removes the adjustment handler
+     *
+     * @private
+     * @memberof NewLedgerEntryPanelComponent
+     */
     private removeAdjustment(): void {
         this.currentTxn.voucherAdjustments = null;
     }
