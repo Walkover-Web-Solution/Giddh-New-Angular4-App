@@ -2262,7 +2262,7 @@
             <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent
                 [isUpdateMode]="isUpdateMode" [depositAmount]="depositAmount" [invoiceFormDetails]="invFormData"
                 [isVoucherModule]="true" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
-                [adjustedVoucherType]="'invoice'" (closeModelEvent)="closeAdvanceReceiptModal()"
+                (closeModelEvent)="closeAdvanceReceiptModal()"
                 (submitClicked)="getAdvanceReceiptAdjustData($event)" [isVoucherModule]="true">
             </advance-receipt-adjustment-component>
         </div>
