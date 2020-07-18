@@ -758,6 +758,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public deleteAttachedFile() {
         this.blankLedger.attachedFile = '';
         this.blankLedger.attachedFileName = '';
+        this.webFileInput.nativeElement.value = '';
         this.hideDeleteAttachedFileModal();
     }
 
