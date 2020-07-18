@@ -1701,24 +1701,27 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         console.log(this.vm.selectedLedger);
         if (event && event.adjustPaymentData && event.adjustVoucherData) {
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
-            adjustments.forEach(adjustment => {
-                adjustment.adjustmentAmount = adjustment.balanceDue;
-                // delete adjustment.balanceDue;
-            })
-            this.vm.selectedLedger.voucherAdjustments = {
-                adjustments,
-                totalAdjustmentAmount: event.adjustPaymentData.totalAdjustedAmount,
-                tdsTaxUniqueName: null,
-                tdsAmount: null,
-                description: null
-            };
-            console.log(this.vm.selectedLedger);
-            if (!adjustments.length)  {
-                // No adjustments done clear the adjustment checkbox
-                if (this.vm.selectedLedger.subVoucher === SubVoucher.AdvanceReceipt) {
-                    this.isAdjustAdvanceReceiptSelected = false;
-                } else {
-                    this.isAdjustReceiptSelected = false;
+            if (adjustments) {
+                adjustments.forEach(adjustment => {
+                    adjustment.adjustmentAmount = adjustment.balanceDue;
+                    // delete adjustment.balanceDue;
+                });
+
+                this.vm.selectedLedger.voucherAdjustments = {
+                    adjustments,
+                    totalAdjustmentAmount: event.adjustPaymentData.totalAdjustedAmount,
+                    tdsTaxUniqueName: null,
+                    tdsAmount: null,
+                    description: null
+                };
+                console.log(this.vm.selectedLedger);
+                if (!adjustments.length) {
+                    // No adjustments done clear the adjustment checkbox
+                    if (this.vm.selectedLedger.subVoucher === SubVoucher.AdvanceReceipt) {
+                        this.isAdjustAdvanceReceiptSelected = false;
+                    } else {
+                        this.isAdjustReceiptSelected = false;
+                    }
                 }
             }
         }
@@ -1786,7 +1789,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @private
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    private openAdjustPaymentModal() {
+    private openAdjustPaymentModal(): void {
         this.adjustPaymentModal.show();
     }
 

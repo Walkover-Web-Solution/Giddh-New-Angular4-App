@@ -80,7 +80,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     /** True if the current module is voucher module required as all voucher adjustments are not supported from API */
     @Input() public isVoucherModule: boolean;
 
+    /** Close modal event emitter */
     @Output() public closeModelEvent: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
+    /** Submit modal event emitter */
     @Output() public submitClicked: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
 
     constructor(private store: Store<AppState>, private salesService: SalesService, private toaster: ToasterService) {
@@ -144,7 +146,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                     this.adjustVoucherOptions = [];
                     if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
                         this.allAdvanceReceiptResponse.forEach(item => {
-                            if (item) {
+                            if (item && item.voucherDate) {
                                 item.voucherDate = item.voucherDate.replace(/-/g, '/');
                                 this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                                 this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
