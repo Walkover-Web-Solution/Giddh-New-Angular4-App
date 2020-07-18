@@ -4481,6 +4481,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.checkVoucherEntries();
     }
 
+    /** @memberOf ProformaInvoiceComponent
+     * check valid entry if have any then enable save button **/
     checkVoucherEntries() {
         if (this.invFormData.entries && this.invFormData.entries.length) {
             let validLineItem;
