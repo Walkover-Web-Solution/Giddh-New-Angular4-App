@@ -3,7 +3,7 @@
 <!--  -->
 <section class="audit-log" *ngFor="let log of (this.auditLogs$ | async); let parentIndex = index">
     <h1>{{log.operationType}}
-        <ng-container *ngIf="log?.details?.voucherType"> <span>  -{{log?.details?.voucherType}}</span></ng-container>
+        <ng-container *ngIf="log?.details?.voucherType && log?.operationType!=='EDIT'"> <span>  -{{log?.details?.voucherType}}</span></ng-container>
 
         <!-- For account start header -->
         <ng-container *ngIf="log?.operationType==='EDIT' && log?.old?.details?.name !== log?.details?.name; else VoucherEntityOld ">
