@@ -295,7 +295,7 @@ var app = new Vue({
                 axios.get(apiBaseUrl + 'magic-link/' + id + '/ledger/upload/' + attachedFileUniqueName)
                     .then(response => {
                         // JSON responses are automatically parsed.
-                        if (response.status === 200 && response.data.status === 'success') {
+                        if ( response && response.status === 200 && response.data.status === 'success') {
                             var blobData = this.base64ToBlob(response.data.body.uploadedFile, 'image/'+response.data.body.fileType, 512);
                             return saveAs(blobData, response.data.body.name);
                         } else {
