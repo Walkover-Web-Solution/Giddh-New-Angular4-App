@@ -58,7 +58,7 @@
                                 <input [disabled]="shouldDisableEdit(entry) ? 'disabled' : null" required decimalDigitsDirective type="text" class="form-control" placeholder="Enter Amount" name="amount{{entryIdx}}" [(ngModel)]="entry.balanceDue.amountForAccount" (ngModelChange)="calculateTax(entry, entryIdx);" [prefix]="currencySymbol" [mask]="inputMaskFormat">
                             </div>
                         </div>
-                        <div class="col-sm-2" *ngIf="adjustedVoucherType === 'invoice'">
+                        <div class="col-sm-2" *ngIf="adjustedVoucherType === 'invoice' && entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'">
                             <div class="form-group">
                                 <label for="name_{{entryIdx}}">Tax</label>
                                 <input id="name_{{entryIdx}}" type="text" class="form-control" name="calculatedTaxAmount_{{entryIdx}}" decimalDigitsDirective [(ngModel)]="entry.calculatedTaxAmount" placeholder="00.00" disabled>

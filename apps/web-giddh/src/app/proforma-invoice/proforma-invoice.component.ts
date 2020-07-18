@@ -2011,7 +2011,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     adjustments.forEach(adjustment => {
                         adjustment.adjustmentAmount = adjustment.balanceDue;
                         delete adjustment.balanceDue;
-                    })
+                    });
                     requestObject.voucherAdjustments = {
                         adjustments
                     };
@@ -3281,8 +3281,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (this.isSalesInvoice) {
                     if (!this.advanceReceiptAdjustmentData) {
                         this.advanceReceiptAdjustmentData.adjustments = [];
-                        requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
+                    } else {
+                        this.advanceReceiptAdjustmentData.adjustments.forEach(adjustment => {
+                            delete adjustment.balanceDue;
+                        });
                     }
+                    requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
                 }
 
                 this.salesService.updateVoucherV4(<GenericRequestForGenerateSCD>this.updateData(requestObject, requestObject.voucher)).pipe(takeUntil(this.destroyed$))
@@ -4928,6 +4932,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
         // this.invFormData.voucherDetails.balanceDue = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
+        this.advanceReceiptAdjustmentData.adjustments.forEach(adjustment => {
+            adjustment.adjustmentAmount = adjustment.balanceDue;
+        });
         this.adjustPaymentData = advanceReceiptsAdjustEvent.adjustPaymentData;
         if (this.adjustPaymentData.totalAdjustedAmount) {
             this.isAdjustAmount = true;
