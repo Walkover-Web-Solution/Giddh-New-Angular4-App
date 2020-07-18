@@ -728,12 +728,23 @@
                     </div>
 
                     <!-- Advance receipts adjusted Invoice -->
-                    <div class="clearfix adjust-receipt font-14" *ngIf="isAdjustedInvoicesWithAdvanceReceipt && (isAdjustAdvanceReceiptSelected)">
-                        <p class="bold">Adjusted Amount
-                            <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
-                                (click)="openAdjustInvoiceEditMode();$event.stopPropagation();"><i
-                                    class="icon-edit11 font-10"></i></a>
+                    <div class="clearfix adjust-receipt font-14" *ngIf="isAdjustAdvanceReceiptSelected || isAdjustReceiptSelected">
+                        <p class="bold">
+                            Adjusted Amount
+                            <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" (click)="openAdjustInvoiceEditMode();$event.stopPropagation();">
+                                <i class="edit-adjustment icon-edit11 font-10"></i>
+                            </a>
+                            <i class="icon-info" [popover]="adjustmentPopOverTemplate" [outsideClick]="true" containerClass="adjustment-popover" placement="bottom right"></i>
                         </p>
+                        <ng-template #adjustmentPopOverTemplate>
+                            <div class="adusted-info">
+                                <p class="mb-1"><strong>Adjustment</strong></p>
+                                <p class="info-text">The selected entry is a part of {{vm.selectedLedger?.voucherNumber}}. All the
+                                    adjustment will reflect
+                                    to subsequent entries as well. Here we
+                                    are adjusting the Invoice not just the selected entry.</p>
+                            </div>
+                        </ng-template>
                         <p class="font-12 text-light mb-1">
                             {{ vm.baseCurrencyDetails?.symbol}}{{vm.selectedLedger?.voucherAdjustments?.totalAdjustmentAmount | giddhCurrency}}
                         </p>
@@ -775,11 +786,10 @@
                     </div>
                     <!-- End advance receipts adjusted Invoice -->
                     <!--Adjusted advance receipts list  -->
-                    <div class="clearfix adjust-receipt font-14" *ngIf="isAdjustedWithAdvanceReceipt && (isAdjustAdvanceReceiptSelected)">
+                    <!-- <div class="clearfix adjust-receipt font-14" *ngIf="isAdjustedWithAdvanceReceipt && (isAdjustAdvanceReceiptSelected)">
                         <p class="bold">Adjusted Vouchers
                             <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" (click)="openAdjustInvoiceEditMode();$event.stopPropagation();">
                                 <i class="icon-edit11 font-10"></i>
-                                <!-- adjusted static code start  -->
                                 <i class="icon-info"></i>
                                 <div class="adusted-info">
                                     <p class="mb-1"><strong>Adjustment</strong></p>
@@ -788,7 +798,6 @@
                                         to subsequent entries as well. Here we
                                         are adjusting the Invoice not just the selected entry.</p>
                                 </div>
-                                <!-- adjusted static code end  -->
                                 <i class="icon-edit11 font-10"></i>
                             </a>
                         </p>
