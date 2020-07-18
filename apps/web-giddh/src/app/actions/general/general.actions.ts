@@ -70,36 +70,17 @@ export class GeneralActions {
                     const items = data.itemData;
                     switch (payload.type) {
                         case "accounts": {
-                            // debugger;
                             const matchedIndex = items.aidata.accounts.findIndex(item => item && item.uniqueName && item.uniqueName === payload.oldUniqueName);
                             if (matchedIndex > -1) {
-                                items.aidata.accounts = items.aidata.accounts.map(item => {
-                                    if (item && item.uniqueName && item.uniqueName === payload.oldUniqueName) {
-                                        return {
-                                            ...item,
-                                            uniqueName: payload.newUniqueName,
-                                            name: payload.name,
-                                            route: item.route.replace(payload.oldUniqueName, payload.newUniqueName)
-                                        }
-                                    }
-                                    return item
-                                });
-                                 return this._dbService.insertFreshData(items).pipe(map( () => {
-                                    if (this._activatedRoute.children.length) {
-                                        let child = this._activatedRoute.children[0]
-                                        if (child.children.length) {
-                                            let child2 = child.children[0];
-                                            let path: string = child.snapshot.url[0].path;
-                                            if (child2.children.length && path === 'pages') {
-                                                let child3 = child2.children[0];
-                                                let path1: string = child2.snapshot.url[0].path;
-                                                if (child3.snapshot.url.length && path1 === 'ledger') {
-                                                    if (child3.snapshot.url[0].path === payload.oldUniqueName) {
-                                                       this.route.navigate(['pages', 'ledger', payload.newUniqueName]);
-                                                    }
-                                                }
-                                            }
-                                        }
+                                items.aidata.accounts = [...items.aidata.accounts, items.aidata.accounts[matchedIndex] = {
+                                    ...items.aidata.accounts[matchedIndex],
+                                    uniqueName: payload.newUniqueName,
+                                    name: payload.name,
+                                    route: items.aidata.accounts[matchedIndex].route.replace(payload.oldUniqueName, payload.newUniqueName)
+                                }]
+                                return this._dbService.insertFreshData(items).pipe(map(() => {
+                                    if (this.route.url.includes('/ledger/' + payload.oldUniqueName)) {
+                                        this.route.navigate(['pages', 'ledger', payload.newUniqueName]);
                                     }
                                     return this.updateIndexDbComplete()
                                 }));
@@ -117,7 +98,7 @@ export class GeneralActions {
             })
         )
 
-    constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService, private _companyService: CompanyService, private _dbService: DbService,private _activatedRoute: ActivatedRoute, private route: Router) {
+    constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService, private _companyService: CompanyService, private _dbService: DbService, private _activatedRoute: ActivatedRoute, private route: Router) {
         //
     }
 
@@ -262,6 +243,7 @@ export class GeneralActions {
             type: GENERAL_ACTIONS.UPDATE_INDEX_DB_COMPLETE,
         }
     }
+
     public updateUiFromDb() {
         return {
             type: GENERAL_ACTIONS.UPDATE_UI_FROM_DB

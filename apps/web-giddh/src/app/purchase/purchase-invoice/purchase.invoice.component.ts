@@ -514,9 +514,6 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
 
                     this.accountService.UpdateAccountV2(account, reqObj).subscribe((res) => {
                         if (res.status === 'success') {
-                            if(res && res.body && res.queryString) {
-
-                            }
                             const updateIndexDb: UpdateDbRequest = {
                                 newUniqueName: res.body.uniqueName,
                                 oldUniqueName: res.queryString.accountUniqueName,
