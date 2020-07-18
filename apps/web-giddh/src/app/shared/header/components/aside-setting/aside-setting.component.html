@@ -26,7 +26,7 @@
                 <ul class="mb-3" *ngFor="let section of filteredSettingsPageTabs;">
                     <li *ngFor="let tab of section;">
                         <a class="d-block" [routerLink]="[tab.link]" (click)="closeAsidePane($event)">
-                            <span><img src="{{imgPath}}{{tab.image}}"></span>
+                            <span [innerHTML]="tab.icon"></span>
                             <span>{{tab.label}}</span>
                         </a>
                     </li>

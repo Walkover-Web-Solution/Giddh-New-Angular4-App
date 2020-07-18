@@ -9265,6 +9265,32 @@ ngx-daterangepicker-material {
 .icon-home-icon {
     color: $white;
 }
+.remove-header-lower-layer{
+    .container-fluid.mrB1{
+        margin-bottom: 0;
+        .lower-layer-header{
+            display: none !important;
+        }
+        .upper-layer-header{
+            padding-top: 10px;
+            padding-bottom: 5px;
+        }
+    }
+    .padding-top-fixed-mobile{
+        padding-top: 50px;
+    }
+
+}
+.mobile-sidebar-open:after{
+    position: absolute;
+    content: '';
+    background-color: rgba(0,0,0,0.5);
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 9;
+}
 .HW_badge.HW_softHidden{
     display: none !important;
 }
@@ -9274,6 +9300,22 @@ span#HW_badge_cont:nth-child(3){
 .giddh-datepicker{
     cursor: pointer !important;
 }
+.setting-items{
+    ul{
+        li{
+            a{
+                span{
+                    i{
+                        color: $dim-gray;
+                        margin-right: 10px;
+                        font-size: 11px;
+                    }
+                }
+            }
+        }
+    }
+}
+
 /* responsive */
 
 @media (max-width: 1440px) {
