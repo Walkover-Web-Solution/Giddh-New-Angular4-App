@@ -791,7 +791,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                             totalAdjustmentAmount += Number(adjustment.amount);
 
                             if (adjustment.type === "receipt" || adjustment.type === "advanceReceipt") {
+                                let taxAmount = 0;
+                                let advanceReceiptAmount = 0;
+
+                                if(adjustment.type === "advanceReceipt") {
+                                    taxAmount = adjustment.tax.value;
+                                    advanceReceiptAmount = Number(adjustment.amount) - Number(taxAmount);
+                                }
+
                                 data.transactions[totalTransactions] = {
+                                    advanceReceiptAmount: advanceReceiptAmount,
                                     amount: Number(adjustment.amount),
                                     applyApplicableTaxes: adjustmentParentEntry.applyApplicableTaxes,
                                     currentBalance: adjustmentParentEntry.applyApplicableTaxes,
@@ -801,6 +810,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                                     particular: byEntry.particular,
                                     selectedAccount: adjustmentParentEntry.selectedAccount,
                                     stocks: null,
+                                    tax: taxAmount,
                                     taxes: [adjustment.tax.uniqueName],
                                     total: Number(adjustment.amount),
                                     type: adjustmentParentEntry.type,

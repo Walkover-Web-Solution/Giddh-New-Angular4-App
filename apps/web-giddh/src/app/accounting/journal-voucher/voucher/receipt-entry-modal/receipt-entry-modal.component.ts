@@ -124,6 +124,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
                 } else if (invoiceBalanceDue < entry.amount) {
                     this.toaster.clearAllToaster();
                     this.toaster.errorToast(this.invoiceAmountErrorMessage);
+                    this.isValidForm = false;
                 }
             } else {
                 this.addNewEntry();
@@ -131,6 +132,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         } else if (receiptTotal > this.transaction.amount) {
             this.toaster.clearAllToaster();
             this.toaster.errorToast(this.amountErrorMessage);
+            this.isValidForm = false;
         } else {
             entry.amount = parseFloat(entry.amount);
             this.validateEntries(false);
@@ -147,9 +149,11 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         if (receiptTotal < this.transaction.amount) {
             this.toaster.clearAllToaster();
             this.toaster.errorToast(this.amountErrorMessage);
+            this.isValidForm = false;
         } else if (receiptTotal > this.transaction.amount) {
             this.toaster.clearAllToaster();
             this.toaster.errorToast(this.amountErrorMessage);
+            this.isValidForm = false;
         } else {
             this.transaction.voucherAdjustments = this.receiptEntries;
             this.entriesList.emit(this.transaction);
