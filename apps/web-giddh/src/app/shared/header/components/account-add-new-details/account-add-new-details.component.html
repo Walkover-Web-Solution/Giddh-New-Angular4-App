@@ -141,7 +141,7 @@
                                     <div class="form-group mb-05">
                                         <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}
                                         </label>
-                                        <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (keyup)="getStateCode(gst, states);" (blur)="checkGstNumValidation(gstNumberField);" name="gstNumber" formControlName="gstNumber" placeholder="Enter {{formFields['taxName'].label}}"
+                                        <input type="text" class="form-control" autocomplete="false" autocomplete="false" #gstNumberField (keyup)="getStateCode(gst, states, $event);" (blur)="checkGstNumValidation(gstNumberField);" name="gstNumber" formControlName="gstNumber" placeholder="Enter {{formFields['taxName'].label}}"
                                         />
                                     </div>
                                 </div>
