@@ -127,14 +127,14 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                 requestObject = {
                     accountUniqueNames: [customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName],
                     voucherType,
-                    subVoucherType: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                    subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
                 }
             } else {
                 // A ledger entry is updated
                 requestObject = {
                     accountUniqueNames: [...customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName],
                     voucherType,
-                    subVoucherType: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                    subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
                 }
             }
             this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate).subscribe((response) => {
@@ -678,10 +678,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     private formatAdjustmentData(adjustmentData: Array<Adjustment>): void {
         if (adjustmentData && adjustmentData.length) {
             adjustmentData.forEach(adjustment => {
-                if (adjustment.balanceDue.amountForAccount) {
-                    adjustment.adjustmentAmount = adjustment.balanceDue;
-                } else if (adjustment.adjustmentAmount.amountForAccount) {
+                if (adjustment.adjustmentAmount && adjustment.adjustmentAmount.amountForAccount) {
                     adjustment.balanceDue = adjustment.adjustmentAmount;
+                } else if (adjustment.balanceDue && adjustment.balanceDue.amountForAccount){
+                    adjustment.adjustmentAmount = adjustment.balanceDue;
                 }
             });
         }
