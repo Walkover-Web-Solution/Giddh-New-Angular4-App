@@ -2018,8 +2018,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     const adjustments = cloneDeep(this.advanceReceiptAdjustmentData.adjustments);
                     if (adjustments) {
                         adjustments.forEach(adjustment => {
-                            adjustment.adjustmentAmount = adjustment.balanceDue;
-                            delete adjustment.balanceDue;
+                            if (adjustment.balanceDue !== undefined) {
+                                adjustment.adjustmentAmount = adjustment.balanceDue;
+                                delete adjustment.balanceDue;
+                            }
                         });
                         requestObject.voucherAdjustments = {
                             adjustments
