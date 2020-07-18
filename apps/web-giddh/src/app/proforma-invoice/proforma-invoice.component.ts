@@ -459,6 +459,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public excludeTax: boolean = false;
     /* This will hold the company country name */
     public companyCountryName: string = '';
+    /** this property is return weather invoice have at least on correct entry or not **/
     public hasVoucherEntry: boolean;
 
     /**
@@ -4482,8 +4483,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     /** @memberOf ProformaInvoiceComponent
+     *
      * check valid entry if have any then enable save button **/
-    checkVoucherEntries() {
+    checkVoucherEntries(): void {
         if (this.invFormData.entries && this.invFormData.entries.length) {
             let validLineItem;
             for (let i = 0; i < this.invFormData.entries.length; i++) {
