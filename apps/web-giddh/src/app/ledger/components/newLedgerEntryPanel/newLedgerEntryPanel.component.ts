@@ -1,4 +1,4 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 import {
     AfterViewChecked,
     AfterViewInit,
@@ -185,7 +185,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Allowed taxes list contains the unique name of all
      * tax types within a company and count upto which they are allowed
      */
-    public allowedSelectionOfAType: any = { type: [], count: 1 };
+    public allowedSelectionOfAType: any = {type: [], count: 1};
     /** country name of active account */
     public activeAccountCountryName: string = '';
     /** True, if company country supports other tax (TCS/TDS) */
@@ -246,7 +246,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngOnInit() {
         this.showAdvanced = false;
         this.uploadInput = new EventEmitter<UploadInput>();
-        this.fileUploadOptions = { concurrency: 0 };
+        this.fileUploadOptions = {concurrency: 0};
         this.currentTxn.advanceReceiptAmount = this.currentTxn.amount;
         this.activeAccount$.subscribe(acc => {
             if (acc) {
@@ -759,6 +759,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.blankLedger.attachedFile = '';
         this.blankLedger.attachedFileName = '';
         this.hideDeleteAttachedFileModal();
+        if (this.webFileInput && this.webFileInput.nativeElement) {
+            this.webFileInput.nativeElement.value = '';
+        }
     }
 
     public ngOnDestroy(): void {
