@@ -125,7 +125,6 @@ export class LedgerResponse {
     public passportNumber?: string;
     public touristSchemeApplicable?: boolean;
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
-    public invoiceAdvanceReceiptAdjustment?: InvoiceAdvanceReceiptAdjustment;
     public voucherAdjustments?: VoucherAdjustments
 }
 /** Model for Ledger Advance receipts for invoices */
