@@ -196,14 +196,13 @@
                         {{row.voucherDate}}
                     </td>
                     <td data-title="Purchase Order">
-                        <a
-                            routerLink="['/pages/purchase-management/purchase-order-invoice-preview/'+row.uniqueName]">{{row.voucherNumber}}</a>
+                        <a routerLink="/pages/purchase-management/purchase-order-invoice-preview/{{row.uniqueName}}">{{row.voucherNumber}}</a>
                     </td>
                     <td data-title="Vendor Name">
                         {{row.vendor?.name}}
                     </td>
                     <td data-title="Total Amt." class="text-right">
-                        {{row.amountForAccount}}
+                        {{row.grandTotal?.amountForAccount | giddhCurrency}}
                     </td>
                     <td data-title="Expected Delivery">
                         <span hidden>Delivery in 7 days</span>

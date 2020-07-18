@@ -262,8 +262,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
 
                     companyAddresses.forEach(address => {
                         if (address.isDefault === true) {
-                            this.purchaseOrder.company.billingDetails.address = address.address;
+                            this.purchaseOrder.company.billingDetails.address = [];
+                            this.purchaseOrder.company.billingDetails.address.push(address.address);
                             this.purchaseOrder.company.billingDetails.state.code = address.stateCode;
+                            this.purchaseOrder.company.billingDetails.state.name = address.stateName;
+                            this.purchaseOrder.company.billingDetails.stateCode = address.stateCode;
+                            this.purchaseOrder.company.billingDetails.stateName = address.stateName;
                             this.purchaseOrder.company.billingDetails.gstNumber = address.taxNumber;
                             this.purchaseOrder.company.shippingDetails.gstNumber = address.taxNumber;
                         }
@@ -300,7 +304,6 @@ export class CreatePurchaseOrderComponent implements OnInit {
         });
 
         this.updateAccountSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
             if (response && this.accountAsideMenuState === 'in') {
                 this.toggleAccountAsidePane();
             }
@@ -553,6 +556,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
                 if (!this.autoFillCompanyShipping) {
                     this.purchaseOrder.company.shippingDetails.stateName = stateName;
                     this.purchaseOrder.company.shippingDetails.stateCode = stateCode;
+                    this.purchaseOrder.company.shippingDetails.state.code = stateCode;
                     this.purchaseOrder.company.shippingDetails.state.name = stateName;
                 }
             }
@@ -679,9 +683,15 @@ export class CreatePurchaseOrderComponent implements OnInit {
             this.purchaseOrder.company.shippingDetails.address = [];
             this.purchaseOrder.company.shippingDetails.address.push(warehouse.address);
             this.purchaseOrder.company.shippingDetails.state.code = warehouse.stateCode;
+            this.purchaseOrder.company.shippingDetails.stateCode = warehouse.stateCode;
+            this.purchaseOrder.company.shippingDetails.state.name = warehouse.stateName;
+            this.purchaseOrder.company.shippingDetails.stateName = warehouse.stateName;
         } else {
             this.purchaseOrder.company.shippingDetails.address = [];
             this.purchaseOrder.company.shippingDetails.state.code = "";
+            this.purchaseOrder.company.shippingDetails.stateCode = "";
+            this.purchaseOrder.company.shippingDetails.state.name = "";
+            this.purchaseOrder.company.shippingDetails.stateName = "";
         }
     }
 
