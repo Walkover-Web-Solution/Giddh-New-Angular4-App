@@ -439,7 +439,7 @@ a[vr-item]:focus {
 }
 
 .universal-date li input {
-    padding-left: 29px !important;
+    padding-left: 20px !important;
     color: #fff !important;
     padding-right: 0 !important;
     text-align: left;
@@ -469,10 +469,23 @@ a[vr-item]:focus {
     top:2px;
 }
 
-.not-today .calender-addone {
-    position: absolute;
-    padding: 8px 8px;
-}
+.not-today{
+    padding:0px !important;
+    border:0px !important;
+    .calender-addone {
+        position: absolute;
+        left:auto;
+        margin:auto;
+    }
+    .input-date{
+        border: 1px solid #ffffff;
+        border-radius: 20px !important;
+        input{
+            margin-right: 44px;
+            text-align:center !important;
+        }
+    }
+} 
 
 #add-manage.btn-gray {
     background:transparent;
@@ -505,8 +518,8 @@ span.icon-support.dropdown-toggle {
     height: 32px;
 }
 .date-range-picker{
-    max-width: 210px;
-    min-width: 210px;
+    max-width: 100%;
+    min-width: 100%;
 }
 
 .other a {
@@ -847,7 +860,7 @@ ul.sub-list {
         }
     }
     .calender-addone {
-        height: 28px;
+        height: 30px;
         vertical-align: middle;
         align-items: center;
     }
@@ -889,8 +902,6 @@ ul.sub-list {
         margin-right: 5px;
     }
     .date-range-picker{
-        max-width: 190px;
-        min-width: 190px;
         font-size: 12px !important;
     }
 }
