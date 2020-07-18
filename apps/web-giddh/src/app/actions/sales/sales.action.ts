@@ -17,6 +17,9 @@ import { InventoryService } from '../../services/inventory.service';
 import { INameUniqueName } from '../../models/api-models/Inventory';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { CustomActions } from '../../store/customActions';
+import {UpdateDbRequest} from "../../models/interfaces/ulist.interface";
+import {GeneralActions} from "../general/general.actions";
+import {GeneralService} from "../../services/general.service";
 
 /**
  * Created by ad on 04-07-2017.
@@ -125,6 +128,18 @@ export class SalesActions {
         .ofType(SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS).pipe(
             switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.accountRequest, action.payload.value)),
             map(response => {
+                if(response && response.body && response.queryString) {
+                    const updateIndexDb: UpdateDbRequest = {
+                        newUniqueName: response.body.uniqueName,
+                        oldUniqueName: response.queryString.accountUniqueName,
+                        latestName: response.request.name,
+                        uniqueName: this._generalServices.companyUniqueName,
+                        type: "accounts",
+                        isActive: false,
+                        name: response.body.name
+                    }
+                    this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
+                }
                 return this.updateAccountDetailsForSalesResponse(response);
             }));
 
@@ -149,6 +164,8 @@ export class SalesActions {
         private _salesService: SalesService,
         private _accountService: AccountService,
         private _groupService: GroupService,
+        private _generalActions: GeneralActions,
+        private _generalServices: GeneralService,
         private _inventoryService: InventoryService
     ) {
     }

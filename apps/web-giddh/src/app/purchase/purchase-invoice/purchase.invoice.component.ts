@@ -24,6 +24,9 @@ import { AlertConfig } from 'ngx-bootstrap/alert';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import {UpdateDbRequest} from "../../models/interfaces/ulist.interface";
+import {GeneralService} from "../../services/general.service";
+import {GeneralActions} from "../../actions/general/general.actions";
 
 const otherFiltersOptions = [
     { name: 'GSTIN Empty', uniqueName: 'GSTIN Empty' },
@@ -137,6 +140,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         private purchaseInvoiceService: PurchaseInvoiceService,
         private accountService: AccountService,
         private _reconcileActions: GstReconcileActions,
+        private _generalServices: GeneralService,
+        private _generalActions: GeneralActions,
         private componentFactoryResolver: ComponentFactoryResolver,
         private settingsProfileActions: SettingsProfileActions
     ) {
@@ -509,6 +514,19 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
 
                     this.accountService.UpdateAccountV2(account, reqObj).subscribe((res) => {
                         if (res.status === 'success') {
+                            if(res && res.body && res.queryString) {
+
+                            }
+                            const updateIndexDb: UpdateDbRequest = {
+                                newUniqueName: res.body.uniqueName,
+                                oldUniqueName: res.queryString.accountUniqueName,
+                                latestName: res.request.name,
+                                uniqueName: this._generalServices.companyUniqueName,
+                                type: "accounts",
+                                isActive: false,
+                                name: res.body.name
+                            }
+                            this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
                             this.toasty.successToast('Entry type changed successfully.');
                         } else {
                             this.toasty.errorToast(res.message, res.code);

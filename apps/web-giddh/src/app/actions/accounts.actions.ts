@@ -235,6 +235,18 @@ export class AccountsAction {
         .ofType(AccountsAction.UPDATE_ACCOUNT).pipe(
             switchMap((action: CustomActions) => this._accountService.UpdateAccount(action.payload.account, action.payload.accountUniqueName)),
             map(response => {
+                if(response && response.body && response.queryString) {
+                    const updateIndexDb: UpdateDbRequest = {
+                        newUniqueName: response.body.uniqueName,
+                        oldUniqueName: response.queryString.accountUniqueName,
+                        latestName: response.request.name,
+                        uniqueName: this._generalServices.companyUniqueName,
+                        type: "accounts",
+                        isActive: false,
+                        name: response.body.name
+                    }
+                    this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
+                }
                 return this.updateAccountResponse(response);
             }));
 
