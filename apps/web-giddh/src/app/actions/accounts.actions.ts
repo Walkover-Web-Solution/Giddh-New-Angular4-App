@@ -17,6 +17,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { Observable } from 'rxjs';
 import { ApplyDiscountRequest, AssignDiscountRequestForAccount } from '../models/api-models/ApplyDiscount';
+import {UpdateDbRequest} from "../models/interfaces/ulist.interface";
 
 @Injectable()
 export class AccountsAction {
@@ -234,6 +235,18 @@ export class AccountsAction {
         .ofType(AccountsAction.UPDATE_ACCOUNT).pipe(
             switchMap((action: CustomActions) => this._accountService.UpdateAccount(action.payload.account, action.payload.accountUniqueName)),
             map(response => {
+                if(response && response.body && response.queryString) {
+                    const updateIndexDb: UpdateDbRequest = {
+                        newUniqueName: response.body.uniqueName,
+                        oldUniqueName: response.queryString.accountUniqueName,
+                        latestName: response.request.name,
+                        uniqueName: this._generalServices.companyUniqueName,
+                        type: "accounts",
+                        isActive: false,
+                        name: response.body.name
+                    }
+                    this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
+                }
                 return this.updateAccountResponse(response);
             }));
 
@@ -266,6 +279,16 @@ export class AccountsAction {
             map(response => {
                 if (response.status === 'success') {
                     this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
+                    const updateIndexDb: UpdateDbRequest = {
+                        newUniqueName: response.body.uniqueName,
+                        oldUniqueName: response.queryString.accountUniqueName,
+                        latestName: response.request.name,
+                        uniqueName: this._generalServices.companyUniqueName,
+                        type: "accounts",
+                        isActive: false,
+                        name: response.body.name
+                    }
+                    this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
                 }
                 return this.updateAccountResponseV2(response);
             }));

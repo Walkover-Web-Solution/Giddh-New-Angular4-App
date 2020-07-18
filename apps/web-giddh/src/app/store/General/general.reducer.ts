@@ -45,6 +45,8 @@ export interface GeneralState {
     headerTitle: { uniqueName: string, additional: { tab: string, tabIndex: number } };
     currentPage: CurrentPage;
     isCalendlyModelOpen: boolean;
+    updateIndexDbInProcess: boolean;
+    updateIndexDbComplete: boolean;
 }
 
 const initialState: GeneralState = {
@@ -58,7 +60,9 @@ const initialState: GeneralState = {
     sideMenuBarOpen: false,
     headerTitle: null,
     currentPage: null,
-    isCalendlyModelOpen: false
+    isCalendlyModelOpen: false,
+    updateIndexDbComplete: false,
+    updateIndexDbInProcess: false
 };
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {
@@ -375,6 +379,27 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             return {
                 ...state,
                 flattenAccounts: flattenAccountsArray
+            }
+        }
+        case GENERAL_ACTIONS.UPDATE_INDEX_DB: {
+            return {
+                ...state,
+                updateIndexDbInProcess: true,
+                updateIndexDbComplete: false,
+            }
+        }
+        case GENERAL_ACTIONS.UPDATE_INDEX_DB_COMPLETE: {
+            return {
+                ...state,
+                updateIndexDbComplete: true,
+                updateIndexDbInProcess: false
+            }
+        }
+        case GENERAL_ACTIONS.UPDATE_UI_FROM_DB: {
+            return  {
+                ...state,
+                updateIndexDbInProcess: false,
+                updateIndexDbComplete: false,
             }
         }
         default:
