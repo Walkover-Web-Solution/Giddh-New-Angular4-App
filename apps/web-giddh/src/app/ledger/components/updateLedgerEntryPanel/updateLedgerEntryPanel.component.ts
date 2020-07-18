@@ -1064,7 +1064,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         delete requestObj['tdsTaxes'];
         delete requestObj['tcsTaxes'];
 
-        if (!this.isAdjustAdvanceReceiptSelected || !this.isAdjustReceiptSelected) {
+        if (!(this.isAdjustAdvanceReceiptSelected || this.isAdjustReceiptSelected)) {
             // Clear the voucher adjustments if the adjust advance receipt is not selected
             this.vm.selectedLedger.voucherAdjustments = undefined;
             requestObj.voucherAdjustments = undefined;
@@ -1705,17 +1705,24 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments && this.vm.selectedLedger.voucherAdjustments.adjustments.length) {
             if (this.vm.selectedLedger.voucherAdjustments.adjustments.every(adjustment => adjustment.voucherType === 'sales')) {
                 this.isAdjustedInvoicesWithAdvanceReceipt = true;
-                this.isAdjustAdvanceReceiptSelected = true;
+                if (this.isAdvanceReceipt) {
+                    this.isAdjustAdvanceReceiptSelected = true;
+                } else {
+                    this.isAdjustReceiptSelected = true;
+                }
                 this.calculateInclusiveTaxesForAdvanceReceiptsInvoices();
-            } else {
-                this.isAdjustAdvanceReceiptSelected = false;
-                this.isAdjustedInvoicesWithAdvanceReceipt = false;
-            }
-            if (this.vm.selectedLedger.voucherAdjustments.adjustments.every(adjustment => adjustment.voucherType === 'receipt')) {
+            } else if (this.vm.selectedLedger.voucherAdjustments.adjustments.every(adjustment => adjustment.voucherType === 'receipt')) {
                 this.isAdjustedWithAdvanceReceipt = true;
+                if (this.isAdvanceReceipt) {
+                    this.isAdjustAdvanceReceiptSelected = true;
+                } else {
+                    this.isAdjustReceiptSelected = true;
+                }
                 this.calculateInclusiveTaxesForAdvanceReceipts();
             } else {
-                this.isAdjustedWithAdvanceReceipt = false;
+                this.isAdjustReceiptSelected = false;
+                this.isAdjustAdvanceReceiptSelected = false;
+                this.isAdjustedInvoicesWithAdvanceReceipt = false;
             }
         }
     }

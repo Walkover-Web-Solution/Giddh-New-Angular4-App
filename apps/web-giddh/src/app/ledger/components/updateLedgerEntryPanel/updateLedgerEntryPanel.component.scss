@@ -241,20 +241,21 @@ span.eligible-ITC {
         width: 100%;
     }
 }
+.edit-adjustment {
+    padding: 0 5px 0;
+}
 .icon-info{
     color: $gray;
     cursor: pointer;
-    padding: 5px;
+    padding: 8px 5px 0;
 }
 .adusted-info {
-    position: absolute;
     background-color: $white;
     padding: 15px;
     z-index: 1;
     max-width: 360px;
-    left: 135px;
     box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    color: $nero;
+    color: $dark-gray;
     .info-text{
         font-family: 'opensans-regular';
     }
