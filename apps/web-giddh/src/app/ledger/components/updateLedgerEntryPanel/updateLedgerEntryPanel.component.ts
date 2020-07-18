@@ -1290,11 +1290,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
 
             this.invoiceList = [];
-            this.ledgerService.GetInvoiceList({ accountUniqueName: this.accountUniqueName, status: 'unpaid' }).subscribe((res: any) => {
-                _.map(res.body.invoiceList, (o) => {
-                    this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
-                });
-            });
+            // this._ledgerService.GetInvoiceList({ accountUniqueName: this.accountUniqueName, status: 'unpaid' }).subscribe((res: any) => {
+            //     _.map(res.body.invoiceList, (o) => {
+            //         this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
+            //     });
+            // });
+        } else {
+            this.invoiceList = [];
         }
     }
 
@@ -1689,6 +1691,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
+    /**
+     * Payment adjustment handler
+     *
+     * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}} event Adjustment handler
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
     public getAdjustedPaymentData(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
         console.log(this.vm.selectedLedger);
         if (event && event.adjustPaymentData && event.adjustVoucherData) {
@@ -1718,6 +1726,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.adjustPaymentModal.hide();
     }
 
+    /**
+     * Close voucher adjustment modal handler
+     *
+     * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}} event Close event
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
     public closeAdjustmentModal(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
         if (event && event.adjustPaymentData &&
             !event.adjustVoucherData.adjustments.length) {
@@ -1776,6 +1790,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.adjustPaymentModal.show();
     }
 
+    /**
+     * Initializes the variables based on adjustments made to show/hide sections on UI
+     *
+     * @private
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
     private makeAdjustmentCalculation(): void {
         if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments && this.vm.selectedLedger.voucherAdjustments.adjustments.length) {
             if (this.vm.selectedLedger.voucherAdjustments.adjustments.every(adjustment => adjustment.voucherType === 'sales')) {
