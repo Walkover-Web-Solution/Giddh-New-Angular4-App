@@ -1322,7 +1322,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @private
      * @memberof NewLedgerEntryPanelComponent
      */
-    private openAdjustPaymentModal() {
+    private openAdjustPaymentModal(): void {
         this.adjustPaymentModal.show();
     }
 }

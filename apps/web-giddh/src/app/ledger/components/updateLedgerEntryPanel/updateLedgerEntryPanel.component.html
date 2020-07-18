@@ -623,7 +623,7 @@
                             <i class="icon-info" [popover]="adjustmentPopOverTemplate" [outsideClick]="true" containerClass="adjustment-popover" placement="bottom right"></i>
                         </p>
                         <ng-template #adjustmentPopOverTemplate>
-                            <div class="adusted-info">
+                            <div class="adjusted-info">
                                 <p class="mb-1"><strong>Adjustment</strong></p>
                                 <p class="info-text">The selected entry is a part of {{vm.selectedLedger?.voucherNumber}}. All the
                                     adjustment will reflect
@@ -669,7 +669,7 @@
                             <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" (click)="openAdjustInvoiceEditMode();$event.stopPropagation();">
                                 <i class="icon-edit11 font-10"></i>
                                 <i class="icon-info"></i>
-                                <div class="adusted-info">
+                                <div class="adjusted-info">
                                     <p class="mb-1"><strong>Adjustment</strong></p>
                                     <p class="info-text">The selected entry is a part of Invoice# 43242. All the
                                         adjustment will reflect

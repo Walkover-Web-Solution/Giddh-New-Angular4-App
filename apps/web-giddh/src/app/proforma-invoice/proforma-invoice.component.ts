@@ -397,6 +397,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** Inventory Settings */
     public inventorySettings: any;
     public companyCountryCode: string = '';
+    /** Stores the adjustment data */
     public advanceReceiptAdjustmentData: VoucherAdjustments;
     public adjustPaymentBalanceDueData: number = 0;
     public totalAdvanceReceiptsAdjustedAmount: number = 0;
@@ -1878,20 +1879,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.isSalesInvoice && this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
                 if (this.advanceReceiptAdjustmentData.adjustments.length) {
                     const adjustments = cloneDeep(this.advanceReceiptAdjustmentData.adjustments);
-                    adjustments.forEach(adjustment => {
-                        adjustment.adjustmentAmount = adjustment.balanceDue;
-                        delete adjustment.balanceDue;
-                    });
-                    requestObject.voucherAdjustments = {
-                        adjustments
-                    };
+                    if (adjustments) {
+                        adjustments.forEach(adjustment => {
+                            adjustment.adjustmentAmount = adjustment.balanceDue;
+                            delete adjustment.balanceDue;
+                        });
+                        requestObject.voucherAdjustments = {
+                            adjustments
+                        };
 
-                    // requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
-                    requestObject.voucherAdjustments.adjustments.map(item => {
-                        if (item && item.voucherDate) {
-                            item.voucherDate = item.voucherDate.replace(/\//g, '-');
-                        }
-                    });
+                        // requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
+                        requestObject.voucherAdjustments.adjustments.map(item => {
+                            if (item && item.voucherDate) {
+                                item.voucherDate = item.voucherDate.replace(/\//g, '-');
+                            }
+                        });
+                    }
                 } else {
                     this.advanceReceiptAdjustmentData.adjustments = [];
                     requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
@@ -3138,9 +3141,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (!this.advanceReceiptAdjustmentData) {
                         this.advanceReceiptAdjustmentData.adjustments = [];
                     } else {
-                        this.advanceReceiptAdjustmentData.adjustments.forEach(adjustment => {
-                            delete adjustment.balanceDue;
-                        });
+                        if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
+                            this.advanceReceiptAdjustmentData.adjustments.forEach(adjustment => {
+                                delete adjustment.balanceDue;
+                            });
+                        }
                     }
                     requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
                 }
@@ -4774,9 +4779,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
         // this.invFormData.voucherDetails.balanceDue = advanceReceiptsAdjustEvent.adjustPaymentData.balanceDue;
-        this.advanceReceiptAdjustmentData.adjustments.forEach(adjustment => {
-            adjustment.adjustmentAmount = adjustment.balanceDue;
-        });
+        if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
+            this.advanceReceiptAdjustmentData.adjustments.forEach(adjustment => {
+                adjustment.adjustmentAmount = adjustment.balanceDue;
+            });
+        }
         this.adjustPaymentData = advanceReceiptsAdjustEvent.adjustPaymentData;
         if (this.adjustPaymentData.totalAdjustedAmount) {
             this.isAdjustAmount = true;
