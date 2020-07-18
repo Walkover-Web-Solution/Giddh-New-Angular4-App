@@ -231,6 +231,8 @@ export class GeneralActions {
         }
     }
 
+    /** Update index db action while updating any account **/
+
     public updateIndexDb(payload: UpdateDbRequest) {
         return {
             type: GENERAL_ACTIONS.UPDATE_INDEX_DB,
