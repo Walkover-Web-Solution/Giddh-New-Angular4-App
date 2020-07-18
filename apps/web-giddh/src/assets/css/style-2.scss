@@ -9343,6 +9343,22 @@ span#HW_badge_cont:nth-child(3) {
 .giddh-datepicker {
     cursor: pointer !important;
 }
+.setting-items{
+    ul{
+        li{
+            a{
+                span{
+                    i{
+                        color: $dim-gray;
+                        margin-right: 10px;
+                        font-size: 11px;
+                    }
+                }
+            }
+        }
+    }
+}
+
 /* responsive */
 
 @media (max-width: 1440px) {
