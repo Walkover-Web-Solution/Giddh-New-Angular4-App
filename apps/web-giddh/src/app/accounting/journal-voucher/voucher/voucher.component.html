@@ -27,7 +27,7 @@
                                 [ngClass]="{'activeRow': (isSelectedRow && selectedIdx === i) || (!selectedIdx && !isSelectedRow && i == 0)}">
                                 <td [style.width.px]="40">
                                     <input onReturn type="text" class="form-control txtCpc byTo"
-                                        [disabled]="i === 0 && !isFirstRowDeleted" [ngModel]="transaction.type"
+                                        [disabled]="(i === 0 && !isFirstRowDeleted) || (requestObj.voucherType === 'Receipt')" [ngModel]="transaction.type"
                                         (ngModelChange)="selectEntryType(transaction, $event, i)"
                                         (focus)="selectRow(true,i);hideListItems()"
                                         [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
