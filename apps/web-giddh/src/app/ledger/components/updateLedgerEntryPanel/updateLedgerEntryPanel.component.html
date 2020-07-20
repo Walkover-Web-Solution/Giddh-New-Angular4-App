@@ -925,11 +925,11 @@
                                                     <div class="item">{{ option.label }}
                                                     </div>
                                                     <div class="item_unq">
-                                                        (Dated: {{ option.invoice?.voucherDate}})
+                                                        (Dated: {{ option.additional?.voucherDate}})
                                                     </div>
                                                     <div class="item_unq">
                                                         (Due:
-                                                        {{ option.invoice?.balanceDue?.amountForAccount | giddhCurrency }})
+                                                        {{ option.additional?.balanceDue?.amountForAccount | giddhCurrency }})
                                                     </div>
                                                 </a>
                                             </ng-template>

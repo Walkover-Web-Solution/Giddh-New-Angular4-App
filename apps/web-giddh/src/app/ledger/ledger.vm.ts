@@ -355,7 +355,6 @@ export class BlankLedgerVM {
     public selectedCurrencyToDisplay?: 0 | 1 = 0;
     public passportNumber?: string;
     public touristSchemeApplicable?: boolean;
-    public invoiceLinkingRequest?: IInvoiceLinkingRequest;
 }
 
 export class IInvoiceLinkingRequest {
@@ -364,6 +363,7 @@ export class IInvoiceLinkingRequest {
 
 export class ILinkedInvoice {
     public invoiceUniqueName: string;
+    public voucherType: string;
 }
 
 export class TransactionVM {
@@ -395,6 +395,7 @@ export class TransactionVM {
     public reverseChargeTaxableAmount?: number;
     public shouldShowRcmEntry?: boolean;
     public advanceReceiptAmount?: number = 0;
+    public invoiceLinkingRequest?: IInvoiceLinkingRequest;
 }
 
 export interface IInventory {

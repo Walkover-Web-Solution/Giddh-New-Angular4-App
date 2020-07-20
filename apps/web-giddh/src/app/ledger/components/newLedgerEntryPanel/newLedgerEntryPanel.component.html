@@ -341,11 +341,11 @@
                                                 <div class="item">{{ option.label }}
                                                 </div>
                                                 <div class="item_unq">
-                                                    (Dated: {{ option.invoice?.voucherDate}})
+                                                    (Dated: {{ option.additional?.voucherDate}})
                                                 </div>
                                                 <div class="item_unq">
                                                     (Due:
-                                                    {{ option.invoice?.balanceDue.amountForAccount | giddhCurrency }})
+                                                    {{ option.additional?.balanceDue.amountForAccount | giddhCurrency }})
                                                 </div>
                                             </a>
                                         </ng-template>
@@ -462,7 +462,7 @@
                     <label class="pull-left cp fs16">
 
                         <input class="pull-left" type="checkbox" name="generateInvoice"
-                            [disabled]="(isAdvanceReceipt && blankLedger.generateInvoice || selectedInvoiceForCreditNote) ? 'disabled' : null"
+                            [disabled]="((isAdvanceReceipt || blankLedger.voucherType === 'credit note') && blankLedger.generateInvoice) ? 'disabled' : null"
                             [(ngModel)]="blankLedger.generateInvoice">
                         Generate Voucher
                     </label>

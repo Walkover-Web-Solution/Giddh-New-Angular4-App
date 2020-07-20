@@ -1208,7 +1208,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
             if (response && response.body) {
                 if (response.body.results) {
-                    response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber, value: invoice.uniqueName, invoice }))
+                    response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber, value: invoice.uniqueName, additional: invoice }))
                 } else {
                     this.forceClear$ = observableOf({ status: true });
                 }
@@ -1218,7 +1218,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     invoiceSelected = {
                         label: selectedInvoice.invoiceNumber,
                         value: selectedInvoice.invoiceUniqueName,
-                        invoice: selectedInvoice
+                        additional: selectedInvoice
                     };
                     const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
                     if (!linkedInvoice) {
@@ -1274,11 +1274,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public creditNoteInvoiceSelected(event: any): void {
-        if (event.value) {
+        if (event && event.value && event.additional) {
             this.vm.selectedLedger.invoiceLinkingRequest = {
                 linkedInvoices: [
                     {
-                        invoiceUniqueName: event.value
+                        invoiceUniqueName: event.value,
+                        voucherType: event.additional.voucherType
                     }
                 ]
             }
