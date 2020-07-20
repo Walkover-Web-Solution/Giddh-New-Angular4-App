@@ -352,11 +352,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.invalidInlineDate = "";
         });
 
-        this.scrollTopSubject$.pipe(debounceTime(700)).subscribe((response) => {
+        this.scrollTopSubject$.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((response) => {
             this.onScroll(response);
         });
 
-        this.scrollBottomSubject$.pipe(debounceTime(200)).subscribe((response) => {
+        this.scrollBottomSubject$.pipe(debounceTime(200), takeUntil(this.destroyed$)).subscribe((response) => {
             this.onScroll(response);
         });
 
