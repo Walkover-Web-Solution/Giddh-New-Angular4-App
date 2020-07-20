@@ -31,6 +31,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     public isValidForm: boolean = false;
     public amountErrorMessage: string = "Amount can't be greater than Credit Amount.";
     public invoiceAmountErrorMessage: string = "Amount can't be greater than Invoice Balance Due.";
+    public invalidAmountErrorMessage: string = "Please enter valid amount.";
     public taxList: any[] = [];
     public taxListSource$: Observable<IOption[]> = observableOf([]);
     public pendingInvoicesList: any[] = [];
@@ -53,7 +54,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
             if (this.transaction.voucherAdjustments) {
                 this.receiptEntries = this.transaction.voucherAdjustments;
                 this.totalEntries = this.receiptEntries.length;
-                this.validateEntries(false);
+                this.validateEntries();
             } else {
                 this.addNewEntry();
             }
@@ -95,13 +96,17 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         }
     }
 
-    public validateEntry(entry: any): void {
+    public validateEntry(entry: any): any {
         if (!entry.amount) {
             this.toaster.clearAllToaster();
-            this.toaster.errorToast("Please enter amount");
+            this.toaster.errorToast(this.invalidAmountErrorMessage);
+            this.isValidForm = false;
+            return;
         } else if (isNaN(parseFloat(entry.amount)) || entry.amount <= 0) {
             this.toaster.clearAllToaster();
-            this.toaster.errorToast("Please enter valid amount");
+            this.toaster.errorToast(this.invalidAmountErrorMessage);
+            this.isValidForm = false;
+            return;
         }
 
         if (entry.amount && !isNaN(parseFloat(entry.amount)) && entry.tax.percent) {
@@ -135,28 +140,39 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
             this.isValidForm = false;
         } else {
             entry.amount = parseFloat(entry.amount);
-            this.validateEntries(false);
+            this.validateEntries();
         }
     }
 
     public emitEntries(): void {
         let receiptTotal = 0;
+        let isValid = true;
 
         this.receiptEntries.forEach(receipt => {
-            receiptTotal += parseFloat(receipt.amount);
+            if(parseFloat(receipt.amount) === 0 || isNaN(parseFloat(receipt.amount))) {
+                isValid = false;
+            } else {
+                receiptTotal += parseFloat(receipt.amount);
+            }
         });
 
-        if (receiptTotal < this.transaction.amount) {
-            this.toaster.clearAllToaster();
-            this.toaster.errorToast(this.amountErrorMessage);
-            this.isValidForm = false;
-        } else if (receiptTotal > this.transaction.amount) {
-            this.toaster.clearAllToaster();
-            this.toaster.errorToast(this.amountErrorMessage);
-            this.isValidForm = false;
+        if(isValid) {
+            if (receiptTotal < this.transaction.amount) {
+                this.toaster.clearAllToaster();
+                this.toaster.errorToast(this.amountErrorMessage);
+                this.isValidForm = false;
+            } else if (receiptTotal > this.transaction.amount) {
+                this.toaster.clearAllToaster();
+                this.toaster.errorToast(this.amountErrorMessage);
+                this.isValidForm = false;
+            } else {
+                this.transaction.voucherAdjustments = this.receiptEntries;
+                this.entriesList.emit(this.transaction);
+            }
         } else {
-            this.transaction.voucherAdjustments = this.receiptEntries;
-            this.entriesList.emit(this.transaction);
+            this.isValidForm = false;
+            this.toaster.clearAllToaster();
+            this.toaster.errorToast(this.invalidAmountErrorMessage);
         }
     }
 
@@ -251,31 +267,39 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         this.receiptEntries = receiptEntries;
         this.totalEntries--;
 
-        this.validateEntries(true);
+        this.validateEntries();
     }
 
     public closePopup(): void {
         this.entriesList.emit(this.transaction);
     }
 
-    public validateEntries(addEntryIfInvalid: boolean): void {
+    public validateEntries(): void {
         let receiptTotal = 0;
+        let isValid = true;
 
         this.receiptEntries.forEach(receipt => {
-            receiptTotal += parseFloat(receipt.amount);
+            if(parseFloat(receipt.amount) === 0 || isNaN(parseFloat(receipt.amount))) {
+                isValid = false;
+            } else {
+                receiptTotal += parseFloat(receipt.amount);
+            }
         });
 
-        if (receiptTotal !== this.transaction.amount) {
-            this.isValidForm = false;
-            if (addEntryIfInvalid) {
-                this.addNewEntry();
+        if(isValid) {
+            if (receiptTotal !== this.transaction.amount) {
+                this.isValidForm = false;
+            } else {
+                this.isValidForm = true;
             }
         } else {
-            this.isValidForm = true;
+            this.isValidForm = false;
+            this.toaster.clearAllToaster();
+            this.toaster.errorToast(this.invalidAmountErrorMessage);
         }
     }
 
-    public formatAmount(entry): void {
+    public formatAmount(entry: any): void {
         entry.amount = Number(entry.amount);
     }
 }
