@@ -51,6 +51,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @Input() public showBottomBorderOnly: boolean = false;
     @Input() public salesShSelectPading: number = 0;
     @Input() public tabIndex: number = 0;
+    @Input() public fixedValue: string = "";
 
     @ViewChild('inputFilter') public inputFilter: ElementRef;
     @ViewChild('mainContainer') public mainContainer: ElementRef;
@@ -129,6 +130,10 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
                 this.propagateChange(this.filter);
             } else {
                 this.clearFilter();
+
+                if (this.fixedValue) {
+                    this.filter = this.fixedValue;
+                }
             }
             this.onHide.emit();
         }
@@ -372,6 +377,17 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
             if (this.forceClearReactive.status) {
                 this.filter = '';
                 this.clear();
+
+                if (this.fixedValue) {
+                    this.filter = this.fixedValue;
+                }
+            }
+        }
+
+        if ('fixedValue' in changes) {
+            if (changes.fixedValue && changes.fixedValue.currentValue) {
+                this.filter = changes.fixedValue.currentValue;
+                this.writeValue(this.filter);
             }
         }
     }

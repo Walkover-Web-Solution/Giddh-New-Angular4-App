@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, TemplateRef, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { BsModalRef, BsModalService, BsDatepickerDirective, PopoverDirective, ModalDirective } from 'ngx-bootstrap'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { takeUntil, filter, take } from 'rxjs/operators';
+import { takeUntil, filter, take, delay } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
@@ -24,7 +24,7 @@ import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
 import { VAT_SUPPORTED_COUNTRIES, RATE_FIELD_PRECISION } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, GenericRequestForGenerateSCD, PurchaseRecordRequest, SalesEntryClassMulticurrency, AmountClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency } from '../../models/api-models/Sales';
+import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, GenericRequestForGenerateSCD, PurchaseRecordRequest, SalesEntryClassMulticurrency, AmountClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, AccountDetailsClass } from '../../models/api-models/Sales';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { TaxResponse } from '../../models/api-models/Company';
 import { IContentCommon } from '../../models/api-models/Invoice';
@@ -40,6 +40,8 @@ import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../comm
 import { NgForm } from '@angular/forms';
 import { EMAIL_REGEX_PATTERN } from '../../shared/helpers/universalValidations';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
+import { LoaderState } from '../../loader/loader';
+import { LoaderService } from '../../loader/loader.service';
 
 const THEAD_ARR_READONLY = [
     {
@@ -99,7 +101,6 @@ const THEAD_ARR_READONLY = [
 })
 
 export class CreatePurchaseOrderComponent implements OnInit {
-    @ViewChild('customerNameDropDown') public customerNameDropDown: ShSelectComponent;
     /** Billing state instance */
     @ViewChild('vendorBillingState') vendorBillingState: ElementRef;
     /** Shipping state instance */
@@ -190,7 +191,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
     public isRcmEntry: boolean = false;
     public universalDate: any;
     public moment = moment;
-    public isPurchaseInvoice: boolean = false;
+    public isPurchaseInvoice: boolean = true;
     public baseCurrencySymbol: string = '';
     public customerAccount: any = { email: '' };
     public companyCurrency: string;
@@ -204,7 +205,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
     /** Stores the unique name of selected warehouse */
     public selectedWarehouse: string;
 
-    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService) {
+    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private cdr: ChangeDetectorRef) {
         this.getInventorySettings();
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.flattenAccountListStream$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$));
@@ -225,6 +226,13 @@ export class CreatePurchaseOrderComponent implements OnInit {
             '(max-width: 768px)'
         ]).subscribe(result => {
             this.isMobileScreen = result.matches;
+        });
+
+        this.loaderService.loaderState.pipe(delay(500), takeUntil(this.destroyed$)).subscribe((stateLoader: LoaderState) => {
+            // check if we really need to show a loader
+            if (!this.shouldShowLoader) {
+                return;
+            }
         });
 
         this.store.pipe(select(state => {
@@ -387,6 +395,8 @@ export class CreatePurchaseOrderComponent implements OnInit {
     public updateVendorDetails(accountDetails: any): void {
         console.log(accountDetails);
         if (accountDetails) {
+            this.purchaseOrder.voucherDetails.customerUniquename = accountDetails.uniqueName;
+            this.purchaseOrder.voucherDetails.customerName = accountDetails.name;
             this.purchaseOrder.account.uniqueName = accountDetails.uniqueName;
             this.purchaseOrder.account.customerName = accountDetails.name;
             this.purchaseOrder.account.name = accountDetails.name;
@@ -411,19 +421,34 @@ export class CreatePurchaseOrderComponent implements OnInit {
                 this.purchaseOrder.account.billingDetails.address = [];
                 this.purchaseOrder.account.billingDetails.address.push(accountDetails.addresses[0].address);
                 this.purchaseOrder.account.billingDetails.gstNumber = accountDetails.addresses[0].gstNumber;
-                this.purchaseOrder.account.billingDetails.state.name = accountDetails.addresses[0].state.name;
-                this.purchaseOrder.account.billingDetails.state.code = (accountDetails.addresses[0].state) ? (accountDetails.addresses[0].state.code) ? accountDetails.addresses[0].state.code : accountDetails.addresses[0].state.stateGstCode : accountDetails.addresses[0].stateCode;
-                this.purchaseOrder.account.billingDetails.stateCode = this.purchaseOrder.account.billingDetails.state.code;
-                this.purchaseOrder.account.billingDetails.stateName = accountDetails.addresses[0].state.name;
+                if(accountDetails.addresses[0].state) {
+                    this.purchaseOrder.account.billingDetails.state.name = accountDetails.addresses[0].state.name;
+                    this.purchaseOrder.account.billingDetails.state.code = (accountDetails.addresses[0].state) ? (accountDetails.addresses[0].state.code) ? accountDetails.addresses[0].state.code : accountDetails.addresses[0].state.stateGstCode : accountDetails.addresses[0].stateCode;
+                    this.purchaseOrder.account.billingDetails.stateCode = this.purchaseOrder.account.billingDetails.state.code;
+                    this.purchaseOrder.account.billingDetails.stateName = accountDetails.addresses[0].state.name;
+                } else {
+                    this.purchaseOrder.account.billingDetails.state.name = "";
+                    this.purchaseOrder.account.billingDetails.state.code = "";
+                    this.purchaseOrder.account.billingDetails.stateCode = "";
+                    this.purchaseOrder.account.billingDetails.stateName = "";
+                }
+                
                 this.purchaseOrder.account.billingDetails.panNumber = "";
 
                 this.purchaseOrder.account.shippingDetails.address = [];
                 this.purchaseOrder.account.shippingDetails.address.push(accountDetails.addresses[0].address);
                 this.purchaseOrder.account.shippingDetails.gstNumber = accountDetails.addresses[0].gstNumber;
-                this.purchaseOrder.account.shippingDetails.state.name = accountDetails.addresses[0].state.name;
-                this.purchaseOrder.account.shippingDetails.state.code = (accountDetails.addresses[0].state) ? (accountDetails.addresses[0].state.code) ? accountDetails.addresses[0].state.code : accountDetails.addresses[0].state.stateGstCode : accountDetails.addresses[0].stateCode;
-                this.purchaseOrder.account.shippingDetails.stateCode = this.purchaseOrder.account.shippingDetails.state.code;
-                this.purchaseOrder.account.shippingDetails.stateName = accountDetails.addresses[0].state.name;
+                if(accountDetails.addresses[0].state) {
+                    this.purchaseOrder.account.shippingDetails.state.name = accountDetails.addresses[0].state.name;
+                    this.purchaseOrder.account.shippingDetails.state.code = (accountDetails.addresses[0].state) ? (accountDetails.addresses[0].state.code) ? accountDetails.addresses[0].state.code : accountDetails.addresses[0].state.stateGstCode : accountDetails.addresses[0].stateCode;
+                    this.purchaseOrder.account.shippingDetails.stateCode = this.purchaseOrder.account.shippingDetails.state.code;
+                    this.purchaseOrder.account.shippingDetails.stateName = accountDetails.addresses[0].state.name;
+                } else {
+                    this.purchaseOrder.account.shippingDetails.state.name = "";
+                    this.purchaseOrder.account.shippingDetails.state.code = "";
+                    this.purchaseOrder.account.shippingDetails.stateCode = "";
+                    this.purchaseOrder.account.shippingDetails.stateName = "";
+                }
                 this.purchaseOrder.account.shippingDetails.panNumber = "";
             }
         }
@@ -506,7 +531,19 @@ export class CreatePurchaseOrderComponent implements OnInit {
     }
 
     public resetVendor(event: any): void {
-
+        if (event) {
+            if (!event.target.value) {
+                this.purchaseOrder.voucherDetails.customerName = null;
+                this.purchaseOrder.voucherDetails.customerUniquename = null;
+                this.purchaseOrder.accountDetails = new AccountDetailsClass();
+                this.purchaseOrder.accountDetails.uniqueName = 'cash';
+            }
+        } else {
+            this.purchaseOrder.voucherDetails.customerName = null;
+            this.purchaseOrder.voucherDetails.tempCustomerName = null;
+            this.purchaseOrder.accountDetails = new AccountDetailsClass();
+            this.purchaseOrder.accountDetails.uniqueName = 'cash';
+        }
     }
 
     public getAccountDetails(accountUniqueName: string): void {

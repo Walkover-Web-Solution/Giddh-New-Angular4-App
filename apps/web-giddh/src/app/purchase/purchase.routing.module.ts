@@ -22,8 +22,8 @@ const INVOICE_ROUTES: Routes = [
         children: [
             { path: '', redirectTo: 'purchase', pathMatch: 'full' },
             { path: 'invoice', component: PurchaseInvoiceComponent },
-            { path: 'create-purchase-order', component: CreatePurchaseOrderComponent },
-            { path: 'purchase-order', component: PurchaseOrderComponent },
+            { path: 'new-purchase-order', component: CreatePurchaseOrderComponent },
+            { path: 'purchase-orders', component: PurchaseOrderComponent },
             { path: 'purchase-order-invoice-preview', component: PurchaseOrderInvoicePreviewComponent },
             { path: 'purchase-setting', component: PurchaseSettingComponent },
             { path: 'purchase', component: PurchaseRecordComponent },
