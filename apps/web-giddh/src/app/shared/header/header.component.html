@@ -213,9 +213,12 @@
                             <button class="btn btn-link" (click)="dateSelectedCallback()">Today</button>
                         </li>
                         <li class="not-today cursor-pointer">
-                            <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
-                            <!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
-                            <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
+                            
+                                <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
+                                <!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
+                                <div class="input-date">
+                                     <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker"/>
+                                </div>
                         </li>
                         <!-- <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
 
@@ -346,7 +349,7 @@
                 <!-- Main menu -->
                 <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
                     <h6 class="mrB1">MENU
-                        <a [routerLink]="['/pages/all-modules']">
+                        <a (click)="navigateToAllModules()">
                             <img src="{{imgPath}}angle-round-icon.svg" class="pull-right" *ngIf="!isMobileSite" tooltip="Menu" placement="bottom" container="body">
                         </a>
                     </h6>
@@ -373,7 +376,7 @@
                         </a>
                     </li>
                     <li id="other" class="show-more-module">
-                        <a [routerLink]="['/pages/all-modules']">Show More...</a>
+                        <a (click)="navigateToAllModules()">Show More...</a>
                     </li>
                 </ul>
             </perfect-scrollbar>
@@ -492,7 +495,9 @@
                         <li class="daterang-picker not-today cursor-pointer">
                             <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
                             <!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
+                            <div class="input-date">
                             <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
+                            </div>
                         </li>
                         <!-- <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
                             <label class="btn btn-link">&nbsp;</label>

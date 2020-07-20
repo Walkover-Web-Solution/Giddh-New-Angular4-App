@@ -1,4 +1,5 @@
 import { ILogRequest, ILogsItem } from '../interfaces/logs.interface';
+import { IOption } from '../../theme/ng-select/ng-select';
 
 /**
  * Model for Audit Logs api request
@@ -34,3 +35,49 @@ export class LogsResponse {
     public size: number;
     public totalElements: number;
 }
+// Get audit log filter form
+export class AuditLogFilterForm {
+    public entity: string;
+    public operations: string[];
+}
+
+
+/** Audit log request */
+export class GetAuditLogsRequest {
+    public fromDate: string;
+    public toDate: string;
+    public operation: string;
+    public userUniqueName?: string;
+    public entity: string;
+    public accountUniqueName?: string;
+    public groupUniqueName?: string;
+}
+
+/** Audit log response*/
+export class AuditLogsResponse {
+    page: number;
+    count: number;
+    totalPages: number;
+    totalItems: number;
+    results: any[];
+    size: number;
+    fromDate?: any;
+    toDate?: any;
+    openingBalance?: OpeningBalance;
+    closingBalance?: ClosingBalance;
+    debitTotal: number;
+    creditTotal: number;
+}
+
+/** Opening balance */
+export interface OpeningBalance {
+    amount: number;
+    type: string;
+}
+
+/** Closing balance */
+export interface ClosingBalance {
+    amount: number;
+    type: string;
+}
+

@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, Input, ViewChild, ElementRef } from '@angular/core';
-import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal, AdvanceReceiptRequest, Adjustment } from '../../models/api-models/AdvanceReceiptsAdjust';
+import { VoucherAdjustments, AdjustAdvancePaymentModal, AdvanceReceiptRequest, Adjustment } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import * as moment from 'moment/moment';
 import { SalesService } from '../../services/sales.service';
@@ -11,6 +11,7 @@ import { ReplaySubject } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { ToasterService } from '../../services/toaster.service';
 import { cloneDeep } from '../../lodash-optimized';
+import { AdjustedVoucherType, SubVoucher } from '../../app.constant';
 
 
 @Component({
@@ -37,7 +38,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     public inputMaskFormat: string = '';
     public isInvalidForm: boolean = false;
     /** Message for toaster when due amount get negative  */
-    public exceedDueErrorMessage: string = 'The adjusted amount of the linked invoice\'s is more than this receipt due amount';
+    public exceedDueErrorMessage: string = 'The adjusted amount of the linked invoice is more than this receipt due amount';
     /** Exceed Amount from invoice amount after adjustment */
     public exceedDueAmount: number = 0;
 
@@ -62,20 +63,27 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         tdsTotal: 0,
     }
 
-    public adjustVoucherForm: AdvanceReceiptAdjustment;
+    public adjustVoucherForm: VoucherAdjustments;
     public getAllAdvanceReceiptsRequest: AdvanceReceiptRequest = {
         accountUniqueName: '',
         invoiceDate: ''
     };
-    public advanceReceiptAdjustmentPreUpdatedData: AdvanceReceiptAdjustment;
+    public advanceReceiptAdjustmentPreUpdatedData: VoucherAdjustments;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     @Input() public invoiceFormDetails;
     @Input() public isUpdateMode;
     @Input() public depositAmount = 0;
     // To use pre adjusted data which was adjusted earlier or in other trasaction by user
-    @Input() public advanceReceiptAdjustmentUpdatedData: AdvanceReceiptAdjustment;
-    @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @Output() public submitClicked: EventEmitter<{ adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
+    @Input() public advanceReceiptAdjustmentUpdatedData: VoucherAdjustments;
+    /** Stores the type of voucher adjustment */
+    @Input() public adjustedVoucherType: AdjustedVoucherType;
+    /** True if the current module is voucher module required as all voucher adjustments are not supported from API */
+    @Input() public isVoucherModule: boolean;
+
+    /** Close modal event emitter */
+    @Output() public closeModelEvent: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
+    /** Submit modal event emitter */
+    @Output() public submitClicked: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
 
     constructor(private store: Store<AppState>, private salesService: SalesService, private toaster: ToasterService) {
 
@@ -87,16 +95,19 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public ngOnInit() {
-        this.adjustVoucherForm = new AdvanceReceiptAdjustment();
+        this.adjustVoucherForm = new VoucherAdjustments();
         this.onClear();
         if (this.advanceReceiptAdjustmentUpdatedData) {
+            this.formatAdjustmentData(this.advanceReceiptAdjustmentUpdatedData.adjustments);
             this.advanceReceiptAdjustmentPreUpdatedData = cloneDeep(this.advanceReceiptAdjustmentUpdatedData);
-            this.adjustVoucherForm = this.advanceReceiptAdjustmentUpdatedData.adjustments.length ? this.advanceReceiptAdjustmentUpdatedData : this.adjustVoucherForm;
+            this.adjustVoucherForm = this.advanceReceiptAdjustmentUpdatedData.adjustments.length ? cloneDeep(this.advanceReceiptAdjustmentUpdatedData) : this.adjustVoucherForm;
             if (this.advanceReceiptAdjustmentUpdatedData && this.advanceReceiptAdjustmentUpdatedData.adjustments && this.advanceReceiptAdjustmentUpdatedData.adjustments.length && this.advanceReceiptAdjustmentUpdatedData.tdsTaxUniqueName) {
                 this.isTaxDeducted = true;
             } else {
                 this.isTaxDeducted = false;
             }
+        } else {
+            this.onClear();
         }
         if (this.invoiceFormDetails && this.invoiceFormDetails.voucherDetails) {
             if (typeof this.invoiceFormDetails.voucherDetails.voucherDate !== 'string') {
@@ -106,9 +117,51 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.invoiceFormDetails.voucherDetails.tdsTotal = this.invoiceFormDetails.voucherDetails.tdsTotal || 0;
             this.assignVoucherDetails();
         }
-        this.getAllAdvanceReceipts();
+        console.log('Invoice form details: ', this.invoiceFormDetails);
+        if (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt ||
+            this.adjustedVoucherType === AdjustedVoucherType.Sales) {
+            const voucherType =
+                (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt) ? 'receipt' : 'sales';
+            const customerUniqueName = this.invoiceFormDetails.voucherDetails.customerUniquename;
+            let requestObject;
+            if (typeof customerUniqueName === 'string') {
+                // New entry is created from ledger
+                requestObject = {
+                    accountUniqueNames: [customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName],
+                    voucherType,
+                    subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                }
+            } else {
+                // A ledger entry is updated
+                requestObject = {
+                    accountUniqueNames: [...customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName],
+                    voucherType,
+                    subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                }
+            }
+            this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate).subscribe((response) => {
+                console.log('Response received: ', response);
+                if (response && response.body) {
+                    this.allAdvanceReceiptResponse = response.body.results
+                    this.adjustVoucherOptions = [];
+                    if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
+                        this.allAdvanceReceiptResponse.forEach(item => {
+                            if (item && item.voucherDate) {
+                                item.voucherDate = item.voucherDate.replace(/-/g, '/');
+                                this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                                this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                            }
+                        });
+                    } else {
+                        this.toaster.warningToast("There is no advanced receipt for adjustment.");
+                    }
+                }
+            });
+        } else {
+            this.getAllAdvanceReceipts();
+        }
         if (this.isUpdateMode) {
-            this.calculateBalanceDue()
+            this.calculateBalanceDue();
         }
         this.store.select(p => p.company).pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
             if (obj && obj.taxes) {
@@ -142,7 +195,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         //     this.toaster.warningToast('The adjusted amount of the linked invoice\'s is more than this receipt due amount');
         //     return;
         // }
-        this.closeModelEvent.emit(true);
+        this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.filter(item => {
+            return item.voucherNumber !== '' || item.balanceDue.amountForAccount > 0;
+        });
+        this.closeModelEvent.emit({
+            adjustVoucherData: this.adjustVoucherForm,
+            adjustPaymentData: this.adjustPayment
+        });
     }
 
     /**
@@ -160,7 +219,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             adjustments: [
                 {
                     voucherNumber: '',
-                    dueAmount: {
+                    balanceDue: {
                         amountForAccount: 0,
                         amountForCompany: 0
                     },
@@ -387,16 +446,16 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         });
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
             this.adjustVoucherForm.adjustments.forEach((item, key) => {
-                if (!item.voucherNumber && item.dueAmount.amountForAccount) {
+                if (!item.voucherNumber && item.balanceDue.amountForAccount) {
                     isValid = false;
                     form.controls[`voucherName${key}`].markAsTouched();
-                } else if (item.voucherNumber && !item.dueAmount.amountForAccount) {
+                } else if (item.voucherNumber && !item.balanceDue.amountForAccount) {
                     isValid = false;
                     form.controls[`amount${key}`].markAsTouched();
                 }
             });
             this.adjustVoucherForm.adjustments = this.adjustVoucherForm.adjustments.filter(item => {
-                return item.voucherNumber !== '' || item.dueAmount.amountForAccount > 0;
+                return item.voucherNumber !== '' || item.balanceDue.amountForAccount > 0;
             });
         }
         if (this.isTaxDeducted) {
@@ -433,6 +492,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     public selectVoucher(event: IOption, entry: Adjustment, index: number): void {
         if (event && entry) {
             entry = cloneDeep(event.additional);
+            this.formatAdjustmentData([event.additional]);
             this.adjustVoucherForm.adjustments.splice(index, 1, entry);
             this.calculateTax(entry, index);
         }
@@ -448,8 +508,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         this.adjustVoucherOptions = this.getAdvanceReceiptUnselectedVoucher();
         if (this.adjustVoucherForm.adjustments.length && this.adjustVoucherForm.adjustments[index] && this.adjustVoucherForm.adjustments[index].voucherNumber) {
             let selectedItem = this.newAdjustVoucherOptions.find(item => item.value === this.adjustVoucherForm.adjustments[index].uniqueName);
-            delete selectedItem['isHilighted'];
-            this.adjustVoucherOptions.splice(0, 0, { value: selectedItem.value, label: selectedItem.label, additional: selectedItem.additional })
+            if (selectedItem) {
+                delete selectedItem['isHilighted'];
+                this.formatAdjustmentData([selectedItem.additional]);
+                this.adjustVoucherOptions.splice(0, 0, { value: selectedItem.value, label: selectedItem.label, additional: selectedItem.additional })
+            }
         }
         this.adjustVoucherOptions = _.uniqBy(this.adjustVoucherOptions, (item) => {
             return item.value && item.label.trim();
@@ -499,6 +562,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public calculateTax(entryData: Adjustment, index: number): void {
+        entryData.balanceDue.amountForCompany = entryData.balanceDue.amountForAccount;
         let entry: Adjustment = cloneDeep(entryData);
         // Object of selected voucher
         let selectedVoucherOptions;
@@ -517,21 +581,21 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                 return item.voucherNumber === entryData.voucherNumber;
             });
         }
-        if (selectedVoucherOptions && selectedVoucherPreAdjusted && selectedVoucherOptions.additional.dueAmount && selectedVoucherPreAdjusted.dueAmount) {
-            excessAmount = selectedVoucherOptions.additional.dueAmount.amountForAccount + selectedVoucherPreAdjusted.dueAmount.amountForAccount;
+        if (selectedVoucherOptions && selectedVoucherPreAdjusted && selectedVoucherOptions.additional.balanceDue && selectedVoucherPreAdjusted.balanceDue) {
+            excessAmount = selectedVoucherOptions.additional.balanceDue.amountForAccount + selectedVoucherPreAdjusted.balanceDue.amountForAccount;
         } else {
-            if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.dueAmount) {
-                excessAmount = selectedVoucherOptions.additional.dueAmount.amountForAccount;
+            if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.balanceDue) {
+                excessAmount = selectedVoucherOptions.additional.balanceDue.amountForAccount;
             }
         }
         // To restrict user to enter amount less or equal selected voucher amount
-        if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.dueAmount && this.adjustVoucherForm.adjustments[index].dueAmount.amountForAccount > excessAmount) {
-            this.adjustVoucherForm.adjustments[index].dueAmount.amountForAccount = cloneDeep(excessAmount);
-            entry.dueAmount.amountForAccount = excessAmount;
+        if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.balanceDue && this.adjustVoucherForm.adjustments[index].balanceDue.amountForAccount > excessAmount) {
+            this.adjustVoucherForm.adjustments[index].balanceDue.amountForAccount = cloneDeep(excessAmount);
+            entry.balanceDue.amountForAccount = excessAmount;
             this.adjustVoucherForm.adjustments = cloneDeep(this.adjustVoucherForm.adjustments);
         }
-        if (entry && entry.taxRate && entry.dueAmount.amountForAccount) {
-            let taxAmount = this.calculateInclusiveTaxAmount(entry.dueAmount.amountForAccount, entry.taxRate);
+        if (entry && entry.taxRate && entry.balanceDue.amountForAccount) {
+            let taxAmount = this.calculateInclusiveTaxAmount(entry.balanceDue.amountForAccount, entry.taxRate);
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = Number(taxAmount);
         } else {
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = 0.0;
@@ -550,8 +614,16 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails.balanceDue;
             let totalAmount: number = 0;
             this.adjustVoucherForm.adjustments.forEach(item => {
-                if (item && item.dueAmount && item.dueAmount.amountForAccount) {
-                    totalAmount += Number(item.dueAmount.amountForAccount);
+                if (this.isUpdateMode) {
+                    // In update mode adjusted amount holds the amount that is adjusted
+                    if (item && item.adjustmentAmount && item.adjustmentAmount.amountForAccount) {
+                        totalAmount += Number(item.adjustmentAmount.amountForAccount);
+                    }
+                } else {
+                    // In create mode balance due holds the amount that could be adjusted
+                    if (item && item.balanceDue && item.balanceDue.amountForAccount) {
+                        totalAmount += Number(item.balanceDue.amountForAccount);
+                    }
                 }
             });
             // this.adjustPayment.balanceDue = Number(this.adjustPayment.grandTotal.) - Number(totalAmount);
@@ -582,10 +654,43 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     public checkValidations(): void {
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
             this.adjustVoucherForm.adjustments.forEach((item, key) => {
-                if ((!item.voucherNumber && item.dueAmount.amountForAccount) || (item.voucherNumber && !item.dueAmount.amountForAccount) || (!item.voucherNumber && !item.dueAmount.amountForAccount && key > 0)) {
+                if ((!item.voucherNumber && item.balanceDue.amountForAccount) || (item.voucherNumber && !item.balanceDue.amountForAccount) || (!item.voucherNumber && !item.balanceDue.amountForAccount && key > 0)) {
                     this.isInvalidForm = true;
                 } else {
                     this.isInvalidForm = false;
+                }
+            });
+        }
+    }
+
+    /**
+     * Returns true if the voucher adjustment EDIT operation is supported
+     *
+     * @readonly
+     * @type {boolean} True if the voucher adjustment EDIT operation is supported
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    public shouldDisableEdit(item: Adjustment): boolean {
+        return this.isVoucherModule && item.voucherType && !(item.voucherType === 'receipt' && item.subVoucher === SubVoucher.AdvanceReceipt);
+    }
+
+    /**
+     * Used to format data as the adjustments array have two keys as
+     * 'balanceDue' and 'adjustmentAmount'. Former is received when any voucher
+     * is adjusted during creating entry and represents the BALANCE amount that can
+     * get adjusted and latter is received when any voucher
+     * is already adjusted and represents the ADJUSTED amount
+     *
+     * @private
+     * @memberof AdvanceReceiptAdjustmentComponent
+     */
+    private formatAdjustmentData(adjustmentData: Array<Adjustment>): void {
+        if (adjustmentData && adjustmentData.length) {
+            adjustmentData.forEach(adjustment => {
+                if (adjustment.adjustmentAmount && adjustment.adjustmentAmount.amountForAccount) {
+                    adjustment.balanceDue = adjustment.adjustmentAmount;
+                } else if (adjustment.balanceDue && adjustment.balanceDue.amountForAccount){
+                    adjustment.adjustmentAmount = adjustment.balanceDue;
                 }
             });
         }

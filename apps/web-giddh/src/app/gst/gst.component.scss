@@ -390,8 +390,8 @@ hr {
     position: absolute;
     top: 10px !important;
     left: 160px !important;
-    li{
-        a{
+    li {
+        a {
             background-color: transparent !important;
             border: none !important;
         }
@@ -468,7 +468,6 @@ hr {
 }
 /*responsive*/
 @media (max-width: 767px) {
-  
     .return-content {
         background-color: #fff;
     }
@@ -479,7 +478,7 @@ hr {
         padding: 15px 0;
     }
 }
-@media(max-width:575px){
+@media (max-width: 575px) {
     .month-picker {
         position: absolute;
         top: 0 !important;
