@@ -102,15 +102,19 @@ export class PurchaseOrder {
     constructor() {
         this.account = new Account();
         this.account.billingDetails = new Address();
+        this.account.billingDetails.address = [];
         this.account.billingDetails.state = new StateCode();
         this.account.shippingDetails = new Address();
         this.account.shippingDetails.state = new StateCode();
+        this.account.shippingDetails.address = [];
         this.account.currency = new Currency();
 
         this.company = new Company();
         this.company.billingDetails = new Address();
+        this.company.billingDetails.address = [];
         this.company.billingDetails.state = new StateCode();
         this.company.shippingDetails = new Address();
+        this.company.shippingDetails.address = [];
         this.company.shippingDetails.state = new StateCode();
         this.warehouse = new NameUniqueName();
         this.accountDetails = new AccountDetailsClass();
