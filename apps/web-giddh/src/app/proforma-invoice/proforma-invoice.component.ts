@@ -1500,7 +1500,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
                 if (response && response.body) {
                     if (response.body.results && response.body.results.length) {
-                        response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber, value: invoice.uniqueName, invoice }))
+                        response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber, value: invoice.uniqueName, additional: invoice }))
                     } else {
                         this.invoiceForceClearReactive$ = observableOf({ status: true });
                     }
@@ -1511,7 +1511,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             invoiceSelected = {
                                 label: selectedInvoice.invoiceNumber,
                                 value: selectedInvoice.invoiceUniqueName,
-                                invoice: selectedInvoice
+                                additional: selectedInvoice
                             };
                             const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
                             if (!linkedInvoice) {
@@ -1598,13 +1598,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {any} event Selected invoice for credit note
      * @memberof ProformaInvoiceComponent
      */
-    public creditNoteInvoiceSelected(ev): void {
-        this.invFormData.voucherDetails.invoiceLinkingRequest = {
-            linkedInvoices: [
-                {
-                    invoiceUniqueName: ev.value
-                }
-            ]
+    public creditNoteInvoiceSelected(event: any): void {
+        if (event && event.additional && event.value) {
+            this.invFormData.voucherDetails.invoiceLinkingRequest = {
+                linkedInvoices: [
+                    {
+                        invoiceUniqueName: event.value,
+                        voucherType: event.additional.voucherType
+                    }
+                ]
+            }
         }
     }
 
@@ -3267,9 +3270,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
                 }
                 if (this.isCreditNote && this.selectedInvoice) {
+                    const selectedLinkedVoucherType = this.invoiceList.find(invoice => invoice.value === this.selectedInvoice);
                     requestObject['invoiceLinkingRequest'] = {
                         linkedInvoices: [{
-                            invoiceUniqueName: this.selectedInvoice
+                            invoiceUniqueName: this.selectedInvoice,
+                            voucherType: selectedLinkedVoucherType && selectedLinkedVoucherType.additional ?
+                                selectedLinkedVoucherType.additional.voucherType : 'sales'
                         }]
                     };
                 }

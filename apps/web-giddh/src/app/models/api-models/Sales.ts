@@ -516,6 +516,7 @@ export class IInvoiceLinkingRequest {
 export class ILinkedInvoice {
     public invoiceUniqueName: string;
     public invoiceNumber?: string;
+    public voucherType: string;
 }
 
 export class TemplateDetailsClass {

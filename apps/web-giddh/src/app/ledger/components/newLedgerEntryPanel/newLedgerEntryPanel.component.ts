@@ -946,15 +946,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public creditNoteInvoiceSelected(event: any): void {
-        if (event && event.value && event.invoice) {
-            this.blankLedger.invoiceLinkingRequest = {
+        if (event && event.value && event.additional) {
+            this.currentTxn.invoiceLinkingRequest = {
                 linkedInvoices: [
                     {
-                        invoiceUniqueName: event.value
+                        invoiceUniqueName: event.value,
+                        voucherType: event.additional.voucherType
                     }
                 ]
             }
-            this.selectedInvoiceAmount = event.invoice.balanceDue.amountForAccount;
+            this.selectedInvoiceAmount = event.additional.balanceDue.amountForAccount;
         }
     }
 
@@ -981,6 +982,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.isAdvanceReceipt = true;
         } else if (event.value === VoucherTypeEnum.creditNote) {
             this.shouldShowAdvanceReceipt = false;
+            this.removeSelectedInvoice();
             this.getInvoiceListsForCreditNote.emit(true);
             this.blankLedger.generateInvoice = true;
         } else {
