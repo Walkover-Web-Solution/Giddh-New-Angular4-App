@@ -670,10 +670,9 @@ ul.sub-list {
 }
 .help-setting-icons {
     color: $white;
-    img {
-        width: 18px;
-        vertical-align: top;
-        margin-top: 2px;
+    i{
+        font-size: 18px;
+        line-height: 2;
     }
 }
 .help-support-aside {
