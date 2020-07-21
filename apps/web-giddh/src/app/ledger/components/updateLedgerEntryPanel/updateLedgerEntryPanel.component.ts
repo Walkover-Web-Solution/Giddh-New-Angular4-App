@@ -1197,7 +1197,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public getInvoiceListsForCreditNote(): void {
         const request = {
             accountUniqueNames: [this.vm.selectedLedger.particular.uniqueName, this.vm.selectedLedger.transactions[0].particular.uniqueName],
-            voucherType: VoucherTypeEnum.creditNote
+            voucherType: this.vm.selectedLedger.voucher.shortCode
         }
         let date;
         if (typeof this.vm.selectedLedger.entryDate === 'string') {
