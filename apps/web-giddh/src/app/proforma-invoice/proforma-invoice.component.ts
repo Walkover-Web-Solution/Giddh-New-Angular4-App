@@ -1204,6 +1204,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     } else {
                         this.isCustomerSelected = false;
                     }
+                    if (this.isMultiCurrencyModule()) {
+                        this.initializeWarehouse();
+                    }
                 }
 
                 // update account success then close sidebar, and update customer details
@@ -4490,6 +4493,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.shouldShowWarehouse = true;
                     }
                 }
+            } else {
+                this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
             }
         });
     }
