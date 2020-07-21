@@ -102,9 +102,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChildren('toAmountField') public toAmountFields: QueryList<ElementRef>;
     /** List of both date picker used (one in voucher date and other in check clearance date) */
     @ViewChildren(BsDatepickerDirective) bsDatePickers: QueryList<BsDatepickerDirective>;
-    public showInvNo: false;
-    public debtorDetailFormShow: boolean = false;
-    public debtorFormStatic: boolean = true;
     public showLedgerAccountList: boolean = false;
     public selectedInput: 'by' | 'to' = 'by';
     public requestObj: any = {};
@@ -166,30 +163,44 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any;
-
+    /* Variable to store if modal is out/in */
     public accountAsideMenuState: string = 'out';
     /** Category of accounts to display based on voucher type */
     public categoryOfAccounts: string;
+    /* Object of bootstrap modal */
     public modalRef: BsModalRef;
     /* This will hold the transaction details to use in adjustment popup */
     public currentTransaction: any;
+    /* This will hold list of pending invoices */
     public pendingInvoiceList: any[] = [];
+    /* Observable for list of pending invoices */
     public pendingInvoiceListSource$: Observable<IOption[]> = observableOf([]);
+    /* This will hold list of adjustment types */
     public adjustmentTypes: IOption[] = [];
+    /* Total number of adjusment entries */
     public totalEntries: number = 0;
+    /* Will check if form is valid */
     public isValidForm: boolean = false;
+    /* Error message for amount comparision with transaction amount */
     public amountErrorMessage: string = "Amount can't be greater than Credit Amount.";
+    /* Error message for comparision of adjusted amount with invoice */
     public invoiceAmountErrorMessage: string = "Amount can't be greater than Invoice Balance Due.";
+    /* Error message for invalid adjustment amount */
     public invalidAmountErrorMessage: string = "Please enter valid amount.";
+    /* This will hold list of tax */
     public taxList: any[] = [];
+    /* Observable for list of tax */
     public taxListSource$: Observable<IOption[]> = observableOf([]);
-    public pendingInvoicesList: any[] = [];
+    /* Object for pending invoices list search params */
     public pendingInvoicesListParams: any = {
         accountUniqueNames: [],
         voucherType: "receipt"
     };
+    /* List of adjustment entries */
     public receiptEntries: any[] = [];
+    /* Object for active transaction for adjustment */
     public adjustmentTransaction: any = {};
+    /* Selected transaction type */
     public selectedTransactionType: string = '';
 
     constructor(
@@ -262,51 +273,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         });
         this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).pipe(takeUntil(this.destroyed$));
-    }
-
-    public openAdjustmentModal(event: KeyboardEvent, transaction: any, template: TemplateRef<any>): void {
-        if (this.requestObj.voucherType === VOUCHERS.RECEIPT && transaction && transaction.type === "to" && transaction.amount && Number(transaction.amount) > 0) {
-            this.currentTransaction = transaction;
-
-            if (event.keyCode === 9 || event.keyCode === 13) {
-                this.modalRef = this.modalService.show(
-                    template,
-                    Object.assign({}, { class: 'modal-lg' })
-                );
-            }
-        }
-    }
-
-    public selectRef: IOption[] = [
-        { label: "Receipt", value: "Receipt" },
-        { label: "Advance Receipt", value: "Advance Receipt" },
-        { label: "Against  Reference", value: "Against  Reference" }
-    ];
-
-    public selectTax: IOption[] = [
-        { label: "Receipt", value: "Receipt" },
-        { label: "Advance Receipt", value: "Advance Receipt" },
-        { label: "Against  Reference", value: "Against  Reference" }
-    ];
-
-    public selectCrDr: IOption[] = [
-        { label: "To/Cr", value: "To/Cr" },
-        { label: "To/Dr", value: "To/Dr" }
-    ];
-
-    public SelectInvNoDateAmount: IOption[] = [
-        { label: "84358; 25/06/2020; 5000 cr.", value: "84358; 25/06/2020; 5000 cr." },
-        { label: "848; 25/06/2020; 5000 cr", value: "848; 25/06/2020; 5000 cr." }
-    ];
-
-    public shoewDebtorForm() {
-        this.debtorDetailFormShow = !this.debtorDetailFormShow;
-        this.debtorFormStatic = !this.debtorFormStatic;
-    }
-
-    public closeDebtorDetailForm() {
-        this.debtorDetailFormShow = !this.debtorDetailFormShow;
-        this.debtorFormStatic = !this.debtorFormStatic;
     }
 
     public ngOnInit() {
@@ -805,18 +771,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                                 data.transactions[totalTransactions] = {
                                     advanceReceiptAmount: advanceReceiptAmount,
                                     amount: Number(adjustment.amount),
-                                    applyApplicableTaxes: adjustmentParentEntry.applyApplicableTaxes,
-                                    currentBalance: adjustmentParentEntry.applyApplicableTaxes,
+                                    applyApplicableTaxes: byEntry.applyApplicableTaxes,
+                                    currentBalance: byEntry.applyApplicableTaxes,
                                     discounts: [],
                                     inventory: [],
-                                    isInclusiveTax: adjustmentParentEntry.isInclusiveTax,
+                                    isInclusiveTax: byEntry.isInclusiveTax,
                                     particular: byEntry.particular,
-                                    selectedAccount: adjustmentParentEntry.selectedAccount,
+                                    selectedAccount: byEntry.selectedAccount,
                                     stocks: null,
                                     tax: taxAmount,
                                     taxes: adjustment.tax.uniqueName ? [adjustment.tax.uniqueName] : [],
                                     total: Number(adjustment.amount),
-                                    type: adjustmentParentEntry.type,
+                                    type: byEntry.type,
                                     subVoucher: (adjustment.type === "advanceReceipt") ? "ADVANCE_RECEIPT" : ""
                                 };
                                 totalTransactions++;
@@ -1554,6 +1520,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.store.dispatch(this.generalAction.setPageTitle(currentPageObj));
     }
 
+    /**
+     * Callback for adjusment popup close event
+     *
+     * @param {*} event
+     * @memberof AccountAsVoucherComponent
+     */
     public handleEntries(event): void {
         this.receiptEntries = event.voucherAdjustments;
         this.totalEntries = (this.receiptEntries) ? this.receiptEntries.length : 0;
@@ -1562,6 +1534,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.modalRef.hide();
     }
 
+    /**
+     * This will get tax list
+     *
+     * @memberof AccountAsVoucherComponent
+     */
     public getTaxList(): void {
         this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -1579,8 +1556,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
     }
 
+    /**
+     * This will get list of all pending invoices
+     *
+     * @memberof AccountAsVoucherComponent
+     */
     public getInvoiceListForReceiptVoucher(): void {
-        this.salesService.getInvoiceListForReceiptVoucher(this.journalDate, this.pendingInvoicesListParams).subscribe(response => {
+        this.salesService.getInvoiceListForReceiptVoucher(moment(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT), this.pendingInvoicesListParams).subscribe(response => {
             if (response && response.status === "success" && response.body && response.body.results && response.body.results.length > 0) {
                 let pendingInvoiceList: IOption[] = [];
 
@@ -1595,6 +1577,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
     }
 
+    /**
+     * Callback for select tax in adjustment
+     *
+     * @param {*} event
+     * @param {*} entry
+     * @memberof AccountAsVoucherComponent
+     */
     public onSelectTax(event: any, entry: any): void {
         if (event && event.value) {
             entry.tax.name = this.taxList[event.value].name;
@@ -1615,6 +1604,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
+    /**
+     * Callback for select invoice in adjustment
+     *
+     * @param {*} event
+     * @param {*} entry
+     * @memberof AccountAsVoucherComponent
+     */
     public onSelectInvoice(event: any, entry: any): void {
         if (event && event.value) {
             entry.invoice = {
@@ -1635,6 +1631,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
+    /**
+     * This will remove the adjustment entry
+     *
+     * @param {number} index
+     * @memberof AccountAsVoucherComponent
+     */
     public removeReceiptEntry(index: number): void {
         let receiptEntries = [];
         let loop = 0;
@@ -1651,6 +1653,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.validateEntries();
     }
 
+    /**
+     * This will validate all the adjustment entries
+     *
+     * @memberof AccountAsVoucherComponent
+     */
     public validateEntries(): void {
         let receiptTotal = 0;
         let isValid = true;
@@ -1676,11 +1683,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
+    /**
+     * This will add new row for adjusment
+     *
+     * @memberof AccountAsVoucherComponent
+     */
     public addNewAdjustmentEntry(): void {
         if (this.totalEntries === 0 || (this.receiptEntries[this.totalEntries - 1] && this.receiptEntries[this.totalEntries - 1] !== undefined && parseFloat(this.receiptEntries[this.totalEntries - 1].amount) > 0)) {
             this.receiptEntries[this.totalEntries] = {
                 type: 'receipt',
-                note: '',
+                //note: '',
                 tax: {
                     name: '',
                     uniqueName: '',
@@ -1700,12 +1712,26 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
+    /**
+     * This will get called on enter/tab in adjustment amount field
+     *
+     * @param {KeyboardEvent} event
+     * @param {*} entry
+     * @memberof AccountAsVoucherComponent
+     */
     public validateAmount(event: KeyboardEvent, entry: any): void {
         if ((event.keyCode === 9 || event.keyCode === 13) && this.adjustmentTransaction && this.adjustmentTransaction.amount) {
             this.validateEntry(entry);
         }
     }
 
+    /**
+     * This will validate the adjustment entry
+     *
+     * @param {*} entry
+     * @returns {*}
+     * @memberof AccountAsVoucherComponent
+     */
     public validateEntry(entry: any): any {
         if (!entry.amount) {
             this._toaster.clearAllToaster();
@@ -1750,5 +1776,36 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             entry.amount = parseFloat(entry.amount);
             this.validateEntries();
         }
+    }
+
+    /**
+     * This will open the adjustment popup if voucher is receipt and transaction is To/Cr
+     *
+     * @param {KeyboardEvent} event
+     * @param {*} transaction
+     * @param {TemplateRef<any>} template
+     * @memberof AccountAsVoucherComponent
+     */
+    public openAdjustmentModal(event: KeyboardEvent, transaction: any, template: TemplateRef<any>): void {
+        if (this.requestObj.voucherType === VOUCHERS.RECEIPT && transaction && transaction.type === "to" && transaction.amount && Number(transaction.amount) > 0 && !transaction.voucherAdjustments) {
+            this.currentTransaction = transaction;
+
+            if (event.keyCode === 9 || event.keyCode === 13) {
+                this.modalRef = this.modalService.show(
+                    template,
+                    Object.assign({}, { class: 'modal-lg' })
+                );
+            }
+        }
+    }
+
+    /**
+     * This will format the amount
+     *
+     * @param {*} entry
+     * @memberof AccountAsVoucherComponent
+     */
+    public formatAmount(entry: any): void {
+        entry.amount = Number(entry.amount);
     }
 }
