@@ -25,8 +25,51 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-setting-header:before {
+.icon-branch:before {
+  content: "\e905";
+}
+.icon-company-profile:before {
+  content: "\e906";
+}
+.icon-discount:before {
+  content: "\e907";
+}
+.icon-financial-year:before {
+  content: "\e908";
+}
+.icon-integration:before {
+  content: "\e909";
+}
+.icon-invoice-managment:before {
+  content: "\e90a";
+}
+.icon-linked-accounts:before {
+  content: "\e90b";
+}
+.icon-manage-user:before {
+  content: "\e90c";
+}
+.icon-subscription:before {
+  content: "\e90d";
+}
+.icon-tags:before {
+  content: "\e90e";
+}
+.icon-taxes:before {
+  content: "\e90f";
+}
+.icon-trigger:before {
+  content: "\e910";
+}
+.icon-user:before {
+  content: "\e911";
+}
+.icon-warehouse:before {
+  content: "\e912";
+}
+.icon-header-setting:before {
   content: "\e979";
+  color: #f7f8fa;
 }
 .icon-history-icon:before {
   content: "\e900";
@@ -87,48 +130,6 @@
 }
 .icon-tick:before {
   content: "\e904";
-}
-.icon-branch:before {
-  content: "\e905";
-}
-.icon-company-profile:before {
-  content: "\e906";
-}
-.icon-discount:before {
-  content: "\e907";
-}
-.icon-financial-year:before {
-  content: "\e908";
-}
-.icon-integration:before {
-  content: "\e909";
-}
-.icon-invoice-managment:before {
-  content: "\e90a";
-}
-.icon-linked-accounts:before {
-  content: "\e90b";
-}
-.icon-manage-user:before {
-  content: "\e90c";
-}
-.icon-subscription:before {
-  content: "\e90d";
-}
-.icon-tags:before {
-  content: "\e90e";
-}
-.icon-taxes:before {
-  content: "\e90f";
-}
-.icon-trigger:before {
-  content: "\e910";
-}
-.icon-user:before {
-  content: "\e911";
-}
-.icon-warehouse:before {
-  content: "\e912";
 }
 .icon-help-support-icon:before {
   content: "\e913";
