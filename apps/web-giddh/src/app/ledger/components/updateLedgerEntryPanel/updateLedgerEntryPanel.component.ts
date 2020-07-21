@@ -1226,7 +1226,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.invoiceList.push(invoiceSelected);
                     }
                 }
-                _.uniqBy(this.invoiceList, 'value');
+                this.invoiceList = _.uniqBy(this.invoiceList, 'value');
                 this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
             }
         });
