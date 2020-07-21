@@ -31,12 +31,12 @@
                                 [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)"
                                 class="form-control" />
                         </span>
-                        <button class="clear-filter btn btn-filter align-items-center d-flex justify-content-center" *ngIf="!isUniversalDateApplicable && isMobileView" (click)="resetDateSearch()">
+                            <button class="clear-filter btn btn-filter align-items-center d-flex justify-content-center" *ngIf="!isUniversalDateApplicable && isMobileView" (click)="resetDateSearch()">
                             <span class="icon-cross"></span> Clear Filter
                             </button>
-                       
-                    </div>
-                        
+
+                        </div>
+
                         <span>
                             <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(false)">
                                 Generate Multiple
@@ -222,7 +222,8 @@
 
                     <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''" data-title="Account">
                         {{item.account.name}}
-                        <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component [accountUniqueName]="item.account.uniqueName" [from]="this.ledgerSearchRequest.from" [to]="this.ledgerSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
+                        <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component [accountUniqueName]="item.account.uniqueName" [from]="this.ledgerSearchRequest.from" [to]="this.ledgerSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName"
+                            [voucherType]="selectedVoucher">
                         </div>
                     </td>
 
