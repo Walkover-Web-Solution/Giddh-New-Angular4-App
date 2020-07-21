@@ -178,8 +178,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-            this.dateFieldPosition.y = element.clientY + 20; // 20 px for inputbox height
+            this.dateFieldPosition = this.generalService.getPosition(element.target, element);
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
