@@ -118,8 +118,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.assignVoucherDetails();
         }
         console.log('Invoice form details: ', this.invoiceFormDetails);
-        if (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt ||
-            this.adjustedVoucherType === AdjustedVoucherType.Sales) {
+        if (!this.isVoucherModule) {
             const voucherType =
                 (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt) ? 'receipt' : 'sales';
             const customerUniqueName = this.invoiceFormDetails.voucherDetails.customerUniquename;
@@ -153,7 +152,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                             }
                         });
                     } else {
-                        this.toaster.warningToast("There is no advanced receipt for adjustment.");
+                        if (this.isVoucherModule) {
+                            this.toaster.warningToast("There is no advanced receipt for adjustment.");
+                        } else {
+                            this.toaster.warningToast("There is no voucher for adjustment.");
+                        }
                     }
                 }
             });
@@ -279,7 +282,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                                 }
                             });
                         } else {
-                            this.toaster.warningToast("There is no advanced receipt for adjustment.");
+                            if (this.isVoucherModule) {
+                                this.toaster.warningToast("There is no advanced receipt for adjustment.");
+                            }
                         }
                     }
                 }
