@@ -31,6 +31,11 @@ table {
     table-layout: fixed;
 }
 
+.head-report{
+    font-size: 20px;
+    font-weight: bold; 
+    text-transform:capitalize;
+}
 /* .table.basic tbody tr td {
     background-color: #fff;
 }
@@ -312,4 +317,30 @@ button.btn.btn-filter {
 }
 .group-not-found {
     text-transform: none;
+}
+
+
+@media (max-width:767px){
+    .btn-pink{
+        display:none;
+    }
+    .advance-icon{
+        display:none;
+    }
+    .head-report{
+        margin-right:0 !important;
+        font-size: 16px;
+    }
+    .btn-link{
+        font-size:12px;
+        margin-right:0 !important;
+        margin-top:0 !important;
+    }
+    .inventoryStockTable{
+        table-layout: auto;
+    }
+    .basic > tbody > tr > td,
+        .basic > thead > tr > th {
+            min-width: 100px !important;
+        }
 }

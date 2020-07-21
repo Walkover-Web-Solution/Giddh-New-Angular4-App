@@ -9617,6 +9617,16 @@ span#HW_badge_cont:nth-child(3){
 
 @media (max-width: 767px) {
 
+    .daterangepicker.ltr .ranges {
+        ul{
+            width:100%;
+            li{
+                display:inline-block;
+                margin-right: 5px;
+            }
+        }
+    }
+
     .remove-header-lower-layer{
         .mobile-back-btn{
             display: inline-flex !important;
@@ -9992,6 +10002,12 @@ span#HW_badge_cont:nth-child(3){
 @media (max-width: 575px) {
     .daterangepicker.ltr .ranges {
         float: left;
+        ul{
+            li{
+                font-size: 11px;
+                padding: 3px 4px;
+            }
+        }
     }
     .custom-tabs .top-bar {
         padding-top: 10px;

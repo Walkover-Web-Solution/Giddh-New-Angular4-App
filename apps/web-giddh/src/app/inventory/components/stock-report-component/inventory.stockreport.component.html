@@ -34,7 +34,7 @@
 
         <div class="d-flex" style="justify-content: space-between">
             <div class="d-flex" style="align-items: center">
-                <h2 style="font-size: 20px;font-weight: bold;text-transform:capitalize;">
+                <h2 class="head-report">
                     <span *ngIf="stockReport && stockReport.stockUnit">
                         {{stockReport.stockName}}</span> (Stock)</h2>
 
@@ -75,6 +75,7 @@
     </form>
 
     <section>
+        <div style="overflow-x:auto">
         <table class="table basic table-border"
             [ngClass]="{'mB100': stockReport && stockReport.transactions && stockReport.transactions.length>6}">
             <thead>
@@ -392,6 +393,7 @@
                 </tr>
             </tfoot>
         </table>
+        </div>
     </section>
 
 

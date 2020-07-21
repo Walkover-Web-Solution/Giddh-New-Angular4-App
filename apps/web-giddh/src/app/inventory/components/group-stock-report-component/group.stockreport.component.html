@@ -48,7 +48,7 @@
     <div class="fb__1-container mrB1">
         <div class="d-flex" style="justify-content: space-between;width: 100%">
             <div class="d-flex" style="align-items: center">
-                <h2 class="mr-2" style="font-size: 20px;font-weight: bold; text-transform:capitalize;"
+                <h2 class="mr-2 head-report"
                     *ngIf="groupStockReport">
                     <span>{{groupStockReport.stockGroupName}}</span> (Group)</h2>
 
@@ -93,6 +93,7 @@
     </div>
 
     <section>
+        <div style="overflow-x:auto">
         <table class="table basic table-border inventoryStockTable"
             [ngClass]="{'mB100': groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length>6}">
             <thead>
@@ -423,7 +424,7 @@
                 </tr>
             </tfoot>
         </table>
-
+        </div>
 
         <!-- sticky Footer -->
         <section class="mt-5"

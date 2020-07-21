@@ -5221,6 +5221,16 @@ form#groupDetailForm {
     }
 }
 @media only screen and (max-width: 767px) {
+    #inventory-sidebar{
+        .parent-Group {
+            >.stock-grp-list {
+                >li {
+                    display: block !important;
+                }
+            }
+        }
+    }
+
     .mobileHeader {
         display: block;
         position: fixed !important;

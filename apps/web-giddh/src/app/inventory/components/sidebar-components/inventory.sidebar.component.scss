@@ -51,3 +51,22 @@ ul#dropdown-nested li:hover .dropdown-menu {
     opacity: 1;
     transition: .5s all ease;
 }
+
+.padd15{
+    .form-control{
+        width:205px;
+    }
+}
+
+@media (max-width:767px){
+    #inventory-sidebar {
+        min-height: 100%;
+        width: 100% !important;
+        padding-bottom: 0;
+        }
+        .padd15{
+            .form-control{
+                width:90%;
+            }
+        }
+    }
