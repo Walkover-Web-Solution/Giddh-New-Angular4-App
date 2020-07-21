@@ -877,7 +877,7 @@
                                 </td>
 
                                 <td class="pdR1"
-                                    *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur'      ||     vm.selectedLedger.voucher.shortCode == 'debit note' || vm.selectedLedger.voucher.shortCode == 'pay')">
+                                    *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur' || vm.selectedLedger.voucher.shortCode == 'pay')">
                                     <div class="form-group">
                                         <label class="default_clr">Invoice No.</label>
                                         <input type="text" placeholder="Invoice no." class="form-control"
@@ -912,9 +912,9 @@
 
                                 </td>
 
-                                <td class="pdR1" *ngIf="vm.selectedLedger.voucher.shortCode == 'credit note'">
+                                <td class="pdR1" *ngIf="vm.selectedLedger.voucher.shortCode == 'credit note' || vm.selectedLedger.voucher.shortCode == 'debit note'">
                                     <div class="form-group">
-                                        <label class="default_clr">Invoice No.</label>
+                                        <label class="default_clr">{{vm.selectedLedger.voucher.shortCode == 'debit note' ? 'Voucher' : 'Invoice'}} No.</label>
 
                                         <sh-select [options]="invoiceList" placeholder="Select Accounts"
                                             [(ngModel)]="selectedInvoice" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
@@ -936,7 +936,7 @@
                                         </sh-select>
                                     </div>
                                 </td>
-                                <td *ngIf="vm.selectedLedger.voucher.shortCode === 'credit note' && selectedInvoice" class="cp remove-invoice pdR2 hidden-xs" (click)="removeSelectedInvoice()">
+                                <td *ngIf="(vm.selectedLedger.voucher.shortCode === 'credit note' || vm.selectedLedger.voucher.shortCode === 'debit note') && selectedInvoice" class="cp remove-invoice pdR2 hidden-xs" (click)="removeSelectedInvoice()">
                                     <span class=“remove-invoice-icon”>×</span>
                                     <span class="remove-invoice-label">Remove</span>
                                 </td>

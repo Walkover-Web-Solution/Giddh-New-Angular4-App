@@ -480,7 +480,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     //#region transaction assignment process
                     this.vm.selectedLedger = resp[1];
 
-                    if (this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === 'credit note') {
+                    if (this.vm.selectedLedger && (this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.creditNote ||
+                        this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.debitNote)) {
                         this.getInvoiceListsForCreditNote();
                     }
                     // Check the RCM checkbox if API returns subvoucher as Reverse charge
@@ -1064,7 +1065,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         delete requestObj['tdsTaxes'];
         delete requestObj['tcsTaxes'];
 
-        if (requestObj.voucherType !== VoucherTypeEnum.creditNote) {
+        if (requestObj.voucherType !== VoucherTypeEnum.creditNote && requestObj.voucherType !== VoucherTypeEnum.debitNote) {
             requestObj.invoiceLinkingRequest = null;
         }
 
@@ -1185,7 +1186,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
                 });
             });
-        } else if (event.value === VoucherTypeEnum.creditNote) {
+        } else if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
             this.vm.selectedLedger.generateInvoice = true;
         } else {
