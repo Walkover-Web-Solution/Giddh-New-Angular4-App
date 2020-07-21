@@ -614,7 +614,7 @@
                     </div>
 
                     <!-- Advance receipts adjusted Invoice -->
-                    <div class="clearfix adjust-receipt font-14" *ngIf="isAdjustAdvanceReceiptSelected || isAdjustReceiptSelected">
+                    <div class="clearfix adjust-receipt font-14" *ngIf="vm.selectedLedger?.voucherAdjustments?.adjustments?.length">
                         <p class="bold">
                             Adjusted Amount
                             <a href="javascript:void(0)" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" (click)="openAdjustInvoiceEditMode();$event.stopPropagation();">
@@ -789,10 +789,10 @@
                         <table>
                             <tr>
                                 <td *ngIf="vm.selectedLedger.voucher.shortCode == 'advance-receipt' && isAdvanceReceipt" class="pdR1 pb-1">
-                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdjustAdvanceReceiptSelected" (change)="handleAdvanceReceiptAdjustment()">Adjust Advance Receipt
+                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdjustAdvanceReceiptSelected" (change)="handleVoucherAdjustment()">Adjust Advance Receipt
                                 </td>
                                 <td *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt' && !isAdvanceReceipt" class="pdR1 pb-1">
-                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdjustReceiptSelected" (change)="handleAdvanceReceiptAdjustment()">Adjust Receipt
+                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdjustReceiptSelected" (change)="handleVoucherAdjustment()">Adjust Receipt
                                 </td>
                             </tr>
                         </table>
