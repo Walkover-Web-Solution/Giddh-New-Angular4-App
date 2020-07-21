@@ -1,4 +1,4 @@
-import {map, switchMap} from 'rxjs/operators';
+import {map, switchMap, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Actions, Effect} from '@ngrx/effects';
 import {GroupService} from '../../services/group.service';
@@ -6,15 +6,17 @@ import {BaseResponse} from '../../models/api-models/BaseResponse';
 import {Action} from '@ngrx/store';
 import {GroupsWithAccountsResponse} from '../../models/api-models/GroupsWithAccounts';
 import {GENERAL_ACTIONS} from './general.const';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {FlattenAccountsResponse} from '../../models/api-models/Account';
 import {AccountService} from '../../services/account.service';
 import {States, StatesRequest} from '../../models/api-models/Company';
 import {CompanyService} from '../../services/companyService.service';
 import {CustomActions} from '../../store/customActions';
 import {IPaginatedResponse} from '../../models/interfaces/paginatedResponse.interface';
-import {IUlist} from '../../models/interfaces/ulist.interface';
+import {IUlist, UpdateDbRequest} from '../../models/interfaces/ulist.interface';
 import {CurrentPage} from '../../models/api-models/Common';
+import {DbService} from "../../services/db.service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Injectable()
 export class GeneralActions {
@@ -54,7 +56,49 @@ export class GeneralActions {
             switchMap((action: CustomActions) => this._companyService.getAllStates(action.payload)),
             map(resp => this.getAllStateResponse(resp)));
 
-    constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService, private _companyService: CompanyService) {
+    @Effect()
+    public updateIndexDb$: Observable<Action> = this.action$
+        .ofType(GENERAL_ACTIONS.UPDATE_INDEX_DB).pipe(
+            switchMap((action: CustomActions) => {
+                const payload: UpdateDbRequest = action.payload;
+                return this._dbService.getItemDetails(payload.uniqueName).pipe(map(itemData => ({itemData, payload})))
+            }),
+            switchMap(data => {
+                // debugger;
+                if (data.itemData && data.payload) {
+                    const payload = data.payload;
+                    const items = data.itemData;
+                    switch (payload.type) {
+                        case "accounts": {
+                            const matchedIndex = items.aidata.accounts.findIndex(item => item && item.uniqueName && item.uniqueName === payload.oldUniqueName);
+                            if (matchedIndex > -1) {
+                                items.aidata.accounts[matchedIndex] = {
+                                    ...items.aidata.accounts[matchedIndex],
+                                    uniqueName: payload.newUniqueName,
+                                    name: payload.name,
+                                    route: items.aidata.accounts[matchedIndex].route.replace(payload.oldUniqueName, payload.newUniqueName)
+                                }
+                                return this._dbService.insertFreshData(items).pipe(map(() => {
+                                    if (this.route.url.includes('/ledger/' + payload.oldUniqueName)) {
+                                        this.route.navigate(['pages', 'ledger', payload.newUniqueName]);
+                                    }
+                                    return this.updateIndexDbComplete()
+                                }));
+                            } else {
+                                return of(this.updateIndexDbComplete());
+                            }
+                        }
+                        default : {
+                            return of(this.updateIndexDbComplete())
+                        }
+                    }
+                } else {
+                    return of(this.updateIndexDbComplete());
+                }
+            })
+        )
+
+    constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService, private _companyService: CompanyService, private _dbService: DbService, private _activatedRoute: ActivatedRoute, private route: Router) {
         //
     }
 
@@ -184,6 +228,32 @@ export class GeneralActions {
         return {
             type: GENERAL_ACTIONS.UPDATE_CURRENT_LIABILITIES,
             payload: uniqueName
+        }
+    }
+
+    /** Update index db action while updating any account
+     * it will initiate update index db with new updated account info for accounts in sidebar *
+     * **/
+
+    public updateIndexDb(payload: UpdateDbRequest): CustomActions {
+        return {
+            type: GENERAL_ACTIONS.UPDATE_INDEX_DB,
+            payload: payload
+        }
+    }
+
+    /** UpdateIndexDbComplete calls after update index db finished and data has been updated in index db.**/
+
+    public updateIndexDbComplete(): CustomActions {
+        return {
+            type: GENERAL_ACTIONS.UPDATE_INDEX_DB_COMPLETE,
+        }
+    }
+
+    /** UpdateUIFromDB calls after ui has changed with new data from index db **/
+    public updateUiFromDb() : CustomActions {
+        return {
+            type: GENERAL_ACTIONS.UPDATE_UI_FROM_DB
         }
     }
 }

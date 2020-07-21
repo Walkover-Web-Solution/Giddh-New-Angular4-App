@@ -125,9 +125,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     @ViewChild('startDateElement') startDateElement: ElementRef;
     @ViewChild('endDateElement') endDateElement: ElementRef;
     @Input()
-    minDate: _moment.Moment;
+    minDate: _moment.Moment = _moment().subtract(1, 'year').startOf('month').month(0); // default min date of previous year first month
     @Input()
-    maxDate: _moment.Moment;
+    maxDate: _moment.Moment = _moment().add(1, 'year').endOf('month').month(11); // default max date of next year last month
     @Input()
     autoApply: boolean = false;
     @Input()
@@ -217,7 +217,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public invalidInlineEndDate: string = "";
     public invalidInlineDate: string = "";
     public isInlineDateFieldsShowing: boolean = false;
-    public scrollSubject$: Subject<any> = new Subject();
+    /* Observer for scroll to top event */
+    public scrollTopSubject$: Subject<any> = new Subject();
+    /* Observer for scroll to bottom event */
+    public scrollBottomSubject$: Subject<any> = new Subject();
     public activeMonth: any;
     public activeMonthHover: boolean = false;
     public invalidStartDate: string = "";
@@ -231,8 +234,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.rangeClicked = new EventEmitter();
         this.datesUpdated = new EventEmitter();
         this.locale = { ...this._locale };
-        this.updateMonthsInView();
         this.getFinancialYears();
+        this.updateMonthsInView();        
     }
 
     _locale: LocaleConfig = {};
@@ -349,7 +352,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.invalidInlineDate = "";
         });
 
-        this.scrollSubject$.pipe(debounceTime(400)).subscribe((response) => {
+        this.scrollTopSubject$.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((response) => {
+            this.onScroll(response);
+        });
+
+        this.scrollBottomSubject$.pipe(debounceTime(200), takeUntil(this.destroyed$)).subscribe((response) => {
             this.onScroll(response);
         });
 
@@ -1143,12 +1150,15 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public mouseUp(e: MouseWheelEvent): void {
-        if (!this.isOnScrollActive) {
-            this.isOnScrollActive = true;
-            if (e.deltaY < 0) {
-                this.scrollSubject$.next("top");
-            } else {
-                this.scrollSubject$.next("bottom");
+        if (e.deltaY < 0) {
+            if (!this.isOnScrollActive) {
+                this.isOnScrollActive = true;
+                this.scrollTopSubject$.next("top");
+            }
+        } else {
+            if (!this.isOnScrollActive) {
+                this.isOnScrollActive = true;
+                this.scrollBottomSubject$.next("bottom");
             }
         }
     }
@@ -1730,6 +1740,14 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 let lastFinancialYear;
                 let allFinancialYears = [];
 
+                if (this.minDate === undefined) {
+                    this.minDate = moment(moment(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate());
+                }
+
+                if (this.maxDate === undefined) {
+                    this.maxDate = moment(moment(res.body.financialYears[res.body.financialYears.length - 1].financialYearEnds, GIDDH_DATE_FORMAT).toDate());
+                }
+
                 res.body.financialYears.forEach(key => {
                     let financialYearStarts = moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     let financialYearEnds = moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
@@ -1787,14 +1805,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     });
 
                     this.ranges = ranges;
-
-                    if (this.minDate === undefined) {
-                        this.minDate = moment(moment(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate());
-                    }
-
-                    if (this.maxDate === undefined) {
-                        this.maxDate = moment(moment(res.body.financialYears[res.body.financialYears.length - 1].financialYearEnds, GIDDH_DATE_FORMAT).toDate());
-                    }
 
                     this.getAllYearsBetweenDates();
                 }
@@ -1893,8 +1903,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 }
             }
         }
-
-        this.isOnScrollActive = false;
     }
 
     /**
@@ -1962,6 +1970,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
 
         this.calendarMonths = [...this.calendarMonths];
+        
+        this.isOnScrollActive = false;
     }
 
     /**
@@ -2129,7 +2139,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      */
     public scrollUp(): void {
         if (!this.isOnScrollActive) {
-            this.scrollSubject$.next("top");
+            this.scrollTopSubject$.next("top");
         }
     }
 
@@ -2140,7 +2150,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      */
     public scrollDown(): void {
         if (!this.isOnScrollActive) {
-            this.scrollSubject$.next("bottom");
+            this.scrollBottomSubject$.next("bottom");
         }
     }
 

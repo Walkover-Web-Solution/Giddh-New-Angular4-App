@@ -14,6 +14,7 @@ import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { TaxControlData } from '../theme/tax-control/tax-control.component';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { ICurrencyResponse } from '../models/api-models/Company';
+import { VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
 
 export class LedgerVM {
     public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
@@ -187,6 +188,10 @@ export class LedgerVM {
                 bl.taxes.push(requestObj.otherTaxModal.appliedOtherTax.uniqueName);
             }
         });
+        if (requestObj.voucherType === 'advance-receipt') {
+            /** Voucher type in case of advance receipt should be 'rcpt' but to differentiate the drop down values 'advance-receipt' is used */
+            requestObj.voucherType = 'rcpt';
+        }
         if (requestObj.voucherType !== 'rcpt' && requestObj.invoicesToBePaid.length) {
             requestObj.invoicesToBePaid = [];
         } else if (requestObj.voucherType === 'rcpt' && requestObj.invoiceNumberAgainstVoucher) {
@@ -355,7 +360,6 @@ export class BlankLedgerVM {
     public selectedCurrencyToDisplay?: 0 | 1 = 0;
     public passportNumber?: string;
     public touristSchemeApplicable?: boolean;
-    public invoiceLinkingRequest?: IInvoiceLinkingRequest;
 }
 
 export class IInvoiceLinkingRequest {
@@ -364,6 +368,7 @@ export class IInvoiceLinkingRequest {
 
 export class ILinkedInvoice {
     public invoiceUniqueName: string;
+    public voucherType: string;
 }
 
 export class TransactionVM {
@@ -395,6 +400,8 @@ export class TransactionVM {
     public reverseChargeTaxableAmount?: number;
     public shouldShowRcmEntry?: boolean;
     public advanceReceiptAmount?: number = 0;
+    public invoiceLinkingRequest?: IInvoiceLinkingRequest;
+    public voucherAdjustments?: VoucherAdjustments;
 }
 
 export interface IInventory {

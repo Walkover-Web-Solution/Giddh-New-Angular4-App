@@ -10,7 +10,7 @@ import { SALES_API_V2, SALES_API_V4 } from './apiurls/sales.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { ReportsDetailedRequestFilter, SalesRegisteDetailedResponse } from "../models/api-models/Reports";
-import { AdvanceReceiptRequest, AdvanceReceiptAdjustment } from '../models/api-models/AdvanceReceiptsAdjust';
+import { AdvanceReceiptRequest, VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
 import { ADVANCE_RECEIPTS_API } from './apiurls/advance-receipt-adjustment.api';
 
 @Injectable()
@@ -141,12 +141,12 @@ export class SalesService {
     /**
      * API call to adjust an invoice with advance receipts
      *
-     * @param {AdvanceReceiptAdjustment} model Adjust advance receipts request model
+     * @param {VoucherAdjustments} model Adjust advance receipts request model
      * @param {string} invoiceUniqueName Invoice unique name which need to adjust
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof SalesService
      */
-    public adjustAnInvoiceWithAdvanceReceipts(model: AdvanceReceiptAdjustment, invoiceUniqueName: string): Observable<BaseResponse<any, any>> {
+    public adjustAnInvoiceWithAdvanceReceipts(model: VoucherAdjustments, invoiceUniqueName: string): Observable<BaseResponse<any, any>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.post(this.config.apiUrl + ADVANCE_RECEIPTS_API.INVOICE_ADJUSTMENT_WITH_ADVANCE_RECEIPT.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceUniqueName', invoiceUniqueName), model).pipe(
@@ -180,6 +180,22 @@ export class SalesService {
                     return data;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
+    }
+
+    /**
+     * This will download/JSON to show the columnar report
+     *
+     * @param {any} model voucher type & account unique name
+     * @param {string} date Date in GIDDH_DATE_FORMAT
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof LedgerService
+     */
+    public getInvoiceList(model: any, date: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.post(this.config.apiUrl + SALES_API_V2.GET_VOUCHER_INVOICE_LIST
+            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            .replace(':voucherDate', encodeURIComponent(date)), model
+        ).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error, model)));
     }
 
 }

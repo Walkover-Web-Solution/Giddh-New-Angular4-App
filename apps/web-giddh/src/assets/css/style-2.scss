@@ -8923,13 +8923,16 @@ p.remvBrnchName {
 }
 
 .popover.purchase-invoice-rcm,
+.popover.adjustment-popover,
 .update-ledger-rcm,
 .all-modules-popover {
     .popover-arrow.arrow {
         display: none;
     }
 }
-
+.popover.adjustment-popover {
+    margin: 0;
+}
 @media (min-width: 564px) {
     #date-range-picker-parent .daterangepicker {
         width: 100%;

@@ -6,7 +6,7 @@ import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 import * as moment from 'moment';
-import { AdvanceReceiptAdjustment } from './AdvanceReceiptsAdjust';
+import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
 
 export enum VoucherTypeEnum {
     'sales' = 'sales',
@@ -516,6 +516,7 @@ export class IInvoiceLinkingRequest {
 export class ILinkedInvoice {
     public invoiceUniqueName: string;
     public invoiceNumber?: string;
+    public voucherType: string;
 }
 
 export class TemplateDetailsClass {
@@ -542,7 +543,7 @@ export class VoucherClass {
     public passportNumber?: string;
     public number?: string;
     public subVoucher?: string;
-    public advanceReceiptAdjustment?: AdvanceReceiptAdjustment;
+    public voucherAdjustments?: VoucherAdjustments;
     public subTotal?: AmountClassMulticurrency
 
     constructor() {
