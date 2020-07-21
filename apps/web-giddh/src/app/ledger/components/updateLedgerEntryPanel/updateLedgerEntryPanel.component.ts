@@ -53,6 +53,9 @@ import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../../../models/api-models/AdvanceReceiptsAdjust';
 
+/** Info message to be displayed during adjustment if the voucher is not generated */
+const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
+
 @Component({
     selector: 'update-ledger-entry-panel',
     templateUrl: './updateLedgerEntryPanel.component.html',
@@ -1080,9 +1083,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (requestObj.voucherType !== VoucherTypeEnum.creditNote && requestObj.voucherType !== VoucherTypeEnum.debitNote) {
             requestObj.invoiceLinkingRequest = null;
         }
-
-        if (!(this.isAdjustAdvanceReceiptSelected || this.isAdjustReceiptSelected)) {
-            // Clear the voucher adjustments if the adjust advance receipt is not selected
+        if ((this.isAdvanceReceipt && !this.isAdjustAdvanceReceiptSelected) || (this.vm.selectedLedger.voucher.shortCode === 'rcpt' && !this.isAdjustReceiptSelected)) {
+            // Clear the voucher adjustments if the adjust advance receipt or adjust receipt is not selected
             this.vm.selectedLedger.voucherAdjustments = undefined;
             requestObj.voucherAdjustments = undefined;
         }
@@ -1214,7 +1216,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @param {boolean} isUpdateMode True if adjustments are updated
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public handleAdvanceReceiptAdjustment(isUpdateMode?: boolean): void {
+    public handleVoucherAdjustment(isUpdateMode?: boolean): void {
+        if (!this.vm.selectedLedger.voucherGenerated) {
+            this._toasty.infoToast(ADJUSTMENT_INFO_MESSAGE, 'Giddh');
+            if (this.isAdjustAdvanceReceiptSelected) {
+                this.isAdjustAdvanceReceiptSelected = false;
+            } else if (this.isAdjustReceiptSelected) {
+                this.isAdjustReceiptSelected = false;
+            }
+            return;
+        }
         if (this.vm.selectedLedger.voucherAdjustments && !this.vm.selectedLedger.voucherAdjustments.adjustments ) {
             this.vm.selectedLedger.voucherAdjustments.adjustments = [];
         }
@@ -1582,7 +1593,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public openAdjustInvoiceEditMode(): void {
         // this.selectedAdvanceReceiptAdjustInvoiceEditMode = this.selectedAdvanceReceiptAdjustInvoiceEditMode ? false : true;
-        this.handleAdvanceReceiptAdjustment(true);
+        this.handleVoucherAdjustment(true);
     }
 
     /**
