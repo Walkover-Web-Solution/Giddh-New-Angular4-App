@@ -370,13 +370,13 @@
                                     <div class="col-sm-6 pl-0">
                                         <!-- Enabled for CR/DR update flow -->
                                         <div>
-                                            <input *ngIf="(selectedVoucherType !== 'credit note' && !(isUpdateMode && isCreditNote))" type="text"
+                                            <input *ngIf="(!isCreditNote && !isDebitNote)" type="text"
                                                 name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo"
                                                 [ngClass]="{'dateinvoice': !isPurchaseInvoice }"
                                                 [disabled]="(isUpdateMode && !(isDebitNote || isPurchaseInvoice)) ? 'disabled' : null"
                                                 [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
 
-                                            <ng-container *ngIf="(selectedVoucherType === 'credit note') || (isUpdateMode && isCreditNote)">
+                                            <ng-container *ngIf="isCreditNote || isDebitNote">
                                                 <sh-select [options]="invoiceList" placeholder="Select Accounts"
                                                     [forceClearReactive]="invoiceForceClearReactive$ | async" [notFoundLink]="false"
                                                     [(ngModel)]="selectedInvoice" [ngModelOptions]="{standalone: true}"
@@ -397,14 +397,14 @@
                                                 </sh-select>
                                             </ng-container>
                                         </div>
-                                        <div *ngIf="isCreditNote && selectedInvoice" class="cp for-mobile-screen remove-invoice" (click)="removeSelectedInvoice()">
+                                        <div *ngIf="(isCreditNote || isDebitNote) && selectedInvoice" class="cp for-mobile-screen remove-invoice" (click)="removeSelectedInvoice()">
                                             <span class="remove-invoice-icon mr-05">×</span>
                                             <span class="remove-invoice-label">Remove</span>
                                         </div>
                                     </div>
                                     <div class="col-sm-6 invoiceDateDueDate">
                                         <div class="form-inline">
-                                            <div *ngIf="isCreditNote && selectedInvoice" class="cp remove-invoice" (click)="removeSelectedInvoice()">
+                                            <div *ngIf="(isCreditNote || isDebitNote) && selectedInvoice" class="cp remove-invoice" (click)="removeSelectedInvoice()">
                                                 <span class="remove-invoice-icon mr-05">×</span>
                                                 <span class="remove-invoice-label">Remove</span>
                                             </div>
