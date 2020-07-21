@@ -393,7 +393,7 @@
                                         <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic"></a>
                                         <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right width-150" role="menu" aria-labelledby="edit-model-basic">
                                             <ul class="selectActionDropdown">
-                                                <li (click)="onPerformAction(item, 'paid')">
+                                                <li *ngIf="item?.balanceStatus !== 'paid'" (click)="onPerformAction(item, 'paid')">
                                                     <a class="cp" href="javascript:void(0)">Paid</a>
                                                 </li>
                                                 <li *ngIf="selectedVoucher === 'sales'" (click)="onPerformAdjustPaymentAction(item)">
