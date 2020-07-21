@@ -241,6 +241,13 @@
                     li {
                         a {
                             padding: 10px 15px !important;
+                            span{
+                                i{
+                                    color: $gray;
+                                    margin-right: 10px;
+                                    font-size: 14px;
+                                }
+                            }
                         }
                     }
                 }
