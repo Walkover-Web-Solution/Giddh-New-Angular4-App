@@ -956,10 +956,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (event.value === 'rcpt') {
             this.shouldShowAdvanceReceipt = true;
             this.clickUnpaidInvoiceList.emit(true);
-        } else if (event.value === VoucherTypeEnum.creditNote) {
+        } else if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
             this.shouldShowAdvanceReceipt = false;
             this.removeSelectedInvoice();
-            this.getInvoiceListsForCreditNote.emit(true);
+            this.getInvoiceListsForCreditNote.emit(event.value);
             this.blankLedger.generateInvoice = true;
         } else {
             this.shouldShowAdvanceReceipt = false;
