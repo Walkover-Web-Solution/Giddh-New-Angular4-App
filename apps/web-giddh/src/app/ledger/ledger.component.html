@@ -251,10 +251,13 @@
                         </tr>
                         <tr class="transaction-table-row">
                             <td class="nopad bdrL bdrR" colspan="3">
-                                <table class="width100" *ngFor="let item of lc.bankTransactionsData;"
+                                <ng-container *ngFor="let item of lc.bankTransactionsData;">
+                                <table class="width100"
                                     (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                                     <tbody>
-                                        <tr *ngFor="let txn of item.transactions;">
+                                    <ng-container *ngFor="let txn of item.transactions;">
+                                        <ng-container *ngIf="txn.type === 'DEBIT'">
+                                        <tr>
                                             <td class="width100 pos-rel">
                                                 <table class="width100">
                                                     <tbody class="ledger-main">
@@ -263,7 +266,7 @@
 
                                                             <td class="col-xs-3 col-md-3 col-lg-3">
                                                                 <div class="d-flex align-items-center"
-                                                                    *ngIf="txn.type === 'DEBIT'">
+                                                                     >
                                                                     <span class="pl-05">
                                                                         <input type="checkbox"
                                                                             (click)="selectEntryForBulkAction($event, item)" /></span>
@@ -358,21 +361,27 @@
                                                 <!-- end  -->
                                             </td>
                                         </tr>
+                                        </ng-container>
+                                    </ng-container>
                                     </tbody>
                                 </table>
+                                </ng-container>
                             </td>
                             <td colspan="3" class="nopad bdrL bdrR">
-                                <table class="width100" *ngFor="let item of lc.bankTransactionsData;"
+                                <ng-container *ngFor="let item of lc.bankTransactionsData;">
+                                <table class="width100"
                                     (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                                     <tbody>
-                                        <tr *ngFor="let txn of item.transactions;">
+                                    <ng-container *ngFor="let txn of item.transactions;" >
+                                        <ng-container *ngIf="txn.type === 'CREDIT'">
+                                        <tr >
                                             <td class="width100 pos-rel">
                                                 <table class="width100">
                                                     <tbody class="ledger-main">
                                                         <tr class="ledger-row">
                                                             <td class="col-xs-3 col-md-3 col-lg-3">
                                                                 <div class="d-flex align-items-center"
-                                                                    *ngIf="txn.type === 'CREDIT'">
+                                                                    >
                                                                     <span class="pl-05">
                                                                         <input type="checkbox"
                                                                             [(ngModel)]="txn.isChecked"
@@ -471,8 +480,11 @@
                                                 <!-- end  -->
                                             </td>
                                         </tr>
+                                        </ng-container>
+                                    </ng-container>
                                     </tbody>
                                 </table>
+                                </ng-container>
                             </td>
                         </tr>
                     </tbody>
