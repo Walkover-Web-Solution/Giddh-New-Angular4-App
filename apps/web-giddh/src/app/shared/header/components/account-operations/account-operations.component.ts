@@ -451,11 +451,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
 
         this.accountsAction.mergeAccountResponse$.subscribe(res => {
-            if (this.selectedaccountForMerge.length > 0) {
-                this.selectedaccountForMerge.forEach((element) => {
-                    this.deleteFromLocalDB(element);
-                });
-            }
             this.selectedaccountForMerge = '';
         });
     }
@@ -836,25 +831,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.deleteAccountModal.hide();
     }
 
-    public deleteFromLocalDB(activeAccUniqueName?: string) {
-        this._dbService.removeItem(this.activeCompany.uniqueName, 'accounts', activeAccUniqueName).then((res) => {
-            if (res) {
-                this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
-            }
-        }, (err: any) => {
-        });
-    }
-
     public deleteAccount() {
         let activeAccUniqueName = null;
         this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s.uniqueName);
-
         let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
-        this.deleteFromLocalDB(activeAccUniqueName);
         this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
 
         this.hideDeleteAccountModal();
-        this.router.navigateByUrl('home');
     }
 
     public customMoveGroupFilter(term: string, item: IOption): boolean {

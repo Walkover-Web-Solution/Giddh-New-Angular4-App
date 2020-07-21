@@ -27,9 +27,10 @@ export interface Igtbl {
 }
 
 export interface UpdateDbRequest extends INameUniqueName {
-    oldUniqueName: string;
-    newUniqueName: string;
-    latestName: string;
+    oldUniqueName?: string;
+    newUniqueName?: string;
+    latestName?: string;
+    deleteUniqueName?: string;
     type: 'menus' | 'groups' | 'accounts'
 }
 

@@ -537,6 +537,18 @@ export class AccountsAction {
                     this._toasty.successToast(action.payload.body, '');
                     let data: BaseResponse<string, AccountMergeRequest[]> = action.payload;
                     this._generalServices.eventHandler.next({ name: eventsConst.accountMerged, payload: data });
+                    if(data.request && data.request.length) {
+                        data.request.forEach(uniqueAccountName => {
+                            const request: UpdateDbRequest = {
+                                uniqueName: this._generalServices.companyUniqueName,
+                                deleteUniqueName: uniqueAccountName.uniqueName,
+                                type: "accounts",
+                                name: this._generalServices.companyUniqueName,
+                                isActive: false
+                            }
+                            this.store.dispatch(this._generalActions.DeleteEntryFromIndexDb(request));
+                        });
+                    }
                     return this.getAccountDetails(data.queryString.accountUniqueName);
                 }
                 return {
@@ -590,6 +602,14 @@ export class AccountsAction {
                     this._generalServices.invokeEvent.next(["accountdeleted", action.payload.request.groupUniqueName]);
                     this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(action.payload.request.groupUniqueName));
                     this._generalServices.eventHandler.next({ name: eventsConst.accountDeleted, payload: action.payload });
+                    const request: UpdateDbRequest = {
+                        uniqueName: this._generalServices.companyUniqueName,
+                        deleteUniqueName: action.payload.queryString,
+                        type: "accounts",
+                        name: this._generalServices.companyUniqueName,
+                        isActive: false
+                    }
+                    this.store.dispatch(this._generalActions.DeleteEntryFromIndexDb(request));
                     this._toasty.successToast(action.payload.body, '');
                 }
                 return {

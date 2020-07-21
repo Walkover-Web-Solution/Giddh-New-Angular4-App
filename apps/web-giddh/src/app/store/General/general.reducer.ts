@@ -395,8 +395,29 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                 updateIndexDbInProcess: false
             }
         }
+        case GENERAL_ACTIONS.DELETE_ENTRY_FROM_INDEX_DB: {
+            return {
+                ...state,
+                updateIndexDbInProcess: true,
+                updateIndexDbComplete: false,
+            }
+        }
+        case GENERAL_ACTIONS.DELETE_ENTRY_FROM_INDEX_DB_COMPLETE: {
+            return {
+                ...state,
+                updateIndexDbComplete: true,
+                updateIndexDbInProcess: false
+            }
+        }
+        case GENERAL_ACTIONS.DELETE_ENTRY_FROM_INDEX_DB_ERROR: {
+            return {
+                ...state,
+                updateIndexDbInProcess: false,
+                updateIndexDbComplete: false,
+            }
+        }
         case GENERAL_ACTIONS.UPDATE_UI_FROM_DB: {
-            return  {
+            return {
                 ...state,
                 updateIndexDbInProcess: false,
                 updateIndexDbComplete: false,

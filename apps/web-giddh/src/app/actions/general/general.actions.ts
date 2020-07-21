@@ -96,6 +96,24 @@ export class GeneralActions {
                     return of(this.updateIndexDbComplete());
                 }
             })
+        );
+
+    @Effect()
+    deleteIndexDbEntry$: Observable<Action> = this.action$
+        .ofType(GENERAL_ACTIONS.DELETE_ENTRY_FROM_INDEX_DB).pipe(
+            switchMap((action: CustomActions) => {
+                const payload: UpdateDbRequest = action.payload;
+                return this._dbService.removeItem(payload.uniqueName, payload.type, payload.deleteUniqueName).then(res => {
+                    if (res) {
+                        if (this.route.url.includes('/ledger/' + payload.deleteUniqueName)) {
+                            this.route.navigate(['pages', 'ledger', res.aidata.accounts[0].uniqueName]);
+                        }
+                        return this.DeleteEntryFromIndexDbComplete()
+                    }
+                    return this.DeleteEntryFromIndexDbError();
+                }).
+                catch(error => this.DeleteEntryFromIndexDbError());
+            })
         )
 
     constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService, private _companyService: CompanyService, private _dbService: DbService, private _activatedRoute: ActivatedRoute, private route: Router) {
@@ -250,8 +268,30 @@ export class GeneralActions {
         }
     }
 
+    /** DeleteEntryFromIndexDb action update index db entries after delete any account from application **/
+    public DeleteEntryFromIndexDb(request: UpdateDbRequest): CustomActions {
+        return {
+            type: GENERAL_ACTIONS.DELETE_ENTRY_FROM_INDEX_DB,
+            payload: request
+        }
+    }
+
+    /** DeleteEntryFromIndexDbComplete action is for update complete acknowledgement after deleting entry from index db **/
+    public DeleteEntryFromIndexDbComplete(): CustomActions {
+        return {
+            type: GENERAL_ACTIONS.DELETE_ENTRY_FROM_INDEX_DB_COMPLETE
+        }
+    }
+
+    /** DeleteEntryFromIndexDbError action is for handle error acknowledgement for deleting entry from the index db **/
+    public DeleteEntryFromIndexDbError(): CustomActions {
+        return {
+            type: GENERAL_ACTIONS.DELETE_ENTRY_FROM_INDEX_DB_ERROR
+        }
+    }
+
     /** UpdateUIFromDB calls after ui has changed with new data from index db **/
-    public updateUiFromDb() : CustomActions {
+    public updateUiFromDb(): CustomActions {
         return {
             type: GENERAL_ACTIONS.UPDATE_UI_FROM_DB
         }
