@@ -424,7 +424,9 @@ export class GeneralService {
 
         while (elementTarget) {
             xPosition += (elementTarget.offsetLeft - elementTarget.scrollLeft + elementTarget.clientLeft);
-            yPosition += (elementTarget.offsetTop - elementTarget.scrollTop + elementTarget.clientTop);
+            if (!element) {
+                yPosition += (elementTarget.offsetTop - elementTarget.scrollTop + elementTarget.clientTop);
+            }
             elementTarget = elementTarget.offsetParent;
         }
         if (element) {
