@@ -485,8 +485,8 @@ a[vr-item]:focus {
             text-align:center !important;
         }
     }
-
-}
+    
+} 
 
 #add-manage.btn-gray {
     background: transparent;
@@ -671,9 +671,10 @@ ul.sub-list {
 }
 .help-setting-icons {
     color: $white;
-    i{
-        font-size: 18px;
-        line-height: 2;
+    img {
+        width: 18px;
+        vertical-align: top;
+        margin-top: 2px;
     }
 }
 .help-support-aside {
