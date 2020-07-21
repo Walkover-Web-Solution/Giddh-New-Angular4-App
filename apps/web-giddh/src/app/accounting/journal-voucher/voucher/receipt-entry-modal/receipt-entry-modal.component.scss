@@ -27,6 +27,7 @@
                     .icon-arrow-down, .icon-cross{
                         top: 36px;
                     }
+
                 }
             }
         }
@@ -35,11 +36,14 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 15px;
-            .receipt-type, .select-tax{
+            .receipt-type, .select-tax, .about-invoice-detail{
                 min-width: 180px;
+                div.pos-rel{
+                    width: 100% !important;
+                }
             }
             .single-field {
-                margin-right: 15px;
+                margin-right: 15px;flex: 1 1 auto !important;
                 label{
                     margin-bottom: 5px;
                     display: none;
@@ -48,7 +52,7 @@
                     width: 100%;
                     max-width: 375px;
                 }
-                .icon-arrow-down, .icon-cross{
+                .icon-arrow-down{
                     font-size: 14px;
                     position: absolute;
                     right: 5px;
@@ -56,6 +60,21 @@
                     color: $nero;
                 }
             }
+            .to-cr-field{
+                min-width: 40px;
+                max-width: 40px;
+            }
+            .delete-row{
+                    display: flex;
+                    color: $nero;
+                    min-width: 18px;
+                    max-width: 18px;
+                    i.icon-cross{
+                        font-size: 14px;
+                        color: $nero;
+                        line-height: 2;
+                    }
+                }
         }
     }
 }
