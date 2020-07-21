@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { AppState } from '../../store/roots';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
@@ -67,18 +67,18 @@ export class FinancialYearComponent implements OnInit {
             }
         })).pipe(takeUntil(this.destroyed$)).subscribe();
 
-        this.store.pipe(takeUntil(this.destroyed$)).subscribe(s => {
-            if (s.session) {
-                this.currentCompanyUniqueName = _.cloneDeep(s.session.companyUniqueName);
+        this.store.pipe(select((state: AppState) => state.session),takeUntil(this.destroyed$)).subscribe(session => {
+            if (session) {
+                this.currentCompanyUniqueName = _.cloneDeep(session.companyUniqueName);
             }
-            if (this.currentCompanyUniqueName && s.session.companies) {
-                let companies = _.cloneDeep(s.session.companies);
-                let comp = companies.find((c) => c.uniqueName === this.currentCompanyUniqueName);
-                if (comp) {
-                    this.currentCompanyName = comp.name;
-                    this.currentCompanyFinancialYearUN = comp.activeFinancialYear.uniqueName;
-                    this.financialOptions = comp.financialYears.map(q => {
-                        return { label: q.uniqueName, value: q.uniqueName };
+            if (this.currentCompanyUniqueName && session.companies) {
+                let companies = _.cloneDeep(session.companies);
+                let company = companies.find((items) => items.uniqueName === this.currentCompanyUniqueName);
+                if (company) {
+                    this.currentCompanyName = company.name;
+                    this.currentCompanyFinancialYearUN = company.activeFinancialYear.uniqueName;
+                    this.financialOptions = company.financialYears.map(element => {
+                        return { label: element.uniqueName, value: element.uniqueName };
                     });
                 }
             }
