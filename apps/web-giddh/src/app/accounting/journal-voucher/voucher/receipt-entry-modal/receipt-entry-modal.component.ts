@@ -9,6 +9,8 @@ import { ReplaySubject, of as observableOf, Observable } from 'rxjs';
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { adjustmentTypes } from "../../../../shared/helpers/adjustmentTypes";
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
+import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import * as moment from 'moment';
 
 @Component({
     selector: 'receipt-entry',
@@ -17,34 +19,55 @@ import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 })
 
 export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
+    /* Selected transaction for adjusment */
     @Input() public transaction: any;
+    /* Active company object */
     @Input() public activeCompany: any;
+    /* Selected voucher date */
     @Input() public voucherDate: any;
+    /* Event emitter for the adjustment entries */
     @Output() public entriesList: EventEmitter<any> = new EventEmitter();
-
+    /* List of adjustment entries */
     public receiptEntries: any[] = [];
+    /* Object of bootstrap modal */
     public modalRef: BsModalRef;
+    /* This will hold list of pending invoices */
     public pendingInvoiceList: any[] = [];
+    /* Observable for list of pending invoices */
     public pendingInvoiceListSource$: Observable<IOption[]> = observableOf([]);
+    /* This will hold list of adjustment types */
     public adjustmentTypes: IOption[] = [];
+    /* Total number of adjusment entries */
     public totalEntries: number = 0;
+    /* Will check if form is valid */
     public isValidForm: boolean = false;
+    /* Error message for amount comparision with transaction amount */
     public amountErrorMessage: string = "Amount can't be greater than Credit Amount.";
+    /* Error message for comparision of adjusted amount with invoice */
     public invoiceAmountErrorMessage: string = "Amount can't be greater than Invoice Balance Due.";
+    /* Error message for invalid adjustment amount */
     public invalidAmountErrorMessage: string = "Please enter valid amount.";
+    /* This will hold list of tax */
     public taxList: any[] = [];
+    /* Observable for list of tax */
     public taxListSource$: Observable<IOption[]> = observableOf([]);
-    public pendingInvoicesList: any[] = [];
+    /* Object for pending invoices list search params */
     public pendingInvoicesListParams: any = {
         accountUniqueNames: [],
         voucherType: "receipt"
     };
+    /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private toaster: ToasterService, private store: Store<AppState>, private salesService: SalesService, private companyActions: CompanyActions) {
 
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof ReceiptEntryModalComponent
+     */
     public ngOnInit(): void {
         adjustmentTypes.map(type => {
             this.adjustmentTypes.push({ label: type.label, value: type.value });
@@ -66,11 +89,16 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         this.getTaxList();
     }
 
+    /**
+     * This will add new entry for adjusment
+     *
+     * @memberof ReceiptEntryModalComponent
+     */
     public addNewEntry(): void {
         if (this.totalEntries === 0 || (this.receiptEntries[this.totalEntries - 1] && this.receiptEntries[this.totalEntries - 1] !== undefined && parseFloat(this.receiptEntries[this.totalEntries - 1].amount) > 0)) {
             this.receiptEntries[this.totalEntries] = {
                 type: 'receipt',
-                note: '',
+                //note: '',
                 tax: {
                     name: '',
                     uniqueName: '',
@@ -90,12 +118,26 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will get called on enter/tab in adjustment amount field
+     *
+     * @param {KeyboardEvent} event
+     * @param {*} entry
+     * @memberof ReceiptEntryModalComponent
+     */
     public validateAmount(event: KeyboardEvent, entry: any): void {
         if ((event.keyCode === 9 || event.keyCode === 13) && this.transaction && this.transaction.amount) {
             this.validateEntry(entry);
         }
     }
 
+    /**
+     * This will validate the adjustment entry
+     *
+     * @param {*} entry
+     * @returns {*}
+     * @memberof ReceiptEntryModalComponent
+     */
     public validateEntry(entry: any): any {
         if (!entry.amount) {
             this.toaster.clearAllToaster();
@@ -144,6 +186,11 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will output/emit the adjusments 
+     *
+     * @memberof ReceiptEntryModalComponent
+     */
     public emitEntries(): void {
         let receiptTotal = 0;
         let isValid = true;
@@ -176,6 +223,11 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will get tax list
+     *
+     * @memberof ReceiptEntryModalComponent
+     */
     public getTaxList(): void {
         this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -193,13 +245,23 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Releases the memory
+     *
+     * @memberof ReceiptEntryModalComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * This will get list of all pending invoices
+     *
+     * @memberof ReceiptEntryModalComponent
+     */
     public getInvoiceListForReceiptVoucher(): void {
-        this.salesService.getInvoiceListForReceiptVoucher(this.voucherDate, this.pendingInvoicesListParams).subscribe(response => {
+        this.salesService.getInvoiceListForReceiptVoucher(moment(this.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT), this.pendingInvoicesListParams).subscribe(response => {
             if (response && response.status === "success" && response.body && response.body.results && response.body.results.length > 0) {
                 let pendingInvoiceList: IOption[] = [];
 
@@ -214,6 +276,13 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Callback for select tax in adjustment
+     *
+     * @param {*} event
+     * @param {*} entry
+     * @memberof ReceiptEntryModalComponent
+     */
     public onSelectTax(event: any, entry: any): void {
         if (event && event.value) {
             entry.tax.name = this.taxList[event.value].name;
@@ -234,6 +303,13 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Callback for select invoice in adjustment
+     *
+     * @param {*} event
+     * @param {*} entry
+     * @memberof ReceiptEntryModalComponent
+     */
     public onSelectInvoice(event: any, entry: any): void {
         if (event && event.value) {
             entry.invoice = {
@@ -254,6 +330,12 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will remove the adjustment entry
+     *
+     * @param {number} index
+     * @memberof ReceiptEntryModalComponent
+     */
     public removeReceiptEntry(index: number): void {
         let receiptEntries = [];
         let loop = 0;
@@ -270,10 +352,20 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         this.validateEntries();
     }
 
+    /**
+     * This will close the popup and will emit the entries
+     *
+     * @memberof ReceiptEntryModalComponent
+     */
     public closePopup(): void {
         this.entriesList.emit(this.transaction);
     }
 
+    /**
+     * This will validate all the adjustment entries
+     *
+     * @memberof ReceiptEntryModalComponent
+     */
     public validateEntries(): void {
         let receiptTotal = 0;
         let isValid = true;
@@ -299,6 +391,12 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will format the amount
+     *
+     * @param {*} entry
+     * @memberof ReceiptEntryModalComponent
+     */
     public formatAmount(entry: any): void {
         entry.amount = Number(entry.amount);
     }
