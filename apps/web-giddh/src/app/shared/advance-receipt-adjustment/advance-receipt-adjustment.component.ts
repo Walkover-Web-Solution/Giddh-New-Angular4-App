@@ -13,6 +13,8 @@ import { ToasterService } from '../../services/toaster.service';
 import { cloneDeep } from '../../lodash-optimized';
 import { AdjustedVoucherType, SubVoucher } from '../../app.constant';
 
+/** Toast message when no advance receipt is found */
+const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
 
 @Component({
     selector: 'advance-receipt-adjustment-component',
@@ -153,7 +155,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                         });
                     } else {
                         if (this.isVoucherModule) {
-                            this.toaster.warningToast("There is no advanced receipt for adjustment.");
+                            this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                         } else {
                             this.toaster.warningToast("There is no voucher for adjustment.");
                         }
@@ -283,7 +285,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                             });
                         } else {
                             if (this.isVoucherModule) {
-                                this.toaster.warningToast("There is no advanced receipt for adjustment.");
+                                this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                             }
                         }
                     }

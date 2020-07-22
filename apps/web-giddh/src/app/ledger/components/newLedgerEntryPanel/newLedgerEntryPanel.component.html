@@ -274,7 +274,7 @@
     <span>{{""}}</span>
 </td> -->
                             <td class="pdR1"
-                                *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note')">
+                                *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType == 'pur' || blankLedger.voucherType == 'pay' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note')">
                                 <label class="default_clr">Invoice No.</label>
                                 <input type="text" placeholder="Invoice no." class="form-control"
                                     [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
