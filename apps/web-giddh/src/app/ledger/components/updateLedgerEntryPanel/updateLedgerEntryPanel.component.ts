@@ -1219,7 +1219,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public handleVoucherAdjustment(isUpdateMode?: boolean): void {
-        if (!this.vm.selectedLedger.voucherGenerated) {
+        if (!this.vm.selectedLedger.voucherGenerated && this.vm.selectedLedger.voucher.shortCode !== 'pur') {
+            // Voucher must be generated for all vouchers except purchase order
             this._toasty.infoToast(ADJUSTMENT_INFO_MESSAGE, 'Giddh');
             if (this.isAdjustAdvanceReceiptSelected) {
                 this.isAdjustAdvanceReceiptSelected = false;
