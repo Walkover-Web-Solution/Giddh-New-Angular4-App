@@ -191,6 +191,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isAdjustAdvanceReceiptSelected: boolean;
     /** True when user checks the adjust receipt checkbox */
     public isAdjustReceiptSelected: boolean;
+    /** True when user checks any voucher for adjustment (sales, purchase, payment, receipt & advance-receipt) checkbox */
+    public isAdjustVoucherSelected: boolean;
     /** Stores the details for adjustment component */
     public adjustVoucherConfiguration: any;
 
@@ -1067,7 +1069,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         delete requestObj['tdsTaxes'];
         delete requestObj['tcsTaxes'];
 
-        if ((this.isAdvanceReceipt && !this.isAdjustAdvanceReceiptSelected) || (this.vm.selectedLedger.voucher.shortCode === 'rcpt' && !this.isAdjustReceiptSelected)) {
+        if ((this.isAdvanceReceipt && !this.isAdjustAdvanceReceiptSelected) || (this.vm.selectedLedger.voucher.shortCode === 'rcpt' && !this.isAdjustReceiptSelected) || !this.isAdjustVoucherSelected) {
             // Clear the voucher adjustments if the adjust advance receipt or adjust receipt is not selected
             this.vm.selectedLedger.voucherAdjustments = undefined;
             requestObj.voucherAdjustments = undefined;
@@ -1205,13 +1207,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.isAdjustAdvanceReceiptSelected = false;
             } else if (this.isAdjustReceiptSelected) {
                 this.isAdjustReceiptSelected = false;
+            } else if (this.isAdjustVoucherSelected) {
+                this.isAdjustVoucherSelected = false;
             }
             return;
         }
         if (this.vm.selectedLedger.voucherAdjustments && !this.vm.selectedLedger.voucherAdjustments.adjustments ) {
             this.vm.selectedLedger.voucherAdjustments.adjustments = [];
         }
-        if ((this.isAdjustAdvanceReceiptSelected || this.isAdjustReceiptSelected) && this.vm.selectedLedger.voucherAdjustments && (!this.vm.selectedLedger.voucherAdjustments.adjustments.length || isUpdateMode)) {
+        if ((this.isAdjustAdvanceReceiptSelected || this.isAdjustReceiptSelected || this.isAdjustVoucherSelected) && this.vm.selectedLedger.voucherAdjustments && (!this.vm.selectedLedger.voucherAdjustments.adjustments.length || isUpdateMode)) {
             this.prepareAdjustVoucherConfiguration();
             console.log(this.vm.selectedLedger);
             console.log(this.profileObj);
@@ -1634,11 +1638,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 console.log(this.vm.selectedLedger);
                 if (!adjustments.length) {
                     // No adjustments done clear the adjustment checkbox
-                    if (this.vm.selectedLedger.subVoucher === SubVoucher.AdvanceReceipt) {
-                        this.isAdjustAdvanceReceiptSelected = false;
-                    } else {
-                        this.isAdjustReceiptSelected = false;
-                    }
+                    this.isAdjustReceiptSelected = false;
+                    this.isAdjustVoucherSelected = false;
+                    this.isAdjustAdvanceReceiptSelected = false;
+                    this.isAdjustVoucherSelected = false;
                 }
             }
         }
@@ -1655,11 +1658,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public closeAdjustmentModal(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
         if (event && event.adjustPaymentData &&
             !event.adjustVoucherData.adjustments.length) {
-            if (this.vm.selectedLedger.subVoucher === SubVoucher.AdvanceReceipt) {
-                this.isAdjustAdvanceReceiptSelected = false;
-            } else {
-                this.isAdjustReceiptSelected = false;
-            }
+            // No adjustments done clear the adjustment checkbox
+            this.isAdjustReceiptSelected = false;
+            this.isAdjustVoucherSelected = false
+            this.isAdjustAdvanceReceiptSelected = false;
+
             if (!this.vm.isInvoiceGeneratedAlready) {
                 this.vm.selectedLedger.voucherGenerated = false;
             }
@@ -1720,6 +1723,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private makeAdjustmentCalculation(): void {
         if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments && this.vm.selectedLedger.voucherAdjustments.adjustments.length) {
+            this.isAdjustVoucherSelected = true;
             if (this.vm.selectedLedger.voucherAdjustments.adjustments.every(adjustment => adjustment.voucherType === 'sales')) {
                 this.isAdjustedInvoicesWithAdvanceReceipt = true;
                 if (this.isAdvanceReceipt) {
