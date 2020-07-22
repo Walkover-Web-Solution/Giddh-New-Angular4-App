@@ -46,6 +46,7 @@ import { KEYS, VOUCHERS } from '../journal-voucher.component';
 import { adjustmentTypes } from "../../../shared/helpers/adjustmentTypes";
 import { SalesService } from '../../../services/sales.service';
 import { CompanyActions } from '../../../actions/company.actions';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
 const CustomShortcode = [
     { code: 'F9', route: 'purchase' }
@@ -95,7 +96,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChild('resetButton') public resetButton: ElementRef;
 
     @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
-
+    /* Selector for adjustment type field */
+    @ViewChildren('adjustmentTypesField') public adjustmentTypesField: ShSelectComponent;
     /** List of all 'DEBIT' amount fields when 'By' entries are made  */
     @ViewChildren('byAmountField') public byAmountFields: QueryList<ElementRef>;
     /** List of all 'CREDIT' amount fields when 'To' entries are made  */
@@ -186,11 +188,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     /* Will check if form is valid */
     public isValidForm: boolean = false;
     /* Error message for amount comparision with transaction amount */
-    public amountErrorMessage: string = "Amount can't be greater than Credit Amount.";
+    public amountErrorMessage: string = "Amount can't be greater than Credit Amount";
     /* Error message for comparision of adjusted amount with invoice */
-    public invoiceAmountErrorMessage: string = "Amount can't be greater than Invoice Balance Due.";
+    public invoiceAmountErrorMessage: string = "Amount can't be greater than Invoice Balance Due";
     /* Error message for invalid adjustment amount */
-    public invalidAmountErrorMessage: string = "Please enter valid amount.";
+    public invalidAmountErrorMessage: string = "Please enter valid amount";
+    /* Error message for invalid adjustment amount */
+    public invoiceErrorMessage: string = "Please select invoice";
     /* This will hold list of tax */
     public taxList: any[] = [];
     /* Observable for list of tax */
@@ -368,10 +372,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     this.setAccount(createdAccountDetails);
                 }
             }
-        });
-
-        adjustmentTypes.map(type => {
-            this.adjustmentTypes.push({ label: type.label, value: type.value });
         });
     }
 
@@ -748,7 +748,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 let hasAdvanceReceipt = false;
 
                 if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
-                    let adjustmentParentEntry = data.transactions[0];
+
+                    if(!this.isValidForm) {
+                        return false;
+                    }
+
                     let voucherAdjustments = this.receiptEntries;
                     let totalAdjustmentAmount = 0;
                     if (voucherAdjustments && voucherAdjustments.length > 0) {
@@ -1539,6 +1543,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.totalEntries = (this.receiptEntries) ? this.receiptEntries.length : 0;
         this.adjustmentTransaction = event;
         this.getTaxList();
+        this.updateAdjustmentTypes();
         this.modalRef.hide();
     }
 
@@ -1669,6 +1674,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public validateEntries(): void {
         let receiptTotal = 0;
         let isValid = true;
+        let invoiceRequired = false;
 
         this.receiptEntries.forEach(receipt => {
             if(parseFloat(receipt.amount) === 0 || isNaN(parseFloat(receipt.amount))) {
@@ -1676,18 +1682,34 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             } else {
                 receiptTotal += parseFloat(receipt.amount);
             }
+
+            if (receipt.type === "againstReference" && !receipt.invoice.uniqueName) {
+                isValid = false;
+                invoiceRequired = true;
+            }
         });
 
-        if(isValid) {
-            if (receiptTotal !== this.adjustmentTransaction.amount) {
+        if (isValid) {
+            if (invoiceRequired) {
                 this.isValidForm = false;
+                this._toaster.clearAllToaster();
+                this._toaster.errorToast(this.invoiceErrorMessage);
             } else {
-                this.isValidForm = true;
+                if (receiptTotal !== this.adjustmentTransaction.amount) {
+                    this.isValidForm = false;
+                } else {
+                    this.isValidForm = true;
+                }
             }
         } else {
             this.isValidForm = false;
             this._toaster.clearAllToaster();
-            this._toaster.errorToast(this.invalidAmountErrorMessage);
+
+            if (invoiceRequired) {
+                this._toaster.errorToast(this.invoiceErrorMessage);
+            } else {
+                this._toaster.errorToast(this.invalidAmountErrorMessage);
+            }
         }
     }
 
@@ -1698,8 +1720,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public addNewAdjustmentEntry(): void {
         if (this.totalEntries === 0 || (this.receiptEntries[this.totalEntries - 1] && this.receiptEntries[this.totalEntries - 1] !== undefined && parseFloat(this.receiptEntries[this.totalEntries - 1].amount) > 0)) {
+            let getAdjustmentTypes = this.prepareAdjustmentTypes();
+
             this.receiptEntries[this.totalEntries] = {
-                type: 'receipt',
+                allowedTypes: getAdjustmentTypes,
+                type: (getAdjustmentTypes && getAdjustmentTypes.length === 3) ? 'receipt' : 'againstReference',
                 //note: '',
                 tax: {
                     name: '',
@@ -1749,6 +1774,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         } else if (isNaN(parseFloat(entry.amount)) || entry.amount <= 0) {
             this._toaster.clearAllToaster();
             this._toaster.errorToast(this.invalidAmountErrorMessage);
+            this.isValidForm = false;
+            return;
+        }
+
+        if (entry.type === "againstReference" && !entry.invoice.uniqueName) {
+            this._toaster.clearAllToaster();
+            this._toaster.errorToast(this.invoiceErrorMessage);
             this.isValidForm = false;
             return;
         }
@@ -1815,5 +1847,44 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public formatAmount(entry: any): void {
         entry.amount = Number(entry.amount);
+    }
+
+    /**
+     * This will prepare the list of adjusment types
+     *
+     * @returns {IOption[]}
+     * @memberof AccountAsVoucherComponent
+     */
+    public prepareAdjustmentTypes(entry?: any): IOption[] {
+        let receiptExists = false;
+        let advanceReceiptExists = false;
+        this.receiptEntries.forEach(receipt => {
+            if (receipt.type === "receipt") {
+                receiptExists = true;
+            } else if (receipt.type === "advanceReceipt") {
+                advanceReceiptExists = true;
+            }
+        });
+
+        let adjustmentTypesOptions: IOption[] = [];
+
+        adjustmentTypes.map(type => {
+            if (((type.value === "receipt" || type.value === "advanceReceipt") && (!(receiptExists || advanceReceiptExists) || (entry && (entry.type === "receipt" || entry.type === "advanceReceipt")))) || type.value === "againstReference" || (entry && entry.type === type.value)) {
+                adjustmentTypesOptions.push({ label: type.label, value: type.value });
+            }
+        });
+
+        return adjustmentTypesOptions;
+    }
+
+    /**
+     * This will initiate update of adjustment types of all adjustments
+     *
+     * @memberof AccountAsVoucherComponent
+     */
+    public updateAdjustmentTypes(): void {
+        this.receiptEntries.forEach(entry => {
+            entry.allowedTypes = this.prepareAdjustmentTypes(entry);
+        });
     }
 }
