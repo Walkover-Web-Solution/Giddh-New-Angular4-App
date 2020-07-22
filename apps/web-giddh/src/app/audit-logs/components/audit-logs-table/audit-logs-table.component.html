@@ -27,7 +27,8 @@
             <span *ngIf="log?.details?.entity"> - {{log?.details?.name}}({{log?.details?.uniqueName}})</span>
         </ng-container>
         <!-- For Stock end header -->
-        <span class="pd-2" *ngIf="log?.operationType==='EDIT' && ((log?.old?.details?.name !== log?.details?.name) || (log?.old?.details?.voucherAccount?.name !== log?.details?.voucherAccount?.name))"> To </span>
+        <span class="pd-2" *ngIf="log?.operationType==='EDIT' && ((auditLogsRequest$ | async).entity !=='entry')  && ((log?.old?.details?.name !== log?.details?.name) || (log?.old?.details?.voucherAccount?.name !== log?.details?.voucherAccount?.name))"> To </span>
+
         <ng-container *ngIf="log?.details?.name && log?.operationType!='MOVE' && log?.operationType != 'MERGE' && log?.details?.uniqueName != null; else VoucherEntityNew"> <span> -{{log?.details?.name}}({{log?.details?.uniqueName}})</span></ng-container>
         <ng-template #VoucherEntityNew>
             <span *ngIf="log?.old?.details?.voucherAccount"> - {{log?.details?.voucherAccount?.name}}({{log?.details?.voucherAccount?.uniqueName}})</span>
@@ -229,6 +230,60 @@
                     </ng-container>
                 </div>
                 <!-- Vouchers block end -->
+                <!-- entries audit log block -->
+                <div class="single-address-row" *ngIf="log?.details?.baseAccount && log?.details?.baseAccount.name">
+                    <ng-container>
+                        <div class="mr-05" *ngIf="log?.details?.voucher">
+                            <label>
+                           Voucher:
+                        </label>
+                            <p class="address-field"> {{log?.details?.voucher}}
+                            </p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.details?.entryDateString">
+                            <label>
+                            Entry Date:
+                        </label>
+                            <p class="ml-05"> {{log?.details?.entryDateString}}</p>
+                        </div>
+                        <ng-container *ngFor="let item of log?.details?.otherAccounts; let indexEntries = index; let firstEntryIndex = first; let lastEntryIndex = last">
+                            <div class="mr-05" *ngIf="firstEntryIndex">
+                                <label>
+                                      Account Name:
+                                    </label>
+                                <p class="address-field"> {{item?.name}}
+                                </p>
+                            </div>
+                            <div class="mr-05" *ngIf="indexEntries >0">
+                                <label *ngIf="indexEntries === 1">
+                                       Other Accounts:
+                                     </label>
+                                <p class="address-field">{{item?.name}}
+                                    <ng-container *ngIf="!lastEntryIndex"> |</ng-container>
+                                </p>
+                            </div>
+                        </ng-container>
+                        <div class="mr-05" *ngIf="log?.details?.subTotal">
+                            <label>
+                            Sub Total:
+                        </label>
+                            <p class="ml-05"> {{log?.details?.subTotal |giddhCurrency }}</p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.details?.taxTotal">
+                            <label>
+                            Tax:
+                        </label>
+                            <p class="ml-05"> {{log?.details?.taxTotal |giddhCurrency }}</p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.details?.total">
+                            <label>
+                            Total:
+                        </label>
+                            <p class="ml-05"> {{log?.details?.total |giddhCurrency }}</p>
+                        </div>
+                    </ng-container>
+                </div>
+                <!-- etries log block end -->
                 <ng-container *ngIf="log && log?.details && log?.details?.addresses && log?.details?.addresses.length">
                     <ng-container *ngFor="let item of log?.details?.addresses; let index = index">
                         <div class="single-address-row" *ngIf="index===0">
@@ -258,8 +313,6 @@
                                 <p class="ml-05">{{item?.country?.countryName}}</p>
                             </div>
                         </div>
-
-
 
                         <div class="single-address-row" *ngIf="index>0 && showSingleAddress && isShowMultipleDataIndex===parentIndex">
                             <div class="mr-05" *ngIf="item?.address">
@@ -361,14 +414,6 @@
                     <label>Unit:</label>
                     <p>{{ log?.old?.details?.stockUnit?.name}} ({{ log?.old?.details?.stockUnit?.code}})</p>
                 </div>
-                <!-- <div>
-                <label>Opening Balance:</label>
-                <p>0.00</p>
-            </div>
-            <div>
-                <label>Closing Balance:</label>
-                <p>0.00</p>
-            </div> -->
             </div>
             <!-- stocks -->
             <div class="address-row-wrapper d-flex" *ngIf="log?.old?.details?.purchases?.account && log?.old?.details?.sales?.account">
@@ -501,6 +546,62 @@
                         </ng-container>
                     </div>
                     <!--Old  vouchers block end -->
+
+
+                    <!-- Old entries audit log block -->
+                    <div class="single-address-row" *ngIf="log?.old?.details?.baseAccount && log?.old?.details?.baseAccount.name">
+                        <ng-container>
+                            <div class="mr-05" *ngIf="log?.old?.details?.voucher">
+                                <label>
+                           Voucher:
+                        </label>
+                                <p class="address-field"> {{log?.old?.details?.voucher}}
+                                </p>
+                            </div>
+                            <div class="mr-05" *ngIf="log?.old?.details?.entryDateString">
+                                <label>
+                            Entry Date:
+                        </label>
+                                <p class="ml-05"> {{log?.old?.details?.entryDateString}}</p>
+                            </div>
+                            <ng-container *ngFor="let item of log?.old?.details?.otherAccounts; let indexEntries = index;let firstOldEntryIndex=first; let lastOldEntryIndex= last">
+                                <div class="mr-05" *ngIf="firstOldEntryIndex">
+                                    <label>
+                                      Account Name:
+                                    </label>
+                                    <p class="address-field"> {{item?.name}}
+                                    </p>
+                                </div>
+                                <div class="mr-05" *ngIf="indexEntries >0">
+                                    <label *ngIf="indexEntries === 1">
+                                       Other Accounts:
+                                     </label>
+                                    <p class="address-field">{{item?.name}}
+                                        <ng-container *ngIf="!lastOldEntryIndex"> |</ng-container>
+                                    </p>
+                                </div>
+                            </ng-container>
+                            <div class="mr-05" *ngIf="log?.old?.details?.subTotal">
+                                <label>
+                            Sub Total:
+                        </label>
+                                <p class="ml-05"> {{log?.old?.details?.subTotal |giddhCurrency }}</p>
+                            </div>
+                            <div class="mr-05" *ngIf="log?.old?.details?.taxTotal">
+                                <label>
+                            Tax:
+                        </label>
+                                <p class="ml-05"> {{log?.old?.details?.taxTotal |giddhCurrency }}</p>
+                            </div>
+                            <div class="mr-05" *ngIf="log?.old?.details?.total">
+                                <label>
+                            Total:
+                        </label>
+                                <p class="ml-05"> {{log?.old?.details?.total |giddhCurrency }}</p>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <!--Old etries log block end -->
                     <ng-container *ngIf="log?.old && log?.old?.details && log?.old?.details?.addresses && log?.old?.details?.addresses.length">
                         <ng-container *ngFor="let item of log?.old?.details?.addresses; let index = index">
                             <div class="single-address-row" *ngIf="index===0">
