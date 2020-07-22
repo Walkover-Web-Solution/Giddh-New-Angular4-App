@@ -375,6 +375,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll.measureScrollOffset('bottom') === 0), takeUntil(this.destroyed$)).subscribe(event => {
             this.setCalendarToActiveMonth('end');
         });
+
+        this.getAllYearsBetweenDates();
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -1740,11 +1742,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 let lastFinancialYear;
                 let allFinancialYears = [];
 
-                if (this.minDate === undefined) {
+                if (res.body.financialYears[0].financialYearStarts) {
                     this.minDate = moment(moment(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate());
                 }
 
-                if (this.maxDate === undefined) {
+                if (res.body.financialYears[res.body.financialYears.length - 1].financialYearEnds) {
                     this.maxDate = moment(moment(res.body.financialYears[res.body.financialYears.length - 1].financialYearEnds, GIDDH_DATE_FORMAT).toDate());
                 }
 
@@ -1903,6 +1905,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 }
             }
         }
+
+        this.isOnScrollActive = false;
     }
 
     /**
@@ -1970,8 +1974,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
 
         this.calendarMonths = [...this.calendarMonths];
-        
-        this.isOnScrollActive = false;
     }
 
     /**
@@ -1992,7 +1994,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public getAllYearsBetweenDates(): void {
         let difference: number;
         difference = new Date(this.maxDate.toDate()).getFullYear() - new Date(this.minDate.toDate()).getFullYear();
-
+        this.allowedYears = [];
         for (let loop = 0; loop < difference; loop++) {
             let loopYear = new Date(this.minDate.toDate());
             loopYear.setFullYear(loopYear.getFullYear() + loop);
@@ -2208,7 +2210,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 isAvailable = true;
             }
         } else {
-            if (!this.calendarVariables.end.maxDate || this.calendarVariables.end.maxDate.isAfter(this.calendarVariables.end.calendar.lastDay)) {
+            if (this.maxDate && this.maxDate.isAfter(this.calendarVariables.end.calendar.lastDay)) {
                 isAvailable = true;
             }
         }
@@ -2230,7 +2232,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 isAvailable = true;
             }
         } else {
-            if (!this.calendarVariables.start.minDate || this.calendarVariables.start.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
+            if (this.minDate && this.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
                 isAvailable = true;
             }
         }
