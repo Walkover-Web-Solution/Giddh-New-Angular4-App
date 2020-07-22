@@ -82,7 +82,7 @@
                                 <input *ngIf="entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'" id="name_{{entryIdx}}" type="text" class="form-control" name="calculatedTaxAmount_{{entryIdx}}" decimalDigitsDirective [(ngModel)]="entry.calculatedTaxAmount" placeholder="00.00" disabled>
                             </div>
                         </div>
-                        <div *ngIf="!entry.linkingAdjustment" class="col-sm-3">
+                        <div *ngIf="!entry.linkingAdjustment && !shouldDisableEdit(entry)" class="col-sm-3">
                             <a href="javascript:void(0)" (click)="deleteAdjustVoucherRow(entryIdx);" class="font-22 text-light d-inline-block"><i class="icon-trash"></i></a>
                         </div>
                     </div>
