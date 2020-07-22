@@ -24,7 +24,7 @@ import { AlertConfig } from 'ngx-bootstrap/alert';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import {UpdateDbRequest} from "../../models/interfaces/ulist.interface";
+import {IUpdateDbRequest} from "../../models/interfaces/ulist.interface";
 import {GeneralService} from "../../services/general.service";
 import {GeneralActions} from "../../actions/general/general.actions";
 
@@ -514,7 +514,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
 
                     this.accountService.UpdateAccountV2(account, reqObj).subscribe((res) => {
                         if (res.status === 'success') {
-                            const updateIndexDb: UpdateDbRequest = {
+                            const updateIndexDb: IUpdateDbRequest = {
                                 newUniqueName: res.body.uniqueName,
                                 oldUniqueName: res.queryString.accountUniqueName,
                                 latestName: res.request.name,
