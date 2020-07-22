@@ -393,8 +393,8 @@
                                         <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic"></a>
                                         <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right width-150" role="menu" aria-labelledby="edit-model-basic">
                                             <ul class="selectActionDropdown">
-                                                <li *ngIf="item?.balanceStatus !== 'paid'" (click)="onPerformAction(item, 'paid')">
-                                                    <a class="cp" href="javascript:void(0)">Paid</a>
+                                                <li [tooltip]="item?.balanceStatus === 'paid' ? 'Already paid' :null" (click)="onPerformAction(item, 'paid', $event)">
+                                                    <a class="cp" [ngClass]="{'disabled-link' : item?.balanceStatus === 'paid'}" href="javascript:void(0)">Paid</a>
                                                 </li>
                                                 <li *ngIf="selectedVoucher === 'sales'" (click)="onPerformAdjustPaymentAction(item)">
                                                     <a class="cp" href="javascript:void(0)">Adjust Amount</a>
@@ -571,8 +571,8 @@
                                         <div class="click-dropdwon" [attachOutsideOnClick]="true" (clickOutside)="showMoreBtn = false" [exclude]="'.dropdown-menu'">
                                             <i class="fa fa-ellipsis-v" (click)="showMoreBtn=!showMoreBtn;selectedItemForMoreBtn = item.voucherNumber"></i>
                                             <ul class="dropdown-menu displayBlock" *ngIf="showMoreBtn && selectedItemForMoreBtn === item.voucherNumber">
-                                                <li (click)="onPerformAction(item, 'paid')">
-                                                    <a class="cp" href="javascript:void(0)">Paid</a>
+                                                <li [tooltip]="item?.balanceStatus === 'paid' ? 'Already paid' :null" (click)="onPerformAction(item, 'paid', $event)">
+                                                    <a class="cp" [ngClass]="{'disabled-link' : item?.balanceStatus === 'paid'}" href="javascript:void(0)">Paid</a>
                                                 </li>
                                                 <li (click)="onPerformAction(item, 'unpaid')">
                                                     <a class="cp" href="javascript:void(0)">Unpaid</a>
