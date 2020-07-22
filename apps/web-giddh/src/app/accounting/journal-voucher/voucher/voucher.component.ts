@@ -749,9 +749,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
                 if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
 
-                    if(!this.isValidForm) {
-                        return false;
-                    }
+                    // if(!this.isValidForm) {
+                    //     return false;
+                    // }
 
                     let voucherAdjustments = this.receiptEntries;
                     let totalAdjustmentAmount = 0;
