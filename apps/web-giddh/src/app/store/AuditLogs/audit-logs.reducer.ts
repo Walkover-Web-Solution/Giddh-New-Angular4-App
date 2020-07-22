@@ -1,8 +1,8 @@
-import { LogsRequest, LogsResponse } from '../../models/api-models/Logs';
+import { LogsRequest, LogsResponse, AuditLogsResponse, GetAuditLogsRequest } from '../../models/api-models/Logs';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ILogsItem } from '../../models/interfaces/logs.interface';
 import * as _ from '../../lodash-optimized';
-import { AUDIT_LOGS_ACTIONS } from '../../actions/audit-logs/audit-logs.const';
+import { AUDIT_LOGS_ACTIONS, AUDIT_LOGS_ACTIONS_V2 } from '../../actions/audit-logs/audit-logs.const';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 
@@ -15,6 +15,8 @@ export interface AuditLogsState {
     LoadMoreInProcess: boolean;
     currentLogsRequest?: LogsRequest;
     currentPage?: number;
+    auditLogsRequest?: GetAuditLogsRequest;
+    auditLogs: any
 }
 
 export const initialState: AuditLogsState = {
@@ -25,11 +27,14 @@ export const initialState: AuditLogsState = {
     getLogInProcess: false,
     LoadMoreInProcess: false,
     currentLogsRequest: null,
-    currentPage: 0
+    currentPage: 0,
+    auditLogsRequest: null,
+    auditLogs: [],
 };
 
 export function auditLogsReducer(state = initialState, action: CustomActions): AuditLogsState {
     let data: BaseResponse<LogsResponse, LogsRequest> = null;
+    let auditLogsData: BaseResponse<AuditLogsResponse, GetAuditLogsRequest> = null;
     let newState: AuditLogsState = null;
     switch (action.type) {
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
@@ -78,6 +83,27 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
         }
         case AUDIT_LOGS_ACTIONS.AUDIT_LOGS_RESET: {
             return Object.assign({}, state, initialState);
+        }
+
+        case AUDIT_LOGS_ACTIONS_V2.GET_LOGS_REQUEST: {
+            newState = _.cloneDeep(state);
+            newState.getLogInProcess = true;
+            return Object.assign({}, state, newState);
+        }
+        case AUDIT_LOGS_ACTIONS_V2.GET_LOGS_RESPONSE_V2: {
+            auditLogsData = action.payload as BaseResponse<AuditLogsResponse, GetAuditLogsRequest>;
+            if (auditLogsData.status === 'success') {
+                newState = _.cloneDeep(state);
+                newState.currentPage = auditLogsData.body.page;
+                newState.auditLogsRequest = auditLogsData.request;
+                newState.auditLogs = auditLogsData.body.results;
+                newState.getLogInProcess = false;
+                // newState.size = data.body.size;
+                newState.totalElements = auditLogsData.body.totalItems;
+                newState.totalPages = auditLogsData.body.totalPages;
+                return newState;
+            }
+            return Object.assign({}, state, { getLogInProcess: false });
         }
         default: {
             return state;
