@@ -17,7 +17,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { Observable } from 'rxjs';
 import { ApplyDiscountRequest, AssignDiscountRequestForAccount } from '../models/api-models/ApplyDiscount';
-import {UpdateDbRequest} from "../models/interfaces/ulist.interface";
+import {IUpdateDbRequest} from "../models/interfaces/ulist.interface";
 
 @Injectable()
 export class AccountsAction {
@@ -236,7 +236,7 @@ export class AccountsAction {
             switchMap((action: CustomActions) => this._accountService.UpdateAccount(action.payload.account, action.payload.accountUniqueName)),
             map(response => {
                 if(response && response.body && response.queryString) {
-                    const updateIndexDb: UpdateDbRequest = {
+                    const updateIndexDb: IUpdateDbRequest = {
                         newUniqueName: response.body.uniqueName,
                         oldUniqueName: response.queryString.accountUniqueName,
                         latestName: response.request.name,
@@ -279,7 +279,7 @@ export class AccountsAction {
             map(response => {
                 if (response.status === 'success') {
                     this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
-                    const updateIndexDb: UpdateDbRequest = {
+                    const updateIndexDb: IUpdateDbRequest = {
                         newUniqueName: response.body.uniqueName,
                         oldUniqueName: response.queryString.accountUniqueName,
                         latestName: response.request.name,
@@ -539,14 +539,14 @@ export class AccountsAction {
                     this._generalServices.eventHandler.next({ name: eventsConst.accountMerged, payload: data });
                     if(data.request && data.request.length) {
                         data.request.forEach(uniqueAccountName => {
-                            const request: UpdateDbRequest = {
+                            const request: IUpdateDbRequest = {
                                 uniqueName: this._generalServices.companyUniqueName,
                                 deleteUniqueName: uniqueAccountName.uniqueName,
                                 type: "accounts",
                                 name: this._generalServices.companyUniqueName,
                                 isActive: false
                             }
-                            this.store.dispatch(this._generalActions.DeleteEntryFromIndexDb(request));
+                            this.store.dispatch(this._generalActions.deleteEntryFromIndexDb(request));
                         });
                     }
                     return this.getAccountDetails(data.queryString.accountUniqueName);
@@ -602,14 +602,14 @@ export class AccountsAction {
                     this._generalServices.invokeEvent.next(["accountdeleted", action.payload.request.groupUniqueName]);
                     this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(action.payload.request.groupUniqueName));
                     this._generalServices.eventHandler.next({ name: eventsConst.accountDeleted, payload: action.payload });
-                    const request: UpdateDbRequest = {
+                    const request: IUpdateDbRequest = {
                         uniqueName: this._generalServices.companyUniqueName,
                         deleteUniqueName: action.payload.queryString,
                         type: "accounts",
                         name: this._generalServices.companyUniqueName,
                         isActive: false
                     }
-                    this.store.dispatch(this._generalActions.DeleteEntryFromIndexDb(request));
+                    this.store.dispatch(this._generalActions.deleteEntryFromIndexDb(request));
                     this._toasty.successToast(action.payload.body, '');
                 }
                 return {
