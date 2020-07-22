@@ -149,6 +149,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                         this.allAdvanceReceiptResponse.forEach(item => {
                             if (item && item.voucherDate) {
                                 item.voucherDate = item.voucherDate.replace(/-/g, '/');
+                                item.voucherNumber = !item.voucherNumber ? '-' : item.voucherNumber;
                                 this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                                 this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                             }

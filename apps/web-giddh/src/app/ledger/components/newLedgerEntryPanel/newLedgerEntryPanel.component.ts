@@ -1210,15 +1210,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public closeAdjustmentModal(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
-        if (event && event.adjustPaymentData &&
-            !event.adjustVoucherData.adjustments.length) {
+        if (!this.currentTxn.voucherAdjustments || (this.currentTxn.voucherAdjustments && this.currentTxn.voucherAdjustments.adjustments && !this.currentTxn.voucherAdjustments.adjustments.length)) {
             if (this.currentTxn['subVoucher'] === SubVoucher.AdvanceReceipt) {
                 this.isAdjustAdvanceReceiptSelected = false;
             } else {
                 this.isAdjustReceiptSelected = false;
             }
             this.isAdjustVoucherSelected = false;
-            this.blankLedger.generateInvoice = false;
         }
         this.adjustPaymentModal.hide();
     }
