@@ -199,8 +199,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isAdjustReceiptSelected: boolean;
     /** True when user checks the adjust advance receipt */
     public isAdjustAdvanceReceiptSelected: boolean;
-    /** True when user checks the adjust payment checkbox */
-    public isAdjustPaymentSelected: boolean;
+    /** True when user checks any voucher for adjustment (sales, purchase, payment, receipt & advance-receipt) checkbox */
+    public isAdjustVoucherSelected: boolean;
     /** Stores the details for adjustment component */
     public adjustVoucherConfiguration: any;
     /** Adjustment modal */
@@ -1188,7 +1188,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public handleVoucherAdjustment(): void {
         if (this.isAdjustReceiptSelected || this.isAdjustAdvanceReceiptSelected ||
-            this.isAdjustPaymentSelected) {
+            this.isAdjustVoucherSelected) {
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
             this.blankLedger.generateInvoice = true;
@@ -1267,6 +1267,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             } else {
                 this.isAdjustReceiptSelected = false;
             }
+            this.isAdjustVoucherSelected = false
             this.blankLedger.generateInvoice = false;
         }
         this.adjustPaymentModal.hide();
@@ -1280,6 +1281,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     private removeAdjustment(): void {
         this.currentTxn.voucherAdjustments = null;
+        this.isAdjustAdvanceReceiptSelected = false;
+        this.isAdjustReceiptSelected = false;
+        this.isAdjustVoucherSelected = false;
     }
 
     /**
