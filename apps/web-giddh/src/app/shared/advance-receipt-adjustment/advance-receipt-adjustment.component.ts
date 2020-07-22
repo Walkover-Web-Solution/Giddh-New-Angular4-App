@@ -120,7 +120,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         console.log('Invoice form details: ', this.invoiceFormDetails);
         if (!this.isVoucherModule) {
             const voucherType =
-                (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt) ? 'receipt' : 'sales';
+                (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt) ? 'receipt' : this.adjustedVoucherType;
             const customerUniqueName = this.invoiceFormDetails.voucherDetails.customerUniquename;
             let requestObject;
             if (typeof customerUniqueName === 'string') {
