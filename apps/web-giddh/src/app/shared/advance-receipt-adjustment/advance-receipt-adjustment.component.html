@@ -26,13 +26,31 @@
                 </div>
             </div>
             <form #adjustAdvancePaymentForm="ngForm" autocomplete="off">
+                <div class="row vouchar-form">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label for="name">Adjustment Voucher<span class="text-danger">*</span></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Amount<span class="text-danger">* </span></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Tax</label>
+                        </div>
+                    </div>
+                </div>
+
                 <ng-container *ngFor="let entry of adjustVoucherForm.adjustments; let entryIdx = index; let first = first; let last = last">
-                    <div class="row vouchar-form">
+                    <div class="row vouchar-form pb-1">
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label for="name">Adjustment Voucher<span class="text-danger">*</span></label>
+                                <!-- <label for="name">Adjustment Voucher<span class="text-danger">*</span></label> -->
                                 <div class="select-error select-caret relative">
-                                    <sh-select [disabled]="shouldDisableEdit(entry) ? 'disabled' : null" class="text-left" name="voucherName{{entryIdx}}" [defaultValue]="entry.voucherNumber" (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm);" required [placeholder]="'Select Voucher'" [(ngModel)]="entry.uniqueName" (selected)="selectVoucher($event, entry, entryIdx);"
+                                    <sh-select [disabled]="(shouldDisableEdit(entry) || entry.linkingAdjustment) ? 'disabled' : null" class="text-left" name="voucherName{{entryIdx}}" [defaultValue]="entry.voucherNumber" (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm);" required [placeholder]="'Select Voucher'" [(ngModel)]="entry.uniqueName" (selected)="selectVoucher($event, entry, entryIdx);"
                                         [options]="adjustVoucherOptions" [multiple]="false">
                                         <ng-template #optionTemplate let-option="option">
                                             <a href="javascript:void(0)" class="list-item">
@@ -52,20 +70,20 @@
 
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label>Amount<span class="text-danger">* </span> <span *ngIf="entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'" class="text-light">
-                                        (Inclusive Tax)</span></label>
                                 <!-- decimalDigitsDirective -->
-                                <input [disabled]="shouldDisableEdit(entry) ? 'disabled' : null" required decimalDigitsDirective type="text" class="form-control" placeholder="Enter Amount" name="amount{{entryIdx}}" [(ngModel)]="entry.balanceDue.amountForAccount" (ngModelChange)="calculateTax(entry, entryIdx);" [prefix]="currencySymbol" [mask]="inputMaskFormat">
+                                <input [disabled]="(shouldDisableEdit(entry) || entry.linkingAdjustment)? 'disabled' : null" required decimalDigitsDirective type="text" class="form-control" placeholder="Enter Amount" name="amount{{entryIdx}}" [(ngModel)]="entry.balanceDue.amountForAccount" (ngModelChange)="calculateTax(entry, entryIdx);" [prefix]="currencySymbol" [mask]="inputMaskFormat">
+                                <span *ngIf="entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'" class="text-light inclusive-tax">
+                                        (Inclusive Tax)</span>
                             </div>
                         </div>
-                        <div class="col-sm-2" *ngIf="entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'">
+                        <div class="col-sm-2">
                             <div class="form-group">
-                                <label for="name_{{entryIdx}}">Tax</label>
-                                <input id="name_{{entryIdx}}" type="text" class="form-control" name="calculatedTaxAmount_{{entryIdx}}" decimalDigitsDirective [(ngModel)]="entry.calculatedTaxAmount" placeholder="00.00" disabled>
+                                <!-- <label for="name_{{entryIdx}}">Tax</label> -->
+                                <input *ngIf="entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'" id="name_{{entryIdx}}" type="text" class="form-control" name="calculatedTaxAmount_{{entryIdx}}" decimalDigitsDirective [(ngModel)]="entry.calculatedTaxAmount" placeholder="00.00" disabled>
                             </div>
                         </div>
-                        <div class="col-sm-3">
-                            <a href="javascript:void(0)" (click)="deleteAdjustVoucherRow(entryIdx);" class="font-22 text-light pt-3 d-inline-block"><i class="icon-trash"></i></a>
+                        <div *ngIf="!entry.linkingAdjustment" class="col-sm-3">
+                            <a href="javascript:void(0)" (click)="deleteAdjustVoucherRow(entryIdx);" class="font-22 text-light d-inline-block"><i class="icon-trash"></i></a>
                         </div>
                     </div>
                 </ng-container>

@@ -192,9 +192,11 @@ export class SalesService {
      */
     public getInvoiceList(model: any, date: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + SALES_API_V2.GET_VOUCHER_INVOICE_LIST
+        const contextPath = SALES_API_V2.GET_VOUCHER_INVOICE_LIST
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':voucherDate', encodeURIComponent(date)), model
+            .replace(':voucherDate', encodeURIComponent(date))
+            .replace(':adjustmentRequest', String(true));
+        return this._http.post(this.config.apiUrl + contextPath, model
         ).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error, model)));
     }
 

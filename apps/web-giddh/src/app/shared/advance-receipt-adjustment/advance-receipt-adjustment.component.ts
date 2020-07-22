@@ -13,6 +13,8 @@ import { ToasterService } from '../../services/toaster.service';
 import { cloneDeep } from '../../lodash-optimized';
 import { AdjustedVoucherType, SubVoucher } from '../../app.constant';
 
+/** Toast message when no advance receipt is found */
+const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
 
 @Component({
     selector: 'advance-receipt-adjustment-component',
@@ -118,10 +120,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.assignVoucherDetails();
         }
         console.log('Invoice form details: ', this.invoiceFormDetails);
-        if (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt ||
-            this.adjustedVoucherType === AdjustedVoucherType.Sales) {
+        if (!this.isVoucherModule) {
             const voucherType =
-                (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt) ? 'receipt' : 'sales';
+                (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt) ? 'receipt' : this.adjustedVoucherType;
             const customerUniqueName = this.invoiceFormDetails.voucherDetails.customerUniquename;
             let requestObject;
             if (typeof customerUniqueName === 'string') {
@@ -153,7 +154,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                             }
                         });
                     } else {
-                        this.toaster.warningToast("There is no advanced receipt for adjustment.");
+                        if (this.isVoucherModule) {
+                            this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
+                        } else {
+                            this.toaster.warningToast("There is no voucher for adjustment.");
+                        }
                     }
                 }
             });
@@ -286,7 +291,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                                 }
                             });
                         } else {
-                            this.toaster.warningToast("There is no advanced receipt for adjustment.");
+                            if (this.isVoucherModule) {
+                                this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
+                            }
                         }
                     }
                 }
