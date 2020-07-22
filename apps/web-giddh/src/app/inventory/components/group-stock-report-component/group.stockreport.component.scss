@@ -49,6 +49,9 @@ table {
     cursor: pointer;
 }
 
+.popover-details{
+    display:none;
+}
 /*
 .table.basic>tbody>tr>td>table tbody tr td {
     padding: 5px 0;
@@ -332,9 +335,11 @@ button.btn.btn-filter {
         font-size: 16px;
     }
     .btn-link{
-        font-size:12px;
         margin-right:0 !important;
         margin-top:0 !important;
+        span{
+            display:none;
+        }
     }
     .inventoryStockTable{
         table-layout: auto;
@@ -343,4 +348,24 @@ button.btn.btn-filter {
         .basic > thead > tr > th {
             min-width: 100px !important;
         }
+    .popover-details{
+        display:block;
+        position: absolute;
+        top: 120px;
+        right: 0;
+        margin: 0 15px;
+        .btn-group{
+            margin-left:0 !important;
+            .dropdown-toggle{
+                border-width: 0px !important;
+                background:transparent;
+            }
+        }
+        .bottom-details{
+            min-width: 90vw;
+        }
+    }
+    .footer-sticky{
+        display:none;
+    }
 }

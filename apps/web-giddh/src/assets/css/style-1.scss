@@ -5231,6 +5231,14 @@ form#groupDetailForm {
         }
     }
 
+    .inventory-controll{
+        .tab-container{
+            .nav-tabs{
+                display:none;
+            }
+        }   
+    }
+
     .mobileHeader {
         display: block;
         position: fixed !important;

@@ -5,6 +5,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 @Component({
     selector: 'welcome-inventory',  // <home></home>
     templateUrl: './welcome-inventory.component.html',
+    styleUrls: ['./welcome-inventory.scss'],
     animations: [
         trigger('slideInOut', [
             state('in', style({

@@ -1,4 +1,122 @@
 <section class="h100">
+    <div class="text-right popover-details">
+            <div class="btn-group d-inline-block custom-dropdown ml-1" dropdown
+    placement="bottom right">
+    <button id="button-alignment" dropdownToggle type="button"
+        class="dropdown-toggle" aria-controls="dropdown-alignment">
+        <span class="icon-dots-three-vertical"></span>
+    </button>
+    <ul id="dropdown-alignment" *dropdownMenu
+        class="dropdown-menu dropdown-menu-right bottom-details pt-1 pb-1" role="menu"
+        aria-labelledby="button-alignment">
+        <li role="menuitem" >
+            <section
+            *ngIf="groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length>0">
+                <div class="p-3">
+                    <div class="row mr-0 ml-0">
+
+                        <div class="col-sm-5">
+                            <div class="row mr-0 ml-0">
+                                <div class="col-xs-5 p0 count-text">
+                                    <h4 class="text-light pl-0">
+                                        <div *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">Transaction
+                                            Count</div>
+                                        <div class="" *ngIf="GroupStockReportRequest.branchDetails!=='allEntity'">
+                                            Product Count</div>
+                                        <div class="mt-1">Profit/Loss</div>
+                                    </h4>
+                                </div>
+                                <div class="col-xs-7 p0">
+                                    <h4 class="text-orange text-right">
+                                        <div *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
+                                            <span class="text-orange"
+                                                *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems}}</span>
+                                        </div>
+                                        <div class="" *ngIf="GroupStockReportRequest.branchDetails!=='allEntity'">
+                                            <span class="text-orange"
+                                                *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems}}</span>
+                                        </div>
+                                        <div class="mt-1">
+                                            <span class="text-orange d-block">{{groupStockReport.profit | giddhCurrency}}
+                                            </span>
+                                        </div>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="groupStockReport.openingBalance.transactionCount">
+                                <div class="col-xs-10 p0">
+                                    <h4>Inward</h4>
+                                </div>
+                                <div class="col-xs-2 p0">
+                                    <h4>&nbsp;<span>{{groupStockReport.InwardBalance.transactionCount}}</span></h4>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="groupStockReport.outwardBalance.transactionCount">
+                                <div class="col-xs-10 p0">
+                                    <h4>Outward</h4>
+                                </div>
+                                <div class="col-xs-2 p0">
+                                    <h4>&nbsp;<span>{{groupStockReport.outwardBalance.transactionCount}}</span></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="flex-col">
+                                <div class="cont d-flex justify-content-between pt-1">
+                                    <h4 class="text-light">Opening Value</h4>
+                                    <h2>{{groupStockReport.openingBalance.amount}}</h2>
+                                    <h4 *ngIf="groupStockReport.openingBalance.quantity">
+                                        ({{groupStockReport.openingBalance.quantity}}
+                                        {{groupStockReport.openingBalance.stockUnit}})</h4>
+                                </div>
+
+                            </div>
+                            <div class="flex-col">
+
+                            </div>
+                            <div class="flex-col">
+                                <div class="cont d-flex justify-content-between pt-1">
+                                    <h4 class="text-light">Inward Value</h4>
+                                    <h2>{{groupStockReport.inwardBalance.amount}}</h2>
+                                    <h4 *ngIf="groupStockReport.inwardBalance.quantity">
+                                        ({{groupStockReport.inwardBalance.quantity}}
+                                        {{groupStockReport.inwardBalance.stockUnit}})</h4>
+                                </div>
+                            </div>
+                            <div class="flex-col">
+
+                            </div>
+                            <div class="flex-col">
+                                <div class="cont d-flex justify-content-between pt-1">
+                                    <h4 class="text-light">Outward Value</h4>
+                                    <h2>{{groupStockReport.outwardBalance.amount}}</h2>
+                                    <h4 *ngIf="groupStockReport.outwardBalance.quantity">
+                                        ({{groupStockReport.outwardBalance.quantity}}
+                                        {{groupStockReport.outwardBalance.stockUnit}})</h4>
+                                </div>
+                            </div>
+                            <div class="flex-col">
+
+                            </div>
+                            <div class="flex-col">
+                                <div class="cont d-flex justify-content-between pt-1">
+                                    <h4 class="text-light">Closing Value</h4>
+                                    <h2 class="text-orange">{{groupStockReport.closingBalance.amount}}</h2>
+                                    <h4 class="text-orange" *ngIf="groupStockReport.closingBalance.quantity">
+                                        ({{groupStockReport.closingBalance.quantity}}
+                                        {{groupStockReport.closingBalance.stockUnit}})</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+        </section>
+        </li>
+    </ul>
+</div>
+    </div>
+
     <div class="d-flex mb-2" style="display:none;">
         <!-- enable branch selection after implimentation from api-->
         <div class="d-flex">
@@ -69,7 +187,7 @@
                 <div class="btn-group " dropdown [autoClose]="true" placement="bottom right">
                     <button id="button-alignment" dropdownToggle type="button"
                         class="btn-link mrT cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
-                        <i class="icon-download"></i> Download
+                        <i class="icon-download"></i> <span>Download</span>
                     </button>
                     <ul id="dropdown-alignment" *dropdownMenu
                         class="dropdown-menu dropdown-menu-right dropdown-menu-download" role="menu"
@@ -426,8 +544,9 @@
         </table>
         </div>
 
+
         <!-- sticky Footer -->
-        <section class="mt-5"
+        <section class="mt-5 footer-sticky"
             *ngIf="groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length>0">
             <!-- <span>{{activeGroupName}} Value:</span> -->
             <div class="sticky-footer sticky-footer-sale-amount">
