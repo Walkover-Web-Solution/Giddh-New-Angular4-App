@@ -1232,14 +1232,14 @@
                                                             </a>
                                                         </ng-template>
                                                     </sh-select>
-                                                    <label class="pull-left pt-1">Payment Mode</label>
+                                                    <label class="pull-right pt-1">Payment Mode</label>
                                                 </div>
                                             </li>
 
                                             <li class="clearfix mrT1" *ngIf="isSalesInvoice">
                                                 <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount" name="dueAmount" class="form-control amountField text-right pull-right max100" [(ngModel)]="depositAmount" [prefix]="depositCurrSymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                                 />
-                                                <label class="pull-left pt-1">Amount</label>
+                                                <label class="pull-right pt-1">Amount</label>
                                             </li>
 
                                             <li class="clearfix mrT1" *ngIf="isCashInvoice">
@@ -1247,7 +1247,7 @@
                                                                     <span
                                                                         *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span> {{invFormData.voucherDetails.balanceDue
                                                 | giddhCurrency}}</span>
-                                                <label class="pull-left pt-1">Amount</label>
+                                                <label class="pull-right pt-1">Amount</label>
                                             </li>
 
                                             <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
@@ -1260,7 +1260,7 @@
                                                                         {{invFormData.voucherDetails.balanceDue | giddhCurrency }}
                                                                     </ng-container>
                                                                 </strong>
-                                                <strong class="pull-left">Balance Due</strong>
+                                                <strong class="pull-right">Balance Due</strong>
                                             </li>
                                         </ng-container>
                                     </ul>
@@ -1924,21 +1924,21 @@
                                                 </a>
                                             </ng-template>
                                         </sh-select>
-                                        <label class="pull-left pt-1">Payment Mode</label>
+                                        <label class="pull-right pt-1">Payment Mode</label>
                                     </div>
                                 </li>
 
                                 <li class="clearfix mrT1" *ngIf="isSalesInvoice">
                                     <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount" name="dueAmount" class="form-control amountField text-right pull-right max100" [(ngModel)]="depositAmount" [prefix]="depositCurrSymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                     />
-                                    <label class="pull-left pt-1">Amount</label>
+                                    <label class="pull-right pt-1">Amount</label>
                                 </li>
 
                                 <li class="clearfix mrT1" *ngIf="isCashInvoice">
                                     <span class="amountField pull-right max100 amountFiledCash">
                                                         <span
                                                             *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span> {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</span>
-                                    <label class="pull-left pt-1">Amount</label>
+                                    <label class="pull-right pt-1">Amount</label>
                                 </li>
 
                                 <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
@@ -1946,7 +1946,7 @@
                                                         *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
                                                         {{invFormData.voucherDetails.balanceDue | giddhCurrency}}
                                                     </strong>
-                                    <strong class="pull-left">Balance Due</strong>
+                                    <strong class="pull-right">Balance Due</strong>
                                 </li>
 
                             </ul>
