@@ -1217,6 +1217,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.isAdjustReceiptSelected = false;
             }
             this.isAdjustVoucherSelected = false;
+            if (this.blankLedger.voucherType === 'pur') {
+                this.blankLedger.generateInvoice = false;
+            }
         }
         this.adjustPaymentModal.hide();
     }

@@ -307,7 +307,9 @@
 
                                 </div>
                             </td> -->
-                            <td *ngIf="blankLedger.voucherType && (blankLedger.voucherType !== 'jr' || blankLedger.voucherType !== 'cntr')" class="pdR1 pt-2 hidden-xs">
+                            <td *ngIf="blankLedger.voucherType &&
+                                (blankLedger.voucherType !== 'jr' && blankLedger.voucherType !== 'cntr' && blankLedger.voucherType !== 'rcpt'
+                                && blankLedger.voucherType !== 'advance-receipt')" class="pdR1 pt-2 hidden-xs">
                                 <input type="checkbox" name="adjustSales" (change)="handleVoucherAdjustment()"
                                     [(ngModel)]="isAdjustVoucherSelected">
                                 Adjust {{
