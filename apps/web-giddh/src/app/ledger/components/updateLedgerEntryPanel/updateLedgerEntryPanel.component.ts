@@ -487,8 +487,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                     //#region transaction assignment process
                     this.vm.selectedLedger = resp[1];
-
-                    if (this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.creditNote) {
+                    if (this.vm.selectedLedger && (this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.creditNote ||
+                        this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.debitNote)) {
                         this.getInvoiceListsForCreditNote();
                     }
 
@@ -1077,7 +1077,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         delete requestObj['tdsTaxes'];
         delete requestObj['tcsTaxes'];
 
-        if (requestObj.voucherType !== VoucherTypeEnum.creditNote) {
+        if (requestObj.voucherType !== VoucherTypeEnum.creditNote && requestObj.voucherType !== VoucherTypeEnum.debitNote) {
             requestObj.invoiceLinkingRequest = null;
         }
 
@@ -1199,14 +1199,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this._toasty.errorToast('Please Select ' + this.pettyCashBaseAccountTypeString + '  for entry..');
                 return;
             }
-
-            // this.invoiceList = [];
-            // this._ledgerService.GetInvoiceList({ accountUniqueName: this.accountUniqueName, status: 'unpaid' }).subscribe((res: any) => {
-            //     _.map(res.body.invoiceList, (o) => {
-            //         this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
-            //     });
-            // });
-        } else if (event.value === VoucherTypeEnum.creditNote) {
+        } else if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
             this.vm.selectedLedger.generateInvoice = true;
         }
@@ -1241,7 +1234,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public getInvoiceListsForCreditNote(): void {
         const request = {
             accountUniqueNames: [this.vm.selectedLedger.particular.uniqueName, this.vm.selectedLedger.transactions[0].particular.uniqueName],
-            voucherType: VoucherTypeEnum.creditNote
+            voucherType: this.vm.selectedLedger.voucher.shortCode
         }
         let date;
         if (typeof this.vm.selectedLedger.entryDate === 'string') {
@@ -1270,7 +1263,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.invoiceList.push(invoiceSelected);
                     }
                 }
-                _.uniqBy(this.invoiceList, 'value');
+                this.invoiceList = _.uniqBy(this.invoiceList, 'value');
                 this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
             }
         });

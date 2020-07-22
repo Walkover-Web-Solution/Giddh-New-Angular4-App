@@ -1474,7 +1474,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.voucherTypeChanged = true;
         this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
         this.selectedVoucherType = val;
-        if (this.selectedVoucherType === VoucherTypeEnum.creditNote) {
+        if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
         }
     }
@@ -1489,7 +1489,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.invFormData && this.invFormData.voucherDetails && this.invFormData.voucherDetails.customerUniquename) {
             let request = {
                 accountUniqueNames: [this.invFormData.voucherDetails.customerUniquename, 'sales'],
-                voucherType: VoucherTypeEnum.creditNote
+                voucherType: this.isCreditNote ? VoucherTypeEnum.creditNote : VoucherTypeEnum.debitNote
             }
             let date;
             if (voucherDate) {
@@ -2719,7 +2719,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.bankAccounts$ = observableOf(this.updateBankAccountObject(item.additional.currency));
             }
 
-            if (this.selectedVoucherType === VoucherTypeEnum.creditNote) {
+            if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
                 this.getInvoiceListsForCreditNote();
             }
         }
@@ -3272,7 +3272,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (this.isCreditNote || this.isDebitNote) {
                     requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
                 }
-                if (this.isCreditNote && this.selectedInvoice) {
+                if ((this.isCreditNote || this.isDebitNote) && this.selectedInvoice) {
                     const selectedLinkedVoucherType = this.invoiceList.find(invoice => invoice.value === this.selectedInvoice);
                     requestObject['invoiceLinkingRequest'] = {
                         linkedInvoices: [{
@@ -4232,7 +4232,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (selectedDate === modelDate && this.invFormData && this.invFormData.voucherDetails && this.invFormData.voucherDetails.voucherDate && this.invFormData.accountDetails && this.invFormData.accountDetails.uniqueName) {
             this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, moment(selectedDate).format(GIDDH_DATE_FORMAT));
         }
-        if (selectedDate && modelDate && selectedDate !== modelDate && this.isCreditNote) {
+        if (selectedDate && modelDate && selectedDate !== modelDate && (this.isCreditNote || this.isDebitNote)) {
             this.getInvoiceListsForCreditNote(moment(selectedDate).format(GIDDH_DATE_FORMAT));
         }
     }
