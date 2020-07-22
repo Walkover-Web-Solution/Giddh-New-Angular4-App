@@ -2271,7 +2271,28 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
-        trx.amount = Number(trx.amount);
+        if(trx.amount) {
+            let transactionAmount = trx.amount.toString();
+
+            if(this.invFormData.accountDetails.currencySymbol) {
+                transactionAmount = transactionAmount.replace(this.invFormData.accountDetails.currencySymbol, "");
+            }
+
+            if(this.selectedSuffixForCurrency) {
+                transactionAmount = transactionAmount.replace(this.selectedSuffixForCurrency, "");
+            }
+
+            if(!isNaN(Number(transactionAmount))) {
+                trx.amount = Number(transactionAmount);
+            }
+        }
+
+        if(!isNaN(Number(trx.amount))) {
+            trx.amount = Number(trx.amount);
+        } else {
+            trx.amount = 0;
+        }
+        
         if (trx.isStockTxn) {
             trx.rate = Number((trx.amount / trx.quantity).toFixed(this.highPrecisionRate));
         }
