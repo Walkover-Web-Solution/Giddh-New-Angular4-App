@@ -25,7 +25,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Profit & Loss', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'profit-and-loss', tabIndex: 1 } },
     { type: 'MENU', name: 'Balance Sheet', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'balance-sheet', tabIndex: 2 } },
     { type: 'MENU', name: 'Audit Logs', uniqueName: '/pages/audit-logs' },
-
+    { type: 'MENU', name: 'New Audit Logs', uniqueName: '/pages/audit-logs/New' },
     // { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice' },
     { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' },
     // { type: 'MENU', name: 'Inventory > Jobwork', uniqueName: '/pages/inventory/jobwork' },

@@ -773,10 +773,10 @@ a.copyInvoice img {
 .entryDate input {
     border: none;
     display: inline-block;
-    width: 73px;
+    width: 66px;
     background: transparent !important;
     height: 25px !important;
-    font-size: 12px;
+    font-size: 12px !important;
     padding-right: 0 !important;
     padding-left: 0 !important;
     padding-top: 0 !important;
@@ -886,7 +886,7 @@ span.edit-icon {
     width: 100%;
     height: 28px !important;
     padding: 5px;
-    max-width: 200px;
+    max-width: 100%;
     border: 1px solid #c7c7c7;
 }
 
@@ -1858,3 +1858,15 @@ span.eligible-ITC {
         padding-right: 20px !important;
     }
 }
+
+
+/* Rotate animation for spinner in uploading file */
+
+.rotate {
+    -webkit-animation:spin 4s linear infinite;
+    -moz-animation:spin 4s linear infinite;
+    animation:spin 4s linear infinite;
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg) } }
