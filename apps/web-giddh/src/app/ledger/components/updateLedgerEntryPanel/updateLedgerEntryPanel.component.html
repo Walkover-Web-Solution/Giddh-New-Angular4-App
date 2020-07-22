@@ -965,6 +965,8 @@
                                     Adjust {{
                                         vm.selectedLedger.voucher.shortCode === 'sal' ? 'Sales' :
                                         vm.selectedLedger.voucher.shortCode === 'pur' ? 'Purchase' :
+                                        vm.selectedLedger.voucherType === 'credit note' ? 'Credit Note' :
+                                        vm.selectedLedger.voucherType === 'debit note' ? 'Debit Note' :
                                         vm.selectedLedger.voucher.shortCode === 'pay' ? 'Payment' : ''
                                     }}
                                 </td>

@@ -1748,8 +1748,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public closeAdjustmentModal(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
-        if (event && event.adjustPaymentData &&
-            !event.adjustVoucherData.adjustments.length) {
+        if (this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments && !this.vm.selectedLedger.voucherAdjustments.adjustments.length) {
             // No adjustments done clear the adjustment checkbox
             this.isAdjustReceiptSelected = false;
             this.isAdjustVoucherSelected = false
@@ -1818,24 +1817,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.isAdjustVoucherSelected = true;
             if (this.vm.selectedLedger.voucherAdjustments.adjustments.every(adjustment => adjustment.voucherType === 'sales')) {
                 this.isAdjustedInvoicesWithAdvanceReceipt = true;
-                if (this.isAdvanceReceipt) {
-                    this.isAdjustAdvanceReceiptSelected = true;
-                } else {
-                    this.isAdjustReceiptSelected = true;
-                }
                 this.calculateInclusiveTaxesForAdvanceReceiptsInvoices();
             } else if (this.vm.selectedLedger.voucherAdjustments.adjustments.every(adjustment => adjustment.voucherType === 'receipt')) {
                 this.isAdjustedWithAdvanceReceipt = true;
-                if (this.isAdvanceReceipt) {
-                    this.isAdjustAdvanceReceiptSelected = true;
-                } else {
-                    this.isAdjustReceiptSelected = true;
-                }
                 this.calculateInclusiveTaxesForAdvanceReceipts();
             } else {
-                this.isAdjustReceiptSelected = false;
-                this.isAdjustAdvanceReceiptSelected = false;
+                this.isAdjustedWithAdvanceReceipt = false;
                 this.isAdjustedInvoicesWithAdvanceReceipt = false;
+            }
+            if (this.isAdvanceReceipt) {
+                this.isAdjustAdvanceReceiptSelected = true;
+            } else if (this.vm.selectedLedger.voucher.shortCode === 'rcpt') {
+                this.isAdjustReceiptSelected = true;
             }
         }
     }

@@ -1056,8 +1056,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                     }
                     //  If last invoice copied then no need to add voucherAdjustments as pre-fill ref:- G0-5554
-                    if (this.isSalesInvoice) {
-                        if (results[1] && results[1].voucherAdjustments && results[1].voucherAdjustments.adjustments && results[1].voucherAdjustments.adjustments.length && !this.isLastInvoiceCopied) {
+                    if (this.isSalesInvoice || results[1] && results[1].voucherAdjustments) {
+                        if (results[1].voucherAdjustments.adjustments && results[1].voucherAdjustments.adjustments.length && !this.isLastInvoiceCopied) {
                             this.isInvoiceAdjustedWithAdvanceReceipts = true;
                             this.calculateAdjustedVoucherTotal(results[1].voucherAdjustments.adjustments);
                             this.advanceReceiptAdjustmentData = results[1].voucherAdjustments;
@@ -3314,11 +3314,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         requestObject.passportNumber = '';
                     }
                 }
-                /** Advance receipts adjustment for sales invoice*/
-                if (this.isSalesInvoice) {
+                /** Advance receipts adjustment for sales invoice or if other voucher adjustments then send the data as is */
+                if (this.isSalesInvoice || this.advanceReceiptAdjustmentData) {
                     if (!this.advanceReceiptAdjustmentData) {
                         this.advanceReceiptAdjustmentData.adjustments = [];
-                    } else {
+                    } else if (this.isSalesInvoice) {
                         if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
                             this.advanceReceiptAdjustmentData.adjustments.forEach(adjustment => {
                                 delete adjustment.balanceDue;
