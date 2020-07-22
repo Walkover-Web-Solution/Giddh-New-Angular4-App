@@ -13,7 +13,7 @@ import {States, StatesRequest} from '../../models/api-models/Company';
 import {CompanyService} from '../../services/companyService.service';
 import {CustomActions} from '../../store/customActions';
 import {IPaginatedResponse} from '../../models/interfaces/paginatedResponse.interface';
-import {IUlist, IUpdateDbRequest } from '../../models/interfaces/ulist.interface';
+import {IUlist, IUpdateDbRequest} from '../../models/interfaces/ulist.interface';
 import {CurrentPage} from '../../models/api-models/Common';
 import {DbService} from "../../services/db.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -82,14 +82,14 @@ export class GeneralActions {
                                     if (this.route.url.includes('/ledger/' + payload.oldUniqueName)) {
                                         this.route.navigate(['pages', 'ledger', payload.newUniqueName]);
                                     }
-                                    return this.updateIndexDbComplete()
+                                    return this.updateIndexDbComplete();
                                 }));
                             } else {
                                 return of(this.updateIndexDbComplete());
                             }
                         }
                         default : {
-                            return of(this.updateIndexDbComplete())
+                            return of(this.updateIndexDbComplete());
                         }
                     }
                 } else {
@@ -104,15 +104,14 @@ export class GeneralActions {
             switchMap((action: CustomActions) => {
                 const payload: IUpdateDbRequest = action.payload;
                 return this._dbService.removeItem(payload.uniqueName, payload.type, payload.deleteUniqueName).then(res => {
-                    if (res) {
+                    if (res && res.aidata && res.aidata.accounts && res.aidata.accounts.length) {
                         if (this.route.url.includes('/ledger/' + payload.deleteUniqueName)) {
                             this.route.navigate(['pages', 'ledger', res.aidata.accounts[0].uniqueName]);
                         }
-                        return this.deleteEntryFromIndexDbComplete()
+                        return this.deleteEntryFromIndexDbComplete();
                     }
                     return this.deleteEntryFromIndexDbError();
-                }).
-                catch(error => this.deleteEntryFromIndexDbError());
+                }).catch(error => this.deleteEntryFromIndexDbError());
             })
         )
 
