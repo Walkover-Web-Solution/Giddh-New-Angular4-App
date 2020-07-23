@@ -63,8 +63,6 @@
 
                         <button placement="top" tooltip="Works only for single entry." *ngIf="!isMobileView" [hidden]="selectedLedgerItems.length === 0  || !togglePrevGenBtn" class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate
                     </button>
-
-
                     </div>
 
                     <!-- <div class="form-group">
@@ -240,7 +238,8 @@
 
                     <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select" (clickOutside)="modalUniqueName = ''" data-title="Account">
                         {{item.account.name}}
-                        <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component [accountUniqueName]="item.account.uniqueName" [from]="this.ledgerSearchRequest.from" [to]="this.ledgerSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName">
+                        <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component [accountUniqueName]="item.account.uniqueName" [from]="this.ledgerSearchRequest.from" [to]="this.ledgerSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName"
+                            [voucherType]="selectedVoucher">
                         </div>
                     </td>
 
