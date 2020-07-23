@@ -295,23 +295,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private commonActions: CommonActions,
         private location: Location
     ) {
-        this._windowRef.nativeWindow.superformIds = ['Jkvq'];
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                let configDatePicker = cloneDeep(config);
-                if (configDatePicker && configDatePicker.ranges) {
-                    let modifiedRanges = [];
-                    configDatePicker.ranges.forEach(item => {
-                        if (item.name !== 'Today' && item.name !== 'Yesterday') {
-                            modifiedRanges.push(item);
-                        }
-                    });
-                    configDatePicker.ranges = modifiedRanges;
-                }
-                this.datePickerOptions = configDatePicker;
-            }
-        });
+        //this._windowRef.nativeWindow.superformIds = ['Jkvq'];
+        
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
 
@@ -349,6 +334,30 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             }
         });
+    }
+
+    public ngOnInit() {
+        this.sideBarStateChange(true);
+        this.getElectronAppVersion();
+        this.store.dispatch(this.companyActions.GetApplicationDate());
+
+        /* This will get the date range picker configurations */
+        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
+            if (config) {
+                let configDatePicker = cloneDeep(config);
+                if (configDatePicker && configDatePicker.ranges) {
+                    let modifiedRanges = [];
+                    configDatePicker.ranges.forEach(item => {
+                        if (item.name !== 'Today' && item.name !== 'Yesterday') {
+                            modifiedRanges.push(item);
+                        }
+                    });
+                    configDatePicker.ranges = modifiedRanges;
+                }
+                this.datePickerOptions = configDatePicker;
+            }
+        });
+
         this.store.pipe(select(s => s.general.isCalendlyModelOpen), takeUntil(this.destroyed$)).subscribe(response => {
             this.isCalendlyModelActivate = response;
         });
@@ -393,6 +402,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     return false;
                 }
             });
+
             if (!selectedCmp) {
                 return;
             }
@@ -419,17 +429,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 } else {
                     this.seletedCompanywithBranch = selectedCmp.name;
                 }
-                //commenting due to new date picker option
-                // if (this.activeFinancialYear) {
-                //     this.datePickerOptions.ranges['This Financial Year to Date'] = [
-                //         moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
-                //         moment()
-                //     ];
-                //     this.datePickerOptions.ranges['Last Financial Year'] = [
-                //         moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
-                //         moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
-                //     ];
-                // }
 
                 this.activeCompanyForDb = new CompAidataModel();
                 this.activeCompanyForDb.name = selectedCmp.name;
@@ -464,20 +463,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.removeCompanySessionData();
             }
         });
-    }
-
-    public ngOnInit() {
-        this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
-            if (value === 'logoutCordova') {
-                this.zone.run(() => {
-                    this.router.navigate(['login']);
-                    this.changeDetection.detectChanges();
-                });
-            }
-        });
-        this.sideBarStateChange(true);
-        this.getElectronAppVersion();
-        this.store.dispatch(this.companyActions.GetApplicationDate());
 
         this.user$.pipe(take(1)).subscribe((u) => {
             if (u) {
@@ -706,7 +691,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     });
                 }
             }
-        })
+        });
+
+        this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
+            if (value === 'logoutCordova') {
+                this.zone.run(() => {
+                    this.router.navigate(['login']);
+                    this.changeDetection.detectChanges();
+                });
+            }
+        });
     }
 
     public setSelectedCompanyData(selectedCompany) {
