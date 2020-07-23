@@ -9297,7 +9297,7 @@ span#HW_badge_cont:nth-child(3){
     .padding-top-fixed-mobile{
         padding-top: 50px;
     }
-    
+
 }
 .mobile-sidebar-open:after{
     position: absolute;
@@ -9318,6 +9318,22 @@ span#HW_badge_cont:nth-child(3){
 .giddh-datepicker{
     cursor: pointer !important;
 }
+.setting-items{
+    ul{
+        li{
+            a{
+                span{
+                    i{
+                        color: $gray;
+                        margin-right: 10px;
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+    }
+}
+
 /* responsive */
 
 @media (max-width: 1440px) {
