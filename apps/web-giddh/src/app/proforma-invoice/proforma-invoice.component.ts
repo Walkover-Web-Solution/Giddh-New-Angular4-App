@@ -3337,6 +3337,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     subVoucher: (this.isRcmEntry) ? Subvoucher.ReverseCharge : ''
                 } as PurchaseRecordRequest;
                 requestObject = this.updateData(requestObject, data);
+                if (this.advanceReceiptAdjustmentData) {
+                    requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
+                }
                 this.generatePurchaseRecord(requestObject);
             } else {
                 this.salesService.updateVoucher(requestObject).pipe(takeUntil(this.destroyed$))
