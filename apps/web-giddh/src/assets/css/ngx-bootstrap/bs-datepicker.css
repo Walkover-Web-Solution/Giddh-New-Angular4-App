@@ -82,7 +82,7 @@
 .bs-datepicker-head button.next span,
 .bs-datepicker-head button.previous span {
     font-size: 28px;
-    line-height: 1;
+    line-height: 0.9;
     display: inline-block;
     position: relative;
     height: 100%;
@@ -91,7 +91,8 @@
 }
 .bs-datepicker-head button.current {
     border-radius: 15px;
-    max-width: 155px;
+    /* max-width: 155px; */
+    width: 100px;
     padding: 0 13px;
 }
 .bs-datepicker-head button:hover {
@@ -517,3 +518,8 @@
 }
 
 /*# sourceMappingURL=bs-datepicker.css.map */
+bs-datepicker-navigation-view {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
