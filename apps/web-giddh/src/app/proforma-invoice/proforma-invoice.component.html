@@ -53,7 +53,7 @@
 
     <!-- region main form -->
     <div [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)">
-        <form #invoiceForm="ngForm" novalidate autocomplete="off" [ngClass]="{ 'customerInvoiceForm' : !invFormData.voucherDetails.customerName, 'cusomerInvoiceFormPurchase': isPurchaseInvoice , 'slaesPrEsti':isSalesInvoice || isProformaInvoice || isEstimateInvoice , 'forMultiCurrency' : isMulticurrencyAccount  } ">
+        <form #invoiceForm="ngForm" [validateDate]="['voucherDate', 'dueDate', invFormData?.entries?.length?.toString(), invoiceType]" novalidate autocomplete="off" [ngClass]="{ 'customerInvoiceForm' : !invFormData.voucherDetails.customerName, 'cusomerInvoiceFormPurchase': isPurchaseInvoice , 'slaesPrEsti':isSalesInvoice || isProformaInvoice || isEstimateInvoice , 'forMultiCurrency' : isMulticurrencyAccount  } ">
 
             <div class="clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="addAccountFromShortcut()">
 
@@ -412,20 +412,16 @@
                                                 <label>{{ invoiceDateLabel }}</label>
 
                                                 <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.voucherDate" [disabled]="(invoiceType !== 'purchase' && isUpdateMode) ? 'disabled' : null"
-                                                    [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)" (blur)="onBlurInvoiceDate(0)" (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)"
+                                                    [class.invalid-inp]="voucherDate.errors" (blur)="onBlurInvoiceDate(0)" (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)"
                                                 />
-                                                <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">
-                                                    Invalid Date
-                                                </p>
-
                                             </div>
 
                                             <div class="form-group m-l-10" *ngIf="isSalesInvoice || isPurchaseInvoice || isProformaInvoice || isEstimateInvoice">
                                                 <label>{{ invoiceDueDateLabel }}</label>
 
-                                                <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.dueDate" [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
+                                                <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.dueDate" [class.invalid-inp]="dueDate.errors"
                                                     (blur)="onBlurDueDate(0)" />
-                                                <p class="text-danger" *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid Date
+                                                <p class="text-danger" *ngIf="dueDate.errors"> {{invoiceDueDateLabel}} should be grater then {{invoiceDateLabel}}.
                                                 </p>
 
                                             </div>
@@ -442,11 +438,8 @@
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
                                         <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel" name="voucherDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.voucherDate" (blur)="onBlurInvoiceDate(0)"
-                                            (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)" [disabled]="(invoiceType !== 'purchase' && isUpdateMode) ? 'disabled' : null" [class.invalid-inp]="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
+                                            (bsValueChange)="onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)" [disabled]="(invoiceType !== 'purchase' && isUpdateMode) ? 'disabled' : null" [class.invalid-inp]="voucherDate.errors"
                                         />
-                                        <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">
-                                            Invalid Date
-                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -457,9 +450,9 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
-                                        <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.dueDate" [class.invalid-inp]="dueDate.errors && (dueDate.dirty || dueDate.touched)"
+                                        <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel" name="dueDate" class="form-control dateinvoice" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" [(ngModel)]="invFormData.voucherDetails.dueDate" [class.invalid-inp]="dueDate.errors"
                                         />
-                                        <p class="text-danger" *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)">Invalid Date
+                                        <p class="text-danger" *ngIf="dueDate.errors">{{invoiceDueDateLabel}} should be grater then {{invoiceDateLabel}}.
                                         </p>
                                     </div>
                                 </div>
@@ -635,7 +628,14 @@
                                                         <span class="edit-icon cp" *ngIf="!isUpdateMode">
                                                             <img src="assets/images/edit-pencilicon.svg">
                                                         </span>
-
+                                                        <small *ngIf="invoiceForm.controls['transaction.date_' + entryIdx] &&
+                                                        invoiceForm.controls['transaction.date_' + entryIdx].errors?.sameMMDD">
+                                                            {{invoiceDateLabel}} and entry dates should be in same month and year.
+                                                        </small>
+                                                        <small *ngIf="invoiceForm.controls['transaction.date_' + entryIdx] &&
+                                                        invoiceForm.controls['transaction.date_' + entryIdx].errors?.beforeEntry">
+                                                            entry date should not after {{invoiceDateLabel}}.
+                                                        </small>
                                                     </div>
                                                 </div>
 
@@ -816,11 +816,9 @@
                                                                     <img src="assets/images/edit-pencilicon.svg">
                                                                 </span>
                                                             </span>
-
                                                             <span *ngIf="isUpdateMode">
                                                                 {{ entry.entryDate | date: 'dd-MM-yyyy'}}
                                                             </span>
-
                                                         </div>
                                                     </div>
 
