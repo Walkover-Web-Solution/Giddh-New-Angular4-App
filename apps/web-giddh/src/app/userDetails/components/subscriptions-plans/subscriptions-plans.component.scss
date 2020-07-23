@@ -6,11 +6,10 @@
     display: inline-block;
 }
 .select-plan-block {
-    margin-bottom: 30px;
+    padding-bottom: 40px;
     background-color: $white;
     border:1px solid $gainsboro;
     height: 97%;
-
 }
 .welcome-msg {
     position: relative;
@@ -88,6 +87,8 @@
 }
 .plans-box {
     padding: 10px 30px 10px;
+    height: 97%;
+    justify-content: space-around;
     p.total-price {
         margin: 0 -8px;
     }
@@ -98,7 +99,7 @@
     }
 }
 .your-account {
-    margin: 30px 0px 20px 15px;
+    margin: 30px 0px 10px 15px;
     position: relative;
 }
 .inner-your-account {
@@ -135,7 +136,7 @@
 
 .plan-list {
     list-style-type: none;
-    min-height: 290px;
+    min-height: 190px;
     margin-top: 5px;
     li {
         font-size: 14px;
@@ -290,13 +291,13 @@
 }
 .single-plan-for-company{
     .your-account {
-        margin: 15px 0;
+        margin: 15px 0 10px;
         &:before,
         &:after{
             display: none;
         }
         .plan-list {
-            min-height: 245px !important;
+            min-height: 245px;
         }
     }
     .plans-box {
@@ -306,7 +307,7 @@
     }
 }
 
-@media (min-width: 1367px) {
+@media (min-width: 1200px) {
     .select-plan-block {
         height: 97%;
         .plans-box{
@@ -314,16 +315,29 @@
             flex-direction: column;
             .your-account {
                 .plan-list {
-                    min-height: 230px;
+                    min-height: 160px;
+                }
+            }
+        }
+    }
+    .single-plan-for-company{
+        .plans-box{
+            display: flex;
+            flex-direction: column;
+            .your-account {
+                .plan-list {
+                    min-height: 193px;
                 }
             }
         }
     }
 }
-@media only screen and (max-width: 1366px) {
-    .your-account {
-        margin: 30px 0px 0 15px;
+@media (min-width:1367px){
+    .plans-box {
+        padding: 10px 30px 30px;
     }
+}
+@media only screen and (max-width: 1366px) {
     .your-account:after {
         top: -10px;
         left: -10px;
@@ -337,15 +351,8 @@
     }
     .plan-list {
         list-style-type: none;
-        min-height: 150px;
     }
-    .single-plan-for-company {
-        .your-account {
-            .plan-list {
-                min-height: 165px;
-            }
-        }
-    }
+
     .select-plan-head {
         padding: 10px 15px;
     }
@@ -356,6 +363,19 @@
     }
     .plan-msg {
         margin-bottom: 10px;
+    }
+    .single-plan-for-company{
+        .plans-box{
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 30px;
+            height: 101%;
+            .your-account {
+                .plan-list {
+                    min-height: 173px;
+                }
+            }
+        }
     }
 }
 @media only screen and (max-width: 1600px) {
@@ -381,9 +401,6 @@
         width: 50%;
         display: inline-block;
     }
-    .main-row-plans .col-sm-4:last-child {
-        margin-left: 25%;
-    }
     .main-row-plans::-webkit-scrollbar {
         height: 5px;
         width: 100%;
@@ -392,6 +409,25 @@
         background-color: $gainsboro;
         outline: 1px solid $gray;
         border-radius: 20px;
+    }
+    .single-plan-for-company{
+        .plans-box{
+                padding-bottom: 15px;
+            .your-account{
+                    margin: 15px 0 0;
+                .plan-list{
+                    min-height: 200px;
+                }
+            }
+        }
+    }
+    .select-plan-block{
+        height: 97%;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        .overall-plans{
+            margin-bottom: 20px;
+        }
     }
 }
 @media(max-width:768px){
@@ -405,7 +441,6 @@
         margin-left: auto;
     }
     .plan-list {
-        min-height: initial;
         margin-bottom: 10px;
     }
 
