@@ -370,13 +370,13 @@
                                     <div class="col-sm-6 pl-0">
                                         <!-- Enabled for CR/DR update flow -->
                                         <div>
-                                            <input *ngIf="(selectedVoucherType !== 'credit note' && !(isUpdateMode && isCreditNote))" type="text"
+                                            <input *ngIf="(!isCreditNote && !isDebitNote)" type="text"
                                                 name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo"
                                                 [ngClass]="{'dateinvoice': !isPurchaseInvoice }"
                                                 [disabled]="(isUpdateMode && !(isDebitNote || isPurchaseInvoice)) ? 'disabled' : null"
                                                 [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
 
-                                            <ng-container *ngIf="(selectedVoucherType === 'credit note') || (isUpdateMode && isCreditNote)">
+                                            <ng-container *ngIf="isCreditNote || isDebitNote">
                                                 <sh-select [options]="invoiceList" placeholder="Select Accounts"
                                                     [forceClearReactive]="invoiceForceClearReactive$ | async" [notFoundLink]="false"
                                                     [(ngModel)]="selectedInvoice" [ngModelOptions]="{standalone: true}"
@@ -397,14 +397,14 @@
                                                 </sh-select>
                                             </ng-container>
                                         </div>
-                                        <div *ngIf="isCreditNote && selectedInvoice" class="cp for-mobile-screen remove-invoice" (click)="removeSelectedInvoice()">
+                                        <div *ngIf="(isCreditNote || isDebitNote) && selectedInvoice" class="cp for-mobile-screen remove-invoice" (click)="removeSelectedInvoice()">
                                             <span class="remove-invoice-icon mr-05">×</span>
                                             <span class="remove-invoice-label">Remove</span>
                                         </div>
                                     </div>
                                     <div class="col-sm-6 invoiceDateDueDate">
                                         <div class="form-inline">
-                                            <div *ngIf="isCreditNote && selectedInvoice" class="cp remove-invoice" (click)="removeSelectedInvoice()">
+                                            <div *ngIf="(isCreditNote || isDebitNote) && selectedInvoice" class="cp remove-invoice" (click)="removeSelectedInvoice()">
                                                 <span class="remove-invoice-icon mr-05">×</span>
                                                 <span class="remove-invoice-label">Remove</span>
                                             </div>
@@ -1268,14 +1268,14 @@
                                                             </a>
                                                         </ng-template>
                                                     </sh-select>
-                                                    <label class="pull-left pt-1">Payment Mode</label>
+                                                    <label class="pull-right pt-1">Payment Mode</label>
                                                 </div>
                                             </li>
 
                                             <li class="clearfix mrT1" *ngIf="isSalesInvoice">
                                                 <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount" name="dueAmount" class="form-control amountField text-right pull-right max100" [(ngModel)]="depositAmount" [prefix]="depositCurrSymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                                 />
-                                                <label class="pull-left pt-1">Amount</label>
+                                                <label class="pull-right pt-1">Amount</label>
                                             </li>
 
                                             <li class="clearfix mrT1" *ngIf="isCashInvoice">
@@ -1283,7 +1283,7 @@
                                                                     <span
                                                                         *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span> {{invFormData.voucherDetails.balanceDue
                                                 | giddhCurrency}}</span>
-                                                <label class="pull-left pt-1">Amount</label>
+                                                <label class="pull-right pt-1">Amount</label>
                                             </li>
 
                                             <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
@@ -1296,7 +1296,7 @@
                                                                         {{invFormData.voucherDetails.balanceDue | giddhCurrency }}
                                                                     </ng-container>
                                                                 </strong>
-                                                <strong class="pull-left">Balance Due</strong>
+                                                <strong class="pull-right">Balance Due</strong>
                                             </li>
                                         </ng-container>
                                     </ul>
@@ -1960,21 +1960,21 @@
                                                 </a>
                                             </ng-template>
                                         </sh-select>
-                                        <label class="pull-left pt-1">Payment Mode</label>
+                                        <label class="pull-right pt-1">Payment Mode</label>
                                     </div>
                                 </li>
 
                                 <li class="clearfix mrT1" *ngIf="isSalesInvoice">
                                     <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount" name="dueAmount" class="form-control amountField text-right pull-right max100" [(ngModel)]="depositAmount" [prefix]="depositCurrSymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                     />
-                                    <label class="pull-left pt-1">Amount</label>
+                                    <label class="pull-right pt-1">Amount</label>
                                 </li>
 
                                 <li class="clearfix mrT1" *ngIf="isCashInvoice">
                                     <span class="amountField pull-right max100 amountFiledCash">
                                                         <span
                                                             *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span> {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</span>
-                                    <label class="pull-left pt-1">Amount</label>
+                                    <label class="pull-right pt-1">Amount</label>
                                 </li>
 
                                 <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
@@ -1982,7 +1982,7 @@
                                                         *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
                                                         {{invFormData.voucherDetails.balanceDue | giddhCurrency}}
                                                     </strong>
-                                    <strong class="pull-left">Balance Due</strong>
+                                    <strong class="pull-right">Balance Due</strong>
                                 </li>
 
                             </ul>

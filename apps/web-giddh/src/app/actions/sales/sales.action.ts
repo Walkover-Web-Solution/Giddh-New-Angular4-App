@@ -17,7 +17,7 @@ import { InventoryService } from '../../services/inventory.service';
 import { INameUniqueName } from '../../models/api-models/Inventory';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { CustomActions } from '../../store/customActions';
-import {UpdateDbRequest} from "../../models/interfaces/ulist.interface";
+import {IUpdateDbRequest} from "../../models/interfaces/ulist.interface";
 import {GeneralActions} from "../general/general.actions";
 import {GeneralService} from "../../services/general.service";
 
@@ -129,7 +129,7 @@ export class SalesActions {
             switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.accountRequest, action.payload.value)),
             map(response => {
                 if(response && response.body && response.queryString) {
-                    const updateIndexDb: UpdateDbRequest = {
+                    const updateIndexDb: IUpdateDbRequest = {
                         newUniqueName: response.body.uniqueName,
                         oldUniqueName: response.queryString.accountUniqueName,
                         latestName: response.request.name,

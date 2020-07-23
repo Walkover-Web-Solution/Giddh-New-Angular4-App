@@ -26,10 +26,11 @@ export interface Igtbl {
 	accounts: IUlist[];
 }
 
-export interface UpdateDbRequest extends INameUniqueName {
-    oldUniqueName: string;
-    newUniqueName: string;
-    latestName: string;
+export interface IUpdateDbRequest extends INameUniqueName {
+    oldUniqueName?: string;
+    newUniqueName?: string;
+    latestName?: string;
+    deleteUniqueName?: string;
     type: 'menus' | 'groups' | 'accounts'
 }
 

@@ -894,14 +894,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * Get Invoice list for credit note
      *
-     * @param {any} event Selected invoice for credit note
+     * @param {any} voucher Selected voucher
      * @memberof LedgerComponent
      */
-    public getInvoiceListsForCreditNote(ev): void {
-        if (ev && this.selectedTxnAccUniqueName && this.accountUniquename) {
+    public getInvoiceListsForCreditNote(voucherType: string): void {
+        if (voucherType && this.selectedTxnAccUniqueName && this.accountUniquename) {
             const request = {
                 accountUniqueNames: [this.selectedTxnAccUniqueName, this.accountUniquename],
-                voucherType: VoucherTypeEnum.creditNote
+                voucherType
             };
             let date;
             if (typeof this.lc.blankLedger.entryDate === 'string') {

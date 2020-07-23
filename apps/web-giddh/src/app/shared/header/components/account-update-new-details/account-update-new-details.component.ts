@@ -404,11 +404,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
         this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
         this.accountsAction.mergeAccountResponse$.subscribe(res => {
-            if (this.selectedaccountForMerge.length > 0) {
-                this.selectedaccountForMerge.forEach((element) => {
-                    this.deleteFromLocalDB(element);
-                });
-            }
             this.selectedaccountForMerge = '';
         });
         this.isTaxableAccount$ = this.store.select(createSelector([
@@ -424,16 +419,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 return result;
             }));
     }
-    public deleteFromLocalDB(activeAccUniqueName?: string) {
-        this._dbService.removeItem(this.activeCompany.uniqueName, 'accounts', activeAccUniqueName).then((res) => {
-            if (res) {
-                this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
-            }
-        }, (err: any) => {
-        });
-    }
-
-
     public ngAfterViewInit() {
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();

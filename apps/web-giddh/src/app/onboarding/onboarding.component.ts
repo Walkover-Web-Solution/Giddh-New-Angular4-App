@@ -37,7 +37,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit {
         private companyActions: CompanyActions,
         private generalActions: GeneralActions
     ) {
-        this._window.nativeWindow.superformIds = ['Jkvq'];
+        //this._window.nativeWindow.superformIds = ['Jkvq'];
     }
 
     public ngOnInit() {

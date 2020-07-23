@@ -1056,8 +1056,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                     }
                     //  If last invoice copied then no need to add voucherAdjustments as pre-fill ref:- G0-5554
-                    if (this.isSalesInvoice) {
-                        if (results[1] && results[1].voucherAdjustments && results[1].voucherAdjustments.adjustments && results[1].voucherAdjustments.adjustments.length && !this.isLastInvoiceCopied) {
+                    if (this.isSalesInvoice || (results[1] && results[1].voucherAdjustments)) {
+                        if (results[1].voucherAdjustments.adjustments && results[1].voucherAdjustments.adjustments.length && !this.isLastInvoiceCopied) {
                             this.isInvoiceAdjustedWithAdvanceReceipts = true;
                             this.calculateAdjustedVoucherTotal(results[1].voucherAdjustments.adjustments);
                             this.advanceReceiptAdjustmentData = results[1].voucherAdjustments;
@@ -1212,6 +1212,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
                     } else {
                         this.isCustomerSelected = false;
+                    }
+                    if (this.isMultiCurrencyModule()) {
+                        this.initializeWarehouse();
                     }
                 }
 
@@ -1471,7 +1474,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.voucherTypeChanged = true;
         this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
         this.selectedVoucherType = val;
-        if (this.selectedVoucherType === VoucherTypeEnum.creditNote) {
+        if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
         }
     }
@@ -1486,7 +1489,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.invFormData && this.invFormData.voucherDetails && this.invFormData.voucherDetails.customerUniquename) {
             let request = {
                 accountUniqueNames: [this.invFormData.voucherDetails.customerUniquename, 'sales'],
-                voucherType: VoucherTypeEnum.creditNote
+                voucherType: this.isCreditNote ? VoucherTypeEnum.creditNote : VoucherTypeEnum.debitNote
             }
             let date;
             if (voucherDate) {
@@ -2268,7 +2271,28 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
-        trx.amount = Number(trx.amount);
+        if(trx.amount) {
+            let transactionAmount = trx.amount.toString();
+
+            if(this.invFormData.accountDetails.currencySymbol) {
+                transactionAmount = transactionAmount.replace(this.invFormData.accountDetails.currencySymbol, "");
+            }
+
+            if(this.selectedSuffixForCurrency) {
+                transactionAmount = transactionAmount.replace(this.selectedSuffixForCurrency, "");
+            }
+
+            if(!isNaN(Number(transactionAmount))) {
+                trx.amount = Number(transactionAmount);
+            }
+        }
+
+        if(!isNaN(Number(trx.amount))) {
+            trx.amount = Number(trx.amount);
+        } else {
+            trx.amount = 0;
+        }
+
         if (trx.isStockTxn) {
             trx.rate = Number((trx.amount / trx.quantity).toFixed(this.highPrecisionRate));
         }
@@ -2716,7 +2740,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.bankAccounts$ = observableOf(this.updateBankAccountObject(item.additional.currency));
             }
 
-            if (this.selectedVoucherType === VoucherTypeEnum.creditNote) {
+            if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
                 this.getInvoiceListsForCreditNote();
             }
         }
@@ -3269,7 +3293,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (this.isCreditNote || this.isDebitNote) {
                     requestObject['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
                 }
-                if (this.isCreditNote && this.selectedInvoice) {
+                if ((this.isCreditNote || this.isDebitNote) && this.selectedInvoice) {
                     const selectedLinkedVoucherType = this.invoiceList.find(invoice => invoice.value === this.selectedInvoice);
                     requestObject['invoiceLinkingRequest'] = {
                         linkedInvoices: [{
@@ -3290,11 +3314,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         requestObject.passportNumber = '';
                     }
                 }
-                /** Advance receipts adjustment for sales invoice*/
-                if (this.isSalesInvoice) {
+                /** Advance receipts adjustment for sales invoice or if other voucher adjustments then send the data as is */
+                if (this.isSalesInvoice || this.advanceReceiptAdjustmentData) {
                     if (!this.advanceReceiptAdjustmentData) {
                         this.advanceReceiptAdjustmentData.adjustments = [];
-                    } else {
+                    } else if (this.isSalesInvoice) {
                         if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
                             this.advanceReceiptAdjustmentData.adjustments.forEach(adjustment => {
                                 delete adjustment.balanceDue;
@@ -4229,7 +4253,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (selectedDate === modelDate && this.invFormData && this.invFormData.voucherDetails && this.invFormData.voucherDetails.voucherDate && this.invFormData.accountDetails && this.invFormData.accountDetails.uniqueName) {
             this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, moment(selectedDate).format(GIDDH_DATE_FORMAT));
         }
-        if (selectedDate && modelDate && selectedDate !== modelDate && this.isCreditNote) {
+        if (selectedDate && modelDate && selectedDate !== modelDate && (this.isCreditNote || this.isDebitNote)) {
             this.getInvoiceListsForCreditNote(moment(selectedDate).format(GIDDH_DATE_FORMAT));
         }
     }
@@ -4638,6 +4662,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.shouldShowWarehouse = true;
                     }
                 }
+            } else {
+                this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
             }
         });
     }
