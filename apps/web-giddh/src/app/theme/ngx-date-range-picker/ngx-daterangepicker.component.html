@@ -166,8 +166,8 @@
                         <!-- month name and month dropdown -->
                         <!-- navigate to previous and next month buttons -->
                         <div class="prev-next-btn">
-                            <button class="prev available" (click)="onScroll('top')"></button>
-                            <button class="next available" (click)="onScroll('bottom')"></button>
+                            <button class="prev available" (click)="initiateScrollToIndex('top'); onScroll('top')"></button>
+                            <button class="next available" (click)="initiateScrollToIndex('bottom'); onScroll('bottom')"></button>
                         </div>
                         <!-- navigate to previous and next month buttons -->
                     </div>
@@ -246,7 +246,7 @@
                 </perfect-scrollbar>
                 <!-- start date calendar container -->
                 <div (wheel)="mouseUp($event)" (touchmove)="mouseUp($event)">
-                    <cdk-virtual-scroll-viewport [itemSize]="160" *ngIf="showCalInRanges && !showMonthPicker">
+                    <cdk-virtual-scroll-viewport [itemSize]="160" *ngIf="showCalInRanges && !showMonthPicker" (scrolledIndexChange)="updateScrollIndex($event)">
                         <div *cdkVirtualFor="let calendarMonth of calendarMonths; let i = index;">
                             <div class="calendar" *ngIf="calendarMonth && calendarMonth.start"
                                 [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">

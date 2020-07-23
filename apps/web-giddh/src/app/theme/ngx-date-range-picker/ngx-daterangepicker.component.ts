@@ -228,6 +228,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public currentFinancialYearUniqueName: string = "";
     public isOnScrollActive: boolean = false;
     public imgPath: string = '';
+    public currentScrollIndex: number = 0;
+    public scrollInDirection: string = "";
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private scrollDispatcher: ScrollDispatcher) {
         this.choosedDate = new EventEmitter();
@@ -735,7 +737,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             if (this.timePicker && this.timePickerIncrement) {
                 this.startDate.minute(Math.round(this.startDate.minute() / this.timePickerIncrement) * this.timePickerIncrement);
             }
-
         }
 
         if (this.maxDate && this.startDate.isAfter(this.maxDate)) {
@@ -1974,6 +1975,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
 
         this.calendarMonths = [...this.calendarMonths];
+
+        if(this.scrollInDirection === "top") {
+            this.virtualScroll.scrollToIndex(this.currentScrollIndex - 1);
+        } else if(this.scrollInDirection === "bottom") {
+            this.virtualScroll.scrollToIndex(this.currentScrollIndex + 1);
+        }
     }
 
     /**
@@ -2253,5 +2260,25 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.isMobileScreen = false;
         this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate });
         this.hide();
+    }
+
+    /**
+     * This will update the index of scrolled element
+     *
+     * @param {*} event
+     * @memberof NgxDaterangepickerComponent
+     */
+    public updateScrollIndex(event: number): void {
+        this.currentScrollIndex = event;
+    }
+
+    /**
+     * This will update that in which direction we need to scroll
+     *
+     * @param {string} direction
+     * @memberof NgxDaterangepickerComponent
+     */
+    public initiateScrollToIndex(direction: string): void {
+        this.scrollInDirection = direction;
     }
 }
