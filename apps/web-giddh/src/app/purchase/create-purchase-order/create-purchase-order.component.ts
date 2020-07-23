@@ -421,7 +421,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
                 this.purchaseOrder.account.billingDetails.address = [];
                 this.purchaseOrder.account.billingDetails.address.push(accountDetails.addresses[0].address);
                 this.purchaseOrder.account.billingDetails.gstNumber = accountDetails.addresses[0].gstNumber;
-                if(accountDetails.addresses[0].state) {
+                if (accountDetails.addresses[0].state) {
                     this.purchaseOrder.account.billingDetails.state.name = accountDetails.addresses[0].state.name;
                     this.purchaseOrder.account.billingDetails.state.code = (accountDetails.addresses[0].state) ? (accountDetails.addresses[0].state.code) ? accountDetails.addresses[0].state.code : accountDetails.addresses[0].state.stateGstCode : accountDetails.addresses[0].stateCode;
                     this.purchaseOrder.account.billingDetails.stateCode = this.purchaseOrder.account.billingDetails.state.code;
@@ -432,13 +432,13 @@ export class CreatePurchaseOrderComponent implements OnInit {
                     this.purchaseOrder.account.billingDetails.stateCode = "";
                     this.purchaseOrder.account.billingDetails.stateName = "";
                 }
-                
+
                 this.purchaseOrder.account.billingDetails.panNumber = "";
 
                 this.purchaseOrder.account.shippingDetails.address = [];
                 this.purchaseOrder.account.shippingDetails.address.push(accountDetails.addresses[0].address);
                 this.purchaseOrder.account.shippingDetails.gstNumber = accountDetails.addresses[0].gstNumber;
-                if(accountDetails.addresses[0].state) {
+                if (accountDetails.addresses[0].state) {
                     this.purchaseOrder.account.shippingDetails.state.name = accountDetails.addresses[0].state.name;
                     this.purchaseOrder.account.shippingDetails.state.code = (accountDetails.addresses[0].state) ? (accountDetails.addresses[0].state.code) ? accountDetails.addresses[0].state.code : accountDetails.addresses[0].state.stateGstCode : accountDetails.addresses[0].stateCode;
                     this.purchaseOrder.account.shippingDetails.stateCode = this.purchaseOrder.account.shippingDetails.state.code;
@@ -1680,7 +1680,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
         };
 
         this.purchaseOrderService.create(getRequestObject, updatedData).subscribe(response => {
-            console.log(response);
+            this.toaster.clearAllToaster();
+            if (response && response.status === "success") {
+                this.toaster.successToast("Purchase Order created succesfully with Voucher number - " + response.body.number);
+            } else {
+                this.toaster.errorToast(response.message);
+            }
         });
     }
 
