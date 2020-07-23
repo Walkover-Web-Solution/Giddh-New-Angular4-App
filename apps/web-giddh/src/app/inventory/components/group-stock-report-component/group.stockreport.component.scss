@@ -31,6 +31,11 @@ table {
     table-layout: fixed;
 }
 
+.head-report{
+    font-size: 20px;
+    font-weight: bold; 
+    text-transform:capitalize;
+}
 /* .table.basic tbody tr td {
     background-color: #fff;
 }
@@ -44,6 +49,9 @@ table {
     cursor: pointer;
 }
 
+.popover-details{
+    display:none;
+}
 /*
 .table.basic>tbody>tr>td>table tbody tr td {
     padding: 5px 0;
@@ -313,3 +321,62 @@ button.btn.btn-filter {
 .group-not-found {
     text-transform: none;
 }
+.tdmobile-head{
+    display:none;
+}
+
+
+@media (max-width:767px){
+    .btn-pink{
+        display:none;
+    }
+    .advance-icon{
+        display:none;
+    }
+    .head-report{
+        margin-right:0 !important;
+        font-size: 16px;
+    }
+    .btn-link{
+        margin-right:0 !important;
+        margin-top:0 !important;
+        span{
+            display:none;
+        }
+    }
+    .inventoryStockTable{
+        table-layout: auto;
+    }
+    .basic > tbody > tr > td,
+        .basic > thead > tr > th {
+            min-width: 100px !important;
+        }
+    .popover-details{
+        display:block;
+        position: absolute;
+        top: 120px;
+        right: 0;
+        margin: 0 15px;
+        .btn-group{
+            margin-left:0 !important;
+            .dropdown-toggle{
+                border-width: 0px !important;
+                background:transparent;
+            }
+        }
+        .bottom-details{
+            min-width: 90vw;
+        }
+    }
+    .footer-sticky{
+        display:none;
+    }
+
+    .tdmobile-head{
+        display:block;
+    }
+
+    .table-border {
+        border: 0px solid #c6c6c6 !important;
+    }
+} 
