@@ -457,7 +457,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         let adjustmentTypesOptions: IOption[] = [];
 
         adjustmentTypes.map(type => {
-            if (((type.value === "receipt" || type.value === "advanceReceipt") && (!(receiptExists || advanceReceiptExists) || (entry && (entry.type === "receipt" || entry.type === "advanceReceipt")))) || type.value === "againstReference" || (entry && entry.type === type.value)) {
+            if((!receiptExists && !advanceReceiptExists) || (receiptExists && !advanceReceiptExists && type.value === "receipt") || (!receiptExists && advanceReceiptExists && type.value === "advanceReceipt") || type.value === "againstReference") {
                 adjustmentTypesOptions.push({ label: type.label, value: type.value });
             }
         });
