@@ -1503,7 +1503,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
                 if (response && response.body) {
                     if (response.body.results && response.body.results.length) {
-                        response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber, value: invoice.uniqueName, additional: invoice }))
+                        response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber ? invoice.voucherNumber : '-', value: invoice.uniqueName, additional: invoice }))
                     } else {
                         this.invoiceForceClearReactive$ = observableOf({ status: true });
                     }
@@ -1511,8 +1511,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (this.isUpdateMode) {
                         const selectedInvoice = this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0];
                         if (selectedInvoice) {
+                            selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
                             invoiceSelected = {
-                                label: selectedInvoice.invoiceNumber,
+                                label: selectedInvoice.invoiceNumber ? selectedInvoice.invoiceNumber : '-',
                                 value: selectedInvoice.invoiceUniqueName,
                                 additional: selectedInvoice
                             };
