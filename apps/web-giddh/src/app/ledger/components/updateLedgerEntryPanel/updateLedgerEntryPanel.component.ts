@@ -81,6 +81,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() pettyCashBaseAccountUniqueName: string;
 
     @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
+    /** fileinput element ref for clear value after remove attachment **/
     @ViewChild('fileInputUpdate') public fileInputElement: ElementRef<any>;
     @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
     @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
