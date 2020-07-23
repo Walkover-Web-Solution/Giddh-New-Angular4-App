@@ -322,6 +322,10 @@ button.btn.btn-filter {
     font-weight: bold; 
     text-transform:capitalize;
 }
+.tdmobile-head{
+    display:none;
+}
+
 
 @media (max-width:767px){
     .btn-pink{
@@ -345,4 +349,17 @@ button.btn.btn-filter {
         .basic > thead > tr > th {
             min-width: 100px !important;
         }
+
+    .download-icon{
+        span{
+            display:none;
+        }
+    }
+    .tdmobile-head{
+        display:block;
+    }
+
+    .table-border {
+        border: 0px solid #c6c6c6 !important;
+    }
 }

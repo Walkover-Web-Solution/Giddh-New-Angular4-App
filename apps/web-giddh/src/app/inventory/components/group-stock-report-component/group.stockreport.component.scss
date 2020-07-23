@@ -321,6 +321,9 @@ button.btn.btn-filter {
 .group-not-found {
     text-transform: none;
 }
+.tdmobile-head{
+    display:none;
+}
 
 
 @media (max-width:767px){
@@ -367,5 +370,13 @@ button.btn.btn-filter {
     }
     .footer-sticky{
         display:none;
+    }
+
+    .tdmobile-head{
+        display:block;
+    }
+
+    .table-border {
+        border: 0px solid #c6c6c6 !important;
     }
 }
