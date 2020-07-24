@@ -52,7 +52,6 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
 
                 if (selectedCmp) {
                     this.selectedCompany = cloneDeep(selectedCmp);
-                    console.log(this.selectedCompany);
                     let selectedCompanyArray = selectedCmp.name.split(" ");
                     let companyInitials = [];
                     for (let loop = 0; loop < selectedCompanyArray.length; loop++) {

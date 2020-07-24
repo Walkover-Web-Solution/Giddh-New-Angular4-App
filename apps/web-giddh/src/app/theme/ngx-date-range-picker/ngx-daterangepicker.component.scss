@@ -204,19 +204,6 @@ $input-height: 3rem !default;
             }
         }
         /* new calendar */
-        .th-div,
-        .td-div {
-            padding: 0;
-            white-space: nowrap;
-            text-align: center;
-            min-width: 34px;
-            line-height: 1.15;
-
-            span {
-                pointer-events: none;
-            }
-        }
-         /* new calendar */
     }
     .calendar-table {
         border: $md-drppicker-calendar-border-size solid
