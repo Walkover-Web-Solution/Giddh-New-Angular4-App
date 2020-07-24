@@ -46,7 +46,7 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsTableComponent
      */
     public ngOnInit(): void {
-        this.getFilteredLogs();
+        // 
     }
 
     /**
@@ -64,7 +64,7 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
      *
      * @memberof AuditLogsTableComponent
      */
-    public loadMoreLogs(): void{
+    public loadMoreLogs(): void {
         this.store.pipe(select(state => state.auditlog), take(1)).subscribe((response) => {
             let request = _.cloneDeep(response.auditLogsRequest);
             let page = response.currentPage + 1;
@@ -81,21 +81,5 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
     public openAllAddress(index: number): void {
         this.showSingleAddress = !this.showSingleAddress;
         this.isShowMultipleDataIndex = index;
-    }
-
-    /**
-     * To get filter log request response
-     *
-     * @memberof AuditLogsTableComponent
-     */
-    public getFilteredLogs(): void {
-        // used for testing purpose ignire it for now we will remove it in next build
-        this.auditLogs$.subscribe(res => {
-            console.log("stored audit response:==", res);
-        });
-        // used for testing purpose ignire it for now we will remove it in next build
-        this.auditLogsRequest$.subscribe(res => {
-            console.log("store audit Request--", res);
-        });
     }
 }
