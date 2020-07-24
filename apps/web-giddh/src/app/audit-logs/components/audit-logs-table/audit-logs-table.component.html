@@ -187,7 +187,7 @@
                 <!-- Bank details block end -->
 
                 <!-- Voucher block -->
-                <div class="single-address-row" *ngIf="log?.details?.voucherAccount && log?.details?.voucherAccount.name">
+                <div class="single-address-row voucheracc3" *ngIf="log?.details?.voucherAccount && log?.details?.voucherAccount.name">
                     <ng-container>
                         <div class="mr-05" *ngIf="log?.details?.voucherAccount.name">
                             <label>
@@ -286,48 +286,7 @@
                 <!-- etries log block end -->
 
                 <!-- Stock group block -->
-                <div class="single-address-row" *ngIf="log?.details?.voucherAccount && log?.details?.voucherAccount.name">
-                    <ng-container>
-                        <div class="mr-05" *ngIf="log?.details?.voucherAccount.name">
-                            <label>
-                           Account:
-                        </label>
-                            <p class="address-field"> {{log?.details?.voucherAccount.name}}
-                            </p>
-                        </div>
-                        <div class="mr-05" *ngIf="log?.details?.voucherType">
-                            <label>
-                           Voucher:
-                        </label>
-                            <p class="address-field"> {{log?.details?.voucherType}}
-                            </p>
-                        </div>
-                        <div class="mr-05" *ngIf="log?.details?.voucherNumber">
-                            <label>
-                            Voucher Number:
-                        </label>
-                            <p class="ml-05"> {{log?.details?.voucherNumber}}</p>
-                        </div>
-                        <div class="mr-05" *ngIf="log?.details?.subTotal">
-                            <label>
-                            Sub Total:
-                        </label>
-                            <p class="ml-05"> {{log?.details?.subTotal?.amountForAccount |giddhCurrency }}</p>
-                        </div>
-                        <div class="mr-05" *ngIf="log?.details?.totalTax">
-                            <label>
-                            Tax:
-                        </label>
-                            <p class="ml-05"> {{log?.details?.totalTax?.amountForAccount |giddhCurrency }}</p>
-                        </div>
-                        <div class="mr-05" *ngIf="log?.details?.grandTotal">
-                            <label>
-                            Total:
-                        </label>
-                            <p class="ml-05"> {{log?.details?.grandTotal?.amountForAccount |giddhCurrency }}</p>
-                        </div>
-                    </ng-container>
-                </div>
+
                 <!-- Stock group block end -->
                 <ng-container *ngIf="log?.details?.parentGroup">
                     <div class="single-address-row">
