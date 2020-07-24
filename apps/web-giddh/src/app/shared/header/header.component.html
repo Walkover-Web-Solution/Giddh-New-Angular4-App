@@ -400,7 +400,7 @@
                 <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}"
                     *ngIf="(selectedCompany | async)">
                     <h6 class="mrB1">MENU
-                        <a (click)="navigateToAllModules()">
+                        <a [routerLink]="['/pages/all-modules']">
                             <img src="{{imgPath}}angle-round-icon.svg" class="pull-right" *ngIf="!isMobileSite"
                                 tooltip="Menu" placement="bottom" container="body">
                         </a>
