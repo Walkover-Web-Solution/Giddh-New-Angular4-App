@@ -101,6 +101,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     public isNewUser: boolean = false;
     public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public selectedCountry: string = '';
+    /* This will hold if it's production env or not */
+    public isProdMode: boolean = false;
 
     constructor(private socialAuthService: AuthService,
                 private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
@@ -108,6 +110,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                 private _aunthenticationService: AuthenticationService, private _generalActions: GeneralActions, private _generalService: GeneralService,
                 private _toaster: ToasterService, private commonActions: CommonActions
     ) {
+        this.isProdMode = PRODUCTION_ENV;
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
@@ -195,7 +198,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             this.closeCompanyModal.emit();
             this._route.navigate(['welcome']);
 
-            if (companies) {
+            if (this.isProdMode && companies) {
                 if (companies.length === 0) {
                     this.fireSocketCompanyCreateRequest();
                 }
