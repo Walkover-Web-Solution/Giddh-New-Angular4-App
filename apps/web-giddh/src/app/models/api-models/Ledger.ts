@@ -124,7 +124,6 @@ export class LedgerResponse {
     public reverseChargeTaxableAmount?: number;
     public passportNumber?: string;
     public touristSchemeApplicable?: boolean;
-    public invoiceAdvanceReceiptAdjustment?: InvoiceAdvanceReceiptAdjustment;
     public voucherAdjustments?: VoucherAdjustments
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
 }
