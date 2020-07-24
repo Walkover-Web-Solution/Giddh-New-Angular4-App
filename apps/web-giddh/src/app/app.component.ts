@@ -175,15 +175,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
         }
 
-        if (!LOCAL_ENV && !(isElectron || isCordova())) {
-            this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
+        //if (!LOCAL_ENV && !(isElectron || isCordova())) {
+            this._versionCheckService.initVersionCheck(AppUrl + 'assets/version.json');
 
             this._versionCheckService.onVersionChange$.subscribe((isChanged: boolean) => {
                 if (isChanged) {
                     this.newVersionAvailableForWebApp = _.clone(isChanged);
                 }
             });
-        }
+        //}
     }
 
     private getLastStateFromUrl(url: string): string {
