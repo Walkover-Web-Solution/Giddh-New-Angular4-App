@@ -496,7 +496,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.debitNote)) {
                         this.getInvoiceListsForCreditNote();
                     }
-                    // Check the RCM checkbox if API returns subvoucher as Reverse charge
 
                     /** To check advance receipts adjustment for Tx (Using list of invoice is there or not)*/
                     // if (this.vm && this.vm.selectedLedger && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices && this.vm.selectedLedger.invoiceAdvanceReceiptAdjustment.adjustedInvoices.length) {
@@ -1202,13 +1201,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this._toasty.errorToast('Please Select ' + this.pettyCashBaseAccountTypeString + '  for entry..');
                 return;
             }
-
-            // this.invoiceList = [];
-            // this._ledgerService.GetInvoiceList({ accountUniqueName: this.accountUniqueName, status: 'unpaid' }).subscribe((res: any) => {
-            //     _.map(res.body.invoiceList, (o) => {
-            //         this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
-            //     });
-            // });
         } else if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
             this.vm.selectedLedger.generateInvoice = true;
