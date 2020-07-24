@@ -82,7 +82,7 @@
     min-width: 155px;
     color: #fff;
 }
-.inventory-stocktable input.form-control.stock-input {
+.inventory-stock-table input.form-control.stock-input {
     color: #1c1c1c;
     text-align: left;
 }
@@ -297,7 +297,7 @@ button[aria-expanded="true"] i {
     color: #1a237e;
     background: #fff;
 }
-.inventory-stocktable .d-flex {
+.inventory-stock-table .d-flex {
     align-items: center;
 }
 .icon-pointer {
@@ -344,7 +344,7 @@ button.btn.btn-filter {
         margin-right:0 !important;
         margin-top:0 !important;
     }
-    .inventory-stocktable{
+    .inventory-stock-table{
         table-layout: auto;
     }
     .basic > tbody > tr > td,
@@ -362,6 +362,6 @@ button.btn.btn-filter {
     }
 
     .table-border {
-        border: 0px solid #c6c6c6 !important;
+        border: 0px solid $white !important;
     }
 }
