@@ -214,6 +214,15 @@
 
         }
 
+        tbody > tr > .td-mobile-head {
+            margin-bottom: 0px !important;
+        }
+
+        tbody .td-mobile-head:before {
+            color: $black !important;
+            font-weight: 600 !important;
+        }
+
         tbody tr td.no-entries{
             padding: 20px 0 0 !important;
             border-top: none !important;
