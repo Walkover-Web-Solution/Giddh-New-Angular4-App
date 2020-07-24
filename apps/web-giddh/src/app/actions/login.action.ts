@@ -11,29 +11,29 @@ import {
     VerifyMobileModel,
     VerifyMobileResponseModel
 } from '../models/api-models/loginModels';
-import {ToasterService} from '../services/toaster.service';
-import {GeneralActions} from './general/general.actions';
-import {CompanyActions} from './company.actions';
-import {BaseResponse} from '../models/api-models/BaseResponse';
-import {ActivatedRoute, Router} from '@angular/router';
-import {sortBy} from '../lodash-optimized';
-import {COMMON_ACTIONS} from './common.const';
-import {AppState} from '../store';
-import {Injectable, NgZone} from '@angular/core';
-import {map, switchMap, take} from 'rxjs/operators';
-import {userLoginStateEnum} from '../models/user-login-state';
-import {Actions, Effect} from '@ngrx/effects';
-import {DbService} from '../services/db.service';
-import {CompanyService} from '../services/companyService.service';
-import {GeneralService} from '../services/general.service';
-import {Observable, ReplaySubject, zip as observableZip} from 'rxjs';
-import {CustomActions} from '../store/customActions';
-import {LoginWithPassword, SignUpWithPassword} from '../models/api-models/login';
-import {AuthenticationService} from '../services/authentication.service';
-import {AccountService} from '../services/account.service';
-import {Configuration} from '../app.constant';
-import {ROUTES} from '../routes-array';
-import {SettingsProfileActions} from "./settings/profile/settings.profile.action";
+import { ToasterService } from '../services/toaster.service';
+import { GeneralActions } from './general/general.actions';
+import { CompanyActions } from './company.actions';
+import { BaseResponse } from '../models/api-models/BaseResponse';
+import { ActivatedRoute, Router } from '@angular/router';
+import { sortBy } from '../lodash-optimized';
+import { COMMON_ACTIONS } from './common.const';
+import { AppState } from '../store';
+import { Injectable, NgZone } from '@angular/core';
+import { map, switchMap, take } from 'rxjs/operators';
+import { userLoginStateEnum } from '../models/user-login-state';
+import { Actions, Effect } from '@ngrx/effects';
+import { DbService } from '../services/db.service';
+import { CompanyService } from '../services/companyService.service';
+import { GeneralService } from '../services/general.service';
+import { Observable, ReplaySubject, zip as observableZip } from 'rxjs';
+import { CustomActions } from '../store/customActions';
+import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
+import { AuthenticationService } from '../services/authentication.service';
+import { AccountService } from '../services/account.service';
+import { Configuration } from '../app.constant';
+import { ROUTES } from '../routes-array';
+import { SettingsProfileActions } from "./settings/profile/settings.profile.action";
 
 @Injectable()
 export class LoginActions {
@@ -115,7 +115,7 @@ export class LoginActions {
         .ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE).pipe(
             map((action: CustomActions) => {
                 let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
-                if(response) {
+                if (response) {
                     if (response.status === 'error') {
                         this._toaster.errorToast(action.payload.message, action.payload.code);
                         return { type: 'EmptyAction' };
@@ -250,7 +250,7 @@ export class LoginActions {
                     this.zone.run(() => {
                         this._router.navigate(['/pages/new-user']);
                     });
-                    return {type: 'EmptyAction'};
+                    return { type: 'EmptyAction' };
                 } else {
                     if (stateDetail.body && stateDetail.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
@@ -303,7 +303,7 @@ export class LoginActions {
                     this.zone.run(() => {
                         this._router.navigate(['/pages/new-user']);
                     });
-                    return {type: 'EmptyAction'};
+                    return { type: 'EmptyAction' };
                 } else {
                     if (stateDetail.body && stateDetail.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
@@ -442,21 +442,20 @@ export class LoginActions {
             switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload)),
             map(response => {
                 if ((response.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) === -1) || (response.status === 'error' || response.code === 'NOT_FOUND')) {
-                    //
                     let dummyResponse = new BaseResponse<StateDetailsResponse, string>();
                     dummyResponse.body = new StateDetailsResponse();
                     dummyResponse.body.companyUniqueName = response.request;
                     dummyResponse.body.lastState = 'sales';
                     dummyResponse.status = 'success';
                     this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-                        this._router.navigate([dummyResponse.body.lastState]);
+                        this.finalNavigate(dummyResponse.body.lastState);
                     });
                     return this.ChangeCompanyResponse(dummyResponse);
                 }
                 if (response.body.companyUniqueName) {
                     if (response.body.lastState && ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) !== -1) {
                         this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-                            this._router.navigate([response.body.lastState]);
+                            this.finalNavigate(response.body.lastState);
                         });
                     } else {
                         if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
@@ -472,9 +471,9 @@ export class LoginActions {
                                 if (path.length > 0 && parament) {
                                     this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
                                         if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1) {
-                                            this._router.navigate([path[0]], parament);
+                                            this.finalNavigate(path[0], parament);
                                         } else {
-                                            this._router.navigate(['home']);
+                                            this.finalNavigate('home');
                                         }
                                     });
                                 }
@@ -1057,7 +1056,7 @@ export class LoginActions {
         // now take first company from the companies
         let cArr = companies.body.sort((a, b) => a.name.length - b.name.length);
         let company = cArr[0];
-        if(company) {
+        if (company) {
             respState.body.companyUniqueName = company.uniqueName;
         } else {
             respState.body.companyUniqueName = "";
@@ -1092,14 +1091,23 @@ export class LoginActions {
         this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
         this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-        if(screen.width <= 767 || isCordova) {
+        this.finalNavigate(stateDetail.body.lastState);
+        return { type: 'EmptyAction' };
+    }
+
+    public finalNavigate(route: any, parameter?: any): void {
+        if (screen.width <= 767 || isCordova) {
             this._router.navigate(["/pages/mobile-home"]);
         } else {
-            this._router.navigate([stateDetail.body.lastState]);
+            this._router.navigate([route], parameter);
         }
-        if (isElectron || isCordova) {
+        if (isElectron) {
             window.location.reload();
         }
-        return { type: 'EmptyAction' };
+        if(isCordova) {
+            setTimeout(() => {
+                window.location.reload();
+            }, 200);
+        }
     }
 }

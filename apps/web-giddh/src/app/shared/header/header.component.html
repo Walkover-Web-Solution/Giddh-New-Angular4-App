@@ -503,7 +503,7 @@
     <header class="clearfix header-container mobileHeader">
         <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
             <div class="container-fluid  mrB1 ">
-                <div class="upperLayerHeader">
+                <div class="upper-layer-header">
                     <ul class="nav navbar-nav">
                         <!-- (isOpenChange)="sideBarStateChange($event)" -->
                         <li class="hamburger_menu cp pull-left">
@@ -985,3 +985,12 @@
         </div>
     </div>
 </ng-template>
+
+<div class="filings-empty-state" *ngIf="isCalendlyModelActivate">
+    <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+    <div class="spinner2">
+        <div class="cube1"></div>
+        <div class="cube2"></div>
+    </div>
+    <div class="empty-msg"><span> Loading Data. </span></div>
+</div>

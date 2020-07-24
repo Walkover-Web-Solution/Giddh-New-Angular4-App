@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { HostListener, Inject, Component, OnInit, ChangeDetectorRef, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Subject, ReplaySubject, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
@@ -12,11 +12,18 @@ import { LoginActions } from '../actions/login.action';
 import { AuthService } from '../theme/ng-social-login-module/index';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommandKRequest } from '../models/api-models/Common';
+import { BsDropdownConfig } from 'ngx-bootstrap';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
     selector: 'mobile-home',
     templateUrl: './mobile-home.component.html',
-    styleUrls: ['./mobile-home.component.scss']
+    styleUrls: ['./mobile-home.component.scss'],
+    providers: [
+        {
+            provide: BsDropdownConfig, useValue: { insideClick: true },
+        }
+    ],
 })
 
 export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -51,6 +58,8 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public hasAccounts: boolean = false;
     /* This will hold if results have groups in it */
     public hasGroups: boolean = false;
+    /* This will hold side nav open status */
+    public sideNavOpen: boolean = false;
     /* This will hold company initials */
     public companyInitials: any = '';
     /* This will hold the search string */
@@ -66,14 +75,14 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private generalService: GeneralService, private commandKService: CommandKService, private cdref: ChangeDetectorRef, private router: Router, private loginAction: LoginActions, private socialAuthService: AuthService, private breakPointObservar: BreakpointObserver) {
+    constructor(@Inject(DOCUMENT) document, private store: Store<AppState>, private generalService: GeneralService, private commandKService: CommandKService, private cdref: ChangeDetectorRef, private router: Router, private loginAction: LoginActions, private socialAuthService: AuthService, private breakPointObservar: BreakpointObserver) {
         document.querySelector('body').classList.add('mobile-home');
 
         this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$)).subscribe(res => {
             this.activeCompanyUniqueName = res;
         });
 
-        this.isLoggedInWithSocialAccount$ = this.store.select(state => state.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
+        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount, takeUntil(this.destroyed$)));
     }
 
     /**
@@ -93,7 +102,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         // listen on input for search
-        this.searchSubject.pipe(debounceTime(300)).subscribe(term => {
+        this.searchSubject.pipe(debounceTime(300), takeUntil(this.destroyed$)).subscribe(term => {
             this.commandKRequestParams.page = 1;
             this.commandKRequestParams.q = term;
             this.searchCommandK(true);
@@ -133,15 +142,48 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
+    @HostListener('window:scroll', ['$event'])
+    public onWindowScroll(event: any): void {
+        if (window.pageYOffset > 100) {
+            let element = document.getElementById('navbar');
+            element.classList.add('sticky');
+        } else {
+            let element = document.getElementById('navbar');
+            element.classList.remove('sticky');
+        }
+    }
+
     /**
      * This function gets called after view initializes and will set focus in search box
-     * 
+     *
      * @memberof MobileHomeComponent
      */
     public ngAfterViewInit(): void {
         setTimeout(() => {
             this.focusInSearchBox();
         }, 0);
+    }
+
+    /**
+     * This function open mobile side bar
+     *
+     * @memberof MobileHomeComponent
+     */
+    public openMobileSidebar(): void {
+        document.querySelector('body').classList.add('mobile-sidebar-open');
+        setTimeout(() => {
+            this.sideNavOpen = true;
+        }, 100);
+    }
+
+    /**
+     * This function close mobile side bar
+     *
+     * @memberof MobileHomeComponent
+     */
+    public closeMobileSidebar(): void {
+        this.sideNavOpen = false;
+        document.querySelector('body').classList.remove('mobile-sidebar-open');
     }
 
     /**
@@ -153,6 +195,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
         document.querySelector('body').classList.remove('mobile-home');
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('mobile-sidebar-open');
     }
 
     /**
@@ -287,6 +330,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof MobileHomeComponent
      */
     public itemSelected(item: any): void {
+        document.querySelector('body').classList.add('add-animation');
         if (item && item.type === 'MENU') {
             item.uniqueName = item.route;
 
@@ -392,5 +436,15 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             });
         }
+    }
+
+    /**
+     * This will scroll to top
+     *
+     * @param {HTMLElement} element
+     * @memberof MobileHomeComponent
+     */
+    public navigate(element: HTMLElement): void {
+        element.scrollIntoView({ behavior: 'smooth' });
     }
 }

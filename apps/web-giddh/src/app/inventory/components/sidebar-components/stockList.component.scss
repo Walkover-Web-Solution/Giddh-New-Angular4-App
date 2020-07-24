@@ -20,3 +20,9 @@
 .stock-items .active .btn-link .fa {
     color: $jacksons-purple;
 }
+.stock-items > li .in-list:hover {
+    background-color: $lavender;
+}
+.stock-items > li .in-list:hover a > span {
+    color: $chetwode-blue !important;
+}

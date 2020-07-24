@@ -95,7 +95,7 @@
                 <div class="edit-date-container">
                     <div class="modal-date-range">
                         <h5 class="modal-inside-heading">Custom</h5>
-                        <p>{{inlineStartDate.format("MMM DD")}} - {{inlineEndDate.format("MMM DD")}}</p>
+                        <p>{{inlineStartDate.format("MMM DD YYYY")}} - {{inlineEndDate.format("MMM DD YYYY")}}</p>
                         <span (click)="modalRef.hide()">
                             <i class="icon-calender"></i>
                         </span>
@@ -311,30 +311,20 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="th-div month drp-animate">
                                                 <ng-container *ngIf="showDropdowns && calendarMonth.start.dropdowns">
-                                                    <div>
-                                                        {{this.locale.monthNames[calendarMonth?.start?.calendar[1][1].month()]}}
-                                                    </div>
-                                                    <div class="year-name">
-                                                        {{ calendarMonth?.start?.calendar[1][1].format(" YYYY")}}
-                                                    </div>
+                                                    {{this.locale.monthNames[calendarMonth?.start?.calendar[1][1].month()]}}
+                                                    {{ calendarMonth?.start?.calendar[1][1].format(" YYYY")}}
                                                 </ng-container>
                                                 <ng-container *ngIf="!showDropdowns || !calendarMonth.start.dropdowns">
                                                     {{this.locale.monthNames[calendarMonth?.start?.calendar[1][1].month()]}}
                                                     {{ calendarMonth?.start?.calendar[1][1].format(" YYYY")}}
                                                 </ng-container>
                                             </div>
-                                            <div *ngIf="showWeekNumbers || showISOWeekNumbers" class="th-div">
-
-                                            </div>
-
                                             <div class="th-div">
                                                 <ng-container
                                                     *ngIf="!calendarMonth.start.minDate || calendarMonth.start.minDate.isBefore(calendarMonth.start.calendar.firstDay) && (!this.linkedCalendars || true)">
-
                                                 </ng-container>
                                                 <ng-container
                                                     *ngIf="!(!calendarMonth.start.minDate || calendarMonth.start.minDate.isBefore(calendarMonth.start.calendar.firstDay) && (!this.linkedCalendars || true))">
-
                                                 </ng-container>
                                             </div>
                                         </div>
@@ -404,19 +394,36 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="th-div month drp-animate">
                                                 <ng-container *ngIf="showDropdowns && calendarMonth.end.dropdowns">
-                                                    <div>
-                                                        {{this.locale.monthNames[calendarMonth?.end?.calendar[1][1].month()]}}
-                                                    </div>
-                                                    <div class="year-name">
-                                                        {{ calendarMonth?.end?.calendar[1][1].format(" YYYY")}}
-                                                    </div>
+                                                    {{this.locale.monthNames[calendarMonth?.end?.calendar[1][1].month()]}}
+                                                    {{ calendarMonth?.end?.calendar[1][1].format(" YYYY")}}
                                                 </ng-container>
                                                 <ng-container *ngIf="!showDropdowns || !calendarMonth.end.dropdowns">
                                                     {{this.locale.monthNames[calendarMonth?.end?.calendar[1][1].month()]}}
                                                     {{ calendarMonth?.end?.calendar[1][1].format(" YYYY")}}
                                                 </ng-container>
                                             </div>
+                                            <div class="th-div">
+                                                <ng-container
+                                                    *ngIf="(!calendarMonth.end.minDate || calendarMonth.end.minDate.isBefore(calendarMonth.end.calendar.firstDay)) && (!this.linkedCalendars)">
+                                                    <div class="available"></div>
+                                                </ng-container>
+                                                <ng-container
+                                                    *ngIf="!((!calendarMonth.end.minDate || calendarMonth.end.minDate.isBefore(calendarMonth.end.calendar.firstDay)) && (!this.linkedCalendars))">
+
+                                                </ng-container>
+                                            </div>
                                             <div *ngIf="showWeekNumbers || showISOWeekNumbers" class="th-div">
+
+                                                <div class="th-div">
+                                                    <ng-container
+                                                        *ngIf="!calendarMonth.end.maxDate || calendarMonth.end.maxDate.isAfter(calendarMonth.end.calendar.lastDay) && (!linkedCalendars || singleDatePicker || true)">
+
+                                                    </ng-container>
+                                                    <ng-container
+                                                        *ngIf="!(!calendarMonth.end.maxDate || calendarMonth.end.maxDate.isAfter(calendarMonth.end.calendar.lastDay) && (!linkedCalendars || singleDatePicker || true))">
+
+                                                    </ng-container>
+                                                </div>
 
                                             </div>
 

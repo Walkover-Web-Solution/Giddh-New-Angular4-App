@@ -57,12 +57,20 @@ span.icon-rupees {
 .panel-body small {
     color: $dark-gray;
 }
-@media(max-width:360px){
+.dashboard-datepicker {
+    max-width: 190px;
+    min-width: 190px;
+    border-radius: 30px;
+    border: 1px solid $gainsboro;
+}
+@media(max-width:480px){
     .dashboard-filter{
         display: flex;
         float: none !important;
         margin-top: 10px;
     }
+}
+@media(max-width:360px){
     .due-amount{
         font-size: 14px;
         display: block;

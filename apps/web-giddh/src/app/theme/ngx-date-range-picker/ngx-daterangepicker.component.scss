@@ -203,6 +203,19 @@ $input-height: 3rem !default;
                 pointer-events: none;
             }
         }
+        /* new calendar */
+        .th-div,
+        .td-div {
+            padding: 0;
+            white-space: nowrap;
+            text-align: center;
+            min-width: 34px;
+            line-height: 1.15;
+
+            span {
+                pointer-events: none;
+            }
+        }
          /* new calendar */
     }
     .calendar-table {
@@ -738,11 +751,11 @@ $input-height: 3rem !default;
         padding-right: 15px;
         position: absolute;
         bottom: 0;
-        background-color: #fff;
+        background-color: $white;
         padding-top: 9px;
-        z-index: 999;
-        right: 0;
         padding-bottom: 15px;
+        z-index: 999 !important;
+        right: 0;
         width: calc(100% - 218px);
     }
     button {
@@ -854,9 +867,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     color: $nero;
     border-color: $gray;
 }
-.td-div.in-range.in-range-start.in-range-hovered.in-range-end::before {
-    border: none !important;
-}
+
 /* new calendar */
 
 .invalid-date.error-msg {
@@ -1225,7 +1236,6 @@ td span {
 .activatedDate.in-range.in-range-start span {
     color: $nero !important;
 }
-
 .activatedDate:hover {
     span {
         background-color: $white-smoke !important;
@@ -1301,7 +1311,6 @@ td span {
 .md-drppicker .calendar .td-div.hide-date {
     visibility: hidden;
 }
-
 .close-calender {
     display: none;
 }
@@ -1521,7 +1530,6 @@ cdk-virtual-scroll-viewport{
 }
 
 /*media query*/
-
 @media (max-width: 767px) {
     .md-drppicker {
         flex-direction: column;
@@ -1772,7 +1780,7 @@ cdk-virtual-scroll-viewport{
         position: absolute !important;
         bottom: 0 !important;
         right: 0 !important;
-        background-color: #ffffff !important;
+        background-color: $white !important;
         z-index: 99999 !important;
         width: 100% !important;
         margin: 0 !important;

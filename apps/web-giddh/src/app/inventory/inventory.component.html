@@ -12,9 +12,9 @@
                     <section class="rightBar">
                         <!-- uiView: inventory-detail -->
                         <section class="container-fluid  clearfix pdT2">
-                            <div *ngIf="activeView" class="d-flex mb-1 branch-warehouse-filter">
-                                <sh-select class="multi-select branch-filter" (ngModelChange)="loadReportByBranch($event)" [options]="branches" [ngModel]="currentBranchAndWarehouseFilterValues.branch"></sh-select>
-                                <sh-select class="multi-select warehouse-filter" #warehouseFilter (ngModelChange)="loadReportByWarehouse($event)" [options]="warehouses" [ngModel]="currentBranchAndWarehouseFilterValues.warehouse"></sh-select>
+                            <div *ngIf="activeView" class="d-flex mrB1 branch-warehouse-filter">
+                                <sh-select class="multi-select branch-filter sh-select-border" (ngModelChange)="loadReportByBranch($event)" [options]="branches" [ngModel]="currentBranchAndWarehouseFilterValues.branch"></sh-select>
+                                <sh-select class="multi-select sh-select-border warehouse-filter" #warehouseFilter (ngModelChange)="loadReportByWarehouse($event)" [options]="warehouses" [ngModel]="currentBranchAndWarehouseFilterValues.warehouse"></sh-select>
                             </div>
                             <div *ngIf="activeView === 'stock'">
                                 <invetory-stock-report [currentBranchAndWarehouse]="currentBranchAndWarehouseFilterValues"></invetory-stock-report>

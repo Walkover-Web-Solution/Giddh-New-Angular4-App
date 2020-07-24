@@ -295,7 +295,7 @@
                                     <div class="">
                                         <div class=" form-group">
                                             <div class="" [ngClass]="{'input-group': true}">
-                                                <input type="text" class="form-control" [(ngModel)]="estimateSetting.duePeriod" maxlength="3" placeholder="00" decimalDigitsDirective name="estimate-default-expiry" />
+                                                <input type="tel" class="form-control" [(ngModel)]="estimateSetting.duePeriod" maxlength="3" placeholder="00" decimalDigitsDirective name="estimate-default-expiry" />
                                                 <span> Days </span>
 
                                             </div>
@@ -473,7 +473,7 @@
                                     <div class="">
                                         <div class=" form-group">
                                             <div class="" [ngClass]="{'input-group': true}">
-                                                <input type="text" class="form-control" placeholder="00" name="proformaDuePeriod" decimalDigitsDirective maxlength="3" [(ngModel)]="proformaSetting.duePeriod" />
+                                                <input type="tel" class="form-control" placeholder="00" name="proformaDuePeriod" decimalDigitsDirective maxlength="3" [(ngModel)]="proformaSetting.duePeriod" />
                                                 <span> Days </span>
 
                                             </div>
@@ -613,7 +613,7 @@
                                     <div class="">
                                         <div class=" form-group">
                                             <div class="" [ngClass]="{'input-group': true}">
-                                                <input type="text" class="form-control" placeholder="00" maxlength="3" decimalDigitsDirective [(ngModel)]="invoiceSetting.duePeriod" name="default-expiry" />
+                                                <input type="tel" class="form-control" placeholder="00" maxlength="3" decimalDigitsDirective [(ngModel)]="invoiceSetting.duePeriod" name="default-expiry" />
                                                 <span> Days </span>
 
                                             </div>
