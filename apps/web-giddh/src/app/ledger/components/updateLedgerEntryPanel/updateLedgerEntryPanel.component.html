@@ -767,7 +767,7 @@
                                         <input type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedInvoiceAmountChange()" *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode" [(ngModel)]="item.adjustmentAmount.amountForAccount">
                                     </div>
                                 </div>
-                                <div *ngIf="item.voucherType === 'receipt'" class="col-sm-2 pl-05">
+                                <div *ngIf="item.voucherType === 'receipt' && item.subVoucher === 'ADVANCE_RECEIPT'" class="col-sm-2 pl-05">
                                     <div class="form-group">
                                         <label>Tax</label>
                                         <input type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.calculatedTaxAmount" disabled>
