@@ -15,7 +15,7 @@
                 <div class="single-field relative">
                     <label *ngIf="i === 0">Type</label>
                     <sh-select #adjustmentTypesField [options]="entry.allowedTypes" placeholder="Type" name="type" [(ngModel)]="entry.type"
-                        class="receipt-type" (selected)="updateAdjustmentTypes()"></sh-select>
+                        class="receipt-type" (selected)="onSelectAdjustmentType($event, entry)"></sh-select>
                     <i class="icon-arrow-down" (click)="adjustmentTypesField.show($event)"></i>
                 </div>
                 <!-- <div class="single-field" *ngIf="entry.type !== 'againstReference'">
