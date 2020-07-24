@@ -279,7 +279,7 @@
     <span>{{""}}</span>
 </td> -->
                             <td class="pdR1"
-                                *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType == 'pur' || blankLedger.voucherType == 'pay' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note')">
+                                *ngIf="(blankLedger.voucherType === 'sal' || blankLedger.voucherType == 'pur' || blankLedger.voucherType == 'pay')">
                                 <label class="default_clr">Invoice No.</label>
                                 <input type="text" placeholder="Invoice no." class="form-control"
                                     [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
@@ -312,25 +312,6 @@
 
                                 </div>
                             </td> -->
-                            <td *ngIf="blankLedger.voucherType &&
-                                (blankLedger.voucherType !== 'jr' && blankLedger.voucherType !== 'cntr' && blankLedger.voucherType !== 'rcpt'
-                                && blankLedger.voucherType !== 'advance-receipt')" class="pdR1 pt-2 hidden-xs">
-                                <input type="checkbox" name="adjustSales" (change)="handleVoucherAdjustment()"
-                                    [(ngModel)]="isAdjustVoucherSelected">
-                                Adjust {{
-                                    blankLedger.voucherType === 'sal' ? 'Sales' :
-                                    blankLedger.voucherType === 'pur' ? 'Purchase' :
-                                    blankLedger.voucherType === 'credit note' ? 'Credit Note' :
-                                    blankLedger.voucherType === 'debit note' ? 'Debit Note' :
-                                    blankLedger.voucherType === 'pay' ? 'Payment' : ''
-                                }}
-                            </td>
-                            <td *ngIf="blankLedger.voucherType == 'rcpt' && !shouldShowAdvanceReceipt" class="pdR1 pt-2 hidden-xs">
-                                <input type="checkbox" name="adjustReceipt" (change)="handleVoucherAdjustment()"
-                                    [(ngModel)]="isAdjustReceiptSelected">
-                                Adjust Receipt
-                            </td>
-
                             <td class="pdR1" *ngIf="blankLedger.voucherType == 'credit note' || blankLedger.voucherType === 'debit note'">
                                 <div class="form-group">
                                     <label class="default_clr">Voucher No.</label>
@@ -361,12 +342,26 @@
                                 <span class=“remove-invoice-icon”>×</span>
                                 <span class="label">Remove</span>
                             </td>
-
-                            <td *ngIf="blankLedger.voucherType == 'pay'" class="pdR1 pt-2 hidden-xs">
-                                <input type="checkbox" name="adjustPayment" (change)="handleVoucherAdjustment()"
-                                    [(ngModel)]="isAdjustPaymentSelected">
-                                Adjust Payment
+                            <td *ngIf="blankLedger.voucherType &&
+                                (blankLedger.voucherType !== 'jr' && blankLedger.voucherType !== 'cntr' && blankLedger.voucherType !== 'rcpt'
+                                && blankLedger.voucherType !== 'advance-receipt')" class="pdR1 pt-2 hidden-xs">
+                                <input type="checkbox" name="adjustSales" (change)="handleVoucherAdjustment()"
+                                    [(ngModel)]="isAdjustVoucherSelected">
+                                Adjust {{
+                                    blankLedger.voucherType === 'sal' ? 'Sales' :
+                                    blankLedger.voucherType === 'pur' ? 'Purchase' :
+                                    blankLedger.voucherType === 'credit note' ? 'Credit Note' :
+                                    blankLedger.voucherType === 'debit note' ? 'Debit Note' :
+                                    blankLedger.voucherType === 'pay' ? 'Payment' : ''
+                                }}
                             </td>
+                            <td *ngIf="blankLedger.voucherType == 'rcpt' && !shouldShowAdvanceReceipt" class="pdR1 pt-2 hidden-xs">
+                                <input type="checkbox" name="adjustReceipt" (change)="handleVoucherAdjustment()"
+                                    [(ngModel)]="isAdjustReceiptSelected">
+                                Adjust Receipt
+                            </td>
+
+
                             <td *ngIf="blankLedger.voucherType == 'advance-receipt' && shouldShowAdvanceReceipt" class="pdR1 pt-2 hidden-xs">
                                 <input type="checkbox" name="adjustAdvanceReceipt" (change)="handleVoucherAdjustment()"
                                     [(ngModel)]="isAdjustAdvanceReceiptSelected">

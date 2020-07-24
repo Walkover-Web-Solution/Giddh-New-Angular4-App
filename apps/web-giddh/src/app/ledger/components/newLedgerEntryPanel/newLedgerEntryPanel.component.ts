@@ -976,18 +976,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public getInvoiceListsData(event: any): void {
         this.removeAdjustment();
-        if (event.value === 'rcpt') {
+        if (event.value === 'advance-receipt') {
             this.shouldShowAdvanceReceipt = true;
-            this.clickUnpaidInvoiceList.emit(true);
+            this.isAdvanceReceipt = true;
         } else if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
             this.shouldShowAdvanceReceipt = false;
             this.removeSelectedInvoice();
             this.getInvoiceListsForCreditNote.emit(event.value);
             this.blankLedger.generateInvoice = true;
-        } else if (event.value === 'advance-receipt') {
-            this.shouldShowAdvanceReceipt = true;
-            this.isAdvanceReceipt = true;
-            this.handleAdvanceReceiptChange();
         } else {
             this.shouldShowAdvanceReceipt = false;
             this.isAdvanceReceipt = false;
