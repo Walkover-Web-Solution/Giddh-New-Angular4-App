@@ -330,29 +330,43 @@
                 </div>
                 <!-- Stock group block end -->
                 <ng-container *ngIf="log?.details?.parentGroup">
-
-                    <div class="mr-05" *ngIf="log?.details?.name">
-                        <label>
+                    <div class="single-address-row">
+                        <div class="mr-05" *ngIf="log?.details?.name">
+                            <label>
                             Group Name:
                         </label>
-                        <p class="address-field">{{log?.details?.name}}
-                        </p>
-                    </div>
+                            <p class="address-field">{{log?.details?.name}}
+                            </p>
+                        </div>
 
-                    <div class="mr-05" *ngIf="log?.details?.parentGroup?.name">
-                        <label>
+                        <div class="mr-05" *ngIf="log?.details?.parentGroup?.name">
+                            <label>
                             Parent Group Name:
                         </label>
-                        <p class="address-field">{{log?.details?.parentGroup?.name}}
-                        </p>
-                    </div>
-                    <div class="mr-05" *ngIf="log?.details?.description">
-                        <label>
+                            <p class="address-field">{{log?.details?.parentGroup?.name}}
+                            </p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.details?.hsn">
+                            <label>
+                            HSN:
+                             </label>
+                            <p class="address-field">{{log?.details?.hsn}}
+                            </p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.details?.sac">
+                            <label>
+                            SAC:
+                             </label>
+                            <p class="address-field">{{log?.details?.sac}}
+                            </p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.details?.description">
+                            <label>
                             Description:
                         </label>
-                        <p class="ml-05">{{log?.details?.description}}</p>
+                            <p class="ml-05">{{log?.details?.description}}</p>
+                        </div>
                     </div>
-
                 </ng-container>
             </div>
             <div class="angle-right-icon" (click)="openAllAddress(parentIndex)" *ngIf="log?.details?.addresses?.length>1">
@@ -615,29 +629,44 @@
                     <!--Old etries log block end -->
                     <!-- Old stock group logs start -->
                     <ng-container *ngIf="log?.old?.details?.parentGroup">
+                        <div class="single-address-row">
 
-                        <div class="mr-05" *ngIf="log?.old?.details?.name">
-                            <label>
+                            <div class="mr-05" *ngIf="log?.old?.details?.name">
+                                <label>
                             Group Name:
                         </label>
-                            <p class="address-field">{{log?.old?.details?.name}}
-                            </p>
-                        </div>
+                                <p class="address-field">{{log?.old?.details?.name}}
+                                </p>
+                            </div>
 
-                        <div class="mr-05" *ngIf="log?.old?.details?.parentGroup?.name">
-                            <label>
+                            <div class="mr-05" *ngIf="log?.old?.details?.parentGroup?.name">
+                                <label>
                             Parent Group Name:
-                        </label>
-                            <p class="address-field">{{log?.old?.details?.parentGroup?.name}}
-                            </p>
-                        </div>
-                        <div class="mr-05" *ngIf="log?.old?.details?.description">
-                            <label>
+                             </label>
+                                <p class="address-field">{{log?.old?.details?.parentGroup?.name}}
+                                </p>
+                            </div>
+                            <div class="mr-05" *ngIf="log?.old?.details?.hsn">
+                                <label>
+                            HSN:
+                             </label>
+                                <p class="address-field">{{log?.old?.details?.hsn}}
+                                </p>
+                            </div>
+                            <div class="mr-05" *ngIf="log?.old?.details?.sac">
+                                <label>
+                            SAC:
+                             </label>
+                                <p class="address-field">{{log?.old?.details?.sac}}
+                                </p>
+                            </div>
+                            <div class="mr-05" *ngIf="log?.old?.details?.description">
+                                <label>
                             Description:
-                        </label>
-                            <p class="ml-05">{{log?.old?.details?.description}}</p>
+                            </label>
+                                <p class="ml-05">{{log?.old?.details?.description}}</p>
+                            </div>
                         </div>
-
                     </ng-container>
                     <!-- Old stock group logs end -->
 
