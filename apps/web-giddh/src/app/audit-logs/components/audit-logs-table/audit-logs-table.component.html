@@ -284,64 +284,75 @@
                     </ng-container>
                 </div>
                 <!-- etries log block end -->
-                <ng-container *ngIf="log && log?.details && log?.details?.addresses && log?.details?.addresses.length">
-                    <ng-container *ngFor="let item of log?.details?.addresses; let index = index">
-                        <div class="single-address-row" *ngIf="index===0">
-                            <div class="mr-05" *ngIf="item.address">
-                                <label>
-                            Address:
-                        </label>
-                                <p class="address-field">{{item?.address}}
-                                </p>
-                            </div>
-                            <div class="mr-05" *ngIf="item?.state">
-                                <label>
-                            State:
-                        </label>
-                                <p class="ml-05">{{item?.state?.name}}</p>
-                            </div>
-                            <div class="mr-05">
-                                <label>
-                            GSTIN:
-                        </label>
-                                <p class="ml-05">{{item?.gstIn}}</p>
-                            </div>
-                            <div class="mr-05" *ngIf="item?.country">
-                                <label>
-                            Country:
-                        </label>
-                                <p class="ml-05">{{item?.country?.countryName}}</p>
-                            </div>
-                        </div>
 
-                        <div class="single-address-row" *ngIf="index>0 && showSingleAddress && isShowMultipleDataIndex===parentIndex">
-                            <div class="mr-05" *ngIf="item?.address">
-                                <label>
-                            Address:
+                <!-- Stock group block -->
+                <div class="single-address-row" *ngIf="log?.details?.voucherAccount && log?.details?.voucherAccount.name">
+                    <ng-container>
+                        <div class="mr-05" *ngIf="log?.details?.voucherAccount.name">
+                            <label>
+                           Account:
                         </label>
-                                <p class="address-field">{{item?.address}}
-                                </p>
-                            </div>
-                            <div class="mr-05" *ngIf="item?.state">
-                                <label>
-                            State:
+                            <p class="address-field"> {{log?.details?.voucherAccount.name}}
+                            </p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.details?.voucherType">
+                            <label>
+                           Voucher:
                         </label>
-                                <p class="ml-05">{{item?.state?.name}}</p>
-                            </div>
-                            <div class="mr-05">
-                                <label>
-                            GSTIN:
+                            <p class="address-field"> {{log?.details?.voucherType}}
+                            </p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.details?.voucherNumber">
+                            <label>
+                            Voucher Number:
                         </label>
-                                <p class="ml-05">{{item?.gstIn}}</p>
-                            </div>
-                            <div class="mr-05" *ngIf="item?.country">
-                                <label>
-                            Country:
+                            <p class="ml-05"> {{log?.details?.voucherNumber}}</p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.details?.subTotal">
+                            <label>
+                            Sub Total:
                         </label>
-                                <p class="ml-05">{{item?.country?.countryName}}</p>
-                            </div>
+                            <p class="ml-05"> {{log?.details?.subTotal?.amountForAccount |giddhCurrency }}</p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.details?.totalTax">
+                            <label>
+                            Tax:
+                        </label>
+                            <p class="ml-05"> {{log?.details?.totalTax?.amountForAccount |giddhCurrency }}</p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.details?.grandTotal">
+                            <label>
+                            Total:
+                        </label>
+                            <p class="ml-05"> {{log?.details?.grandTotal?.amountForAccount |giddhCurrency }}</p>
                         </div>
                     </ng-container>
+                </div>
+                <!-- Stock group block end -->
+                <ng-container *ngIf="log?.details?.parentGroup">
+
+                    <div class="mr-05" *ngIf="log?.details?.name">
+                        <label>
+                            Group Name:
+                        </label>
+                        <p class="address-field">{{log?.details?.name}}
+                        </p>
+                    </div>
+
+                    <div class="mr-05" *ngIf="log?.details?.parentGroup?.name">
+                        <label>
+                            Parent Group Name:
+                        </label>
+                        <p class="address-field">{{log?.details?.parentGroup?.name}}
+                        </p>
+                    </div>
+                    <div class="mr-05" *ngIf="log?.details?.description">
+                        <label>
+                            Description:
+                        </label>
+                        <p class="ml-05">{{log?.details?.description}}</p>
+                    </div>
+
                 </ng-container>
             </div>
             <div class="angle-right-icon" (click)="openAllAddress(parentIndex)" *ngIf="log?.details?.addresses?.length>1">
@@ -602,6 +613,35 @@
                         </ng-container>
                     </div>
                     <!--Old etries log block end -->
+                    <!-- Old stock group logs start -->
+                    <ng-container *ngIf="log?.old?.details?.parentGroup">
+
+                        <div class="mr-05" *ngIf="log?.old?.details?.name">
+                            <label>
+                            Group Name:
+                        </label>
+                            <p class="address-field">{{log?.old?.details?.name}}
+                            </p>
+                        </div>
+
+                        <div class="mr-05" *ngIf="log?.old?.details?.parentGroup?.name">
+                            <label>
+                            Parent Group Name:
+                        </label>
+                            <p class="address-field">{{log?.old?.details?.parentGroup?.name}}
+                            </p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.old?.details?.description">
+                            <label>
+                            Description:
+                        </label>
+                            <p class="ml-05">{{log?.old?.details?.description}}</p>
+                        </div>
+
+                    </ng-container>
+                    <!-- Old stock group logs end -->
+
+
                     <ng-container *ngIf="log?.old && log?.old?.details && log?.old?.details?.addresses && log?.old?.details?.addresses.length">
                         <ng-container *ngFor="let item of log?.old?.details?.addresses; let index = index">
                             <div class="single-address-row" *ngIf="index===0">
