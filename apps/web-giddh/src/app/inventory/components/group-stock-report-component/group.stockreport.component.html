@@ -211,8 +211,8 @@
     </div>
 
     <section>
-        <div style="overflow-x:auto" class="mobilecardwrapper table-responsive">
-        <table class="table basic table-border inventoryStockTable on-mobile-view"
+        <div class="mobile-cardwrapper table-responsive">
+        <table class="table basic table-border inventory-stocktable on-mobile-view"
             [ngClass]="{'mB100': groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length>6}">
             <thead>
                 <tr>
@@ -474,7 +474,7 @@
                             {{txn.stockName}}
                         </td>
                         <!-- in case of all entity with group end -->
-                        <td data-title="Opening stock -" class="tdmobile-head"></td>
+                        <td data-title="Opening stock -" class="td-mobile-head"></td>
 
                         <td class="bdrB bdrR text-right brNone" data-title="Qty">
                             <span
@@ -482,21 +482,21 @@
                         </td>
                         <td class="bdrB bdrR text-right" data-title="Value">{{txn.openingBalance?.amount}}</td>
 
-                        <td data-title="inwards -" class="tdmobile-head"></td>
+                        <td data-title="inwards -" class="td-mobile-head"></td>
 
                         <td class="bdrB bdrR text-right brNone" data-title="Qty">
                             <span [ngClass]="{'text-danger': txn.inwards?.quantity<0 }">{{txn.inwards?.quantity}}</span>
                         </td>
                         <td class="bdrB bdrR text-right" data-title="Value">{{txn.inwards?.amount}}</td>
 
-                        <td data-title="Outwards -" class="tdmobile-head"></td>
+                        <td data-title="Outwards -" class="td-mobile-head"></td>
 
                         <td class="bdrB bdrR text-right brNone" data-title="Qty">
                             {{txn.outwards?.quantity}}
                         </td>
                         <td class="bdrB bdrR text-right" data-title="Value">{{txn.outwards?.amount}}</td>
 
-                        <td data-title="Closing stock -" class="tdmobile-head"></td>
+                        <td data-title="Closing stock -" class="td-mobile-head"></td>
 
                         <td class="bdrB bdrR text-right brNone" data-title="Qty">
                             <span

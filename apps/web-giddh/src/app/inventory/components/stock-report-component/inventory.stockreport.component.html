@@ -75,7 +75,7 @@
     </form>
 
     <section>
-        <div style="overflow-x:auto" class="mobilecardwrapper table-responsive">
+        <div class="mobile-cardwrapper table-responsive">
         <table class="table basic table-border on-mobile-view"
             [ngClass]="{'mB100': stockReport && stockReport.transactions && stockReport.transactions.length>6}">
             <thead>
@@ -323,7 +323,7 @@
                     <td class="bdrR" data-title="Date">{{txn.entryDate}}</td>
                     <td class="bdrR {{txn.voucherType}}" data-title="Voucher Type">{{txn.voucherType}}</td>
                     <td class="bdrR" data-title="Account Name">{{txn.account?.name}}</td>
-                    <td data-title="Transactions -" class="tdmobile-head"></td>
+                    <td data-title="Transactions -" class="td-mobile-head"></td>
                     <td class="text-right bdrR" data-title="Inwards">
                         <span *ngIf="txn.type == 'dr'">
                             {{txn.quantity}}
@@ -346,7 +346,7 @@
 
                     <td class="text-right bdrR" data-title="Rate" [ngClass]="txn.type === 'cr'? 'cr' : 'dr' ">{{txn.rate}}</td>
 
-                    <td data-title="Closing Stock -" class="tdmobile-head"></td>
+                    <td data-title="Closing Stock -" class="td-mobile-head"></td>
                     
                     <td class="text-right bdrR" data-title="Value" [ngClass]="txn.type === 'cr'? 'cr' : 'dr' ">
                         {{txn.amount}}
