@@ -1589,7 +1589,7 @@ span.eligible-ITC {
 }
 .deposit-payment-mode {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     flex-direction: row-reverse;
     label {
         padding-bottom: 0;
