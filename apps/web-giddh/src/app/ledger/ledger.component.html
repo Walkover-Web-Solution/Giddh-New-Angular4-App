@@ -356,6 +356,7 @@
                                                         (clickedOutsideEvent)="hideBankLedgerPopup($event)"
                                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                                         [invoiceList]="invoiceList"
+                                                        (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
                                                         [isTouristSchemeApplicable]="isTouristSchemeApplicable">
                                                     </new-ledger-entry-panel>
                                                 </div>
@@ -475,6 +476,7 @@
                                                         (saveBlankLedger)="saveBankTransaction()"
                                                         (clickedOutsideEvent)="hideBankLedgerPopup($event)"
                                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
+                                                        (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
                                                         [invoiceList]="invoiceList">
                                                     </new-ledger-entry-panel>
                                                 </div>
@@ -763,6 +765,7 @@
                                                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                         [(ngModel)]="lc.blankLedger.entryDate"
                                                         [placeholder]="lc.formatPlaceholder" [outsideClick]="true"
+                                                        (ngModelChange)="getInvoiceListsForCreditNote(true)"
                                                         (click)="$event.stopPropagation()" autocomplete="off" />
 
                                                 </div>
@@ -857,6 +860,7 @@
                                         (resetBlankLedger)="resetBlankTransaction()"
                                         (saveBlankLedger)="saveBlankTransaction()"
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
+                                        (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
                                         [invoiceList]="invoiceList"
                                         [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
@@ -1128,6 +1132,7 @@
                                         (saveBlankLedger)="saveBlankTransaction()"
                                         (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
+                                        (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
                                         [invoiceList]="invoiceList"
                                         [shouldShowRcmTaxableAmount]="shouldShowRcmTaxableAmount"
                                         [shouldShowItcSection]="shouldShowItcSection"
