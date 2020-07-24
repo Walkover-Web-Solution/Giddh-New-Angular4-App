@@ -188,7 +188,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     /* Will check if form is valid */
     public isValidForm: boolean = false;
     /* Error message for amount comparision with transaction amount */
-    public amountErrorMessage: string = "Amount can't be greater than Credit Amount";
+    public amountErrorMessage: string = "Total Amount can't be greater than Credit Amount";
     /* Error message for comparision of adjusted amount with invoice */
     public invoiceAmountErrorMessage: string = "Amount can't be greater than Invoice Balance Due";
     /* Error message for invalid adjustment amount */
@@ -745,13 +745,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (this.totalCreditAmount === this.totalDebitAmount) {
             if (this.validatePaymentAndReceipt(data)) {
 
-                let hasAdvanceReceipt = false;
-
                 if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
 
                     this.validateEntries(true);
 
-                    if(!this.isValidForm) {
+                    if (!this.isValidForm) {
                         return false;
                     }
 
@@ -764,19 +762,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         let adjustmentsCount = 0;
 
                         voucherAdjustments.forEach(adjustment => {
-                            if(adjustment.type === "advanceReceipt") {
-                                hasAdvanceReceipt = true;
-                            }
-                        });
-
-                        voucherAdjustments.forEach(adjustment => {
                             totalAdjustmentAmount += Number(adjustment.amount);
 
                             if (adjustment.type === "receipt" || adjustment.type === "advanceReceipt") {
                                 let taxAmount = 0;
                                 let advanceReceiptAmount = 0;
 
-                                if(adjustment.type === "advanceReceipt") {
+                                if (adjustment.type === "advanceReceipt") {
                                     taxAmount = adjustment.tax.value;
                                     advanceReceiptAmount = Number(adjustment.amount) - Number(taxAmount);
                                 }
@@ -813,16 +805,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                             }
                         });
 
-                        if(data.transactions[2]) {
-                            data.transactions[2].voucherAdjustments = {adjustments: []};
-                            data.transactions[2].voucherAdjustments.adjustments = dataVoucherAdjustments;
-                        } else {
-                            data.transactions[1].voucherAdjustments = {adjustments: []};
-                            data.transactions[1].voucherAdjustments.adjustments = dataVoucherAdjustments;
+                        if (dataVoucherAdjustments && dataVoucherAdjustments.length > 0) {
+                            if (data.transactions[2]) {
+                                data.transactions[2].voucherAdjustments = { adjustments: [] };
+                                data.transactions[2].voucherAdjustments.adjustments = dataVoucherAdjustments;
+                            } else if (data.transactions[1]) {
+                                data.transactions[1].voucherAdjustments = { adjustments: [] };
+                                data.transactions[1].voucherAdjustments.adjustments = dataVoucherAdjustments;
+                            }
                         }
                     }
 
-                    if(totalAdjustmentAmount !== this.totalCreditAmount) {
+                    if (totalAdjustmentAmount !== this.totalCreditAmount) {
                         this._toaster.errorToast('Total credit amount and adjustment amount should be equal.', 'Error');
                         return false;
                     }
@@ -831,8 +825,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 }
 
                 _.forEach(data.transactions, (element: any) => {
-                    if(element) {
-                        element.type = (element.type === 'by' || hasAdvanceReceipt) ? 'credit' : 'debit';
+                    if (element) {
+                        element.type = (element.type === 'by') ? 'credit' : 'debit';
                     }
                 });
                 let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
@@ -1397,7 +1391,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     } else if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
                         let isReceiptAccount;
 
-                        if(this.selectedTransactionType === 'to') {
+                        if (this.selectedTransactionType === 'to') {
                             isReceiptAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'currentliabilities' || pg.uniqueName === 'sundrycreditors' || pg.uniqueName === 'sundrydebtors'));
                         } else {
                             isReceiptAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash' || pg.uniqueName === 'currentliabilities' || pg.uniqueName === 'sundrycreditors' || pg.uniqueName === 'sundrydebtors'));
@@ -1689,34 +1683,35 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let receiptTotal = 0;
         let isValid = true;
         let invoiceRequired = false;
+        let invoiceAmountError = false;
 
         this.receiptEntries.forEach(receipt => {
-            if(parseFloat(receipt.amount) === 0 || isNaN(parseFloat(receipt.amount))) {
-                isValid = false;
-            } else {
-                receiptTotal += parseFloat(receipt.amount);
-            }
+            if (isValid) {
+                if (parseFloat(receipt.amount) === 0 || isNaN(parseFloat(receipt.amount))) {
+                    isValid = false;
+                } else {
+                    receiptTotal += parseFloat(receipt.amount);
+                }
 
-            if (receipt.type === "againstReference" && !receipt.invoice.uniqueName) {
-                isValid = false;
-                invoiceRequired = true;
+                if (isValid && receipt.type === "againstReference" && !receipt.invoice.uniqueName) {
+                    isValid = false;
+                    invoiceRequired = true;
+                } else if (isValid && receipt.type === "againstReference" && receipt.invoice.uniqueName && parseFloat(receipt.invoice.amount) < parseFloat(receipt.amount)) {
+                    isValid = false;
+                    invoiceAmountError = true;
+                }
             }
         });
 
         if (isValid) {
-            if (invoiceRequired) {
+            if (receiptTotal !== this.adjustmentTransaction.amount) {
                 this.isValidForm = false;
 
                 if (showErrorMessage) {
-                    this._toaster.clearAllToaster();
-                    this._toaster.errorToast(this.invoiceErrorMessage);
+                    this._toaster.errorToast(this.amountErrorMessage);
                 }
             } else {
-                if (receiptTotal !== this.adjustmentTransaction.amount) {
-                    this.isValidForm = false;
-                } else {
-                    this.isValidForm = true;
-                }
+                this.isValidForm = true;
             }
         } else {
             this.isValidForm = false;
@@ -1726,6 +1721,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
                 if (invoiceRequired) {
                     this._toaster.errorToast(this.invoiceErrorMessage);
+                } else if (invoiceAmountError) {
+                    this._toaster.errorToast(this.invoiceAmountErrorMessage);
                 } else {
                     this._toaster.errorToast(this.invalidAmountErrorMessage);
                 }
@@ -1740,7 +1737,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public addNewAdjustmentEntry(): void {
         if (this.totalEntries === 0 || (this.receiptEntries[this.totalEntries - 1] && this.receiptEntries[this.totalEntries - 1] !== undefined && parseFloat(this.receiptEntries[this.totalEntries - 1].amount) > 0)) {
-            let getAdjustmentTypes = this.prepareAdjustmentTypes();
+            let getAdjustmentTypes = this.prepareAdjustmentTypes("add");
 
             this.receiptEntries[this.totalEntries] = {
                 allowedTypes: getAdjustmentTypes,
@@ -1875,7 +1872,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @returns {IOption[]}
      * @memberof AccountAsVoucherComponent
      */
-    public prepareAdjustmentTypes(entry?: any): IOption[] {
+    public prepareAdjustmentTypes(event: string): IOption[] {
         let receiptExists = false;
         let advanceReceiptExists = false;
         this.receiptEntries.forEach(receipt => {
@@ -1889,7 +1886,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let adjustmentTypesOptions: IOption[] = [];
 
         adjustmentTypes.map(type => {
-            if((!receiptExists && !advanceReceiptExists) || (receiptExists && !advanceReceiptExists && type.value === "receipt") || (!receiptExists && advanceReceiptExists && type.value === "advanceReceipt") || type.value === "againstReference") {
+            if (this.totalEntries === 0 || (event === "remove" && this.totalEntries === 1) || (!receiptExists && !advanceReceiptExists) || (receiptExists && !advanceReceiptExists && type.value === "receipt") || (!receiptExists && advanceReceiptExists && type.value === "advanceReceipt") || type.value === "againstReference") {
                 adjustmentTypesOptions.push({ label: type.label, value: type.value });
             }
         });
@@ -1903,8 +1900,26 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public updateAdjustmentTypes(): void {
-        this.receiptEntries.forEach(entry => {
-            entry.allowedTypes = this.prepareAdjustmentTypes(entry);
-        });
+        if (this.receiptEntries && this.receiptEntries.length > 0) {
+            this.receiptEntries.forEach(entry => {
+                entry.allowedTypes = this.prepareAdjustmentTypes("remove");
+            });
+        }
+    }
+
+    /**
+     * Callback for select type in adjustment
+     *
+     * @param {*} event
+     * @param {*} entry
+     * @memberof AccountAsVoucherComponent
+     */
+    public onSelectAdjustmentType(event: any, entry: any): void {
+        if (event && event.value === "againstReference") {
+            entry.amount = 0;
+            this.isValidForm = false;
+        }
+
+        this.updateAdjustmentTypes();
     }
 }
