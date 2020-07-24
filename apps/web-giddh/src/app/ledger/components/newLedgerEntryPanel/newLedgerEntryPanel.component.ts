@@ -1218,7 +1218,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public allowAlphanumericChar(event: any): void {
         if (event && event.value) {
-            this.blankLedger.passportNumber = this.generalService.allowAlphanumericChar(event.value)
+            this.blankLedger.passportNumber = this.generalService.allowAlphanumericChar(event.value);
         }
     }
 
@@ -1229,7 +1229,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public getAdjustedPaymentData(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
-        console.log(event);
         if (event && event.adjustPaymentData && event.adjustVoucherData) {
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             adjustments.forEach(adjustment => {
@@ -1243,7 +1242,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 tdsAmount: null,
                 description: null
             };
-            console.log(this.currentTxn);
             if (!adjustments.length)  {
                 // No adjustments done clear the adjustment checkbox
                 if (this.currentTxn['subVoucher'] === SubVoucher.AdvanceReceipt) {
@@ -1363,7 +1361,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             },
             activeAccountUniqueName: this.activeAccount.uniqueName
         };
-        console.log('Reached', this.currentTxn);
     }
 
     /**

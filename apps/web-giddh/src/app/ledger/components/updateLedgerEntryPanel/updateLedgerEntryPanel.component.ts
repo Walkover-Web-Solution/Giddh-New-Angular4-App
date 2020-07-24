@@ -1247,8 +1247,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         if ((this.isAdjustAdvanceReceiptSelected || this.isAdjustReceiptSelected || this.isAdjustVoucherSelected) && this.vm.selectedLedger.voucherAdjustments && (!this.vm.selectedLedger.voucherAdjustments.adjustments.length || isUpdateMode)) {
             this.prepareAdjustVoucherConfiguration();
-            console.log(this.vm.selectedLedger);
-            console.log(this.profileObj);
             this.openAdjustPaymentModal();
         }
     }
@@ -1621,7 +1619,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
             let totalAmount: number = 0;
             this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(item => {
-                totalAmount = Number(totalAmount) + Number(item.adjustmentAmount.amountForAccount);
+                totalAmount = Number(totalAmount) + (item.adjustmentAmount ? Number(item.adjustmentAmount.amountForAccount) : 0);
             });
             this.vm.selectedLedger.voucherAdjustments.totalAdjustmentAmount = totalAmount;
             this.checkAdjustedAmountExceed(Number(totalAmount));
@@ -1649,7 +1647,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
             let totalAmount: number = 0;
             this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(item => {
-                totalAmount = Number(totalAmount) + Number(item.adjustmentAmount.amountForAccount);
+                totalAmount = Number(totalAmount) + (item.adjustmentAmount ? Number(item.adjustmentAmount.amountForAccount) : 0);
             });
             this.totalAdjustedAmount = totalAmount;
             this.checkAdjustedAmountExceed(Number(totalAmount));
@@ -1722,7 +1720,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public getAdjustedPaymentData(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
-        console.log(this.vm.selectedLedger);
         if (event && event.adjustPaymentData && event.adjustVoucherData) {
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             if (adjustments) {
@@ -1738,7 +1735,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     tdsAmount: null,
                     description: null
                 };
-                console.log(this.vm.selectedLedger);
                 if (!adjustments.length) {
                     // No adjustments done clear the adjustment checkbox
                     this.isAdjustReceiptSelected = false;
@@ -1762,7 +1758,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments && !this.vm.selectedLedger.voucherAdjustments.adjustments.length) {
             // No adjustments done clear the adjustment checkbox
             this.isAdjustReceiptSelected = false;
-            this.isAdjustVoucherSelected = false
+            this.isAdjustVoucherSelected = false;
             this.isAdjustAdvanceReceiptSelected = false;
 
             if (!this.vm.isInvoiceGeneratedAlready) {
@@ -1804,7 +1800,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             },
             activeAccountUniqueName: this.activeAccount.uniqueName
         };
-        console.log('Reached', this.vm.selectedLedger);
     }
 
     /**

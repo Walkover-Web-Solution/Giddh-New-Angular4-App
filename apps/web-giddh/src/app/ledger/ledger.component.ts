@@ -899,10 +899,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 voucherType
             };
             let date;
-            if (typeof this.lc.blankLedger.entryDate === 'string') {
-                date = this.lc.blankLedger.entryDate;
-            } else {
-                date = moment(this.lc.blankLedger.entryDate).format(GIDDH_DATE_FORMAT);
+            if (this.lc && this.lc.blankLedger && this.lc.blankLedger.entryDate) {
+                if (typeof this.lc.blankLedger.entryDate === 'string') {
+                    date = this.lc.blankLedger.entryDate;
+                } else {
+                    date = moment(this.lc.blankLedger.entryDate).format(GIDDH_DATE_FORMAT);
+                }
             }
             this.invoiceList = [];
             this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
