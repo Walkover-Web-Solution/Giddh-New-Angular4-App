@@ -295,7 +295,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private commonActions: CommonActions,
         private location: Location
     ) {
-        this._windowRef.nativeWindow.superformIds = ['Jkvq'];
+        console.log("Header Constructor - " + new Date().getTime());
+        //this._windowRef.nativeWindow.superformIds = ['Jkvq'];
         /* This will get the date range picker configurations */
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
             if (config) {
@@ -467,6 +468,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        console.log("Header Init - " + new Date().getTime());
         this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
             if (value === 'logoutCordova') {
                 this.zone.run(() => {
