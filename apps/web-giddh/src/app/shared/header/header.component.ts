@@ -639,7 +639,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // });
         // Observes when screen resolution is 1440 or less close navigation bar for few pages...
         this._breakpointObserver
-            .observe(['(min-width: 1367px)'])
+            .observe(['(min-width: 1020px)'])
             .subscribe((state: BreakpointState) => {
                 this.isLargeWindow = state.matches;
                 this.adjustNavigationBar();
