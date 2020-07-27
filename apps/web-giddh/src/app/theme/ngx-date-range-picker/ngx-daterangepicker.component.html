@@ -267,18 +267,12 @@
                                                     {{ calendarMonth?.start?.calendar[1][1].format(" YYYY")}}
                                                 </ng-container>
                                             </div>
-                                            <div *ngIf="showWeekNumbers || showISOWeekNumbers" class="th-div">
-
-                                            </div>
-
                                             <div class="th-div">
                                                 <ng-container
                                                     *ngIf="!calendarMonth.start.minDate || calendarMonth.start.minDate.isBefore(calendarMonth.start.calendar.firstDay) && (!this.linkedCalendars || true)">
-
                                                 </ng-container>
                                                 <ng-container
                                                     *ngIf="!(!calendarMonth.start.minDate || calendarMonth.start.minDate.isBefore(calendarMonth.start.calendar.firstDay) && (!this.linkedCalendars || true))">
-
                                                 </ng-container>
                                             </div>
                                         </div>
@@ -360,10 +354,6 @@
                                                     {{ calendarMonth?.end?.calendar[1][1].format(" YYYY")}}
                                                 </ng-container>
                                             </div>
-                                            <div *ngIf="showWeekNumbers || showISOWeekNumbers" class="th-div">
-
-                                            </div>
-
                                             <div class="th-div">
                                                 <ng-container
                                                     *ngIf="(!calendarMonth.end.minDate || calendarMonth.end.minDate.isBefore(calendarMonth.end.calendar.firstDay)) && (!this.linkedCalendars)">
@@ -371,24 +361,16 @@
                                                 </ng-container>
                                                 <ng-container
                                                     *ngIf="!((!calendarMonth.end.minDate || calendarMonth.end.minDate.isBefore(calendarMonth.end.calendar.firstDay)) && (!this.linkedCalendars))">
-
                                                 </ng-container>
-
                                                 <div class="th-div">
                                                     <ng-container
                                                         *ngIf="!calendarMonth.end.maxDate || calendarMonth.end.maxDate.isAfter(calendarMonth.end.calendar.lastDay) && (!linkedCalendars || singleDatePicker || true)">
-
                                                     </ng-container>
                                                     <ng-container
                                                         *ngIf="!(!calendarMonth.end.maxDate || calendarMonth.end.maxDate.isAfter(calendarMonth.end.calendar.lastDay) && (!linkedCalendars || singleDatePicker || true))">
-
                                                     </ng-container>
                                                 </div>
-
                                             </div>
-
-
-
                                         </div>
                                         <ng-container *ngFor="let row of calendarMonth.end.calRows">
                                             <div class="d-flex" [class]="calendarMonth.end.classes[row].classList"
