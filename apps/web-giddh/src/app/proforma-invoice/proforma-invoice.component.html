@@ -1084,10 +1084,13 @@
                                         Attachment</label>
 
                     <label class="custom-file-label form-control cp pos-rel" for="invoiceFile">
-                                        <em *ngIf="!selectedFileName">Drag/Drop file or click here</em>
-                                        <em *ngIf="selectedFileName" class="text-success">{{selectedFileName}}</em>
+                                        <em *ngIf="!selectedFileName && !isFileUploading">Drag/Drop file or click here</em>
+                                        <div *ngIf="isFileUploading" class="d-flex justify-content-center align-items-center">
+                                            <i class="fa fa-spinner rotate"></i>
+                                        </div>
+                                        <em *ngIf="selectedFileName && !isFileUploading" class="text-success">{{selectedFileName}}</em>
                                         <span class="text-success"><i class="fa fa-check"
-                                                                      *ngIf="selectedFileName"></i></span>
+                                                                      *ngIf="selectedFileName && !isFileUploading"></i></span>
                                         <input type="file" name="invoiceFile" id="invoiceFile"
                                                [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
                                                (uploadOutput)="onUploadOutput($event)"
@@ -2027,7 +2030,7 @@
                                 <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
                             class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
                         </button> -->
-                                <button type="button" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
+                                <button type="button" [disabled]="isFileUploading" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default">Save
                                 </button>
                             </span>
@@ -2117,7 +2120,7 @@
             <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">Cancel
                             </button>
 
-            <button type="button" class="btn btn-default" (click)="submitUpdateForm(invoiceForm)">
+            <button type="button" class="btn btn-default" [disabled]="isFileUploading" (click)="submitUpdateForm(invoiceForm)">
                                 Update
                                 <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                     Cash

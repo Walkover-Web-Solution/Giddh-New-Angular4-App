@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewInit,
-    Component,
+    Component, ElementRef,
     EventEmitter,
     Input,
     OnChanges,
@@ -85,6 +85,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() pettyCashBaseAccountUniqueName: string;
 
     @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
+    /** fileinput element ref for clear value after remove attachment **/
+    @ViewChild('fileInputUpdate') public fileInputElement: ElementRef<any>;
     @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
     @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
     @ViewChild('tax') public taxControll: TaxControlComponent;
@@ -782,7 +784,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         } else if (output.type === 'done') {
             this._loaderService.hide();
             if (output.file.response.status === 'success') {
-                // this.isFileUploading = false;
+                this.isFileUploading = false;
                 this.vm.selectedLedger.attachedFile = output.file.response.body.uniqueName;
                 this.vm.selectedLedger.attachedFileName = output.file.response.body.name;
                 this._toasty.successToast('file uploaded successfully');
@@ -1002,6 +1004,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public deleteAttachedFile() {
         this.vm.selectedLedger.attachedFile = '';
         this.vm.selectedLedger.attachedFileName = '';
+        if(this.fileInputElement && this.fileInputElement.nativeElement) {
+            this.fileInputElement.nativeElement.value = '';
+        }
         this.hideDeleteAttachedFileModal();
     }
 
