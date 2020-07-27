@@ -93,3 +93,9 @@ a.dropdown-item:hover {
     justify-content: center;
     align-items: center;
 }
+.dashboard-datepicker{
+    max-width: 190px;
+    min-width: 190px;
+    border-radius: 30px;
+    border: 1px solid $gainsboro;
+}
