@@ -6104,7 +6104,7 @@ ng-select .select_drop i {
 
 virtual-scroll .scrollable-content .item > a {
     color: $nero;
-    padding: 3px 10px;
+    padding: 10px;
     display: table-cell;
     vertical-align: middle;
     height: 100%;
@@ -9352,9 +9352,9 @@ span#HW_badge_cont:nth-child(3) {
             a{
                 span{
                     i{
-                        color: $dim-gray;
+                        color: $gray;
                         margin-right: 10px;
-                        font-size: 11px;
+                        font-size: 14px;
                     }
                 }
             }
@@ -9665,6 +9665,16 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 @media (max-width: 767px) {
+    .daterangepicker.ltr .ranges {
+        ul{
+            width:100%;
+            li{
+                display:inline-block;
+                margin-right: 5px;
+            }
+        }
+    }
+
     .remove-header-lower-layer {
         .mobile-back-btn {
             display: inline-flex !important;
@@ -9936,10 +9946,10 @@ span#HW_badge_cont:nth-child(3) {
     .padding-top-fixed-mobile {
         padding-top: 90px;
     }
-    .page-has-tabs .padding-top-fixed-mobile,
-    .on-user-page .padding-top-fixed-mobile {
-        padding-top: 130px !important;
-    }
+    //.page-has-tabs .padding-top-fixed-mobile,
+    //.on-user-page .padding-top-fixed-mobile {
+    //    padding-top: 130px !important;
+   // }
     .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile {
         padding-top: 85px !important;
     }
@@ -10044,6 +10054,12 @@ span#HW_badge_cont:nth-child(3) {
 @media (max-width: 575px) {
     .daterangepicker.ltr .ranges {
         float: left;
+        ul{
+            li{
+                font-size: 11px;
+                padding: 3px 4px;
+            }
+        }
     }
     .custom-tabs .top-bar {
         padding-top: 10px;

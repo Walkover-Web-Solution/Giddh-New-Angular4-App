@@ -808,4 +808,14 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.toggleTransferAsidePane();
         this.openModal();
     }
+
+    /**
+     * To open edit model 
+     *
+     * @memberof InventoryGroupStockReportComponent
+     */
+    public editGroup(): void {
+        this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
+        this.setInventoryAsideState(true, true, true);
+    }
 }

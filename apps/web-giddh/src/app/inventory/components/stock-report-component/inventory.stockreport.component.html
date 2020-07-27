@@ -34,7 +34,7 @@
 
         <div class="d-flex" style="justify-content: space-between">
             <div class="d-flex" style="align-items: center">
-                <h2 style="font-size: 20px;font-weight: bold;text-transform:capitalize;">
+                <h2 class="head-report">
                     <span *ngIf="stockReport && stockReport.stockUnit">
                         {{stockReport.stockName}}</span> (Stock)</h2>
 
@@ -54,8 +54,8 @@
 
                 <div class="btn-group btn-download" dropdown [autoClose]="true" placement="bottom right">
                     <button id="button-alignment" dropdownToggle type="button"
-                        class="btn-link mrT cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
-                        <i class="icon-download"></i> Download
+                        class="btn-link mrT cp mr-1 dropdown-toggle download-icon" aria-controls="dropdown-alignment">
+                        <i class="icon-download"></i> <span> Download</span>
                     </button>
                     <ul *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download" role="menu"
                         aria-labelledby="button-alignment">
@@ -67,15 +67,16 @@
                         </li>
                     </ul>
                 </div>
-
-                <button class="btn btn-pink" (click)="toggleAsidePane()" data-toggle="tooltip" tooltip="Alt+i"
-                    style="margin-right: 0 !important;">Create New</button>
+                <button class="btn btn-pink" (click)="editStock()"  >Edit Stock</button>
+                <button class="btn btn-pink mr-0" (click)="toggleAsidePane()" data-toggle="tooltip" tooltip="Alt+i"
+                   >Create New</button>
             </div>
         </div>
     </form>
 
     <section>
-        <table class="table basic table-border"
+        <div class="mobile-card-wrapper table-responsive">
+        <table class="table basic table-border on-mobile-view"
             [ngClass]="{'mB100': stockReport && stockReport.transactions && stockReport.transactions.length>6}">
             <thead>
                 <tr>
@@ -319,10 +320,11 @@
             </thead>
             <tbody *ngIf="stockReport">
                 <tr *ngFor="let txn of stockReport.transactions">
-                    <td class="bdrR">{{txn.entryDate}}</td>
-                    <td class="bdrR {{txn.voucherType}}">{{txn.voucherType}}</td>
-                    <td class="bdrR">{{txn.account?.name}}</td>
-                    <td class="text-right bdrR">
+                    <td class="bdrR" data-title="Date">{{txn.entryDate}}</td>
+                    <td class="bdrR {{txn.voucherType}}" data-title="Voucher Type">{{txn.voucherType}}</td>
+                    <td class="bdrR" data-title="Account Name">{{txn.account?.name}}</td>
+                    <td data-title="Transactions -" class="td-mobile-head"></td>
+                    <td class="text-right bdrR" data-title="Inwards">
                         <span *ngIf="txn.type == 'dr'">
                             {{txn.quantity}}
                         </span>
@@ -332,7 +334,7 @@
                         <span *ngIf="txn.type == 'cr'">-</span>
                     </td>
 
-                    <td class="text-right bdrR">
+                    <td class="text-right bdrR" data-title="Outwards">
                         <span *ngIf="txn.type == 'cr'">
                             {{txn.quantity}}
                         </span>
@@ -342,11 +344,14 @@
                         <span *ngIf="txn.type == 'dr'">-</span>
                     </td>
 
-                    <td class="text-right bdrR" [ngClass]="txn.type === 'cr'? 'cr' : 'dr' ">{{txn.rate}}</td>
-                    <td class="text-right bdrR" [ngClass]="txn.type === 'cr'? 'cr' : 'dr' ">
+                    <td class="text-right bdrR" data-title="Rate" [ngClass]="txn.type === 'cr'? 'cr' : 'dr' ">{{txn.rate}}</td>
+
+                    <td data-title="Closing Stock -" class="td-mobile-head"></td>
+                    
+                    <td class="text-right bdrR" data-title="Value" [ngClass]="txn.type === 'cr'? 'cr' : 'dr' ">
                         {{txn.amount}}
                     </td>
-                    <td class="text-right bdrR">
+                    <td class="text-right bdrR" data-title="Quantity">
                         {{txn.closingQuantity}}<span class="unit-badge">{{stockReport.stockUnit}}</span>
                     </td>
                     <!--          <td class="text-right bdrR">-->
@@ -392,6 +397,7 @@
                 </tr>
             </tfoot>
         </table>
+        </div>
     </section>
 
 

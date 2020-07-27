@@ -127,6 +127,13 @@
                 }
                 span{
                     color: $nero;
+                    &:first-child{
+                        line-height: 1.6;
+                        height: 20px;
+                        display: inline-flex;
+                        align-items: center;
+                        width: 28px;
+                    }
                 }
             }
             &:hover{
@@ -241,6 +248,13 @@
                     li {
                         a {
                             padding: 10px 15px !important;
+                            span{
+                                i{
+                                    color: $gray;
+                                    margin-right: 10px;
+                                    font-size: 14px;
+                                }
+                            }
                         }
                     }
                 }

@@ -132,7 +132,7 @@
                     <div class="select-date-range" [ngClass]="{'mb-3':invalidStartDate || invalidEndDate}">
                         <div class="relative">
                             <input [ngClass]="{'invalid-date-input':invalidStartDate}" placeholder="start date"
-                                #startDateElement [value]="startDateString" (change)="setStartDate($event.target.value)"
+                                #startDateElement [value]="startDateString" (blur)="setStartDate($event.target.value)"
                                 (focus)="ActiveDate =0" [class]="ActiveDate ===0 ?ActiveSelectedDateClass :''">
                             <span *ngIf="invalidStartDate" class="invalid-date error-msg">{{invalidStartDate}}</span>
                         </div>
@@ -141,7 +141,7 @@
                         </span>
                         <div class="relative">
                             <input [ngClass]="{'invalid-date-input':invalidEndDate}" placeholder="end date"
-                                #endDateElement [value]="endDateString" (change)="setEndDate($event.target.value)"
+                                #endDateElement [value]="endDateString" (blur)="setEndDate($event.target.value)"
                                 (focus)="ActiveDate =1" [class]="ActiveDate ===1 ?ActiveSelectedDateClass :''">
                             <span *ngIf="invalidEndDate" class="invalid-date error-msg">{{invalidEndDate}}</span>
                         </div>
@@ -166,10 +166,8 @@
                         <!-- month name and month dropdown -->
                         <!-- navigate to previous and next month buttons -->
                         <div class="prev-next-btn">
-                            <button (click)="goToPrevMonth()" [disabled]="!checkIfScrollToPreviousMonthAvailable()"
-                                class="prev available"></button>
-                            <button class="next available" [disabled]="!checkIfScrollToNextMonthAvailable()"
-                                (click)="goToNextMonth()"></button>
+                            <button class="prev available" (click)="onScroll('top')"></button>
+                            <button class="next available" (click)="onScroll('bottom')"></button>
                         </div>
                         <!-- navigate to previous and next month buttons -->
                     </div>
@@ -399,9 +397,9 @@
                             <!-- start date calendar container -->
                             <!-- end date calendar container -->
                             <div class="calendar right"
-                                *ngIf="showCalInRanges && !singleDatePicker && !showMonthPicker">
+                                *ngIf="showCalInRanges && !singleDatePicker && !showMonthPicker && calendarMonth && calendarMonth.end">
                                 <div class="calendar-table">
-                                    <div class="table-condensed" *ngIf="calendarMonth && calendarMonth.end"
+                                    <div class="table-condensed"
                                         (mouseenter)="setActiveMonth(calendarMonth, 'end');">
                                         <div class="d-flex justify-content-between">
                                             <div class="th-div month drp-animate">

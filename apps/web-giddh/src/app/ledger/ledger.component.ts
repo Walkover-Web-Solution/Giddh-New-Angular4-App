@@ -894,14 +894,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * Get Invoice list for credit note
      *
-     * @param {any} event Selected invoice for credit note
+     * @param {any} voucher Selected voucher
      * @memberof LedgerComponent
      */
-    public getInvoiceListsForCreditNote(ev): void {
-        if (ev && this.selectedTxnAccUniqueName && this.accountUniquename) {
+    public getInvoiceListsForCreditNote(voucherType: string): void {
+        if (voucherType && this.selectedTxnAccUniqueName && this.accountUniquename) {
             const request = {
                 accountUniqueNames: [this.selectedTxnAccUniqueName, this.accountUniquename],
-                voucherType: VoucherTypeEnum.creditNote
+                voucherType
             };
             let date;
             if (typeof this.lc.blankLedger.entryDate === 'string') {
@@ -912,8 +912,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.invoiceList = [];
             this._ledgerService.getInvoiceListsForCreditNote(request, date).subscribe((response: any) => {
                 if (response && response.body && response.body.results) {
-                    response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber, value: invoice.uniqueName, additional: invoice }))
-                    _.uniqBy(this.invoiceList, 'value');
+                    response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber ? invoice.voucherNumber : '-', value: invoice.uniqueName, additional: invoice }))
                 }
             });
         }
