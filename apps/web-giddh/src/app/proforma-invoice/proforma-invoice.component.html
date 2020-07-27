@@ -1359,6 +1359,14 @@
                                             <div class="entryDate">
                                                 <label>Entry Date: {{entry.entryDate | date: 'dd-MM-yyyy'}}
                                                             </label>
+                                                <small *ngIf="invoiceForm.controls['transaction.date_' + entryIdx] &&
+                                                        invoiceForm.controls['transaction.date_' + entryIdx].errors?.sameMMDD">
+                                                    {{invoiceDateLabel}} and entry dates should be in same month and year.
+                                                </small>
+                                                <small *ngIf="invoiceForm.controls['transaction.date_' + entryIdx] &&
+                                                        invoiceForm.controls['transaction.date_' + entryIdx].errors?.beforeEntry">
+                                                    entry date should not after {{invoiceDateLabel}}.
+                                                </small>
                                             </div>
                                         </div>
 
