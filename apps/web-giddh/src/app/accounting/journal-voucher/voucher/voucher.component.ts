@@ -677,7 +677,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
         if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
             if (this.totalCreditAmount < this.totalDebitAmount) {
-                this.newEntryObj('to');
+                if(this.requestObj.voucherType !== VOUCHERS.RECEIPT) {
+                    this.newEntryObj('to');
+                }
             } else if (this.totalDebitAmount < this.totalCreditAmount) {
                 this.newEntryObj('by');
             }
@@ -737,6 +739,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (this.totalCreditAmount === this.totalDebitAmount) {
             if (this.validatePaymentAndReceipt(data)) {
 
+                let hasAdvanceReceipt = false;
+
                 if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
 
                     this.validateEntries(true);
@@ -761,6 +765,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                                 let advanceReceiptAmount = 0;
 
                                 if (adjustment.type === "advanceReceipt") {
+                                    hasAdvanceReceipt = true;
                                     taxAmount = adjustment.tax.value;
                                     advanceReceiptAmount = Number(adjustment.amount) - Number(taxAmount);
                                 }
@@ -813,7 +818,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         return false;
                     }
 
-                    data.transactions[1].type = "to"; // changing it to "to" so that it becomes debit in below loop
+                    data.transactions[1].type = "to"; // changing it to "to" so that it becomes debit in loop below
                 }
 
                 _.forEach(data.transactions, (element: any) => {
@@ -823,7 +828,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 });
                 let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
                 let indexOfMaxAmountEntry = _.findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
-                data.transactions.splice(indexOfMaxAmountEntry, 1);
+                if(hasAdvanceReceipt) {
+                    data.transactions.splice(indexOfMaxAmountEntry, 2);
+                } else {
+                    data.transactions.splice(indexOfMaxAmountEntry, 1);
+                }
                 data = this.tallyModuleService.prepareRequestForAPI(data);
                 this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
             } else {
