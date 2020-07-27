@@ -1,13 +1,13 @@
-import {take, takeUntil} from "rxjs/operators";
-import {LoginActions} from "../actions/login.action";
-import {AppState} from "../store";
-import {Router} from "@angular/router";
-import {Component, Inject, OnDestroy, OnInit, ViewChild} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ModalDirective} from "ngx-bootstrap";
-import {Configuration} from "../app.constant";
-import {Store} from "@ngrx/store";
-import {Observable, ReplaySubject} from "rxjs";
+import { take, takeUntil } from "rxjs/operators";
+import { LoginActions } from "../actions/login.action";
+import { AppState } from "../store";
+import { Router } from "@angular/router";
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ModalDirective } from "ngx-bootstrap";
+import { Configuration } from "../app.constant";
+import { Store, select } from "@ngrx/store";
+import { Observable, ReplaySubject } from "rxjs";
 import {
     LinkedInRequestModel,
     SignupwithEmaillModel,
@@ -22,13 +22,13 @@ import {
     LinkedinLoginProvider,
     SocialUser
 } from "../theme/ng-social-login-module/index";
-import {contriesWithCodes} from "../shared/helpers/countryWithCodes";
-import {IOption} from "../theme/ng-virtual-select/sh-options.interface";
-import {DOCUMENT} from "@angular/platform-browser";
-import {ToasterService} from "../services/toaster.service";
-import {userLoginStateEnum} from "../models/user-login-state";
-import {isIOSCordova} from "@giddh-workspaces/utils";
-import {GeneralService} from "../services/general.service";
+import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
+import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
+import { DOCUMENT } from "@angular/platform-browser";
+import { ToasterService } from "../services/toaster.service";
+import { userLoginStateEnum } from "../models/user-login-state";
+import { isIOSCordova } from "@giddh-workspaces/utils";
+import { GeneralService } from "../services/general.service";
 
 @Component({
     selector: "signup",
@@ -74,24 +74,26 @@ export class SignupComponent implements OnInit, OnDestroy {
     public showLinkedInButton: boolean = false;
     /** Used only to refer in the template */
     public isCordova: boolean = isCordova;
+    /** To Observe is google login inprocess */
+    public isLoginWithGoogleInProcess$: Observable<boolean>;
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,
-                private store: Store<AppState>,
-                private router: Router,
-                private loginAction: LoginActions,
-                private authService: AuthService,
-                @Inject(DOCUMENT) private document: Document,
-                private _toaster: ToasterService,
-                private _generalService: GeneralService
+        private store: Store<AppState>,
+        private router: Router,
+        private loginAction: LoginActions,
+        private authService: AuthService,
+        @Inject(DOCUMENT) private document: Document,
+        private _toaster: ToasterService,
+        private _generalService: GeneralService
     ) {
         this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
-        this.isLoginWithEmailInProcess$ = store.select(state => {
+        this.isLoginWithEmailInProcess$ = store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
-        }).pipe(takeUntil(this.destroyed$));
-        this.isVerifyEmailInProcess$ = store.select(state => {
+        }), takeUntil(this.destroyed$));
+        this.isVerifyEmailInProcess$ = store.pipe(select(state => {
             return state.login.isVerifyEmailInProcess;
-        }).pipe(takeUntil(this.destroyed$));
+        }), takeUntil(this.destroyed$));
         this.isLoginWithMobileInProcess$ = store.select(state => {
             return state.login.isLoginWithMobileInProcess;
         }).pipe(takeUntil(this.destroyed$));
@@ -126,13 +128,15 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.isSignupWithPasswordSuccess$ = store.select(state => {
             return state.login.isSignupWithPasswordSuccess;
         }).pipe(takeUntil(this.destroyed$));
-
+        this.isLoginWithGoogleInProcess$ = store.pipe(select(state => {
+            return state.login.isLoginWithGoogleInProcess;
+        }), takeUntil(this.destroyed$));
         this.signupVerifyEmail$ = this.store.select(p => p.login.signupVerifyEmail).pipe(takeUntil(this.destroyed$));
 
         this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).pipe(takeUntil(this.destroyed$));
 
         contriesWithCodes.map(c => {
-            this.countryCodeList.push({value: c.countryName, label: c.value});
+            this.countryCodeList.push({ value: c.countryName, label: c.value });
         });
         this.userLoginState$ = this.store.select(p => p.session.userLoginState);
         this.userDetails$ = this.store.select(p => p.session.user);
@@ -165,7 +169,7 @@ export class SignupComponent implements OnInit, OnDestroy {
             email: ["", [Validators.required, Validators.email]],
             verificationCode: ["", Validators.required]
         });
-        this.setCountryCode({value: "India", label: "India"});
+        this.setCountryCode({ value: "India", label: "India" });
 
         // get user object when google auth is complete
         if (!Configuration.isElectron && !Configuration.isCordova) {
@@ -306,7 +310,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     public async signInWithProviders(provider: string) {
         if (Configuration.isElectron) {
 
-            const {ipcRenderer} = (window as any).require("electron");
+            const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
                 const t = ipcRenderer.send("authenticate", provider);
