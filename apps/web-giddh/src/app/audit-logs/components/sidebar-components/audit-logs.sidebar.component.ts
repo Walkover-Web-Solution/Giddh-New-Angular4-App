@@ -9,7 +9,7 @@ import {GroupService} from '../../../services/group.service';
 import {AccountService} from '../../../services/account.service';
 import {AppState} from '../../../store';
 import {GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI} from '../../../shared/helpers/defaultDateFormat';
-import {Store} from '@ngrx/store';
+import {select, Store} from '@ngrx/store';
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import * as moment from 'moment/moment';
@@ -60,7 +60,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
 
         /* previously we were getting data from api now we are getting data from general store */
 
-        this.vm.accounts$ = this.store.select(state => state.general.flattenAccounts).pipe(takeUntil(this.destroyed$), map(accounts => {
+        this.vm.accounts$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$), map(accounts => {
             if(accounts && accounts.length) {
                 return accounts.map(account => {
                     return {
