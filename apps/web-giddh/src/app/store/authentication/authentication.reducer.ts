@@ -165,7 +165,14 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                 isLoginWithEmailSubmited: false,
                 isLoginWithEmailInProcess: false
             });
-
+        case LoginActions.SIGNUP_WITH_GOOGLE_REQUEST:
+            return Object.assign({}, state, {
+                isLoginWithGoogleInProcess: true
+            });
+        case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE:
+            return Object.assign({}, state, {
+                isLoginWithGoogleInProcess: false
+            });
         case LoginActions.SignupWithEmailRequest:
             return Object.assign({}, state, {
                 isLoginWithEmailInProcess: true
@@ -381,6 +388,10 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                         user: res.body
                     });
                 }
+            } else {
+              return  Object.assign({}, state, {
+                        isLoginWithPasswordInProcess: false,
+                    });
             }
             return state;
         }
@@ -398,6 +409,11 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                     isSignupWithPasswordSuccess: true,
                     signupVerifyEmail: res.request.email
                 });
+            } else {
+                 return Object.assign({}, state, {
+                    isSignupWithPasswordInProcess: false,
+                    isSignupWithPasswordSuccess: false,
+                });
             }
             return state;
         }
@@ -408,6 +424,10 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
         case LoginActions.forgotPasswordResponse: {
             let res: BaseResponse<any, any> = action.payload;
             if (res.status === 'success') {
+                return Object.assign({}, state, {
+                    isForgotPasswordInProcess: true,
+                });
+            } else {
                 return Object.assign({}, state, {
                     isForgotPasswordInProcess: true,
                 });
@@ -423,6 +443,11 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
             if (res.status === 'success') {
                 return Object.assign({}, state, {
                     isResetPasswordInSuccess: true,
+                    isForgotPasswordInProcess: false
+                });
+            } else {
+                 return Object.assign({}, state, {
+                    isResetPasswordInSuccess: false,
                     isForgotPasswordInProcess: false
                 });
             }
@@ -725,13 +750,12 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         }
         case LoginActions.LoginWithPasswdResponse: {
             let res: BaseResponse<any, any> = action.payload;
+            let newStates = _.cloneDeep(state);
+            newStates.isLoginWithPasswordInProcess = false;
             if (res.status === 'success') {
-                return Object.assign({}, state, {
-                    user: res.body,
-                    isLoginWithPasswordInProcess: false
-                });
+                newStates.user = res.body;
             }
-            return state;
+            return Object.assign({}, state, newStates);
         }
 
         case LoginActions.AutoLoginWithPasswdResponse: {
