@@ -295,7 +295,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private commonActions: CommonActions,
         private location: Location
     ) {
-        console.log("Header Constructor - " + new Date().getTime());
+        console.log("Header Constructor Position 1 - " + new Date().getTime());
         //this._windowRef.nativeWindow.superformIds = ['Jkvq'];
         /* This will get the date range picker configurations */
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
@@ -313,6 +313,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.datePickerOptions = configDatePicker;
             }
         });
+
+        console.log("Header Constructor Position 2 - " + new Date().getTime());
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
 
@@ -336,6 +338,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.addClassInBodyIfPageHasTabs();
             }
         });
+
+        console.log("Header Constructor Position 3 - " + new Date().getTime());
 
         // GETTING CURRENT PAGE
         this.store.pipe(select(s => s.general.currentPage), takeUntil(this.destroyed$)).subscribe(response => {
@@ -368,6 +372,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return user.user;
             }
         })).pipe(takeUntil(this.destroyed$));
+
+        console.log("Header Constructor Position 4 - " + new Date().getTime());
 
         this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).pipe(takeUntil(this.destroyed$));
         this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
@@ -441,6 +447,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.selectedCompanyCountry = selectedCmp.country;
         });
 
+        console.log("Header Constructor Position 5 - " + new Date().getTime());
+
         this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
 
         this.isAddAndManageOpenedFromOutside$ = this.store.select(s => s.groupwithaccounts.isAddAndManageOpenedFromOutside).pipe(takeUntil(this.destroyed$));
@@ -465,6 +473,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.removeCompanySessionData();
             }
         });
+
+        console.log("Header Constructor Position 6 - " + new Date().getTime());
     }
 
     public ngOnInit() {
