@@ -8,7 +8,7 @@ import { createSelector } from "reselect";
 import * as moment from 'moment/moment';
 import { CompanyResponse } from "../../../models/api-models/Company";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService, BsDropdownModule } from 'ngx-bootstrap';
 import { GeneralService } from '../../../services/general.service';
 
 @Component({

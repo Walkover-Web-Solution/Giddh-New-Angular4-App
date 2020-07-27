@@ -24,7 +24,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { DashboardService } from '../services/dashboard.service';
 import { ContactService } from '../services/contact.service';
-import { BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent, BsModalService, BsModalRef } from 'ngx-bootstrap';
+import { BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent, TabsetComponent, BsModalService, BsModalRef, BsDropdownModule } from 'ngx-bootstrap';
 import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
@@ -1285,15 +1285,16 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      * @param {*} element
      * @memberof ContactComponent
      */
-    public showGiddhDatepicker(element): void {
-        if (element) {
-            this.dateFieldPosition = this._generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
-        );
-    }
+    // public showGiddhDatepicker(element): void {
+    //     if (element) {
+    //         this.dateFieldPosition = this._generalService.getPosition(element.target);
+    //         this.datepickerTemplate
+    //     }
+    //     // this.modalRef = this.modalService.show(
+    //     //     this.datepickerTemplate,
+    //     //     Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+    //     // );
+    // }
 
     /**
      * This will hide datepicker
