@@ -6103,7 +6103,7 @@ ng-select .select_drop i {
 
 virtual-scroll .scrollable-content .item>a {
     color: $nero;
-    padding: 3px 10px;
+    padding: 10px;
     display: table-cell;
     vertical-align: middle;
     height: 100%;
@@ -8905,13 +8905,16 @@ p.remvBrnchName {
 }
 
 .popover.purchase-invoice-rcm,
+.popover.adjustment-popover,
 .update-ledger-rcm,
 .all-modules-popover {
     .popover-arrow.arrow {
         display: none;
     }
 }
-
+.popover.adjustment-popover {
+    margin: 0;
+}
 @media (min-width: 564px) {
     #date-range-picker-parent .daterangepicker {
         width: 100%;

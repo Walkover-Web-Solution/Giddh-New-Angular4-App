@@ -1603,6 +1603,26 @@ tr:first-child.in-range-hovered.available {
 cdk-virtual-scroll-viewport{
     height: 284px;
 }
+cdk-virtual-scroll-viewport::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+cdk-virtual-scroll-viewport::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+/* Handle */
+cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
+  background: $dim-gray;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb:hover {
+  background: $dim-gray;
+}
+
 .calendar-d-flex{
     display: flex;
 }
