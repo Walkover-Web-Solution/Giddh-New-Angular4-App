@@ -459,14 +459,16 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
             let updateStockResp: BaseResponse<StockDetailResponse, CreateStockRequest> = action.payload;
             if (updateStockResp.status === 'success') {
                 groupArray = _.cloneDeep(state.groupsWithStocks);
-                let activeGroup = _.cloneDeep(state.activeGroup) || updateStockResp.body.stockGroup;
+                let activeGroupUniqueName = _.cloneDeep(updateStockResp.queryString.stockGroupUniqueName);
                 let stateActiveGrp: StockGroupResponse = null;
-                let myGrp = removeStockItemAndReturnIt(groupArray, activeGroup.uniqueName, updateStockResp.queryString.stockUniqueName, null);
-                if (myGrp) {
-                    myGrp.name = updateStockResp.body.name;
-                    myGrp.uniqueName = updateStockResp.body.uniqueName;
-                    addStockItemAtIndex(groupArray, activeGroup.uniqueName, myGrp);
-                }
+                // let myGrp = removeStockItemAndReturnIt(groupArray, activeGroup.uniqueName, updateStockResp.queryString.stockUniqueName, null);
+                // if (myGrp) {
+                //     myGrp.name = updateStockResp.body.name;
+                //     myGrp.uniqueName = updateStockResp.body.uniqueName;
+                //     addStockItemAtIndex(groupArray, activeGroup.uniqueName, myGrp);
+                // }
+                updateStockIteminGroupArray(groupArray,activeGroupUniqueName, updateStockResp);
+                debugger;
                 return Object.assign({}, state, {
                     groupsWithStocks: groupArray,
                     activeStock: updateStockResp.body,
@@ -841,6 +843,25 @@ const removeStockItemAndReturnIt = (groups: IGroupsWithStocksHierarchyMinItem[],
     return result;
 };
 
+/** update stock group array object on update stock unit in a group **/
+const updateStockIteminGroupArray = (groups: IGroupsWithStocksHierarchyMinItem[], grpUniqueName: string, response: BaseResponse<StockDetailResponse, CreateStockRequest>): void => {
+    for (let grp of groups) {
+        if (grp.uniqueName === grpUniqueName) {
+            let st = grp.stocks.findIndex(p => p.uniqueName === response.queryString.stockUniqueName);
+            if (st > -1) {
+                grp.stocks[st] = {
+                    name: response.body.name,
+                    uniqueName: response.body.uniqueName,
+                };
+                return
+            }
+        }
+
+        if (grp.childStockGroups && grp.childStockGroups.length > 0) {
+            updateStockIteminGroupArray(grp.childStockGroups, grpUniqueName, response);
+        }
+    }
+};
 const addStockItemAtIndex = (groups: IGroupsWithStocksHierarchyMinItem[], parentUniqueName: string, stock: INameUniqueName) => {
     for (let el of groups) {
         if (el.uniqueName === parentUniqueName) {
