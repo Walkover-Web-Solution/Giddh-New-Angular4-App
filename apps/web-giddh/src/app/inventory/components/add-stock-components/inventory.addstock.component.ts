@@ -1218,7 +1218,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      * @memberof InventoryAddStockComponent
      */
     public checkedPurchaseInformation() {
-        if (this.addStockForm.controls['enablePurchase'].value) {
+        if (!this.addStockForm.controls['enablePurchase'].value) {
             this.addStockForm.get('purchaseAccountUniqueName').patchValue(null)
             this.forceClearPurchaseAccount$ = of({ status: true });
         }
@@ -1230,7 +1230,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      * @memberof InventoryAddStockComponent
      */
     public checkedSalesInformation() {
-        if (this.addStockForm.controls['enableSales'].value) {
+        if (!this.addStockForm.controls['enableSales'].value) {
             this.addStockForm.get('salesAccountUniqueName').patchValue(null)
             this.forceClearSalesAccount$ = of({ status: true });
         }
