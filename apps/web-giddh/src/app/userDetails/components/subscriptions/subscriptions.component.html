@@ -220,41 +220,43 @@
                                         <input type="search" class="form-control" [(ngModel)]="searchString" (ngModelChange)="filterCompanyList($event)" placeholder="Search Company here">
                                     </div>
                                 </div>
-                                <div class="associated-companies" *ngIf="subscriptions">
+                                <div class="associated-companies" *ngIf="subscriptions && activeTab === 'subscription'">
                                     <ul>
-                                        <li *ngFor="let company of companyListForFilter; let i = index">
-                                            <a href="javascript:void(0)" (click)="toggleCompanyDetailsAsidePane(company)">
-                                                <span>{{i+1}}</span>
-                                                <div class="d-flex associated-company-name">
-                                                    <p>
-                                                        <img src="assets/images/blue-check.svg" class="mr-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">
-                                                        {{company.name}}
-                                                    </p>
-                                                    <p class="font-12 mt-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">(Current Company)</p>
-                                                </div>
+                                        <cdk-virtual-scroll-viewport [itemSize]="48">
+                                            <li *cdkVirtualFor="let company of companyListForFilter; let i = index" class="associated-companies-li">
+                                                <a href="javascript:void(0)" (click)="toggleCompanyDetailsAsidePane(company)">
+                                                    <span>{{i+1}}</span>
+                                                    <div class="d-flex associated-company-name">
+                                                        <p>
+                                                            <img src="assets/images/blue-check.svg" class="mr-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">
+                                                            {{company.name}}
+                                                        </p>
+                                                        <p class="font-12 mt-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">(Current Company)</p>
+                                                    </div>
                                                 </a>
 
-                                            <div class="btn-group custom-dropdown"
-                                                dropdown placement="bottom right" container="body">
-                                                <button id="button-alignment" dropdownToggle type="button"
-                                                    class="dropdown-toggle" aria-controls="dropdown-alignment">
-                                                    <span class="icon-dots-three-vertical"></span>
-                                                </button>
-                                                <ul id="dropdown-alignment" *dropdownMenu
-                                                    class="dropdown-menu dropdown-menu-right" role="menu"
-                                                    aria-labelledby="button-alignment">
-                                                    <li role="menuitem">
-                                                        <a class="dropdown-item" (click)="openModalMove(MoveCompany, company)"
-                                                            href="javascript:void(0)">Move Company </a>
-                                                    </li>
-                                                    <!-- <li role="menuitem">
-                                                        <a class="dropdown-item" href="javascript:void(0)"
-                                                            (click)="openModal(deactivateCompany)">Deactivate
-                                                            Company</a>
-                                                    </li> -->
-                                                </ul>
-                                            </div>
-                                        </li>
+                                                <div class="btn-group custom-dropdown"
+                                                    dropdown placement="bottom right" container="body">
+                                                    <button id="button-alignment" dropdownToggle type="button"
+                                                        class="dropdown-toggle" aria-controls="dropdown-alignment">
+                                                        <span class="icon-dots-three-vertical"></span>
+                                                    </button>
+                                                    <ul id="dropdown-alignment" *dropdownMenu
+                                                        class="dropdown-menu dropdown-menu-right" role="menu"
+                                                        aria-labelledby="button-alignment">
+                                                        <li role="menuitem">
+                                                            <a class="dropdown-item" (click)="openModalMove(MoveCompany, company)"
+                                                                href="javascript:void(0)">Move Company </a>
+                                                        </li>
+                                                        <!-- <li role="menuitem">
+                                                            <a class="dropdown-item" href="javascript:void(0)"
+                                                                (click)="openModal(deactivateCompany)">Deactivate
+                                                                Company</a>
+                                                        </li> -->
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </cdk-virtual-scroll-viewport>
                                     </ul>
                                 </div>
 
