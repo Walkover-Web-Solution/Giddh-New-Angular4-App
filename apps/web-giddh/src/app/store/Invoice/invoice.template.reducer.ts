@@ -144,6 +144,11 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
+                    gstComposition: {
+                        label: '',
+                        display: true,
+                        width: null
+                    },
                     gstin: {
                         label: 'GSTIN',
                         display: true,

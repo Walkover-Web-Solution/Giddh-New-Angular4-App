@@ -81,37 +81,37 @@ export function download(filename, data, mimeType) {
                                         cordova.plugins.fileOpener2.open(url, mimeType, {
                                             error: (err) => {
                                                 // debugger;
-                                                console.error(err);
-                                                alert("Unable to download");
+                                                //console.error(err);
+                                                alert("No app available to open this type of file.");
                                             },
                                             success: () => {
                                                 // debugger;
-                                                console.log("success with opening the file");
+                                                //alert("success with opening the file");
                                             }
                                         });
                                     };
 
                                     fileWriter.onerror = (err) => {
-                                        alert("Unable to download");
-                                        console.error(err);
+                                        //alert("Unable to download");
+                                        //console.error(err);
                                     };
                                 },
                                 (err) => {
                                     // failed
-                                    alert("Unable to download");
-                                    console.error(err);
+                                    //alert("Unable to download");
+                                    //console.error(err);
                                 }
                             );
                         },
                         (err) => {
-                            alert("Unable to download");
-                            console.error(err);
+                            //alert("Unable to download");
+                            //console.error(err);
                         }
                     );
                 },
                 (err) => {
-                    alert("Unable to download");
-                    console.error(err);
+                    //alert("Unable to download");
+                    //console.error(err);
                 }
             );
         });
@@ -123,16 +123,18 @@ export function download(filename, data, mimeType) {
 
 export function isIOSCordova() {
     // Depending on the device, a few examples are:
-//   - "Android"
-//   - "BlackBerry 10"
-//   - "browser"
-//   - "iOS"
-//   - "WinCE"
-//   - "Tizen"
-//   - "Mac OS X"
-//     debugger;
-    const devicePlatform = device.platform;
-    return isCordova() && device.platform === "iOS";
+    //   - "Android"
+    //   - "BlackBerry 10"
+    //   - "browser"
+    //   - "iOS"
+    //   - "WinCE"
+    //   - "Tizen"
+    //   - "Mac OS X"
+    //     debugger;
+    if (window.cordova && cordova.platformId !== "browser") {
+        const devicePlatform = device.platform;
+        return isCordova() && device.platform === "iOS";
+    }
 }
 
 /**
@@ -140,15 +142,17 @@ export function isIOSCordova() {
  */
 export function isAndroidCordova() {
     // Depending on the device, a few examples are:
-//   - "Android"
-//   - "BlackBerry 10"
-//   - "browser"
-//   - "iOS"
-//   - "WinCE"
-//   - "Tizen"
-//   - "Mac OS X"
-//     debugger;
-    const devicePlatform = device.platform;
-    return isCordova() && device.platform === "Android";
+    //   - "Android"
+    //   - "BlackBerry 10"
+    //   - "browser"
+    //   - "iOS"
+    //   - "WinCE"
+    //   - "Tizen"
+    //   - "Mac OS X"
+    //     debugger;
+    if (window.cordova && cordova.platformId !== "browser") {
+        const devicePlatform = device.platform;
+        return isCordova() && device.platform === "Android";
+    }
 }
 

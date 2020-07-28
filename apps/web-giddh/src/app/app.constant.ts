@@ -51,8 +51,8 @@ export enum OnBoardingType {
 /** Pagination limit for every module */
 export const PAGINATION_LIMIT = 50;
 
-/** Subvoucher type */
-export enum Subvoucher {
+/** SubVoucher type */
+export enum SubVoucher {
     ReverseCharge = 'REVERSE_CHARGE',
     AdvanceReceipt = 'ADVANCE_RECEIPT'
 }
@@ -172,6 +172,9 @@ export const API_POSTMAN_DOC_URL='https://documenter.getpostman.com/view/117343/
  */
 export const RATE_FIELD_PRECISION = 4;
 
+/** High precision for rate value to avoid variation in rate */
+export const HIGH_RATE_FIELD_PRECISION = 16;
+
 /** Regex to remove trailing zeros from a string representation of number */
 export const REMOVE_TRAILING_ZERO_REGEX = /^([\d,' ]*)$|^([\d,' ]*)\.0*$|^([\d,' ]+\.[0-9]*?)0*$/;
 
@@ -190,4 +193,11 @@ if (PRODUCTION_ENV || isElectron || isCordova) {
     DEFAULT_POPULAR_PLAN = "Oak";
 } else {
     DEFAULT_POPULAR_PLAN = "Popular Plan";
+}
+
+/** Type of voucher that is adjusted */
+export enum AdjustedVoucherType {
+    Receipt = 'rcpt',
+    AdvanceReceipt = 'advance-receipt',
+    Sales = 'sal'
 }

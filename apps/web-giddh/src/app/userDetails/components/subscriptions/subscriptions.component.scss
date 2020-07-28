@@ -116,14 +116,20 @@
     width: 100%;
 }
 .associated-companies > ul > li > a span {
-    margin-right: 20px;
+    margin-right: 8px;
     white-space: nowrap;
+    min-width: 20px;
 }
 .associated-companies > ul > li > a:hover {
     color: $deep-sky-blue;
 }
 .associated-company-name{
     flex-direction: column;
+    p{
+        img{
+            width: 16px;
+        }
+    }
     .custom-dropdown{
         right: 0;
         top: 13px;

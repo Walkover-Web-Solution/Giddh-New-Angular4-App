@@ -13,7 +13,7 @@ import { AccountResponse } from '../../../models/api-models/Account';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { RATE_FIELD_PRECISION } from '../../../app.constant';
+import { RATE_FIELD_PRECISION, SubVoucher } from '../../../app.constant';
 
 export class UpdateLedgerVm {
     public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -103,6 +103,10 @@ export class UpdateLedgerVm {
         }, {
             label: 'Credit Note',
             value: 'credit note'
+        }, {
+            label: 'Advance Receipt',
+            value: 'advance-receipt',
+            subVoucher: SubVoucher.AdvanceReceipt
         }];
     }
 

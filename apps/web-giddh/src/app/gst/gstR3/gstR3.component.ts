@@ -214,7 +214,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         if (!this.userEmail) {
             return this._toasty.errorToast("Email Id can't be empty");
         }
-        let monthToSend = moment(this.selectedMonth).format("MM") + "-" + moment(this.selectedMonth).format("YYYY");
+        // Note:- appended ",1" with selectedMonth (July 2020) because "July 2020" format does not support for firefox browser and ("July 2020, 1") is valid format for chrome and firefox browser  
+        let convertValidDateFormatForMoment = this.selectedMonth + ',1';
+        let monthToSend = moment(convertValidDateFormatForMoment).format("MM") + "-" + moment(convertValidDateFormatForMoment).format("YYYY");
         if (!monthToSend) {
             this._toasty.errorToast('Please select a month');
         } else if (!this.activeCompanyGstNumber) {

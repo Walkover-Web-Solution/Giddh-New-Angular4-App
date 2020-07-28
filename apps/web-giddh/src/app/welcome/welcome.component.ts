@@ -206,6 +206,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     private phoneUtility: any = googleLibPhoneNumber.PhoneNumberUtil.getInstance();
 
     public isCreateCompanyInProgress: boolean = false;
+    public isCompanyCreated$: Observable<boolean>;
 
     constructor(
         private store: Store<AppState>,
@@ -279,6 +280,18 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.loggedInUser = this._generalService.user;
         this.subscriptionRequestObj.userUniqueName = this.loggedInUser.uniqueName;
+
+        this.store.pipe(select(state => state.session.isCompanyCreated), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                if(this.activeCompany === undefined) {
+                    setTimeout(() => {
+                        if (this._router.url.includes("welcome")) {
+                            this._router.navigate(['/pages/onboarding']);
+                        }
+                    }, 2000);
+                }
+            }
+        });
     }
 
     public ngAfterViewInit() {

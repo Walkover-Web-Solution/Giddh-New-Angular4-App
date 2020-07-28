@@ -245,6 +245,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /**True, if get accounts request in process */
     public isGetAccountsInProcess: boolean = false;
+    /* This will hold the current page number */
+    public currentPage: number = 1;
 
     constructor(
         private store: Store<AppState>,
@@ -668,10 +670,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public pageChanged(event: any): void {
-        let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
-        this.selectedCheckedContacts = [];
-        this.selectedAccountsList = [];
-        this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
+        if (this.currentPage !== event.page) {
+            let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
+            this.selectedCheckedContacts = [];
+            this.selectedAccountsList = [];
+            this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
+        }
     }
 
     public hideListItems() {
@@ -1107,6 +1111,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         refresh = refresh ? refresh : 'false';
         fromDate = (fromDate) ? fromDate : '';
         toDate = (toDate) ? toDate : '';
+        this.currentPage = pageNumber;
+
         this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal).subscribe((res) => {
             if (res.status === 'success') {
                 this.totalDue = res.body.closingBalance.amount || 0;

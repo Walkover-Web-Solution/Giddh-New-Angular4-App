@@ -149,13 +149,12 @@
                                                                     <td class="col-xs-6 bdrL">To {{txn.particular.name}}
                                                                     </td>
                                                                     <td class="col-xs-3 bdrL pos-rel"
-                                                                        v-bind:class="{'pdR25imp': ledger.voucherGenerated}"
+                                                                        v-bind:class="{'pdR25imp': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
                                                                         align="right">
                                                                         {{txn.amount}}
                                                                         <template
                                                                             v-if="ledger.voucherGenerated && ledger.voucherNumber">
-                                                                            <!-- tooltip="Download Invoice : {{ledger.voucherNumber}}" -->
-                                                                            <!-- [placement]="'top'" -->
+
                                                                             <span class="download-invoice-ledger"
                                                                                 v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"
                                                                                 v-on:click="downloadInvoice(ledger.voucherNumber)"
@@ -164,16 +163,27 @@
                                                                                     style="font-size:15px;"></i>
                                                                             </span>
                                                                         </template>
+<!--                                                                        <template-->
+<!--                                                                            v-if="ledger.voucherGenerated && ledger.voucherNumber">-->
+<!--                                                                            &lt;!&ndash; tooltip="Download Invoice : {{ledger.voucherNumber}}" &ndash;&gt;-->
+<!--                                                                            &lt;!&ndash; [placement]="'top'" &ndash;&gt;-->
+<!--                                                                            <span class="download-invoice-ledger"-->
+<!--                                                                                v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"-->
+<!--                                                                                v-on:click="downloadInvoice(ledger.voucherNumber)"-->
+<!--                                                                                container="body">-->
+<!--                                                                                <i class="glyphicon glyphicon-download"-->
+<!--                                                                                    style="font-size:15px;"></i>-->
+<!--                                                                            </span>-->
+<!--                                                                        </template>-->
                                                                         <template
-                                                                            v-if="ledger.voucherGenerated && ledger.voucherNumber">
-                                                                            <!-- tooltip="Download Invoice : {{ledger.voucherNumber}}" -->
-                                                                            <!-- [placement]="'top'" -->
+                                                                            v-if="ledger.attachedFileUniqueName">
+
                                                                             <span class="download-invoice-ledger"
-                                                                                v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"
-                                                                                v-on:click="downloadInvoice(ledger.voucherNumber)"
-                                                                                container="body">
+                                                                                  v-tooltip="'Download file: '+ledger.attachedFileName"
+                                                                                  v-on:click="downloadAttachedFile(ledger.attachedFileUniqueName,ledger.attachedFileName)"
+                                                                                  container="body">
                                                                                 <i class="glyphicon glyphicon-download"
-                                                                                    style="font-size:15px;"></i>
+                                                                                   style="font-size:15px;"></i>
                                                                             </span>
                                                                         </template>
                                                                     </td>
@@ -259,13 +269,12 @@
                                                                     <td class="col-xs-6 bdrL">By {{txn.particular.name}}
                                                                     </td>
                                                                     <td class="col-xs-3 bdrL pos-rel"
-                                                                        v-bind:class="{'pdR25imp': ledger.voucherGenerated}"
+                                                                        v-bind:class="{'pdR25imp': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
                                                                         align="right">
                                                                         {{txn.amount}}
                                                                         <template
                                                                             v-if="ledger.voucherGenerated && ledger.voucherNumber">
-                                                                            <!-- tooltip="Download Invoice : {{ledger.voucherNumber}}" -->
-                                                                            <!-- [placement]="'top'" -->
+
                                                                             <span class="download-invoice-ledger"
                                                                                 v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"
                                                                                 v-on:click="downloadInvoice(ledger.voucherNumber)"
@@ -274,16 +283,27 @@
                                                                                     style="font-size:15px;"></i>
                                                                             </span>
                                                                         </template>
+<!--                                                                        <template-->
+<!--                                                                            v-if="ledger.voucherGenerated && ledger.voucherNumber">-->
+<!--                                                                            &lt;!&ndash; tooltip="Download Invoice : {{ledger.voucherNumber}}" &ndash;&gt;-->
+<!--                                                                            &lt;!&ndash; [placement]="'top'" &ndash;&gt;-->
+<!--                                                                            <span class="download-invoice-ledger"-->
+<!--                                                                                v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"-->
+<!--                                                                                v-on:click="downloadInvoice(ledger.voucherNumber)"-->
+<!--                                                                                container="body">-->
+<!--                                                                                <i class="glyphicon glyphicon-download"-->
+<!--                                                                                    style="font-size:15px;"></i>-->
+<!--                                                                            </span>-->
+<!--                                                                        </template>-->
                                                                         <template
-                                                                            v-if="ledger.voucherGenerated && ledger.voucherNumber">
-                                                                            <!-- tooltip="Download Invoice : {{ledger.voucherNumber}}" -->
-                                                                            <!-- [placement]="'top'" -->
+                                                                            v-if="ledger.attachedFileUniqueName">
+
                                                                             <span class="download-invoice-ledger"
-                                                                                v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"
-                                                                                v-on:click="downloadInvoice(ledger.voucherNumber)"
-                                                                                container="body">
+                                                                                  v-tooltip="'Download file: '+ledger.attachedFileName"
+                                                                                  v-on:click="downloadAttachedFile(ledger.attachedFileUniqueName,ledger.attachedFileName)"
+                                                                                  container="body">
                                                                                 <i class="glyphicon glyphicon-download"
-                                                                                    style="font-size:15px;"></i>
+                                                                                   style="font-size:15px;"></i>
                                                                             </span>
                                                                         </template>
                                                                     </td>
