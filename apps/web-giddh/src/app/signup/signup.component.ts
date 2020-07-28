@@ -88,10 +88,10 @@ export class SignupComponent implements OnInit, OnDestroy {
         private _generalService: GeneralService
     ) {
         this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
-        this.isLoginWithEmailInProcess$ = store.pipe(select(state => {
+        this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
-        this.isVerifyEmailInProcess$ = store.pipe(select(state => {
+        this.isVerifyEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isVerifyEmailInProcess;
         }), takeUntil(this.destroyed$));
         this.isLoginWithMobileInProcess$ = store.select(state => {
@@ -128,7 +128,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.isSignupWithPasswordSuccess$ = store.select(state => {
             return state.login.isSignupWithPasswordSuccess;
         }).pipe(takeUntil(this.destroyed$));
-        this.isLoginWithGoogleInProcess$ = store.pipe(select(state => {
+        this.isLoginWithGoogleInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithGoogleInProcess;
         }), takeUntil(this.destroyed$));
         this.signupVerifyEmail$ = this.store.select(p => p.login.signupVerifyEmail).pipe(takeUntil(this.destroyed$));

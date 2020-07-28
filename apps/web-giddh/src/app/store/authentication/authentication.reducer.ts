@@ -389,9 +389,9 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                     });
                 }
             } else {
-              return  Object.assign({}, state, {
-                        isLoginWithPasswordInProcess: false,
-                    });
+                return Object.assign({}, state, {
+                    isLoginWithPasswordInProcess: false,
+                });
             }
             return state;
         }
