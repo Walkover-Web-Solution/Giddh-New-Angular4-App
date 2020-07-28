@@ -772,11 +772,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public onPerformAction(item, ev: string) {
+    public onPerformAction(item, ev: string, event: Event = null) {
         if (ev) {
             this.showMoreBtn = false;
             let objItem = item || this.selectedInvoiceForDetails;
             let actionToPerform = ev;
+            if(item && item.balanceStatus === 'paid' && actionToPerform === 'paid' && event) {
+                event.stopPropagation();
+                event.stopImmediatePropagation();
+                event.preventDefault();
+                return;
+            }
             if (actionToPerform === 'paid') {
                 this.performActionOnInvoiceModel.show();
                 setTimeout(() => {

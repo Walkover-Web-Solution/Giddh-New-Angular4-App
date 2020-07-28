@@ -652,3 +652,8 @@ span.icon-export-icon {
         letter-spacing: -0.99px;
     }
 }
+
+.disabled-link {
+    color: $very-light-gray !important;
+    cursor: not-allowed !important;
+}
