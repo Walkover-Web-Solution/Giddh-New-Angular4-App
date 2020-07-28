@@ -5,7 +5,7 @@ import { Environment } from './model';
 export const environment: Environment = {
     production: true,
     showDevModule: false,
-    AppUrl: 'https://dev.giddh.com',
+    AppUrl: 'http://localhost:3000',
     ApiUrl: 'https://apitest.giddh.com/',
     isElectron: false,
     isCordova: false,
