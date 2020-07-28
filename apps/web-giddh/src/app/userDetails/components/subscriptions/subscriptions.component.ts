@@ -27,6 +27,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
     @ViewChild('addCompanyNewModal') public addCompanyNewModal: ModalDirective;
     @ViewChild('companynewadd') public companynewadd: ElementViewContainerRef;
 
+    /* This will have active tab value */
     @Input() public activeTab: string = '';
 
     public subscriptions: SubscriptionsUser[] = [];
@@ -131,6 +132,12 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
         this.showCurrentCompanyPlan();
     }
 
+    /**
+     * Hook to detect input directive changes
+     *
+     * @param {SimpleChanges} changes
+     * @memberof SubscriptionsComponent
+     */
     public ngOnChanges(changes: SimpleChanges): void {
         this.activeTab = changes.activeTab.currentValue;
     }
