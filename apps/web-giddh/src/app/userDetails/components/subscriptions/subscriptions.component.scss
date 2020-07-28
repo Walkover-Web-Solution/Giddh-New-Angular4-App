@@ -173,6 +173,12 @@
     border-left: 1px solid $gainsboro;
     padding-left: 0px;
     padding-bottom: 60px;
+    padding-right: 0;
+    .custom-dropdown {
+      .dropdown-toggle{
+          margin-right: 13px;
+      }
+    }
 }
 .giddh-table tbody {
     tr:last-child {
@@ -194,14 +200,6 @@
 }
 .associated-companies-list {
     max-height: 600px;
-}
-.associated-companies-list::-webkit-scrollbar {
-    width:5px;
-}
-.associated-companies-list::-webkit-scrollbar-thumb {
-    background-color: $gainsboro;
-    outline: 1px solid $gray;
-    border-radius: 20px;
 }
 .plan-row {
     color: $nero;
@@ -245,10 +243,6 @@
         border: none;
         margin-bottom: 0;
         margin-top: 0;
-    }
-    .associated-companies-list {
-        max-height: 300px;
-        overflow-y: auto;
     }
     .transaction-popup {
         position: relative;
@@ -314,6 +308,11 @@
         .associated-companies-list{
                 .search-company-here{
                     padding-right: 20px;
+                }
+        }
+        .custom-dropdown{
+            .dropdown-toggle{
+                 margin-right: 0;
                 }
             }
         }
