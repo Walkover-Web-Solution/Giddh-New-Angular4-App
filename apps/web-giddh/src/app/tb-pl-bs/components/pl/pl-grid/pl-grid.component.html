@@ -17,7 +17,7 @@
                 <div class="income">
                     <div class="clearfix profitLoss">
 
-                        <table class="table basic">
+                        <table class="table basic pl-table-grid">
                             <thead>
                                 <tr>
                                     <th class="col-xs-8" style="padding: 0 !important;">
@@ -186,7 +186,7 @@
                 </div>
 
                 <div class="account clearfix" *ngIf="plData && plData?.incomeStatment"
-                    [ngStyle]="{'border-bottom':plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT' ? '1px solid #dbdde3' : 'none' }">
+                    [ngStyle]="{'border-bottom':plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT' ? 'none' : 'none' }">
                     <div class="col-xs-8  group pd1">
                         <strong>Income Before Taxes (EBT)</strong>
                     </div>

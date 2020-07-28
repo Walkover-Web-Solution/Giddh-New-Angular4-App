@@ -22,7 +22,7 @@
                                 (selected)="selectFinancialYearOption($event)" [ItemHeight]="33"></sh-select>
                         </div>
                     </div>
-                    <div class="form-group mrR1" *ngIf="filterForm.get('selectedDateOption').value == '1'">
+                    <div class="form-group relative mrR1" *ngIf="filterForm.get('selectedDateOption').value == '1'">
                         <span class="inputWrapper">
                             <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
                                    (applyDaterangepicker)="selectedDate($event)"
