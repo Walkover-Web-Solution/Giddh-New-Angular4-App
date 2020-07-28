@@ -238,22 +238,13 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         let val: string = this.addGroupForm.controls['name'].value;
         val = uniqueNameInvalidStringReplace(val);
 
-        // if val then check for uniqueName is available or not
-        if (val) {
-            this.store.dispatch(this.sideBarAction.GetGroupUniqueName(val));
+        /** unique name availability is check on server now
+        if unique name is not available then server will assign number suffix **/
 
-            this.isGroupNameAvailable$.subscribe(a => {
-                if (a !== null && a !== undefined) {
-                    if (a) {
-                        this.addGroupForm.patchValue({ uniqueName: val });
-                    } else {
-                        let num = 1;
-                        this.addGroupForm.patchValue({ uniqueName: val + num });
-                    }
-                }
-            });
+        if (val) {
+            this.addGroupForm.patchValue({uniqueName: val});
         } else {
-            this.addGroupForm.patchValue({ uniqueName: '' });
+            this.addGroupForm.patchValue({uniqueName: ''});
         }
     }
 
