@@ -154,7 +154,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             return state.login.isLoginWithPasswordIsShowVerifyOtp;
         }).pipe(takeUntil(this.destroyed$));
         this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).pipe(takeUntil(this.destroyed$));
-        this.isLoginWithGoogleInProcess$ = store.pipe(select(state => {
+        this.isLoginWithGoogleInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithGoogleInProcess;
         }), takeUntil(this.destroyed$));
         contriesWithCodes.map(c => {
