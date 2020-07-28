@@ -96,6 +96,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChild('resetButton') public resetButton: ElementRef;
 
     @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
+    /* Selector for receipt entry modal */
+    @ViewChild('receiptEntry') public receiptEntry: TemplateRef<any>;
     /* Selector for adjustment type field */
     @ViewChildren('adjustmentTypesField') public adjustmentTypesField: ShSelectComponent;
     /** List of all 'DEBIT' amount fields when 'By' entries are made  */
@@ -890,6 +892,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.showConfirmationBox = false;
         this.totalCreditAmount = 0;
         this.totalDebitAmount = 0;
+        this.receiptEntries = [];
+        this.totalEntries = 0;
+        this.adjustmentTransaction = {};
         this.requestObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
         if (this.universalDate[1]) {
             this.journalDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -1582,10 +1587,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public getInvoiceListForReceiptVoucher(): void {
+        let pendingInvoiceList: IOption[] = [];
+        this.pendingInvoiceList = [];
+        this.pendingInvoiceListSource$ = observableOf(pendingInvoiceList);
+
         this.salesService.getInvoiceListForReceiptVoucher(moment(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT), this.pendingInvoicesListParams).subscribe(response => {
             if (response && response.status === "success" && response.body && response.body.results && response.body.results.length > 0) {
-                let pendingInvoiceList: IOption[] = [];
-
                 Object.keys(response.body.results).forEach(key => {
                     this.pendingInvoiceList[response.body.results[key].uniqueName] = [];
                     this.pendingInvoiceList[response.body.results[key].uniqueName] = response.body.results[key];
@@ -1640,6 +1647,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 uniqueName: event.value,
                 type: this.pendingInvoiceList[event.value].voucherType
             };
+            if(this.pendingInvoiceList[event.value].balanceDue.amountForAccount < entry.amount) {
+                this._toaster.clearAllToaster();
+                this._toaster.errorToast(this.invoiceAmountErrorMessage);
+            }
         } else {
             entry.invoice = {
                 number: '',
@@ -1686,23 +1697,37 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let invoiceRequired = false;
         let invoiceAmountError = false;
 
-        this.receiptEntries.forEach(receipt => {
-            if (isValid) {
-                if (parseFloat(receipt.amount) === 0 || isNaN(parseFloat(receipt.amount))) {
-                    isValid = false;
-                } else {
-                    receiptTotal += parseFloat(receipt.amount);
-                }
+        if(this.receiptEntries && this.receiptEntries.length > 0) {
+            this.receiptEntries.forEach(receipt => {
+                if (isValid) {
+                    if (parseFloat(receipt.amount) === 0 || isNaN(parseFloat(receipt.amount))) {
+                        isValid = false;
+                    } else {
+                        receiptTotal += parseFloat(receipt.amount);
+                    }
 
-                if (isValid && receipt.type === "againstReference" && !receipt.invoice.uniqueName) {
-                    isValid = false;
-                    invoiceRequired = true;
-                } else if (isValid && receipt.type === "againstReference" && receipt.invoice.uniqueName && parseFloat(receipt.invoice.amount) < parseFloat(receipt.amount)) {
-                    isValid = false;
-                    invoiceAmountError = true;
+                    if (isValid && receipt.type === "againstReference" && !receipt.invoice.uniqueName) {
+                        isValid = false;
+                        invoiceRequired = true;
+                    } else if (isValid && receipt.type === "againstReference" && receipt.invoice.uniqueName && parseFloat(receipt.invoice.amount) < parseFloat(receipt.amount)) {
+                        isValid = false;
+                        invoiceAmountError = true;
+                    }
                 }
+            });
+        } else {
+            if(this.requestObj && this.requestObj.transactions && this.requestObj.transactions.length > 0) {
+                this.requestObj.transactions.forEach(transaction => {
+                    if(transaction.type === "to") {
+                        this.showConfirmationBox = false;
+                        this.validateAndOpenAdjustmentPopup(transaction, this.receiptEntry);
+                    }
+                });
             }
-        });
+
+            this.isValidForm = false;
+            return;
+        }
 
         if (isValid) {
             if (receiptTotal !== this.adjustmentTransaction.amount) {
@@ -1845,15 +1870,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public openAdjustmentModal(event: KeyboardEvent, transaction: any, template: TemplateRef<any>): void {
-        if (this.requestObj.voucherType === VOUCHERS.RECEIPT && transaction && transaction.type === "to" && transaction.amount && Number(transaction.amount) > 0 && !transaction.voucherAdjustments) {
-            this.currentTransaction = transaction;
-
-            if (event.keyCode === 9 || event.keyCode === 13) {
-                this.modalRef = this.modalService.show(
-                    template,
-                    Object.assign({}, { class: 'modal-lg' })
-                );
-            }
+        if (event.keyCode === 9 || event.keyCode === 13) {
+            this.validateAndOpenAdjustmentPopup(transaction, template);
         }
     }
 
@@ -1922,5 +1940,22 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
 
         this.updateAdjustmentTypes();
+    }
+
+    /**
+     * This will validate the transaction and adjustments and will open popup if required
+     *
+     * @param {*} transaction
+     * @param {TemplateRef<any>} template
+     * @memberof AccountAsVoucherComponent
+     */
+    public validateAndOpenAdjustmentPopup(transaction: any, template: TemplateRef<any>): void {
+        if (this.requestObj.voucherType === VOUCHERS.RECEIPT && transaction && transaction.type === "to" && transaction.amount && Number(transaction.amount) > 0 && !transaction.voucherAdjustments) {
+            this.currentTransaction = transaction;
+            this.modalRef = this.modalService.show(
+                template,
+                Object.assign({}, { class: 'modal-lg', ignoreBackdropClick: true })
+            );
+        }
     }
 }
