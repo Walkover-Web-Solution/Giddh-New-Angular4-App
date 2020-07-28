@@ -35,7 +35,7 @@
     width: auto;
 }
 .wrap-searching-aging a {
-    color: $jacksons-purple;
+    color: $gray;
 }
 .advance-icon {
     width: 32px;
@@ -45,7 +45,6 @@
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border: 1px solid #5b64c9;
     border-radius: 2px;
     color: #1a237e;
     background: #fff;
@@ -124,6 +123,29 @@ tr.aging-table-top td {
     .paginationWrapper {
         margin-bottom: 0px;
     }
+    .wrap-searching-aging .max250 {
+        max-width: calc(100% - 30px);
+        width: 100%;
+    }
+    .wrap-searching-aging .max250.default-width {
+        max-width: calc(100% - 90px);
+        width: 100%;
+    }
+    .advance-clear-filter-icons{
+        display: flex;
+        span{
+            width: 36px;
+            height: 36px;
+            background-color: $white;
+            border: 1px solid $gainsboro;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            i{
+                color: $gray;
+            }
+        }
+    }
 }
 @media (max-width: 575px) {
     .customer-right-wrap h4.mb-1.pdR2 {
@@ -176,13 +198,17 @@ tr.aging-table-top td {
         font-size: 14px;
     }
     .top-aging-table-top {
-        padding: 3px !important;
+        padding: 8px 3px !important;
         font-size: 14px;
     }
 }
 @media (max-width: 575px) {
     .wrap-searching-aging .max250 {
-        max-width: calc(100% - 50px);
+        max-width: calc(100% - 30px);
+        width: 100%;
+    }
+    .wrap-searching-aging .max250.default-width {
+        max-width: calc(100% - 90px);
         width: 100%;
     }
     .wrap-searching-aging .max250 input {

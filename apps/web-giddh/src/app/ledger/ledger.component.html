@@ -3,8 +3,7 @@
         <i class="fa fa-ellipsis-v"></i>
     </button>
     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-        <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onOpenAdvanceSearch()">Advance
-                Search</a></li>
+        <!-- <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onOpenAdvanceSearch()">Advance Search</a></li> -->
         <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="showShareLedgerModal()">Share
                 ledger</a></li>
         <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)"
@@ -43,6 +42,7 @@
                                 [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
                         </div>
                     </div>
+                    <!-- [ngClass]="{'class-1':condition1==condition2, 'class-2': condition3==condition4}" -->
                     <div class="single-search-box d-flex" *ngIf="checkedTrxWhileHovering.length === 0">
                         <span
                             [ngClass]="{'default-width-input': (searchText || isAdvanceSearchImplemented) && isMobileScreen,
@@ -73,7 +73,6 @@
                     <span *ngIf="!isMobileScreen" class="advance-icon d-flex advance-search-filter pointer"
                         [tooltip]="'Advance Search'" [placement]="'top'"
                         [ngStyle]="{'margin-left': checkedTrxWhileHovering.length === 0 ? '7px': '0px'}">
-                        <!-- <i class="icon-advance-search" aria-hidden="true" (click)="onOpenAdvanceSearch()"></i> -->
                         <span class="icon-advance-filter" (click)="onOpenAdvanceSearch()"></span>
                     </span>
                     <a class="cp mrL1 clear-filter-btn" *ngIf="isAdvanceSearchImplemented && !isMobileScreen"
@@ -103,7 +102,7 @@
 
             <div class="col-md-4 col-sm-4  col-xs-12 text-center col-xs-12 daterngoption" *ngIf="!isMobileScreen">
                 <!-- (hideDaterangepicker)="selectedDate($event)"  -->
-                <div class="advanceSearchByDate date-advanceSearch">
+                <div class="advanceSearchByDate date-advance-search">
                     <!-- <span class="icon-calender "></span> -->
                     <span class="inputWrapper">
                         <!-- <input type="text" class="form-control daterange_picker_ledger" daterangepicker

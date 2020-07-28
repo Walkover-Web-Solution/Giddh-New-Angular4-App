@@ -15,13 +15,12 @@
 				(selected)="selectFinancialYearOption($event)" [ItemHeight]="33"></sh-select></div>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-10">
-
-			<div class="btn-group xs-mb-1" dropdown placement="bottom left">
-				<div class="btn-group" dropdown [autoClose]="true" container="body">
+			<div class="btn-group xs-mb-1 pr-5 xs-pr-0" dropdown placement="bottom left">
+				<div class="btn-group pr-3 xs-pr-0" dropdown [autoClose]="true" container="body">
 					<button id="button-nested" dropdownToggle type="button" class="btn  dropdown-toggle"
 						aria-controls="dropdown-nested"> {{selectedType}}<span class="caret"></span>
 					</button>
-					<ul id="dropdown-nested" *dropdownMenu class="dropdown-menu " role="menu"
+					<ul id="dropdown-nested" *dropdownMenu class="dropdown-menu sales-register-menu" role="menu"
 						aria-labelledby="button-nested">
 						<li role="menuitem" dropdown placement="right" container="body">
 							<a dropdownToggle (click)="populateRecords('monthly')"

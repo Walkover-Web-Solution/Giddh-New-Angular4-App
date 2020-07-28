@@ -299,11 +299,6 @@ small {
     font-size: 14px;
 }
 
-.google-ico a {
-    color: $white;
-    padding-left: 40px !important;
-}
-
 .google-ico span {
     padding: 0 15px;
 }
@@ -316,9 +311,10 @@ small {
 }
 
 .google-ico a {
-    background: $corn-flower-blue;
-    border-color: $corn-flower-blue !important;
+    background: $deep-sky-blue;
+    border-color: $deep-sky-blue !important;
     color: $white;
+    padding-left: 40px !important;
 }
 
 .ico-google {
@@ -488,7 +484,7 @@ small {
 }
 .accounting-space h4 {
     color: $midnight-blue;
-    font-weight: 600;
+    /*font-weight: 600;*/
     font-size: 20px;
 }
 .btn-outline-primary {
@@ -507,12 +503,12 @@ small {
     outline: none;
 }
 .login-with {
+    a {
+        color: $midnight-blue;
+        text-decoration: none;
+    }
     color: $midnight-blue;
-    font-size: 0.9em;
-}
-.login-with a {
-    color: $midnight-blue;
-    text-decoration: none;
+    font-size: 14px;
 }
 .btn-secondary {
     background-color: $white;

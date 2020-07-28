@@ -24,7 +24,6 @@ export class VersionCheckService {
         setTimeout(() => {
             this.checkVersion(url);
         }, 2000);
-
         setInterval(() => {
             this.checkVersion(url);
         }, frequency);

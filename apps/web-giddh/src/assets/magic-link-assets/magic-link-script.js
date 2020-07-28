@@ -212,7 +212,6 @@ var app = new Vue({
             var unq = ledger.uniqueName;
             ledger.isCompoundEntry = true;
             var ledgerData = this.ledgerData;
-
             if( ledgerData && ledgerData.ledgersTransactions && ledgerData.ledgersTransactions.ledgers) {
                 ledgerData.ledgersTransactions.ledgers.forEach(function (lgr) {
                     if (unq === lgr.uniqueName) {

@@ -1,0 +1,23 @@
+<div class="search-copmany-page">
+    <div class="search-compnay-field">
+        <div class="input-group">
+            <span class="input-group-addon">
+                <i class="icon-search2"></i>
+            </span>
+            <div class="wrap-group-account-input">
+                <input type="text" [(ngModel)]="searchCmp" (ngModelChange)="filterCompanyList($event)" #searchElement
+                    class="form-control" placeholder="Search Company">
+            </div>
+            <span class="close-addon" *ngIf="searchCmp && searchCmp.length">
+                <i class="icon-cross" (click)="filterCompanyList('');searchCmp = ''"></i>
+            </span>
+        </div>
+    </div>
+    <div class="all-company-list mt-1">
+        <ul>
+            <li *ngFor="let company of companyList" (click)="changeCompany(company.uniqueName)">
+                <a href="javascript:;">{{company.name}}</a>
+            </li>
+        </ul>
+    </div>
+</div>
