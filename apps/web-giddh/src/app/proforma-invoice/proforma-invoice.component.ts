@@ -1160,6 +1160,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.accountDetails.currencySymbol = '';
                         }
                         this.invFormData = obj;
+                        this.checkVoucherEntries();
                         this.getInvoiceListsForCreditNote();
                     } else {
                         this.invoiceDataFound = false;
@@ -2820,6 +2821,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.addBlankRow(null);
         }
         this.handleWarehouseVisibility();
+        this.checkVoucherEntries();
     }
 
     public taxAmountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
