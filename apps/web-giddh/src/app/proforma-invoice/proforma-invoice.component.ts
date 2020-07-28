@@ -427,6 +427,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public excludeTax: boolean = false;
     /* This will hold the company country name */
     public companyCountryName: string = '';
+    /** this property is return whether invoice have at least on correct entry or not **/
     public hasVoucherEntry: boolean;
 
     /**
@@ -1116,6 +1117,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.accountDetails.currencySymbol = '';
                         }
                         this.invFormData = obj;
+                        this.checkVoucherEntries();
                     } else {
                         this.invoiceDataFound = false;
                     }
@@ -4322,11 +4324,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.checkVoucherEntries();
     }
 
-    checkVoucherEntries() {
+    /**
+     * Check valid entry if have any then enable save button
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    checkVoucherEntries(): void {
         if (this.invFormData.entries && this.invFormData.entries.length) {
             let validLineItem;
             for (let i = 0; i < this.invFormData.entries.length; i++) {
-                validLineItem = this.invFormData.entries[i].transactions.find(transaction => (transaction.accountUniqueName && transaction.accountUniqueName !== '' && transaction.amount > 0));
+                validLineItem = this.invFormData.entries[i].transactions.find(transaction => (transaction.accountUniqueName && transaction.amount > 0));
                 if (validLineItem) {
                     break;
                 }
