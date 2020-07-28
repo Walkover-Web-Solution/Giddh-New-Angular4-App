@@ -325,6 +325,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     * */
     public confirmOTP() {
         let bankTransferConfirmOtpRequest: BulkPaymentConfirmRequest = new BulkPaymentConfirmRequest();
+        this.isRequestInProcess = true;
         bankTransferConfirmOtpRequest.requestId = this.paymentRequestId;
         bankTransferConfirmOtpRequest.otp = this.receivedOtp;
         this._companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, bankTransferConfirmOtpRequest).subscribe((res) => {
@@ -338,6 +339,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                     this._toaster.errorToast(res.message, res.code);
                 }
             }
+            this.isRequestInProcess = false;
         });
     }
 
