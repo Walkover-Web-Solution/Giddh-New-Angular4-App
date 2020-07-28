@@ -145,6 +145,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public companyProfile$: Observable<any>;
     public activeAccount$: Observable<AccountResponse>;
     public activeAccount: AccountResponse;
+    /** Emits the active ledger account data */
     public activeAccountSubject: Subject<any> = new Subject();
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public showAdvanced: boolean;
