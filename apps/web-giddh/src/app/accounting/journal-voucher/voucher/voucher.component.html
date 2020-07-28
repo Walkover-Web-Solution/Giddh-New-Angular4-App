@@ -45,7 +45,7 @@
                                         (keydown)="detectKey($event)"
                                         (keydown.Tab)="validateAccount(transaction, $event, i)"
                                         (keydown.arrowDown)="openCreateAccountPopupIfRequired($event)">
-                                    <span *ngIf="transaction.currentBalance !== ''"
+                                    <span *ngIf="transaction.selectedAccount.account && transaction.currentBalance !== ''"
                                         class="current-balance d-block mb-05">
                                         Current Balance: {{transaction.currentBalance | giddhCurrency}}
                                         {{transaction.selectedAccount.type === 'DEBIT' ? 'Dr.' : 'Cr.'}}

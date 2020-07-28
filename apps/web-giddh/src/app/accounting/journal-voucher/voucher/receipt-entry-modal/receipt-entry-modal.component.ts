@@ -307,6 +307,10 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
                 uniqueName: event.value,
                 type: this.pendingInvoiceList[event.value].voucherType
             };
+            if(this.pendingInvoiceList[event.value].balanceDue.amountForAccount < entry.amount) {
+                this.toaster.clearAllToaster();
+                this.toaster.errorToast(this.invoiceAmountErrorMessage);
+            }
         } else {
             entry.invoice = {
                 number: '',
