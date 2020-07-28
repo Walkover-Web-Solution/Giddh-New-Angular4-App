@@ -1863,6 +1863,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         });
 
         if (this.isPurchaseInvoice && this.isRcmEntry && !this.validateTaxes(cloneDeep(data))) {
+            this.startLoader(false);
             return;
         }
 
@@ -1935,6 +1936,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     // will get errors of string and if not error then true boolean
                     if (!txn.isValid()) {
+                        this.startLoader(false);
                         this._toasty.warningToast('Product/Service can\'t be empty');
                         txnErr = true;
                         return false;
