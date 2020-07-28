@@ -23,11 +23,7 @@ import {IOption} from '../../../theme/ng-virtual-select/sh-options.interface';
 @Component({
     selector: 'audit-logs-sidebar',
     templateUrl: './audit-logs.sidebar.component.html',
-    styles: [`
-        .ps {
-            overflow: visible !important
-        }
-    `]
+    styleUrls: ['audit-logs.sidebar.component.scss']
 })
 export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     public vm: AuditLogsSidebarVM;
@@ -71,7 +67,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             } else {
                 return [];
             }
-        }))
+        }));
         let selectedCompany: CompanyResponse = null;
         let loginUser: UserDetails = null;
         this.vm.selectedCompany.pipe(take(1)).subscribe((c) => selectedCompany = c);
