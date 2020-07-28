@@ -1,7 +1,7 @@
-import { takeUntil, take, debounceTime } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ViewChild, ComponentFactoryResolver } from '@angular/core';
-import { ReplaySubject, Observable, Subject } from 'rxjs';
+import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ViewChild, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
+import { ReplaySubject, Observable } from 'rxjs';
 import { AppState } from '../../../store/roots';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
 import { SubscriptionsActions } from '../../../actions/userSubscriptions/subscriptions.action';
@@ -23,9 +23,12 @@ import { DEFAULT_SIGNUP_TRIAL_PLAN } from '../../../app.constant';
     templateUrl: './subscriptions.component.html'
 })
 
-export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     @ViewChild('addCompanyNewModal') public addCompanyNewModal: ModalDirective;
     @ViewChild('companynewadd') public companynewadd: ElementViewContainerRef;
+
+    /* This will have active tab value */
+    @Input() public activeTab: string = '';
 
     public subscriptions: SubscriptionsUser[] = [];
     public allSubscriptions: SubscriptionsUser[] = [];
@@ -92,8 +95,6 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
 
         this.isPlanShow = false;
         this.subscriptionService.getSubScribedCompanies().subscribe((res) => {
-            this.isLoading = false;
-
             if (res && res.status === "success") {
                 if (!res.body || !res.body[0]) {
                     this.isPlanShow = true;
@@ -106,7 +107,6 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
         });
 
         this.subscriptions$.subscribe(userSubscriptions => {
-            this.isLoading = false;
             if(userSubscriptions && userSubscriptions.length > 0) {
                 userSubscriptions.forEach(userSubscription => {
                     if(userSubscription.createdAt) {
@@ -116,6 +116,7 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
                     this.subscriptions.push(userSubscription);
                     this.allSubscriptions.push(userSubscription);
                 });
+                this.isLoading = false;
             }
             this.showCurrentCompanyPlan();
         });
@@ -129,6 +130,16 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
 
     public ngAfterViewInit() {
         this.showCurrentCompanyPlan();
+    }
+
+    /**
+     * Hook to detect input directive changes
+     *
+     * @param {SimpleChanges} changes
+     * @memberof SubscriptionsComponent
+     */
+    public ngOnChanges(changes: SimpleChanges): void {
+        this.activeTab = changes.activeTab.currentValue;
     }
 
     public goToBillingDetails() {
@@ -406,18 +417,18 @@ export class SubscriptionsComponent implements OnInit, AfterViewInit, OnDestroy 
      */
     public sortAssociatedCompanies(): void {
         if(this.companyListForFilter && this.companyListForFilter.length > 0) {
-            this.companyListForFilter = _.orderBy(this.companyListForFilter, 'name');
+            let companyListForFilter = _.orderBy(this.companyListForFilter, 'name');
 
             let loop = 0;
             let activeCompanyIndex = -1;
-            this.companyListForFilter.forEach(company => {
+            companyListForFilter.forEach(company => {
                 if (this.activeCompany && this.activeCompany.uniqueName === company.uniqueName) {
                     activeCompanyIndex = loop;
                 }
                 loop++;
             });
 
-            this.companyListForFilter = this.generalService.changeElementPositionInArray(this.companyListForFilter, activeCompanyIndex, 0);
+            this.companyListForFilter = this.generalService.changeElementPositionInArray(companyListForFilter, activeCompanyIndex, 0);
         }
     }
 
