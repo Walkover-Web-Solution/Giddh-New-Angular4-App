@@ -84,8 +84,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public customField1: boolean = false;
     public customField2: boolean = false;
     public tdstcsTypes: any = ['tdsrc', 'tcsrc', 'tdspay', 'tcspay'];
-
-
+    /** To clear purchase account  */
+    public forceClearPurchaseAccount$: Observable<IForceClear> = of({ status: false });
+    /** To clear sales account  */
+    public forceClearSalesAccount$: Observable<IForceClear> = of({ status: false });
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
@@ -575,7 +577,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             if (isNaN(Number(rate))) {
                 rate = '0';
             }
-            this.addStockForm.patchValue({ stockRate:  rate});
+            this.addStockForm.patchValue({ stockRate: rate });
         } else if (!quantity || !amount) {
             this.addStockForm.controls['stockRate'].patchValue('');
         }
@@ -1208,5 +1210,29 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             return formEntries.length === 0;
         }
         return true;
+    }
+
+    /**
+     * To reset purchase information if purchase information unchecked
+     *
+     * @memberof InventoryAddStockComponent
+     */
+    public checkedPurchaseInformation() {
+        if (this.addStockForm.controls['enablePurchase'].value) {
+            this.addStockForm.get('purchaseAccountUniqueName').patchValue(null)
+            this.forceClearPurchaseAccount$ = of({ status: true });
+        }
+    }
+
+    /**
+     * To reset sales information if sales information unchecked  
+     *
+     * @memberof InventoryAddStockComponent
+     */
+    public checkedSalesInformation() {
+        if (this.addStockForm.controls['enableSales'].value) {
+            this.addStockForm.get('salesAccountUniqueName').patchValue(null)
+            this.forceClearSalesAccount$ = of({ status: true });
+        }
     }
 }
