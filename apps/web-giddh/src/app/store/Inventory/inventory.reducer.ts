@@ -460,15 +460,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
             if (updateStockResp.status === 'success') {
                 groupArray = _.cloneDeep(state.groupsWithStocks);
                 let activeGroupUniqueName = _.cloneDeep(updateStockResp.queryString.stockGroupUniqueName);
-                let stateActiveGrp: StockGroupResponse = null;
-                // let myGrp = removeStockItemAndReturnIt(groupArray, activeGroup.uniqueName, updateStockResp.queryString.stockUniqueName, null);
-                // if (myGrp) {
-                //     myGrp.name = updateStockResp.body.name;
-                //     myGrp.uniqueName = updateStockResp.body.uniqueName;
-                //     addStockItemAtIndex(groupArray, activeGroup.uniqueName, myGrp);
-                // }
                 updateStockIteminGroupArray(groupArray,activeGroupUniqueName, updateStockResp);
-                debugger;
                 return Object.assign({}, state, {
                     groupsWithStocks: groupArray,
                     activeStock: updateStockResp.body,
