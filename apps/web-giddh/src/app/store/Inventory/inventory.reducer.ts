@@ -839,9 +839,9 @@ const removeStockItemAndReturnIt = (groups: IGroupsWithStocksHierarchyMinItem[],
 const updateStockIteminGroupArray = (groups: IGroupsWithStocksHierarchyMinItem[], grpUniqueName: string, response: BaseResponse<StockDetailResponse, CreateStockRequest>): void => {
     for (let grp of groups) {
         if (grp.uniqueName === grpUniqueName) {
-            let st = grp.stocks.findIndex(p => p.uniqueName === response.queryString.stockUniqueName);
-            if (st > -1) {
-                grp.stocks[st] = {
+            let index = grp.stocks.findIndex(stock => stock.uniqueName === response.queryString.stockUniqueName);
+            if (index > -1) {
+                grp.stocks[index] = {
                     name: response.body.name,
                     uniqueName: response.body.uniqueName,
                 };
