@@ -2030,7 +2030,7 @@
                                 <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
                             class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
                         </button> -->
-                                <button type="button" [disabled]="isFileUploading || (!hasVoucherEntry && !isUpdateMode)" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
+                                <button type="button" [disabled]="isFileUploading || !hasVoucherEntry" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default">Save
                                 </button>
                             </span>
@@ -2039,7 +2039,7 @@
                 <!-- region non purchase -->
                 <span class="d-inline-block v-align-middle" *ngIf="!isPurchaseInvoice && (!isProformaInvoice  && !isEstimateInvoice)">
 
-                                <button type="button" [disabled]="(!hasVoucherEntry && !isUpdateMode)" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
+                                <button type="button" [disabled]="!hasVoucherEntry" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
                                         class="btn btn-default" *ngIf="isCustomerSelected && !isPendingVoucherType">Generate
                                     <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                         Cash
@@ -2123,7 +2123,7 @@
             <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">Cancel
                             </button>
 
-            <button type="button" class="btn btn-default" [disabled]="isFileUploading || (!hasVoucherEntry && !isUpdateMode)" (click)="submitUpdateForm(invoiceForm)">
+            <button type="button" class="btn btn-default" [disabled]="isFileUploading || !hasVoucherEntry" (click)="submitUpdateForm(invoiceForm)">
                                 Update
                                 <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                     Cash

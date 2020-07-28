@@ -2780,6 +2780,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.addBlankRow(null);
         }
         this.handleWarehouseVisibility();
+        this.checkVoucherEntries();
     }
 
     public taxAmountEvent(txn: SalesTransactionItemClass, entry: SalesEntryClass) {
