@@ -88,6 +88,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public forceClearPurchaseAccount$: Observable<IForceClear> = of({ status: false });
     /** To clear sales account  */
     public forceClearSalesAccount$: Observable<IForceClear> = of({ status: false });
+    /** To clear purchase stock  */
+    public forceClearPurchaseStock$: Observable<IForceClear> = of({ status: false });
+    /** To clear sales stock  */
+    public forceClearSalesStock$: Observable<IForceClear> = of({ status: false });
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
@@ -219,22 +223,24 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         // subscribe enablePurchase checkbox for enable/disable unit/rate
-        this.addStockForm.controls['enablePurchase'].valueChanges.subscribe((a) => {
+        this.addStockForm.controls['enablePurchase'].valueChanges.subscribe((isEnable) => {
             const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
-            if (a) {
+            if (isEnable) {
                 purchaseUnitRatesControls.enable();
             } else {
                 purchaseUnitRatesControls.disable();
+                this.resetPurchaseInformation();
             }
         });
 
         // subscribe enableSales checkbox for enable/disable unit/rate
-        this.addStockForm.controls['enableSales'].valueChanges.subscribe((a) => {
+        this.addStockForm.controls['enableSales'].valueChanges.subscribe((isEnable) => {
             const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
-            if (a) {
+            if (isEnable) {
                 saleUnitRatesControls.enable();
             } else {
                 saleUnitRatesControls.disable();
+                this.resetSalesInformation();
             }
         });
 
@@ -1217,10 +1223,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      *
      * @memberof InventoryAddStockComponent
      */
-    public checkedPurchaseInformation() {
-        if (this.addStockForm.controls['enablePurchase'].value) {
-            this.addStockForm.get('purchaseAccountUniqueName').patchValue(null)
-            this.forceClearPurchaseAccount$ = of({ status: true });
+    public resetPurchaseInformation(): void {
+        const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
+        this.addStockForm.get('purchaseAccountUniqueName').patchValue(null);
+        this.forceClearPurchaseAccount$ = of({ status: true });
+        this.forceClearPurchaseStock$ = of({ status: true });
+        for (let control of purchaseUnitRatesControls.controls) {
+            control.get('stockUnitCode').patchValue(null);
+            control.get('rate').patchValue(null);
         }
     }
 
@@ -1229,10 +1239,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      *
      * @memberof InventoryAddStockComponent
      */
-    public checkedSalesInformation() {
-        if (this.addStockForm.controls['enableSales'].value) {
-            this.addStockForm.get('salesAccountUniqueName').patchValue(null)
-            this.forceClearSalesAccount$ = of({ status: true });
+    public resetSalesInformation(): void {
+        const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
+        this.addStockForm.get('salesAccountUniqueName').patchValue(null);
+        this.forceClearSalesAccount$ = of({ status: true });
+        this.forceClearSalesStock$ = of({ status: true });
+        for (let control of saleUnitRatesControls.controls) {
+            control.get('stockUnitCode').patchValue(null);
+            control.get('rate').patchValue(null);
         }
     }
 }
