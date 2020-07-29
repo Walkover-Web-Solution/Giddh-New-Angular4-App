@@ -45,7 +45,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     /* Will check if form is valid */
     public isValidForm: boolean = false;
     /* Error message for amount comparision with transaction amount */
-    public amountErrorMessage: string = "Total Amount can't be greater than Credit Amount";
+    public amountErrorMessage: string = "Total Amount must be equal to Credit Amount";
     /* Error message for comparision of adjusted amount with invoice */
     public invoiceAmountErrorMessage: string = "Amount can't be greater than Invoice Balance Due";
     /* Error message for invalid adjustment amount */
@@ -61,6 +61,10 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         accountUniqueNames: [],
         voucherType: "receipt"
     };
+    /* This will hold if receipt option is choosen */
+    public receiptExists: boolean = false;
+    /* This will hold if advance receipt option is choosen */
+    public advanceReceiptExists: boolean = false;
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -101,7 +105,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
 
             this.receiptEntries[this.totalEntries] = {
                 allowedTypes: getAdjustmentTypes,
-                type: (getAdjustmentTypes && getAdjustmentTypes.length === 3) ? 'receipt' : 'againstReference',
+                type: (this.advanceReceiptExists) ? 'advanceReceipt' : 'receipt',
                 //note: '',
                 tax: {
                     name: '',
@@ -342,7 +346,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
 
         this.receiptEntries = receiptEntries;
         this.totalEntries--;
-        this.updateAdjustmentTypes();
+        this.updateAdjustmentTypes("remove");
         this.validateEntries(false);
     }
 
@@ -429,20 +433,34 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
      * @memberof ReceiptEntryModalComponent
      */
     public prepareAdjustmentTypes(event: string): IOption[] {
-        let receiptExists = false;
-        let advanceReceiptExists = false;
+        this.receiptExists = false;
+        this.advanceReceiptExists = false;
         this.receiptEntries.forEach(receipt => {
             if (receipt.type === "receipt") {
-                receiptExists = true;
+                if(this.advanceReceiptExists) {
+                    receipt.type = "advanceReceipt";
+                } else {
+                    this.receiptExists = true;
+                }
             } else if (receipt.type === "advanceReceipt") {
-                advanceReceiptExists = true;
+                if(this.receiptExists) {
+                    receipt.type = "receipt";
+                    receipt.tax = {
+                        name: '',
+                        uniqueName: '',
+                        percent: 0,
+                        value: 0
+                    };
+                } else {
+                    this.advanceReceiptExists = true;
+                }
             }
         });
 
         let adjustmentTypesOptions: IOption[] = [];
 
         adjustmentTypes.map(type => {
-            if(this.totalEntries === 0 || (event === "remove" && this.totalEntries === 1) || (!receiptExists && !advanceReceiptExists) || (receiptExists && !advanceReceiptExists && type.value === "receipt") || (!receiptExists && advanceReceiptExists && type.value === "advanceReceipt") || type.value === "againstReference") {
+            if(this.totalEntries === 0 || (event === "remove" && this.totalEntries === 1) || (!this.receiptExists && !this.advanceReceiptExists) || (this.receiptExists && !this.advanceReceiptExists && type.value === "receipt") || (!this.receiptExists && this.advanceReceiptExists && type.value === "advanceReceipt") || type.value === "againstReference") {
                 adjustmentTypesOptions.push({ label: type.label, value: type.value });
             }
         });
@@ -453,12 +471,13 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     /**
      * This will initiate update of adjustment types of all adjustments
      *
+     * @param {string} action
      * @memberof ReceiptEntryModalComponent
      */
-    public updateAdjustmentTypes(): void {
+    public updateAdjustmentTypes(action: string): void {
         if(this.receiptEntries && this.receiptEntries.length > 0) {
             this.receiptEntries.forEach(entry => {
-                entry.allowedTypes = this.prepareAdjustmentTypes("remove");
+                entry.allowedTypes = this.prepareAdjustmentTypes(action);
             });
         }
     }
@@ -471,11 +490,20 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
      * @memberof ReceiptEntryModalComponent
      */
     public onSelectAdjustmentType(event: any, entry: any): void {
-        if(event && event.value === "againstReference") {
-            entry.amount = 0;
-            this.isValidForm = false;
+        if(event) {
+            if(event.value === "againstReference") {
+                entry.amount = 0;
+                this.isValidForm = false;
+            } else if(event.value === "receipt") {
+                entry.tax = {
+                    name: '',
+                    uniqueName: '',
+                    percent: 0,
+                    value: 0
+                };
+            }
         }
 
-        this.updateAdjustmentTypes();
+        this.updateAdjustmentTypes("update");
     }
 }
