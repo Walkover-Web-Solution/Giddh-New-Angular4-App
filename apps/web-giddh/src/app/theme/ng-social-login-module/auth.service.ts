@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LoginProvider, SocialUser } from '.';
+import { LoaderService } from '../../loader/loader.service';
 
 export interface AuthServiceConfigItem {
 	id: string;
@@ -35,7 +36,10 @@ export class AuthService {
 
 	private _authState: BehaviorSubject<SocialUser> = new BehaviorSubject(null);
 
-	constructor(config: AuthServiceConfig) {
+	constructor(
+        config: AuthServiceConfig,
+        private laodingService: LoaderService
+    ) {
 		this.providers = config.providers;
 		if (config.autoLogin) {
 			this.providers.forEach((provider: LoginProvider, key: string) => {
@@ -53,6 +57,7 @@ export class AuthService {
 	}
 
 	public signIn(providerId: string): Promise<SocialUser> {
+        this.laodingService.show();
 		return new Promise((resolve, reject) => {
 			const providerObject = this.providers.get(providerId);
 			if (providerObject) {
@@ -61,7 +66,7 @@ export class AuthService {
 						user.provider = providerId;
 						resolve(user);
 						this._user = user;
-						this._authState.next(user);
+                        this._authState.next(user);
 					});
 				} else {
 					providerObject.initialize().then(() => {
@@ -71,7 +76,7 @@ export class AuthService {
 								u.provider = providerId;
 								resolve(u);
 								this._user = u;
-								this._authState.next(u);
+                                this._authState.next(u);
 							});
 						} else {
 							reject('something went wrong');
@@ -79,12 +84,14 @@ export class AuthService {
                     });
 				}
 			} else {
-				reject(AuthService.LOGIN_PROVIDER_NOT_FOUND);
+                reject(AuthService.LOGIN_PROVIDER_NOT_FOUND);
+                this.laodingService.hide();
 			}
 		});
 	}
 
 	public signOut(): Promise<any> {
+        this.laodingService.show();
 		return new Promise((resolve, reject) => {
 			if (this._user && this._user.provider) {
 				const providerId = this._user.provider;
@@ -92,12 +99,15 @@ export class AuthService {
 				providerObject.signOut().then(() => {
 					this._user = null;
 					this._authState.next(null);
-					resolve();
+                    resolve();
+                    this.laodingService.hide();
 				}).catch((err) => {
-					this._authState.next(null);
+                    this._authState.next(null);
+                    this.laodingService.hide();
 				});
 			} else {
-				reject(AuthService.LOGIN_PROVIDER_NOT_FOUND);
+                reject(AuthService.LOGIN_PROVIDER_NOT_FOUND);
+                this.laodingService.hide();
 			}
 		});
 	}
