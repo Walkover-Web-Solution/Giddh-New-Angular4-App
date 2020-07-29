@@ -12,6 +12,7 @@ import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as moment from 'moment';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
+import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
 
 @Component({
     selector: 'receipt-entry',
@@ -65,6 +66,8 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     public receiptExists: boolean = false;
     /* This will hold if advance receipt option is choosen */
     public advanceReceiptExists: boolean = false;
+    /* This will clear the select value in sh-select */
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -223,14 +226,16 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     public getTaxList(): void {
         this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                let taxList: IOption[] = [];
-                Object.keys(res.taxes).forEach(key => {
-                    taxList.push({ label: res.taxes[key].name, value: res.taxes[key].uniqueName });
+                if(res.taxes) {
+                    let taxList: IOption[] = [];
+                    Object.keys(res.taxes).forEach(key => {
+                        taxList.push({ label: res.taxes[key].name, value: res.taxes[key].uniqueName });
 
-                    this.taxList[res.taxes[key].uniqueName] = [];
-                    this.taxList[res.taxes[key].uniqueName] = res.taxes[key];
-                });
-                this.taxListSource$ = observableOf(taxList);
+                        this.taxList[res.taxes[key].uniqueName] = [];
+                        this.taxList[res.taxes[key].uniqueName] = res.taxes[key];
+                    });
+                    this.taxListSource$ = observableOf(taxList);
+                }
             } else {
                 this.store.dispatch(this.companyActions.getTax());
             }
@@ -501,6 +506,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
                     percent: 0,
                     value: 0
                 };
+                this.forceClear$ = observableOf({ status: true });
             }
         }
 

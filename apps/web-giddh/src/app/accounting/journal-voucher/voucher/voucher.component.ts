@@ -47,6 +47,7 @@ import { adjustmentTypes } from "../../../shared/helpers/adjustmentTypes";
 import { SalesService } from '../../../services/sales.service';
 import { CompanyActions } from '../../../actions/company.actions';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { IForceClear } from '../../../models/api-models/Sales';
 
 const CustomShortcode = [
     { code: 'F9', route: 'purchase' }
@@ -212,6 +213,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public receiptExists: boolean = false;
     /* This will hold if advance receipt option is choosen */
     public advanceReceiptExists: boolean = false;
+    /* This will clear the select value in sh-select */
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
 
     constructor(
         private _accountService: AccountService,
@@ -1575,14 +1578,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public getTaxList(): void {
         this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                let taxList: IOption[] = [];
-                Object.keys(res.taxes).forEach(key => {
-                    taxList.push({ label: res.taxes[key].name, value: res.taxes[key].uniqueName });
+                if(res.taxes) {
+                    let taxList: IOption[] = [];
+                    Object.keys(res.taxes).forEach(key => {
+                        taxList.push({ label: res.taxes[key].name, value: res.taxes[key].uniqueName });
 
-                    this.taxList[res.taxes[key].uniqueName] = [];
-                    this.taxList[res.taxes[key].uniqueName] = res.taxes[key];
-                });
-                this.taxListSource$ = observableOf(taxList);
+                        this.taxList[res.taxes[key].uniqueName] = [];
+                        this.taxList[res.taxes[key].uniqueName] = res.taxes[key];
+                    });
+                    this.taxListSource$ = observableOf(taxList);
+                }
             } else {
                 this.store.dispatch(this.companyActions.getTax());
             }
@@ -1968,6 +1973,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     percent: 0,
                     value: 0
                 };
+                this.forceClear$ = observableOf({ status: true });
             }
         }
 
