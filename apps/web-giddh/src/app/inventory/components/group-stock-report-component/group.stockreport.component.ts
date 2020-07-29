@@ -29,6 +29,7 @@ import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { InvViewService } from '../../inv.view.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'invetory-group-stock-report',  // <home></home>
@@ -213,6 +214,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     modalRef: BsModalRef;
     valueWidth = false;
     public branchTransferMode: string = '';
+    /* This will hold if it's mobile screen or not */
+    public isMobileScreen: boolean = false;
+    public showAllColumns: boolean = false;
 
     constructor(
         private _generalService: GeneralService,
@@ -228,8 +232,15 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         private inventoryAction: InventoryAction,
         private settingsBranchActions: SettingsBranchActions,
         private invViewService: InvViewService,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private breakPointObservar: BreakpointObserver
     ) {
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+        
         this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.GroupStockReportRequest = new GroupStockReportRequest();
         this.activeGroup$ = this.store.select(state => state.inventory.activeGroup).pipe(takeUntil(this.destroyed$));

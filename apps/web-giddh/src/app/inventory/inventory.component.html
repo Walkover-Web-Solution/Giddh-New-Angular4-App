@@ -6,12 +6,13 @@
                 [active]="activeTabIndex === 0">
                 <!--sidebar-->
                 <ng-container *ngIf="activeTabIndex === 0 && activeView !== 'receipt'">
-                    <inventory-sidebar></inventory-sidebar>
+                    <inventory-sidebar *ngIf="!isMobileScreen || (isMobileScreen && activeView !== 'group')"></inventory-sidebar>
                     <!--/sidebar-->
 
-                    <section class="rightBar">
+                    <section class="rightBar" *ngIf="!isMobileScreen || (isMobileScreen && activeView === 'group')">
                         <!-- uiView: inventory-detail -->
                         <section class="container-fluid  clearfix pdT2">
+                            <a [routerLink]="['/pages/inventory/']" (click)="activeView = null" *ngIf="isMobileScreen && activeView === 'group'">Back</a>
                             <div *ngIf="activeView" class="d-flex mrB1 branch-warehouse-filter">
                                 <sh-select class="multi-select branch-filter sh-select-border" (ngModelChange)="loadReportByBranch($event)" [options]="branches" [placeholder]="'Select Branch'" [ngModel]="currentBranchAndWarehouseFilterValues.branch"></sh-select>
                                 <sh-select class="multi-select sh-select-border warehouse-filter" #warehouseFilter (ngModelChange)="loadReportByWarehouse($event)" [placeholder]="'Select Warehouse'"  [options]="warehouses" [ngModel]="currentBranchAndWarehouseFilterValues.warehouse"></sh-select>
