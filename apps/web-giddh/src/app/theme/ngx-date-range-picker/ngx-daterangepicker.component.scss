@@ -172,9 +172,11 @@ $input-height: 3rem !default;
                 border: none;
             }
         }
-        th {
+
+        th, .th-div {
             font-size: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
             font: 400 14px system-ui;
         }
         th,
@@ -188,22 +190,39 @@ $input-height: 3rem !default;
                 pointer-events: none;
             }
         }
+        /* new calendar */
+        .th-div,
+        .td-div {
+            padding: 0;
+            white-space: nowrap;
+            text-align: center;
+            min-width: 34px;
+            line-height: 1.15;
+
+            span {
+                pointer-events: none;
+            }
+        }
+        /* new calendar */
     }
     .calendar-table {
-        border: $md-drppicker-calendar-border-size solid $md-drppicker-calendar-border-color;
+        border: $md-drppicker-calendar-border-size solid
+            $md-drppicker-calendar-border-color;
         padding: $md-drppicker-calendar-margin;
         border-radius: $md-drppicker-calendar-border-radius;
         background-color: $md-drppicker-calendar-bg-color;
     }
-    table {
+
+    table, .table-condensed {
         width: 100%;
         margin: 0;
         border-collapse: collapse;
     }
-    th {
-        color: #988c8c;
+
+    th, .th-div {
+        color: $opium;
     }
-    th.month.drp-animate {
+    th.month.drp-animate, .month.drp-animate {
         font-size: 12px;
         text-align: left;
         color: $nero;
@@ -217,7 +236,8 @@ $input-height: 3rem !default;
         text-align: center;
         width: $md-drppicker-cell-width;
         height: $md-drppicker-cell-height;
-        border: $md-drppicker-cell-border-size solid $md-drppicker-cell-border-color;
+        border: $md-drppicker-cell-border-size solid
+            $md-drppicker-cell-border-color;
         white-space: nowrap;
         cursor: pointer;
         height: 2em;
@@ -265,11 +285,74 @@ $input-height: 3rem !default;
         }
         &.week {
             font-size: 80%;
-            color: #ccc;
+            color: $very-light-gray;
         }
     }
-    td {
-        margin: 0.25em 0;
+
+    /* new calendar */
+    .td-div, .th-div{
+        text-align: center;
+        width: $md-drppicker-cell-width;
+        height: $md-drppicker-cell-height;
+        border: $md-drppicker-cell-border-size solid
+            $md-drppicker-cell-border-color;
+        white-space: nowrap;
+        cursor: pointer;
+        height: 2em;
+        width: 2em;
+        font-style: initial;
+
+        &.available {
+            &.prev {
+                display: block;
+                background-image: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMy43IDYiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDMuNyA2IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxwYXRoIGQ9Ik0zLjcsMC43TDEuNCwzbDIuMywyLjNMMyw2TDAsM2wzLTNMMy43LDAuN3oiLz4NCjwvZz4NCjwvc3ZnPg0K");
+                background-repeat: no-repeat;
+                background-size: 0.5em;
+                background-position: center;
+                opacity: 0.8;
+                transition: background-color 0.2s ease;
+                &:hover {
+                    margin: 0;
+                }
+            }
+
+            &.next {
+                transform: rotate(180deg);
+                display: block;
+                background-image: url("data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMy43IDYiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDMuNyA2IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxwYXRoIGQ9Ik0zLjcsMC43TDEuNCwzbDIuMywyLjNMMyw2TDAsM2wzLTNMMy43LDAuN3oiLz4NCjwvZz4NCjwvc3ZnPg0K");
+                background-repeat: no-repeat;
+                background-size: 0.5em;
+                background-position: center;
+                opacity: 0.8;
+                transition: background-color 0.2s ease;
+                border-radius: 2em;
+
+                &:hover {
+                    margin: 0;
+                    transform: rotate(180deg);
+                }
+            }
+
+            &:hover {
+                background-color: $md-drppicker-cell-hover-bg-color;
+                border-color: $md-drppicker-cell-hover-border-color;
+                color: $md-drppicker-cell-hover-color;
+                background-repeat: no-repeat;
+                background-size: 0.5em;
+                background-position: center;
+                margin: 0.25em 0;
+                opacity: 0.8;
+                transition: background-color 0.2s ease;
+            }
+        }
+
+        &.week {
+            font-size: 80%;
+            color: $very-light-gray;
+        }
+    }
+    td, .td-div {
+        margin: 0em 0;
         &.off {
             &,
             &.in-range,
@@ -380,20 +463,42 @@ $input-height: 3rem !default;
             }
         }
     }
-    th {
+
+    th, .th-div {
         &.month {
             width: auto;
         }
     }
+
+    .d-flex{
+        display:flex;
+    }
+    .justify-content-between{
+        justify-content:space-between;
+    }
+    /* new calendar */
+
     // disabled controls
     td,
     option {
         &.disabled {
-            color: #999;
+            color: $nobel;
             cursor: not-allowed;
             text-decoration: line-through;
         }
     }
+
+    /* new calendar */
+    .td-div,
+    option {
+        &.disabled {
+            color: $nobel;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+    }
+    /* new calendar */
+
     select {
         display: inline-block;
         background-color: $select-background;
@@ -416,8 +521,8 @@ $input-height: 3rem !default;
         &.ampm-select {
             width: 50px;
             margin: 0 auto;
-            background: #eee;
-            border: 1px solid #eee;
+            background: $whisper-light;
+            border: 1px solid $whisper-light;
             padding: 2px;
             outline: 0;
             font-size: 12px;
@@ -433,10 +538,18 @@ $input-height: 3rem !default;
             padding: 0;
         }
     }
-    th.month>div {
+    th.month > div {
         position: relative;
         display: inline-block;
     }
+
+    /* new calendar */
+    .th-div.month > div {
+        position: relative;
+        display: inline-block;
+    }
+    /* new calendar */
+
     .calendar-time {
         text-align: center;
         margin: 4px auto 0 auto;
@@ -444,11 +557,12 @@ $input-height: 3rem !default;
         position: relative;
     }
     .calendar-time select.disabled {
-        color: #ccc;
+        color: $very-light-gray;
         cursor: not-allowed;
     }
     .label-input {
-        border: $md-drppicker-control-border-size solid $md-drppicker-control-border-color;
+        border: $md-drppicker-control-border-size solid
+            $md-drppicker-control-border-color;
         border-radius: $md-drppicker-control-border-radius;
         color: $md-drppicker-control-color;
         height: $md-drppicker-control-line-height;
@@ -459,7 +573,8 @@ $input-height: 3rem !default;
         padding: 0 0 0 28px;
         width: 100%;
         &.active {
-            border: $md-drppicker-control-active-border-size solid $md-drppicker-control-active-border-color;
+            border: $md-drppicker-control-active-border-size solid
+                $md-drppicker-control-active-border-color;
             border-radius: $md-drppicker-control-active-border-radius;
         }
     }
@@ -487,7 +602,7 @@ $input-height: 3rem !default;
     /* ranges */
     .show-ranges {
         .drp-calendar.left {
-            border-left: 1px solid #ddd;
+            border-left: 1px solid $gainsboro-light;
         }
     }
     .ranges {
@@ -523,7 +638,7 @@ $input-height: 3rem !default;
                             position: absolute;
                             z-index: 1017;
                             min-width: 96px;
-                            background-color: white;
+                            background-color:$white;
                             box-shadow: 0px 2px 8px $moody-blue;
                             left: 28px;
                             top: -3px;
@@ -622,10 +737,11 @@ $input-height: 3rem !default;
         margin: 0;
         padding-right: 15px;
         position: absolute;
-        bottom: 15px;
-        background-color: #fff;
+        bottom: 0;
+        background-color: $white;
         padding-top: 9px;
-        z-index: 999;
+        padding-bottom: 15px;
+        z-index: 999 !important;
         right: 0;
         width: calc(100% - 218px);
     }
@@ -687,7 +803,7 @@ $input-height: 3rem !default;
         box-shadow: none;
         background-color: $white !important;
         svg {
-            color: #eb3232;
+            color: $red;
             fill: currentColor;
         }
     }
@@ -709,7 +825,7 @@ $input-height: 3rem !default;
 }
 
 .md-drppicker td.in-range.in-range-start.in-range-end span {
-    background-color: $portage!important;
+    background-color: $portage !important;
     border-radius: 50%;
     color: $nero;
     border-color: $gray;
@@ -718,6 +834,28 @@ $input-height: 3rem !default;
 td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     border: none !important;
 }
+
+/* new calendar */
+.md-drppicker .td-div.in-range.in-range-start::before {
+    border-radius: 50% 0 0 50% !important;
+}
+.md-drppicker .td-div.in-range.in-range-end::before {
+    border-radius: 0 50% 50% 0 !important;
+}
+.md-drppicker .td-div.in-range.in-range-start.in-range-end::before {
+    border-radius: 50% !important;
+    text-align: center;
+    width: 80%;
+    display: none;
+}
+.md-drppicker .td-div.in-range.in-range-start.in-range-end span {
+    background-color: $portage !important;
+    border-radius: 50%;
+    color: $nero;
+    border-color: $gray;
+}
+
+/* new calendar */
 
 .invalid-date.error-msg {
     font-size: 12px;
@@ -852,7 +990,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     }
 }
 
-@media(min-width:768px) {
+@media (min-width: 768px) {
     .custom-select-btn {
         display: none;
     }
@@ -876,6 +1014,16 @@ td:hover span {
     border: 1px solid $gray;
 }
 
+/* new calendar */
+.td-div span {
+    border: 1px solid transparent;
+}
+.td-div:hover span {
+    background-color: $white-smoke;
+    border: 1px solid $gray;
+}
+/* new calendar */
+
 .off.in-range {
     &::before {
         content: "";
@@ -891,8 +1039,19 @@ td:hover span {
     }
 }
 
+/* new calendar */
+.md-drppicker .td-div.start-date.active {
+    span {
+        background-color: $midnight-blue !important;
+        color: $white !important;
+        border-color: $midnight-blue !important;
+    }
+}
+/* new calendar */
+
 .md-drppicker td.end-date.active {
-    background-color: white !important;
+    background-color:$white!important;
+
     span {
         background-color: $portage !important;
         color: $nero !important;
@@ -907,6 +1066,27 @@ td:hover span {
         }
     }
 }
+
+/* new calendar */
+.md-drppicker .td-div.end-date.active {
+    background-color:$white !important;
+
+    span {
+        background-color: $portage !important;
+        color: $nero !important;
+    }
+
+    .available:hover {
+        background-color: unset !important;
+    }
+    &:hover {
+        span {
+            background-color: $white-smoke !important;
+            border-color: $gray !important;
+        }
+    }
+}
+/* new calendar */
 
 td span {
     position: relative;
@@ -923,6 +1103,23 @@ td span {
     display: block;
 }
 
+/* new calendar */
+.td-div span {
+    position: relative;
+    z-index: 999;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    width: 26px;
+    height: 26px;
+    line-height: 2;
+    display: block;
+}
+/* new calendar */
+
 .se {
     width: 270px;
     opacity: 0;
@@ -930,7 +1127,7 @@ td span {
 
 .d-container {
     width: 100%;
-    background-color: white;
+    background-color: $white;
     z-index: 100;
     // overflow-x: hidden;
     // overflow-y: auto;
@@ -1011,7 +1208,7 @@ td span {
 }
 
 .hideMe {
-    display: none;
+    display: none !important;
 }
 
 .activatedDate {
@@ -1026,7 +1223,6 @@ td span {
 .activatedDate.in-range.in-range-start span {
     color: $nero !important;
 }
-
 .activatedDate:hover {
     span {
         background-color: $white-smoke !important;
@@ -1036,7 +1232,7 @@ td span {
 
 .btn-angle-down {
     position: relative;
-    background-color: #ddd;
+    background-color:$gainsboro-light;
 }
 
 .angle-down {
@@ -1093,11 +1289,15 @@ td span {
     border: none;
     border-top: 1px solid transparent;
 }
-
-.md-drppicker .calendar td.hide-date {
+.md-drppicker .calendar .th-div,
+.md-drppicker .calendar .td-div {
+    height: 28px;
+    border: none;
+    border-top: 1px solid transparent;
+}
+.md-drppicker .calendar .td-div.hide-date {
     visibility: hidden;
 }
-
 .close-calender {
     display: none;
 }
@@ -1219,7 +1419,7 @@ td span {
                     position: absolute;
                     z-index: 1017;
                     min-width: 96px;
-                    background-color: white;
+                    background-color: $white;
                     box-shadow: 0px 2px 8px $moody-blue;
                     left: 28px;
                     top: -3px;
@@ -1301,8 +1501,33 @@ tr:first-child.in-range-hovered.available {
         border-radius: 50% 0 0 50%;
     }
 }
+cdk-virtual-scroll-viewport{
+    height: 284px;
+}
+cdk-virtual-scroll-viewport::-webkit-scrollbar {
+  width: 5px;
+}
 
-@media(min-height:767px) {
+/* Track */
+cdk-virtual-scroll-viewport::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+/* Handle */
+cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
+  background: $dim-gray;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb:hover {
+  background: $dim-gray;
+}
+
+.calendar-d-flex{
+    display: flex;
+}
+@media (min-height: 767px) {
     .ranges-perfect-scrollbar {
         overflow: initial !important;
         .ps {
@@ -1311,10 +1536,8 @@ tr:first-child.in-range-hovered.available {
     }
 }
 
-
 /*media query*/
-
-@media(max-width:767px) {
+@media (max-width: 767px) {
     .md-drppicker {
         flex-direction: column;
         z-index: 999;
@@ -1525,6 +1748,21 @@ tr:first-child.in-range-hovered.available {
     }
     .md-drppicker .calendar {
         max-width: 100%;
+        .th-div{
+            min-width: 14%;
+            span{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 28px;
+                }
+        }
+         .td-div{
+             min-width: 14%;
+             span{
+                 margin-left: 10px;
+             }
+         }
     }
     .d-container {
         width: 100%;
@@ -1549,7 +1787,7 @@ tr:first-child.in-range-hovered.available {
         position: absolute !important;
         bottom: 0 !important;
         right: 0 !important;
-        background-color: #ffffff !important;
+        background-color: $white !important;
         z-index: 99999 !important;
         width: 100% !important;
         margin: 0 !important;
@@ -1562,9 +1800,16 @@ tr:first-child.in-range-hovered.available {
         left: 11px;
         width: 79%;
     }
+    .md-drppicker .td-div.in-range-start::before {
+        left: 11px;
+        width: 79%;
+    }
+    cdk-virtual-scroll-viewport{
+        height: calc(100vh - 350px);
+    }
 }
 
-@media(max-width:375px) {
+@media (max-width: 375px) {
     .md-drppicker {
         .calender-container {
             .calender-container-wrapper {
@@ -1581,9 +1826,22 @@ tr:first-child.in-range-hovered.available {
         left: 11px;
         width: 79%;
     }
+    .md-drppicker .td-div.in-range-start::before {
+        left: 11px;
+        width: 79%;
+    }
 }
-
-@media(max-height:767px) {
+@media(max-width:330px){
+    .md-drppicker .calendar {
+        .th-div, .td-div{
+            min-width: 44px;
+        }
+    }
+    cdk-virtual-scroll-viewport{
+            height: calc(100vh - 180px);
+    }
+}
+@media (max-height: 767px) {
     .drops-down-right {
         height: 470px;
         overflow: hidden !important;

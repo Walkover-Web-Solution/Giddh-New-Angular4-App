@@ -6,6 +6,9 @@
         position: relative;
         top: 0;
     }
+    .modal-header {
+        border-radius: 0px;
+    }
 }
 
 .hieghtInVH {

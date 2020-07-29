@@ -250,13 +250,21 @@ export class AuthenticationService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }
 
-    // Delete Single Sessions
-    public DeleteSession(sessionId) {
+    /**
+     * Deletes the session
+     *
+     * @param {*} requestPayload Payload for API
+     * @returns {Observable<any>} Observable to carry out further operation
+     * @memberof AuthenticationService
+     */
+    public DeleteSession(requestPayload: any): Observable<any> {
         let userEmail = this._generalService.user.email;
-        let id = {sessionId};
+        let id = {
+            sessionId: requestPayload.sessionId
+        };
         return this._http.post(this.config.apiUrl + LOGIN_API.DELETE_SESSION.replace(':userEmail', userEmail), id).pipe(map(res => {
             let data = res;
-            data.queryString = id;
+            data.queryString = requestPayload;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
     }

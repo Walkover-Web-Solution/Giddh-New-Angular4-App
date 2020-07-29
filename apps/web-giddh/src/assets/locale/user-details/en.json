@@ -2,7 +2,7 @@
     "auth_key" : {
         "main_auth_key" : "Main Auth-key",
         "regenerate_auth_key" : "Regenerate Auth Key",
-        "documentation" : "Documentation",
+        "documentation" : "Documentation"
     },
     "mobile_number" : {
         "add_edit_mobile_number" : "Add/Edit Mobile Number",
@@ -10,6 +10,7 @@
         "mobile_number_format" : "Format should be like 9898989898",
         "verification_code_label" : "Enter verification Code",
         "verification_code_placeholder" : "Verification Code",
+        "resend" : "Resend",
         "verify" : "Verify",
         "long_code" : "Long Code Hints (Long code no. : 9229224424)",
         "accounts" : "Accounts",

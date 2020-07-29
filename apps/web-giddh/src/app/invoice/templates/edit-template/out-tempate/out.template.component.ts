@@ -3,7 +3,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Observable } from 'rxjs';
 import * as _ from '../../../../lodash-optimized';
 import { CustomTemplateResponse } from '../../../../models/api-models/Invoice';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../services/invoice.ui.data.service';
@@ -31,7 +31,11 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 	public fieldsAndVisibility: any;
 	public companyUniqueName: string;
 	public voucherType = 'default';
-	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* Company unique name observable */
+    public companyUniqueName$: Observable<string>;
+    /* This will hold the value if Gst Composition will show/hide */
+    public showGstComposition: boolean = false;
 
 	constructor(
 		private store: Store<AppState>,
@@ -45,7 +49,21 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
 			companyUniqueName = ss.companyUniqueName;
 			companies = ss.companies;
 			this.companyUniqueName = ss.companyUniqueName;
-		});
+        });
+        
+        this.companyUniqueName$ = this.store.select(state => state.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
+
+        this.companyUniqueName$.pipe(take(1)).subscribe(activeCompanyUniqueName => {
+            if (companies) {
+                companies.forEach(company => {
+                    if (company.uniqueName === activeCompanyUniqueName) {
+                        if (company.country === "India") {
+                            this.showGstComposition = true;
+                        }
+                    }
+                });
+            }
+        });
 
 		this.store.select(s => s.invoiceTemplate).pipe(take(1)).subscribe(ss => {
 			defaultTemplate = ss.defaultTemplate;

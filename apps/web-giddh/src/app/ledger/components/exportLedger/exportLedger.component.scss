@@ -4,6 +4,9 @@
 .export-type{
     display: flex;
 }
+.show-columnar-button{
+    display: inline-block;
+}
 @media (max-width: 767px) {
     .descendingRadioBtn {
         display: block !important;
@@ -14,5 +17,8 @@
         span{
             margin-right: 15px !important;
         }
+    }
+    .show-columnar-button{
+        display: none;
     }
 }

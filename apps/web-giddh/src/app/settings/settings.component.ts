@@ -54,7 +54,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold the value out/in to open/close setting sidebar popup */
-    public asideSettingMenuState: string = 'out';
+    public asideSettingMenuState: string = 'in';
 
     constructor(
         private store: Store<AppState>,
@@ -83,6 +83,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
             if (!this.isMobileScreen) {
                 this.asideSettingMenuState = "in";
                 this.toggleBodyClass();
+            } else {
+                this.asideSettingMenuState = "out";
             }
         });
 
@@ -187,7 +189,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public permissionTabSelected(e) {
-        if(!this.permissionTabDataFetched) {
+        if (!this.permissionTabDataFetched) {
             this.permissionTabDataFetched = true;
             this.permissionComp.getInitialData();
         }

@@ -11,7 +11,7 @@ import { GeneralService } from '../services/general.service';
 import { AppState } from '../store';
 
 @Component({
-    template: `<h2>Please wait...</h2>`
+    templateUrl: "./token-verify.component.html",
 })
 export class TokenVerifyComponent implements OnInit, OnDestroy {
     public loading = false;

@@ -108,7 +108,14 @@ export class SessionActions {
         };
     }
 
-    public deleteSession(sessionId: string): CustomActions {
+    /**
+     * Returns the delete session action
+     *
+     * @param {*} sessionId Session details
+     * @returns {CustomActions} Delete session action
+     * @memberof SessionActions
+     */
+    public deleteSession(sessionId: any): CustomActions {
         return {
             type: SessionActions.DELETE_SESSION_REQUEST,
             payload: sessionId

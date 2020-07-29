@@ -106,15 +106,15 @@
 
 
                                     </ul>
-                                    <p class="login-with " *ngIf="loginUsing !== 'userName'">Login with<a
-                                            href="javascript:;"
+                                    <p class="login-with" *ngIf="loginUsing !== 'userName'">Login with <a
+                                            href="javascript:;" class="bold"
                                             (click)="loginUsing = 'userName';resetForgotPasswordProcess()">
-                                            email and password</a></p>
+                                           email and password</a></p>
 
                                     <div class="d-flex align-items-center account mt-1">
-                                        <p class="mb-0 mr-2">Don't have an account?</p>
+                                        <p class="mb-0 mr-2 bold text-light-2">Don't have an account?</p>
                                         <!-- https://giddh.com -->
-                                        <a routerLink="/signup" class="btn btn-secondary"> signup</a>
+                                        <a routerLink="/signup" class="btn btn-secondary"> Signup</a>
                                     </div>
                                 </section>
                                 <!-- end of full view -->

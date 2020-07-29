@@ -3,7 +3,7 @@
 
         <div class="panel-heading">
             <strong>Total Overdues</strong>
-            <i class="glyphicon glyphicon-refresh mrL2" (click)="refreshChart()"></i>
+            <i class="glyphicon glyphicon-refresh ml-1" (click)="refreshChart()"></i>
             <div class="pull-right dashboard-filter">
                 <!-- <div class="btn-group" dropdown>
 					<span id="button-basic" dropdownToggle class="dropdown-toggle month-dropdown"
@@ -12,7 +12,7 @@
 					</span>
 				</div> - -->
                 <div (click)="showGiddhDatepicker($event)">
-                    <input type="text" readonly name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
+                    <input type="text" readonly name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker dashboard-datepicker" />
                 </div>
             </div>
         </div>
