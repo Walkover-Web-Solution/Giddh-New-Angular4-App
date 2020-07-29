@@ -184,8 +184,7 @@
                     </div>
                 </div>
 
-                <div class="account clearfix" *ngIf="plData && plData?.incomeStatment"
-                    [ngStyle]="{'border-bottom':plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT' ? 'none' : 'none' }">
+                <div class="account clearfix" *ngIf="plData && plData?.incomeStatment">
                     <div class="col-xs-8  group pd1">
                         <strong>Income Before Taxes (EBT)</strong>
                     </div>
