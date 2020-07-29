@@ -190,7 +190,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     /* Will check if form is valid */
     public isValidForm: boolean = false;
     /* Error message for amount comparision with transaction amount */
-    public amountErrorMessage: string = "Total Amount can't be greater than Credit Amount";
+    public amountErrorMessage: string = "Total Amount must be equal to Credit Amount";
     /* Error message for comparision of adjusted amount with invoice */
     public invoiceAmountErrorMessage: string = "Amount can't be greater than Invoice Balance Due";
     /* Error message for invalid adjustment amount */
@@ -212,6 +212,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public adjustmentTransaction: any = {};
     /* Selected transaction type */
     public selectedTransactionType: string = '';
+    /* This will hold if receipt option is choosen */
+    public receiptExists: boolean = false;
+    /* This will hold if advance receipt option is choosen */
+    public advanceReceiptExists: boolean = false;
 
     constructor(
         private _accountService: AccountService,
@@ -1544,6 +1548,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 currentPageObj.name = `Journal Voucher * > ${voucherType}`;
                 currentPageObj.url = '/pages/journal-voucher/contra';
                 break;
+            case VOUCHERS.RECEIPT:
+                currentPageObj.name = `Journal Voucher * > ${voucherType}`;
+                currentPageObj.url = '/pages/journal-voucher/receipt';
+                break;    
             default:
                 currentPageObj.name = 'Journal Voucher *';
                 currentPageObj.url = '/pages/journal-voucher';
@@ -1563,7 +1571,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.totalEntries = (this.receiptEntries) ? this.receiptEntries.length : 0;
         this.adjustmentTransaction = event;
         this.getTaxList();
-        this.updateAdjustmentTypes();
+        this.updateAdjustmentTypes("update");
         this.modalRef.hide();
     }
 
@@ -1690,7 +1698,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         this.receiptEntries = receiptEntries;
         this.totalEntries--;
-        this.updateAdjustmentTypes();
+        this.updateAdjustmentTypes("remove");
         this.validateEntries(false);
     }
 
@@ -1775,7 +1783,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
             this.receiptEntries[this.totalEntries] = {
                 allowedTypes: getAdjustmentTypes,
-                type: (getAdjustmentTypes && getAdjustmentTypes.length === 3) ? 'receipt' : 'againstReference',
+                type: (this.advanceReceiptExists) ? 'advanceReceipt' : 'receipt',
                 //note: '',
                 tax: {
                     name: '',
@@ -1900,20 +1908,34 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public prepareAdjustmentTypes(event: string): IOption[] {
-        let receiptExists = false;
-        let advanceReceiptExists = false;
+        this.receiptExists = false;
+        this.advanceReceiptExists = false;
         this.receiptEntries.forEach(receipt => {
             if (receipt.type === "receipt") {
-                receiptExists = true;
+                if(this.advanceReceiptExists) {
+                    receipt.type = "advanceReceipt";
+                } else {
+                    this.receiptExists = true;
+                }
             } else if (receipt.type === "advanceReceipt") {
-                advanceReceiptExists = true;
+                if(this.receiptExists) {
+                    receipt.type = "receipt";
+                    receipt.tax = {
+                        name: '',
+                        uniqueName: '',
+                        percent: 0,
+                        value: 0
+                    };
+                } else {
+                    this.advanceReceiptExists = true;
+                }
             }
         });
 
         let adjustmentTypesOptions: IOption[] = [];
 
         adjustmentTypes.map(type => {
-            if (this.totalEntries === 0 || (event === "remove" && this.totalEntries === 1) || (!receiptExists && !advanceReceiptExists) || (receiptExists && !advanceReceiptExists && type.value === "receipt") || (!receiptExists && advanceReceiptExists && type.value === "advanceReceipt") || type.value === "againstReference") {
+            if(this.totalEntries === 0 || (event === "remove" && this.totalEntries === 1) || (!this.receiptExists && !this.advanceReceiptExists) || (this.receiptExists && !this.advanceReceiptExists && type.value === "receipt") || (!this.receiptExists && this.advanceReceiptExists && type.value === "advanceReceipt") || type.value === "againstReference") {
                 adjustmentTypesOptions.push({ label: type.label, value: type.value });
             }
         });
@@ -1924,12 +1946,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     /**
      * This will initiate update of adjustment types of all adjustments
      *
+     * @param {string} action
      * @memberof AccountAsVoucherComponent
      */
-    public updateAdjustmentTypes(): void {
+    public updateAdjustmentTypes(action: string): void {
         if (this.receiptEntries && this.receiptEntries.length > 0) {
             this.receiptEntries.forEach(entry => {
-                entry.allowedTypes = this.prepareAdjustmentTypes("remove");
+                entry.allowedTypes = this.prepareAdjustmentTypes(action);
             });
         }
     }
@@ -1942,12 +1965,21 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public onSelectAdjustmentType(event: any, entry: any): void {
-        if (event && event.value === "againstReference") {
-            entry.amount = 0;
-            this.isValidForm = false;
+        if(event) {
+            if(event.value === "againstReference") {
+                entry.amount = 0;
+                this.isValidForm = false;
+            } else if(event.value === "receipt") {
+                entry.tax = {
+                    name: '',
+                    uniqueName: '',
+                    percent: 0,
+                    value: 0
+                };
+            }
         }
 
-        this.updateAdjustmentTypes();
+        this.updateAdjustmentTypes("update");
     }
 
     /**
