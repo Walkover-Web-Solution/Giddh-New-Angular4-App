@@ -1,9 +1,4 @@
 @import "../../../../../assets/css/color.scss";
-.trailBlnctble {
-    max-width: 1050px;
-    width: 100%;
-    margin-top: 15px;
-}
 .liabilities-assets {
     max-width: 760px;
     width: 100%;
@@ -18,5 +13,18 @@
         display: flex;
         align-items: center;
         }
+    }
+      input{
+        height: 47px;
+    }
+}
+.tb-wrapper{
+    width: 70%;
+    margin: auto;
+}
+@media(max-width:991px){
+    .tb-wrapper{
+        width: 100%;
+        margin: auto;
     }
 }

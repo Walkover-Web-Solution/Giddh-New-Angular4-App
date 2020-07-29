@@ -1,0 +1,32 @@
+@import "../../../../../assets/css/color.scss";
+.bs-table-grid {
+    th{
+        border: none !important;
+        border-bottom:1px solid $gainsboro !important;
+        padding: 13px 8px 14px 0 !important;
+        &:first-child{
+            padding: 0 !important;
+        }
+            i.glyphicon-search{
+            position: relative;z-index: 1; font-size: 13px;
+            color: $gray;
+            padding-right: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            }
+            input{
+                height: 47px;
+            }
+    }
+}
+.tb-wrapper{
+    width: 70%;
+    margin: auto;
+}
+@media(max-width:991px){
+    .tb-wrapper{
+        width: 100%;
+        margin: auto;
+    }
+}
