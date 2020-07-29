@@ -52,7 +52,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private sanitizer: DomSanitizer,
         private breakpointObserver: BreakpointObserver,
         private dbServices: DbService,
-        private laodingService: LoaderService
+        private loadingService: LoaderService
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -215,9 +215,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private subscribeToLazyRouteLoading(): void {
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof RouteConfigLoadStart) {
-                this.laodingService.show();
+                this.loadingService.show();
             } else if (event instanceof RouteConfigLoadEnd) {
-                this.laodingService.hide();
+                this.loadingService.hide();
             }
         })
     }

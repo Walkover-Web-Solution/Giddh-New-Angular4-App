@@ -38,7 +38,7 @@ export class AuthService {
 
 	constructor(
         config: AuthServiceConfig,
-        private laodingService: LoaderService
+        private loadingService: LoaderService
     ) {
 		this.providers = config.providers;
 		if (config.autoLogin) {
@@ -57,7 +57,7 @@ export class AuthService {
 	}
 
 	public signIn(providerId: string): Promise<SocialUser> {
-        this.laodingService.show();
+        this.loadingService.show();
 		return new Promise((resolve, reject) => {
 			const providerObject = this.providers.get(providerId);
 			if (providerObject) {
@@ -85,13 +85,13 @@ export class AuthService {
 				}
 			} else {
                 reject(AuthService.LOGIN_PROVIDER_NOT_FOUND);
-                this.laodingService.hide();
+                this.loadingService.hide();
 			}
 		});
 	}
 
 	public signOut(): Promise<any> {
-        this.laodingService.show();
+        this.loadingService.show();
 		return new Promise((resolve, reject) => {
 			if (this._user && this._user.provider) {
 				const providerId = this._user.provider;
@@ -100,14 +100,14 @@ export class AuthService {
 					this._user = null;
 					this._authState.next(null);
                     resolve();
-                    this.laodingService.hide();
+                    this.loadingService.hide();
 				}).catch((err) => {
                     this._authState.next(null);
-                    this.laodingService.hide();
+                    this.loadingService.hide();
 				});
 			} else {
                 reject(AuthService.LOGIN_PROVIDER_NOT_FOUND);
-                this.laodingService.hide();
+                this.loadingService.hide();
 			}
 		});
 	}
