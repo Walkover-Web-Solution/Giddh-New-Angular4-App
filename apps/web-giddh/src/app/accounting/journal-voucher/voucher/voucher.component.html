@@ -78,6 +78,7 @@
                                                     <sh-select [options]="taxListSource$ | async"
                                                         placeholder="Select Tax" name="tax"
                                                         [(ngModel)]="entry.tax.uniqueName"
+                                                        [forceClearReactive]="forceClear$ | async"
                                                         [disabled]="entry.type === 'receipt'"
                                                         (selected)="onSelectTax($event, entry)" class="select-tax">
                                                     </sh-select>
