@@ -505,11 +505,12 @@
                         <td class="bdrB bdrR text-right" data-title="Value">{{txn.closingBalance?.amount}}</td>
 
                     </ng-container>
-                </tr>
-                <tr *ngIf="isMobileScreen">
-                    <td [attr.colspan]="showAllColumns ? 16 : 10">
-                        <a href="javascript:;" (click)="showAllColumns = !showAllColumns;">{{showAllColumns ? 'Less' : 'More'}}</a>
-                    </td>    
+
+                    <ng-container *ngIf="isMobileScreen">
+                            <td [attr.colspan]="showAllColumns ? 16 : 10" class="more-table">
+                                <a href="javascript:;" (click)="showAllColumns = !showAllColumns;">{{showAllColumns ? 'Less' : 'More'}}</a>
+                            </td>    
+                        </ng-container>
                 </tr>
             </tbody>
 

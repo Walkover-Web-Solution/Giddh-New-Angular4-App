@@ -73,3 +73,9 @@ stock-list ::ng-deep.in-list a div {
         }
     }
 }
+
+@media (max-width:767px){
+    .stock-grp-list{
+        height:74vh;
+    }
+}

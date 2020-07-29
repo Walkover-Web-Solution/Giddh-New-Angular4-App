@@ -356,7 +356,7 @@ button.btn.btn-filter {
     .popover-details{
         display:block;
         position: absolute;
-        top: 120px;
+        top: 116px;
         right: 0;
         margin: 0 15px;
         .btn-group{
@@ -381,4 +381,19 @@ button.btn.btn-filter {
     .table-border {
         border: 0px solid $white !important;
     }
+    
+    .more-table{
+        text-align:end !important;
+        margin-bottom:0 !important;
+        a{
+            background: #01a9f4;
+            border: 1px solid #01a9f4;
+            color: #ffffff;
+            border-radius: 2px;
+            font-size: 14px;
+            padding: 7px 8px;
+            width:auto;
+        }
+    }
+
 } 
