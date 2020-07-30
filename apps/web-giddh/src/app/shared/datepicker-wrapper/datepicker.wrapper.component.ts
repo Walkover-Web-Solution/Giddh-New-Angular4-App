@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, ElementRef, Renderer2, Output, EventEmitter, OnChanges, SimpleChanges, HostListener } from '@angular/core';
 import * as _moment from 'moment';
-import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
-import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'app-datepicker-wrapper',
@@ -43,11 +41,12 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
     @Input() public locale: any;
     @Input() public selectedRangeLabel: any;
     @Input() public dateFieldPosition: any;
+    @Input() public updatePosition: boolean = true;
 
     public initialWindowOffset: number = 0;
     public initialDatepickerYPosition: number = 0;
 
-    constructor(private _renderer: Renderer2, private generalService: GeneralService) {
+    constructor(private _renderer: Renderer2) {
 
     }
 
@@ -133,11 +132,13 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
 
     @HostListener('window:scroll', ['$event'])
     public onWindowScroll(event: any): void {
-        if(window.pageYOffset > this.initialWindowOffset) {
-            this.dateFieldPosition.y = this.initialDatepickerYPosition - (window.pageYOffset - this.initialWindowOffset);
-        } else {
-            this.dateFieldPosition.y = this.initialDatepickerYPosition + (this.initialWindowOffset - window.pageYOffset);
+        if(this.updatePosition) {
+            if(window.pageYOffset > this.initialWindowOffset) {
+                this.dateFieldPosition.y = this.initialDatepickerYPosition - (window.pageYOffset - this.initialWindowOffset);
+            } else {
+                this.dateFieldPosition.y = this.initialDatepickerYPosition + (this.initialWindowOffset - window.pageYOffset);
+            }
+            this.setPosition();
         }
-        this.setPosition();
     }
 }
