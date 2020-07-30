@@ -327,6 +327,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.subscribe(event => {
+            if (event instanceof NavigationStart) {
+                this.addClassInBodyIfPageHasTabs();
+            }
             if (event instanceof NavigationEnd) {
                 this.setCurrentPage();
 
@@ -334,8 +337,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentState = this.router.url;
                     this.setCurrentAccountNameInHeading();
                 }
-
-                this.addClassInBodyIfPageHasTabs();
             }
         });
 
