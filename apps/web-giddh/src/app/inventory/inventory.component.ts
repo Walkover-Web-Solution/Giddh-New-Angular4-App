@@ -25,6 +25,7 @@ import { InventoryService } from '../services/inventory.service';
 import { ToasterService } from '../services/toaster.service';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -81,6 +82,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     /** List of branches */
     public branches: Array<any> = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold if it's mobile screen or not */
+    public isMobileScreen: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -96,8 +99,18 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         private stockReportActions: StockReportActions,
         private sideBarAction: SidebarAction,
         private settingsUtilityService: SettingsUtilityService,
-        private toastService: ToasterService
+        private toastService: ToasterService,
+        private breakPointObservar: BreakpointObserver
     ) {
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).subscribe(result => {
+            if(this.isMobileScreen && !result.matches) {
+                this.setDefaultGroup();
+            }
+            this.isMobileScreen = result.matches;
+        });
+
         this.currentUrl = this.router.url;
 
         if (this.currentUrl.indexOf('group') > 0) {
@@ -204,7 +217,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngAfterViewInit() {
-        this.setDefaultGroup();
+        if(!this.isMobileScreen) {
+            this.setDefaultGroup();
+        }
     }
 
     public setDefaultGroup() {

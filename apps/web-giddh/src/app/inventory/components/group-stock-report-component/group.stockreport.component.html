@@ -484,19 +484,19 @@
                         </td>
                         <td class="bdrB bdrR text-right" data-title="Value">{{txn.openingBalance?.amount}}</td>
 
-                        <td data-title="inwards -" class="td-mobile-head"></td>
+                        <td data-title="inwards -" class="td-mobile-head" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)"></td>
 
-                        <td class="bdrB bdrR text-right brNone" data-title="Qty">
+                        <td class="bdrB bdrR text-right brNone" data-title="Qty" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">
                             <span [ngClass]="{'text-danger': txn.inwards?.quantity<0 }">{{txn.inwards?.quantity}}</span>
                         </td>
-                        <td class="bdrB bdrR text-right" data-title="Value">{{txn.inwards?.amount}}</td>
+                        <td class="bdrB bdrR text-right" data-title="Value" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">{{txn.inwards?.amount}}</td>
 
-                        <td data-title="Outwards -" class="td-mobile-head"></td>
+                        <td data-title="Outwards -" class="td-mobile-head" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)"></td>
 
-                        <td class="bdrB bdrR text-right brNone" data-title="Qty">
+                        <td class="bdrB bdrR text-right brNone" data-title="Qty" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">
                             {{txn.outwards?.quantity}}
                         </td>
-                        <td class="bdrB bdrR text-right" data-title="Value">{{txn.outwards?.amount}}</td>
+                        <td class="bdrB bdrR text-right" data-title="Value" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">{{txn.outwards?.amount}}</td>
 
                         <td data-title="Closing stock -" class="td-mobile-head"></td>
 
@@ -507,8 +507,13 @@
                         <td class="bdrB bdrR text-right" data-title="Value">{{txn.closingBalance?.amount}}</td>
 
                     </ng-container>
-                </tr>
 
+                    <ng-container *ngIf="isMobileScreen">
+                        <td [attr.colspan]="txn.showAllColumns ? 16 : 10" class="more-table">
+                            <a href="javascript:;" (click)="txn.showAllColumns = !txn.showAllColumns;">{{txn.showAllColumns ? 'Less' : 'More'}}</a>
+                        </td>    
+                    </ng-container>
+                </tr>
             </tbody>
 
             <tbody *ngIf="groupStockReportInProcess">
