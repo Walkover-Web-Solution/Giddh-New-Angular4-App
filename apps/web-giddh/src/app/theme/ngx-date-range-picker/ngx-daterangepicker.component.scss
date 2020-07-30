@@ -1606,6 +1606,15 @@ cdk-virtual-scroll-viewport{
 .calendar-d-flex{
     display: flex;
 }
+.calendar.left .table-condensed , .calendar.right .table-condensed{
+    min-height: 170px;
+    max-height: 200px;
+}
+.calendar.left .table-condensed.sticky-header , .calendar.right .table-condensed.sticky-header{
+     height: auto;
+    min-height: auto;
+    max-height: auto;
+}
 @media (min-height: 767px) {
     .ranges-perfect-scrollbar {
         overflow: initial !important;
