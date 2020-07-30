@@ -39,7 +39,7 @@
                 </div>
                 <div class="single-field relative">
                     <label *ngIf="i === 0">Amount</label>
-                    <input type="tel" class="form-control" placeholder="Enter Amount" name="amount"
+                    <input type="tel" class="form-control" placeholder="Enter Amount" name="amount" [disabled]="i === 0"
                         [(ngModel)]="entry.amount" (keydown)="validateAmount($event, entry)"
                         (blur)="validateEntry(entry)" decimalDigitsDirective [DecimalPlaces]="2"
                         (ngModelChange)="formatAmount(entry)">
@@ -50,13 +50,13 @@
                         To/Cr
                     </p>
                 </div>
-                <div class="single-field delete-row" *ngIf="receiptEntries.length > 1">
+                <div class="single-field delete-row">
                     <p>
                         <label class="d-block">&nbsp;</label>
-                        <a href="javascript:;" (click)="removeReceiptEntry(i)"><i class="icon-cross"></i></a>
+                        <a href="javascript:;" (click)="removeReceiptEntry(i)" *ngIf="i > 0"><i class="icon-cross"></i></a>
+                        <a *ngIf="i === 0">&nbsp;</a>
                     </p>
                 </div>
-
             </div>
             <div class="mt-4">
                 <button class="btn btn-success" [disabled]="!isValidForm" (click)="emitEntries()">Save</button>
