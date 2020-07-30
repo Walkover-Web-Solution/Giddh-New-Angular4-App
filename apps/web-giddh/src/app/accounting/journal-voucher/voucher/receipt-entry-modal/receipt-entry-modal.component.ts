@@ -62,10 +62,6 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         accountUniqueNames: [],
         voucherType: "receipt"
     };
-    /* This will hold if receipt option is choosen */
-    public receiptExists: boolean = false;
-    /* This will hold if advance receipt option is choosen */
-    public advanceReceiptExists: boolean = false;
     /* This will clear the select value in sh-select */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -87,7 +83,8 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
                 this.totalEntries = this.receiptEntries.length;
                 this.validateEntries(false);
             } else {
-                this.addNewEntry();
+                this.addNewEntry(); // for receipt/advance receipt
+                this.addNewEntry(); // for adjustment
             }
 
             this.pendingInvoicesListParams.accountUniqueNames.push(this.transaction.selectedAccount.UniqueName);
@@ -104,11 +101,11 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
      */
     public addNewEntry(): void {
         if (this.totalEntries === 0 || (this.receiptEntries[this.totalEntries - 1] && this.receiptEntries[this.totalEntries - 1] !== undefined && parseFloat(this.receiptEntries[this.totalEntries - 1].amount) > 0)) {
-            let getAdjustmentTypes = this.prepareAdjustmentTypes("add");
+            let getAdjustmentTypes = this.prepareAdjustmentTypes(this.totalEntries);
 
             this.receiptEntries[this.totalEntries] = {
                 allowedTypes: getAdjustmentTypes,
-                type: (this.advanceReceiptExists) ? 'advanceReceipt' : 'receipt',
+                type: (this.totalEntries > 0) ? 'againstReference' : 'receipt',
                 //note: '',
                 tax: {
                     name: '',
@@ -123,7 +120,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
                     uniqueName: '',
                     type: ''
                 },
-                amount: 0
+                amount: (this.totalEntries === 0) ? this.transaction.amount : 0
             }
             this.totalEntries++;
         }
@@ -181,7 +178,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
             receiptTotal += parseFloat(receipt.amount);
         });
 
-        if (receiptTotal < this.transaction.amount) {
+        if (receiptTotal < (this.transaction.amount * 2)) {
             if (entry.type === "againstReference") {
                 let invoiceBalanceDue = parseFloat(this.pendingInvoiceList[entry.invoice.uniqueName].balanceDue.amountForAccount);
                 if (invoiceBalanceDue >= entry.amount) {
@@ -194,7 +191,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
             } else {
                 this.addNewEntry();
             }
-        } else if (receiptTotal > this.transaction.amount) {
+        } else if (receiptTotal > (this.transaction.amount * 2)) {
             this.toaster.clearAllToaster();
             this.toaster.errorToast(this.amountErrorMessage);
             this.isValidForm = false;
@@ -226,7 +223,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     public getTaxList(): void {
         this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                if(res.taxes) {
+                if (res.taxes) {
                     let taxList: IOption[] = [];
                     Object.keys(res.taxes).forEach(key => {
                         taxList.push({ label: res.taxes[key].name, value: res.taxes[key].uniqueName });
@@ -316,7 +313,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
                 uniqueName: event.value,
                 type: this.pendingInvoiceList[event.value].voucherType
             };
-            if(this.pendingInvoiceList[event.value].balanceDue.amountForAccount < entry.amount) {
+            if (this.pendingInvoiceList[event.value].balanceDue.amountForAccount < entry.amount) {
                 this.toaster.clearAllToaster();
                 this.toaster.errorToast(this.invoiceAmountErrorMessage);
             }
@@ -351,7 +348,6 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
 
         this.receiptEntries = receiptEntries;
         this.totalEntries--;
-        this.updateAdjustmentTypes("remove");
         this.validateEntries(false);
     }
 
@@ -376,7 +372,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         let invoiceAmountError = false;
 
         this.receiptEntries.forEach(receipt => {
-            if(isValid) {
+            if (isValid) {
                 if (parseFloat(receipt.amount) === 0 || isNaN(parseFloat(receipt.amount))) {
                     isValid = false;
                 } else {
@@ -394,7 +390,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         });
 
         if (isValid) {
-            if (receiptTotal !== this.transaction.amount) {
+            if (receiptTotal !== (this.transaction.amount * 2)) {
                 this.isValidForm = false;
 
                 if (showErrorMessage) {
@@ -411,7 +407,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
 
                 if (invoiceRequired) {
                     this.toaster.errorToast(this.invoiceErrorMessage);
-                } else if(invoiceAmountError) {
+                } else if (invoiceAmountError) {
                     this.toaster.errorToast(this.invoiceAmountErrorMessage);
                 } else {
                     this.toaster.errorToast(this.invalidAmountErrorMessage);
@@ -433,39 +429,15 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     /**
      * This will prepare the list of adjusment types
      *
-     * @param {string} event
+     * @param {any} entry
      * @returns {IOption[]}
      * @memberof ReceiptEntryModalComponent
      */
-    public prepareAdjustmentTypes(event: string): IOption[] {
-        this.receiptExists = false;
-        this.advanceReceiptExists = false;
-        this.receiptEntries.forEach(receipt => {
-            if (receipt.type === "receipt") {
-                if(this.advanceReceiptExists) {
-                    receipt.type = "advanceReceipt";
-                } else {
-                    this.receiptExists = true;
-                }
-            } else if (receipt.type === "advanceReceipt") {
-                if(this.receiptExists) {
-                    receipt.type = "receipt";
-                    receipt.tax = {
-                        name: '',
-                        uniqueName: '',
-                        percent: 0,
-                        value: 0
-                    };
-                } else {
-                    this.advanceReceiptExists = true;
-                }
-            }
-        });
-
+    public prepareAdjustmentTypes(index: number, entry?: any): IOption[] {
         let adjustmentTypesOptions: IOption[] = [];
 
         adjustmentTypes.map(type => {
-            if(this.totalEntries === 0 || (event === "remove" && this.totalEntries === 1) || (!this.receiptExists && !this.advanceReceiptExists) || (this.receiptExists && !this.advanceReceiptExists && type.value === "receipt") || (!this.receiptExists && this.advanceReceiptExists && type.value === "advanceReceipt") || type.value === "againstReference") {
+            if ((index === 0 && (type.value === "receipt" || type.value === "advanceReceipt")) || (index > 0 && type.value === "againstReference") || (entry && type.value === entry.type)) {
                 adjustmentTypesOptions.push({ label: type.label, value: type.value });
             }
         });
@@ -476,13 +448,14 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     /**
      * This will initiate update of adjustment types of all adjustments
      *
-     * @param {string} action
      * @memberof ReceiptEntryModalComponent
      */
-    public updateAdjustmentTypes(action: string): void {
-        if(this.receiptEntries && this.receiptEntries.length > 0) {
+    public updateAdjustmentTypes(): void {
+        if (this.receiptEntries && this.receiptEntries.length > 0) {
+            let loop = 0;
             this.receiptEntries.forEach(entry => {
-                entry.allowedTypes = this.prepareAdjustmentTypes(action);
+                entry.allowedTypes = this.prepareAdjustmentTypes(loop, entry);
+                loop++;
             });
         }
     }
@@ -495,21 +468,14 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
      * @memberof ReceiptEntryModalComponent
      */
     public onSelectAdjustmentType(event: any, entry: any): void {
-        if(event) {
-            if(event.value === "againstReference") {
-                entry.amount = 0;
-                this.isValidForm = false;
-            } else if(event.value === "receipt") {
-                entry.tax = {
-                    name: '',
-                    uniqueName: '',
-                    percent: 0,
-                    value: 0
-                };
-                this.forceClear$ = observableOf({ status: true });
-            }
+        if (event && event.value === "receipt") {
+            entry.tax = {
+                name: '',
+                uniqueName: '',
+                percent: 0,
+                value: 0
+            };
+            this.forceClear$ = observableOf({ status: true });
         }
-
-        this.updateAdjustmentTypes("update");
     }
 }
