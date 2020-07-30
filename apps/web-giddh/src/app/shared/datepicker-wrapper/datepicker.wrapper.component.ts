@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, ElementRef, Renderer2, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, Renderer2, Output, EventEmitter, OnChanges, SimpleChanges, HostListener } from '@angular/core';
 import * as _moment from 'moment';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'app-datepicker-wrapper',
@@ -43,7 +44,10 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
     @Input() public selectedRangeLabel: any;
     @Input() public dateFieldPosition: any;
 
-    constructor(private _renderer: Renderer2) {
+    public initialWindowOffset: number = 0;
+    public initialDatepickerYPosition: number = 0;
+
+    constructor(private _renderer: Renderer2, private generalService: GeneralService) {
 
     }
 
@@ -53,6 +57,8 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
      * @memberof DatepickerWrapperComponent
      */
     public ngOnInit(): void {
+        this.initialWindowOffset = window.pageYOffset;
+        this.initialDatepickerYPosition = this.dateFieldPosition.y;
         this.minDate = _.cloneDeep(this.inputStartDate);
         this.minDate.subtract(1, 'year').startOf('month').month(0); // default min date of previous year first month
         this.maxDate = _.cloneDeep(this.inputEndDate);
@@ -123,5 +129,15 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
                 this._renderer.setStyle(container, 'right', 'auto');
             }
         }
+    }
+
+    @HostListener('window:scroll', ['$event'])
+    public onWindowScroll(event: any): void {
+        if(window.pageYOffset > this.initialWindowOffset) {
+            this.dateFieldPosition.y = this.initialDatepickerYPosition - (window.pageYOffset - this.initialWindowOffset);
+        } else {
+            this.dateFieldPosition.y = this.initialDatepickerYPosition + (this.initialWindowOffset - window.pageYOffset);
+        }
+        this.setPosition();
     }
 }

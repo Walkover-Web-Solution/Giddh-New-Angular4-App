@@ -234,6 +234,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public initialScrollToIndexTop: number = 0;
     public initialScrollToIndexBottom: number = 0;
     public financialYearUpdated: boolean = false;
+    public allowMouseScroll: boolean = false;
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private scrollDispatcher: ScrollDispatcher) {
         this.choosedDate = new EventEmitter();
@@ -356,11 +357,15 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         });
 
         this.scrollTopSubject$.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((response) => {
-            this.onScroll(response);
+            if (this.allowMouseScroll) {
+                this.onScroll(response);
+            }
         });
 
         this.scrollBottomSubject$.pipe(debounceTime(200), takeUntil(this.destroyed$)).subscribe((response) => {
-            this.onScroll(response);
+            if (this.allowMouseScroll) {
+                this.onScroll(response);
+            }
         });
 
         if (this.inputStartDate) {
@@ -375,24 +380,24 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         this.initCalendar();
 
-        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll.measureScrollOffset('top') === 0), takeUntil(this.destroyed$)).subscribe(event => {
+        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll && this.virtualScroll.measureScrollOffset('top') === 0), takeUntil(this.destroyed$)).subscribe(event => {
             this.setCalendarToActiveMonth('start');
-            if (!this.isOnScrollActive) {
+            if (!this.isOnScrollActive && this.allowMouseScroll) {
                 this.isOnScrollActive = true;
                 this.scrollTopSubject$.next("top");
             }
         });
 
-        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll.measureScrollOffset('bottom') === 0), takeUntil(this.destroyed$)).subscribe(event => {
+        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll && this.virtualScroll.measureScrollOffset('bottom') === 0), takeUntil(this.destroyed$)).subscribe(event => {
             this.setCalendarToActiveMonth('end');
-            if (!this.isOnScrollActive) {
+            if (!this.isOnScrollActive && this.allowMouseScroll) {
                 this.isOnScrollActive = true;
                 this.scrollBottomSubject$.next("bottom");
             }
         });
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe(event => {
-            if (!this.isOnScrollActive) {
+            if (!this.isOnScrollActive && this.allowMouseScroll) {
                 if (this.currentScrollIndex < this.previousScrollIndex) {
                     this.isOnScrollActive = true;
                     this.scrollTopSubject$.next("top");
@@ -412,8 +417,14 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             try {
                 if (this.initialScrollToIndexTop < this.initialScrollToIndexBottom) {
                     this.virtualScroll.scrollToIndex(this.initialScrollToIndexTop);
+                    if (this.calendarMonths[this.initialScrollToIndexTop]) {
+                        this.setActiveMonth(this.calendarMonths[this.initialScrollToIndexTop], 'start');
+                    }
                 } else {
                     this.virtualScroll.scrollToIndex(this.initialScrollToIndexBottom);
+                    if (this.calendarMonths[this.initialScrollToIndexBottom]) {
+                        this.setActiveMonth(this.calendarMonths[this.initialScrollToIndexBottom], 'end');
+                    }
                 }
             } catch (error) {
 
@@ -1199,15 +1210,17 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public mouseUp(e: MouseWheelEvent): void {
-        if (e.deltaY < 0) {
-            if (!this.isOnScrollActive) {
-                this.isOnScrollActive = true;
-                this.scrollTopSubject$.next("top");
-            }
-        } else {
-            if (!this.isOnScrollActive) {
-                this.isOnScrollActive = true;
-                this.scrollBottomSubject$.next("bottom");
+        if (this.allowMouseScroll) {
+            if (e.deltaY < 0) {
+                if (!this.isOnScrollActive) {
+                    this.isOnScrollActive = true;
+                    this.scrollTopSubject$.next("top");
+                }
+            } else {
+                if (!this.isOnScrollActive) {
+                    this.isOnScrollActive = true;
+                    this.scrollBottomSubject$.next("bottom");
+                }
             }
         }
     }
@@ -1981,7 +1994,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 this.renderedCalendarMonths = [];
             }
 
-            if(this.checkMinMaxDate(this.calendarVariables.start)) {
+            if (this.checkMinMaxDate(this.calendarVariables.start)) {
                 if (this.activeMonthHover === false) {
                     this.activeMonth = this.calendarVariables.start;
                 }
@@ -2015,7 +2028,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
 
         if (side === "end") {
-            if(this.checkMinMaxDate(this.calendarVariables.end)) {
+            if (this.checkMinMaxDate(this.calendarVariables.end)) {
                 if (this.activeMonthHover === false) {
                     this.activeMonth = this.calendarVariables.end;
                 }
@@ -2126,6 +2139,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public openMobileDatepicker(): void {
+        this.allowMouseScroll = true;
         this.openMobileDatepickerPopup = true;
         document.querySelector('body').classList.add('hide-scroll-body');
     }
@@ -2150,7 +2164,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public restrictBodyScroll(): void {
-        document.querySelector('body').classList.add('restrict-body-scroll');
+        document.querySelector('body').classList.add('prevent-body-scroll');
+        this.allowMouseScroll = true;
     }
 
     /**
@@ -2159,7 +2174,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public allowBodyScroll(): void {
-        document.querySelector('body').classList.remove('restrict-body-scroll');
+        document.querySelector('body').classList.remove('prevent-body-scroll');
+        this.allowMouseScroll = false;
     }
 
     /**
