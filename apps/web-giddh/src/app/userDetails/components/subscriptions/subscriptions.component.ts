@@ -98,11 +98,13 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
             if (res && res.status === "success") {
                 if (!res.body || !res.body[0]) {
                     this.isPlanShow = true;
+                    this.isLoading = false;
                 } else {
                     this.store.dispatch(this._subscriptionsActions.SubscribedCompaniesResponse(res));
                 }
             } else {
                 this.isPlanShow = true;
+                this.isLoading = false;
             }
         });
 
