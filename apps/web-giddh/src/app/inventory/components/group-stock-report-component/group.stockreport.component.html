@@ -482,19 +482,19 @@
                         </td>
                         <td class="bdrB bdrR text-right" data-title="Value">{{txn.openingBalance?.amount}}</td>
 
-                        <td data-title="inwards -" class="td-mobile-head" *ngIf="!isMobileScreen || (isMobileScreen && showAllColumns)"></td>
+                        <td data-title="inwards -" class="td-mobile-head" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)"></td>
 
-                        <td class="bdrB bdrR text-right brNone" data-title="Qty" *ngIf="!isMobileScreen || (isMobileScreen && showAllColumns)">
+                        <td class="bdrB bdrR text-right brNone" data-title="Qty" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">
                             <span [ngClass]="{'text-danger': txn.inwards?.quantity<0 }">{{txn.inwards?.quantity}}</span>
                         </td>
-                        <td class="bdrB bdrR text-right" data-title="Value" *ngIf="!isMobileScreen || (isMobileScreen && showAllColumns)">{{txn.inwards?.amount}}</td>
+                        <td class="bdrB bdrR text-right" data-title="Value" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">{{txn.inwards?.amount}}</td>
 
-                        <td data-title="Outwards -" class="td-mobile-head" *ngIf="!isMobileScreen || (isMobileScreen && showAllColumns)"></td>
+                        <td data-title="Outwards -" class="td-mobile-head" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)"></td>
 
-                        <td class="bdrB bdrR text-right brNone" data-title="Qty" *ngIf="!isMobileScreen || (isMobileScreen && showAllColumns)">
+                        <td class="bdrB bdrR text-right brNone" data-title="Qty" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">
                             {{txn.outwards?.quantity}}
                         </td>
-                        <td class="bdrB bdrR text-right" data-title="Value" *ngIf="!isMobileScreen || (isMobileScreen && showAllColumns)">{{txn.outwards?.amount}}</td>
+                        <td class="bdrB bdrR text-right" data-title="Value" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">{{txn.outwards?.amount}}</td>
 
                         <td data-title="Closing stock -" class="td-mobile-head"></td>
 
@@ -507,10 +507,10 @@
                     </ng-container>
 
                     <ng-container *ngIf="isMobileScreen">
-                            <td [attr.colspan]="showAllColumns ? 16 : 10" class="more-table">
-                                <a href="javascript:;" (click)="showAllColumns = !showAllColumns;">{{showAllColumns ? 'Less' : 'More'}}</a>
-                            </td>    
-                        </ng-container>
+                        <td [attr.colspan]="txn.showAllColumns ? 16 : 10" class="more-table">
+                            <a href="javascript:;" (click)="txn.showAllColumns = !txn.showAllColumns;">{{txn.showAllColumns ? 'Less' : 'More'}}</a>
+                        </td>    
+                    </ng-container>
                 </tr>
             </tbody>
 
