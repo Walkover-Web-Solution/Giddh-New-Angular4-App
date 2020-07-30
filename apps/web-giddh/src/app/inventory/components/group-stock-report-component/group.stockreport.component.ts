@@ -216,7 +216,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public branchTransferMode: string = '';
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
-    public showAllColumns: boolean = false;
 
     constructor(
         private _generalService: GeneralService,
