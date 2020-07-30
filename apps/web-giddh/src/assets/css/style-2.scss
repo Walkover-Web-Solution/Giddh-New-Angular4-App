@@ -9361,7 +9361,25 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
-
+.on-setting-page .nav-left-bar.open{
+    left: -215px !important;
+    display: none !important;
+}
+.setting-sidebar-open .nav-left-bar{
+    display: none;
+}
+.menu_open aside-setting.setting-sidebar {
+    left: -215px;
+}
+.on-setting-page aside-setting.setting-sidebar{
+    left: 0;
+}
+.setting-sidebar-open #content_wrapper.menu_open {
+    padding-left: 0;
+}
+.setting-sidebar-open .desktop-header.menu_open {
+    padding-left: 0;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
