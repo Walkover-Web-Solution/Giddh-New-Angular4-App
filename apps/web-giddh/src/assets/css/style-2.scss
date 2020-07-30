@@ -9366,6 +9366,7 @@ span#HW_badge_cont:nth-child(3) {
     display: none;
 }
 .menu_open aside-setting.setting-sidebar {
+<<<<<<< HEAD
     left: 0 !important;
 }
 .on-setting-page aside-setting.setting-sidebar{
@@ -9382,6 +9383,19 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 
+=======
+    left: -215px;
+}
+.on-setting-page aside-setting.setting-sidebar{
+    left: 0;
+}
+.setting-sidebar-open #content_wrapper.menu_open {
+    padding-left: 0;
+}
+.setting-sidebar-open .desktop-header.menu_open {
+    padding-left: 0;
+}
+>>>>>>> 88469c309... shalinee | stage | GIDK-266 | setting sidebar correct
 /* responsive */
 
 @media (max-width: 1440px) {
