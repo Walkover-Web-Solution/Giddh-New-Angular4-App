@@ -1,10 +1,12 @@
 @import "../../../../../assets/css/color.scss";
-.liabilities-assets {
-    max-width: 760px;
-    width: 100%;
-}
-.trial-balance {
-    span {
+.bs-table-grid {
+    th {
+        border: none !important;
+        border-bottom: 1px solid $gainsboro !important;
+        padding: 13px 8px 14px 0 !important;
+        &:first-child {
+            padding: 0 !important;
+        }
         i.glyphicon-search {
             position: relative;
             z-index: 1;
@@ -15,9 +17,9 @@
             display: flex;
             align-items: center;
         }
-    }
-    input {
-        height: 47px;
+        input {
+            height: 47px;
+        }
     }
 }
 .tb-wrapper {
