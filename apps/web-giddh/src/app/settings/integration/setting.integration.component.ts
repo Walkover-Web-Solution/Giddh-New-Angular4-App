@@ -1314,7 +1314,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      *
      * @memberof SettingIntegrationComponent
      */
-    public loadECommerceData(): void {
+    public loadEcommerceData(): void {
         this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
     }
 
@@ -1367,7 +1367,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.loadCollectionData();
                 break;
             case SettingsIntegrationTab.ECommerce:
-                this.loadECommerceData();
+                this.loadEcommerceData();
                 break;
             case SettingsIntegrationTab.Payment:
                 this.loadPaymentData();
