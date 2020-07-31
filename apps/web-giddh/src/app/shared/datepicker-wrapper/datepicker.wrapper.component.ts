@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, Renderer2, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, Renderer2, Output, EventEmitter, OnChanges, SimpleChanges, HostListener } from '@angular/core';
 import * as _moment from 'moment';
 
 @Component({
@@ -41,6 +41,13 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
     @Input() public locale: any;
     @Input() public selectedRangeLabel: any;
     @Input() public dateFieldPosition: any;
+    /* This will take input if datepicker position needs to be updated on window scroll or not */
+    @Input() public updatePosition: boolean = true;
+
+    /* This will hold the initial Y offset of window */
+    public initialWindowOffset: number = 0;
+    /* This will hold the initial Y offset of datepicker */
+    public initialDatepickerYPosition: number = 0;
 
     constructor(private _renderer: Renderer2) {
 
@@ -52,6 +59,12 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
      * @memberof DatepickerWrapperComponent
      */
     public ngOnInit(): void {
+        this.initialWindowOffset = window.pageYOffset;
+        this.initialDatepickerYPosition = this.dateFieldPosition.y;
+        this.minDate = _.cloneDeep(this.inputStartDate);
+        this.minDate.subtract(1, 'year').startOf('month').month(0); // default min date of previous year first month
+        this.maxDate = _.cloneDeep(this.inputEndDate);
+        this.maxDate.add(1, 'year').endOf('month').month(11); // default max date of next year last month
         this.setPosition();
     }
 
@@ -65,9 +78,13 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
         for (let change in changes) {
             if (change === "inputStartDate" && changes[change].currentValue) {
                 this.inputStartDate = changes[change].currentValue;
+                this.minDate = _.cloneDeep(this.inputStartDate);
+                this.minDate.subtract(1, 'year').startOf('month').month(0); // default min date of previous year first month
             }
             if (change === "inputEndDate" && changes[change].currentValue) {
                 this.inputEndDate = changes[change].currentValue;
+                this.maxDate = _.cloneDeep(this.inputEndDate);
+                this.maxDate.add(1, 'year').endOf('month').month(11); // default max date of next year last month
             }
         }
     }
@@ -113,6 +130,24 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
                 this._renderer.setStyle(container, 'left', positionX + 'px');
                 this._renderer.setStyle(container, 'right', 'auto');
             }
+        }
+    }
+
+    /**
+     * This will readjust the datepicker position on window scroll
+     *
+     * @param {*} event
+     * @memberof DatepickerWrapperComponent
+     */
+    @HostListener('window:scroll', ['$event'])
+    public onWindowScroll(event: any): void {
+        if(this.updatePosition) {
+            if(window.pageYOffset > this.initialWindowOffset) {
+                this.dateFieldPosition.y = this.initialDatepickerYPosition - (window.pageYOffset - this.initialWindowOffset);
+            } else {
+                this.dateFieldPosition.y = this.initialDatepickerYPosition + (this.initialWindowOffset - window.pageYOffset);
+            }
+            this.setPosition();
         }
     }
 }
