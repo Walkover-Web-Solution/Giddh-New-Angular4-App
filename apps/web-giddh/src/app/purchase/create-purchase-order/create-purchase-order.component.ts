@@ -392,6 +392,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
         });
     }
 
+    /**
+     * This will update the selected vendor details
+     *
+     * @param {*} accountDetails
+     * @memberof CreatePurchaseOrderComponent
+     */
     public updateVendorDetails(accountDetails: any): void {
         console.log(accountDetails);
         if (accountDetails) {
@@ -418,38 +424,42 @@ export class CreatePurchaseOrderComponent implements OnInit {
             }
 
             if (accountDetails.addresses && accountDetails.addresses.length > 0) {
-                this.purchaseOrder.account.billingDetails.address = [];
-                this.purchaseOrder.account.billingDetails.address.push(accountDetails.addresses[0].address);
-                this.purchaseOrder.account.billingDetails.gstNumber = accountDetails.addresses[0].gstNumber;
-                if (accountDetails.addresses[0].state) {
-                    this.purchaseOrder.account.billingDetails.state.name = accountDetails.addresses[0].state.name;
-                    this.purchaseOrder.account.billingDetails.state.code = (accountDetails.addresses[0].state) ? (accountDetails.addresses[0].state.code) ? accountDetails.addresses[0].state.code : accountDetails.addresses[0].state.stateGstCode : accountDetails.addresses[0].stateCode;
-                    this.purchaseOrder.account.billingDetails.stateCode = this.purchaseOrder.account.billingDetails.state.code;
-                    this.purchaseOrder.account.billingDetails.stateName = accountDetails.addresses[0].state.name;
-                } else {
-                    this.purchaseOrder.account.billingDetails.state.name = "";
-                    this.purchaseOrder.account.billingDetails.state.code = "";
-                    this.purchaseOrder.account.billingDetails.stateCode = "";
-                    this.purchaseOrder.account.billingDetails.stateName = "";
-                }
+                accountDetails.addresses.forEach(defaultAddress => {
+                    if(defaultAddress && defaultAddress.isDefault) {
+                        this.purchaseOrder.account.billingDetails.address = [];
+                        this.purchaseOrder.account.billingDetails.address.push(defaultAddress.address);
+                        this.purchaseOrder.account.billingDetails.gstNumber = defaultAddress.gstNumber;
+                        if (defaultAddress.state) {
+                            this.purchaseOrder.account.billingDetails.state.name = defaultAddress.state.name;
+                            this.purchaseOrder.account.billingDetails.state.code = (defaultAddress.state) ? (defaultAddress.state.code) ? defaultAddress.state.code : defaultAddress.state.stateGstCode : defaultAddress.stateCode;
+                            this.purchaseOrder.account.billingDetails.stateCode = this.purchaseOrder.account.billingDetails.state.code;
+                            this.purchaseOrder.account.billingDetails.stateName = defaultAddress.state.name;
+                        } else {
+                            this.purchaseOrder.account.billingDetails.state.name = "";
+                            this.purchaseOrder.account.billingDetails.state.code = "";
+                            this.purchaseOrder.account.billingDetails.stateCode = "";
+                            this.purchaseOrder.account.billingDetails.stateName = "";
+                        }
 
-                this.purchaseOrder.account.billingDetails.panNumber = "";
+                        this.purchaseOrder.account.billingDetails.panNumber = "";
 
-                this.purchaseOrder.account.shippingDetails.address = [];
-                this.purchaseOrder.account.shippingDetails.address.push(accountDetails.addresses[0].address);
-                this.purchaseOrder.account.shippingDetails.gstNumber = accountDetails.addresses[0].gstNumber;
-                if (accountDetails.addresses[0].state) {
-                    this.purchaseOrder.account.shippingDetails.state.name = accountDetails.addresses[0].state.name;
-                    this.purchaseOrder.account.shippingDetails.state.code = (accountDetails.addresses[0].state) ? (accountDetails.addresses[0].state.code) ? accountDetails.addresses[0].state.code : accountDetails.addresses[0].state.stateGstCode : accountDetails.addresses[0].stateCode;
-                    this.purchaseOrder.account.shippingDetails.stateCode = this.purchaseOrder.account.shippingDetails.state.code;
-                    this.purchaseOrder.account.shippingDetails.stateName = accountDetails.addresses[0].state.name;
-                } else {
-                    this.purchaseOrder.account.shippingDetails.state.name = "";
-                    this.purchaseOrder.account.shippingDetails.state.code = "";
-                    this.purchaseOrder.account.shippingDetails.stateCode = "";
-                    this.purchaseOrder.account.shippingDetails.stateName = "";
-                }
-                this.purchaseOrder.account.shippingDetails.panNumber = "";
+                        this.purchaseOrder.account.shippingDetails.address = [];
+                        this.purchaseOrder.account.shippingDetails.address.push(defaultAddress.address);
+                        this.purchaseOrder.account.shippingDetails.gstNumber = defaultAddress.gstNumber;
+                        if (defaultAddress.state) {
+                            this.purchaseOrder.account.shippingDetails.state.name = defaultAddress.state.name;
+                            this.purchaseOrder.account.shippingDetails.state.code = (defaultAddress.state) ? (defaultAddress.state.code) ? defaultAddress.state.code : defaultAddress.state.stateGstCode : defaultAddress.stateCode;
+                            this.purchaseOrder.account.shippingDetails.stateCode = this.purchaseOrder.account.shippingDetails.state.code;
+                            this.purchaseOrder.account.shippingDetails.stateName = defaultAddress.state.name;
+                        } else {
+                            this.purchaseOrder.account.shippingDetails.state.name = "";
+                            this.purchaseOrder.account.shippingDetails.state.code = "";
+                            this.purchaseOrder.account.shippingDetails.stateCode = "";
+                            this.purchaseOrder.account.shippingDetails.stateName = "";
+                        }
+                        this.purchaseOrder.account.shippingDetails.panNumber = "";
+                    }
+                });
             }
         }
     }
@@ -793,7 +803,6 @@ export class CreatePurchaseOrderComponent implements OnInit {
             if (selectedState) {
                 this.purchaseOrder.account[type].stateCode = selectedState.value;
                 this.purchaseOrder.account[type].state.code = selectedState.value;
-
             } else {
                 this.purchaseOrder.account[type].stateCode = null;
                 this.purchaseOrder.account[type].state.code = null;
