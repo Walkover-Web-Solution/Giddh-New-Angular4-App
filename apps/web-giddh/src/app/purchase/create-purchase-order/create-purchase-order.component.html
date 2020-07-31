@@ -4,7 +4,7 @@
         <div class="cube2"></div>
     </div>
 </div>
-<form #invoiceForm="ngForm" novalidate autocomplete="off"
+<form #poForm="ngForm" novalidate autocomplete="off"
     [ngClass]="{'create-purchase-order-form': true, 'customerInvoiceForm' : !purchaseOrder.voucherDetails.customerName, 'forMultiCurrency' : isMulticurrencyAccount  } "
     *ngIf="!showLoader">
     <div class="clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="addAccountFromShortcut()">
@@ -23,7 +23,7 @@
                                 <div class="col-sm-7 select-customer-name">
                                     <div class="clearfix d-flex flex-column">
                                         <div class="d-flex flex-column">
-                                            <sales-sh-select style="width:62.7%; float: left;" name="vendor"
+                                            <sales-sh-select #vendorNameDropDown style="width:62.7%; float: left;" name="vendor"
                                                 [options]="customerAcList$ | async"
                                                 [(ngModel)]="purchaseOrder.account.uniqueName"
                                                 [customFilter]="customMoveGroupFilter"
@@ -422,7 +422,7 @@
                 *ngFor="let entry of purchaseOrder.entries; let entryIdx = index; let first = first; let last = last;"
                 (clickOutside)="handleOutsideClick()" [exclude]="'.entriesTr'">
                 <ng-container *ngFor="let transaction of entry.transactions;">
-                    <tr (click)="setActiveIndx(entryIdx);$event.stopPropagation()" [hidden]="activeIndx === entryIdx"
+                    <tr (click)="setActiveIndex(entryIdx);$event.stopPropagation()" [hidden]="activeIndx === entryIdx"
                         class="entriesTr set-active"
                         [ngClass]="{'isOtherTax' : entry.isOtherTaxApplicable && isMulticurrencyAccount}">
                         <td>{{ entryIdx + 1 }}</td>
@@ -1178,7 +1178,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="edit-card" (click)="setActiveIndx(entryIdx);$event.stopPropagation()">
+                    <div class="edit-card" (click)="setActiveIndex(entryIdx);$event.stopPropagation()">
                         <img src="assets/images/edit-pencilicon.svg">
                     </div>
                     <div class="del-card" (click)="removeTransaction(entryIdx)">
@@ -1733,11 +1733,11 @@
 
             <!-- region generate mode -->
             <div class="pull-right pr update-mode">
-                <button type="button" class="btn btn-danger d-inline-block v-align-middle">Clear</button>
+                <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="resetForm(poForm)">Clear</button>
 
                 <!-- region purchase invoice -->
                 <span class="d-inline-block v-align-middle">
-                    <button type="button" class="btn btn-default" (click)="onSubmitForm()">Save</button>
+                    <button type="button" class="btn btn-default" (click)="savePurchaseOrder()">Save</button>
                 </span>
                 <!-- endregion -->
 

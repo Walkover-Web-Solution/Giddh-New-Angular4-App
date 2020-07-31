@@ -101,6 +101,7 @@ const THEAD_ARR_READONLY = [
 })
 
 export class CreatePurchaseOrderComponent implements OnInit {
+    @ViewChild('vendorNameDropDown') public vendorNameDropDown: ShSelectComponent;
     /** Billing state instance */
     @ViewChild('vendorBillingState') vendorBillingState: ElementRef;
     /** Shipping state instance */
@@ -111,7 +112,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
     @ViewChild('companyShippingState') companyShippingState: ElementRef;
     /** RCM popup instance */
     @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
-    @ViewChild('invoiceForm', { read: NgForm }) public invoiceForm: NgForm;
+    @ViewChild('poForm', { read: NgForm }) public poForm: NgForm;
     @ViewChild('bulkItemsModal') public bulkItemsModal: ModalDirective;
 
     @ViewChildren(BsDatepickerDirective) public datePickers: QueryList<BsDatepickerDirective>;
@@ -133,7 +134,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
     private selectedAccountDetails$: Observable<AccountResponseV2>;
     public vendorCountry: any = '';
     public autoFillVendorShipping: boolean = true;
-    public autoFillCompanyShipping: boolean = true;
+    public autoFillCompanyShipping: boolean = false;
     public statesSource: IOption[] = [];
     public companyStatesSource: IOption[] = [];
     public showLoader: boolean = true;
@@ -204,6 +205,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
     public defaultWarehouse: string;
     /** Stores the unique name of selected warehouse */
     public selectedWarehouse: string;
+    public companyAddresses: any[] = [];
 
     constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private cdr: ChangeDetectorRef) {
         this.getInventorySettings();
@@ -266,20 +268,8 @@ export class CreatePurchaseOrderComponent implements OnInit {
                 this.companyCurrency = profile.baseCurrency || 'INR';
 
                 if (profile.addresses && profile.addresses.length > 0) {
-                    let companyAddresses = profile.addresses;
-
-                    companyAddresses.forEach(address => {
-                        if (address.isDefault === true) {
-                            this.purchaseOrder.company.billingDetails.address = [];
-                            this.purchaseOrder.company.billingDetails.address.push(address.address);
-                            this.purchaseOrder.company.billingDetails.state.code = address.stateCode;
-                            this.purchaseOrder.company.billingDetails.state.name = address.stateName;
-                            this.purchaseOrder.company.billingDetails.stateCode = address.stateCode;
-                            this.purchaseOrder.company.billingDetails.stateName = address.stateName;
-                            this.purchaseOrder.company.billingDetails.gstNumber = address.taxNumber;
-                            this.purchaseOrder.company.shippingDetails.gstNumber = address.taxNumber;
-                        }
-                    });
+                    this.companyAddresses = profile.addresses;
+                    this.fillCompanyAddress();
                 }
 
                 if (profile.countryV2) {
@@ -425,7 +415,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
 
             if (accountDetails.addresses && accountDetails.addresses.length > 0) {
                 accountDetails.addresses.forEach(defaultAddress => {
-                    if(defaultAddress && defaultAddress.isDefault) {
+                    if (defaultAddress && defaultAddress.isDefault) {
                         this.purchaseOrder.account.billingDetails.address = [];
                         this.purchaseOrder.account.billingDetails.address.push(defaultAddress.address);
                         this.purchaseOrder.account.billingDetails.gstNumber = defaultAddress.gstNumber;
@@ -540,7 +530,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
-    public resetVendor(event: any): void {
+    public resetVendor(event?: any): void {
         if (event) {
             if (!event.target.value) {
                 this.purchaseOrder.voucherDetails.customerName = null;
@@ -721,10 +711,22 @@ export class CreatePurchaseOrderComponent implements OnInit {
         });
     }
 
+    /**
+     * Callback for warehouse
+     *
+     * @param {*} warehouse
+     * @memberof CreatePurchaseOrderComponent
+     */
     public onSelectWarehouse(warehouse: any): void {
         this.autoFillWarehouseAddress(warehouse);
     }
 
+    /**
+     * This will autofill warehouse address
+     *
+     * @param {*} warehouse
+     * @memberof CreatePurchaseOrderComponent
+     */
     public autoFillWarehouseAddress(warehouse: any): void {
         if (warehouse) {
             this.purchaseOrder.company.shippingDetails.address = [];
@@ -742,12 +744,23 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
+    /**
+     * This will open account aside pan
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
     public addNewAccount(): void {
         this.selectedVendorForDetails = null;
         this.isVendorSelected = false;
         this.toggleAccountAsidePane();
     }
 
+    /**
+     * This will toggle account sidebar
+     *
+     * @param {*} [event]
+     * @memberof CreatePurchaseOrderComponent
+     */
     public toggleAccountAsidePane(event?): void {
         if (event) {
             event.preventDefault();
@@ -756,6 +769,11 @@ export class CreatePurchaseOrderComponent implements OnInit {
         this.toggleBodyClass();
     }
 
+    /**
+     * This will toggle fixed class in body
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
     public toggleBodyClass(): void {
         if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in' || this.asideMenuStateForRecurringEntry === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
             // don't show loader when aside menu is opened
@@ -781,10 +799,22 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
+    /**
+     * Callback for add account
+     *
+     * @param {AddAccountRequest} item
+     * @memberof CreatePurchaseOrderComponent
+     */
     public addNewSidebarAccount(item: AddAccountRequest): void {
         this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
     }
 
+    /**
+     * Callback for account update
+     *
+     * @param {UpdateAccountRequest} item
+     * @memberof CreatePurchaseOrderComponent
+     */
     public updateSidebarAccount(item: UpdateAccountRequest): void {
         this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item));
     }
@@ -796,7 +826,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
      * @param {SalesShSelectComponent} statesEle state input box
      * @memberof CreatePurchaseOrderComponent
      */
-    public getStateCode(type: string, statesEle: SalesShSelectComponent) {
+    public getStateCode(type: string, statesEle: SalesShSelectComponent): void {
         let gstVal = _.cloneDeep(this.purchaseOrder.account[type].gstNumber).toString();
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.statesSource.find(item => item.stateGstCode === gstVal.substring(0, 2));
@@ -824,7 +854,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
      * @param {string} fieldName Field name for which the value is validated
      * @memberof CreatePurchaseOrderComponent
      */
-    public checkGstNumValidation(value, fieldName: string = '') {
+    public checkGstNumValidation(value, fieldName: string = ''): void {
         this.isValidGstinNumber = false;
         if (value) {
             if (this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
@@ -848,6 +878,14 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
+    /**
+     * This will show/hide GST/TRN based on country
+     *
+     * @private
+     * @param {string} code
+     * @param {string} name
+     * @memberof CreatePurchaseOrderComponent
+     */
     private showGstAndTrnUsingCountry(code: string, name: string): void {
         if (this.selectedCompany.country === name) {
             if (name === 'India') {
@@ -871,13 +909,22 @@ export class CreatePurchaseOrderComponent implements OnInit {
      * @param {*} countryCode
      * @memberof CreatePurchaseOrderComponent
      */
-    public getOnboardingForm(countryCode) {
+    public getOnboardingForm(countryCode): void {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
         onboardingFormRequest.country = countryCode;
         this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
     }
 
+    /**
+     * Callback for account selection
+     *
+     * @param {*} selectedAcc
+     * @param {SalesTransactionItemClass} txn
+     * @param {SalesEntryClass} entry
+     * @returns {*}
+     * @memberof CreatePurchaseOrderComponent
+     */
     public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass): any {
         if (selectedAcc.value && selectedAcc.additional.uniqueName) {
 
@@ -1023,11 +1070,35 @@ export class CreatePurchaseOrderComponent implements OnInit {
     }
 
     public onNoResultsClicked(index: any): void {
-
+        // if (_.isUndefined(index)) {
+        //     this.getAllFlattenAc();
+        // } else {
+        //     this.innerEntryIdx = index;
+        // }
+        // this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
+        // this.toggleBodyClass();
     }
 
+    /**
+     * This will set the transaction values to null on clear sales account
+     *
+     * @param {*} transaction
+     * @memberof CreatePurchaseOrderComponent
+     */
     public onClearSalesAccount(transaction: any): void {
-
+        transaction.applicableTaxes = [];
+        transaction.quantity = null;
+        transaction.isStockTxn = false;
+        transaction.stockUnit = null;
+        transaction.stockDetails = null;
+        transaction.stockList = [];
+        transaction.rate = null;
+        transaction.quantity = null;
+        transaction.amount = null;
+        transaction.taxableValue = null;
+        transaction.sacNumber = null;
+        transaction.hsnNumber = null;
+        transaction.sacNumberExists = false;
     }
 
     /**
@@ -1044,9 +1115,10 @@ export class CreatePurchaseOrderComponent implements OnInit {
     }
 
     /**
-     * toggle hsn/sac dropdown
-     * and hide all open date-pickers because it's overlapping
-     * hsn/sac dropdown
+     * Toggle hsn/sac dropdown and hide all open date-pickers because it's overlapping hsn/sac dropdown
+     *
+     * @param {*} transaction
+     * @memberof CreatePurchaseOrderComponent
      */
     public toggleHsnSacDropDown(transaction: any): void {
         if (this.datePickers && this.datePickers.length) {
@@ -1091,7 +1163,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
      *
      * @private
      * @returns {boolean} True, if item entries contains stock item
-     * @memberof ProformaInvoiceComponent
+     * @memberof CreatePurchaseOrderComponent
      */
     private isStockItemPresent(): boolean {
         const entries = this.purchaseOrder.entries;
@@ -1123,7 +1195,14 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
-    public prepareUnitArr(unitArr) {
+    /**
+     * This will prepare the stock units
+     *
+     * @param {*} unitArr
+     * @returns {*}
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public prepareUnitArr(unitArr): any {
         let unitArray = [];
         _.forEach(unitArr, (item) => {
             unitArray.push({ id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate });
@@ -1131,11 +1210,24 @@ export class CreatePurchaseOrderComponent implements OnInit {
         return unitArray;
     }
 
-    public calculateStockEntryAmount(trx: SalesTransactionItemClass) {
+    /**
+     * This will calculate stock entry amount
+     *
+     * @param {SalesTransactionItemClass} trx
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public calculateStockEntryAmount(trx: SalesTransactionItemClass): void {
         trx.amount = Number(trx.quantity) * Number(trx.rate);
     }
 
-    public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
+    /**
+     * This will calculate discount/tax/total
+     *
+     * @param {SalesEntryClass} entry
+     * @param {SalesTransactionItemClass} trx
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass): void {
         trx.amount = Number(trx.amount);
         if (trx.isStockTxn) {
             trx.rate = giddhRoundOff((trx.amount / trx.quantity), this.ratePrecision);
@@ -1152,7 +1244,15 @@ export class CreatePurchaseOrderComponent implements OnInit {
         this.calculateTcsTdsTotal();
     }
 
-    public calculateTotalDiscountOfEntry(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true) {
+    /**
+     * This will calculate discount of entry
+     *
+     * @param {SalesEntryClass} entry
+     * @param {SalesTransactionItemClass} trx
+     * @param {boolean} [calculateEntryTotal=true]
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public calculateTotalDiscountOfEntry(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true): void {
         let percentageListTotal = entry.discounts.filter(f => f.isActive)
             .filter(s => s.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
@@ -1180,7 +1280,15 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
-    public calculateEntryTaxSum(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true) {
+    /**
+     * This will calculate entry tax sum
+     *
+     * @param {SalesEntryClass} entry
+     * @param {SalesTransactionItemClass} trx
+     * @param {boolean} [calculateEntryTotal=true]
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public calculateEntryTaxSum(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true): void {
         let taxPercentage: number = 0;
         let cessPercentage: number = 0;
         entry.taxes.filter(f => f.isChecked).forEach(tax => {
@@ -1207,7 +1315,14 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
-    public calculateEntryTotal(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
+    /**
+     * This will calculate entry total
+     *
+     * @param {SalesEntryClass} entry
+     * @param {SalesTransactionItemClass} trx
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public calculateEntryTotal(entry: SalesEntryClass, trx: SalesTransactionItemClass): void {
         if (this.excludeTax) {
             trx.total = giddhRoundOff((trx.amount - entry.discountSum), 2);
         } else {
@@ -1225,7 +1340,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
      *
      * @param {SalesEntryClass} entry Entry value
      * @param {SalesTransactionItemClass} transaction Current transaction
-     * @memberof ProformaInvoiceComponent
+     * @memberof CreatePurchaseOrderComponent
      */
     public calculateTransactionValueInclusively(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         // Calculate discount
@@ -1287,24 +1402,34 @@ export class CreatePurchaseOrderComponent implements OnInit {
         this.calculateTcsTdsTotal();
     }
 
-    public calculateTotalDiscount() {
+    /**
+     * This will calculate total discount
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public calculateTotalDiscount(): void {
         let discount = 0;
-        this.purchaseOrder.entries.forEach(f => {
-            discount += f.discountSum;
+        this.purchaseOrder.entries.forEach(entry => {
+            discount += entry.discountSum;
         });
         this.purchaseOrder.voucherDetails.totalDiscount = discount;
     }
 
-    public calculateTotalTaxSum() {
+    /**
+     * This will calculate tax sum
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public calculateTotalTaxSum(): void {
         let taxes = 0;
         let cess = 0;
 
-        this.purchaseOrder.entries.forEach(f => {
-            taxes += f.taxSum;
+        this.purchaseOrder.entries.forEach(entry => {
+            taxes += entry.taxSum;
         });
 
-        this.purchaseOrder.entries.forEach(f => {
-            cess += f.cessSum;
+        this.purchaseOrder.entries.forEach(entry => {
+            cess += entry.cessSum;
         });
 
         this.purchaseOrder.voucherDetails.gstTaxesTotal = taxes;
@@ -1312,7 +1437,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
         this.purchaseOrder.voucherDetails.totalTaxableValue = this.purchaseOrder.voucherDetails.subTotal - this.purchaseOrder.voucherDetails.totalDiscount;
     }
 
-    public calculateTcsTdsTotal() {
+    /**
+     * This will calculate tcs/tds
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public calculateTcsTdsTotal(): void {
         let tcsSum: number = 0;
         let tdsSum: number = 0;
 
@@ -1325,7 +1455,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
         this.purchaseOrder.voucherDetails.tdsTotal = tdsSum;
     }
 
-    public calculateSubTotal() {
+    /**
+     * This will calculate sub total
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public calculateSubTotal(): void {
         let count: number = 0;
         this.purchaseOrder.entries.forEach(f => {
             count += f.transactions.reduce((pv, cv) => {
@@ -1339,7 +1474,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
         this.purchaseOrder.voucherDetails.subTotal = count;
     }
 
-    public calculateGrandTotal() {
+    /**
+     * This will calculate grand total
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public calculateGrandTotal(): void {
 
         let calculatedGrandTotal = 0;
         calculatedGrandTotal = this.purchaseOrder.voucherDetails.grandTotal = this.purchaseOrder.entries.reduce((pv, cv) => {
@@ -1366,7 +1506,15 @@ export class CreatePurchaseOrderComponent implements OnInit {
         this.grandTotalMulDum = calculatedGrandTotal * this.exchangeRate;
     }
 
-    public calculateOtherTaxes(modal: SalesOtherTaxesModal, entryObj?: SalesEntryClass) {
+    /**
+     * This will calculate other taxes
+     *
+     * @param {SalesOtherTaxesModal} modal
+     * @param {SalesEntryClass} [entryObj]
+     * @returns
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public calculateOtherTaxes(modal: SalesOtherTaxesModal, entryObj?: SalesEntryClass): void {
         let entry: SalesEntryClass;
         entry = entryObj ? entryObj : this.purchaseOrder.entries[this.activeIndx];
 
@@ -1421,7 +1569,13 @@ export class CreatePurchaseOrderComponent implements OnInit {
         this.activeIndx = null;
     }
 
-    public setActiveIndx(index: number): void {
+    /**
+     * This will set the active index of transaction
+     *
+     * @param {number} index
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public setActiveIndex(index: number): void {
         this.activeIndx = index;
         try {
             if (this.isRcmEntry) {
@@ -1432,12 +1586,25 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
+    /**
+     * This will set the transaction amount to undefined if 0
+     *
+     * @param {SalesTransactionItemClass} transaction
+     * @memberof CreatePurchaseOrderComponent
+     */
     public transactionAmountClicked(transaction: SalesTransactionItemClass): void {
         if (Number(transaction.amount) === 0) {
             transaction.amount = undefined;
         }
     }
 
+    /**
+     * This will add the blank transaction
+     *
+     * @param {SalesTransactionItemClass} txn
+     * @returns {void}
+     * @memberof CreatePurchaseOrderComponent
+     */
     public addBlankRow(txn: SalesTransactionItemClass): void {
         if (!txn) {
             let entry: SalesEntryClass = new SalesEntryClass();
@@ -1467,6 +1634,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
+    /**
+     * This will remove the transaction
+     *
+     * @param {number} entryIdx
+     * @memberof CreatePurchaseOrderComponent
+     */
     public removeTransaction(entryIdx: number): void {
         if (this.activeIndx === entryIdx) {
             this.activeIndx = null;
@@ -1479,9 +1652,15 @@ export class CreatePurchaseOrderComponent implements OnInit {
         this.handleWarehouseVisibility();
     }
 
+    /**
+     * Callback for due date
+     *
+     * @param {*} index
+     * @memberof CreatePurchaseOrderComponent
+     */
     public onBlurDueDate(index): void {
         if (this.purchaseOrder.voucherDetails.customerUniquename || this.purchaseOrder.voucherDetails.customerName) {
-            this.setActiveIndx(index);
+            this.setActiveIndex(index);
             setTimeout(() => {
                 let selectAccount = this.selectAccount.toArray();
                 if (selectAccount !== undefined && selectAccount[index] !== undefined) {
@@ -1491,24 +1670,44 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
+    /**
+     * This will calculate the tax and grand total
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
     public calculateAffectedThingsFromOtherTaxChanges(): void {
         this.calculateTcsTdsTotal();
         this.calculateGrandTotal();
     }
 
+    /**
+     * This will close the discount popup
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
     public closeDiscountPopup(): void {
         if (this.discountComponent) {
             this.discountComponent.hideDiscountMenu();
         }
     }
 
+    /**
+     * This will close the tax popup
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
     public closeTaxControlPopup(): void {
         if (this.taxControlComponent) {
             this.taxControlComponent.showTaxPopup = false;
         }
     }
 
-    public getCustomerDetails() {
+    /**
+     * This will open the account edit aside pan
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public getCustomerDetails(): void {
         this.selectedVendorForDetails = this.purchaseOrder.accountDetails.uniqueName;
         this.toggleAccountAsidePane();
     }
@@ -1517,7 +1716,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
      * Toggle the RCM checkbox based on user confirmation
      *
      * @param {*} event Click event
-     * @memberof ProformaInvoiceComponent
+     * @memberof CreatePurchaseOrderComponent
      */
     public toggleRcmCheckbox(event: any): void {
         event.preventDefault();
@@ -1529,7 +1728,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
      * action with the RCM popup
      *
      * @param {string} action Action performed by user
-     * @memberof ProformaInvoiceComponent
+     * @memberof CreatePurchaseOrderComponent
      */
     public handleRcmChange(action: string): void {
         if (action === CONFIRMATION_ACTIONS.YES) {
@@ -1541,6 +1740,11 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
+    /**
+     * This will open the account create aside pan on alt+c
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
     public addAccountFromShortcut(): void {
         if (this.purchaseOrder && this.purchaseOrder.voucherDetails && !this.purchaseOrder.voucherDetails.customerName) {
             this.selectedVendorForDetails = null;
@@ -1548,7 +1752,13 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
-    public onSubmitForm(): any {
+    /**
+     * This will save the purchase order
+     *
+     * @returns {*}
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public savePurchaseOrder(): any {
         let data: VoucherClass = _.cloneDeep(this.purchaseOrder);
 
         // special check if gst no filed is visible then and only then check for gst validation
@@ -1691,6 +1901,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
         this.purchaseOrderService.create(getRequestObject, updatedData).subscribe(response => {
             this.toaster.clearAllToaster();
             if (response && response.status === "success") {
+                this.resetForm(this.poForm);
                 this.toaster.successToast("Purchase Order created succesfully with Voucher number - " + response.body.number);
             } else {
                 this.toaster.errorToast(response.message);
@@ -1698,6 +1909,14 @@ export class CreatePurchaseOrderComponent implements OnInit {
         });
     }
 
+    /**
+     * This will process the data and will arrange in desired format
+     *
+     * @param {*} obj
+     * @param {VoucherClass} data
+     * @returns {*}
+     * @memberof CreatePurchaseOrderComponent
+     */
     public updateData(obj: any, data: VoucherClass): any {
         if (obj.voucher) {
             delete obj.voucher;
@@ -1765,6 +1984,13 @@ export class CreatePurchaseOrderComponent implements OnInit {
         return obj;
     }
 
+    /**
+     * This will convert the data into giddh format
+     *
+     * @param {*} val
+     * @returns {string}
+     * @memberof CreatePurchaseOrderComponent
+     */
     public convertDateForAPI(val: any): string {
         if (val) {
             // To check val is DD-MM-YY format already so it will be string then return val
@@ -1786,6 +2012,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
+    /**
+     * Callback for add bulk items
+     *
+     * @param {SalesAddBulkStockItems[]} items
+     * @memberof CreatePurchaseOrderComponent
+     */
     public addBulkStockItems(items: SalesAddBulkStockItems[]): void {
         let salesAccs: IOption[] = [];
         this.salesAccounts$.pipe(take(1)).subscribe(data => salesAccs = data);
@@ -1815,6 +2047,64 @@ export class CreatePurchaseOrderComponent implements OnInit {
                 this.calculateStockEntryAmount(this.purchaseOrder.entries[lastIndex].transactions[0]);
                 this.calculateWhenTrxAltered(this.purchaseOrder.entries[lastIndex], this.purchaseOrder.entries[lastIndex].transactions[0]);
             }
+        }
+    }
+
+    /**
+     * This will be called on change of stock unit
+     *
+     * @param {*} transaction
+     * @param {*} selectedUnit
+     * @returns {void}
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public onChangeUnit(transaction: any, selectedUnit: any): void {
+        if (!event) {
+            return;
+        }
+        _.find(transaction.stockList, (txn) => {
+            if (txn.id === selectedUnit) {
+                return transaction.rate = txn.rate;
+            }
+        });
+    }
+
+    /**
+     * This will reset the form
+     *
+     * @param {NgForm} poForm
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public resetForm(poForm: NgForm): void {
+        if (poForm) {
+            this.purchaseOrder = new PurchaseOrder();
+            this.resetVendor();
+            this.vendorNameDropDown.clear();
+            this.initializeWarehouse();
+            this.fillCompanyAddress();
+            this.assignDates();
+        }
+    }
+
+    /**
+     * This will fill the company address in billing details
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public fillCompanyAddress(): void {
+        if(this.companyAddresses) {
+            this.companyAddresses.forEach(address => {
+                if (address.isDefault === true) {
+                    this.purchaseOrder.company.billingDetails.address = [];
+                    this.purchaseOrder.company.billingDetails.address.push(address.address);
+                    this.purchaseOrder.company.billingDetails.state.code = address.stateCode;
+                    this.purchaseOrder.company.billingDetails.state.name = address.stateName;
+                    this.purchaseOrder.company.billingDetails.stateCode = address.stateCode;
+                    this.purchaseOrder.company.billingDetails.stateName = address.stateName;
+                    this.purchaseOrder.company.billingDetails.gstNumber = address.taxNumber;
+                    this.purchaseOrder.company.shippingDetails.gstNumber = address.taxNumber;
+                }
+            });
         }
     }
 }
