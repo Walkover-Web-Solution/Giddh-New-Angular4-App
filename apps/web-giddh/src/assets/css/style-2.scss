@@ -9250,13 +9250,10 @@ span#HW_badge_cont:nth-child(3){
     display: none;
 }
 /*notofication css end*/
-.setting-sidebar-open .desktop-header {
-    padding-left: 215px;
-}
 
 .setting-data,
 .setting-sidebar-open .white-row {
-    padding-left: 230px !important;
+    padding-left: 15px !important;
 }
 
 // .setting-sidebar-open .white-row{
@@ -9344,17 +9341,22 @@ span#HW_badge_cont:nth-child(3){
     display: none;
 }
 .menu_open aside-setting.setting-sidebar {
-    left: -215px !important;
+    left: 0 !important;
 }
 .on-setting-page aside-setting.setting-sidebar{
-    left: 0;
+    left: -215px;
 }
 .setting-sidebar-open #content_wrapper.menu_open {
+    padding-left: -215px;
+}
+.setting-sidebar-open .desktop-header {
     padding-left: 0;
 }
 .setting-sidebar-open .desktop-header.menu_open {
-    padding-left: 0;
+    padding-left: 215px;
 }
+
+
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9632,6 +9634,18 @@ span#HW_badge_cont:nth-child(3){
             font-size: 26px;
         }
     }
+    .on-setting-page aside-setting.setting-sidebar{
+        left: -230px;
+    }
+    .setting-sidebar-open .desktop-header {
+        padding-left: 0;
+    }
+    .setting-data, .setting-sidebar-open .white-row {
+        padding-left: 15px !important;
+    }
+    .setting-data, .setting-sidebar-open .white-row {
+        padding-left: 15px !important;
+    }
 }
 
 @media (max-width: 1280px) {
@@ -9669,9 +9683,6 @@ span#HW_badge_cont:nth-child(3){
         z-index: 991;
         top: -25px !important;
         position: absolute;
-    }
-    .setting-sidebar-open .desktop-header {
-        padding-left: 0;
     }
     .setting-sidebar-open .setting-data,
     .setting-sidebar-open .white-row {
@@ -10023,6 +10034,9 @@ span#HW_badge_cont:nth-child(3){
     }
     .digit-blue .tooltip.bs-tooltip-top{
         display: block !important;
+    }
+    .on-setting-page aside-setting.setting-sidebar{
+        left: 0;
     }
 }
 
