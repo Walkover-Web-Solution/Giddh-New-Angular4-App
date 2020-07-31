@@ -327,6 +327,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.subscribe(event => {
+            if (event instanceof NavigationStart) {
+                this.addClassInBodyIfPageHasTabs();
+            }
             if (event instanceof NavigationEnd) {
                 this.setCurrentPage();
 
@@ -334,8 +337,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentState = this.router.url;
                     this.setCurrentAccountNameInHeading();
                 }
-
-                this.addClassInBodyIfPageHasTabs();
             }
         });
 
@@ -1754,7 +1755,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         setTimeout(() => {
             if (document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0 && !this.router.url.includes("/vendor")) {
                 if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
-                    this.sideBarStateChange(false);
                     document.querySelector('body').classList.add('on-setting-page');
                     document.querySelector('body').classList.remove('page-has-tabs');
                     document.querySelector('body').classList.remove('on-user-page');
