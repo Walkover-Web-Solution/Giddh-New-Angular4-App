@@ -4,7 +4,7 @@
 
         <!-- start auth tab tab -->
         <tab heading="Auth Key" [active]="activeTab == 'auth-key'" (select)="onTabChanged('auth-key')">
-            <div class="wrap-tab-content-pd-15">
+            <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'auth-key'">
                 <div class="box clearfix mrT2">
                     <h1 class="section-head pdT0">Main Auth-key</h1>
                     <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
@@ -22,8 +22,8 @@
             </div>
         </tab>
         <!-- end of auth tab tab -->
-        <tab heading="Mobile Number" [active]="activeTab == 'mobile-number'" select="getUserDetails()" (select)="onTabChanged('mobile-number')">
-            <div class="wrap-tab-content-pd-15">
+        <tab heading="Mobile Number" [active]="activeTab == 'mobile-number'" (select)="onTabChanged('mobile-number');">
+            <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'mobile-number'">
                 <div class="box clearfix mrT2">
                     <form class="" name="mobileForm" novalidate>
                         <h1 class="section-head">Add/Edit Mobile Number</h1>
@@ -127,7 +127,7 @@
 
         <!-- start session tab tab -->
         <tab heading="Session" [active]="activeTab == 'session'" (select)="onTabChanged('session')">
-            <div class="wrap-tab-content-pd-15">
+            <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'session'">
                 <div class="box clearfix mrT2">
                     <div class="max900 d-flex pdB1  activity-title">
                         <h1 class="section-head pdT0">Activity History</h1>
