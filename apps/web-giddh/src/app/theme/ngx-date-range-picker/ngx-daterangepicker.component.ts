@@ -228,12 +228,19 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public currentFinancialYearUniqueName: string = "";
     public isOnScrollActive: boolean = false;
     public imgPath: string = '';
+    /* This will hold the previous scroll index of cdk scrollbar */
     public previousScrollIndex: number = 0;
+    /* This will hold the current scroll index of cdk scrollbar */
     public currentScrollIndex: number = 0;
+    /* This will hold the scroll direction of cdk scrollbar */
     public scrollInDirection: string = "";
+    /* This will hold that how many elements were scrolled in top initially in cdk scrollbar */
     public initialScrollToIndexTop: number = 0;
+    /* This will hold that how many elements were scrolled in bottom initially in cdk scrollbar */
     public initialScrollToIndexBottom: number = 0;
+    /* This will hold if financial years were updated by api */
     public financialYearUpdated: boolean = false;
+    /* This will hold if mouse scroll or touch scroll is allowed or not */
     public allowMouseScroll: boolean = false;
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private scrollDispatcher: ScrollDispatcher) {
@@ -413,6 +420,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         document.querySelector(".giddh-datepicker-modal").parentElement.classList.add("giddh-calendar");
     }
 
+    /**
+     * This will check and scroll the scrollbar on desired month
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
     public ngAfterViewInit(): void {
         document.querySelector('body').classList.remove('modal-open');
         setTimeout(() => {

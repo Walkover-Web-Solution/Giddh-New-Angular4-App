@@ -43,7 +43,9 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
     @Input() public dateFieldPosition: any;
     @Input() public updatePosition: boolean = true;
 
+    /* This will hold the initial Y offset of window */
     public initialWindowOffset: number = 0;
+    /* This will hold the initial Y offset of datepicker */
     public initialDatepickerYPosition: number = 0;
 
     constructor(private _renderer: Renderer2) {
@@ -130,6 +132,12 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
         }
     }
 
+    /**
+     * This will readjust the datepicker position on window scroll
+     *
+     * @param {*} event
+     * @memberof DatepickerWrapperComponent
+     */
     @HostListener('window:scroll', ['$event'])
     public onWindowScroll(event: any): void {
         if(this.updatePosition) {
