@@ -12,19 +12,6 @@
             <div class="customer-purchase-table">
                 <div class="inner-container">
                     <div class="inner-container">
-                        <div class="total-purchase-amount">
-                            <div class="text-right">
-                                <p class="pr-1">
-                                    <span class="balance-due">Total Amount</span>
-                                    <span class="total-amount-order" *ngIf="isMulticurrencyAccount">{{purchaseOrder.accountDetails.currencySymbol}}
-                                        <strong>{{purchaseOrder.voucherDetails.grandTotal | giddhCurrency}}</strong></span>
-                                    <span class="total-amount-order" *ngIf='isMulticurrencyAccount'>
-                                        <span>{{baseCurrencySymbol}}</span>
-                                        <span>{{purchaseOrder.voucherDetails.grandTotal * exchangeRate | giddhCurrency}}</span>
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
                         <!-- region customer section -->
                         <div class="clearfix">
                             <div class="row mb-1">
@@ -142,6 +129,7 @@
                                                                         type="text" name="vendorBillingDetailsTax"
                                                                         [(ngModel)]="purchaseOrder.account.billingDetails.gstNumber"
                                                                         class="form-control input-custom"
+                                                                        (blur)="autoFillShippingDetails('vendor')"
                                                                         (change)="getStateCode('billingDetails', vendorBillingState)"
                                                                         placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                 </div>
@@ -285,6 +273,7 @@
                                                                 name="companyBillingDetailsTax"
                                                                 [(ngModel)]="purchaseOrder.company.billingDetails.gstNumber"
                                                                 class="form-control input-custom"
+                                                                (blur)="autoFillShippingDetails('company')"
                                                                 (change)="getStateCode('billingDetails', companyBillingState)"
                                                                 placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                         </div>
