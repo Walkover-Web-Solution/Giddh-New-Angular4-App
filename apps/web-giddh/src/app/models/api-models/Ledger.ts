@@ -126,6 +126,7 @@ export class LedgerResponse {
     public touristSchemeApplicable?: boolean;
     public voucherAdjustments?: VoucherAdjustments
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
+    public unitRates?: Array<any>;
 }
 /** Model for Ledger Advance receipts for invoices */
 export class VoucherAdjustmentsForInvoice {
