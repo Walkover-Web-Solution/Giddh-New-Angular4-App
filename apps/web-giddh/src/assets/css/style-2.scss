@@ -9358,7 +9358,7 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
-.on-setting-page .nav-left-bar.open{
+.on-setting-page .nav-left-bar.open , .on-user-page .nav-left-bar.open on-user-page {
     left: -215px !important;
     display: none !important;
 }
@@ -9368,7 +9368,7 @@ span#HW_badge_cont:nth-child(3) {
 .menu_open aside-setting.setting-sidebar {
     left: 0 !important;
 }
-.on-setting-page aside-setting.setting-sidebar{
+.on-setting-page aside-setting.setting-sidebar, .on-user-page aside-setting.setting-sidebar{
     left: -225px;
 }
 .setting-sidebar-open #content_wrapper.menu_open {
@@ -10078,7 +10078,7 @@ span#HW_badge_cont:nth-child(3) {
     .digit-blue .tooltip.bs-tooltip-top {
         display: block !important;
     }
-    .on-setting-page aside-setting.setting-sidebar{
+    .on-setting-page aside-setting.setting-sidebar, .on-user-page aside-setting.setting-sidebar{
         left: 0;
     }
 }
