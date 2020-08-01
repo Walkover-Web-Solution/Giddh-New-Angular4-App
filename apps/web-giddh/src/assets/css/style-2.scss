@@ -9381,7 +9381,6 @@ span#HW_badge_cont:nth-child(3) {
     padding-left: 215px;
 }
 
-
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9664,11 +9663,8 @@ span#HW_badge_cont:nth-child(3) {
             font-size: 26px;
         }
     }
-    .on-setting-page aside-setting.setting-sidebar{
+  .on-setting-page aside-setting.setting-sidebar{
         left: -230px;
-    }
-    .setting-sidebar-open .desktop-header {
-        padding-left: 0;
     }
     .setting-data, .setting-sidebar-open .white-row {
         padding-left: 15px !important;
