@@ -326,7 +326,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.setCurrentPage();
 
         // SETTING CURRENT PAGE ON ROUTE CHANGE
-        this.router.events.subscribe(event => {
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
                 this.addClassInBodyIfPageHasTabs();
             }
