@@ -13,6 +13,7 @@ import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/default
 import * as moment from 'moment';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
+import { VOUCHERS } from '../../journal-voucher.component';
 
 @Component({
     selector: 'receipt-entry',
@@ -62,7 +63,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     /* Object for pending invoices list search params */
     public pendingInvoicesListParams: any = {
         accountUniqueNames: [],
-        voucherType: "receipt"
+        voucherType: VOUCHERS.RECEIPT
     };
     /* This will clear the select value in sh-select */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
@@ -453,7 +454,6 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         let adjustmentTypesOptions: IOption[] = [];
 
         adjustmentTypes.map(type => {
-            console.log(type);
             if ((index === 0 && (type.value === AdjustmentTypesEnum.receipt || type.value === AdjustmentTypesEnum.advanceReceipt)) || (index > 0 && type.value === AdjustmentTypesEnum.againstReference) || (entry && type.value === entry.type)) {
                 adjustmentTypesOptions.push({ label: type.label, value: type.value });
             }
