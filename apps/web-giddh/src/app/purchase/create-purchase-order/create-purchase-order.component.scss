@@ -3,7 +3,7 @@
     position: relative;
 }
 
-.customerInvoiceForm::before {
+.customer-purchase-order::before {
     position: absolute;
     content: "";
     left: 0;
@@ -29,7 +29,7 @@
             max-width: 1120px;
             width: 100%;
             .delivery-from-field {
-                margin-top: 80px;
+                margin-top: 15px;
             }
             .total-purchase-amount {
                 position: absolute;
@@ -63,7 +63,7 @@
                     padding: 5px;
                     padding-bottom: 10px;
                     &.disabled {
-                        background: $whisper-color;
+                        background: $whisper-light;
                     }
                     textarea {
                         border: none;
@@ -74,9 +74,19 @@
                         background-color: transparent !important;
                         background: transparent !important;
                         padding-left: 0 !important;
+                        resize: none;
+                        overflow-y: auto;
                         &:focus {
                             outline: none !important;
                         }
+                    }
+                     textarea.form-control::-webkit-scrollbar {
+                        width: 5px;
+                    }
+                    textarea.form-control::-webkit-scrollbar-thumb {
+                        background-color: $gainsboro;
+                        outline: 1px solid $gray;
+                        border-radius: 20px;
                     }
                     input,
                     .form-control {
@@ -113,7 +123,7 @@
                 margin-left: 48%;
             }
             .order-expected-delivery {
-                sh-select {
+                sh-select , input.form-control{
                     width: 100%;
                 }
                 .invoice-due-date {
@@ -131,6 +141,17 @@
             color: $gainsboro;
             padding-bottom: 3px;
             display: block;
+        }
+    }
+}
+.customer-purchase-order{
+    .wrapper-customer-table {
+        .customer-purchase-table {
+            .inner-container {
+                .delivery-from-field {
+                    margin-top: 80px;
+                }
+            }
         }
     }
 }
@@ -477,7 +498,6 @@ span.edit-icon {
     width: 100%;
     height: 28px !important;
     padding: 5px;
-    max-width: 200px;
     border: 1px solid $gainsboro;
 }
 
@@ -771,9 +791,9 @@ table.table.table-custom-invoice.basic {
 }
 
 .set-active .trash-icon-delete {
-    transform: translateY(-40px);
-    -webkit-transform: translateY(-40px);
-    -moz-transform: translateY(-40px);
+    transform: translateY(-20px);
+    -webkit-transform: translateY(-20px);
+    -moz-transform: translateY(-20px);
 }
 
 .wrap-td-data .icon-rupees {
@@ -1162,11 +1182,22 @@ span.eligible-ITC {
                     }
                 }
                 .delivery-from-field {
+                    margin-top: 0px;
+                }
+            }
+        }
+    }
+    .customer-purchase-order{
+    .wrapper-customer-table {
+        .customer-purchase-table {
+            .inner-container {
+                .delivery-from-field {
                     margin-top: 50px;
                 }
             }
         }
     }
+}
 }
 
 @media (max-width: 414px) {
