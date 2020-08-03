@@ -1401,7 +1401,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
         this.modelRefCrossLimit = this.modalService.show(template);
-         
+
     }
 
     /**
@@ -1750,7 +1750,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileSite })
+            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileSite })
         );
     }
 

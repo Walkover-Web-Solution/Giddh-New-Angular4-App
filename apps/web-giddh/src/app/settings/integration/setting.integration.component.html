@@ -61,7 +61,7 @@
 
             <!--remove account integration confirmation modal-->
             <div bsModal #removegmailintegration="bs-modal" class="modal fade" role="dialog">
-                <div class="modal-dialog modal-lg">
+                <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <confirm-modal [title]="'Remove Gmail Integration'" [body]="'Are you sure you want to remove gmail account?'" (cancelCallBack)="removegmailintegration.toggle()" (successCallBack)="removeGmailAccount();removegmailintegration.toggle()"></confirm-modal>
                     </div>

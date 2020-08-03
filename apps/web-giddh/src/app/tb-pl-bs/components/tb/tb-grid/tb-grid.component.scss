@@ -30,3 +30,13 @@
         margin: auto;
     }
 }
+.tb-wrapper{
+    width: 70%;
+    margin: auto;
+}
+@media(max-width:991px){
+    .tb-wrapper{
+        width: 100%;
+        margin: auto;
+    }
+}
