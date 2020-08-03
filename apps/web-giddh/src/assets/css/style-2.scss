@@ -6414,7 +6414,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     border-right: 1px solid #ccc;
     font-size: 13px;
     color: #4d4d4d;
-    max-width: 0;
     text-overflow: ellipsis;
     /* // overflow: hidden; */
     white-space: nowrap;
@@ -6435,7 +6434,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     border-right: 1px solid #ccc;
     font-size: 13px;
     color: #4d4d4d;
-    max-width: 0;
     text-overflow: ellipsis;
     /* overflow: hidden; */
     white-space: nowrap;
@@ -9417,9 +9415,10 @@ span#HW_badge_cont:nth-child(3) {
 .setting-sidebar-open .desktop-header.menu_open {
     padding-left: 215px;
 }
-
-
-
+.page-count .pagination{
+    justify-content: center;
+    margin-top: 15px;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
