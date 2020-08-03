@@ -116,6 +116,7 @@
                                                     (keydown)="keydownPressed($event)"
                                                     [options]="vm.flatternAccountList4Select | async" #dbtSelect
                                                     (click)="addBlankTrx('DEBIT', txn, $event)"
+                                                    [fixedValue]="txn.particular.name"
                                                     (selected)="selectAccount($event,txn, dbtSelect)"
                                                     [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
                                                     [ItemHeight]="67" (onShow)="dbs.hide()"
@@ -297,6 +298,7 @@
                                                 <sh-select id="crdID" [notFoundLink]="true"
                                                     (noResultsClicked)="showQuickAccountModal()"
                                                     (keydown)="keydownPressed($event)"
+                                                    [fixedValue]="txn.particular.name"
                                                     [options]="vm.flatternAccountList4Select | async" #crdSelect
                                                     (click)="addBlankTrx('CREDIT', txn, $event)"
                                                     (selected)="selectAccount($event,txn, crdSelect)"
