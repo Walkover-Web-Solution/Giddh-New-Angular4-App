@@ -108,7 +108,7 @@
                                                 </div>
                                                 <span class="delete-row">
                                                     <a href="javascript:;" (click)="removeReceiptEntry(i)"
-                                                        *ngIf="receiptEntries.length > 1"><i class="icon-cross"></i></a>
+                                                    *ngIf="i > 0"><i class="icon-cross"></i></a>
                                                 </span>
                                             </div>
                                         </div>
@@ -298,6 +298,6 @@
 
 <!-- Recipt entry modal -->
 <ng-template #receiptEntry>
-    <receipt-entry [transaction]="currentTransaction" [activeCompany]="activeCompany" [voucherDate]="journalDate"
+    <receipt-entry *ngIf="currentTransaction" [transaction]="currentTransaction" [activeCompany]="activeCompany" [voucherDate]="journalDate"
         (entriesList)="handleEntries($event)"></receipt-entry>
 </ng-template>
