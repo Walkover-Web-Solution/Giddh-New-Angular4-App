@@ -1112,6 +1112,7 @@ ul.sub-list {
 .aging-table {
     border: 0px;
     margin-bottom: 0px;
+    background: transparent !important;
 }
 
 .d-none {
@@ -1255,8 +1256,9 @@ ul.sub-list {
 }
 
 .Advance-Search .input-group-addon {
-    border-left: 0px;
+    border: 1px solid $gainsboro;
     background: none;
+    border-left: 0 !important;
 }
 
 .Advance-Search .input-group .form-control {
@@ -2507,10 +2509,14 @@ input[type="checkbox"]:checked:after {
 .btn-success:hover,
 .btn-success:active:focus,
 .btn-success:active:hover,
-.btn-success:focus {
+.btn-success:focus ,
+.btn-success:not(:disabled):not(.disabled):active,
+.btn-success:not(:disabled):not(.disabled).active,
+.show > .btn-success.dropdown-toggle{
     background: #087e7d;
     color: $white;
     border: 1px solid #087e7d;
+    box-shadow: none;
 }
 
 .btn-success:disabled,
@@ -2519,7 +2525,12 @@ input[type="checkbox"]:checked:after {
     border: 1px solid #81d4d4;
     background: #81d4d4;
 }
-
+.btn-warning{
+    color: $white !important;
+}
+.btn-warning:not(:disabled):not(.disabled):active:focus, .btn-warning:not(:disabled):not(.disabled).active:focus, .show > .btn-warning.dropdown-toggle:focus{
+    box-shadow: none;
+}
 .btn-default:disabled,
 .btn-danger:disabled {
     opacity: 0.5;
@@ -8252,6 +8263,8 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 .paginationWrapper {
     padding: 20px 0;
     text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
 .pagination > li > a,
@@ -8762,7 +8775,7 @@ button.btn.btn-filter {
 // .custom-tabs#asidePaneFormTabs .nav.nav-tabs > li {
 //     padding-right: 0;
 // }
-.mangeAccountPopup .modal-dialog.modal-lg {
+.mangeAccountPopup .modal-dialog.modal-xl {
     margin: 0 auto;
 }
 
@@ -9418,6 +9431,14 @@ span#HW_badge_cont:nth-child(3) {
 .page-count .pagination{
     justify-content: center;
     margin-top: 15px;
+}
+.purchase-record-confirmation-modal{
+    .modal-content{
+        box-shadow: 0 5px 15px rgba(0,0,0,.5);
+    }
+}
+.dropdown-toggle::after{
+    display: none;
 }
 /* responsive */
 

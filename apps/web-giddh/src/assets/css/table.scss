@@ -4,7 +4,7 @@
     border: 1px solid $gainsboro;
     width: 100%;
     max-width: 100%;
-    border-collapse: separate;
+    border-collapse: collapse;
     border: 0;
 
     thead > tr > td,
@@ -125,7 +125,7 @@
     }
     /*card responsive code*/
     .on-mobile-view {
-        display: block;  
+        display: block;
        .table-bordered > tfoot > tr > td {
             border: none;
         }
@@ -133,7 +133,7 @@
             border: none;
             background: transparent;
             margin-top: 0;
-        } 
+        }
     }
     table.on-mobile-view {
         background: transparent;

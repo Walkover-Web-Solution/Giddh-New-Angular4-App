@@ -1381,7 +1381,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             // }
             if (!isCtrlClicked) {
                 this.router.navigate([url]); // added link in routerLink
-            }     
+            }
         }
         // save data to db
         item.time = +new Date();
@@ -1787,7 +1787,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
             Object.assign({}, {
-                class: 'modal-lg giddh-datepicker-modal',
+                class: 'modal-xl giddh-datepicker-modal',
                 backdrop: false,
                 ignoreBackdropClick: this.isMobileSite
             })

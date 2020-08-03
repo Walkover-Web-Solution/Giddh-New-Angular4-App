@@ -4,8 +4,7 @@
         <div class="container-fluid">
 
             <div class="top-bar clearfix">
-                <div class="form-inline">
-                    <div>
+                <div class="customer-form-inline">
                         <div class="dis pull-left mrR1">
 
                             <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'right'">
@@ -66,7 +65,6 @@
                             </div>
 
                         </div>
-                    </div>
                     <!-- Invoice filter section ends -->
                     <button class="btn btn-group btn-filter desktop-button-filter " *ngIf="selectedAccountsList.length>0" (click)="clearSelectedContacts();">
                             <span class="icon-cross"></span> Clear Selected
