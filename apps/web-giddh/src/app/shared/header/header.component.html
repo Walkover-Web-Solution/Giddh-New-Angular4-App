@@ -622,7 +622,7 @@
 <!--add and manage group account modal -->
 <div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }"
     class="modal fade fullScreenMy mangeAccountPopup addManageGroupAcc" role="dialog" (onShown)="onShown()">
-    <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
+    <div class="modal-dialog modal-xl modal-liq90 mr0 width100" style="height: 100%;">
         <div class="modal-content fullScreenMy">
             <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
             </ng-template>
@@ -632,7 +632,7 @@
 <!--add company modal  -->
 <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
     role="dialog" (onHidden)="onHide()">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
             </ng-template>
@@ -642,7 +642,7 @@
 <!--add company new modal  -->
 <div bsModal #addCompanyNewModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
     role="dialog" (onHidden)="onHide()">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <ng-template element-view-container-ref #companynewadd=elementviewcontainerref>
             </ng-template>
@@ -651,7 +651,7 @@
 </div>
 <!--delete company modal  -->
 <div bsModal #deleteCompanyModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody"
                 (cancelCallBack)="hideDeleteCompanyModal($event)" (successCallBack)="deleteCompany($event)">

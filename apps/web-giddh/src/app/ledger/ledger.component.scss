@@ -118,6 +118,18 @@ input {
     padding-left: 0;
     padding-top: 5px;
     padding-bottom: 10px;
+    &.first-child{
+        span{
+            position: relative;
+            right: 15px;
+        }
+    }
+}
+.ledger-head th:first-child{
+    span{
+        position: relative;
+        right: 15px;
+    }
 }
 .total_col td {
     border: 0;
@@ -330,7 +342,7 @@ sh-select:focus {
     padding: 6px 9px;
     color: #fff;
 }
-#blankLedgerContainer .ledger-main .no-leftBorder {
+.left-col-new table.width100.h-table#blank-ledger-container .no-left-border{
     border-left: none !important;
 }
 .ledger-row input[type="checkbox"] {
@@ -425,7 +437,8 @@ sh-select:focus {
     margin-right: 10px;
 }
 .modal-ledger {
-    width: 70%;
+    width: 100%;
+    max-width: 1350px;
 }
 .justify-content-between {
     justify-content: space-between;
@@ -635,9 +648,9 @@ sh-select:focus {
     }
     .ledg-head table td[class*="col-"],
     toggle-switch .ledg-head table td .select2-container {
-        min-height: initial;
-        height: initial;
-        max-height: initial;
+        // min-height: initial;
+        // height: initial;
+        // max-height: initial;
     }
 }
 @media (max-width: 991px) {
@@ -724,7 +737,7 @@ sh-select:focus {
     .ledger-row td:empty {
         display: none !important;
     }
-    #blankLedgerContainer tbody tr:empty {
+    #blank-ledger-container tbody tr:empty {
         display: none;
     }
     .ledger-head-top {
