@@ -15,9 +15,9 @@ input {
     border-right: 1px solid $gainsboro;
     font-size: 13px;
     color: $nero;
-    max-width: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: flex;
 }
 .ledg-head table td.pdR25imp {
     padding-right: 25px !important;
@@ -36,7 +36,6 @@ input {
     border-bottom: 1px solid $gainsboro;
     border-right: 1px solid $gainsboro;
     font-size: 13px;
-    max-width: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -239,9 +238,6 @@ input {
 .d-none {
     display: none;
 }
-.h-table tr {
-    height: 45px;
-}
 .dateStep {
     padding: 0 !important;
     font-size: 13px;
@@ -278,6 +274,7 @@ sh-select:focus {
 .ledger-book .left-col-new,
 .ledger-book .right-col-new {
     background: #fff;
+    padding: 0 15px 350px;
 }
 .left-col-new table.width100.h-table tbody tr td:last-child,
 .left-col-new table.width100.h-table thead tr th:last-child {
@@ -461,6 +458,7 @@ sh-select:focus {
 }
 .ledger-account-label {
     align-items: center;
+    flex: auto;
     span {
         padding-left: 10px;
     }
