@@ -617,7 +617,7 @@
                 <!-- region debit transaction header-->
                 <table class="width100 h-table table-head hidden-xs">
                     <thead>
-                        <tr class="t-h-bg1">
+                        <tr class="t-h-bg1 row">
                             <th class="col-xs-3 col-md-3 col-lg-3">
                                 <span class="cp">Date</span>
                             </th>
@@ -632,7 +632,7 @@
                 <table class="width100 h-table">
                     <tbody>
                         <!-- region debit transaction if forwardedBalance -->
-                        <tr class="ledger-row" container="body" vr-item tabindex="-1"
+                        <tr class="ledger-row row" container="body" vr-item tabindex="-1"
                             *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">
 
                             <!--<td class="col-xs-1 text-center">-->
@@ -661,7 +661,7 @@
                         <!-- endregion -->
 
                         <!-- region debit transaction if no forwardedBalance -->
-                        <tr class="ledger-row" container="body"
+                        <tr class="ledger-row row" container="body"
                             *ngIf="(ledgerTxnBalance?.forwardedBalance?.type !== 'DEBIT') || (ledgerTxnBalance?.forwardedBalance?.amount == 0)">
 
                             <!--<td class="col-xs-1 text-center"><input type="checkbox" [(ngModel)]="debitSelectAll"-->
@@ -678,7 +678,7 @@
                         <!-- endregion -->
 
                         <!-- region debit transaction loop over transactions -->
-                        <tr vr-item tabindex="-1" class="ledger-row "
+                        <tr vr-item tabindex="-1" class="ledger-row row"
                             *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;"
                             (dblclick)="showUpdateLedgerModal(txn)" (keydown.enter)="showUpdateLedgerModal(txn)"
                             [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
@@ -751,7 +751,7 @@
 
                                 <table class="width100">
                                     <tbody class="ledger-main">
-                                        <tr class="ledger-row" container="body">
+                                        <tr class="ledger-row row" container="body">
 
                                             <td class="col-xs-3 col-md-3 col-lg-3 no-leftBorder" data-title="Date">
                                                 <div class="d-flex align-items-center">
@@ -883,7 +883,7 @@
                 <!-- region credit transaction header-->
                 <table class="width100 h-table hidden-xs">
                     <thead>
-                        <tr class="t-h-bg1">
+                        <tr class="t-h-bg1 row">
                             <th class="col-xs-3 col-md-3 col-lg-3">
                                 <span class="cp">Date</span>
                             </th>
@@ -898,7 +898,7 @@
                     <tbody>
 
                         <!-- region credit transaction if forwardedBalance -->
-                        <tr class="ledger-row" vr-item tabindex="-1"
+                        <tr class="ledger-row row" vr-item tabindex="-1"
                             *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
 
                             <!--<td class="col-xs-1 text-center">-->
@@ -925,7 +925,7 @@
                         <!-- endregion -->
 
                         <!-- region credit transaction no forwardedBalance -->
-                        <tr class="ledger-row"
+                        <tr class="ledger-row row"
                             *ngIf="ledgerTxnBalance?.forwardedBalance?.type !== 'CREDIT' || (ledgerTxnBalance?.forwardedBalance?.amount == 0)">
 
                             <!--<td class="col-xs-1 text-center"><input type="checkbox" [(ngModel)]="creditSelectAll"-->
@@ -943,7 +943,7 @@
                         <!-- endregion -->
 
                         <!-- region credit transaction loop over transactions -->
-                        <tr class="ledger-row " *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;"
+                        <tr class="ledger-row row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;"
                             (dblclick)="showUpdateLedgerModal(txn)" vr-item tabindex="-1"
                             (keydown.enter)="showUpdateLedgerModal(txn)"
                             [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
@@ -1019,7 +1019,7 @@
 
                                 <table class="width100 h-table">
                                     <tbody class="ledger-main">
-                                        <tr class="ledger-row" container="body">
+                                        <tr class="ledger-row row" container="body">
 
                                             <!--<td class="col-xs-1 text-center">-->
                                             <!---->
