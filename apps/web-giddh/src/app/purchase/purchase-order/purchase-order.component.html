@@ -17,7 +17,7 @@
                 </div>
             </form>
         </div>
-        <div class="clear-filter" *ngIf="showClearFilterButton()">
+        <div class="clear-filter" *ngIf="showClearFilterButton() && !isMobileScreen">
             <button class="btn btn-default mr-0" (click)="clearFilter()">
                 <span class="icon-cross"></span> Clear Filter
             </button>
