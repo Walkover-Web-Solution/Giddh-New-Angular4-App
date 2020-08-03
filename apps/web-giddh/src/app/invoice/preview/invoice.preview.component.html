@@ -788,7 +788,7 @@
             </div>
         </div>
 
-        <!-- Perform action on invoice model -->
+    <!-- Perform action on invoice model -->
         <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
             tabindex="-1">
             <div class="modal-dialog modal-md perform-payment">
@@ -800,7 +800,15 @@
                 </div>
             </div>
         </div>
-
+    <!-- Download or Send Invoice on mail -->
+    <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div element-view-container-ref #downloadOrSendMailComponent=elementviewcontainerref>
+                </div>
+            </div>
+        </div>
+    </div>
         <!-- Download or Send Invoice on mail -->
         <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
             tabindex="-1">
@@ -919,9 +927,8 @@
 <!-- endregion -->
 
 <!-- Advance receipt adjust modal start -->
-<div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal"
-    [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent [isUpdateMode]="isUpdateMode" [depositAmount]="depositAmount" [invoiceFormDetails]="invFormData" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
                 (closeModelEvent)="closeAdvanceReceiptModal()" (submitClicked)="getAdvanceReceiptAdjustData($event)" [isVoucherModule]="true">

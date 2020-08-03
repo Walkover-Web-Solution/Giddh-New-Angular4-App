@@ -26,6 +26,7 @@
 .aging-table {
     max-width: 1170px;
     width: 100%;
+    background: transparent;
 }
 .paginationWrapper {
     width: 100%;
@@ -70,6 +71,7 @@ span.inputAddon {
     color: #fff;
     font-size: 20px;
     border-radius: 2px;
+    top: 0;
 }
 tr.aging-table-top {
     border-bottom: 1px solid $gainsboro;
@@ -226,7 +228,7 @@ tr.aging-table-top td {
         float: none;
         width: 100%;
     }
-    .form-inline{
+    .aging-form-inline{
         .btn-group{
             width: 100%;
             .btn{

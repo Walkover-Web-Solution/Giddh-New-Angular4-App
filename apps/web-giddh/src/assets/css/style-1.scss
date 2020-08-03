@@ -2941,6 +2941,7 @@ ul.pills li {
     cursor: pointer;
     background-color: rgb(244, 245, 248);
     color: #333;
+    display: inline-block;
     border: 1px solid #ddd;
 }
 
@@ -5164,7 +5165,7 @@ perfect-scrollbar.ps-show-active
 body.fixed {
     overflow-y: hidden;
 }
-#blankLedgerContainer tbody tr:empty {
+#blank-ledger-container tbody tr:empty {
     display: none;
 }
 #getGroupModal {
