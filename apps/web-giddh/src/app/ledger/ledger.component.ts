@@ -233,7 +233,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.isTransactionRequestInProcess$ = this.store.select(p => p.ledger.transactionInprogress).pipe(takeUntil(this.destroyed$));
         this.ledgerBulkActionSuccess$ = this.store.select(p => p.ledger.ledgerBulkActionSuccess).pipe(takeUntil(this.destroyed$));
         this.store.dispatch(this._generalActions.getFlattenAccount());
-        this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
+        // this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         this.store.dispatch(this._settingsTagActions.GetALLTags());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
