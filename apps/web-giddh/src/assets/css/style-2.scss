@@ -9442,6 +9442,9 @@ span#HW_badge_cont:nth-child(3) {
 }
 .dropdown-toggle::after{
     display: none;
+.page-count .pagination{
+    justify-content: center;
+    margin-top: 15px;
 }
 /* responsive */
 
