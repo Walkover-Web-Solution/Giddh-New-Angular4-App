@@ -1479,9 +1479,8 @@
 <!-- Advance search popup -->
 <div bsModal #advanceSearchModel="bs-modal" tabindex="-1" class="modal fade" role="dialog">
     <div class="modal-dialog modal-xl advanceSearchModal">
-        <div class="modal-content">
-            <advance-search-model #advanceSearchComp [advanceSearchRequest]="advanceSearchRequest"
-                (closeModelEvent)="closeAdvanceSearchPopup($event)"></advance-search-model>
+        <div class="modal-content" *ngIf="advanceSearchModel.isShown">
+            <advance-search-model #advanceSearchComp [advanceSearchRequest]="advanceSearchRequest" (closeModelEvent)="closeAdvanceSearchPopup($event)"></advance-search-model>
         </div>
     </div>
 </div>
