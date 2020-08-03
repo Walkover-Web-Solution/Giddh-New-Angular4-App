@@ -131,17 +131,17 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.loadPaginationComponent(data);
                 this.daybookData$ = observableOf(data);
                 this.checkIsStockEntryAvailable();
-                this.changeDetectorRef.detectChanges();
             }
             this.showLoader = false;
+            this.changeDetectorRef.detectChanges();
         });
     }
 
     public selectedDate(value: any) {
-        this.showLoader = true;
         let from = moment(value.picker.startDate).format('DD-MM-YYYY');
         let to = moment(value.picker.endDate).format('DD-MM-YYYY');
         if ((this.daybookQueryRequest.from !== from) || (this.daybookQueryRequest.to !== to)) {
+            this.showLoader = true;
             this.daybookQueryRequest.from = from;
             this.daybookQueryRequest.to = to;
             this.daybookQueryRequest.page = 0;
