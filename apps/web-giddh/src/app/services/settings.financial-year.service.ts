@@ -137,5 +137,21 @@ export class SettingsFinancialYearService {
 			data.queryString = {};
 			return data;
 		}), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, string>(e)));
+    }
+    
+    /**
+     * This will get intial and last financial year
+     *
+     * @returns {Observable<BaseResponse<IFinancialYearResponse, string>>}
+     * @memberof SettingsFinancialYearService
+     */
+    public getFinancialYearLimits(): Observable<BaseResponse<IFinancialYearResponse, string>> {
+		this.user = this._generalService.user;
+		this.companyUniqueName = this._generalService.companyUniqueName;
+		return this._http.get(this.config.apiUrl + SETTINGS_FINANCIAL_YEAR_API.GET_FINANCIAL_YEAR_LIMITS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+			let data: BaseResponse<any, any> = res;
+			data.queryString = {};
+			return data;
+		}), catchError((e) => this.errorHandler.HandleCatch<IFinancialYearResponse, string>(e)));
 	}
 }

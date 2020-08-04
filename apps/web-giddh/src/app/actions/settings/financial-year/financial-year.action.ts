@@ -136,6 +136,18 @@ export class SettingsFinancialYearActions {
                 payload: res
             })));        
 
+    @Effect()
+    public getFinancialYearLimits$: Observable<Action> = this.action$
+        .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_FINANCIAL_YEAR_LIMITS).pipe(
+            switchMap((action: CustomActions) => this._settingsFinancialYearService.getFinancialYearLimits()),
+            map(res => this.validateResponse<any, any>(res, {
+                type: SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_FINANCIAL_YEAR_LIMITS_RESPONSE,
+                payload: res
+            }, true, {
+                type: SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_FINANCIAL_YEAR_LIMITS_RESPONSE,
+                payload: res
+            })));        
+
     constructor(private action$: Actions,
         private toasty: ToasterService,
         private router: Router,
@@ -233,4 +245,9 @@ export class SettingsFinancialYearActions {
         return successAction;
     }
 
+    public getFinancialYearLimits(): CustomActions {
+        return {
+            type: SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_FINANCIAL_YEAR_LIMITS
+        };
+    }
 }

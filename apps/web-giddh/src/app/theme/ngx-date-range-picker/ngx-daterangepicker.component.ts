@@ -11,7 +11,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helper
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
 import { Router, NavigationStart } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { DatePickerDefaultRangeEnum } from '../../app.constant';
 import { ScrollDispatcher, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
@@ -248,6 +248,16 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.rangeClicked = new EventEmitter();
         this.datesUpdated = new EventEmitter();
         this.locale = { ...this._locale };
+
+        this.store.pipe(select(state => state.settings.financialYearLimits), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response && response.startDate && response.endDate) {
+                this.minDate = moment(moment(response.startDate, GIDDH_DATE_FORMAT).toDate());
+                this.maxDate = moment(moment(response.endDate, GIDDH_DATE_FORMAT).toDate());
+                this.financialYearUpdated = true;
+                this.getAllYearsBetweenDates();
+            }
+        });
+
         this.getFinancialYears();
     }
 
@@ -414,8 +424,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 }
             }
         });
-
-        this.getAllYearsBetweenDates();
 
         document.querySelector(".giddh-datepicker-modal").parentElement.classList.add("giddh-calendar");
     }
@@ -1816,16 +1824,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 let lastFinancialYear;
                 let allFinancialYears = [];
 
-                if (res.body.financialYears[0].financialYearStarts) {
-                    this.minDate = moment(moment(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate());
-                }
-
-                if (res.body.financialYears[res.body.financialYears.length - 1].financialYearEnds) {
-                    this.maxDate = moment(moment(res.body.financialYears[res.body.financialYears.length - 1].financialYearEnds, GIDDH_DATE_FORMAT).toDate());
-                }
-
-                this.financialYearUpdated = true;
-
                 res.body.financialYears.forEach(key => {
                     let financialYearStarts = moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     let financialYearEnds = moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
@@ -1883,8 +1881,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     });
 
                     this.ranges = ranges;
-
-                    this.getAllYearsBetweenDates();
                 }
             }
         });
