@@ -1120,7 +1120,7 @@ ul.sub-list {
 .aging-table {
     border: 0px;
     margin-bottom: 0px;
-    background: transparent !important;
+    background: $white !important;
 }
 
 .d-none {
@@ -9700,7 +9700,6 @@ span#HW_badge_cont:nth-child(3){
 }
 
 @media (max-width: 767px) {
-
     .remove-header-lower-layer{
         .mobile-back-btn{
             display: inline-flex !important;
