@@ -9378,6 +9378,18 @@ span#HW_badge_cont:nth-child(3){
 .setting-sidebar-open .desktop-header.menu_open {
     padding-left: 215px;
 }
+.purchase-record-confirmation-modal{
+    .modal-content{
+        box-shadow: 0 5px 15px rgba(0,0,0,.5);
+    }
+}
+.dropdown-toggle::after{
+    display: none;
+}
+.page-count .pagination{
+    justify-content: center;
+    margin-top: 15px;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
