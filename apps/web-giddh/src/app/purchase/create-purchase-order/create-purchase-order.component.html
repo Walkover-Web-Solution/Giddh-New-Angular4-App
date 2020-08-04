@@ -24,7 +24,7 @@
                                     <div class="clearfix d-flex flex-column">
                                         <div class="d-flex flex-column">
                                             <sales-sh-select #vendorNameDropDown style="width:62.7%; float: left;" name="vendor"
-                                                [options]="customerAcList$ | async"
+                                                [options]="vendorAcList$ | async"
                                                 [(ngModel)]="purchaseOrder.account.uniqueName"
                                                 [customFilter]="customMoveGroupFilter"
                                                 (selected)="onSelectVendor($event);" [placeholder]="'Select Vendor'"
@@ -130,7 +130,7 @@
                                                                         [(ngModel)]="purchaseOrder.account.billingDetails.gstNumber"
                                                                         class="form-control input-custom"
                                                                         (blur)="autoFillShippingDetails('vendor')"
-                                                                        (change)="getStateCode('billingDetails', vendorBillingState)"
+                                                                        (change)="getStateCode('billingDetails', vendorBillingState, 'vendor')"
                                                                         placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                 </div>
                                                             </div>
@@ -172,6 +172,7 @@
                                                                     <div class="col-sm-6 pd select-border-bottom"
                                                                         #vendorShippingState>
                                                                         <sales-sh-select [placeholder]="'State'"
+                                                                            [disabled]="autoFillVendorShipping"
                                                                             class="select-border-bottom"
                                                                             (selected)="fillShippingBillingDetails($event, false, 'vendor');"
                                                                             #statesShipping
@@ -187,7 +188,7 @@
                                                                             type="text" name="vendorShippingDetailsTax"
                                                                             [(ngModel)]="purchaseOrder.account.shippingDetails.gstNumber"
                                                                             class="form-control input-custom"
-                                                                            (change)="getStateCode('shippingDetails', vendorShippingState)"
+                                                                            (change)="getStateCode('shippingDetails', vendorShippingState, 'vendor')"
                                                                             placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                     </div>
 
@@ -274,7 +275,7 @@
                                                                 [(ngModel)]="purchaseOrder.company.billingDetails.gstNumber"
                                                                 class="form-control input-custom"
                                                                 (blur)="autoFillShippingDetails('company')"
-                                                                (change)="getStateCode('billingDetails', companyBillingState)"
+                                                                (change)="getStateCode('billingDetails', companyBillingState, 'company')"
                                                                 placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                         </div>
                                                     </div>
@@ -312,6 +313,7 @@
                                                             </div>
                                                             <div class="col-sm-6 pd" #companyShippingState>
                                                                 <sales-sh-select [placeholder]="'State'"
+                                                                    [disabled]="autoFillCompanyShipping"
                                                                     class="select-border-bottom disabled"
                                                                     (selected)="fillShippingBillingDetails($event, false, 'company');"
                                                                     [showBottomBorderOnly]="true"
@@ -326,7 +328,7 @@
                                                                     name="companyShippingDetailsTax"
                                                                     [(ngModel)]="purchaseOrder.company.shippingDetails.gstNumber"
                                                                     class="form-control input-custom"
-                                                                    (change)="getStateCode('shippingDetails', companyShippingState)"
+                                                                    (change)="getStateCode('shippingDetails', companyShippingState, 'company')"
                                                                     placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                             </div>
                                                         </div>
@@ -421,7 +423,7 @@
                 *ngFor="let entry of purchaseOrder.entries; let entryIdx = index; let first = first; let last = last;"
                 (clickOutside)="handleOutsideClick()" [exclude]="'.entriesTr'">
                 <ng-container *ngFor="let transaction of entry.transactions;">
-                    <tr (click)="setActiveIndex(entryIdx);$event.stopPropagation()" [hidden]="activeIndx === entryIdx"
+                    <tr (click)="setActiveIndex(entryIdx);$event.stopPropagation()" [hidden]="activeIndex === entryIdx"
                         class="entriesTr set-active"
                         [ngClass]="{'isOtherTax' : entry.isOtherTaxApplicable && isMulticurrencyAccount}">
                         <td>{{ entryIdx + 1 }}</td>
@@ -569,7 +571,7 @@
 
                     <!-- region dynamic entries-->
                     <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
-                    <tr [hidden]="activeIndx !== entryIdx" class="entriesTr defaultActive"
+                    <tr [hidden]="activeIndex !== entryIdx" class="entriesTr defaultActive"
                         (click)="$event.stopPropagation();">
                         <td>{{ entryIdx + 1 }}</td>
                         <td>
@@ -635,7 +637,7 @@
                                                         name="transaction.date_{{entryIdx}}"
                                                         id="transaction.date_{{entryIdx}}"
                                                         class="form-control text-left" [(ngModel)]="entry.entryDate"
-                                                        [disabled]="isUpdateMode" (onShown)="hsnDropdownShow = false;"
+                                                        [disabled]="isUpdateMode" (onShown)="hsnSacDropdownShow = false;"
                                                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                         #dp="bsDatepicker" />
                                                     <span class="edit-icon cp" (click)="dp.toggle()"
@@ -667,7 +669,7 @@
                                                     </span>
                                                 </div>
 
-                                                <div class="hsn-code-dropdown" *ngIf="hsnDropdownShow">
+                                                <div class="hsn-code-dropdown" *ngIf="hsnSacDropdownShow">
                                                     <label>HSN/SAC</label>
                                                     <input type="text" maxLength="10" placeholder="HSN/SAC Number"
                                                         name="transaction.hsnNumber_{{entryIdx}}"
@@ -681,7 +683,7 @@
                                                     </a>
                                                     <div class="btngroup m-t-10">
                                                         <button class="btn btn-sm btn-success" type="button"
-                                                            (click)="hsnDropdownShow=!hsnDropdownShow">Save
+                                                            (click)="hsnSacDropdownShow=!hsnSacDropdownShow">Save
                                                         </button>
                                                         <button class="btn btn-sm btn-primary" type="button"
                                                             (click)="hideHsnSacEditPopup(transaction)">
@@ -890,7 +892,7 @@
                                 </div>
                                 <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600 pdL3 mr0">
                                     <div class="row">
-                                        <div class="form-group col-xs-4" [ngClass]="{'mb-3': isInvalidfield}">
+                                        <div class="form-group col-xs-4">
                                             <input type="text" #shippingDate="ngModel" placeholder="Ship Date"
                                                 bsDatepicker name="shippingDate"
                                                 [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate"
@@ -901,12 +903,12 @@
                                                 Invalid Date
                                             </p>
                                         </div>
-                                        <div class="form-group col-xs-4" [ngClass]="{'mb-3': isInvalidfield}">
+                                        <div class="form-group col-xs-4">
                                             <input type="text" name="shippedVia"
                                                 [(ngModel)]="purchaseOrder.templateDetails.other.shippedVia"
                                                 class="form-control" [placeholder]="'Ship Via'" />
                                         </div>
-                                        <div class="form-group col-xs-4" [ngClass]="{'mb-3': isInvalidfield}">
+                                        <div class="form-group col-xs-4">
                                             <input type="text" name="trackingNumber"
                                                 [(ngModel)]="purchaseOrder.templateDetails.other.trackingNumber"
                                                 class="form-control" [placeholder]="'Tracking No.'" />
@@ -1036,7 +1038,7 @@
         <div class="card-invoice-table-wrapper"
             *ngFor="let entry of purchaseOrder.entries; let entryIdx = index; let first = first; let last = last">
             <ng-container *ngFor="let transaction of entry.transactions;">
-                <div class="card-invoice-table" [hidden]="activeIndx === entryIdx">
+                <div class="card-invoice-table" [hidden]="activeIndex === entryIdx">
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="single-card-row">
@@ -1187,7 +1189,7 @@
                 <!-- endregion -->
 
                 <!-- region dynamic entry -->
-                <div class="card-invoice-table edit-card-invoice-table" [hidden]="activeIndx !== entryIdx">
+                <div class="card-invoice-table edit-card-invoice-table" [hidden]="activeIndex !== entryIdx">
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="single-card-row">
@@ -1258,7 +1260,7 @@
                                                                 id="transaction.date_{{entryIdx}}"
                                                                 class="form-control text-left"
                                                                 [(ngModel)]="entry.entryDate" [disabled]="isUpdateMode"
-                                                                (onShown)="hsnDropdownShow = false"
+                                                                (onShown)="hsnSacDropdownShow = false"
                                                                 [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                                 #dp="bsDatepicker" />
                                                             <span class="edit-icon cp" (click)="dp.toggle()"
@@ -1287,7 +1289,7 @@
                                                                 </span>
                                                             </span>
                                                         </div>
-                                                        <div class="hsn-code-dropdown" *ngIf="hsnDropdownShow">
+                                                        <div class="hsn-code-dropdown" *ngIf="hsnSacDropdownShow">
                                                             <label>HSN/SAC</label>
                                                             <input type="text" maxLength="10"
                                                                 placeholder="HSN/SAC Number"
@@ -1303,7 +1305,7 @@
                                                             </a>
                                                             <div class="btngroup m-t-10">
                                                                 <button class="btn btn-sm btn-success" type="button"
-                                                                    (click)="hsnDropdownShow=!hsnDropdownShow">
+                                                                    (click)="hsnSacDropdownShow=!hsnSacDropdownShow">
                                                                     Save
                                                                 </button>
                                                                 <button class="btn btn-sm btn-primary" type="button"
@@ -1813,7 +1815,7 @@
 
 <!-- endregion -->
 <div class="aside-overlay"
-    *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForRecurringEntry === 'in' || asideMenuStateForOtherTaxes === 'in'">
+    *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in' || asideMenuStateForOtherTaxes === 'in'">
 </div>
 <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
     (closeAsideEvent)="toggleAccountAsidePane($event)"
