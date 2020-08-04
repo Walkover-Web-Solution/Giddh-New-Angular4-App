@@ -122,7 +122,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NewUserComponent,
         BrowserDetectComponent,
         OnboardingComponent,
-        LoaderComponent,
         SocialLoginCallbackComponent,
         SelectPlanComponent,
         MobileHomeComponent,
