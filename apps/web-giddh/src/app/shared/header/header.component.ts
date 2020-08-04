@@ -1721,6 +1721,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public addClassInBodyIfPageHasTabs(): void {
         setTimeout(() => {
             if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
+                this.sideBarStateChange(true);
                 document.querySelector('body').classList.add('on-setting-page');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-user-page');
@@ -1728,14 +1729,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.add('on-user-page');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
+                document.querySelector('body').classList.remove('mobile-setting-sidebar');
             } else if (document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0 && !this.router.url.includes("/vendor")) {
                 document.querySelector('body').classList.add('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
+                document.querySelector('body').classList.remove('mobile-setting-sidebar');
             } else {
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
+                document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
         }, 500);
     }
