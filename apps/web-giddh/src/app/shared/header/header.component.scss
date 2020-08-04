@@ -23,8 +23,8 @@
 }
 
 .account-search .input-group-addon {
-    border-color: $gainsboro;
-    border-radius: 20px 0 0 20px;
+    //border-color: $gainsboro;
+    //border-radius: 20px 0 0 20px;
     color: #484848;
     font-size: 12px;
     padding-right: 0px;
@@ -41,11 +41,12 @@
 
 .account-search .form-control {
     background: none !important;
-    border-color: $gainsboro;
-    border-left: 0px;
-    border-radius: 0px 20px 20px 0 !important;
+    //border-color: $gainsboro;
+    //border-left: 0px;
+    //border-radius: 0px 20px 20px 0 !important;
     height: 36px;
     padding-left: 3px !important;
+    border: 0px solid $white !important;
 }
 
 .account-search .form-control:focus {
@@ -54,9 +55,12 @@
 }
 
 .account-search {
-    margin: 10px 15px 5px 15px;
     position: relative;
     height: 36px;
+    border-color: $gainsboro;
+    border-radius: 20px 20px 20px 20px !important;
+    border: 1px solid #d9d9d9;
+    margin: 10px 0px 5px 0px;
 }
 
 .account-search:hover:after {
@@ -131,8 +135,13 @@ a[vr-item]:focus {
     cursor: pointer;
 }
 
-.main-company-name > li > a {
-    padding: 6px 15px !important;
+.main-company-name{
+    padding:0 15px !important;
+    > li{
+        > a{
+            padding: 6px 15px !important;
+        }
+    }
 }
 
 .main-company-name > li > a:hover .cText .cName,
@@ -791,6 +800,7 @@ ul.sub-list {
         .navbar-nav {
             margin-bottom: 5px;
             display: flex;
+            flex-direction: row;
             .hamburger_menu {
                 display: flex;
                 align-items: center;
@@ -836,6 +846,7 @@ ul.sub-list {
     .lower-layer-header {
         display: flex;
         justify-content: space-between;
+        width: 100%;
         #add-manage.btn-gray {
             padding-left: 0;
             padding-right: 0;
@@ -957,4 +968,10 @@ ul.sub-list {
     .not-today {
         padding-right: 0 !important;
     }
+}
+
+@media (min-width: 992px){
+.modal-lg, .modal-xl {
+    max-width: 100% !important;
+}
 }
