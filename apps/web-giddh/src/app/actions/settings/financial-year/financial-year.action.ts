@@ -136,6 +136,12 @@ export class SettingsFinancialYearActions {
                 payload: res
             })));        
 
+    /**
+     * Effect to get financial year data
+     *
+     * @type {Observable<Action>}
+     * @memberof SettingsFinancialYearActions
+     */
     @Effect()
     public getFinancialYearLimits$: Observable<Action> = this.action$
         .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_FINANCIAL_YEAR_LIMITS).pipe(
@@ -245,6 +251,12 @@ export class SettingsFinancialYearActions {
         return successAction;
     }
 
+    /**
+     * Returns the action to get financial year data
+     *
+     * @returns {CustomActions}
+     * @memberof SettingsFinancialYearActions
+     */
     public getFinancialYearLimits(): CustomActions {
         return {
             type: SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_FINANCIAL_YEAR_LIMITS
