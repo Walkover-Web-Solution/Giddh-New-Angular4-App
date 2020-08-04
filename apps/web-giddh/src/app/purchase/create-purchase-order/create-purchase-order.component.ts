@@ -102,109 +102,167 @@ const THEAD_ARR_READONLY = [
 
 export class CreatePurchaseOrderComponent implements OnInit {
     @ViewChild('vendorNameDropDown') public vendorNameDropDown: ShSelectComponent;
-    /** Billing state instance */
+    /* Billing state instance */
     @ViewChild('vendorBillingState') vendorBillingState: ElementRef;
-    /** Shipping state instance */
+    /* Shipping state instance */
     @ViewChild('vendorShippingState') vendorShippingState: ElementRef;
-    /** Billing state instance */
+    /* Billing state instance */
     @ViewChild('companyBillingState') companyBillingState: ElementRef;
-    /** Shipping state instance */
+    /* Shipping state instance */
     @ViewChild('companyShippingState') companyShippingState: ElementRef;
-    /** RCM popup instance */
+    /* RCM popup instance */
     @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
+    /* PO Form instance */
     @ViewChild('poForm', { read: NgForm }) public poForm: NgForm;
+    /* Bulk item modal instance */
     @ViewChild('bulkItemsModal') public bulkItemsModal: ModalDirective;
-
+    /* Bootstrap directive instance */
     @ViewChildren(BsDatepickerDirective) public datePickers: QueryList<BsDatepickerDirective>;
+    /* Select account instance */
     @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
+    /* Entry description instance */
     @ViewChildren('description') public description: QueryList<ElementRef>;
+    /* Discount component instance */
     @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
+    /* Tax Control instance */
     @ViewChild(TaxControlComponent) public taxControlComponent: TaxControlComponent;
-
+    /* Modal instance */
     public modelRef: BsModalRef;
-    public isInvalidfield: boolean = true;
-    public modalRef: BsModalRef;
+    /* This will hold if it's multi currency account */
     public isMulticurrencyAccount: boolean = false;
+    /* This will hold if it's mobile device*/
     public isMobileScreen: boolean = true;
+    /* Observable for list of flatten accounts */
     public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
-    public customerAcList$: Observable<IOption[]>;
+    /* Observable for list of vendors */
+    public vendorAcList$: Observable<IOption[]>;
+    /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* Object for purchase order */
     public purchaseOrder: PurchaseOrder = new PurchaseOrder();
+    /* This will hold if it's update mode */
     public isUpdateMode: boolean = false;
+    /* Observable for list of selected account */
     private selectedAccountDetails$: Observable<AccountResponseV2>;
+    /* This will hold vendor country */
     public vendorCountry: any = '';
+    /* This will hold autofill vendor shipping is enabled */
     public autoFillVendorShipping: boolean = true;
+    /* This will hold autofill company shipping is enabled */
     public autoFillCompanyShipping: boolean = false;
+    /* This will hold list of vendor country states */
     public statesSource: IOption[] = [];
+    /* This will hold list of company country states */
     public companyStatesSource: IOption[] = [];
+    /* This will hold if we need to show loader */
     public showLoader: boolean = true;
-    /** Stores warehouses for a company */
+    /* Stores warehouses for a company */
     public warehouses: Array<any>;
-    /** True, if warehouse drop down should be displayed */
+    /* True, if warehouse drop down should be displayed */
     public shouldShowWarehouse: boolean;
     /* This will hold the company country name */
     public companyCountryName: string = '';
+    /* This will hold the company country code */
     public companyCountryCode: string = '';
+    /* This will hold the vendor not found text */
     public vendorNotFoundText: string = 'Add Vendor';
+    /* This will hold state of account aside popup */
     public accountAsideMenuState: string = 'out';
+    /* This will hold state of product/service aside popup */
     public asideMenuStateForProductService: string = 'out';
-    public asideMenuStateForRecurringEntry: string = 'out';
+    /* This will hold state of account aside popup */
     public asideMenuStateForOtherTaxes: string = 'out';
-    // variable for checking do we really need to show loader, issue ref :- when we open aside pan loader is displayed unnecessary
+    /* Variable for checking do we really need to show loader, issue ref :- when we open aside pan loader is displayed unnecessary */
     private shouldShowLoader: boolean = true;
+    /* Default group unique name for account create/edit */
     public selectedGroupUniqueNameForAddEditAccountModal: string = 'sundrycreditors';
+    /* This will hold selected vendor */
     public selectedVendorForDetails: string = '';
+    /* This will hold if vendor is selected */
     public isVendorSelected = false;
+    /* Observable for create account success */
     private createAccountIsSuccess$: Observable<boolean>;
+    /* Observable for update account success */
     private updateAccountSuccess$: Observable<boolean>;
+    /* Observable for created account details */
     private createdAccountDetails$: Observable<AccountResponseV2>;
+    /* Observable for updated account details */
     private updatedAccountDetails$: Observable<AccountResponseV2>;
+    /* This will hold form fields */
     public formFields: any[] = [];
-    /** True, if the Giddh supports the taxation of the country (not supported now: UK, US, Nepal, Australia) */
+    /* True, if the Giddh supports the taxation of the country (not supported now: UK, US, Nepal, Australia) */
     public shouldShowTrnGstField: boolean = false;
+    /* This will hold selected company details */
     public selectedCompany: any;
+    /* This will hold if we need to show GST */
     public showGSTINNo: boolean;
+    /* This will hold if we need to show TRN */
     public showTRNNo: boolean;
-    public isValidGstinNumber: boolean = false;
+    /* This will hold if tax is valid */
+    public isValidTaxNumber: boolean = false;
+    /* This will hold list of vat supported countries */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    /* This will hold giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /* Observable for sales account */
     public salesAccounts$: Observable<IOption[]> = observableOf(null);
+    /* Observable for force clear sh-select */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
-    public hsnDropdownShow: boolean = false;
-    /** Inventory Settings */
+    /* This will hold if we need to show hsn/sac popup */
+    public hsnSacDropdownShow: boolean = false;
+    /* This will hold inventory settings */
     public inventorySettings: any;
     /* This will hold the currently editing hsn/sac code */
     public editingHsnSac: any = "";
+    /* This will hold company taxes list */
     public companyTaxesList: TaxResponse[] = [];
+    /* This will hold list of all columns of entry table */
     public theadArrReadOnly: IContentCommon[] = THEAD_ARR_READONLY;
+    /* This will hold list of all tax types */
     public allowedSelectionOfAType: any = { type: [], count: 1 };
-    public activeIndx: number;
-    /** Rate should have precision up to 4 digits for better calculation */
+    /* This will hold active index of entry */
+    public activeIndex: number;
+    /* Rate should have precision up to 4 digits for better calculation */
     public ratePrecision = RATE_FIELD_PRECISION;
+    /* This will hold if we need to apply round off */
     public applyRoundOff: boolean = true;
     /* This will hold if we need to hide total tax and have to exclude tax amount from total invoice amount */
     public excludeTax: boolean = false;
+    /* This will hold round off calculation */
     public calculatedRoundOff: number = 0;
+    /* This will hold exchange rate */
     public exchangeRate = 1;
-    public grandTotalMulDum;
+    /* This will hold grand total */
+    public grandTotalMulDum: any;
+    /* This will hold entries list before applying tax */
     private entriesListBeforeTax: SalesEntryClass[];
-    /** True, if the entry contains RCM applicable taxes */
+    /* True, if the entry contains RCM applicable taxes */
     public isRcmEntry: boolean = false;
+    /* This will hold universal date */
     public universalDate: any;
+    /* moment object */
     public moment = moment;
+    /* This will hold if multicurrency is supported */
     public isMultiCurrencySupported: boolean = false;
+    /* This will hold currency symbol of company */
     public baseCurrencySymbol: string = '';
+    /* Object for selected vendor */
     public customerAccount: any = { email: '' };
+    /* This will hold company currency */
     public companyCurrency: string;
-    /** RCM modal configuration */
+    /* RCM modal configuration */
     public rcmConfiguration: ConfirmationModalConfiguration;
+    /* This will hold suffix for currency */
     public selectedSuffixForCurrency: string = '';
+    /* Fetched converted rate */
     public fetchedConvertedRate: number = 0;
+    /* This will hold if we need to show bulk item modal */
     public showBulkItemModal: boolean = false;
-    /** Stores the unique name of default warehouse of a company */
+    /* Stores the unique name of default warehouse of a company */
     public defaultWarehouse: string;
-    /** Stores the unique name of selected warehouse */
+    /* Stores the unique name of selected warehouse */
     public selectedWarehouse: string;
+    /* Array of company addresses */
     public companyAddresses: any[] = [];
 
     constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private cdr: ChangeDetectorRef) {
@@ -512,9 +570,11 @@ export class CreatePurchaseOrderComponent implements OnInit {
                     }
                 });
                 this.salesAccounts$ = observableOf(_.orderBy(stockAccountsList, 'label'));
-                this.customerAcList$ = observableOf(_.orderBy(sundryCreditorsAcList, 'label'));
+                this.vendorAcList$ = observableOf(_.orderBy(sundryCreditorsAcList, 'label'));
             }
         });
+
+        this.focusInVendorName();
     }
 
     /**
@@ -829,7 +889,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
      * @memberof CreatePurchaseOrderComponent
      */
     public toggleBodyClass(): void {
-        if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in' || this.asideMenuStateForRecurringEntry === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
+        if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
             // don't show loader when aside menu is opened
             this.shouldShowLoader = false;
 
@@ -880,23 +940,38 @@ export class CreatePurchaseOrderComponent implements OnInit {
      * @param {SalesShSelectComponent} statesEle state input box
      * @memberof CreatePurchaseOrderComponent
      */
-    public getStateCode(type: string, statesEle: SalesShSelectComponent): void {
+    public getStateCode(type: string, statesEle: SalesShSelectComponent, addressType: string): void {
         let gstVal = _.cloneDeep(this.purchaseOrder.account[type].gstNumber).toString();
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.statesSource.find(item => item.stateGstCode === gstVal.substring(0, 2));
             if (selectedState) {
-                this.purchaseOrder.account[type].stateCode = selectedState.value;
-                this.purchaseOrder.account[type].state.code = selectedState.value;
+                if (addressType === "vendor") {
+                    this.purchaseOrder.account[type].stateCode = selectedState.value;
+                    this.purchaseOrder.account[type].state.code = selectedState.value;
+                } else {
+                    this.purchaseOrder.company[type].stateCode = selectedState.value;
+                    this.purchaseOrder.company[type].state.code = selectedState.value;
+                }
             } else {
-                this.purchaseOrder.account[type].stateCode = null;
-                this.purchaseOrder.account[type].state.code = null;
+                if (addressType === "vendor") {
+                    this.purchaseOrder.account[type].stateCode = null;
+                    this.purchaseOrder.account[type].state.code = null;
+                } else {
+                    this.purchaseOrder.company[type].stateCode = null;
+                    this.purchaseOrder.company[type].state.code = null;
+                }
                 this.toaster.clearAllToaster();
             }
             statesEle.disabled = true;
         } else {
             statesEle.disabled = false;
-            this.purchaseOrder.account[type].stateCode = null;
-            this.purchaseOrder.account[type].state.code = null;
+            if (addressType === "vendor") {
+                this.purchaseOrder.account[type].stateCode = null;
+                this.purchaseOrder.account[type].state.code = null;
+            } else {
+                this.purchaseOrder.company[type].stateCode = null;
+                this.purchaseOrder.company[type].state.code = null;
+            }
         }
         this.checkGstNumValidation(gstVal);
     }
@@ -909,19 +984,19 @@ export class CreatePurchaseOrderComponent implements OnInit {
      * @memberof CreatePurchaseOrderComponent
      */
     public checkGstNumValidation(value, fieldName: string = ''): void {
-        this.isValidGstinNumber = false;
+        this.isValidTaxNumber = false;
         if (value) {
             if (this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(value)) {
-                        this.isValidGstinNumber = true;
+                        this.isValidTaxNumber = true;
                     }
                 }
             } else {
-                this.isValidGstinNumber = true;
+                this.isValidTaxNumber = true;
             }
-            if (!this.isValidGstinNumber) {
+            if (!this.isValidTaxNumber) {
                 this.startLoader(false);
                 if (fieldName) {
                     this.toaster.errorToast(`Invalid ${this.formFields['taxName'].label} in ${fieldName}! Please fix and try again`);
@@ -1093,8 +1168,8 @@ export class CreatePurchaseOrderComponent implements OnInit {
 
             setTimeout(() => {
                 let description = this.description.toArray();
-                if (description && description[this.activeIndx]) {
-                    description[this.activeIndx].nativeElement.focus();
+                if (description && description[this.activeIndex]) {
+                    description[this.activeIndex].nativeElement.focus();
                 }
             }, 200);
             this.calculateStockEntryAmount(txn);
@@ -1115,8 +1190,8 @@ export class CreatePurchaseOrderComponent implements OnInit {
 
             setTimeout(() => {
                 let description = this.description.toArray();
-                if (description && description[this.activeIndx]) {
-                    description[this.activeIndx].nativeElement.focus();
+                if (description && description[this.activeIndex]) {
+                    description[this.activeIndex].nativeElement.focus();
                 }
             }, 200);
             return txn;
@@ -1191,7 +1266,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
             this.editingHsnSac = transaction.sacNumber;
         }
 
-        this.hsnDropdownShow = !this.hsnDropdownShow;
+        this.hsnSacDropdownShow = !this.hsnSacDropdownShow;
     }
 
     /**
@@ -1209,7 +1284,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
             transaction.sacNumber = this.editingHsnSac;
         }
 
-        this.hsnDropdownShow = !this.hsnDropdownShow;
+        this.hsnSacDropdownShow = !this.hsnSacDropdownShow;
     }
 
     /**
@@ -1570,7 +1645,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
      */
     public calculateOtherTaxes(modal: SalesOtherTaxesModal, entryObj?: SalesEntryClass): void {
         let entry: SalesEntryClass;
-        entry = entryObj ? entryObj : this.purchaseOrder.entries[this.activeIndx];
+        entry = entryObj ? entryObj : this.purchaseOrder.entries[this.activeIndex];
 
         let taxableValue = 0;
         let totalTaxes = 0;
@@ -1608,9 +1683,9 @@ export class CreatePurchaseOrderComponent implements OnInit {
             entry.tcsTaxList = [];
             entry.tdsTaxList = [];
         }
-        if (this.activeIndx !== undefined && this.activeIndx !== null && !entryObj) {
+        if (this.activeIndex !== undefined && this.activeIndex !== null && !entryObj) {
             this.purchaseOrder.entries = cloneDeep(this.entriesListBeforeTax);
-            this.purchaseOrder.entries[this.activeIndx] = entry;
+            this.purchaseOrder.entries[this.activeIndex] = entry;
         }
     }
 
@@ -1620,7 +1695,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
      * @memberof CreatePurchaseOrderComponent
      */
     public handleOutsideClick(): void {
-        this.activeIndx = null;
+        this.activeIndex = null;
     }
 
     /**
@@ -1630,7 +1705,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
      * @memberof CreatePurchaseOrderComponent
      */
     public setActiveIndex(index: number): void {
-        this.activeIndx = index;
+        this.activeIndex = index;
         try {
             if (this.isRcmEntry) {
                 this.purchaseOrder.entries[index].transactions[0]['requiredTax'] = false;
@@ -1670,8 +1745,8 @@ export class CreatePurchaseOrderComponent implements OnInit {
             }
             this.purchaseOrder.entries.push(entry);
             setTimeout(() => {
-                this.activeIndx = this.purchaseOrder.entries.length ? this.purchaseOrder.entries.length - 1 : 0;
-                this.onBlurDueDate(this.activeIndx);
+                this.activeIndex = this.purchaseOrder.entries.length ? this.purchaseOrder.entries.length - 1 : 0;
+                this.onBlurDueDate(this.activeIndex);
             }, 200);
         } else {
             // if transaction is valid then add new row else show toasty
@@ -1682,8 +1757,8 @@ export class CreatePurchaseOrderComponent implements OnInit {
             let entry: SalesEntryClass = new SalesEntryClass();
             this.purchaseOrder.entries.push(entry);
             setTimeout(() => {
-                this.activeIndx = this.purchaseOrder.entries.length ? this.purchaseOrder.entries.length - 1 : 0;
-                this.onBlurDueDate(this.activeIndx);
+                this.activeIndex = this.purchaseOrder.entries.length ? this.purchaseOrder.entries.length - 1 : 0;
+                this.onBlurDueDate(this.activeIndex);
             }, 200);
         }
     }
@@ -1695,8 +1770,8 @@ export class CreatePurchaseOrderComponent implements OnInit {
      * @memberof CreatePurchaseOrderComponent
      */
     public removeTransaction(entryIdx: number): void {
-        if (this.activeIndx === entryIdx) {
-            this.activeIndx = null;
+        if (this.activeIndex === entryIdx) {
+            this.activeIndex = null;
         }
         this.purchaseOrder.entries = cloneDeep(this.purchaseOrder.entries.filter((entry, index) => entryIdx !== index));
         this.calculateAffectedThingsFromOtherTaxChanges();
@@ -1818,12 +1893,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
         // special check if gst no filed is visible then and only then check for gst validation
         if (data.accountDetails && data.accountDetails.billingDetails && data.accountDetails.shippingDetails && data.accountDetails.billingDetails.gstNumber && this.showGSTINNo) {
             this.checkGstNumValidation(data.accountDetails.billingDetails.gstNumber, 'Billing Address');
-            if (!this.isValidGstinNumber) {
+            if (!this.isValidTaxNumber) {
                 this.startLoader(false);
                 return;
             }
             this.checkGstNumValidation(data.accountDetails.shippingDetails.gstNumber, 'Shipping Address');
-            if (!this.isValidGstinNumber) {
+            if (!this.isValidTaxNumber) {
                 this.startLoader(false);
                 return;
             }
@@ -2093,7 +2168,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
                     lastIndex = this.purchaseOrder.entries.length - 1;
                 }
 
-                this.activeIndx = lastIndex;
+                this.activeIndex = lastIndex;
                 this.purchaseOrder.entries[lastIndex].entryDate = this.universalDate;
                 this.purchaseOrder.entries[lastIndex].transactions[0].fakeAccForSelect2 = salesItem.value;
                 this.purchaseOrder.entries[lastIndex].isNewEntryInUpdateMode = true;
@@ -2146,7 +2221,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
      * @memberof CreatePurchaseOrderComponent
      */
     public fillCompanyAddress(): void {
-        if(this.companyAddresses) {
+        if (this.companyAddresses) {
             this.companyAddresses.forEach(address => {
                 if (address.isDefault === true) {
                     this.purchaseOrder.company.billingDetails.address = [];
@@ -2160,5 +2235,44 @@ export class CreatePurchaseOrderComponent implements OnInit {
                 }
             });
         }
+    }
+
+    /**
+     * This will put focus in vendor field
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public focusInVendorName(): void {
+        setTimeout(() => {
+            let firstElementToFocus: any = document.getElementsByClassName('firstElementToFocus');
+            if (firstElementToFocus[0]) {
+                firstElementToFocus[0].focus();
+            }
+        }, 200);
+    }
+
+    /**
+     * This will toggle other tax aside pane
+     *
+     * @param {boolean} modalBool
+     * @param {number} [index=null]
+     * @returns {void}
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null): void {
+        if (!modalBool) {
+            let entry = this.purchaseOrder.entries[this.activeIndex];
+            if (entry) {
+                entry.otherTaxModal = new SalesOtherTaxesModal();
+                entry.otherTaxSum = 0;
+            }
+            return;
+        } else {
+            if (index !== null) {
+                this.entriesListBeforeTax = cloneDeep(this.purchaseOrder.entries);
+            }
+        }
+        this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
     }
 }
