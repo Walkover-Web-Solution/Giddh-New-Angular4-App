@@ -98,7 +98,7 @@
         display: block;
         padding: 5px 10px 5px 50% !important;
         position: relative;
-        text-align: left;
+        text-align: left !important;
         height: auto !important;
         min-height: 30px !important;
         word-wrap: inherit !important;
@@ -1027,6 +1027,7 @@ ul.sub-list {
     padding-left: 0;
     padding-right: 0;
     border-bottom: 4px solid transparent;
+    display: inline-block;
 }
 
 .custom-tabs .nav.nav-tabs>li a:hover {
@@ -1147,7 +1148,7 @@ ul.sub-list {
     padding: 20px;
     box-shadow: 0 0 19px rgba(0, 0, 0, 0.2);
     top: 75px;
-    z-index: 999;
+    z-index: 1;
 }
 
 .top-aging-table-top1 p {
@@ -3247,7 +3248,9 @@ input,
 button:focus {
     outline: none !important;
 }
-
+.btn:focus, .btn.focus{
+    box-shadow:none !important;
+}
 .Inpt_dwn {
     padding-right: 25px !important;
     text-align: right;
@@ -6841,10 +6844,7 @@ table td[class*=col-]:last-child {
             display:block;
         }
     }
-} 
-
-
-
+}
 /* ==================================================
     Branch
 ================================================== */
@@ -9567,6 +9567,7 @@ span#HW_badge_cont:nth-child(3){
     .aging-table.table-aging-report tr td:first-child,
     .aging-table.table-aging-report tr th:first-child {
         padding-left: 50% !important;
+        width: auto;
     }
     .basic>tbody>tr td:first-child,
     .basic>thead>tr th:first-child {
@@ -9678,6 +9679,9 @@ span#HW_badge_cont:nth-child(3){
     }
     .setting-data, .setting-sidebar-open .white-row {
         padding-left: 15px !important;
+    }
+    .aging-table{
+        background: transparent !important;
     }
 }
 
@@ -9850,7 +9854,7 @@ span#HW_badge_cont:nth-child(3){
         padding-top: 0;
     }
     .custom-tabs.hide-header .top-bar {
-        margin-top: 0;
+        margin-top: 10px;
     }
     .invoce-controll .nav.nav-tabs {
         padding: 0 0 0 15px !important;

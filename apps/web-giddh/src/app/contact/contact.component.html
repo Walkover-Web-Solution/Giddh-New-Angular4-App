@@ -7,7 +7,7 @@
                 <div class="customer-form-inline">
                     <div class="dis pull-left mrR1">
 
-                        <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'right'">
+                        <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'bottom'">
                             <i dropdownToggle class="icon-options pd cp fs20"></i>
 
                             <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
@@ -59,7 +59,7 @@
                     <div class="pull-left header-left">
                         <div class="form-group max250 searchField" *ngIf="activeTab !== 'aging'">
                             <input type="text" placeholder="Name/Email/Mobile" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
-                            <span class="inputAddon">
+                            <span class="input-addon">
                                 <i class="icon-search"></i>
                             </span>
                         </div>
@@ -749,7 +749,7 @@
                             <button *ngIf="account?.bankPaymentDetails && account?.country?.code==='IN'" class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
                             Pay Now </button>
                             <!-- (click)="openPaymentAside(account)" -->
-                            <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-succes " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
+                            <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-light " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
                             </button>
                         </td>
                     </tr>
