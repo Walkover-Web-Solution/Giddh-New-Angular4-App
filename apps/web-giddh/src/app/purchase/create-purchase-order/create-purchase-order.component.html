@@ -427,7 +427,7 @@
                         <td>{{ entryIdx + 1 }}</td>
                         <td>
                             <div class="productName">
-                                <label *ngIf="!transaction.accountName" class="selectAccountLabel">Click to
+                                <label *ngIf="!transaction.accountName" class="select-account-label">Click to
                                     Select
                                     Account</label> {{transaction.accountName}}
                                 <span
@@ -1042,7 +1042,7 @@
                             <div class="single-card-row">
                                 <div class="product-name">
                                     <label class="card-label">Product/Service Description</label>
-                                    <label *ngIf="!transaction.accountName" class="selectAccountLabel">Click
+                                    <label *ngIf="!transaction.accountName" class="select-account-label">Click
                                         to Select
                                         Account</label>
                                     <p>{{transaction.accountName}}</p>
@@ -1273,9 +1273,8 @@
                                                 </div>
 
                                                 <div class="col-xs-6 pdL0">
-                                                    <div class="wrap-hsn-box"
-                                                        (click)="toggleHsnSacDropDown(transaction)">
-                                                        <div class="hsn-code text-right">
+                                                    <div class="wrap-hsn-box">
+                                                        <div class="hsn-code text-right"  (click)="toggleHsnSacDropDown(transaction)">
                                                             <label>HSN/SAC:</label>
                                                             <span>
                                                                 {{(inventorySettings?.manageInventory || !transaction.sacNumber) ? transaction.hsnNumber : transaction.sacNumber }}
