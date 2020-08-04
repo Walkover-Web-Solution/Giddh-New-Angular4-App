@@ -276,6 +276,7 @@ span.inputAddon {
     font-size: 20px;
     border-radius: 2px;
     height: 36px;
+    top: 0;
 }
 .aging-table .btn-small {
     min-width: 140px;
@@ -402,7 +403,7 @@ span.inputAddon {
         padding-bottom: 10px;
         float: right !important;
     }
-    .form-inline{
+    .customer-form-inline{
         position: relative;
         .dis{
             position: absolute;

@@ -227,6 +227,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public selectedAccountsList: any[] = [];
     /**pagination count */
     public paginationLimit: number = PAGINATION_LIMIT;
+    /** Giddh decimal places set by user */
+    public giddhDecimalPlaces = 2;
 
 
     private checkboxInfo: any = {
@@ -334,7 +336,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }
         if (this.selectedAccountsList.length || this.selectedAccForPayment) {
             this.bulkPaymentModalRef = this.modalService.show(template,
-                Object.assign({}, { class: 'payment-modal modal-lg' })
+                Object.assign({}, { class: 'payment-modal modal-xl' })
             );
         }
     }
@@ -483,6 +485,13 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         if (this.selectedCompany && this.selectedCompany.countryV2) {
             this.getOnboardingForm(this.selectedCompany.countryV2.alpha2CountryCode);
         }
+        this.store.pipe(select(store => store.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.balanceDecimalPlaces) {
+                this.giddhDecimalPlaces = response.balanceDecimalPlaces;
+            } else {
+                this.giddhDecimalPlaces = 2;
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -1114,10 +1123,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.currentPage = pageNumber;
 
         this._contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order, this.advanceSearchRequestModal).subscribe((res) => {
-            if (res.status === 'success') {
-                this.totalDue = res.body.closingBalance.amount || 0;
-                this.totalSales = (this.activeTab === 'customer' ? res.body.creditTotal : res.body.debitTotal) || 0;
-                this.totalReceipts = (this.activeTab === 'customer' ? res.body.debitTotal : res.body.creditTotal) || 0;
+            if (res && res.body && res.status === 'success') {
+                this.totalDue = Number(Math.abs(res.body.debitTotal - res.body.creditTotal).toFixed(this.giddhDecimalPlaces)) || 0;
+                this.totalSales = (this.activeTab === 'customer' ? res.body.debitTotal : res.body.creditTotal) || 0;
+                this.totalReceipts = (this.activeTab === 'customer' ? res.body.creditTotal : res.body.debitTotal) || 0;
                 this.Totalcontacts = 0;
 
                 if (groupUniqueName === 'sundrydebtors') {
@@ -1291,7 +1300,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
     }
 

@@ -2231,7 +2231,7 @@
 <!-- region print voucher popup -->
 <div bsModal #printVoucherModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" [config]="modalConfig">
 
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
 
             <ng-container *ngIf="actionAfterGenerateORUpdate === 3 && (invoiceNo && accountUniqueName)">
@@ -2257,7 +2257,7 @@
 </div>
 
 <div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent
                 [isUpdateMode]="isUpdateMode" [depositAmount]="depositAmount" [invoiceFormDetails]="invFormData"
