@@ -128,12 +128,13 @@
                 span{
                     color: $nero;
                     &:first-child{
-                        line-height: 1.6;
-                        height: 20px;
-                        display: inline-flex;
-                        align-items: center;
-                        width: 28px;
-                    }
+                            line-height: 1.6;
+                            height: 20px;
+                            display: inline-flex;
+                            -webkit-box-align: center;
+                            align-items: center;
+                            width: 28px;
+                        }
                 }
             }
             &:hover{
