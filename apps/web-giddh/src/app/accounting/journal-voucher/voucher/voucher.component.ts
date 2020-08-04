@@ -683,7 +683,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
         if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
             if (this.totalCreditAmount < this.totalDebitAmount) {
-                if(this.requestObj.voucherType !== VOUCHERS.RECEIPT) {
+                if (this.requestObj.voucherType !== VOUCHERS.RECEIPT) {
                     this.newEntryObj('to');
                 }
             } else if (this.totalDebitAmount < this.totalCreditAmount) {
@@ -815,7 +815,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 });
                 let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
                 let indexOfMaxAmountEntry = _.findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
-                if(this.requestObj.voucherType === VOUCHERS.RECEIPT) {
+                if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
                     data.transactions.splice(0, 2);
                 } else {
                     data.transactions.splice(indexOfMaxAmountEntry, 1);
@@ -1523,7 +1523,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             case VOUCHERS.RECEIPT:
                 currentPageObj.name = `Journal Voucher * > ${voucherType}`;
                 currentPageObj.url = '/pages/journal-voucher/receipt';
-                break;    
+                break;
             default:
                 currentPageObj.name = 'Journal Voucher *';
                 currentPageObj.url = '/pages/journal-voucher';
@@ -1555,7 +1555,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public getTaxList(): void {
         this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                if(res.taxes) {
+                if (res.taxes) {
                     let taxList: IOption[] = [];
                     Object.keys(res.taxes).forEach(key => {
                         taxList.push({ label: res.taxes[key].name, value: res.taxes[key].uniqueName });
@@ -1637,7 +1637,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 uniqueName: event.value,
                 type: this.pendingInvoiceList[event.value].voucherType
             };
-            if(this.pendingInvoiceList[event.value].balanceDue.amountForAccount < entry.amount) {
+            if (this.pendingInvoiceList[event.value].balanceDue.amountForAccount < entry.amount) {
                 this._toaster.clearAllToaster();
                 this._toaster.errorToast(this.invoiceAmountErrorMessage);
             }
@@ -1682,6 +1682,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public validateEntries(showErrorMessage: boolean): void {
         let receiptTotal = 0;
+        let adjustmentTotal = 0;
         let isValid = true;
         let invoiceRequired = false;
         let invoiceAmountError = false;
@@ -1691,7 +1692,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 if (parseFloat(receipt.amount) === 0 || isNaN(parseFloat(receipt.amount))) {
                     isValid = false;
                 } else {
-                    if(receipt.type === AdjustmentTypesEnum.againstReference) {
+                    if (receipt.type === AdjustmentTypesEnum.againstReference) {
+                        adjustmentTotal += parseFloat(receipt.amount);
+                    } else {
                         receiptTotal += parseFloat(receipt.amount);
                     }
                 }
@@ -1707,7 +1710,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         if (isValid) {
-            if (receiptTotal > this.adjustmentTransaction.amount) {
+            if (receiptTotal != this.adjustmentTransaction.amount || adjustmentTotal > this.adjustmentTransaction.amount) {
                 this.isValidForm = false;
 
                 if (showErrorMessage) {
@@ -1773,7 +1776,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public validateAmount(event: KeyboardEvent, entry: any): void {
-        if ((event.keyCode === 9 || event.keyCode === 13) && this.adjustmentTransaction && this.adjustmentTransaction.amount) {
+        if (event && (event.key === KEYS.ENTER || event.key === KEYS.TAB) && this.adjustmentTransaction && this.adjustmentTransaction.amount) {
             this.validateEntry(entry);
         }
     }
@@ -1798,8 +1801,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             return;
         }
 
-        if(entry.type === AdjustmentTypesEnum.receipt || entry.type === AdjustmentTypesEnum.advanceReceipt) {
-            if(parseFloat(entry.amount) !== this.adjustmentTransaction.amount) {
+        if (entry.type === AdjustmentTypesEnum.receipt || entry.type === AdjustmentTypesEnum.advanceReceipt) {
+            if (parseFloat(entry.amount) !== this.adjustmentTransaction.amount) {
                 this._toaster.clearAllToaster();
                 this._toaster.errorToast(this.entryAmountErrorMessage);
                 this.isValidForm = false;
@@ -1823,7 +1826,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let receiptTotal = 0;
 
         this.receiptEntries.forEach(receipt => {
-            if(receipt.type === AdjustmentTypesEnum.againstReference) {
+            if (receipt.type === AdjustmentTypesEnum.againstReference) {
                 receiptTotal += parseFloat(receipt.amount);
             }
         });
@@ -1862,7 +1865,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public openAdjustmentModal(event: KeyboardEvent, transaction: any, template: TemplateRef<any>): void {
-        if (event.keyCode === 9 || event.keyCode === 13) {
+        if (event && (event.key === KEYS.ENTER || event.key === KEYS.TAB)) {
             this.validateAndOpenAdjustmentPopup(transaction, template);
         }
     }

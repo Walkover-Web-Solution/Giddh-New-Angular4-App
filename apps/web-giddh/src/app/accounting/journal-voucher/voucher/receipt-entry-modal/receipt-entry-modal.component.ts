@@ -13,7 +13,7 @@ import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/default
 import * as moment from 'moment';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
-import { VOUCHERS } from '../../journal-voucher.component';
+import { VOUCHERS, KEYS } from '../../journal-voucher.component';
 
 @Component({
     selector: 'receipt-entry',
@@ -136,7 +136,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
      * @memberof ReceiptEntryModalComponent
      */
     public validateAmount(event: KeyboardEvent, entry: any): void {
-        if ((event.keyCode === 9 || event.keyCode === 13) && this.transaction && this.transaction.amount) {
+        if (event && (event.key === KEYS.ENTER || event.key === KEYS.TAB) && this.transaction && this.transaction.amount) {
             this.validateEntry(entry);
         }
     }
@@ -161,8 +161,8 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
             return;
         }
 
-        if(entry.type === AdjustmentTypesEnum.receipt || entry.type === AdjustmentTypesEnum.advanceReceipt) {
-            if(parseFloat(entry.amount) !== this.transaction.amount) {
+        if (entry.type === AdjustmentTypesEnum.receipt || entry.type === AdjustmentTypesEnum.advanceReceipt) {
+            if (parseFloat(entry.amount) !== this.transaction.amount) {
                 this.toaster.clearAllToaster();
                 this.toaster.errorToast(this.entryAmountErrorMessage);
                 this.isValidForm = false;
@@ -186,7 +186,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         let receiptTotal = 0;
 
         this.receiptEntries.forEach(receipt => {
-            if(receipt.type === AdjustmentTypesEnum.againstReference) {
+            if (receipt.type === AdjustmentTypesEnum.againstReference) {
                 receiptTotal += parseFloat(receipt.amount);
             }
         });
@@ -382,6 +382,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
      */
     public validateEntries(showErrorMessage: boolean): void {
         let receiptTotal = 0;
+        let adjustmentTotal = 0;
         let isValid = true;
         let invoiceRequired = false;
         let invoiceAmountError = false;
@@ -391,7 +392,9 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
                 if (parseFloat(receipt.amount) === 0 || isNaN(parseFloat(receipt.amount))) {
                     isValid = false;
                 } else {
-                    if(receipt.type === AdjustmentTypesEnum.againstReference) {
+                    if (receipt.type === AdjustmentTypesEnum.againstReference) {
+                        adjustmentTotal += parseFloat(receipt.amount);
+                    } else {
                         receiptTotal += parseFloat(receipt.amount);
                     }
                 }
@@ -407,7 +410,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         });
 
         if (isValid) {
-            if (receiptTotal > this.transaction.amount) {
+            if (receiptTotal != this.transaction.amount || adjustmentTotal > this.transaction.amount) {
                 this.isValidForm = false;
 
                 if (showErrorMessage) {
