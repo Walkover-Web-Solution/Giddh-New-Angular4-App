@@ -193,24 +193,28 @@ export class UpdateLedgerVm {
     }
 
     public accountCatgoryGetterFunc(account, accountName): string {
-        let parent = account.parentGroups[0];
-        if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent.uniqueName)) {
-            return 'liabilities';
-        } else if (find(['fixedassets'], p => p === parent.uniqueName)) {
-            return 'fixedassets';
-        } else if (find(['noncurrentassets', 'currentassets'], p => p === parent.uniqueName)) {
-            return 'assets';
-        } else if (find(['revenuefromoperations', 'otherincome'], p => p === parent.uniqueName)) {
-            return 'income';
-        } else if (find(['operatingcost', 'indirectexpenses'], p => p === parent.uniqueName)) {
-            if (accountName === 'roundoff') {
-                return 'roundoff';
+        let parent = account.parentGroups ? account.parentGroups[0] : '';
+        if (parent) {
+            if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent.uniqueName)) {
+                return 'liabilities';
+            } else if (find(['fixedassets'], p => p === parent.uniqueName)) {
+                return 'fixedassets';
+            } else if (find(['noncurrentassets', 'currentassets'], p => p === parent.uniqueName)) {
+                return 'assets';
+            } else if (find(['revenuefromoperations', 'otherincome'], p => p === parent.uniqueName)) {
+                return 'income';
+            } else if (find(['operatingcost', 'indirectexpenses'], p => p === parent.uniqueName)) {
+                if (accountName === 'roundoff') {
+                    return 'roundoff';
+                }
+                let subParent = account.parentGroups[1];
+                if (subParent && subParent.uniqueName === 'discount') {
+                    return 'discount';
+                }
+                return 'expenses';
+            } else {
+                return '';
             }
-            let subParent = account.parentGroups[1];
-            if (subParent && subParent.uniqueName === 'discount') {
-                return 'discount';
-            }
-            return 'expenses';
         } else {
             return '';
         }
