@@ -799,6 +799,7 @@ ul.sub-list {
         .navbar-nav {
             margin-bottom: 5px;
             display: flex;
+            flex-direction: row;
             .hamburger_menu {
                 display: flex;
                 align-items: center;
@@ -844,6 +845,7 @@ ul.sub-list {
     .lower-layer-header {
         display: flex;
         justify-content: space-between;
+        width: 100%;
         #add-manage.btn-gray {
             padding-left: 0;
             padding-right: 0;
@@ -967,4 +969,10 @@ ul.sub-list {
     .not-today {
         padding-right: 0 !important;
     }
+}
+
+@media (min-width: 992px){
+.modal-lg, .modal-xl {
+    max-width: 100% !important;
+}
 }
