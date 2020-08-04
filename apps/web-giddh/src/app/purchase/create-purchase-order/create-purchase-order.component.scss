@@ -138,7 +138,7 @@
     .create-purchase-order-table {
         .select-account-label {
             font-size: 14px;
-            color: $gainsboro;
+            color: $wistful;
             padding-bottom: 3px;
             display: block;
         }
@@ -538,7 +538,7 @@ span.edit-icon {
 
 .select-account-label {
     font-size: 14px;
-    color: $gainsboro;
+    color: $wistful;
     padding-bottom: 3px;
 }
 
@@ -1054,6 +1054,11 @@ span.eligible-ITC {
         margin-top: 20px;
     }
 }
+@media(max-width:768px){
+    .search-arrow-image{
+        left: 146px;;
+    }
+}
 @media (max-width: 767px) {
     .wrapper-customer-table {
         .customer-purchase-table {
@@ -1105,7 +1110,10 @@ span.eligible-ITC {
     }
     .search-arrow-image {
         left: 15px;
-        top: 150px;
+        top: 98px;
+    }
+    .customer-purchase-order:before{
+            top: 153px;
     }
 }
 @media (max-width: 840px) {
