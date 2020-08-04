@@ -192,7 +192,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
     public isRcmEntry: boolean = false;
     public universalDate: any;
     public moment = moment;
-    public isPurchaseInvoice: boolean = true;
+    public isMultiCurrencySupported: boolean = false;
     public baseCurrencySymbol: string = '';
     public customerAccount: any = { email: '' };
     public companyCurrency: string;
@@ -223,7 +223,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
         this.updateAccountSuccess$ = this.store.pipe(select(state => state.sales.updateAccountSuccess), takeUntil(this.destroyed$));
     }
 
-    public ngOnInit() {
+    /**
+     * Initializes the component
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public ngOnInit(): void {
         this.breakPointObservar.observe([
             '(max-width: 768px)'
         ]).subscribe(result => {
@@ -369,7 +374,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
         });
     }
 
-    public assignDates() {
+    /**
+     * This will assign the universal date in entry date of transactions
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public assignDates(): void {
         let date = _.cloneDeep(this.universalDate);
         this.purchaseOrder.voucherDetails.voucherDate = date;
 
@@ -389,7 +399,6 @@ export class CreatePurchaseOrderComponent implements OnInit {
      * @memberof CreatePurchaseOrderComponent
      */
     public updateVendorDetails(accountDetails: any): void {
-        console.log(accountDetails);
         if (accountDetails) {
             this.purchaseOrder.voucherDetails.customerUniquename = accountDetails.uniqueName;
             this.purchaseOrder.voucherDetails.customerName = accountDetails.name;
@@ -454,6 +463,11 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
+    /**
+     * This will prepare list of vendors to show in select vendor dropdown
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
     public createVendorList(): void {
         let sundryCreditorsAcList = [];
         let stockAccountsList = [];
@@ -503,6 +517,14 @@ export class CreatePurchaseOrderComponent implements OnInit {
         });
     }
 
+    /**
+     * Custom filter
+     *
+     * @param {string} term
+     * @param {IOption} item
+     * @returns {boolean}
+     * @memberof CreatePurchaseOrderComponent
+     */
     public customMoveGroupFilter(term: string, item: IOption): boolean {
         let newItem = { ...item };
         if (!newItem.additional) {
@@ -514,6 +536,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
         return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.email.toLocaleLowerCase().indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase().indexOf(term) > -1);
     }
 
+    /**
+     * Callback for select vendor
+     *
+     * @param {IOption} item
+     * @memberof CreatePurchaseOrderComponent
+     */
     public onSelectVendor(item: IOption): void {
         if (item.value) {
             this.purchaseOrder.voucherDetails.customerName = item.label;
@@ -530,6 +558,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
+    /**
+     * This will reset the selected vendor
+     *
+     * @param {*} [event]
+     * @memberof CreatePurchaseOrderComponent
+     */
     public resetVendor(event?: any): void {
         if (event) {
             if (!event.target.value) {
@@ -546,10 +580,24 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
+    /**
+     * This will get the selected vendor account details
+     *
+     * @param {string} accountUniqueName
+     * @memberof CreatePurchaseOrderComponent
+     */
     public getAccountDetails(accountUniqueName: string): void {
         this.store.dispatch(this.salesAction.getAccountDetailsForSales(accountUniqueName));
     }
 
+    /**
+     * This will autofill billing and shipping details
+     *
+     * @param {*} event
+     * @param {boolean} isBilling
+     * @param {string} addressType
+     * @memberof CreatePurchaseOrderComponent
+     */
     public fillShippingBillingDetails(event: any, isBilling: boolean, addressType: string): void {
         let stateName = event.label;
         let stateCode = event.value;
@@ -600,6 +648,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
     }
 
+    /**
+     * This will autofill billing details into shipping
+     *
+     * @param {string} addressType
+     * @memberof CreatePurchaseOrderComponent
+     */
     public autoFillShippingDetails(addressType: string): void {
         if (addressType === "vendor") {
             // auto fill shipping address
