@@ -1,4 +1,4 @@
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, RouteConfigLoadEnd, RouteConfigLoadStart } from '@angular/router';
 import { isCordova } from '@giddh-workspaces/utils';
 /**
  * Angular 2 decorators and services
@@ -18,6 +18,7 @@ import { reassignNavigationalArray } from './models/defaultMenus'
 import { Configuration } from "./app.constant";
 import { LoginActions } from './actions/login.action';
 import { takeUntil } from 'rxjs/operators';
+import { LoaderService } from './loader/loader.service';
 
 /**
  * App Component
@@ -50,7 +51,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private _versionCheckService: VersionCheckService,
         private sanitizer: DomSanitizer,
         private breakpointObserver: BreakpointObserver,
-        private dbServices: DbService
+        private dbServices: DbService,
+        private loadingService: LoaderService
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -139,6 +141,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
     public ngOnInit() {
         this.sideBarStateChange(true);
+        this.subscribeToLazyRouteLoading();
     }
 
     public ngAfterViewInit() {
@@ -201,5 +204,21 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Listens to the loading of lazy routes to show loader
+     *
+     * @private
+     * @memberof AppComponent
+     */
+    private subscribeToLazyRouteLoading(): void {
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            if (event instanceof RouteConfigLoadStart) {
+                this.loadingService.show();
+            } else if (event instanceof RouteConfigLoadEnd) {
+                this.loadingService.hide();
+            }
+        })
     }
 }
