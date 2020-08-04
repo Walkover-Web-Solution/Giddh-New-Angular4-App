@@ -345,12 +345,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     // this.vm.flatternAccountList = resp[0];
                     this.activeAccount = cloneDeep(resp[1].body);
                     // Decides whether to show the RCM entry
-                    this.shouldShowRcmEntry = this.isRcmEntryPresent(resp[1].transactions);
+                    this.shouldShowRcmEntry = this.isRcmEntryPresent(resp[0].transactions);
                     this.isTouristSchemeApplicable = this.checkTouristSchemeApplicable(resp[0], resp[1], resp[2]);
                     this.shouldShowRcmTaxableAmount = resp[0].reverseChargeTaxableAmount !== undefined && resp[0].reverseChargeTaxableAmount !== null;
                     if (this.shouldShowRcmTaxableAmount) {
                         // Received taxable amount is a truthy value
-                        resp[1].reverseChargeTaxableAmount = this.generalService.convertExponentialToNumber(resp[1].reverseChargeTaxableAmount);
+                        resp[0].reverseChargeTaxableAmount = this.generalService.convertExponentialToNumber(resp[0].reverseChargeTaxableAmount);
                     }
                     // Show the ITC section if value of ITC is received (itcAvailable) or it's an old transaction that is eligible for ITC (isItcEligible)
                     this.shouldShowItcSection = !!resp[0].itcAvailable || resp[0].isItcEligible;
@@ -375,10 +375,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             }
                         }
                     }
-
-                    // set account details for multi currency account
-                    this.prepareMultiCurrencyObject(resp[0].particular.uniqueName);
-                    // end multi currency assign
 
                     // TODO: Prateek start
                     // let stockListFormFlattenAccount: IFlattenAccountsResultItem;
@@ -562,10 +558,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                     let tax: TaxResponse;
                     if (resp[0].tcsTaxes && resp[0].tcsTaxes.length) {
-                        tax = companyTaxes.find(f => f.uniqueName === resp[1].tcsTaxes[0]);
+                        tax = companyTaxes.find(f => f.uniqueName === resp[0].tcsTaxes[0]);
                         this.vm.selectedLedger.otherTaxType = 'tcs';
                     } else if (resp[0].tdsTaxes && resp[0].tdsTaxes.length) {
-                        tax = companyTaxes.find(f => f.uniqueName === resp[1].tdsTaxes[0]);
+                        tax = companyTaxes.find(f => f.uniqueName === resp[0].tdsTaxes[0]);
                         this.vm.selectedLedger.otherTaxType = 'tds';
                     }
 
@@ -587,7 +583,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     const initialAccounts: Array<IOption> = [];
                     this.vm.selectedLedger.transactions.map(t => {
                         if (this.vm.selectedLedger.discounts.length > 0 && !t.isTax && t.particular.uniqueName !== 'roundoff') {
-                            let category = this.vm.getCategoryNameFromAccount(t.particular.uniqueName);
+                            let category = this.vm.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
                             if (this.vm.isValidCategory(category)) {
                                 /**
                                  * replace transaction amount with the actualAmount key that we got in response of get-ledger
@@ -724,6 +720,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 let expensesAccArray = ['operatingcost', 'indirectexpenses'];
                 let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
                 isStockableAccount = this.activeAccount.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
+                // set account details for multi currency account
+                this.prepareMultiCurrencyObject(this.vm.selectedLedger.particular.uniqueName);
+                // end multi currency assign
                 if (isStockableAccount) {
                     // stocks from ledger account
                     this.vm.flatternAccountList.map(acc => {
