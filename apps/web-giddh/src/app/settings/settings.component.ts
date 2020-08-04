@@ -78,7 +78,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.breakPointObservar.observe([
             '(max-width:767px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
             if (!this.isMobileScreen) {
                 this.asideSettingMenuState = "in";
