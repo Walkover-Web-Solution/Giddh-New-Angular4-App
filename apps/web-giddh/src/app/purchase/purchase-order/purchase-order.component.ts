@@ -11,6 +11,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { PAGINATION_LIMIT } from '../../app.constant';
 import * as moment from 'moment/moment';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'purchase-order',
@@ -78,10 +79,18 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public showVendorNameSearch: boolean = false;
     /* This will hold timeout object */
     public timeout: any;
+    /* This will hold the PO unique name */
+    public purchaseOrderUniqueName: any = '';
 
-    constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService) {
+    constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.universalDate$ = this.store.select(state => state.session.applicationDate).pipe(takeUntil(this.destroyed$));
+
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if(params && params['purchaseOrderUniqueName']) {
+                this.purchaseOrderUniqueName = params['purchaseOrderUniqueName'];
+            }
+        });
     }
 
     /**
@@ -353,6 +362,12 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public hidePreview(event: boolean): void {
+        if(event) {
+            this.purchaseOrderUniqueName = '';
         }
     }
 }

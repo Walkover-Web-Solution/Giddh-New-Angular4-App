@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="!purchaseOrderUniqueName">
     <div class="d-flex justify-content-between mt-15 purchase-order-header">
         <div class="d-flex date-advanceSearch">
             <form #invoiceForm="ngForm" novalidate class="form-inline">
@@ -196,7 +196,7 @@
                         {{row.voucherDate}}
                     </td>
                     <td data-title="Purchase Order">
-                        <a routerLink="/pages/purchase-management/purchase-order-invoice-preview/{{row.uniqueName}}">{{row.voucherNumber}}</a>
+                        <a routerLink="/pages/purchase-management/purchase-order-preview/{{row.uniqueName}}">{{row.voucherNumber}}</a>
                     </td>
                     <td data-title="Vendor Name">
                         {{row.vendor?.name}}
@@ -319,3 +319,4 @@
         [ngClass]="{'activeTextColor': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'}">
     </div>
 </ng-template>
+<purchase-order-preview *ngIf="purchaseOrderUniqueName" [purchaseOrders]="purchaseOrders" (hidePreview)="hidePreview($event)"></purchase-order-preview>
