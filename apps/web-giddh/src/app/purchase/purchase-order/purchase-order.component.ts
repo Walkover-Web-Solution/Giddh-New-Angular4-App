@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, TemplateRef, OnDestroy } from '@angular/core';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap'
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
@@ -24,6 +24,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /* Input element for column search */
     @ViewChild('searchBox') public searchBox: ElementRef;
+    /* Confirm box */
+    @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
 
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
@@ -58,7 +60,6 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         to: '',
         page: 1,
         count: PAGINATION_LIMIT,
-        search: '',
         sort: '',
         sortBy: ''
     };
@@ -69,7 +70,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         grandTotalOperation: '',
         statuses: [],
         dueFrom: '',
-        dueTo: ''
+        dueTo: '',
+        vendorName: ''
     };
     /* This will hold the universal date object */
     public universalDate: any;
@@ -81,14 +83,22 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public timeout: any;
     /* This will hold the PO unique name */
     public purchaseOrderUniqueName: any = '';
+    /* This will hold if all items are selected */
+    public allItemsSelected: boolean = false;
+    /* This will hold current hovered item */
+    public hoveredItem: any = '';
+    /* This will hold current selected item */
+    public selectedItem: any;
 
     constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.universalDate$ = this.store.select(state => state.session.applicationDate).pipe(takeUntil(this.destroyed$));
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if(params && params['purchaseOrderUniqueName']) {
+            if (params && params['purchaseOrderUniqueName']) {
                 this.purchaseOrderUniqueName = params['purchaseOrderUniqueName'];
+            } else {
+                this.purchaseOrderUniqueName = '';
             }
         });
     }
@@ -271,7 +281,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 grandTotalOperation: '',
                 statuses: [],
                 dueFrom: '',
-                dueTo: ''
+                dueTo: '',
+                vendorName: ''
             };
         }
 
@@ -288,7 +299,6 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         this.purchaseOrderGetRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
         this.purchaseOrderGetRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         this.purchaseOrderGetRequest.page = 1;
-        this.purchaseOrderGetRequest.search = '';
         this.purchaseOrderGetRequest.sort = '';
         this.purchaseOrderGetRequest.sortBy = '';
 
@@ -298,7 +308,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             grandTotalOperation: '',
             statuses: [],
             dueFrom: '',
-            dueTo: ''
+            dueTo: '',
+            vendorName: ''
         };
 
         this.getAllPurchaseOrders(true);
@@ -365,9 +376,56 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         }
     }
 
-    public hidePreview(event: boolean): void {
-        if(event) {
-            this.purchaseOrderUniqueName = '';
+    /**
+     * This will select/unselect all items
+     *
+     * @param {boolean} type
+     * @memberof PurchaseOrderComponent
+     */
+    public toggleAllItems(type: boolean): void {
+        this.allItemsSelected = type;
+
+        this.purchaseOrders.items.forEach(item => {
+            item.isSelected = type;
+        });
+    }
+
+    /**
+     * This will select/unselect single item
+     *
+     * @param {*} item
+     * @param {boolean} action
+     * @memberof PurchaseOrderComponent
+     */
+    public toggleItem(item: any, action: boolean): void {
+        item.isSelected = action;
+        if (!action) {
+            this.allItemsSelected = false;
         }
+    }
+
+    public confirmDelete(item: any): void {
+        this.selectedItem = item;
+        this.poConfirmationModel.show();
+    }
+
+    public deleteItem(): void {
+        let getRequest = { companyUniqueName: this.purchaseOrderGetRequest.companyUniqueName, poUniqueName: this.selectedItem.uniqueName };
+
+        this.purchaseOrderService.delete(getRequest).subscribe((res) => {
+            if (res) {
+                if (res.status === 'success') {
+
+                } else {
+                    this.closeConfirmationPopup();
+                    this.toaster.errorToast(res.message);
+                }
+            }
+        });
+    }
+
+    public closeConfirmationPopup(): void {
+        this.selectedItem = '';
+        this.poConfirmationModel.hide();
     }
 }

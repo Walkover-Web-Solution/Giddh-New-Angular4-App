@@ -102,13 +102,14 @@
         <table class="table basic mt-15 table-bordered giddh-table on-mobile-view">
             <thead class="t-h-bg1">
                 <tr>
-                    <!-- functioanlity should be like proform/estimate module -->
                     <th width="3%">
                         <div class="table-checkbox-field">
                             #
-                            <div class="table-checkbox-field" hidden>
-                                <img src="assets/images/unchecked.png">
-                                <!-- <img src="assets/images/checked.png"> -->
+                            <div class="table-checkbox-field">
+                                <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
+                                    (click)="toggleAllItems(true)">
+                                <img src="assets/images/checked.png" *ngIf="allItemsSelected"
+                                    (click)="toggleAllItems(false)">
                             </div>
                         </div>
                     </th>
@@ -144,7 +145,7 @@
                         </div>
                         <div class="input-container" [hidden]="!showVendorNameSearch">
                             <input type="text" placeholder="Search Vendor Name" class="w100" #searchBox
-                                [(ngModel)]="purchaseOrderGetRequest.search" (keyup)="columnSearch()"
+                                [(ngModel)]="purchaseOrderPostRequest.vendorName" (keyup)="columnSearch()"
                                 (keydown)="columnSearch()" />
                         </div>
                     </th>
@@ -179,38 +180,39 @@
                     </th>
                 </tr>
             </thead>
-            <tbody *ngIf="!isLoading && purchaseOrders.items && purchaseOrders.items.length > 0">
-                <tr *ngFor="let row of purchaseOrders.items; let i = index;">
+            <tbody *ngIf="!isLoading && purchaseOrders.items && purchaseOrders.items.length > 0" (mouseleave)="hoveredItem = '';">
+                <tr *ngFor="let item of purchaseOrders.items; let i = index;" (mouseenter)="hoveredItem = item.uniqueName">
                     <td data-title="#">
-                        {{ (purchaseOrderGetRequest.count * (purchaseOrderGetRequest.page - 1)) + (i+1) }}
-                        <!-- make this dynamic , functionality should be like proforma invoice for mobile view only  -->
-                        <div class="mh18_img" class="justify-content-sm-start check-uncheck" hidden>
-                            <img src="assets/images/unchecked.png" />
-                            <img src="assets/images/checked.png" />
+                        <span *ngIf="hoveredItem !== item.uniqueName && !item.isSelected">{{ (purchaseOrderGetRequest.count * (purchaseOrderGetRequest.page - 1)) + (i+1) }}</span>
+                        <div class="mh18_img" class="justify-content-sm-start" *ngIf="hoveredItem === item.uniqueName || item.isSelected">
+                            <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
+                                (click)="toggleItem(item, true)" />
+                            <img *ngIf="item.isSelected" src="assets/images/checked.png"
+                                (click)="toggleItem(item, false)" />
                         </div>
-                        <div class="download-purchase-order">
+                        <!-- <div class="download-purchase-order">
                             <i class="icon-download"></i>
-                        </div>
+                        </div> -->
                     </td>
                     <td data-title="Date">
-                        {{row.voucherDate}}
+                        {{item.voucherDate}}
                     </td>
                     <td data-title="Purchase Order">
-                        <a routerLink="/pages/purchase-management/purchase-order-preview/{{row.uniqueName}}">{{row.voucherNumber}}</a>
+                        <a routerLink="/pages/purchase-management/purchase-order-preview/{{item.uniqueName}}">{{item.voucherNumber}}</a>
                     </td>
                     <td data-title="Vendor Name">
-                        {{row.vendor?.name}}
+                        {{item.vendor?.name}}
                     </td>
                     <td data-title="Total Amt." class="text-right">
-                        {{row.grandTotal?.amountForAccount | giddhCurrency}}
+                        {{item.grandTotal?.amountForAccount | giddhCurrency}}
                     </td>
                     <td data-title="Expected Delivery">
                         <span hidden>Delivery in 7 days</span>
-                        <span>{{row.dueDate}}</span>
+                        <span>{{item.dueDate}}</span>
                     </td>
                     <td data-title="status" class="d-flex align-items-center">
                         <span class="d-flex">
-                            {{row.status}}</span>
+                            {{item.status}}</span>
                         <div class="action-icon ml-15">
                             <a tooltip="Convert to bill">
                                 <span class="icon-tick font-12"></span>
@@ -221,7 +223,7 @@
                             <a tooltip="Copy">
                                 <span class="icon-copy-small font-14"></span>
                             </a>
-                            <a tooltip="Delete">
+                            <a tooltip="Delete" (click)="confirmDelete(item)">
                                 <i class="icon-trash"></i>
                             </a>
                         </div>
@@ -319,4 +321,16 @@
         [ngClass]="{'activeTextColor': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'}">
     </div>
 </ng-template>
-<purchase-order-preview *ngIf="purchaseOrderUniqueName" [purchaseOrders]="purchaseOrders" (hidePreview)="hidePreview($event)"></purchase-order-preview>
+<!-- Delete invoice confirmation model -->
+<div bsModal #poConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <delete-role-confirmation-model
+                [module]="'purchaseorderlist'"
+                [selectedInvoiceForDelete]="selectedInvoice" (confirmDeleteEvent)="deleteItem()"
+                (closeModelEvent)="closeConfirmationPopup()">
+            </delete-role-confirmation-model>
+        </div>
+    </div>
+</div>
+<purchase-order-preview *ngIf="purchaseOrderUniqueName" [purchaseOrders]="purchaseOrders"></purchase-order-preview>
