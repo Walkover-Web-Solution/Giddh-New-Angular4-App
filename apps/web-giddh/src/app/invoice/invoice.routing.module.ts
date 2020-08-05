@@ -182,7 +182,8 @@ const INVOICE_ROUTES: Routes = [
         DownloadOrSendInvoiceOnMailComponent,
         InvoiceGenerateModelComponent,
         InvoiceCreateComponent,
-        InvoicePreviewComponent
+        InvoicePreviewComponent,
+        DeleteInvoiceConfirmationModelComponent
     ],
     entryComponents: [DownloadOrSendInvoiceOnMailComponent, PreviewDownloadReceiptComponent,
         ReceiptUpdateComponent],
