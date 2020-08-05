@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, EventEmitter } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap'
 
 @Component({
@@ -9,7 +9,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap'
 
 export class PurchaseOrderPreviewComponent implements OnInit {
     @Input() public purchaseOrders: any;
-    @Output() public hidePreview: EventEmitter<boolean> = new EventEmitter();
 
     public modalRef: BsModalRef;
     public orderHistoryAsideState: string = 'out';
@@ -40,10 +39,6 @@ export class PurchaseOrderPreviewComponent implements OnInit {
 
     public openModal(template: TemplateRef<any>): void {
         this.modalRef = this.modalService.show(template);
-    }
-
-    public closePreview(): void {
-        this.hidePreview.emit(true);
     }
 
 }

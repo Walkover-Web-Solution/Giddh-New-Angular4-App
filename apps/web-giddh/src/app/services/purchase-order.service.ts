@@ -29,7 +29,6 @@ export class PurchaseOrderService {
         url = url.replace(':to', getRequestObject.to);
         url = url.replace(':page', getRequestObject.page);
         url = url.replace(':count', getRequestObject.count);
-        url = url.replace(':q', getRequestObject.search);
         url = url.replace(':sort', getRequestObject.sort);
         url = url.replace(':sortBy', getRequestObject.sortBy);
 
@@ -50,5 +49,29 @@ export class PurchaseOrderService {
         url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);
 
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
+
+    public bulkUpdate(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.BULK_UPDATE;
+        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url.replace(':action', getRequestObject.action);
+
+        return this.http.patch(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
+
+    public statusUpdate(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.STATUS_UPDATE;
+        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);
+
+        return this.http.patch(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
+
+    public delete(getRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.DELETE;
+        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url.replace(':poUniqueName', getRequestObject.poUniqueName);
+
+        return this.http.delete(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
 }
