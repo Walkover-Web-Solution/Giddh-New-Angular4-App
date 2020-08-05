@@ -108,7 +108,13 @@ export class HttpWrapperService {
     };
 
     public prepareOptions(options: any): any {
-        this.showLoader();
+        if(options && options.loader) {
+            if(options.loader !== "hide") {
+                this.showLoader();
+            }
+        } else {
+            this.showLoader();
+        }
         let sessionId = this._generalService.sessionId;
         options = options || {};
 

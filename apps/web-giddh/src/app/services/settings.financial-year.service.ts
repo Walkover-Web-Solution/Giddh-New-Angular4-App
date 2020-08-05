@@ -146,8 +146,9 @@ export class SettingsFinancialYearService {
      * @memberof SettingsFinancialYearService
      */
     public getFinancialYearLimits(): Observable<BaseResponse<any, any>> {
-		let companyUniqueName = this._generalService.companyUniqueName;
-		return this._http.get(this.config.apiUrl + SETTINGS_FINANCIAL_YEAR_API.GET_FINANCIAL_YEAR_LIMITS.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))).pipe(map((res) => {
+        let companyUniqueName = this._generalService.companyUniqueName;
+        let options = {loader: "hide"};
+		return this._http.get(this.config.apiUrl + SETTINGS_FINANCIAL_YEAR_API.GET_FINANCIAL_YEAR_LIMITS.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), false, options).pipe(map((res) => {
 			let data: BaseResponse<any, any> = res;
 			return data;
 		}), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
