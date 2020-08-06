@@ -7,5 +7,5 @@ export const PURCHASE_ORDER_API = {
     GET: `${PURCHASE_ORDER}purchase-order/:purchaseOrderUniqueName`,
     BULK_UPDATE: `${PURCHASE_ORDER}purchase-order/bulk-update?action=:action`,
     STATUS_UPDATE: `${PURCHASE_ORDER}accounts/:accountUniqueName/purchase-order/status/change`,
-    DELETE: `${PURCHASE_ORDER}purchase-order/:poUniqueName`
+    DELETE: `${PURCHASE_ORDER}purchase-order?uniqueName=:poUniqueName`
 }
