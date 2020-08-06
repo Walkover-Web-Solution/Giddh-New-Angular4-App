@@ -779,7 +779,10 @@
                                                                 (shDebit.isOpen && shDebit.filter))">To
                                                     </span>
                                                     <sh-select [idEl]="txn.id" #shDebit
-                                                        [options]="lc.flattenAccountList | async"
+                                                        [isPaginationEnabled]="true" (srollEnd)="handleScrollEnd()"
+                                                        (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                        [enableDynamicSearch]="true"
+                                                        [options]="searchResults"
                                                         [(ngModel)]="txn.particular" vr-item tabindex="-1" #select
                                                         [showClear]="false" (keydown.enter)="onEnter(select,txn)"
                                                         (onShow)="isSelectOpen=true;bs.hide();"
@@ -1050,7 +1053,10 @@
                                                         (shCredit.isOpen && shCredit.filter))">By </span>
 
                                                     <sh-select [idEl]="txn.id" #shCredit
-                                                        [options]="lc.flattenAccountList | async" vr-item tabindex="-1"
+                                                        [options]="searchResults" vr-item tabindex="-1"
+                                                        [isPaginationEnabled]="true" (srollEnd)="handleScrollEnd()"
+                                                        (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                        [enableDynamicSearch]="true"
                                                         #select (keydown.enter)="onEnter(shCredit,txn)"
                                                         (onShow)="isSelectOpen=true;bsd.hide()"
                                                         (onHide)="onSelectHide()" [(ngModel)]="txn.particular"

@@ -45,4 +45,10 @@ export class SearchService {
                 catchError((e) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(e)));
     }
 
+    public searchAccount(query: string, page: number = 1): Observable<any> {
+        return this._http.get(
+            `http://giddh-search-test.eu-west-1.elasticbeanstalk.com/company/${this._generalService.companyUniqueName}/account-search?q=${query}&page=${page}&withStocks=true`)
+            .pipe(catchError((error) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(error)));
+    }
+
 }

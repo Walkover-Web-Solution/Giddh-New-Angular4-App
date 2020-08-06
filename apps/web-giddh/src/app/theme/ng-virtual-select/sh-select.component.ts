@@ -7,6 +7,8 @@ import { IOption } from './sh-options.interface';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
 import { concat, includes, startsWith } from 'apps/web-giddh/src/app/lodash-optimized';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
+import { Subject, ReplaySubject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
 
@@ -52,6 +54,19 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public readonlyInput: boolean;
     @Input() public showCheckbox: boolean = false;
     @Input() public fixedValue: string = "";
+
+    /** True when pagination should be enabled */
+    @Input() public isPaginationEnabled: boolean;
+    /** True if the compoonent should be used as dynamic search component instead of static search */
+    @Input() public enableDynamicSearch: boolean;
+    /** Emits the scroll to bottom event when pagination is required  */
+    @Output() public srollEnd: EventEmitter<void> = new EventEmitter();
+    /** Emits dynamic searched query */
+    @Output() public dynamicSearchedQuery: EventEmitter<string> = new EventEmitter();
+    /** Subject to emit current searched value */
+    private dynamicSearchQueryChanged: Subject<string> = new Subject<string>();
+    /** To unsubscribe from the dynamic search query subscription */
+    private stopDynamicSearch$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     @ViewChild('inputFilter') public inputFilter: ElementRef;
     @ViewChild('mainContainer') public mainContainer: ElementRef;
@@ -181,6 +196,14 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             return array.filter((item: IOption) => {
                 return includes(String(item.label).toLocaleLowerCase(), term) || includes(String(item.value).toLocaleLowerCase(), term);
             });
+        }
+    }
+
+    public handleInputChange(inputText: string): void {
+        if (this.enableDynamicSearch) {
+            this.dynamicSearchQueryChanged.next(inputText);
+        } else {
+            this.updateFilter(inputText);
         }
     }
 
@@ -423,6 +446,22 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         //
     }
 
+    public subscribeToQueryChange(): void {
+        if (this.enableDynamicSearch) {
+            this.stopDynamicSearch$.next(true);
+            this.stopDynamicSearch$.complete();
+            this.stopDynamicSearch$ = new ReplaySubject(1);
+            this.dynamicSearchQueryChanged = new Subject();
+            this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
+                if (query && query.length > 1) {
+                    console.log('Sending the query: ', query);
+                    this.dynamicSearchedQuery.emit(query);
+                }
+            });
+        }
+    }
+
+
     public ngAfterViewInit() {
         this.viewInitEvent.emit(true);
     }
@@ -507,6 +546,10 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             this.propagateChange(newValue.value);
             this.selected.emit(newValue);
         }
+    }
+
+    public reachedEnd() {
+        this.srollEnd.emit();
     }
 }
 
