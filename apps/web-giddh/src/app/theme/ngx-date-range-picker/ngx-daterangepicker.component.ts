@@ -242,6 +242,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public financialYearUpdated: boolean = false;
     /* This will hold if mouse scroll or touch scroll is allowed or not */
     public allowMouseScroll: boolean = false;
+    public lastActiveMonthSide: string = '';
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private scrollDispatcher: ScrollDispatcher) {
         this.choosedDate = new EventEmitter();
@@ -250,7 +251,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.locale = { ...this._locale };
 
         this.store.pipe(select(state => state.settings.financialYearLimits), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response && response.startDate && response.endDate) {
+            if (response && response.startDate && response.endDate) {
                 this.minDate = moment(moment(response.startDate, GIDDH_DATE_FORMAT).toDate());
                 this.maxDate = moment(moment(response.endDate, GIDDH_DATE_FORMAT).toDate());
                 this.financialYearUpdated = true;
@@ -1987,8 +1988,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         } else if (this.scrollInDirection === "bottom") {
             this.virtualScroll.scrollToIndex(this.currentScrollIndex + 1);
         }
-
-        this.scrollInDirection = "";
     }
 
     /**
@@ -2007,6 +2006,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             if (this.checkMinMaxDate(this.calendarVariables.start)) {
                 if (this.activeMonthHover === false) {
                     this.activeMonth = this.calendarVariables.start;
+                    this.lastActiveMonthSide = 'start';
                 }
 
                 let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) : 0;
@@ -2041,6 +2041,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             if (this.checkMinMaxDate(this.calendarVariables.end)) {
                 if (this.activeMonthHover === false) {
                     this.activeMonth = this.calendarVariables.end;
+                    this.lastActiveMonthSide = 'end';
                 }
 
                 let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) - 1 : 0;
@@ -2196,6 +2197,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      */
     public setActiveMonth(calendar: any, side: string): void {
         this.activeMonthHover = true;
+        this.lastActiveMonthSide = side;
         if (side === 'start') {
             this.activeMonth = calendar.start;
         } else {
@@ -2364,6 +2366,68 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.previousScrollIndex = this.currentScrollIndex;
         }
         this.currentScrollIndex = event;
+
+        if(this.scrollInDirection === "top") {
+            if(this.lastActiveMonthSide === "end") {
+                if (this.calendarMonths[this.currentScrollIndex] && this.calendarMonths[this.currentScrollIndex].start) {
+                    this.setActiveMonth(this.calendarMonths[this.currentScrollIndex], "start");
+                } else {
+                    let scrollIndex = 0;
+                    if(this.currentScrollIndex > 0) {
+                        scrollIndex = this.currentScrollIndex;
+                    }
+
+                    if (this.calendarMonths[scrollIndex]) {
+                        if (this.calendarMonths[scrollIndex].end) {
+                            this.setActiveMonth(this.calendarMonths[scrollIndex], "end");
+                        } else if (this.calendarMonths[scrollIndex].start) {
+                            this.setActiveMonth(this.calendarMonths[scrollIndex], "start");
+                        }
+                    }
+                }
+            } else {
+                let scrollIndex = 0;
+                if(this.currentScrollIndex > 0) {
+                    scrollIndex = this.currentScrollIndex;
+                }
+
+                if (this.calendarMonths[scrollIndex]) {
+                    if (this.calendarMonths[scrollIndex].end) {
+                        this.setActiveMonth(this.calendarMonths[scrollIndex], "end");
+                    } else if (this.calendarMonths[scrollIndex].start) {
+                        this.setActiveMonth(this.calendarMonths[scrollIndex], "start");
+                    }
+                }
+            }
+        } else {
+            if(this.lastActiveMonthSide === "start") {
+                if (this.calendarMonths[this.currentScrollIndex] && this.calendarMonths[this.currentScrollIndex].end) {
+                    this.setActiveMonth(this.calendarMonths[this.currentScrollIndex], "end");
+                } else {
+                    let scrollIndex = this.currentScrollIndex + 1;
+
+                    if (this.calendarMonths[scrollIndex]) {
+                        if (this.calendarMonths[scrollIndex].start) {
+                            this.setActiveMonth(this.calendarMonths[scrollIndex], "start");
+                        } else if (this.calendarMonths[scrollIndex].end) {
+                            this.setActiveMonth(this.calendarMonths[scrollIndex], "end");
+                        }
+                    }
+                }
+            } else {
+                let scrollIndex = this.currentScrollIndex;
+
+                if (this.calendarMonths[scrollIndex]) {
+                    if (this.calendarMonths[scrollIndex].start) {
+                        this.setActiveMonth(this.calendarMonths[scrollIndex], "start");
+                    } else if (this.calendarMonths[scrollIndex].end) {
+                        this.setActiveMonth(this.calendarMonths[scrollIndex], "end");
+                    }
+                }
+            }
+        }
+
+        this.scrollInDirection = "";
     }
 
     /**
