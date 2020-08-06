@@ -242,6 +242,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public financialYearUpdated: boolean = false;
     /* This will hold if mouse scroll or touch scroll is allowed or not */
     public allowMouseScroll: boolean = false;
+    /* This will hold last active month side */
     public lastActiveMonthSide: string = '';
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private scrollDispatcher: ScrollDispatcher) {
