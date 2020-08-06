@@ -738,12 +738,12 @@ a.copyInvoice img {
     margin-right: 6px;
 }
 
-.invoiceDateDueDate .form-group,
-.invoiceDateDueDate label {
+.invoice-date-due-date .form-group,
+.invoice-date-due-date label {
     display: inline-block !important;
 }
 
-.invoiceDateDueDate label {
+.invoice-date-due-date label {
     padding-right: 10px;
 }
 
@@ -751,7 +751,7 @@ a.copyInvoice img {
     padding: 0;
 }
 
-// .invoiceDateDueDate{
+// .invoice-date-due-date{
 // position: absolute;
 // left: 406px;
 // top: 0;
@@ -960,7 +960,7 @@ table.table.customerInvoiceTable {
     padding: 8px 15px;
 }
 
-.invoiceDateDueDate input {
+.invoice-date-due-date input {
     width: 112px !important;
 }
 
@@ -969,10 +969,11 @@ section.staticInvoiceTable {
     margin-top: -20px;
 }
 
-.invoiceDateDueDate {
+.invoice-date-due-date {
     position: absolute;
     width: 100%;
     left: 0;
+    top: 0;
     margin-left: 48%;
 }
 
@@ -1069,7 +1070,9 @@ section.newtable {
 .total-amountDiscription {
     display: none;
 }
-
+.custom-file-label::after, .dropdown-toggle::after{
+    display: none !important;
+}
 // card css
 .card-invoiceTable-wrapper {
     max-width: 400px;
@@ -1323,7 +1326,7 @@ section.newtable {
     position: relative;
 }
 
-.p-4.aqua-color.add-line-bulk-item {
+.add-line-bulk-item {
     position: relative;
     height: 33px;
     width: 470% !important;
@@ -1646,7 +1649,7 @@ span.eligible-ITC {
     .showOnsmall-screen {
         display: block;
     }
-    .invoiceDateDueDate {
+    .invoice-date-due-date {
         display: none;
     }
     .wrapperCustomerTable .col-sm-2 {
@@ -1721,7 +1724,7 @@ span.eligible-ITC {
 }
 
 @media (max-width: 767px) {
-    .invoiceDateDueDate {
+    .invoice-date-due-date {
         position: static;
         width: 100%;
         left: 0;

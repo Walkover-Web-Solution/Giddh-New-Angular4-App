@@ -7,15 +7,15 @@
 			<div id="dropdown-basic1" *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu"
 				aria-labelledby="button-basic1" [style.width.px]="550" (click)="toggleFilters = false;">
 				<form [formGroup]="searchQueryForm" novalidate name="searchQueryForm" id="searchQueryForm"
-					class="form-inline pd1">
+					class="form-inline flex-row flex-nowrap pd1">
 					<!-- repeater -->
-					<div class="pos-rel query_list form-inline" [ngClass]="{'mrT2': i !== 0}"
+					<div class="pos-rel query_list query_list " [ngClass]="{'mrT2': i !== 0}"
 						formArrayName="searchQuery"
 						*ngFor="let item of searchQueryForm.get('searchQuery')['controls'];let i = index; let l = last;">
 						<div [formGroupName]="i">
 							<!-- <label *ngIf="i === 0"> whose</label> -->
 							<label>whose</label>
-							<span class="custom-select pos-rel form-group">
+							<span class="pos-rel form-group">
 								<select class="form-control" formControlName="queryType" required>
 									<option value="">Select Type</option>
 									<option *ngFor="let queryType of queryTypes" value="{{queryType.uniqueName}}">
@@ -26,7 +26,7 @@
 							<!-- <label *ngIf="item.value.queryType === 'closingBalance' || item.value.queryType === 'openingBalance' || !item.value.queryType ">balance
     &nbsp;</label> -->
 							<label>is</label>
-							<span class="custom-select pos-rel form-group">
+							<span class="pos-rel form-group">
 								<select class="form-control" formControlName="queryDiffer" required>
 									<option *ngFor="let queryDiffer of queryDiffers" value="{{queryDiffer}}" selected>
 										{{queryDiffer}}</option>
@@ -41,7 +41,7 @@
 									type="text" placeholder="amount" decimalDigitsDirective [DecimalPlaces]="2" />
 							</span>
 							<!--By and To: Not required in paginated API -->
-							<span class="custom-select pos-rel form-group"
+							<span class="pos-rel form-group"
 								*ngIf="item.value.queryType === 'openingBalance'">
 								<select class="form-control" formControlName="openingBalanceType">
 									<option *ngFor="let type of balType" value="{{type.uniqueName}}">{{type.name}}
@@ -50,7 +50,7 @@
 								<span class="select_drop"><i class="fa fa-caret-down"></i></span>
 							</span>
 
-							<span class="custom-select pos-rel form-group"
+							<span class="pos-rel form-group"
 								*ngIf="item.value.queryType === 'closingBalance'">
 								<select class="form-control" formControlName="closingBalanceType">
 									<option *ngFor="let type of balType" value="{{type.uniqueName}}">{{type.name}}
