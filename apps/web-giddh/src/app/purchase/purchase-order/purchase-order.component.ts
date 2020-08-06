@@ -93,6 +93,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public deleteModule: string = '';
     /* This will toggle the select all checkbox */
     public showSelectAllItemCheckbox: boolean = false;
+    public sendEmailRequest: any = {};
 
     constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
@@ -542,7 +543,10 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof PurchaseOrderComponent
      */
     public openSendMailModal(item: any, template: TemplateRef<any>): void {
-        this.selectedItem = item;
+        this.sendEmailRequest.email = item.vendor.email;
+        this.sendEmailRequest.uniqueName = item.uniqueName;
+        this.sendEmailRequest.accountUniqueName = item.vendor.uniqueName;
+        this.sendEmailRequest.companyUniqueName = this.purchaseOrderGetRequest.companyUniqueName;
         this.modalRef = this.modalService.show(template);
     }
 
@@ -553,6 +557,9 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      */
     public closeSendMailPopup(event: any): void {
         this.selectedItem = '';
-        this.modalRef.hide();
+
+        if(event) {
+            this.modalRef.hide();
+        }
     }
 }
