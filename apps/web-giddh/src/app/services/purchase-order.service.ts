@@ -74,4 +74,21 @@ export class PurchaseOrderService {
 
         return this.http.delete(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
+
+    public sendEmail(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.EMAIL;
+        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);
+        url = url.replace(':poUniqueName', getRequestObject.poUniqueName);
+
+        return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
+
+    public get(getRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET;
+        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url.replace(':poUniqueName', getRequestObject.poUniqueName);
+
+        return this.http.get(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
 }

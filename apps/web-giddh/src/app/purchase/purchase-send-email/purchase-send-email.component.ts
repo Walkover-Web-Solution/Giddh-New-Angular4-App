@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { PurchaseOrderService } from '../../services/purchase-order.service';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
     selector: 'purchase-send-email-modal',
@@ -7,9 +9,12 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 
 export class PurchaseSendEmailModalComponent implements OnInit {
-    @Input() public selectedItem: any;
+    @Input() public sendEmailRequest: any;
+    @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter();
 
-    constructor() { 
+    public emailId: any = '';
+
+    constructor(public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService) {
 
     }
 
@@ -19,6 +24,38 @@ export class PurchaseSendEmailModalComponent implements OnInit {
      * @memberof PurchaseSendEmailModalComponent
      */
     public ngOnInit(): void {
+        if (this.sendEmailRequest && this.sendEmailRequest.email) {
+            this.emailId = this.sendEmailRequest.email;
+        }
+    }
 
+    /**
+     * This will send the email
+     *
+     * @memberof PurchaseSendEmailModalComponent
+     */
+    public sendEmail(): void {
+        let getRequest = { companyUniqueName: this.sendEmailRequest.companyUniqueName, accountUniqueName: this.sendEmailRequest.accountUniqueName, poUniqueName: this.sendEmailRequest.uniqueName };
+        let postRequest = { emailId: [this.emailId] };
+
+        this.purchaseOrderService.sendEmail(getRequest, postRequest).subscribe((res) => {
+            if (res) {
+                if (res.status === 'success') {
+                    this.toaster.successToast(res.body);
+                    this.hideModal();
+                } else {
+                    this.toaster.errorToast(res.message);
+                }
+            }
+        });
+    }
+
+    /**
+     * This will hide the modal
+     *
+     * @memberof PurchaseSendEmailModalComponent
+     */
+    public hideModal(): void {
+        this.closeModelEvent.emit(true);
     }
 }
