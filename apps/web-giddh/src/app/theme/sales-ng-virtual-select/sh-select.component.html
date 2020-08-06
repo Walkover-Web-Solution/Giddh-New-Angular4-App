@@ -30,8 +30,9 @@
 
         <input type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" class="form-control" #inputFilter
             *ngIf="!multiple && !showLabelOnly" [hidden]="((!isOpen || !isFilterEnabled))"
+            (focus)="subscribeToQueryChange()"
             (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter"
-            (ngModelChange)="updateFilter($event)" style="padding-right: 28px !important;">
+            (ngModelChange)="handleInputChange($event)" style="padding-right: 28px !important;">
 
         <!-- (click)="show($event);" -->
         <div *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">

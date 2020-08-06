@@ -52,6 +52,7 @@ import { UpdateLedgerVm } from './updateLedger.vm';
 import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../../../models/api-models/AdvanceReceiptsAdjust';
+import { SearchService } from '../../../services/search.service';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -204,6 +205,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public isAdjustVoucherSelected: boolean;
     /** Stores the details for adjustment component */
     public adjustVoucherConfiguration: any;
+    /** Stores the search results */
+    public searchResults: Array<IOption> = [];
+    /** Stores the search results pagination details */
+    public searchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
 
     /** True, if all the transactions are of type 'Tax' or 'Reverse Charge' */
     private taxOnlyTransactions: boolean;
@@ -223,6 +232,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private _settingsTagActions: SettingsTagActions,
         private settingsUtilityService: SettingsUtilityService,
         private store: Store<AppState>,
+        private searchService: SearchService,
         private _toasty: ToasterService
     ) {
 
@@ -1678,6 +1688,49 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.vm.stockTrxEntry.inventory.quantity = Number(this.vm.stockTrxEntry.inventory.quantity);
         }
         this.vm.inventoryQuantityChanged(value);
+    }
+
+    public handleScrollEnd() {
+        console.log('Reached end');
+        if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
+            this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
+        }
+    }
+
+    public onSearchQueryChanged(query: string, page: number = 1) {
+        console.log('Searched query: ', query);
+        this.searchResultsPaginationData.query = query;
+        this.searchService.searchAccount(query, page).subscribe(data => {
+            console.log('Data received: ', data);
+            if (data && data.body && data.body.results) {
+                const searchResults = data.body.results.map(result => {
+                    return {
+                        value: result.uniqueName,
+                        label: result.name,
+                        additional: result
+                    }
+                }) || [];
+                if (page === 1) {
+                    this.searchResults = searchResults;
+                } else {
+                    this.searchResults = [
+                        ...this.searchResults,
+                        ...searchResults
+                    ];
+                }
+                this.searchResultsPaginationData.page = data.body.page;
+                this.searchResultsPaginationData.totalPages = data.body.totalPages;
+            }
+        });
+    }
+
+    public resetPreviousSearchResults(): void {
+        this.searchResults = [];
+        this.searchResultsPaginationData = {
+            page: 0,
+            totalPages: 0,
+            query: ''
+        };
     }
 
     /**

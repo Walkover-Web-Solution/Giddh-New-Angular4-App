@@ -1393,7 +1393,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (page === 1) {
                     this.searchResults = searchResults;
                 } else {
-                    this.searchResults.push(...searchResults);
+                    this.searchResults = [
+                        ...this.searchResults,
+                        ...searchResults
+                    ];
                 }
                 this.searchResultsPaginationData.page = data.body.page;
                 this.searchResultsPaginationData.totalPages = data.body.totalPages;
