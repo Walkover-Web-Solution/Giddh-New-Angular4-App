@@ -490,6 +490,12 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                 this.filter = changes.fixedValue.currentValue;
             }
         }
+
+        if ('options' in changes) {
+            if (changes.options && changes.options.currentValue) {
+                this.refreshList();
+            }
+        }
     }
 
     //////// ControlValueAccessor imp //////////
@@ -550,6 +556,12 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     public reachedEnd() {
         this.srollEnd.emit();
+    }
+
+    public refreshList(): void {
+        if (this.menuEle && this.menuEle.virtualScrollElm) {
+            this.menuEle.virtualScrollElm.refresh();
+        }
     }
 }
 
