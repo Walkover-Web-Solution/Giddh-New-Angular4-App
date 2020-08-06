@@ -88,7 +88,11 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     /* This will hold current hovered item */
     public hoveredItem: any = '';
     /* This will hold current selected item */
-    public selectedItem: any;
+    public selectedItem: any = '';
+    /* This will hold the delete module to show delete message in confirmation popup */
+    public deleteModule: string = '';
+    /* This will toggle the select all checkbox */
+    public showSelectAllItemCheckbox: boolean = false;
 
     constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
@@ -369,7 +373,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof PurchaseOrderComponent
      */
     public showClearFilterButton(): boolean {
-        if (this.purchaseOrderPostRequest.purchaseOrderNumber || this.purchaseOrderPostRequest.grandTotal || this.purchaseOrderPostRequest.grandTotalOperation || (this.purchaseOrderPostRequest.statuses && this.purchaseOrderPostRequest.statuses.length > 0) || this.purchaseOrderPostRequest.dueFrom || this.purchaseOrderPostRequest.dueTo || this.purchaseOrderGetRequest.search || this.purchaseOrderGetRequest.sortBy || (this.universalDate && (this.purchaseOrderGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.purchaseOrderGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)))) {
+        if (this.purchaseOrderPostRequest.purchaseOrderNumber || this.purchaseOrderPostRequest.grandTotal || this.purchaseOrderPostRequest.grandTotalOperation || (this.purchaseOrderPostRequest.statuses && this.purchaseOrderPostRequest.statuses.length > 0) || this.purchaseOrderPostRequest.dueFrom || this.purchaseOrderPostRequest.dueTo || this.purchaseOrderPostRequest.vendorName || this.purchaseOrderGetRequest.sortBy || (this.universalDate && (this.purchaseOrderGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.purchaseOrderGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)))) {
             return true;
         } else {
             return false;
@@ -404,18 +408,32 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will show the confirmation popup for delete
+     *
+     * @param {*} item
+     * @memberof PurchaseOrderComponent
+     */
     public confirmDelete(item: any): void {
-        this.selectedItem = item;
+        this.deleteModule = 'purchaseorder';
+        this.selectedItem = item.uniqueName;
         this.poConfirmationModel.show();
     }
 
+    /**
+     * This will delete the item
+     *
+     * @memberof PurchaseOrderComponent
+     */
     public deleteItem(): void {
-        let getRequest = { companyUniqueName: this.purchaseOrderGetRequest.companyUniqueName, poUniqueName: this.selectedItem.uniqueName };
+        let getRequest = { companyUniqueName: this.purchaseOrderGetRequest.companyUniqueName, poUniqueName: this.selectedItem };
 
         this.purchaseOrderService.delete(getRequest).subscribe((res) => {
             if (res) {
                 if (res.status === 'success') {
-
+                    this.getAllPurchaseOrders(false);
+                    this.closeConfirmationPopup();
+                    this.toaster.successToast(res.body);
                 } else {
                     this.closeConfirmationPopup();
                     this.toaster.errorToast(res.message);
@@ -424,8 +442,95 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * This will close the confirmation popup
+     *
+     * @memberof PurchaseOrderComponent
+     */
     public closeConfirmationPopup(): void {
         this.selectedItem = '';
         this.poConfirmationModel.hide();
+    }
+
+    /**
+     * This will give the list of selected items
+     *
+     * @returns {*}
+     * @memberof PurchaseOrderComponent
+     */
+    public getSelectedItems(): any {
+        let purchaseNumbers = [];
+
+        if (this.purchaseOrders && this.purchaseOrders.items && this.purchaseOrders.items.length > 0) {
+            this.purchaseOrders.items.forEach(item => {
+                if (item.isSelected) {
+                    purchaseNumbers.push(item.voucherNumber);
+                }
+            });
+        }
+
+        return purchaseNumbers;
+    }
+
+    /**
+     * This will bulk update the status of items
+     *
+     * @param {*} action
+     * @memberof PurchaseOrderComponent
+     */
+    public bulkUpdate(action: any): void {
+        let purchaseNumbers = this.getSelectedItems();
+
+        if (purchaseNumbers.length > 0) {
+            let getRequest = { companyUniqueName: this.purchaseOrderGetRequest.companyUniqueName, action: action };
+            let postRequest = { purchaseNumbers: purchaseNumbers };
+
+            this.purchaseOrderService.bulkUpdate(getRequest, postRequest).subscribe((res) => {
+                if (res) {
+                    if (res.status === 'success') {
+                        this.getAllPurchaseOrders(false);
+                        if (action === "delete") {
+                            this.closeConfirmationPopup();
+                        }
+                        this.toaster.successToast(res.body);
+                    } else {
+                        if (action === "delete") {
+                            this.closeConfirmationPopup();
+                        }
+                        this.toaster.errorToast(res.message);
+                    }
+                }
+            });
+        } else {
+            this.toaster.errorToast("Please select atleast 1 Purchase Order");
+        }
+    }
+
+    /**
+     * This will show the confirmation popup for bulk delete
+     *
+     * @memberof PurchaseOrderComponent
+     */
+    public confirmBulkDelete(): void {
+        let purchaseNumbers = this.getSelectedItems();
+        if (purchaseNumbers.length > 0) {
+            this.deleteModule = 'purchaseorderlist';
+            this.poConfirmationModel.show();
+        } else {
+            this.toaster.errorToast("Please select atleast 1 Purchase Order");
+        }
+    }
+
+    /**
+     * This will process the delete of item(s)
+     *
+     * @memberof PurchaseOrderComponent
+     */
+    public processDelete(): void {
+        if (this.deleteModule === 'purchaseorderlist') {
+            this.bulkUpdate('delete');
+        } else {
+            this.deleteItem();
+        }
     }
 }

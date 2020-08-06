@@ -41,11 +41,11 @@
                                 Convert to bill</a>
                         </li> -->
                         <li role="menuitem">
-                            <a class="dropdown-item cp" href="javascript:void(0)">
+                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('expire')">
                                 Expired</a>
                         </li>
                         <li role="menuitem">
-                            <a class="dropdown-item cp" href="javascript:void(0)">Delete</a>
+                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="confirmBulkDelete()">Delete</a>
                         </li>
                     </ul>
                 </div>
@@ -82,11 +82,11 @@
                             Convert to bill</a>
                     </li> -->
                     <li role="menuitem">
-                        <a class="dropdown-item cp" href="javascript:void(0)">
+                        <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('expire')">
                             Expired</a>
                     </li>
                     <li role="menuitem">
-                        <a class="dropdown-item cp" href="javascript:void(0)">Delete</a>
+                        <a class="dropdown-item cp" href="javascript:void(0)" (click)="confirmBulkDelete()">Delete</a>
                     </li>
                 </ul>
             </div>
@@ -100,12 +100,12 @@
     </div>
     <div class="table-responsive">
         <table class="table basic mt-15 table-bordered giddh-table on-mobile-view">
-            <thead class="t-h-bg1">
-                <tr>
+            <thead class="t-h-bg1" (mouseleave)="showSelectAllItemCheckbox = false">
+                <tr (mouseenter)="showSelectAllItemCheckbox = true">
                     <th width="3%">
-                        <div class="table-checkbox-field">
-                            #
-                            <div class="table-checkbox-field">
+                        <div>
+                            <span *ngIf="!showSelectAllItemCheckbox && !allItemsSelected">#</span>
+                            <div class="table-checkbox-field" *ngIf="showSelectAllItemCheckbox || allItemsSelected">
                                 <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
                                     (click)="toggleAllItems(true)">
                                 <img src="assets/images/checked.png" *ngIf="allItemsSelected"
@@ -183,8 +183,8 @@
             <tbody *ngIf="!isLoading && purchaseOrders.items && purchaseOrders.items.length > 0" (mouseleave)="hoveredItem = '';">
                 <tr *ngFor="let item of purchaseOrders.items; let i = index;" (mouseenter)="hoveredItem = item.uniqueName">
                     <td data-title="#">
-                        <span *ngIf="hoveredItem !== item.uniqueName && !item.isSelected">{{ (purchaseOrderGetRequest.count * (purchaseOrderGetRequest.page - 1)) + (i+1) }}</span>
-                        <div class="mh18_img" class="justify-content-sm-start" *ngIf="hoveredItem === item.uniqueName || item.isSelected">
+                        <span *ngIf="hoveredItem !== item.uniqueName && !item.isSelected && selectedItem !== item.uniqueName">{{ (purchaseOrderGetRequest.count * (purchaseOrderGetRequest.page - 1)) + (i+1) }}</span>
+                        <div class="mh18_img" class="justify-content-sm-start table-checkbox-field" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
                             <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
                                 (click)="toggleItem(item, true)" />
                             <img *ngIf="item.isSelected" src="assets/images/checked.png"
@@ -213,7 +213,7 @@
                     <td data-title="status" class="d-flex align-items-center">
                         <span class="d-flex">
                             {{item.status}}</span>
-                        <div class="action-icon ml-15">
+                        <div class="action-icon ml-15" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
                             <a tooltip="Convert to bill">
                                 <span class="icon-tick font-12"></span>
                             </a>
@@ -321,13 +321,12 @@
         [ngClass]="{'activeTextColor': purchaseOrderGetRequest.sortBy === column && purchaseOrderGetRequest.sort === 'desc'}">
     </div>
 </ng-template>
-<!-- Delete invoice confirmation model -->
 <div bsModal #poConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <delete-role-confirmation-model
-                [module]="'purchaseorderlist'"
-                [selectedInvoiceForDelete]="selectedInvoice" (confirmDeleteEvent)="deleteItem()"
+                [module]="deleteModule"
+                (confirmDeleteEvent)="processDelete()"
                 (closeModelEvent)="closeConfirmationPopup()">
             </delete-role-confirmation-model>
         </div>
