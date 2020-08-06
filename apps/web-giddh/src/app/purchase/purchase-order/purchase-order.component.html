@@ -217,7 +217,7 @@
                             <a tooltip="Convert to bill">
                                 <span class="icon-tick font-12"></span>
                             </a>
-                            <a tooltip="Send Email">
+                            <a tooltip="Send Email" (click)="openSendMailModal(item, sendEmailModal)">
                                 <span class="icon-enevlop font-12"></span>
                             </a>
                             <a tooltip="Copy">
@@ -333,3 +333,6 @@
     </div>
 </div>
 <purchase-order-preview *ngIf="purchaseOrderUniqueName" [purchaseOrders]="purchaseOrders"></purchase-order-preview>
+<ng-template #sendEmailModal>
+    <purchase-send-email-modal [selectedItem]="selectedItem" (closePopup)="closeSendMailPopup($event)"></purchase-send-email-modal>
+</ng-template>
