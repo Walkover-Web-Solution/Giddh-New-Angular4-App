@@ -7,6 +7,8 @@ import { IOption } from './sh-options.interface';
 import { SalesShSelectMenuComponent } from './sh-select-menu.component';
 import { concat, includes, startsWith } from 'apps/web-giddh/src/app/lodash-optimized';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
+import { Subject, ReplaySubject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
 
@@ -79,6 +81,19 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
         UP: 38,
         DOWN: 40
     };
+
+    /** True when pagination should be enabled */
+    @Input() public isPaginationEnabled: boolean;
+    /** True if the compoonent should be used as dynamic search component instead of static search */
+    @Input() public enableDynamicSearch: boolean;
+    /** Emits the scroll to bottom event when pagination is required  */
+    @Output() public srollEnd: EventEmitter<void> = new EventEmitter();
+    /** Emits dynamic searched query */
+    @Output() public dynamicSearchedQuery: EventEmitter<string> = new EventEmitter();
+    /** Subject to emit current searched value */
+    private dynamicSearchQueryChanged: Subject<string> = new Subject<string>();
+    /** To unsubscribe from the dynamic search query subscription */
+    private stopDynamicSearch$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef) {
     }
@@ -374,6 +389,11 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
                 this.clear();
             }
         }
+        if ('options' in changes) {
+            if (changes.options && changes.options.currentValue) {
+                this.refreshList();
+            }
+        }
     }
 
     //////// ControlValueAccessor imp //////////
@@ -438,6 +458,39 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
             setTimeout(() => {
                 this.renderer.invokeElementMethod(this.inputFilter.nativeElement, 'focus');
             }, 10);
+        }
+    }
+
+    public reachedEnd() {
+        this.srollEnd.emit();
+    }
+
+    public refreshList(): void {
+        if (this.menuEle && this.menuEle.virtualScrollElm) {
+            this.menuEle.virtualScrollElm.refresh();
+        }
+    }
+
+    public handleInputChange(inputText: string): void {
+        if (this.enableDynamicSearch) {
+            this.dynamicSearchQueryChanged.next(inputText);
+        } else {
+            this.updateFilter(inputText);
+        }
+    }
+
+    public subscribeToQueryChange(): void {
+        if (this.enableDynamicSearch) {
+            this.stopDynamicSearch$.next(true);
+            this.stopDynamicSearch$.complete();
+            this.stopDynamicSearch$ = new ReplaySubject(1);
+            this.dynamicSearchQueryChanged = new Subject();
+            this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
+                if (query && query.length > 1) {
+                    console.log('Sending the query: ', query);
+                    this.dynamicSearchedQuery.emit(query);
+                }
+            });
         }
     }
 }
