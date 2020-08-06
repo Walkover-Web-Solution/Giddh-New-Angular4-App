@@ -48,6 +48,7 @@ import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/n
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { download } from "@giddh-workspaces/utils";
+import { SearchService } from '../services/search.service';
 
 @Component({
     selector: 'ledger',
@@ -196,6 +197,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** Stores the search results */
+    public searchResults: Array<IOption> = [];
+    /** Stores the search results pagination details */
+    public searchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
 
     constructor(
         private store: Store<AppState>,
@@ -214,7 +223,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private warehouseActions: WarehouseActions,
         private _cdRf: ChangeDetectorRef,
         private breakPointObservar: BreakpointObserver,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private searchService: SearchService
     ) {
 
         this.lc = new LedgerVM();
@@ -1061,6 +1071,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public showNewLedgerEntryPopup(trx: TransactionVM) {
+        this.resetPreviousSearchResults();
         this.selectBlankTxn(trx);
         this.lc.showNewLedgerPanel = true;
     }
@@ -1154,6 +1165,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.showUpdateLedgerForm = false;
         this.updateLedgerModal.hide();
         this._loaderService.show();
+    }
+
+    public handleScrollEnd() {
+        console.log('Reached end');
+        if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
+            this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
+        }
     }
 
     public showShareLedgerModal() {
@@ -1357,6 +1375,39 @@ export class LedgerComponent implements OnInit, OnDestroy {
             componentInstance.destroyed$.complete();
         });
 
+    }
+
+    public onSearchQueryChanged(query: string, page: number = 1) {
+        console.log('Searched query: ', query);
+        this.searchResultsPaginationData.query = query;
+        this.searchService.searchAccount(query, page).subscribe(data => {
+            console.log('Data received: ', data);
+            if (data && data.body && data.body.results) {
+                const searchResults = data.body.results.map(result => {
+                    return {
+                        value: result.uniqueName,
+                        label: result.name,
+                        additional: result
+                    }
+                }) || [];
+                if (page === 1) {
+                    this.searchResults = searchResults;
+                } else {
+                    this.searchResults.push(...searchResults);
+                }
+                this.searchResultsPaginationData.page = data.body.page;
+                this.searchResultsPaginationData.totalPages = data.body.totalPages;
+            }
+        });
+    }
+
+    public resetPreviousSearchResults(): void {
+        this.searchResults = [];
+        this.searchResultsPaginationData = {
+            page: 0,
+            totalPages: 0,
+            query: ''
+        };
     }
 
     public loadPaginationComponent(s) {
