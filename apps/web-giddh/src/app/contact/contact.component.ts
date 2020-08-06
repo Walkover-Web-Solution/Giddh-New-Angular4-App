@@ -1258,7 +1258,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      *
      * @memberof ContactComponent
      */
-    public closeBulkPaymentModel(): void {
+    public closeBulkPaymentModel(event: any): void {
+        //  if bulk paymemt success then clear all selected contacts lists
+        if (event) {
+            this.clearSelectedContacts();
+        }
         this.isBulkPaymentShow = false;
         this.selectedAccForPayment = null;
         this.bulkPaymentModalRef.hide();
@@ -1347,5 +1351,21 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         } else if (indexOfEntrySelected > -1 && !this.allSelectionModel) {
             this.selectedCheckedContacts.splice(indexOfEntrySelected, 1);
         }
+    }
+
+    /**
+     * To clear selected contacts list
+     *
+     * @memberof ContactComponent
+     */
+    public clearSelectedContacts(): void {
+        this.searchStr = '';
+        this.selectedCheckedContacts = [];
+        this.selectedAccountsList = [];
+        this.allSelectionModel = false;
+        this.checkboxInfo = {
+            selectedPage: 1
+        };
+        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr);
     }
 }
