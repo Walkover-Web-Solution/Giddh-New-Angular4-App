@@ -117,7 +117,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label>State <sup class="text-danger" *ngIf="isStateRequired">*</sup> </label>
-                                        <div class="custom-select">
+                                        <div>
                                             <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" [defaultValue]="gst.value.state.code ? gst.value.state.code + ' - ' + gst.value.state.name: ''" (selected)="selectedState(gst, $event)" [forceClearReactive]="forceClear$ | async"
                                                 formControlName="stateCode" class="wd100" [useInBuiltFilterForIOptionTypeItems]="true">
                                             </sh-select>
@@ -136,7 +136,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>Party Type<span class="red-text">*</span></label>
-                                            <div class="custom-select pos-rel">
+                                            <div class="pos-rel">
                                                 <sh-select [options]="partyTypeSource" formControlName="partyType" [isFilterEnabled]="true"></sh-select>
                                             </div>
                                         </div>

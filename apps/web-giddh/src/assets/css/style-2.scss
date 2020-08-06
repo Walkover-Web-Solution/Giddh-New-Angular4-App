@@ -195,7 +195,16 @@
 }
 
 /* start MDB tweaks */
-
+.caret{
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}
 .border-none {
     border: none !important;
 }
@@ -6844,6 +6853,7 @@ table td[class*=col-]:last-child {
             padding: 2px 10px;
             color: $nero;
             display:block;
+            line-height: 1.4;
         }
     }
 }
@@ -9155,9 +9165,10 @@ input.checkbox-custom[type="checkbox"] {
 
 .modal-content {
     border: none !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,.5)
 }
 
-.panel-block .panel-body {
+.panel-block .card-body {
     min-height: 350px;
 }
 
@@ -9440,6 +9451,12 @@ span#HW_badge_cont:nth-child(3) {
 }
 .dropdown-toggle::after{
     display: none;
+}
+.dashboard-container {
+    .card{
+        margin-bottom: 20px;
+        min-height: 426px;
+    }
 }
 /* responsive */
 
@@ -10029,7 +10046,7 @@ span#HW_badge_cont:nth-child(3) {
     body.hide-scroll-body {
         overflow-y: hidden !important;
     }
-    .panel-block .panel-body {
+    .panel-block .card-body {
         min-height: auto;
     }
     // .tabs-page .padding-top-fixed-mobile {
