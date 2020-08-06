@@ -257,6 +257,7 @@
     .search-subscription{
         .subscription-dropdown-wrapper{
             max-width: 100%;
+            width: calc(100% - 120px);
         }
     }
     .plan-row-wrapper{

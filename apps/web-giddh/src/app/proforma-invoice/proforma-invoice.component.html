@@ -9,7 +9,7 @@
     <!-- region page change menu -->
     <div class="form-group mrB mrT2 clearfix">
 
-        <div class="col-xs-12 clearfix">
+        <div class="col-12 col-sm-12 clearfix">
 
             <div class="btn-group proformaSalesTime" dropdown>
 
@@ -163,12 +163,12 @@
                             <!-- region customer address section -->
                             <div class="row">
 
-                                <div class="col-sm-9 col-sm-offset-2">
+                                <div class="col-sm-9 offset-sm-2">
                                     <ng-container>
 
                                         <section class="form-inline" [ngClass]="{' billing-addressWrap' : !invFormData.voucherDetails.customerName }">
 
-                                            <div class=" wrap-billing-address clearfix">
+                                            <div class="wrap-billing-address clearfix w-100">
 
                                                 <div class="row">
                                                     <!-- region billing address -->
@@ -180,19 +180,19 @@
                                                             <div class="billing-address clearfix">
                                                                 <textarea name="billingDetails.address" class="form-control" (keyup)="autoFillShippingDetails()" rows="3" autocomplete="off" [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]" autofocus="off" aria-autocomplete="none" #customerBillingAddress></textarea>
 
-                                                                <div>
-                                                                    <div class="col-sm-6 pd ">
+                                                                <div class="row">
+                                                                    <div class="col-sm-6">
                                                                         <label class="salesCountryLabel">
                                                                             {{ customerCountryName }}
                                                                         </label>
                                                                     </div>
 
-                                                                    <div class="col-sm-6 pd" #billingState>
+                                                                    <div class="col-sm-6" #billingState>
                                                                         <sales-sh-select [placeholder]="'State'" class="select-bdr-bottom" (selected)="fillShippingBillingDetails($event, true); autoFillShippingDetails()" #statesBilling [showBottomBorderOnly]="true" [options]="statesSource" name="billingDetails.stateCode" [(ngModel)]="invFormData.accountDetails.billingDetails.state.code">
                                                                         </sales-sh-select>
                                                                     </div>
 
-                                                                    <div class="col-sm-12 pd " *ngIf="shouldShowTrnGstField">
+                                                                    <div class="col-sm-12" *ngIf="shouldShowTrnGstField">
                                                                         <!-- <label>GSTIN</label> -->
                                                                         <input maxLength="15" autocomplete="None" type="text" name="billingDetails.gstNumber" class="form-control input-custom" *ngIf="showGSTINNo" [(ngModel)]="invFormData.accountDetails.billingDetails.gstNumber" (change)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()"
                                                                             placeholder="GSTIN" />
@@ -225,11 +225,11 @@
 
                                                                 <textarea [readonly]="autoFillShipping" name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.accountDetails.shippingDetails.address[0]" rows="3" autocomplete="off"></textarea>
 
-                                                                <div class="clearfix">
+                                                                <div class="clearfix form-group">
 
-                                                                    <div class="form-group">
+                                                                    <div class="row">
 
-                                                                        <div class="col-sm-6 pd ">
+                                                                        <div class="col-sm-6">
                                                                             <div class="form-group">
 
                                                                                 <label class="salesCountryLabel">
@@ -238,14 +238,14 @@
                                                                             </div>
                                                                         </div>
 
-                                                                        <div class="col-sm-6 pd" #shippingState>
+                                                                        <div class="col-sm-6" #shippingState>
 
                                                                             <sales-sh-select [disabled]="autoFillShipping" [placeholder]="'State'" class="select-bdr-bottom" #statesShipping [showBottomBorderOnly]="true" (selected)="fillShippingBillingDetails($event, false)" [options]="statesSource" name="shippingDetails.stateCode"
                                                                                 [(ngModel)]="invFormData.accountDetails.shippingDetails.state.code">
                                                                             </sales-sh-select>
                                                                         </div>
 
-                                                                        <div class="col-sm-12 pd " *ngIf="shouldShowTrnGstField">
+                                                                        <div class="col-sm-12" *ngIf="shouldShowTrnGstField">
                                                                             <input [readonly]="autoFillShipping" autocomplete="None" maxLength="15" type="text" name="shippingDetails.gstNumber" *ngIf="showGSTINNo" class="form-control input-custom" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" (change)="getStateCode('shippingDetails', statesShipping)"
                                                                                 placeholder="GSTIN" />
                                                                             <input [readonly]="autoFillShipping" maxLength="15" autocomplete="None" type="text" name="shippingDetails.gstNumber" class="form-control input-custom" *ngIf="showTRNNo" [(ngModel)]="invFormData.accountDetails.shippingDetails.gstNumber" (change)="getStateCode('shippingDetails', statesShipping);"
@@ -402,8 +402,8 @@
                                             <span class="remove-invoice-label">Remove</span>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 invoiceDateDueDate">
-                                        <div class="form-inline">
+                                    <div class="col-sm-6 invoice-date-due-date">
+                                        <div class="form-inline flex-row flex-nowrap">
                                             <div *ngIf="(isCreditNote || isDebitNote) && selectedInvoice" class="cp remove-invoice" (click)="removeSelectedInvoice()">
                                                 <span class="remove-invoice-icon mr-05">×</span>
                                                 <span class="remove-invoice-label">Remove</span>
@@ -474,7 +474,7 @@
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
                                         <input id="reverse-charge" name="rcmEntry" class="checkbox-custom" type="checkbox" [ngModel]="isRcmEntry" (click)="toggleRcmCheckbox($event)">
-                                        <label #rcmPopup="bs-popover" [popover]="rcmTemplate" container="body" placement="bottom" containerClass="purchase-invoice-rcm" for="reverse-charge" class="checkbox-custom-label">
+                                        <label #rcmPopup="bs-popover" [popover]="rcmTemplate" container="body" placement="bottom right" containerClass="purchase-invoice-rcm" for="reverse-charge" class="checkbox-custom-label">
                                             Is this transaction applicable for reverse charge?
                                         </label>
                                     </div>
@@ -629,7 +629,7 @@
 
                                             <div class="row">
 
-                                                <div class="col-xs-6 pdR0" *ngIf="entry.entryDate">
+                                                <div class="col-6 col-sm-6 pdR0" *ngIf="entry.entryDate">
                                                     <div class="entryDate">
                                                         <label>Entry Date: </label> {{entry.entryDate | date: 'dd-MM-yyyy'}}
                                                         <span class="edit-icon cp" *ngIf="!isUpdateMode">
@@ -639,7 +639,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-xs-6 pdL0" *ngIf="transaction.hsnNumber || transaction.sacNumber">
+                                                <div class="col-6 col-sm-6 pdL0" *ngIf="transaction.hsnNumber || transaction.sacNumber">
                                                     <div class="hsnCode text-right">
                                                         <label>HSN/SAC:</label>
                                                         <span>
@@ -798,7 +798,7 @@
                                             <!-- region entry date/ hsncode -->
                                             <div class="dateHsnCode">
                                                 <div class="row">
-                                                    <div class="col-xs-6 pdR0">
+                                                    <div class="col-6 col-sm-6 pdR0">
                                                         <div class="entryDate">
                                                             <label>Entry Date: </label>
                                                             <span *ngIf="!isUpdateMode">
@@ -824,7 +824,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-xs-6 pdL0">
+                                                    <div class="col-6 col-sm-6 pdL0">
                                                         <div class="wrap-hsnBox">
                                                             <div class="hsnCode text-right" (click)="toggleHsnSacDropDown(transaction)">
                                                                 <label>HSN/SAC:</label>
@@ -998,7 +998,7 @@
     </tbody>
 
     <!-- region add bulk items -->
-    <div class="p-4 aquaColor add-line-bulk-item" style="width: max-content;">
+    <div class="p-1 aquaColor add-line-bulk-item" style="width: max-content;">
         <a href="javascript:void 0" (click)="addBlankRow(null)">+ Add New Line</a>
         <span style="font-size:14px; color: #c5c5c5;"> | </span>
         <a (click)="showBulkItemModal = true; bulkItemsModal.show()" href="javascript:void 0">+ Add
@@ -1028,7 +1028,7 @@
 
                             <div class="row">
 
-                                <div class="form-group col-xs-4 mb-0">
+                                <div class="form-group col-xs-4 col-sm-4 mb-0">
                                     <input type="text" #shippingDate="ngModel" [placeholder]="templatePlaceholder?.shippedDateLabel" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                         [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
                                     <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
@@ -1036,11 +1036,11 @@
                                     </p>
                                 </div>
 
-                                <div class="form-group col-xs-4 mb-0">
+                                <div class="form-group col-xs-4 col-sm-4 mb-0">
                                     <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" [placeholder]="templatePlaceholder?.shippedViaLabel || 'Ship Via'" />
                                 </div>
 
-                                <div class="form-group col-xs-4 mb-0">
+                                <div class="form-group col-xs-4 col-sm-4 mb-0">
                                     <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" [placeholder]="templatePlaceholder?.trackingNumber || 'Tracking No.'" />
                                 </div>
 
@@ -1048,15 +1048,15 @@
 
                             <div class="row">
 
-                                <div class="form-group col-xs-4 mb-0">
+                                <div class="form-group col-xs-4 col-sm-4 mb-0">
                                     <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" [placeholder]="templatePlaceholder?.customField1Label || 'Field 1'" />
                                 </div>
 
-                                <div class="form-group col-xs-4 mb-0">
+                                <div class="form-group col-xs-4 col-sm-4 mb-0">
                                     <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" [placeholder]="templatePlaceholder?.customField2Label || 'Field 2'" />
                                 </div>
 
-                                <div class="form-group col-xs-4 mb-0">
+                                <div class="form-group col-xs-4 col-sm-4 mb-0">
                                     <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" [placeholder]="templatePlaceholder?.customField3Label || 'Field 3'" />
                                 </div>
 
@@ -1336,7 +1336,7 @@
                 <!-- region static entry -->
                 <div class="card-invoiceTable" [hidden]="activeIndx === entryIdx">
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-12 col-sm-12">
                             <div class="single-card-row">
                                 <div class="productName">
                                     <label class="card-label">Product/Service Description</label>
@@ -1357,14 +1357,14 @@
                                 <div class="dateHsnCode pdR0">
                                     <div class="row">
 
-                                        <div class="col-xs-6" *ngIf="entry.entryDate">
+                                        <div class="col-6" *ngIf="entry.entryDate">
                                             <div class="entryDate">
                                                 <label>Entry Date: {{entry.entryDate | date: 'dd-MM-yyyy'}}
                                                             </label>
                                             </div>
                                         </div>
 
-                                        <div class="col-xs-6 pdL0" *ngIf="transaction.hsnNumber || transaction.sacNumber">
+                                        <div class="col-6 pdL0" *ngIf="transaction.hsnNumber || transaction.sacNumber">
                                             <div class="hsnCode text-right">
                                                 <label>HSN/SAC:
                                                                 {{(inventorySettings?.manageInventory || !transaction.sacNumberExists) ? transaction.hsnNumber : transaction.sacNumber}}</label>
@@ -1377,7 +1377,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-6 col-sm-6">
                             <div class="single-card-row">
                                 <div class="qty-unit">
                                     <label class="card-label">Qty/Unit</label>
@@ -1387,7 +1387,7 @@
 
                         </div>
 
-                        <div class="col-xs-6">
+                        <div class="col-6 col-sm-6">
                             <div class="single-card-row">
                                 <div class="card-rate">
                                     <label class="card-label">Rate</label>
@@ -1407,7 +1407,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-6 col-sm-6">
                             <div class="single-card-row">
                                 <div class="card-amount">
                                     <label class="card-label">Amount</label>
@@ -1422,7 +1422,7 @@
                             </div>
                         </div>
 
-                        <div class="col-xs-6">
+                        <div class="col-6 col-sm-6">
                             <div class="single-card-row">
                                 <div class="card-discount">
                                     <label class="card-label">Discount</label>
@@ -1439,7 +1439,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-6 col-sm-6">
                             <div class="single-card-row">
                                 <div class="card-tax">
                                     <label class="card-label">Tax</label>
@@ -1454,7 +1454,7 @@
                             </div>
                         </div>
 
-                        <div class="col-xs-6">
+                        <div class="col-6 col-sm-6">
                             <div class="single-card-row">
                                 <div class="card-total">
                                     <label class="card-label">Total</label>
@@ -1485,7 +1485,7 @@
                 <!-- region dynamic entry -->
                 <div class="card-invoiceTable edit-card-invoiceTable" [hidden]="activeIndx !== entryIdx">
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-12 col-sm-12">
                             <div class="single-card-row">
                                 <div class="productName">
                                     <label class="card-label">Product/Service Description</label>
@@ -1532,7 +1532,7 @@
                                         <div class="dateHsnCode">
 
                                             <div class="row">
-                                                <div class="col-xs-6 pdR0">
+                                                <div class="col-6 pdR0">
                                                     <div class="entryDate">
                                                         <label>Entry Date: </label>
 
@@ -1561,7 +1561,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-xs-6 pdL0">
+                                                <div class="col-6 pdL0">
                                                     <div class="wrap-hsnBox">
                                                         <div class="hsnCode text-right" (click)="toggleHsnSacDropDown(transaction)">
                                                             <label>HSN/SAC:</label>
@@ -1608,19 +1608,19 @@
                     </div>
 
                     <div class="row quantityUnitW100">
-                        <div class="col-xs-6">
+                        <div class="col-12 col-sm-12">
 
                             <div class="single-card-row">
                                 <div class="qty-unit">
 
                                     <div class="row">
 
-                                        <div class="col-xs-6" style="padding-right:0;">
+                                        <div class="col-12">
                                             <label class="card-label text-right">Qty</label>
                                             <input type="text" [disabled]="!transaction.isStockTxn" (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity" decimalDigitsDirective name="transaction.quantity_{{entryIdx}}" class="form-control text-right" [(ngModel)]="transaction.quantity"
                                             />
                                         </div>
-                                        <div class="col-xs-6">
+                                        <div class="col-12">
                                             <label class="card-label text-right">Unit</label>
                                             <select class="form-control" [disabled]="!transaction.isStockTxn" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit" (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
                                                             <option *ngFor="let stock of transaction.stockList"
@@ -1637,7 +1637,7 @@
 
                         </div>
 
-                        <div class="col-xs-6">
+                        <div class="col-12 col-sm-12">
 
                             <div class="single-card-row">
 
@@ -1661,7 +1661,7 @@
 
                     <div class="row">
 
-                        <div class="col-xs-6">
+                        <div class="col-6 col-sm-6">
 
                             <div class="single-card-row">
 
@@ -1681,7 +1681,7 @@
                             </div>
                         </div>
 
-                        <div class="col-xs-6">
+                        <div class="col-6 col-sm-6">
 
                             <div class="single-card-row">
 
@@ -1706,7 +1706,7 @@
 
                     <div class="row">
 
-                        <div class="col-xs-6">
+                        <div class="col-6 col-sm-6">
 
                             <div class="single-card-row">
                                 <div class="card-tax">
@@ -1727,7 +1727,7 @@
                             </div>
                         </div>
 
-                        <div class="col-xs-6">
+                        <div class="col-6 col-sm-6">
                             <div class="single-card-row">
                                 <div class="card-total">
                                     <label class="card-label text-right">Total</label>
@@ -1813,30 +1813,30 @@
 
                     <div class="row">
 
-                        <div class="form-group col-xs-4 mb-0">
+                        <div class="form-group col-xs-4 mb-1">
                             <input type="text" #shippingDate="ngModel" [placeholder]="templatePlaceholder?.shippedDateLabel" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                 [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
                             <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                 Invalid Date</p>
                         </div>
 
-                        <div class="form-group col-xs-4 mb-0">
+                        <div class="form-group col-xs-4 mb-1">
                             <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" [placeholder]="templatePlaceholder?.shippedViaLabel || 'Ship Via'" />
                         </div>
 
-                        <div class="form-group col-xs-4 mb-0">
+                        <div class="form-group col-xs-4 mb-1">
                             <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" [placeholder]="templatePlaceholder?.trackingNumber || 'Tracking No.'" />
                         </div>
 
-                        <div class="form-group col-xs-4 mb-0">
+                        <div class="form-group col-xs-4 mb-1">
                             <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" [placeholder]="templatePlaceholder?.customField1Label || 'Field 1'" />
                         </div>
 
-                        <div class="form-group col-xs-4 mb-0">
+                        <div class="form-group col-xs-4 mb-1">
                             <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" [placeholder]="templatePlaceholder?.customField2Label || 'Field 2'" />
                         </div>
 
-                        <div class="form-group col-xs-4 mb-0">
+                        <div class="form-group col-xs-4 mb-1">
                             <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" [placeholder]="templatePlaceholder?.customField3Label || 'Field 3'" />
                         </div>
                     </div>
@@ -2018,7 +2018,7 @@
 
     <section id="actionPane" class="text-center">
 
-        <div class="col-xs-12">
+        <div class="col-12">
 
             <!-- region generate mode -->
             <div class="pull-right pr updateMode" *ngIf="!isUpdateMode">
