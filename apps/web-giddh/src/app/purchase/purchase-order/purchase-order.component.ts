@@ -533,4 +533,26 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             this.deleteItem();
         }
     }
+
+    /**
+     * This will open the send mail popup
+     *
+     * @param {*} item
+     * @param {TemplateRef<any>} template
+     * @memberof PurchaseOrderComponent
+     */
+    public openSendMailModal(item: any, template: TemplateRef<any>): void {
+        this.selectedItem = item;
+        this.modalRef = this.modalService.show(template);
+    }
+
+    /**
+     * This will close the email popup
+     *
+     * @memberof PurchaseOrderComponent
+     */
+    public closeSendMailPopup(event: any): void {
+        this.selectedItem = '';
+        this.modalRef.hide();
+    }
 }
