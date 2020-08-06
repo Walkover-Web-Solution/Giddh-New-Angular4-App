@@ -28,27 +28,27 @@
             <!-- </div> -->
             <div class="row">
                 <!-- total overdues -->
-                <div class="col-sm-6 col-md-4 col-lg-4 col-xs-12 panel-block" *ngIf="!hideallcharts">
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xs-12 col-xl-4 panel-block" *ngIf="!hideallcharts">
                     <toal-overdues-chart #overdues></toal-overdues-chart>
                 </div>
                 <!-- profit loss -->
-                <div class="col-sm-6 col-md-4 col-lg-4 col-xs-12 panel-block" *ngIf="!hideallcharts">
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xs-12 col-xl-4 panel-block" *ngIf="!hideallcharts">
                     <profit-loss></profit-loss>
                 </div>
                 <!-- bank accounts -->
-                <div class="col-sm-12 col-md-4 col-lg-4 col-xs-12 panel-block" *ngIf="!hideallcharts">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4 col-xs-12 panel-block" *ngIf="!hideallcharts">
                     <bank-accounts></bank-accounts>
                 </div>
                 <!-- sales graph -->
-                <div class="col-xs-12 col-lg-12 ">
+                <div class="col-xs-12 col-lg-12">
                     <revenue-chart #revenue></revenue-chart>
                 </div>
                 <!-- ratio analysis -->
-                <div class="col-xs-12 " *ngIf="!hideallcharts">
+                <div class="col-xs-12 col-lg-12" *ngIf="!hideallcharts">
                     <ratio-analysis-chart #ratio></ratio-analysis-chart>
                 </div>
                 <!-- Debtors / Creditors table -->
-                <div class="col-xs-12" *ngIf="!hideallcharts">
+                <div class="col-xs-12 col-lg-12" *ngIf="!hideallcharts">
                     <cr-dr-list [initializeDateWithUniversalDate]="true"></cr-dr-list>
                 </div>
             </div>
