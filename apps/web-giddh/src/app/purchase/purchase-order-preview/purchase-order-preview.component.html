@@ -13,7 +13,7 @@
                             *ngIf="purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0">
                             <li class="single-invoice-detail cp"
                                 *ngFor="let row of purchaseOrders.items; let i = index;">
-                                <div class="row">
+                                <div class="row" (click)="showPurchaseOrderPreview(row.uniqueName)">
                                     <div class="col-xs-7">
                                         <div class="invoice-number-date">
                                             <span class="order-number">
@@ -52,8 +52,8 @@
 
                                 <div class="col-sm-4 col-xs-12">
                                     <div class="invoice-number-holder">
-                                        <h3 class="invoice-number">PO432908-3</h3>
-                                        <p class="account-holder-name">Walkover Web Solutions Pvt. Ltd.</p>
+                                        <h3 class="invoice-number">{{purchaseOrder?.number}}</h3>
+                                        <p class="account-holder-name">{{purchaseOrder?.account?.name}}</p>
                                     </div>
                                 </div>
 
@@ -99,7 +99,7 @@
 
                                             <span class="pos-rel">
                                                 <a href="javascript:void 0" tooltip="Send Email" placement="top"
-                                                    (click)="openModal(sendEmailModal)"><i
+                                                    (click)="openSendMailModal(sendEmailModal)"><i
                                                         class="fa fa-envelope-o"></i></a>
                                             </span>
 
@@ -141,7 +141,7 @@
                             <div class="loader"></div>
                         </div>
 
-                        <div class="error" hidden>
+                        <!-- <div class="error" hidden>
                             <span>
                                 Invoice Preview is not available right now!Please try again..
                             </span>
@@ -172,7 +172,7 @@
                         </div>
                         <div class="fixed-ng2pdfview pdf-preview" hidden>
                             <img class="image-preview" />
-                        </div>
+                        </div> -->
                         <!-- template -->
 
                         <body id="default">
@@ -547,7 +547,7 @@
     <!-- endregion -->
 </div>
 <ng-template #sendEmailModal>
-    <purchase-send-email-modal></purchase-send-email-modal>
+    <purchase-send-email-modal *ngIf="purchaseOrder" [sendEmailRequest]="sendEmailRequest" (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
 </ng-template>
 <!-- <div class="aside-overlay" *ngIf="orderHistoryAsideState === 'in'"></div>
 <div *ngIf="orderHistoryAsideState === 'in'">

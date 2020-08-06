@@ -332,7 +332,7 @@
         </div>
     </div>
 </div>
-<purchase-order-preview *ngIf="purchaseOrderUniqueName" [purchaseOrders]="purchaseOrders"></purchase-order-preview>
+<purchase-order-preview *ngIf="purchaseOrderUniqueName" [purchaseOrders]="purchaseOrders" [companyUniqueName]="purchaseOrderGetRequest.companyUniqueName" [purchaseOrderUniqueName]="purchaseOrderUniqueName"></purchase-order-preview>
 <ng-template #sendEmailModal>
-    <purchase-send-email-modal [selectedItem]="selectedItem" (closePopup)="closeSendMailPopup($event)"></purchase-send-email-modal>
+    <purchase-send-email-modal [sendEmailRequest]="sendEmailRequest" (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
 </ng-template>
