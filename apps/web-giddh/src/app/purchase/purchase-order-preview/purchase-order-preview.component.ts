@@ -3,6 +3,7 @@ import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap'
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
+import { GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'purchase-order-preview',
@@ -23,6 +24,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges {
     public purchaseOrder: any = {};
     public sendEmailRequest: any = {};
     public isLoading: boolean = false;
+    public giddhDateFormat: any = GIDDH_DATE_FORMAT_UI;
 
     constructor(private modalService: BsModalService, public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public router: Router) {
 
