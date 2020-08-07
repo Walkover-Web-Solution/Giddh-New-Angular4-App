@@ -127,6 +127,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges {
             this.purchaseOrderService.statusUpdate(getRequest, postRequest).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
+                        this.getPurchaseOrder();
                         this.toaster.successToast(res.body);
                     } else {
                         this.toaster.errorToast(res.message);
