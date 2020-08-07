@@ -68,6 +68,7 @@
     border-bottom: 1px solid #cac8c6;
 }*/
 
+
 @media (max-width: 768px) {
     .onMobileView tbody tr {
         box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
@@ -1854,7 +1855,7 @@ input:-moz-placeholder {
 
 header .navbar {
     background-color: #f7f8fa;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 0px solid $gainsboro;
     padding: 3px 0;
 }
 
@@ -4556,7 +4557,7 @@ label {
     width: 100%;
     overflow-y: scroll;
     height: 100%;
-    min-height: 550px;
+    //min-height: 550px;
     padding-bottom: 80px;
 }
 
@@ -5183,21 +5184,25 @@ label {
     transition: all 0.3s ease;
 }
 
-.custom-select select {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    -webkit-border-radius: 0;
-    border-radius: 0;
-    padding-right: 22px !important;
-}
-
-.custom-select .select_drop {
-    position: absolute;
-    bottom: 16px;
-    top: inherit;
-    z-index: 9;
-    right: 6px;
-}
+.custom-select{
+        height: auto;
+        padding: 0px;
+        border:0px solid $gainsboro;
+        select {
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            -webkit-border-radius: 0;
+            border-radius: 0;
+            padding-right: 22px !important;
+        }
+        .select_drop {
+            position: absolute;
+            bottom: 16px;
+            top: inherit;
+            z-index: 9;
+            right: 6px;
+        }
+} 
 
 #mfReportTbl table>tbody>tr>td>table.table {
     background: transparent;
@@ -5999,9 +6004,9 @@ input[type="checkbox"][disabled]:after {
 }
 
 .active-toggle-btn {
-    color: $white;
-    background-color: $chetwode-blue;
-    border-color: $chetwode-blue;
+    color: $white !important;
+    background-color: $chetwode-blue !important;
+    border-color: $chetwode-blue !important;
 }
 
 .input-group-addon input[type="radio"] {
@@ -6839,7 +6844,7 @@ table td[class*=col-]:last-child {
     }
     >li{
         >a {
-            padding: 2px 10px;
+            padding: 4px 10px;
             color: $nero;
             display:block;
         }
@@ -8492,6 +8497,8 @@ ul.dropdown-menu p.lead.pd {
     border-bottom: 4px solid $deep-sky-blue !important;
     padding-bottom: 7px !important;
     font-family: $opensans-semibold;
+    background: transparent;
+    border-color: transparent;
 }
 
 .invoce-controll .nav-tabs>li>a {
@@ -8635,6 +8642,10 @@ ul.dropdown-menu p.lead.pd {
 
 .input-group-addon {
     padding: 5px 12px;
+    color: $davy-grey;
+    text-align: center;
+    background-color: $whisper-light;
+    border: 1px solid $very-light-gray;
 }
 
 .mrTop {
@@ -10321,6 +10332,22 @@ span#HW_badge_cont:nth-child(3){
     }
     .edit-modal.modal-small {
         display: none;
+    }
+    .modal-dialog {
+        width: 600px !important;
+        margin: 30px auto;
+    }
+}
+
+@media (min-width: 992px){
+    .modal-xl {
+        width: 900px !important;
+    }
+}
+
+@media (min-width:576px){
+    .modal-dialog {
+        max-width: 100% !important;
     }
 }
 
