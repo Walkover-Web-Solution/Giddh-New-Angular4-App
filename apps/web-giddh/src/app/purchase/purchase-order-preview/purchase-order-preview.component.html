@@ -94,33 +94,33 @@
 
                                         <div class="edit-action-btn-groups pull-right">
                                             <span>
-                                                <a href="javascript:void 0" tooltip="Edit" placement="top"><i
+                                                <a href="javascript:;" tooltip="Edit" placement="top"><i
                                                         class="fa fa-pencil"></i></a>
                                             </span>
 
                                             <span class="pos-rel">
-                                                <a href="javascript:void 0" tooltip="Send Email" placement="top"
+                                                <a href="javascript:;" tooltip="Send Email" placement="top"
                                                     (click)="openSendMailModal(sendEmailModal)"><i
                                                         class="fa fa-envelope-o"></i></a>
                                             </span>
 
-                                            <span>
-                                                <a href="javascript:void 0" tooltip="Print" placement="top"><i
+                                            <!-- <span>
+                                                <a href="javascript:;" tooltip="Print" placement="top"><i
                                                         class="fa fa-print"></i></a>
-                                            </span>
+                                            </span> -->
 
                                             <!-- <span>
-                                                <a href="javascript:void 0" tooltip="Download" placement="top"><i
+                                                <a href="javascript:;" tooltip="Download" placement="top"><i
                                                         class="fa fa-file-pdf-o"></i></a>
                                             </span>
 
                                             <span>
-                                                <a href="javascript:void 0" tooltip="Download" placement="top"><i
+                                                <a href="javascript:;" tooltip="Download" placement="top"><i
                                                         class="icon-download"></i></a>
                                             </span> -->
 
                                             <span>
-                                                <a href="javascript:void 0" tooltip="Delete" placement="top" (click)="confirmDelete()"><i
+                                                <a href="javascript:;" tooltip="Delete" placement="top" (click)="confirmDelete()"><i
                                                         class="fa fa-trash"></i></a>
                                             </span>
                                         </div>
@@ -193,11 +193,9 @@
                                                                             alt="">
                                                                     </td>
                                                                 </tr>
-
                                                             </tbody>
                                                         </table>
                                                     </td>
-
                                                     <td class="pull-right">
                                                         <table>
                                                             <tbody>
@@ -210,20 +208,16 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <span
-                                                                                class="mb-0">Delivery:</span>11/09/2017
+                                                                            <span class="mb-0">Delivery:</span>{{purchaseOrder?.dueDate}}
                                                                         </td>
                                                                         <td>
-                                                                            <span class="mb-0"> #2543464859457</span>
+                                                                            <span class="mb-0"> #{{purchaseOrder?.number}}</span>
                                                                         </td>
                                                                         <td>
-                                                                            <span class="mb-0">PO Date:</span>
-                                                                            20/12/2020
+                                                                            <span class="mb-0">PO Date:</span>{{purchaseOrder?.date}}
                                                                         </td>
                                                                     </tr>
                                                                 </ng-container>
-
-
                                                             </tbody>
                                                         </table>
                                                     </td>
@@ -231,8 +225,6 @@
                                             </tbody>
                                         </table>
                                     </header>
-
-
                                     <table class="warehouse-table" cellspacing="0" cellpadding="0">
                                         <tbody>
                                             <tr>
@@ -240,25 +232,19 @@
                                                     <p class="mb-05">
                                                         From
                                                     </p>
-                                                    <p class="strong"><strong>Walkover Web Solutions Pvt. Ltd.</strong>
-                                                    </p>
-                                                    <p>405-406, Capt. C. S. Naidu Arcade Near Greater Kailash Hospital
-                                                    </p>
-                                                    <p>I10/2, 10/2, New Palasia, Indore, Woking, Madhya Pradesh
-                                                        452001</p>
-                                                    <p>GSTIN:23AAAAAA000A1Z0</p>
+                                                    <p class="strong"><strong>{{purchaseOrder?.account?.name}}</strong></p>
+                                                    <p>{{purchaseOrder?.account?.billingDetails?.address[0]}}</p>
+                                                    <p>{{purchaseOrder?.account?.billingDetails?.stateName}} {{purchaseOrder?.account?.billingDetails?.countryName}}</p>
+                                                    <p>GSTIN:{{purchaseOrder?.account?.billingDetails?.gstNumber}}</p>
                                                 </td>
                                                 <td class="text-left">
                                                     <p class="mb-05">
                                                         Shipped From
                                                     </p>
-                                                    <p class="strong"><strong>Walkover Web Solutions Pvt. Ltd.</strong>
-                                                    </p>
-                                                    <p>405-406, Capt. C. S. Naidu Arcade Near Greater Kailash Hospital
-                                                    </p>
-                                                    <p>I10/2, 10/2, New Palasia, Indore, Woking, Madhya Pradesh
-                                                        452001</p>
-                                                    <p>GSTIN:23AAAAAA000A1Z0</p>
+                                                    <p class="strong"><strong>{{purchaseOrder?.account?.name}}</strong></p>
+                                                    <p>{{purchaseOrder?.account?.shippingDetails?.address[0]}}</p>
+                                                    <p>{{purchaseOrder?.account?.shippingDetails?.stateName}} {{purchaseOrder?.account?.shippingDetails?.countryName}}</p>
+                                                    <p>GSTIN:{{purchaseOrder?.account?.shippingDetails?.gstNumber}}</p>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -270,25 +256,19 @@
                                                     <p class="mb-05">
                                                         Bill To:
                                                     </p>
-                                                    <p class="strong"><strong>Walkover Web Solutions Pvt. Ltd.</strong>
-                                                    </p>
-                                                    <p>405-406, Capt. C. S. Naidu Arcade Near Greater Kailash Hospital
-                                                    </p>
-                                                    <p>I10/2, 10/2, New Palasia, Indore, Woking, Madhya Pradesh
-                                                        452001</p>
-                                                    <p>GSTIN:23AAAAAA000A1Z0</p>
+                                                    <p class="strong"><strong>{{purchaseOrder?.company?.name}}</strong></p>
+                                                    <p>{{purchaseOrder?.company?.billingDetails?.address[0]}}</p>
+                                                    <p>{{purchaseOrder?.company?.billingDetails?.stateName}} {{purchaseOrder?.company?.billingDetails?.countryName}}</p>
+                                                    <p>GSTIN:{{purchaseOrder?.company?.billingDetails?.gstNumber}}</p>
                                                 </td>
                                                 <td class="text-left">
                                                     <p class="mb-05">
                                                         Shipped To:
                                                     </p>
-                                                    <p class="strong"><strong>Walkover Web Solutions Pvt. Ltd.</strong>
-                                                    </p>
-                                                    <p>405-406, Capt. C. S. Naidu Arcade Near Greater Kailash Hospital
-                                                    </p>
-                                                    <p>I10/2, 10/2, New Palasia, Indore, Woking, Madhya Pradesh
-                                                        452001</p>
-                                                    <p>GSTIN:23AAAAAA000A1Z0</p>
+                                                    <p class="strong"><strong>{{purchaseOrder?.company?.name}}</strong></p>
+                                                    <p>{{purchaseOrder?.company?.shippingDetails?.address[0]}}</p>
+                                                    <p>{{purchaseOrder?.company?.shippingDetails?.stateName}} {{purchaseOrder?.company?.shippingDetails?.countryName}}</p>
+                                                    <p>GSTIN:{{purchaseOrder?.company?.shippingDetails?.gstNumber}}</p>
                                                 </td>
 
                                             </tr>
@@ -340,26 +320,27 @@
                                                     </th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="text-right">1</td>
+                                            <tbody *ngIf="purchaseOrder?.entries && purchaseOrder?.entries?.length > 0">
+                                                <tr *ngFor="let entry of purchaseOrder.entries; let i = index;">
+                                                    <td class="text-right">{{i+1}}</td>
                                                     <td class="text-left">
-                                                        <span>Dummy Product Edition 1 </span>
+                                                        <span *ngIf="entry?.transactions[0]?.stock">{{entry?.transactions[0]?.stock?.name}}</span>
+                                                        <span *ngIf="!entry?.transactions[0]?.stock">{{entry?.transactions[0]?.account?.name}}</span><br>
+                                                        <span>{{entry?.description}}</span>
                                                     </td>
                                                     <td class="text-right ">12345
                                                         <p>(H)</p>
                                                     </td>
-                                                    <td class="text-right nowrap">2 No.
+                                                    <td class="text-right nowrap">{{entry?.transactions[0]?.stock?.quantity}} {{entry?.transactions[0]?.stock?.stockUnit?.code}}
                                                     </td>
-                                                    <td class="text-right "><span></span>1000.00
+                                                    <td class="text-right "><span></span>{{entry?.transactions[0]?.stock?.rate?.amountForAccount}}
                                                         <p><span></span>15.00</p>
                                                     </td>
-
                                                     <td class="text-right">
-                                                        <span></span>1700.00
+                                                        <span></span>{{entry?.discounts[0]?.amount?.amountForAccount}}
                                                         <p><span></span>24.79</p>
                                                     </td>
-                                                    <td class="text-right"><span></span>306.00
+                                                    <td class="text-right"><span></span>{{entry?.taxableValue?.amountForAccount}}
                                                         <p>@18.00%</p>
                                                     </td>
                                                     <td class="text-right" hidden><span></span>306.00
@@ -378,9 +359,9 @@
                                                         0.000
                                                     </td>
                                                     <td class="text-right ">
-                                                        0.000
+                                                        {{entry?.taxes[0]?.amount?.amountForAccount}}
                                                     </td>
-                                                    <td class="text-right "><span></span>2006.00
+                                                    <td class="text-right "><span></span>{{entry?.transactions[0]?.amount?.amountForAccount}}
                                                         <p><span></span>29.25</p>
                                                     </td>
                                                 </tr>
@@ -404,8 +385,6 @@
                                                     </th>
                                                     <th class="text-right text-right nowrap">&nbsp; <span>6 No.</span>
                                                     </th>
-                                                    <!-- added by sadique -->
-
                                                     <th class="text-right ">
                                                         0.000
                                                     </th>
@@ -430,7 +409,6 @@
                                             <table class="balance">
                                                 <tr>
                                                     <td>
-                                                        <!-- {{fieldsAndVisibility.footer.taxableAmount?.label}}-->
                                                         Taxable Amount
                                                     </td>
                                                     <td>
@@ -445,13 +423,12 @@
                                                         <span></span> 966.00
                                                     </td>
                                                 </tr>
-
                                                 <tr>
-                                                    <td class="strong ">
-                                                        Invoice Total(INR)
+                                                    <td class="strong">
+                                                        Invoice Total({{purchaseOrder?.account?.currency?.code}})
                                                     </td>
                                                     <td class="strong">
-                                                        <span></span>10166.00
+                                                        <span></span>{{purchaseOrder?.grandTotal?.amountForAccount}}
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -459,38 +436,21 @@
                                                         Total (In words)
                                                     </td>
                                                     <td>
-                                                        Ten Thousand One Hundred Sixty Six Only
-                                                        <div class="inner mr-0">&nbsp;</div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="strong ">
-                                                        Invoice Total(USD)
-                                                    </td>
-                                                    <td class="strong">
-                                                        <span></span>10166.00
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Total (In words)
-                                                    </td>
-                                                    <td>
-                                                        Ten Thousand One Hundred Sixty Six Only
+                                                        {{purchaseOrder?.totalAsWords?.amountForAccount}}
                                                         <div class="inner mr-0">&nbsp;</div>
                                                     </td>
                                                 </tr>
                                                 <tr hidden>
                                                     <td>TCS</td>
-                                                    <td><span></span>2900.00</td>
+                                                    <td><span></span>&nbsp;</td>
                                                 </tr>
                                                 <tr hidden>
                                                     <td>TDS</td>
-                                                    <td><span></span>3480.00</td>
+                                                    <td><span></span>&nbsp;</td>
                                                 </tr>
-                                                <tr>
+                                                <tr hidden>
                                                     <td class="strong">Total Due</td>
-                                                    <td><span class="strong"></span>27380.00</td>
+                                                    <td><span class="strong"></span>&nbsp;</td>
                                                 </tr>
                                             </table>
                                         </article>
@@ -505,16 +465,13 @@
                                                             <ng-container>
                                                                 <p class="strong">Note</p>
                                                                 <p class="font-12">
-                                                                    <span class="mb-2">Content whatever written in note
-                                                                        section at the time of creating Purchase Order.
-                                                                        Lorem Ipsum dummy text will come here.
-                                                                    </span>
+                                                                    <span class="mb-2">{{purchaseOrder?.templateDetails?.other?.message2}}</span>
                                                                 </p>
                                                             </ng-container>
 
                                                         </td>
                                                         <td class="text-right">
-                                                            <p class="strong"> Company Name will come here</p>
+                                                            <p class="strong">{{purchaseOrder?.company?.name}}</p>
                                                         </td>
                                                     </tr>
                                                     <!-- <tr>
