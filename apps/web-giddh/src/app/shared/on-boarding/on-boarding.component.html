@@ -20,14 +20,14 @@
                 <form name="form" #companyForm="ngForm" class="clearfix" novalidate="" autocomplete="off">
                     <div class="company-form-body">
 
-                        <div class="col-xs-12 m-t-50">
+                        <div class="col-sm-12 m-t-50">
                             <div class="input-group form-group dblock m-b-30">
                                 <p>Enter your {{onBoardingType?.toLowerCase()}} name to start hassle free accounting
                                     with
                                     Giddh.</p>
                             </div>
                         </div>
-                        <div class="col-xs-12 mrB3">
+                        <div class="col-sm-12 mrB3">
                             <label for="name" class="m-t-40">{{onBoardingType}} Name<sup>*</sup></label>
                             <input name="name" id="name" #itemName type="text" required placeholder="Name"
                                 (input)="handleOnBoardingNameChange($event?.target?.value)" [(ngModel)]="company.name"
@@ -38,28 +38,31 @@
                                 100</span>
                         </div>
 
-                        <div class="col-xs-6 mrB3 ">
-                            <span>
-                                <label for="country" class="d-block">Country<sup>*</sup></label>
-                                <sh-select id="country"
-                                    [disabled]="(onBoardingType === 'Warehouse') ? 'disabled' : null"
-                                    [options]="countrySource$ | async" [isFilterEnabled]="true" name="country"
-                                    [(ngModel)]="company.country" class="pull-left select-caret" [required]='true'
-                                    (selected)="selectCountry($event)" [defaultValue]="selectedCountry"
-                                    style="width: 100%">
-                                </sh-select>
-                            </span>
+                        <div class="row mr-0 ml-0">
+                                <div class="col-sm-6 mrB3 ">
+                                        <span>
+                                            <label for="country" class="d-block">Country<sup>*</sup></label>
+                                            <sh-select id="country"
+                                                [disabled]="(onBoardingType === 'Warehouse') ? 'disabled' : null"
+                                                [options]="countrySource$ | async" [isFilterEnabled]="true" name="country"
+                                                [(ngModel)]="company.country" class="pull-left select-caret" [required]='true'
+                                                (selected)="selectCountry($event)" [defaultValue]="selectedCountry"
+                                                style="width: 100%">
+                                            </sh-select>
+                                        </span>
+                                    </div>
+                                    <div class="col-sm-6 mrB3 ">
+                                        <label for="">Currency <sup>*</sup></label>
+                                        <div class="custom-select select-caret pos-rel">
+                                            <sh-select name="baseCurrency" [options]="currencySource$ | async" required
+                                                [disabled]="(onBoardingType === 'Warehouse') ? 'disabled' : null"
+                                                [isFilterEnabled]="true" [(ngModel)]="company.baseCurrency"
+                                                [defaultValue]="company.baseCurrency"></sh-select>
+                                        </div>
+                                    </div>
                         </div>
-                        <div class="col-xs-6 mrB3 ">
-                            <label for="">Currency <sup>*</sup></label>
-                            <div class="custom-select select-caret pos-rel">
-                                <sh-select name="baseCurrency" [options]="currencySource$ | async" required
-                                    [disabled]="(onBoardingType === 'Warehouse') ? 'disabled' : null"
-                                    [isFilterEnabled]="true" [(ngModel)]="company.baseCurrency"
-                                    [defaultValue]="company.baseCurrency"></sh-select>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 mrB3">
+
+                        <div class="col-sm-12 mrB3">
                             <span>
                                 <label for="contactNo" class="d-block">Mobile Number<sup>*</sup></label>
                                 <div class="d-flex welcome-select ">
@@ -75,7 +78,7 @@
                                 </div>
                             </span>
                         </div>
-                        <div class="col-xs-12 mrT1">
+                        <div class="col-sm-12 mrT1">
                             <button class="btn btn-pink mrL1" style="margin-left: 0 !important;" type="submit"
                                 (click)="createCompany(mobileNoEl)" [disabled]="companyForm.invalid"
                                 [ladda]="isCompanyCreationInProcess$ | async">Next
