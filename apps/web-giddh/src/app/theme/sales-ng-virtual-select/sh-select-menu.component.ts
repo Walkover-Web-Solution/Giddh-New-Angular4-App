@@ -23,6 +23,11 @@ export class SalesShSelectMenuComponent implements OnChanges {
     @Input() public showLabelOnly: boolean = false;
     @Input() public salesShSelectPading: number = 0;
 
+    /** True when pagination should be enabled */
+    @Input() isPaginationEnabled: boolean;
+    /** Emits the scroll to bottom event when pagination is required  */
+    @Output() public srollEnd: EventEmitter<void> = new EventEmitter();
+
     @Output() public noToggleClick: EventEmitter<any> = new EventEmitter<any>();
     @Output() public noResultClicked = new EventEmitter<null>();
     @ViewChild(VirtualScrollComponent) public virtualScrollElm: VirtualScrollComponent;
@@ -52,6 +57,10 @@ export class SalesShSelectMenuComponent implements OnChanges {
 
     public toggleSelected(row) {
         this.noToggleClick.emit(row);
+    }
+
+    public reachedEnd() {
+        this.srollEnd.emit();
     }
 
 }

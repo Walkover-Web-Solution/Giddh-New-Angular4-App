@@ -45,9 +45,15 @@ export class SearchService {
                 catchError((e) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(e)));
     }
 
-    public searchAccount(query: string, page: number = 1): Observable<any> {
-        return this._http.get(
-            `http://giddh-search-test.eu-west-1.elasticbeanstalk.com/company/${this._generalService.companyUniqueName}/account-search?q=${query}&page=${page}&withStocks=true`)
+    public searchAccount(params: any): Observable<any> {
+        let contextPath = `http://giddh-search-test.eu-west-1.elasticbeanstalk.com/company/${this._generalService.companyUniqueName}/account-search`;
+        if (params) {
+            Object.keys(params).forEach((key, index) => {
+                const delimiter = index === 0 ? '?' : '&'
+                contextPath += `${delimiter}${key}=${params[key]}`
+            });
+        }
+        return this._http.get(contextPath)
             .pipe(catchError((error) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(error)));
     }
 
