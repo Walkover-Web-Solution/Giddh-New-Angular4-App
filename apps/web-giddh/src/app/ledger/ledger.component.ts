@@ -1382,13 +1382,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public onSearchQueryChanged(query: string, page: number = 1) {
         console.log('Searched query: ', query);
         this.searchResultsPaginationData.query = query;
-        this.searchService.searchAccount(query, page).subscribe(data => {
+        const requestObject = {
+            q: query,
+            page,
+            withStocks: true
+        }
+        this.searchService.searchAccount(requestObject).subscribe(data => {
             console.log('Data received: ', data);
             if (data && data.body && data.body.results) {
                 const searchResults = data.body.results.map(result => {
                     return {
                         value: result.uniqueName,
-                        label: result.name,
+                        label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                         additional: result
                     }
                 }) || [];
