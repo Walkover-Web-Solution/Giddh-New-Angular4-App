@@ -244,6 +244,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public allowMouseScroll: boolean = false;
     /* This will hold last active month side */
     public lastActiveMonthSide: string = '';
+    /* This will hold if initially datepicker has rendered */
+    public initialCalendarRender: boolean = true;
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private scrollDispatcher: ScrollDispatcher) {
         this.choosedDate = new EventEmitter();
@@ -2072,7 +2074,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.renderCalendar(DateType.start);
         this.renderCalendar(DateType.end);
 
-        if (this.initialCalendarMonths === true) {
+        if (this.initialCalendarRender === true) {
+            this.initialCalendarRender = false;
+            
             for (let loop = 0; loop <= 4; loop++) {
                 this.onScroll("top");
             }
@@ -2089,15 +2093,14 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public getAllYearsBetweenDates(): void {
-        let difference: number;
-        difference = new Date(this.maxDate.toDate()).getFullYear() - new Date(this.minDate.toDate()).getFullYear();
-        this.allowedYears = [];
-        for (let loop = 0; loop < difference; loop++) {
-            let loopYear = new Date(this.minDate.toDate());
-            loopYear.setFullYear(loopYear.getFullYear() + loop);
+        let minYear = new Date(this.minDate.toDate()).getFullYear();
+        let maxYear = new Date(this.maxDate.toDate()).getFullYear();
 
-            this.allowedYears.push(loopYear.getFullYear());
+        let allowedYears = [];
+        for (minYear; minYear <= maxYear; minYear++) {
+            allowedYears.push(minYear);
         }
+        this.allowedYears = allowedYears;
     }
 
     /**
@@ -2452,6 +2455,24 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         let isValidDate = false;
 
         if (moment([date.year, date.month, 1]).startOf('M').isSameOrAfter(this.minDate) && moment([date.year, date.month, 1]).startOf('M').isSameOrBefore(this.maxDate)) {
+            isValidDate = true;
+        }
+
+        return isValidDate;
+    }
+
+    /**
+     * This will validate if month/year is valid or not
+     *
+     * @param {*} year
+     * @param {*} month
+     * @returns {boolean}
+     * @memberof NgxDaterangepickerComponent
+     */
+    public checkValidMonthYear(year: any, month: any): boolean {
+        let isValidDate = false;
+
+        if (moment([year, month, 1]).startOf('M').isSameOrAfter(this.minDate) && moment([year, month, 1]).startOf('M').isSameOrBefore(this.maxDate)) {
             isValidDate = true;
         }
 
