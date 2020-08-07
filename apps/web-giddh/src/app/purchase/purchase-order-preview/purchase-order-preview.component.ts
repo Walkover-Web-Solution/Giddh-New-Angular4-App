@@ -1,5 +1,5 @@
-import { Component, OnInit, TemplateRef, Input, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap'
+import { Component, OnInit, TemplateRef, Input, EventEmitter, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap'
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
@@ -14,6 +14,9 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges {
     @Input() public purchaseOrders: any;
     @Input() public companyUniqueName: any;
     @Input() public purchaseOrderUniqueName: any;
+
+    /* Confirm box */
+    @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
 
     public modalRef: BsModalRef;
     public orderHistoryAsideState: string = 'out';
@@ -88,6 +91,50 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges {
     public closeSendMailPopup(event: any): void {
         if(event) {
             this.modalRef.hide();
+        }
+    }
+
+    public closeConfirmationPopup(): void {
+        this.poConfirmationModel.hide();
+    }
+
+    public deleteItem(): void {
+        let getRequest = { companyUniqueName: this.companyUniqueName, poUniqueName: this.purchaseOrder.uniqueName };
+
+        this.purchaseOrderService.delete(getRequest).subscribe((res) => {
+            if (res) {
+                if (res.status === 'success') {
+                    this.closeConfirmationPopup();
+                    this.toaster.successToast(res.body);
+                    this.router.navigate(['/pages/purchase-management/purchase-orders']);
+                } else {
+                    this.closeConfirmationPopup();
+                    this.toaster.errorToast(res.message);
+                }
+            }
+        });
+    }
+
+    public confirmDelete(): void {
+        this.poConfirmationModel.show();
+    }
+
+    public statusUpdate(action: any): void {
+        if (this.purchaseOrder && this.purchaseOrder.number) {
+            let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.purchaseOrder.account.uniqueName };
+            let postRequest = { purchaseNumber: this.purchaseOrder.number, action: action };
+
+            this.purchaseOrderService.statusUpdate(getRequest, postRequest).subscribe((res) => {
+                if (res) {
+                    if (res.status === 'success') {
+                        this.toaster.successToast(res.body);
+                    } else {
+                        this.toaster.errorToast(res.message);
+                    }
+                }
+            });
+        } else {
+            this.toaster.errorToast("Invalid Purchase Order");
         }
     }
 }
