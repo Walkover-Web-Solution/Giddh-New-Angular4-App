@@ -1753,6 +1753,7 @@ modal-container.modal {
 }
 .sh-select-border .menu .scrollable-content > .item {
     border-bottom: 1px solid $gainsboro;
+    height: initial !important;
 }
 /* my css end */
 

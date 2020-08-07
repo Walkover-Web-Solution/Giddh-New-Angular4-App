@@ -30,11 +30,15 @@ s.tock-grp-list .active i,
 }
 
 .item-group {
-    padding: 12px 15px;
     padding-right: 0;
     display: flex;
     align-items: center;
     max-height: 41px;
+    a{
+         a{
+            padding: 12px 15px;
+         }
+    }
 }
 
 .main-group div > stockgrp-list .item-group {
@@ -67,8 +71,14 @@ stock-list ::ng-deep.in-list a div {
             &:hover {
                 a {
                     color: $chetwode-blue !important;
+
                 }
                 background-color: $lavender;
+            }
+        span{
+                .btn{
+                    padding:10px !important
+                }
             }
         }
     }
