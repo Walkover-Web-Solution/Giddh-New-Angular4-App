@@ -46,7 +46,8 @@ export class SearchService {
     }
 
     public searchAccount(params: any): Observable<any> {
-        let contextPath = `http://giddh-search-test.eu-west-1.elasticbeanstalk.com/company/${this._generalService.companyUniqueName}/account-search`;
+        const companyUniqueName = this._generalService.companyUniqueName;
+        let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_SEARCH}`.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         if (params) {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&'
