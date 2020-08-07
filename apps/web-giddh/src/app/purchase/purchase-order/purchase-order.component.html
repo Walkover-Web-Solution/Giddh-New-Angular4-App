@@ -23,7 +23,7 @@
             </button>
         </div>
         <div class="d-flex add-invoice">
-            <div>
+            <div *ngIf="purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0">
                 <div class="btn-group" dropdown #dp="bs-dropdown">
                     <button dropdownToggle type="button" class="btn btn-primary desktop-view-btn dropdown-toggle"
                         aria-controls="dropdown-basic">
@@ -180,7 +180,7 @@
                     </th>
                 </tr>
             </thead>
-            <tbody *ngIf="!isLoading && purchaseOrders.items && purchaseOrders.items.length > 0" (mouseleave)="hoveredItem = '';">
+            <tbody *ngIf="!isLoading && purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0" (mouseleave)="hoveredItem = '';">
                 <tr *ngFor="let item of purchaseOrders.items; let i = index;" (mouseenter)="hoveredItem = item.uniqueName">
                     <td data-title="#">
                         <span *ngIf="hoveredItem !== item.uniqueName && !item.isSelected && selectedItem !== item.uniqueName">{{ (purchaseOrderGetRequest.count * (purchaseOrderGetRequest.page - 1)) + (i+1) }}</span>
