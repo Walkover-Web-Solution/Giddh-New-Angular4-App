@@ -79,11 +79,12 @@
                                                 <li class="cp" role="menuitem"><a class="dropdown-item">Copy</a></li>
 
                                                 <li>
-                                                    <a class="cp" href="javascript:void(0)">Cancel</a>
+                                                    <a class="cp" href="javascript:void(0)" (click)="statusUpdate('cancelled')" *ngIf="purchaseOrder.status === 'OPEN'">Cancel</a>
+                                                    <a class="cp" href="javascript:void(0)" (click)="statusUpdate('open')" *ngIf="purchaseOrder.status === 'CANCELLED'">Open</a>
                                                 </li>
 
                                                 <li>
-                                                    <a class="cp" href="javascript:void(0)">Delete</a>
+                                                    <a class="cp" href="javascript:void(0)" (click)="confirmDelete()">Delete</a>
                                                 </li>
                                             </ul>
 
@@ -108,7 +109,7 @@
                                                         class="fa fa-print"></i></a>
                                             </span>
 
-                                            <span>
+                                            <!-- <span>
                                                 <a href="javascript:void 0" tooltip="Download" placement="top"><i
                                                         class="fa fa-file-pdf-o"></i></a>
                                             </span>
@@ -116,10 +117,10 @@
                                             <span>
                                                 <a href="javascript:void 0" tooltip="Download" placement="top"><i
                                                         class="icon-download"></i></a>
-                                            </span>
+                                            </span> -->
 
                                             <span>
-                                                <a href="javascript:void 0" tooltip="Delete" placement="top"><i
+                                                <a href="javascript:void 0" tooltip="Delete" placement="top" (click)="confirmDelete()"><i
                                                         class="fa fa-trash"></i></a>
                                             </span>
                                         </div>
@@ -554,3 +555,14 @@
     <aside-order-history (closeAsideEvent)="toggleOrderHistoryAsidePane($event)">
     </aside-order-history>
 </div> -->
+<div bsModal #poConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <delete-role-confirmation-model
+                [module]="'purchaseorder'"
+                (confirmDeleteEvent)="deleteItem()"
+                (closeModelEvent)="closeConfirmationPopup()">
+            </delete-role-confirmation-model>
+        </div>
+    </div>
+</div>
