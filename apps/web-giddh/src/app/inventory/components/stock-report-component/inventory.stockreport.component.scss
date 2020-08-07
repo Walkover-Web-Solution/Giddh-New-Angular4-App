@@ -328,6 +328,16 @@ button.btn.btn-filter {
 .table-responsive{
     overflow-x:auto;
 }
+.icon-btn {
+    border: 1px solid $gainsboro;
+    height: 36px;
+    width: 36px;
+    margin-top: 0;
+    background-color: $white;
+    .strong {
+        font-weight: bold;
+    }
+}
 
 @media (max-width:767px){
     .btn-pink{

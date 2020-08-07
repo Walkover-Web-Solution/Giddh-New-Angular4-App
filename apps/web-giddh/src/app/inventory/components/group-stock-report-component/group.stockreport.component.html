@@ -176,7 +176,7 @@
             <div class="clearfix">
 
                 <div class="btn-group" dropdown [autoClose]="true" placement="bottom right">
-                    <button class="btn-link icon-btn mr-1" tooltip="Edit group">
+                    <button class="btn-link icon-btn mr-1" (click)="editGroup()" tooltip="Edit group">
                         <i class="fa fa-pencil"></i>
                     </button>
                     <button id="button-alignment" dropdownToggle type="button" class="btn-link mrT cp mr-1 dropdown-toggle icon-btn" aria-controls="dropdown-alignment" tooltip="Download">
@@ -189,8 +189,8 @@
                         </li>
                     </ul>
                 </div>
-                <button class="btn btn-pink" data-toggle="tooltip" tooltip="Alt+i" (click)="editGroup()">Edit group
-                </button>
+                <!-- <button class="btn btn-pink" data-toggle="tooltip" tooltip="Alt+i" (click)="editGroup()">Edit group
+                </button> -->
                 <button class="btn btn-pink" data-toggle="tooltip" tooltip="Alt+N" (click)="toggleTransferAsidePane()">New Transfer </button>
                 <button class="btn btn-pink mr-0" data-toggle="tooltip" tooltip="Alt+i" (click)="toggleAsidePane()">Create
                     New
