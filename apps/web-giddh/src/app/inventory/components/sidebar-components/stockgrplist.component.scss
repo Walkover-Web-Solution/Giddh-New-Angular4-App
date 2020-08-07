@@ -84,8 +84,16 @@ stock-list ::ng-deep.in-list a div {
     }
 }
 
+.icon-arrow-down{
+    margin:0 15px;
+    font-size: 9px;
+}
 @media (max-width:767px){
     .stock-grp-list{
         height:74vh;
+    }
+
+    .icon-arrow-down{
+        display:none;
     }
 }
