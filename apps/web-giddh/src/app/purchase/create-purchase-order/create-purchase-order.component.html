@@ -1733,7 +1733,7 @@
 
                 <!-- region purchase invoice -->
                 <span class="d-inline-block v-align-middle">
-                    <button type="button" class="btn btn-default" (click)="savePurchaseOrder()">Save</button>
+                    <button type="button" class="btn btn-default" (click)="savePurchaseOrder(poForm)">Save</button>
                 </span>
                 <!-- endregion -->
 
@@ -1833,3 +1833,12 @@
     </ng-container>
 </div>
 <!-- endregion -->
+<ng-template let-entry #otherTaxesModal>
+    <div id="top0">
+        <app-aside-menu-other-taxes *ngIf="asideMenuStateForOtherTaxes === 'in'" [class]="asideMenuStateForOtherTaxes"
+            [taxes]="companyTaxesList" [otherTaxesModal]="entry.otherTaxModal"
+            [@slideInOut]="asideMenuStateForOtherTaxes" (closeModal)="toggleOtherTaxesAsidePane(true, null)"
+            (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true, null);calculateAffectedThingsFromOtherTaxChanges();">
+        </app-aside-menu-other-taxes>
+    </div>
+</ng-template>

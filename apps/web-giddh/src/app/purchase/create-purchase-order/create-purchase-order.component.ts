@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { BsModalRef, BsModalService, BsDatepickerDirective, PopoverDirective, ModalDirective } from 'ngx-bootstrap'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -24,7 +24,7 @@ import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
 import { VAT_SUPPORTED_COUNTRIES, RATE_FIELD_PRECISION } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, GenericRequestForGenerateSCD, PurchaseRecordRequest, SalesEntryClassMulticurrency, AmountClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, AccountDetailsClass } from '../../models/api-models/Sales';
+import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, SalesEntryClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, AccountDetailsClass } from '../../models/api-models/Sales';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { TaxResponse } from '../../models/api-models/Company';
 import { IContentCommon } from '../../models/api-models/Invoice';
@@ -42,6 +42,7 @@ import { EMAIL_REGEX_PATTERN } from '../../shared/helpers/universalValidations';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { LoaderState } from '../../loader/loader';
 import { LoaderService } from '../../loader/loader.service';
+import { CurrentCompanyState } from '../../store/Company/company.reducer';
 
 const THEAD_ARR_READONLY = [
     {
@@ -264,6 +265,8 @@ export class CreatePurchaseOrderComponent implements OnInit {
     public selectedWarehouse: string;
     /* Array of company addresses */
     public companyAddresses: any[] = [];
+    /* True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
 
     constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private cdr: ChangeDetectorRef) {
         this.getInventorySettings();
@@ -339,6 +342,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
                     this.companyCountryCode = profile.countryV2.alpha2CountryCode;
                     this.getUpdatedStateCodes(profile.countryV2.alpha2CountryCode, true);
                 }
+            }
+        });
+
+        this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
+            if (companyData) {
+                this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
         });
 
@@ -1887,7 +1896,10 @@ export class CreatePurchaseOrderComponent implements OnInit {
      * @returns {*}
      * @memberof CreatePurchaseOrderComponent
      */
-    public savePurchaseOrder(): any {
+    public savePurchaseOrder(poForm: NgForm): any {
+        if (poForm.invalid) {
+            return;
+        }
         let data: VoucherClass = _.cloneDeep(this.purchaseOrder);
 
         // special check if gst no filed is visible then and only then check for gst validation
@@ -2274,5 +2286,20 @@ export class CreatePurchaseOrderComponent implements OnInit {
         }
         this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+    }
+
+    /**
+     * This will update the entry amount on quantity blur
+     *
+     * @param {SalesEntryClass} entry
+     * @param {SalesTransactionItemClass} transaction
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public handleQuantityBlur(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
+        if (transaction.quantity !== undefined) {
+            transaction.quantity = Number(transaction.quantity);
+            this.calculateStockEntryAmount(transaction);
+            this.calculateWhenTrxAltered(entry, transaction);
+        }
     }
 }
