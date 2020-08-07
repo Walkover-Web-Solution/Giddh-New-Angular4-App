@@ -11,33 +11,30 @@
     </div>
     <div #topAllPlans>
         <div *ngIf="!isSwitchPlanInProcess" class="choose-ur-plan noHeight">
-            <div>
-                <div class="main-row-plans">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 col-12" *ngIf="totalMultipleCompanyPlans">
-                            <div class="select-plan-block"
-                                [ngClass]="{'plan-disabled': showPlans === 'single' || showPlans === 'free'}">
-                                <div class="select-plan-head">
-                                    <h2>Multiple Company</h2>
-                                </div>
-                                <div class="plans-box">
-                                    <div class="overall-plans">
-                                        <p class="bold total-price">Total Plans: {{totalMultipleCompanyPlans}}</p>
-                                        <div class="your-account">
-                                            <div class="inner-your-account"
-                                                [ngClass]="{'active': showPlans === 'multiple'}">
-                                                <h3 class="mb-2 plan-heading">
-                                                    {{defaultMultipleCompanyPlan?.planDetails?.name}}</h3>
-                                                <div
-                                                    class="d-flex align-items-center justify-content-between plans-head-top">
-                                                    <div class="clearfix">
-                                                        <h3 class="bold font-22 mb-05">
-                                                            {{defaultMultipleCompanyPlan?.planDetails?.amount}} /-</h3>
-                                                        <p class="font-12">
-                                                            {{defaultMultipleCompanyPlan?.planDetails?.duration}}
-                                                            {{defaultMultipleCompanyPlan?.planDetails?.durationUnit}}(s)</p>
-                                                    </div>
-                                                    <img class="guarantee-img" src="assets/images/guarantee.png" alt="">
+            <div class="row">
+                <div class="main-row-plans w-100">
+                    <div class="col-md-4 col-sm-4" *ngIf="totalMultipleCompanyPlans">
+                        <div class="select-plan-block"
+                            [ngClass]="{'plan-disabled': showPlans === 'single' || showPlans === 'free'}">
+                            <div class="select-plan-head">
+                                <h2>Multiple Company</h2>
+                            </div>
+                            <div class="plans-box">
+                                <div class="overall-plans">
+                                    <p class="bold total-price">Total Plans: {{totalMultipleCompanyPlans}}</p>
+                                    <div class="your-account">
+                                        <div class="inner-your-account"
+                                            [ngClass]="{'active': showPlans === 'multiple'}">
+                                            <h3 class="mb-2 plan-heading">
+                                                {{defaultMultipleCompanyPlan?.planDetails?.name}}</h3>
+                                            <div
+                                                class="d-flex align-items-center justify-content-between plans-head-top">
+                                                <div class="clearfix">
+                                                    <h3 class="bold font-22 mb-05">
+                                                        {{defaultMultipleCompanyPlan?.planDetails?.amount}} /-</h3>
+                                                    <p class="font-12">
+                                                        {{defaultMultipleCompanyPlan?.planDetails?.duration}}
+                                                        {{defaultMultipleCompanyPlan?.planDetails?.durationUnit}}(s)</p>
                                                 </div>
                                                 <div class="clearfix">
                                                     <ul class="plan-list">

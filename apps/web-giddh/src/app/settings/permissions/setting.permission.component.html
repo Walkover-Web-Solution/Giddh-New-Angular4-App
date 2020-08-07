@@ -12,24 +12,24 @@
 		<div *ngFor="let usrGrp of usersList">
 			<div class="user_list">
 				<div class="row">
-					<div class="col-md-2 col-sm-6 col-xs-12 user">
+					<div class="col-md-2 col-sm-6 user">
 						<div class="ellp">
 							<div class="ellp"><i class="fa fa-user pdR1"></i>{{usrGrp.name}}</div>
 							<small class="mrL2">{{usrGrp.rows[0].emailId}}</small>
 						</div>
 					</div>
-					<div class="col-md-10 col-sm-6 col-xs-12">
+					<div class="col-md-10 col-sm-6">
 						<div class="row">
-							<div class="permission_list">
-								<div class="col-md-10 col-sm-10 col-xs-12 permission"
+							<div class="permission_list w-100">
+								<div class="col-md-10 col-sm-10 permission"
 									*ngFor="let user of usrGrp.rows; let i = index">
 
-									<div class="col-md-3 col-sm-12 col-xs-12">
+									<div class="col-md-3 col-sm-12">
 										<div class="form-group"><input class="form-control" [value]="user.roleName"
 												disabled /></div>
 									</div>
 
-									<div class="col-md-3 col-sm-5 col-xs-5" *ngIf="user.from || user.period">
+									<div class="col-md-3 col-sm-5" *ngIf="user.from || user.period">
 										<div class="form-group">
 											<input *ngIf="user.from && user.to" class="form-control"
 												value="{{user.from}} - {{user.to}}" disabled />
@@ -38,7 +38,7 @@
 										</div>
 									</div>
 
-									<div class="col-md-3 col-sm-5 col-xs-5" *ngIf="user.ipsStr || user.cidrsStr">
+									<div class="col-md-3 col-sm-5" *ngIf="user.ipsStr || user.cidrsStr">
 										<div class="form-group">
 											<input *ngIf="user.ipsStr" class="form-control" [value]="user.ipsStr"
 												disabled />
@@ -47,7 +47,7 @@
 										</div>
 									</div>
 
-									<div class="ico-btn pull-left col-md-2 col-sm-12 col-xs-12 mrT">
+									<div class="ico-btn pull-left col-md-2 col-sm-12 mrT">
 										<button class="btn btn-xs" type="button"
 											[hidden]="usrGrp.rows[0].isLoggedInUser" (click)="showModalForEdit(user)"><i
 												aria-hidden="true" class="fa fa-pencil"></i></button>

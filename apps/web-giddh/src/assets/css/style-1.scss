@@ -1522,7 +1522,6 @@ li:last-child .angular-ui-tree-handle {
 .max500 {
     max-width: 500px;
 }
-
 /* styles for trial-balance */
 
 .page-title {
@@ -4804,7 +4803,7 @@ border-bottom: 1px solid #e0e0e0;
     /* left: 0; */
     z-index: 99;
     min-width: 160px;
-    padding: 5px 0;
+    padding: 5px 0; 
     margin: 2px 0 0;
     font-size: 14px;
     text-align: left;
@@ -4949,6 +4948,8 @@ border-bottom: 1px solid #e0e0e0;
 .panel-heading {
     color: rgba(0, 0, 0, 0.8) !important;
     text-transform: capitalize;
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent
 }
 
 strong {

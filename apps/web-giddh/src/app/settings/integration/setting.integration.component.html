@@ -149,7 +149,7 @@
 
 
                     <div class="row">
-                        <div class="col-xs-12 form-group ">
+                        <div class="col-sm-12 form-group ">
                             <button *ngIf="!updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid" (click)="saveRazorPayDetails()">Save
                             </button>
                             <button *ngIf="updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid" (click)="updateRazorPayDetails()">Update
@@ -204,7 +204,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-xs-12 form-group ">
+                            <div class="col-sm-12 form-group ">
                                 <button *ngIf="!payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid" (click)="submitCashfreeDetail(payoutObj)">Save
                                 </button>
                                 <button *ngIf="payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid" (click)="updateCashfreeDetail(payoutObj)">Update
@@ -255,7 +255,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-xs-12 form-group ">
+                            <div class="col-sm-12 form-group ">
                                 <button type="submit" *ngIf="!autoCollectAdded" class="btn btn-success" [disabled]="autoCollectform.invalid" (click)="submitAutoCollect(autoCollectObj)">Save
                                 </button>
                                 <button type="submit" *ngIf="autoCollectAdded" class="btn btn-success" [disabled]="autoCollectform.invalid" (click)="updateAutoCollect(autoCollectObj)">Update
@@ -289,7 +289,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-12 form-group ">
+                            <div class="col-sm-12 form-group ">
                                 <button *ngIf="!paymentGatewayAdded" class="btn btn-success" [disabled]="paymentGatewayForm.invalid" (click)="submitPaymentGateway(paymentGateway)">Save
                                 </button>
                                 <button *ngIf="paymentGatewayAdded" class="btn btn-success" [disabled]="paymentGatewayForm.invalid" (click)="updatePaymentGateway(paymentGateway)">Update
@@ -361,7 +361,7 @@
                 </form>
 
                 <div class="row mt-1">
-                    <div class="col-xs-12 form-group ">
+                    <div class="col-sm-12 form-group ">
                         <!-- <button class="btn btn-success" (click)="saveAmazonSeller()">Save</button> -->
                         <button class="btn btn-success" (click)="addAmazonSellerRow()">Add more</button>
                         <!-- <button class="btn btn-danger">Delete</button> -->
