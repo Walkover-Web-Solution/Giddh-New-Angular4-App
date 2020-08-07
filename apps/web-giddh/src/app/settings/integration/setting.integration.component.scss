@@ -61,6 +61,10 @@
         color: $gray;
     }
 }
+
+.form-control{
+    width:100%;
+}
 @media(max-width:1359px) {
     .xs-pl-15 {
         padding-left: 15px !important;
