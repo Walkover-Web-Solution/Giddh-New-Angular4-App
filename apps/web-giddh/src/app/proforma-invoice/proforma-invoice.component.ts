@@ -111,6 +111,7 @@ import { AdvanceReceiptAdjustmentComponent } from '../shared/advance-receipt-adj
 import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../models/api-models/AdvanceReceiptsAdjust';
 import { CurrentCompanyState } from '../store/Company/company.reducer';
 import { CustomTemplateState } from '../store/Invoice/invoice.template.reducer';
+import { SearchService } from '../services/search.service';
 
 const THEAD_ARR_READONLY = [
     {
@@ -150,6 +151,13 @@ const THEAD_ARR_READONLY = [
         label: ''
     }
 ];
+
+/** Type of search: customer and item (product/service) search */
+const SEARCH_TYPE = {
+    CUSTOMER: 'customer',
+    ITEM: 'item',
+    BANK: 'bank'
+}
 
 @Component({
     selector: 'proforma-invoice-component',
@@ -457,6 +465,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public excludeTax: boolean = false;
     /* This will hold the company country name */
     public companyCountryName: string = '';
+    /** Stores the search results */
+    public searchResults: Array<IOption> = [];
+    /** Stores the search results pagination details */
+    public searchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -500,7 +516,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private warehouseActions: WarehouseActions,
         private commonActions: CommonActions,
         private purchaseRecordAction: PurchaseRecordActions,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private searchService: SearchService
     ) {
         this.getInventorySettings();
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
@@ -647,7 +664,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.prepareCompanyCountryAndCurrencyFromProfile(profile);
                     });
 
-                    this.makeCustomerList();
+                    // this.makeCustomerList();
                     this.getAllLastInvoices();
                 }
                 this.invoiceType = decodeURI(params['invoiceType']) as VoucherTypeEnum;
@@ -857,85 +874,85 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.prdSerAcListForDeb = [];
                     this.prdSerAcListForCred = [];
 
-                    flattenAccounts.forEach(item => {
+                    // flattenAccounts.forEach(item => {
 
-                        if (item.parentGroups.some(p => p.uniqueName === 'sundrydebtors')) {
-                            this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
-                        }
+                    //     // if (item.parentGroups.some(p => p.uniqueName === 'sundrydebtors')) {
+                    //     //     this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
+                    //     // }
 
-                        if (item.parentGroups.some(p => p.uniqueName === 'sundrycreditors')) {
-                            this.sundryCreditorsAcList.push({
-                                label: item.name,
-                                value: item.uniqueName,
-                                additional: item
-                            });
-                        }
+                    //     // if (item.parentGroups.some(p => p.uniqueName === 'sundrycreditors')) {
+                    //     //     this.sundryCreditorsAcList.push({
+                    //     //         label: item.name,
+                    //     //         value: item.uniqueName,
+                    //     //         additional: item
+                    //     //     });
+                    //     // }
 
-                        if (item.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
-                            bankaccounts.push({label: item.name, value: item.uniqueName, additional: item});
-                            if (this.isPurchaseInvoice) {
-                                this.sundryCreditorsAcList.push({
-                                    label: item.name,
-                                    value: item.uniqueName,
-                                    additional: item
-                                });
-                            }
-                        }
+                    //     // if (item.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
+                    //     //     bankaccounts.push({label: item.name, value: item.uniqueName, additional: item});
+                    //     //     if (this.isPurchaseInvoice) {
+                    //     //         this.sundryCreditorsAcList.push({
+                    //     //             label: item.name,
+                    //     //             value: item.uniqueName,
+                    //     //             additional: item
+                    //     //         });
+                    //     //     }
+                    //     // }
 
-                        if (item.parentGroups.some(p => p.uniqueName === 'otherincome' || p.uniqueName === 'revenuefromoperations')) {
-                            if (item.stocks) {
-                                // normal entry
-                                this.prdSerAcListForDeb.push({
-                                    value: item.uniqueName,
-                                    label: item.name,
-                                    additional: item
-                                });
+                    //     // if (item.parentGroups.some(p => p.uniqueName === 'otherincome' || p.uniqueName === 'revenuefromoperations')) {
+                    //     //     if (item.stocks) {
+                    //     //         // normal entry
+                    //     //         this.prdSerAcListForDeb.push({
+                    //     //             value: item.uniqueName,
+                    //     //             label: item.name,
+                    //     //             additional: item
+                    //     //         });
 
-                                // stock entry
-                                item.stocks.map(as => {
-                                    this.prdSerAcListForDeb.push({
-                                        value: `${item.uniqueName}#${as.uniqueName}`,
-                                        label: `${item.name} (${as.name})`,
-                                        additional: Object.assign({}, item, {stock: as})
-                                    });
-                                });
-                            } else {
-                                this.prdSerAcListForDeb.push({
-                                    value: item.uniqueName,
-                                    label: item.name,
-                                    additional: item
-                                });
-                            }
-                        }
+                    //     //         // stock entry
+                    //     //         item.stocks.map(as => {
+                    //     //             this.prdSerAcListForDeb.push({
+                    //     //                 value: `${item.uniqueName}#${as.uniqueName}`,
+                    //     //                 label: `${item.name} (${as.name})`,
+                    //     //                 additional: Object.assign({}, item, {stock: as})
+                    //     //             });
+                    //     //         });
+                    //     //     } else {
+                    //     //         this.prdSerAcListForDeb.push({
+                    //     //             value: item.uniqueName,
+                    //     //             label: item.name,
+                    //     //             additional: item
+                    //     //         });
+                    //     //     }
+                    //     // }
 
-                        if (item.parentGroups.some(p => p.uniqueName === 'operatingcost' || p.uniqueName === 'indirectexpenses')) {
-                            if (item.stocks) {
-                                // normal entry
-                                this.prdSerAcListForCred.push({
-                                    value: item.uniqueName,
-                                    label: item.name,
-                                    additional: item
-                                });
+                    //     // if (item.parentGroups.some(p => p.uniqueName === 'operatingcost' || p.uniqueName === 'indirectexpenses')) {
+                    //     //     if (item.stocks) {
+                    //     //         // normal entry
+                    //     //         this.prdSerAcListForCred.push({
+                    //     //             value: item.uniqueName,
+                    //     //             label: item.name,
+                    //     //             additional: item
+                    //     //         });
 
-                                // stock entry
-                                item.stocks.map(as => {
-                                    this.prdSerAcListForCred.push({
-                                        value: `${item.uniqueName}#${as.uniqueName}`,
-                                        label: `${item.name} (${as.name})`,
-                                        additional: Object.assign({}, item, {stock: as})
-                                    });
-                                });
-                            } else {
-                                this.prdSerAcListForCred.push({
-                                    value: item.uniqueName,
-                                    label: item.name,
-                                    additional: item
-                                });
-                            }
-                        }
-                    });
+                    //     //         // stock entry
+                    //     //         item.stocks.map(as => {
+                    //     //             this.prdSerAcListForCred.push({
+                    //     //                 value: `${item.uniqueName}#${as.uniqueName}`,
+                    //     //                 label: `${item.name} (${as.name})`,
+                    //     //                 additional: Object.assign({}, item, {stock: as})
+                    //     //             });
+                    //     //         });
+                    //     //     } else {
+                    //     //         this.prdSerAcListForCred.push({
+                    //     //             value: item.uniqueName,
+                    //     //             label: item.name,
+                    //     //             additional: item
+                    //     //         });
+                    //     //     }
+                    //     // }
+                    // });
 
-                    this.makeCustomerList();
+                    // this.makeCustomerList();
 
                     /*
                       find and select customer from accountUniqueName basically for account-details-modal popup. only applicable when invoice no
@@ -943,18 +960,41 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     */
                     if (this.accountUniqueName && !this.invoiceNo) {
                         if (!this.isCashInvoice) {
-                            this.customerAcList$.pipe(take(1)).subscribe(data => {
-                                if (data && data.length) {
-                                    let item = data.find(f => f.value === this.accountUniqueName);
+                            // this.customerAcList$.pipe(take(1)).subscribe(data => {
+                            //     if (data && data.length) {
+                            //         let item = data.find(f => f.value === this.accountUniqueName);
+                            //         if (item) {
+                            //             this.invFormData.voucherDetails.customerName = item.label;
+                            //             this.invFormData.voucherDetails.customerUniquename = item.value;
+                            //             this.isCustomerSelected = true;
+                            //             this.invFormData.accountDetails.name = '';
+                            //         }
+                            //     }
+                            // });
+                            // this.onSearchQueryChanged(this.accountUniqueName, 1, SEARCH_TYPE.CUSTOMER);
+                            const requestObject = this.getSearchRequestObject(this.accountUniqueName, 1, SEARCH_TYPE.CUSTOMER);
+                            this.searchAccount(requestObject).subscribe(data => {
+                                if (data && data.body && data.body.results) {
+                                    this.prepareSearchLists([{
+                                        name: this.invFormData.accountDetails.name,
+                                        uniqueName: this.invFormData.accountDetails.uniqueName
+                                    }], 1, SEARCH_TYPE.CUSTOMER);
+                                    this.makeCustomerList();
+                                    const item = data.body.results.find(result => result.uniqueName === this.accountUniqueName);
                                     if (item) {
-                                        this.invFormData.voucherDetails.customerName = item.label;
-                                        this.invFormData.voucherDetails.customerUniquename = item.value;
+                                        this.invFormData.voucherDetails.customerName = item.name;
+                                        this.invFormData.voucherDetails.customerUniquename = item.accountUniqueName;
                                         this.isCustomerSelected = true;
                                         this.invFormData.accountDetails.name = '';
                                     }
                                 }
                             });
                         } else {
+                            this.prepareSearchLists([{
+                                name: this.invFormData.accountDetails.name,
+                                uniqueName: this.invFormData.accountDetails.uniqueName
+                            }], 1, SEARCH_TYPE.CUSTOMER);
+                            this.makeCustomerList();
                             this.invFormData.voucherDetails.customerName = this.invFormData.accountDetails.name;
                             this.invFormData.voucherDetails.customerUniquename = this.invFormData.accountDetails.uniqueName;
                         }
@@ -1621,6 +1661,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
         this.customerCountryName = data.country.countryName;
         this.showGstAndTrnUsingCountryName(this.customerCountryName);
+        this.prepareSearchLists([{
+            name: data.name,
+            uniqueName: data.uniqueName
+        }], 1, SEARCH_TYPE.CUSTOMER);
+        this.makeCustomerList();
         if (this.isInvoiceRequestedFromPreviousPage) {
             this.invFormData.voucherDetails.customerUniquename = data.uniqueName;
             this.invFormData.voucherDetails.customerName = data.name;
@@ -5062,6 +5107,96 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
+    public handleScrollEnd(searchType: string): void {
+        console.log('Reached end');
+        if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
+            this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1, searchType);
+        }
+    }
+
+    public onSearchQueryChanged(query: string, page: number = 1, searchType: string) {
+        const requestObject = this.getSearchRequestObject(query, page, searchType);
+        this.searchAccount(requestObject).subscribe(data => {
+            if (data && data.body && data.body.results) {
+                this.prepareSearchLists(data.body.results, page, searchType);
+                this.makeCustomerList();
+                this.searchResultsPaginationData.page = data.body.page;
+                this.searchResultsPaginationData.totalPages = data.body.totalPages;
+            }
+        });
+    }
+
+    public prepareSearchLists(results: any, currentPage: number = 1, searchType: string): void {
+        const searchResults = results.map(result => {
+            return {
+                value: result.uniqueName,
+                label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                additional: result
+            };
+        }) || [];
+        if (currentPage === 1) {
+            this.searchResults = searchResults;
+        } else {
+            this.searchResults = [
+                ...this.searchResults,
+                ...searchResults
+            ];
+        }
+        if (searchType === SEARCH_TYPE.CUSTOMER) {
+            if (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) {
+                this.sundryCreditorsAcList = this.searchResults;
+            } else {
+                this.sundryDebtorsAcList = this.searchResults;
+            }
+        } else if (searchType === SEARCH_TYPE.ITEM) {
+            if (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) {
+                this.prdSerAcListForCred = this.searchResults;
+            } else {
+                this.prdSerAcListForDeb = this.searchResults;
+            }
+        }
+    }
+
+    public getSearchRequestObject(query: string, page: number = 1, searchType: string): any {
+        let withStocks: boolean;
+        let group: string;
+        if (searchType === SEARCH_TYPE.CUSTOMER) {
+            this.searchResultsPaginationData.query = query;
+            group = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
+                'sundrycreditors, bankaccounts, cash' : 'sundrydebtors';
+            this.selectedGrpUniqueNameForAddEditAccountModal = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
+                'sundrycreditors' : 'sundrydebtors';
+        } else if (searchType === SEARCH_TYPE.ITEM) {
+            group = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
+                'operatingcost, indirectexpenses' : 'otherincome, revenuefromoperations';
+            withStocks = true;
+        } else if (searchType === SEARCH_TYPE.BANK) {
+            group = 'bankaccounts, cash';
+        }
+        const requestObject = {
+            q: query,
+            page,
+            group: encodeURIComponent(group)
+        };
+        if (withStocks) {
+            requestObject['withStocks'] = withStocks;
+        }
+        return requestObject;
+    }
+
+    public searchAccount(requestObject: any): Observable<any> {
+        return this.searchService.searchAccount(requestObject);
+    }
+
+    public resetPreviousSearchResults(): void {
+        this.searchResults = [];
+        this.searchResultsPaginationData = {
+            page: 0,
+            totalPages: 0,
+            query: ''
+        };
+    }
+
     /**
      * Fetches the default template configuration to show placeholder text for template
      * section
@@ -5150,4 +5285,5 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         }
     }
+
 }
