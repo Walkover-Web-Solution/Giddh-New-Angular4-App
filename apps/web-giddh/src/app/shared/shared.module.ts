@@ -7,7 +7,6 @@ import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { CKEditorModule } from 'ng2-ckeditor';
 import { BsDatepickerModule, DatepickerModule, PaginationModule } from 'ngx-bootstrap';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -176,7 +175,6 @@ export function provideConfig() {
         TextCaseChangeModule,
         HighlightModule,
         TabsModule,
-        CKEditorModule,
         NgxMaskModule,
         CommandKModule,
         NgxDaterangepickerMd.forRoot()
@@ -213,7 +211,6 @@ export function provideConfig() {
         TextCaseChangeModule,
         KeyboardShortutModule,
         CompanyAddNewUiComponent,
-        CKEditorModule,
         AsideMenuOtherTaxes,
         MfReportComponent,
         AccountAddNewDetailsComponent,
