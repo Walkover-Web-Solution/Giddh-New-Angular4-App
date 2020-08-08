@@ -39,7 +39,7 @@ import {PopoverModule} from 'ngx-bootstrap/popover';
 import {LaddaModule} from 'angular2-ladda';
 import {ShSelectModule} from './theme/ng-virtual-select/sh-select.module';
 import {LoaderComponent} from './loader/loader.component';
-import {NgbTypeaheadModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {localStorageSync} from 'ngrx-store-localstorage';
 import {ActionModule} from './actions/action.module';
 import {DecoratorsModule} from './decorators/decorators.module';
@@ -149,7 +149,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         BsDatepickerModule.forRoot(),
         ModalModule.forRoot(),
         PopoverModule.forRoot(),
-        NgbTypeaheadModule.forRoot(),
+        NgModule,
         BsDropdownModule.forRoot(),
         TabsModule.forRoot(),
         TooltipModule.forRoot(),

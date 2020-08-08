@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { InvoiceRoutingModule } from './invoice.routing.module';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 
@@ -8,7 +8,7 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
     declarations: [],
     imports: [
         InvoiceRoutingModule,
-        NgbTypeaheadModule,
+        NgbModule,
         ProformaInvoiceModule,
         DigitsOnlyModule,
     ],

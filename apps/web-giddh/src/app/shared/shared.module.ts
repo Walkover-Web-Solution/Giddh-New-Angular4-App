@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
@@ -154,7 +154,7 @@ export function provideConfig() {
         DatepickerModule,
         TypeaheadModule,
         UniversalListModule,
-        NgbTypeaheadModule,
+        NgbModule,
         TooltipModule,
         BsDropdownModule,
         PopoverModule.forRoot(),
@@ -205,7 +205,7 @@ export function provideConfig() {
         PerfectScrollbarModule,
         OnBoardingComponent,
         ConfirmModalModule,
-        NgbTypeaheadModule,
+        NgbModule,
         VsForDirective,
         AccountsSideBarComponent,
         AsideHelpSupportComponent,
