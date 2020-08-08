@@ -8,7 +8,7 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
     declarations: [],
     imports: [
         InvoiceRoutingModule,
-        NgbTypeaheadModule.forRoot(),
+        NgbTypeaheadModule,
         ProformaInvoiceModule,
         DigitsOnlyModule,
     ],

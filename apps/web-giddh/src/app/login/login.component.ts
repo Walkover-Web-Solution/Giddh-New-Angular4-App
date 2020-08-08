@@ -25,7 +25,7 @@ import {
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
-import { DOCUMENT } from "@angular/platform-browser";
+import { DOCUMENT } from "@angular/common";
 import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
 import { userLoginStateEnum } from "../models/user-login-state";

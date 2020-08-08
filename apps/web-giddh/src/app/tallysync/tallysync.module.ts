@@ -7,7 +7,7 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
     declarations: [],
     imports: [
         TallysyncRoutingModule,
-        NgbTypeaheadModule.forRoot(),
+        NgbTypeaheadModule,
         DigitsOnlyModule
     ],
     exports: [
