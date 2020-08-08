@@ -105,7 +105,7 @@
         "ng2-pdfjs-viewer": "^5.0.1",
         "ng2-search-filter": "^0.4.7",
         "ng2-ui-auth": "^9.0.0",
-        "ngrx-store-localstorage": "^8.0.0",
+        "ngrx-store-localstorage": "^9.0.0",
         "ngrx-store-logger": "^0.2.4",
         "ngx-bootstrap": "~3.0.1",
         "ngx-clipboard": "^11.1.7",
