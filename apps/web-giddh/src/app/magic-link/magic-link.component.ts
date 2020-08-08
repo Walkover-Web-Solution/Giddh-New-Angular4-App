@@ -10,7 +10,7 @@ import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
-import { DOCUMENT } from '@angular/platform-browser';
+import { DOCUMENT } from "@angular/common";
 import { WindowRef } from 'apps/web-giddh/src/app/shared/helpers/window.object';
 import { underStandingTextData } from 'apps/web-giddh/src/app/ledger/underStandingTextData';
 import { CompanyService } from 'apps/web-giddh/src/app/services/companyService.service';
