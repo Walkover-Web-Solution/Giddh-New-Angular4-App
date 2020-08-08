@@ -35,7 +35,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @Input() public notFoundMsg: string = 'No results found';
     @Input() public notFoundLinkText: string = 'Create New';
     @Input() public notFoundLink: boolean = false;
-    @ContentChild('notFoundLinkTemplate', /* TODO: add static flag */ {}) public notFoundLinkTemplate: TemplateRef<any>;
+    @ContentChild('notFoundLinkTemplate', { static: true }) public notFoundLinkTemplate: TemplateRef<any>;
     @Input() public isFilterEnabled: boolean = true;
     @Input() public width: string = 'auto';
     @Input() public ItemHeight: number = 41;
@@ -55,7 +55,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @ViewChild('inputFilter', { static: false }) public inputFilter: ElementRef;
     @ViewChild('mainContainer', { static: true }) public mainContainer: ElementRef;
     @ViewChild('menuEle', { static: true }) public menuEle: SalesShSelectMenuComponent;
-    @ContentChild('optionTemplate', /* TODO: add static flag */ {}) public optionTemplate: TemplateRef<any>;
+    @ContentChild('optionTemplate', { static: true }) public optionTemplate: TemplateRef<any>;
     @ViewChild('dd', { static: true }) public ele: ElementRef;
     @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();

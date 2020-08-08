@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { CustomActions } from '../../../store/customActions';
 import { INVOICE_RECEIPT_ACTIONS } from './receipt.const';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
@@ -19,7 +19,8 @@ export class InvoiceReceiptActions {
 
     @Effect()
     private UPDATE_INVOICE_RECEIPT_REQUEST$: Observable<Action> = this.action$
-        .ofType(INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT).pipe(
+        .pipe(
+            ofType(INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT),
             switchMap((action: CustomActions) => this._receiptService.UpdateReceipt(action.payload.accountUniqueName, action.payload.model)),
             map(res => this.validateResponse<string, ReciptRequest>(res, {
                 type: INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT_RESPONSE,

@@ -53,7 +53,7 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
 
     @ViewChild('content', { read: ElementRef, static: true }) public contentElementRef: ElementRef;
     @ViewChild('shim', { read: ElementRef, static: true }) public shimElementRef: ElementRef;
-    @ContentChild('container', /* TODO: add static flag */ {}) public containerElementRef: ElementRef;
+    @ContentChild('container', { static: true }) public containerElementRef: ElementRef;
 
     @Input() public items: any[] = [];
     @Input() public scrollbarWidth: number;
