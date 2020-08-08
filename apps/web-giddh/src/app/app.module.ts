@@ -149,7 +149,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         BsDatepickerModule.forRoot(),
         ModalModule.forRoot(),
         PopoverModule.forRoot(),
-        NgModule,
+        NgbModule,
         BsDropdownModule.forRoot(),
         TabsModule.forRoot(),
         TooltipModule.forRoot(),
