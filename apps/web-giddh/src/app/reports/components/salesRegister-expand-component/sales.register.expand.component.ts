@@ -40,9 +40,9 @@ export class SalesRegisterExpandComponent implements OnInit {
 
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     // searching
-    @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
+    @ViewChild('invoiceSearch', { static: false }) public invoiceSearch: ElementRef;
     // @ViewChild('customerSearch') public customerSearch: ElementRef;
-    @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
+    @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
 
     public voucherNumberInput: FormControl = new FormControl();
     // public customerNameInput: FormControl = new FormControl();

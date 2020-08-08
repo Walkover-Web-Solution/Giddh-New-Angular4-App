@@ -84,21 +84,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() pettyCashBaseAccountTypeString: string;
     @Input() pettyCashBaseAccountUniqueName: string;
 
-    @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
+    @ViewChild('deleteAttachedFileModal', { static: true }) public deleteAttachedFileModal: ModalDirective;
     /** fileinput element ref for clear value after remove attachment **/
-    @ViewChild('fileInputUpdate') public fileInputElement: ElementRef<any>;
-    @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
-    @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
-    @ViewChild('tax') public taxControll: TaxControlComponent;
-    @ViewChild('updateBaseAccount') public updateBaseAccount: ModalDirective;
-    @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+    @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef<any>;
+    @ViewChild('deleteEntryModal', { static: true }) public deleteEntryModal: ModalDirective;
+    @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
+    @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
+    @ViewChild('updateBaseAccount', { static: true }) public updateBaseAccount: ModalDirective;
+    @ViewChild(BsDatepickerDirective, { static: false }) public datepickers: BsDatepickerDirective;
     /** Advance receipt remove confirmation modal reference */
-    @ViewChild('advanceReceiptRemoveConfirmationModal') public advanceReceiptRemoveConfirmationModal: ModalDirective;
+    @ViewChild('advanceReceiptRemoveConfirmationModal', { static: true }) public advanceReceiptRemoveConfirmationModal: ModalDirective;
     /** Adjustment modal */
-    @ViewChild('adjustPaymentModal') public adjustPaymentModal: ModalDirective;
+    @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: ModalDirective;
 
     /** RCM popup instance */
-    @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
+    @ViewChild('rcmPopup', { static: false }) public rcmPopup: PopoverDirective;
 
     /** Warehouse data for warehouse drop down */
     public warehouses: Array<any>;

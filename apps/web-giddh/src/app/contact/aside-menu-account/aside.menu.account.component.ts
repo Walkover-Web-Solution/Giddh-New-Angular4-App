@@ -30,8 +30,8 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public getUpdateList: EventEmitter<string> = new EventEmitter();
-    @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
-    @ViewChild('addAccountNewComponent') public addAccountNewComponent: AccountAddNewDetailsComponent;
+    @ViewChild('deleteAccountModal', { static: true }) public deleteAccountModal: ModalDirective;
+    @ViewChild('addAccountNewComponent', { static: false }) public addAccountNewComponent: AccountAddNewDetailsComponent;
 
     public flatGroupsOptions: IOption[];
     public isGstEnabledAcc: boolean = true; // true only for groups will not under other

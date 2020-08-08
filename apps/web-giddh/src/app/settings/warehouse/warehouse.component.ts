@@ -58,13 +58,13 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     public warehouses: Array<any> = [];
 
     /** View container to carry out on boarding */
-    @ViewChild('onBoardingContainer') public onBoardingContainer: ElementViewContainerRef;
+    @ViewChild('onBoardingContainer', { static: true }) public onBoardingContainer: ElementViewContainerRef;
     /** Warehouse on boarding modal viewchild */
-    @ViewChild('warehouseOnBoardingModal') public warehouseOnBoardingModal: ModalDirective;
+    @ViewChild('warehouseOnBoardingModal', { static: true }) public warehouseOnBoardingModal: ModalDirective;
     /** Welcome component template ref for second step of warehouse on boarding */
-    @ViewChild('welcomeComponent') public welcomeComponentTemplate: TemplateRef<any>;
+    @ViewChild('welcomeComponent', { static: true }) public welcomeComponentTemplate: TemplateRef<any>;
     /** Warehouse pagination instance */
-    @ViewChild('warehousePagination') warehousePagination: PaginationComponent;
+    @ViewChild('warehousePagination', { static: false }) warehousePagination: PaginationComponent;
 
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: Subject<boolean> = new Subject();

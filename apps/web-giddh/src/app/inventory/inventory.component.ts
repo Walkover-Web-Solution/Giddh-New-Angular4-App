@@ -41,13 +41,13 @@ export const IsyncData = [
     providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
 })
 export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('branchModal') public branchModal: ModalDirective;
-    @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
-    @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
-    @ViewChild('confirmationModal') public confirmationModal: ModalDirective;
-    @ViewChild('inventoryStaticTabs') public inventoryStaticTabs: TabsetComponent;
+    @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
+    @ViewChild('addCompanyModal', { static: false }) public addCompanyModal: ModalDirective;
+    @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
+    @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
+    @ViewChild('inventoryStaticTabs', { static: true }) public inventoryStaticTabs: TabsetComponent;
     /** Warehouse filter instance */
-    @ViewChild('warehouseFilter') warehouseFilter: ShSelectComponent;
+    @ViewChild('warehouseFilter', { static: false }) warehouseFilter: ShSelectComponent;
 
     public dataSyncOption = IsyncData;
     public currentBranch: string = null;

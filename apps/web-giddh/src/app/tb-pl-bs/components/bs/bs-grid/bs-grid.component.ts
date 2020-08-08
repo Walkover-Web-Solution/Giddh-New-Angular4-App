@@ -24,7 +24,7 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
 	@Input() public from: string = '';
 	@Input() public to: string = '';
 	@Output() public searchChange = new EventEmitter<string>();
-	@ViewChild('searchInputEl') public searchInputEl: ElementRef;
+	@ViewChild('searchInputEl', { static: false }) public searchInputEl: ElementRef;
 	public bsSearchControl: FormControl = new FormControl();
 
 	constructor(private cd: ChangeDetectorRef, private zone: NgZone) {

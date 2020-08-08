@@ -16,7 +16,7 @@ import { GeneralActions } from '../actions/general/general.actions';
     styleUrls:[`./invoice.component.scss`]
 })
 export class InvoiceComponent implements OnInit, OnDestroy {
-    @ViewChild('staticTabs') public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', { static: false }) public staticTabs: TabsetComponent;
     
     public tabsDropdown:boolean = false;
     public selectedVoucherType: VoucherTypeEnum;

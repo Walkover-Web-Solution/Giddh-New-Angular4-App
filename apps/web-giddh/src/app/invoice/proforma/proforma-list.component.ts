@@ -44,10 +44,10 @@ const VOUCHER_TYPES = ['proformas', 'estimates'];
 })
 
 export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
-    @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
+    @ViewChild('advanceSearch', { static: true }) public advanceSearch: ModalDirective;
     /** Confirmation popup for delete operation */
-    @ViewChild('deleteConfirmationModel') public deleteConfirmationModel: ModalDirective;
-    @ViewChild(InvoiceAdvanceSearchComponent) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
+    @ViewChild('deleteConfirmationModel', { static: true }) public deleteConfirmationModel: ModalDirective;
+    @ViewChild(InvoiceAdvanceSearchComponent, { static: false }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.proforma;
     public voucherData: ProformaResponse;
     public selectedDateRange: any;

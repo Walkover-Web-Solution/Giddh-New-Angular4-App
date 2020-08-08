@@ -30,10 +30,10 @@ export const IsyncData = [
 })
 
 export class BunchComponent implements OnDestroy {
-	@ViewChild('bunchModal') public bunchModal: ModalDirective;
-	@ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
-	@ViewChild('getBunchCompanyModal') public getBunchCompanyModal: ModalDirective;
-	@ViewChild('confirmationModal') public confirmationModal: ModalDirective;
+	@ViewChild('bunchModal', { static: true }) public bunchModal: ModalDirective;
+	@ViewChild('addCompanyModal', { static: true }) public addCompanyModal: ModalDirective;
+	@ViewChild('getBunchCompanyModal', { static: true }) public getBunchCompanyModal: ModalDirective;
+	@ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
 
 	public dataSyncOption = IsyncData;
 	public currentBranch: string = null;

@@ -20,7 +20,7 @@ export class BunchAddCompanyModalComponent implements OnChanges, OnDestroy {
     @Output() public closeModalEvent: EventEmitter<boolean> = new EventEmitter(false);
     @Output() public saveDataEvent: EventEmitter<any> = new EventEmitter(null);
 
-    @ViewChild('companyListDropdown') public companyListDropdown: BsDropdownDirective;
+    @ViewChild('companyListDropdown', { static: false }) public companyListDropdown: BsDropdownDirective;
 
     public isAllCompanySelected: boolean = false;
 

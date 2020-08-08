@@ -41,10 +41,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
     public isLoginWithMobileSubmited$: Observable<boolean>;
-    @ViewChild("emailVerifyModal") public emailVerifyModal: ModalDirective;
+    @ViewChild("emailVerifyModal", { static: true }) public emailVerifyModal: ModalDirective;
     public isLoginWithEmailSubmited$: Observable<boolean>;
-    @ViewChild("mobileVerifyModal") public mobileVerifyModal: ModalDirective;
-    @ViewChild("twoWayAuthModal") public twoWayAuthModal: ModalDirective;
+    @ViewChild("mobileVerifyModal", { static: true }) public mobileVerifyModal: ModalDirective;
+    @ViewChild("twoWayAuthModal", { static: true }) public twoWayAuthModal: ModalDirective;
     // @ViewChild('forgotPasswordModal') public forgotPasswordModal: ModalDirective;
 
     public isSubmited: boolean = false;

@@ -39,8 +39,8 @@ import * as googleLibphonenumber from 'google-libphonenumber';
 export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
     @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
-    @ViewChild('logoutModal') public logoutModal: ModalDirective;
-    @ViewChild('companyForm') public companyForm: NgForm;
+    @ViewChild('logoutModal', { static: true }) public logoutModal: ModalDirective;
+    @ViewChild('companyForm', { static: true }) public companyForm: NgForm;
     @Input() public createBranch: boolean = false;
 
     public imgPath: string = '';

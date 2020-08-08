@@ -51,9 +51,9 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public end: EventEmitter<ChangeEvent> = new EventEmitter<ChangeEvent>();
     @Output() public highLightedItemEmitter: EventEmitter<any> = new EventEmitter<any>();
 
-    @ViewChild('content', { read: ElementRef }) public contentElementRef: ElementRef;
-    @ViewChild('shim', { read: ElementRef }) public shimElementRef: ElementRef;
-    @ContentChild('container') public containerElementRef: ElementRef;
+    @ViewChild('content', { read: ElementRef, static: true }) public contentElementRef: ElementRef;
+    @ViewChild('shim', { read: ElementRef, static: true }) public shimElementRef: ElementRef;
+    @ContentChild('container', /* TODO: add static flag */ {}) public containerElementRef: ElementRef;
 
     @Input() public items: any[] = [];
     @Input() public scrollbarWidth: number;

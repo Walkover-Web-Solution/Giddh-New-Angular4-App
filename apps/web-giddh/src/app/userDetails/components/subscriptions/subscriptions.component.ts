@@ -24,8 +24,8 @@ import { DEFAULT_SIGNUP_TRIAL_PLAN } from '../../../app.constant';
 })
 
 export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-    @ViewChild('addCompanyNewModal') public addCompanyNewModal: ModalDirective;
-    @ViewChild('companynewadd') public companynewadd: ElementViewContainerRef;
+    @ViewChild('addCompanyNewModal', { static: false }) public addCompanyNewModal: ModalDirective;
+    @ViewChild('companynewadd', { static: false }) public companynewadd: ElementViewContainerRef;
 
     /* This will have active tab value */
     @Input() public activeTab: string = '';

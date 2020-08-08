@@ -235,13 +235,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     public isCashInvoice: boolean = false;
     @Input() public accountUniqueName: string = '';
 
-    @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
-    @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
-    @ViewChild('createAcModal') public createAcModal: ModalDirective;
+    @ViewChild(ElementViewContainerRef, { static: false }) public elementViewContainerRef: ElementViewContainerRef;
+    @ViewChild('createGroupModal', { static: false }) public createGroupModal: ModalDirective;
+    @ViewChild('createAcModal', { static: false }) public createAcModal: ModalDirective;
 
-    @ViewChild('invoiceForm') public invoiceForm: NgForm;
-    @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
-    @ViewChild("cashInvoiceInput") cashInvoiceInput: ElementRef;
+    @ViewChild('invoiceForm', { static: true }) public invoiceForm: NgForm;
+    @ViewChild('discountComponent', { static: false }) public discountComponent: DiscountListComponent;
+    @ViewChild("cashInvoiceInput", { static: false }) cashInvoiceInput: ElementRef;
     @ViewChildren(ShSelectComponent) public allShSelect: QueryList<ShSelectComponent>;
     @ViewChildren(SalesShSelectComponent) public allSalesShSelect: QueryList<SalesShSelectComponent>;
 

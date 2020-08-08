@@ -49,15 +49,15 @@ import { InvViewService } from '../../inv.view.service';
 })
 
 export class InventoryGroupStockReportComponent implements OnChanges, OnInit, OnDestroy {
-    @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
-    @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
-    @ViewChild("productName") productName: ElementRef;
-    @ViewChild("sourceName") sourceName: ElementRef;
-    @ViewChild('advanceSearchForm') formValues;
-    @ViewChild('shCategory') public shCategory: ShSelectComponent;
-    @ViewChild('shCategoryType') public shCategoryType: ShSelectComponent;
-    @ViewChild('shValueCondition') public shValueCondition: ShSelectComponent;
-    @ViewChild('template') public template: ElementRef;
+    @ViewChild('dateRangePickerCmp', { static: false }) public dateRangePickerCmp: ElementRef;
+    @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: ModalDirective;
+    @ViewChild("productName", { static: true }) productName: ElementRef;
+    @ViewChild("sourceName", { static: false }) sourceName: ElementRef;
+    @ViewChild('advanceSearchForm', { static: false }) formValues;
+    @ViewChild('shCategory', { static: false }) public shCategory: ShSelectComponent;
+    @ViewChild('shCategoryType', { static: false }) public shCategoryType: ShSelectComponent;
+    @ViewChild('shValueCondition', { static: false }) public shValueCondition: ShSelectComponent;
+    @ViewChild('template', { static: true }) public template: ElementRef;
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;

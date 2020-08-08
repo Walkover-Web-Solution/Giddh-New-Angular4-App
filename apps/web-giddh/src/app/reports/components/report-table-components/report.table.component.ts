@@ -21,7 +21,7 @@ export class ReportsTableComponent implements OnInit, OnDestroy {
     @Input() public reportRespone: ReportsModel[];
     @Input() public activeFinacialYr: any;
     @Input() salesRegisterTotal: any;
-    @ViewChild('mailModal') public mailModal: ModalDirective;
+    @ViewChild('mailModal', { static: false }) public mailModal: ModalDirective;
     public messageBody = {
         header: {
             email: 'Send Email',

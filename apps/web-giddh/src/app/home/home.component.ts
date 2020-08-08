@@ -41,17 +41,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public historyComparisionChartData$: Observable<IComparisionChartResponse>;
     public expensesChartData$: Observable<IExpensesChartClosingBalanceResponse>;
     public comparisionChartData$: Observable<IComparisionChartResponse>;
-    @ViewChild('liveaccount') public liveaccount: LiveAccountsComponent;
-    @ViewChild('expence') public expence: ExpensesChartComponent;
-    @ViewChild('revenue') public revenue: RevenueChartComponent;
-    @ViewChild('compare') public compare: ComparisionChartComponent;
-    @ViewChild('history') public history: HistoryChartComponent;
-    @ViewChild('networth') public networth: NetworthChartComponent;
-    @ViewChild('profitloss') public profitloss: ProfitLossComponent;
-    @ViewChild('gst') public gst: gstComponent;
-    @ViewChild('bankaccount') public bankaccount: BankAccountsComponent;
-    @ViewChild('crdrlist') public crdrlist: CrDrComponent;
-    @ViewChild('totalSales') public totalSales: TotalSalesComponent;
+    @ViewChild('liveaccount', { static: false }) public liveaccount: LiveAccountsComponent;
+    @ViewChild('expence', { static: false }) public expence: ExpensesChartComponent;
+    @ViewChild('revenue', { static: true }) public revenue: RevenueChartComponent;
+    @ViewChild('compare', { static: false }) public compare: ComparisionChartComponent;
+    @ViewChild('history', { static: false }) public history: HistoryChartComponent;
+    @ViewChild('networth', { static: false }) public networth: NetworthChartComponent;
+    @ViewChild('profitloss', { static: false }) public profitloss: ProfitLossComponent;
+    @ViewChild('gst', { static: false }) public gst: gstComponent;
+    @ViewChild('bankaccount', { static: false }) public bankaccount: BankAccountsComponent;
+    @ViewChild('crdrlist', { static: false }) public crdrlist: CrDrComponent;
+    @ViewChild('totalSales', { static: false }) public totalSales: TotalSalesComponent;
 
     public selectedCompany: Observable<CompanyResponse>;
     public subscribedPlan: SubscriptionsUser;

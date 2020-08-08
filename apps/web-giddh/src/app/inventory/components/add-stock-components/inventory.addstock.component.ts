@@ -41,8 +41,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public purchaseAccountsDropDown$: Observable<IOption[]>;
     public salesAccountsDropDown$: Observable<IOption[]>;
 
-    @ViewChild('formDiv') public formDiv: ElementRef;
-    @ViewChild('groupDDList') public groupDDList: any;
+    @ViewChild('formDiv', { static: true }) public formDiv: ElementRef;
+    @ViewChild('groupDDList', { static: true }) public groupDDList: any;
     public formDivBoundingRect: Subject<any> = new Subject<any>();
 
     public groupUniqueName: string;

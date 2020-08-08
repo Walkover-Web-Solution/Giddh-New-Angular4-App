@@ -19,7 +19,7 @@ export class PurchaseRegisterTableComponent implements OnInit, OnDestroy {
     @Input() public reportRespone: PurchaseReportsModel[];
     @Input() public activeFinacialYr: any;
     @Input() purchaseRegisterTotal: any;
-    @ViewChild('mailModal') public mailModal: ModalDirective;
+    @ViewChild('mailModal', { static: false }) public mailModal: ModalDirective;
     public messageBody = {
         header: {
             email: 'Send Email',

@@ -28,8 +28,8 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
 	public uniqueName: string = null;
 	public nameSearch: string = null;
 
-	@ViewChild('search') public search: ElementRef;
-	@ViewChild('sidebar') public sidebar: ElementRef;
+	@ViewChild('search', { static: true }) public search: ElementRef;
+	@ViewChild('sidebar', { static: true }) public sidebar: ElementRef;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	/**

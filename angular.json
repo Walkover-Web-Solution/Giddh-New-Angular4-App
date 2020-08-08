@@ -1,5 +1,4 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "",
   "projects": {
@@ -71,7 +70,7 @@
       },
       "architect": {
         "build": {
-          "builder": "ngx-build-plus:build",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "baseHref": "http://localhost:3000",
             "outputPath": "dist/apps/web-giddh",
@@ -120,7 +119,6 @@
               "apps/web-giddh/src/assets/js/lodash.min.js",
               "node_modules/bootstrap-daterangepicker/daterangepicker.js"
             ],
-            "es5BrowserSupport": true,
             "extraWebpackConfig": "./webpack.partial.js"
           },
           "configurations": {
@@ -248,7 +246,7 @@
           }
         },
         "serve": {
-          "builder": "ngx-build-plus:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "host": "localhost",
             "baseHref": "http://localhost:3000",
@@ -278,7 +276,7 @@
           }
         },
         "test": {
-          "builder": "ngx-build-plus:karma",
+          "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "apps/web-giddh/src/test.ts",
             "tsConfig": "apps/web-giddh/tsconfig.spec.json",
@@ -331,7 +329,7 @@
       },
       "architect": {
         "build": {
-          "builder": "ngx-build-plus:build",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "index": "apps/web-giddh/src/index.html",
             "main": "apps/web-giddh/src/main.electron.ts",
@@ -505,7 +503,7 @@
           }
         },
         "serve": {
-          "builder": "ngx-build-plus:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "host": "localhost",
             "port": 4200,
@@ -534,7 +532,7 @@
       },
       "architect": {
         "build": {
-          "builder": "ngx-build-plus:build",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "index": "apps/web-giddh/src/index.html",
             "main": "apps/web-giddh/src/main.cordova.ts",
@@ -664,7 +662,7 @@
           }
         },
         "serve": {
-          "builder": "ngx-build-plus:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "host": "localhost",
             "port": 3000,

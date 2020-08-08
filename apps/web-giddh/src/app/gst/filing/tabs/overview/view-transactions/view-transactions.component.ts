@@ -79,9 +79,9 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isTransactionSummary: boolean;
     // @Input() public filterParam = filterTransaction;
 
-    @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
-    @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
-    @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
+    @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: ModalDirective;
+    @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
+    @ViewChild('invoiceGenerateModel', { static: true }) public invoiceGenerateModel: ModalDirective;
 
     public viewTransaction$: Observable<GstTransactionResult> = of(null);
     public gstr1entityType = Gstr1TransactionType;

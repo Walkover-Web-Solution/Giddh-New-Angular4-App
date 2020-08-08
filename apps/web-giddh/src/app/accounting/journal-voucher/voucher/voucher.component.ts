@@ -75,22 +75,22 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @Input() public currentDate: string;
     @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 
-    @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
-    @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
+    @ViewChild('quickAccountComponent', { static: false }) public quickAccountComponent: ElementViewContainerRef;
+    @ViewChild('quickAccountModal', { static: false }) public quickAccountModal: ModalDirective;
 
-    @ViewChild('chequeEntryModal') public chequeEntryModal: ModalDirective;
+    @ViewChild('chequeEntryModal', { static: true }) public chequeEntryModal: ModalDirective;
 
     @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
-    @ViewChild('particular') public accountField: any;
-    @ViewChild('dateField') public dateField: ElementRef;
-    @ViewChild('narrationBox') public narrationBox: ElementRef;
-    @ViewChild('chequeNumberInput') public chequeNumberInput: ElementRef;
-    @ViewChild('chequeClearanceInputField') public chequeClearanceInputField: ElementRef;
-    @ViewChild('chqFormSubmitBtn') public chqFormSubmitBtn: ElementRef;
-    @ViewChild('submitButton') public submitButton: ElementRef;
-    @ViewChild('resetButton') public resetButton: ElementRef;
+    @ViewChild('particular', { static: false }) public accountField: any;
+    @ViewChild('dateField', { static: true }) public dateField: ElementRef;
+    @ViewChild('narrationBox', { static: true }) public narrationBox: ElementRef;
+    @ViewChild('chequeNumberInput', { static: true }) public chequeNumberInput: ElementRef;
+    @ViewChild('chequeClearanceInputField', { static: true }) public chequeClearanceInputField: ElementRef;
+    @ViewChild('chqFormSubmitBtn', { static: true }) public chqFormSubmitBtn: ElementRef;
+    @ViewChild('submitButton', { static: true }) public submitButton: ElementRef;
+    @ViewChild('resetButton', { static: true }) public resetButton: ElementRef;
 
-    @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
+    @ViewChild('manageGroupsAccountsModal', { static: false }) public manageGroupsAccountsModal: ModalDirective;
 
     /** List of all 'DEBIT' amount fields when 'By' entries are made  */
     @ViewChildren('byAmountField') public byAmountFields: QueryList<ElementRef>;

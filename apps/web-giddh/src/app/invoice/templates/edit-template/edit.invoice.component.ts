@@ -26,11 +26,11 @@ import { VoucherTypeEnum } from '../../../models/api-models/Sales';
 
 export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
-    @ViewChild('templateModal') public templateModal: ModalDirective;
-    @ViewChild('customTemplateConfirmationModal') public customTemplateConfirmationModal: ModalDirective;
-    @ViewChild('invoiceTemplatePreviewModal') public invoiceTemplatePreviewModal: ModalDirective;
+    @ViewChild('templateModal', { static: true }) public templateModal: ModalDirective;
+    @ViewChild('customTemplateConfirmationModal', { static: true }) public customTemplateConfirmationModal: ModalDirective;
+    @ViewChild('invoiceTemplatePreviewModal', { static: true }) public invoiceTemplatePreviewModal: ModalDirective;
     public voucherType: string;
-    @ViewChild(InvoiceTemplateModalComponent) public invoiceTemplateModalComponent: InvoiceTemplateModalComponent;
+    @ViewChild(InvoiceTemplateModalComponent, { static: true }) public invoiceTemplateModalComponent: InvoiceTemplateModalComponent;
 
     public selectedVoucherType: VoucherTypeEnum;
     public templateId: string = 'common_template_a';

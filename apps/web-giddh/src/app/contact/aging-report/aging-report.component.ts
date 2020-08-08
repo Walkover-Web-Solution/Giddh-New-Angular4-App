@@ -60,9 +60,9 @@ export class AgingReportComponent implements OnInit {
     public agingAdvanceSearchModal: AgingAdvanceSearchModal = new AgingAdvanceSearchModal();
     public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
 
-    @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
-    @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
-    @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
+    @ViewChild('advanceSearch', { static: true }) public advanceSearch: ModalDirective;
+    @ViewChild('paginationChild', { static: false }) public paginationChild: ElementViewContainerRef;
+    @ViewChild('filterDropDownList', { static: false }) public filterDropDownList: BsDropdownDirective;
     @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
     private createAccountIsSuccess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

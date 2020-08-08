@@ -45,7 +45,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isMonthSelected: boolean = false;
     @Input() public fileReturn: {} = { isAuthenticate: false };
     @Input() public fileGstr3b: {} = { via: null };
-    @ViewChild('cancelConfirmationModel') public cancelConfirmationModel: ModalDirective;
+    @ViewChild('cancelConfirmationModel', { static: true }) public cancelConfirmationModel: ModalDirective;
 
     public gstAuthenticated$: Observable<boolean>;
     public GstAsidePaneState: string = 'out';

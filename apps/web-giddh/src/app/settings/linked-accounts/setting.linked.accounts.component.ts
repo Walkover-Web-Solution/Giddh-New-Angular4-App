@@ -31,10 +31,10 @@ import { GeneralService } from '../../services/general.service';
 })
 export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
-    @ViewChild('connectBankModel') public connectBankModel: ModalDirective;
-    @ViewChild('confirmationModal') public confirmationModal: ModalDirective;
-    @ViewChild('yodleeFormHTML') public yodleeFormHTML: HTMLFormElement;
-    @ViewChild('yodleeIframe') public yodleeIframe: HTMLIFrameElement;
+    @ViewChild('connectBankModel', { static: true }) public connectBankModel: ModalDirective;
+    @ViewChild('confirmationModal', { static: true }) public confirmationModal: ModalDirective;
+    @ViewChild('yodleeFormHTML', { static: true }) public yodleeFormHTML: HTMLFormElement;
+    @ViewChild('yodleeIframe', { static: false }) public yodleeIframe: HTMLIFrameElement;
 
     public iframeSource: string = null;
     public ebankAccounts: BankAccountsResponse[] = [];

@@ -29,7 +29,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 })
 
 export class MfEditComponent implements OnInit {
-    @ViewChild('manufacturingConfirmationModal') public manufacturingConfirmationModal: ModalDirective;
+    @ViewChild('manufacturingConfirmationModal', { static: true }) public manufacturingConfirmationModal: ModalDirective;
 
     public stockListDropDown$: Observable<IOption[]>;
     public allStocksDropDown$: Observable<IOption[]>;

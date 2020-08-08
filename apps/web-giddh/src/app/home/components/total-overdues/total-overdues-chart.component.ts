@@ -21,7 +21,7 @@ import { GeneralService } from '../../../services/general.service';
 })
 
 export class TotalOverduesChartComponent implements OnInit, OnDestroy {
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store modal reference */

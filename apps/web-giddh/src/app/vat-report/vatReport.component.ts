@@ -36,8 +36,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public toDate: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public allowVatReportAccess: boolean = false;
-    @ViewChild('monthWise') public monthWise: BsDropdownDirective;
-    @ViewChild('periodDropdown') public periodDropdown;
+    @ViewChild('monthWise', { static: false }) public monthWise: BsDropdownDirective;
+    @ViewChild('periodDropdown', { static: true }) public periodDropdown;
     public isMonthSelected: boolean = true;
     public selectedMonth: any = null;
     public currentPeriod: any = {};

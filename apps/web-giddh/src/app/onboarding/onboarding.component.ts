@@ -20,8 +20,8 @@ import { GeneralActions } from '../actions/general/general.actions';
 })
 
 export class OnboardingComponent implements OnInit, AfterViewInit {
-    @ViewChild('talkSalesModal') public talkSalesModal: ModalDirective;
-    @ViewChild('supportTab') public supportTab: TabsetComponent;
+    @ViewChild('talkSalesModal', { static: false }) public talkSalesModal: ModalDirective;
+    @ViewChild('supportTab', { static: false }) public supportTab: TabsetComponent;
     public sideMenu: { isopen: boolean } = { isopen: true };
     public loadAPI: Promise<any>;
     public CompanySettingsObj: any = {};

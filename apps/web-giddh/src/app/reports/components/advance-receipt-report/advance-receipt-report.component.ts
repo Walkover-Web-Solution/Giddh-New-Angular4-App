@@ -40,25 +40,25 @@ import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt
 export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, OnInit {
 
     /** Customer name search bar */
-    @ViewChild('customerName') public customerName: ElementRef;
+    @ViewChild('customerName', { static: true }) public customerName: ElementRef;
     /** Parent of customer name search bar */
-    @ViewChild('customerNameParent') public customerNameParent: ElementRef;
+    @ViewChild('customerNameParent', { static: true }) public customerNameParent: ElementRef;
     /** Receipt number search bar */
-    @ViewChild('receiptNumber') public receiptNumber: ElementRef;
+    @ViewChild('receiptNumber', { static: true }) public receiptNumber: ElementRef;
     /** Parent of receipt number search bar */
-    @ViewChild('receiptNumberParent') public receiptNumberParent: ElementRef;
+    @ViewChild('receiptNumberParent', { static: true }) public receiptNumberParent: ElementRef;
     /** Payment mode search bar */
-    @ViewChild('paymentMode') public paymentMode: ElementRef;
+    @ViewChild('paymentMode', { static: true }) public paymentMode: ElementRef;
     /** Parent of payment mode search bar */
-    @ViewChild('paymentModeParent') public paymentModeParent: ElementRef;
+    @ViewChild('paymentModeParent', { static: true }) public paymentModeParent: ElementRef;
     /** Invoice number search bar */
-    @ViewChild('invoiceNumber') public invoiceNumber: ElementRef;
+    @ViewChild('invoiceNumber', { static: true }) public invoiceNumber: ElementRef;
     /** Parent of invoice number search bar */
-    @ViewChild('invoiceNumberParent') public invoiceNumberParent: ElementRef;
+    @ViewChild('invoiceNumberParent', { static: true }) public invoiceNumberParent: ElementRef;
     /** Advance search modal instance */
-    @ViewChild('receiptAdvanceSearchFilterModal') public receiptAdvanceSearchFilterModal: ElementViewContainerRef;
+    @ViewChild('receiptAdvanceSearchFilterModal', { static: true }) public receiptAdvanceSearchFilterModal: ElementViewContainerRef;
     /** Container of Advance search modal instance */
-    @ViewChild('receiptAdvanceSearchModalContainer') public receiptAdvanceSearchModalContainer: ModalDirective;
+    @ViewChild('receiptAdvanceSearchModalContainer', { static: true }) public receiptAdvanceSearchModalContainer: ModalDirective;
 
     /** Moment method */
     public moment = moment;

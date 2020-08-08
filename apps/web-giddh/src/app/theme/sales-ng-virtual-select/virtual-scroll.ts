@@ -63,7 +63,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     public start: EventEmitter<ChangeEvent> = new EventEmitter<ChangeEvent>();
     @Output()
     public end: EventEmitter<ChangeEvent> = new EventEmitter<ChangeEvent>();
-    @ViewChild('content', { read: ElementRef })
+    @ViewChild('content', { read: ElementRef, static: true })
     public contentElementRef: ElementRef;
     @Input() public salesShSelectPading: number;
     public onScrollListener: any;

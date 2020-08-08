@@ -12,7 +12,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 export class AsideSettingComponent implements OnInit {
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('searchField') public searchField: ElementRef;
+    @ViewChild('searchField', { static: true }) public searchField: ElementRef;
 
     public imgPath: string = '';
     public settingsPageTabs: any[] = [];

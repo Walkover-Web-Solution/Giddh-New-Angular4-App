@@ -75,9 +75,9 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
 	@Input() public isMenuOpen: boolean = false;
 	@Output() public selectedDiscountItems: EventEmitter<any[]> = new EventEmitter();
 	@Output() public selectedDiscountItemsTotal: EventEmitter<number> = new EventEmitter();
-	@ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
-	@ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
-	@ViewChild('disInptEle') public disInptEle: ElementRef;
+	@ViewChild('quickAccountComponent', { static: false }) public quickAccountComponent: ElementViewContainerRef;
+	@ViewChild('quickAccountModal', { static: false }) public quickAccountModal: ModalDirective;
+	@ViewChild('disInptEle', { static: true }) public disInptEle: ElementRef;
 
 	// new code
 	@Input() public discountSum: number;

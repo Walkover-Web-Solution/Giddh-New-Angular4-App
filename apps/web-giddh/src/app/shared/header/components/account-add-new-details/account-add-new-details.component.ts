@@ -45,7 +45,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public isDebtorCreditor: boolean = true;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
-    @ViewChild('autoFocus') public autoFocus: ElementRef;
+    @ViewChild('autoFocus', { static: true }) public autoFocus: ElementRef;
 
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public showOtherDetails: boolean = false;

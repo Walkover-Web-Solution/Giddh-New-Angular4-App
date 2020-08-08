@@ -35,10 +35,10 @@ export const IsyncData = [
 })
 
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
-    @ViewChild('branchModal') public branchModal: ModalDirective;
-    @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
-    @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
-    @ViewChild('confirmationModal') public confirmationModal: ModalDirective;
+    @ViewChild('branchModal', { static: true }) public branchModal: ModalDirective;
+    @ViewChild('addCompanyModal', { static: true }) public addCompanyModal: ModalDirective;
+    @ViewChild('companyadd', { static: true }) public companyadd: ElementViewContainerRef;
+    @ViewChild('confirmationModal', { static: true }) public confirmationModal: ModalDirective;
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
         dateInputFormat: 'DD-MM-YYYY',

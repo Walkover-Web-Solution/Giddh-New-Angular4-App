@@ -43,12 +43,12 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     /** True, If advance search applied */
     public showAdvanceSearchIcon: boolean = false;
-    @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
-    @ViewChild('exportDaybookModal') public exportDaybookModal: ModalDirective;
-    @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent }) public dateRangePickerCmp: DaterangePickerComponent;
-    @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+    @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: ModalDirective;
+    @ViewChild('exportDaybookModal', { static: true }) public exportDaybookModal: ModalDirective;
+    @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent, static: false }) public dateRangePickerCmp: DaterangePickerComponent;
+    @ViewChild('paginationChild', { static: false }) public paginationChild: ElementViewContainerRef;
     /** Daybook advance search component reference */
-    @ViewChild('daybookAdvanceSearch') public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
+    @ViewChild('daybookAdvanceSearch', { static: true }) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
     public datePickerOptions: any = {
         locale: {
             applyClass: 'btn-green',

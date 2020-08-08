@@ -84,7 +84,7 @@ import { SidebarAction } from '../../../../actions/inventory/sidebar.actions';
 })
 export class BranchTransferComponent implements OnInit, OnDestroy {
     // @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('sourceSelect') public sourceSelect: ShSelectComponent;
+    @ViewChild('sourceSelect', { static: true }) public sourceSelect: ShSelectComponent;
     public form: FormGroup;
     public mode: 'destination' | 'product' = 'destination';
     public today = new Date();

@@ -28,8 +28,8 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
 	public toDate: string;
 	/** Stores data related to stock group for inventory module */
 	public stockGroupData: Array<any>;
-	@ViewChild('search') public search: ElementRef;
-	@ViewChild('sidebar') public sidebar: ElementRef;
+	@ViewChild('search', { static: true }) public search: ElementRef;
+	@ViewChild('sidebar', { static: true }) public sidebar: ElementRef;
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
 	/**

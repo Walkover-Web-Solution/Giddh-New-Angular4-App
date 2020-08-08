@@ -35,8 +35,8 @@ export class InventoryInOutSidebarComponent implements OnInit, OnDestroy, AfterV
     public stocksList$: Observable<IStocksItem[]>;
     public inventoryUsers$: Observable<InventoryUser[]>;
     public sidebarRect: any;
-    @ViewChild('search') public search: ElementRef;
-    @ViewChild('sidebar') public sidebar: ElementRef;
+    @ViewChild('search', { static: true }) public search: ElementRef;
+    @ViewChild('sidebar', { static: true }) public sidebar: ElementRef;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     /**

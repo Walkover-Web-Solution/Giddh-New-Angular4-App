@@ -28,9 +28,9 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
 })
 
 export class VatReportTransactionsComponent implements OnInit, OnDestroy {
-    @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
-    @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
-    @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
+    @ViewChild('downloadOrSendMailModel', { static: true }) public downloadOrSendMailModel: ModalDirective;
+    @ViewChild('downloadOrSendMailComponent', { static: true }) public downloadOrSendMailComponent: ElementViewContainerRef;
+    @ViewChild('invoiceGenerateModel', { static: true }) public invoiceGenerateModel: ModalDirective;
 
     public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any;

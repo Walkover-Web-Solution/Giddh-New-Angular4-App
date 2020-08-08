@@ -22,8 +22,8 @@ export class AVAccountListComponent implements OnChanges {
 
     @Output() public noToggleClick: EventEmitter<any> = new EventEmitter<any>();
     @Output() public noResultClicked = new EventEmitter<null>();
-    @ViewChild(VirtualScrollComponent) public virtualScrollElm: VirtualScrollComponent;
-    @ViewChild('listContainer') public listContainer: ElementRef;
+    @ViewChild(VirtualScrollComponent, { static: false }) public virtualScrollElm: VirtualScrollComponent;
+    @ViewChild('listContainer', { static: false }) public listContainer: ElementRef;
     public math: any = Math;
     public viewPortItems: IOption[];
 

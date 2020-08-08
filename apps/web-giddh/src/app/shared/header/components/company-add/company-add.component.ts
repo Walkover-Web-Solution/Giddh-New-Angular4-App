@@ -27,8 +27,8 @@ import {GeneralService} from '../../../../services/general.service';
     styleUrls: ['./company-add.component.css']
 })
 export class CompanyAddComponent implements OnInit, OnDestroy {
-    @ViewChild('wizard') public wizard: WizardComponent;
-    @ViewChild('logoutModal') public logoutModal: ModalDirective;
+    @ViewChild('wizard', { static: false }) public wizard: WizardComponent;
+    @ViewChild('logoutModal', { static: true }) public logoutModal: ModalDirective;
     @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
     @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
     @Input() public createBranch: boolean = false;

@@ -180,15 +180,15 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() itemDetails: any;
 
     /** States dropdown instance */
-    @ViewChild('states') statesDropdown: ShSelectComponent;
+    @ViewChild('states', { static: false }) statesDropdown: ShSelectComponent;
     /** GST number field */
-    @ViewChild('gstNumberField') gstNumberField: ElementRef<any>;
+    @ViewChild('gstNumberField', { static: false }) gstNumberField: ElementRef<any>;
     /** Contact number field */
-    @ViewChild('mobileNoEl') contactNumberField: ElementRef<any>;
+    @ViewChild('mobileNoEl', { static: true }) contactNumberField: ElementRef<any>;
     /** Address field */
-    @ViewChild('address') addressField: ElementRef<any>;
+    @ViewChild('address', { static: false }) addressField: ElementRef<any>;
     /** Form instance */
-    @ViewChild('welcomeForm') welcomeForm: NgForm;
+    @ViewChild('welcomeForm', { static: true }) welcomeForm: NgForm;
 
     /**
      * Returns true, if onboarding of Warehouse is going on

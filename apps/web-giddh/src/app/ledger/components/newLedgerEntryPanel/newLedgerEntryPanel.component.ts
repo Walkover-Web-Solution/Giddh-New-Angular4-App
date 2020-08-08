@@ -100,7 +100,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedSuffixForCurrency: string;
     @Input() public inputMaskFormat: string = '';
     @Input() public giddhBalanceDecimalPlaces: number = 2;
-    @ViewChild('webFileInput') public webFileInput: ElementRef;
+    @ViewChild('webFileInput', { static: true }) public webFileInput: ElementRef;
     /** True, if RCM taxable amount needs to be displayed in create new ledger component as per criteria */
     @Input() public shouldShowRcmTaxableAmount: boolean = false;
     /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
@@ -118,16 +118,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
     /** Emit event for getting invoice list for credit note linking */
     @Output() public getInvoiceListsForCreditNote: EventEmitter<any> = new EventEmitter();
-    @ViewChild('entryContent') public entryContent: ElementRef;
-    @ViewChild('sh') public sh: ShSelectComponent;
-    @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+    @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
+    @ViewChild('sh', { static: false }) public sh: ShSelectComponent;
+    @ViewChild(BsDatepickerDirective, { static: false }) public datepickers: BsDatepickerDirective;
 
-    @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
-    @ViewChild('discount') public discountControl: LedgerDiscountComponent;
-    @ViewChild('tax') public taxControll: TaxControlComponent;
+    @ViewChild('deleteAttachedFileModal', { static: true }) public deleteAttachedFileModal: ModalDirective;
+    @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
+    @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
 
     /** RCM popup instance */
-    @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
+    @ViewChild('rcmPopup', { static: false }) public rcmPopup: PopoverDirective;
 
     public sourceWarehouse: true;
     public uploadInput: EventEmitter<UploadInput>;
@@ -142,7 +142,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isFileUploading: boolean = false;
     public isLedgerCreateInProcess$: Observable<boolean>;
     // bank map eledger related
-    @ViewChild('confirmBankTxnMapModal') public confirmBankTxnMapModal: ModalDirective;
+    @ViewChild('confirmBankTxnMapModal', { static: true }) public confirmBankTxnMapModal: ModalDirective;
     public matchingEntriesData: ReconcileResponse[] = [];
     public showMatchingEntries: boolean = false;
     public mapBodyContent: string;
@@ -204,7 +204,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Stores the details for adjustment component */
     public adjustVoucherConfiguration: any;
     /** Adjustment modal */
-    @ViewChild('adjustPaymentModal') public adjustPaymentModal: ModalDirective;
+    @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: ModalDirective;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

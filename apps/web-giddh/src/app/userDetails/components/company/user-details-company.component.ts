@@ -33,8 +33,8 @@ export class UserDetailsCompanyComponent implements OnInit {
 
 	//Modal reference variables
 	modalRef: BsModalRef;
-	@ViewChild('addCompanyNewModal') public addCompanyNewModal: ModalDirective;
-	@ViewChild('companynewadd') public companynewadd: ElementViewContainerRef;
+	@ViewChild('addCompanyNewModal', { static: false }) public addCompanyNewModal: ModalDirective;
+	@ViewChild('companynewadd', { static: false }) public companynewadd: ElementViewContainerRef;
 
 
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

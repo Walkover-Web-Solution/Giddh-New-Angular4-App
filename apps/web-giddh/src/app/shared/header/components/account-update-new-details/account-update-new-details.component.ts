@@ -61,11 +61,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @Input() public isDebtorCreditor: boolean = false;
     @Input() public showDeleteButton: boolean = true;
     @Input() public accountDetails: any;
-    @ViewChild('autoFocusUpdate') public autoFocusUpdate: ElementRef;
+    @ViewChild('autoFocusUpdate', { static: true }) public autoFocusUpdate: ElementRef;
     public moveAccountForm: FormGroup;
     public taxGroupForm: FormGroup;
-    @ViewChild('deleteMergedAccountModal') public deleteMergedAccountModal: ModalDirective;
-    @ViewChild('moveMergedAccountModal') public moveMergedAccountModal: ModalDirective;
+    @ViewChild('deleteMergedAccountModal', { static: false }) public deleteMergedAccountModal: ModalDirective;
+    @ViewChild('moveMergedAccountModal', { static: false }) public moveMergedAccountModal: ModalDirective;
 
     public activeCompany: CompanyResponse;
     @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>

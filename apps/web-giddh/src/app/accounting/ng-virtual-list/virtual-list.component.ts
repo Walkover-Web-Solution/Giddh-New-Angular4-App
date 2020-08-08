@@ -50,11 +50,11 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     @Input() public filterText: string = '';
     @Input() public keydownUpInput: KeyboardEvent;
 
-    @ViewChild('inputFilter') public inputFilter: ElementRef;
-    @ViewChild('mainContainer') public mainContainer: ElementRef;
-    @ViewChild('menuEle') public menuEle: AVAccountListComponent;
-    @ContentChild('optionTemplate') public optionTemplate: TemplateRef<any>;
-    @ViewChild('dd') public ele: ElementRef;
+    @ViewChild('inputFilter', { static: false }) public inputFilter: ElementRef;
+    @ViewChild('mainContainer', { static: false }) public mainContainer: ElementRef;
+    @ViewChild('menuEle', { static: true }) public menuEle: AVAccountListComponent;
+    @ContentChild('optionTemplate', /* TODO: add static flag */ {}) public optionTemplate: TemplateRef<any>;
+    @ViewChild('dd', { static: true }) public ele: ElementRef;
     @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onClear: EventEmitter<any[]> = new EventEmitter<any[]>();

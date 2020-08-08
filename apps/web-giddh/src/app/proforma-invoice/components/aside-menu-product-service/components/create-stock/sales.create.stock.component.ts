@@ -40,28 +40,28 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public purchaseAccountsDropDown$: Observable<IOption[]>;
     public salesAccountsDropDown$: Observable<IOption[]>;
 
-    @ViewChild('formDiv') public formDiv: ElementRef;
-    @ViewChild('groupDDList') public groupDDList: any;
+    @ViewChild('formDiv', { static: true }) public formDiv: ElementRef;
+    @ViewChild('groupDDList', { static: true }) public groupDDList: any;
     public formDivBoundingRect: Subject<any> = new Subject<any>();
 
 
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
     @Output() public animateAside: EventEmitter<any> = new EventEmitter();
 
-    @ViewChild('uniqueName') public uniqueName: ElementRef;
-    @ViewChild('stockName') public stockName: ElementRef;
+    @ViewChild('uniqueName', { static: false }) public uniqueName: ElementRef;
+    @ViewChild('stockName', { static: true }) public stockName: ElementRef;
 
-    @ViewChild('purchaseAccountUniqueName') public purchaseAccountUniqueName: any;
-    @ViewChild('purchaseStockUnitCode') public purchaseStockUnitCode: any;
-    @ViewChild('purchaseRate') public purchaseRate: ElementRef;
+    @ViewChild('purchaseAccountUniqueName', { static: true }) public purchaseAccountUniqueName: any;
+    @ViewChild('purchaseStockUnitCode', { static: false }) public purchaseStockUnitCode: any;
+    @ViewChild('purchaseRate', { static: false }) public purchaseRate: ElementRef;
 
-    @ViewChild('salesAccountUniqueName') public salesAccountUniqueName: any;
-    @ViewChild('salesStockUnitCode') public salesStockUnitCode: any;
-    @ViewChild('salesRate') public salesRate: ElementRef;
+    @ViewChild('salesAccountUniqueName', { static: true }) public salesAccountUniqueName: any;
+    @ViewChild('salesStockUnitCode', { static: false }) public salesStockUnitCode: any;
+    @ViewChild('salesRate', { static: false }) public salesRate: ElementRef;
 
-    @ViewChild('manufacturingQuantity') public manufacturingQuantity: ElementRef;
-    @ViewChild('manufacturingStockUniqueName') public manufacturingStockUniqueName: any;
-    @ViewChild('manufacturingStockUnitCode') public manufacturingStockUnitCode; any;
+    @ViewChild('manufacturingQuantity', { static: false }) public manufacturingQuantity: ElementRef;
+    @ViewChild('manufacturingStockUniqueName', { static: false }) public manufacturingStockUniqueName: any;
+    @ViewChild('manufacturingStockUnitCode', { static: false }) public manufacturingStockUnitCode; any;
 
     public groupUniqueName: string;
     public stockUniqueName: string;

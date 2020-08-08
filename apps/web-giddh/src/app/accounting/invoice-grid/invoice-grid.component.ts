@@ -64,17 +64,17 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	@Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 	@Output() public showStockList: EventEmitter<boolean> = new EventEmitter();
 
-	@ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
-	@ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
+	@ViewChild('quickAccountComponent', { static: true }) public quickAccountComponent: ElementViewContainerRef;
+	@ViewChild('quickAccountModal', { static: true }) public quickAccountModal: ModalDirective;
 
 	@ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
-	@ViewChild('particular') public accountField: any;
-	@ViewChild('dateField') public dateField: ElementRef;
-	@ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
-	@ViewChild('partyAccNameInputField') public partyAccNameInputField: ElementRef;
-	@ViewChild('submitButton') public submitButton: ElementRef;
-	@ViewChild('resetButton') public resetButton: ElementRef;
-	@ViewChild('narrationBox') public narrationBox: ElementRef;
+	@ViewChild('particular', { static: false }) public accountField: any;
+	@ViewChild('dateField', { static: true }) public dateField: ElementRef;
+	@ViewChild('manageGroupsAccountsModal', { static: false }) public manageGroupsAccountsModal: ModalDirective;
+	@ViewChild('partyAccNameInputField', { static: true }) public partyAccNameInputField: ElementRef;
+	@ViewChild('submitButton', { static: true }) public submitButton: ElementRef;
+	@ViewChild('resetButton', { static: true }) public resetButton: ElementRef;
+	@ViewChild('narrationBox', { static: true }) public narrationBox: ElementRef;
 
 	// public showAccountList: boolean = true;
 	public TransactionType: 'by' | 'to' = 'by';

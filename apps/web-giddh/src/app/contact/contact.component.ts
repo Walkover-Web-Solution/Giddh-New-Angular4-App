@@ -137,14 +137,14 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public updateCommentIdx: number = null;
     public searchStr$ = new Subject<string>();
     public searchStr: string = '';
-    @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
-    @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
-    @ViewChild('staticTabs') public staticTabs: TabsetComponent;
-    @ViewChild('mailModal') public mailModal: ModalDirective;
-    @ViewChild('messageBox') public messageBox: ElementRef;
-    @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
+    @ViewChild('filterDropDownList', { static: false }) public filterDropDownList: BsDropdownDirective;
+    @ViewChild('paginationChild', { static: false }) public paginationChild: ElementViewContainerRef;
+    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
+    @ViewChild('mailModal', { static: false }) public mailModal: ModalDirective;
+    @ViewChild('messageBox', { static: false }) public messageBox: ElementRef;
+    @ViewChild('advanceSearch', { static: false }) public advanceSearch: ModalDirective;
 
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
 
     // @Input('sort-direction')
     // sortDirection: string = '';
