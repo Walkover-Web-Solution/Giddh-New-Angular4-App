@@ -1,7 +1,7 @@
 import { map, switchMap } from 'rxjs/operators';
 
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from './financial-year.const';
 import { CustomActions } from '../../../store/customActions';
@@ -18,7 +18,8 @@ export class SettingsFinancialYearActions {
 
     @Effect()
     public GetAllFinancialYears$: Observable<Action> = this.action$
-        .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_ALL_FINANCIAL_YEARS).pipe(
+        .pipe(
+            ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_ALL_FINANCIAL_YEARS),
             switchMap((action: CustomActions) => this._settingsFinancialYearService.GetAllFinancialYears()),
             map(res => this.validateResponse<IFinancialYearResponse, string>(res, {
                 type: SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_ALL_FINANCIAL_YEARS_RESPONSE,
@@ -30,7 +31,8 @@ export class SettingsFinancialYearActions {
 
     @Effect()
     public LockFinancialYear$: Observable<Action> = this.action$
-        .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.LOCK_FINANCIAL_YEAR).pipe(
+        .pipe(
+            ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.LOCK_FINANCIAL_YEAR),
             switchMap((action: CustomActions) => {
                 return this._settingsFinancialYearService.LockFinancialYear(action.payload).pipe(
                     map(response => this.LockFinancialYearResponse(response)));
@@ -38,7 +40,8 @@ export class SettingsFinancialYearActions {
 
     @Effect()
     public LockFinancialYearResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.LOCK_FINANCIAL_YEAR_RESPONSE).pipe(
+        .pipe(
+            ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.LOCK_FINANCIAL_YEAR_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = response.payload;
                 if (data.status === 'error') {
@@ -51,7 +54,8 @@ export class SettingsFinancialYearActions {
 
     @Effect()
     public UnlockFinancialYear$: Observable<Action> = this.action$
-        .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR).pipe(
+        .pipe(
+            ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR),
             switchMap((action: CustomActions) => {
                 return this._settingsFinancialYearService.UnlockFinancialYear(action.payload).pipe(
                     map(response => this.UnlockFinancialYearResponse(response)));
@@ -59,7 +63,8 @@ export class SettingsFinancialYearActions {
 
     @Effect()
     public UnlockFinancialYearResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR_RESPONSE).pipe(
+        .pipe(
+            ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = response.payload;
                 if (data.status === 'error') {
@@ -72,7 +77,8 @@ export class SettingsFinancialYearActions {
 
     @Effect()
     public SwitchFinancialYear$: Observable<Action> = this.action$
-        .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR).pipe(
+        .pipe(
+            ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR),
             switchMap((action: CustomActions) => {
                 return this._settingsFinancialYearService.SwitchFinancialYear(action.payload).pipe(
                     map(response => this.SwitchFinancialYearResponse(response)));
@@ -80,7 +86,8 @@ export class SettingsFinancialYearActions {
 
     @Effect()
     public SwitchFinancialYearResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR_RESPONSE).pipe(
+        .pipe(
+            ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<ActiveFinancialYear, string> = response.payload;
                 if (data.status === 'error') {
@@ -93,7 +100,8 @@ export class SettingsFinancialYearActions {
 
     @Effect()
     public UpdateFinancialYearPeriod$: Observable<Action> = this.action$
-        .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD).pipe(
+        .pipe(
+            ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD),
             switchMap((action: CustomActions) => {
                 return this._settingsFinancialYearService.UpdateFinancialYearPeriod(action.payload).pipe(
                     map(response => this.UpdateFinancialYearPeriodResponse(response)));
@@ -101,7 +109,8 @@ export class SettingsFinancialYearActions {
 
     @Effect()
     public UpdateFinancialYearPeriodResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD_RESPONSE).pipe(
+        .pipe(
+            ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<ActiveFinancialYear, string> = response.payload;
                 if (data.status === 'error') {
@@ -114,7 +123,8 @@ export class SettingsFinancialYearActions {
 
     @Effect()
     public AddFinancialYear$: Observable<Action> = this.action$
-        .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR).pipe(
+        .pipe(
+            ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR),
             switchMap((action: CustomActions) => this._settingsFinancialYearService.AddFinancialYear(action.payload)),
             map(res => this.validateResponse<IFinancialYearResponse, string>(res, {
                 type: SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR_RESPONSE,
@@ -126,7 +136,8 @@ export class SettingsFinancialYearActions {
 
     @Effect()
     public AddFutureFinancialYear$: Observable<Action> = this.action$
-        .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FUTURE_FINANCIAL_YEAR).pipe(
+        .pipe(
+            ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FUTURE_FINANCIAL_YEAR),
             switchMap((action: CustomActions) => this._settingsFinancialYearService.addFutureFinancialYear(action.payload)),
             map(res => this.validateResponse<IFinancialYearResponse, string>(res, {
                 type: SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR_RESPONSE,
@@ -134,7 +145,7 @@ export class SettingsFinancialYearActions {
             }, true, {
                 type: SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR_RESPONSE,
                 payload: res
-            })));        
+            })));
 
     constructor(private action$: Actions,
         private toasty: ToasterService,

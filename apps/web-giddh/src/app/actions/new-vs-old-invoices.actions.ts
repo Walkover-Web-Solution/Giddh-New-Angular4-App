@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import { NewVsOldInvoicesService } from '../services/new-vs-old-invoices.service';
@@ -18,9 +18,9 @@ export class NewVsOldInvoicesActions {
     public static GET_NULL = 'GET_NULL';
 
     @Effect()
-    private getNewVsOldInvoicesResponse$: Observable<Action> = this.action$
-        .ofType(NewVsOldInvoicesActions.GET_NEW_VS_OLD_INVOICE_REQUEST)
+    public getNewVsOldInvoicesResponse$: Observable<Action> = this.action$
         .pipe(
+            ofType(NewVsOldInvoicesActions.GET_NEW_VS_OLD_INVOICE_REQUEST),
             switchMap((action: CustomActions) => this._NewVsOldInvoicesService.GetNewVsOldInvoices(action.payload.queryRequest)),
             map((r) => this.validateResponse<NewVsOldInvoicesResponse, string>(r, {
                 type: NewVsOldInvoicesActions.GET_NEW_VS_OLD_INVOICE_RESPONSE,

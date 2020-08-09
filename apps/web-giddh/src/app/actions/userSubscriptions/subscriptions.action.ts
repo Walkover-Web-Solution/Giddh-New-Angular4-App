@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { Router } from '@angular/router';
 import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -23,25 +23,29 @@ export class SubscriptionsActions {
 
     @Effect()
     public SubscriptionsActions: Observable<Action> = this.actions$
-        .ofType(SubscriptionsActions.SubscribedCompanies).pipe(
+        .pipe(
+            ofType(SubscriptionsActions.SubscribedCompanies),
             switchMap((action: CustomActions) => this.subscriptions.getSubScribedCompanies()),
             map(response => this.SubscribedCompaniesResponse(response)));
 
     @Effect()
     public SubscribedUserTransactions$: Observable<Action> = this.actions$
-        .ofType(SubscriptionsActions.SubscribedUserTransactions).pipe(
+        .pipe(
+            ofType(SubscriptionsActions.SubscribedUserTransactions),
             switchMap((action: CustomActions) => this.subscriptions.GetSubScribedUserTransaction(action.payload)),
             map(response => this.SubscribedUserTransactionsResponse(response)));
 
     @Effect()
     public SubscribedCompanyTransactions$: Observable<Action> = this.actions$
-        .ofType(SubscriptionsActions.SubscribedCompanyTransactions).pipe(
+        .pipe(
+            ofType(SubscriptionsActions.SubscribedCompanyTransactions),
             switchMap((action: CustomActions) => this.subscriptions.GetSubScribedCompanyTransaction(action.payload)),
             map(response => this.SubscribedCompanyTransactionsResponse(response)));
 
     @Effect()
     public SubscribedCompaniesList$: Observable<Action> = this.actions$
-        .ofType(SubscriptionsActions.SubscribedCompaniesList).pipe(
+        .pipe(
+            ofType(SubscriptionsActions.SubscribedCompaniesList),
             switchMap((action: CustomActions) => this.subscriptions.GetSubscribedCompaniesList(action.payload)),
             map(response => this.SubscribedCompaniesListResponse(response)));
 

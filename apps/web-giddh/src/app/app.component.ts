@@ -107,12 +107,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const { ipcRenderer } = (window as any).require("electron");
             // google
             const t = ipcRenderer.send("take-server-environment", {
-                STAGING_ENV,
-                LOCAL_ENV,
-                TEST_ENV,
-                PRODUCTION_ENV,
-                AppUrl,
-                APP_FOLDER
+                STAGING_ENV: STAGING_ENV,
+                LOCAL_ENV: LOCAL_ENV,
+                TEST_ENV: TEST_ENV,
+                PRODUCTION_ENV: PRODUCTION_ENV,
+                AppUrl: AppUrl,
+                APP_FOLDER: APP_FOLDER
             });
         }
     }

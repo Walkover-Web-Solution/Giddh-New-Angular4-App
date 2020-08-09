@@ -15,7 +15,6 @@ import {
     ViewChild,
     ViewChildren
 } from '@angular/core';
-import {animate, state, style, transition, trigger} from '@angular/animations';
 import {
     BsDatepickerDirective,
     BsModalRef,
@@ -28,7 +27,6 @@ import {select, Store} from '@ngrx/store';
 import {AppState} from '../store';
 import {SalesActions} from '../actions/sales/sales.action';
 import {CompanyActions} from '../actions/company.actions';
-import {ActivatedRoute, ActivationStart, Router} from '@angular/router';
 import {LedgerActions} from '../actions/ledger/ledger.actions';
 import {SalesService} from '../services/sales.service';
 import {ToasterService} from '../services/toaster.service';
@@ -66,7 +64,6 @@ import {auditTime, debounceTime, delay, filter, take, takeUntil} from 'rxjs/oper
 import {IOption} from '../theme/ng-select/option.interface';
 import {combineLatest, Observable, of as observableOf, ReplaySubject, Subject} from 'rxjs';
 import {ElementViewContainerRef} from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import {NgForm} from '@angular/forms';
 import {DiscountListComponent} from '../sales/discount-list/discountList.component';
 import {IContentCommon, InvoicePreviewDetailsVm} from '../models/api-models/Invoice';
 import {StateDetailsRequest, TaxResponse} from '../models/api-models/Company';
@@ -111,6 +108,9 @@ import { AdvanceReceiptAdjustmentComponent } from '../shared/advance-receipt-adj
 import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../models/api-models/AdvanceReceiptsAdjust';
 import { CurrentCompanyState } from '../store/Company/company.reducer';
 import { CustomTemplateState } from '../store/Invoice/invoice.template.reducer';
+import {NgForm} from "@angular/forms";
+import {animate, state, style, transition, trigger} from "@angular/animations";
+import {ActivatedRoute, ActivationStart, Router} from "@angular/router";
 
 const THEAD_ARR_READONLY = [
     {
@@ -179,8 +179,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild(ElementViewContainerRef, { static: false }) public elementViewContainerRef: ElementViewContainerRef;
     @ViewChild('createGroupModal', { static: false }) public createGroupModal: ModalDirective;
     @ViewChild('createAcModal', { static: false }) public createAcModal: ModalDirective;
-    @ViewChild('bulkItemsModal', { static: true }) public bulkItemsModal: ModalDirective;
-    @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: ModalDirective;
+    @ViewChild('bulkItemsModal', { static: true, read: ModalDirective }) public bulkItemsModal: ModalDirective;
+    @ViewChild('sendEmailModalTmpl', { static: true }) public sendEmailModal: ModalDirective;
     @ViewChild('printVoucherModal', { static: true }) public printVoucherModal: ModalDirective;
 
     @ViewChild('copyPreviousEstimate', { static: false }) public copyPreviousEstimate: ElementRef;
@@ -526,7 +526,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.createdAccountDetails$ = this.store.pipe(select(p => p.sales.createdAccountDetails), takeUntil(this.destroyed$));
         this.updatedAccountDetails$ = this.store.pipe(select(p => p.sales.updatedAccountDetails), takeUntil(this.destroyed$));
         this.updateAccountSuccess$ = this.store.pipe(select(p => p.sales.updateAccountSuccess), takeUntil(this.destroyed$));
-        this.updateProformaVoucherInProcess$ = this.store.pipe(select(state => state.proforma.isUpdateProformaInProcess), takeUntil(this.destroyed$));
+        this.updateProformaVoucherInProcess$ = this.store.pipe(select(st => st.proforma.isUpdateProformaInProcess), takeUntil(this.destroyed$));
         this.generateVoucherSuccess$ = combineLatest([this.store.pipe(select(appState => appState.proforma.isGenerateSuccess)),
             this.store.pipe(select(appState => appState.proforma.isGenerateInProcess))]).pipe(debounceTime(0), takeUntil(this.destroyed$));
         this.updateVoucherSuccess$ = this.store.pipe(select(p => p.proforma.isUpdateProformaSuccess), takeUntil(this.destroyed$));
@@ -845,7 +845,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         //region combine get voucher details && all flatten A/c's && create account and update account success from sidebar
         combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.createAccountIsSuccess$, this.updateAccountSuccess$])
             .pipe(takeUntil(this.destroyed$), auditTime(700))
-            .subscribe(async results => {
+            .subscribe(async (results: any) => {
                 //this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
                 // create mode because voucher details are not available
                 if (results[0]) {
@@ -1330,11 +1330,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 } else {
                     if (result[1]) {
                         result[1] = result[1] as ProformaResponse;
-                        result[1].items.forEach(item => {
+                        result[1].results.forEach(item => {
                             arr.push({
                                 versionNumber: this.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
-                                date: item.voucherDate,
-                                grandTotal: item.grandTotal,
+                                date: item.invoiceDate,
+                                grandTotal: { amountForAccount: item.grandTotal, amountForCompany: item.grandTotal.toString() },
                                 account: {name: item.customerName, uniqueName: item.customerUniqueName}
                             });
                         });

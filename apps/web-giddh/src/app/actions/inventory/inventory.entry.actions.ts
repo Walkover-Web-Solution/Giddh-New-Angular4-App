@@ -2,7 +2,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { InventoryService } from '../../services/inventory.service';
 import { Router } from '@angular/router';
@@ -17,13 +17,15 @@ export class InventoryEntryActions {
 
 	@Effect()
 	public addNewEntry$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY).pipe(
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY),
 			switchMap((action: CustomActions) => this._inventoryService.CreateInventoryEntry(action.payload.entry, action.payload.reciever)),
 			map(response => this.addNewEntryResponse(response)));
 
 	@Effect()
 	public addNewEntryResponse$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY_RESPONSE).pipe(
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<InventoryEntry, InventoryEntry> = response.payload;
 				if (data.status === 'error') {
@@ -38,13 +40,15 @@ export class InventoryEntryActions {
 
 	@Effect()
 	public addNewTransferEntry$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY).pipe(
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY),
 			switchMap((action: CustomActions) => this._inventoryService.CreateInventoryTransferEntry(action.payload.entry, action.payload.reciever)),
 			map(response => this.addNewEntryResponse(response)));
 
 	@Effect()
 	public addNewTransferEntryResponse$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY_RESPONSE).pipe(
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<InventoryEntry, InventoryEntry> = response.payload;
 				if (data.status === 'error') {
@@ -58,13 +62,15 @@ export class InventoryEntryActions {
 
 	@Effect()
 	public updateEntry$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.UPDATE_ENTRY).pipe(
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.UPDATE_ENTRY),
 			switchMap((action: CustomActions) => this._inventoryService.UpdateInventoryEntry(action.payload.entry, action.payload.inventoryUserUniqueName, action.payload.inventoryEntryUniqueName)),
 			map(response => this.updateEntryResponse(response)));
 
 	@Effect()
 	public updateEntryResponse$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.UPDATE_ENTRY_RESPONSE).pipe(
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.UPDATE_ENTRY_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<InventoryEntry, InventoryEntry> = response.payload;
 				if (data.status === 'error') {
@@ -78,13 +84,15 @@ export class InventoryEntryActions {
 
 	@Effect()
 	public deleteEntry$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.DELETE_ENTRY).pipe(
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.DELETE_ENTRY),
 			switchMap((action: CustomActions) => this._inventoryService.DeleteInventoryEntry(action.payload.inventoryUserUniqueName, action.payload.inventoryEntryUniqueName)),
 			map(response => this.deleteEntryResponse(response)));
 
 	@Effect()
 	public deleteEntryResponse$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.DELETE_ENTRY_RESPONSE).pipe(
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.DELETE_ENTRY_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<string, string> = response.payload;
 				if (data.status === 'error') {
@@ -98,13 +106,15 @@ export class InventoryEntryActions {
 
 	@Effect()
 	public getEntry$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.GET_ENTRY).pipe(
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.GET_ENTRY),
 			switchMap((action: CustomActions) => this._inventoryService.GetInventoryEntry(action.payload.inventoryUserUniqueName, action.payload.inventoryEntryUniqueName)),
 			map(response => this.getEntryResponse(response)));
 
 	@Effect()
 	public getEntryResponse$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.GET_ENTRY_RESPONSE).pipe(
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.GET_ENTRY_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<InventoryEntry, string> = response.payload;
 				if (data.status === 'error') {

@@ -8,7 +8,7 @@ import { LogsRequest, LogsResponse } from '../../models/api-models/Logs';
  * Created by ad on 04-07-2017.
  */
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AUDIT_LOGS_ACTIONS } from './audit-logs.const';
@@ -16,8 +16,9 @@ import { CustomActions } from '../../store/customActions';
 
 @Injectable()
 export class AuditLogsActions {
-    @Effect() private GET_LOGS$: Observable<Action> = this.action$
-        .ofType(AUDIT_LOGS_ACTIONS.GET_LOGS).pipe(
+    @Effect() public GET_LOGS$: Observable<Action> = this.action$
+        .pipe(
+            ofType(AUDIT_LOGS_ACTIONS.GET_LOGS),
             switchMap((action: CustomActions) => {
                 return this._logService.GetAuditLogs(action.payload.request, action.payload.page).pipe(
                     map((r) => this.validateResponse<LogsResponse, LogsRequest>(r, {
@@ -29,8 +30,9 @@ export class AuditLogsActions {
                     })));
             }));
 
-    @Effect() private LoadMore$: Observable<Action> = this.action$
-        .ofType(AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS).pipe(
+    @Effect() public LoadMore$: Observable<Action> = this.action$
+        .pipe(
+            ofType(AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS),
             switchMap((action: CustomActions) => {
                 return this._logService.GetAuditLogs(action.payload.request, action.payload.page).pipe(
                     map((r) => this.validateResponse<LogsResponse, LogsRequest>(r, {

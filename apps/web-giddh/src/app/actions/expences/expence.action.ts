@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { CustomActions } from '../../store/customActions';
 import { ToasterService } from '../../services/toaster.service';
@@ -22,7 +22,8 @@ export class ExpencesAction {
 
 	@Effect()
 	public GetPettycashReportRequest$: Observable<Action> = this.action$
-		.ofType(ExpencesAction.GET_PETTYCASH_REPORT_REQUEST).pipe(
+		.pipe(
+            ofType(ExpencesAction.GET_PETTYCASH_REPORT_REQUEST),
 			switchMap((action: CustomActions) =>
 				this._expenseService.getPettycashReports(action.payload)
 			),
@@ -31,8 +32,9 @@ export class ExpencesAction {
 			}));
 
 	@Effect()
-	private GetPettycashReportResponse$: Observable<Action> = this.action$
-		.ofType(ExpencesAction.GET_PETTYCASH_REPORT_RESPONSE).pipe(
+	public GetPettycashReportResponse$: Observable<Action> = this.action$
+		.pipe(
+            ofType(ExpencesAction.GET_PETTYCASH_REPORT_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<any, CommonPaginatedRequest> = response.payload;
 				if (data.status === 'error') {
@@ -44,7 +46,8 @@ export class ExpencesAction {
 			}));
 	@Effect()
 	public GetPettycashRejectedReportRequest$: Observable<Action> = this.action$
-		.ofType(ExpencesAction.GET_PETTYCASH_REJECTED_REPORT_REQUEST).pipe(
+		.pipe(
+            ofType(ExpencesAction.GET_PETTYCASH_REJECTED_REPORT_REQUEST),
 			switchMap((action: CustomActions) =>
 				this._expenseService.getPettycashRejectedReports(action.payload)
 			),
@@ -53,8 +56,9 @@ export class ExpencesAction {
 			}));
 
 	@Effect()
-	private GetPettycashRejectedReportRequestResponse$: Observable<Action> = this.action$
-		.ofType(ExpencesAction.GET_PETTYCASH_REJECTED_REPORT_RESPONSE).pipe(
+	public GetPettycashRejectedReportRequestResponse$: Observable<Action> = this.action$
+		.pipe(
+            ofType(ExpencesAction.GET_PETTYCASH_REJECTED_REPORT_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<any, CommonPaginatedRequest> = response.payload;
 				if (data.status === 'error') {
@@ -66,7 +70,8 @@ export class ExpencesAction {
 			}));
 	@Effect()
 	public GetPettycashEntryRequest$: Observable<Action> = this.action$
-		.ofType(ExpencesAction.GET_PETTYCASH_ENTRY_REQUEST).pipe(
+		.pipe(
+            ofType(ExpencesAction.GET_PETTYCASH_ENTRY_REQUEST),
 			switchMap((action: CustomActions) =>
 				this._expenseService.getPettycashEntry(action.payload)
 			),
@@ -75,8 +80,9 @@ export class ExpencesAction {
 			}));
 
 	@Effect()
-	private GetPettycashEntryResponse$: Observable<Action> = this.action$
-		.ofType(ExpencesAction.GET_PETTYCASH_ENTRY_RESPONSE).pipe(
+	public GetPettycashEntryResponse$: Observable<Action> = this.action$
+		.pipe(
+            ofType(ExpencesAction.GET_PETTYCASH_ENTRY_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<PettyCashResonse, any> = response.payload;
 				if (data.status === 'error') {

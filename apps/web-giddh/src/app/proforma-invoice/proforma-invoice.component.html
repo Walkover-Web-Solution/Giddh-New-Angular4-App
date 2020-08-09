@@ -2154,7 +2154,7 @@
 
 <app-aside-recurring-entry *ngIf="asideMenuStateForRecurringEntry === 'in'" [voucherType]="invoiceType" [voucherNumber]="voucherNumber" [class]="asideMenuStateForRecurringEntry" [@slideInOut]="asideMenuStateForRecurringEntry" (closeAsideEvent)="toggleRecurringAsidePane('out')"></app-aside-recurring-entry>
 <!-- region send email popup -->
-<div bsModal #sendEmailModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" [config]="modalConfig">
+<div bsModal #sendEmailModalTmpl tabindex="-1" class="modal fade" role="dialog" [config]="modalConfig">
 
     <div class="modal-dialog modal-md">
         <div class="modal-content">
@@ -2170,7 +2170,7 @@
 <!-- endregion -->
 
 <!-- region bulk items -->
-<div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" [config]="{ animated: true,keyboard: false,backdrop: false,ignoreBackdropClick: true }">
+<div bsModal #bulkItemsModal tabindex="-1" class="modal fade" role="dialog" [config]="{ animated: true,keyboard: false,backdrop: false,ignoreBackdropClick: true }">
 
     <ng-container *ngIf="showBulkItemModal">
         <proforma-add-bulk-items-component [data]="salesAccounts$ | async" (saveItemsEvent)="addBulkStockItems($event)" (closeEvent)="bulkItemsModal.hide()"></proforma-add-bulk-items-component>
@@ -2229,7 +2229,7 @@
 </section>
 
 <!-- region print voucher popup -->
-<div bsModal #printVoucherModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" [config]="modalConfig">
+<div bsModal #printVoucherModal tabindex="-1" class="modal fade" role="dialog" [config]="modalConfig">
 
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -2248,7 +2248,7 @@
 <ng-template #invoiceTypeDisplayRef>
     {{((invoiceType === 'proforma' || invoiceType === 'proformas') ? 'proforma' : (invoiceType === 'estimate' || invoiceType === 'estimates') ? 'estimate' : invoiceType) | titlecase}}
 </ng-template>
-<div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #purchaseRecordConfirmationPopup="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
+<div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #purchaseRecordConfirmationPopup [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <confirmation-modal [configuration]="purchaseRecordConfirmationConfiguration" (buttonClicked)="handlePurchaseRecordConfirmation($event)"></confirmation-modal>
@@ -2256,7 +2256,7 @@
     </div>
 </div>
 
-<div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
+<div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent

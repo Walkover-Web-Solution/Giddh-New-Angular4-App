@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -20,61 +20,69 @@ import { CustomActions } from '../../store/customActions';
 export class PermissionActions {
 
 	@Effect()
-	private GetAllPages$: Observable<Action> = this.action$
-		.ofType(PERMISSION_ACTIONS.GET_ALL_PAGES).pipe(
+	public GetAllPages$: Observable<Action> = this.action$
+		.pipe(
+            ofType(PERMISSION_ACTIONS.GET_ALL_PAGES),
 			switchMap((action: CustomActions) => this._permissionService.GetAllPageNames()),
 			map(response => {
 				return this.GetAllPagesResponse(response);
 			}));
 
 	@Effect()
-	private GetAllPagesResponse$: Observable<Action> = this.action$
-		.ofType(PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE).pipe(
+	public GetAllPagesResponse$: Observable<Action> = this.action$
+		.pipe(
+            ofType(PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE),
 			map(response => {
 				return { type: 'EmptyAction' };
 			}));
 
 	@Effect()
-	private GetAllPermissions$: Observable<Action> = this.action$
-		.ofType(PERMISSION_ACTIONS.GET_ALL_PERMISSIONS).pipe(
+	public GetAllPermissions$: Observable<Action> = this.action$
+		.pipe(
+            ofType(PERMISSION_ACTIONS.GET_ALL_PERMISSIONS),
 			switchMap((action: CustomActions) => this._permissionService.GetAllRoles()),
 			map(response => {
 				return this.GetAllPermissionsResponse(response);
 			}));
 
 	@Effect()
-	private GetAllPermissionsResponse$: Observable<Action> = this.action$
-		.ofType(PERMISSION_ACTIONS.GET_ALL_PERMISSIONS_RESPONSE).pipe(
+	public GetAllPermissionsResponse$: Observable<Action> = this.action$
+		.pipe(
+            ofType(PERMISSION_ACTIONS.GET_ALL_PERMISSIONS_RESPONSE),
 			map(response => {
 				return { type: 'EmptyAction' };
 			}));
 
 	@Effect()
-	private GetRoles$: Observable<Action> = this.action$
-		.ofType(PERMISSION_ACTIONS.GET_ROLES).pipe(
+	public GetRoles$: Observable<Action> = this.action$
+		.pipe(
+            ofType(PERMISSION_ACTIONS.GET_ROLES),
 			switchMap((action: CustomActions) => this._permissionService.GetAllRoles()),
 			map(response => {
 				return this.GetRolesResponse(response);
 			}));
 
 	@Effect()
-	private GetRolesResponse$: Observable<Action> = this.action$
-		.ofType(PERMISSION_ACTIONS.GET_ROLES_RESPONSE).pipe(
+	public GetRolesResponse$: Observable<Action> = this.action$
+		.pipe(
+            ofType(PERMISSION_ACTIONS.GET_ROLES_RESPONSE),
 			map(response => {
 				return { type: 'EmptyAction' };
 			}));
 
 	@Effect()
-	private CreateRole$: Observable<Action> = this.action$
-		.ofType(PERMISSION_ACTIONS.CREATE_ROLE).pipe(
+	public CreateRole$: Observable<Action> = this.action$
+		.pipe(
+            ofType(PERMISSION_ACTIONS.CREATE_ROLE),
 			switchMap((action: CustomActions) => {
 				return this._permissionService.CreateNewRole(action.payload).pipe(
 					map(response => this.CreateRoleResponse(response)));
 			}));
 
 	@Effect()
-	private CreateRoleResponse$: Observable<Action> = this.action$
-		.ofType(PERMISSION_ACTIONS.CREATE_ROLE_RESPONSE).pipe(
+	public CreateRoleResponse$: Observable<Action> = this.action$
+		.pipe(
+            ofType(PERMISSION_ACTIONS.CREATE_ROLE_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest> = response.payload;
 				if (data.status === 'error') {
@@ -87,16 +95,18 @@ export class PermissionActions {
 			}));
 
 	@Effect()
-	private UpdateRole$: Observable<Action> = this.action$
-		.ofType(PERMISSION_ACTIONS.UPDATE_ROLE).pipe(
+	public UpdateRole$: Observable<Action> = this.action$
+		.pipe(
+            ofType(PERMISSION_ACTIONS.UPDATE_ROLE),
 			switchMap((action: CustomActions) => this._permissionService.UpdateRole(action.payload)),
 			map(response => {
 				return this.UpdateRoleResponse(response);
 			}));
 
 	@Effect()
-	private UpdateRoleResponse$: Observable<Action> = this.action$
-		.ofType(PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE).pipe(
+	public UpdateRoleResponse$: Observable<Action> = this.action$
+		.pipe(
+            ofType(PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest> = response.payload;
 				if (data.status === 'error') {
@@ -133,16 +143,18 @@ export class PermissionActions {
 	//   });
 
 	@Effect()
-	private DeleteRole$: Observable<Action> = this.action$
-		.ofType(PERMISSION_ACTIONS.DELETE_ROLE).pipe(
+	public DeleteRole$: Observable<Action> = this.action$
+		.pipe(
+            ofType(PERMISSION_ACTIONS.DELETE_ROLE),
 			switchMap((action: CustomActions) => this._permissionService.DeleteRole(action.payload)),
 			map(response => {
 				return this.DeleteRoleResponse(response);
 			}));
 
 	@Effect()
-	private DeleteRoleResponse$: Observable<Action> = this.action$
-		.ofType(PERMISSION_ACTIONS.DELETE_ROLE_RESPONSE).pipe(
+	public DeleteRoleResponse$: Observable<Action> = this.action$
+		.pipe(
+            ofType(PERMISSION_ACTIONS.DELETE_ROLE_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<string, string> = response.payload;
 				if (data.status === 'error') {

@@ -195,7 +195,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             .subscribe(res => {
                 if (res[0]) {
                     this.itemsListForDetails = [];
-                    res[0].results = res[0].items.map(item => {
+                    res[0].results = res[0].results.map(item => {
                         item.isSelected = false;
                         item.uniqueName = item.proformaNumber || item.estimateNumber;
                         item.invoiceDate = item.proformaDate || item.estimateDate;

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ToasterService } from '../../services/toaster.service';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { CustomActions } from '../../store/customActions';
 import { IMPORT_EXCEL } from './import-excel.const';
@@ -16,7 +16,8 @@ export class ImportExcelActions {
 
     @Effect()
     public uploadFile$: Observable<Action> = this.action$
-        .ofType(IMPORT_EXCEL.UPLOAD_FILE_REQUEST).pipe(
+        .pipe(
+            ofType(IMPORT_EXCEL.UPLOAD_FILE_REQUEST),
             switchMap((action: CustomActions) => {
                 return this._importExcelService.uploadFile(action.payload.entity, action.payload.file);
             }), map((res) => {
@@ -28,7 +29,8 @@ export class ImportExcelActions {
             }));
     @Effect()
     public processImport$: Observable<Action> = this.action$
-        .ofType(IMPORT_EXCEL.PROCESS_IMPORT_REQUEST).pipe(
+        .pipe(
+            ofType(IMPORT_EXCEL.PROCESS_IMPORT_REQUEST),
             switchMap((action: CustomActions) => {
                 return this._importExcelService.processImport(action.payload.entity, action.payload.data);
             }), map((res) => {
@@ -37,7 +39,8 @@ export class ImportExcelActions {
 
     @Effect()
     public getImportStatus$: Observable<Action> = this.action$
-        .ofType(IMPORT_EXCEL.IMPORT_STATUS_REQUEST).pipe(
+        .pipe(
+            ofType(IMPORT_EXCEL.IMPORT_STATUS_REQUEST),
             switchMap((action: CustomActions) => {
                 return this._importExcelService.importStatus(action.payload);
             }), map((res) => {

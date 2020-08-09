@@ -2,7 +2,7 @@ import { map, switchMap, take } from 'rxjs/operators';
 import { AppState } from '../store';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreateRequest, GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse, GroupUpateRequest, MoveGroupRequest, MoveGroupResponse, ShareGroupRequest } from '../models/api-models/Group';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
@@ -73,7 +73,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public ApplyGroupTax$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.APPLY_GROUP_TAX).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.APPLY_GROUP_TAX),
             switchMap((action: CustomActions) => this._accountService.ApplyTax(action.payload)),
             map((response) => {
                 return this.applyGroupTaxResponse(response);
@@ -81,7 +82,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public ApplyGroupTaxResponse$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.APPLY_GROUP_TAX_RESPONSE).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.APPLY_GROUP_TAX_RESPONSE),
             map((action: CustomActions) => {
                 let data: BaseResponse<string, ApplyTaxRequest> = action.payload;
                 if (action.payload.status === 'error') {
@@ -103,7 +105,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public SetActiveGroup$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.SET_ACTIVE_GROUP).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.SET_ACTIVE_GROUP),
             map((action: CustomActions) => {
                 return {
                     type: 'EmptyAction'
@@ -112,7 +115,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public GetGroupsWithAccount$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS),
             switchMap((action: CustomActions) =>
                 this._groupService.GetGroupsWithAccounts(action.payload)
             ),
@@ -127,7 +131,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public GetGroupsWithAccountResponse$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -139,7 +144,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public GetGroupsDetails$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.GET_GROUP_DETAILS).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.GET_GROUP_DETAILS),
             switchMap((action: CustomActions) => this._groupService.GetGroupDetails(action.payload)),
             map((response) => {
                 return this.getGroupDetailsResponse(response);
@@ -147,7 +153,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public GetGroupDetailsResponse$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE),
             map((action: CustomActions) => {
                 let data: BaseResponse<GroupResponse, string> = action.payload;
                 if (action.payload.status === 'error') {
@@ -162,7 +169,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public CreateGroup$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.CREATE_GROUP).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.CREATE_GROUP),
             switchMap((action: CustomActions) => this._groupService.CreateGroup(action.payload)),
             map((response) => {
                 return this.createGroupResponse(response);
@@ -170,7 +178,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public CreateGroupResponse$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.CREATE_GROUP_RESPONSE).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.CREATE_GROUP_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -186,7 +195,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public GetFlattenGroupsAccounts$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS),
             switchMap((action: CustomActions) =>
                 this._groupService.GetFlattenGroupsAccounts(action.payload)
             ),
@@ -196,7 +206,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public GetFlattenGroupsAccountsResponse$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -208,7 +219,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public shareGroup$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.SHARE_GROUP).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.SHARE_GROUP),
             switchMap((action: CustomActions) =>
                 this._groupService.ShareGroup(
                     action.payload.body,
@@ -221,7 +233,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public shareGroupResponse$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.SHARE_GROUP_RESPONSE).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.SHARE_GROUP_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -241,7 +254,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public unShareGroup$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.UNSHARE_GROUP).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.UNSHARE_GROUP),
             switchMap((action: CustomActions) =>
                 this._groupService.UnShareGroup(
                     action.payload.user,
@@ -254,7 +268,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public unShareGroupResponse$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -268,7 +283,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public sharedGroup$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.SHARED_GROUP_WITH).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.SHARED_GROUP_WITH),
             switchMap((action: CustomActions) => this._groupService.ShareWithGroup(action.payload)),
             map((response) => {
                 return this.sharedGroupWithResponse(response);
@@ -276,7 +292,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public sharedGroupResponse$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -288,7 +305,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public moveGroup$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.MOVE_GROUP).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.MOVE_GROUP),
             switchMap((action: CustomActions) =>
                 this._groupService.MoveGroup(
                     action.payload.body,
@@ -301,7 +319,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public moveGroupResponse$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.MOVE_GROUP_RESPONSE).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.MOVE_GROUP_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -326,7 +345,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public getGroupTaxHierarchy$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY),
             switchMap((action: CustomActions) => this._groupService.GetTaxHierarchy(action.payload)),
             map(response => {
                 return this.getTaxHierarchyResponse(response);
@@ -334,7 +354,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public getGroupTaxHierarchyResponse$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -346,14 +367,16 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public UpdateGroup$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.UPDATE_GROUP).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.UPDATE_GROUP),
             switchMap((action: CustomActions) => this._groupService.UpdateGroup(action.payload.data, action.payload.groupUniqueName)),
             map(response => {
                 return this.updateGroupResponse(response);
             }));
     @Effect()
     public UpdateGroupResponse$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.UPDATE_GROUP_RESPONSE).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.UPDATE_GROUP_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -371,7 +394,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public DeleteGroup$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.DELETE_GROUP).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.DELETE_GROUP),
             switchMap((action: CustomActions) => this._groupService.DeleteGroup(action.payload)),
             map(response => {
                 let activeGrp: IGroupsWithAccounts;
@@ -384,7 +408,8 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public DeleteGroupResponse$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.DELETE_GROUP_RESPONSE).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.DELETE_GROUP_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -402,14 +427,16 @@ export class GroupWithAccountsAction {
 
     @Effect()
     public GetGroupUniqueName$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.GET_GROUP_UNIQUENAME).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.GET_GROUP_UNIQUENAME),
             switchMap((action: CustomActions) => this._groupService.GetGrouptDetails(action.payload)),
             map(response => {
                 return this.getGroupUniqueNameResponse(response);
             }));
     @Effect()
     public GetGroupUniqueNameResponse$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.GET_GROUP_UNIQUENAME_RESPONSE).pipe(
+        .pipe(
+            ofType(GroupWithAccountsAction.GET_GROUP_UNIQUENAME_RESPONSE),
             map((action: CustomActions) => {
                 let data: BaseResponse<GroupResponse, string> = action.payload;
                 return {

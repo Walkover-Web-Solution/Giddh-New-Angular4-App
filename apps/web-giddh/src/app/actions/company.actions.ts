@@ -1,7 +1,7 @@
 import { map, switchMap, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CompanyService } from '../services/companyService.service';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse, TaxResponse, CompanyCreateRequest, CreateCompanyUsersPlan, CompanyCountry } from '../models/api-models/Company';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
@@ -67,19 +67,22 @@ export class CompanyActions {
 
     @Effect()
     public createCompany$: Observable<Action> = this.action$
-        .ofType(CompanyActions.CREATE_COMPANY).pipe(
+        .pipe(
+            ofType(CompanyActions.CREATE_COMPANY),
             switchMap((action: CustomActions) => this._companyService.CreateCompany(action.payload)),
             map(response => this.CreateCompanyResponse(response)));
 
     @Effect()
     public createNewCompany$: Observable<Action> = this.action$
-        .ofType(CompanyActions.CREATE_NEW_COMPANY).pipe(
+        .pipe(
+            ofType(CompanyActions.CREATE_NEW_COMPANY),
             switchMap((action: CustomActions) => this._companyService.CreateNewCompany(action.payload)),
             map(response => this.CreateNewCompanyResponse(response)));
 
     @Effect()
     public createCompanyResponse$: Observable<Action> = this.action$
-        .ofType(CompanyActions.CREATE_COMPANY_RESPONSE).pipe(
+        .pipe(
+            ofType(CompanyActions.CREATE_COMPANY_RESPONSE),
             map((action: CustomActions) => {
                 let response = action.payload as BaseResponse<CompanyResponse, CompanyRequest>;
                 if (response.status === 'error') {
@@ -141,7 +144,8 @@ export class CompanyActions {
 
     @Effect()
     public createNewCompanyResponse$: Observable<Action> = this.action$
-        .ofType(CompanyActions.CREATE_NEW_COMPANY_RESPONSE).pipe(
+        .pipe(
+            ofType(CompanyActions.CREATE_NEW_COMPANY_RESPONSE),
             map((action: CustomActions) => {
                 let response = action.payload as BaseResponse<CompanyResponse, CompanyCreateRequest>;
                 if (response.status === 'error') {
@@ -206,7 +210,8 @@ export class CompanyActions {
 
     @Effect()
     public RefreshCompanies$: Observable<Action> = this.action$
-        .ofType(CompanyActions.REFRESH_COMPANIES).pipe(
+        .pipe(
+            ofType(CompanyActions.REFRESH_COMPANIES),
             switchMap((action: CustomActions) => this._companyService.CompanyList()),
             map(response => {
                 if (response.status === 'error') {
@@ -218,7 +223,8 @@ export class CompanyActions {
 
     @Effect()
     public RefreshCompaniesResponse$: Observable<CustomActions> = this.action$
-        .ofType(CompanyActions.REFRESH_COMPANIES_RESPONSE).pipe(
+        .pipe(
+            ofType(CompanyActions.REFRESH_COMPANIES_RESPONSE),
             map((action: CustomActions) => {
                 let response: BaseResponse<CompanyResponse[], string> = action.payload;
                 if (response.status === 'error') {
@@ -272,7 +278,8 @@ export class CompanyActions {
 
     @Effect()
     public GetStateDetails$: Observable<Action> = this.action$
-        .ofType(CompanyActions.GET_STATE_DETAILS).pipe(
+        .pipe(
+            ofType(CompanyActions.GET_STATE_DETAILS),
             switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload)),
             map(response => {
                 if (response.status === 'error') {
@@ -284,7 +291,8 @@ export class CompanyActions {
 
     @Effect()
     public SetStateDetails$: Observable<Action> = this.action$
-        .ofType(CompanyActions.SET_STATE_DETAILS).pipe(
+        .pipe(
+            ofType(CompanyActions.SET_STATE_DETAILS),
             switchMap((action: CustomActions) => this._companyService.setStateDetails(action.payload)),
             map(response => {
                 if (response && response.status === 'error') {
@@ -296,7 +304,8 @@ export class CompanyActions {
 
     @Effect()
     public GetApplicationDate$: Observable<Action> = this.action$
-        .ofType(CompanyActions.GET_APPLICATION_DATE).pipe(
+        .pipe(
+            ofType(CompanyActions.GET_APPLICATION_DATE),
             switchMap((action: CustomActions) => this._companyService.getApplicationDate()),
             map(response => {
                 if (response && response.status === 'error') {
@@ -308,7 +317,8 @@ export class CompanyActions {
 
     @Effect()
     public SetApplicationDate$: Observable<Action> = this.action$
-        .ofType(CompanyActions.SET_APPLICATION_DATE).pipe(
+        .pipe(
+            ofType(CompanyActions.SET_APPLICATION_DATE),
             switchMap((action: CustomActions) => this._companyService.setApplicationDate(action.payload)),
             map(response => {
                 if (response.status === 'error') {
@@ -322,7 +332,8 @@ export class CompanyActions {
 
     @Effect()
     public DeleteCompany$: Observable<Action> = this.action$
-        .ofType(CompanyActions.DELETE_COMPANY).pipe(
+        .pipe(
+            ofType(CompanyActions.DELETE_COMPANY),
             switchMap((action: CustomActions) => this._companyService.DeleteCompany(action.payload)),
             map(response => {
                 return this.DeleteCompanyResponse(response);
@@ -330,7 +341,8 @@ export class CompanyActions {
 
     @Effect()
     public DeleteCompanyResponse$: Observable<Action> = this.action$
-        .ofType(CompanyActions.DELETE_COMPANY_RESPONSE).pipe(
+        .pipe(
+            ofType(CompanyActions.DELETE_COMPANY_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -344,7 +356,8 @@ export class CompanyActions {
 
     @Effect()
     public CompanyTax$: Observable<Action> = this.action$
-        .ofType(CompanyActions.GET_TAX).pipe(
+        .pipe(
+            ofType(CompanyActions.GET_TAX),
             switchMap((action: CustomActions) => this._companyService.getComapnyTaxes()),
             map(response => {
                 return this.getTaxResponse(response);
@@ -352,7 +365,8 @@ export class CompanyActions {
 
     @Effect()
     public CompanyTaxResponse$: Observable<Action> = this.action$
-        .ofType(CompanyActions.GET_TAX_RESPONSE).pipe(
+        .pipe(
+            ofType(CompanyActions.GET_TAX_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -362,7 +376,8 @@ export class CompanyActions {
 
     @Effect()
     public GetRegisteredAccount$: Observable<Action> = this.action$
-        .ofType(CompanyActions.GET_REGISTRATION_ACCOUNT).pipe(
+        .pipe(
+            ofType(CompanyActions.GET_REGISTRATION_ACCOUNT),
             switchMap((action: CustomActions) => this._companyService.getRegisteredAccount()),
             map(response => {
                 return this.getAllRegistrationsResponse(response);
@@ -370,7 +385,8 @@ export class CompanyActions {
 
     @Effect()
     public GetRegisteredAccountResponse$: Observable<Action> = this.action$
-        .ofType(CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE).pipe(
+        .pipe(
+            ofType(CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -380,7 +396,8 @@ export class CompanyActions {
 
     @Effect()
     public getAllIntegratedBankInCompany$: Observable<Action> = this.action$
-        .ofType(CompanyActions.GET_ALL_INTEGRATED_BANK).pipe(
+        .pipe(
+            ofType(CompanyActions.GET_ALL_INTEGRATED_BANK),
             switchMap((action: CustomActions) => this._companyService.getIntegratedBankInCompany(action.payload)),
             map(response => {
                 return this.getAllIntegratedBankInCompanyResponse(response);
@@ -388,7 +405,8 @@ export class CompanyActions {
 
     @Effect()
     public getAllIntegratedBankInCompanyResponse$: Observable<Action> = this.action$
-        .ofType(CompanyActions.GET_ALL_INTEGRATED_BANK_RESPONSE).pipe(
+        .pipe(
+            ofType(CompanyActions.GET_ALL_INTEGRATED_BANK_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);

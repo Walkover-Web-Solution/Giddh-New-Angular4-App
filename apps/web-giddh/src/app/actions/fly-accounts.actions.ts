@@ -4,7 +4,7 @@ import { FlattenGroupsAccountsResponse } from '../models/api-models/Group';
  * Created by ad on 04-07-2017.
  */
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -18,8 +18,9 @@ export class FlyAccountsActions {
     public static readonly GET_FLAT_ACCOUNT_W_GROUP_REQUEST = 'GET_FLAT_ACCOUNT_W_GROUP_REQUEST';
     public static readonly GET_FLAT_ACCOUNT_W_GROUP_RESPONSE = 'GET_FLAT_ACCOUNT_W_GROUP_RESPONSE';
     public static readonly RESET_FLAT_ACCOUNT_W_GROUP = 'RESET_FLAT_ACCOUNT_W_GROUP';
-    @Effect() private Search$: Observable<Action> = this.action$
-        .ofType(FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_REQUEST).pipe(
+    @Effect() public Search$: Observable<Action> = this.action$
+        .pipe(
+            ofType(FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_REQUEST),
             switchMap((action: CustomActions) => {
                 return this._groupService.GetFlattenGroupsAccounts(action.payload.q, action.payload.page, action.payload.count, action.payload.showEmptyGroups).pipe(
                     map((r) => this.validateResponse<FlattenGroupsAccountsResponse, string>(r, {

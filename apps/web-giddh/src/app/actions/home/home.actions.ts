@@ -7,7 +7,7 @@ import { API_TO_CALL, CHART_CALLED_FROM, HOME } from './home.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ToasterService } from '../../services/toaster.service';
 import { DashboardService } from '../../services/dashboard.service';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IRevenueChartClosingBalanceResponse, ITotalOverDuesResponse } from '../../models/interfaces/dashboard.interface';
 import { BankAccountsResponse, DashboardResponse, GroupHistoryRequest, GroupHistoryResponse, RefreshBankAccountResponse, GraphTypesResponse, RevenueGraphDataRequest, RevenueGraphDataResponse } from '../../models/api-models/Dashboard';
 import * as _ from '../../lodash-optimized';
@@ -19,7 +19,8 @@ export class HomeActions {
 
     @Effect()
     public GetExpensesChartActiveYear$: Observable<Action> = this.action$
-        .ofType(HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_ACTIVE_YEAR).pipe(
+        .pipe(
+            ofType(HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_ACTIVE_YEAR),
             switchMap((action: CustomActions) => {
                 return observableZip(
                     this._dashboardService.getClosingBalance('operatingcost', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
@@ -44,7 +45,8 @@ export class HomeActions {
 
     @Effect()
     public GetExpensesChartLastYear$: Observable<Action> = this.action$
-        .ofType(HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_LAST_YEAR).pipe(
+        .pipe(
+            ofType(HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_LAST_YEAR),
             switchMap((action: CustomActions) => {
                 return observableZip(
                     this._dashboardService.getClosingBalance('operatingcost', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
@@ -68,7 +70,8 @@ export class HomeActions {
 
     @Effect()
     public GetRevenueChartActiveYear$: Observable<Action> = this.action$
-        .ofType(HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_ACTIVE_YEAR).pipe(
+        .pipe(
+            ofType(HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_ACTIVE_YEAR),
             switchMap((action: CustomActions) => {
                 return observableZip(
                     this._dashboardService.getClosingBalance('revenuefromoperations', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
@@ -93,7 +96,8 @@ export class HomeActions {
 
     @Effect()
     public GetRevenueChartLastYear$: Observable<Action> = this.action$
-        .ofType(HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_LAST_YEAR).pipe(
+        .pipe(
+            ofType(HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_LAST_YEAR),
             switchMap((action: CustomActions) => {
                 return observableZip(
                     this._dashboardService.getClosingBalance('revenuefromoperations', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
@@ -117,7 +121,8 @@ export class HomeActions {
 
     @Effect()
     public GetComparisionChartActiveYear$: Observable<Action> = this.action$
-        .ofType(HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_ACTIVE_YEAR).pipe(
+        .pipe(
+            ofType(HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_ACTIVE_YEAR),
             switchMap((action: CustomActions) => {
                 let revenueModel: GroupHistoryRequest = {
                     groups: ['revenuefromoperations']
@@ -219,7 +224,8 @@ export class HomeActions {
 
     @Effect()
     public GetComparisionChartLastYear$: Observable<Action> = this.action$
-        .ofType(HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR).pipe(
+        .pipe(
+            ofType(HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR),
             switchMap((action: CustomActions) => {
                 let revenueModel: GroupHistoryRequest = {
                     groups: ['revenuefromoperations']
@@ -321,7 +327,8 @@ export class HomeActions {
 
     @Effect()
     public GetNetworthChartActiveYear$: Observable<Action> = this.action$
-        .ofType(HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR).pipe(
+        .pipe(
+            ofType(HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR),
             switchMap((action: CustomActions) => {
                 let a: Observable<Action> = new Observable<Action>((o) => {
                     o.next(action);
@@ -349,7 +356,8 @@ export class HomeActions {
     @Effect()
     public GetBankAccounts$: Observable<Action> = this.action$
 
-        .ofType(HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS).pipe(
+        .pipe(
+            ofType(HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS),
             switchMap((action: CustomActions) => {
                 return this._dashboardService.GetBankAccounts();
             }), map((res) => this.validateResponse<BankAccountsResponse[], string>(res, {
@@ -361,7 +369,8 @@ export class HomeActions {
             })));
     @Effect()
     public RefereshBankAccounts$: Observable<Action> = this.action$
-        .ofType(HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT).pipe(
+        .pipe(
+            ofType(HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT),
             switchMap((action: CustomActions) => {
                 return this._dashboardService.RefreshBankAccount(action.payload);
             }), map((res) => this.validateResponse<RefreshBankAccountResponse, string>(res, {
@@ -374,7 +383,8 @@ export class HomeActions {
 
     @Effect()
     public ReConnectBankAccounts$: Observable<Action> = this.action$
-        .ofType(HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT).pipe(
+        .pipe(
+            ofType(HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT),
             switchMap((action: CustomActions) => {
                 return this._dashboardService.ReconnectBankAccount(action.payload);
             }), map((res) => this.validateResponse<RefreshBankAccountResponse, string>(res, {
@@ -387,8 +397,8 @@ export class HomeActions {
 
     @Effect()
     public GetRatioAnalysis$: Observable<Action> = this.action$
-
-        .ofType(HOME.GET_RATIO_ANALYSIS).pipe(
+        .pipe(
+            ofType(HOME.GET_RATIO_ANALYSIS),
             switchMap((action: CustomActions) => {
                 return this._dashboardService.GetRationAnalysis(action.payload.date, action.payload.refresh);
             }), map((res) => this.validateResponse<BankAccountsResponse[], string>(res, {
@@ -401,7 +411,8 @@ export class HomeActions {
 
     @Effect()
     public GetTotalOverdues$: Observable<Action> = this.action$
-        .ofType(HOME.TOTAL_OVERDUES.GET_TOTALOVER_DUES).pipe(
+        .pipe(
+            ofType(HOME.TOTAL_OVERDUES.GET_TOTALOVER_DUES),
             switchMap((action: CustomActions) => {
                 return observableZip(
                     this._dashboardService.getClosingBalance('sundrydebtors', action.payload.fromDate, action.payload.toDate, action.payload.refresh),
@@ -426,13 +437,15 @@ export class HomeActions {
 
     @Effect()
     public getRevenueGraphTypes$: Observable<Action> = this.action$
-        .ofType(HOME.GET_REVENUE_GRAPH_TYPES).pipe(
+        .pipe(
+            ofType(HOME.GET_REVENUE_GRAPH_TYPES),
             switchMap((action: CustomActions) => this._dashboardService.GetRevenueGraphTypes()),
             map(response => this.getRevenueGraphTypesResponse(response)));
 
     @Effect()
     public getRevenueGraphData$: Observable<Action> = this.action$
-        .ofType(HOME.GET_REVENUE_GRAPH_DATA).pipe(
+        .pipe(
+            ofType(HOME.GET_REVENUE_GRAPH_DATA),
             switchMap((action: CustomActions) => this._dashboardService.GetRevenueGraphData(action.payload)), map((res) => this.validateResponse<RevenueGraphDataResponse, string>(res, {
                 type: HOME.GET_REVENUE_GRAPH_DATA_RESPONSE,
                 payload: res

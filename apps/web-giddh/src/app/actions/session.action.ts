@@ -2,7 +2,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Action, Store } from '@ngrx/store';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { Observable, ReplaySubject } from 'rxjs';
 import { CompanyActions } from './company.actions';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -30,13 +30,15 @@ export class SessionActions {
 
     @Effect()
     public getAllSession$: Observable<Action> = this.actions$
-        .ofType(SessionActions.GET_ALL_SESSION_REQUEST).pipe(
+        .pipe(
+            ofType(SessionActions.GET_ALL_SESSION_REQUEST),
             switchMap((action: CustomActions) => this.auth.GetUserSession()),
             map(response => this.getAllSessionResponse(response)));
 
     @Effect()
     public getAllSessionResponse$: Observable<Action> = this.actions$
-        .ofType(SessionActions.GET_ALL_SESSION_RESPONSE).pipe(
+        .pipe(
+            ofType(SessionActions.GET_ALL_SESSION_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status !== 'success') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -47,13 +49,15 @@ export class SessionActions {
 
     @Effect()
     public deleteSession$: Observable<Action> = this.actions$
-        .ofType(SessionActions.DELETE_SESSION_REQUEST).pipe(
+        .pipe(
+            ofType(SessionActions.DELETE_SESSION_REQUEST),
             switchMap((action: CustomActions) => this.auth.DeleteSession(action.payload)),
             map(response => this.deleteSessionResponse(response)));
 
     @Effect()
     public deleteSessionResponse$: Observable<Action> = this.actions$
-        .ofType(SessionActions.DELETE_SESSION_RESPONSE).pipe(
+        .pipe(
+            ofType(SessionActions.DELETE_SESSION_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status !== 'success') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -64,13 +68,15 @@ export class SessionActions {
 
     @Effect()
     public deleteAllSession$: Observable<Action> = this.actions$
-        .ofType(SessionActions.DELETE_ALL_SESSION_REQUEST).pipe(
+        .pipe(
+            ofType(SessionActions.DELETE_ALL_SESSION_REQUEST),
             switchMap((action: CustomActions) => this.auth.DeleteAllSession()),
             map(response => this.deleteAllSessionResponse(response)));
 
     @Effect()
     public deleteAllSessionResponse$: Observable<Action> = this.actions$
-        .ofType(SessionActions.DELETE_ALL_SESSION_RESPONSE).pipe(
+        .pipe(
+            ofType(SessionActions.DELETE_ALL_SESSION_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status !== 'success') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);

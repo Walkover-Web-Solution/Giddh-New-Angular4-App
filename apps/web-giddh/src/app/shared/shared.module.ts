@@ -1,79 +1,75 @@
-import { CommonModule } from '@angular/common';
-import { ModuleWithProviders, NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { LaddaModule } from 'angular2-ladda';
-import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
-import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
-import { ClickOutsideModule } from 'ng-click-outside';
-import { BsDatepickerModule, DatepickerModule, PaginationModule } from 'ngx-bootstrap';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { ModalModule } from 'ngx-bootstrap/modal';
-import { PopoverModule } from 'ngx-bootstrap/popover';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
+import {CommonModule} from '@angular/common';
+import {ModuleWithProviders, NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {RouterModule} from '@angular/router';
+import {NgbTypeaheadModule} from '@ng-bootstrap/ng-bootstrap';
+import {LaddaModule} from 'angular2-ladda';
+import {DigitsOnlyModule} from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
+import {HighlightModule} from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
+import {ClickOutsideModule} from 'ng-click-outside';
+import {BsDatepickerModule, BsModalService, DatepickerModule, PaginationModule} from 'ngx-bootstrap';
+import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
+import {ModalModule} from 'ngx-bootstrap/modal';
+import {PopoverModule} from 'ngx-bootstrap/popover';
+import {TabsModule} from 'ngx-bootstrap/tabs';
+import {TooltipModule} from 'ngx-bootstrap/tooltip';
+import {TypeaheadModule} from 'ngx-bootstrap/typeahead';
+import {PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
+import {PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
 
-import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
-import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
-import { MfReportComponent } from '../manufacturing/report/mf.report.component';
-import { CommandKModule } from '../theme/command-k/command.k.module';
-import { ConfirmModalModule } from '../theme/confirm-modal';
-import { SelectModule } from '../theme/ng-select/ng-select';
+import {LedgerDiscountComponent} from '../ledger/components/ledgerDiscount/ledgerDiscount.component';
+import {ConfirmationModalComponent} from '../common/confirmation-modal/confirmation-modal.component';
+import {MfReportComponent} from '../manufacturing/report/mf.report.component';
+import {CommandKModule} from '../theme/command-k/command.k.module';
+import {ConfirmModalModule} from '../theme/confirm-modal';
+import {SelectModule} from '../theme/ng-select/ng-select';
 import {
     AuthServiceConfig,
     GoogleLoginProvider,
     LinkedinLoginProvider,
     SocialLoginModule,
 } from '../theme/ng-social-login-module';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
-import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { VsForDirective } from '../theme/ng2-vs-for/ng2-vs-for';
-import { FormWizardModule } from '../theme/ng2-wizard';
-import { UniversalListModule } from '../theme/universal-list/universal.list.module';
-import { WelcomeComponent } from '../welcome/welcome.component';
-import { CheckPermissionDirective } from './../permissions/check-permission.directive';
-import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
-import { FixedFooterComponent } from './fixed-footer/fixed-footer.component';
-import { FooterComponent } from './footer/footer.component';
-import { HeaderComponent } from './header'
+import {ShSelectModule} from '../theme/ng-virtual-select/sh-select.module';
+import {Daterangepicker} from '../theme/ng2-daterangepicker/daterangepicker.module';
+import {VsForDirective} from '../theme/ng2-vs-for/ng2-vs-for';
+import {FormWizardModule} from '../theme/ng2-wizard';
+import {UniversalListModule} from '../theme/universal-list/universal.list.module';
+import {CheckPermissionDirective} from '../permissions/check-permission.directive';
+import {AsideMenuOtherTaxes} from './aside-menu-other-taxes/aside-menu-other-taxes';
+import {FixedFooterComponent} from './fixed-footer/fixed-footer.component';
+import {FooterComponent} from './footer/footer.component';
+import {HeaderComponent} from './header'
 import {
+    AccountAddNewDetailsComponent,
     AccountOperationsComponent,
     AccountsSideBarComponent,
+    AccountUpdateNewDetailsComponent,
     CompanyAddComponent,
     CompanyAddNewUiComponent,
     GroupsAccountSidebarComponent,
     ManageGroupsAccountsComponent,
 } from './header/components';
-import {
-    AccountAddNewDetailsComponent,
-} from './header/components/account-add-new-details/account-add-new-details.component';
-import {
-    AccountUpdateNewDetailsComponent,
-} from './header/components/account-update-new-details/account-update-new-details.component';
-import { GroupAddComponent } from './header/components/group-add/group-add.component';
-import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
-import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
-import { ShareAccountModalComponent } from './header/components/share-account-modal/share-account-modal.component';
-import { ShareGroupModalComponent } from './header/components/share-group-modal/share-group-modal.component';
-import { AccountFilterPipe } from './header/pipe/accountfilter.pipe';
-import { DecimalDigitsModule } from './helpers/directives/decimalDigits/decimalDigits.module';
-import { DisableFormFieldModule } from './helpers/directives/disableFormField/disableFormField.module';
-import { ElementViewChildModule } from './helpers/directives/elementViewChild/elementViewChild.module';
-import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
-import { NgxMaskModule } from './helpers/directives/ngx-mask';
-import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
-import { LayoutComponent } from './layout/layout.component';
-import { OnBoardingComponent } from './on-boarding/on-boarding.component';
-import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
-import { AsideHelpSupportComponent } from './header/components/aside-help-support/aside-help-support.component';
-import { AsideSettingComponent } from './header/components/aside-setting/aside-setting.component';
-import { DeleteTemplateConfirmationModelComponent } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
-import { DatepickerWrapperComponent } from './datepicker-wrapper/datepicker.wrapper.component';
-import { LoaderComponent } from '../loader/loader.component';
+import {GroupAddComponent} from './header/components/group-add/group-add.component';
+import {ExportGroupLedgerComponent} from './header/components/group-export-ledger-modal/export-group-ledger.component';
+import {GroupUpdateComponent} from './header/components/group-update/group-update.component';
+import {ShareAccountModalComponent} from './header/components/share-account-modal/share-account-modal.component';
+import {ShareGroupModalComponent} from './header/components/share-group-modal/share-group-modal.component';
+import {AccountFilterPipe} from './header/pipe/accountfilter.pipe';
+import {DecimalDigitsModule} from './helpers/directives/decimalDigits/decimalDigits.module';
+import {DisableFormFieldModule} from './helpers/directives/disableFormField/disableFormField.module';
+import {ElementViewChildModule} from './helpers/directives/elementViewChild/elementViewChild.module';
+import {KeyboardShortutModule} from './helpers/directives/keyboardShortcut/keyboardShortut.module';
+import {NgxMaskModule} from './helpers/directives/ngx-mask';
+import {TextCaseChangeModule} from './helpers/directives/textCaseChange/textCaseChange.module';
+import {LayoutComponent} from './layout/layout.component';
+import {OnBoardingComponent} from './on-boarding/on-boarding.component';
+import {NgxDaterangepickerMd} from '../theme/ngx-date-range-picker';
+import {AsideHelpSupportComponent} from './header/components/aside-help-support/aside-help-support.component';
+import {AsideSettingComponent} from './header/components/aside-setting/aside-setting.component';
+import {DeleteTemplateConfirmationModelComponent} from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
+import {DatepickerWrapperComponent} from './datepicker-wrapper/datepicker.wrapper.component';
+import {LoaderComponent} from "../loader/loader.component";
+import {NewUserComponent} from "../newUser.component";
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -137,11 +133,12 @@ export function provideConfig() {
         AsideMenuOtherTaxes,
         AccountAddNewDetailsComponent,
         AccountUpdateNewDetailsComponent,
-        WelcomeComponent,
+        // WelcomeComponent,
         ConfirmationModalComponent,
         DeleteTemplateConfirmationModelComponent,
         DatepickerWrapperComponent,
-        LoaderComponent
+        LoaderComponent,
+        // NewUserComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -149,13 +146,13 @@ export function provideConfig() {
         RouterModule,
         FormsModule,
         ReactiveFormsModule,
-        ModalModule,
+        ModalModule.forRoot(),
         DatepickerModule,
         TypeaheadModule,
         UniversalListModule,
-        NgbModule,
-        TooltipModule,
-        BsDropdownModule,
+        NgbTypeaheadModule,
+        TooltipModule.forRoot(),
+        BsDropdownModule.forRoot(),
         PopoverModule.forRoot(),
         PerfectScrollbarModule,
         SocialLoginModule,
@@ -186,6 +183,7 @@ export function provideConfig() {
         PopoverModule,
         FormsModule,
         ReactiveFormsModule,
+        LoaderComponent,
         LaddaModule,
         LayoutComponent,
         ShSelectModule,
@@ -203,7 +201,7 @@ export function provideConfig() {
         PerfectScrollbarModule,
         OnBoardingComponent,
         ConfirmModalModule,
-        NgbModule,
+        NgbTypeaheadModule,
         VsForDirective,
         AccountsSideBarComponent,
         AsideHelpSupportComponent,
@@ -215,7 +213,6 @@ export function provideConfig() {
         MfReportComponent,
         AccountAddNewDetailsComponent,
         AccountUpdateNewDetailsComponent,
-        WelcomeComponent,
         TabsModule,
         BsDropdownModule,
         ElementViewChildModule,
@@ -223,8 +220,7 @@ export function provideConfig() {
         BsDatepickerModule,
         NgxDaterangepickerMd,
         DeleteTemplateConfirmationModelComponent,
-        DatepickerWrapperComponent,
-        LoaderComponent
+        DatepickerWrapperComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
@@ -244,7 +240,8 @@ export function provideConfig() {
         {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        }
+        },
+        BsModalService
     ]
 })
 export class SharedModule {

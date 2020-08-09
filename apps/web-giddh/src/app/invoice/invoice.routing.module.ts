@@ -55,7 +55,6 @@ import { GenerateEWayBillComponent } from './preview/models/generateEWayBill/gen
 import { EWayBillCredentialsComponent } from './eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component';
 import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { DownloadOrPreviewEwayComponent } from './eWayBill/download-or-preview-eway/download-or-preview-eway.component';
 import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview-details/invoice-preview-details.component';
@@ -71,8 +70,8 @@ import { SharedModule } from '../shared/shared.module';
 import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.module';
 import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-invoice.module';
 import { DownloadVoucherComponent } from './preview/models/download-voucher/download-voucher.component';
-import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
+import {NgbTypeaheadModule} from "@ng-bootstrap/ng-bootstrap";
 
 // import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
@@ -162,7 +161,7 @@ const INVOICE_ROUTES: Routes = [
         Daterangepicker,
         AccountDetailModalModule,
         CurrencyModule,
-        NgbModule,
+        NgbTypeaheadModule,
         PerfectScrollbarModule,
         ProformaInvoiceModule,
         DigitsOnlyModule,

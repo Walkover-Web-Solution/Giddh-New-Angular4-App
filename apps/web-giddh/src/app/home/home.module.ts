@@ -83,8 +83,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ChartModule,
         LaddaModule,
         PerfectScrollbarModule,
-        BsDropdownModule,
-        TabsModule,
         BsDatepickerModule,
         TooltipModule.forRoot(),
         Daterangepicker,

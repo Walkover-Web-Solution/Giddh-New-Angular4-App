@@ -4,7 +4,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
-import {NgModule, ErrorHandler} from '@angular/core';
+import {ErrorHandler, NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActionReducer, MetaReducer, StoreModule} from '@ngrx/store';
@@ -32,14 +32,9 @@ import {BsDatepickerModule, DatepickerModule} from 'ngx-bootstrap/datepicker';
 import {TooltipModule} from 'ngx-bootstrap/tooltip';
 import {PaginationModule} from 'ngx-bootstrap/pagination';
 import {CollapseModule} from 'ngx-bootstrap/collapse';
-import {ModalModule} from 'ngx-bootstrap/modal';
-import {TabsModule} from 'ngx-bootstrap/tabs';
-import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {PopoverModule} from 'ngx-bootstrap/popover';
 import {LaddaModule} from 'angular2-ladda';
 import {ShSelectModule} from './theme/ng-virtual-select/sh-select.module';
-import {LoaderComponent} from './loader/loader.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {localStorageSync} from 'ngrx-store-localstorage';
 import {ActionModule} from './actions/action.module';
 import {DecoratorsModule} from './decorators/decorators.module';
@@ -61,10 +56,12 @@ import {SelectPlanComponent} from './selectPlan/selectPlan.component';
 import {BillingDetailComponent} from './billing-details/billingDetail.component';
 import {TokenVerifyComponent} from './login/token-verify.component';
 import {AppLoginSuccessComponent} from "./app-login-success/app-login-success";
-import { ExceptionLogService } from './services/exception-log.service';
-import { MobileHomeComponent } from './mobile-home/mobile-home.component';
-import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mobile-home-sidebar.component';
-import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
+import {ExceptionLogService} from './services/exception-log.service';
+import {MobileHomeComponent} from './mobile-home/mobile-home.component';
+import {MobileHomeSidebarComponent} from './mobile-home/mobile-home-sidebar/mobile-home-sidebar.component';
+import {MobileSearchCompanyComponent} from './mobile-home/mobile-search-company/mobile-search-company.component';
+import {ModalModule} from "ngx-bootstrap";
+import {WelcomeComponent} from "./welcome/welcome.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -117,9 +114,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         TokenVerifyComponent,
         DummyComponent,
         BillingDetailComponent,
+        WelcomeComponent,
 
         // SuccessComponent,
-        NewUserComponent,
+        // NewUserComponent,
         BrowserDetectComponent,
         OnboardingComponent,
         SocialLoginCallbackComponent,
@@ -143,16 +141,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             style: 'slide-left',
             spinnerSize: 30
         }),
+        // ModalModule.forRoot(),
         PaginationModule.forRoot(),
         CollapseModule.forRoot(),
-        TooltipModule.forRoot(),
         BsDatepickerModule.forRoot(),
-        ModalModule.forRoot(),
         PopoverModule.forRoot(),
-        NgbModule,
-        BsDropdownModule.forRoot(),
-        TabsModule.forRoot(),
-        TooltipModule.forRoot(),
         DatepickerModule.forRoot(),
         SharedModule.forRoot(),
         ServiceModule.forRoot(),
@@ -168,7 +161,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             preloadingStrategy: CustomPreloadingStrategy,
             onSameUrlNavigation: 'reload'
         }),
-        StoreRouterConnectingModule,
+        StoreRouterConnectingModule.forRoot(),
         ...CONDITIONAL_IMPORTS,
 
         /**

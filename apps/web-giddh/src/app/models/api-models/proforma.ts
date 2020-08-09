@@ -2,6 +2,7 @@ import { CommonPaginatedResponse } from './BaseResponse';
 import { InvoiceReceiptFilter } from './recipt';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { CommonPaginatedRequest } from './Invoice';
+import {AmountClassMulticurrency} from "./Sales";
 
 export class ProformaFilter extends InvoiceReceiptFilter {
 	public estimateNumber: string;
@@ -68,6 +69,6 @@ export class ProformaVersionItem {
 export class PreviousInvoicesVm {
 	versionNumber: string;
 	account: INameUniqueName;
-	grandTotal: number;
+	grandTotal: AmountClassMulticurrency;
 	date: string;
 }

@@ -4,7 +4,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
 
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AUDIT_LOGS_ACTIONS } from './audit-logs.const';
@@ -17,8 +17,9 @@ import { GeneralService } from '../../services/general.service';
 
 @Injectable()
 export class CompanyImportExportActions {
-    @Effect() private EXPORT_REQUEST$: Observable<Action> = this.action$
-        .ofType(COMPANY_IMPORT_EXPORT_ACTIONS.EXPORT_REQUEST).pipe(
+    @Effect() public EXPORT_REQUEST$: Observable<Action> = this.action$
+        .pipe(
+            ofType(COMPANY_IMPORT_EXPORT_ACTIONS.EXPORT_REQUEST),
             switchMap((action: CustomActions) => {
 
                 if (action.payload.fileType === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
@@ -49,8 +50,9 @@ export class CompanyImportExportActions {
                 }
             }));
 
-    @Effect() private IMPORT_REQUEST$: Observable<Action> = this.action$
-        .ofType(COMPANY_IMPORT_EXPORT_ACTIONS.IMPORT_REQUEST).pipe(
+    @Effect() public IMPORT_REQUEST$: Observable<Action> = this.action$
+        .pipe(
+            ofType(COMPANY_IMPORT_EXPORT_ACTIONS.IMPORT_REQUEST),
             switchMap((action: CustomActions) => {
 
                 if (action.payload.fileType === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {

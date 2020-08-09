@@ -7,7 +7,7 @@ import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { Action, Store } from '@ngrx/store';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
@@ -70,7 +70,8 @@ export class AccountsAction {
 
     @Effect()
     public ApplyAccountTax$: Observable<Action> = this.action$
-        .ofType(AccountsAction.APPLY_GROUP_TAX).pipe(
+        .pipe(
+            ofType(AccountsAction.APPLY_GROUP_TAX),
             switchMap((action: CustomActions) => this._accountService.ApplyTax(action.payload)),
             map(response => {
                 return this.applyAccountTaxResponse(response);
@@ -78,7 +79,8 @@ export class AccountsAction {
 
     @Effect()
     public ApplyAccountTaxResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.APPLY_GROUP_TAX_RESPONSE).pipe(
+        .pipe(
+            ofType(AccountsAction.APPLY_GROUP_TAX_RESPONSE),
             map((action: CustomActions) => {
                 let data: BaseResponse<string, ApplyTaxRequest> = action.payload;
                 if (action.payload.status === 'error') {
@@ -96,7 +98,8 @@ export class AccountsAction {
 
     @Effect()
     public ApplyAccountDiscount$: Observable<Action> = this.action$
-        .ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNT).pipe(
+        .pipe(
+            ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNT),
             switchMap((action: CustomActions) => this._accountService.ApplyDiscount(action.payload)),
             map(response => {
                 return this.applyAccountDiscountResponse(response);
@@ -104,7 +107,8 @@ export class AccountsAction {
 
     @Effect()
     public ApplyAccountDiscountResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNT_RESPONSE).pipe(
+        .pipe(
+            ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNT_RESPONSE),
             map((action: CustomActions) => {
                 let data: BaseResponse<string, AssignDiscountRequestForAccount> = action.payload;
                 if (action.payload.status === 'error') {
@@ -117,7 +121,8 @@ export class AccountsAction {
 
     @Effect()
     public CreateAccount$: Observable<Action> = this.action$
-        .ofType(AccountsAction.CREATE_ACCOUNT).pipe(
+        .pipe(
+            ofType(AccountsAction.CREATE_ACCOUNT),
             switchMap((action: CustomActions) => this._accountService.CreateAccount(action.payload.account, action.payload.accountUniqueName)),
             map(response => {
                 return this.createAccountResponse(response);
@@ -125,7 +130,8 @@ export class AccountsAction {
 
     @Effect()
     public CreateAccountResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.CREATE_ACCOUNT_RESPONSE).pipe(
+        .pipe(
+            ofType(AccountsAction.CREATE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.clearAllToaster();
@@ -149,7 +155,8 @@ export class AccountsAction {
 
     @Effect()
     public CreateAccountV2$: Observable<Action> = this.action$
-        .ofType(AccountsAction.CREATE_ACCOUNTV2).pipe(
+        .pipe(
+            ofType(AccountsAction.CREATE_ACCOUNTV2),
             switchMap((action: CustomActions) => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName)),
             map(response => {
                 if (response.status === 'success') {
@@ -160,7 +167,8 @@ export class AccountsAction {
 
     @Effect()
     public CreateAccountResponseV2$: Observable<Action> = this.action$
-        .ofType(AccountsAction.CREATE_ACCOUNT_RESPONSEV2).pipe(
+        .pipe(
+            ofType(AccountsAction.CREATE_ACCOUNT_RESPONSEV2),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.clearAllToaster();
@@ -191,14 +199,16 @@ export class AccountsAction {
 
     @Effect()
     public GetAccountDetails$: Observable<Action> = this.action$
-        .ofType(AccountsAction.GET_ACCOUNT_DETAILS).pipe(
+        .pipe(
+            ofType(AccountsAction.GET_ACCOUNT_DETAILS),
             switchMap((action: CustomActions) => this._accountService.GetAccountDetailsV2(action.payload)),
             map(response => {
                 return this.getAccountDetailsResponse(response);
             }));
     @Effect()
     public GetAccountDetailsResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE).pipe(
+        .pipe(
+            ofType(AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE),
             map((action: CustomActions) => {
                 let data: BaseResponse<AccountResponseV2, string> = action.payload;
                 if (action.payload.status === 'error') {
@@ -214,14 +224,16 @@ export class AccountsAction {
             }));
     @Effect()
     public GetAccountUniqueName$: Observable<Action> = this.action$
-        .ofType(AccountsAction.GET_ACCOUNT_UNIQUENAME).pipe(
+        .pipe(
+            ofType(AccountsAction.GET_ACCOUNT_UNIQUENAME),
             switchMap((action: CustomActions) => this._accountService.GetAccountDetails(action.payload)),
             map(response => {
                 return this.getAccountUniqueNameResponse(response);
             }));
     @Effect()
     public GetAccountUniqueNameResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE).pipe(
+        .pipe(
+            ofType(AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE),
             map((action: CustomActions) => {
                 let data: BaseResponse<AccountResponse, string> = action.payload;
                 return {
@@ -231,7 +243,8 @@ export class AccountsAction {
 
     @Effect()
     public UpdateAccount$: Observable<Action> = this.action$
-        .ofType(AccountsAction.UPDATE_ACCOUNT).pipe(
+        .pipe(
+            ofType(AccountsAction.UPDATE_ACCOUNT),
             switchMap((action: CustomActions) => this._accountService.UpdateAccount(action.payload.account, action.payload.accountUniqueName)),
             map(response => {
                 return this.updateAccountResponse(response);
@@ -239,7 +252,8 @@ export class AccountsAction {
 
     @Effect()
     public UpdateAccountResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSE).pipe(
+        .pipe(
+            ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.clearAllToaster();
@@ -261,7 +275,8 @@ export class AccountsAction {
 
     @Effect()
     public UpdateAccountV2$: Observable<Action> = this.action$
-        .ofType(AccountsAction.UPDATE_ACCOUNTV2).pipe(
+        .pipe(
+            ofType(AccountsAction.UPDATE_ACCOUNTV2),
             switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.account, action.payload.value)),
             map(response => {
                 if (response.status === 'success') {
@@ -272,7 +287,8 @@ export class AccountsAction {
 
     @Effect()
     public UpdateAccountResponseV2$: Observable<Action> = this.action$
-        .ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSEV2).pipe(
+        .pipe(
+            ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSEV2),
             map((action: CustomActions) => {
                 let resData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
                 if (action.payload.status === 'error') {
@@ -292,7 +308,8 @@ export class AccountsAction {
             }));
     @Effect()
     public getGroupTaxHierarchy$: Observable<Action> = this.action$
-        .ofType(AccountsAction.GET_ACCOUNT_TAX_HIERARCHY).pipe(
+        .pipe(
+            ofType(AccountsAction.GET_ACCOUNT_TAX_HIERARCHY),
             switchMap((action: CustomActions) => this._accountService.GetTaxHierarchy(action.payload)),
             map(response => {
                 return this.getTaxHierarchyResponse(response);
@@ -300,7 +317,8 @@ export class AccountsAction {
 
     @Effect()
     public getGroupTaxHierarchyResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.GET_ACCOUNT_TAX_HIERARCHY_RESPONSE).pipe(
+        .pipe(
+            ofType(AccountsAction.GET_ACCOUNT_TAX_HIERARCHY_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -313,7 +331,8 @@ export class AccountsAction {
 
     @Effect()
     public shareEntity$: Observable<Action> = this.action$
-        .ofType(AccountsAction.SHARE_ENTITY).pipe(
+        .pipe(
+            ofType(AccountsAction.SHARE_ENTITY),
             switchMap((action: CustomActions) =>
                 this._accountService.Share(
                     action.payload.body,
@@ -325,7 +344,8 @@ export class AccountsAction {
             }));
     @Effect()
     public shareEntityResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.SHARE_ENTITY_RESPONSE).pipe(
+        .pipe(
+            ofType(AccountsAction.SHARE_ENTITY_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -349,7 +369,8 @@ export class AccountsAction {
 
     @Effect()
     public unShareEntity$: Observable<Action> = this.action$
-        .ofType(AccountsAction.UN_SHARE_ENTITY).pipe(
+        .pipe(
+            ofType(AccountsAction.UN_SHARE_ENTITY),
             switchMap((action: CustomActions) =>
                 this._accountService.UnShare(action.payload.entryUniqueName, action.payload.entity, action.payload.entityUniqueName)
             ),
@@ -359,7 +380,8 @@ export class AccountsAction {
 
     @Effect()
     public unShareEntityResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.UN_SHARE_ENTITY_RESPONSE).pipe(
+        .pipe(
+            ofType(AccountsAction.UN_SHARE_ENTITY_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -384,7 +406,8 @@ export class AccountsAction {
     // Update entity permission
     @Effect()
     public updateEntityPermission$: Observable<Action> = this.action$
-        .ofType(AccountsAction.UPDATE_ENTITY_PERMISSION).pipe(
+        .pipe(
+            ofType(AccountsAction.UPDATE_ENTITY_PERMISSION),
             switchMap((action: CustomActions) =>
                 this._accountService.UpdateEntityPermission(action.payload.model, action.payload.entity, action.payload.newRoleUniqueName)
             ),
@@ -394,7 +417,8 @@ export class AccountsAction {
 
     @Effect()
     public updateEntityPermissionResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.UPDATE_ENTITY_PERMISSION_RESPONSE).pipe(
+        .pipe(
+            ofType(AccountsAction.UPDATE_ENTITY_PERMISSION_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -411,7 +435,8 @@ export class AccountsAction {
 
     @Effect()
     public unShareAccount$: Observable<Action> = this.action$
-        .ofType(AccountsAction.UNSHARE_ACCOUNT).pipe(
+        .pipe(
+            ofType(AccountsAction.UNSHARE_ACCOUNT),
             switchMap((action: CustomActions) =>
                 this._accountService.AccountUnshare(
                     action.payload.user,
@@ -424,7 +449,8 @@ export class AccountsAction {
 
     @Effect()
     public unShareAccountResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.UNSHARE_ACCOUNT_RESPONSE).pipe(
+        .pipe(
+            ofType(AccountsAction.UNSHARE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -443,14 +469,16 @@ export class AccountsAction {
 
     @Effect()
     public sharedAccount$: Observable<Action> = this.action$
-        .ofType(AccountsAction.SHARED_ACCOUNT_WITH).pipe(
+        .pipe(
+            ofType(AccountsAction.SHARED_ACCOUNT_WITH),
             switchMap((action: CustomActions) => this._accountService.AccountShareWith(action.payload)),
             map(response => {
                 return this.sharedAccountWithResponse(response);
             }));
     @Effect()
     public sharedAccountResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE).pipe(
+        .pipe(
+            ofType(AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -462,7 +490,8 @@ export class AccountsAction {
 
     @Effect()
     public moveAccount$: Observable<Action> = this.action$
-        .ofType(AccountsAction.MOVE_ACCOUNT).pipe(
+        .pipe(
+            ofType(AccountsAction.MOVE_ACCOUNT),
             switchMap((action: CustomActions) =>
                 this._accountService.AccountMove(
                     action.payload.body,
@@ -475,7 +504,8 @@ export class AccountsAction {
             }));
     @Effect()
     public moveAccountResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.MOVE_ACCOUNT_RESPONSE).pipe(
+        .pipe(
+            ofType(AccountsAction.MOVE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -492,7 +522,8 @@ export class AccountsAction {
 
     @Effect()
     public mergeAccount$: Observable<Action> = this.action$
-        .ofType(AccountsAction.MERGE_ACCOUNT).pipe(
+        .pipe(
+            ofType(AccountsAction.MERGE_ACCOUNT),
             switchMap((action: CustomActions) =>
                 this._accountService.MergeAccount(
                     action.payload.data,
@@ -504,7 +535,8 @@ export class AccountsAction {
             }));
     @Effect()
     public mergeAccountResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.MERGE_ACCOUNT_RESPONSE).pipe(
+        .pipe(
+            ofType(AccountsAction.MERGE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -523,7 +555,8 @@ export class AccountsAction {
 
     @Effect()
     public unMergeAccount$: Observable<Action> = this.action$
-        .ofType(AccountsAction.UNMERGE_ACCOUNT).pipe(
+        .pipe(
+            ofType(AccountsAction.UNMERGE_ACCOUNT),
             switchMap((action: CustomActions) =>
                 this._accountService.UnmergeAccount(
                     action.payload.data,
@@ -535,7 +568,8 @@ export class AccountsAction {
             }));
     @Effect()
     public unMergeAccountResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.UNMERGE_ACCOUNT_RESPONSE).pipe(
+        .pipe(
+            ofType(AccountsAction.UNMERGE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -551,7 +585,8 @@ export class AccountsAction {
 
     @Effect()
     public DeleteAccount$: Observable<Action> = this.action$
-        .ofType(AccountsAction.DELETE_ACCOUNT).pipe(
+        .pipe(
+            ofType(AccountsAction.DELETE_ACCOUNT),
             switchMap((action: CustomActions) => this._accountService.DeleteAccount(action.payload.accountUniqueName, action.payload.groupUniqueName)),
             map(response => {
                 return this.deleteAccountResponse(response);
@@ -559,7 +594,8 @@ export class AccountsAction {
 
     @Effect()
     public DeleteAccountResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.DELETE_ACCOUNT_RESPONSE).pipe(
+        .pipe(
+            ofType(AccountsAction.DELETE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);

@@ -50,7 +50,7 @@ export const ROUTES: Routes = [
     { path: 'ledger', redirectTo: 'pages/ledger' },
     { path: 'dummy', component: DummyComponent },
     { path: 'browser-support', component: BrowserDetectComponent },
-    { path: 'new-user', component: NewUserComponent, canActivate: [NewUserAuthGuard] },
+    // { path: 'new-user', component: NewUserComponent, canActivate: [NewUserAuthGuard] },
     { path: 'welcome', component: WelcomeComponent },
     { path: 'onboarding', redirectTo: 'pages/onboarding', pathMatch: 'full' },
     { path: 'social-login-callback', component: SocialLoginCallbackComponent },
@@ -124,7 +124,7 @@ export const ROUTES: Routes = [
             { path: 'mobile-home', component: MobileHomeComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-home-sidebar', component: MobileHomeSidebarComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-search-company', component: MobileSearchCompanyComponent, canActivate: [NeedsAuthorization] },
-            
+
             { path: 'tallysync', loadChildren: './tallysync/tallysync.module#TallysyncModule', canActivate: [NeedsAuthorization] },
 
             { path: 'expenses-manager', loadChildren: './expenses/expenses.module#ExpensesModule', canActivate: [NeedsAuthorization] },
@@ -132,7 +132,7 @@ export const ROUTES: Routes = [
             { path: 'vat-report', loadChildren: './vat-report/vatReport.module#VatReportModule', canActivate: [NeedsAuthorization] },
             { path: 'purchase-management', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
-            
+
             // {path: '**', pathMatch: 'full', component: NotFoundComponent},
 
         ]
