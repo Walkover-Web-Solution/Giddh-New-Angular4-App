@@ -32,7 +32,7 @@
 
         </div>
 
-        <div class="d-flex" style="justify-content: space-between">
+        <div class="d-flex w-100" style="justify-content: space-between">
             <div class="d-flex" style="align-items: center">
                 <h2 style="font-size: 20px;font-weight: bold;text-transform:capitalize;">
                     <span *ngIf="stockReport && stockReport.stockUnit">
@@ -54,7 +54,7 @@
 
                 <div class="btn-group btn-download" dropdown [autoClose]="true" placement="bottom right">
                     <button id="button-alignment" dropdownToggle type="button"
-                        class="btn-link mrT cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
+                        class="btn-link btn mrT cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
                         <i class="icon-download"></i> Download
                     </button>
                     <ul *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download" role="menu"
@@ -128,7 +128,7 @@
                     <th class="bdrR bdrB" width="14%">
                         <div class="btn-group btn-group-voucher-type" dropdown placement="bottom right">
                             <button id="button-alignment" dropdownToggle type="button"
-                                class="btn-link cp p-0 dropdown-toggle c-3 p0"
+                                class="btn-link btn cp p-0 dropdown-toggle c-3 p0"
                                 aria-controls="dropdown-alignment">Voucher Type
                                 <i class="fa fa-ellipsis-v pull-right text-light-2" aria-hidden="true"></i>
                             </button>

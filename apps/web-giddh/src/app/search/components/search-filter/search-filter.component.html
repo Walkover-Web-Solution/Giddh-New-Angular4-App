@@ -1,5 +1,5 @@
 <section class="mrT1">
-	<div class="">
+	<div>
 		<div class="btn-group" #filterDropdown="bs-dropdown" dropdown [autoClose]="false"
 			(clickOutside)="filterDropdown.hide()">
 			<button type="button" class="btn btn-default" dropdownToggle>Filter by account <span class="caret"></span>
@@ -7,12 +7,12 @@
 			<div id="dropdown-basic1" *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu"
 				aria-labelledby="button-basic1" [style.width.px]="550" (click)="toggleFilters = false;">
 				<form [formGroup]="searchQueryForm" novalidate name="searchQueryForm" id="searchQueryForm"
-					class="form-inline flex-row flex-nowrap pd1">
+					class="form-inline flex-row flex-wrap pd1">
 					<!-- repeater -->
-					<div class="pos-rel query_list query_list " [ngClass]="{'mrT2': i !== 0}"
+					<div class="pos-rel query_list query_list d-flex" [ngClass]="{'mrT2': i !== 0}"
 						formArrayName="searchQuery"
 						*ngFor="let item of searchQueryForm.get('searchQuery')['controls'];let i = index; let l = last;">
-						<div [formGroupName]="i">
+						<div [formGroupName]="i" class="d-flex">
 							<!-- <label *ngIf="i === 0"> whose</label> -->
 							<label>whose</label>
 							<span class="pos-rel form-group">
@@ -21,7 +21,6 @@
 									<option *ngFor="let queryType of queryTypes" value="{{queryType.uniqueName}}">
 										{{queryType.name}}</option>
 								</select>
-								<span class="select_drop"><i class="fa fa-caret-down"></i></span>
 							</span>
 							<!-- <label *ngIf="item.value.queryType === 'closingBalance' || item.value.queryType === 'openingBalance' || !item.value.queryType ">balance
     &nbsp;</label> -->
@@ -31,7 +30,6 @@
 									<option *ngFor="let queryDiffer of queryDiffers" value="{{queryDiffer}}" selected>
 										{{queryDiffer}}</option>
 								</select>
-								<span class="select_drop"><i class="fa fa-caret-down"></i></span>
 							</span>
 							<label
 								*ngIf="item.value.queryDiffer === 'Less' || item.value.queryDiffer === 'Greater' || !item.value.queryDiffer ">than</label>
@@ -47,7 +45,6 @@
 									<option *ngFor="let type of balType" value="{{type.uniqueName}}">{{type.name}}
 									</option>
 								</select>
-								<span class="select_drop"><i class="fa fa-caret-down"></i></span>
 							</span>
 
 							<span class="pos-rel form-group"
@@ -56,7 +53,6 @@
 									<option *ngFor="let type of balType" value="{{type.uniqueName}}">{{type.name}}
 									</option>
 								</select>
-								<span class="select_drop"><i class="fa fa-caret-down"></i></span>
 							</span>
 							<label *ngIf="searchDataSet.controls.length > 1 && !l" class="condition_tag">and</label>
 							<!-- <label *ngIf="i === 1 && searchDataSet.controls.length > 2" class="condition_tag">and</label>
