@@ -5502,6 +5502,10 @@ label {
     height: calc(100vh - 70px);
 }
 
+.panel-body {
+    padding: 15px;
+}
+
 #customInvoice h2 {
     font-size: 20px;
     margin-bottom: 20px;
@@ -8544,7 +8548,11 @@ ul.dropdown-menu p.lead.pd {
     border-bottom: 4px solid transparent !important;
 }
 
-.dropdown-menu > li > a:hover {
+.invoce-controll .nav-tabs > li > a:hover {
+    border-color: 0px solid transparent !important;
+}
+
+.dropdown-menu>li>a:hover {
     color: $chetwode-blue !important;
     background: #eeeff9 !important;
 }
@@ -8740,6 +8748,10 @@ button.btn.btn-filter {
 .mangeAccountPopup.fullScreenMy.modal.fade .modal-dialog {
     transform: translateY(0) !important;
     margin: 0 auto;
+}
+
+.mangeAccountPopup.fullScreenMy.modal.fade .width100{
+    width:100% !important;
 }
 
 .translatY8 {
