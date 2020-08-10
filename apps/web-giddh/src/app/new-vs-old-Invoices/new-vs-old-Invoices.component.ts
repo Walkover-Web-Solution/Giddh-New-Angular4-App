@@ -59,6 +59,15 @@ import { take } from 'rxjs/operators';
     .align-end {
       text-align: end;
     }
+    .align-center{
+      align-items: center;
+    }
+    .d-initial{
+        display: initial;
+    }
+    .d-initial label{
+        justify-content: left;
+    }
   `]
 })
 

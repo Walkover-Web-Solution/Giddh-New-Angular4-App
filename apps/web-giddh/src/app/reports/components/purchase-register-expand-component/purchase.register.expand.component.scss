@@ -305,6 +305,13 @@ table th {
         color: $deep-sky-blue;
     }
 }
+
+.list-inline>li {
+    display: inline-block;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
 @media (max-width: 1366px) {
     .sales-register {
         width: 100%;
