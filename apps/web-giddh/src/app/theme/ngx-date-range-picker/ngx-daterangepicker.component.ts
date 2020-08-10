@@ -457,7 +457,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             } catch (error) {
 
             }
-        }, 200);
+        }, 100);
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -2159,6 +2159,20 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.allowMouseScroll = true;
         this.openMobileDatepickerPopup = true;
         document.querySelector('body').classList.add('hide-scroll-body');
+
+        setTimeout(() => {
+            if (this.initialScrollToIndexTop < this.initialScrollToIndexBottom) {
+                this.virtualScroll.scrollToIndex(this.initialScrollToIndexTop);
+                if (this.calendarMonths[this.initialScrollToIndexTop]) {
+                    this.setActiveMonth(this.calendarMonths[this.initialScrollToIndexTop], 'start');
+                }
+            } else {
+                this.virtualScroll.scrollToIndex(this.initialScrollToIndexBottom);
+                if (this.calendarMonths[this.initialScrollToIndexBottom]) {
+                    this.setActiveMonth(this.calendarMonths[this.initialScrollToIndexBottom], 'end');
+                }
+            }
+        }, 100);    
     }
 
     /**
