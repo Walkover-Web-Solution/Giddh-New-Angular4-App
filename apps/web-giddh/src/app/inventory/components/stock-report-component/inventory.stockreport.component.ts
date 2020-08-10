@@ -1,6 +1,6 @@
 import {ToasterService} from './../../../services/toaster.service';
 import {InventoryService} from '../../../services/inventory.service';
-import {debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil, last} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil} from 'rxjs/operators';
 import {IGroupsWithStocksHierarchyMinItem} from '../../../models/interfaces/groupsWithStocks.interface';
 import {InventoryDownloadRequest, StockReportRequest, StockReportResponse} from '../../../models/api-models/Inventory';
 import {StockReportActions} from '../../../actions/inventory/stocks-report.actions';
