@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { BsModalRef, BsModalService, BsDatepickerDirective, PopoverDirective, ModalDirective } from 'ngx-bootstrap'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -43,6 +43,9 @@ import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { LoaderState } from '../../loader/loader';
 import { LoaderService } from '../../loader/loader.service';
 import { CurrentCompanyState } from '../../store/Company/company.reducer';
+import { ActivatedRoute } from '@angular/router';
+import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
+import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
 
 const THEAD_ARR_READONLY = [
     {
@@ -101,7 +104,7 @@ const THEAD_ARR_READONLY = [
     ]
 })
 
-export class CreatePurchaseOrderComponent implements OnInit {
+export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     @ViewChild('vendorNameDropDown') public vendorNameDropDown: ShSelectComponent;
     /* Billing state instance */
     @ViewChild('vendorBillingState') vendorBillingState: ElementRef;
@@ -267,8 +270,18 @@ export class CreatePurchaseOrderComponent implements OnInit {
     public companyAddresses: any[] = [];
     /* True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
+    /* This will hold po unique name for copy/edit */
+    public purchaseOrderUniqueName: string = '';
+    /* This will hold purchase order details */
+    public purchaseOrderDetails: any = {};
+    /* This will hold if get account api is called */
+    public getAccountInProgress: boolean = false;
+    /* This will hold if account details are copied */
+    public copiedAccountDetails: boolean = false;
+    /* This will hold if vendor accounts are loaded */
+    public vendorAccountsLoaded: boolean = false;
 
-    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private cdr: ChangeDetectorRef) {
+    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute) {
         this.getInventorySettings();
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.flattenAccountListStream$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$));
@@ -292,7 +305,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
     public ngOnInit(): void {
         this.breakPointObservar.observe([
             '(max-width: 768px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
 
@@ -310,6 +323,23 @@ export class CreatePurchaseOrderComponent implements OnInit {
             state.session.companies.forEach(cmp => {
                 if (cmp.uniqueName === state.session.companyUniqueName) {
                     this.selectedCompany = cmp;
+
+                    this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+                        if (params && params['action']) {
+                            if (params['action'] === "new") {
+                                this.isUpdateMode = false;
+                            }
+
+                            if (params['action'] === "edit") {
+                                this.isUpdateMode = true;
+                            }
+                        }
+
+                        if (params && params['purchaseOrderUniqueName'] && !this.purchaseOrderUniqueName) {
+                            this.purchaseOrderUniqueName = params['purchaseOrderUniqueName'];
+                            this.getPurchaseOrder();
+                        }
+                    });
                 }
             });
         })).subscribe();
@@ -317,13 +347,52 @@ export class CreatePurchaseOrderComponent implements OnInit {
         this.createVendorList();
         this.initializeWarehouse();
 
-        this.selectedAccountDetails$.subscribe(async accountDetails => {
+        this.selectedAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(async accountDetails => {
             if (accountDetails && !this.isUpdateMode) {
                 if (accountDetails.country) {
                     await this.getUpdatedStateCodes(accountDetails.country.countryCode, false);
                 }
-
                 this.updateVendorDetails(accountDetails);
+
+                if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails) {
+                    let billingDetails = this.purchaseOrderDetails.account.billingDetails;
+
+                    this.purchaseOrder.account.billingDetails.address = [];
+                    this.purchaseOrder.account.billingDetails.address.push(billingDetails.address);
+                    this.purchaseOrder.account.billingDetails.gstNumber = billingDetails.gstNumber;
+                    if (billingDetails.stateCode) {
+                        this.purchaseOrder.account.billingDetails.state.name = billingDetails.stateName;
+                        this.purchaseOrder.account.billingDetails.state.code = (billingDetails.stateCode) ? billingDetails.stateCode : billingDetails.stateGstCode;
+                        this.purchaseOrder.account.billingDetails.stateCode = billingDetails.stateCode;
+                        this.purchaseOrder.account.billingDetails.stateName = billingDetails.stateName;
+                    } else {
+                        this.purchaseOrder.account.billingDetails.state.name = "";
+                        this.purchaseOrder.account.billingDetails.state.code = "";
+                        this.purchaseOrder.account.billingDetails.stateCode = "";
+                        this.purchaseOrder.account.billingDetails.stateName = "";
+                    }
+
+                    this.purchaseOrder.account.billingDetails.panNumber = "";
+
+                    let shippingDetails = this.purchaseOrderDetails.account.shippingDetails;
+
+                    this.purchaseOrder.account.shippingDetails.address = [];
+                    this.purchaseOrder.account.shippingDetails.address.push(shippingDetails.address);
+                    this.purchaseOrder.account.shippingDetails.gstNumber = shippingDetails.gstNumber;
+                    if (shippingDetails.stateCode) {
+                        this.purchaseOrder.account.shippingDetails.state.name = shippingDetails.stateName;
+                        this.purchaseOrder.account.shippingDetails.state.code = (shippingDetails.stateCode) ? shippingDetails.stateCode : shippingDetails.stateGstCode;
+                        this.purchaseOrder.account.shippingDetails.stateCode = shippingDetails.stateCode;
+                        this.purchaseOrder.account.shippingDetails.stateName = shippingDetails.stateName;
+                    } else {
+                        this.purchaseOrder.account.shippingDetails.state.name = "";
+                        this.purchaseOrder.account.shippingDetails.state.code = "";
+                        this.purchaseOrder.account.shippingDetails.stateCode = "";
+                        this.purchaseOrder.account.shippingDetails.stateName = "";
+                    }
+                    this.purchaseOrder.account.shippingDetails.panNumber = "";
+                    this.copiedAccountDetails = true;
+                }
             }
         });
 
@@ -335,7 +404,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
 
                 if (profile.addresses && profile.addresses.length > 0) {
                     this.companyAddresses = profile.addresses;
-                    this.fillCompanyAddress();
+                    this.fillCompanyAddress("fill");
                 }
 
                 if (profile.countryV2) {
@@ -580,6 +649,13 @@ export class CreatePurchaseOrderComponent implements OnInit {
                 });
                 this.salesAccounts$ = observableOf(_.orderBy(stockAccountsList, 'label'));
                 this.vendorAcList$ = observableOf(_.orderBy(sundryCreditorsAcList, 'label'));
+                this.vendorAccountsLoaded = true;
+
+                if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails && !this.getAccountInProgress) {
+                    this.getAccountDetails(this.purchaseOrderDetails.account.uniqueName);
+
+                    this.purchaseOrder.entries = this.modifyEntries(this.purchaseOrderDetails.entries);
+                }
             }
         });
 
@@ -1048,10 +1124,12 @@ export class CreatePurchaseOrderComponent implements OnInit {
      * @memberof CreatePurchaseOrderComponent
      */
     public getOnboardingForm(countryCode): void {
-        let onboardingFormRequest = new OnboardingFormRequest();
-        onboardingFormRequest.formName = 'onboarding';
-        onboardingFormRequest.country = countryCode;
-        this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
+        if (!this.formFields || this.formFields.length === 0) {
+            let onboardingFormRequest = new OnboardingFormRequest();
+            onboardingFormRequest.formName = 'onboarding';
+            onboardingFormRequest.country = countryCode;
+            this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
+        }
     }
 
     /**
@@ -2222,7 +2300,7 @@ export class CreatePurchaseOrderComponent implements OnInit {
             this.resetVendor();
             this.vendorNameDropDown.clear();
             this.initializeWarehouse();
-            this.fillCompanyAddress();
+            this.fillCompanyAddress("reset");
             this.assignDates();
         }
     }
@@ -2232,7 +2310,11 @@ export class CreatePurchaseOrderComponent implements OnInit {
      *
      * @memberof CreatePurchaseOrderComponent
      */
-    public fillCompanyAddress(): void {
+    public fillCompanyAddress(event: string): void {
+        if (this.purchaseOrderUniqueName && event === "fill") {
+            return;
+        }
+
         if (this.companyAddresses) {
             this.companyAddresses.forEach(address => {
                 if (address.isDefault === true) {
@@ -2301,5 +2383,223 @@ export class CreatePurchaseOrderComponent implements OnInit {
             this.calculateStockEntryAmount(transaction);
             this.calculateWhenTrxAltered(entry, transaction);
         }
+    }
+
+    /**
+     * Releases the memory
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    /**
+     * This will get the purchase order by uniquename
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public getPurchaseOrder(): void {
+        this.startLoader(true);
+
+        let getRequest = { companyUniqueName: this.selectedCompany.uniqueName, poUniqueName: this.purchaseOrderUniqueName };
+
+        this.purchaseOrderService.get(getRequest).subscribe(response => {
+            if (response) {
+                if (response.status === "success") {
+                    this.purchaseOrderDetails = response.body;
+                    this.purchaseOrder.templateDetails = this.purchaseOrderDetails.templateDetails;
+
+                    if (this.purchaseOrderDetails.warehouse) {
+                        this.initializeWarehouse(this.purchaseOrderDetails.warehouse);
+                    }
+
+                    this.purchaseOrder.company = this.purchaseOrderDetails.company;
+
+                    this.purchaseOrder.company.billingDetails.state = { name: '', code: '' };
+                    this.purchaseOrder.company.shippingDetails.state = { name: '', code: '' };
+
+                    this.purchaseOrder.company.billingDetails.state.code = this.purchaseOrderDetails.company.billingDetails.stateCode;
+                    this.purchaseOrder.company.billingDetails.state.name = this.purchaseOrderDetails.company.billingDetails.stateName;
+
+                    this.purchaseOrder.company.shippingDetails.state.code = this.purchaseOrderDetails.company.shippingDetails.stateCode;
+                    this.purchaseOrder.company.shippingDetails.state.name = this.purchaseOrderDetails.company.shippingDetails.stateName;
+
+                    this.purchaseOrder.voucherDetails.voucherDate = this.purchaseOrderDetails.date;
+                    this.purchaseOrder.voucherDetails.dueDate = this.purchaseOrderDetails.dueDate;
+
+                    if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails && !this.getAccountInProgress && this.vendorAccountsLoaded) {
+                        this.getAccountDetails(this.purchaseOrderDetails.account.uniqueName);
+                        this.purchaseOrder.entries = this.modifyEntries(this.purchaseOrderDetails.entries);
+                    }
+                } else {
+                    this.toaster.errorToast(response.message);
+                }
+            }
+        });
+    }
+
+    /**
+     * This will modify the entries and adapt it into the desired format
+     *
+     * @param {any[]} entries
+     * @returns {*}
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public modifyEntries(entries: any[]): any {
+        let convertedEntries = [];
+        
+        entries.forEach(entry => {
+            let salesEntryClass = new SalesEntryClass();
+            let salesTransactionItemClass = new SalesTransactionItemClass();
+            salesEntryClass.tcsTaxList = [];
+            salesEntryClass.tdsTaxList = [];
+
+            salesEntryClass.transactions = [];
+
+            entry.transactions.forEach(transaction => {
+                salesTransactionItemClass = new SalesTransactionItemClass();
+                salesTransactionItemClass.accountUniqueName = transaction.account.uniqueName;
+                salesTransactionItemClass.accountName = transaction.account.name;
+                salesTransactionItemClass.amount = transaction.amount.amountForAccount;
+                salesTransactionItemClass.hsnNumber = transaction.hsnNumber;
+                salesTransactionItemClass.sacNumber = transaction.sacNumber;
+                salesTransactionItemClass.sacNumberExists = (transaction.sacNumber) ? true : false;
+                salesTransactionItemClass.fakeAccForSelect2 = transaction.account.uniqueName;
+                salesTransactionItemClass.description = entry.description;
+                salesTransactionItemClass.date = transaction.date;
+                salesEntryClass.transactions.push(salesTransactionItemClass);
+
+                entry.taxes.forEach(tax => {
+                    let taxTypeArr = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
+                    if (taxTypeArr.indexOf(tax.taxType) > -1) {
+                        salesEntryClass.isOtherTaxApplicable = true;
+                        let otherTaxModal = new SalesOtherTaxesModal();
+                        otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
+                        otherTaxModal.tcsCalculationMethod = tax.calculationMethod;
+                        salesEntryClass.otherTaxModal = otherTaxModal;
+
+                        if (tax.taxType === 'tdsrc' || tax.taxType === 'tdspay') {
+                            salesEntryClass.tdsTaxList.push(tax.uniqueName);
+                        } else {
+                            salesEntryClass.tcsTaxList.push(tax.uniqueName);
+                        }
+                    } else {
+                        salesEntryClass.taxes.push({
+                            amount: tax.taxPercent,
+                            uniqueName: tax.uniqueName,
+                            isChecked: true,
+                            isDisabled: false,
+                            type: tax.taxType,
+                            name: tax.name || ''
+                        });
+                    }
+                });
+
+                if (transaction.stock) {
+                    salesTransactionItemClass.isStockTxn = true;
+                    salesTransactionItemClass.stockDetails = {};
+                    salesTransactionItemClass.stockDetails.name = transaction.stock.name;
+                    salesTransactionItemClass.stockDetails.uniqueName = transaction.stock.uniqueName;
+                    salesTransactionItemClass.quantity = transaction.stock.quantity;
+                    salesTransactionItemClass.rate = transaction.stock.rate.amountForAccount;
+                    salesTransactionItemClass.stockDetails.skuCode = transaction.stock.sku;
+                    salesTransactionItemClass.stockUnit = transaction.stock.stockUnit.code;
+                    salesTransactionItemClass.fakeAccForSelect2 = transaction.account.uniqueName + '#' + transaction.stock.uniqueName;
+                }
+            });
+
+            if (entry.discounts && entry.discounts.length) {
+                let discountArray = [];
+                let tradeDiscountArray = [];
+                entry.discounts.forEach(discount => {
+                    let discountLedger = new LedgerDiscountClass();
+
+                    discountLedger.amount = discount.discountValue;
+                    discountLedger.discountType = discount.calculationMethod;
+                    discountLedger.discountValue = discount.discountValue;
+                    discountLedger.isActive = true;
+                    discountLedger.discountUniqueName = discount.uniqueName;
+                    discountLedger.name = discount.name;
+                    discountLedger.particular = discount.particular;
+                    discountLedger.uniqueName = discountLedger.discountUniqueName;
+                    let tradeDiscount = new LedgerResponseDiscountClass();
+                    tradeDiscount.discount = {
+                        uniqueName: '',
+                        name: '',
+                        discountType: "PERCENTAGE",
+                        discountValue: 0
+                    };
+                    tradeDiscount.account = {
+                        accountType: '',
+                        uniqueName: entry.uniqueName,
+                        name: ''
+                    };
+                    tradeDiscount.discount.uniqueName = discountLedger.discountUniqueName;
+                    tradeDiscount.discount.discountValue = discountLedger.discountValue;
+                    tradeDiscount.discount.discountType = discountLedger.discountType;
+                    tradeDiscount.discount.name = discountLedger.name;
+                    tradeDiscountArray.push(tradeDiscount);
+                });
+                salesEntryClass.discounts = discountArray;
+                salesEntryClass.tradeDiscounts = tradeDiscountArray;
+            } else {
+                salesEntryClass.discounts = [new LedgerDiscountClass()];
+            }
+
+            salesEntryClass.discounts = this.parseDiscountFromResponse(salesEntryClass);
+            salesEntryClass.voucherType = entry.voucherType;
+            salesEntryClass.uniqueName = entry.uniqueName;
+            salesEntryClass.description = entry.description;
+            salesEntryClass.entryDate = moment(entry.date, GIDDH_DATE_FORMAT).toDate();
+            this.calculateOtherTaxes(salesEntryClass.otherTaxModal, salesEntryClass);
+            convertedEntries.push(salesEntryClass);
+        });
+
+        return convertedEntries;
+    }
+
+    /**
+     * This will modify the entry discount and adapt it into the desired format
+     *
+     * @private
+     * @param {*} entry
+     * @returns {LedgerDiscountClass[]}
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private parseDiscountFromResponse(entry: any): LedgerDiscountClass[] {
+        let discountArray: LedgerDiscountClass[] = [];
+
+        if (entry.tradeDiscounts) {
+            let isDefaultDiscountThere = entry.tradeDiscounts.some(s => !s.discount.uniqueName);
+
+            // now we are adding every discounts in tradeDiscounts so have to only check in trade discounts
+            if (!isDefaultDiscountThere) {
+                discountArray.push({
+                    discountType: 'FIX_AMOUNT',
+                    amount: 0,
+                    name: '',
+                    particular: '',
+                    isActive: true,
+                    discountValue: 0
+                });
+            }
+
+            entry.tradeDiscounts.forEach((f) => {
+                discountArray.push({
+                    discountType: f.discount.discountType,
+                    amount: f.discount.discountValue,
+                    name: f.discount.name,
+                    particular: f.account.uniqueName,
+                    isActive: true,
+                    discountValue: f.discount.discountValue,
+                    discountUniqueName: f.discount.uniqueName
+                });
+
+            });
+        }
+
+        return discountArray;
     }
 }

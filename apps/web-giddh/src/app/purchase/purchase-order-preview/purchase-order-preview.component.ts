@@ -1,9 +1,17 @@
-import { Component, OnInit, TemplateRef, Input, EventEmitter, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, EventEmitter, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap'
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
 import { GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { takeUntil, debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
+import { AppState } from '../../store';
+import { select, Store } from '@ngrx/store';
+import { ReplaySubject, fromEvent } from 'rxjs';
+import { OnboardingFormRequest } from '../../models/api-models/Common';
+import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { CommonActions } from '../../actions/common.actions';
 
 @Component({
     selector: 'purchase-order-preview',
@@ -11,11 +19,12 @@ import { GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
     styleUrls: ['./purchase-order-preview.component.scss']
 })
 
-export class PurchaseOrderPreviewComponent implements OnInit, OnChanges {
+export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
     @Input() public purchaseOrders: any;
     @Input() public companyUniqueName: any;
     @Input() public purchaseOrderUniqueName: any;
 
+    @ViewChild('searchElement') public searchElement: ElementRef;
     /* Confirm box */
     @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
 
@@ -25,24 +34,97 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges {
     public sendEmailRequest: any = {};
     public isLoading: boolean = false;
     public giddhDateFormat: any = GIDDH_DATE_FORMAT_UI;
+    /* This will hold inventory settings */
+    public inventorySettings: any;
+    /* Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public filteredData: any[] = [];
+    /* This will hold if we need to show GST */
+    public showGSTINNo: boolean;
+    /* This will hold if we need to show TRN */
+    public showTRNNo: boolean;
+    /* This will hold selected company details */
+    public selectedCompany: any;
+    /* This will hold list of vat supported countries */
+    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    /* This will hold form fields */
+    public formFields: any[] = [];
+    /* True, if the Giddh supports the taxation of the country (not supported now: UK, US, Nepal, Australia) */
+    public shouldShowTrnGstField: boolean = false;
 
-    constructor(private modalService: BsModalService, public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public router: Router) {
-
+    constructor(private store: Store<AppState>, private modalService: BsModalService, public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public router: Router, private commonActions: CommonActions) {
+        this.getInventorySettings();
     }
 
     public ngOnInit(): void {
         this.getPurchaseOrder();
+
+        if (this.purchaseOrders && this.purchaseOrders.items) {
+            this.filteredData = this.purchaseOrders.items;
+        }
+
+        this.store.pipe(select(state => {
+            if (!state.session.companies) {
+                return;
+            }
+            state.session.companies.forEach(cmp => {
+                if (cmp.uniqueName === state.session.companyUniqueName) {
+                    this.selectedCompany = cmp;
+                }
+            });
+        })).subscribe();
+
+        this.store.pipe(select(state => state.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                if (res.fields) {
+                    this.formFields = [];
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
+                if (this.formFields && this.formFields['taxName']) {
+                    this.shouldShowTrnGstField = true;
+                } else {
+                    this.shouldShowTrnGstField = false;
+                }
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
-        if(changes.purchaseOrderUniqueName && changes.purchaseOrderUniqueName.currentValue && changes.purchaseOrderUniqueName.currentValue !== this.purchaseOrder.uniqueName) {
+        if (changes.purchaseOrders && changes.purchaseOrders.currentValue && changes.purchaseOrders.currentValue.items) {
+            this.filteredData = changes.purchaseOrders.currentValue.items;
+        }
+
+        if (changes.purchaseOrderUniqueName && changes.purchaseOrderUniqueName.currentValue && changes.purchaseOrderUniqueName.currentValue !== this.purchaseOrder.uniqueName) {
             this.purchaseOrderUniqueName = changes.purchaseOrderUniqueName.currentValue;
             this.getPurchaseOrder();
         }
     }
 
+    public ngAfterViewInit(): void {
+        this.searchElement.nativeElement.focus();
+        fromEvent(this.searchElement.nativeElement, 'input')
+            .pipe(
+                debounceTime(500),
+                distinctUntilChanged(),
+                map((ev: any) => ev.target.value)
+            )
+            .subscribe((term => {
+                this.filteredData = this.purchaseOrders.items.filter(item => {
+                    return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
+                        item.vendor.name.toLowerCase().includes(term.toLowerCase()) ||
+                        item.voucherDate.includes(term) ||
+                        item.grandTotal.amountForAccount.toString().includes(term);
+                });
+            }))
+    }
+
     public getPurchaseOrder(): void {
-        if(this.isLoading) {
+        if (this.isLoading) {
             return;
         }
 
@@ -53,6 +135,12 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges {
             if (response) {
                 if (response.status === "success") {
                     this.purchaseOrder = response.body;
+
+                    if (this.purchaseOrder.account.billingDetails.country) {
+                        this.showGstAndTrnUsingCountry(this.purchaseOrder.account.billingDetails.country.countryCode, this.purchaseOrder.account.billingDetails.country.countryName);
+                    } else {
+                        this.showGstAndTrnUsingCountry('', '');
+                    }
                 } else {
                     this.toaster.errorToast(response.message);
                 }
@@ -91,7 +179,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges {
     }
 
     public closeSendMailPopup(event: any): void {
-        if(event) {
+        if (event) {
             this.modalRef.hide();
         }
     }
@@ -139,5 +227,52 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges {
         } else {
             this.toaster.errorToast("Invalid Purchase Order");
         }
+    }
+
+    /**
+     * This function is used to get inventory settings from store
+     *
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public getInventorySettings(): void {
+        this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
+            if (settings && settings.companyInventorySettings) {
+                this.inventorySettings = settings.companyInventorySettings;
+            }
+        });
+    }
+
+    /**
+     * Releases the memory
+     *
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    private showGstAndTrnUsingCountry(code: string, name: string): void {
+        if (this.selectedCompany.country === name) {
+            if (name === 'India') {
+                this.showGSTINNo = true;
+                this.showTRNNo = false;
+                this.getOnboardingForm('IN')
+            } else if (this.vatSupportedCountries.includes(code)) {
+                this.showGSTINNo = false;
+                this.showTRNNo = true;
+                this.getOnboardingForm(code);
+            }
+        } else {
+            this.showGSTINNo = false;
+            this.showTRNNo = false;
+        }
+    }
+
+    public getOnboardingForm(countryCode): void {
+        let onboardingFormRequest = new OnboardingFormRequest();
+        onboardingFormRequest.formName = 'onboarding';
+        onboardingFormRequest.country = countryCode;
+        this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
     }
 }
