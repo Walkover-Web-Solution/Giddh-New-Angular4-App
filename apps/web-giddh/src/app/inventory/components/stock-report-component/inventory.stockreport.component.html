@@ -32,8 +32,8 @@
 
         <div class="d-flex" style="justify-content: space-between">
             <div class="d-flex" style="align-items: center">
-                <h2 class="head-report">
-                    <span *ngIf="stockReport && stockReport.stockUnit">
+                <h2 class="head-report" *ngIf="stockReport && stockReport.stockUnit">
+                    <span>
                         {{stockReport.stockName}}</span> (Stock)</h2>
 
                 <div class="advance-icon" tooltip="Advance Search">

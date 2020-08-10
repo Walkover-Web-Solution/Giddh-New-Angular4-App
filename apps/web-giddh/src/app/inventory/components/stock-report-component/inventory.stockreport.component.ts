@@ -1,6 +1,6 @@
 import {ToasterService} from './../../../services/toaster.service';
 import {InventoryService} from '../../../services/inventory.service';
-import {debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil, last} from 'rxjs/operators';
 import {IGroupsWithStocksHierarchyMinItem} from '../../../models/interfaces/groupsWithStocks.interface';
 import {InventoryDownloadRequest, StockReportRequest, StockReportResponse} from '../../../models/api-models/Inventory';
 import {StockReportActions} from '../../../actions/inventory/stocks-report.actions';
@@ -22,7 +22,7 @@ import {
 } from '@angular/core';
 import {SidebarAction} from '../../../actions/inventory/sidebar.actions';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, of as observableOf, ReplaySubject, Subscription} from 'rxjs';
+import {Observable, of as observableOf, ReplaySubject, Subscription, combineLatest as observableCombineLatest} from 'rxjs';
 
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment/moment';
@@ -254,7 +254,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
                 private invViewService: InvViewService,
                 private cdr: ChangeDetectorRef
     ) {
-        this.stockReport$ = this.store.select(p => p.inventory.stockReport).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount());
+        this.stockReport$ = this.store.pipe(select(stockReportStore => stockReportStore.inventory.stockReport),takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.stockReportRequest = new StockReportRequest();
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
         this.entityAndInventoryTypeForm = this.fb.group({
@@ -296,30 +296,31 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     }
 
     public ngOnInit() {
-        if (this.route.firstChild) {
-            this.route.firstChild.params.pipe(take(1)).subscribe(s => {
-                if (s) {
-                    this.groupUniqueName = s.groupUniqueName;
-                    this.stockUniqueName = s.stockUniqueName;
-                    this.initReport();
-                }
-            });
-        }
+        // if (this.route.firstChild) {
+        //     this.route.firstChild.params.pipe(take(1)).subscribe(s => {
+        //         if (s) {
+        //             this.groupUniqueName = s.groupUniqueName;
+        //             this.stockUniqueName = s.stockUniqueName;
+        //             this.initReport();
+        //         }
+        //     });
+        // }
+
 
         // get view from sidebar while clicking on group/stock
-        this.invViewService.getActiveView().subscribe(v => {
+        this.invViewService.getActiveView().subscribe(viewActiveStock => {
             this.initVoucherType();
-            this.groupUniqueName = v.groupUniqueName;
-            this.stockUniqueName = v.stockUniqueName;
+            this.groupUniqueName = viewActiveStock.groupUniqueName;
+            this.stockUniqueName = viewActiveStock.stockUniqueName;
             this.selectedEntity = 'allEntity';
             this.selectedTransactionType = 'all';
             if (this.groupUniqueName) {
                 this.store.dispatch(this.sideBarAction.SetActiveStock(this.stockUniqueName));
                 if (this.groupUniqueName && this.stockUniqueName) {
-                    this.store.select(p => {
-                        return this.findStockNameFromId(p.inventory.groupsWithStocks, this.stockUniqueName);
-                    }).pipe(take(1)).subscribe(p => this.activeStock$ = p);
                     this.initReport();
+                    this.store.pipe(select(p => {
+                        return this.findStockNameFromId(p.inventory.groupsWithStocks, this.stockUniqueName);
+                    }),take(1)).subscribe(p => this.activeStock$ = p);
                 }
             }
         });

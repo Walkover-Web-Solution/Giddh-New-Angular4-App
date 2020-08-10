@@ -105,21 +105,21 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).subscribe(result => {
-            if(this.isMobileScreen && !result.matches) {
+            if (this.isMobileScreen && !result.matches) {
                 this.setDefaultGroup();
             }
             this.isMobileScreen = result.matches;
         });
 
-        this.currentUrl = this.router.url;
+        // this.currentUrl = this.router.url;
 
-        if (this.currentUrl.indexOf('group') > 0) {
-            this.activeView = "group";
-        } else if (this.currentUrl.indexOf('stock') > 0) {
-            this.activeView = "stock";
-        } else {
-            this.activeView = null;
-        }
+        // if (this.currentUrl.indexOf('group') > 0) {
+        //     this.activeView = "group";
+        // } else if (this.currentUrl.indexOf('stock') > 0) {
+        //     this.activeView = "stock";
+        // } else {
+        //     this.activeView = null;
+        // }
 
         this.activeStock$ = this.store.select(p => p.inventory.activeStock).pipe(takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.select(p => p.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
@@ -182,8 +182,13 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         })).pipe(takeUntil(this.destroyed$)).subscribe();
 
         // get view from sidebar while clicking on group/stock
-        this.invViewService.getActiveView().subscribe(v => {
-            this.activeView = v.view;
+        this.invViewService.getActiveView().subscribe(activeViewData => {
+            if (activeViewData.view) {
+                this.activeView = activeViewData.view;
+            } else {
+                this.activeView = null;
+            }
+
             if (this.branchesWithWarehouse && this.branchesWithWarehouse.length === 0) {
                 // First time initialization (when first stock is created in a new company), load the filter values
                 this.loadBranchAndWarehouseDetails();
@@ -217,7 +222,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngAfterViewInit() {
-        if(!this.isMobileScreen) {
+        if (!this.isMobileScreen) {
             this.setDefaultGroup();
         }
     }
