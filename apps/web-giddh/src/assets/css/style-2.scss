@@ -9488,6 +9488,12 @@ span#HW_badge_cont:nth-child(3) {
     font-size: 14px;
     padding: 4px;
 }
+.daterangepicker td,
+.daterangepicker th {
+    font-weight: 400;
+    font-size: 14px;
+    padding: 4px;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -10459,18 +10465,20 @@ span#HW_badge_cont:nth-child(3) {
     }
     .modal-dialog{
         max-width: 600px !important;
-        margin: 30px auto;
+          margin: 30px auto;
     }
     .modal-dialog.modal-xl{
         max-width: 1140px !important;
     }
 }
-@media (min-width: 992px){
-    .modal-xl {
-        width: 900px !important;
+
+@media (min-width:576px){
+    .modal-dialog {
+        max-width: 100% !important;
     }
 }
-@media (min-width: 480px) and (max-width: 667px) {
+
+@media(min-width:480px) and (max-width:667px) {
     .edit-modal {
         margin: 20px auto;
         padding-top: 0;
