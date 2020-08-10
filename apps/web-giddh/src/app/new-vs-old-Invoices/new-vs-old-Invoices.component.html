@@ -3,8 +3,8 @@
         <div class="form-inline">
 
             <form #carried="ngForm" (ngSubmit)="go(carried)">
-                <div class="pull-left">
-                    <div class="form-group mrR1 max500">
+                <div class="pull-left d-flex align-center">
+                    <div class="form-group mrR1 max500 d-initial">
                         <label>Select Year</label>
                         <sh-select placeholder="Search Year..." [multiple]='false' name="selectedYear"
                             [(ngModel)]="selectedYear" #SelectYear="ngModel" [options]="yearOptions" required>
@@ -15,7 +15,7 @@
                     </div>
 
 
-                    <div class="form-group mrR1 max500">
+                    <div class="form-group mrR1 max500 d-initial">
                         <label>Select Type</label>
                         <sh-select placeholder="Search Type..." [multiple]='false' name="selectedType"
                             [(ngModel)]="selectedType" #SelectType="ngModel" [options]="GetTypeOptions" required
@@ -25,7 +25,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group mrR1 max500" *ngIf="selectedType==='month'">
+                    <div class="form-group mrR1 max500 d-initial" *ngIf="selectedType==='month'">
                         <label>Select Month</label>
                         <sh-select placeholder="Search Month..." [multiple]='false' name="selectedmonth"
                             [(ngModel)]="selectedmonth" #SelectMonth="ngModel" [options]="monthOptions" required
@@ -35,7 +35,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group mrR1 max500" *ngIf="selectedType==='quater'">
+                    <div class="form-group mrR1 max500 d-initial" *ngIf="selectedType==='quater'">
                         <label>Select Quater</label>
                         <sh-select placeholder="Search Quater..." [multiple]='false' name="selectedQuater"
                             [(ngModel)]="selectedQuater" #SelectQuater="ngModel" [options]="quaterOptions" required>

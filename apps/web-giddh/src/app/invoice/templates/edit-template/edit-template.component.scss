@@ -77,6 +77,10 @@
 .templteGrid-container {
     padding: 0 15px;
 }
+.full-modal{
+    width:100% !important;
+    margin:0;
+}
 @media (max-width: 414px) {
     .template-grid {
         background: #fafafa;
