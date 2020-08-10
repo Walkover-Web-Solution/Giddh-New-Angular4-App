@@ -114,7 +114,6 @@
                                                     (noResultsClicked)="showQuickAccountModal()"
                                                     [isPaginationEnabled]="true" (srollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
                                                     [enableDynamicSearch]="true"
-                                                    (onHide)="resetPreviousSearchResults()"
                                                     (keydown)="keydownPressed($event)"
                                                     [options]="searchResults" #dbtSelect
                                                     (click)="addBlankTrx('DEBIT', txn, $event)"
@@ -301,7 +300,6 @@
                                                     (noResultsClicked)="showQuickAccountModal()"
                                                     [isPaginationEnabled]="true" (srollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
                                                     [enableDynamicSearch]="true"
-                                                    (onHide)="resetPreviousSearchResults()"
                                                     (keydown)="keydownPressed($event)"
                                                     [options]="searchResults" #crdSelect
                                                     (click)="addBlankTrx('CREDIT', txn, $event)"
