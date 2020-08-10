@@ -175,12 +175,10 @@
             </div>
             <div class="clearfix">
 
-                <div class="btn-group" dropdown [autoClose]="true" placement="bottom right">
-                    <button class="btn-link icon-btn mr-1" (click)="editGroup()" tooltip="Edit group">
-                        <i class="fa fa-pencil"></i>
-                    </button>
-                    <button id="button-alignment" dropdownToggle type="button" class="btn-link mrT cp mr-1 dropdown-toggle icon-btn" aria-controls="dropdown-alignment" tooltip="Download">
-                        <i class="icon-download strong"></i>
+                <div class="btn-group " dropdown [autoClose]="true" placement="bottom right">
+                    <button id="button-alignment" dropdownToggle type="button"
+                        class="btn-link btn mrT cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
+                        <i class="icon-download"></i> Download
                     </button>
                     <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download" role="menu" aria-labelledby="button-alignment">
                         <li role="menuitem" (click)="downloadAllInventoryReports('group', 'csv')"><a class="dropdown-item">CSV</a>
