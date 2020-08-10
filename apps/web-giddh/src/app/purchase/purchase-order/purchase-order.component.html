@@ -52,7 +52,7 @@
             </div>
             <div class="btn-wrapper">
                 <button class="btn btn-pink desktop-view-btn mr-0"
-                    [routerLink]="['/pages/purchase-management/new-purchase-order']">+
+                    [routerLink]="['/pages/purchase-management/purchase-order/new']">+
                     New Order
                 </button>
             </div>
@@ -93,7 +93,7 @@
         </div>
         <div class="btn-wrapper">
             <button class="btn btn-pink desktop-view-btn mr-0"
-                [routerLink]="['/pages/purchase-management/new-purchase-order']">+
+                [routerLink]="['/pages/purchase-management/purchase-order/new']">+
                 New Order
             </button>
         </div>
@@ -198,7 +198,7 @@
                         {{item.voucherDate}}
                     </td>
                     <td data-title="Purchase Order">
-                        <a routerLink="/pages/purchase-management/purchase-order-preview/{{item.uniqueName}}">{{item.voucherNumber}}</a>
+                        <a routerLink="/pages/purchase-management/purchase-orders/preview/{{item.uniqueName}}">{{item.voucherNumber}}</a>
                     </td>
                     <td data-title="Vendor Name">
                         {{item.vendor?.name}}
@@ -220,7 +220,7 @@
                             <a tooltip="Send Email" (click)="openSendMailModal(item, sendEmailModal)">
                                 <span class="icon-enevlop font-12"></span>
                             </a>
-                            <a tooltip="Copy">
+                            <a tooltip="Copy" [routerLink]="['/pages/purchase-management/purchase-order/new/'+item.uniqueName]">
                                 <span class="icon-copy-small font-14"></span>
                             </a>
                             <a tooltip="Delete" (click)="confirmDelete(item)">
