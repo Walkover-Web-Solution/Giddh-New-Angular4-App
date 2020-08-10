@@ -48,10 +48,10 @@
                         <input type="text" decimalDigitsDirective [DecimalPlaces]="4" class="form-control"
                             placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
                     </div>
-                    <div class="form-group col-md-1 pull-left ml-15">
+                    <div class="form-group col-md-1">
                         <label class="d-block d-none-sm">&nbsp;</label>
                         <!-- [disabled]="mfStockSearchRequestForm.invalid" -->
-                        <button class="btn btn-success float-right" type="submit">Go</button>
+                        <button class="btn btn-success" type="submit">Go</button>
                     </div>
                 </div>
             </form>
@@ -72,16 +72,33 @@
                 <table class="table basic table-bordered">
                     <thead>
                         <tr>
-                            <th width="15%">Date</th>
-                            <th width="10%">Vch. No.</th>
-                            <th width="15%">Final Product</th>
-                            <th width="24%" class="alC">Raw Products</th>
-                            <th width="12%" class="alC">Product Inwards</th>
-                            <th width="24%" class="alC">Quantity Outwards</th>
+                            <th>Date</th>
+                            <th>Vch. No.</th>
+                            <th>Final Product</th>
+                            <th>Raw Products</th>
+                            <th>Product Inwards</th>
+                            <th>Quantity Outwards</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)" class="cp">
+                            <td>{{item.date}}</td>
+                            <td>{{item.voucherNumber}}</td>
+                            <td>{{item.stockName}}</td>
+                            <td>{{item.manufacturingQuantity}} {{item.manufacturingUnit}}</td>
+                            <td>
+                                <span *ngFor="let row of item.linkedStocks">
+                                    {{row.stockName}}
+                                </span>
+                            </td>
+                            <td>
+                                <span *ngFor="let row of item.linkedStocks">
+                                    {{row.manufacturingQuantity}} {{row.manufacturingUnit}}
+                                </span>
+                            </td>
+                        </tr>
+
+                        <!-- <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)" class="cp">
                             <td>{{item.date}}</td>
                             <td>{{item.voucherNumber}}</td>
                             <td>{{item.stockName}}</td>
@@ -102,7 +119,7 @@
                                     </tbody>
                                 </table>
                             </td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
                 <div *ngIf="reportData?.totalPages > 1" class="paginationWrapper">
