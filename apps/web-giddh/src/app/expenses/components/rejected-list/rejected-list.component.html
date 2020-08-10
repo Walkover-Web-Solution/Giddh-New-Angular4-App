@@ -2,7 +2,7 @@
 
 	<div class="table-responsive">
 
-		<table class="table basic table-bordered mt-2 onMobileView">
+		<table class="table basic giddh-table table-bordered mt-2 onMobileView">
 			<thead>
 				<tr>
 					<th>#</th>
@@ -106,7 +106,7 @@
 
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
-	<div class="icon-pointer d-inline-block pull-right ml-1 pointer">
+	<div class="icon-pointer d-inline-block ml-1 pointer">
 
 		<div class="icon-sort-asc" *ngIf="pettycashRequest.sortBy !== col" (click)="sort('asc', col)"
 			[ngClass]="{'activeTextColor': pettycashRequest.sortBy === col && pettycashRequest.sort === 'asc'}">
