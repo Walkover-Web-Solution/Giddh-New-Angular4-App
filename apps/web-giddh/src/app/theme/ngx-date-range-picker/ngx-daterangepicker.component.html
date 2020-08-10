@@ -198,7 +198,7 @@
                 </div>
                 <perfect-scrollbar fxFlex="auto" class="hide-horizontal-scroll" [scrollIndicators]="true"
                     [config]="{suppressScrollX: false, suppressScrollY: false}">
-                    <div class="d-container" [style.max-height.px]="320" *ngIf="showMonthPicker">
+                    <div class="d-container" [style.max-height.px]="280" *ngIf="showMonthPicker">
                         <div *ngFor="let year of allowedYears; let i = index;">
                             <h2>
                                 {{ minDate.clone().add(i, 'year').format(" YYYY")}}
