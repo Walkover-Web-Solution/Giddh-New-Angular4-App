@@ -10442,18 +10442,15 @@ span#HW_badge_cont:nth-child(3) {
     }
     .modal-dialog{
         max-width: 600px !important;
+        margin: 30px auto;
+    }
+    .modal-dialog.modal-xl{
+        max-width: 1140px !important;
     }
     .modal-dialog.modal-xl{
         max-width: 1140px !important;
     }
 }
-
-@media (min-width: 992px){
-    .modal-xl {
-        width: 900px !important;
-    }
-}
-
 @media (min-width:576px){
     .modal-dialog {
         max-width: 100% !important;
