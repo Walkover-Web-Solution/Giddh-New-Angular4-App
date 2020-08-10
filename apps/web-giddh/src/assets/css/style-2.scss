@@ -4040,7 +4040,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .modal-header {
     position: relative;
     background: $midnight-blue !important;
-    border-radius: 5px 5px 0 0;
+    border-radius: 0 !important;
 }
 
 .close_modal {
@@ -6201,6 +6201,7 @@ typeahead-container .dropdown-menu li.active>a>a:hover {
     font-weight: 100;
     text-shadow: none;
     font-size: 30px;
+    cursor: pointer;
 }
 
 
@@ -9423,6 +9424,12 @@ span#HW_badge_cont:nth-child(3){
         min-height: 426px;
     }
 }
+.daterangepicker td,
+.daterangepicker th {
+    font-weight: 400;
+    font-size: 14px;
+    padding: 4px;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -10353,6 +10360,12 @@ span#HW_badge_cont:nth-child(3){
     }
     .edit-modal.modal-small {
         display: none;
+    }
+    .modal-dialog{
+        max-width: 600px !important;
+    }
+    .modal-dialog.modal-xl{
+        max-width: 1140px !important;
     }
 }
 
