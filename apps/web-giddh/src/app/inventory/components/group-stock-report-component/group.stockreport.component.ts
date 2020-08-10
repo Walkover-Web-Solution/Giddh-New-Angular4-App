@@ -8,7 +8,7 @@ import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
 import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, publishReplay, refCount, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, publishReplay, refCount, takeUntil, last } from 'rxjs/operators';
 
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
@@ -232,7 +232,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     ) {
         this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.GroupStockReportRequest = new GroupStockReportRequest();
-        this.activeGroup$ = this.store.select(state => state.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
+        this.activeGroup$ = this.store.pipe(select(activeGroupStore => activeGroupStore.inventory.activeGroup),takeUntil(this.destroyed$));
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
         this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
@@ -744,7 +744,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     }
 
     public downloadAllInventoryReports(reportType: string, reportFormat: string) {
-        console.log('Called : download', reportType, 'format', reportFormat);
         let obj = new InventoryDownloadRequest();
         if (this.GroupStockReportRequest.stockGroupUniqueName) {
             obj.stockGroupUniqueName = this.GroupStockReportRequest.stockGroupUniqueName;

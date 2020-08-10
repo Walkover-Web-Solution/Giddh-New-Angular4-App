@@ -49,7 +49,6 @@ export class StockListComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-
         this.sub = this.route.params.subscribe(params => {
             this.groupUniqueName = params['groupUniqueName'];
         });
@@ -66,7 +65,7 @@ export class StockListComponent implements OnInit, OnDestroy {
         this.stockUniqueName = item.uniqueName;
         this.store.dispatch(this.sideBarAction.GetInventoryStock(item.uniqueName, this.Groups.uniqueName));
         // setTimeout(() => {
-        this._router.navigate(['/pages', 'inventory', 'stock', this.Groups.uniqueName, 'report', item.uniqueName]);
+        // this._router.navigate(['/pages', 'inventory', 'stock', this.Groups.uniqueName, 'report', item.uniqueName]);
         // }, 700);
     }
 
