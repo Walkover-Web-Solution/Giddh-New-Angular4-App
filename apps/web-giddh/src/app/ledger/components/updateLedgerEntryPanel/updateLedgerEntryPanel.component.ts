@@ -875,6 +875,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.isTxnUpdateSuccess$.subscribe(upd => {
             if (upd) {
                 this.store.dispatch(this._ledgerAction.ResetUpdateLedger());
+                this.resetPreviousSearchResults();
                 this.baseAccountChanged = false;
                 // this.closeUpdateLedgerModal.emit(true);
             }
@@ -1100,8 +1101,28 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                 }
             } else {
-                // directly assign additional property
-                txn.selectedAccount = e.additional;
+                this.searchService.loadDetails(e.value).subscribe(data => {
+                    // directly assign additional property
+                    if (data && data.body) {
+                        txn.selectedAccount = {
+                            ...e.additional,
+                            label: e.label,
+                            value: e.value,
+                            isHilighted: true,
+
+                            applicableTaxes: data.body.applicableTaxes || [],
+                            currency: data.body.currency,
+                            currencySymbol: data.body.currencySymbol,
+                            email: data.body.emails,
+                            isFixed: data.body.isFixed,
+                            mergedAccounts: data.body.mergedAccounts,
+                            mobileNo: data.body.mobileNo,
+                            nameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.name).join(', ') : '',
+                            stocks: [],
+                            uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
+                        };
+                    }
+                });
                 delete txn.inventory;
                 // Non stock item got selected, search if there is any stock item along with non-stock item
                 const isStockItemPresent = this.isStockItemPresent();
