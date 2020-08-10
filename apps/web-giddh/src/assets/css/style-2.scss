@@ -6950,7 +6950,7 @@ table td[class*=col-]:last-child {
 .condition_tag {
     position: absolute;
     top: 2px;
-    right: 6px;
+    right: -48px;
     background: #eee;
     border-radius: 100%;
     padding: 7px 7px;
@@ -8967,6 +8967,7 @@ p.remvBrnchName {
 .receipt-note-modal {
     width: 100% !important;
     top: 0;
+    max-width: 100%;
 }
 
 .inventory-page .modal,
