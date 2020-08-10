@@ -71,6 +71,13 @@ ul#dropdown-nested li .caret {
 .sales-register-menu {
     min-width: 195px !important;
 }
+
+.list-inline>li {
+    display: inline-block;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
 @media (max-width: 767px) {
     .xs-pr-0 {
         padding-right: 0px !important;
