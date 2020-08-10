@@ -4016,8 +4016,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .modal-header {
     position: relative;
     background: $midnight-blue !important;
-    border-radius: 5px 5px 0 0;
-    color: $white !important;
+    border-radius: 0 !important;
 }
 
 .close-modal {
@@ -6206,6 +6205,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     font-weight: 100;
     text-shadow: none;
     font-size: 30px;
+    cursor: pointer;
 }
 
 /**new modal design**/
@@ -9482,6 +9482,12 @@ span#HW_badge_cont:nth-child(3) {
 .giddh-datepicker-modal {
     z-index: 99999;
 }
+.daterangepicker td,
+.daterangepicker th {
+    font-weight: 400;
+    font-size: 14px;
+    padding: 4px;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -10451,27 +10457,19 @@ span#HW_badge_cont:nth-child(3) {
     .edit-modal.modal-small {
         display: none;
     }
-    .modal-sm {
-        width: 450px !important;
-    }
-    .modal-dialog {
-        width: 600px !important;
+    .modal-dialog{
+        max-width: 600px !important;
         margin: 30px auto;
     }
+    .modal-dialog.modal-xl{
+        max-width: 1140px !important;
+    }
 }
-
 @media (min-width: 992px){
     .modal-xl {
         width: 900px !important;
     }
 }
-
-@media (min-width:576px){
-    .modal-dialog {
-        max-width: 100% !important;
-    }
-}
-
 @media (min-width: 480px) and (max-width: 667px) {
     .edit-modal {
         margin: 20px auto;
