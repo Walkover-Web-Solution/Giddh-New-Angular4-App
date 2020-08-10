@@ -255,10 +255,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         this.store.pipe(select(state => state.settings.financialYearLimits), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.startDate && response.endDate) {
-                this.minDate = moment(moment(response.startDate, GIDDH_DATE_FORMAT).toDate());
-                this.maxDate = moment(moment(response.endDate, GIDDH_DATE_FORMAT).toDate());
-                this.financialYearUpdated = true;
-                this.getAllYearsBetweenDates();
+                if(moment(moment(response.startDate, GIDDH_DATE_FORMAT).toDate()) !== this.minDate || moment(moment(response.endDate, GIDDH_DATE_FORMAT).toDate()) !== this.maxDate) {
+                    this.minDate = moment(moment(response.startDate, GIDDH_DATE_FORMAT).toDate());
+                    this.maxDate = moment(moment(response.endDate, GIDDH_DATE_FORMAT).toDate());
+                    this.financialYearUpdated = true;
+                    this.getAllYearsBetweenDates();
+                }
             }
         });
 
@@ -316,7 +318,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         this._breakPointObservar.observe([
             '(max-width: 767px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
             this.closeCalender();
         });
