@@ -176,7 +176,7 @@
             <div class="clearfix">
 
                 <div class="btn-group" dropdown [autoClose]="true" placement="bottom right">
-                    <button class="btn-link icon-btn mr-1" (click)="editGroup()" tooltip="Edit group">
+                    <button class="btn-link btn icon-btn mr-1" (click)="editGroup()" tooltip="Edit group">
                         <i class="fa fa-pencil"></i>
                     </button>
                     <button id="button-alignment" dropdownToggle type="button" class="btn-link mrT cp mr-1 dropdown-toggle icon-btn" aria-controls="dropdown-alignment" tooltip="Download">
@@ -592,8 +592,10 @@
                         <div class="col-sm-4">Date Range</div>
                         <div class="col-sm-8">
                             <div class="input-group">
-                                <input type="text" name="daterangeInput1" daterangepicker [options]="datePickerOptions" class="form-control" (applyDaterangepicker)="selectedDate($event, 'advance')" />
-                                <div class="input-group-addon"><span class="glyphicon glyphicon-calendar bg-white"></span></div>
+                                <input type="text" name="daterangeInput1" daterangepicker [options]="datePickerOptions"
+                                    class="form-control" (applyDaterangepicker)="selectedDate($event, 'advance')" />
+                                <div class="input-group-addon"><span
+                                        class="icon-calender bg-white"></span></div>
                             </div>
                         </div>
                     </div>
@@ -627,8 +629,10 @@
                     </div>
 
                     <div class="row mrT4 mrB3">
-                        <div class="col-xs-12 text-right">
-                            <button class="btn btn-success" type="button" [disabled]="!isFilterCorrect || !GroupStockReportRequest.condition || !GroupStockReportRequest.entity || !GroupStockReportRequest.value || !GroupStockReportRequest.number" (click)="advanceSearchAction('search')">Search
+                        <div class="col-xs-12 col-sm-12 text-right">
+                            <button class="btn btn-success" type="button"
+                                [disabled]="!isFilterCorrect || !GroupStockReportRequest.condition || !GroupStockReportRequest.entity || !GroupStockReportRequest.value || !GroupStockReportRequest.number"
+                                (click)="advanceSearchAction('search')">Search
                             </button>
                             <button class="btn btn-danger" type="button" (click)="advanceSearchAction('clear')">Clear</button>
                         </div>
