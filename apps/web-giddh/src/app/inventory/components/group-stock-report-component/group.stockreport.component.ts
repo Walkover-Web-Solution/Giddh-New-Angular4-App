@@ -8,7 +8,7 @@ import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
 import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, publishReplay, refCount, takeUntil, last } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, publishReplay, refCount, takeUntil } from 'rxjs/operators';
 
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
