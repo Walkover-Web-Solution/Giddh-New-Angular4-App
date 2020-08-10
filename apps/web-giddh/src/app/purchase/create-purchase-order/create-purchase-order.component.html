@@ -350,8 +350,7 @@
                         </div>
                         <!-- region customer dropdown -->
                         <div class="col-sm-7 select-customer-name">
-                            <input type="text" class="form-control" placeholder="Select Date" name="purchaseOrderDate"
-                                [(ngModel)]="purchaseOrder.voucherDetails.voucherDate" bsDatepicker>
+                            <input type="text" class="form-control" placeholder="Select Date" [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseOrderDate" [(ngModel)]="purchaseOrder.voucherDetails.voucherDate" bsDatepicker>
                         </div>
                         <!-- endregion -->
                     </div>
@@ -372,8 +371,7 @@
                             <div class="col-sm-6 invoice-due-date">
                                 <div class="d-flex">
                                     <label>Expected Delivery</label>
-                                    <input type="text" class="form-control" placeholder="Select Date"
-                                        name="purchaseDueDate" [(ngModel)]="purchaseOrder.voucherDetails.dueDate" bsDatepicker>
+                                    <input type="text" class="form-control" placeholder="Select Date" [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseDueDate" [(ngModel)]="purchaseOrder.voucherDetails.dueDate" bsDatepicker>
                                 </div>
                             </div>
                         </div>
@@ -473,7 +471,7 @@
                                 {{transaction.quantity}} {{transaction.stockUnit}}
                             </div>
                         </td>
-                        <td class="text-right tra-rate item-rate ">
+                        <td class="text-right tra-rate item-rate">
                             <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
                                 <div class="td-Wrapper">
                                     <div style="flex: 1;">
@@ -580,7 +578,7 @@
                                     <sh-select [options]="salesAccounts$ | async" #selectAccount
                                         [(ngModel)]="transaction.fakeAccForSelect2"
                                         name="transaction.fakeAccForSelect2_{{entryIdx}}"
-                                        (selected)="onSelectSalesAccount($event,transaction, entry)"
+                                        (selected)="onSelectSalesAccount($event, transaction, entry)"
                                         [placeholder]="'Select A/c'" [notFoundLink]="true"
                                         [fixedValue]="(transaction.stockDetails && transaction.stockDetails.name) ? transaction.accountName+' ('+transaction.stockDetails?.name+')' : transaction.accountName"
                                         [forceClearReactive]="forceClear$ | async"
