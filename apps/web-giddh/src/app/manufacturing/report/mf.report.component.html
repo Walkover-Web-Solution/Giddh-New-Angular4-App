@@ -1,12 +1,12 @@
 <section id="manufacture" class="clearfix">
     <!-- page Title -->
-    <div class="top-bar col-xs-12 clearfix bdrB">
+    <div class="top-bar col-xs-12 col-sm-12 clearfix bdrB">
         <h1 class="section-title d-inline-block"><strong>Mfg. Journal Register</strong></h1>
         <button class="btn isActive pull-right mr-0" (click)="goToCreateNewPage()" type="button">Create
             Manufacture</button>
     </div>
     <!-- form -->
-    <div class="col-xs-12">
+    <div class="col-xs-12 col-sm-12">
         <div class="mfStockSearchRequestForm clearfix">
             <form #mfStockSearchRequestForm="ngForm" class="col-xs-12 pl-0 pr-0 mt-2 mb-05 manufacturing-form" (submit)="getReports()"
                 autocomplete="off">
@@ -26,7 +26,7 @@
                                 required>
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default" (click)="dp.toggle()"><i
-                                        class="glyphicon glyphicon-calendar"></i></button>
+                                        class="icon-calender"></i></button>
                             </span>
                         </div>
                     </div>
@@ -48,10 +48,10 @@
                         <input type="text" decimalDigitsDirective [DecimalPlaces]="4" class="form-control"
                             placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
                     </div>
-                    <div class="form-group pull-left ml-15">
+                    <div class="form-group col-md-1 pull-left ml-15">
                         <label class="d-block d-none-sm">&nbsp;</label>
                         <!-- [disabled]="mfStockSearchRequestForm.invalid" -->
-                        <button class="btn btn-success" type="submit">Go</button>
+                        <button class="btn btn-success float-right" type="submit">Go</button>
                     </div>
                 </div>
             </form>
@@ -61,14 +61,14 @@
     <section *ngIf="(isReportLoading$ | async)" class="clearfix mart100 col-xs-12">
         <p class="lead alC mrT4">Loading...</p>
     </section>
-    <div class="no-data mart100 col-xs-12"
+    <div class="no-data mart100 col-xs-12 col-sm-12"
         *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length === 0">
         <h1>No entries found within given criteria.</h1>
         <h1>Do search with some other dates</h1>
     </div>
     <section *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length > 0">
         <div class="" id="mfReportTbl">
-            <div class="col-xs-12">
+            <div class="col-xs-12 col-sm-12">
                 <table class="table basic table-bordered">
                     <thead>
                         <tr>
