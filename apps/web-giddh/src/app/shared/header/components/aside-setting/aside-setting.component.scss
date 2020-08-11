@@ -30,7 +30,7 @@
     background: $white;
     width: 215px;
     left: 0;
-    z-index: 990;
+    z-index: 999;
     .aside-help-header{
         display: none;
     }
@@ -144,7 +144,7 @@
     background:$white;
     width: 215px;
     left: 0;
-    z-index: 990;
+    z-index: 999;
     box-shadow: -2px -2px 15px rgba(0,0,0,.2) !important;
     &:after{
         display: none;
@@ -241,6 +241,13 @@
                     li {
                         a {
                             padding: 10px 15px !important;
+                            span{
+                                i{
+                                    color: $gray;
+                                    margin-right: 10px;
+                                    font-size: 14px;
+                                }
+                            }
                         }
                     }
                 }

@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?3ned1i');
-  src:  url('fonts/icomoon.eot?3ned1i#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?3ned1i') format('truetype'),
-    url('fonts/icomoon.woff?3ned1i') format('woff'),
-    url('fonts/icomoon.svg?3ned1i#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?ai868m');
+  src:  url('fonts/icomoon.eot?ai868m#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?ai868m') format('truetype'),
+    url('fonts/icomoon.woff?ai868m') format('woff'),
+    url('fonts/icomoon.svg?ai868m#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,16 +25,53 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-account:before {
-  content: "\e954";
+.icon-branch:before {
+  content: "\e905";
 }
-.icon-group-folder:before {
-  content: "\e955";
+.icon-company-profile:before {
+  content: "\e906";
 }
-.icon-menu:before {
-  content: "\e956";
+.icon-discount:before {
+  content: "\e907";
 }
-.icon-back-arrow:before {
+.icon-financial-year:before {
+  content: "\e908";
+}
+.icon-integration:before {
+  content: "\e909";
+}
+.icon-invoice-managment:before {
+  content: "\e90a";
+}
+.icon-linked-accounts:before {
+  content: "\e90b";
+}
+.icon-manage-user:before {
+  content: "\e90c";
+}
+.icon-subscription:before {
+  content: "\e90d";
+}
+.icon-tags:before {
+  content: "\e90e";
+}
+.icon-taxes:before {
+  content: "\e90f";
+}
+.icon-trigger:before {
+  content: "\e910";
+}
+.icon-user:before {
+  content: "\e911";
+}
+.icon-warehouse:before {
+  content: "\e912";
+}
+.icon-header-setting:before {
+  content: "\e979";
+  color: #f7f8fa;
+}
+.icon-history-icon:before {
   content: "\e900";
 }
 .icon-log:before {
@@ -82,254 +119,365 @@
 .icon-journal:before {
   content: "\e016";
 }
-.icon-home-icon:before {
+.icon-advance-filter:before {
   content: "\e901";
 }
-.icon-generate-invoice:before {
+.icon-copy-small:before {
   content: "\e902";
 }
-.icon-no-selected:before {
+.icon-enevlop:before {
   content: "\e903";
 }
-.icon-edit-pencil:before {
+.icon-tick:before {
   content: "\e904";
 }
-.icon-collapse:before {
-  content: "\e905";
-}
-.icon-info:before {
-  content: "\e906";
-}
-.icon-expandIcon:before {
-  content: "\e907";
-}
-.icon-advance-search:before {
-  content: "\e908";
-}
-.icon-copy:before {
-  content: "\e909";
-}
-.icon-edit:before {
-  content: "\e90a";
-}
-.icon-expand:before {
-  content: "\e90b";
-}
-.icon-eye:before {
-  content: "\e90c";
-}
-.icon-favorite-selected:before {
-  content: "\e90d";
-}
-.icon-filter:before {
-  content: "\e90e";
-}
-.icon-sort-asc:before {
-  content: "\e90f";
-}
-.icon-sort-dsc:before {
-  content: "\e910";
-}
-.icon-collapse-icon:before {
-  content: "\e911";
-}
-.icon-info-icon:before {
-  content: "\e912";
-}
-.icon-traingle-info:before {
+.icon-help-support-icon:before {
   content: "\e913";
 }
-.icon-cash:before {
+.icon-back-arrow:before {
   content: "\e914";
 }
-.icon-atm-card:before {
+.icon-home-icon:before {
   content: "\e915";
 }
-.icon-folder-group:before {
+.icon-generate-invoice:before {
   content: "\e916";
 }
-.icon-file-path:before {
+.icon-no-selected:before {
   content: "\e917";
 }
-.icon-image:before {
-  content: "\e919";
-}
-.icon-arrow-down-2:before {
+.icon-edit-pencil:before {
   content: "\e918";
 }
-.icon-Revert:before {
+.icon-collapse:before {
+  content: "\e919";
+}
+.icon-info:before {
   content: "\e91a";
 }
-.icon-payment:before {
+.icon-expandIcon:before {
   content: "\e91b";
 }
-.icon-edit-ico:before {
+.icon-advance-search:before {
   content: "\e91c";
 }
-.icon-copy-icon:before {
+.icon-copy:before {
   content: "\e91d";
 }
-.icon-divide-ico:before {
+.icon-edit:before {
   content: "\e91e";
 }
-.icon-estimate1:before {
+.icon-expand:before {
   content: "\e91f";
 }
-.icon-invoice-icon:before {
+.icon-eye:before {
   content: "\e920";
 }
-.icon-sales-order:before {
+.icon-favorite-selected:before {
   content: "\e921";
 }
-.icon-card:before {
+.icon-filter:before {
   content: "\e922";
 }
-.icon-chat2:before {
+.icon-sort-asc:before {
   content: "\e923";
 }
-.icon-ecomm:before {
+.icon-sort-dsc:before {
   content: "\e924";
 }
-.icon-mail:before {
+.icon-collapse-icon:before {
   content: "\e925";
 }
-.icon-group:before {
+.icon-info-icon:before {
   content: "\e926";
 }
-.icon-bar:before {
+.icon-traingle-info:before {
   content: "\e927";
 }
-.icon-Search:before {
+.icon-cash:before {
   content: "\e928";
 }
-.icon-add:before {
+.icon-atm-card:before {
   content: "\e929";
 }
-.icon-cross:before {
+.icon-folder-group:before {
   content: "\e92a";
 }
-.icon-inventory:before {
+.icon-file-path:before {
   content: "\e92b";
 }
-.icon-caret-down:before {
+.icon-arrow-down-2:before {
   content: "\e92c";
 }
-.icon-edit1:before {
+.icon-image:before {
   content: "\e92d";
 }
-.icon-arrow-down:before {
+.icon-Revert:before {
   content: "\e92e";
 }
-.icon-child:before {
+.icon-payment:before {
   content: "\e92f";
 }
-.icon-download:before {
+.icon-edit-ico:before {
   content: "\e930";
 }
-.icon-share:before {
+.icon-copy-icon:before {
   content: "\e931";
 }
-.icon-magic_link:before {
+.icon-divide-ico:before {
   content: "\e932";
 }
-.icon-dropdown:before {
+.icon-estimate1:before {
   content: "\e933";
 }
-.icon-plus:before {
+.icon-invoice-icon:before {
   content: "\e934";
 }
-.icon-search:before {
+.icon-sales-order:before {
   content: "\e935";
 }
-.icon-building:before {
+.icon-card:before {
   content: "\e936";
 }
-.icon-options:before {
+.icon-chat2:before {
   content: "\e937";
 }
-.icon-minus:before {
+.icon-ecomm:before {
   content: "\e938";
 }
-.icon-trash:before {
+.icon-mail:before {
   content: "\e939";
 }
-.icon-checkbox-icon:before {
+.icon-group:before {
   content: "\e93a";
 }
-.icon-checkboxfill-icon:before {
+.icon-bar:before {
   content: "\e93b";
 }
-.icon-dots-three-vertical:before {
+.icon-Search:before {
   content: "\e93c";
 }
-.icon-calender:before {
+.icon-add:before {
   content: "\e93d";
 }
-.icon-car:before {
+.icon-cross:before {
   content: "\e93e";
 }
-.icon-download1:before {
+.icon-inventory:before {
   content: "\e93f";
 }
-.icon-edit11:before {
+.icon-caret-down:before {
   content: "\e940";
 }
-.icon-plane:before {
+.icon-edit1:before {
   content: "\e941";
 }
-.icon-read:before {
+.icon-arrow-down:before {
   content: "\e942";
 }
-.icon-search2:before {
+.icon-child:before {
   content: "\e943";
 }
-.icon-ship:before {
+.icon-download:before {
   content: "\e944";
 }
-.icon-train:before {
+.icon-share:before {
   content: "\e945";
 }
-.icon-file:before {
+.icon-magic_link:before {
   content: "\e946";
 }
-.icon-link:before {
+.icon-dropdown:before {
   content: "\e947";
 }
-.icon-pass:before {
+.icon-plus:before {
   content: "\e948";
 }
-.icon-vol:before {
+.icon-search:before {
   content: "\e949";
 }
-.icon-support:before {
+.icon-building:before {
   content: "\e94a";
 }
-.icon-summary:before {
+.icon-options:before {
   content: "\e94b";
 }
-.icon-hand_icon:before {
+.icon-minus:before {
   content: "\e94c";
 }
-.icon-users:before {
+.icon-trash:before {
   content: "\e94d";
 }
-.icon-folder1:before {
+.icon-checkbox-icon:before {
   content: "\e94e";
 }
-.icon-switch-icon:before {
+.icon-checkboxfill-icon:before {
   content: "\e94f";
 }
-.icon-rupees:before {
+.icon-dots-three-vertical:before {
   content: "\e950";
 }
-.icon-export-icon:before {
+.icon-calender:before {
   content: "\e951";
 }
-.icon-edit-pencil1:before {
+.icon-car:before {
   content: "\e952";
 }
-.icon-customise-columns:before {
+.icon-download1:before {
   content: "\e953";
+}
+.icon-edit11:before {
+  content: "\e954";
+}
+.icon-plane:before {
+  content: "\e955";
+}
+.icon-read:before {
+  content: "\e956";
+}
+.icon-search2:before {
+  content: "\e957";
+}
+.icon-ship:before {
+  content: "\e958";
+}
+.icon-train:before {
+  content: "\e959";
+}
+.icon-file:before {
+  content: "\e95a";
+}
+.icon-link:before {
+  content: "\e95b";
+}
+.icon-pass:before {
+  content: "\e95c";
+}
+.icon-vol:before {
+  content: "\e95d";
+}
+.icon-support:before {
+  content: "\e95e";
+}
+.icon-summary:before {
+  content: "\e95f";
+}
+.icon-hand_icon:before {
+  content: "\e960";
+}
+.icon-users:before {
+  content: "\e961";
+}
+.icon-folder1:before {
+  content: "\e962";
+}
+.icon-switch-icon:before {
+  content: "\e963";
+}
+.icon-rupees:before {
+  content: "\e964";
+}
+.icon-export-icon:before {
+  content: "\e965";
+}
+.icon-edit-pencil1:before {
+  content: "\e966";
+}
+.icon-customise-columns:before {
+  content: "\e967";
+}
+.icon-account:before {
+  content: "\e968";
+}
+.icon-group-folder:before {
+  content: "\e969";
+}
+.icon-menu:before {
+  content: "\e96a";
+}
+.icon-balance-sheet:before {
+  content: "\e96b";
+}
+.icon-cash-invoice:before {
+  content: "\e96c";
+}
+.icon-company-import:before {
+  content: "\e96d";
+}
+.icon-credit-debit-note:before {
+  content: "\e96e";
+}
+.icon-credit-note:before {
+  content: "\e96f";
+}
+.icon-customer:before {
+  content: "\e970";
+}
+.icon-day-book:before {
+  content: "\e971";
+}
+.icon-E-way-bill:before {
+  content: "\e972";
+}
+.icon-estimate:before {
+  content: "\e973";
+}
+.icon-gstr:before {
+  content: "\e974";
+}
+.icon-import-from-tally:before {
+  content: "\e975";
+}
+.icon-import-trial-balance:before {
+  content: "\e976";
+}
+.icon-invoice1:before {
+  content: "\e977";
+}
+.icon-journal-voucher:before {
+  content: "\e978";
+}
+.icon-uniE97A:before {
+  content: "\e97a";
+}
+.icon-new-old-invoices:before {
+  content: "\e981";
+}
+.icon-onboarding:before {
+  content: "\e982";
+}
+.icon-profit-loss:before {
+  content: "\e983";
+}
+.icon-proforma:before {
+  content: "\e984";
+}
+.icon-purchase-management:before {
+  content: "\e985";
+}
+.icon-purchase-record:before {
+  content: "\e986";
+}
+.icon-search-app:before {
+  content: "\e987";
+}
+.icon-settings-taxes:before {
+  content: "\e988";
+}
+.icon-subscription1:before {
+  content: "\e989";
+}
+.icon-trial-balance:before {
+  content: "\e98a";
+}
+.icon-user1:before {
+  content: "\e98b";
+}
+.icon-vat:before {
+  content: "\e98c";
+}
+.icon-aging-report:before {
+  content: "\e98d";
 }
 .icon-folderminus:before {
   content: "\f2332";

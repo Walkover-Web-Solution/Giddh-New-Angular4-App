@@ -6103,7 +6103,7 @@ ng-select .select_drop i {
 
 virtual-scroll .scrollable-content .item>a {
     color: $nero;
-    padding: 3px 10px;
+    padding: 10px;
     display: table-cell;
     vertical-align: middle;
     height: 100%;
@@ -8905,13 +8905,16 @@ p.remvBrnchName {
 }
 
 .popover.purchase-invoice-rcm,
+.popover.adjustment-popover,
 .update-ledger-rcm,
 .all-modules-popover {
     .popover-arrow.arrow {
         display: none;
     }
 }
-
+.popover.adjustment-popover {
+    margin: 0;
+}
 @media (min-width: 564px) {
     #date-range-picker-parent .daterangepicker {
         width: 100%;
@@ -9247,13 +9250,10 @@ span#HW_badge_cont:nth-child(3){
     display: none;
 }
 /*notofication css end*/
-.setting-sidebar-open .desktop-header {
-    padding-left: 215px;
-}
 
 .setting-data,
 .setting-sidebar-open .white-row {
-    padding-left: 230px !important;
+    padding-left: 15px !important;
 }
 
 // .setting-sidebar-open .white-row{
@@ -9297,7 +9297,7 @@ span#HW_badge_cont:nth-child(3){
     .padding-top-fixed-mobile{
         padding-top: 50px;
     }
-    
+
 }
 .mobile-sidebar-open:after{
     position: absolute;
@@ -9317,6 +9317,43 @@ span#HW_badge_cont:nth-child(3){
 }
 .giddh-datepicker{
     cursor: pointer !important;
+}
+.setting-items{
+    ul{
+        li{
+            a{
+                span{
+                    i{
+                        color: $gray;
+                        margin-right: 10px;
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+    }
+}
+.on-setting-page .nav-left-bar.open , .on-user-page .nav-left-bar.open on-user-page {
+    left: -215px !important;
+    display: none !important;
+}
+.setting-sidebar-open .nav-left-bar{
+    display: none;
+}
+.menu_open aside-setting.setting-sidebar {
+    left: 0 !important;
+}
+.on-setting-page aside-setting.setting-sidebar, .on-user-page aside-setting.setting-sidebar{
+    left: -225px;
+}
+.setting-sidebar-open #content_wrapper.menu_open {
+    padding-left: -215px;
+}
+.setting-sidebar-open .desktop-header {
+    padding-left: 0;
+}
+.setting-sidebar-open .desktop-header.menu_open {
+    padding-left: 215px;
 }
 /* responsive */
 
@@ -9595,6 +9632,18 @@ span#HW_badge_cont:nth-child(3){
             font-size: 26px;
         }
     }
+    .on-setting-page aside-setting.setting-sidebar{
+        left: -230px;
+    }
+    .setting-sidebar-open .desktop-header {
+        padding-left: 0;
+    }
+    .setting-data, .setting-sidebar-open .white-row {
+        padding-left: 15px !important;
+    }
+    .setting-data, .setting-sidebar-open .white-row {
+        padding-left: 15px !important;
+    }
 }
 
 @media (max-width: 1280px) {
@@ -9632,9 +9681,6 @@ span#HW_badge_cont:nth-child(3){
         z-index: 991;
         top: -25px !important;
         position: absolute;
-    }
-    .setting-sidebar-open .desktop-header {
-        padding-left: 0;
     }
     .setting-sidebar-open .setting-data,
     .setting-sidebar-open .white-row {
@@ -9986,6 +10032,9 @@ span#HW_badge_cont:nth-child(3){
     }
     .digit-blue .tooltip.bs-tooltip-top{
         display: block !important;
+    }
+    .on-setting-page aside-setting.setting-sidebar, .on-user-page aside-setting.setting-sidebar{
+        left: 0;
     }
 }
 

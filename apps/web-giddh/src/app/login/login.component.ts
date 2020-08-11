@@ -6,7 +6,7 @@ import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ModalDirective } from "ngx-bootstrap";
 import { Configuration } from "../app.constant";
-import { Store } from "@ngrx/store";
+import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
     LinkedInRequestModel,
@@ -77,7 +77,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     public isLoginWithPasswordSuccessNotVerified$: Observable<boolean>;
     public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
 
-
     public showForgotPassword: boolean = false;
     public forgotStep: number = 0;
     public retryCount: number = 0;
@@ -87,6 +86,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private name: string;
     private token: string;
     private userUniqueKey: string;
+    /** To Observe is google login inprocess */
+    public isLoginWithGoogleInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     //Button to hide linkedIn button till functionality is available
@@ -153,7 +154,9 @@ export class LoginComponent implements OnInit, OnDestroy {
             return state.login.isLoginWithPasswordIsShowVerifyOtp;
         }).pipe(takeUntil(this.destroyed$));
         this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).pipe(takeUntil(this.destroyed$));
-
+        this.isLoginWithGoogleInProcess$ = this.store.pipe(select(state => {
+            return state.login.isLoginWithGoogleInProcess;
+        }), takeUntil(this.destroyed$));
         contriesWithCodes.map(c => {
             this.countryCodeList.push({ value: c.countryName, label: c.value });
         });

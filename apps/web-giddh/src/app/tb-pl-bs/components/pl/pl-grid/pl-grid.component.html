@@ -6,7 +6,7 @@
 <!-- nodata end -->
 
 <div>
-    <div *ngIf="!noData">
+    <div *ngIf="!noData" class="tb-wrapper">
         <div class="mrT2 clearfix">
             <!--top heading  labels-->
 
@@ -17,21 +17,20 @@
                 <div class="income">
                     <div class="clearfix profitLoss">
 
-                        <table class="table basic">
+                        <table class="table basic pl-table-grid">
                             <thead>
                                 <tr>
-                                    <th class="col-xs-8" style="padding: 0 !important;">
+                                    <th class="col-xs-8 pd-0">
                                         <div #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
 
                                             <div [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}"
                                                 style="display:flex">
-                                                <span style="margin-left: 15px; flex: 1;">Account</span>
-                                                <i class="glyphicon glyphicon-search" (click)="toggleSearch()"
-                                                    style="position: relative;top:3px;left:-1%;z-index: 1; font-size: 13px;color: #A6A6A6;cursor: pointer;"></i>
+                                                <span class="ml-15 mr-1">Account</span>
+                                                <i class="glyphicon glyphicon-search" (click)="toggleSearch()" ></i>
                                             </div>
 
                                             <div [hidden]="!showClearSearch">
-                                                <input style="height: 45px;" type="search" #searchInputEl
+                                                <input type="search" #searchInputEl
                                                     class="form-control" placeholder="Search"
                                                     aria-describedby="sizing-addon3" id="w-398px"
                                                     [formControl]="plSearchControl">
@@ -42,7 +41,7 @@
                                         </div>
                                     </th>
                                     <!-- <th class="col-xs-3 ">Note</th> -->
-                                    <th class="col-xs-4 text-right" style="padding: 13px 8px;">
+                                    <th class="col-xs-4 text-right">
                                         As Of
                                         <span
                                             *ngIf="plData && plData.dates && plData.dates.to && plData.dates.to!=='Invalid date'">
@@ -185,8 +184,7 @@
                     </div>
                 </div>
 
-                <div class="account clearfix" *ngIf="plData && plData?.incomeStatment"
-                    [ngStyle]="{'border-bottom':plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT' ? '1px solid #dbdde3' : 'none' }">
+                <div class="account clearfix" *ngIf="plData && plData?.incomeStatment">
                     <div class="col-xs-8  group pd1">
                         <strong>Income Before Taxes (EBT)</strong>
                     </div>

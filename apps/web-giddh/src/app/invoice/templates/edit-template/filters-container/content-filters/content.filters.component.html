@@ -24,7 +24,7 @@
                 <div *ngIf="fieldsAndVisibility.header.gstin && customTemplate?.templateType !== 'gst_template_e'" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['gstin'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> GSTIN
                 </div>
-                <div class="form-group clearfix customField" *ngIf="(customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
+                <div class="form-group clearfix customField" *ngIf="showGstComposition === true && (customTemplate?.templateType === 'gst_template_a' || customTemplate?.templateType === 'gst_template_e') && voucherType==='sales'">
                     <input type="checkbox" name="gstCompositionLabel" [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
                     <span>
                         <input class="form-control" maxlength="70" type="text" name="gstComposition" placeholder="Registered under Composition Scheme" [(ngModel)]="customTemplate.sections['header'].data['gstComposition'].label" (ngModelChange)='onFieldChange(null, null, null)'>

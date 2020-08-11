@@ -413,19 +413,26 @@ export class GeneralService {
     /**
      * This will calculate the position of element
      *
-     * @param {*} element
+     * @param {*} elementTarget
+     * @param {*} element 
      * @returns
      * @memberof DatepickerWrapperComponent
      */
-    public getPosition(element): any {
+    public getPosition(elementTarget, element?: any): any {
         var xPosition = 0;
         var yPosition = 40;
 
-        while (element) {
-            xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
-            yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
-            element = element.offsetParent;
+        while (elementTarget) {
+            xPosition += (elementTarget.offsetLeft - elementTarget.scrollLeft + elementTarget.clientLeft);
+            if (!element) {
+                yPosition += (elementTarget.offsetTop - elementTarget.scrollTop + elementTarget.clientTop);
+            }
+            elementTarget = elementTarget.offsetParent;
         }
+        if (element) {
+            yPosition = element.clientY + 20;
+        }
+
 
         return { x: xPosition, y: yPosition };
     }
@@ -481,6 +488,22 @@ export class GeneralService {
      */
     public allowOnlyNumbersAndDot(event: any): boolean {
         if (event.keyCode === 46 || (event.keyCode >= 48 && event.keyCode <= 57)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    /**
+    * This is to allow only digits
+    *
+    * @param {*} event
+    * @returns {boolean}
+    * @memberof GeneralService
+    */
+    public allowOnlyNumbers(event: any): boolean {
+        if (event.keyCode >= 48 && event.keyCode <= 57) {
             return true;
         } else {
             return false;

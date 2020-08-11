@@ -48,6 +48,8 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold the value if Gst Composition will show/hide */
+    public showGstComposition: boolean = false;
 
     constructor(private store: Store<AppState>, private _invoiceUiDataService: InvoiceUiDataService,
         private _activatedRoute: ActivatedRoute, private _toasty: ToasterService
@@ -68,7 +70,17 @@ export class ContentFilterComponent implements OnInit, OnChanges, OnDestroy {
         this.sessionId$ = this.store.select(p => p.session.user.session.id).pipe(takeUntil(this.destroyed$));
         this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
 
-
+        this.companyUniqueName$.pipe(take(1)).subscribe(activeCompanyUniqueName => {
+            if (companies) {
+                companies.forEach(company => {
+                    if (company.uniqueName === activeCompanyUniqueName) {
+                        if (company.country === "India") {
+                            this.showGstComposition = true;
+                        }
+                    }
+                });
+            }
+        });
     }
 
     /**

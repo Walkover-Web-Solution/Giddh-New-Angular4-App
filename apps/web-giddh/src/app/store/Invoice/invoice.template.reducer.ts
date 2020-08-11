@@ -145,7 +145,7 @@ export const initialState: CustomTemplateState = {
                         width: null
                     },
                     gstComposition: {
-                        label: 'Registered under Composition Scheme',
+                        label: '',
                         display: true,
                         width: null
                     },

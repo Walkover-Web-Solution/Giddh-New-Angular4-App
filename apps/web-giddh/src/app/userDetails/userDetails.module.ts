@@ -14,8 +14,8 @@ import { ElementViewChildModule } from "../shared/helpers/directives/elementView
 //import { ModalModule } from 'ngx-bootstrap';
 import { SubscriptionsComponent } from './components/subscriptions/subscriptions.component';
 import { UserDetailsPipe } from './userDetails.pipe';
-import { UserDetailsCompanyComponent } from './components/company/user-details-company.component'
-    ; import { ModalModule } from 'ngx-bootstrap/modal';
+import { UserDetailsCompanyComponent } from './components/company/user-details-company.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { SubscriptionsPlansComponent } from './components/subscriptions-plans/subscriptions-plans.component';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -25,6 +25,7 @@ import { DeactivateCompanyComponent } from './components/deactivate-company/deac
 import { MoveCompanyComponent } from './components/move-company/move-company.component';
 import { AllFeaturesComponent } from './components/all-features/all-features.component';
 import { AddCompanyComponent } from './components/add-company/add-company.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -61,7 +62,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ElementViewChildModule,
         ModalModule.forRoot(),
         BsDropdownModule.forRoot(),
-        TooltipModule.forRoot()
+        TooltipModule.forRoot(),
+        ScrollingModule
     ],
     providers: [
         {
