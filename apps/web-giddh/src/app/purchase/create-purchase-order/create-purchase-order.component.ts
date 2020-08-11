@@ -1736,24 +1736,25 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         }
         if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
             let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
-            if (!modal.appliedOtherTax.name) {
-                entry.otherTaxModal.appliedOtherTax.name = tax.name;
-            }
-            if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
-
-                if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
-                    taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
-                } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-                    let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                    taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+            if(tax) {
+                if (!modal.appliedOtherTax.name) {
+                    entry.otherTaxModal.appliedOtherTax.name = tax.name;
                 }
-                entry.otherTaxType = 'tcs';
-            } else {
-                taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
-                entry.otherTaxType = 'tds';
-            }
+                if (['tcsrc', 'tcspay'].includes(tax.taxType)) {
+                    if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+                        taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+                    } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                        let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
+                        taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+                    }
+                    entry.otherTaxType = 'tcs';
+                } else {
+                    taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+                    entry.otherTaxType = 'tds';
+                }
 
-            totalTaxes += tax.taxDetail[0].taxValue;
+                totalTaxes += tax.taxDetail[0].taxValue;
+            }
 
             entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
             entry.otherTaxModal = modal;
@@ -2215,9 +2216,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
         delete obj.account.customerName;
 
-        if (this.shouldShowWarehouse) {
-            obj['warehouse'] = { name: '', uniqueName: this.selectedWarehouse };
-        }
         return obj;
     }
 

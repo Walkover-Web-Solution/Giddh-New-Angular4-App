@@ -99,4 +99,12 @@ export class PurchaseOrderService {
 
         return this.http.put(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
+
+    public getPreview(getRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_PREVIEW;
+        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url.replace(':poUniqueName', getRequestObject.poUniqueName);
+
+        return this.http.get(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
 }

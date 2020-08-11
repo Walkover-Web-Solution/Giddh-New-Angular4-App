@@ -134,7 +134,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
 
         this.isLoading = true;
         let getRequest = { companyUniqueName: this.companyUniqueName, poUniqueName: this.purchaseOrderUniqueName };
-        this.purchaseOrderService.get(getRequest).subscribe(response => {
+        this.purchaseOrderService.getPreview(getRequest).subscribe(response => {
             this.isLoading = false;
             if (response) {
                 if (response.status === "success") {
@@ -179,7 +179,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     }
 
     public showPurchaseOrderPreview(poUniqueName: any): void {
-        this.router.navigate(['/pages/purchase-management/purchase-order-preview/' + poUniqueName]);
+        this.router.navigate(['/pages/purchase-management/purchase-orders/preview/' + poUniqueName]);
     }
 
     public closeSendMailPopup(event: any): void {
