@@ -1733,7 +1733,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (data && data.body && data.body.results) {
                 const searchResults = data.body.results.map(result => {
                     return {
-                        value: result.uniqueName,
+                        value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
                         label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                         additional: result
                     }
