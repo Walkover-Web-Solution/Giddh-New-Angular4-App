@@ -1048,11 +1048,10 @@
 
                         </div>
 
-                        <div class="d-flex w-100 mb-2">
+                        <div class="d-flex w-100 mb-2 justify-content-between">
 
-                            <div class="justify-content-end pl-15" *ngIf="vm.isMultiCurrencyAvailable">
-
-                                <ul class="list-inline font-14 currency-convertor">
+                            <div class="w-100 d-flex pl-15" *ngIf="vm.isMultiCurrencyAvailable">
+                                <ul class="list-inline d-flex font-14 currency-convertor">
 
                                     <li>
                                         1
@@ -1087,7 +1086,7 @@
                                     <input type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
                                         [uploadInput]="uploadInput" (uploadOutput)="onUploadOutputUpdate($event)">
                                     <label for="invoiceFile" class="cp fs16">
-                                        <i [ngClass]="!isFileUploading ? 'glyphicon glyphicon-paperclip' : 'fa fa-spinner rotate'"></i> Attach file</label>
+                                        <i [ngClass]="!isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'"></i> Attach file</label>
                                 </label>
                             </div>
 

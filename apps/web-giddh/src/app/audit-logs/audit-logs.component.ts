@@ -8,7 +8,8 @@ import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'audit-logs',
-    templateUrl: './audit-logs.component.html'
+    templateUrl: './audit-logs.component.html',
+    styleUrls: [`./audit-logs.component.scss`],
 })
 export class AuditLogsComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
