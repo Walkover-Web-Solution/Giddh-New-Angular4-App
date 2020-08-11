@@ -1,5 +1,4 @@
-<giddh-loader></giddh-loader>
-<div class="flex-container">
+<div class="flex-container" *ngIf="!((isLoginWithPasswordInProcess$ | async) || (isLoginWithEmailInProcess$ | async) || (isLoginWithGoogleInProcess$ | async))">
     <div class="login-box">
         <div class="row mx-0">
             <div class="col-md-6 col-lg-6 col-sm-6 col-12 px-0">
@@ -110,7 +109,7 @@
                                     <p class="login-with" *ngIf="loginUsing !== 'userName'">Login with <a
                                             href="javascript:;" class="bold"
                                             (click)="loginUsing = 'userName';resetForgotPasswordProcess()">
-                                           email and password</a></p>
+                                            email and password</a></p>
 
                                     <div class="d-flex align-items-center account mt-1">
                                         <p class="mb-0 mr-2 bold text-light-2">Don't have an account?</p>
@@ -127,10 +126,6 @@
             </div>
         </div>
     </div>
-
-
-
-
 </div>
 
 
@@ -325,3 +320,14 @@
     </div>
 </div> -->
 <!--mobile verify form  -->
+
+
+<div *ngIf="(isLoginWithPasswordInProcess$ | async) || (isLoginWithEmailInProcess$ | async) || (isLoginWithGoogleInProcess$ | async)">
+    <div class="no-data mrT2 loader-main">
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
+</div>
+

@@ -23,6 +23,7 @@ import { WarehouseActions } from './warehouse/action/warehouse.action';
 import { PAGINATION_LIMIT } from '../app.constant';
 import { HttpClient } from "@angular/common/http";
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
 
 @Component({
     templateUrl: './settings.component.html',
@@ -66,6 +67,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private _toast: ToasterService,
         private _generalActions: GeneralActions,
         private settingsIntegrationActions: SettingsIntegrationActions,
+        private settingsTagsActions: SettingsTagActions,
         private warehouseActions: WarehouseActions,
         private http: HttpClient,
         private breakPointObservar: BreakpointObserver
@@ -78,7 +80,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.breakPointObservar.observe([
             '(max-width:767px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
             if (!this.isMobileScreen) {
                 this.asideSettingMenuState = "in";
@@ -105,19 +107,27 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
             this.tabChanged(this.activeTab);
 
-            if (this.activeTab == "integration") {
-                this.integrationComponent.getInitialData();
-            } else if (this.activeTab == "linked-accounts") {
-                this.eBankComp.getInitialEbankInfo();
-            } else if (this.activeTab == "profile") {
-                this.profileComponent.getInitialProfileData();
-                this.profileComponent.getInventorySettingData();
-            } else if (this.activeTab == "financial-year") {
-                this.financialYearComp.getInitialFinancialYearData();
-            } else if (this.activeTab == "permission") {
-                this.permissionComp.getInitialData();
-            } else if (this.activeTab == "tag") {
-                this.tagComp.getTags();
+            if (this.activeTab === "linked-accounts") {
+                setTimeout(() => {
+                    this.eBankComp.getInitialEbankInfo();
+                }, 0);
+            } else if (this.activeTab === "profile") {
+                setTimeout(() => {
+                    this.profileComponent.getInitialProfileData();
+                    this.profileComponent.getInventorySettingData();
+                }, 0);
+            } else if (this.activeTab === "financial-year") {
+                setTimeout(() => {
+                    this.financialYearComp.getInitialFinancialYearData();
+                }, 0);
+            } else if (this.activeTab === "permission") {
+                setTimeout(() => {
+                    this.permissionComp.getInitialData();
+                }, 0);
+            } else if (this.activeTab === "tag") {
+                setTimeout(() => {
+                    this.tagComp.getTags();
+                }, 0);
             }
         });
 
@@ -171,12 +181,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
         if (e.heading === 'Profile') {
             this.profileComponent.getInitialProfileData();
             this.profileComponent.getInventorySettingData();
-        }
-    }
-
-    public integrationSelected(e) {
-        if (e.heading === 'Integration') {
-            this.integrationComponent.getInitialData();
         }
     }
 
