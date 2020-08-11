@@ -641,8 +641,11 @@
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event, 'debit')">
                             </td>
-                            <td data-title="Particular" class="col-xs-5 col-md-6 col-lg-6">To Balance B/F</td>
+                            <td data-title="Particular" class="col-xs-5 col-md-6 col-lg-6">
+                                <span *ngIf="(lc.transactionData$ | async)?.page === 1">To Balance B/F </span>
+                            </td>
                             <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 text-right">
+                                <ng-container *ngIf="(lc.transactionData$ | async)?.page === 1">
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'" class="">
                                     {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount  | giddhCurrency }}
                                 </span><br>
@@ -652,7 +655,7 @@
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'" class="">0</span>
 
                                 <!--              <p class="mb-0 amnt-total">$454</p>-->
-
+                                </ng-container>
                             </td>
                         </tr>
                         <!-- endregion -->
@@ -906,8 +909,11 @@
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event,'credit')">
                             </td>
-                            <td data-title="B/F Balance" class="col-xs-5 col-md-6 col-lg-6">By Balance B/F</td>
+                            <td data-title="B/F Balance" class="col-xs-5 col-md-6 col-lg-6">
+                                <span *ngIf="(lc.transactionData$ | async)?.page === 1"> By Balance B/F </span>
+                            </td>
                             <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 text-right">
+                                <ng-container *ngIf="(lc.transactionData$ | async)?.page === 1">
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
                                     {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount | giddhCurrency}}
                                 </span><br>
@@ -916,6 +922,7 @@
                                 </span>
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">0</span>
                                 <!--              <p class="mb-0 amnt-total">$454</p>-->
+                                </ng-container>
                             </td>
                         </tr>
                         <!-- endregion -->
@@ -1241,7 +1248,8 @@
                 <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
 
                 <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
-                    <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
+                    <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(
+                    $ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
 [boundaryLinks]="true">
 </pagination> -->
                 </div>
