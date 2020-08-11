@@ -93,7 +93,7 @@
 
                                         <div class="edit-action-btn-groups pull-right">
                                             <span>
-                                                <a href="javascript:;" tooltip="Edit" placement="top"><i
+                                                <a href="javascript:;" tooltip="Edit" placement="top" [routerLink]="['/pages/purchase-management/purchase-order/edit/'+purchaseOrder.uniqueName]"><i
                                                         class="fa fa-pencil"></i></a>
                                             </span>
 
@@ -205,13 +205,13 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <td>
-                                                                            <span class="mb-0">Delivery:</span>{{purchaseOrder?.dueDate}}
+                                                                            <span class="mb-0">Delivery: </span>{{purchaseOrder?.dueDate}}
                                                                         </td>
                                                                         <td>
                                                                             <span class="mb-0"> #{{purchaseOrder?.number}}</span>
                                                                         </td>
                                                                         <td>
-                                                                            <span class="mb-0">PO Date:</span>{{purchaseOrder?.date}}
+                                                                            <span class="mb-0">PO Date: </span>{{purchaseOrder?.date}}
                                                                         </td>
                                                                     </tr>
                                                                 </ng-container>
@@ -325,8 +325,8 @@
                                                         <span *ngIf="!entry?.transactions[0]?.stock">{{entry?.transactions[0]?.account?.name}}</span><br>
                                                         <span>{{entry?.description}}</span>
                                                     </td>
-                                                    <td class="text-right ">12345
-                                                        <p>(H)</p>
+                                                    <td class="text-right">{{inventorySettings?.manageInventory ? entry?.hsnNumber : entry?.sacNumber}}
+                                                        <p>({{inventorySettings?.manageInventory ? 'H' : 'S'}})</p>
                                                     </td>
                                                     <td class="text-right nowrap">{{entry?.transactions[0]?.stock?.quantity}} {{entry?.transactions[0]?.stock?.stockUnit?.code}}
                                                     </td>
@@ -338,13 +338,7 @@
                                                         <p><span></span>24.79</p>
                                                     </td>
                                                     <td class="text-right"><span></span>{{entry?.taxableValue?.amountForAccount}}
-                                                        <p>@18.00%</p>
-                                                    </td>
-                                                    <td class="text-right" hidden><span></span>306.00
-                                                        <p>@18.00%</p>
-                                                    </td>
-                                                    <td class="text-right" hidden><span></span>0.00
-                                                        <p>@0%</p>
+                                                        <p *ngIf="entry?.taxes[0]?.taxPercent">@{{entry?.taxes[0]?.taxPercent}}%</p>
                                                     </td>
                                                     <td class="text-right ">
                                                         0.000
