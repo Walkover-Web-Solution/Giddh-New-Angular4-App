@@ -713,8 +713,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             }
         })
-
-        this.getFinancialYearLimits();
     }
 
     public setSelectedCompanyData(selectedCompany) {
@@ -1880,16 +1878,5 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.router.navigate(['/pages/all-modules']);
         }
         this.isAllModuleOpen = !this.isAllModuleOpen;
-    }
-
-    /**
-     * This will get the initial and last financial years set in settings every 10 seconds
-     *
-     * @memberof HeaderComponent
-     */
-    public getFinancialYearLimits(): void {
-        setInterval(() => {
-            this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
-        }, 10000);
     }
 }
