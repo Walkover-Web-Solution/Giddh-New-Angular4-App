@@ -641,8 +641,11 @@
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event, 'debit')">
                             </td>
-                            <td data-title="Particular" class="col-xs-5 col-md-6 col-lg-6">To Balance B/F</td>
+                            <td data-title="Particular" class="col-xs-5 col-md-6 col-lg-6">
+                                <span *ngIf="(lc.transactionData$ | async)?.page === 1">To Balance B/F </span>
+                            </td>
                             <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 text-right">
+                                <ng-container *ngIf="(lc.transactionData$ | async)?.page === 1">
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'" class="">
                                     {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount  | giddhCurrency }}
                                 </span><br>
@@ -652,7 +655,7 @@
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'" class="">0</span>
 
                                 <!--              <p class="mb-0 amnt-total">$454</p>-->
-
+                                </ng-container>
                             </td>
                         </tr>
                         <!-- endregion -->
@@ -906,8 +909,11 @@
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event,'credit')">
                             </td>
-                            <td data-title="B/F Balance" class="col-xs-5 col-md-6 col-lg-6">By Balance B/F</td>
+                            <td data-title="B/F Balance" class="col-xs-5 col-md-6 col-lg-6">
+                                <span *ngIf="(lc.transactionData$ | async)?.page === 1"> By Balance B/F </span>
+                            </td>
                             <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 text-right">
+                                <ng-container *ngIf="(lc.transactionData$ | async)?.page === 1">
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
                                     {{ ledgerTxnBalance?.currencySymbol }}{{ ledgerTxnBalance?.forwardedBalance?.amount | giddhCurrency}}
                                 </span><br>
@@ -916,6 +922,7 @@
                                 </span>
                                 <span *ngIf="ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">0</span>
                                 <!--              <p class="mb-0 amnt-total">$454</p>-->
+                                </ng-container>
                             </td>
                         </tr>
                         <!-- endregion -->
@@ -1241,7 +1248,8 @@
                 <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
 
                 <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
-                    <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
+                    <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(
+                    $ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
 [boundaryLinks]="true">
 </pagination> -->
                 </div>
@@ -1386,18 +1394,16 @@
                         <h1>Closing Balance</h1>
                         <div class="d-flex" style="justify-content: space-between;flex-direction: column">
                             <h3 class="digit-blue" container="body">
-                                <button class="no-btn"
-                                    [tooltip]="(ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? lc.ledgerUnderStandingObj.balanceText.dr : lc.ledgerUnderStandingObj.balanceText.cr)"
-                                    triggers="click">{{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.closingBalance?.amount | giddhCurrency}}
-                                    {{ ledgerTxnBalance?.closingBalance?.amount > 0 ? (ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr') : '' }}</button>
+                                <span
+                                    [tooltip]="(ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? lc.ledgerUnderStandingObj.balanceText.dr : lc.ledgerUnderStandingObj.balanceText.cr)">{{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.closingBalance?.amount | giddhCurrency}}
+                                    {{ ledgerTxnBalance?.closingBalance?.amount > 0 ? (ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr') : '' }}</span>
                             </h3>
                             <h3 class="digit-blue" container="body" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                                <button class="no-btn"
-                                    [tooltip]="(ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? lc.ledgerUnderStandingObj.balanceText.dr : lc.ledgerUnderStandingObj.balanceText.cr)"
-                                    triggers="click">
+                                <span
+                                    [tooltip]="(ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? lc.ledgerUnderStandingObj.balanceText.dr : lc.ledgerUnderStandingObj.balanceText.cr)">
                                     {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedClosingBalance?.amount | giddhCurrency}}
                                     {{ ledgerTxnBalance?.convertedClosingBalance?.amount > 0 ? (ledgerTxnBalance?.convertedClosingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr') : '' }}
-                                </button>
+                                </span>
                             </h3>
                         </div>
                     </div>
