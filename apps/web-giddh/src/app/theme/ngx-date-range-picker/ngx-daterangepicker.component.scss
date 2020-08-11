@@ -1344,7 +1344,7 @@ td span {
     position: absolute;
     background-color: $white;
     right: -100%;
-    top: 0;
+    top: -20px;
     z-index: 9999;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
@@ -1641,6 +1641,9 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb:hover {
         overflow: initial !important;
         .ps {
             overflow: initial !important;
+        }
+        .ps__thumb-x, .ps__rail-x{
+            display: none !important;
         }
     }
 }
