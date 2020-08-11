@@ -16,7 +16,7 @@ import { CurrentPage } from '../models/api-models/Common';
 @Component({
     selector: 'audit-logs',
     templateUrl: './audit-logs.component.html',
-    styleUrls: ['audit-logs.component.scss']
+    styleUrls: [`./audit-logs.component.scss`],
 })
 export class AuditLogsComponent implements OnInit, OnDestroy {
     /** To check module for new version  */

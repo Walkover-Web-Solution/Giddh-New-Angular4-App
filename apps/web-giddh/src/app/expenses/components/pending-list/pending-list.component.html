@@ -3,9 +3,9 @@
         <table class="table basic table-bordered giddh-table mt-2 onMobileView">
             <thead>
                 <tr>
-                    <th data-title="#">#</th>
+                    <th width="2%" data-title="#">#</th>
 
-                    <th>
+                    <th width="10%">
                         <div class="d-flex align-items-center">
                             <span class="pull-left">Date</span>
                             <ng-container class="d-inline-block"
@@ -13,26 +13,26 @@
                         </div>
                     </th>
 
-                    <th class="td-search-box" #submittedBySearchContainer
+                    <th width="10%" class="td-search-box" #submittedBySearchContainer
                         (clickOutside)="clickedOutside($event, submittedBySearchContainer, 'submittedBy')">
                         <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSubmittedBySearch,
           title: 'Submitted By', fieldName: 'submittedBy', formControl: submittedBySearchInput}"></ng-container>
                     </th>
 
-                    <th class="td-search-box" #accountSearchContainer
+                    <th width="10%" class="td-search-box" #accountSearchContainer
                         (clickOutside)="clickedOutside($event, accountSearchContainer, 'account')">
                         <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showAccountSearch,
                         title: 'Account', fieldName: 'account', formControl: accountSearchInput}"></ng-container>
                     </th>
 
-                    <th class="pr-2 amount-arrow">
+                    <th width="20%" class="pr-2 amount-arrow">
                         <div class="d-flex align-items-center justify-content-end"><span>Amount</span>
                             <ng-container class="d-inline-block "
                                 *ngTemplateOutlet="sortingTemplate;context: { $implicit: 'amount'}"></ng-container>
                         </div>
                     </th>
 
-                    <th class="td-search-box" #paymentReceiptSearchContainer
+                    <th width="20%" class="td-search-box" #paymentReceiptSearchContainer
                         (clickOutside)="clickedOutside($event, paymentReceiptSearchContainer, 'payment/receive')">
                         <ng-container
                             *ngTemplateOutlet="searchTemplate;context:{ $implicit: showPaymentReceiveSearch,
@@ -40,9 +40,9 @@
                         </ng-container>
                     </th>
 
-                    <th>File</th>
-                    <th>Description</th>
-                    <th>Action</th>
+                    <th width="10%">File</th>
+                    <th width="20%">Description</th>
+                    <th width="10%">Action</th>
                 </tr>
             </thead>
 

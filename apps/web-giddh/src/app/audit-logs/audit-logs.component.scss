@@ -3,3 +3,8 @@
     text-align: center;
     justify-content: center;
 }
+@media(min-width:1366px){
+    .audit-log-sidebar{
+     max-width: 350px;
+    }
+}

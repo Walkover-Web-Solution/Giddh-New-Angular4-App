@@ -3,8 +3,8 @@
 
     <form #recurringForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr" (ngSubmit)="submit()">
 
-        <div class="d-flex search-icon-block">
-            <div *ngIf="isMobileScreen" (click)="openModal(template)">
+        <div class="d-flex search-icon-block"  *ngIf="isMobileScreen">
+            <div (click)="openModal(template)">
                 <i class="icon-search"></i>
             </div>
             <ng-template #template>
@@ -119,9 +119,9 @@
                 <div class="form-group mrR1">
                     <label class="d-block">Last Invoice Date</label>
                     <div class="input-group">
-                        <input name="lastInvoiceDate" placeholder="Select Date" [(ngModel)]="filter.lastInvoiceDate"
-                            type="text" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" autocomplete="off"
-                            class="form-control" bsDatepicker required>
+                        <input name="lastInvoiceDate" placeholder="Select Date" [(ngModel)]="filter.lastInvoiceDate" type="text"
+                            [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" autocomplete="off" class="form-control" bsDatepicker
+                            required>
                     </div>
                 </div>
 
@@ -129,8 +129,8 @@
                     <div class="searchInvoiceNo">
                         <label class="d-block">Search Invoice No.</label>
                         <div class="input-group">
-                            <input type="text" placeholder="Search Invoice No." class="w100"
-                                [formControl]="invoiceNumberInput" #invoiceSearch class="form-control" />
+                            <input type="text" placeholder="Search Invoice No." class="w100" [formControl]="invoiceNumberInput"
+                                #invoiceSearch class="form-control" />
                             <!--<i class="icon-search" (click)="showInvoiceNumberSearch = false;"></i>-->
                         </div>
                     </div>
@@ -150,64 +150,14 @@
                     <label class="d-block">&nbsp;</label>
                     <button class="btn btn-success btn-sm">Search</button>
                     <a class="cp" href="javascript: void 0">
-                        <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
-                            tooltip="Reset Filter" *ngIf="showResetFilterButton" (click)="resetFilter()"></i>
+                        <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333" tooltip="Reset Filter"
+                            *ngIf="showResetFilterButton" (click)="resetFilter()"></i>
                     </a>
                 </div>
 
 
 
-            </div>
-            <div class="d-flex " style="margin-top: 24px">
-                <div style="height: 30px;" *ngIf="selectedItems.length < 0">
-                    <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
-                        style="margin-bottom: 10px;display:inline-block !important;">
-
-                        <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
-                            aria-controls="dropdown-basic">
-                            More
-                            <span class="caret"></span>
-                        </button>
-
-                        <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic"
-                            style="right: -53px !important;">
-
-                            <li role="menuitem">
-                                <a class="dropdown-item cp" href="javascript:void(0)">Bulk Note</a>
-                            </li>
-
-                            <li role="menuitem">
-                                <a class="dropdown-item cp" href="javascript:void(0)">Send Email</a>
-                            </li>
-
-                            <li role="menuitem">
-                                <a class="dropdown-item cp" href="javascript:void(0)">Print</a>
-                            </li>
-
-                            <li role="menuitem">
-                                <a class="dropdown-item cp" href="javascript:void(0)">Export Pdf</a>
-                            </li>
-
-                            <li role="menuitem" *ngIf="!isMobileScreen">
-                                <a class="dropdown-item cp" href="javascript:void(0)">Generate E-way Bill</a>
-                            </li>
-
-                            <li role="menuitem">
-                                <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
-                            </li>
-
-                            <li role="menuitem">
-                                <a class="dropdown-item cp" href="javascript:void(0)">Delete</a>
-                            </li>
-
-                        </ul>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </form>
-
+    </div>
     <div class="table-responsive">
         <table class="table basic giddh-table table-bordered on-mobile-view">
 

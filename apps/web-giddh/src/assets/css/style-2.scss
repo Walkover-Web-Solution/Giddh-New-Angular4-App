@@ -871,10 +871,11 @@ ul.sub-list {
     margin-top: 5px;
 }
 
-.user_dropdown > li > a .glyphicon-menu-right {
-    font-size: 10px;
+.user_dropdown>li>a .icon-arrow-down {
+    font-size: 12px;
     float: right;
     padding-top: 4px;
+    transform: rotate(270deg);
 }
 
 .sub-list li a {
@@ -6563,10 +6564,11 @@ table td[class*=col-]:last-child {
 #pagination {
     margin: 0 auto;
     overflow: hidden;
-    width: 100%;
     text-align: center;
 }
-
+.pagination{
+    justify-content: center;
+}
 .ledger-panel label {
     font-weight: 400;
 }
@@ -8698,6 +8700,7 @@ ul.dropdown-menu p.lead.pd {
     text-align: center;
     background-color: $whisper-light;
     border: 1px solid $very-light-gray;
+    border-left: none !important;
 }
 
 .mrTop {
@@ -9998,7 +10001,7 @@ span#HW_badge_cont:nth-child(3) {
         top: 0;
         display: none;
     }
-    .user_dropdown > li > a .glyphicon-menu-right {
+    .user_dropdown>li>a .icon-arrow-down {
         transform: rotate(90deg);
     }
     #setting-tab .tab-container .nav.nav-tabs {
@@ -10199,8 +10202,7 @@ span#HW_badge_cont:nth-child(3) {
     .page-has-tabs .invoice-genrate-container,
     .page-has-tabs .invoice-container,
     .page-has-tabs .proforma-container,
-    .page-has-tabs .proforma-container,
-    .page-has-tabs .recurring-container {
+    .page-has-tabs .proforma-container{
         padding-top: 15px !important;
     }
     .page-has-tabs
@@ -10213,6 +10215,7 @@ span#HW_badge_cont:nth-child(3) {
     }
     .page-has-tabs .recurring-container {
         margin-top: 0px !important;
+        padding-top: 10px !important;
     }
     .on-user-page .user-detail-page.company-page {
         padding-top: 15px !important;
@@ -10523,8 +10526,7 @@ span#HW_badge_cont:nth-child(3) {
         max-width: 1140px !important;
     }
 }
-
-@media (min-width: 480px) and (max-width: 667px) {
+@media(min-width:480px) and (max-width:667px) {
     .edit-modal {
         margin: 20px auto;
         padding-top: 0;

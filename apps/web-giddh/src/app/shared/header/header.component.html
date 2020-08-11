@@ -63,7 +63,7 @@
                                     (onShown)="switchCompanyMenuShown()">
                                     <a href="javascript:void(0)" class="clearfix" dropdownToggle>
                                         Switch company
-                                        <span class="glyphicon glyphicon-menu-right"></span>
+                                        <span class="icon-arrow-down"></span>
                                     </a>
 
                                     <ul id="companyList" class="company-list dropdown-menu sub_menu_nav" dropdown>
@@ -118,7 +118,7 @@
 
                                                         </a>
                                                         <!-- commented by meghna
-            <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
+            <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="icon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
             -->
                                                     </li>
 
@@ -830,7 +830,7 @@
         (clickOutside)="subdropdown.isOpen = false" (onShown)="switchCompanyMenuShown()">
         <a href="javascript:void(0)" class="clearfix" dropdownToggle>
             Switch company
-            <span class="glyphicon glyphicon-menu-right"></span>
+            <span class="icon-arrow-down"></span>
         </a>
 
         <ul id="companyList" class="company-list dropdown-menu sub_menu_nav" dropdown>
@@ -878,7 +878,7 @@
 
                             </a>
                             <!-- commented by meghna
-<i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
+<i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="icon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
 -->
                         </li>
 

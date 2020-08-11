@@ -1,0 +1,12 @@
+.ps {
+    overflow: visible !important
+}
+.select-log{
+    display: flex;
+    flex-direction: row;
+    p{
+        label{
+            width: 120px;
+        }
+    }
+}

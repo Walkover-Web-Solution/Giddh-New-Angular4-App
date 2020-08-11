@@ -38,8 +38,9 @@
                         <div class="col-sm-7 col-xs-12">
                             <div class="row">
                                 <div class="col-6 col-sm-6">
-                                    <div class="checkbox square-switch">
-                                        <input type="checkbox" id="includeParticulars" formControlName="includeParticulars" />
+                                    <div class="checkbox square-switch mb-1">
+                                        <input type="checkbox" id="includeParticulars"
+                                            formControlName="includeParticulars" />
                                         <label for="includeParticulars">
                                             <span class="pull-left"
                                                 *ngIf="advanceSearchForm.get('includeParticulars').value">Include</span>
@@ -126,14 +127,14 @@
                 <!-- other details container -->
                 <ng-container *ngIf="advanceSearchForm.get('includeDescription').value">
                     <div class="col-xs-12 col-sm-12 mrT2">
-                        <div class="row">
-                            <div class="mrB1 clearfix">
+                        <div class="mrB1 clearfix">
+                            <div class="row" >
                                 <div class="col-sm-5 col-xs-12">
                                     <label for="">Inventory</label>
                                 </div>
                                 <div class="col-sm-7 col-xs-12" formGroupName="inventory">
                                     <div class="row">
-                                        <div class="col-6 col-sm-12">
+                                        <div class="col-sm-6">
 
                                             <div class="checkbox square-switch">
                                                 <input type="checkbox" id="includeInventory" formControlName="includeInventory" />
@@ -145,31 +146,31 @@
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="col-6 col-sm-12">
+                                        <div class="col-sm-6">
                                             <div class="form-group">
                                                 <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear('inventory')" (selected)="onDDElementSelect('inventory', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'" [ItemHeight]="33"></sh-select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-6 col-sm-12">
+                                        <div class="col-sm-6">
                                             <div class="form-group">
                                                 <sh-select [showClear]="false" [width]="'100%'" (selected)="onRangeSelect('inventoryQty', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="'Select Range'" [ItemHeight]="33"></sh-select>
                                             </div>
                                         </div>
-                                        <div class="col-6 col-sm-12">
+                                        <div class="col-sm-6">
                                             <div class="form-group">
                                                 <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="quantity" [mask]="inputMaskFormat" placeholder="Quantity">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-6 col-sm-12">
+                                        <div class="col-sm-6">
                                             <div class="form-group">
                                                 <sh-select [showClear]="false" [width]="'100%'" (selected)="onRangeSelect('inventoryVal', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars" [placeholder]="'Select Range'" [ItemHeight]="33"></sh-select>
                                             </div>
                                         </div>
-                                        <div class="col-6 col-sm-12">
+                                        <div class="col-sm-6">
                                             <div class="form-group">
                                                 <input type="text" decimalDigitsDirective [DecimalPlaces]="3" class="form-control" formControlName="itemValue" [mask]="inputMaskFormat" placeholder="Value">
                                             </div>
@@ -184,12 +185,12 @@
                             </div>
                             <div class="col-sm-7 col-xs-12">
                                 <div class="row">
-                                    <div class="col-6 col-sm-6">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <input type="text" placeholder="Cheque Number" formControlName="chequeNumber" class="form-control">
                                         </div>
                                     </div>
-                                    <div class="col-6 col-sm-6">
+                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <input type="text" placeholder="Clearance Date" name="from" formControlName="dateOnCheque" bsDatepicker class="form-control" [bsConfig]="bsConfig" />
                                         </div>

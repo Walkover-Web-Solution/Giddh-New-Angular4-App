@@ -194,7 +194,7 @@
                                             <div class="" [ngClass]="{'input-group': true}">
                                                 <input type="email" class="form-control" placeholder="Enter email id" name="invoiceEmail" [(ngModel)]='invoiceSetting.email' (ngModelChange)="onChangeEmail($event)" />
                                                 <span class="input-group-addon" *ngIf="!invoiceSetting.emailVerified"><i
-                                                        class="glyphicon glyphicon-exclamation-sign"
+                                                        class="fa fa-exclamation-circle"
                                                         tooltip="Unverified"></i></span>
                                                 <span class="input-group-addon" *ngIf="invoiceSetting.emailVerified"><i
                                                         class="glyphicon glyphicon-ok" tooltip="Verified"></i></span>
@@ -324,7 +324,7 @@
                         <!--                                    <input type="text" class="form-control" name='webhookUrl_+{{i}}' [(ngModel)]='webhook.url' [disabled]='webhook.uniqueName' />-->
                         <!--                                    <span class="viasocket"><a href="#">viasocket.com</a></span>-->
                         <!--                                  </div>-->
-                        <!--                                  <span class="cp" [hidden]="i == estimateWebhook.length-1"> <i class="glyphicon glyphicon-trash delete-ico" (click)="deleteWebhook(webhook, i)"></i></span>-->
+                        <!--                                  <span class="cp" [hidden]="i == estimateWebhook.length-1"> <i class="icon-trash delete-ico" (click)="deleteWebhook(webhook, i)"></i></span>-->
                         <!--                                  <a href="javascript:void(0);"  class="cp" *ngIf="i == estimateWebhook.length-1" (click)="addNewWebhook(webhook, 'estimate')"> <i class="fa fa-plus"></i> Add webhook URL</a>-->
                         <!--                                </div>-->
                         <!--                              </li>-->
@@ -500,7 +500,7 @@
                         <!--                                        <input type="text" class="form-control" name='webhookUrl_+{{i}}' [(ngModel)]='webhook.url' [disabled]='webhook.uniqueName' />-->
                         <!--                                        <span class="viasocket"><a href="#">viasocket.com</a></span>-->
                         <!--                                      </div>-->
-                        <!--                                      <span class="cp" [hidden]="i == proformaWebhook.length-1"> <i class="glyphicon glyphicon-trash delete-ico" (click)="deleteWebhook(webhook, i)"></i></span>-->
+                        <!--                                      <span class="cp" [hidden]="i == proformaWebhook.length-1"> <i class="icon-trash delete-ico" (click)="deleteWebhook(webhook, i)"></i></span>-->
                         <!--                                      <a href="javascript:void(0);"  class="cp" *ngIf="i == proformaWebhook.length-1" (click)="addNewWebhook(webhook, 'proforma')"> <i class="fa fa-plus"></i> Add webhook URL</a>-->
                         <!--                                    </div>-->
                         <!--                                  </li>-->
@@ -639,7 +639,7 @@
                         <!--                                            <input type="text" class="form-control" name='webhookUrl_+{{i}}' [(ngModel)]='webhook.url' [disabled]='webhook.uniqueName' />-->
                         <!--                                            <span class="viasocket"><a href="#">viasocket.com</a></span>-->
                         <!--                                          </div>-->
-                        <!--                                          <span class="cp" [hidden]="i == invoiceWebhook.length-1"> <i class="glyphicon glyphicon-trash delete-ico" (click)="deleteWebhook(webhook, i)"></i></span>-->
+                        <!--                                          <span class="cp" [hidden]="i == invoiceWebhook.length-1"> <i class="icon-trash delete-ico" (click)="deleteWebhook(webhook, i)"></i></span>-->
                         <!--                                          <a href="javascript:void(0);"  class="cp" *ngIf="i == invoiceWebhook.length-1" (click)="addNewWebhook(webhook, 'invoice')"> <i class="fa fa-plus"></i> Add webhook URL</a>-->
                         <!--                                        </div>-->
                         <!--                                      </li>-->
@@ -786,7 +786,7 @@
     <!--                                    <div class=" form-group">-->
     <!--                                        <div class="" [ngClass]="{'input-group': true}">-->
     <!--                                            <input type="email" class="form-control" placeholder="Enter email id" name="invoiceEmail" [(ngModel)]='invoiceSetting.email' (ngModelChange)="onChangeEmail($event)" />-->
-    <!--                                            <span class="input-group-addon" *ngIf="!invoiceSetting.emailVerified"><i class="glyphicon glyphicon-exclamation-sign" tooltip="Unverified"></i></span>-->
+    <!--                                            <span class="input-group-addon" *ngIf="!invoiceSetting.emailVerified"><i class="fa fa-exclamation-circle" tooltip="Unverified"></i></span>-->
     <!--                                            <span class="input-group-addon" *ngIf="invoiceSetting.emailVerified"><i class="glyphicon glyphicon-ok" tooltip="Verified"></i></span>-->
     <!--                                        </div>-->
     <!--                                    </div>-->
@@ -852,10 +852,10 @@
     <!--                                            <input type="text" class="form-control" name='alertDuedate_+{{i}}' [(ngModel)]='webhook.triggerAt' (ngModelChange)="checkDueDays(webhook.triggerAt, i, 'alpha')" (blur)="checkDueDays(webhook.triggerAt, i, 'length')" [disabled]='webhook.uniqueName' />-->
     <!--                                        </div>-->
     <!--                                        <div class="col-xs-6">-->
-    <!--                                            <label [hidden]="i !== 0">Webhook URL <i class="glyphicon glyphicon-exclamation-sign" tooltip="Add a webhook URL & specify due days to send all your Invoice details"></i></label>-->
+    <!--                                            <label [hidden]="i !== 0">Webhook URL <i class="fa fa-exclamation-circle" tooltip="Add a webhook URL & specify due days to send all your Invoice details"></i></label>-->
     <!--                                            <input type="text" class="form-control" name='webhookUrl_+{{i}}' [(ngModel)]='webhook.url' [disabled]='webhook.uniqueName' />-->
     <!--                                        </div>-->
-    <!--                                        <label class="cp" [hidden]="i == invoiceWebhook.length-1"> <i class="glyphicon glyphicon-trash delete-ico" (click)="deleteWebhook(webhook, i)"></i></label>-->
+    <!--                                        <label class="cp" [hidden]="i == invoiceWebhook.length-1"> <i class="icon-trash delete-ico" (click)="deleteWebhook(webhook, i)"></i></label>-->
     <!--                                        <label class="cp" *ngIf="i == invoiceWebhook.length-1" (click)="addNewWebhook(webhook)"> <i class="fa fa-plus"></i> Add webhook URL</label>-->
     <!--                                    </div>-->
     <!--                                </li>-->
@@ -903,7 +903,7 @@
     <!--                                <input type="text" class="form-control" name="invoiceLockDate" [value]="invoiceSetting.lockDate" (focus)="showDatePicker = true;" />-->
     <!--                                <span class="input-group-btn">-->
     <!--                                    <button [class.active]="showDatePicker" type="button" class="btn btn-default" (click)="showDatePicker = !showDatePicker">-->
-    <!--                                        <i class="glyphicon glyphicon-calendar"></i>-->
+    <!--                                        <i class="icon-calender"></i>-->
     <!--                                    </button>-->
     <!--                                </span>-->
     <!--                            </div>-->
