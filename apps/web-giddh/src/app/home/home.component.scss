@@ -75,6 +75,9 @@ a.dropdown-item:hover {
 .panel-heading {
     padding: 15px 15px;
     font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 .basic > tbody > tr:hover td {
     background: transparent;
