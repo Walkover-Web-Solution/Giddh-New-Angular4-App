@@ -42,11 +42,11 @@
             <!-- end of column -->
         </div>
         <div class="table-container clearfix trial-balance">
-            <section class="row" style="padding-left: 7px;background-color: #fff;">
-                <div class="row" style="display: flex;">
+            <section style="padding-left: 7px;background-color: #fff;">
+                <div class="row">
 
 
-                    <div class="col-xs-4" style="padding: 0;display: flex;align-items: center" #searchContainer
+                    <div class="col-4" style="padding: 0;display: flex;align-items: center" #searchContainer
                         (clickOutside)="clickedOutside($event, searchContainer)">
 
                         <span [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}"
@@ -66,18 +66,18 @@
 
                     </div>
 
-                    <div style=" padding: 14px 8px 14px 0;" class="col-xs-2 text-right">
+                    <div style=" padding: 14px 8px 14px 0;" class="col-2 text-right">
                         <strong>Opening
                             Bal</strong></div>
-                    <div style="padding: 14px 8px 14px 0;" class="col-xs-2  text-right">
+                    <div style="padding: 14px 8px 14px 0;" class="col-2  text-right">
                         <strong> Debit</strong>
 
                     </div>
-                    <div style="padding: 14px 8px 14px 0;" class="col-xs-2 text-right">
+                    <div style="padding: 14px 8px 14px 0;" class="col-2 text-right">
                         <strong> Credit</strong>
 
                     </div>
-                    <div class="col-xs-2 text-right" style="padding: 14px 20px 14px 0;"><strong>Closing Bal</strong>
+                    <div class="col-2 text-right" style="padding: 14px 20px 14px 0;"><strong>Closing Bal</strong>
                     </div>
 
 
@@ -88,7 +88,7 @@
 
                 <ng-template #groupDetails let-list let-padding="padding">
                     <ng-container *ngFor="let grp of list">
-                        <section class="row row-1" *ngIf="grp.isVisible || grp.isCreated" [hidden]="!grp.isVisible"
+                        <section class="row-1" *ngIf="grp.isVisible || grp.isCreated" [hidden]="!grp.isVisible"
                             [ngClass]="grp.category" tb-pl-bs-grid-row [groupDetail]="grp" [padding]="padding"
                             [search]="search" [from]="from" [to]="to">
                             <ng-container

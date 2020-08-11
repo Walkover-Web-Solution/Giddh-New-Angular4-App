@@ -20,7 +20,7 @@
                         <table class="table basic pl-table-grid">
                             <thead>
                                 <tr>
-                                    <th class="col-xs-8 pd-0">
+                                    <th class="col-8 pd-0">
                                         <div #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
 
                                             <div [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}"
@@ -40,15 +40,15 @@
 
                                         </div>
                                     </th>
-                                    <!-- <th class="col-xs-3 ">Note</th> -->
-                                    <th class="col-xs-4 text-right">
+                                    <!-- <th class="col-3 ">Note</th> -->
+                                    <th class="col-4 text-right">
                                         As Of
                                         <span
                                             *ngIf="plData && plData.dates && plData.dates.to && plData.dates.to!=='Invalid date'">
                                             {{ moment(plData?.dates?.to, 'DD-MM-YYYY').toString() | date:'dd MMMM yyyy' }}</span>
                                     </th>
                                     <!-- commented due to new response
-                <th class="col-xs-2 text-right">
+                <th class="col-2 text-right">
                     As Of
                     <span *ngIf="plData && plData.dates && plData.dates.from && plData.dates.from!=='Invalid date'"> {{ moment(plData?.dates?.from, 'DD-MM-YYYY').add(-1,'days').toString() | date:'dd MMMM yyyy' }}</span>
                 </th> -->
@@ -79,9 +79,9 @@
 
                             <section class="row-1">
                                 <div class="pl-grid-row">
-                                    <div class="col-xs-8  group" style="padding-left: 10px;">Total Cost of Goods Sold
+                                    <div class="col-8  group" style="padding-left: 10px;">Total Cost of Goods Sold
                                     </div>
-                                    <div class="col-xs-4  bdrL group text-right pull-right">
+                                    <div class="col-4  bdrL group text-right pull-right">
                                         <span> {{ cogsData?.closingBalance.amount | giddhCurrency }} </span>
                                     </div>
                                 </div>
@@ -91,14 +91,14 @@
                         </div>
 
                         <div class="account clearfix" *ngIf="plData && plData.incomeStatment">
-                            <div class="col-xs-8  group pd1">
+                            <div class="col-8  group pd1">
                                 <strong>Gross Profit</strong>
                             </div>
-                            <div class="col-xs-4  group text-right pull-right bdrL pd1">
+                            <div class="col-4  group text-right pull-right bdrL pd1">
                                 <strong>{{ plData?.incomeStatment.grossProfit.amount | giddhCurrency }}</strong>
                             </div>
                             <!-- commented due to new response
-              <div class="col-xs-2  group text-right">
+              <div class="col-2  group text-right">
                     <strong>{{ plData?.incomeTotalEnd | number:'1.2-2' }}</strong>
                 </div>
                -->
@@ -126,8 +126,8 @@
 
                                     <section class="row-1" *ngIf="grp.groupName && grp.uniqueName === 'revenue'">
                                         <div class="pl-grid-row">
-                                            <div class="col-xs-8  group" style="padding-left: 10px;">Total Revenue</div>
-                                            <div class="col-xs-4  bdrL group text-right pull-right">
+                                            <div class="col-8  group" style="padding-left: 10px;">Total Revenue</div>
+                                            <div class="col-4  bdrL group text-right pull-right">
                                                 <span> {{ plData?.incomeStatment.revenue.amount | giddhCurrency }}
                                                 </span>
                                             </div>
@@ -136,20 +136,20 @@
 
                                     <div class="group clearfix"
                                         *ngIf="grp.groupName && grp.uniqueName === 'operatingcost'">
-                                        <div class="col-xs-8  group pd1">
+                                        <div class="col-8  group pd1">
                                             Total Operating Expenses
                                         </div>
-                                        <div class="col-xs-4  group text-right pull-right bdrL pd1">
+                                        <div class="col-4  group text-right pull-right bdrL pd1">
                                             {{ plData?.incomeStatment.operatingExpenses.amount | giddhCurrency }}
                                         </div>
                                     </div>
 
                                     <div class="account clearfix fs16"
                                         *ngIf="grp.groupName && grp.uniqueName === 'operatingcost'">
-                                        <div class="col-xs-8  group pd1">
+                                        <div class="col-8  group pd1">
                                             <strong class="fs16">Operating Profit/Loss (EBIT)</strong>
                                         </div>
-                                        <div class="col-xs-4  group text-right pull-right bdrL pd1">
+                                        <div class="col-4  group text-right pull-right bdrL pd1">
                                             <strong
                                                 class="fs16">{{ plData?.incomeStatment.operatingProfit.amount | giddhCurrency }}</strong>
                                         </div>
@@ -157,9 +157,9 @@
 
                                     <section class="row-1" *ngIf="grp.groupName && grp.uniqueName === 'otherexpenses'">
                                         <div class="pl-grid-row">
-                                            <div class="col-xs-8  group" style="padding-left: 10px;">Total Other
+                                            <div class="col-8  group" style="padding-left: 10px;">Total Other
                                                 Expenses</div>
-                                            <div class="col-xs-4  bdrL group text-right pull-right">
+                                            <div class="col-4  bdrL group text-right pull-right">
                                                 <span> {{ plData?.incomeStatment.otherExpenses.amount | giddhCurrency }}
                                                 </span>
                                             </div>
@@ -167,8 +167,8 @@
                                     </section>
 
                                     <!-- <div class="group clearfix" *ngIf="grp.groupName && grp.uniqueName === 'otherexpenses'">
-                      <div class="col-xs-4  group pd1" style="padding-left: 10px;">Total </div>
-                      <div class="col-xs-3  bdrL group text-right pull-right bdrL pd1">
+                      <div class="col-4  group pd1" style="padding-left: 10px;">Total </div>
+                      <div class="col-3  bdrL group text-right pull-right bdrL pd1">
                           <span> {{ plData?.incomeStatment.otherExpenses.amount | giddhCurrency }} </span>
                       </div>
                   </div> -->
@@ -185,10 +185,10 @@
                 </div>
 
                 <div class="account clearfix" *ngIf="plData && plData?.incomeStatment">
-                    <div class="col-xs-8  group pd1">
+                    <div class="col-8  group pd1">
                         <strong>Income Before Taxes (EBT)</strong>
                     </div>
-                    <div class="col-xs-4  group text-right pull-right bdrL pd1">
+                    <div class="col-4  group text-right pull-right bdrL pd1">
                         <strong>
                             <span
                                 *ngIf="plData?.incomeStatment.incomeBeforeTaxes.type === 'DEBIT' && plData?.incomeStatment.incomeBeforeTaxes.amount !== 0">-</span>
@@ -200,10 +200,10 @@
                 <ng-template
                     *ngIf="plData && plData?.incomeStatment && plData?.incomeStatment.incomeBeforeTaxes.type === 'CREDIT'">
                     <div class="group clearfix fs14">
-                        <div class="col-xs-8  group pd1">
+                        <div class="col-8  group pd1">
                             Taxes (30%)
                         </div>
-                        <div class="col-xs-4  group text-right pull-right bdrL pd1">
+                        <div class="col-4  group text-right pull-right bdrL pd1">
                             {{ plData?.incomeStatment.appliedTax | giddhCurrency }}
                         </div>
                     </div>

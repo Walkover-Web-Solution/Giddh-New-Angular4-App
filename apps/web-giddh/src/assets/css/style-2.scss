@@ -614,6 +614,7 @@ input {
 .navbar {
     min-height: auto;
     margin-bottom: 10px;
+    padding: 0rem !important;
 }
 
 .invoice-bg {
@@ -914,6 +915,10 @@ ul.sub-list {
 
 .modal-open {
     overflow: auto !important;
+}
+.table-responsive {
+    display: table !important;
+    width: 100%;
 }
 
 /* file upload css start */
@@ -4771,7 +4776,7 @@ label {
 .breadcrumb > li + li:before {
     padding-left: 4px;
     content: ">";
-    font-size: 15px;
+    font-size: 13px;
     color: #808080;
 }
 
@@ -9191,7 +9196,13 @@ input.checkbox-custom[type="checkbox"] {
 
 .modal-content {
     border: none !important;
-    box-shadow: 0 5px 15px rgba(0,0,0,.5)
+    box-shadow: 0 5px 15px rgba(0,0,0,.5);
+    position: relative;
+    background-color: #fff;
+    background-clip: padding-box;
+    border-radius: 6px;
+    outline: 0;
+    display:block;
 }
 
 .panel-block .card-body {
@@ -10491,6 +10502,12 @@ span#HW_badge_cont:nth-child(3) {
     }
 }
 
+@media (min-width:576px){
+    .modal-dialog {
+        max-width: 100% !important;
+    }
+}
+
 @media (min-width: 768px) {
     .invoice-modal-content .modal-dialog {
         margin: 70px auto;
@@ -10500,15 +10517,10 @@ span#HW_badge_cont:nth-child(3) {
     }
     .modal-dialog{
         max-width: 600px !important;
-          margin: 30px auto;
+        margin: 30px auto;
     }
     .modal-dialog.modal-xl{
         max-width: 1140px !important;
-    }
-}
-@media (min-width:576px){
-    .modal-dialog {
-        max-width: 100% !important;
     }
 }
 
