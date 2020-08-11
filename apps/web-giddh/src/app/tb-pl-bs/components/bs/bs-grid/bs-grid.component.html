@@ -20,7 +20,7 @@
                         <table class="mrB table basic bs-table-grid">
                             <thead>
                                 <tr>
-                                    <th class="col-xs-3 pd-0">
+                                    <th class="col-3 pd-0">
                                         <div #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
 
                                             <div [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}"
@@ -41,12 +41,12 @@
                                         </div>
 
                                     </th>
-                                    <th class="col-xs-3 text-right">As Of
+                                    <th class="col-3 text-right">As Of
                                         <span
                                             *ngIf="bsData && bsData.dates && bsData.dates.to && bsData.dates.to!=='Invalid date'">
                                             {{ moment(bsData?.dates?.to, 'DD-MM-YYYY').toString() | date:'dd MMMM yyyy' }}</span>
                                     </th>
-                                    <th class="col-xs-3 text-right">As Of
+                                    <th class="col-3 text-right">As Of
                                         <span
                                             *ngIf="bsData && bsData.dates && bsData.dates.from && bsData.dates.from!=='Invalid date'">
                                             {{ moment(bsData?.dates?.from, 'DD-MM-YYYY').add(-1, 'days').toString() | date:'dd MMMM yyyy' }}</span>
@@ -73,7 +73,7 @@
 
                         <ng-template #groupDetails let-list let-padding="padding">
                             <ng-container *ngFor="let grp of list">
-                                <section class="row row-1" *ngIf="grp.isVisible || grp.isCreated"
+                                <section class="row-1" *ngIf="grp.isVisible || grp.isCreated"
                                     [hidden]="!grp.isVisible" bs-grid-row [groupDetail]="grp" [padding]="padding"
                                     [search]="search" [from]="from" [to]="to" [padding]="padding">
                                     <ng-container
@@ -87,14 +87,14 @@
                             *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.liabilities| tbsearch: search, padding: 10 }">
                         </ng-container>
                         <!--/Grid-->
-                        <div class="top-bar clearfix">
-                            <div class="col-xs-4  group">
+                        <div class="top-bar row clearfix">
+                            <div class="col-4  group">
                                 <strong>Total Liabilities</strong>
                             </div>
-                            <div class="col-xs-4  group text-right">
+                            <div class="col-4  group text-right">
                                 <strong>{{ bsData?.liabTotal | giddhCurrency }}</strong>
                             </div>
-                            <div class="col-xs-4  group text-right">
+                            <div class="col-4  group text-right">
                                 <strong>{{ bsData?.liabTotalEnd | giddhCurrency }}</strong>
                             </div>
                         </div>
@@ -120,7 +120,7 @@
               </section>
             </section> -->
                         <ng-template #groupDetails let-list let-padding="padding">
-                            <section class="row row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible" bs-grid-row
+                            <section class="row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible" bs-grid-row
                                 [groupDetail]="grp" [padding]="padding" [search]="search" [padding]="padding"
                                 [from]="from" [to]="to">
                                 <ng-container
@@ -135,14 +135,14 @@
                     </div>
                 </div>
 
-                <div class="top-bar clearfix">
-                    <div class="col-xs-4  group">
+                <div class="top-bar row clearfix">
+                    <div class="col-4  group">
                         <strong>Total Assets</strong>
                     </div>
-                    <div class="col-xs-4  group text-right">
+                    <div class="col-4  group text-right">
                         <strong>{{ bsData?.assetTotal | giddhCurrency }}</strong>
                     </div>
-                    <div class="col-xs-4  group text-right">
+                    <div class="col-4  group text-right">
                         <strong>{{ bsData?.assetTotalEnd | giddhCurrency }}</strong>
                     </div>
                 </div>
