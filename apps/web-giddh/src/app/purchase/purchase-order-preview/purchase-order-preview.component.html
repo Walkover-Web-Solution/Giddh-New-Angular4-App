@@ -186,8 +186,7 @@
                                                             <tbody>
                                                                 <tr>
                                                                     <td>
-                                                                        <img src="../../../assets/images/walkover-logo.svg"
-                                                                            alt="">
+                                                                        <img src="{{purchaseOrder?.templateDetails?.logoPath}}" alt="">
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -330,16 +329,11 @@
                                                     </td>
                                                     <td class="text-right nowrap">{{entry?.transactions[0]?.stock?.quantity}} {{entry?.transactions[0]?.stock?.stockUnit?.code}}
                                                     </td>
-                                                    <td class="text-right "><span></span>{{entry?.transactions[0]?.stock?.rate?.amountForAccount}}
-                                                        <p><span></span>15.00</p>
-                                                    </td>
+                                                    <td class="text-right "><span></span>{{entry?.transactions[0]?.stock?.rate?.amountForAccount}}</td>
                                                     <td class="text-right">
-                                                        <span></span>{{entry?.discounts[0]?.amount?.amountForAccount}}
-                                                        <p><span></span>24.79</p>
+                                                        {{entry?.discounts[0]?.amount?.amountForAccount}}
                                                     </td>
-                                                    <td class="text-right"><span></span>{{entry?.taxableValue?.amountForAccount}}
-                                                        <p *ngIf="entry?.taxes[0]?.taxPercent">@{{entry?.taxes[0]?.taxPercent}}%</p>
-                                                    </td>
+                                                    <td class="text-right"><span></span>{{entry?.taxableValue?.amountForAccount}}</td>
                                                     <td class="text-right ">
                                                         0.000
                                                     </td>
@@ -351,12 +345,11 @@
                                                     </td>
                                                     <td class="text-right ">
                                                         {{entry?.taxes[0]?.amount?.amountForAccount}}
+                                                        <p *ngIf="entry?.taxes[0]?.taxPercent">@{{entry?.taxes[0]?.taxPercent}}%</p>
                                                     </td>
                                                     <td class="text-right "><span></span>{{entry?.transactions[0]?.amount?.amountForAccount}}
-                                                        <p><span></span>29.25</p>
                                                     </td>
                                                 </tr>
-
                                             </tbody>
                                             <tfoot>
                                                 <tr>
@@ -376,19 +369,14 @@
                                                     </th>
                                                     <th class="text-right text-right nowrap">&nbsp; <span>6 No.</span>
                                                     </th>
-                                                    <th class="text-right ">
-                                                        0.000
+                                                    <th class="text-right">
+                                                        0.00
                                                     </th>
-                                                    <th class="text-right "><span></span>7200.00
-                                                    </th>
+                                                    <th class="text-right "><span></span>0.00</th>
                                                     <!--SGST-->
-                                                    <th class="text-right "><span></span>918.00
-
-                                                    </th>
+                                                    <th class="text-right "><span></span>0.00</th>
                                                     <!--CGST-->
-                                                    <th class="text-right "><span></span>918.00
-                                                    </th>
-
+                                                    <th class="text-right "><span></span>0.00</th>
                                                 </tr>
                                             </tfoot>
                                         </table>
