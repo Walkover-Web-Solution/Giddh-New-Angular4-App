@@ -232,7 +232,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     ) {
         this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.GroupStockReportRequest = new GroupStockReportRequest();
-        this.activeGroup$ = this.store.pipe(select(activeGroupStore => activeGroupStore.inventory.activeGroup),takeUntil(this.destroyed$));
+        this.activeGroup$ = this.store.pipe(select(activeGroupStore => activeGroupStore.inventory.activeGroup), takeUntil(this.destroyed$));
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
         this.activeGroup$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
@@ -266,6 +266,10 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.groupUniqueNameFromURL = document.location.pathname.split('/')[len - 2];
         if (this.groupUniqueNameFromURL && len === 6) {
             this.groupUniqueName = this.groupUniqueNameFromURL;
+            this.initReport();
+        }
+        if (this.invViewService.getActiveGroupUniqueName()) {
+            this.groupUniqueName = this.invViewService.getActiveGroupUniqueName();
             this.initReport();
         }
 
