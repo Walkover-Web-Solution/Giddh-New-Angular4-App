@@ -207,8 +207,8 @@
                         {{item.grandTotal?.amountForAccount | giddhCurrency}}
                     </td>
                     <td data-title="Expected Delivery">
-                        <span hidden>Delivery in 7 days</span>
-                        <span>{{item.dueDate}}</span>
+                        <span *ngIf="item.dueDays && item.dueDays > 0 && item.dueDays <= 7">{{item.dueDays > 0 ? 'Delivery in ' + item.dueDays + ((item.dueDays === 1) ? ' day ' : ' days') : 'Delayed by ' + item.dueDays + ' days' }}</span>
+                        <span *ngIf="item.dueDays < 0 || item.dueDays > 7">{{item.dueDate}}</span>
                     </td>
                     <td data-title="status" class="d-flex align-items-center">
                         <span class="d-flex">
