@@ -56,6 +56,7 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
 
     public OpenGroup(grp: IGroupsWithStocksHierarchyMinItem, e: Event) {
         this.invViewService.setActiveView('group', grp.name, null, grp.uniqueName, grp.isOpen);
+        this.invViewService.setActiveGroupUniqueName(grp.uniqueName);
         e.stopPropagation();
         //this.store.dispatch(this.sideBarAction.ShowBranchScreen(false));
         if (grp.isOpen) {
