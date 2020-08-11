@@ -41,10 +41,10 @@
                     <h3 class="primary_clr ellp">{{template.name}}</h3>
 
                     <span *ngIf="template.isDefault" class="badge btn-pink mrT2"><i
-                            class="glyphicon glyphicon-star"></i> Default
+                            class="icon-favorite-selected"></i> Default
                         Template</span>
                     <span *ngIf="!template.isDefault" class="badge btn-success mrT2 cp"
-                        (click)="onSetTemplateAsDefault(template,'invoice')"><i class="glyphicon glyphicon-star"></i>
+                        (click)="onSetTemplateAsDefault(template,'invoice')"><i class="icon-favorite-selected"></i>
                         Set as
                         Default</span>
                 </div>
@@ -60,7 +60,7 @@
                     </button>
                     <button [disabled]="template.isDefault" class="btn btn-default"
                         (click)="onDeleteTemplate(template)">
-                        <i class="glyphicon glyphicon-trash" tooltip="Delete" aria-hidden="true"></i>
+                        <i class="icon-trash" tooltip="Delete" aria-hidden="true"></i>
                     </button>
 
                     <div class="template_meta">
@@ -77,10 +77,10 @@
                         <h3 class="primary_clr ellp">{{template.name}}</h3>
 
                         <span *ngIf="template.isDefaultForVoucher" class="badge btn-pink mrT2"><i
-                                class="glyphicon glyphicon-star"></i> Default Template</span>
+                                class="icon-favorite-selected"></i> Default Template</span>
                         <span *ngIf="!template.isDefaultForVoucher" class="badge btn-success mrT2 cp"
                             (click)="onSetTemplateAsDefault(template,'voucher')"><i
-                                class="glyphicon glyphicon-star"></i> Set as
+                                class="icon-favorite-selected"></i> Set as
                             Default</span>
                     </div>
 
@@ -95,7 +95,7 @@
                         </button>
                         <button [disabled]="template.isDefaultForVoucher" class="btn btn-default"
                             (click)="onDeleteTemplate(template)">
-                            <i class="glyphicon glyphicon-trash" tooltip="Delete" aria-hidden="true"></i>
+                            <i class="icon-trash" tooltip="Delete" aria-hidden="true"></i>
                         </button>
 
                         <div class="template_meta">
