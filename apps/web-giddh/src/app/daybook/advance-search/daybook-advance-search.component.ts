@@ -169,17 +169,6 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 				});
 			}
 		})).pipe(takeUntil(this.destroyed$));
-
-		// Get groups with accounts
-		this._groupService.GetFlattenGroupsAccounts().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-			if (data.status === 'success') {
-				let groups: IOption[] = [];
-				data.body.results.map(d => {
-					groups.push({ label: d.groupName, value: d.groupUniqueName });
-				});
-				this.groups$ = observableOf(groups);
-			}
-		});
          this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
         });

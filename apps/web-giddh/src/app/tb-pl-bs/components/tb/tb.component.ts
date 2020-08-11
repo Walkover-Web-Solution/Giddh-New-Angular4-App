@@ -179,8 +179,8 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     }
 
     public expandAllEvent(event: boolean) {
-        this.cd.checkNoChanges();
-        this.expandAll = !this.expandAll;
+        // this.cd.checkNoChanges();
+        // this.expandAll = !this.expandAll;
         setTimeout(() => {
             this.expandAll = event;
             this.cd.detectChanges();

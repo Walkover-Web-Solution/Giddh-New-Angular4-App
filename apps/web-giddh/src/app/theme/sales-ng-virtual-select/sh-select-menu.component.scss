@@ -10,9 +10,7 @@
     box-sizing: border-box;
     z-index: 100;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    border-left: 1px solid rgba(34, 36, 38, 0.15);
-    border-right: 1px solid rgba(34, 36, 38, 0.15);
-    border-top: 1px solid rgba(34, 36, 38, 0.15);
+    border: 1px solid rgba(0,0,0,.15);
     border-radius: 4px;
     min-width: max-content;
     margin-top: 1px;
@@ -43,7 +41,7 @@
 }
 
 .item > a {
-    padding: 3px 10px;
+    padding: 5px 10px;
 }
 
 .no-result-link > a {

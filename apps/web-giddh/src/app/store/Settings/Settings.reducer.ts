@@ -107,6 +107,7 @@ export interface SettingsState {
     isPaymentUpdationSuccess: boolean;
     taxes: Taxes;
     branchRemoved: boolean;
+    financialYearLimits: any;
 }
 
 export const initialState: SettingsState = {
@@ -132,7 +133,8 @@ export const initialState: SettingsState = {
     taxes: null,
     branchRemoved: false,
     // Get profile API call in process
-    getProfileInProgress: false
+    getProfileInProgress: false,
+    financialYearLimits: null
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -714,6 +716,16 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         case SETTINGS_BRANCH_ACTIONS.RESET_REMOVED_BRANCH_RESPONSE: {
             return Object.assign({}, state, { branchRemoved: false });
+        }
+
+        case SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_FINANCIAL_YEAR_LIMITS_RESPONSE: {
+            let financialYearLimits: BaseResponse<any, any> = action.payload;
+            if (financialYearLimits.status === 'success') {
+                return Object.assign({}, state, {
+                    financialYearLimits: financialYearLimits.body
+                });
+            }
+            return Object.assign({}, state, {});
         }
 
         //  endregion discount reducer

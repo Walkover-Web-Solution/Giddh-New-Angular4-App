@@ -1,8 +1,8 @@
-import {combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {AuthService} from '../../theme/ng-social-login-module/index';
-import {debounceTime, distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
-import {GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI} from './../helpers/defaultDateFormat';
-import {CompanyAddNewUiComponent, ManageGroupsAccountsComponent} from './components';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
+import { AuthService } from '../../theme/ng-social-login-module/index';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
+import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
 import {
     AfterViewChecked,
     AfterViewInit,
@@ -19,7 +19,7 @@ import {
     TemplateRef,
     ViewChild,
 } from '@angular/core';
-import {select, Store} from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import {
     BsDropdownDirective,
     BsModalRef,
@@ -29,10 +29,10 @@ import {
     TabsetComponent
     , PopoverDirective
 } from 'ngx-bootstrap';
-import {AppState} from '../../store';
-import {LoginActions} from '../../actions/login.action';
-import {CompanyActions} from '../../actions/company.actions';
-import {CommonActions} from '../../actions/common.actions';
+import { AppState } from '../../store';
+import { LoginActions } from '../../actions/login.action';
+import { CompanyActions } from '../../actions/company.actions';
+import { CommonActions } from '../../actions/common.actions';
 import {
     ActiveFinancialYear,
     CompanyCountry,
@@ -40,32 +40,33 @@ import {
     CompanyResponse,
     StatesRequest
 } from '../../models/api-models/Company';
-import {UserDetails} from '../../models/api-models/loginModels';
-import {GroupWithAccountsAction} from '../../actions/groupwithaccounts.actions';
-import {ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router} from '@angular/router';
+import { UserDetails } from '../../models/api-models/loginModels';
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
+import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import * as _ from 'lodash';
-import {ElementViewContainerRef} from '../helpers/directives/elementViewChild/element.viewchild.directive';
-import {FlyAccountsActions} from '../../actions/fly-accounts.actions';
-import {FormControl} from '@angular/forms';
-import {GeneralActions} from '../../actions/general/general.actions';
-import {createSelector} from 'reselect';
+import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
+import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
+import { FormControl } from '@angular/forms';
+import { GeneralActions } from '../../actions/general/general.actions';
+import { createSelector } from 'reselect';
 import * as moment from 'moment/moment';
-import {AuthenticationService} from '../../services/authentication.service';
-import {ICompAidata, IUlist} from '../../models/interfaces/ulist.interface';
-import {cloneDeep, concat, orderBy, sortBy} from '../../lodash-optimized';
-import {DbService} from '../../services/db.service';
-import {CompAidataModel} from '../../models/db';
-import {WindowRef} from '../helpers/window.object';
-import {AccountResponse} from 'apps/web-giddh/src/app/models/api-models/Account';
-import {GeneralService} from 'apps/web-giddh/src/app/services/general.service';
-import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
-import {DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST} from '../../models/defaultMenus';
-import {userLoginStateEnum} from '../../models/user-login-state';
-import {SubscriptionsUser} from '../../models/api-models/Subscriptions';
-import {CountryRequest, CurrentPage, OnboardingFormRequest} from '../../models/api-models/Common';
-import {VAT_SUPPORTED_COUNTRIES} from '../../app.constant';
-import {CommonService} from '../../services/common.service';
-import {Location} from '@angular/common';
+import { AuthenticationService } from '../../services/authentication.service';
+import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
+import { cloneDeep, concat, orderBy, sortBy } from '../../lodash-optimized';
+import { DbService } from '../../services/db.service';
+import { CompAidataModel } from '../../models/db';
+import { WindowRef } from '../helpers/window.object';
+import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
+import { userLoginStateEnum } from '../../models/user-login-state';
+import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
+import { CountryRequest, CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
+import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { CommonService } from '../../services/common.service';
+import { Location } from '@angular/common';
+import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 
 @Component({
     selector: 'app-header',
@@ -117,8 +118,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
     public noGroups: boolean;
     public languages: any[] = [
-        {name: 'ENGLISH', value: 'en'},
-        {name: 'DUTCH', value: 'nl'}
+        { name: 'ENGLISH', value: 'en' },
+        { name: 'DUTCH', value: 'nl' }
     ];
     public activeFinancialYear: ActiveFinancialYear;
     // public datePickerOptions: any = {
@@ -171,8 +172,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     //     endDate: moment()
     // };
 
-    public sideMenu: { isopen: boolean } = {isopen: false};
-    public companyMenu: { isopen: boolean } = {isopen: false};
+    public sideMenu: { isopen: boolean } = { isopen: false };
+    public companyMenu: { isopen: boolean } = { isopen: false };
     public isCompanyRefreshInProcess$: Observable<boolean>;
     public isCompanyCreationSuccess$: Observable<boolean>;
     public isLoggedInWithSocialAccount$: Observable<boolean>;
@@ -255,7 +256,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = {x: 0, y: 0};
+    public dateFieldPosition: any = { x: 0, y: 0 };
     /* This will check if company is allowed to beta test new modules */
     public isAllowedForBetaTesting: boolean = false;
     /* This will hold value if settings sidebar is open through mobile hamburger icon */
@@ -293,9 +294,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
         private commonActions: CommonActions,
-        private location: Location
+        private location: Location,
+        private settingsFinancialYearActions: SettingsFinancialYearActions
     ) {
-        console.log("Header Constructor Position 1 - " + new Date().getTime());
+        this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         //this._windowRef.nativeWindow.superformIds = ['Jkvq'];
         /* This will get the date range picker configurations */
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
@@ -314,7 +316,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
 
-        console.log("Header Constructor Position 2 - " + new Date().getTime());
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
 
@@ -326,7 +327,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.setCurrentPage();
 
         // SETTING CURRENT PAGE ON ROUTE CHANGE
-        this.router.events.subscribe(event => {
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            if (event instanceof NavigationStart) {
+                this.addClassInBodyIfPageHasTabs();
+            }
             if (event instanceof NavigationEnd) {
                 this.setCurrentPage();
 
@@ -334,12 +338,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentState = this.router.url;
                     this.setCurrentAccountNameInHeading();
                 }
-
-                this.addClassInBodyIfPageHasTabs();
             }
         });
-
-        console.log("Header Constructor Position 3 - " + new Date().getTime());
 
         // GETTING CURRENT PAGE
         this.store.pipe(select(s => s.general.currentPage), takeUntil(this.destroyed$)).subscribe(response => {
@@ -372,8 +372,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return user.user;
             }
         })).pipe(takeUntil(this.destroyed$));
-
-        console.log("Header Constructor Position 4 - " + new Date().getTime());
 
         this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).pipe(takeUntil(this.destroyed$));
         this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
@@ -447,8 +445,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.selectedCompanyCountry = selectedCmp.country;
         });
 
-        console.log("Header Constructor Position 5 - " + new Date().getTime());
-
         this.session$ = this.store.select(p => p.session.userLoginState).pipe(distinctUntilChanged(), takeUntil(this.destroyed$));
 
         this.isAddAndManageOpenedFromOutside$ = this.store.select(s => s.groupwithaccounts.isAddAndManageOpenedFromOutside).pipe(takeUntil(this.destroyed$));
@@ -474,11 +470,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
 
-        console.log("Header Constructor Position 6 - " + new Date().getTime());
     }
 
     public ngOnInit() {
-        console.log("Header Init - " + new Date().getTime());
         this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
             if (value === 'logoutCordova') {
                 this.zone.run(() => {
@@ -719,6 +713,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             }
         })
+
+        this.getFinancialYearLimits();
     }
 
     public setSelectedCompanyData(selectedCompany) {
@@ -809,10 +805,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 // }
                 if (this.isTodaysDateSelected) {
                     let today = _.cloneDeep([moment(), moment()]);
-                    this.selectedDateRange = {startDate: moment(today[0]), endDate: moment(today[1])};
+                    this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
                     this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 } else {
-                    this.selectedDateRange = {startDate: moment(dateObj[0]), endDate: moment(dateObj[1])};
+                    this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                     this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.isDateRangeSelected = true;
                 }
@@ -960,7 +956,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
         if (o) {
-            menu = {...menu, ...o};
+            menu = { ...menu, ...o };
         } else {
             try {
                 menu.name = pageName.split('/pages/')[1].toLowerCase();
@@ -983,7 +979,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.setCurrentPageTitle(menu);
 
         if (menu.additional) {
-            this.router.navigate([pageName], {queryParams: menu.additional});
+            this.router.navigate([pageName], { queryParams: menu.additional });
         } else {
             this.router.navigate([pageName]);
         }
@@ -996,7 +992,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public analyzeAccounts(e: any, acc) {
         if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
-            this.onItemSelected(acc);
+            this.onItemSelected(acc, null, true);
             return;
         }
         e.preventDefault();
@@ -1359,7 +1355,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.doEntryInDb('groups', item);
     }
 
-    public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null) {
+    public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null, isCtrlClicked?: boolean) {
         this.oldSelectedPage = _.cloneDeep(this.selectedPage);
         if (this.modelRef) {
             this.modelRef.hide();
@@ -1385,7 +1381,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             // if (!this.isLedgerAccSelected) {
             //   this.navigateToUser = true;
             // }
-            this.router.navigate([url]); // added link in routerLink
+            if (!isCtrlClicked) {
+                this.router.navigate([url]); // added link in routerLink
+            }     
         }
         // save data to db
         item.time = +new Date();
@@ -1426,7 +1424,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
         if (!this.modalService.getModalsCount()) {
             this.modelRefExpirePlan = this.modalService.show(template,
-                Object.assign({}, {class: 'subscription-upgrade'})
+                Object.assign({}, { class: 'subscription-upgrade' })
             );
         }
     }
@@ -1587,7 +1585,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         );
 
         this.subscriptions.push(_combine);
-        let config: ModalOptions = {class: 'universal_modal', show: true, keyboard: true, animated: false};
+        let config: ModalOptions = { class: 'universal_modal', show: true, keyboard: true, animated: false };
         this.modelRef = this.modalService.show(this.navigationModal, config);
     }
 
@@ -1752,25 +1750,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public addClassInBodyIfPageHasTabs(): void {
         setTimeout(() => {
-            if (document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0 && !this.router.url.includes("/vendor")) {
-                if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
-                    this.sideBarStateChange(false);
-                    document.querySelector('body').classList.add('on-setting-page');
-                    document.querySelector('body').classList.remove('page-has-tabs');
-                    document.querySelector('body').classList.remove('on-user-page');
-                } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page").length > 0) {
-                    document.querySelector('body').classList.add('on-user-page');
-                    document.querySelector('body').classList.remove('page-has-tabs');
-                    document.querySelector('body').classList.remove('on-setting-page');
-                } else {
-                    document.querySelector('body').classList.add('page-has-tabs');
-                    document.querySelector('body').classList.remove('on-setting-page');
-                    document.querySelector('body').classList.remove('on-user-page');
-                }
+            if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
+                this.sideBarStateChange(true);
+                document.querySelector('body').classList.add('on-setting-page');
+                document.querySelector('body').classList.remove('page-has-tabs');
+                document.querySelector('body').classList.remove('on-user-page');
+            } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page").length > 0) {
+                document.querySelector('body').classList.add('on-user-page');
+                document.querySelector('body').classList.remove('page-has-tabs');
+                document.querySelector('body').classList.remove('on-setting-page');
+                document.querySelector('body').classList.remove('mobile-setting-sidebar');
+            } else if (document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0 && !this.router.url.includes("/vendor")) {
+                document.querySelector('body').classList.add('page-has-tabs');
+                document.querySelector('body').classList.remove('on-setting-page');
+                document.querySelector('body').classList.remove('on-user-page');
+                document.querySelector('body').classList.remove('mobile-setting-sidebar');
             } else {
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
+                document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
         }, 500);
     }
@@ -1820,7 +1819,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         if (value && value.startDate && value.endDate) {
             this.hideGiddhDatepicker();
-            this.selectedDateRange = {startDate: moment(value.startDate), endDate: moment(value.endDate)};
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
@@ -1834,7 +1833,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isTodaysDateSelected = true;
             let today = _.cloneDeep([moment(), moment()]);
             // this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
-            this.selectedDateRange = {startDate: moment(today[0]), endDate: moment(today[1])};
+            this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
             this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             let dates = {
                 fromDate: null,
@@ -1881,5 +1880,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.router.navigate(['/pages/all-modules']);
         }
         this.isAllModuleOpen = !this.isAllModuleOpen;
+    }
+
+    /**
+     * This will get the initial and last financial years set in settings every 10 seconds
+     *
+     * @memberof HeaderComponent
+     */
+    public getFinancialYearLimits(): void {
+        setInterval(() => {
+            this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
+        }, 10000);
     }
 }

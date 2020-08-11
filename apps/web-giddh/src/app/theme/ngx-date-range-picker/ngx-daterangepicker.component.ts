@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, TemplateRef, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, TemplateRef, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _moment from 'moment';
 import { Moment } from 'moment';
@@ -11,7 +11,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helper
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
 import { Router, NavigationStart } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { DatePickerDefaultRangeEnum } from '../../app.constant';
 import { ScrollDispatcher, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
@@ -98,7 +98,7 @@ export interface DateRangeClicked {
     }]
 })
 
-export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges {
+export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
     /* This will check if scrolling reached bottom or top */
     @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
@@ -125,9 +125,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     @ViewChild('startDateElement') startDateElement: ElementRef;
     @ViewChild('endDateElement') endDateElement: ElementRef;
     @Input()
-    minDate: _moment.Moment = _moment().subtract(1, 'year').startOf('month').month(0); // default min date of previous year first month
+    minDate: _moment.Moment;
     @Input()
-    maxDate: _moment.Moment = _moment().add(1, 'year').endOf('month').month(11); // default max date of next year last month
+    maxDate: _moment.Moment;
     @Input()
     autoApply: boolean = false;
     @Input()
@@ -228,14 +228,43 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public currentFinancialYearUniqueName: string = "";
     public isOnScrollActive: boolean = false;
     public imgPath: string = '';
+    /* This will hold the previous scroll index of cdk scrollbar */
+    public previousScrollIndex: number = 0;
+    /* This will hold the current scroll index of cdk scrollbar */
+    public currentScrollIndex: number = 0;
+    /* This will hold the scroll direction of cdk scrollbar */
+    public scrollInDirection: string = "";
+    /* This will hold that how many elements were scrolled in top initially in cdk scrollbar */
+    public initialScrollToIndexTop: number = 0;
+    /* This will hold that how many elements were scrolled in bottom initially in cdk scrollbar */
+    public initialScrollToIndexBottom: number = 0;
+    /* This will hold if financial years were updated by api */
+    public financialYearUpdated: boolean = false;
+    /* This will hold if mouse scroll or touch scroll is allowed or not */
+    public allowMouseScroll: boolean = false;
+    /* This will hold last active month side */
+    public lastActiveMonthSide: string = '';
+    /* This will hold if initially datepicker has rendered */
+    public initialCalendarRender: boolean = true;
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private scrollDispatcher: ScrollDispatcher) {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();
         this.datesUpdated = new EventEmitter();
         this.locale = { ...this._locale };
+
+        this.store.pipe(select(state => state.settings.financialYearLimits), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.startDate && response.endDate) {
+                if(moment(moment(response.startDate, GIDDH_DATE_FORMAT).toDate()) !== this.minDate || moment(moment(response.endDate, GIDDH_DATE_FORMAT).toDate()) !== this.maxDate) {
+                    this.minDate = moment(moment(response.startDate, GIDDH_DATE_FORMAT).toDate());
+                    this.maxDate = moment(moment(response.endDate, GIDDH_DATE_FORMAT).toDate());
+                    this.financialYearUpdated = true;
+                    this.getAllYearsBetweenDates();
+                }
+            }
+        });
+
         this.getFinancialYears();
-        this.updateMonthsInView();        
     }
 
     _locale: LocaleConfig = {};
@@ -270,7 +299,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         return '';
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             let currentCompanyUniqueName = "";
@@ -289,7 +318,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         this._breakPointObservar.observe([
             '(max-width: 767px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
             this.closeCalender();
         });
@@ -326,8 +355,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             }
         }
 
-        this.initCalendar();
-
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
                 this.hide();
@@ -353,11 +380,15 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         });
 
         this.scrollTopSubject$.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((response) => {
-            this.onScroll(response);
+            if (this.allowMouseScroll) {
+                this.onScroll(response);
+            }
         });
 
         this.scrollBottomSubject$.pipe(debounceTime(200), takeUntil(this.destroyed$)).subscribe((response) => {
-            this.onScroll(response);
+            if (this.allowMouseScroll) {
+                this.onScroll(response);
+            }
         });
 
         if (this.inputStartDate) {
@@ -368,15 +399,65 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.endDate = this.inputEndDate;
         }
 
-        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll.measureScrollOffset('top') === 0), takeUntil(this.destroyed$)).subscribe(event => {
+        this.updateMonthsInView();
+
+        this.initCalendar();
+
+        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll && this.virtualScroll.measureScrollOffset('top') === 0), takeUntil(this.destroyed$)).subscribe(event => {
             this.setCalendarToActiveMonth('start');
+            if (!this.isOnScrollActive && this.allowMouseScroll) {
+                this.isOnScrollActive = true;
+                this.scrollTopSubject$.next("top");
+            }
         });
 
-        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll.measureScrollOffset('bottom') === 0), takeUntil(this.destroyed$)).subscribe(event => {
+        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll && this.virtualScroll.measureScrollOffset('bottom') === 0), takeUntil(this.destroyed$)).subscribe(event => {
             this.setCalendarToActiveMonth('end');
+            if (!this.isOnScrollActive && this.allowMouseScroll) {
+                this.isOnScrollActive = true;
+                this.scrollBottomSubject$.next("bottom");
+            }
         });
 
-        this.getAllYearsBetweenDates();
+        this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            if (!this.isOnScrollActive && this.allowMouseScroll) {
+                if (this.currentScrollIndex < this.previousScrollIndex) {
+                    this.isOnScrollActive = true;
+                    this.scrollTopSubject$.next("top");
+                } else {
+                    this.isOnScrollActive = true;
+                    this.scrollBottomSubject$.next("bottom");
+                }
+            }
+        });
+
+        document.querySelector(".giddh-datepicker-modal").parentElement.classList.add("giddh-calendar");
+    }
+
+    /**
+     * This will check and scroll the scrollbar on desired month
+     *
+     * @memberof NgxDaterangepickerComponent
+     */
+    public ngAfterViewInit(): void {
+        document.querySelector('body').classList.remove('modal-open');
+        setTimeout(() => {
+            try {
+                if (this.initialScrollToIndexTop < this.initialScrollToIndexBottom) {
+                    this.virtualScroll.scrollToIndex(this.initialScrollToIndexTop);
+                    if (this.calendarMonths[this.initialScrollToIndexTop]) {
+                        this.setActiveMonth(this.calendarMonths[this.initialScrollToIndexTop], 'start');
+                    }
+                } else {
+                    this.virtualScroll.scrollToIndex(this.initialScrollToIndexBottom);
+                    if (this.calendarMonths[this.initialScrollToIndexBottom]) {
+                        this.setActiveMonth(this.calendarMonths[this.initialScrollToIndexBottom], 'end');
+                    }
+                }
+            } catch (error) {
+
+            }
+        }, 100);
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -388,6 +469,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 if (change === "inputEndDate" && changes[change].currentValue) {
                     this.endDate = changes[change].currentValue;
                     this.updateMonthsInView();
+                }
+                if (change === "minDate" && changes[change].currentValue) {
+                    this.minDate = changes[change].currentValue;
+                }
+                if (change === "maxDate" && changes[change].currentValue) {
+                    this.maxDate = changes[change].currentValue;
                 }
             }
         }
@@ -735,7 +822,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             if (this.timePicker && this.timePickerIncrement) {
                 this.startDate.minute(Math.round(this.startDate.minute() / this.timePickerIncrement) * this.timePickerIncrement);
             }
-
         }
 
         if (this.maxDate && this.startDate.isAfter(this.maxDate)) {
@@ -837,7 +923,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     this.endCalendar.month = this.startDate.clone().date(2).add(1, 'month');
                 }
             }
-
         } else {
             if (this.startCalendar.month.format('YYYY-MM') !== this.startDate.format('YYYY-MM') &&
                 this.endCalendar.month.format('YYYY-MM') !== this.startDate.format('YYYY-MM')) {
@@ -845,7 +930,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 this.endCalendar.month = this.startDate.clone().date(2).add(1, 'month');
             }
         }
-        if (this.maxDate && this.linkedCalendars && !this.singleDatePicker && this.endCalendar.month > this.maxDate) {
+
+        if (this.financialYearUpdated && this.maxDate && this.linkedCalendars && !this.singleDatePicker && this.endCalendar.month > this.maxDate) {
             this.endCalendar.month = this.maxDate.clone().date(2);
             this.startCalendar.month = this.maxDate.clone().date(2).subtract(1, 'month');
         }
@@ -1152,15 +1238,17 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public mouseUp(e: MouseWheelEvent): void {
-        if (e.deltaY < 0) {
-            if (!this.isOnScrollActive) {
-                this.isOnScrollActive = true;
-                this.scrollTopSubject$.next("top");
-            }
-        } else {
-            if (!this.isOnScrollActive) {
-                this.isOnScrollActive = true;
-                this.scrollBottomSubject$.next("bottom");
+        if (this.allowMouseScroll) {
+            if (e.deltaY < 0) {
+                if (!this.isOnScrollActive) {
+                    this.isOnScrollActive = true;
+                    this.scrollTopSubject$.next("top");
+                }
+            } else {
+                if (!this.isOnScrollActive) {
+                    this.isOnScrollActive = true;
+                    this.scrollBottomSubject$.next("bottom");
+                }
             }
         }
     }
@@ -1742,14 +1830,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 let lastFinancialYear;
                 let allFinancialYears = [];
 
-                if (res.body.financialYears[0].financialYearStarts) {
-                    this.minDate = moment(moment(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate());
-                }
-
-                if (res.body.financialYears[res.body.financialYears.length - 1].financialYearEnds) {
-                    this.maxDate = moment(moment(res.body.financialYears[res.body.financialYears.length - 1].financialYearEnds, GIDDH_DATE_FORMAT).toDate());
-                }
-
                 res.body.financialYears.forEach(key => {
                     let financialYearStarts = moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     let financialYearEnds = moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
@@ -1807,8 +1887,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     });
 
                     this.ranges = ranges;
-
-                    this.getAllYearsBetweenDates();
                 }
             }
         });
@@ -1887,6 +1965,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             } else {
                 if (this.maxDate && this.maxDate.isAfter(this.calendarVariables.end.calendar.lastDay)) {
                     this.initialCalendarMonths = false;
+                    this.initialScrollToIndexBottom++;
                     this.goToNextMonth();
                 }
             }
@@ -1901,12 +1980,19 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             } else {
                 if (this.minDate && this.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
                     this.initialCalendarMonths = false;
+                    this.initialScrollToIndexTop++;
                     this.goToPrevMonth();
                 }
             }
         }
 
         this.isOnScrollActive = false;
+
+        if (this.scrollInDirection === "top") {
+            this.virtualScroll.scrollToIndex(this.currentScrollIndex - 1);
+        } else if (this.scrollInDirection === "bottom") {
+            this.virtualScroll.scrollToIndex(this.currentScrollIndex + 1);
+        }
     }
 
     /**
@@ -1922,54 +2008,59 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 this.renderedCalendarMonths = [];
             }
 
-            if (this.activeMonthHover === false) {
-                this.activeMonth = this.calendarVariables.start;
-            }
-
-            let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) : 0;
-            let startKey = this.calendarVariables.start.month + "-" + this.calendarVariables.start.year;
-            let endKey = this.calendarVariables.end.month + "-" + this.calendarVariables.end.year;
-
-            if (!this.renderedCalendarMonths.includes(endKey)) {
-                if (this.isPreviousMonth === true) {
-                    this.renderedCalendarMonths.push(endKey);
-
-                    this.calendarMonths.unshift({ end: this.calendarVariables.end });
+            if (this.checkMinMaxDate(this.calendarVariables.start)) {
+                if (this.activeMonthHover === false) {
+                    this.activeMonth = this.calendarVariables.start;
+                    this.lastActiveMonthSide = 'start';
                 }
-            }
 
-            if (!this.renderedCalendarMonths.includes(startKey)) {
-                this.renderedCalendarMonths.push(startKey);
+                let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) : 0;
+                let startKey = this.calendarVariables.start.month + "-" + this.calendarVariables.start.year;
+                let endKey = this.calendarVariables.end.month + "-" + this.calendarVariables.end.year;
 
-                if (this.isPreviousMonth === true) {
-                    this.calendarMonths.unshift({ start: this.calendarVariables.start });
-                } else {
-                    if (this.calendarMonths[existingMonthsLength] === undefined) {
-                        this.calendarMonths[existingMonthsLength] = [];
+                if (!this.renderedCalendarMonths.includes(endKey)) {
+                    if (this.isPreviousMonth === true) {
+                        this.renderedCalendarMonths.push(endKey);
+
+                        this.calendarMonths.unshift({ end: this.calendarVariables.end });
                     }
+                }
 
-                    this.calendarMonths[existingMonthsLength].start = this.calendarVariables.start;
+                if (!this.renderedCalendarMonths.includes(startKey)) {
+                    this.renderedCalendarMonths.push(startKey);
+
+                    if (this.isPreviousMonth === true) {
+                        this.calendarMonths.unshift({ start: this.calendarVariables.start });
+                    } else {
+                        if (this.calendarMonths[existingMonthsLength] === undefined) {
+                            this.calendarMonths[existingMonthsLength] = [];
+                        }
+
+                        this.calendarMonths[existingMonthsLength].start = this.calendarVariables.start;
+                    }
                 }
             }
         }
 
         if (side === "end") {
-
-            if (this.activeMonthHover === false) {
-                this.activeMonth = this.calendarVariables.end;
-            }
-
-            let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) - 1 : 0;
-            let key = this.calendarVariables.end.month + "-" + this.calendarVariables.end.year;
-
-            if (!this.renderedCalendarMonths.includes(key)) {
-                this.renderedCalendarMonths.push(key);
-
-                if (this.calendarMonths[existingMonthsLength] === undefined) {
-                    this.calendarMonths[existingMonthsLength] = [];
+            if (this.checkMinMaxDate(this.calendarVariables.end)) {
+                if (this.activeMonthHover === false) {
+                    this.activeMonth = this.calendarVariables.end;
+                    this.lastActiveMonthSide = 'end';
                 }
 
-                this.calendarMonths[existingMonthsLength].end = this.calendarVariables.end;
+                let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) - 1 : 0;
+                let key = this.calendarVariables.end.month + "-" + this.calendarVariables.end.year;
+
+                if (!this.renderedCalendarMonths.includes(key)) {
+                    this.renderedCalendarMonths.push(key);
+
+                    if (this.calendarMonths[existingMonthsLength] === undefined) {
+                        this.calendarMonths[existingMonthsLength] = [];
+                    }
+
+                    this.calendarMonths[existingMonthsLength].end = this.calendarVariables.end;
+                }
             }
         }
 
@@ -1984,6 +2075,18 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public initCalendar(): void {
         this.renderCalendar(DateType.start);
         this.renderCalendar(DateType.end);
+
+        if (this.initialCalendarRender === true) {
+            this.initialCalendarRender = false;
+            
+            for (let loop = 0; loop <= 4; loop++) {
+                this.onScroll("top");
+            }
+
+            for (let loop = 0; loop <= 8; loop++) {
+                this.onScroll("bottom");
+            }
+        }
     }
 
     /**
@@ -1992,15 +2095,14 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public getAllYearsBetweenDates(): void {
-        let difference: number;
-        difference = new Date(this.maxDate.toDate()).getFullYear() - new Date(this.minDate.toDate()).getFullYear();
-        this.allowedYears = [];
-        for (let loop = 0; loop < difference; loop++) {
-            let loopYear = new Date(this.minDate.toDate());
-            loopYear.setFullYear(loopYear.getFullYear() + loop);
+        let minYear = new Date(this.minDate.toDate()).getFullYear();
+        let maxYear = new Date(this.maxDate.toDate()).getFullYear();
 
-            this.allowedYears.push(loopYear.getFullYear());
+        let allowedYears = [];
+        for (minYear; minYear <= maxYear; minYear++) {
+            allowedYears.push(minYear);
         }
+        this.allowedYears = allowedYears;
     }
 
     /**
@@ -2054,8 +2156,23 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public openMobileDatepicker(): void {
+        this.allowMouseScroll = true;
         this.openMobileDatepickerPopup = true;
         document.querySelector('body').classList.add('hide-scroll-body');
+
+        setTimeout(() => {
+            if (this.initialScrollToIndexTop < this.initialScrollToIndexBottom) {
+                this.virtualScroll.scrollToIndex(this.initialScrollToIndexTop);
+                if (this.calendarMonths[this.initialScrollToIndexTop]) {
+                    this.setActiveMonth(this.calendarMonths[this.initialScrollToIndexTop], 'start');
+                }
+            } else {
+                this.virtualScroll.scrollToIndex(this.initialScrollToIndexBottom);
+                if (this.calendarMonths[this.initialScrollToIndexBottom]) {
+                    this.setActiveMonth(this.calendarMonths[this.initialScrollToIndexBottom], 'end');
+                }
+            }
+        }, 100);    
     }
 
     /**
@@ -2078,7 +2195,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public restrictBodyScroll(): void {
-        document.querySelector('body').classList.add('restrict-body-scroll');
+        document.querySelector('body').classList.add('prevent-body-scroll');
+        this.allowMouseScroll = true;
     }
 
     /**
@@ -2087,7 +2205,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public allowBodyScroll(): void {
-        document.querySelector('body').classList.remove('restrict-body-scroll');
+        document.querySelector('body').classList.remove('prevent-body-scroll');
+        this.allowMouseScroll = false;
     }
 
     /**
@@ -2098,6 +2217,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      */
     public setActiveMonth(calendar: any, side: string): void {
         this.activeMonthHover = true;
+        this.lastActiveMonthSide = side;
         if (side === 'start') {
             this.activeMonth = calendar.start;
         } else {
@@ -2253,5 +2373,125 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.isMobileScreen = false;
         this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate });
         this.hide();
+    }
+
+    /**
+     * This will update the index of scrolled element
+     *
+     * @param {*} event
+     * @memberof NgxDaterangepickerComponent
+     */
+    public updateScrollIndex(event: number): void {
+        if (this.currentScrollIndex) {
+            this.previousScrollIndex = this.currentScrollIndex;
+        }
+        this.currentScrollIndex = event;
+
+        if(this.scrollInDirection === "top") {
+            if(this.lastActiveMonthSide === "end") {
+                if (this.calendarMonths[this.currentScrollIndex] && this.calendarMonths[this.currentScrollIndex].start) {
+                    this.setActiveMonth(this.calendarMonths[this.currentScrollIndex], "start");
+                } else {
+                    let scrollIndex = 0;
+                    if(this.currentScrollIndex > 0) {
+                        scrollIndex = this.currentScrollIndex;
+                    }
+
+                    if (this.calendarMonths[scrollIndex]) {
+                        if (this.calendarMonths[scrollIndex].end) {
+                            this.setActiveMonth(this.calendarMonths[scrollIndex], "end");
+                        } else if (this.calendarMonths[scrollIndex].start) {
+                            this.setActiveMonth(this.calendarMonths[scrollIndex], "start");
+                        }
+                    }
+                }
+            } else {
+                let scrollIndex = 0;
+                if(this.currentScrollIndex > 0) {
+                    scrollIndex = this.currentScrollIndex;
+                }
+
+                if (this.calendarMonths[scrollIndex]) {
+                    if (this.calendarMonths[scrollIndex].end) {
+                        this.setActiveMonth(this.calendarMonths[scrollIndex], "end");
+                    } else if (this.calendarMonths[scrollIndex].start) {
+                        this.setActiveMonth(this.calendarMonths[scrollIndex], "start");
+                    }
+                }
+            }
+        } else {
+            if(this.lastActiveMonthSide === "start") {
+                if (this.calendarMonths[this.currentScrollIndex] && this.calendarMonths[this.currentScrollIndex].end) {
+                    this.setActiveMonth(this.calendarMonths[this.currentScrollIndex], "end");
+                } else {
+                    let scrollIndex = this.currentScrollIndex + 1;
+
+                    if (this.calendarMonths[scrollIndex]) {
+                        if (this.calendarMonths[scrollIndex].start) {
+                            this.setActiveMonth(this.calendarMonths[scrollIndex], "start");
+                        } else if (this.calendarMonths[scrollIndex].end) {
+                            this.setActiveMonth(this.calendarMonths[scrollIndex], "end");
+                        }
+                    }
+                }
+            } else {
+                let scrollIndex = this.currentScrollIndex;
+
+                if (this.calendarMonths[scrollIndex]) {
+                    if (this.calendarMonths[scrollIndex].start) {
+                        this.setActiveMonth(this.calendarMonths[scrollIndex], "start");
+                    } else if (this.calendarMonths[scrollIndex].end) {
+                        this.setActiveMonth(this.calendarMonths[scrollIndex], "end");
+                    }
+                }
+            }
+        }
+
+        this.scrollInDirection = "";
+    }
+
+    /**
+     * This will update that in which direction we need to scroll
+     *
+     * @param {string} direction
+     * @memberof NgxDaterangepickerComponent
+     */
+    public initiateScrollToIndex(direction: string): void {
+        this.scrollInDirection = direction;
+    }
+
+    /**
+     * This will validate if the rendering month is valid or not
+     *
+     * @param {*} date
+     * @returns {boolean}
+     * @memberof NgxDaterangepickerComponent
+     */
+    public checkMinMaxDate(date: any): boolean {
+        let isValidDate = false;
+
+        if (moment([date.year, date.month, 1]).startOf('M').isSameOrAfter(this.minDate) && moment([date.year, date.month, 1]).startOf('M').isSameOrBefore(this.maxDate)) {
+            isValidDate = true;
+        }
+
+        return isValidDate;
+    }
+
+    /**
+     * This will validate if month/year is valid or not
+     *
+     * @param {*} year
+     * @param {*} month
+     * @returns {boolean}
+     * @memberof NgxDaterangepickerComponent
+     */
+    public checkValidMonthYear(year: any, month: any): boolean {
+        let isValidDate = false;
+
+        if (moment([year, month, 1]).startOf('M').isSameOrAfter(this.minDate) && moment([year, month, 1]).startOf('M').isSameOrBefore(this.maxDate)) {
+            isValidDate = true;
+        }
+
+        return isValidDate;
     }
 }
