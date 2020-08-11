@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, Input, EventEmitter, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap'
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -12,6 +12,7 @@ import { ReplaySubject, fromEvent } from 'rxjs';
 import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonActions } from '../../actions/common.actions';
+import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 
 @Component({
     selector: 'purchase-order-preview',
@@ -38,6 +39,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public inventorySettings: any;
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold the filtered orders */
     public filteredData: any[] = [];
     /* This will hold if we need to show GST */
     public showGSTINNo: boolean;
@@ -52,8 +54,10 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     /* True, if the Giddh supports the taxation of the country (not supported now: UK, US, Nepal, Australia) */
     public shouldShowTrnGstField: boolean = false;
 
-    constructor(private store: Store<AppState>, private modalService: BsModalService, public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public router: Router, private commonActions: CommonActions) {
+    constructor(private store: Store<AppState>, private modalService: BsModalService, public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public router: Router, private commonActions: CommonActions, private invoiceActions: InvoiceActions) {
         this.getInventorySettings();
+
+        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
     }
 
     public ngOnInit(): void {

@@ -91,4 +91,12 @@ export class PurchaseOrderService {
 
         return this.http.get(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
+
+    public update(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.UPDATE;
+        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);
+
+        return this.http.put(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
 }

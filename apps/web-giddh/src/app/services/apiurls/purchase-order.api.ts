@@ -9,4 +9,5 @@ export const PURCHASE_ORDER_API = {
     STATUS_UPDATE: `${PURCHASE_ORDER}accounts/:accountUniqueName/purchase-order/status/change`,
     DELETE: `${PURCHASE_ORDER}purchase-order?uniqueName=:poUniqueName`,
     EMAIL: `${PURCHASE_ORDER}accounts/:accountUniqueName/purchase-order/:poUniqueName/mail`,
+    UPDATE: `${PURCHASE_ORDER}accounts/:accountUniqueName/purchase-order`
 }
