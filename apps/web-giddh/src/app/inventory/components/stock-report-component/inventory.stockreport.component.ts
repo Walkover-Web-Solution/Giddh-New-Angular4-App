@@ -1,11 +1,11 @@
-import {ToasterService} from './../../../services/toaster.service';
-import {InventoryService} from '../../../services/inventory.service';
-import {debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil} from 'rxjs/operators';
-import {IGroupsWithStocksHierarchyMinItem} from '../../../models/interfaces/groupsWithStocks.interface';
-import {InventoryDownloadRequest, StockReportRequest, StockReportResponse} from '../../../models/api-models/Inventory';
-import {StockReportActions} from '../../../actions/inventory/stocks-report.actions';
-import {AppState} from '../../../store';
-import {select, Store} from '@ngrx/store';
+import { ToasterService } from './../../../services/toaster.service';
+import { InventoryService } from '../../../services/inventory.service';
+import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
+import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
+import { InventoryDownloadRequest, StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
+import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
+import { AppState } from '../../../store';
+import { select, Store } from '@ngrx/store';
 
 import {
     AfterViewInit,
@@ -20,22 +20,22 @@ import {
     SimpleChanges,
     ViewChild
 } from '@angular/core';
-import {SidebarAction} from '../../../actions/inventory/sidebar.actions';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, of as observableOf, ReplaySubject, Subscription, combineLatest as observableCombineLatest} from 'rxjs';
+import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, of as observableOf, ReplaySubject, Subscription, combineLatest as observableCombineLatest } from 'rxjs';
 
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
-import {InventoryAction} from '../../../actions/inventory/inventory.actions';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {BranchFilterRequest, CompanyResponse} from '../../../models/api-models/Company';
-import {createSelector} from 'reselect';
-import {SettingsBranchActions} from '../../../actions/settings/branch/settings.branch.action';
-import {ModalDirective} from 'ngx-bootstrap';
-import {InvViewService} from '../../inv.view.service';
-import {IOption} from '../../../theme/ng-virtual-select/sh-options.interface';
-import {ShSelectComponent} from '../../../theme/ng-virtual-select/sh-select.component';
+import { InventoryAction } from '../../../actions/inventory/inventory.actions';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { BranchFilterRequest, CompanyResponse } from '../../../models/api-models/Company';
+import { createSelector } from 'reselect';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { ModalDirective } from 'ngx-bootstrap';
+import { InvViewService } from '../../inv.view.service';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
     selector: 'invetory-stock-report',  // <home></home>
@@ -99,9 +99,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public pickerSelectedFromDate: string;
     public pickerSelectedToDate: string;
     public transactionTypes: any[] = [
-        {uniqueName: 'purchase_and_sales', name: 'Purchase & Sales'},
-        {uniqueName: 'transfer', name: 'Transfer'},
-        {uniqueName: 'all', name: 'All Transactions'},
+        { uniqueName: 'purchase_and_sales', name: 'Purchase & Sales' },
+        { uniqueName: 'transfer', name: 'Transfer' },
+        { uniqueName: 'all', name: 'All Transactions' },
     ];
 
     public VOUCHER_TYPES: any[] = [
@@ -242,26 +242,28 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public advanceSearchModalShow: boolean = false;
     public updateStockSuccess$: Observable<boolean>;
+    public activeStockUniqueName$: Observable<string>;
+
 
     /**
      * TypeScript public modifiers
      */
     constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-                private stockReportActions: StockReportActions, private router: Router,
-                private _toasty: ToasterService,
-                private inventoryService: InventoryService, private fb: FormBuilder, private inventoryAction: InventoryAction,
-                private settingsBranchActions: SettingsBranchActions,
-                private invViewService: InvViewService,
-                private cdr: ChangeDetectorRef
+        private stockReportActions: StockReportActions, private router: Router,
+        private _toasty: ToasterService,
+        private inventoryService: InventoryService, private fb: FormBuilder, private inventoryAction: InventoryAction,
+        private settingsBranchActions: SettingsBranchActions,
+        private invViewService: InvViewService,
+        private cdr: ChangeDetectorRef
     ) {
-        this.stockReport$ = this.store.pipe(select(stockReportStore => stockReportStore.inventory.stockReport),takeUntil(this.destroyed$), publishReplay(1), refCount());
+        this.stockReport$ = this.store.pipe(select(stockReportStore => stockReportStore.inventory.stockReport), takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.stockReportRequest = new StockReportRequest();
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
         this.entityAndInventoryTypeForm = this.fb.group({
             selectedEntity: ['allEntity'],
             selectedTransactionType: ['all']
         });
-        this.updateStockSuccess$ = this.store.pipe(select(s => s.inventory.UpdateStockSuccess) ,takeUntil(this.destroyed$));
+        this.updateStockSuccess$ = this.store.pipe(select(s => s.inventory.UpdateStockSuccess), takeUntil(this.destroyed$));
     }
 
     public findStockNameFromId(grps: IGroupsWithStocksHierarchyMinItem[], stockUniqueName: string): string {
@@ -296,15 +298,11 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     }
 
     public ngOnInit() {
-        // if (this.route.firstChild) {
-        //     this.route.firstChild.params.pipe(take(1)).subscribe(s => {
-        //         if (s) {
-        //             this.groupUniqueName = s.groupUniqueName;
-        //             this.stockUniqueName = s.stockUniqueName;
-        //             this.initReport();
-        //         }
-        //     });
-        // }
+        if (this.invViewService.getActiveGroupUniqueName() || this.invViewService.getActiveStockUniqueName()) {
+            this.groupUniqueName = this.invViewService.getActiveGroupUniqueName();
+            this.stockUniqueName = this.invViewService.getActiveStockUniqueName();
+            this.initReport();
+        }
 
 
         // get view from sidebar while clicking on group/stock
@@ -320,7 +318,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
                     this.initReport();
                     this.store.pipe(select(p => {
                         return this.findStockNameFromId(p.inventory.groupsWithStocks, this.stockUniqueName);
-                    }),take(1)).subscribe(p => this.activeStock$ = p);
+                    }), take(1)).subscribe(p => this.activeStock$ = p);
                 }
             }
         });
@@ -340,7 +338,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
 
         this.universalDate$.subscribe(a => {
             if (a) {
-                this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2]};
+                this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
                 this.fromDate = moment(a[0]).format(this._DDMMYYYY);
                 this.toDate = moment(a[1]).format(this._DDMMYYYY);
                 this.getStockReport(true);
@@ -550,7 +548,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      * setInventoryAsideState
      */
     public setInventoryAsideState(isOpen, isGroup, isUpdate) {
-        this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen, isGroup, isUpdate}));
+        this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
     }
 
     public pageChanged(event: any): void {
@@ -704,7 +702,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         //Reset Date with universal date
         this.universalDate$.subscribe(a => {
             if (a) {
-                this.datePickerOptions = {...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2]};
+                this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
                 this.fromDate = moment(a[0]).format(this._DDMMYYYY);
                 this.toDate = moment(a[1]).format(this._DDMMYYYY);
             }
@@ -854,11 +852,11 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         }
     }
 
-     /**
-     * To open edit stock aside panel
-     *
-     * @memberof InventoryStockReportComponent
-     */
+    /**
+    * To open edit stock aside panel
+    *
+    * @memberof InventoryStockReportComponent
+    */
     public editStock(): void {
         this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
         this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));

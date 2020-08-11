@@ -111,16 +111,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isMobileScreen = result.matches;
         });
 
-        // this.currentUrl = this.router.url;
-
-        // if (this.currentUrl.indexOf('group') > 0) {
-        //     this.activeView = "group";
-        // } else if (this.currentUrl.indexOf('stock') > 0) {
-        //     this.activeView = "stock";
-        // } else {
-        //     this.activeView = null;
-        // }
-
         this.activeStock$ = this.store.select(p => p.inventory.activeStock).pipe(takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.select(p => p.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
         this.groupsWithStocks$ = this.store.select(s => s.inventory.groupsWithStocks).pipe(takeUntil(this.destroyed$));
