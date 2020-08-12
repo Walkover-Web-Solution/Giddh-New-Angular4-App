@@ -327,15 +327,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
             ];
             return;
         }
-
-        this.searchService.loadDetails(e.value).subscribe(data => {
+        let requestObject;
+        if (e.additional.stock) {
+            requestObject = {
+                stockUniqueName: e.additional.stock.uniqueName
+            };
+        }
+        const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount.uniqueName) : '';
+        // If current ledger is of income or expense category then send current ledger unique name else send particular account unique name
+        const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
+            this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
+            e.additional.uniqueName;
+        this.searchService.loadDetails(accountUniqueName, requestObject).subscribe(data => {
             if (data && data.body) {
                 txn.selectedAccount = {
                     ...e.additional,
                     label: e.label,
                     value: e.value,
                     isHilighted: true,
-
                     applicableTaxes: data.body.applicableTaxes || [],
                     currency: data.body.currency,
                     currencySymbol: data.body.currencySymbol,
@@ -344,76 +353,54 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     mergedAccounts: data.body.mergedAccounts,
                     mobileNo: data.body.mobileNo,
                     nameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.name).join(', ') : '',
-                    stocks: [],
+                    stock: data.body.stock,
                     uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                 };
                 let rate = 0;
-                    let unitCode = '';
-                    let unitName = '';
-                    let stockName = '';
-                    let stockUniqueName = '';
-                    let unitArray = [];
+                let unitCode = '';
+                let unitName = '';
+                let stockName = '';
+                let stockUniqueName = '';
 
-                    //#region unit rates logic
-                    // if (txn.additional && txn.additional.stock) {
-                    //     let defaultUnit = {
-                    //         stockUnitCode: txn.additional.stock.stockUnit.name,
-                    //         code: txn.additional.stock.stockUnit.code,
-                    //         rate: 0,
-                    //         name: txn.additional.stock.stockUnit.name
-                    //     };
-                    //     if (txn.additional.stock.accountStockDetails && txn.additional.stock.accountStockDetails.unitRates) {
-                    //         let cond = txn.additional.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === fa.additional.stock.stockUnit.code);
-                    //         if (cond) {
-                    //             defaultUnit.rate = cond.rate;
-                    //             rate = defaultUnit.rate;
-                    //         }
-
-                    //         unitArray = unitArray.concat(txn.additional.stock.accountStockDetails.unitRates.map(p => {
-                    //             return {
-                    //                 stockUnitCode: p.stockUnitCode,
-                    //                 code: p.stockUnitCode,
-                    //                 rate: 0,
-                    //                 name: p.stockUnitName
-                    //             };
-                    //         }));
-                    //         if (unitArray.findIndex(p => p.code === defaultUnit.code) === -1) {
-                    //             unitArray.push(defaultUnit);
-                    //         }
-                    //     } else {
-                    //         unitArray.push(defaultUnit);
-                    //     }
-
-                    //     txn.unitRate = unitArray;
-                    //     stockName = txn.additional.stock.name;
-                    //     stockUniqueName = txn.additional.stock.uniqueName;
-                    //     unitName = txn.additional.stock.stockUnit.name;
-                    //     unitCode = txn.additional.stock.stockUnit.code;
-                    // }
-                    if (stockName && stockUniqueName) {
-                        txn.inventory = {
-                            stock: {
-                                name: stockName,
-                                uniqueName: stockUniqueName
-                            },
-                            quantity: 1,
-                            unit: {
-                                stockUnitCode: unitCode,
-                                code: unitCode,
-                                rate
-                            }
-                        };
-                    }
-                    if (rate > 0 && txn.amount === 0) {
-                        txn.amount = rate;
-                    }
-                    // check if selected account category allows to show taxationDiscountBox in newEntry popup
-                    txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
-                    this.handleRcmVisibility(txn);
-                    this.handleTaxableAmountVisibility(txn);
-                    this.newLedgerComponent.calculateTotal();
-                    this.newLedgerComponent.detectChanges();
-                    this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
+                //#region unit rates logic
+                if (txn.selectedAccount && txn.selectedAccount.stock) {
+                    let defaultUnit = {
+                        stockUnitCode: txn.selectedAccount.stock.unitRates[0].name,
+                        code: txn.selectedAccount.stock.unitRates[0].stockUnitCode,
+                        rate: txn.selectedAccount.stock.unitRates[0].rate,
+                        name: txn.selectedAccount.stock.unitRates[0].stockUnitName
+                    };
+                    txn.unitRate = txn.selectedAccount.stock.unitRates.map(unitRate => ({...unitRate, code: unitRate.stockUnitCode}));
+                    stockName = defaultUnit.name;
+                    rate = defaultUnit.rate;
+                    stockUniqueName = txn.selectedAccount.stock.uniqueName;
+                    unitName = defaultUnit.name;
+                    unitCode = defaultUnit.code;
+                }
+                if (stockName && stockUniqueName) {
+                    txn.inventory = {
+                        stock: {
+                            name: stockName,
+                            uniqueName: stockUniqueName
+                        },
+                        quantity: 1,
+                        unit: {
+                            stockUnitCode: unitCode,
+                            code: unitCode,
+                            rate
+                        }
+                    };
+                }
+                if (rate > 0 && txn.amount === 0) {
+                    txn.amount = rate;
+                }
+                // check if selected account category allows to show taxationDiscountBox in newEntry popup
+                txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+                this.handleRcmVisibility(txn);
+                this.handleTaxableAmountVisibility(txn);
+                this.newLedgerComponent.calculateTotal();
+                this.newLedgerComponent.detectChanges();
+                this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
             }
         });
         // this.lc.flattenAccountList.pipe(take(1)).subscribe(data => {
@@ -1465,10 +1452,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         const requestObject = {
             q: query,
             page,
-            withStocks: true
+            withStocks: true,
+            accountUniqueName: this.lc.activeAccount ? this.lc.activeAccount.uniqueName : ''
         }
         this.searchService.searchAccount(requestObject).subscribe(data => {
-            console.log('Data received: ', data);
             if (data && data.body && data.body.results) {
                 const searchResults = data.body.results.map(result => {
                     return {

@@ -58,11 +58,17 @@ export class SearchService {
             .pipe(catchError((error) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(error)));
     }
 
-    public loadDetails(uniqueName: string): Observable<any> {
+    public loadDetails(uniqueName: string, params?: any): Observable<any> {
         const companyUniqueName = this._generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_DETAIL}`
-            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-            .replace(':accountUniqueName', uniqueName);
+        .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+        .replace(':accountUniqueName', uniqueName);
+        if (params) {
+            Object.keys(params).forEach((key, index) => {
+                const delimiter = index === 0 ? '?' : '&'
+                contextPath += `${delimiter}${key}=${params[key]}`
+            });
+        }
 
         return this._http.get(contextPath)
             .pipe(catchError((error) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(error)));
