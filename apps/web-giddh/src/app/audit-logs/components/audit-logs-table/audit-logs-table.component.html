@@ -164,7 +164,7 @@
                 <!-- account address block start -->
                 <ng-container *ngIf="log && log?.details && log?.details?.addresses && log?.details?.addresses.length">
                     <ng-container *ngFor="let item of log?.details?.addresses; let index = index">
-                        <div class="single-address-row" *ngIf="index===0">
+                        <div class="single-address-row" *ngIf="index===0 || index>0 && showSingleAddress && isShowMultipleDataIndex===parentIndex">
                             <div class="mr-05" *ngIf="item.address">
                                 <label>
                             Address:
@@ -192,35 +192,6 @@
                             </div>
                         </div>
 
-
-
-                        <div class="single-address-row" *ngIf="index>0 && showSingleAddress && isShowMultipleDataIndex===parentIndex">
-                            <div class="mr-05" *ngIf="item?.address">
-                                <label>
-                            Address:
-                        </label>
-                                <p class="address-field">{{item?.address}}
-                                </p>
-                            </div>
-                            <div class="mr-05" *ngIf="item?.state">
-                                <label>
-                            State:
-                        </label>
-                                <p class="ml-05">{{item?.state?.name}}</p>
-                            </div>
-                            <div class="mr-05">
-                                <label>
-                            GSTIN:
-                        </label>
-                                <p class="ml-05">{{item?.gstIn}}</p>
-                            </div>
-                            <div class="mr-05" *ngIf="item?.country">
-                                <label>
-                            Country:
-                        </label>
-                                <p class="ml-05">{{item?.country?.countryName}}</p>
-                            </div>
-                        </div>
                     </ng-container>
                 </ng-container>
                 <!-- account address block end -->
@@ -538,38 +509,8 @@
                     <!-- old account address start -->
                     <ng-container *ngIf="log?.old && log?.old?.details && log?.old?.details?.addresses && log?.old?.details?.addresses.length">
                         <ng-container *ngFor="let item of log?.old?.details?.addresses; let index = index">
-                            <div class="single-address-row" *ngIf="index===0">
+                            <div class="single-address-row" *ngIf="index===0 || index>0 && showSingleAddress && isShowMultipleDataIndex===parentIndex">
                                 <div class="mr-05" *ngIf="item.address">
-                                    <label>
-                            Address:
-                        </label>
-                                    <p class="address-field">{{item?.address}}
-                                    </p>
-                                </div>
-                                <div class="mr-05" *ngIf="item?.state">
-                                    <label>
-                            State:
-                        </label>
-                                    <p class="ml-05">{{item?.state?.name}}</p>
-                                </div>
-                                <div class="mr-05">
-                                    <label>
-                            GSTIN:
-                        </label>
-                                    <p class="ml-05">{{item?.gstIn}}</p>
-                                </div>
-                                <div class="mr-05" *ngIf="item?.country">
-                                    <label>
-                            Country:
-                        </label>
-                                    <p class="ml-05">{{item?.country?.countryName}}</p>
-                                </div>
-                            </div>
-
-
-
-                            <div class="single-address-row" *ngIf="index>0 && showSingleAddress && isShowMultipleDataIndex===parentIndex">
-                                <div class="mr-05" *ngIf="item?.address">
                                     <label>
                             Address:
                         </label>
