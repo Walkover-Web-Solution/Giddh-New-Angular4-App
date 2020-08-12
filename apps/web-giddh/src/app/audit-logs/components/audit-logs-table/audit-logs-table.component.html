@@ -36,6 +36,7 @@
     </h1>
     <div class="audit-log-detail mt-05 clearfix">
         <label *ngIf="log?.operationType==='EDIT'">Updated</label>
+        <!-- User info block start-->
         <div class="d-flex user-basic-detail">
             <div *ngIf="(auditLogsRequest$ | async)">
                 <label>Entity:</label>
@@ -98,7 +99,7 @@
                 <p>{{ log?.details?.stockUnit?.name}} ({{ log?.details?.stockUnit?.code}})</p>
             </div>
         </div>
-
+        <!-- User info block end-->
         <!-- stocks block -->
         <div class="address-row-wrapper d-flex" *ngIf="log?.details?.purchases?.account && log?.details?.sales?.account">
             <div class="address-row mt-05" *ngIf="log?.details?.purchases?.account">
@@ -160,6 +161,69 @@
 
         <div class="address-row-wrapper d-flex">
             <div class="address-row mt-05">
+                <!-- account address block start -->
+                <ng-container *ngIf="log && log?.details && log?.details?.addresses && log?.details?.addresses.length">
+                    <ng-container *ngFor="let item of log?.details?.addresses; let index = index">
+                        <div class="single-address-row" *ngIf="index===0">
+                            <div class="mr-05" *ngIf="item.address">
+                                <label>
+                            Address:
+                        </label>
+                                <p class="address-field">{{item?.address}}
+                                </p>
+                            </div>
+                            <div class="mr-05" *ngIf="item?.state">
+                                <label>
+                            State:
+                        </label>
+                                <p class="ml-05">{{item?.state?.name}}</p>
+                            </div>
+                            <div class="mr-05">
+                                <label>
+                            GSTIN:
+                        </label>
+                                <p class="ml-05">{{item?.gstIn}}</p>
+                            </div>
+                            <div class="mr-05" *ngIf="item?.country">
+                                <label>
+                            Country:
+                        </label>
+                                <p class="ml-05">{{item?.country?.countryName}}</p>
+                            </div>
+                        </div>
+
+
+
+                        <div class="single-address-row" *ngIf="index>0 && showSingleAddress && isShowMultipleDataIndex===parentIndex">
+                            <div class="mr-05" *ngIf="item?.address">
+                                <label>
+                            Address:
+                        </label>
+                                <p class="address-field">{{item?.address}}
+                                </p>
+                            </div>
+                            <div class="mr-05" *ngIf="item?.state">
+                                <label>
+                            State:
+                        </label>
+                                <p class="ml-05">{{item?.state?.name}}</p>
+                            </div>
+                            <div class="mr-05">
+                                <label>
+                            GSTIN:
+                        </label>
+                                <p class="ml-05">{{item?.gstIn}}</p>
+                            </div>
+                            <div class="mr-05" *ngIf="item?.country">
+                                <label>
+                            Country:
+                        </label>
+                                <p class="ml-05">{{item?.country?.countryName}}</p>
+                            </div>
+                        </div>
+                    </ng-container>
+                </ng-container>
+                <!-- account address block end -->
                 <!-- Bank details block -->
                 <div class="single-address-row" *ngIf="log && log?.details && log?.details?.bankDetails && log?.details?.bankDetails.length">
                     <ng-container *ngFor="let bank of log?.details?.bankDetails; let bankIndex = index">
@@ -281,12 +345,20 @@
                         </label>
                             <p class="ml-05"> {{log?.details?.total |giddhCurrency }}</p>
                         </div>
+                        <div class="mr-05" *ngIf="log?.details?.description">
+                            <label>
+                           description:
+                        </label>
+                            <p class="address-field"> {{log?.details?.description}}
+                            </p>
+                        </div>
                     </ng-container>
                 </div>
                 <!-- etries log block end -->
 
                 <!-- Stock group block -->
-                <div class="single-address-row" *ngIf="log?.details?.voucherAccount && log?.details?.voucherAccount.name">
+                <!--commenting due to voucher block already exit  -->
+                <!-- <div class="single-address-row" *ngIf="log?.details?.voucherAccount && log?.details?.voucherAccount.name">
                     <ng-container>
                         <div class="mr-05" *ngIf="log?.details?.voucherAccount.name">
                             <label>
@@ -327,9 +399,9 @@
                             <p class="ml-05"> {{log?.details?.grandTotal?.amountForAccount |giddhCurrency }}</p>
                         </div>
                     </ng-container>
-                </div>
+                </div> -->
                 <!-- Stock group block end -->
-                <ng-container *ngIf="log?.details?.parentGroup">
+                <ng-container *ngIf="log?.details?.parentGroup || (auditLogsRequest$ | async).entity === 'stock_group'">
                     <div class="single-address-row">
                         <div class="mr-05" *ngIf="log?.details?.name">
                             <label>
@@ -375,9 +447,13 @@
             </div>
         </div>
     </div>
+
+
+    <!-- Old log block start -->
     <ng-container *ngIf="log?.operationType==='EDIT' && log?.old">
         <div class="audit-log-detail mt-05 clearfix">
             <label *ngIf="log.operationType==='EDIT'">Old</label>
+            <!-- Old user info block start-->
             <div class="d-flex user-basic-detail">
                 <div *ngIf="(auditLogsRequest$ | async)">
                     <label>Entity:</label>
@@ -440,6 +516,7 @@
                     <p>{{ log?.old?.details?.stockUnit?.name}} ({{ log?.old?.details?.stockUnit?.code}})</p>
                 </div>
             </div>
+            <!-- Old user info block end-->
             <!-- stocks -->
             <div class="address-row-wrapper d-flex" *ngIf="log?.old?.details?.purchases?.account && log?.old?.details?.sales?.account">
                 <div class="address-row mt-05" *ngIf="log?.old?.details?.purchases?.account">
@@ -501,6 +578,69 @@
 
             <div class="address-row-wrapper d-flex">
                 <div class="address-row mt-05">
+                    <!-- old account address start -->
+                    <ng-container *ngIf="log?.old && log?.old?.details && log?.old?.details?.addresses && log?.old?.details?.addresses.length">
+                        <ng-container *ngFor="let item of log?.old?.details?.addresses; let index = index">
+                            <div class="single-address-row" *ngIf="index===0">
+                                <div class="mr-05" *ngIf="item.address">
+                                    <label>
+                            Address:
+                        </label>
+                                    <p class="address-field">{{item?.address}}
+                                    </p>
+                                </div>
+                                <div class="mr-05" *ngIf="item?.state">
+                                    <label>
+                            State:
+                        </label>
+                                    <p class="ml-05">{{item?.state?.name}}</p>
+                                </div>
+                                <div class="mr-05">
+                                    <label>
+                            GSTIN:
+                        </label>
+                                    <p class="ml-05">{{item?.gstIn}}</p>
+                                </div>
+                                <div class="mr-05" *ngIf="item?.country">
+                                    <label>
+                            Country:
+                        </label>
+                                    <p class="ml-05">{{item?.country?.countryName}}</p>
+                                </div>
+                            </div>
+
+
+
+                            <div class="single-address-row" *ngIf="index>0 && showSingleAddress && isShowMultipleDataIndex===parentIndex">
+                                <div class="mr-05" *ngIf="item?.address">
+                                    <label>
+                            Address:
+                        </label>
+                                    <p class="address-field">{{item?.address}}
+                                    </p>
+                                </div>
+                                <div class="mr-05" *ngIf="item?.state">
+                                    <label>
+                            State:
+                        </label>
+                                    <p class="ml-05">{{item?.state?.name}}</p>
+                                </div>
+                                <div class="mr-05">
+                                    <label>
+                            GSTIN:
+                        </label>
+                                    <p class="ml-05">{{item?.gstIn}}</p>
+                                </div>
+                                <div class="mr-05" *ngIf="item?.country">
+                                    <label>
+                            Country:
+                        </label>
+                                    <p class="ml-05">{{item?.country?.countryName}}</p>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <!-- old account address end -->
                     <!-- Old bank details block -->
                     <div class="single-address-row" *ngIf="log?.old && log?.old?.details && log?.old?.details?.bankDetails && log?.old?.details?.bankDetails.length">
                         <ng-container *ngFor="let bank of log?.old?.details?.bankDetails; let bankIndex = index">
@@ -624,11 +764,18 @@
                         </label>
                                 <p class="ml-05"> {{log?.old?.details?.total |giddhCurrency }}</p>
                             </div>
+                            <div class="mr-05" *ngIf="log?.old?.details?.description">
+                                <label>
+                           description:
+                        </label>
+                                <p class="address-field"> {{log?.old?.details?.description}}
+                                </p>
+                            </div>
                         </ng-container>
                     </div>
                     <!--Old etries log block end -->
                     <!-- Old stock group logs start -->
-                    <ng-container *ngIf="log?.old?.details?.parentGroup">
+                    <ng-container *ngIf="log?.old?.details?.parentGroup || (auditLogsRequest$ | async).entity === 'stock_group'">
                         <div class="single-address-row">
 
                             <div class="mr-05" *ngIf="log?.old?.details?.name">
@@ -670,68 +817,6 @@
                     </ng-container>
                     <!-- Old stock group logs end -->
 
-
-                    <ng-container *ngIf="log?.old && log?.old?.details && log?.old?.details?.addresses && log?.old?.details?.addresses.length">
-                        <ng-container *ngFor="let item of log?.old?.details?.addresses; let index = index">
-                            <div class="single-address-row" *ngIf="index===0">
-                                <div class="mr-05" *ngIf="item.address">
-                                    <label>
-                            Address:
-                        </label>
-                                    <p class="address-field">{{item?.address}}
-                                    </p>
-                                </div>
-                                <div class="mr-05" *ngIf="item?.state">
-                                    <label>
-                            State:
-                        </label>
-                                    <p class="ml-05">{{item?.state?.name}}</p>
-                                </div>
-                                <div class="mr-05">
-                                    <label>
-                            GSTIN:
-                        </label>
-                                    <p class="ml-05">{{item?.gstIn}}</p>
-                                </div>
-                                <div class="mr-05" *ngIf="item?.country">
-                                    <label>
-                            Country:
-                        </label>
-                                    <p class="ml-05">{{item?.country?.countryName}}</p>
-                                </div>
-                            </div>
-
-
-
-                            <div class="single-address-row" *ngIf="index>0 && showSingleAddress && isShowMultipleDataIndex===parentIndex">
-                                <div class="mr-05" *ngIf="item?.address">
-                                    <label>
-                            Address:
-                        </label>
-                                    <p class="address-field">{{item?.address}}
-                                    </p>
-                                </div>
-                                <div class="mr-05" *ngIf="item?.state">
-                                    <label>
-                            State:
-                        </label>
-                                    <p class="ml-05">{{item?.state?.name}}</p>
-                                </div>
-                                <div class="mr-05">
-                                    <label>
-                            GSTIN:
-                        </label>
-                                    <p class="ml-05">{{item?.gstIn}}</p>
-                                </div>
-                                <div class="mr-05" *ngIf="item?.country">
-                                    <label>
-                            Country:
-                        </label>
-                                    <p class="ml-05">{{item?.country?.countryName}}</p>
-                                </div>
-                            </div>
-                        </ng-container>
-                    </ng-container>
                     <!-- <div class="single-address-row" *ngIf="showSingleAddress">
                     <div class="mr-05">
                         <label>

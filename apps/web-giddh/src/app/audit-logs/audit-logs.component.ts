@@ -11,6 +11,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import * as moment from 'moment';
 import { GeneralService } from '../services/general.service';
 import { GeneralActions } from '../actions/general/general.actions';
+import { CurrentPage } from '../models/api-models/Common';
 
 @Component({
     selector: 'audit-logs',
@@ -49,7 +50,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
 
     constructor(private store: Store<AppState>, private companyActions: CompanyActions, private route: ActivatedRoute, private generalActions: GeneralActions,
-    private generalService: GeneralService, private modalService: BsModalService) {
+    private generalService: GeneralService, private modalService: BsModalService, private router: Router) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -59,7 +60,8 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
                 this.isNewVersion = false;
                 if (response.version && response.version && String(response.version).toLocaleLowerCase() === 'new') {
                     this.isNewVersion = true;
-                     this.store.dispatch(this.generalActions.setAppTitle('/pages/audit-logs/New'));
+                    this.setCurrentPageTitle('Audit-Log > New')
+                    //  this.store.dispatch(this.generalActions.setAppTitle('/pages/audit-logs/v2'));
                 }
             } else {
                 this.isNewVersion = false;
@@ -142,5 +144,18 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         }
+    }
+
+     /**
+     * This function will set the page heading
+     *
+     * @param {string} title
+     * @memberof AuditLogsFormComponent
+     */
+    public setCurrentPageTitle(title: string) : void {
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = title
+        currentPageObj.url = this.router.url;
+        this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
     }
 }
