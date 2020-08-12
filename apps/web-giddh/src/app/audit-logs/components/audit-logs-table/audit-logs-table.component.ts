@@ -41,16 +41,16 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *  Component lifecycle call stack 
+     *  Component lifecycle call stack
      *
      * @memberof AuditLogsTableComponent
      */
     public ngOnInit(): void {
-        // 
+        //
     }
 
     /**
-     *  Component lifecycle call stack 
+     *  Component lifecycle call stack
      *
      * @memberof AuditLogsTableComponent
      */
