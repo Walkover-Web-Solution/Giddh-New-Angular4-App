@@ -1,8 +1,9 @@
 <div class="container-fluid clearfix" *ngIf="allRoles.length > 0">
     <a href="javascript:void(0)" *ngIf="showBackButton" class="btn btn-pink pull-right mt-1" [routerLink]="['/pages/settings/permission']">Back</a>
+    <br>
     <div class="col-sm-12 mrT2 pd0 role clearfix" *ngFor="let role of allRoles">
         <div class="row mr-0 ml-0">
-        <div class="col-sm-3 pd0 rolehead cp">
+        <div class="col-3 pd0 rolehead cp">
             <span class="vcenter">
                 <h1>{{role.name}}</h1>
                 <div class="text-center mrT2 onHover">
@@ -15,7 +16,7 @@
                 </div>
             </span>
         </div>
-        <div class="col-sm-9">
+        <div class="col-9">
             <ul>
                 <li *ngFor="let item of role.scopes">{{ item.name | capitalize }}</li>
             </ul>

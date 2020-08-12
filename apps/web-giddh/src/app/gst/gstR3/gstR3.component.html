@@ -79,7 +79,7 @@
 
                         <div *ngIf="showTaxPro">
 
-                            <button class="btn-2 pull-right" [ngClass]="{'btn-success': gstAuthenticated }"
+                            <button class="btn-2 pull-right authenticate-btn" [ngClass]="{'btn-success': gstAuthenticated }"
                                 (click)="returnGstr3B = { via: 'VAYANA' }">{{ gstAuthenticated ? 'Authenticated' : 'Authenticate'}}
                             </button>
 
