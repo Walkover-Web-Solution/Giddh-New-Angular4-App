@@ -1049,9 +1049,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.passportNumber = '';
                         }
                     }
-                    //  If last invoice copied then no need to add advanceReceiptAdjustment as pre-fill ref:- G0-5554
-                    if (this.isSalesInvoice) {
-                        if (results[1] && results[1].advanceReceiptAdjustment && results[1].advanceReceiptAdjustment.adjustments && results[1].advanceReceiptAdjustment.adjustments.length && !this.isLastInvoiceCopied) {
+                    //  If last invoice copied then no need to add voucherAdjustments as pre-fill ref:- G0-5554
+                    if (this.isSalesInvoice || (results[1] && results[1].voucherAdjustments)) {
+                        if (results[1] && results[1].voucherAdjustments && results[1].voucherAdjustments.adjustments && results[1].voucherAdjustments.adjustments.length && !this.isLastInvoiceCopied) {
                             this.isInvoiceAdjustedWithAdvanceReceipts = true;
                             this.calculateAdjustedVoucherTotal(results[1].advanceReceiptAdjustment.adjustments);
                             this.advanceReceiptAdjustmentData = results[1].advanceReceiptAdjustment;
