@@ -60,8 +60,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
                 this.isNewVersion = false;
                 if (response.version && response.version && String(response.version).toLocaleLowerCase() === 'new') {
                     this.isNewVersion = true;
-                    this.setCurrentPageTitle('Audit-Log > New')
-                    //  this.store.dispatch(this.generalActions.setAppTitle('/pages/audit-logs/v2'));
+                    this.setCurrentPageTitle('Audit-Log > New');
                 }
             } else {
                 this.isNewVersion = false;
@@ -146,15 +145,15 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
         }
     }
 
-     /**
-     * This function will set the page heading
-     *
-     * @param {string} title
-     * @memberof AuditLogsFormComponent
-     */
-    public setCurrentPageTitle(title: string) : void {
+    /**
+    * This function will set the page heading
+    *
+    * @param {string} title
+    * @memberof AuditLogsFormComponent
+    */
+    public setCurrentPageTitle(title: string): void {
         let currentPageObj = new CurrentPage();
-        currentPageObj.name = title
+        currentPageObj.name = title;
         currentPageObj.url = this.router.url;
         this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
     }

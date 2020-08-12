@@ -82,20 +82,4 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
         this.showSingleAddress = !this.showSingleAddress;
         this.isShowMultipleDataIndex = index;
     }
-
-    /**
-     * To get filter log request response
-     *
-     * @memberof AuditLogsTableComponent
-     */
-    public getFilteredLogs(): void {
-        // used for testing purpose ignire it for now we will remove it in next build
-        this.auditLogs$.subscribe(res => {
-            console.log("stored audit response:==", res);
-        });
-        // used for testing purpose ignire it for now we will remove it in next build
-        this.auditLogsRequest$.subscribe(res => {
-            console.log("store audit Request--", res);
-        });
-    }
 }
