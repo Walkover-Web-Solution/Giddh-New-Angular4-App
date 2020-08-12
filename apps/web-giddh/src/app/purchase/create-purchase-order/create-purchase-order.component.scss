@@ -121,6 +121,13 @@
                 width: 100%;
                 left: 0;
                 margin-left: 48%;
+                display: flex;
+                align-items: center;
+                input{
+                    float: none !important;
+                    margin-left: 0 !important;
+                    margin-right: 15px !important;
+                }
             }
             .order-expected-delivery {
                 sh-select , input.form-control{
@@ -1066,18 +1073,27 @@ span.eligible-ITC {
             .inner-container {
                 .order-expected-delivery {
                     flex-direction: column;
+                    .col-sm-6{
+                        padding-right: 0 !important;
+                    }
                     .invoice-due-date {
                         padding: 0;
                         margin-left: 0 !important;
                         position: static;
                         margin-top: 15px;
+                        align-items: flex-start;
+                        flex-direction: column;
+                        width: 100%;
                         .d-flex {
                             flex-direction: column;
+                            width: 100%;
+                            margin-bottom: 15px;
                             input {
                                 margin-left: 0;
                                 width: 100% !important;
                             }
                         }
+
                     }
                 }
                 .select-customer-name {
