@@ -20,11 +20,10 @@
                         <table class="table basic pl-table-grid">
                             <thead>
                                 <tr>
-                                    <th class="col-8 pd-0">
+                                    <th class="pd-0" width="60%">
                                         <div #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
 
-                                            <div [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}"
-                                                style="display:flex">
+                                            <div [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}" class="align-items-center">
                                                 <span class="ml-15 mr-1">Account</span>
                                                 <i class="icon-search2" (click)="toggleSearch()" ></i>
                                             </div>
@@ -41,7 +40,7 @@
                                         </div>
                                     </th>
                                     <!-- <th class="col-3 ">Note</th> -->
-                                    <th class="col-4 text-right">
+                                    <th class="text-right" width="40%">
                                         As Of
                                         <span
                                             *ngIf="plData && plData.dates && plData.dates.to && plData.dates.to!=='Invalid date'">
