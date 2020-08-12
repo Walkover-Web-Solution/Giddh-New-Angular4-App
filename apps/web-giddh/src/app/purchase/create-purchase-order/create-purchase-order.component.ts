@@ -20,7 +20,7 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 import { ToasterService } from '../../services/toaster.service';
-import { OnboardingFormRequest } from '../../models/api-models/Common';
+import { OnboardingFormRequest, CurrentPage } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
 import { VAT_SUPPORTED_COUNTRIES, RATE_FIELD_PRECISION, Subvoucher } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
@@ -46,6 +46,7 @@ import { CurrentCompanyState } from '../../store/Company/company.reducer';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
+import { GeneralActions } from '../../actions/general/general.actions';
 
 const THEAD_ARR_READONLY = [
     {
@@ -276,8 +277,15 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public copiedAccountDetails: boolean = false;
     /* This will hold if vendor accounts are loaded */
     public vendorAccountsLoaded: boolean = false;
+    /* This will hold the url params */
+    public urlParams: any;
+    /* This will hold all the accounts */
+    public flattenAccounts: any;
+    /* This will hold if we have prefilled all the data for edit */
+    public showLoaderUntilDataPrefilled: boolean = false;
+    public onboardingFormRequest: OnboardingFormRequest = { formName: 'onboarding', country: '' };
 
-    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router) {
+    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions) {
         this.getInventorySettings();
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.flattenAccountListStream$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$));
@@ -312,6 +320,24 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params) {
+                this.urlParams = params;
+
+                if (params['action'] === "new") {
+                    this.resetForm(this.poForm);
+                    this.setCurrentPageTitle("New Purchase Order");
+                    this.isUpdateMode = false;
+                }
+
+                if (params['action'] === "edit") {
+                    this.resetForm(this.poForm);
+                    this.setCurrentPageTitle("Edit Purchase Order");
+                    this.isUpdateMode = true;
+                }
+            }
+        });
+
         this.store.pipe(select(state => {
             if (!state.session.companies) {
                 return;
@@ -320,22 +346,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 if (cmp.uniqueName === state.session.companyUniqueName) {
                     this.selectedCompany = cmp;
 
-                    this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-                        if (params && params['action']) {
-                            if (params['action'] === "new") {
-                                this.isUpdateMode = false;
-                            }
-
-                            if (params['action'] === "edit") {
-                                this.isUpdateMode = true;
-                            }
-                        }
-
-                        if (params && params['purchaseOrderUniqueName'] && !this.purchaseOrderUniqueName) {
-                            this.purchaseOrderUniqueName = params['purchaseOrderUniqueName'];
-                            this.getPurchaseOrder();
-                        }
-                    });
+                    if (this.urlParams['purchaseOrderUniqueName'] && !this.purchaseOrderUniqueName) {
+                        this.showLoaderUntilDataPrefilled = true;
+                        this.purchaseOrderUniqueName = this.urlParams['purchaseOrderUniqueName'];
+                        this.getPurchaseOrder();
+                    }
                 }
             });
         })).pipe(takeUntil(this.destroyed$)).subscribe();
@@ -643,6 +658,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 });
                 this.salesAccounts$ = observableOf(_.orderBy(stockAccountsList, 'label'));
                 this.vendorAcList$ = observableOf(_.orderBy(sundryCreditorsAcList, 'label'));
+                this.flattenAccounts = items;
                 this.vendorAccountsLoaded = true;
 
                 if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails && !this.getAccountInProgress) {
@@ -709,13 +725,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 this.purchaseOrder.voucherDetails.customerName = null;
                 this.purchaseOrder.voucherDetails.customerUniquename = null;
                 this.purchaseOrder.accountDetails = new AccountDetailsClass();
-                this.purchaseOrder.accountDetails.uniqueName = 'cash';
+                this.purchaseOrder.accountDetails.uniqueName = '';
             }
         } else {
             this.purchaseOrder.voucherDetails.customerName = null;
-            this.purchaseOrder.voucherDetails.tempCustomerName = null;
+            this.purchaseOrder.voucherDetails.customerUniquename = null;
             this.purchaseOrder.accountDetails = new AccountDetailsClass();
-            this.purchaseOrder.accountDetails.uniqueName = 'cash';
+            this.purchaseOrder.accountDetails.uniqueName = '';
         }
     }
 
@@ -850,7 +866,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public startLoader(shouldStartLoader: boolean): void {
-        this.showLoader = shouldStartLoader;
+        if (this.showLoaderUntilDataPrefilled) {
+            this.showLoader = true;
+        } else {
+            this.showLoader = shouldStartLoader;
+        }
     }
 
     private modifyStateResp(stateList: StateCode[]): IOption[] {
@@ -1118,11 +1138,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public getOnboardingForm(countryCode): void {
-        if (!this.formFields || this.formFields.length === 0) {
-            let onboardingFormRequest = new OnboardingFormRequest();
-            onboardingFormRequest.formName = 'onboarding';
-            onboardingFormRequest.country = countryCode;
-            this.store.dispatch(this.commonActions.GetOnboardingForm(onboardingFormRequest));
+        if (this.onboardingFormRequest.country !== countryCode) {
+            this.onboardingFormRequest.country = countryCode;
+            this.store.dispatch(this.commonActions.GetOnboardingForm(this.onboardingFormRequest));
         }
     }
 
@@ -1736,7 +1754,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         }
         if (modal && modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
             let tax = this.companyTaxesList.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
-            if(tax) {
+            if (tax) {
                 if (!modal.appliedOtherTax.name) {
                     entry.otherTaxModal.appliedOtherTax.name = tax.name;
                 }
@@ -1918,7 +1936,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      *
      * @memberof CreatePurchaseOrderComponent
      */
-    public getCustomerDetails(): void {
+    public getVendorDetails(): void {
         this.selectedVendorForDetails = this.purchaseOrder.accountDetails.uniqueName;
         this.toggleAccountAsidePane();
     }
@@ -2049,7 +2067,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         let txnErr: boolean;
 
         // check for valid entries and transactions
-        if (data.entries) {
+        if (data.entries && data.entries.length > 0) {
             _.forEach(data.entries, (entry) => {
                 _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
                     // convert date object
@@ -2068,7 +2086,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             });
         } else {
             this.startLoader(false);
-            this.toaster.warningToast('At least a single entry needed to generate sales-invoice');
+            this.toaster.warningToast('At least a single entry needed to generate purchase order');
             return;
         }
 
@@ -2125,7 +2143,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 this.toaster.clearAllToaster();
                 if (response && response.status === "success") {
                     this.resetForm(this.poForm);
-                    this.toaster.successToast("Purchase order created succesfully with Voucher number - " + response.body.number);
+                    this.toaster.successToast("Purchase order created succesfully with voucher number - " + response.body.number);
                 } else {
                     this.toaster.errorToast(response.message);
                 }
@@ -2407,6 +2425,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public ngOnDestroy() {
+        this.resetForm(this.poForm);
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -2437,6 +2456,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                         this.initializeWarehouse(this.purchaseOrderDetails.warehouse);
                     }
 
+                    this.isRcmEntry = (this.purchaseOrderDetails.subVoucher && this.purchaseOrderDetails.subVoucher === Subvoucher.ReverseCharge) ? true : false;
+
                     this.purchaseOrder.company = this.purchaseOrderDetails.company;
 
                     this.purchaseOrder.company.billingDetails.state = { name: '', code: '' };
@@ -2466,13 +2487,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      */
     public modifyEntries(entries: any[]): any {
         let convertedEntries = [];
+        this.activeIndex = 0;
 
         entries.forEach(entry => {
             let salesEntryClass = new SalesEntryClass();
             let salesTransactionItemClass = new SalesTransactionItemClass();
             salesEntryClass.tcsTaxList = [];
             salesEntryClass.tdsTaxList = [];
-
             salesEntryClass.transactions = [];
 
             entry.transactions.forEach(transaction => {
@@ -2503,6 +2524,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                             salesEntryClass.tcsTaxList.push(tax.uniqueName);
                         }
                     } else {
+                        if (!tax.name) {
+                            console.log(tax);
+                        }
                         salesEntryClass.taxes.push({
                             amount: tax.taxPercent,
                             uniqueName: tax.uniqueName,
@@ -2524,6 +2548,23 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     salesTransactionItemClass.stockDetails.skuCode = transaction.stock.sku;
                     salesTransactionItemClass.stockUnit = transaction.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = transaction.account.uniqueName + '#' + transaction.stock.uniqueName;
+
+                    let selectedAcc = this.flattenAccounts.find(d => {
+                        return (d.uniqueName === transaction.account.uniqueName);
+                    });
+
+                    let stock = selectedAcc.stocks.find(stock => stock.uniqueName === transaction.stock.uniqueName);
+
+                    salesTransactionItemClass.stockList = [];
+                    if (stock.accountStockDetails.unitRates.length) {
+                        salesTransactionItemClass.stockList = this.prepareUnitArr(stock.accountStockDetails.unitRates);
+                    } else {
+                        let stockUnit: IStockUnit = {
+                            id: stock.stockUnit.code,
+                            text: stock.stockUnit.name
+                        };
+                        salesTransactionItemClass.stockList.push(stockUnit);
+                    }
                 }
             });
 
@@ -2572,7 +2613,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             salesEntryClass.entryDate = moment(entry.date, GIDDH_DATE_FORMAT).toDate();
             this.calculateOtherTaxes(salesEntryClass.otherTaxModal, salesEntryClass);
             convertedEntries.push(salesEntryClass);
+            this.activeIndex++;
         });
+
+        this.showLoaderUntilDataPrefilled = false;
 
         return convertedEntries;
     }
@@ -2647,5 +2691,18 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             }
         });
         return validEntries;
+    }
+
+    /**
+     * This will set the current page title
+     *
+     * @param {string} title
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public setCurrentPageTitle(title: string): void {
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = title;
+        currentPageObj.url = this.router.url;
+        this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
     }
 }
