@@ -874,7 +874,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         let trim: string = '';
         if (element.value && type) {
             if (this.selectedCountryCode === 'IN') {
-                trim = element.value.replace(/[^0-9]/g, '');
+                // trim = element.value.replace(/[^0-9]/g, '');
             } else {
                 trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
             }

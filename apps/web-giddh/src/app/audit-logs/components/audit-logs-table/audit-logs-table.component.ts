@@ -46,7 +46,7 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsTableComponent
      */
     public ngOnInit(): void {
-        this.getFilteredLogs();
+        // this.getFilteredLogs();
     }
 
     /**
