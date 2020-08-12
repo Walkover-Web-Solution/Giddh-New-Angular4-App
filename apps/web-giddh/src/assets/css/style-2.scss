@@ -10509,6 +10509,10 @@ span#HW_badge_cont:nth-child(3) {
     .modal-dialog {
         max-width: 100% !important;
     }
+        #shareModal select {
+        width: auto;
+        max-width: 300px;
+    }
 }
 
 @media (min-width: 768px) {
