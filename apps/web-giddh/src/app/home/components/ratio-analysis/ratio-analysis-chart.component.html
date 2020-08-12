@@ -4,7 +4,7 @@
         <div class="panel-heading">
             <strong>Ratio Analysis</strong>
             <div class="pull-right dashboard-filter">
-                <i class="glyphicon glyphicon-refresh mrL1" (click)="hardRefresh()"></i>
+                <i class="icon-refrsh  mrL1" (click)="hardRefresh()"></i>
             </div>
         </div>
 
@@ -21,7 +21,6 @@
                 <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
             </div>
             <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
-                <perfect-scrollbar [scrollIndicators]="true">
                     <div class="row">
                         <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
                             <chart [options]="currentRatioOption" #currentRatio></chart>
@@ -44,7 +43,6 @@
                             <small>Fixed Assets/<br />NonCurrent Liab. + <br /> Shareholder's fund</small>
                         </div>
                     </div>
-                </perfect-scrollbar>
             </div>
         </div>
     </div>

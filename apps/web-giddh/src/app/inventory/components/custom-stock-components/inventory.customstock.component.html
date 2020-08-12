@@ -121,7 +121,7 @@
                                 <td class="text-right">{{item.displayQuantityPerUnit | giddhRoundOff : giddhDecimalPlaces}}</td>
                                 <td class="action ico-btn">
                                     <button class="btn-default btn-xs" [disabled]="editMode" (click)="editUnit(item)"><i
-                                            class="fa fa-pencil"></i></button>
+                                            class="icon-edit-pencil"></i></button>
                                     <button class="btn-default btn-xs" [disabled]="editMode"
                                         [ladda]="(deleteCustomStockInProcessCode$ | async)?.indexOf(item.code) > -1"
                                         (click)="deleteUnit(item.code)"><i class="fa fa-trash"></i></button>
