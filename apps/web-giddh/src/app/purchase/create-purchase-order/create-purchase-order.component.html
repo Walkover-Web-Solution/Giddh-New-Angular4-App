@@ -346,18 +346,6 @@
                     <div class="row mb-1">
                         <!-- region customer name -->
                         <div class="col-sm-2">
-                            <label>Order Date<span class="red-text">*</span></label>
-                        </div>
-                        <!-- region customer dropdown -->
-                        <div class="col-sm-7 select-customer-name">
-                            <input type="text" class="form-control" placeholder="Select Date" [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseOrderDate" [(ngModel)]="purchaseOrder.voucherDetails.voucherDate" bsDatepicker>
-                        </div>
-                        <!-- endregion -->
-                    </div>
-
-                    <div class="row mb-1">
-                        <!-- region customer name -->
-                        <div class="col-sm-2">
                             <label>Order #</label>
                         </div>
                         <!-- region customer dropdown -->
@@ -368,7 +356,13 @@
                                     [(ngModel)]="purchaseOrder.number">
                             </div>
                             <!-- endregion -->
-                            <div class="col-sm-6 invoice-due-date">
+                            <div class="col-sm-3 invoice-due-date">
+                                <div class="d-flex">
+                                    <label>Order Date<span class="red-text">*</span></label>
+                                    <input type="text" class="form-control" placeholder="Select Date" [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseOrderDate" [(ngModel)]="purchaseOrder.voucherDetails.voucherDate" bsDatepicker>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 invoice-due-date">
                                 <div class="d-flex">
                                     <label>Expected Delivery</label>
                                     <input type="text" class="form-control" placeholder="Select Date" [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseDueDate" [(ngModel)]="purchaseOrder.voucherDetails.dueDate" bsDatepicker>

@@ -288,6 +288,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions) {
         this.getInventorySettings();
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+        this.store.dispatch(this.generalActions.getFlattenAccount());
         this.flattenAccountListStream$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$));
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
