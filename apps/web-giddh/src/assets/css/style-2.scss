@@ -10433,6 +10433,16 @@ span#HW_badge_cont:nth-child(3) {
     }
 }
 
+@media (min-width:576px){
+    .modal-dialog {
+        max-width: 100% !important;
+    }
+        #shareModal select {
+        width: auto;
+        max-width: 300px;
+    }
+}
+
 @media (min-width: 768px) {
     .invoice-modal-content .modal-dialog {
         margin: 70px auto;
