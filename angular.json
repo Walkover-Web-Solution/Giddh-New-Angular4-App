@@ -116,7 +116,7 @@
             ],
             "scripts": [
               "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
-              "node_modules/bootstrap-daterangepicker/moment.js",
+              "node_modules/bootstrap-daterangepicker/moment.min.js",
               "apps/web-giddh/src/assets/js/lodash.min.js",
               "node_modules/bootstrap-daterangepicker/daterangepicker.js"
             ],
@@ -255,7 +255,7 @@
             "port": 3000,
             "baseUrl": "localhost:3000",
             "browserTarget": "web-giddh:build",
-            "extraWebpackConfig": "./webpack.partial.js",
+            "extraWebpackConfig": "apps/web-giddh/webpack.partial.js",
             "assets": [],
             "plugin": "./hook.js"
           },
@@ -687,7 +687,8 @@
       "typescriptMismatch": false,
       "versionMismatch": false
     },
-    "defaultCollection": "@nstudio/schematics"
+    "defaultCollection": "@nstudio/schematics",
+    "analytics": "7c93e7ed-0803-4dc5-9c1d-f05bf49b713e"
   },
   "schematics": {
     "@nrwl/schematics:application": {
