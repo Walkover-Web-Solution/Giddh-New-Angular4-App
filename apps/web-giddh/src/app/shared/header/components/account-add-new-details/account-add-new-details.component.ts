@@ -841,12 +841,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public bankDetailsValidator(element, type: string): void {
         let trim: string = '';
         if (element.value && type) {
-            if (this.selectedCountryCode === 'IN') {
-                // trim = element.value.replace(/[^0-9]/g, '');
-            } else {
-                trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
-            }
-
+            // changes account number validation for country india as well ref card : GIDK-1119 
+            trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
             let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetail.controls) {
                 if (type === 'bankAccountNo') {
