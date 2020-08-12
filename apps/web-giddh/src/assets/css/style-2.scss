@@ -1138,7 +1138,7 @@ ul.sub-list {
 .aging-table {
     border: 0px;
     margin-bottom: 0px;
-    background: transparent !important;
+    background: $white !important;
 }
 
 .d-none {
@@ -5374,11 +5374,11 @@ label {
 
 #dashboard .panel-heading i {
     cursor: pointer;
+    font-size: 18px;
 }
 
 #dashboard .panel-heading i {
     position: relative;
-    top: 4px;
     color: $gray;
 }
 
@@ -6866,7 +6866,7 @@ table td[class*=col-]:last-child {
     }
     >li{
         >a {
-            padding: 4px 10px;
+            padding: 2px 10px;
             color: $nero;
             display:block;
             line-height: 1.4;
@@ -9407,6 +9407,18 @@ span#HW_badge_cont:nth-child(3){
         }
     }
 }
+.page-count .pagination{
+    justify-content: center;
+    margin-top: 15px;
+}
+.purchase-record-confirmation-modal{
+    .modal-content{
+        box-shadow: 0 5px 15px rgba(0,0,0,.5);
+    }
+}
+.dropdown-toggle::after{
+    display: none;
+}
 .on-setting-page .nav-left-bar.open , .on-user-page .nav-left-bar.open on-user-page {
     left: -215px !important;
     display: none !important;
@@ -9767,7 +9779,6 @@ span#HW_badge_cont:nth-child(3){
 }
 
 @media (max-width: 767px) {
-
     .remove-header-lower-layer{
         .mobile-back-btn{
             display: inline-flex !important;

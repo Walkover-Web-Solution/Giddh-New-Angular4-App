@@ -10,7 +10,7 @@
     <div id="template-header" (click)="onClickSection('header')"
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header">
-            <i class="fa fa-pencil"></i>
+            <i class="icon-edit-pencil"></i>
         </a>
         <header class="testing">
 
@@ -234,7 +234,7 @@
     <div id="Template-table" class="pos-rel" (click)="onClickSection('table')"
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table">
-            <i class="fa fa-pencil"></i>
+            <i class="icon-edit-pencil"></i>
         </a>
         <article>
             <table class="item" cellpadding="0" cellspacing="0">
@@ -343,7 +343,7 @@
     <div id="Template-footer" class="" (click)="onClickSection('footer')"
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
-            <i class="fa fa-pencil"></i>
+            <i class="icon-edit-pencil"></i>
         </a>
         <table class="balance strong">
             <tr *ngIf="fieldsAndVisibility.footer.taxableAmount?.display">

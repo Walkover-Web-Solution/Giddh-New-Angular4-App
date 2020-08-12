@@ -11,9 +11,7 @@
         </div>
         <!--share group/account-->
             <!--group-->
-
-            <div class="col-sm-4 pull right pr-0">
-            <div class="pdR0 text-right">
+            <div class="pull-right col-sm-4 pdR0 text-right">
                 <button class="btn btn-share mrR1" *ngIf="(showEditGroup$ | async)" (click)="exportGroupLedger()">
                     Export
                 </button>
@@ -26,7 +24,7 @@
                 </div>
             </div>
             <!--account-->
-            <div class="pdR0">
+            <div class="pull-right col-sm-4 pdR0">
                 <button class="btn btn-share pull-right" *ngIf="(showEditAccount$ | async)"
                     (click)="showShareAccountModal()">
                     Share
@@ -36,7 +34,6 @@
                     Shared with {{ (activeAccountSharedWith$ | async)?.length }} people
                 </div>
             </div>
-        </div>
     </div>
 
     <!--add/edit group form-->

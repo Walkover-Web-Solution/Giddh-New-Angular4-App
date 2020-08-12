@@ -22,7 +22,7 @@ import { InvViewService } from '../../inv.view.service';
          {{item.count}}</span>
           </a>
           <button class="btn btn-link btn-xs pull-right" (click)="goToManageStock(item)" *ngIf="(activeStockUniqueName$ | async) === item.uniqueName">
-            <i class="fa fa-pencil"> </i>
+            <i class="icon-edit-pencil"> </i>
           </button>
         </div>
       </li>
