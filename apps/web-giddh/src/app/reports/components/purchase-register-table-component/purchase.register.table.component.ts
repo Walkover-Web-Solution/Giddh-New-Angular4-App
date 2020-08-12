@@ -3,7 +3,7 @@ import {PurchaseReportsModel} from "../../../models/api-models/Reports";
 import {Store, select} from "@ngrx/store";
 import {AppState} from "../../../store";
 import {GroupWithAccountsAction} from "../../../actions/groupwithaccounts.actions";
-import {ModalDirective} from "ngx-bootstrap";
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import {Router} from '@angular/router';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { takeUntil } from 'rxjs/operators';

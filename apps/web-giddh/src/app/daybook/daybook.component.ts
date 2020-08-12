@@ -4,7 +4,8 @@ import { DaybookActions } from 'apps/web-giddh/src/app/actions/daybook/daybook.a
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as moment from 'moment/moment';
-import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
+import { PaginationComponent } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 

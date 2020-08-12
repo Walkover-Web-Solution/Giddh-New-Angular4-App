@@ -6,7 +6,7 @@ import { SalesEntryClass, VOUCHER_TYPE_LIST, VoucherClass } from '../../../../..
 import { FormArray, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CreateHttpService } from '../../../../create-http-service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ToasterService } from '../../../../../services/toaster.service';
 import * as moment from 'moment';
 import { IOption } from '../../../../../theme/ng-virtual-select/sh-options.interface';

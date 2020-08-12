@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GroupWithAccountsAction } from '../../../actions/groupwithaccounts.actions';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyActions } from '../../../actions/company.actions';

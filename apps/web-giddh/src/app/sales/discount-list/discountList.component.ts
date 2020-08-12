@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, On
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 
 @Component({

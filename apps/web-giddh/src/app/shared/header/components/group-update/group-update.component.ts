@@ -6,7 +6,7 @@ import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.a
 import { AppState } from '../../../../store';
 import { Observable, ReplaySubject, BehaviorSubject } from 'rxjs';
 import { GroupResponse, GroupsTaxHierarchyResponse, MoveGroupRequest } from '../../../../models/api-models/Group';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as _ from '../../../../lodash-optimized';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';

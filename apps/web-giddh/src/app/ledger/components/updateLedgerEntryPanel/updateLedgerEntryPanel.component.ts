@@ -17,7 +17,8 @@ import { Configuration, SubVoucher, RATE_FIELD_PRECISION } from 'apps/web-giddh/
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
-import { BsDatepickerDirective, ModalDirective, PopoverDirective } from 'ngx-bootstrap';
+import { BsDatepickerDirective, PopoverDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';

@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { WindowRef } from '../shared/helpers/window.object';
-import { ModalDirective, TabsetComponent } from 'ngx-bootstrap';
+import { TabsetComponent } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../services/general.service';
 import { take, takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';

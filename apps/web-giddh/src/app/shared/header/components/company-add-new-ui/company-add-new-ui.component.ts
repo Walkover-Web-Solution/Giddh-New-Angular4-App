@@ -1,6 +1,6 @@
 import {take, takeUntil, distinctUntilChanged} from 'rxjs/operators';
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit, ViewChild} from '@angular/core';
-import {ModalDirective} from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import {VerifyMobileActions} from '../../../../actions/verifyMobile.actions';
 import {LocationService} from '../../../../services/location.service';
 import {CompanyActions} from '../../../../actions/company.actions';

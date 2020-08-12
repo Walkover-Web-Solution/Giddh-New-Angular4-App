@@ -10,7 +10,8 @@ import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-selec
 import { QuickAccountComponent } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.component';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
-import { ModalDirective, PaginationComponent, BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { PaginationComponent, BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';

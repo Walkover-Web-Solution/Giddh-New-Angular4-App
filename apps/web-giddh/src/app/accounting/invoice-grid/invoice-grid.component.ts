@@ -16,7 +16,7 @@ import * as moment from 'moment';
 import { FlyAccountsActions } from 'apps/web-giddh/src/app/actions/fly-accounts.actions';
 import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
 import { Router } from '@angular/router';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SalesActions } from 'apps/web-giddh/src/app/actions/sales/sales.action';
 import { AccountResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';

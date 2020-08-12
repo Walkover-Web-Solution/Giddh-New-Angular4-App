@@ -20,10 +20,10 @@ import {
     BsDatepickerDirective,
     BsModalRef,
     BsModalService,
-    ModalDirective,
     ModalOptions,
     PopoverDirective
 } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../store';
 import {SalesActions} from '../actions/sales/sales.action';

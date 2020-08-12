@@ -8,7 +8,7 @@ import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAc
 import { SettingsDiscountActions } from '../../actions/settings/discount/settings.discount.action';
 import { AppState } from '../../store';
 import { Store } from '@ngrx/store';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({

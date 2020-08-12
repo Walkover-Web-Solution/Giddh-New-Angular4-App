@@ -9,7 +9,8 @@ import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import * as moment from 'moment';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { BsDatepickerDirective, ModalDirective, BsModalRef, ModalOptions , BsModalService } from 'ngx-bootstrap';
+import { BsDatepickerDirective, BsModalRef, ModalOptions , BsModalService } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({

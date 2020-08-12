@@ -10,7 +10,7 @@ import { ReplaySubject } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 import { FormBuilder } from '@angular/forms';
 import { ShareRequestForm } from '../../models/api-models/Permission';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({

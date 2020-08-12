@@ -4,7 +4,7 @@ import {AppState} from "../store";
 import {Router} from "@angular/router";
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ModalDirective} from "ngx-bootstrap";
+import {ModalDirective} from "ngx-bootstrap/modal";
 import {Configuration} from "../app.constant";
 import {Store} from "@ngrx/store";
 import {Observable, ReplaySubject} from "rxjs";

@@ -24,11 +24,11 @@ import {
     BsDropdownDirective,
     BsModalRef,
     BsModalService,
-    ModalDirective,
     ModalOptions,
     TabsetComponent
     , PopoverDirective
 } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';

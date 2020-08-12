@@ -5,7 +5,7 @@ import { select, Store } from '@ngrx/store';
 import { OnBoardingType } from 'apps/web-giddh/src/app/app.constant';
 import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModels';
 import * as googleLibphonenumber from 'google-libphonenumber';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 

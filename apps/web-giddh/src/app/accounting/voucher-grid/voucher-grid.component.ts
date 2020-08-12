@@ -15,7 +15,8 @@ import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEm
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
-import { ModalDirective, BsDatepickerConfig } from 'ngx-bootstrap';
+import { BsDatepickerConfig } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
 import { AccountResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';

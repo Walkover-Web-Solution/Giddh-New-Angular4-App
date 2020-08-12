@@ -10,7 +10,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { createSelector } from 'reselect';
 import { SettingsTagActions } from '../../actions/settings/tag/settings.tag.actions';
 import { TagRequest } from '../../models/api-models/settingsTags';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
 	selector: 'setting-tags',

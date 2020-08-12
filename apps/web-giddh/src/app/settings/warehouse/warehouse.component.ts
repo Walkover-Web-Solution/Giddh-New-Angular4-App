@@ -4,11 +4,11 @@ import {
     BsDropdownConfig,
     BsModalRef,
     BsModalService,
-    ModalDirective,
     ModalOptions,
     PageChangedEvent,
     PaginationComponent,
 } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
