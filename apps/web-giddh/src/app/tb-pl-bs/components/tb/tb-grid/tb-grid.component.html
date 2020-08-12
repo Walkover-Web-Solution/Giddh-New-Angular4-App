@@ -49,8 +49,7 @@
                     <div class="col-xs-4" style="padding: 0;display: flex;align-items: center" #searchContainer
                         (clickOutside)="clickedOutside($event, searchContainer)">
 
-                        <span [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}"
-                            style="display:flex;width: 100%">
+                        <span [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}" class="align-items-center">
                             <span class="pdR1"><strong>Particular</strong></span>
                             <i class="glyphicon glyphicon-search" id="showSearch" (click)="toggleSearch()"></i>
                         </span>
