@@ -1417,6 +1417,7 @@ modal-container.modal {
         margin: 0;
         width: 100%;
         height: 100%;
+        max-width:100% !important;
         .modal-content {
             height: 100%;
             overflow: scroll;
