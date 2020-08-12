@@ -10,7 +10,7 @@
 <body [ngStyle]="{'font-size': inputTemplate.fontSize +'px','font-family': inputTemplate.font ? inputTemplate.font : 'opensans-regular', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
     <div id="template-header" (click)="onClickSection('header')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header">
-            <i class="fa fa-pencil"></i>
+            <i class="icon-edit-pencil"></i>
         </a>
         <header class="bottom-border">
             <table>
@@ -148,7 +148,7 @@
     <div id="Template-table" class="pos-rel" (click)="onClickSection('table')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }">
         <!-- <span class="arrow-down"></span> -->
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table">
-            <i class="fa fa-pencil"></i>
+            <i class="icon-edit-pencil"></i>
         </a>
         <table class="item product-table" cellspacing="0" cellpadding="0" [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
             <thead>
@@ -390,7 +390,7 @@
     </div>
     <div id="Template-footer" (click)="onClickSection('footer')" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }" style="position: relative;float: left;width: 100%;">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
-            <i class="fa fa-pencil"></i>
+            <i class="icon-edit-pencil"></i>
         </a>
         <table class="subfooter">
             <tbody>
