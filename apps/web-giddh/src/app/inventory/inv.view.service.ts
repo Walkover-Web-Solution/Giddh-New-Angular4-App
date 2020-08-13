@@ -6,6 +6,10 @@ export class InvViewService {
     private viewSubject = new Subject<any>();
     private viewJobworkSubject = new Subject<any>();
     private viewDateSubject = new Subject<any>();
+    // Active group unique name
+    private activeGroupUniqueName:string;
+    // Active stock unique name
+    private activeStockUniqueName:string;
 
     public setActiveView(View: string, StockName: string, StockUniqueName?: string, GroupUniqueName?: string, groupIsOpen?: boolean, ) {
         this.viewSubject.next({ view: View, stockName: StockName, stockUniqueName: StockUniqueName, groupUniqueName: GroupUniqueName, isOpen: groupIsOpen });
@@ -35,7 +39,24 @@ export class InvViewService {
     public getActiveDate(): Observable<any> {
         return this.viewDateSubject.asObservable();
     }
+    /** To set active stock unique name */
+    public setActiveStockUniqueName(item: string): void {
+        this.activeStockUniqueName = item;
+    }
+    /** To set active group unique name */
+    public setActiveGroupUniqueName(item: string): void {
+        this.activeGroupUniqueName = item;
+    }
+     /** To get active group unique name */
+    public getActiveGroupUniqueName(): string {
+        return this.activeGroupUniqueName;
+    }
+     /** To get active stock unique name */
+    public getActiveStockUniqueName(): string {
+        return this.activeStockUniqueName;
+    }
 }
+
 
 export class ViewSubject {
     public view: string;
