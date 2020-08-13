@@ -1053,12 +1053,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.searchService.loadDetails(accountUniqueName, requestObject).subscribe(data => {
                         // directly assign additional property
                         if (data && data.body) {
+                            // Take taxes of parent group and stock's own taxes
+                            const taxes = data.body.taxes || [];
+                            if (data.body.stock) {
+                                taxes.push(...data.body.stock.taxes);
+                            }
                             txn.selectedAccount = {
                                 ...e.additional,
                                 label: e.label,
                                 value: e.value,
                                 isHilighted: true,
-                                applicableTaxes: data.body.applicableTaxes || [],
+                                applicableTaxes: taxes,
                                 currency: data.body.currency,
                                 currencySymbol: data.body.currencySymbol,
                                 email: data.body.emails,
@@ -1119,13 +1124,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.searchService.loadDetails(e.value).subscribe(data => {
                     // directly assign additional property
                     if (data && data.body) {
+                        // Take taxes of parent group
+                        const taxes = data.body.taxes || [];
                         txn.selectedAccount = {
                             ...e.additional,
                             label: e.label,
                             value: e.value,
                             isHilighted: true,
 
-                            applicableTaxes: data.body.applicableTaxes || [],
+                            applicableTaxes: taxes,
                             currency: data.body.currency,
                             currencySymbol: data.body.currencySymbol,
                             email: data.body.emails,
@@ -1729,20 +1736,23 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public handleScrollEnd() {
-        console.log('Reached end');
         if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
             this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
         }
     }
 
     public onSearchQueryChanged(query: string, page: number = 1) {
-        console.log('Searched query: ', query);
         this.searchResultsPaginationData.query = query;
+        const currentLedgerCategory = this.activeAccount ? this.generalService.getAccountCategory(this.activeAccount, this.activeAccount.uniqueName) : '';
+        // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
+        const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
+            this.activeAccount ? this.activeAccount.uniqueName : '' :
+            '';
         const requestObject = {
             q: query,
             page,
             withStocks: true,
-            accountUniqueName: this.activeAccount ? this.activeAccount.uniqueName : ''
+            accountUniqueName: accountUniqueName
         }
         this.searchService.searchAccount(requestObject).subscribe(data => {
             console.log('Data received: ', data);

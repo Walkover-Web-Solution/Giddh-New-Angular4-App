@@ -24,15 +24,11 @@
 
                             <div class="productList">
 
-                                <perfect-scrollbar>
+                                <perfect-scrollbar (psYReachEnd)="onScrollEnd()">
 
                                     <div class="singleProductWrapper cp" *ngFor="let item of filteredData"
                                         (click)="addItemToSelectedArr(item)">
                                         <h5>{{ item.name }}</h5>
-                                        <p>
-                                            <span class="stockSku"><label>SKU: </label>Number</span>
-                                            <span class="rateStock"><label>Rate:</label> </span>{{ item.rate }}
-                                        </p>
                                     </div>
 
                                 </perfect-scrollbar>
@@ -60,6 +56,10 @@
                                             <div class="" style="flex: 1">
                                                 <div class="stockName">
                                                     <p>{{ item.name }}</p>
+                                                    <p>
+                                                        <span *ngIf="item?.additional?.skuCode" class="stockSku"><label>SKU: </label>{{item?.additional?.skuCode}}</span>
+                                                        <span [class.rateStock]="item?.additional?.skuCode"><label>Rate:</label> </span>{{ item?.rate }}
+                                                    </p>
                                                 </div>
                                             </div>
 
