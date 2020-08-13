@@ -334,18 +334,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
             };
         }
         const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount.uniqueName) : '';
-        // If current ledger is of income or expense category then send current ledger unique name else send particular account unique name
+        /** If current ledger is of income or expense category then send current ledger unique name else send particular account unique name
+            to fetch the correct stock details as the first preference is always the current ledger account and then particular account
+            This logic is only required in ledger.
+        */
         const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
             this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
             e.additional.uniqueName;
         this.searchService.loadDetails(accountUniqueName, requestObject).subscribe(data => {
             if (data && data.body) {
+                // Take taxes of parent group and stock's own taxes
+                const taxes = data.body.taxes || [];
+                if (data.body.stock) {
+                    taxes.push(...data.body.stock.taxes);
+                }
                 txn.selectedAccount = {
                     ...e.additional,
                     label: e.label,
                     value: e.value,
                     isHilighted: true,
-                    applicableTaxes: data.body.applicableTaxes || [],
+                    applicableTaxes: taxes,
                     currency: data.body.currency,
                     currencySymbol: data.body.currencySymbol,
                     email: data.body.emails,
@@ -1445,13 +1453,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public onSearchQueryChanged(query: string, page: number = 1) {
-        console.log('Searched query: ', query);
         this.searchResultsPaginationData.query = query;
+        const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount.uniqueName) : '';
+        // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
+        const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
+            this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
+            '';
         const requestObject = {
             q: query,
             page,
             withStocks: true,
-            accountUniqueName: this.lc.activeAccount ? this.lc.activeAccount.uniqueName : ''
+            stockAccountUniqueName: accountUniqueName
         }
         this.searchService.searchAccount(requestObject).subscribe(data => {
             if (data && data.body && data.body.results) {
