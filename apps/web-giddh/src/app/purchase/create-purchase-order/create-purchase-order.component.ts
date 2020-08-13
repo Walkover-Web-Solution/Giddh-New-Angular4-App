@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { BsModalRef, BsModalService, BsDatepickerDirective, PopoverDirective, ModalDirective } from 'ngx-bootstrap'
+import { BsModalRef, BsDatepickerDirective, PopoverDirective, ModalDirective } from 'ngx-bootstrap'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { IOption } from '../../theme/ng-select/ng-select';
@@ -283,6 +283,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public flattenAccounts: any;
     /* This will hold if we have prefilled all the data for edit */
     public showLoaderUntilDataPrefilled: boolean = false;
+    /* Onboarding params object */
     public onboardingFormRequest: OnboardingFormRequest = { formName: 'onboarding', country: '' };
 
     constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions) {
@@ -2099,8 +2100,12 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
         // set voucher type
         data.entries = data.entries.map((entry) => {
+            if (!this.isRcmEntry) {
+                entry.transactions[0]['requiredTax'] = false;
+            }
+
             entry.voucherType = VoucherTypeEnum.purchase;
-            entry.taxList = entry.taxes.map(m => m.uniqueName);
+            entry.taxList = entry.taxes.map(tax => tax.uniqueName);
             entry.tcsCalculationMethod = entry.otherTaxModal.tcsCalculationMethod;
 
             if (entry.isOtherTaxApplicable) {
@@ -2334,6 +2339,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             this.purchaseOrder = new PurchaseOrder();
             this.resetVendor();
             this.vendorNameDropDown.clear();
+            this.isRcmEntry = false;
             this.initializeWarehouse();
             this.fillCompanyAddress("reset");
             this.assignDates();

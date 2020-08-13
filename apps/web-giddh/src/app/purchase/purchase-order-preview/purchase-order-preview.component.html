@@ -125,7 +125,7 @@
                                         </div>
 
                                         <!-- <div class="history-btn">
-                                            <button class="btn btn-primary" (click)="toggleOrderHistoryAsidePane()">
+                                            <button class="btn btn-primary" (click)="toggleActivityHistoryAsidePane()">
                                                 <i class="icon-history-icon font-12"></i> History</button>
                                         </div> -->
 
@@ -175,8 +175,7 @@
                         </div> -->
                         <!-- template -->
 
-                        <body id="default">
-                            <!--class="disabled-area"-->
+                        <body id="default" *ngIf="false">
                             <div class="pl-3 pr-3">
                                 <div id="template-header">
                                     <header class="mb-1">
@@ -488,9 +487,9 @@
 <ng-template #sendEmailModal>
     <purchase-send-email-modal *ngIf="purchaseOrder" [sendEmailRequest]="sendEmailRequest" (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
 </ng-template>
-<!-- <div class="aside-overlay" *ngIf="orderHistoryAsideState === 'in'"></div>
-<div *ngIf="orderHistoryAsideState === 'in'">
-    <aside-order-history (closeAsideEvent)="toggleOrderHistoryAsidePane($event)">
+<!-- <div class="aside-overlay" *ngIf="activityHistoryAsideState === 'in'"></div>
+<div *ngIf="activityHistoryAsideState === 'in'">
+    <aside-order-history (closeAsideEvent)="toggleActivityHistoryAsidePane($event)">
     </aside-order-history>
 </div> -->
 <div bsModal #poConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
