@@ -9,9 +9,12 @@ import { ToasterService } from '../../services/toaster.service';
 })
 
 export class PurchaseSendEmailModalComponent implements OnInit {
+    /* Taking input all the params */
     @Input() public sendEmailRequest: any;
+    /* Output emitter (boolean) */
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter();
 
+    /* This will hold email id of receiver */
     public emailId: any = '';
 
     constructor(public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService) {
