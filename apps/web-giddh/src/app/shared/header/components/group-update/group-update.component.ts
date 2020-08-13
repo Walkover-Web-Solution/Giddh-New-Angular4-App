@@ -72,6 +72,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public groupsList: IOption[] = [];
     public accountList: any[];
     public showTaxes: boolean = false;
+    // list of groups with less details (parent information)
+    public groupWithParentLessDetailsList:any[] = [];
     @ViewChild('deleteGroupModal') public deleteGroupModal: ModalDirective;
     @ViewChild('moveToGroupDropDown') public moveToGroupDropDown: ShSelectComponent;
 
@@ -180,6 +182,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 let activeGroupUniqueName: string;
                 this.activeGroup$.pipe(take(1)).subscribe(grp => activeGroupUniqueName = grp.uniqueName);
                 let grpsList = this.makeGroupListFlatwithLessDtl(this.flattenGroup(a, []));
+                this.groupWithParentLessDetailsList = _.cloneDeep(grpsList);
                 let flattenGroupsList: IOption[] = [];
 
                 grpsList.forEach(grp => {
@@ -478,9 +481,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public getAccountFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: boolean): boolean {
         groupList.forEach(el => {
             if (el && el.accounts) {
-                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses')) {
-                    result = true;
-                    return;
+                if ((el.uniqueName === uniqueName)) {
+                    let isGrp = this.isDebtorCreditorGroup(uniqueName);
+                    if ((el.category === 'income' || el.category === 'expenses' || isGrp)) {
+                        result = true;
+                        return;
+                    }
+
                 }
             }
             if (el && el.groups) {
@@ -501,8 +508,21 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.destroyed$.complete();
     }
 
-
-
+    /**
+     * To get sub group belongs to mentioned group (currentliabilities , currentassets)
+     *
+     * @param {*} item
+     * @memberof GroupUpdateComponent
+     */
+    public isDebtorCreditorGroup(item: any): boolean {
+        let isTaxableGroup: boolean = false;
+        this.groupWithParentLessDetailsList.forEach(element => {
+            if (item === element.uniqueName) {
+                isTaxableGroup = element.parentGroups.some(groupName => groupName.uniqueName === 'currentliabilities' || groupName.uniqueName === 'currentassets');
+            }
+        });
+        return isTaxableGroup;
+    }
 
 
 
