@@ -22,7 +22,7 @@ import { take } from 'rxjs/operators';
     </div>
     <ng-container *ngFor="let account of groupDetail.accounts;trackBy: trackByFn">
       <!-- <section class="row row-2 account " [ngClass]="{'isHidden': !account.isVisible }"> -->
-      <section class="row row-2 account " style="overflow: visible;" *ngIf="account.isVisible || account.isCreated" [hidden]="!account.isVisible"
+      <section class="row-2 account " style="overflow: visible;" *ngIf="account.isVisible || account.isCreated" [hidden]="!account.isVisible"
                (dblclick)="accountInfo(account,$event)" (clickOutside)="hideModal()">
 
         <div class="row" style="height: 35px !important;" *ngIf="account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0 || account.debitTotal || account.creditTotal)">
