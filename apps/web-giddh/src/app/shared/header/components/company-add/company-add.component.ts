@@ -10,7 +10,7 @@ import {select, Store} from '@ngrx/store';
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {WizardComponent} from '../../../../theme/ng2-wizard';
 import {Router} from '@angular/router';
-import {TypeaheadMatch} from 'ngx-bootstrap';
+import {TypeaheadMatch} from 'ngx-bootstrap/typeahead';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import {LoginActions} from '../../../../actions/login.action';
 import {AuthService} from '../../../../theme/ng-social-login-module/index';

@@ -1,7 +1,7 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnInit, Output, Renderer, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from './sh-options.interface';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
@@ -85,7 +85,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         DOWN: 40
     };
 
-    constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef) {
+    constructor(private element: ElementRef, private renderer: Renderer2, private cdRef: ChangeDetectorRef) {
     }
 
     get options(): IOption[] {
@@ -275,7 +275,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             // this.updateFilter(this.filter);
         }
         setTimeout(() => {
-            this.renderer.invokeElementMethod(this.inputFilter.nativeElement, 'focus');
+            (this.inputFilter.nativeElement as any)['focus'].apply(this.inputFilter.nativeElement);
         }, 0);
     }
 

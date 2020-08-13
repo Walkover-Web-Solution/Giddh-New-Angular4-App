@@ -3,7 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, AfterViewInit, TemplateRef, ViewChild, Input, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
 import { AppState } from '../../../store/roots';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SubscriptionsActions } from '../../../actions/userSubscriptions/subscriptions.action';
 import { SubscriptionsUser, CompaniesWithTransaction, UserDetails } from '../../../models/api-models/Subscriptions';

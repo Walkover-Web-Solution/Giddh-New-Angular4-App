@@ -8,7 +8,7 @@ import { ReplaySubject } from 'rxjs';
 import { ImportExcelRequestStates } from '../../store/import-excel/import-excel.reducer';
 import { takeUntil } from 'rxjs/operators';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
-import { PageChangedEvent } from 'ngx-bootstrap';
+import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 import { ImportExcelService } from '../../services/import-excel.service';
 import { base64ToBlob } from '../../shared/helpers/helperFunctions';
 import { ToasterService } from '../../services/toaster.service';

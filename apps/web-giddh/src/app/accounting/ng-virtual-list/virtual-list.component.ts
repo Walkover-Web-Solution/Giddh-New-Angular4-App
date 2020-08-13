@@ -1,7 +1,7 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, Renderer, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { concat, includes, startsWith } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -81,7 +81,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         DOWN: 40
     };
 
-    constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef) {
+    constructor(private element: ElementRef, private renderer: Renderer2, private cdRef: ChangeDetectorRef) {
     }
 
     get options(): IOption[] {
@@ -258,7 +258,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             // this.updateFilter(this.filter);
         }
         setTimeout(() => {
-            this.renderer.invokeElementMethod(this.inputFilter.nativeElement, 'focus');
+            (this.inputFilter.nativeElement as any)['focus'].apply(this.inputFilter.nativeElement);
         }, 0);
     }
 

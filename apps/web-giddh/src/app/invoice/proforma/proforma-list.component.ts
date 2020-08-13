@@ -24,7 +24,7 @@ import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operat
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
 import { cloneDeep, uniqBy } from '../../lodash-optimized';
-import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';

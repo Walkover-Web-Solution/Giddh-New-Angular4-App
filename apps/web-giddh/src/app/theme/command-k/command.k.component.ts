@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, Output, Renderer, ViewChild, Input, EventEmitter, HostListener } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, NgZone, OnDestroy, OnInit, Output, Renderer2, ViewChild, Input, EventEmitter, HostListener } from '@angular/core';
 import { ReplaySubject, Subject, Observable } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { ALT, BACKSPACE, CAPS_LOCK, CONTROL, DOWN_ARROW, ENTER, ESCAPE, LEFT_ARROW, MAC_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, RIGHT_ARROW, SHIFT, TAB, UP_ARROW } from '@angular/cdk/keycodes';
@@ -69,7 +69,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(
         private store: Store<AppState>,
-        private renderer: Renderer,
+        private renderer: Renderer2,
         private zone: NgZone,
         private _generalService: GeneralService,
         private _commandKService: CommandKService,
@@ -141,12 +141,12 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.setParentWidth && this.mainEle) {
             let box: any = this.parentEle.getBoundingClientRect();
             this.ItemWidth = (box.width > this.ItemWidth) ? box.width : this.ItemWidth;
-            this.renderer.setElementStyle(this.mainEle.nativeElement, 'width', `${box.width}px`);
+            this.renderer.setStyle(this.mainEle.nativeElement, 'width', `${box.width}px`);
             if (this.searchWrapEle) {
-                this.renderer.setElementStyle(this.searchWrapEle.nativeElement, 'width', `${box.width}px`);
+                this.renderer.setStyle(this.searchWrapEle.nativeElement, 'width', `${box.width}px`);
             }
             if (box.width > 300) {
-                this.renderer.setElementClass(this.wrapper.nativeElement, 'wider', true);
+                this.renderer.setStyle(this.wrapper.nativeElement, 'wider', true);
             }
         }
     }

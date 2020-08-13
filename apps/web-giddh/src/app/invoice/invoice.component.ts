@@ -6,7 +6,7 @@ import { CompanyActions } from '../actions/company.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, ReplaySubject } from 'rxjs';
-import { TabsetComponent } from 'ngx-bootstrap';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CurrentPage } from '../models/api-models/Common';

@@ -17,12 +17,12 @@ import {
 } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {
-    BsDatepickerDirective,
     BsModalRef,
     BsModalService,
-    ModalOptions,
-    PopoverDirective
-} from 'ngx-bootstrap';
+    ModalOptions
+} from 'ngx-bootstrap/modal';
+import {BsDatepickerDirective} from 'ngx-bootstrap/datepicker';
+import {PopoverDirective} from 'ngx-bootstrap/popover';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../store';

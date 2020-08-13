@@ -14,7 +14,7 @@ import { GIDDH_DATE_FORMAT } from "../shared/helpers/defaultDateFormat";
 import { saveAs } from "file-saver";
 import { StateDetailsRequest } from "../models/api-models/Company";
 import { CompanyActions } from "../actions/company.actions";
-import { BsDropdownDirective } from "ngx-bootstrap";
+import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 
 @Component({
     selector: 'app-vat-report',

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, Renderer, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { ScrollComponent } from '../virtual-scroll/vscroll';
 import { UniversalSearchService, WindowRefService } from '../service';
 import { ReplaySubject, Subject } from 'rxjs';
@@ -98,7 +98,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
     constructor(
         private _store: Store<AppState>,
-        private renderer: Renderer,
+        private renderer: Renderer2,
         private zone: NgZone,
         private winRef: WindowRefService,
         private _dbService: DbService,
@@ -243,12 +243,12 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
         if (this.setParentWidth && this.mainEle) {
             let box: any = this.parentEle.getBoundingClientRect();
             this.ItemWidth = (box.width > this.ItemWidth) ? box.width : this.ItemWidth;
-            this.renderer.setElementStyle(this.mainEle.nativeElement, 'width', `${box.width}px`);
+            this.renderer.setStyle(this.mainEle.nativeElement, 'width', `${box.width}px`);
             if (this.searchWrapEle) {
-                this.renderer.setElementStyle(this.searchWrapEle.nativeElement, 'width', `${box.width}px`);
+                this.renderer.setStyle(this.searchWrapEle.nativeElement, 'width', `${box.width}px`);
             }
             if (box.width > 300) {
-                this.renderer.setElementClass(this.wrapper.nativeElement, 'wider', true);
+                this.renderer.setStyle(this.wrapper.nativeElement, 'wider', true);
             }
         }
     }

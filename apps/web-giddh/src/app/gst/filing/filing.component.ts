@@ -4,7 +4,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsu
 import { ActivatedRoute, Router } from '@angular/router';
 import { GstDatePeriod, GstOverViewRequest } from '../../models/api-models/GstReconcile';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { TabsetComponent } from 'ngx-bootstrap';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../store';
 import { createSelector } from 'reselect';

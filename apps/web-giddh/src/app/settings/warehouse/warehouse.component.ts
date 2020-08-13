@@ -1,13 +1,12 @@
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import {
-    BsDropdownConfig,
     BsModalRef,
     BsModalService,
-    ModalOptions,
-    PageChangedEvent,
-    PaginationComponent,
-} from 'ngx-bootstrap';
+    ModalOptions
+} from 'ngx-bootstrap/modal';
+import {BsDropdownConfig} from 'ngx-bootstrap/dropdown';
+import {PaginationComponent, PageChangedEvent} from 'ngx-bootstrap/pagination';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';

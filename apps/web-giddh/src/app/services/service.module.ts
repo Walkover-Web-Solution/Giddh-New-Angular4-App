@@ -76,7 +76,7 @@ import { CashFlowStatementService } from './cashflowstatement.service';
     exports: [CommonModule, FormsModule, RouterModule]
 })
 export class ServiceModule {
-    public static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders<unknown> {
         return {
             ngModule: ServiceModule,
             providers: [

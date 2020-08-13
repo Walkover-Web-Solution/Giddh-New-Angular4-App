@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, ViewChild, Input, ElementRef, OnInit, OnChanges, OnDestroy } from '@angular/core';
-import { TabsetComponent } from 'ngx-bootstrap';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { FormBuilder, FormGroup, AbstractControl, FormArray, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';

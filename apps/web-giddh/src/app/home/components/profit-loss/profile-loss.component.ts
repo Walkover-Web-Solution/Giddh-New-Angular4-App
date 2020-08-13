@@ -20,7 +20,7 @@ import {
 import { TBPlBsActions } from "../../../actions/tl-pl.actions";
 import * as Highcharts from 'highcharts';
 import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 
 @Component({

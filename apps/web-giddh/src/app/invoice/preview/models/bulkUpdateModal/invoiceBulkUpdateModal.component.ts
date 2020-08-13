@@ -18,8 +18,7 @@ import { NgForm } from '@angular/forms';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
-import { ModalOptions } from 'ngx-bootstrap';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { ModalOptions, ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'invoice-bulk-update-modal-component',

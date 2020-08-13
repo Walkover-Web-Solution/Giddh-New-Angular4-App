@@ -8,7 +8,7 @@ import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
-import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.component';
+import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.component';
 import { GeneralService } from "../../../../services/general.service";
 
 @Component({

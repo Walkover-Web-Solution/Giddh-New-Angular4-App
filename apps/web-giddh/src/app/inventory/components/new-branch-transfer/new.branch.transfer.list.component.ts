@@ -24,7 +24,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { saveAs } from "file-saver";
 import { ESCAPE } from '@angular/cdk/keycodes';
-import { BsDaterangepickerConfig } from 'ngx-bootstrap';
+import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 
 @Component({
     selector: "new-branch-transfer-list",

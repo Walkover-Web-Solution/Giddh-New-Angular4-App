@@ -13,7 +13,7 @@ import {
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { ModalOptions } from 'ngx-bootstrap';
+import { ModalOptions } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import * as googleLibPhoneNumber from 'google-libphonenumber';
