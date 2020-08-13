@@ -145,6 +145,6 @@ export class PurchaseAdvanceSearchComponent implements OnInit {
     }
 
     public onCancel(): void {
-        this.closeModelEvent.emit(this.defaultPurchaseOrderPostRequest);
+        this.closeModelEvent.emit(false);
     }
 }
