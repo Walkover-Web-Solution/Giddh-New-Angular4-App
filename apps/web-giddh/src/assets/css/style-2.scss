@@ -5751,8 +5751,9 @@ input[type="checkbox"][disabled] {
 }
 
 .top-bar {
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+    border-bottom:0px solid $white !important;
     /* padding-left: 240px; */
 }
 

@@ -77,7 +77,7 @@
                             </ng-container>
 
                             <section class="row-1">
-                                <div class="pl-grid-row">
+                                <div class="pl-grid-row row">
                                     <div class="col-8  group" style="padding-left: 10px;">Total Cost of Goods Sold
                                     </div>
                                     <div class="col-4  bdrL group text-right pull-right">
@@ -89,7 +89,7 @@
 
                         </div>
 
-                        <div class="account clearfix" *ngIf="plData && plData.incomeStatment">
+                        <div class="account clearfix row" *ngIf="plData && plData.incomeStatment">
                             <div class="col-8  group pd1">
                                 <strong>Gross Profit</strong>
                             </div>
@@ -124,7 +124,7 @@
 
 
                                     <section class="row-1" *ngIf="grp.groupName && grp.uniqueName === 'revenue'">
-                                        <div class="pl-grid-row">
+                                        <div class="pl-grid-row row">
                                             <div class="col-8  group" style="padding-left: 10px;">Total Revenue</div>
                                             <div class="col-4  bdrL group text-right pull-right">
                                                 <span> {{ plData?.incomeStatment.revenue.amount | giddhCurrency }}
@@ -133,7 +133,7 @@
                                         </div>
                                     </section>
 
-                                    <div class="group clearfix"
+                                    <div class="group clearfix row"
                                         *ngIf="grp.groupName && grp.uniqueName === 'operatingcost'">
                                         <div class="col-8  group pd1">
                                             Total Operating Expenses
@@ -143,7 +143,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="account clearfix fs16"
+                                    <div class="account clearfix fs16 row"
                                         *ngIf="grp.groupName && grp.uniqueName === 'operatingcost'">
                                         <div class="col-8  group pd1">
                                             <strong class="fs16">Operating Profit/Loss (EBIT)</strong>
@@ -155,7 +155,7 @@
                                     </div>
 
                                     <section class="row-1" *ngIf="grp.groupName && grp.uniqueName === 'otherexpenses'">
-                                        <div class="pl-grid-row">
+                                        <div class="pl-grid-row row">
                                             <div class="col-8  group" style="padding-left: 10px;">Total Other
                                                 Expenses</div>
                                             <div class="col-4  bdrL group text-right pull-right">
@@ -183,7 +183,7 @@
                     </div>
                 </div>
 
-                <div class="account clearfix" *ngIf="plData && plData?.incomeStatment">
+                <div class="account clearfix row" *ngIf="plData && plData?.incomeStatment">
                     <div class="col-8  group pd1">
                         <strong>Income Before Taxes (EBT)</strong>
                     </div>
@@ -198,7 +198,7 @@
 
                 <ng-template
                     *ngIf="plData && plData?.incomeStatment && plData?.incomeStatment.incomeBeforeTaxes.type === 'CREDIT'">
-                    <div class="group clearfix fs14">
+                    <div class="group clearfix fs14 row">
                         <div class="col-8  group pd1">
                             Taxes (30%)
                         </div>

@@ -259,8 +259,7 @@
 
                         <td class="mh18_img" data-title="#"
                             *ngIf="hoveredItemUniqueName === item.uniqueName || item.isSelected || selectedItems.length > 0">
-                            <div class="mh18_img" style="justify-content: center;display: flex"
-                                class="justify-content-sm-start">
+                            <div class="mh18_img d-flex justify-content-center">
                                 <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
                                     (click)="toggleItem(item, true)" />
                                 <img *ngIf="item.isSelected" src="assets/images/checked.png"
@@ -270,7 +269,7 @@
 
                         <td *ngIf="!item.isSelected && hoveredItemUniqueName !== item.uniqueName && selectedItems.length === 0"
                             data-title="#">
-                            <div style="justify-content: center;display: flex" class="justify-content-sm-start">
+                            <div class="d-flex justify-content-center">
                                 {{ i + 1}} </div>
                         </td>
 
