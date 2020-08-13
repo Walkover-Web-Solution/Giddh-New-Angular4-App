@@ -241,6 +241,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public selectedCmp: CompanyResponse;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public advanceSearchModalShow: boolean = false;
+    // Observable to check stock updated successfully
     public updateStockSuccess$: Observable<boolean>;
     public activeStockUniqueName$: Observable<string>;
 
