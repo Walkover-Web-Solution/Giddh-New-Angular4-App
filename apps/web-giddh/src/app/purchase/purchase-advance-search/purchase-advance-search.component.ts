@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, EventEmitter, Output, Input } from '@angular/core';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap'
+import { Component, OnInit, ViewChild, ElementRef, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal'
 import { IOption } from '../../theme/ng-select/ng-select';
 import * as moment from 'moment/moment';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -10,6 +10,7 @@ import { ReplaySubject } from 'rxjs';
 import { GeneralService } from '../../services/general.service';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
+/* Amount comparision filters */
 const AMOUNT_COMPARISON_FILTER = [
     { label: 'Greater Than', value: 'GREATER_THAN' },
     { label: 'Greater Than or Equals', value: 'GREATER_THAN_OR_EQUALS' },
@@ -18,6 +19,8 @@ const AMOUNT_COMPARISON_FILTER = [
     { label: 'Equals', value: 'EQUALS' },
     { label: 'Not Equals', value: 'NOT_EQUALS' }
 ];
+
+/* Status filters */
 const STATUS_FILTER = [
     { label: 'Open', value: 'open' },
     { label: 'Received', value: 'received' },
@@ -32,7 +35,7 @@ const STATUS_FILTER = [
     styleUrls: ['./purchase-advance-search.component.scss']
 })
 
-export class PurchaseAdvanceSearchComponent implements OnInit {
+export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
     public filtersForAmount: IOption[] = AMOUNT_COMPARISON_FILTER;
     public filtersForStatus: IOption[] = STATUS_FILTER;
 
@@ -68,6 +71,11 @@ export class PurchaseAdvanceSearchComponent implements OnInit {
 
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof PurchaseAdvanceSearchComponent
+     */
     public ngOnInit(): void {
         if (this.purchaseOrderPostRequest && this.purchaseOrderPostRequest.grandTotalOperation) {
             this.filtersForAmount.forEach(operator => {
@@ -81,7 +89,7 @@ export class PurchaseAdvanceSearchComponent implements OnInit {
 
         this.breakPointObservar.observe([
             '(max-width: 767px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
 
@@ -96,7 +104,7 @@ export class PurchaseAdvanceSearchComponent implements OnInit {
     /**
      * This will show the datepicker
      *
-     * @memberof CashFlowStatementComponent
+     * @memberof PurchaseAdvanceSearchComponent
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -111,7 +119,7 @@ export class PurchaseAdvanceSearchComponent implements OnInit {
     /**
      * This will hide the datepicker
      *
-     * @memberof CashFlowStatementComponent
+     * @memberof PurchaseAdvanceSearchComponent
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -121,7 +129,7 @@ export class PurchaseAdvanceSearchComponent implements OnInit {
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
-     * @memberof CashFlowStatementComponent
+     * @memberof PurchaseAdvanceSearchComponent
      */
     public dateSelectedCallback(value: any): void {
         this.selectedRangeLabel = "";
@@ -140,11 +148,31 @@ export class PurchaseAdvanceSearchComponent implements OnInit {
         }
     }
 
+    /**
+     * This will emit the search data
+     *
+     * @memberof PurchaseAdvanceSearchComponent
+     */
     public onSearch(): void {
         this.closeModelEvent.emit(this.purchaseOrderPostRequest);
     }
 
+    /**
+     * This will emit false on cancel search
+     *
+     * @memberof PurchaseAdvanceSearchComponent
+     */
     public onCancel(): void {
         this.closeModelEvent.emit(false);
+    }
+
+    /**
+     * Releases the memory
+     *
+     * @memberof PurchaseAdvanceSearchComponent
+     */
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

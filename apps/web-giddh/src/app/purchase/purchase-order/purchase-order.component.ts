@@ -93,6 +93,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public deleteModule: string = '';
     /* This will toggle the select all checkbox */
     public showSelectAllItemCheckbox: boolean = false;
+    /* Send email request params object */
     public sendEmailRequest: any = {};
 
     constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute) {
@@ -547,7 +548,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public closeSendMailPopup(event: any): void {
         this.selectedItem = '';
 
-        if(event) {
+        if (event) {
             this.modalRef.hide();
         }
     }
