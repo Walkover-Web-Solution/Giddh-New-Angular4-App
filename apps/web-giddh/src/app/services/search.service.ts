@@ -51,7 +51,9 @@ export class SearchService {
         if (params) {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&'
-                contextPath += `${delimiter}${key}=${params[key]}`
+                if (params[key]) {
+                    contextPath += `${delimiter}${key}=${params[key]}`
+                }
             });
         }
         return this._http.get(contextPath)
