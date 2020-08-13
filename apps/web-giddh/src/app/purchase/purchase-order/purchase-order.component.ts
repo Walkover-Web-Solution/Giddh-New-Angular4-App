@@ -279,20 +279,9 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public advanceSearchCallback(event: any): void {
         if (event) {
             this.purchaseOrderPostRequest = event;
-        } else {
-            this.purchaseOrderPostRequest = {
-                purchaseOrderNumber: '',
-                grandTotal: '',
-                grandTotalOperation: '',
-                statuses: [],
-                dueFrom: '',
-                dueTo: '',
-                vendorName: ''
-            };
+            this.getAllPurchaseOrders(true);
         }
-
         this.modalRef.hide();
-        this.getAllPurchaseOrders(true);
     }
 
     /**

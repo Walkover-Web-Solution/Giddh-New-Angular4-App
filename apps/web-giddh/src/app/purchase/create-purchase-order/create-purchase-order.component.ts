@@ -2525,16 +2525,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                             salesEntryClass.tcsTaxList.push(tax.uniqueName);
                         }
                     } else {
-                        if (!tax.name) {
-                            console.log(tax);
-                        }
                         salesEntryClass.taxes.push({
                             amount: tax.taxPercent,
                             uniqueName: tax.uniqueName,
                             isChecked: true,
                             isDisabled: false,
                             type: tax.taxType,
-                            name: tax.name || ''
+                            name: tax.name || tax.accountName || ''
                         });
                     }
                 });
