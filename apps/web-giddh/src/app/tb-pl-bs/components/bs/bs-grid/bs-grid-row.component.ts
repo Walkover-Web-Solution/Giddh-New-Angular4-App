@@ -14,7 +14,7 @@ import { ChildGroup } from '../../../../models/api-models/Search';
       </div>
     </div>
     <ng-container *ngFor="let account of groupDetail.accounts">
-      <section class="row row-2 account pl-grid-row" *ngIf="account.isVisible || account.isCreated" [ngClass]="{'isHidden': !account.isVisible }">
+      <section class="row-2 account pl-grid-row" *ngIf="account.isVisible || account.isCreated" [ngClass]="{'isHidden': !account.isVisible }">
         <div class="row" *ngIf="account.name && (account.closingBalance.amount !== 0 || account.openingBalance.amount !== 0)"
              (dblclick)="entryClicked(account)">
           <div class="col-4  account" [ngStyle]="{'padding-left': (padding+20)+'px'}" [innerHTML]="account.name | lowercase  | highlight:search"></div>

@@ -101,6 +101,14 @@ tfoot {
     padding: 0px !important;
 }
 
+.nested_table > tbody > tr:hover td {
+    background: transparent !important;
+}
+
+.basic > tbody > tr:hover td .nested_table > tbody > tr td {
+    background: transparent !important;
+}
+
 .pending-textaerea {
     resize: vertical;
     margin-top: 7px;

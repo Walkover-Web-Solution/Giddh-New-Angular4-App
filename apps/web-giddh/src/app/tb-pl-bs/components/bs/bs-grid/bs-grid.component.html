@@ -20,11 +20,11 @@
                         <table class="mrB table basic bs-table-grid">
                             <thead>
                                 <tr>
-                                    <th class="col-3 pd-0">
+                                    <th class="pd-0" width="33.33%">
                                         <div #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
 
                                             <div [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}"
-                                                style="display:flex">
+                                                class="d-flex align-items-center">
                                                 <span class="ml-15 mr-1">Particular</span>
                                                 <i class="icon-search2" (click)="toggleSearch()"></i>
                                             </div>
@@ -41,12 +41,12 @@
                                         </div>
 
                                     </th>
-                                    <th class="col-3 text-right">As Of
+                                    <th class="text-right" width="33.33%">As Of
                                         <span
                                             *ngIf="bsData && bsData.dates && bsData.dates.to && bsData.dates.to!=='Invalid date'">
                                             {{ moment(bsData?.dates?.to, 'DD-MM-YYYY').toString() | date:'dd MMMM yyyy' }}</span>
                                     </th>
-                                    <th class="col-3 text-right">As Of
+                                    <th class="text-right" width="33.33%">As Of
                                         <span
                                             *ngIf="bsData && bsData.dates && bsData.dates.from && bsData.dates.from!=='Invalid date'">
                                             {{ moment(bsData?.dates?.from, 'DD-MM-YYYY').add(-1, 'days').toString() | date:'dd MMMM yyyy' }}</span>
