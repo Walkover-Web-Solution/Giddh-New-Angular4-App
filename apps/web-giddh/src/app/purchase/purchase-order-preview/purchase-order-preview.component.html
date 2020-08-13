@@ -75,7 +75,7 @@
                                                 <li class="cp" role="menuitem"><a class="dropdown-item">Convert to
                                                         Bill</a></li>
 
-                                                <li class="cp" role="menuitem"><a class="dropdown-item" [routerLink]="['/pages/purchase-management/purchase-order/new/'+purchaseOrder.uniqueName]">Copy</a></li>
+                                                <li class="cp" role="menuitem"><a class="dropdown-item" [routerLink]="['/pages/purchase-management/purchase-order/new/'+purchaseOrderUniqueName]">Copy</a></li>
 
                                                 <li>
                                                     <a class="cp" href="javascript:void(0)" (click)="statusUpdate('cancelled')" *ngIf="purchaseOrder.status === 'OPEN'">Cancel</a>
@@ -93,7 +93,7 @@
 
                                         <div class="edit-action-btn-groups pull-right">
                                             <span>
-                                                <a href="javascript:;" tooltip="Edit" placement="top" [routerLink]="['/pages/purchase-management/purchase-order/edit/'+purchaseOrder.uniqueName]"><i
+                                                <a href="javascript:;" tooltip="Edit" placement="top" [routerLink]="['/pages/purchase-management/purchase-order/edit/'+purchaseOrderUniqueName]"><i
                                                         class="fa fa-pencil"></i></a>
                                             </span>
 
