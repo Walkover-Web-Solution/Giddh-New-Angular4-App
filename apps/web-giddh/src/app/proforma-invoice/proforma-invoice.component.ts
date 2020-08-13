@@ -2584,140 +2584,54 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return res;
     }
 
-    public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass): any {
-        if (selectedAcc.value && selectedAcc.additional.uniqueName) {
-            this.searchService.loadDetails(selectedAcc.value).subscribe(data => {
-                // directly assign additional property
-                if (data && data.body) {
-                    selectedAcc.additional = {
-                        ...selectedAcc.additional,
-                        label: selectedAcc.label,
-                        value: selectedAcc.value,
-                        applicableTaxes: data.body.applicableTaxes || [],
-                        currency: data.body.currency,
-                        currencySymbol: data.body.currencySymbol,
-                        email: data.body.emails,
-                        isFixed: data.body.isFixed,
-                        mergedAccounts: data.body.mergedAccounts,
-                        mobileNo: data.body.mobileNo,
-                        nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.name).join(', ') : '',
-                        stocks: [],
-                        uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
-                    };
-                    let o = _.cloneDeep(selectedAcc.additional);
-
-                    // check if we have quantity in additional object. it's for only bulk add mode
-                    txn.quantity = o.quantity ? o.quantity : (o.stock) ? 1 : null;
-                    txn.applicableTaxes = [];
-                    txn.sku_and_customfields = null;
-
-                    // description with sku and custom fields
-                    if ((o.stock) && (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice)) {
-                        let description = [];
-                        let skuCodeHeading = o.stock.skuCodeHeading ? o.stock.skuCodeHeading : 'SKU Code';
-                        if (o.stock.skuCode) {
-                            description.push(skuCodeHeading + ':' + o.stock.skuCode);
+    public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false): any {
+        if ((selectedAcc.value || isBulkItem) && selectedAcc.additional && selectedAcc.additional.uniqueName) {
+            let requestObject;
+            if (selectedAcc.additional.stock) {
+                requestObject = {
+                    stockUniqueName: selectedAcc.additional.stock.uniqueName
+                };
+            }
+            if (isBulkItem) {
+                txn = this.calculateItemValues(selectedAcc, txn, entry);
+            } else {
+                this.searchService.loadDetails(selectedAcc.additional.uniqueName, requestObject).subscribe(data => {
+                    if (data && data.body) {
+                        // Take taxes of parent group and stock's own taxes
+                        const taxes = data.body.taxes || [];
+                        if (data.body.stock) {
+                            taxes.push(...data.body.stock.taxes);
                         }
-
-                        let customField1Heading = o.stock.customField1Heading ? o.stock.customField1Heading : 'Custom field 1';
-                        if (o.stock.customField1Value) {
-                            description.push(customField1Heading + ':' + o.stock.customField1Value);
-                        }
-
-                        let customField2Heading = o.stock.customField2Heading ? o.stock.customField2Heading : 'Custom field 2';
-                        if (o.stock.customField2Value) {
-                            description.push(customField2Heading + ':' + o.stock.customField2Value);
-                        }
-
-                        txn.sku_and_customfields = description.join(', ');
-                    }
-                    //------------------------
-
-                    // assign taxes and create fluctuation
-                    if (o.stock && o.stock.stockTaxes && o.stock.stockTaxes.length) {
-                        o.stock.stockTaxes.forEach(t => {
-                            let tax = this.companyTaxesList.find(f => f.uniqueName === t);
-                            if (tax) {
-                                switch (tax.taxType) {
-                                    case 'tcsrc':
-                                    case 'tcspay':
-                                    case 'tdsrc':
-                                    case 'tdspay':
-                                        entry.otherTaxModal.appliedOtherTax = {name: tax.name, uniqueName: tax.uniqueName};
-                                        entry.isOtherTaxApplicable = true;
-                                        break;
-                                    default:
-                                        txn.applicableTaxes.push(t);
-                                        break;
-                                }
-                            }
-                        });
-                    } else {
-                        // assign taxes for non stock accounts
-                        txn.applicableTaxes = o.applicableTaxes;
-                    }
-
-                    txn.accountName = o.name;
-                    txn.accountUniqueName = o.uniqueName;
-
-                    if (o.stocks && o.stock) {
-                        // set rate auto
-                        txn.rate = null;
-                        let obj: IStockUnit = {
-                            id: o.stock.stockUnit.code,
-                            text: o.stock.stockUnit.name
+                        // directly assign additional property
+                        selectedAcc.additional = {
+                            ...selectedAcc.additional,
+                            label: selectedAcc.label,
+                            value: selectedAcc.value,
+                            applicableTaxes: taxes,
+                            currency: data.body.currency,
+                            currencySymbol: data.body.currencySymbol,
+                            email: data.body.emails,
+                            isFixed: data.body.isFixed,
+                            mergedAccounts: data.body.mergedAccounts,
+                            mobileNo: data.body.mobileNo,
+                            nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.name).join(', ') : '',
+                            stock: data.body.stock,
+                            uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                         };
-                        txn.stockList = [];
-                        if (o.stock && o.stock.accountStockDetails.unitRates.length) {
-                            txn.stockList = this.prepareUnitArr(o.stock.accountStockDetails.unitRates);
-                            txn.stockUnit = txn.stockList[0].id;
-                            txn.rate = txn.stockList[0].rate;
-                        } else {
-                            txn.stockList.push(obj);
-                            txn.stockUnit = o.stock.stockUnit.code;
-                        }
-                        txn.stockDetails = _.omit(o.stock, ['accountStockDetails', 'stockUnit']);
-                        txn.isStockTxn = true;
-                        // Stock item, show the warehouse drop down if it is hidden
-                        if (this.isMultiCurrencyModule() && !this.shouldShowWarehouse) {
-                            this.shouldShowWarehouse = true;
-                            this.selectedWarehouse = String(this.defaultWarehouse);
-                        }
-                    } else {
-                        txn.isStockTxn = false;
-                        txn.stockUnit = null;
-                        txn.stockDetails = null;
-                        txn.stockList = [];
-                        // reset fields
-                        txn.rate = null;
-                        txn.quantity = null;
-                        txn.amount = 0;
-                        txn.taxableValue = 0;
-                        this.handleWarehouseVisibility();
+                        txn = this.calculateItemValues(selectedAcc, txn, entry);
                     }
+                }, () => {
+                    txn.isStockTxn = false;
+                    txn.amount = 0;
+                    txn.accountName = null;
+                    txn.accountUniqueName = null;
+                    txn.hsnOrSac = 'sac';
+                    txn.total = null;
+                    txn.rate = null;
                     txn.sacNumber = null;
                     txn.sacNumberExists = false;
-                    txn.hsnNumber = null;
-
-                    if (txn.stockDetails && txn.stockDetails.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !txn.stockDetails.sacNumber)) {
-                        txn.hsnNumber = txn.stockDetails.hsnNumber;
-                        txn.hsnOrSac = 'hsn';
-                    }
-                    if (txn.stockDetails && txn.stockDetails.sacNumber && this.inventorySettings && this.inventorySettings.manageInventory === false) {
-                        txn.sacNumber = txn.stockDetails.sacNumber;
-                        txn.sacNumberExists = true;
-                        txn.hsnOrSac = 'sac';
-                    }
-
-                    if (!o.stock && o.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !o.sacNumber)) {
-                        txn.hsnNumber = o.hsnNumber;
-                        txn.hsnOrSac = 'hsn';
-                    }
-                    if (!o.stock && o.sacNumber && this.inventorySettings && !this.inventorySettings.manageInventory && this.inventorySettings.manageInventory === false) {
-                        txn.sacNumber = o.sacNumber;
-                        txn.sacNumberExists = true;
-                        txn.hsnOrSac = 'sac';
-                    }
+                    txn.taxableValue = 0;
+                    txn.applicableTaxes = [];
 
                     setTimeout(() => {
                         let description = this.description.toArray();
@@ -2725,31 +2639,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             description[this.activeIndx].nativeElement.focus();
                         }
                     }, 200);
-                    this.calculateStockEntryAmount(txn);
-                    this.calculateWhenTrxAltered(entry, txn);
                     return txn;
-                }
-            }, () => {
-                txn.isStockTxn = false;
-                txn.amount = 0;
-                txn.accountName = null;
-                txn.accountUniqueName = null;
-                txn.hsnOrSac = 'sac';
-                txn.total = null;
-                txn.rate = null;
-                txn.sacNumber = null;
-                txn.sacNumberExists = false;
-                txn.taxableValue = 0;
-                txn.applicableTaxes = [];
-
-                setTimeout(() => {
-                    let description = this.description.toArray();
-                    if (description && description[this.activeIndx]) {
-                        description[this.activeIndx].nativeElement.focus();
-                    }
-                }, 200);
-                return txn;
-            });
+                });
+            }
 
         } else {
             txn.isStockTxn = false;
@@ -2772,6 +2664,134 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }, 200);
             return txn;
         }
+    }
+
+    public calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass): SalesTransactionItemClass {
+        let o = _.cloneDeep(selectedAcc.additional);
+
+        // check if we have quantity in additional object. it's for only bulk add mode
+        transaction.quantity = o.quantity ? o.quantity : (o.stock) ? 1 : null;
+        transaction.applicableTaxes = [];
+        transaction.sku_and_customfields = null;
+
+        // description with sku and custom fields
+        if ((o.stock) && (this.isCashInvoice || this.isSalesInvoice || this.isPurchaseInvoice)) {
+            let description = [];
+            let skuCodeHeading = o.stock.skuCodeHeading ? o.stock.skuCodeHeading : 'SKU Code';
+            if (o.stock.skuCode) {
+                description.push(skuCodeHeading + ':' + o.stock.skuCode);
+            }
+
+            let customField1Heading = o.stock.customField1Heading ? o.stock.customField1Heading : 'Custom field 1';
+            if (o.stock.customField1Value) {
+                description.push(customField1Heading + ':' + o.stock.customField1Value);
+            }
+
+            let customField2Heading = o.stock.customField2Heading ? o.stock.customField2Heading : 'Custom field 2';
+            if (o.stock.customField2Value) {
+                description.push(customField2Heading + ':' + o.stock.customField2Value);
+            }
+
+            transaction.sku_and_customfields = description.join(', ');
+        }
+        //------------------------
+
+        // assign taxes and create fluctuation
+        if (o.stock && o.stock.taxes && o.stock.taxes.length) {
+            o.stock.taxes.forEach(t => {
+                let tax = this.companyTaxesList.find(f => f.uniqueName === t);
+                if (tax) {
+                    switch (tax.taxType) {
+                        case 'tcsrc':
+                        case 'tcspay':
+                        case 'tdsrc':
+                        case 'tdspay':
+                            entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
+                            entry.isOtherTaxApplicable = true;
+                            break;
+                        default:
+                            transaction.applicableTaxes.push(t);
+                            break;
+                    }
+                }
+            });
+        } else {
+            // assign taxes for non stock accounts
+            transaction.applicableTaxes = o.applicableTaxes;
+        }
+
+        transaction.accountName = o.name;
+        transaction.accountUniqueName = o.uniqueName;
+
+        if (o.stock) {
+            // set rate auto
+            transaction.rate = null;
+            let obj: IStockUnit = {
+                id: o.stock.stockUnitCode,
+                text: o.stock.stockUnitName
+            };
+            transaction.stockList = [];
+            if (o.stock && o.stock.unitRates && o.stock.unitRates.length) {
+                transaction.stockList = this.prepareUnitArr(o.stock.unitRates);
+                transaction.stockUnit = transaction.stockList[0].id;
+                transaction.rate = transaction.stockList[0].rate;
+            } else {
+                transaction.stockList.push(obj);
+                transaction.stockUnit = o.stock.stockUnit.code;
+            }
+            transaction.stockDetails = _.omit(o.stock, ['accountStockDetails', 'stockUnit']);
+            transaction.isStockTxn = true;
+            // Stock item, show the warehouse drop down if it is hidden
+            if (this.isMultiCurrencyModule() && !this.shouldShowWarehouse) {
+                this.shouldShowWarehouse = true;
+                this.selectedWarehouse = String(this.defaultWarehouse);
+            }
+        } else {
+            transaction.isStockTxn = false;
+            transaction.stockUnit = null;
+            transaction.stockDetails = null;
+            transaction.stockList = [];
+            // reset fields
+            transaction.rate = null;
+            transaction.quantity = null;
+            transaction.amount = 0;
+            transaction.taxableValue = 0;
+            this.handleWarehouseVisibility();
+        }
+        transaction.sacNumber = null;
+        transaction.sacNumberExists = false;
+        transaction.hsnNumber = null;
+
+        if (transaction.stockDetails && transaction.stockDetails.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !transaction.stockDetails.sacNumber)) {
+            transaction.hsnNumber = transaction.stockDetails.hsnNumber;
+            transaction.hsnOrSac = 'hsn';
+        }
+        if (transaction.stockDetails && transaction.stockDetails.sacNumber && this.inventorySettings && this.inventorySettings.manageInventory === false) {
+            transaction.sacNumber = transaction.stockDetails.sacNumber;
+            transaction.sacNumberExists = true;
+            transaction.hsnOrSac = 'sac';
+        }
+
+        if (!o.stock && o.hsnNumber && this.inventorySettings && (this.inventorySettings.manageInventory === true || !o.sacNumber)) {
+            transaction.hsnNumber = o.hsnNumber;
+            transaction.hsnOrSac = 'hsn';
+        }
+        if (!o.stock && o.sacNumber && this.inventorySettings && !this.inventorySettings.manageInventory && this.inventorySettings.manageInventory === false) {
+            transaction.sacNumber = o.sacNumber;
+            transaction.sacNumberExists = true;
+            transaction.hsnOrSac = 'sac';
+        }
+
+        setTimeout(() => {
+            let description = this.description.toArray();
+            if (description && description[this.activeIndx]) {
+                description[this.activeIndx].nativeElement.focus();
+            }
+        }, 200);
+        this.calculateStockEntryAmount(transaction);
+        this.calculateWhenTrxAltered(entry, transaction);
+        this._cdr.detectChanges();
+        return transaction;
     }
 
     public onClearSalesAccount(txn: SalesTransactionItemClass) {
@@ -3199,30 +3219,26 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.salesAccounts$.pipe(take(1)).subscribe(data => salesAccs = data);
 
         for (const item of items) {
-            let salesItem: IOption = salesAccs.find(f => f.value === item.uniqueName);
-            if (salesItem) {
+            // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
+            item.additional['quantity'] = item.quantity;
+            let lastIndex = -1;
+            let blankItemIndex = this.invFormData.entries.findIndex(f => !f.transactions[0].accountUniqueName);
 
-                // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
-                salesItem.additional = {...salesItem.additional, quantity: item.quantity};
-                let lastIndex = -1;
-                let blankItemIndex = this.invFormData.entries.findIndex(f => !f.transactions[0].accountUniqueName);
-
-                if (blankItemIndex > -1) {
-                    lastIndex = blankItemIndex;
-                    this.invFormData.entries[lastIndex] = new SalesEntryClass();
-                } else {
-                    this.invFormData.entries.push(new SalesEntryClass());
-                    lastIndex = this.invFormData.entries.length - 1;
-                }
-
-                this.activeIndx = lastIndex;
-                this.invFormData.entries[lastIndex].entryDate = this.universalDate;
-                this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = salesItem.value;
-                this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
-                this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[0], this.invFormData.entries[lastIndex]);
-                this.calculateStockEntryAmount(this.invFormData.entries[lastIndex].transactions[0]);
-                this.calculateWhenTrxAltered(this.invFormData.entries[lastIndex], this.invFormData.entries[lastIndex].transactions[0]);
+            if (blankItemIndex > -1) {
+                lastIndex = blankItemIndex;
+                this.invFormData.entries[lastIndex] = new SalesEntryClass();
+            } else {
+                this.invFormData.entries.push(new SalesEntryClass());
+                lastIndex = this.invFormData.entries.length - 1;
             }
+
+            this.activeIndx = lastIndex;
+            this.invFormData.entries[lastIndex].entryDate = this.universalDate;
+            this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = item.uniqueName;
+            this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
+            this.onSelectSalesAccount(item, this.invFormData.entries[lastIndex].transactions[0], this.invFormData.entries[lastIndex], true);
+            this.calculateStockEntryAmount(this.invFormData.entries[lastIndex].transactions[0]);
+            this.calculateWhenTrxAltered(this.invFormData.entries[lastIndex], this.invFormData.entries[lastIndex].transactions[0]);
         }
     }
 
@@ -5152,7 +5168,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public handleScrollEnd(searchType: string): void {
-        console.log('Reached end');
         if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
             this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1, searchType);
         }
@@ -5167,6 +5182,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (searchType === SEARCH_TYPE.CUSTOMER) {
                     this.focusInCustomerName();
                 }
+                this._cdr.detectChanges();
                 this.searchResultsPaginationData.page = data.body.page;
                 this.searchResultsPaginationData.totalPages = data.body.totalPages;
             }
