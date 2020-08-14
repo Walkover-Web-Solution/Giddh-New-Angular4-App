@@ -2463,7 +2463,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                         this.initializeWarehouse(this.purchaseOrderDetails.warehouse);
                     }
 
-                    this.isRcmEntry = (this.purchaseOrderDetails.subVoucher && this.purchaseOrderDetails.subVoucher === Subvoucher.ReverseCharge) ? true : false;
+                    this.isRcmEntry = (this.purchaseOrderDetails.subVoucher && this.purchaseOrderDetails.subVoucher === SubVoucher.ReverseCharge) ? true : false;
 
                     this.purchaseOrder.company = this.purchaseOrderDetails.company;
 
