@@ -11,7 +11,7 @@
     cursor: pointer;
 }
 
-.basic>thead>tr>th {
+.basic > thead > tr > th {
     border-right: 1px solid #c6c4c4;
 }
 
@@ -23,11 +23,11 @@
     display: flex;
 }
 
-.td_in_searchBox div {
+.td-search-box div {
     display: flex;
 }
 
-.td_in_searchBox div span {
+.td-search-box div span {
     /*flex: 1 1 auto;*/
     padding: 8px 0 8px 10px;
 }
@@ -37,7 +37,7 @@
     min-width: 420px !important;
 }
 
-.td_in_searchBox div i {
+.td-search-box div i {
     margin-top: 1px;
     color: $wild-blue-yonder;
     padding-right: 8px;
@@ -47,15 +47,15 @@
     padding-left: 10px;
 }
 
-.td_in_searchBox div i:hover {
+.td-search-box div i:hover {
     color: $deep-sky-blue;
 }
 
-.td_in_searchBox {
+.td-search-box {
     padding: 0px !important;
 }
 
-.td_in_searchBox .input-container input {
+.td-search-box .input-container input {
     height: 50px;
     min-width: 100%;
     padding: 11px;
@@ -65,7 +65,7 @@
     background-color: #f2f2f2;
 }
 
-.td_in_searchBox .input-container i {
+.td-search-box .input-container i {
     position: absolute;
     right: 10px;
     top: 12px;
@@ -80,7 +80,7 @@
     color: $deep-sky-blue;
 }
 
-.dropdown-menu>li>a:hover {
+.dropdown-menu > li > a:hover {
     color: $chetwode-blue !important;
     background: #eeeff9 !important;
 }
@@ -90,7 +90,7 @@
     min-width: 100%;
 }
 
-.input-h .td_in_searchBox .input-container input {
+.input-h .td-search-box .input-container input {
     height: 50px !important;
 }
 
@@ -145,7 +145,6 @@
     outline: none !important;
 }
 
-
 /* my css */
 
 .card {
@@ -166,8 +165,8 @@
     width: 100%;
 }
 
-.card .basic>tbody>tr>td,
-.card .basic>thead>tr>th {
+.card .basic > tbody > tr > td,
+.card .basic > thead > tr > th {
     padding: 5px 14px;
     border: none !important;
 }
@@ -261,7 +260,7 @@ td.card-header.clearfix {
     color: $deep-sky-blue;
 }
 
-.btn-dropdown-ddl-newinv {
+.dropdown-btn-new {
     padding: 7px 16px !important;
 }
 
@@ -302,7 +301,7 @@ ul.selectActionDropdown {
 .input-group input.form-control {
     padding-left: 35px !important;
     border-color: $chetwode-blue;
-    background-image: url("../../../assets/images/calender.svg") !important;
+    background-image: url("../../../assets/images/calender-icon.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
     background-repeat: no-repeat !important;
@@ -390,20 +389,17 @@ button.btn.btn-default.ladda-button {
     display: flex;
     height: 36px;
 }
-
-button.btn.btn-filter {
-    background: #e4e4e4;
-    border: 1px solid #e4e4e4;
-    font-size: 14px;
-    color: #1a237e;
-    display: inline-flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 4px 10px;
-}
-
-button.btn.btn-filter span.icon-cross {
-    margin-right: 5px;
+.clear-filter {
+    button.btn.btn-default {
+        font-size: 14px;
+        display: inline-flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 7px 10px;
+        .icon-cross {
+            margin-right: 5px;
+        }
+    }
 }
 
 .invoice-table th .d-flex {
@@ -416,7 +412,7 @@ button.btn.btn-filter span.icon-cross {
 
 .inputWrapper {
     display: block !important;
-    width: 196px !important;
+    width: 200px !important;
     position: relative;
     height: 36px !important;
 }
@@ -441,7 +437,7 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .invoice-footer h1 {
-    font-size: 28px;
+    font-size: 18px;
     color: #333;
     display: inline-block;
 }
@@ -457,14 +453,57 @@ div.remove-capitalize {
 span.icon-export-icon {
     color: $gray;
 }
+.giddh-table {
+    tr {
+        td {
+            .action-icon {
+                display: flex;
+                align-items: center;
+                border: 1px solid $gainsboro;
+                display: none;
+                a {
+                    width: 30px;
+                    font-size: 20px;
+                    color: $gray;
+                    border-right: 1px solid $gainsboro;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0 5px;
+                    cursor: pointer;
+                    align-items: stretch;
+                    height: 30px;
+                    align-items: center;
+                    background-color: $white;
+                }
+                &:last-child {
+                    border-right: none !important;
+                }
+            }
+        }
+    }
+    &:hover {
+        td {
+            .action-icon {
+                display: flex !important;
+            }
+        }
+    }
+}
+.visible-on-mobile {
+    display: none;
+}
+.visible-on-desktop {
+    display: inline-flex;
+}
 /* responsive */
 
 @media (max-width: 768px) {
     .invoice-name-download {
-        a{
+        a {
             padding-right: 0 !important;
         }
-        .icon-download{
+        .icon-download {
             display: none;
         }
     }
@@ -547,7 +586,7 @@ span.icon-export-icon {
         box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3) !important;
         display: block;
     }
-    .date-advance-search .dropdown-menu>li>a {
+    .date-advance-search .dropdown-menu > li > a {
         padding: 8px 10px;
     }
     .paginationWrapper {
@@ -575,6 +614,12 @@ span.icon-export-icon {
     .mobile-search .input-container input {
         font-size: 13px;
     }
+    .action-icon {
+        display: flex !important;
+        width: 120px;
+        margin-left: 0;
+        margin-top: 5px;
+    }
 }
 
 @media (max-width: 767px) {
@@ -589,7 +634,7 @@ span.icon-export-icon {
         font-size: 18px !important;
     }
     .invoice-container {
-        padding-top: 55px;
+        padding-top: 10px;
     }
     .total-due-sale-wrap {
         display: block !important;
@@ -597,14 +642,18 @@ span.icon-export-icon {
     .totalDueSale {
         padding-bottom: 5px;
     }
+    .invoice-table {
+        margin-bottom: 22px;
+    }
 }
 
 @media (max-width: 575px) {
-    button.btn.btn-filter {
+    button.btn.btn-defualt {
         width: 100%;
         justify-content: center;
-        margin-bottom: 5px;
+        margin-bottom: 0;
         font-size: 14px;
+        margin-top: 15px;
     }
     .invoce-controll .nav.nav-tabs {
         margin-bottom: 28px;
@@ -622,6 +671,25 @@ span.icon-export-icon {
     }
     .date-advance-search {
         flex-direction: column;
+    }
+    .mobile-search {
+        .col-xs-12 {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+            .visible-on-mobile {
+                display: inline-flex;
+            }
+            .more-export-btn {
+                margin-top: 0 !important;
+            }
+            .btn-group {
+                margin-bottom: 0 !important;
+            }
+        }
+    }
+    .visible-on-desktop {
+        display: none;
     }
 }
 

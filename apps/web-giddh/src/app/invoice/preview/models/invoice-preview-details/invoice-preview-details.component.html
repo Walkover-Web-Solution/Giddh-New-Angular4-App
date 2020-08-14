@@ -13,27 +13,26 @@
                         <input type="text" placeholder="search" #searchElement>
 
                         <div class="btn-group" dropdown *ngIf="voucherType === 'sales' && !isMobileView"
-                             [autoClose]="true">
+                            [autoClose]="true">
                             <button id="button-basic2" dropdownToggle type="button"
-                                    class="btn btn-pink dropdown-toggle btn-dropdown-ddl-newinv"
-                                    aria-controls="dropdown-basic3">
+                                class="btn btn-pink dropdown-toggle dropdown-btn-new" aria-controls="dropdown-basic3">
                                 + New Invoice <span class="caret"></span>
                             </button>
-                            <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu ddl-width-small" role="menu"
-                                aria-labelledby="button-basic2">
+                            <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu dropdown-width-small"
+                                role="menu" aria-labelledby="button-basic2">
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)" (click)="goToInvoice('cash')">Cash
-                                        Invoice</a>
+                                    <a class="dropdown-item" href="javascript:void(0)"
+                                        (click)="goToInvoice('cash')">Cash Invoice</a>
                                 </li>
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)" (click)="goToInvoice('sales')">Sales
-                                        Invoice</a>
+                                    <a class="dropdown-item" href="javascript:void(0)"
+                                        (click)="goToInvoice('sales')">Sales Invoice</a>
                                 </li>
                             </ul>
                         </div>
 
                         <button class="btn btn-pink" *ngIf="voucherType !== 'sales' && !isMobileView"
-                                (click)="goToInvoice()">+ New
+                            (click)="goToInvoice()">+ New
                             {{voucherType | voucherTypeToNamePipe}}</button>
                     </div>
 
@@ -87,7 +86,8 @@
 
                                 <div class="col-sm-4 col-xs-12 pd0">
                                     <div class="invoice-num-holder">
-                                        <h3 class="invoice-num"> {{selectedItem?.voucherNumber ? selectedItem?.voucherNumber : '-'}}</h3>
+                                        <h3 class="invoice-num">
+                                            {{selectedItem?.voucherNumber ? selectedItem?.voucherNumber : '-'}}</h3>
                                         <p class="acc-holderName">{{selectedItem?.account.name}}</p>
                                     </div>
                                 </div>
@@ -100,14 +100,14 @@
 
                                         <!-- region for proforma and estimates -->
                                         <div class="btn-group changeStatus-dropdown pull-right" dropdown
-                                             *ngIf="only4ProformaEstimates">
+                                            *ngIf="only4ProformaEstimates">
 
                                             <label class="labeled text-capitalize">
                                                 {{ selectedItem.voucherStatus }}</label>
 
                                             <button id="button-basic" dropdownToggle type="button"
-                                                    class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic">
-                                                Change Status
+                                                class="btn btn-pink dropdown-toggle"
+                                                aria-controls="dropdown-basic">Change Status
                                                 <span class="caret"></span>
                                             </button>
 
@@ -140,7 +140,7 @@
 
                                         <!-- region for invoice -->
                                         <div class="btn-group changeStatus-dropdown pull-right" dropdown
-                                             *ngIf="!only4ProformaEstimates && selectedItem?.voucherType !== 'purchase'">
+                                            *ngIf="!only4ProformaEstimates && selectedItem?.voucherType !== 'purchase'">
 
                                             <label *ngIf="selectedItem.voucherStatus === 'cancel'" class="labeled">
                                                 {{ selectedItem.voucherStatus }}
@@ -181,41 +181,45 @@
                                         <div class="edit-action-btn-grps pull-right">
                                             <span *ngIf="!isMobileView">
                                                 <a href="javascript:void 0" tooltip="Edit" placement="top"
-                                                   (click)="toggleEditMode()"><i class="fa fa-pencil"></i></a>
+                                                    (click)="toggleEditMode()"><i class="fa fa-pencil"></i></a>
                                             </span>
 
                                             <span class="pos-rel" *ngIf="selectedItem?.voucherType !== 'purchase'">
                                                 <a href="javascript:void 0" tooltip="Send Email" placement="top"
-                                                   (click)="showEmailSendModal.toggle()"><i
-                                                    class="fa fa-envelope-o"></i></a>
+                                                    (click)="showEmailSendModal.toggle()"><i
+                                                        class="fa fa-envelope-o"></i></a>
                                             </span>
 
                                             <span *ngIf="shouldShowPrintDocument"
-                                                  [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading}">
+                                                [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading}">
                                                 <a href="javascript:void 0" tooltip="Print" placement="top"
-                                                   (click)="printVoucher()"><i class="fa fa-print"></i></a>
+                                                    (click)="printVoucher()"><i class="fa fa-print"></i></a>
                                             </span>
 
                                             <span
                                                 *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
                                                 [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
                                                 <a href="javascript:void 0" tooltip="Download" placement="top"
-                                                   (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
+                                                    (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
                                             </span>
 
                                             <span
                                                 *ngIf="selectedItem.voucherType === 'purchase' && attachedDocumentType?.type !== 'pdf'"
                                                 [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
                                                 <a href="javascript:void 0" tooltip="Download" placement="top"
-                                                   (click)="downloadFile()"><i class="icon-download"></i></a>
+                                                    (click)="downloadFile()"><i class="icon-download"></i></a>
                                             </span>
 
                                             <span>
                                                 <a href="javascript:void 0" tooltip="Delete" placement="top"
-                                                   (click)="deleteConfirmationModel.toggle()"><i
-                                                    class="fa fa-trash"></i></a>
+                                                    (click)="deleteConfirmationModel.toggle()"><i
+                                                        class="fa fa-trash"></i></a>
                                             </span>
                                         </div>
+                                        <!-- <div class="history-btn">
+                                            <button class="btn btn-primary" (click)="toggleAccountAsidePane()">
+                                                <i class="icon-history-icon font-12"></i> History</button>
+                                        </div> -->
 
                                     </div>
                                 </div>
@@ -224,18 +228,19 @@
                         </div>
 
                         <div class="payment-detail"
-                             *ngIf="!only4ProformaEstimates && (selectedItem?.voucherType !== 'purchase')">
+                            *ngIf="!only4ProformaEstimates && (selectedItem?.voucherType !== 'purchase')">
 
                             <div class="clearfix">
 
-                                <div class="col-sm-4 pd0" *ngIf="(selectedItem.voucherType !== 'credit note' && selectedItem.voucherType !== 'debit note') &&
+                                <div class="col-sm-4 pd0"
+                                    *ngIf="(selectedItem.voucherType !== 'credit note' && selectedItem.voucherType !== 'debit note') &&
                                     (selectedItem.voucherStatus !== 'paid' && selectedItem.voucherStatus !== 'cancel')">
                                     <div class="single-paymentDetail clearfix pr-4">
                                         <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
                                         <p class="payment-content"> Receive payments in cash/check and record payments
                                             manually. </p>
                                         <a href="javascript: void 0"
-                                           (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()">Receive
+                                            (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()">Receive
                                             Payment</a>
                                     </div>
                                 </div>
@@ -280,66 +285,100 @@
 
                             </div>
                         </div>
-
+                        <!-- <div class="linked-purchase-order font-14 mt-15">
+                            <p><span class="icon-file-path"></span> Linked Purchase Order(s):</p>
+                            <div class="purchase-order-number">
+                                <a class="aqua-color" (click)="openModal(purchaseBillTemplate)">PO934850 </a> | <a
+                                    class="aqua-color">PO934850 </a> | <a class="aqua-color">PO934850 </a>
+                            </div>
+                        </div> -->
                     </div>
                     <!-- class="invoice-image-section" [style.height.px]="invoiceImageSectionViewHeight" -->
 
                     <div *ngIf="!isMobileView" class="invoice-image-section">
+                        <div class="relative">
+                            <div class="pos-rel" *ngIf="isVoucherDownloading || isFileUploading">
+                                <div class="loader"></div>
+                            </div>
 
-                        <div class="pos-rel" *ngIf="isVoucherDownloading || isFileUploading">
-                            <div class="loader"></div>
-                        </div>
+                            <div *ngIf="isVoucherDownloadError && (!isVoucherDownloading || !isFileUploading)"
+                                class="error">
+                                <span>
+                                    Invoice Preview is not available right now!Please try again..
+                                </span>
+                            </div>
+                            <div class="preview-not-supported-attachment"
+                                *ngIf="attachedDocumentType?.type === 'unsupported'">
+                                <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and
+                                    PDF (.pdf); to print other formats, download them. </span>
+                            </div>
+                            <div class="expand-button cursor-pointer text-gray" (click)="openModal(template)" hidden>
+                                <span class="icon-collapse-icon"></span>Expand
+                            </div>
+                            <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview
+                                class="fixed-ng2pdfview pdf-preview"
+                                [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
+                                <ng2-pdfjs-viewer pagemode="none"
+                                    *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
+                                    viewerId="MyUniqueID"
+                                    [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
+                                    [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="testPagesLoaded($event);"
+                                    [openFile]="false" [viewBookmark]="false" [download]="false">
+                                </ng2-pdfjs-viewer>
+                                <img *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')"
+                                    class="image-preview" [src]="imagePreviewSource" />
+                            </div>
 
-                        <div *ngIf="isVoucherDownloadError && (!isVoucherDownloading || !isFileUploading)"
-                             class="error">
-                            <span>
-                                Invoice Preview is not available right now!Please try again..
-                            </span>
-                        </div>
-                        <div class="preview-not-supported-attachment"
-                             *ngIf="attachedDocumentType?.type === 'unsupported'">
-                            <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and PDF (.pdf); to print other formats, download them. </span>
-                        </div>
+                            <div *ngIf="isVoucherDownloadError && (!isVoucherDownloading || !isFileUploading)"
+                                class="error">
+                                <span>
+                                    Invoice Preview is not available right now!Please try again..
+                                </span>
+                            </div>
+                            <div class="preview-not-supported-attachment"
+                                *ngIf="attachedDocumentType?.type === 'unsupported'">
+                                <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and PDF (.pdf); to print other formats, download them. </span>
+                            </div>
 
-                        <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview
-                             class="fixed-ng2pdfview pdf-preview"
-                             [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
-                            <ng2-pdfjs-viewer pagemode="none"
-                                              *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
-                                              viewerId="MyUniqueID"
-                                              [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
-                                              [downloadFileName]="'invoice.pdf'"
-                                              (onDocumentLoad)="testPagesLoaded($event);" [openFile]="false"
-                                              [viewBookmark]="false" [download]="false">
-                            </ng2-pdfjs-viewer>
-                            <img
-                                *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')"
-                                class="image-preview" [src]="imagePreviewSource"/>
-                        </div>
-                        <div *ngIf="shouldShowUploadAttachment"
-                             class="upload-excel max500 center-block box mrT2 dashed-bdr">
-                            <input type="file" id="csv-upload-input" placeholder="Upload an EXCEL or CSV file"
-                                   droppable="true" class="form-control" [options]="fileUploadOptions" ngFileSelect
-                                   [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)"/>
-                            <div class="clearfix pos-rel width100">
-                                <div class="file-input-wrapper text-center">
-                                    <div class="clearfix mrB2">
-                                        <img src="assets/images/new/import_icon.svg"/>
-                                    </div>
-                                    <div class="clearfix pdR2 pdL2">
-                                        <label class="clearfix text-light-2" style="font-size: 14px">Drop file to
-                                            upload</label>
-                                        <div class="mrT3">
-                                            <label class="file-uplod-penal" for="csv-upload-input"> <span>Browse
-                                                        file</span></label>
+                            <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview
+                                class="fixed-ng2pdfview pdf-preview"
+                                [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
+                                <ng2-pdfjs-viewer pagemode="none"
+                                                *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
+                                                viewerId="MyUniqueID"
+                                                [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
+                                                [downloadFileName]="'invoice.pdf'"
+                                                (onDocumentLoad)="testPagesLoaded($event);" [openFile]="false"
+                                                [viewBookmark]="false" [download]="false">
+                                </ng2-pdfjs-viewer>
+                                <img
+                                    *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')"
+                                    class="image-preview" [src]="imagePreviewSource"/>
+                            </div>
+                            <div *ngIf="shouldShowUploadAttachment"
+                                class="upload-excel max500 center-block box mrT2 dashed-bdr">
+                                <input type="file" id="csv-upload-input" placeholder="Upload an EXCEL or CSV file"
+                                    droppable="true" class="form-control" [options]="fileUploadOptions" ngFileSelect
+                                    [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)"/>
+                                <div class="clearfix pos-rel width100">
+                                    <div class="file-input-wrapper text-center">
+                                        <div class="clearfix mrB2">
+                                            <img src="assets/images/new/import_icon.svg"/>
+                                        </div>
+                                        <div class="clearfix pdR2 pdL2">
+                                            <label class="clearfix text-light-2" style="font-size: 14px">Drop file to
+                                                upload</label>
+                                            <div class="mrT3">
+                                                <label class="file-uplod-penal" for="csv-upload-input"> <span>Browse
+                                                            file</span></label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>    
                     </div>
-                </div>
-
+                </div>    
             </div>
         </div>
     </div>
@@ -376,6 +415,33 @@
     <!-- endregion -->
 
 </div>
+<!-- <div class="aside-overlay" *ngIf="orderHistoryAsideState === 'in'"></div>
+<div *ngIf="orderHistoryAsideState === 'in'">
+    <aside-order-history (closeAsideEvent)="toggleOrderHistoryAsidePane($event)">
+    </aside-order-history>
+</div> -->
+
+<ng-template #template>
+    <div class="relative header-close-btn">
+
+        <button type="button" class="close pull-right cursor-pointer" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview class="fixed-ng2pdfview pdf-preview"
+            [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
+            <ng2-pdfjs-viewer pagemode="none"
+                *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
+                viewerId="MyUniqueID" [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
+                [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="testPagesLoaded($event);" [openFile]="false"
+                [viewBookmark]="false" [download]="false">
+            </ng2-pdfjs-viewer>
+            <img *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')"
+                class="image-preview" [src]="imagePreviewSource" />
+        </div>
+    </div>
+</ng-template>
 
 <!-- region send email modal-->
 <div bsModal #showEmailSendModal="bs-modal" class="modal fade" role="dialog"
@@ -498,3 +564,8 @@
     </div>
 </div>
 <!-- endregion -->
+
+
+<ng-template #purchaseBillTemplate>
+    <purchase-bill-template></purchase-bill-template>
+</ng-template>
