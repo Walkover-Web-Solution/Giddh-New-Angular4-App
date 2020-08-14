@@ -52,6 +52,15 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
      * @memberof DatepickerWrapperComponent
      */
     public ngOnInit(): void {
+
+        if(!this.inputStartDate) {
+            this.inputStartDate = _moment().startOf('day');
+        }
+
+        if(!this.inputEndDate) {
+            this.inputEndDate = _moment().endOf('day');
+        }
+        
         this.setPosition();
     }
 

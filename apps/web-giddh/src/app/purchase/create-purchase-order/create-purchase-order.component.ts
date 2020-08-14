@@ -668,10 +668,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
                     this.purchaseOrder.entries = this.modifyEntries(this.purchaseOrderDetails.entries);
                 }
+
+                this.focusInVendorName();
             }
         });
-
-        this.focusInVendorName();
     }
 
     /**
