@@ -8,10 +8,9 @@
 =======
     <li class="clearfix main-group" [ngClass]="{'isGrp': grp.childStockGroups.length > 0,'grp_open': grp.isOpen}"
         *ngFor="let grp of Groups" style="padding: 0 !important;padding-left: 0 !important;">
-        <div class="item-group"
+        <div class="item-group d-flex justify-content-sm-between"
             [ngClass]="{'active': grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName) && !(activeStockUniqueName$ | async)}">
-            <a (click)="OpenGroup(grp, $event)" style="display: flex;align-items: center;flex: 1;color: black;"
-                class="d-flex">
+            <a (click)="OpenGroup(grp, $event)" class="d-flex align-items-center">
                 <a [routerLink]="[ 'group', grp.uniqueName, 'report' ]" class="text-black inventory-group-name">{{grp.name}}</a>
                 <i (click)="OpenGroup(grp, $event)" style="margin:0 15px;font-size: 9px" class="icon-arrow-down pr"
                     [ngClass]="{'open': grp.isOpen}"></i>

@@ -5759,7 +5759,7 @@ input[type="checkbox"][disabled] {
 .top-bar {
     padding-top: 15px !important;
     padding-bottom: 15px !important;
-    border-bottom:0px solid $white !important;
+    border-bottom:0px solid $white;
     /* padding-left: 240px; */
 }
 
@@ -8999,7 +8999,7 @@ p.remvBrnchName {
 .receipt-note-modal {
     width: 100% !important;
     top: 0;
-    max-width: 100%;
+    max-width: 100% !important;
 }
 
 .inventory-page .modal,
@@ -10538,6 +10538,9 @@ span#HW_badge_cont:nth-child(3) {
     }
     .modal-dialog.modal-xl{
         max-width: 1140px !important;
+    }
+    .receipt-note-modal {
+        max-width: 100% !important;
     }
 }
 @media(min-width:480px) and (max-width:667px) {
