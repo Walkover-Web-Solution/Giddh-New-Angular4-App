@@ -564,12 +564,12 @@
                                         <span class="download-invoice-ledger d-flex"
                                             *ngIf="transactions.attachedFileUniqueName"
                                             (click)="downloadAttachedFile(transactions.attachedFileUniqueName , $event)">
-                                            <i class="icon-download-circlepull-left"></i>
+                                            <i class="icon-download-circle pull-left"></i>
                                         </span>
                                         <span class="download-invoice-ledger d-flex"
                                             *ngIf="transactions.voucherGenerated"
                                             (click)="downloadInvoice(transactions.voucherNumber, transactions.voucherGeneratedType, $event)">
-                                            <i class="icon-download-circlepull-left"></i>
+                                            <i class="icon-download-circle pull-left"></i>
                                         </span>
                                     </span>
                                 </td>
@@ -704,7 +704,7 @@
                             </td>
 
                             <td class="col-xs-5 col-md-6 col-lg-6" data-title="Particular">
-                                <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center justify-content-between w-100">
 
                                     <div class="ellp">
                                         To
@@ -715,7 +715,7 @@
                                         style="position: unset;align-items: center"
                                         (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)"
                                         tooltip="Download file : {{txn.attachedFileName}}" [placement]="'right'">
-                                        <i class="icon-download-circlepull-left"
+                                        <i class="icon-download-circle pull-left"
                                             style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                                     </span>
                                     <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated"
@@ -723,7 +723,7 @@
                                         (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
                                         tooltip="Download {{txn.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{txn.voucherNumber}}"
                                         [placement]="'right'">
-                                        <i class="icon-download-circlepull-left"
+                                        <i class="icon-download-circle pull-left"
                                             style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                                     </span>
                                 </div>
@@ -972,7 +972,7 @@
 
                             <td class="col-xs-5 col-md-6 col-lg-6" data-title="Particular">
 
-                                <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center justify-content-between w-100">
                                     <div class="ellp">
                                         By
                                         {{ txn.inventory ? txn.particular.name + ' (' + txn.inventory.stock.name + ')' : txn.particular.name }}
@@ -982,7 +982,7 @@
                                         style="position: unset;align-items: center"
                                         (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)"
                                         tooltip="Download file : {{txn.attachedFileName}}" [placement]="'right'">
-                                        <i class="icon-download-circlepull-left"
+                                        <i class="icon-download-circle pull-left"
                                             style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                                     </span>
                                     <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated"
@@ -990,7 +990,7 @@
                                         (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
                                         tooltip="Download {{txn.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{txn.voucherNumber}}"
                                         [placement]="'right'">
-                                        <i class="icon-download-circlepull-left"
+                                        <i class="icon-download-circle pull-left"
                                             style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                                     </span>
                                 </div>

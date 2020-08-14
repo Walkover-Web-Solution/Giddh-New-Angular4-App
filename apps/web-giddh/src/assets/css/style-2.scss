@@ -894,6 +894,8 @@ ul.sub-list {
 
 .company-list .input-group {
     border-bottom: 1px solid #d2d2d2;
+    display: flex;
+    align-items: center;
 }
 
 .company-list .input-group .form-control {
@@ -906,10 +908,13 @@ ul.sub-list {
     background: no-repeat;
     border-radius: 0px;
     border: 0px;
-    font-size: 9px;
+    font-size: 14px;
     color: #333333;
-    border-left: 1px solid #d2d2d2;
+    border-left: 1px solid #d2d2d2 !important;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    height: 36px;
 }
 
 .bold {
@@ -2358,7 +2363,8 @@ fieldset[disabled] .btn-primary:hover {
 
 #companyList {
     background: $white;
-    padding-bottom: 4px;
+    padding-bottom: 0;
+    padding: 0;
 }
 
 #companyList li:not(.divider) {
@@ -8381,6 +8387,8 @@ span.red-text {
 .ledger-book .tooltip-inner {
     word-break: break-word !important;
     white-space: pre-line !important;
+    min-width: 200px;
+    font-size: 14px;
 }
 
 .selectCustomerName .scrollable-content>.item {
@@ -9466,6 +9474,9 @@ span#HW_badge_cont:nth-child(3){
     font-size: 14px;
     padding: 4px;
 }
+.open>.dropdown-menu {
+    display: block;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -10189,13 +10200,10 @@ span#HW_badge_cont:nth-child(3){
     .pagination>li>span {
         padding: 6px 6px;
     }
-    // header .hamburger_menu h4 {
-    //     white-space: nowrap;
-    //     overflow: hidden;
-    //     text-overflow: ellipsis;
-    //     min-height: 20px;
-    //     width: calc(100% - 30px);
-    // }
+    .pagination{
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
 }
 
 @media (max-width: 360px) {
