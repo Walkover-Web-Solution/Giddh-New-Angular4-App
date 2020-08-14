@@ -17,6 +17,9 @@
 
 .btn-link {
     padding-top: 0 !important;
+    &:hover{
+        text-decoration: none;
+    }
 }
 
 .stock-grp-list .active a,
