@@ -22,7 +22,7 @@ import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-s
 import { ToasterService } from '../../services/toaster.service';
 import { OnboardingFormRequest, CurrentPage } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
-import { VAT_SUPPORTED_COUNTRIES, RATE_FIELD_PRECISION, Subvoucher } from '../../app.constant';
+import { VAT_SUPPORTED_COUNTRIES, RATE_FIELD_PRECISION, SubVoucher } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, SalesEntryClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, AccountDetailsClass } from '../../models/api-models/Sales';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
@@ -2134,7 +2134,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             company: this.purchaseOrder.company,
             warehouse: this.purchaseOrder.warehouse,
             templateDetails: data.templateDetails,
-            subVoucher: (this.isRcmEntry) ? Subvoucher.ReverseCharge : ''
+            subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : ''
         };
 
         let updatedData = this.updateData(postRequestObject, data);
