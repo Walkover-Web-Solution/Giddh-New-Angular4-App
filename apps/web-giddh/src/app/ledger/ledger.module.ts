@@ -48,7 +48,6 @@ import { SettingsServiceModule } from '../settings/settings-service.module';
 import { LedgerColumnarReportTableComponent } from './components/ledger-columnar-report-table/ledger.columnar.report.table.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
-import { SearchService } from '../services/search.service';
 
 @NgModule({
     declarations: [
@@ -71,8 +70,7 @@ import { SearchService } from '../services/search.service';
         LedgerComponent, UpdateLedgerEntryPanelComponent
     ],
     entryComponents: [UpdateLedgerEntryPanelComponent, PaginationComponent],
-    providers: [
-    ],
+    providers: [],
     imports: [
         CommonModule,
         FormsModule,

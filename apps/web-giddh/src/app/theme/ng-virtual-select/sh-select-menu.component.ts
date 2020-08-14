@@ -81,7 +81,12 @@ export class ShSelectMenuComponent implements OnChanges {
         }
     }
 
-    public reachedEnd() {
+    /**
+     * Scroll to bottom handler
+     *
+     * @memberof ShSelectMenuComponent
+     */
+    public reachedEnd(): void {
         this.srollEnd.emit();
     }
 
