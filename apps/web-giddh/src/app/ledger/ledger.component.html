@@ -1390,18 +1390,16 @@
                         <h1>Closing Balance</h1>
                         <div class="d-flex" style="justify-content: space-between;flex-direction: column">
                             <h3 class="digit-blue" container="body">
-                                <button class="no-btn"
-                                    [tooltip]="(ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? lc.ledgerUnderStandingObj.balanceText.dr : lc.ledgerUnderStandingObj.balanceText.cr)"
-                                    triggers="click">{{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.closingBalance?.amount | giddhCurrency}}
-                                    {{ ledgerTxnBalance?.closingBalance?.amount > 0 ? (ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr') : '' }}</button>
+                                <span
+                                    [tooltip]="(ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? lc.ledgerUnderStandingObj.balanceText.dr : lc.ledgerUnderStandingObj.balanceText.cr)">{{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.closingBalance?.amount | giddhCurrency}}
+                                    {{ ledgerTxnBalance?.closingBalance?.amount > 0 ? (ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr') : '' }}</span>
                             </h3>
                             <h3 class="digit-blue" container="body" *ngIf="isLedgerAccountAllowsMultiCurrency">
-                                <button class="no-btn"
-                                    [tooltip]="(ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? lc.ledgerUnderStandingObj.balanceText.dr : lc.ledgerUnderStandingObj.balanceText.cr)"
-                                    triggers="click">
+                                <span
+                                    [tooltip]="(ledgerTxnBalance?.closingBalance?.type === 'DEBIT' ? lc.ledgerUnderStandingObj.balanceText.dr : lc.ledgerUnderStandingObj.balanceText.cr)">
                                     {{ ledgerTxnBalance?.convertedCurrencySymbol}}{{ledgerTxnBalance?.convertedClosingBalance?.amount | giddhCurrency}}
                                     {{ ledgerTxnBalance?.convertedClosingBalance?.amount > 0 ? (ledgerTxnBalance?.convertedClosingBalance?.type === 'DEBIT' ? 'Dr' : 'Cr') : '' }}
-                                </button>
+                                </span>
                             </h3>
                         </div>
                     </div>
