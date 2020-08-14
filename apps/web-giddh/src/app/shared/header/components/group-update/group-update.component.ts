@@ -514,10 +514,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {*} item
      * @memberof GroupUpdateComponent
      */
-    public isDebtorCreditorGroup(item: any): boolean {
+    public isDebtorCreditorGroup(itemUniqueName: any): boolean {
         let isTaxableGroup: boolean = false;
         this.groupWithParentLessDetailsList.forEach(element => {
-            if (item === element.uniqueName) {
+            if (itemUniqueName === element.uniqueName) {
                 isTaxableGroup = element.parentGroups.some(groupName => groupName.uniqueName === 'currentliabilities' || groupName.uniqueName === 'currentassets');
             }
         });
