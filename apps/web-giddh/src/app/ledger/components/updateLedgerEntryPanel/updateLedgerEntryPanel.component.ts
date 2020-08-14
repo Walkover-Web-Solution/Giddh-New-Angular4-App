@@ -1735,13 +1735,25 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.inventoryQuantityChanged(value);
     }
 
-    public handleScrollEnd() {
+    /**
+     * Scroll end handler
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public handleScrollEnd(): void {
         if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
             this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
         }
     }
 
-    public onSearchQueryChanged(query: string, page: number = 1) {
+    /**
+     * Search query change handler
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public onSearchQueryChanged(query: string, page: number = 1): void {
         this.searchResultsPaginationData.query = query;
         const currentLedgerCategory = this.activeAccount ? this.generalService.getAccountCategory(this.activeAccount, this.activeAccount.uniqueName) : '';
         // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
@@ -1755,7 +1767,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             accountUniqueName: accountUniqueName
         }
         this.searchService.searchAccount(requestObject).subscribe(data => {
-            console.log('Data received: ', data);
             if (data && data.body && data.body.results) {
                 const searchResults = data.body.results.map(result => {
                     return {
@@ -1778,6 +1789,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
     }
 
+    /**
+     * Resets the previous search result
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
     public resetPreviousSearchResults(): void {
         this.searchResults = [];
         this.searchResultsPaginationData = {

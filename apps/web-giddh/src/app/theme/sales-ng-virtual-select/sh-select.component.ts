@@ -461,16 +461,32 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
         }
     }
 
-    public reachedEnd() {
+    /**
+     * Scroll to bottom handler
+     *
+     * @memberof SalesShSelectComponent
+     */
+    public reachedEnd(): void {
         this.srollEnd.emit();
     }
 
+    /**
+     * Refreshes the list
+     *
+     * @memberof SalesShSelectComponent
+     */
     public refreshList(): void {
         if (this.menuEle && this.menuEle.virtualScrollElm) {
             this.menuEle.virtualScrollElm.refresh();
         }
     }
 
+    /**
+     * Input change handler
+     *
+     * @param {string} inputText Current input text
+     * @memberof SalesShSelectComponent
+     */
     public handleInputChange(inputText: string): void {
         if (this.enableDynamicSearch) {
             this.dynamicSearchQueryChanged.next(inputText);
@@ -479,6 +495,11 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
         }
     }
 
+    /**
+     * Subscribes to query change for dynamic search
+     *
+     * @memberof SalesShSelectComponent
+     */
     public subscribeToQueryChange(): void {
         if (this.enableDynamicSearch) {
             this.stopDynamicSearch$.next(true);
@@ -487,7 +508,6 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
             this.dynamicSearchQueryChanged = new Subject();
             this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
                 if (query && query.length > 1) {
-                    console.log('Sending the query: ', query);
                     this.dynamicSearchedQuery.emit(query);
                 }
             });

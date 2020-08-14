@@ -199,6 +199,12 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
     }
 
+    /**
+     * Input change handler
+     *
+     * @param {string} inputText Current input text
+     * @memberof ShSelectComponent
+     */
     public handleInputChange(inputText: string): void {
         if (this.enableDynamicSearch) {
             this.dynamicSearchQueryChanged.next(inputText);
@@ -446,6 +452,11 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         //
     }
 
+    /**
+     * Subscribes to query change for dynamic search
+     *
+     * @memberof ShSelectComponent
+     */
     public subscribeToQueryChange(): void {
         if (this.enableDynamicSearch) {
             this.stopDynamicSearch$.next(true);
@@ -454,7 +465,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             this.dynamicSearchQueryChanged = new Subject();
             this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
                 if (query && query.length > 1) {
-                    console.log('Sending the query: ', query);
                     this.dynamicSearchedQuery.emit(query);
                 }
             });
@@ -554,10 +564,21 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
     }
 
-    public reachedEnd() {
+    /**
+     * Scroll to bottom handler
+     *
+     * @memberof ShSelectComponent
+     */
+
+    public reachedEnd(): void {
         this.srollEnd.emit();
     }
 
+    /**
+     * Refreshes the list on new items
+     *
+     * @memberof ShSelectComponent
+     */
     public refreshList(): void {
         if (this.menuEle && this.menuEle.virtualScrollElm) {
             this.menuEle.virtualScrollElm.refresh();
