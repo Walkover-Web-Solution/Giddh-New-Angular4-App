@@ -1161,7 +1161,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                         this.invFormData = obj;
                         this.checkVoucherEntries();
-                        this.getInvoiceListsForCreditNote();
+                        if (this.isCreditNote) {
+                            this.getInvoiceListsForCreditNote();
+                        }
                     } else {
                         this.invoiceDataFound = false;
                     }
@@ -4163,7 +4165,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         voucherClassConversion.accountDetails.billingDetails = new GstDetailsClass();
         voucherClassConversion.accountDetails.billingDetails.panNumber = result.account.billingDetails.panNumber;
-        voucherClassConversion.accountDetails.billingDetails.address = result.account.billingDetails.address;
+        voucherClassConversion.accountDetails.billingDetails.address = cloneDeep(result.account.billingDetails.address);
         voucherClassConversion.accountDetails.billingDetails.gstNumber = result.account.billingDetails.gstNumber;
         voucherClassConversion.accountDetails.billingDetails.state.code = this.getNewStateCode(result.account.billingDetails.stateCode);
         voucherClassConversion.accountDetails.billingDetails.state.name = result.account.billingDetails.stateName;
@@ -4171,7 +4173,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
         voucherClassConversion.accountDetails.shippingDetails.panNumber = result.account.shippingDetails.panNumber;
-        voucherClassConversion.accountDetails.shippingDetails.address = result.account.shippingDetails.address;
+        voucherClassConversion.accountDetails.shippingDetails.address = cloneDeep(result.account.shippingDetails.address);
         voucherClassConversion.accountDetails.shippingDetails.gstNumber = result.account.shippingDetails.gstNumber;
         voucherClassConversion.accountDetails.shippingDetails.state.code = this.getNewStateCode(result.account.shippingDetails.stateCode);
         voucherClassConversion.accountDetails.shippingDetails.state.name = result.account.shippingDetails.stateName;
