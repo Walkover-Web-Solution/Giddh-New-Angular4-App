@@ -92,7 +92,12 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
         return viewWidth;
     }
 
-    handleScroll() {
+    /**
+     * Scroll handler
+     *
+     * @memberof VirtualScrollComponent
+     */
+    handleScroll(): void {
         this.refresh();
         if (this.element.nativeElement && this.isPaginationEnabled) {
             // Scrolled to bottom

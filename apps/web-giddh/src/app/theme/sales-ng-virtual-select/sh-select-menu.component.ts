@@ -59,7 +59,12 @@ export class SalesShSelectMenuComponent implements OnChanges {
         this.noToggleClick.emit(row);
     }
 
-    public reachedEnd() {
+    /**
+     * Scroll to bottom handler
+     *
+     * @memberof SalesShSelectMenuComponent
+     */
+    public reachedEnd(): void {
         this.srollEnd.emit();
     }
 
