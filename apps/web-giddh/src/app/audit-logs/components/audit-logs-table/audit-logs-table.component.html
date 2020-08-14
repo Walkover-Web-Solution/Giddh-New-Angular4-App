@@ -6,11 +6,11 @@
         <ng-container *ngIf="log?.details?.voucherType && log?.operationType!=='EDIT'"> <span>  -{{log?.details?.voucherType}}</span></ng-container>
 
         <!-- For account start header -->
-        <ng-container *ngIf="log?.operationType==='EDIT' && log?.old?.details?.name !== log?.details?.name; else VoucherEntityOld ">
+        <ng-container *ngIf="log?.operationType==='EDIT' && (log?.old?.details?.name !== log?.details?.name || log?.old?.details?.uniqueName !== log?.details?.uniqueName); else VoucherEntityOld ">
             <span *ngIf="log?.old && log?.old?.details"> - {{log?.old?.details?.name}}({{log?.old?.details?.uniqueName}})</span>
         </ng-container>
         <ng-template #VoucherEntityOld>
-            <span *ngIf="log?.old?.details?.voucherAccount && (log?.old?.details?.voucherAccount?.name !== log?.details?.voucherAccount?.name)"> - {{log?.old?.details?.voucherAccount?.name}}({{log?.old?.details?.voucherAccount?.uniqueName}})</span>
+            <span *ngIf="log?.old?.details?.voucherAccount && (log?.old?.details?.voucherAccount?.name !== log?.details?.voucherAccount?.name || log?.old?.details?.voucherAccount?.uniqueName !== log?.details?.voucherAccount?.uniqueName)"> - {{log?.old?.details?.voucherAccount?.name}}({{log?.old?.details?.voucherAccount?.uniqueName}})</span>
         </ng-template>
         <ng-container *ngIf="log?.details?.type && log.operationType==='MERGE'">
             <span *ngIf="log?.details?.type==='TARGET' && log?.details?.target"> - {{log?.details?.target?.name}}({{log?.details?.target.uniqueName}})</span>
@@ -27,7 +27,7 @@
             <span *ngIf="log?.details?.entity"> - {{log?.details?.name}}({{log?.details?.uniqueName}})</span>
         </ng-container>
         <!-- For Stock end header -->
-        <span class="pd-2" *ngIf="log?.operationType==='EDIT' && ((auditLogsRequest$ | async).entity !=='entry')  && ((log?.old?.details?.name !== log?.details?.name) || (log?.old?.details?.voucherAccount?.name !== log?.details?.voucherAccount?.name))"> To </span>
+        <span class="pd-2" *ngIf="log?.operationType==='EDIT' && ((auditLogsRequest$ | async).entity !=='entry')  && ((log?.old?.details?.name !== log?.details?.name || log?.old?.details?.uniqueName !== log?.details?.uniqueName) || (log?.old?.details?.voucherAccount?.name !== log?.details?.voucherAccount?.name || log?.old?.details?.voucherAccount?.uniqueName !== log?.details?.voucherAccount?.uniqueName))"> To </span>
 
         <ng-container *ngIf="log?.details?.name && log?.operationType!='MOVE' && log?.operationType != 'MERGE' && log?.details?.uniqueName != null; else VoucherEntityNew"> <span> -{{log?.details?.name}}({{log?.details?.uniqueName}})</span></ng-container>
         <ng-template #VoucherEntityNew>
