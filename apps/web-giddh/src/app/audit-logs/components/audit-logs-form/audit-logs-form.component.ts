@@ -145,7 +145,6 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
             }
         });
         this.auditLogFormVM.reset();
-        this.focusOnEntity();
         // /** Universal date observer */
         // this.universalDate$.subscribe(dateObj => {
         //     if (dateObj) {
@@ -271,6 +270,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                         this.auditLogFormVM.entities.push(element.entity);
                     });
                 }
+                this.focusOnEntity();
             }
         });
     }
