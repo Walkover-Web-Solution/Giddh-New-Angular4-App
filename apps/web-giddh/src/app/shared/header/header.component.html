@@ -39,45 +39,117 @@
                             </div>
                         </a>
 
-                        <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
+                            <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
 
-                            <li>
-                                <a href="javascript:void(0)"
-                                    (click)="analyzeMenus($event, '/pages/settings/taxes', {tab: 'taxes', tabIndex: 0})">Settings</a>
-                            </li>
-                            <li *ngIf="!isMobileSite">
-                                <!-- [routerLink]="['/settings']" [queryParams]="" -->
-                                <a href="javascript:void(0)"
-                                    (click)="analyzeMenus($event, '/pages/settings/permission', { tab: 'permission', tabIndex: 5 })">Manage
-                                    Users (Permission)</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"
-                                    (click)="analyzeMenus($event, '/pages/company-import-export')">Back up
-                                    Data</a>
-                            </li>
-                            <!-- #dropdown="bs-dropdown" -->
-                            <!--  -->
-                            <li dropdown class="pos-rel" #subdropdown="bs-dropdown" [autoClose]="false"
-                                [attachOutsideOnClick]="true" (clickOutside)="subdropdown.isOpen = false"
-                                (onShown)="switchCompanyMenuShown()">
-                                <a href="javascript:void(0)" class="clearfix" dropdownToggle>
-                                    Switch company
-                                    <span class="glyphicon glyphicon-menu-right"></span>
-                                </a>
+                                <li>
+                                    <a href="javascript:void(0)"
+                                        (click)="analyzeMenus($event, '/pages/settings/taxes', {tab: 'taxes', tabIndex: 0})">Settings</a>
+                                </li>
+                                <li *ngIf="!isMobileSite">
+                                    <!-- [routerLink]="['/settings']" [queryParams]="" -->
+                                    <a href="javascript:void(0)"
+                                        (click)="analyzeMenus($event, '/pages/settings/permission', { tab: 'permission', tabIndex: 5 })">Manage
+                                        Users (Permission)</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)"
+                                        (click)="analyzeMenus($event, '/pages/company-import-export')">Back up
+                                        Data</a>
+                                </li>
+                                <!-- #dropdown="bs-dropdown" -->
+                                <!--  -->
+                                <li dropdown class="pos-rel" #subdropdown="bs-dropdown" [autoClose]="false"
+                                    [attachOutsideOnClick]="true" (clickOutside)="subdropdown.isOpen = false"
+                                    (onShown)="switchCompanyMenuShown()">
+                                    <a href="javascript:void(0)" class="clearfix" dropdownToggle>
+                                        Switch company
+                                        <span class="icon-arrow-down"></span>
+                                    </a>
 
-                                <ul id="companyList" class="company-list dropdown-menu sub_menu_nav" dropdown>
+                                    <ul id="companyList" class="company-list dropdown-menu sub_menu_nav" dropdown>
 
-                                    <div class="input-group" container="body">
+                                        <div class="input-group" container="body">
 
-                                        <input type="text" class="form-control" placeholder="Search Company here"
-                                            [(ngModel)]="searchCmp" #searchCmpTextBox name="searchCompany"
-                                            (ngModelChange)="filterCompanyList($event)" autocomplete="off" />
+                                            <input type="text" class="form-control" placeholder="Search Company here"
+                                                [(ngModel)]="searchCmp" #searchCmpTextBox name="searchCompany"
+                                                (ngModelChange)="filterCompanyList($event)" autocomplete="off" />
 
-                                        <span tooltip="Refresh" class="input-group-addon" id=""
-                                            (click)="refreshCompanies($event)">
-                                            <i class="glyphicon glyphicon-refresh cp"
-                                                [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
+                                            <span tooltip="Refresh" class="input-group-addon" id=""
+                                                (click)="refreshCompanies($event)">
+                                                <i class="icon-refrsh  cp"
+                                                    [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
+                                            </span>
+                                        </div>
+
+                                        <li style="padding:0px;">
+
+
+
+                                            <perfect-scrollbar class="" [scrollIndicators]="true">
+                                                <ul class="sub-list"
+                                                    *ngIf="companyListForFilter && companyListForFilter.length">
+
+                                                    <li class="cmp posrelative headerTooltip"
+                                                        *ngFor="let cmp of companyListForFilter; let i = index"
+                                                        [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
+                                                        (keydown.enter)="changeCompany(cmp.uniqueName)"
+                                                        (click)="changeCompany(cmp.uniqueName)">
+
+                                                        <a vr-item href="javascript:void(0);" class="ellp"
+                                                            (mouseenter)="mouseEnteredOnCompanyName(i)">
+
+                                                            <ng-template #CompanyBranchname> {{ cmp.name }}
+                                                                <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
+                                                            </ng-template>
+
+                                                            <span container="body" [tooltip]="CompanyBranchname"
+                                                                placement="top">
+                                                                {{ cmp.name }} <span
+                                                                    *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
+                                                            </span>
+
+                                                            <img class="pull-right permission_icon"
+                                                                *ngIf="hoveredIndx !== i && cmp.createdBy.email !== (user$ | async)?.email"
+                                                                src="assets/images/users.svg">
+
+                                                            <img class="pull-right permission_icon"
+                                                                *ngIf="hoveredIndx === i && cmp.createdBy.email !== (user$ | async)?.email"
+                                                                src="assets/images/users-white.svg">
+
+                                                        </a>
+                                                        <!-- commented by meghna
+            <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="icon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
+            -->
+                                                    </li>
+
+                                                </ul>
+                                            </perfect-scrollbar>
+
+
+                                        </li>
+
+                                        <li>
+                                            <button href="javascript:void(0)" (click)="createNewCompany()"
+                                                class="btn-link pd0 btn">Create
+                                                Company
+                                            </button>
+                                        </li>
+
+                                    </ul>
+                                </li>
+
+                                <li role="separator" class="divider" style="width:100%"></li>
+
+                                <li class="mrB1" *ngIf="!isMobileSite">
+                                    <a [tooltip]="userEmail" placement="top" href="javascript:void(0)"
+                                        (click)="analyzeMenus($event, '/pages/user-details', { tab: 'profile', tabIndex: 1 })"
+                                        class="oh">
+                                        <span class="user_circle pull-left" *ngIf="!userAvatar">
+                                            <span>{{userName | uppercase}}</span>
+                                        </span>
+                                        <span class="user_circle pull-left" *ngIf="userAvatar"
+                                            [style.background]="'transparent'">
+                                            <img src="{{userAvatar}}" alt="" />
                                         </span>
                                     </div>
 
@@ -889,7 +961,7 @@
             </li>
 
             <li>
-                <button href="javascript:void(0)" (click)="createNewCompany()" class="btn-link pd0">Create
+                <button href="javascript:void(0)" (click)="createNewCompany()" class="btn-link btn pd0">Create
                     Company
                 </button>
             </li>
