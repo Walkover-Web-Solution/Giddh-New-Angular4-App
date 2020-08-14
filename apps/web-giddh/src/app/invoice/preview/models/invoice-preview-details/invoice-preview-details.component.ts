@@ -224,14 +224,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.invoiceDetailViewHeight = this.invoiceDetailView.nativeElement.offsetHeight;
         this.invoiceImageSectionViewHeight = this.invoiceDetailWrapperHeight - this.invoiceDetailViewHeight - 90;
     }
-    public toggleOrderHistoryAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.orderHistoryAsideState = this.orderHistoryAsideState === 'out' ? 'in' : 'out';
+    // public toggleOrderHistoryAsidePane(event?): void {
+    //     if (event) {
+    //         event.preventDefault();
+    //     }
+    //     this.orderHistoryAsideState = this.orderHistoryAsideState === 'out' ? 'in' : 'out';
 
-        this.toggleBodyClass();
-    }
+    //     this.toggleBodyClass();
+    // }
     // public toggleBodyClass() {
     //     if (this.orderHistoryAsideState === 'in') {
     //         document.querySelector('body').classList.add('fixed');
@@ -273,12 +273,12 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         }
         this.showEditMode = false;
     }
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template,
-            Object.assign({}, { class: 'preview-lightbox modal-lg' })
-        );
-        $('.modal-backdrop').addClass('preview-lightbox-overlay');
-    }
+    // openModal(template: TemplateRef<any>) {
+    //     this.modalRef = this.modalService.show(template,
+    //         Object.assign({}, { class: 'preview-lightbox modal-lg' })
+    //     );
+    //     $('.modal-backdrop').addClass('preview-lightbox-overlay');
+    // }
 
     public getVoucherVersions() {
         let request = new ProformaGetAllVersionRequest();
