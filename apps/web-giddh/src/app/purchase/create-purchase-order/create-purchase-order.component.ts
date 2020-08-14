@@ -875,6 +875,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will update the state list
+     *
+     * @private
+     * @param {StateCode[]} stateList
+     * @returns {IOption[]}
+     * @memberof CreatePurchaseOrderComponent
+     */
     private modifyStateResp(stateList: StateCode[]): IOption[] {
         let stateListRet: IOption[] = [];
         stateList.forEach(stateR => {
@@ -894,12 +902,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), take(1)).subscribe((warehouses: any) => {
             if (warehouses) {
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
-                this.warehouses = warehouseData.formattedWarehouses;
-                let defaultWarehouseUniqueName = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
-                let defaultWarehouseName = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.name : '';
-                this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
-                if (warehouseData.defaultWarehouse) {
-                    this.autoFillWarehouseAddress(warehouseData.defaultWarehouse);
+                let defaultWarehouseUniqueName;
+                let defaultWarehouseName;
+                if (warehouseData) {
+                    this.warehouses = warehouseData.formattedWarehouses;
+                    defaultWarehouseUniqueName = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+                    defaultWarehouseName = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.name : '';
+                    this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+                    if (warehouseData.defaultWarehouse) {
+                        this.autoFillWarehouseAddress(warehouseData.defaultWarehouse);
+                    }
                 }
 
                 if (warehouse) {
@@ -1297,16 +1309,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             }, 200);
             return txn;
         }
-    }
-
-    public onNoResultsClicked(index: any): void {
-        // if (_.isUndefined(index)) {
-        //     this.getAllFlattenAc();
-        // } else {
-        //     this.innerEntryIdx = index;
-        // }
-        // this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
-        // this.toggleBodyClass();
     }
 
     /**
