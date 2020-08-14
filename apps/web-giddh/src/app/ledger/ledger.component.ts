@@ -1242,8 +1242,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this._loaderService.show();
     }
 
-    public handleScrollEnd() {
-        console.log('Reached end');
+    /**
+     * Scroll end handler
+     *
+     * @returns null
+     * @memberof LedgerComponent
+     */
+    public handleScrollEnd(): void {
         if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
             this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
         }
@@ -1452,7 +1457,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     }
 
-    public onSearchQueryChanged(query: string, page: number = 1) {
+    /**
+     * Search query change handler
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @memberof LedgerComponent
+     */
+    public onSearchQueryChanged(query: string, page: number = 1): void {
         this.searchResultsPaginationData.query = query;
         const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount.uniqueName) : '';
         // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
@@ -1488,6 +1500,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Resets the previous search result
+     *
+     * @memberof LedgerComponent
+     */
     public resetPreviousSearchResults(): void {
         this.searchResults = [];
         this.searchResultsPaginationData = {

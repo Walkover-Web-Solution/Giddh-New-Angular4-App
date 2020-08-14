@@ -2673,6 +2673,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
+    /**
+     * Calculates the entry value
+     *
+     * @param {*} selectedAcc Currently selected account
+     * @param {SalesTransactionItemClass} transaction Current transaction of entry
+     * @param {SalesEntryClass} entry Entry
+     * @returns {SalesTransactionItemClass} Returns the complete transaction instance
+     * @memberof ProformaInvoiceComponent
+     */
+
     public calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass): SalesTransactionItemClass {
         let o = _.cloneDeep(selectedAcc.additional);
 
@@ -5195,12 +5205,25 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
+    /**
+     * Scroll to bottom handler
+     *
+     * @param {string} searchType Search type
+     * @memberof ProformaInvoiceComponent
+     */
     public handleScrollEnd(searchType: string): void {
         if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
             this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1, searchType);
         }
     }
 
+    /**
+     * Search query change handler
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @memberof ProformaInvoiceComponent
+     */
     public onSearchQueryChanged(query: string, page: number = 1, searchType: string) {
         const requestObject = this.getSearchRequestObject(query, page, searchType);
         this.searchAccount(requestObject).subscribe(data => {
@@ -5217,6 +5240,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         });
     }
 
+    /**
+     * Prepares the search list when the data is received
+     *
+     * @param {*} results Search results
+     * @param {number} [currentPage=1] Current page requested
+     * @param {string} searchType Search type of the searched item
+     * @memberof ProformaInvoiceComponent
+     */
     public prepareSearchLists(results: any, currentPage: number = 1, searchType: string): void {
         const searchResults = results.map(result => {
             return {
@@ -5253,6 +5284,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
+    /**
+     * Returns the search request object
+     *
+     * @param {string} query Query to be searched
+     * @param {number} [page=1] Page for which search is to be made
+     * @param {string} searchType Type of search to be performed
+     * @returns {*} Search request object
+     * @memberof ProformaInvoiceComponent
+     */
     public getSearchRequestObject(query: string, page: number = 1, searchType: string): any {
         let withStocks: boolean;
         let group: string;
@@ -5280,10 +5320,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return requestObject;
     }
 
+    /**
+     * Searches account
+     *
+     * @param {*} requestObject Request object
+     * @returns {Observable<any>} Observable to carry out further operation
+     * @memberof ProformaInvoiceComponent
+     */
     public searchAccount(requestObject: any): Observable<any> {
         return this.searchService.searchAccount(requestObject);
     }
 
+    /**
+     * Resets the previous search result
+     *
+     * @memberof ProformaInvoiceComponent
+     */
     public resetPreviousSearchResults(): void {
         this.searchResults = [];
         this.searchResultsPaginationData = {

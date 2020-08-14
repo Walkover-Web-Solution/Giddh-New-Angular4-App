@@ -58,7 +58,7 @@
                                                     <p>{{ item.name }}</p>
                                                     <p>
                                                         <span *ngIf="item?.additional?.skuCode" class="stockSku"><label>SKU: </label>{{item?.additional?.skuCode}}</span>
-                                                        <span [class.rateStock]="item?.additional?.skuCode"><label>Rate:</label> </span>{{ item?.rate }}
+                                                        <span [class.rate-stock]="item?.additional?.skuCode"><label>Rate:</label> </span>{{ item?.rate }}
                                                     </p>
                                                 </div>
                                             </div>
