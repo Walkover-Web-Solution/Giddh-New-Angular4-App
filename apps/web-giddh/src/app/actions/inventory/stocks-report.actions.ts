@@ -5,7 +5,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { GroupStockReportRequest, GroupStockReportResponse, StockReportRequest, StockReportResponse } from '../../models/api-models/Inventory';
 import { STOCKS_REPORT_ACTIONS } from './inventory.const';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -17,8 +17,9 @@ import { CustomActions } from '../../store/customActions';
 @Injectable()
 export class StockReportActions {
 
-    @Effect() private GetStocksReport$: Observable<Action> = this.action$
-        .ofType(STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT).pipe(
+    @Effect() public GetStocksReport$: Observable<Action> = this.action$
+        .pipe(
+            ofType(STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT),
             switchMap((action: CustomActions) => {
                 // let activeGroup: StockGroupResponse = null;
                 // let sub = this.store.select(a => a.inventory.activeGroup);
@@ -49,8 +50,9 @@ export class StockReportActions {
 
             }));
 
-    @Effect() private GetGroupStocksReport$: Observable<Action> = this.action$
-        .ofType(STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT).pipe(
+    @Effect() public GetGroupStocksReport$: Observable<Action> = this.action$
+        .pipe(
+            ofType(STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT),
             switchMap((action: CustomActions) => {
                 return this._inventoryService.GetGroupStocksReport_V3(action.payload).pipe(
                     map((response) => {

@@ -20,7 +20,7 @@ import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
 import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
-import { BsDatepickerDirective, PopoverDirective } from 'ngx-bootstrap';
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
@@ -57,6 +57,7 @@ import { FileTransfer } from "@ionic-native/file-transfer/ngx";
 import { FileChooser } from "@ionic-native/file-chooser/ngx";
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
+import {PopoverDirective} from "ngx-bootstrap/popover";
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [

@@ -1,5 +1,4 @@
-import { ILedgerAdvanceSearchRequest } from './Ledger';
-import { IClosingBalance, IForwardBalance, ILedger, ILedgerTransactionItem, ITotalItem, ITransactionItem, ITransactions, IVoucherItem } from '../interfaces/ledger.interface';
+import { IForwardBalance, ILedger, ILedgerTransactionItem, ITotalItem, ITransactionItem, ITransactions, IVoucherItem } from '../interfaces/ledger.interface';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from './Sales';
 import { PettyCashEntryStatus } from './Expences';

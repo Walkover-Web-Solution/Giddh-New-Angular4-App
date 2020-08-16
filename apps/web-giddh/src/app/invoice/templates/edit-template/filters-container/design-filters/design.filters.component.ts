@@ -1,7 +1,6 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as _ from '../../../../../lodash-optimized';
-import { Font } from 'ngx-font-picker/dist';
 import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
@@ -15,6 +14,7 @@ import { InvoiceTemplatesService } from '../../../../../services/invoice.templat
 import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { IOption } from '../../../../../theme/ng-virtual-select/sh-options.interface';
 import { ActivatedRoute } from '@angular/router';
+import {Font} from "ngx-font-picker";
 
 export class TemplateDesignUISectionVisibility {
     public templates: boolean = false;
@@ -439,7 +439,7 @@ export class DesignFiltersContainerComponent implements OnInit {
 
             if (this.customTemplate.fontSize) {
                 this.presetFontsSize.map(fontSize => {
-                    if (fontSize.value == this.customTemplate.fontSize) {
+                    if (fontSize.value === this.customTemplate.fontSize) {
                         this.selectedFontSize = fontSize.label;
                     }
                 });

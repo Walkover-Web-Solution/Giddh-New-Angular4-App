@@ -7,7 +7,7 @@ import { AccountService } from '../../services/account.service';
  * Created by ad on 04-07-2017.
  */
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -26,7 +26,8 @@ import { DaybookQueryRequest } from '../../models/api-models/DaybookRequest';
 export class LedgerActions {
     @Effect()
     public GetTransactions$: Observable<Action> = this.action$
-        .ofType(LEDGER.GET_TRANSACTION).pipe(
+        .pipe(
+            ofType(LEDGER.GET_TRANSACTION),
             switchMap((action: CustomActions) => {
                 let req: TransactionsRequest = action.payload as TransactionsRequest;
                 return this._ledgerService.GetLedgerTranscations(req);
@@ -40,7 +41,8 @@ export class LedgerActions {
 
     @Effect()
     public GetAccountDetails$: Observable<Action> = this.action$
-        .ofType(LEDGER.GET_LEDGER_ACCOUNT).pipe(
+        .pipe(
+            ofType(LEDGER.GET_LEDGER_ACCOUNT),
             switchMap((action: CustomActions) => this._accountService.GetAccountDetailsV2(action.payload)),
             map(res => this.validateResponse<AccountResponseV2, string>(res, {
                 type: LEDGER.GET_LEDGER_ACCOUNT_RESPONSE,
@@ -52,7 +54,8 @@ export class LedgerActions {
 
     @Effect()
     public DownloadInvoiceFile$: Observable<Action> = this.action$
-        .ofType(LEDGER.DOWNLOAD_LEDGER_INVOICE).pipe(
+        .pipe(
+            ofType(LEDGER.DOWNLOAD_LEDGER_INVOICE),
             switchMap((action: CustomActions) => this._ledgerService.DownloadInvoice(action.payload.body, action.payload.accountUniqueName)),
             map(res => this.validateResponse<string, DownloadLedgerRequest>(res, {
                 type: LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE,
@@ -64,7 +67,8 @@ export class LedgerActions {
 
     @Effect()
     public GetDiscountAccounts$: Observable<Action> = this.action$
-        .ofType(LEDGER.GET_DISCOUNT_ACCOUNTS_LIST).pipe(
+        .pipe(
+            ofType(LEDGER.GET_DISCOUNT_ACCOUNTS_LIST),
             switchMap((action: CustomActions) => this._groupService.GetFlattenGroupsAccounts('discount')),
             map(res => this.validateResponse<FlattenGroupsAccountsResponse, string>(res, {
                 type: LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE,
@@ -76,7 +80,8 @@ export class LedgerActions {
 
     @Effect()
     public CreateBlankLedger$: Observable<Action> = this.action$
-        .ofType(LEDGER.CREATE_BLANK_LEDGER_REQUEST).pipe(
+        .pipe(
+            ofType(LEDGER.CREATE_BLANK_LEDGER_REQUEST),
             switchMap((action: CustomActions) => this._ledgerService.CreateLedger(action.payload.model, action.payload.accountUniqueName)),
             map(res => this.validateResponse<LedgerResponse[], BlankLedgerVM>(res, {
                 type: LEDGER.CREATE_BLANK_LEDGER_RESPONSE,
@@ -88,13 +93,15 @@ export class LedgerActions {
 
     @Effect()
     public DeleteTrxEntry$: Observable<Action> = this.action$
-        .ofType(LEDGER.DELETE_TRX_ENTRY).pipe(
+        .pipe(
+            ofType(LEDGER.DELETE_TRX_ENTRY),
             switchMap((action: CustomActions) => this._ledgerService.DeleteLedgerTransaction(action.payload.accountUniqueName, action.payload.entryUniqueName)),
             map(res => this.deleteTrxEntryResponse(res)));
 
     @Effect()
     public DeleteTrxEntryResponse$: Observable<Action> = this.action$
-        .ofType(LEDGER.DELETE_TRX_ENTRY_RESPONSE).pipe(
+        .pipe(
+            ofType(LEDGER.DELETE_TRX_ENTRY_RESPONSE),
             map((action: CustomActions) => {
                 let res = action.payload as BaseResponse<string, string>;
                 if (res.status === 'success') {
@@ -108,7 +115,8 @@ export class LedgerActions {
             }));
     @Effect()
     public shareAccount$: Observable<Action> = this.action$
-        .ofType(LEDGER.LEDGER_SHARE_ACCOUNT).pipe(
+        .pipe(
+            ofType(LEDGER.LEDGER_SHARE_ACCOUNT),
             switchMap((action: CustomActions) =>
                 this._accountService.AccountShare(
                     action.payload.body,
@@ -120,7 +128,8 @@ export class LedgerActions {
             }));
     @Effect()
     public shareAccountResponse$: Observable<Action> = this.action$
-        .ofType(LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE).pipe(
+        .pipe(
+            ofType(LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -136,7 +145,8 @@ export class LedgerActions {
 
     @Effect()
     public unShareAccount$: Observable<Action> = this.action$
-        .ofType(LEDGER.LEDGER_UNSHARE_ACCOUNT).pipe(
+        .pipe(
+            ofType(LEDGER.LEDGER_UNSHARE_ACCOUNT),
             switchMap((action: CustomActions) =>
                 this._accountService.AccountUnshare(
                     action.payload.user,
@@ -149,7 +159,8 @@ export class LedgerActions {
 
     @Effect()
     public unShareAccountResponse$: Observable<Action> = this.action$
-        .ofType(LEDGER.LEDGER_UNSHARE_ACCOUNT_RESPONSE).pipe(
+        .pipe(
+            ofType(LEDGER.LEDGER_UNSHARE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
                 let data: BaseResponse<string, string> = action.payload;
                 if (data.status === 'error') {
@@ -165,14 +176,16 @@ export class LedgerActions {
 
     @Effect()
     public sharedAccount$: Observable<Action> = this.action$
-        .ofType(LEDGER.LEDGER_SHARED_ACCOUNT_WITH).pipe(
+        .pipe(
+            ofType(LEDGER.LEDGER_SHARED_ACCOUNT_WITH),
             switchMap((action: CustomActions) => this._accountService.AccountShareWith(action.payload)),
             map(response => {
                 return this.sharedAccountWithResponse(response);
             }));
     @Effect()
     public sharedAccountResponse$: Observable<Action> = this.action$
-        .ofType(LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE).pipe(
+        .pipe(
+            ofType(LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -184,7 +197,8 @@ export class LedgerActions {
 
     @Effect()
     public updateTxnEntry$: Observable<Action> = this.action$
-        .ofType(LEDGER.UPDATE_TXN_ENTRY).pipe(
+        .pipe(
+            ofType(LEDGER.UPDATE_TXN_ENTRY),
             switchMap((action: CustomActions) => this._ledgerService.UpdateLedgerTransactions(action.payload.model,
                 action.payload.accountUniqueName, action.payload.entryUniqueName)),
             map(resp => {
@@ -193,7 +207,8 @@ export class LedgerActions {
 
     @Effect()
     public updateTxnEntryResponse$: Observable<Action> = this.action$
-        .ofType(LEDGER.UPDATE_TXN_ENTRY_RESPONSE).pipe(
+        .pipe(
+            ofType(LEDGER.UPDATE_TXN_ENTRY_RESPONSE),
             map((action: CustomActions) => {
                 let response: BaseResponse<LedgerResponse, LedgerUpdateRequest> = action.payload;
                 if (response.status === 'error') {
@@ -224,7 +239,8 @@ export class LedgerActions {
 
     @Effect()
     public CreateQuickAccountV2$: Observable<Action> = this.action$
-        .ofType(LEDGER.CREATE_QUICK_ACCOUNT).pipe(
+        .pipe(
+            ofType(LEDGER.CREATE_QUICK_ACCOUNT),
             switchMap((action: CustomActions) => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName)),
             map(response => {
                 return this.createQuickAccountResponseV2(response);
@@ -232,7 +248,8 @@ export class LedgerActions {
 
     @Effect()
     public CreateQuickAccountResponseV2$: Observable<Action> = this.action$
-        .ofType(LEDGER.CREATE_QUICK_ACCOUNT_RESPONSE).pipe(
+        .pipe(
+            ofType(LEDGER.CREATE_QUICK_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.clearAllToaster();
@@ -254,7 +271,8 @@ export class LedgerActions {
 
     @Effect()
     public AdvanceSearch$: Observable<Action> = this.action$
-        .ofType(LEDGER.ADVANCE_SEARCH).pipe(
+        .pipe(
+            ofType(LEDGER.ADVANCE_SEARCH),
             switchMap((action: CustomActions) => this._ledgerService.AdvanceSearch(action.payload.model, action.payload.accountUniqueName, action.payload.from,
                 action.payload.to, '', action.payload.page, action.payload.count, action.payload.q)),
             map(response => {
@@ -263,7 +281,8 @@ export class LedgerActions {
 
     @Effect()
     public AdvanceSearchResponse$: Observable<Action> = this.action$
-        .ofType(LEDGER.ADVANCE_SEARCH_RESPONSE).pipe(
+        .pipe(
+            ofType(LEDGER.ADVANCE_SEARCH_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.clearAllToaster();
@@ -276,7 +295,8 @@ export class LedgerActions {
 
     @Effect()
     public generateUpdatedLedgerInvoice$: Observable<CustomActions> = this.action$
-        .ofType(LEDGER.GENERATE_UPDATED_LEDGER_INVOICE).pipe(
+        .pipe(
+            ofType(LEDGER.GENERATE_UPDATED_LEDGER_INVOICE),
             switchMap((action: CustomActions) => this._invoiceServices.GenerateBulkInvoice({ combined: false }, action.payload)),
             map(response => {
                 if (response.status === 'success') {
@@ -295,7 +315,8 @@ export class LedgerActions {
 
     @Effect()
     public getLedgerTrxDetails$: Observable<CustomActions> = this.action$
-        .ofType(LEDGER.GET_LEDGER_TRX_DETAILS).pipe(
+        .pipe(
+            ofType(LEDGER.GET_LEDGER_TRX_DETAILS),
             switchMap((action: CustomActions) => this._ledgerService.GetLedgerTransactionDetails(action.payload.accountUniqueName, action.payload.entryName)),
             map(response => {
                 return this.validateResponse(response, {
@@ -309,7 +330,8 @@ export class LedgerActions {
 
     @Effect()
     public GetReconciliation$: Observable<Action> = this.action$
-        .ofType(LEDGER.GET_RECONCILIATION).pipe(
+        .pipe(
+            ofType(LEDGER.GET_RECONCILIATION),
             switchMap((action: CustomActions) => {
                 let req: TransactionsRequest = action.payload as TransactionsRequest;
                 return this._ledgerService.GetReconciliation(req, req.accountUniqueName);
@@ -327,7 +349,8 @@ export class LedgerActions {
 
     @Effect()
     public ExportGroupLedger$: Observable<Action> = this.action$
-        .ofType(LEDGER.GROUP_EXPORT_LEDGER).pipe(
+        .pipe(
+            ofType(LEDGER.GROUP_EXPORT_LEDGER),
             switchMap((action: CustomActions) => {
                 return this._ledgerService.GroupExportLedger(action.payload.groupUniqueName, action.payload.queryRequest).pipe(
                     map((res) => {
@@ -344,13 +367,15 @@ export class LedgerActions {
 
     @Effect()
     public DeleteMultipleLedgerEntries$: Observable<Action> = this.action$
-        .ofType(LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES).pipe(
+        .pipe(
+            ofType(LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES),
             switchMap((action: CustomActions) => this._ledgerService.DeleteMultipleLedgerTransaction(action.payload.accountUniqueName, action.payload.entryUniqueNames)),
             map(res => this.DeleteMultipleLedgerEntriesResponse(res)));
 
     @Effect()
     public DeleteMultipleLedgerEntriesResponse$: Observable<Action> = this.action$
-        .ofType(LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE).pipe(
+        .pipe(
+            ofType(LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE),
             map((action: CustomActions) => {
                 let res: any = action.payload as BaseResponse<any, string>;
                 if (res.status === 'success') {
@@ -376,7 +401,8 @@ export class LedgerActions {
 
     @Effect()
     public GenerateBulkLedgerInvoice$: Observable<Action> = this.action$
-        .ofType(LEDGER.GENERATE_BULK_LEDGER_INVOICE).pipe(
+        .pipe(
+            ofType(LEDGER.GENERATE_BULK_LEDGER_INVOICE),
             switchMap((action: CustomActions) => this._invoiceServices.GenerateBulkInvoice(action.payload.reqObj, action.payload.body, action.payload.requestedFrom)),
             map(response => {
                 return this.GenerateBulkLedgerInvoiceResponse(response);
@@ -385,7 +411,8 @@ export class LedgerActions {
 
     @Effect()
     public GenerateBulkLedgerInvoiceResponse$: Observable<Action> = this.action$
-        .ofType(LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE).pipe(
+        .pipe(
+            ofType(LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = response.payload;
                 if (data.status === 'error') {
@@ -418,7 +445,8 @@ export class LedgerActions {
 
     @Effect()
     public GetLedgerBalance$: Observable<Action> = this.action$
-        .ofType(LEDGER.GET_LEDGER_BALANCE).pipe(
+        .pipe(
+            ofType(LEDGER.GET_LEDGER_BALANCE),
             switchMap((action: CustomActions) => {
                 let req: any = action.payload;
                 return this._ledgerService.GetLedgerBalance(req);
@@ -432,15 +460,17 @@ export class LedgerActions {
 
     @Effect()
     public GetUnpaidInvoiceListAction$: Observable<Action> = this.action$
-        .ofType(LEDGER.GET_UNPAID_INVOICE_LIST)
-        .pipe(switchMap((action: CustomActions) =>
+        .pipe(
+            ofType(LEDGER.GET_UNPAID_INVOICE_LIST),
+            switchMap((action: CustomActions) =>
             this._ledgerService.GetInvoiceList(action.payload)), map(response => {
                 return this.GetUnpaidInvoiceListResponse(response);
             }));
 
     @Effect()
     public GetUnpaidInvoiceListResponse$: Observable<Action> = this.action$
-        .ofType(LEDGER.GET_UNPAID_INVOICE_LIST_RESPONSE).pipe(
+        .pipe(
+            ofType(LEDGER.GET_UNPAID_INVOICE_LIST_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'success') {
                     this._toasty.successToast(action.payload.status);

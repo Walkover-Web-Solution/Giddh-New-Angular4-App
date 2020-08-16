@@ -1,7 +1,7 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
-import isCidr from 'is-cidr';
+import * as isCidr from 'is-cidr';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 

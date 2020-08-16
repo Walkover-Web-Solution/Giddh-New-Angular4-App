@@ -17,7 +17,6 @@ import { Configuration, SubVoucher, RATE_FIELD_PRECISION } from 'apps/web-giddh/
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
-import { BsDatepickerDirective, PopoverDirective } from 'ngx-bootstrap';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
@@ -53,6 +52,8 @@ import { UpdateLedgerVm } from './updateLedger.vm';
 import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../../../models/api-models/AdvanceReceiptsAdjust';
+import {PopoverDirective} from "ngx-bootstrap/popover";
+import {BsDatepickerDirective} from "ngx-bootstrap/datepicker";
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -260,7 +261,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
-        this.store.pipe(select(state => state.ledger.refreshLedger), takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(st => st.ledger.refreshLedger), takeUntil(this.destroyed$)).subscribe(response => {
             if (response === true) {
                 this.store.dispatch(this._ledgerAction.refreshLedger(false));
                 this.entryAccountUniqueName = "";

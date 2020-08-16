@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -17,7 +17,8 @@ export class SettingsTagActions {
 
     @Effect()
     public GetAllTags$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS).pipe(
+        .pipe(
+            ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS),
             switchMap((action: CustomActions) => this.settingsTagService.GetAllTags()),
             map((res) => {
                 return { type: SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE, payload: res };
@@ -25,14 +26,16 @@ export class SettingsTagActions {
 
     @Effect({ dispatch: false })
     public GetAllTagsResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE).pipe(
+        .pipe(
+            ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE),
             map((response: CustomActions) => {
                 return { type: 'EmptyAction' };
             }));
 
     @Effect()
     public CreateTag$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAG_ACTIONS.CREATE_TAG).pipe(
+        .pipe(
+            ofType(SETTINGS_TAG_ACTIONS.CREATE_TAG),
             switchMap((action: CustomActions) => {
                 return this.settingsTagService.CreateTag(action.payload).pipe(
                     map(response => this.CreateTagResponse(response)));
@@ -40,7 +43,8 @@ export class SettingsTagActions {
 
     @Effect()
     public CreateTagResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAG_ACTIONS.CREATE_TAG_RESPONSE).pipe(
+        .pipe(
+            ofType(SETTINGS_TAG_ACTIONS.CREATE_TAG_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -53,7 +57,8 @@ export class SettingsTagActions {
 
     @Effect()
     public UpdateTag$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAG_ACTIONS.UPDATE_TAG).pipe(
+        .pipe(
+            ofType(SETTINGS_TAG_ACTIONS.UPDATE_TAG),
             switchMap((action: CustomActions) => {
                 return this.settingsTagService.UpdateTag(action.payload).pipe(
                     map(response => this.UpdateTagResponse(response)));
@@ -61,7 +66,8 @@ export class SettingsTagActions {
 
     @Effect()
     public UpdateTagResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAG_ACTIONS.UPDATE_TAG_RESPONSE).pipe(
+        .pipe(
+            ofType(SETTINGS_TAG_ACTIONS.UPDATE_TAG_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -74,7 +80,8 @@ export class SettingsTagActions {
 
     @Effect()
     public DeleteTag$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAG_ACTIONS.DELETE_TAG).pipe(
+        .pipe(
+            ofType(SETTINGS_TAG_ACTIONS.DELETE_TAG),
             switchMap((action: CustomActions) => {
                 return this.settingsTagService.DeleteTag(action.payload).pipe(
                     map(response => this.DeleteTagResponse(response)));
@@ -82,7 +89,8 @@ export class SettingsTagActions {
 
     @Effect()
     public DeleteTagResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAG_ACTIONS.DELETE_TAG_RESPONSE).pipe(
+        .pipe(
+            ofType(SETTINGS_TAG_ACTIONS.DELETE_TAG_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {

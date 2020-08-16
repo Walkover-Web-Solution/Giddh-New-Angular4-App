@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -17,7 +17,8 @@ export class SettingsBranchActions {
 
     @Effect()
     public GetAllBranches$: Observable<Action> = this.action$
-        .ofType(SETTINGS_BRANCH_ACTIONS.GET_ALL_BRANCHES).pipe(
+        .pipe(
+            ofType(SETTINGS_BRANCH_ACTIONS.GET_ALL_BRANCHES),
             switchMap((action: CustomActions) => this.settingsBranchService.GetAllBranches(action.payload)),
             map(res => this.validateResponse<any, string>(res, {
                 type: SETTINGS_BRANCH_ACTIONS.GET_ALL_BRANCHES_RESPONSE,
@@ -29,7 +30,8 @@ export class SettingsBranchActions {
 
     @Effect()
     public UpdateProfile$: Observable<Action> = this.action$
-        .ofType(SETTINGS_BRANCH_ACTIONS.CREATE_BRANCHES).pipe(
+        .pipe(
+            ofType(SETTINGS_BRANCH_ACTIONS.CREATE_BRANCHES),
             switchMap((action: CustomActions) => {
                 return this.settingsBranchService.CreateBranches(action.payload).pipe(
                     map(response => this.CreateBranchesResponse(response)));
@@ -37,7 +39,8 @@ export class SettingsBranchActions {
 
     @Effect()
     public UpdateProfileResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_BRANCH_ACTIONS.CREATE_BRANCHES_RESPONSE).pipe(
+        .pipe(
+            ofType(SETTINGS_BRANCH_ACTIONS.CREATE_BRANCHES_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -51,13 +54,15 @@ export class SettingsBranchActions {
 
     @Effect()
     public RemoveBranch$: Observable<Action> = this.action$
-        .ofType(SETTINGS_BRANCH_ACTIONS.REMOVE_BRANCH).pipe(
+        .pipe(
+            ofType(SETTINGS_BRANCH_ACTIONS.REMOVE_BRANCH),
             switchMap((action: CustomActions) => this.settingsBranchService.RemoveBranch(action.payload)),
             map(response => this.RemoveBranchResponse(response)));
 
     @Effect()
     public RemoveBranchResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_BRANCH_ACTIONS.REMOVE_BRANCH_RESPONSE).pipe(
+        .pipe(
+            ofType(SETTINGS_BRANCH_ACTIONS.REMOVE_BRANCH_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -73,7 +78,8 @@ export class SettingsBranchActions {
 
     @Effect()
     public GetParentCompany$: Observable<Action> = this.action$
-        .ofType(SETTINGS_BRANCH_ACTIONS.GET_PARENT_COMPANY).pipe(
+        .pipe(
+            ofType(SETTINGS_BRANCH_ACTIONS.GET_PARENT_COMPANY),
             switchMap((action: CustomActions) => this.settingsBranchService.GetParentCompany()),
             map(response => this.GetParentCompanyResponse(response)));
 

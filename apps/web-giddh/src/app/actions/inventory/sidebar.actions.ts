@@ -4,7 +4,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StockDetailResponse, StockGroupResponse } from '../../models/api-models/Inventory';
 import { InventoryActionsConst } from './inventory.const';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -20,7 +20,8 @@ import { InventoryAction } from './inventory.actions';
 export class SidebarAction {
     @Effect()
     public GetInventoryGroup$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.GetInventoryGroup).pipe(
+        .pipe(
+            ofType(InventoryActionsConst.GetInventoryGroup),
             tap(a => console.log('called')),
             switchMap((action: CustomActions) => {
                 return this._inventoryService.GetGroupsStock(action.payload.groupUniqueName).pipe(shareReplay(), map(response => {
@@ -50,7 +51,8 @@ export class SidebarAction {
 
     @Effect()
     public GetInventoryStock$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.GetInventoryStock).pipe(
+        .pipe(
+            ofType(InventoryActionsConst.GetInventoryStock),
             switchMap((action: CustomActions) => {
                 return this._inventoryService.GetStockDetails(action.payload.activeGroupUniqueName, action.payload.stockUniqueName);
             }),
@@ -65,7 +67,8 @@ export class SidebarAction {
 
     @Effect()
     public GetInventoryStockResponse$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.GetInventoryStockResponse).pipe(
+        .pipe(
+            ofType(InventoryActionsConst.GetInventoryStockResponse),
             map((action: CustomActions) => {
                 let data: BaseResponse<StockDetailResponse, string> = action.payload;
                 if (action.payload.status === 'error') {
@@ -79,7 +82,8 @@ export class SidebarAction {
 
     @Effect()
     public GetGroupUniqueName$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.GetGroupUniqueName).pipe(
+        .pipe(
+            ofType(InventoryActionsConst.GetGroupUniqueName),
             switchMap((action: CustomActions) => this._inventoryService.GetGroupsStock(action.payload)),
             map(response => {
                 return this.GetGroupUniqueNameResponse(response);
@@ -87,14 +91,16 @@ export class SidebarAction {
 
     @Effect()
     public GetGroupUniqueNameResponse$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.GetGroupUniqueNameResponse).pipe(
+        .pipe(
+            ofType(InventoryActionsConst.GetGroupUniqueNameResponse),
             map((action: CustomActions) => {
                 return { type: 'EmptyAction' };
             }));
 
     @Effect()
     public GetGroupsWithStocksHierarchyMin$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMin).pipe(
+        .pipe(
+            ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMin),
             switchMap((action: CustomActions) => this._inventoryService.GetGroupsWithStocksHierarchyMin(action.payload)),
             map(response => {
                 return this.GetGroupsWithStocksHierarchyMinResponse(response);
@@ -102,7 +108,8 @@ export class SidebarAction {
 
     @Effect()
     public GetGroupsWithStocksHierarchyMinResponse$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse).pipe(
+        .pipe(
+            ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse),
             map((action: CustomActions) => {
                 let data: BaseResponse<StockGroupResponse, string> = action.payload;
                 if (action.payload.status === 'error') {
@@ -113,7 +120,8 @@ export class SidebarAction {
 
     @Effect()
     public SearchGroupsWithStocks$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.SearchGroupsWithStocks).pipe(
+        .pipe(
+            ofType(InventoryActionsConst.SearchGroupsWithStocks),
             switchMap((action: CustomActions) => this._inventoryService.SearchStockGroupsWithStocks(action.payload)),
             map(response => {
                 return this.SearchGroupsWithStocksResponse(response);
@@ -121,7 +129,8 @@ export class SidebarAction {
 
     @Effect()
     public SearchGroupsWithStocksResponse$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.SearchGroupsWithStocksResponse).pipe(
+        .pipe(
+            ofType(InventoryActionsConst.SearchGroupsWithStocksResponse),
             map((action: CustomActions) => {
                 let data: BaseResponse<StockGroupResponse, string> = action.payload;
                 if (action.payload.status === 'error') {

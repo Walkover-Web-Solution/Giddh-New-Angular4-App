@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -16,7 +16,8 @@ export class SettingsTriggersActions {
 
     @Effect()
     public CreateTrigger$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TRIGGERS_ACTIONS.CREATE_TRIGGERS).pipe(
+        .pipe(
+            ofType(SETTINGS_TRIGGERS_ACTIONS.CREATE_TRIGGERS),
             switchMap((action: CustomActions) => {
                 return this.settingsTriggersService.CreateTrigger(action.payload).pipe(
                     map(response => this.CreateTriggerResponse(response)));
@@ -24,7 +25,8 @@ export class SettingsTriggersActions {
 
     @Effect()
     public CreateTriggerResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TRIGGERS_ACTIONS.CREATE_TRIGGERS_RESPONSE).pipe(
+        .pipe(
+            ofType(SETTINGS_TRIGGERS_ACTIONS.CREATE_TRIGGERS_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -38,7 +40,8 @@ export class SettingsTriggersActions {
 
     @Effect()
     public UpdateTrigger$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TRIGGERS_ACTIONS.UPDATE_TRIGGERS).pipe(
+        .pipe(
+            ofType(SETTINGS_TRIGGERS_ACTIONS.UPDATE_TRIGGERS),
             switchMap((action: CustomActions) => {
                 return this.settingsTriggersService.UpdateTrigger(action.payload, action.payload.uniqueName).pipe(
                     map(response => this.UpdateTriggerResponse(response)));
@@ -46,7 +49,8 @@ export class SettingsTriggersActions {
 
     @Effect()
     public UpdateTriggerResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TRIGGERS_ACTIONS.UPDATE_TRIGGERS_RESPONSE).pipe(
+        .pipe(
+            ofType(SETTINGS_TRIGGERS_ACTIONS.UPDATE_TRIGGERS_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -60,7 +64,8 @@ export class SettingsTriggersActions {
 
     @Effect()
     public DeleteTrigger$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TRIGGERS_ACTIONS.DELETE_TRIGGERS).pipe(
+        .pipe(
+            ofType(SETTINGS_TRIGGERS_ACTIONS.DELETE_TRIGGERS),
             switchMap((action: CustomActions) => {
                 return this.settingsTriggersService.DeleteTrigger(action.payload).pipe(
                     map(response => this.DeleteTriggerResponse(response)));
@@ -68,7 +73,8 @@ export class SettingsTriggersActions {
 
     @Effect()
     public DeleteTriggerResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TRIGGERS_ACTIONS.DELETE_TRIGGERS_RESPONSE).pipe(
+        .pipe(
+            ofType(SETTINGS_TRIGGERS_ACTIONS.DELETE_TRIGGERS_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -82,7 +88,8 @@ export class SettingsTriggersActions {
 
     @Effect()
     public GetTrigger$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS).pipe(
+        .pipe(
+            ofType(SETTINGS_TRIGGERS_ACTIONS.GET_TRIGGERS),
             switchMap((action: CustomActions) => {
                 return this.settingsTriggersService.GetTriggers().pipe(
                     map(response => this.GetTriggerResponse(response)));

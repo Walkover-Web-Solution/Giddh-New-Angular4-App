@@ -1,6 +1,6 @@
 import {map, switchMap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Actions, Effect} from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import {GroupService} from '../../services/group.service';
 import {BaseResponse} from '../../models/api-models/BaseResponse';
 import {Action} from '@ngrx/store';
@@ -20,7 +20,8 @@ import {CurrentPage} from '../../models/api-models/Common';
 export class GeneralActions {
     @Effect()
     public GetGroupsWithAccount$: Observable<Action> = this.action$
-        .ofType(GENERAL_ACTIONS.GENERAL_GET_GROUP_WITH_ACCOUNTS).pipe(
+        .pipe(
+            ofType(GENERAL_ACTIONS.GENERAL_GET_GROUP_WITH_ACCOUNTS),
             switchMap((action: CustomActions) =>
                 this._groupService.GetGroupsWithAccounts(action.payload)
             ),
@@ -30,7 +31,8 @@ export class GeneralActions {
 
     @Effect()
     public GetFlattenGroups$: Observable<Action> = this.action$
-        .ofType(GENERAL_ACTIONS.FLATTEN_GROUPS_REQ).pipe(
+        .pipe(
+            ofType(GENERAL_ACTIONS.FLATTEN_GROUPS_REQ),
             switchMap((action: CustomActions) =>
                 this._groupService.GetFlattenGroups(action.payload)
             ),
@@ -40,7 +42,8 @@ export class GeneralActions {
 
     @Effect()
     public getFlattenAccounts$: Observable<Action> = this.action$
-        .ofType(GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS).pipe(
+        .pipe(
+            ofType(GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS),
             switchMap((action: CustomActions) =>
                 this._accountService.getFlattenAccounts(action.payload)
             ),
@@ -50,7 +53,8 @@ export class GeneralActions {
 
     @Effect()
     public getAllState$: Observable<Action> = this.action$
-        .ofType(GENERAL_ACTIONS.GENERAL_GET_ALL_STATES).pipe(
+        .pipe(
+            ofType(GENERAL_ACTIONS.GENERAL_GET_ALL_STATES),
             switchMap((action: CustomActions) => this._companyService.getAllStates(action.payload)),
             map(resp => this.getAllStateResponse(resp)));
 

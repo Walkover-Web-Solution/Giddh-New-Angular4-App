@@ -33,7 +33,6 @@
     "clean.shared": "cd libs/ && git clean -dfX && cd ../xplat/ && git clean -dfX",
     "clean": "npx rimraf hooks node_modules package-lock.json && npm i",
     "start.web.giddh": "npm run postinstall.web && ng serve web-giddh",
-    "postinstall": "electron-rebuild install-app-deps",
     "postinstall.electron": "node tools/electron/postinstall",
     "postinstall.web": "node tools/web/postinstall",
     "build.cordova.prod": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build giddh-cordova --configuration=prod",
@@ -60,6 +59,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-builders/custom-webpack": "^10.0.0",
     "@angular/animations": "10.0.8",
     "@angular/common": "10.0.8",
     "@angular/compiler": "10.0.8",
@@ -124,9 +124,7 @@
     "zone.js": "0.10.3"
   },
   "devDependencies": {
-    "http-server": "0.12.3",
-    "movefiles": "1.0.1",
-    "@angular-devkit/build-angular": "0.1000.5",
+    "@angular-devkit/build-angular": "^0.1000.6",
     "@angular/cdk": "10.1.3",
     "@angular/cli": "10.0.5",
     "@angular/compiler-cli": "10.0.8",
@@ -156,6 +154,7 @@
     "electron-store": "6.0.0",
     "electron-updater": "4.3.4",
     "html-webpack-plugin": "4.3.0",
+    "http-server": "0.12.3",
     "jasmine-core": "~3.6.0",
     "jasmine-marbles": "0.6.0",
     "jasmine-spec-reporter": "~5.0.2",
@@ -165,6 +164,7 @@
     "karma-coverage-istanbul-reporter": "~3.0.3",
     "karma-jasmine": "~3.3.1",
     "karma-jasmine-html-reporter": "1.5.4",
+    "movefiles": "1.0.1",
     "ngrx-store-freeze": "0.2.4",
     "ngx-build-plus": "10.1.1",
     "npm-run-all": "4.1.5",

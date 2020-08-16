@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
@@ -20,7 +20,8 @@ export class InvoicePurchaseActions {
 
     @Effect()
     public GetPurchaseInvoices$: Observable<Action> = this.action$
-        .ofType(PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES).pipe(
+        .pipe(
+            ofType(PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES),
             switchMap((action: CustomActions) => this.purchaseInvoiceService.GetPurchaseInvoice(action.payload)),
             map(res => this.validateResponse<IInvoicePurchaseResponse, string>(res, {
                 type: PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES_RESPONSE,
@@ -32,7 +33,8 @@ export class InvoicePurchaseActions {
 
     @Effect()
     public UpdatePurchaseInvoice$: Observable<Action> = this.action$
-        .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE).pipe(
+        .pipe(
+            ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE),
             switchMap((action: CustomActions) => {
                 return this.purchaseInvoiceService.UpdatePurchaseInvoice(action.payload.entryUniqueName, action.payload.taxUniqueName, action.payload.accountUniqueName).pipe(
                     map(response => this.UpdatePurchaseInvoiceResponse(response)));
@@ -40,7 +42,8 @@ export class InvoicePurchaseActions {
 
     @Effect()
     public GetTaxesForThisCompany$: Observable<Action> = this.action$
-        .ofType(PURCHASE_INVOICE_ACTIONS.GET_TAXES).pipe(
+        .pipe(
+            ofType(PURCHASE_INVOICE_ACTIONS.GET_TAXES),
             switchMap((action: CustomActions) => this.purchaseInvoiceService.GetTaxesForThisCompany()),
             map(res => this.validateResponse<ITaxResponse[], string>(res, {
                 type: PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY,
@@ -52,15 +55,17 @@ export class InvoicePurchaseActions {
 
     @Effect()
     public GeneratePurchaseInvoice$: Observable<Action> = this.action$
-        .ofType(PURCHASE_INVOICE_ACTIONS.GENERATE_PURCHASE_INVOICE).pipe(
+        .pipe(
+            ofType(PURCHASE_INVOICE_ACTIONS.GENERATE_PURCHASE_INVOICE),
             switchMap((action: CustomActions) => {
                 return this.purchaseInvoiceService.GeneratePurchaseInvoice(action.payload).pipe(
                     map(response => this.UpdatePurchaseInvoiceResponse(response)));
             }));
 
     @Effect()
-    private UpdatePurchaseInvoiceResponse$: Observable<Action> = this.action$
-        .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE_RESPONSE).pipe(
+    public UpdatePurchaseInvoiceResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<IInvoicePurchaseResponse, string> = response.payload;
                 if (data.status === 'error') {
@@ -72,16 +77,18 @@ export class InvoicePurchaseActions {
             }));
 
     @Effect()
-    private DownloadGSTR1Sheet$: Observable<Action> = this.action$
-        .ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_SHEET).pipe(
+    public DownloadGSTR1Sheet$: Observable<Action> = this.action$
+        .pipe(
+            ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_SHEET),
             switchMap((action: CustomActions) => {
                 return this.purchaseInvoiceService.DownloadGSTR1Sheet(action.payload).pipe(
                     map(response => this.DownloadGSTR1SheetResponse(response)));
             }));
 
     @Effect()
-    private DownloadGSTR1SheetResponse$: Observable<Action> = this.action$
-        .ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_SHEET_RESPONSE).pipe(
+    public DownloadGSTR1SheetResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_SHEET_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
                 if (data.status === 'error') {
@@ -94,16 +101,18 @@ export class InvoicePurchaseActions {
             }));
 
     @Effect()
-    private DownloadGSTR1ErrorSheet$: Observable<Action> = this.action$
-        .ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET).pipe(
+    public DownloadGSTR1ErrorSheet$: Observable<Action> = this.action$
+        .pipe(
+            ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET),
             switchMap((action: CustomActions) => {
                 return this.purchaseInvoiceService.DownloadGSTR1ErrorSheet(action.payload).pipe(
                     map(response => this.DownloadGSTR1ErrorSheetResponse(response)));
             }));
 
     @Effect()
-    private DownloadGSTR1ErrorSheetResponse$: Observable<Action> = this.action$
-        .ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET_RESPONSE).pipe(
+    public DownloadGSTR1ErrorSheetResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
                 if (data.status === 'error') {
@@ -116,16 +125,18 @@ export class InvoicePurchaseActions {
             }));
 
     @Effect()
-    private SendGSTR3BEmail$: Observable<Action> = this.action$
-        .ofType(PURCHASE_INVOICE_ACTIONS.SEND_GSTR3B_EMAIL).pipe(
+    public SendGSTR3BEmail$: Observable<Action> = this.action$
+        .pipe(
+            ofType(PURCHASE_INVOICE_ACTIONS.SEND_GSTR3B_EMAIL),
             switchMap((action: CustomActions) => {
                 return this.purchaseInvoiceService.SendGSTR3BEmail(action.payload).pipe(
                     map(response => this.SendGSTR3BEmailResponse(response)));
             }));
 
     @Effect()
-    private SendGSTR3BEmailResponse$: Observable<Action> = this.action$
-        .ofType(PURCHASE_INVOICE_ACTIONS.SEND_GSTR3B_EMAIL_RESPONSE).pipe(
+    public SendGSTR3BEmailResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(PURCHASE_INVOICE_ACTIONS.SEND_GSTR3B_EMAIL_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
                 if (data.status === 'error') {
@@ -140,8 +151,9 @@ export class InvoicePurchaseActions {
      * UPDATE PURCHASE ENTRY
      */
     @Effect()
-    private UpdatePurchaseEntry$: Observable<Action> = this.action$
-        .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY).pipe(
+    public UpdatePurchaseEntry$: Observable<Action> = this.action$
+        .pipe(
+            ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY),
             switchMap((action: CustomActions) => {
                 return this.purchaseInvoiceService.UpdatePurchaseEntry(action.payload).pipe(
                     map(response => this.UpdatePurchaseEntryResponse(response)));
@@ -151,8 +163,9 @@ export class InvoicePurchaseActions {
      * UPDATE PURCHASE ENTRY RESPONSE
      */
     @Effect()
-    private UpdatePurchaseEntryResponse$: Observable<Action> = this.action$
-        .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY_RESPONSE).pipe(
+    public UpdatePurchaseEntryResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<IInvoicePurchaseResponse, string> = response.payload;
                 if (data.status === 'error') {
@@ -167,8 +180,9 @@ export class InvoicePurchaseActions {
      * UPDATE INVOICE
      */
     @Effect()
-    private UpdateInvoice$: Observable<Action> = this.action$
-        .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_INVOICE).pipe(
+    public UpdateInvoice$: Observable<Action> = this.action$
+        .pipe(
+            ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_INVOICE),
             switchMap((action: CustomActions) => {
                 return this.purchaseInvoiceService.UpdateInvoice(action.payload).pipe(
                     map(response => this.UpdateInvoiceResponse(response)));
@@ -178,8 +192,9 @@ export class InvoicePurchaseActions {
      * UPDATE PURCHASE ENTRY RESPONSE
      */
     @Effect()
-    private UpdateInvoiceResponse$: Observable<Action> = this.action$
-        .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_INVOICE_RESPONSE).pipe(
+    public UpdateInvoiceResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_INVOICE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<IInvoicePurchaseResponse, string> = response.payload;
                 if (data.status === 'error') {
@@ -194,8 +209,9 @@ export class InvoicePurchaseActions {
      * Save Jio Gst Details
      */
     @Effect()
-    private SaveJioGst$: Observable<Action> = this.action$
-        .ofType(GST_RETURN_ACTIONS.SAVE_JIO_GST).pipe(
+    public SaveJioGst$: Observable<Action> = this.action$
+        .pipe(
+            ofType(GST_RETURN_ACTIONS.SAVE_JIO_GST),
             switchMap((action: CustomActions) => {
                 return this.purchaseInvoiceService.SaveJioGst(action.payload).pipe(
                     map(response => this.SaveJioGstResponse(response)));
@@ -205,8 +221,9 @@ export class InvoicePurchaseActions {
      * Save Jio Gst Details RESPONSE
      */
     @Effect()
-    private SaveJioGstResponse$: Observable<Action> = this.action$
-        .ofType(GST_RETURN_ACTIONS.SAVE_JIO_GST_RESPONSE).pipe(
+    public SaveJioGstResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(GST_RETURN_ACTIONS.SAVE_JIO_GST_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
                 if (data.status === 'error') {
@@ -221,8 +238,9 @@ export class InvoicePurchaseActions {
      * Save Tax Pro Details
      */
     @Effect()
-    private SaveTaxPro$: Observable<Action> = this.action$
-        .ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO).pipe(
+    public SaveTaxPro$: Observable<Action> = this.action$
+        .pipe(
+            ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO),
             switchMap((action: CustomActions) => {
                 return this.purchaseInvoiceService.SaveTaxPro(action.payload).pipe(
                     map(response => this.SaveTaxProResponse(response)));
@@ -232,8 +250,9 @@ export class InvoicePurchaseActions {
      * Save Tax Pro RESPONSE
      */
     @Effect()
-    private SaveTaxProResponse$: Observable<Action> = this.action$
-        .ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_RESPONSE).pipe(
+    public SaveTaxProResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
                 if (data.status === 'error') {
@@ -248,8 +267,9 @@ export class InvoicePurchaseActions {
      * Save Tax Pro With OTP Details
      */
     @Effect()
-    private SaveTaxProWithOTP$: Observable<Action> = this.action$
-        .ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_WITH_OTP).pipe(
+    public SaveTaxProWithOTP$: Observable<Action> = this.action$
+        .pipe(
+            ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_WITH_OTP),
             switchMap((action: CustomActions) => {
                 return this.purchaseInvoiceService.SaveTaxProWithOTP(action.payload).pipe(
                     map(response => this.SaveTaxProWithOTPResponse(response)));
@@ -259,8 +279,9 @@ export class InvoicePurchaseActions {
      * Save Tax Pro With OTP Details RESPONSE
      */
     @Effect()
-    private SaveTaxProWithOTPResponse$: Observable<Action> = this.action$
-        .ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_WITH_OTP_RESPONSE).pipe(
+    public SaveTaxProWithOTPResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(GST_RETURN_ACTIONS.SAVE_TAX_PRO_WITH_OTP_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
                 if (data.status === 'error') {
@@ -275,8 +296,9 @@ export class InvoicePurchaseActions {
      * File Jio GSTR1
      */
     @Effect()
-    private FileJioGstReturn$: Observable<Action> = this.action$
-        .ofType(GST_RETURN_ACTIONS.FILE_JIO_GST).pipe(
+    public FileJioGstReturn$: Observable<Action> = this.action$
+        .pipe(
+            ofType(GST_RETURN_ACTIONS.FILE_JIO_GST),
             switchMap((action: CustomActions) => {
                 return this.purchaseInvoiceService.FileGstReturn(action.payload).pipe(
                     map(response => this.FileJioGstReturnResponse(response)));
@@ -286,8 +308,9 @@ export class InvoicePurchaseActions {
      * File Jio GSTR1 Response
      */
     @Effect()
-    private FileJioGstReturnResponse$: Observable<Action> = this.action$
-        .ofType(GST_RETURN_ACTIONS.FILE_JIO_GST_RESPONSE).pipe(
+    public FileJioGstReturnResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(GST_RETURN_ACTIONS.FILE_JIO_GST_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
                 if (data.status === 'error') {
@@ -299,8 +322,9 @@ export class InvoicePurchaseActions {
             }));
 
     @Effect()
-    private SaveGSPSession$: Observable<Action> = this.action$
-        .ofType(GST_RETURN_ACTIONS.SAVE_GSP_SESSION).pipe(
+    public SaveGSPSession$: Observable<Action> = this.action$
+        .pipe(
+            ofType(GST_RETURN_ACTIONS.SAVE_GSP_SESSION),
             switchMap((action: CustomActions) => {
                 return this.purchaseInvoiceService.SaveGSPSession(action.payload).pipe(
                     map(response => this.SaveTaxProResponse(response)));
@@ -310,8 +334,9 @@ export class InvoicePurchaseActions {
      * Save Tax Pro RESPONSE
      */
     @Effect()
-    private SaveGSPSessionResponse$: Observable<Action> = this.action$
-        .ofType(GST_RETURN_ACTIONS.SAVE_GSP_SESSION_RESPONSE).pipe(
+    public SaveGSPSessionResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(GST_RETURN_ACTIONS.SAVE_GSP_SESSION_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
                 if (data.status === 'error') {
@@ -323,16 +348,18 @@ export class InvoicePurchaseActions {
             }));
 
     @Effect()
-    private SaveGSPSessionWithOTP$: Observable<Action> = this.action$
-        .ofType(GST_RETURN_ACTIONS.SAVE_GSP_SESSION_WITH_OTP).pipe(
+    public SaveGSPSessionWithOTP$: Observable<Action> = this.action$
+        .pipe(
+            ofType(GST_RETURN_ACTIONS.SAVE_GSP_SESSION_WITH_OTP),
             switchMap((action: CustomActions) => {
                 return this.purchaseInvoiceService.SaveGSPSessionWithOTP(action.payload).pipe(
                     map(response => this.SaveGSPSessionWithOTPResponse(response)));
             }));
 
     @Effect()
-    private SaveGSPSessionWithOTPResponse$: Observable<Action> = this.action$
-        .ofType(GST_RETURN_ACTIONS.SAVE_GSP_SESSION_WITH_OTP_RESPONSE).pipe(
+    public SaveGSPSessionWithOTPResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(GST_RETURN_ACTIONS.SAVE_GSP_SESSION_WITH_OTP_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
                 if (data.status === 'error') {
@@ -344,16 +371,18 @@ export class InvoicePurchaseActions {
             }));
 
     @Effect()
-    private GetGSPSession$: Observable<Action> = this.action$
-        .ofType(GST_RETURN_ACTIONS.GET_GSP_SESSION).pipe(
+    public GetGSPSession$: Observable<Action> = this.action$
+        .pipe(
+            ofType(GST_RETURN_ACTIONS.GET_GSP_SESSION),
             switchMap((action: CustomActions) => {
                 return this.purchaseInvoiceService.GetGSPSession(action.payload).pipe(
                     map(response => this.GetGSPSessionResponse(response)));
             }));
 
     @Effect()
-    private FileGSTR3B$: Observable<Action> = this.action$
-        .ofType(GST_RETURN_ACTIONS.FILE_GSTR3B).pipe(
+    public FileGSTR3B$: Observable<Action> = this.action$
+        .pipe(
+            ofType(GST_RETURN_ACTIONS.FILE_GSTR3B),
             switchMap((action: CustomActions) => {
                 return this.purchaseInvoiceService.FileGstr3B(action.payload).pipe(
                     map(response => this.FileGSTR3BResponse(response)));
@@ -363,8 +392,9 @@ export class InvoicePurchaseActions {
      * File Jio GSTR1 Response
      */
     @Effect()
-    private FileGSTR3BResponse$: Observable<Action> = this.action$
-        .ofType(GST_RETURN_ACTIONS.FILE_GSTR3B_RESPONSE).pipe(
+    public FileGSTR3BResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(GST_RETURN_ACTIONS.FILE_GSTR3B_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
                 if (data.status === 'error') {

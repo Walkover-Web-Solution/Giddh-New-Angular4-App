@@ -2,7 +2,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { CompanyActions } from '../../company.actions';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -18,7 +18,8 @@ export class SettingsProfileActions {
 
     @Effect()
     public GetSMSKey$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO).pipe(
+        .pipe(
+            ofType(SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO),
             switchMap((action: CustomActions) => this.settingsProfileService.GetProfileInfo()),
             map(res => this.validateResponse<any, string>(res, {
                 type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
@@ -30,7 +31,8 @@ export class SettingsProfileActions {
 
     @Effect()
     public UpdateProfile$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE).pipe(
+        .pipe(
+            ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE),
             switchMap((action: CustomActions) => {
                 return this.settingsProfileService.UpdateProfile(action.payload).pipe(
                     map(response => this.UpdateProfileResponse(response)));
@@ -38,7 +40,8 @@ export class SettingsProfileActions {
 
     @Effect()
     public GetInventoryInfo$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_INFO).pipe(
+        .pipe(
+            ofType(SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_INFO),
             switchMap((action: CustomActions) => this.settingsProfileService.GetInventoryInfo()),
             map(res => this.validateResponse<any, string>(res, {
                 type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE,
@@ -50,15 +53,17 @@ export class SettingsProfileActions {
 
     @Effect()
     public UpdateInventory$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY).pipe(
+        .pipe(
+            ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY),
             switchMap((action: CustomActions) => {
                 return this.settingsProfileService.UpdateInventory(action.payload).pipe(
                     map(response => this.UpdateInventoryResponse(response)));
             }));
 
     @Effect()
-    private UpdateProfileResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE).pipe(
+    public UpdateProfileResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -71,16 +76,18 @@ export class SettingsProfileActions {
             }));
 
     @Effect()
-    private PatchProfile$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE).pipe(
+    public PatchProfile$: Observable<Action> = this.action$
+        .pipe(
+            ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE),
             switchMap((action: CustomActions) => {
                 return this.settingsProfileService.PatchProfile(action.payload).pipe(
                     map(response => this.PatchProfileResponse(response)));
             }));
 
     @Effect({ dispatch: false })
-    private PatchProfileResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE).pipe(
+    public PatchProfileResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -99,8 +106,9 @@ export class SettingsProfileActions {
             }));
 
     @Effect()
-    private UpdateInventoryResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE).pipe(
+    public UpdateInventoryResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {

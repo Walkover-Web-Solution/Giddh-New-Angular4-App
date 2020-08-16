@@ -20,7 +20,7 @@ export class VerifyMobileActions {
     public static VERIFY_MOBILE_CODE_RESPONSE = 'VERIFY_MOBILE_CODE_RESPONSE';
     public static HIDE_VERIFICATION_BOX = 'HIDE_VERIFICATION_BOX';
 
-    private verifyNumber$: Observable<Action> = createEffect(() => this.action$
+    public verifyNumber$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(VerifyMobileActions.VERIFY_MOBILE_REQUEST),
             switchMap((action: CustomActions) => this._authService.VerifyNumber(action.payload)),
@@ -35,7 +35,7 @@ export class VerifyMobileActions {
                 return { type: 'EmptyAction' };
             })));
 
-    private verifyNumberCode$: Observable<Action> = createEffect(() => this.action$
+    public verifyNumberCode$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(VerifyMobileActions.VERIFY_MOBILE_CODE_REQUEST),
             switchMap((action: CustomActions) => this._authService.VerifyNumberOTP(action.payload)),

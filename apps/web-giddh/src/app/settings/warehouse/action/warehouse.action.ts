@@ -46,7 +46,7 @@ export class WarehouseActions {
      * @memberof WarehouseActions
      */
 	@Effect()
-	private createWarehouse$ = this.action$.pipe(
+	public createWarehouse$ = this.action$.pipe(
 		ofType(WarehouseActions.CREATE_WAREHOUSE),
 		switchMap((action: CustomActions) => this.settingsWarehouseService.createWarehouse(action.payload)),
 		map((response: BaseResponse<any, any>) => {
@@ -66,7 +66,7 @@ export class WarehouseActions {
      * @memberof WarehouseActions
      */
 	@Effect()
-	private getAllWarehouse$ = this.action$.pipe(
+	public getAllWarehouse$ = this.action$.pipe(
 		ofType(WarehouseActions.GET_ALL_WAREHOUSE),
 		switchMap((action: CustomActions) => this.settingsWarehouseService.fetchAllWarehouse(action.payload)),
 		map((response: BaseResponse<any, any>) => {
@@ -85,7 +85,7 @@ export class WarehouseActions {
      * @memberof WarehouseActions
      */
 	@Effect()
-	private updateWarehouse$ = this.action$.pipe(
+	public updateWarehouse$ = this.action$.pipe(
 		ofType(WarehouseActions.UPDATE_WAREHOUSE),
 		switchMap((action: CustomActions) => this.settingsWarehouseService.updateWarehouse(action.payload)),
 		map((response: BaseResponse<any, any>) => {
@@ -105,7 +105,7 @@ export class WarehouseActions {
      * @memberof WarehouseActions
      */
 	@Effect()
-	private setDefaultWarehouse$ = this.action$.pipe(
+	public setDefaultWarehouse$ = this.action$.pipe(
 		ofType(WarehouseActions.SET_AS_DEFAULT_WAREHOUSE),
 		switchMap((action: CustomActions) => this.settingsWarehouseService.setAsDefaultWarehouse(action.payload)),
 		map((response: BaseResponse<any, any>) => {

@@ -2,7 +2,7 @@ import { map, switchMap } from 'rxjs/operators';
 import {StockUnitRequest, StockUnitResponse} from '../../models/api-models/Inventory';
 import { CUSTOM_STOCK_UNIT_ACTIONS } from './inventory.const';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -13,8 +13,9 @@ import { CustomActions } from '../../store/customActions';
 
 @Injectable()
 export class CustomStockUnitAction {
-    @Effect() private CreateStockUnit$: Observable<Action> = this.action$
-        .ofType(CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT).pipe(
+    @Effect() public CreateStockUnit$: Observable<Action> = this.action$
+        .pipe(
+            ofType(CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT),
             switchMap((action: CustomActions) => {
                 return this._inventoryService.CreateStockUnit(action.payload).pipe(
                     map((r) => {
@@ -28,8 +29,9 @@ export class CustomStockUnitAction {
                     }));
             }));
 
-    @Effect() private GetStockUnit$: Observable<Action> = this.action$
-        .ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT).pipe(
+    @Effect() public GetStockUnit$: Observable<Action> = this.action$
+        .pipe(
+            ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT),
             switchMap((action: CustomActions) => {
                 return this._inventoryService.GetStockUnit().pipe(
                     map((r) => this.validateResponse(r, {
@@ -38,8 +40,9 @@ export class CustomStockUnitAction {
                     })));
             }));
 
-    @Effect() private UpdateStockUnit$: Observable<Action> = this.action$
-        .ofType(CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT).pipe(
+    @Effect() public UpdateStockUnit$: Observable<Action> = this.action$
+        .pipe(
+            ofType(CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT),
             switchMap((action: CustomActions) => {
                 return this._inventoryService.UpdateStockUnit(action.payload.unit, action.payload.code).pipe(
                     map((data: BaseResponse<StockUnitResponse, StockUnitRequest>) => this.validateResponse(data, {
@@ -48,8 +51,9 @@ export class CustomStockUnitAction {
                     }, true, 'Unit Updated Successfully')));
             }));
 
-    @Effect() private DeleteStockUnit$: Observable<Action> = this.action$
-        .ofType(CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT).pipe(
+    @Effect() public DeleteStockUnit$: Observable<Action> = this.action$
+        .pipe(
+            ofType(CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT),
             switchMap((action: CustomActions) => {
                 return this._inventoryService.DeleteStockUnit(action.payload).pipe(
                     map((r) => this.validateResponse(r, {
@@ -61,16 +65,18 @@ export class CustomStockUnitAction {
                     })));
             }));
 
-    @Effect() private GetStockUnitByName$: Observable<Action> = this.action$
-        .ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME).pipe(
+    @Effect() public GetStockUnitByName$: Observable<Action> = this.action$
+        .pipe(
+            ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME),
             switchMap((action: CustomActions) => this._inventoryService.GetStockUnitByName(action.payload)),
             map(response => {
                 return this.GetStockUnitByNameResponse(response);
             }));
 
     @Effect()
-    private GetStockUnitByNameResponse$: Observable<Action> = this.action$
-        .ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME_RESPONSE).pipe(
+    public GetStockUnitByNameResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME_RESPONSE),
             map((action: CustomActions) => {
                 return { type: 'EmptyAction' };
             }));

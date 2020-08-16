@@ -1,6 +1,6 @@
 import {map, switchMap, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Actions, Effect} from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import {ToasterService} from '../../../services/toaster.service';
 import {Action, Store} from '@ngrx/store';
 import {AppState} from '../../../store/roots';
@@ -17,7 +17,8 @@ export class SettingsTaxesActions {
 
     @Effect()
     public CreateTax$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX).pipe(
+        .pipe(
+            ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX),
             switchMap((action: CustomActions) => {
                 return this.settingsTaxesService.CreateTax(action.payload).pipe(
                     map(response => this.CreateTaxResponse(response)));
@@ -25,7 +26,8 @@ export class SettingsTaxesActions {
 
     @Effect()
     public CreateTaxResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE).pipe(
+        .pipe(
+            ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -38,7 +40,8 @@ export class SettingsTaxesActions {
 
     @Effect()
     public UpdateTax$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX).pipe(
+        .pipe(
+            ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX),
             switchMap((action: CustomActions) => {
                 return this.settingsTaxesService.UpdateTax(action.payload, action.payload.uniqueName).pipe(
                     map(response => this.UpdateTaxResponse(response)));
@@ -46,7 +49,8 @@ export class SettingsTaxesActions {
 
     @Effect()
     public UpdateTaxResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE).pipe(
+        .pipe(
+            ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -59,7 +63,8 @@ export class SettingsTaxesActions {
 
     @Effect()
     public DeleteTax$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX).pipe(
+        .pipe(
+            ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX),
             switchMap((action: CustomActions) => {
                 return this.settingsTaxesService.DeleteTax(action.payload.value).pipe(
                     tap(resp => {
@@ -72,7 +77,8 @@ export class SettingsTaxesActions {
 
     @Effect()
     public DeleteTaxResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE).pipe(
+        .pipe(
+            ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -85,7 +91,8 @@ export class SettingsTaxesActions {
 
     @Effect()
     public GetTaxList$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAXES_ACTIONS.GET_TAX).pipe(
+        .pipe(
+            ofType(SETTINGS_TAXES_ACTIONS.GET_TAX),
             switchMap((action: CustomActions) => {
                 return this.settingsTaxesService.GetTaxList(action.payload).pipe(
                     map(response => this.GetTaxListResponse(response)));

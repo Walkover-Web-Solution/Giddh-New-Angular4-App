@@ -2,7 +2,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { SettingsPermissionService } from '../../../services/settings.permission.service';
 import { SETTINGS_PERMISSION_ACTIONS } from './settings.permissions.const';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -16,15 +16,17 @@ export class SettingsPermissionActions {
 
     @Effect()
     public GetUsersWithPermissions$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS).pipe(
+        .pipe(
+            ofType(SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS),
             switchMap((action: CustomActions) => {
                 return this.settingsPermissionService.GetUsersWithCompanyPermissions(action.payload).pipe(
                     map(response => this.GetUsersWithPermissionsResponse(response)));
             }));
 
     @Effect()
-    private GetUsersWithPermissionsResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS_RESPONSE).pipe(
+    public GetUsersWithPermissionsResponse$: Observable<Action> = this.action$
+        .pipe(
+            ofType(SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
