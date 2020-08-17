@@ -920,6 +920,10 @@ ul.sub-list {
 .modal-open {
     overflow: auto !important;
 }
+.invoice-preview.table-responsive {
+    display: table !important;
+    width: 100%;
+}
 
 /* file upload css start */
 

@@ -19,6 +19,18 @@
     border: 0px solid #ced4da;
     padding:0 !important;
 }
+.form-group{
+    .input-group {
+        .input-group-addon {
+        border-left: 1px solid #cccccc !important;
+    }
+    input{
+            border-left: none !important;
+            border-right: none !important;
+        }
+    }
+
+}
 @media(max-width:768px){
     .multicurrency-checkbox{
         display: block !important;
