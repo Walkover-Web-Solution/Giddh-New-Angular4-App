@@ -2602,6 +2602,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (data.body.stock) {
                             taxes.push(...data.body.stock.taxes);
                         }
+
                         // directly assign additional property
                         selectedAcc.additional = {
                             ...selectedAcc.additional,
@@ -3901,13 +3902,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     // stock unit assign process
                     // get account from flatten account
-                    let selectedAcc = flattenAccounts.find(d => {
-                        return (d.uniqueName === trx.accountUniqueName);
-                    });
+                    // let selectedAcc = flattenAccounts.find(d => {
+                    //     return (d.uniqueName === trx.accountUniqueName);
+                    // });
 
-                    if (selectedAcc) {
+                    // if (selectedAcc) {
                         // get stock from flatten account
-                        let stock = selectedAcc.stocks.find(s => s.uniqueName === trx.stockDetails.uniqueName);
+                        // let stock = selectedAcc.stocks.find(s => s.uniqueName === trx.stockDetails.uniqueName);
+                        let stock = trx.stockDetails;
 
                         if (stock && newTrxObj) {
                             // description with sku and custom fields
@@ -3918,31 +3920,33 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 if (stock.skuCode) {
                                     description.push(skuCodeHeading + ':' + stock.skuCode);
                                 }
-                                let customField1Heading = stock.customField1Heading ? stock.customField1Heading : 'Custom field 1';
-                                if (stock.customField1Value) {
-                                    description.push(customField1Heading + ':' + stock.customField1Value);
+                                let customField1Heading = stock.customField1 ? stock.customField1.key : 'Custom field 1';
+                                if (stock.customField1.value) {
+                                    description.push(customField1Heading + ':' + stock.customField1.value);
                                 }
-                                let customField2Heading = stock.customField2Heading ? stock.customField2Heading : 'Custom field 2';
-                                if (stock.customField2Value) {
-                                    description.push(customField2Heading + ':' + stock.customField2Value);
+                                let customField2Heading = stock.customField2 ? stock.customField2.key : 'Custom field 2';
+                                if (stock.customField2.value) {
+                                    description.push(customField2Heading + ':' + stock.customField2.value);
                                 }
                                 newTrxObj.sku_and_customfields = description.join(', ');
                             }
                             //------------------------
+                            stock.unitRates = stock.unitRates || [];
+                            const unitRate = stock.unitRates.find(rate => rate.code === stock.stockUnit.code);
 
                             let stockUnit: IStockUnit = {
                                 id: stock.stockUnit.code,
-                                text: stock.stockUnit.name
+                                text: unitRate ? unitRate.stockUnitName : ''
                             };
 
                             newTrxObj.stockList = [];
-                            if (stock.accountStockDetails.unitRates.length) {
-                                newTrxObj.stockList = this.prepareUnitArr(stock.accountStockDetails.unitRates);
+                            if (stock.unitRates && stock.unitRates.length) {
+                                newTrxObj.stockList = this.prepareUnitArr(stock.unitRates);
                             } else {
                                 newTrxObj.stockList.push(stockUnit);
                             }
                         }
-                    }
+                    // }
 
                     newTrxObj.quantity = trx.quantity;
                     newTrxObj.rate = trx.rate;
@@ -4212,7 +4216,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     salesTransactionItemClass.isStockTxn = true;
                     salesTransactionItemClass.stockDetails = {};
                     salesTransactionItemClass.stockDetails.name = t.stock.name;
+                    salesTransactionItemClass.stockDetails.customField1 = t.stock.customField1;
+                    salesTransactionItemClass.stockDetails.customField2 = t.stock.customField2;
+                    salesTransactionItemClass.stockDetails.stockUnit = t.stock.stockUnit;
+                    salesTransactionItemClass.stockDetails.unitRates = t.stock.unitRates;
                     salesTransactionItemClass.stockDetails.uniqueName = t.stock.uniqueName;
+                    salesTransactionItemClass.stockDetails.skuCodeHeading = t.stock.skuCodeHeading;
                     salesTransactionItemClass.quantity = t.stock.quantity;
                     salesTransactionItemClass.rate = t.stock.rate.amountForAccount;
                     salesTransactionItemClass.stockDetails.skuCode = t.stock.sku;
@@ -4367,7 +4376,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && selectedDate && !moment(selectedDate).isSame(moment(modelDate))) {
             this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(selectedDate).format(GIDDH_DATE_FORMAT));
         }
-        if (selectedDate === modelDate && this.invFormData && this.invFormData.voucherDetails && this.invFormData.voucherDetails.voucherDate && this.invFormData.accountDetails && this.invFormData.accountDetails.uniqueName) {
+        if (selectedDate && modelDate && selectedDate !== modelDate && this.invFormData && this.invFormData.voucherDetails && this.invFormData.voucherDetails.voucherDate && this.invFormData.accountDetails && this.invFormData.accountDetails.uniqueName) {
             this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, moment(selectedDate).format(GIDDH_DATE_FORMAT));
         }
         if (selectedDate && modelDate && selectedDate !== modelDate && (this.isCreditNote || this.isDebitNote)) {
