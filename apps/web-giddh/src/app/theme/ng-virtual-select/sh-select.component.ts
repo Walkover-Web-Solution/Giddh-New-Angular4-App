@@ -261,11 +261,11 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
         this.clearFilter();
 
-        if (!this.multiple) {
-            if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
-                callChanges = false;
-            }
-        }
+        // if (!this.multiple) {
+        //     if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
+        //         callChanges = false;
+        //     }
+        // }
 
         if (callChanges && !this.multiple) {
             // check last selected value is there
