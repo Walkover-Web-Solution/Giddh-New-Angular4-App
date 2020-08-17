@@ -13,7 +13,7 @@
     top: 132px;
     opacity: 0.6;
     z-index: 98;
-    background: #f7f8fa;
+    background: $alice-blue-light;
 }
 
 .wrapper-customer-table {
@@ -51,6 +51,7 @@
             }
             .select-customer-name {
                 sh-select,
+                .select-customer-field,
                 input[type="text"] {
                     width: 62.7%;
                     float: left;
@@ -457,7 +458,9 @@ a.copyInvoice img {
 .create-purchase-order-table .form-control {
     margin-bottom: 5px;
 }
-
+.create-purchase-order-table textarea{
+    height: 120px !important;
+}
 span.edit-icon {
     line-height: 17px;
     position: relative;
@@ -585,7 +588,7 @@ table.table.customer-purchase-table {
 }
 
 .invoice-due-date input {
-    width: 112px !important;
+    width: 93px !important;
 }
 
 section.static-purchase-table {
@@ -759,26 +762,26 @@ table.table.table-custom-invoice.basic {
     width: 12%;
 }
 
-.td-Wrapper {
+.td-wrapper {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
-.default-active .td-Wrapper {
+.default-active .td-wrapper {
     height: 100%;
 }
 
-.set-active .td-Wrapper {
+.set-active .td-wrapper {
     height: 80%;
     display: initial;
 }
 
-.set-active td:last-child .td-Wrapper {
+.set-active td:last-child .td-wrapper {
     height: 105% !important;
 }
 
-.set-active.isOtherTax td:last-child .td-Wrapper .differ-currency {
+.set-active.isOtherTax td:last-child .td-wrapper .differ-currency {
     margin-bottom: 14px;
 }
 
@@ -1047,9 +1050,6 @@ span.eligible-ITC {
         .wrap-billing-address .form-group {
             display: block !important;
         }
-    }
-    .search-arrow-image {
-        left: 143px;
     }
 }
 @media (max-width: 990px) {
