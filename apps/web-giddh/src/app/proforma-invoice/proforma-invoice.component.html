@@ -100,7 +100,7 @@
                                                 <!-- region if not cashinvoice show customer dropdown -->
                                                 <ng-container *ngIf="!isCashInvoice">
                                                     <sales-sh-select style="width:62.7%; float: left;" name="voucherDetails.customerName" #customerNameDropDown [options]="customerAcList$ | async" [(ngModel)]="invFormData.voucherDetails.customerUniquename" [customFilter]="customMoveGroupFilter" (noOptionsFound)="noResultsForCustomer($event)"
-                                                        [isPaginationEnabled]="true" (srollEnd)="handleScrollEnd('customer')"
+                                                        [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('customer')"
                                                         (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'customer')"
                                                         [enableDynamicSearch]="true" (onHide)="resetPreviousSearchResults()"
                                                         (selected)="onSelectCustomer($event);" [placeholder]="customerPlaceHolder" [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" (noResultsClicked)="addNewAccount()"
@@ -762,7 +762,7 @@
                                         <div class="productName">
                                             <div class="ng-select-wrap">
                                                 <sh-select [options]="salesAccounts$ | async" #selectAccount [(ngModel)]="transaction.fakeAccForSelect2" name="transaction.fakeAccForSelect2_{{entryIdx}}" (selected)="onSelectSalesAccount($event,transaction, entry)" [placeholder]="'Select A/c'" [notFoundLink]="true"
-                                                    [isPaginationEnabled]="true" (srollEnd)="handleScrollEnd('item')"
+                                                    [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('item')"
                                                     (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
                                                     [enableDynamicSearch]="true"
                                                     [fixedValue]="(transaction.stockDetails && transaction.stockDetails.name) ? transaction.accountName+' ('+transaction.stockDetails?.name+')' : transaction.accountName" [forceClearReactive]="forceClear$ | async"
@@ -1264,7 +1264,7 @@
                                                 <div class="clearfix paymentMode">
 
                                                     <sh-select class="pull-right " name="depositAccountUniqueName" [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
-                                                        [isPaginationEnabled]="true" (srollEnd)="handleScrollEnd('item')"
+                                                        [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('item')"
                                                         (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'bank')"
                                                         [enableDynamicSearch]="true" (onHide)="resetPreviousSearchResults()"
                                                         [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">
@@ -1501,7 +1501,7 @@
                                     <div class="productName">
                                         <div class="ng-select-wrap">
                                             <sh-select [options]="salesAccounts$ | async" [(ngModel)]="transaction.fakeAccForSelect2" name="transaction.fakeAccForSelect2_{{entryIdx}}" (selected)="onSelectSalesAccount($event,transaction, entry)" [placeholder]="'Select A/cc'" [notFoundLink]="true"
-                                                [isPaginationEnabled]="true" (srollEnd)="handleScrollEnd('item')"
+                                                [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('item')"
                                                 (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
                                                 [enableDynamicSearch]="true" (onHide)="resetPreviousSearchResults()"
                                                 [forceClearReactive]="forceClear$ | async" (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67" (onClear)="onClearSalesAccount(transaction)" [useInBuiltFilterForFlattenAc]="true">
@@ -1964,7 +1964,7 @@
                                     <div class="clearfix paymentMode deposit-payment-mode">
 
                                         <sh-select class="pull-right " name="depositAccountUniqueName" [options]="bankAccounts$ | async" [(ngModel)]="depositAccountUniqueName" (selected)="onSelectPaymentMode($event)" [placeholder]="'Select Account'" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
-                                            [isPaginationEnabled]="true" (srollEnd)="handleScrollEnd('bank')"
+                                            [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('bank')"
                                             (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'bank')"
                                             [enableDynamicSearch]="true" (onHide)="resetPreviousSearchResults()"
                                             [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true" class="text-left">

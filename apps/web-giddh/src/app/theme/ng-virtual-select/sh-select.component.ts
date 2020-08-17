@@ -60,7 +60,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     /** True if the compoonent should be used as dynamic search component instead of static search */
     @Input() public enableDynamicSearch: boolean;
     /** Emits the scroll to bottom event when pagination is required  */
-    @Output() public srollEnd: EventEmitter<void> = new EventEmitter();
+    @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
     @Output() public dynamicSearchedQuery: EventEmitter<string> = new EventEmitter();
     /** Subject to emit current searched value */
@@ -571,7 +571,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
      */
 
     public reachedEnd(): void {
-        this.srollEnd.emit();
+        this.scrollEnd.emit();
     }
 
     /**

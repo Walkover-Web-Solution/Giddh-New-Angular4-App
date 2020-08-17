@@ -778,7 +778,7 @@
                                                                 (shDebit.isOpen && shDebit.filter))">To
                                                     </span>
                                                     <sh-select [idEl]="txn.id" #shDebit
-                                                        [isPaginationEnabled]="true" (srollEnd)="handleScrollEnd()"
+                                                        [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
                                                         (dynamicSearchedQuery)="onSearchQueryChanged($event)"
                                                         [enableDynamicSearch]="true"
                                                         [options]="searchResults"
@@ -1057,7 +1057,7 @@
 
                                                     <sh-select [idEl]="txn.id" #shCredit
                                                         [options]="searchResults" vr-item tabindex="-1"
-                                                        [isPaginationEnabled]="true" (srollEnd)="handleScrollEnd()"
+                                                        [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
                                                         (dynamicSearchedQuery)="onSearchQueryChanged($event)"
                                                         [enableDynamicSearch]="true"
                                                         #select (keydown.enter)="onEnter(shCredit,txn)"
