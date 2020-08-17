@@ -23,7 +23,7 @@
                                 <div class="col-sm-7 select-customer-name">
                                     <div class="clearfix d-flex flex-column">
                                         <div class="d-flex flex-column">
-                                            <sales-sh-select #vendorNameDropDown style="width:62.7%; float: left;" name="vendor"
+                                            <sales-sh-select #vendorNameDropDown name="vendor" class="select-customer-field"
                                                 [options]="vendorAcList$ | async"
                                                 [(ngModel)]="purchaseOrder.account.uniqueName"
                                                 [customFilter]="customMoveGroupFilter"
@@ -37,8 +37,7 @@
                                                 [disabled]="isUpdateMode">
 
                                                 <ng-template #optionTemplate let-option="option">
-                                                    <a href="javascript:void(0)" class="list-item"
-                                                        style="border-bottom: 1px solid #ccc;">
+                                                    <a href="javascript:void(0)" class="list-item">
                                                         <div class="item">{{ option.label }}</div>
                                                         <div class="item_unq">{{ option.value }}</div>
                                                     </a>
@@ -46,8 +45,7 @@
 
                                                 <ng-template #notFoundLinkTemplate>
                                                     <a href="javascript:void(0)" class="list-item pl-05 pr-05"
-                                                        [keyboardShortcut]="'alt+c'"
-                                                        style="width:100%; display: flex;justify-content: space-between;">
+                                                        [keyboardShortcut]="'alt+c'">
                                                         <div class="item">{{ vendorNotFoundText }}</div>
                                                         <div class="item">Alt+C</div>
                                                     </a>
@@ -55,13 +53,13 @@
 
                                             </sales-sh-select>
                                             <!-- endregion -->
-                                            <div hidden>
+                                            <!-- <div hidden>
                                                 <p><small>Pending Purchase order of selected vendor</small></p>
                                                 <p class="font-14"><a href="javascript(void)">PO84709832 |</a>
                                                     <a href="javascript(void)"> PO02948023 |</a>
 
                                                 </p>
-                                            </div>
+                                            </div> -->
                                             <!-- region Unregistered Business / customer details -->
                                             <div class="d-flex aqua-color"
                                                 *ngIf="purchaseOrder.voucherDetails.customerName">
@@ -69,7 +67,7 @@
                                                     *ngTemplateOutlet="gstTreatmentModal;context:{ $implicit: showGstTreatmentModal}">
                                                 </ng-container>
 
-                                                <span style="margin-right: 5px" class="cp aqua-color"
+                                                <span class="cp aqua-color"
                                                     *ngIf="!isUpdateMode">
                                                     <a href="javascript:void(0)" (click)="getVendorDetails()">Vendor
                                                         Details</a>
@@ -462,8 +460,8 @@
                         </td>
                         <td class="text-right tra-rate item-rate">
                             <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
-                                <div class="td-Wrapper">
-                                    <div style="flex: 1;">
+                                <div class="td-wrapper">
+                                    <div>
                                         <div class="wrap-td-data"> <span
                                                 *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
                                                 {{purchaseOrder.accountDetails.currencySymbol}}</span>
@@ -478,8 +476,8 @@
                             </div>
                         </td>
                         <td class="text-right  item-amount">
-                            <div class="td-Wrapper">
-                                <div style="flex: 1;">
+                            <div class="td-wrapper">
+                                <div>
                                     <div class="wrap-td-data">
                                         <span
                                             *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span>{{transaction.amount | giddhCurrency}}
@@ -492,8 +490,8 @@
                             </div>
                         </td>
                         <td class="item-discount">
-                            <div class=" text-right td-Wrapper">
-                                <div style="flex: 1;">
+                            <div class=" text-right td-wrapper">
+                                <div>
                                     <div class="wrap-td-data"> <span
                                             *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}
                                         </span>{{ entry.discountSum | giddhCurrency}}</div>
@@ -506,8 +504,8 @@
                         </td>
                         <td [class.error-box]="transaction.requiredTax" class="text-right item-tax"
                             (focus)="transaction.requiredTax = false;">
-                            <div class="td-Wrapper">
-                                <div style="flex:1;">
+                            <div class="td-wrapper">
+                                <div>
                                     <div class="wrap-td-data"><span
                                             *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}
                                         </span>{{(entry.taxSum + entry.cessSum) | giddhCurrency}}</div>
@@ -519,8 +517,8 @@
                             </div>
                         </td>
                         <td class="text-right item-tax delete-btn-absolute">
-                            <div class="td-Wrapper">
-                                <div style="flex:1;">
+                            <div class="td-wrapper">
+                                <div>
                                     <div class="wrap-td-data">
                                         <span><span
                                                 *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}
@@ -577,16 +575,14 @@
 
                                         <ng-template #optionTemplate let-option="option">
                                             <ng-container *ngIf="!option.additional?.stock">
-                                                <a href="javascript:void(0)" class="list-item"
-                                                    style="border-bottom: 1px solid #ccc;">
+                                                <a href="javascript:void(0)" class="list-item">
                                                     <div class="item">{{ option.label }}</div>
                                                     <div class="item_unq">
                                                         {{ option.additional?.uniqueName }}</div>
                                                 </a>
                                             </ng-container>
                                             <ng-container *ngIf="option.additional?.stock">
-                                                <a href="javascript:void(0)" class="list-item"
-                                                    style="border-bottom: 1px solid #ccc;">
+                                                <a href="javascript:void(0)" class="list-item">
                                                     <div class="item">{{ option.label }}</div>
                                                     <div class="item_unq">
                                                         {{ option.additional?.uniqueName }}</div>
@@ -703,9 +699,9 @@
                             </select>
                         </td>
 
-                        <td class="text-right item-rate" style="height: 1px;">
-                            <div class="td-Wrapper">
-                                <div style="flex: 1;">
+                        <td class="text-right item-rate">
+                            <div class="td-wrapper">
+                                <div>
                                     <input type="text" [disabled]="!transaction.isStockTxn"
                                         (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)"
                                         placeholder="Rate" name="transaction.rate_{{entryIdx}}"
@@ -722,8 +718,8 @@
                         </td>
 
                         <td class="text-right item-amount">
-                            <div class="td-Wrapper">
-                                <div style="flex: 1;">
+                            <div class="td-wrapper">
+                                <div>
                                     <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction)"
                                         (click)="transactionAmountClicked(transaction)" placeholder="Amount"
                                         name="transaction.amount_{{entryIdx}}" class="form-control text-right"
@@ -739,8 +735,8 @@
                         </td>
 
                         <td class="item-discount">
-                            <div class="td-Wrapper">
-                                <div class="text-right" style="flex:1;">
+                            <div class="td-wrapper">
+                                <div class="text-right">
                                     <discount-control-component #discountComponent [discountMenu]="false"
                                         [discountAccountsDetails]="entry.discounts" [discountSum]="entry.discountSum"
                                         [showHeaderText]="false" (hideOtherPopups)="closeTaxControlPopup()"
@@ -758,8 +754,8 @@
                         </td>
 
                         <td class="pos-rel dropdown-container item-tax">
-                            <div class="td-Wrapper">
-                                <div class="text-right" style="flex:1;">
+                            <div class="td-wrapper">
+                                <div class="text-right">
                                     <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
                                         [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue"
                                         [applicableTaxes]="transaction.applicableTaxes"
@@ -781,9 +777,9 @@
                         </td>
 
                         <td class="text-right item-total delete-btn-absolute">
-                            <div class="td-Wrapper">
+                            <div class="td-wrapper">
 
-                                <div style="flex:1;">
+                                <div>
                                     <input type="text" name="transaction.total_{{entryIdx}}"
                                         class="form-control text-right" [(ngModel)]="transaction.total"
                                         decimalDigitsDirective [prefix]="purchaseOrder.accountDetails.currencySymbol"
@@ -797,15 +793,14 @@
                                             id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                             (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
                                         <label for="entry.isOtherTaxApplicable_{{entryIdx}}"
-                                            *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable"
-                                            style="font-size:13px;vertical-align: middle">Other Tax?</label>
+                                            *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable">Other Tax?</label>
                                     </div>
                                     <div *ngIf="entry.isOtherTaxApplicable" class="mrT1">
 
                                         <span>
 
-                                            <div style="display: flex;align-items: center">
-                                                <span style="margin-right: 5px">
+                                            <div>
+                                                <span class="mr-5">
                                                     <a href="javascript: void 0"
                                                         (click)="toggleOtherTaxesAsidePane(true, entryIdx)">
                                                         <img src="assets/images/edit-pencilicon.svg">
@@ -818,15 +813,14 @@
                                                     name="entry.otherTaxesSum_{{entryIdx}}" />
                                             </div>
 
-                                            <p
-                                                style="margin-top: 5px; font-size: 12px; text-transform: capitalize; margin-bottom: 20px;">
+                                            <p>
                                                 {{ entry.otherTaxModal?.appliedOtherTax?.name}}</p>
                                         </span>
 
                                     </div>
                                 </div>
                                 <div *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount && isMultiCurrencySupported"
-                                    class="texIncurrency" style="color:#999;">
+                                    class="texIncurrency">
                                     {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                     <span>{{baseCurrencySymbol}}</span> :
                                     <span>{{entry.otherTaxSum * exchangeRate | giddhCurrency}}</span>
@@ -853,9 +847,9 @@
                 </ng-container>
             </tbody>
             <!-- region add bulk items -->
-            <div class="p-4 aqua-color add-line-bulk-item" style="width: max-content;">
+            <div class="p-4 aqua-color add-line-bulk-item">
                 <a href="javascript:void 0" (click)="addBlankRow(null)">+ Add New Line</a>
-                <span style="font-size:14px; color: #c5c5c5;"> | </span>
+                <span class="font-14"> | </span>
                 <a (click)="showBulkItemModal = true; bulkItemsModal.show()" href="javascript:void(0)">+ Add
                     Bulk
                     Entries</a>
@@ -908,7 +902,7 @@
                         <!-- region note/messages -->
                         <div class="pt-1 pl-0 max-600">
                             <label class="mrB1">Note</label>
-                            <textarea style="height:120px !important" class="form-control" name="message2"
+                            <textarea class="form-control" name="message2"
                                 [(ngModel)]="purchaseOrder.templateDetails.other.message2"></textarea>
                         </div>
                         <!-- endregion -->
@@ -972,7 +966,7 @@
 
                             <div class="table-row ">
 
-                                <div class="table-cell biggerDollar">
+                                <div class="table-cell bigger-dollar">
                                     <strong>Total <span
                                             *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">{{purchaseOrder.accountDetails.currencySymbol}}</span></strong>
                                 </div>
@@ -986,7 +980,7 @@
                             </div>
                             <!-- multicurrency feature (editable grand total make it functional) -->
                             <div class="table-row" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
-                                <div class="table-cell biggerDollar">
+                                <div class="table-cell bigger-dollar">
                                     <strong>Total <span>{{baseCurrencySymbol}}</span>
                                     </strong>
                                 </div>
@@ -1196,16 +1190,14 @@
 
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container *ngIf="!option.additional?.stock">
-                                                        <a href="javascript:void(0)" class="list-item"
-                                                            style="border-bottom: 1px solid #ccc;">
+                                                        <a href="javascript:void(0)" class="list-item">
                                                             <div class="item">{{ option.label }}</div>
                                                             <div class="item_unq">
                                                                 {{ option.additional?.uniqueName }}</div>
                                                         </a>
                                                     </ng-container>
                                                     <ng-container *ngIf="option.additional?.stock">
-                                                        <a href="javascript:void(0)" class="list-item"
-                                                            style="border-bottom: 1px solid #ccc;">
+                                                        <a href="javascript:void(0)" class="list-item">
                                                             <div class="item">{{ option.label }}</div>
                                                             <div class="item_unq">
                                                                 {{ option.additional?.uniqueName }}</div>
@@ -1356,7 +1348,7 @@
 
                                 <div class="card-rate">
                                     <label class="card-label text-right">Rate</label>
-                                    <div style="flex: 1;">
+                                    <div>
                                         <input type="text" [disabled]="!transaction.isStockTxn"
                                             (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)"
                                             placeholder="Rate" name="transaction.rate_{{entryIdx}}"
@@ -1387,7 +1379,7 @@
                                 <div class="card-amount">
 
                                     <label class="card-label text-right">Amount</label>
-                                    <div style="flex: 1;">
+                                    <div>
                                         <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction)"
                                             (click)="transactionAmountClicked(transaction)" placeholder="Amount"
                                             name="transaction.amount_{{entryIdx}}" class="form-control text-right"
@@ -1482,8 +1474,7 @@
                                                 id="entry.isOtherTaxApplicable_{{entryIdx}}"
                                                 (ngModelChange)="toggleOtherTaxesAsidePane(entry.isOtherTaxApplicable, entryIdx)">
                                             <label for="entry.isOtherTaxApplicable_{{entryIdx}}"
-                                                *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable"
-                                                style="font-size:13px;vertical-align: middle">Other
+                                                *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable">Other
                                                 Tax?</label>
                                         </div>
                                         <div class="mt-1 other-taxes" *ngIf="entry.isOtherTaxApplicable">
@@ -1589,7 +1580,7 @@
 
                 <div class="pdT1 pl0 max-600">
                     <label class="mrB1">Message</label>
-                    <textarea style="height:120px" class="form-control" name="message2"
+                    <textarea class="form-control" name="message2"
                         [(ngModel)]="purchaseOrder.templateDetails.other.message2"></textarea>
                 </div>
 

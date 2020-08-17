@@ -1444,7 +1444,7 @@ input.form-control.edit-currency {
     min-height: 50px;
 }
 
-.biggerDollar .icon-dollar:before {
+.bigger-dollar .icon-dollar:before {
     font-size: 17px;
 }
 
@@ -1452,7 +1452,7 @@ label.salesCountryLabel {
     padding-bottom: 0;
 }
 
-.biggerDollar .icon-rupees {
+.bigger-dollar .icon-rupees {
     font-size: 12px;
 }
 
@@ -1494,26 +1494,26 @@ label.salesCountryLabel {
     width: 12%;
 }
 
-.td-Wrapper {
+.td-wrapper {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
-.defaultActive .td-Wrapper {
+.defaultActive .td-wrapper {
     height: 100%;
 }
 
-.set-active .td-Wrapper {
+.set-active .td-wrapper {
     height: 80%;
     display: initial;
 }
 
-.set-active td:last-child .td-Wrapper {
+.set-active td:last-child .td-wrapper {
     height: 105% !important;
 }
 
-.set-active.isOtherTax td:last-child .td-Wrapper .differ-currency {
+.set-active.isOtherTax td:last-child .td-wrapper .differ-currency {
     margin-bottom: 14px;
 }
 

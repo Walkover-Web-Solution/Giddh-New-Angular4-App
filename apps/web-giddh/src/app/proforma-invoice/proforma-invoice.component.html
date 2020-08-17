@@ -934,7 +934,7 @@
                                     </td>
                                     <td class="text-right tra-rate item-rate " style="height:1px;">
                                         <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
-                                            <div class="td-Wrapper">
+                                            <div class="td-wrapper">
                                                 <div style="flex: 1;">
                                                     <div class="wrap-td-data"> <span
                                                             *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
@@ -953,7 +953,7 @@
                                         </div>
                                     </td>
                                     <td class="text-right  item-amount" style="height:1px;">
-                                        <div class="td-Wrapper">
+                                        <div class="td-wrapper">
                                             <div style="flex: 1;">
                                                 <div class="wrap-td-data"><span
                                                         *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}
@@ -967,7 +967,7 @@
                                         </div>
                                     </td>
                                     <td class="item-discount" style="height:1px;">
-                                        <div class=" text-right td-Wrapper">
+                                        <div class=" text-right td-wrapper">
 
                                             <div style="flex: 1;">
                                                 <div class="wrap-td-data"> <span
@@ -984,7 +984,7 @@
                                     </td>
                                     <td [class.error-box]="transaction.requiredTax" class="text-right item-tax"
                                         style="height:1px;" (focus)="transaction.requiredTax = false;">
-                                        <div class="td-Wrapper">
+                                        <div class="td-wrapper">
                                             <div style="flex:1;">
                                                 <div class="wrap-td-data"><span
                                                         *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}
@@ -998,7 +998,7 @@
                                         </div>
                                     </td>
                                     <td class="text-right item-tax delete-btn-absolute" style="height:1px;">
-                                        <div class="td-Wrapper">
+                                        <div class="td-wrapper">
                                             <div style="flex:1;">
                                                 <div class="wrap-td-data">
                                                     <span><span
@@ -1188,7 +1188,7 @@
 
                                     <td class="text-right item-rate" style="
                       height: 1px;">
-                                        <div class="td-Wrapper">
+                                        <div class="td-wrapper">
 
                                             <div style="flex: 1;">
                                                 <input type="text" [disabled]="!transaction.isStockTxn" (blur)="calculateStockEntryAmount(transaction);calculateWhenTrxAltered(entry, transaction)" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control transaction-rate text-right"
@@ -1204,7 +1204,7 @@
                                     </td>
 
                                     <td class="text-right item-amount" style="height:1px;">
-                                        <div class="td-Wrapper">
+                                        <div class="td-wrapper">
                                             <div style="flex: 1;">
                                                 <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction)"
                                                     (click)="transactionAmountClicked(transaction)" placeholder="Amount"
@@ -1223,7 +1223,7 @@
                                     </td>
 
                                     <td class="item-discount" style="height:1px;">
-                                        <div class="td-Wrapper">
+                                        <div class="td-wrapper">
                                             <div class="text-right" style="flex:1;">
                                                 <discount-control-component #discountComponent [discountMenu]="false"
                                                     [discountAccountsDetails]="entry.discounts"
@@ -1244,7 +1244,7 @@
                                     </td>
 
                                     <td class="pos-rel dropdown-container item-tax" style="height:1px;">
-                                        <div class="td-Wrapper">
+                                        <div class="td-wrapper">
                                             <div class="text-right" style="flex:1;">
                                                 <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
                                                     [taxRenderData]="entry.taxes"
@@ -1274,7 +1274,7 @@
                                     </td>
 
                                     <td class="text-right item-total delete-btn-absolute">
-                                        <div class="td-Wrapper">
+                                        <div class="td-wrapper">
 
                                             <div style="flex:1;">
                                                 <input type="text" name="transaction.total_{{entryIdx}}"
@@ -1539,7 +1539,7 @@
 
                                         <div class="tableRow ">
 
-                                            <div class="tableCell biggerDollar">
+                                            <div class="tableCell bigger-dollar">
                                                 <strong>Total <span
                                                         *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span></strong>
                                             </div>
@@ -1553,7 +1553,7 @@
                                         </div>
                                         <!-- multicurrency feature (editable grand total make it functional) -->
                                         <div class="tableRow" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                            <div class="tableCell biggerDollar">
+                                            <div class="tableCell bigger-dollar">
                                                 <strong>Total <span>{{baseCurrencySymbol}}</span>
                                                 </strong>
                                             </div>
@@ -1702,7 +1702,7 @@
                                                                     <label class="pull-right">Amount</label>
                                                                 </li>
 
-                                                                <li class="clearfix mrT1 biggerDollar"
+                                                                <li class="clearfix mrT1 bigger-dollar"
                                                                     *ngIf="isSalesInvoice ">
                                                                     <strong class="pull-right balanceDueText"> <span
                                                                             *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
@@ -2459,7 +2459,7 @@
                                 </div>
                             </div>
                             <div class="tableRow" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                <div class="tableCell biggerDollar">
+                                <div class="tableCell bigger-dollar">
                                     <strong>Total <span>{{baseCurrencySymbol}}</span>
                                     </strong>
                                 </div>
@@ -2539,7 +2539,7 @@
                                                     <label class="pull-right">Amount</label>
                                                 </li>
 
-                                                <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
+                                                <li class="clearfix mrT1 bigger-dollar" *ngIf="isSalesInvoice ">
                                                     <strong class="pull-right balanceDueText"> <span
                                                             *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
                                                         {{invFormData.voucherDetails.balanceDue | giddhCurrency}}
