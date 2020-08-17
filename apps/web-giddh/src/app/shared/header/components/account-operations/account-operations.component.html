@@ -9,31 +9,34 @@
                 </li>
             </ol>
         </div>
+        <div class="pull-right col-sm-4 pdR0 text-right" *ngIf="(showEditGroup$ | async)">
+            <button class="btn btn-share mrR1" (click)="exportGroupLedger()">
+                Export
+            </button>
+            <button class="btn btn-share pull-right" *ngIf="(showEditGroup$ | async)" (click)="showShareGroupModal()">Share
+            </button>
+            <div class="primary_clr text-right pull-right mrT1 clearfix"
+                *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
+                Shared with {{ (activeGroupSharedWith$ | async)?.length }} people
+            </div>
+        </div>
+        <!--account-->
+        <div class="pull-right col-sm-4 pdR0" *ngIf="(showEditAccount$ | async)">
+            <button class="btn btn-share pull-right" (click)="showShareAccountModal()">
+                Share
+            </button>
+            <div class="primary_clr text-right pull-right mrT1 clearfix"
+                *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length">
+                Shared with {{ (activeAccountSharedWith$ | async)?.length }} people
+            </div>
+        </div>
         <!--share group/account-->
             <!--group-->
-            <div class="pull-right col-sm-4 pdR0 text-right">
-                <button class="btn btn-share mrR1" *ngIf="(showEditGroup$ | async)" (click)="exportGroupLedger()">
-                    Export
-                </button>
-                <button class="btn btn-share pull-right" *ngIf="(showEditGroup$ | async)"
-                    (click)="showShareGroupModal()">Share
-                </button>
-                <div class="primary_clr text-right pull-right mrT1 clearfix"
-                    *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
-                    Shared with {{ (activeGroupSharedWith$ | async)?.length }} people
+            <!-- <div class="col-sm-4">
+                <div class="row">
+
                 </div>
-            </div>
-            <!--account-->
-            <div class="pull-right col-sm-4 pdR0">
-                <button class="btn btn-share pull-right" *ngIf="(showEditAccount$ | async)"
-                    (click)="showShareAccountModal()">
-                    Share
-                </button>
-                <div class="primary_clr text-right pull-right mrT1 clearfix"
-                    *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length">
-                    Shared with {{ (activeAccountSharedWith$ | async)?.length }} people
-                </div>
-            </div>
+            </div> -->
     </div>
 
     <!--add/edit group form-->
