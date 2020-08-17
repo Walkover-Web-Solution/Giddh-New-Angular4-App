@@ -2,7 +2,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { InventoryService } from '../../services/inventory.service';
 import { CustomActions } from '../../store/customActions';
@@ -13,8 +13,8 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class InventoryReportActions {
-    @Effect()
-    public genReport$: Observable<Action> = this.action$
+
+    public genReport$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(INVENTORY_REPORT_ACTIONS.GENERATE_REPORT),
             switchMap((action: CustomActions) => this._inventoryService.GetInventoryReport_v2(action.payload)),
@@ -26,7 +26,7 @@ export class InventoryReportActions {
                     return this.genReportResponse(response);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
     constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
         private _toasty: ToasterService) {

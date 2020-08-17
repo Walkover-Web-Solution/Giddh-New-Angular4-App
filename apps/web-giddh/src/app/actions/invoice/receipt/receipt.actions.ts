@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { CustomActions } from '../../../store/customActions';
 import { INVOICE_RECEIPT_ACTIONS } from './receipt.const';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
@@ -17,8 +17,8 @@ import { SalesRegisteDetailedResponse, ReportsDetailedRequestFilter, PurchaseReg
 @Injectable()
 export class InvoiceReceiptActions {
 
-    @Effect()
-    public UPDATE_INVOICE_RECEIPT_REQUEST$: Observable<Action> = this.action$
+
+    public UPDATE_INVOICE_RECEIPT_REQUEST$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT),
             switchMap((action: CustomActions) => this._receiptService.UpdateReceipt(action.payload.accountUniqueName, action.payload.model)),
@@ -28,10 +28,10 @@ export class InvoiceReceiptActions {
             }, true, {
                 type: INVOICE_RECEIPT_ACTIONS.UPDATE_INVOICE_RECEIPT_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public GET_ALL_INVOICE_RECEIPT$: Observable<Action> = this.action$
+
+    public GET_ALL_INVOICE_RECEIPT$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT),
             switchMap((action: CustomActions) => this._receiptService.GetAllReceipt(action.payload.body, action.payload.type)),
@@ -42,10 +42,10 @@ export class InvoiceReceiptActions {
                     this.showToaster(response.message, 'error');
                 }
                 return this.GetAllInvoiceReceiptResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public GET_VOUCHER_DETAILS$: Observable<Action> = this.action$
+
+    public GET_VOUCHER_DETAILS$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILS),
             switchMap((action: CustomActions) => this._receiptService.GetVoucherDetails(action.payload.accountUniqueName,
@@ -57,9 +57,9 @@ export class InvoiceReceiptActions {
                     this.showToaster(response.message, 'error');
                 }
                 return this.GetVoucherDetailsResponse(response);
-            }));
-    @Effect()
-    public GET_VOUCHER_DETAILSV4$: Observable<Action> = this.action$
+            })));
+
+    public GET_VOUCHER_DETAILSV4$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.GET_VOUCHER_DETAILSV4),
             switchMap((action: CustomActions) => this._receiptService.getVoucherDetailsV4(action.payload.accountUniqueName,
@@ -71,9 +71,9 @@ export class InvoiceReceiptActions {
                     this.showToaster(response.message, 'error');
                 }
                 return this.GetVoucherDetailsResponseV4(response);
-            }));
-    @Effect()
-    public DELETE_INVOICE_RECEIPT$: Observable<Action> = this.action$
+            })));
+
+    public DELETE_INVOICE_RECEIPT$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT),
             switchMap((action: CustomActions) => this._receiptService.DeleteReceipt(action.payload.accountUniqueName, action.payload.model)),
@@ -84,10 +84,10 @@ export class InvoiceReceiptActions {
                     this.showToaster(response.message, 'error');
                 }
                 return this.DeleteInvoiceReceiptResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public VoucherPreview$: Observable<Action> = this.action$
+
+    public VoucherPreview$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.DOWNLOAD_VOUCHER_REQUEST),
             switchMap((action: CustomActions) => this._receiptService.DownloadVoucher(action.payload.model, action.payload.accountUniqueName)),
@@ -98,27 +98,27 @@ export class InvoiceReceiptActions {
                     this.showToaster(response.message, 'error');
                 }
                 return this.VoucherPreviewResponse(response);
-            }));
-    @Effect()
-    public GetSalesRegistedDetails$: Observable<Action> = this.action$
+            })));
+
+    public GetSalesRegistedDetails$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.GET_SALESRAGISTED_DETAILS),
             switchMap((action: CustomActions) => this._receiptService.getDetailedSalesRegister(action.payload)),
             map((response: BaseResponse<any, SalesRegisteDetailedResponse>) => {
                 return this.GetSalesRegistedDetailsResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public GetPurchaseRegistedDetails$: Observable<Action> = this.action$
+
+    public GetPurchaseRegistedDetails$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.GET_PURCHASE_REGISTERED_DETAILS),
             switchMap((action: CustomActions) => this._receiptService.getDetailedPurchaseRegister(action.payload)),
             map((response: BaseResponse<any, PurchaseRegisteDetailedResponse>) => {
                 return this.GetPurchaseRegistedDetailsResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public GetPurchaseRecordDetails$: Observable<Action> = this.action$
+
+    public GetPurchaseRecordDetails$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.GET_PURCHASE_RECORD_DETAILS),
             switchMap((action: CustomActions) => this._receiptService.GetPurchaseRecordDetails(action.payload.accountUniqueName, action.payload.purchaseRecordUniqueName)),
@@ -127,7 +127,7 @@ export class InvoiceReceiptActions {
                     this.showToaster(response.message, 'error');
                 }
                 return this.GetPurchaseRecordDetailsResponse(response);
-            }));
+            })));
 
     constructor(private action$: Actions, private _toasty: ToasterService,
         private store: Store<AppState>, private _receiptService: ReceiptService) {

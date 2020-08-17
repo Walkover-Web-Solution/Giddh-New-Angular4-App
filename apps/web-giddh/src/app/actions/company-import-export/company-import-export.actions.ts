@@ -4,7 +4,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
 
 import { Injectable } from '@angular/core';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AUDIT_LOGS_ACTIONS } from './audit-logs.const';
@@ -17,7 +17,7 @@ import { GeneralService } from '../../services/general.service';
 
 @Injectable()
 export class CompanyImportExportActions {
-    @Effect() public EXPORT_REQUEST$: Observable<Action> = this.action$
+     public EXPORT_REQUEST$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(COMPANY_IMPORT_EXPORT_ACTIONS.EXPORT_REQUEST),
             switchMap((action: CustomActions) => {
@@ -48,9 +48,9 @@ export class CompanyImportExportActions {
                             return this.ExportResponse(response);
                         }));
                 }
-            }));
+            })));
 
-    @Effect() public IMPORT_REQUEST$: Observable<Action> = this.action$
+    public IMPORT_REQUEST$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(COMPANY_IMPORT_EXPORT_ACTIONS.IMPORT_REQUEST),
             switchMap((action: CustomActions) => {
@@ -76,7 +76,7 @@ export class CompanyImportExportActions {
                             return this.ImportResponse(r);
                         }));
                 }
-            }));
+            })));
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,

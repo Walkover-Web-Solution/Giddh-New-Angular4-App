@@ -8,7 +8,7 @@ import { LogsRequest, LogsResponse } from '../../models/api-models/Logs';
  * Created by ad on 04-07-2017.
  */
 import { Injectable } from '@angular/core';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AUDIT_LOGS_ACTIONS } from './audit-logs.const';
@@ -16,7 +16,8 @@ import { CustomActions } from '../../store/customActions';
 
 @Injectable()
 export class AuditLogsActions {
-    @Effect() public GET_LOGS$: Observable<Action> = this.action$
+
+    public GET_LOGS$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AUDIT_LOGS_ACTIONS.GET_LOGS),
             switchMap((action: CustomActions) => {
@@ -28,9 +29,9 @@ export class AuditLogsActions {
                         type: AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE,
                         payload: r
                     })));
-            }));
+            })));
 
-    @Effect() public LoadMore$: Observable<Action> = this.action$
+     public LoadMore$: Observable<Action> =  createEffect( ()=>this.action$
         .pipe(
             ofType(AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS),
             switchMap((action: CustomActions) => {
@@ -42,7 +43,7 @@ export class AuditLogsActions {
                         type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS_RESPONSE,
                         payload: r
                     })));
-            }));
+            })));
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,

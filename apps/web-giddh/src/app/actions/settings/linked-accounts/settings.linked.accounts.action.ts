@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -15,8 +15,8 @@ import { CustomActions } from '../../../store/customActions';
 @Injectable()
 export class SettingsLinkedAccountsActions {
 
-    @Effect()
-    public GetEbankAccounts$: Observable<Action> = this.action$
+
+    public GetEbankAccounts$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS),
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.GetYodleeAccounts()),
@@ -26,10 +26,10 @@ export class SettingsLinkedAccountsActions {
             }, true, {
                 type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public RefreshEbankAccounts$: Observable<Action> = this.action$
+
+    public RefreshEbankAccounts$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS),
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.RefreshAllEbankAccounts()),
@@ -39,10 +39,10 @@ export class SettingsLinkedAccountsActions {
             }, true, {
                 type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public ReconnectEbankAccount$: Observable<Action> = this.action$
+
+    public ReconnectEbankAccount$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT),
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.ReconnectAccount(action.payload)),
@@ -52,10 +52,10 @@ export class SettingsLinkedAccountsActions {
             }, true, {
                 type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public DeleteAccount$: Observable<Action> = this.action$
+
+    public DeleteAccount$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT),
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.DeleteBankAccount(action.payload.loginId, action.payload.deleteWithAccountId)),
@@ -65,10 +65,10 @@ export class SettingsLinkedAccountsActions {
             }, true, {
                 type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public RefreshAccount$: Observable<Action> = this.action$
+
+    public RefreshAccount$: Observable<Action> = createEffect( () => this.action$
         .pipe(
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_BANK_ACCOUNT),
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.RefreshBankAccount(action.payload.ebankItemId, action.payload.requestObj)),
@@ -78,10 +78,10 @@ export class SettingsLinkedAccountsActions {
             }, true, {
                 type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_BANK_ACCOUNT_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public LinkAccount$: Observable<Action> = this.action$
+
+    public LinkAccount$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.LINK_BANK_ACCOUNT),
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.LinkBankAccount(action.payload.data, action.payload.loginId)),
@@ -91,10 +91,10 @@ export class SettingsLinkedAccountsActions {
             }, true, {
                 type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.LINK_BANK_ACCOUNT_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public UnlinkAccount$: Observable<Action> = this.action$
+
+    public UnlinkAccount$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT),
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.UnlinkBankAccount(action.payload.loginId, action.payload.accountUniqueName)),
@@ -104,10 +104,10 @@ export class SettingsLinkedAccountsActions {
             }, true, {
                 type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public UpdateDate$: Observable<Action> = this.action$
+
+    public UpdateDate$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.UPDATE_DATE),
             switchMap((action: CustomActions) => this._settingsLinkedAccountsService.UpdateDate(action.payload.date, action.payload.loginId)),
@@ -117,7 +117,7 @@ export class SettingsLinkedAccountsActions {
             }, true, {
                 type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.UPDATE_DATE_RESPONSE,
                 payload: res
-            })));
+            }))));
 
     constructor(private action$: Actions,
         private toasty: ToasterService,

@@ -7,7 +7,7 @@ import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { Action, Store } from '@ngrx/store';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
@@ -68,17 +68,17 @@ export class AccountsAction {
     public static ASSIGN_DISCOUNT_TO_ACCOUNT = 'ASSIGN_DISCOUNT_TO_ACCOUNT';
 
 
-    @Effect()
-    public ApplyAccountTax$: Observable<Action> = this.action$
+
+    public ApplyAccountTax$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.APPLY_GROUP_TAX),
             switchMap((action: CustomActions) => this._accountService.ApplyTax(action.payload)),
             map(response => {
                 return this.applyAccountTaxResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public ApplyAccountTaxResponse$: Observable<Action> = this.action$
+
+    public ApplyAccountTaxResponse$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(AccountsAction.APPLY_GROUP_TAX_RESPONSE),
             map((action: CustomActions) => {
@@ -94,19 +94,17 @@ export class AccountsAction {
                     }
                 });
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public ApplyAccountDiscount$: Observable<Action> = this.action$
+    public ApplyAccountDiscount$: Observable<Action> = createEffect( () =>this.action$
         .pipe(
             ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNT),
             switchMap((action: CustomActions) => this._accountService.ApplyDiscount(action.payload)),
             map(response => {
                 return this.applyAccountDiscountResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public ApplyAccountDiscountResponse$: Observable<Action> = this.action$
+    public ApplyAccountDiscountResponse$: Observable<Action> = createEffect(()=>this.action$
         .pipe(
             ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNT_RESPONSE),
             map((action: CustomActions) => {
@@ -117,19 +115,18 @@ export class AccountsAction {
                     this._toasty.successToast('Discount Linked Successfully', action.payload.status);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public CreateAccount$: Observable<Action> = this.action$
+    public CreateAccount$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.CREATE_ACCOUNT),
             switchMap((action: CustomActions) => this._accountService.CreateAccount(action.payload.account, action.payload.accountUniqueName)),
             map(response => {
                 return this.createAccountResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public CreateAccountResponse$: Observable<Action> = this.action$
+
+    public CreateAccountResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.CREATE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
@@ -151,10 +148,10 @@ export class AccountsAction {
                     this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public CreateAccountV2$: Observable<Action> = this.action$
+
+    public CreateAccountV2$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.CREATE_ACCOUNTV2),
             switchMap((action: CustomActions) => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName)),
@@ -163,10 +160,10 @@ export class AccountsAction {
                     this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
                 }
                 return this.createAccountResponseV2(response);
-            }));
+            })));
 
-    @Effect()
-    public CreateAccountResponseV2$: Observable<Action> = this.action$
+
+    public CreateAccountResponseV2$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.CREATE_ACCOUNT_RESPONSEV2),
             map((action: CustomActions) => {
@@ -195,18 +192,19 @@ export class AccountsAction {
                 //}
                 setTimeout(() => this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm()), 1000);
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public GetAccountDetails$: Observable<Action> = this.action$
+
+    public GetAccountDetails$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.GET_ACCOUNT_DETAILS),
             switchMap((action: CustomActions) => this._accountService.GetAccountDetailsV2(action.payload)),
             map(response => {
                 return this.getAccountDetailsResponse(response);
-            }));
-    @Effect()
-    public GetAccountDetailsResponse$: Observable<Action> = this.action$
+            })));
+
+
+    public GetAccountDetailsResponse$: Observable<Action> = createEffect( () =>this.action$
         .pipe(
             ofType(AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE),
             map((action: CustomActions) => {
@@ -221,17 +219,17 @@ export class AccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
-    @Effect()
-    public GetAccountUniqueName$: Observable<Action> = this.action$
+            })));
+
+    public GetAccountUniqueName$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.GET_ACCOUNT_UNIQUENAME),
             switchMap((action: CustomActions) => this._accountService.GetAccountDetails(action.payload)),
             map(response => {
                 return this.getAccountUniqueNameResponse(response);
-            }));
-    @Effect()
-    public GetAccountUniqueNameResponse$: Observable<Action> = this.action$
+            })));
+
+    public GetAccountUniqueNameResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE),
             map((action: CustomActions) => {
@@ -239,19 +237,19 @@ export class AccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public UpdateAccount$: Observable<Action> = this.action$
+
+    public UpdateAccount$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.UPDATE_ACCOUNT),
             switchMap((action: CustomActions) => this._accountService.UpdateAccount(action.payload.account, action.payload.accountUniqueName)),
             map(response => {
                 return this.updateAccountResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public UpdateAccountResponse$: Observable<Action> = this.action$
+
+    public UpdateAccountResponse$: Observable<Action> =  createEffect( ()=>this.action$
         .pipe(
             ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
@@ -271,10 +269,10 @@ export class AccountsAction {
                     }
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public UpdateAccountV2$: Observable<Action> = this.action$
+
+    public UpdateAccountV2$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.UPDATE_ACCOUNTV2),
             switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.account, action.payload.value)),
@@ -283,10 +281,10 @@ export class AccountsAction {
                     this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
                 }
                 return this.updateAccountResponseV2(response);
-            }));
+            })));
 
-    @Effect()
-    public UpdateAccountResponseV2$: Observable<Action> = this.action$
+
+    public UpdateAccountResponseV2$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSEV2),
             map((action: CustomActions) => {
@@ -305,18 +303,18 @@ export class AccountsAction {
                     this.store.dispatch(this.getAccountDetails(resData.request.uniqueName));
                 }
                 return { type: 'EmptyAction' };
-            }));
-    @Effect()
-    public getGroupTaxHierarchy$: Observable<Action> = this.action$
+            })));
+
+    public getGroupTaxHierarchy$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.GET_ACCOUNT_TAX_HIERARCHY),
             switchMap((action: CustomActions) => this._accountService.GetTaxHierarchy(action.payload)),
             map(response => {
                 return this.getTaxHierarchyResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public getGroupTaxHierarchyResponse$: Observable<Action> = this.action$
+
+    public getGroupTaxHierarchyResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.GET_ACCOUNT_TAX_HIERARCHY_RESPONSE),
             map((action: CustomActions) => {
@@ -326,11 +324,11 @@ export class AccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
 
-    @Effect()
-    public shareEntity$: Observable<Action> = this.action$
+
+    public shareEntity$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.SHARE_ENTITY),
             switchMap((action: CustomActions) =>
@@ -341,9 +339,10 @@ export class AccountsAction {
             ),
             map(response => {
                 return this.shareEntityResponse(response);
-            }));
-    @Effect()
-    public shareEntityResponse$: Observable<Action> = this.action$
+            })));
+
+
+    public shareEntityResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.SHARE_ENTITY_RESPONSE),
             map((action: CustomActions) => {
@@ -365,10 +364,10 @@ export class AccountsAction {
                         };
                     }
                 }
-            }));
+            })));
 
-    @Effect()
-    public unShareEntity$: Observable<Action> = this.action$
+
+    public unShareEntity$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.UN_SHARE_ENTITY),
             switchMap((action: CustomActions) =>
@@ -376,10 +375,9 @@ export class AccountsAction {
             ),
             map(response => {
                 return this.UnShareEntityResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public unShareEntityResponse$: Observable<Action> = this.action$
+    public unShareEntityResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.UN_SHARE_ENTITY_RESPONSE),
             map((action: CustomActions) => {
@@ -401,11 +399,11 @@ export class AccountsAction {
                         };
                     }
                 }
-            }));
+            })));
 
     // Update entity permission
-    @Effect()
-    public updateEntityPermission$: Observable<Action> = this.action$
+
+    public updateEntityPermission$: Observable<Action> = createEffect( () =>this.action$
         .pipe(
             ofType(AccountsAction.UPDATE_ENTITY_PERMISSION),
             switchMap((action: CustomActions) =>
@@ -413,10 +411,10 @@ export class AccountsAction {
             ),
             map(response => {
                 return this.updateEntityPermissionResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public updateEntityPermissionResponse$: Observable<Action> = this.action$
+
+    public updateEntityPermissionResponse$: Observable<Action> =  createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.UPDATE_ENTITY_PERMISSION_RESPONSE),
             map((action: CustomActions) => {
@@ -431,10 +429,10 @@ export class AccountsAction {
                         type: 'EmptyAction'
                     };
                 }
-            }));
+            })));
 
-    @Effect()
-    public unShareAccount$: Observable<Action> = this.action$
+
+    public unShareAccount$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.UNSHARE_ACCOUNT),
             switchMap((action: CustomActions) =>
@@ -445,10 +443,9 @@ export class AccountsAction {
             ),
             map(response => {
                 return this.unShareAccountResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public unShareAccountResponse$: Observable<Action> = this.action$
+    public unShareAccountResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.UNSHARE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
@@ -465,18 +462,18 @@ export class AccountsAction {
                     accountUniqueName = s.groupwithaccounts.activeAccount.uniqueName;
                 });
                 return this.sharedAccountWith(accountUniqueName);
-            }));
+            })));
 
-    @Effect()
-    public sharedAccount$: Observable<Action> = this.action$
+
+    public sharedAccount$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.SHARED_ACCOUNT_WITH),
             switchMap((action: CustomActions) => this._accountService.AccountShareWith(action.payload)),
             map(response => {
                 return this.sharedAccountWithResponse(response);
-            }));
-    @Effect()
-    public sharedAccountResponse$: Observable<Action> = this.action$
+            })));
+
+    public sharedAccountResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE),
             map((action: CustomActions) => {
@@ -486,10 +483,10 @@ export class AccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public moveAccount$: Observable<Action> = this.action$
+
+    public moveAccount$: Observable<Action> =  createEffect( ()=>this.action$
         .pipe(
             ofType(AccountsAction.MOVE_ACCOUNT),
             switchMap((action: CustomActions) =>
@@ -501,9 +498,10 @@ export class AccountsAction {
             ),
             map(response => {
                 return this.moveAccountResponse(response);
-            }));
-    @Effect()
-    public moveAccountResponse$: Observable<Action> = this.action$
+            })));
+
+
+    public moveAccountResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.MOVE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
@@ -518,10 +516,10 @@ export class AccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public mergeAccount$: Observable<Action> = this.action$
+
+    public mergeAccount$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.MERGE_ACCOUNT),
             switchMap((action: CustomActions) =>
@@ -532,9 +530,9 @@ export class AccountsAction {
             ),
             map(response => {
                 return this.mergeAccountResponse(response);
-            }));
-    @Effect()
-    public mergeAccountResponse$: Observable<Action> = this.action$
+            })));
+
+    public mergeAccountResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.MERGE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
@@ -551,10 +549,10 @@ export class AccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public unMergeAccount$: Observable<Action> = this.action$
+
+    public unMergeAccount$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.UNMERGE_ACCOUNT),
             switchMap((action: CustomActions) =>
@@ -565,9 +563,9 @@ export class AccountsAction {
             ),
             map(response => {
                 return this.unmergeAccountResponse(response);
-            }));
-    @Effect()
-    public unMergeAccountResponse$: Observable<Action> = this.action$
+            })));
+
+    public unMergeAccountResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.UNMERGE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
@@ -581,19 +579,19 @@ export class AccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public DeleteAccount$: Observable<Action> = this.action$
+
+    public DeleteAccount$: Observable<Action> = createEffect( () =>this.action$
         .pipe(
             ofType(AccountsAction.DELETE_ACCOUNT),
             switchMap((action: CustomActions) => this._accountService.DeleteAccount(action.payload.accountUniqueName, action.payload.groupUniqueName)),
             map(response => {
                 return this.deleteAccountResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public DeleteAccountResponse$: Observable<Action> = this.action$
+
+    public DeleteAccountResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(AccountsAction.DELETE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
@@ -608,7 +606,7 @@ export class AccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
     constructor(private action$: Actions,
         private _accountService: AccountService,

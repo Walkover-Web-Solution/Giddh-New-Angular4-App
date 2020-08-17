@@ -2,7 +2,7 @@ import { map, switchMap, take } from 'rxjs/operators';
 import { AppState } from '../store';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreateRequest, GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse, GroupUpateRequest, MoveGroupRequest, MoveGroupResponse, ShareGroupRequest } from '../models/api-models/Group';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
@@ -71,17 +71,17 @@ export class GroupWithAccountsAction {
     public static OPEN_ADD_AND_MANAGE_FROM_OUTSIDE = 'OPEN_ADD_AND_MANAGE_FROM_OUTSIDE';
     public static HIDE_ADD_AND_MANAGE_FROM_OUTSIDE = 'HIDE_ADD_AND_MANAGE_FROM_OUTSIDE';
 
-    @Effect()
-    public ApplyGroupTax$: Observable<Action> = this.action$
+
+    public ApplyGroupTax$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.APPLY_GROUP_TAX),
             switchMap((action: CustomActions) => this._accountService.ApplyTax(action.payload)),
             map((response) => {
                 return this.applyGroupTaxResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public ApplyGroupTaxResponse$: Observable<Action> = this.action$
+
+    public ApplyGroupTaxResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.APPLY_GROUP_TAX_RESPONSE),
             map((action: CustomActions) => {
@@ -101,20 +101,20 @@ export class GroupWithAccountsAction {
                 // get flatten accounts after group tax applied successfully
                 this.store.dispatch(this._generalActions.getFlattenAccount());
                 return this.getTaxHierarchy(grouName);
-            }));
+            })));
 
-    @Effect()
-    public SetActiveGroup$: Observable<Action> = this.action$
+
+    public SetActiveGroup$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.SET_ACTIVE_GROUP),
             map((action: CustomActions) => {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public GetGroupsWithAccount$: Observable<Action> = this.action$
+
+    public GetGroupsWithAccount$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS),
             switchMap((action: CustomActions) =>
@@ -127,10 +127,10 @@ export class GroupWithAccountsAction {
                     this.store.dispatch(this._generalActions.getGroupWithAccountsResponse(response));
                 }
                 return this.getGroupWithAccountsResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public GetGroupsWithAccountResponse$: Observable<Action> = this.action$
+
+    public GetGroupsWithAccountResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE),
             map((action: CustomActions) => {
@@ -140,19 +140,19 @@ export class GroupWithAccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public GetGroupsDetails$: Observable<Action> = this.action$
+
+    public GetGroupsDetails$: Observable<Action> =  createEffect( () =>this.action$
         .pipe(
             ofType(GroupWithAccountsAction.GET_GROUP_DETAILS),
             switchMap((action: CustomActions) => this._groupService.GetGroupDetails(action.payload)),
             map((response) => {
                 return this.getGroupDetailsResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public GetGroupDetailsResponse$: Observable<Action> = this.action$
+
+    public GetGroupDetailsResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE),
             map((action: CustomActions) => {
@@ -165,19 +165,19 @@ export class GroupWithAccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public CreateGroup$: Observable<Action> = this.action$
+
+    public CreateGroup$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.CREATE_GROUP),
             switchMap((action: CustomActions) => this._groupService.CreateGroup(action.payload)),
             map((response) => {
                 return this.createGroupResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public CreateGroupResponse$: Observable<Action> = this.action$
+
+    public CreateGroupResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.CREATE_GROUP_RESPONSE),
             map((action: CustomActions) => {
@@ -191,10 +191,10 @@ export class GroupWithAccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public GetFlattenGroupsAccounts$: Observable<Action> = this.action$
+
+    public GetFlattenGroupsAccounts$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS),
             switchMap((action: CustomActions) =>
@@ -202,10 +202,10 @@ export class GroupWithAccountsAction {
             ),
             map((response) => {
                 return this.getFlattenGroupsAccountsResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public GetFlattenGroupsAccountsResponse$: Observable<Action> = this.action$
+
+    public GetFlattenGroupsAccountsResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE),
             map((action: CustomActions) => {
@@ -215,10 +215,10 @@ export class GroupWithAccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public shareGroup$: Observable<Action> = this.action$
+
+    public shareGroup$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.SHARE_GROUP),
             switchMap((action: CustomActions) =>
@@ -229,10 +229,10 @@ export class GroupWithAccountsAction {
             ),
             map((response) => {
                 return this.shareGroupResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public shareGroupResponse$: Observable<Action> = this.action$
+
+    public shareGroupResponse$: Observable<Action> = createEffect(()=>this.action$
         .pipe(
             ofType(GroupWithAccountsAction.SHARE_GROUP_RESPONSE),
             map((action: CustomActions) => {
@@ -250,10 +250,10 @@ export class GroupWithAccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public unShareGroup$: Observable<Action> = this.action$
+
+    public unShareGroup$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.UNSHARE_GROUP),
             switchMap((action: CustomActions) =>
@@ -264,10 +264,10 @@ export class GroupWithAccountsAction {
             ),
             map((response) => {
                 return this.unShareGroupResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public unShareGroupResponse$: Observable<Action> = this.action$
+
+    public unShareGroupResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE),
             map((action: CustomActions) => {
@@ -279,19 +279,19 @@ export class GroupWithAccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public sharedGroup$: Observable<Action> = this.action$
+
+    public sharedGroup$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.SHARED_GROUP_WITH),
             switchMap((action: CustomActions) => this._groupService.ShareWithGroup(action.payload)),
             map((response) => {
                 return this.sharedGroupWithResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public sharedGroupResponse$: Observable<Action> = this.action$
+
+    public sharedGroupResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE),
             map((action: CustomActions) => {
@@ -301,10 +301,10 @@ export class GroupWithAccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public moveGroup$: Observable<Action> = this.action$
+
+    public moveGroup$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.MOVE_GROUP),
             switchMap((action: CustomActions) =>
@@ -315,10 +315,10 @@ export class GroupWithAccountsAction {
             ),
             map(response => {
                 return this.moveGroupResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public moveGroupResponse$: Observable<Action> = this.action$
+
+    public moveGroupResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.MOVE_GROUP_RESPONSE),
             map((action: CustomActions) => {
@@ -341,19 +341,19 @@ export class GroupWithAccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public getGroupTaxHierarchy$: Observable<Action> = this.action$
+
+    public getGroupTaxHierarchy$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY),
             switchMap((action: CustomActions) => this._groupService.GetTaxHierarchy(action.payload)),
             map(response => {
                 return this.getTaxHierarchyResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public getGroupTaxHierarchyResponse$: Observable<Action> = this.action$
+
+    public getGroupTaxHierarchyResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE),
             map((action: CustomActions) => {
@@ -363,18 +363,18 @@ export class GroupWithAccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public UpdateGroup$: Observable<Action> = this.action$
+
+    public UpdateGroup$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.UPDATE_GROUP),
             switchMap((action: CustomActions) => this._groupService.UpdateGroup(action.payload.data, action.payload.groupUniqueName)),
             map(response => {
                 return this.updateGroupResponse(response);
-            }));
-    @Effect()
-    public UpdateGroupResponse$: Observable<Action> = this.action$
+            })));
+
+    public UpdateGroupResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.UPDATE_GROUP_RESPONSE),
             map((action: CustomActions) => {
@@ -390,10 +390,10 @@ export class GroupWithAccountsAction {
                         type: 'EmptyAction'
                     };
                 }
-            }));
+            })));
 
-    @Effect()
-    public DeleteGroup$: Observable<Action> = this.action$
+
+    public DeleteGroup$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.DELETE_GROUP),
             switchMap((action: CustomActions) => this._groupService.DeleteGroup(action.payload)),
@@ -404,10 +404,10 @@ export class GroupWithAccountsAction {
                 });
                 response.queryString = { groupUniqueName: response.queryString.groupUniqueName, parentUniqueName: activeGrp.uniqueName };
                 return this.deleteGroupResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public DeleteGroupResponse$: Observable<Action> = this.action$
+
+    public DeleteGroupResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.DELETE_GROUP_RESPONSE),
             map((action: CustomActions) => {
@@ -423,18 +423,18 @@ export class GroupWithAccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public GetGroupUniqueName$: Observable<Action> = this.action$
+
+    public GetGroupUniqueName$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.GET_GROUP_UNIQUENAME),
             switchMap((action: CustomActions) => this._groupService.GetGrouptDetails(action.payload)),
             map(response => {
                 return this.getGroupUniqueNameResponse(response);
-            }));
-    @Effect()
-    public GetGroupUniqueNameResponse$: Observable<Action> = this.action$
+            })));
+
+    public GetGroupUniqueNameResponse$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(GroupWithAccountsAction.GET_GROUP_UNIQUENAME_RESPONSE),
             map((action: CustomActions) => {
@@ -442,7 +442,7 @@ export class GroupWithAccountsAction {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
     constructor(private action$: Actions,
         private _groupService: GroupService,

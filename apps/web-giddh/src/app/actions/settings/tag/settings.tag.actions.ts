@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -15,34 +15,32 @@ import { TagRequest } from '../../../models/api-models/settingsTags';
 @Injectable()
 export class SettingsTagActions {
 
-    @Effect()
-    public GetAllTags$: Observable<Action> = this.action$
+    public GetAllTags$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS),
             switchMap((action: CustomActions) => this.settingsTagService.GetAllTags()),
             map((res) => {
                 return { type: SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE, payload: res };
-            }));
+            })));
 
-    @Effect({ dispatch: false })
-    public GetAllTagsResponse$: Observable<Action> = this.action$
+    public GetAllTagsResponse$: Observable<Action> =createEffect(()=> this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.GET_ALL_TAGS_RESPONSE),
             map((response: CustomActions) => {
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public CreateTag$: Observable<Action> = this.action$
+
+    public CreateTag$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.CREATE_TAG),
             switchMap((action: CustomActions) => {
                 return this.settingsTagService.CreateTag(action.payload).pipe(
                     map(response => this.CreateTagResponse(response)));
-            }));
+            })));
 
-    @Effect()
-    public CreateTagResponse$: Observable<Action> = this.action$
+
+    public CreateTagResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.CREATE_TAG_RESPONSE),
             map((response: CustomActions) => {
@@ -53,19 +51,19 @@ export class SettingsTagActions {
                     this.toasty.successToast('Tag created successfully.', 'Success');
                 }
                 return this.GetALLTags();
-            }));
+            })));
 
-    @Effect()
-    public UpdateTag$: Observable<Action> = this.action$
+
+    public UpdateTag$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.UPDATE_TAG),
             switchMap((action: CustomActions) => {
                 return this.settingsTagService.UpdateTag(action.payload).pipe(
                     map(response => this.UpdateTagResponse(response)));
-            }));
+            })));
 
-    @Effect()
-    public UpdateTagResponse$: Observable<Action> = this.action$
+
+    public UpdateTagResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.UPDATE_TAG_RESPONSE),
             map((response: CustomActions) => {
@@ -76,19 +74,19 @@ export class SettingsTagActions {
                     this.toasty.successToast('Tag updated successfully.', 'Success');
                 }
                 return this.GetALLTags();
-            }));
+            })));
 
-    @Effect()
-    public DeleteTag$: Observable<Action> = this.action$
+
+    public DeleteTag$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.DELETE_TAG),
             switchMap((action: CustomActions) => {
                 return this.settingsTagService.DeleteTag(action.payload).pipe(
                     map(response => this.DeleteTagResponse(response)));
-            }));
+            })));
 
-    @Effect()
-    public DeleteTagResponse$: Observable<Action> = this.action$
+
+    public DeleteTagResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_TAG_ACTIONS.DELETE_TAG_RESPONSE),
             map((response: CustomActions) => {
@@ -99,7 +97,7 @@ export class SettingsTagActions {
                     this.toasty.successToast('Tag deleted successfully.', 'Success');
                 }
                 return this.GetALLTags();
-            }));
+            })));
 
     // @Effect()
     // public RemoveBranch$: Observable<Action> = this.action$

@@ -5,7 +5,7 @@ import { Action, Store } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AppState } from '../../store/roots';
 import { InventoryService } from '../../services/inventory.service';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 import { INVENTORY_BRANCH_TRANSFER, INVENTORY_LINKED_STOCKS, InventoryActionsConst } from './inventory.const';
@@ -16,15 +16,15 @@ import { SalesActions } from '../sales/sales.action';
 
 @Injectable()
 export class InventoryAction {
-    @Effect()
-    public addNewGroup$: Observable<Action> = this.action$
+
+    public addNewGroup$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.AddNewGroup),
             switchMap((action: CustomActions) => this._inventoryService.CreateStockGroup(action.payload)),
-            map(response => this.addNewGroupResponse(response)));
+            map(response => this.addNewGroupResponse(response))));
 
-    @Effect()
-    public addNewGroupResponse$: Observable<Action> = this.action$
+
+    public addNewGroupResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.AddNewGroupResponse),
             map((response: CustomActions) => {
@@ -36,17 +36,17 @@ export class InventoryAction {
                     this._toasty.successToast('Group Created Successfully');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public updateGroup$: Observable<Action> = this.action$
+
+    public updateGroup$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(InventoryActionsConst.UpdateGroup),
             switchMap((action: CustomActions) => this._inventoryService.UpdateStockGroup(action.payload.body, action.payload.stockGroupUniquename)),
-            map(response => this.updateGroupResponse(response)));
+            map(response => this.updateGroupResponse(response))));
 
-    @Effect()
-    public updateGroupResponse$: Observable<Action> = this.action$
+
+    public updateGroupResponse$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(InventoryActionsConst.UpdateGroupResponse),
             map((response: CustomActions) => {
@@ -58,17 +58,17 @@ export class InventoryAction {
                     this._toasty.successToast('Group Updated Successfully');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public removeGroup$: Observable<Action> = this.action$
+
+    public removeGroup$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.RemoveGroup),
             switchMap((action: CustomActions) => this._inventoryService.DeleteStockGroup(action.payload)),
-            map(response => this.removeGroupResponse(response)));
+            map(response => this.removeGroupResponse(response))));
 
-    @Effect()
-    public removeGroupResponse$: Observable<Action> = this.action$
+
+    public removeGroupResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.RemoveGroupResponse),
             map((response: CustomActions) => {
@@ -80,87 +80,87 @@ export class InventoryAction {
                     return this.resetActiveGroup();
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public GetStockUniqueName$: Observable<Action> = this.action$
+
+    public GetStockUniqueName$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.GetStockUniqueName),
             switchMap((action: CustomActions) => this._inventoryService.GetStockDetails(action.payload.stockGroupUniqueName, action.payload.stockUniqueName)),
             map(response => {
                 return this.GetStockUniqueNameResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public GetStockUniqueNameResponse$: Observable<Action> = this.action$
+
+    public GetStockUniqueNameResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.GetStockUniqueNameResponse),
             map((action: CustomActions) => {
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public GetStock$: Observable<Action> = this.action$
+
+    public GetStock$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.GetStock),
             switchMap((action: CustomActions) => this._inventoryService.GetStocks(action.payload)),
             map(response => {
                 return this.GetStockResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public GetStockResponse$: Observable<Action> = this.action$
+
+    public GetStockResponse$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(InventoryActionsConst.GetStockResponse),
             map((action: CustomActions) => {
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
     // Get manufacturing stock
-    @Effect()
-    public GetManufacturingStock$: Observable<Action> = this.action$
+
+    public GetManufacturingStock$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.GetManufacturingStock),
             switchMap((action: CustomActions) => this._inventoryService.GetManufacturingStocks()),
             map(response => {
                 return this.GetManufacturingStockResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public GetManufacturingStockResponse$: Observable<Action> = this.action$
+
+    public GetManufacturingStockResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.GetManufacturingStockResponse),
             map((action: CustomActions) => {
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
     // Get manufacturing stock for create manufacturing
-    @Effect()
-    public GetManufacturingStockForCreate$: Observable<Action> = this.action$
+
+    public GetManufacturingStockForCreate$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.GetManufacturingStockForCreate),
             switchMap((action: CustomActions) => this._inventoryService.GetManufacturingStocksForCreateMF()),
             map(response => {
                 return this.GetManufacturingCreateStockResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public GetManufacturingStockForCreateResponse$: Observable<Action> = this.action$
+
+    public GetManufacturingStockForCreateResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.GetManufacturingStockForCreateResponse),
             map((action: CustomActions) => {
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public createStock$: Observable<Action> = this.action$
+
+    public createStock$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.CreateStock),
             switchMap((action: CustomActions) => this._inventoryService.CreateStock(action.payload.stock, action.payload.stockGroupUniqueName)),
-            map(response => this.createStockResponse(response)));
+            map(response => this.createStockResponse(response))));
 
-    @Effect()
-    public createStockResponse$: Observable<Action> = this.action$
+
+    public createStockResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.CreateStockResponse),
             map((response: CustomActions) => {
@@ -180,17 +180,17 @@ export class InventoryAction {
                     return this.resetActiveStock();
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public updateStock$: Observable<Action> = this.action$
+
+    public updateStock$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.UpdateStock),
             switchMap((action: CustomActions) => this._inventoryService.UpdateStock(action.payload.stock, action.payload.stockGroupUniqueName, action.payload.stockUniqueName)),
-            map(response => this.updateStockResponse(response)));
+            map(response => this.updateStockResponse(response))));
 
-    @Effect()
-    public updateStockResponse$: Observable<Action> = this.action$
+
+    public updateStockResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.UpdateStockResponse),
             map((response: CustomActions) => {
@@ -203,17 +203,17 @@ export class InventoryAction {
                     this._toasty.successToast('Stock Updated Successfully');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public removeStock$: Observable<Action> = this.action$
+
+    public removeStock$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(InventoryActionsConst.RemoveStock),
             switchMap((action: CustomActions) => this._inventoryService.DeleteStock(action.payload.stockGroupUniqueName, action.payload.stockUniqueName)),
-            map(response => this.removeStockResponse(response)));
+            map(response => this.removeStockResponse(response))));
 
-    @Effect()
-    public removeStockResponse$: Observable<Action> = this.action$
+
+    public removeStockResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.RemoveStockResponse),
             map((response: CustomActions) => {
@@ -227,27 +227,27 @@ export class InventoryAction {
                     })
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public GetStockWithUniqueName$: Observable<Action> = this.action$
+
+    public GetStockWithUniqueName$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.GetStockWithUniqueName),
             switchMap((action: CustomActions) => this._inventoryService.GetStockUniqueNameWithDetail(action.payload.stockUniqueName)),
             map(response => {
                 return this.GetStockWithUniqueNameResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public GetStockWithUniqueNameResponse$: Observable<Action> = this.action$
+
+    public GetStockWithUniqueNameResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.GetStockWithUniqueNameResponse),
             map((action: CustomActions) => {
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public CreateBranchTransfer$: Observable<Action> = this.action$
+
+    public CreateBranchTransfer$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER),
             switchMap((action: CustomActions) => this._inventoryService.BranchTransfer(action.payload)),
@@ -261,10 +261,9 @@ export class InventoryAction {
                     type: INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER_RESPONSE,
                     payload: res.status === 'success' ? res.body : null
                 } as CustomActions;
-            }));
+            })));
 
-    @Effect()
-    public GetLinkedStocks$: Observable<Action> = this.action$
+    public GetLinkedStocks$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(INVENTORY_LINKED_STOCKS.GET_LINKED_STOCKS),
             switchMap(() => this._inventoryService.getLinkedStocks()),
@@ -277,19 +276,19 @@ export class InventoryAction {
                     type: INVENTORY_LINKED_STOCKS.GET_LINKED_STOCKS_RESPONSE,
                     payload: res.status === 'success' ? res.body : null
                 };
-            }));
+            })));
 
-    @Effect()
-    public MoveStock$: Observable<Action> = this.action$
+
+    public MoveStock$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(InventoryActionsConst.MoveStock),
             switchMap((action: CustomActions) => this._inventoryService.MoveStock(action.payload.activeGroup, action.payload.stockUniqueName, action.payload.groupUniqueName)),
             map(response => {
                 return this.MoveStockResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public MoveStockResponse$: Observable<Action> = this.action$
+
+    public MoveStockResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(InventoryActionsConst.MoveStockResponse),
             map((response: CustomActions) => {
@@ -308,7 +307,7 @@ export class InventoryAction {
                     return this.resetActiveStock();
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
     constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
         private _toasty: ToasterService, private router: Router, private _salesActions: SalesActions) {

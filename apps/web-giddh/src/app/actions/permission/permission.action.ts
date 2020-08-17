@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -19,68 +19,67 @@ import { CustomActions } from '../../store/customActions';
 @Injectable()
 export class PermissionActions {
 
-	@Effect()
-	public GetAllPages$: Observable<Action> = this.action$
+    public GetAllPages$: Observable<Action> =createEffect( ()=> this.action$
 		.pipe(
             ofType(PERMISSION_ACTIONS.GET_ALL_PAGES),
 			switchMap((action: CustomActions) => this._permissionService.GetAllPageNames()),
 			map(response => {
 				return this.GetAllPagesResponse(response);
-			}));
+			})));
 
-	@Effect()
-	public GetAllPagesResponse$: Observable<Action> = this.action$
+
+	public GetAllPagesResponse$: Observable<Action> =createEffect( ()=> this.action$
 		.pipe(
             ofType(PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE),
 			map(response => {
 				return { type: 'EmptyAction' };
-			}));
+			})));
 
-	@Effect()
-	public GetAllPermissions$: Observable<Action> = this.action$
+
+	public GetAllPermissions$: Observable<Action> =createEffect( ()=> this.action$
 		.pipe(
             ofType(PERMISSION_ACTIONS.GET_ALL_PERMISSIONS),
 			switchMap((action: CustomActions) => this._permissionService.GetAllRoles()),
 			map(response => {
 				return this.GetAllPermissionsResponse(response);
-			}));
+			})));
 
-	@Effect()
-	public GetAllPermissionsResponse$: Observable<Action> = this.action$
+
+	public GetAllPermissionsResponse$: Observable<Action> =createEffect( ()=> this.action$
 		.pipe(
             ofType(PERMISSION_ACTIONS.GET_ALL_PERMISSIONS_RESPONSE),
 			map(response => {
 				return { type: 'EmptyAction' };
-			}));
+			})));
 
-	@Effect()
-	public GetRoles$: Observable<Action> = this.action$
+
+	public GetRoles$: Observable<Action> =createEffect( ()=> this.action$
 		.pipe(
             ofType(PERMISSION_ACTIONS.GET_ROLES),
 			switchMap((action: CustomActions) => this._permissionService.GetAllRoles()),
 			map(response => {
 				return this.GetRolesResponse(response);
-			}));
+			})));
 
-	@Effect()
-	public GetRolesResponse$: Observable<Action> = this.action$
+
+	public GetRolesResponse$: Observable<Action> =createEffect( ()=> this.action$
 		.pipe(
             ofType(PERMISSION_ACTIONS.GET_ROLES_RESPONSE),
 			map(response => {
 				return { type: 'EmptyAction' };
-			}));
+			})));
 
-	@Effect()
-	public CreateRole$: Observable<Action> = this.action$
+
+	public CreateRole$: Observable<Action> = createEffect( ()=>this.action$
 		.pipe(
             ofType(PERMISSION_ACTIONS.CREATE_ROLE),
 			switchMap((action: CustomActions) => {
 				return this._permissionService.CreateNewRole(action.payload).pipe(
 					map(response => this.CreateRoleResponse(response)));
-			}));
+			})));
 
-	@Effect()
-	public CreateRoleResponse$: Observable<Action> = this.action$
+
+	public CreateRoleResponse$: Observable<Action> = createEffect( ()=>this.action$
 		.pipe(
             ofType(PERMISSION_ACTIONS.CREATE_ROLE_RESPONSE),
 			map((response: CustomActions) => {
@@ -92,19 +91,19 @@ export class PermissionActions {
 					return { type: PERMISSION_ACTIONS.GET_ROLES };
 				}
 				return { type: 'EmptyAction' };
-			}));
+			})));
 
-	@Effect()
-	public UpdateRole$: Observable<Action> = this.action$
+
+	public UpdateRole$: Observable<Action> =createEffect( ()=> this.action$
 		.pipe(
             ofType(PERMISSION_ACTIONS.UPDATE_ROLE),
 			switchMap((action: CustomActions) => this._permissionService.UpdateRole(action.payload)),
 			map(response => {
 				return this.UpdateRoleResponse(response);
-			}));
+			})));
 
-	@Effect()
-	public UpdateRoleResponse$: Observable<Action> = this.action$
+
+	public UpdateRoleResponse$: Observable<Action> =createEffect( ()=> this.action$
 		.pipe(
             ofType(PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE),
 			map((response: CustomActions) => {
@@ -116,7 +115,7 @@ export class PermissionActions {
 					return { type: PERMISSION_ACTIONS.GET_ROLES };
 				}
 				return { type: 'EmptyAction' };
-			}));
+			})));
 
 	// @Effect()
 	// private UpdateRole$: Observable<Action> = this.action$
@@ -142,17 +141,17 @@ export class PermissionActions {
 	//         }, true));
 	//   });
 
-	@Effect()
-	public DeleteRole$: Observable<Action> = this.action$
+
+	public DeleteRole$: Observable<Action> =createEffect( ()=> this.action$
 		.pipe(
             ofType(PERMISSION_ACTIONS.DELETE_ROLE),
 			switchMap((action: CustomActions) => this._permissionService.DeleteRole(action.payload)),
 			map(response => {
 				return this.DeleteRoleResponse(response);
-			}));
+			})));
 
-	@Effect()
-	public DeleteRoleResponse$: Observable<Action> = this.action$
+
+	public DeleteRoleResponse$: Observable<Action> =createEffect( ()=> this.action$
 		.pipe(
             ofType(PERMISSION_ACTIONS.DELETE_ROLE_RESPONSE),
 			map((response: CustomActions) => {
@@ -163,7 +162,7 @@ export class PermissionActions {
 					this._toasty.successToast('Role Deleted Successfully.');
 				}
 				return { type: 'EmptyAction' };
-			}));
+			})));
 
 	constructor(private action$: Actions,
 		private _toasty: ToasterService,

@@ -1,6 +1,6 @@
 import {map, switchMap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import {GroupService} from '../../services/group.service';
 import {BaseResponse} from '../../models/api-models/BaseResponse';
 import {Action} from '@ngrx/store';
@@ -18,8 +18,8 @@ import {CurrentPage} from '../../models/api-models/Common';
 
 @Injectable()
 export class GeneralActions {
-    @Effect()
-    public GetGroupsWithAccount$: Observable<Action> = this.action$
+
+    public GetGroupsWithAccount$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(GENERAL_ACTIONS.GENERAL_GET_GROUP_WITH_ACCOUNTS),
             switchMap((action: CustomActions) =>
@@ -27,10 +27,10 @@ export class GeneralActions {
             ),
             map(response => {
                 return this.getGroupWithAccountsResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public GetFlattenGroups$: Observable<Action> = this.action$
+
+    public GetFlattenGroups$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(GENERAL_ACTIONS.FLATTEN_GROUPS_REQ),
             switchMap((action: CustomActions) =>
@@ -38,10 +38,10 @@ export class GeneralActions {
             ),
             map(response => {
                 return this.getFlattenGroupsRes(response);
-            }));
+            })));
 
-    @Effect()
-    public getFlattenAccounts$: Observable<Action> = this.action$
+
+    public getFlattenAccounts$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS),
             switchMap((action: CustomActions) =>
@@ -49,14 +49,14 @@ export class GeneralActions {
             ),
             map(response => {
                 return this.getFlattenAccountResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public getAllState$: Observable<Action> = this.action$
+
+    public getAllState$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(GENERAL_ACTIONS.GENERAL_GET_ALL_STATES),
             switchMap((action: CustomActions) => this._companyService.getAllStates(action.payload)),
-            map(resp => this.getAllStateResponse(resp)));
+            map(resp => this.getAllStateResponse(resp))));
 
     constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService, private _companyService: CompanyService) {
         //

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -16,9 +16,9 @@ import { ProformaFilter, ProformaGetAllVersionRequest, ProformaGetAllVersionsRes
 @Injectable()
 export class ProformaActions {
 
-	@Effect()
+
 	public GENERATE_PROFORMA$: Observable<Action> =
-		this.action$.pipe(
+        createEffect( ()=>	this.action$.pipe(
 			ofType(PROFORMA_ACTIONS.GENERATE_PROFORMA_REQUEST),
 			switchMap((action: CustomActions) => this.proformaService.generate(action.payload)),
 			map((response) => {
@@ -40,11 +40,11 @@ export class ProformaActions {
 				}
 				return this.generateProformaResponse(response);
 			})
-		);
+		));
 
-	@Effect()
+
 	public GET_ALL$: Observable<Action> =
-		this.action$.pipe(
+        createEffect( ()=>this.action$.pipe(
 			ofType(PROFORMA_ACTIONS.GET_ALL_PROFORMA_REQUEST),
 			switchMap((action: CustomActions) => this.proformaService.getAll(action.payload.request, action.payload.voucherType)),
 			map((response) => {
@@ -53,11 +53,11 @@ export class ProformaActions {
 				}
 				return this.getAllResponse(response);
 			})
-		);
+		));
 
-	@Effect()
+
 	public GET_DETAILS$: Observable<Action> =
-		this.action$.pipe(
+        createEffect( ()=>this.action$.pipe(
 			ofType(PROFORMA_ACTIONS.GET_PROFORMA_DETAILS_REQUEST),
 			switchMap((action: CustomActions) => this.proformaService.get(action.payload.request, action.payload.voucherType)),
 			map((response) => {
@@ -66,11 +66,11 @@ export class ProformaActions {
 				}
 				return this.getProformaDetailsResponse(response);
 			})
-		);
+		));
 
-	@Effect()
+
 	public UPDATE_PROFORMA$: Observable<Action> =
-		this.action$.pipe(
+        createEffect( ()=>	this.action$.pipe(
 			ofType(PROFORMA_ACTIONS.UPDATE_PROFORMA_REQUEST),
 			switchMap((action: CustomActions) => this.proformaService.update(action.payload)),
 			map((response) => {
@@ -81,11 +81,11 @@ export class ProformaActions {
 				}
 				return this.updateProformaResponse(response);
 			})
-		);
+		));
 
-	@Effect()
+
 	public DELETE_PROFORMA$: Observable<Action> =
-		this.action$.pipe(
+        createEffect( ()=>this.action$.pipe(
 			ofType(PROFORMA_ACTIONS.DELETE_PROFORMA_REQUEST),
 			switchMap((action: CustomActions) => this.proformaService.delete(action.payload.request, action.payload.voucherType)),
 			map((response) => {
@@ -96,11 +96,11 @@ export class ProformaActions {
 				}
 				return this.deleteProformaResponse(response);
 			})
-		);
+		));
 
-	@Effect()
+
 	public UPDATE_PROFORMA_ACTION$: Observable<Action> =
-		this.action$.pipe(
+        createEffect( ()=>	this.action$.pipe(
 			ofType(PROFORMA_ACTIONS.UPDATE_PROFORMA_ACTION),
 			switchMap((action: CustomActions) => this.proformaService.updateAction(action.payload.request, action.payload.voucherType)),
 			map((response) => {
@@ -111,11 +111,10 @@ export class ProformaActions {
 				}
 				return this.updateProformaActionResponse(response);
 			})
-		);
+		));
 
-	@Effect()
 	public GET_ESTIMATE_VERSIONS$: Observable<Action> =
-		this.action$.pipe(
+        createEffect( ()=>	this.action$.pipe(
 			ofType(PROFORMA_ACTIONS.GET_ESTIMATE_VERSIONS),
 			switchMap((action: CustomActions) => this.proformaService.getAllVersions(action.payload.request, action.payload.voucherType)),
 			map((response) => {
@@ -124,11 +123,11 @@ export class ProformaActions {
 				}
 				return this.getEstimateVersionResponse(response);
 			})
-		);
+		));
 
-	@Effect()
+
 	public GENERATE_INVOICE$: Observable<Action> =
-		this.action$.pipe(
+        createEffect( ()=>	this.action$.pipe(
 			ofType(PROFORMA_ACTIONS.GENERATE_INVOICE_FROM_PROFORMA_OR_ESTIMATES),
 			switchMap((action: CustomActions) => this.proformaService.generateInvoice(action.payload.request, action.payload.voucherType)),
 			map((response) => {
@@ -137,11 +136,11 @@ export class ProformaActions {
 				}
 				return this.generateInvoiceResponse(response);
 			})
-		);
+		));
 
-	@Effect()
+
 	public GENERATE_PROFORMA_FROM_ESTIMATES$: Observable<Action> =
-		this.action$.pipe(
+        createEffect( ()=>	this.action$.pipe(
 			ofType(PROFORMA_ACTIONS.GENERATE_PROFORMA_FROM_ESTIMATE),
 			switchMap((action: CustomActions) => this.proformaService.generateProforma(action.payload.request, action.payload.voucherType)),
 			map((response) => {
@@ -152,11 +151,11 @@ export class ProformaActions {
 				}
 				return this.generateProformaFromEstimateResponse(response);
 			})
-		);
+		));
 
-	@Effect()
+
 	public SEND_EMAIL$: Observable<Action> =
-		this.action$.pipe(
+        createEffect( ()=>	this.action$.pipe(
 			ofType(PROFORMA_ACTIONS.SEND_EMAIL),
 			switchMap((action: CustomActions) => this.proformaService.sendEmail(action.payload.request, action.payload.voucherType)),
 			map((response) => {
@@ -167,7 +166,7 @@ export class ProformaActions {
 				}
 				return this.sendMailResponse(response);
 			})
-		);
+		));
 
 	constructor(private action$: Actions, private _toasty: ToasterService, private store: Store<AppState>,
 		private proformaService: ProformaService) {

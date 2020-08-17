@@ -2,7 +2,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { SettingsPermissionService } from '../../../services/settings.permission.service';
 import { SETTINGS_PERMISSION_ACTIONS } from './settings.permissions.const';
 import { Injectable } from '@angular/core';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -14,17 +14,17 @@ import { CustomActions } from '../../../store/customActions';
 @Injectable()
 export class SettingsPermissionActions {
 
-    @Effect()
-    public GetUsersWithPermissions$: Observable<Action> = this.action$
+
+    public GetUsersWithPermissions$: Observable<Action> =createEffect( ()=>  this.action$
         .pipe(
             ofType(SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS),
             switchMap((action: CustomActions) => {
                 return this.settingsPermissionService.GetUsersWithCompanyPermissions(action.payload).pipe(
                     map(response => this.GetUsersWithPermissionsResponse(response)));
-            }));
+            })));
 
-    @Effect()
-    public GetUsersWithPermissionsResponse$: Observable<Action> = this.action$
+
+    public GetUsersWithPermissionsResponse$: Observable<Action> =createEffect( ()=>  this.action$
         .pipe(
             ofType(SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS_RESPONSE),
             map((response: CustomActions) => {
@@ -33,7 +33,7 @@ export class SettingsPermissionActions {
                     this.toasty.errorToast(data.message, data.code);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
     constructor(private action$: Actions,
         private toasty: ToasterService,

@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -16,8 +16,8 @@ import { CompanyActions } from "../company.actions";
 @Injectable()
 export class SettingsIntegrationActions {
 
-    @Effect()
-    public GetSMSKey$: Observable<Action> = this.action$
+
+    public GetSMSKey$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY),
             switchMap((action: CustomActions) => this.settingsIntegrationService.GetSMSKey()),
@@ -27,10 +27,10 @@ export class SettingsIntegrationActions {
             }, false, {
                 type: SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public GetEmailKey$: Observable<Action> = this.action$
+
+    public GetEmailKey$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY),
             switchMap((action: CustomActions) => this.settingsIntegrationService.GetEmailKey()),
@@ -40,10 +40,10 @@ export class SettingsIntegrationActions {
             }, false, {
                 type: SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public SaveSMSKey$: Observable<Action> = this.action$
+
+    public SaveSMSKey$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY),
             switchMap((action: CustomActions) => this.settingsIntegrationService.SaveSMSKey(action.payload)),
@@ -53,10 +53,10 @@ export class SettingsIntegrationActions {
             }, true, {
                 type: SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public SaveEmailKey$: Observable<Action> = this.action$
+
+    public SaveEmailKey$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY),
             switchMap((action: CustomActions) => this.settingsIntegrationService.SaveEmailKey(action.payload)),
@@ -66,9 +66,9 @@ export class SettingsIntegrationActions {
             }, true, {
                 type: SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE,
                 payload: res
-            })));
-    @Effect()
-    public SavePaymentKey$: Observable<Action> = this.action$
+            }))));
+
+    public SavePaymentKey$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY),
             switchMap((action: CustomActions) => this.settingsIntegrationService.SavePaymentKey(action.payload)),
@@ -78,9 +78,9 @@ export class SettingsIntegrationActions {
             }, true, {
                 type: SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY_RESPONSE,
                 payload: res
-            })));
-    @Effect()
-    public SavePaymentKeyResponse$: Observable<Action> = this.action$
+            }))));
+
+    public SavePaymentKeyResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY_RESPONSE),
             map((response: CustomActions) => {
@@ -92,10 +92,9 @@ export class SettingsIntegrationActions {
                     this.toasty.successToast('Account created successfully', '');
                 }
                 return { type: 'EmptyAction' };
+            })));
 
-            }));
-    @Effect()
-    public UpdatePaymentKey$: Observable<Action> = this.action$
+    public UpdatePaymentKey$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY),
             switchMap((action: CustomActions) => this.settingsIntegrationService.updatePaymentKey(action.payload)),
@@ -105,9 +104,9 @@ export class SettingsIntegrationActions {
             }, true, {
                 type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE,
                 payload: res
-            })));
-    @Effect()
-    public UpdatePaymentKeyResponse$: Observable<Action> = this.action$
+            }))));
+
+    public UpdatePaymentKeyResponse$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE),
             map((response: CustomActions) => {
@@ -120,11 +119,10 @@ export class SettingsIntegrationActions {
                     this.toasty.successToast(data.body.message);
                 }
                 return { type: 'EmptyAction' };
+            })));
 
-            }));
 
-    @Effect()
-    public GetRazorPayDetails$: Observable<Action> = this.action$
+    public GetRazorPayDetails$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS),
             switchMap((action: CustomActions) => this.settingsIntegrationService.GetRazorPayDetails()),
@@ -134,10 +132,10 @@ export class SettingsIntegrationActions {
             }, false, {
                 type: SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public SaveRazorPayDetails$: Observable<Action> = this.action$
+
+    public SaveRazorPayDetails$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS),
             switchMap((action: CustomActions) => this.settingsIntegrationService.SaveRazorPayDetails(action.payload)),
@@ -147,10 +145,10 @@ export class SettingsIntegrationActions {
             }, true, {
                 type: SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public DeleteRazorPayDetails$: Observable<Action> = this.action$
+
+    public DeleteRazorPayDetails$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS),
             switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteRazorPayDetails()),
@@ -160,10 +158,10 @@ export class SettingsIntegrationActions {
             }, true, {
                 type: SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public UpdateRazorPayDetails$: Observable<Action> = this.action$
+
+    public UpdateRazorPayDetails$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS),
             switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateRazorPayDetails(action.payload)),
@@ -173,17 +171,17 @@ export class SettingsIntegrationActions {
             }, true, {
                 type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public SaveCashfreeDetails$: Observable<Action> = this.action$
+
+    public SaveCashfreeDetails$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS),
             switchMap((action: CustomActions) => this.settingsIntegrationService.SaveCashFreeDetail(action.payload)),
-            map(response => this.SaveCashfreeDetailsResponse(response)));
+            map(response => this.SaveCashfreeDetailsResponse(response))));
 
-    @Effect()
-    public SaveCashfreeDetailsResponse$: Observable<Action> = this.action$
+
+    public SaveCashfreeDetailsResponse$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS_RESPONSE),
             map((response: CustomActions) => {
@@ -195,17 +193,17 @@ export class SettingsIntegrationActions {
                     this.toasty.successToast(data.body, '');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public DeleteCashfreeDetails$: Observable<Action> = this.action$
+
+    public DeleteCashfreeDetails$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_CASHFREE_DETAILS),
             switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteCashFreeDetail()),
-            map(response => this.DeleteCashfreeDetailsResponse(response)));
+            map(response => this.DeleteCashfreeDetailsResponse(response))));
 
-    @Effect()
-    public DeleteCashfreeDetailsResponse$: Observable<Action> = this.action$
+
+    public DeleteCashfreeDetailsResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_CASHFREE_DETAILS_RESPONSE),
             map((response: CustomActions) => {
@@ -216,17 +214,16 @@ export class SettingsIntegrationActions {
                     this.toasty.successToast(data.body, '');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public AddAutoCollectUser$: Observable<Action> = this.action$
+
+    public AddAutoCollectUser$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER),
             switchMap((action: CustomActions) => this.settingsIntegrationService.AddAutoCollectUser(action.payload)),
-            map(response => this.AddAutoCollectUserResponse(response)));
+            map(response => this.AddAutoCollectUserResponse(response))));
 
-    @Effect()
-    public AddAutoCollectUserResponse$: Observable<Action> = this.action$
+    public AddAutoCollectUserResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER_RESPONSE),
             map((response: CustomActions) => {
@@ -238,17 +235,17 @@ export class SettingsIntegrationActions {
                     this.toasty.successToast(data.body, '');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public DeleteAutoCollectUser$: Observable<Action> = this.action$
+
+    public DeleteAutoCollectUser$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER),
             switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteAutoCollectUser()),
-            map(response => this.DeleteAutoCollectUserResponse(response)));
+            map(response => this.DeleteAutoCollectUserResponse(response))));
 
-    @Effect()
-    public DeleteAutoCollectUserResponse$: Observable<Action> = this.action$
+
+    public DeleteAutoCollectUserResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER_RESPONSE),
             map((response: CustomActions) => {
@@ -260,49 +257,49 @@ export class SettingsIntegrationActions {
                     this.toasty.successToast(data.message, '');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public GetCashfreeDetails$: Observable<Action> = this.action$
+
+    public GetCashfreeDetails$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS),
             switchMap((action: CustomActions) => this.settingsIntegrationService.GetCashFreeDetail()),
-            map(response => this.GetCashfreeDetailsResponse(response)));
+            map(response => this.GetCashfreeDetailsResponse(response))));
 
-    @Effect()
-    public GetCashfreeDetailsResponse$: Observable<Action> = this.action$
+
+    public GetCashfreeDetailsResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public GetAutoCollectDetails$: Observable<Action> = this.action$
+
+    public GetAutoCollectDetails$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER),
             switchMap((action: CustomActions) => this.settingsIntegrationService.GetAutoCollectUser()),
-            map(response => this.GetAutoCollectDetailsResponse(response)));
+            map(response => this.GetAutoCollectDetailsResponse(response))));
 
-    @Effect()
-    public GetAutoCollectDetailsResponse$: Observable<Action> = this.action$
+
+    public GetAutoCollectDetailsResponse$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public UpdateCashfreeDetails$: Observable<Action> = this.action$
+
+    public UpdateCashfreeDetails$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS),
             switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateCashFreeDetail(action.payload)),
-            map(response => this.UpdateCashfreeDetailsResponse(response)));
+            map(response => this.UpdateCashfreeDetailsResponse(response))));
 
-    @Effect()
-    public UpdateCashfreeDetailsResponse$: Observable<Action> = this.action$
+
+    public UpdateCashfreeDetailsResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS_RESPONSE),
             map((response: CustomActions) => {
@@ -314,33 +311,33 @@ export class SettingsIntegrationActions {
                     this.toasty.successToast(data.body, '');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public GetPaymentGateway$: Observable<Action> = this.action$
+
+    public GetPaymentGateway$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY),
             switchMap((action: CustomActions) => this.settingsIntegrationService.GetPaymentGateway()),
-            map(response => this.GetPaymentGatewayResponse(response)));
+            map(response => this.GetPaymentGatewayResponse(response))));
 
-    @Effect()
-    public GetPaymentGatewayResponse$: Observable<Action> = this.action$
+
+    public GetPaymentGatewayResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public AddPaymentGateway$: Observable<Action> = this.action$
+
+    public AddPaymentGateway$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY),
             switchMap((action: CustomActions) => this.settingsIntegrationService.AddPaymentGateway(action.payload)),
-            map(response => this.AddPaymentGatewayResponse(response)));
+            map(response => this.AddPaymentGatewayResponse(response))));
 
-    @Effect()
-    public AddPaymentGatewayResponse$: Observable<Action> = this.action$
+
+    public AddPaymentGatewayResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY_RESPONSE),
             map((response: CustomActions) => {
@@ -351,17 +348,17 @@ export class SettingsIntegrationActions {
                     this.toasty.successToast(data.body, '');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public UpdatePaymentGateway$: Observable<Action> = this.action$
+
+    public UpdatePaymentGateway$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY),
             switchMap((action: CustomActions) => this.settingsIntegrationService.UpdatePaymentGateway(action.payload)),
-            map(response => this.UpdatePaymentGatewayResponse(response)));
+            map(response => this.UpdatePaymentGatewayResponse(response))));
 
-    @Effect()
-    public UpdatePaymentGatewayResponse$: Observable<Action> = this.action$
+
+    public UpdatePaymentGatewayResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY_RESPONSE),
             map((response: CustomActions) => {
@@ -372,17 +369,17 @@ export class SettingsIntegrationActions {
                     this.toasty.successToast(data.body, '');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public DeletePaymentGateway$: Observable<Action> = this.action$
+
+    public DeletePaymentGateway$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY),
             switchMap((action: CustomActions) => this.settingsIntegrationService.DeletePaymentGateway()),
-            map(response => this.DeletePaymentGatewayResponse(response)));
+            map(response => this.DeletePaymentGatewayResponse(response))));
 
-    @Effect()
-    public DeletePaymentGatewayResponse$: Observable<Action> = this.action$
+
+    public DeletePaymentGatewayResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY_RESPONSE),
             map((response: CustomActions) => {
@@ -393,17 +390,17 @@ export class SettingsIntegrationActions {
                     this.toasty.successToast(data.body, '');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public UpdateAutoCollectUser$: Observable<Action> = this.action$
+
+    public UpdateAutoCollectUser$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AUTOCOLLECT_USER),
             switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateAutoCollectUser(action.payload)),
-            map(response => this.UpdateAutoCollectUserResponse(response)));
+            map(response => this.UpdateAutoCollectUserResponse(response))));
 
-    @Effect()
-    public UpdateAutoCollectUserResponse$: Observable<Action> = this.action$
+
+    public UpdateAutoCollectUserResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AUTOCOLLECT_USER_RESPONSE),
             map((response: CustomActions) => {
@@ -414,17 +411,17 @@ export class SettingsIntegrationActions {
                     // this.toasty.successToast(data.body, '');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public AddAmazonSeller$: Observable<Action> = this.action$
+
+    public AddAmazonSeller$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER),
             switchMap((action: CustomActions) => this.settingsIntegrationService.AddAmazonSeller(action.payload))
-            , map(response => this.AddAmazonSellerResponse(response)));
+            , map(response => this.AddAmazonSellerResponse(response))));
 
-    @Effect()
-    public AddAmazonSellerResponse$: Observable<Action> = this.action$
+
+    public AddAmazonSellerResponse$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER_RESPONSE),
             map((response: CustomActions) => {
@@ -435,17 +432,17 @@ export class SettingsIntegrationActions {
                 this.toasty.successToast(data.body, '');
             }
             return { type: 'EmptyAction' };
-        }));
+        })));
 
-    @Effect()
-    public UpdateAmazonSeller$: Observable<Action> = this.action$
+
+    public UpdateAmazonSeller$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER),
             switchMap((action: CustomActions) => this.settingsIntegrationService.UpdateAmazonSeller(action.payload))
-            , map(response => this.UpdateAmazonSellerResponse(response)));
+            , map(response => this.UpdateAmazonSellerResponse(response))));
 
-    @Effect()
-    public UpdateAmazonSellerResponse$: Observable<Action> = this.action$
+
+    public UpdateAmazonSellerResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER_RESPONSE),
             map((response: CustomActions) => {
@@ -456,17 +453,17 @@ export class SettingsIntegrationActions {
                 this.toasty.successToast('Seller Updated Successfully', '');
             }
             return { type: 'EmptyAction' };
-        }));
+        })));
 
-    @Effect()
-    public DeleteAmazonSeller$: Observable<Action> = this.action$
+
+    public DeleteAmazonSeller$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER),
             switchMap((action: CustomActions) => this.settingsIntegrationService.DeleteAmazonSeller(action.payload))
-            , map(response => this.DeleteAmazonSellerResponse(response)));
+            , map(response => this.DeleteAmazonSellerResponse(response))));
 
-    @Effect()
-    public DeleteAmazonSellerResponse$: Observable<Action> = this.action$
+
+    public DeleteAmazonSellerResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER_RESPONSE),
             map((response: CustomActions) => {
@@ -477,40 +474,39 @@ export class SettingsIntegrationActions {
                 this.toasty.successToast(data.body, '');
             }
             return { type: 'EmptyAction' };
-        }));
+        })));
 
-    @Effect()
-    public GetAmazonSellers$: Observable<Action> = this.action$
+
+    public GetAmazonSellers$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER),
             switchMap((action: CustomActions) => this.settingsIntegrationService.GetAmazonSeller())
-            , map(response => this.GetAmazonSellersResponse(response)));
+            , map(response => this.GetAmazonSellersResponse(response))));
 
-    @Effect()
-    public GetAmazonSellersResponse$: Observable<Action> = this.action$
+
+    public GetAmazonSellersResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER_RESPONSE),
             map((response: CustomActions) => {
             let data: BaseResponse<any, any> = response.payload;
             return { type: 'EmptyAction' };
-        }));
+        })));
 
-    @Effect()
-    public GetGmailIntegrationStatus$: Observable<Action> = this.action$
+    public GetGmailIntegrationStatus$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS),
             switchMap((action: CustomActions) => this.settingsIntegrationService.GetGmailIntegrationStatus()),
-            map(response => this.GetGmailIntegrationStatusResponse(response)));
+            map(response => this.GetGmailIntegrationStatusResponse(response))));
 
-    @Effect()
-    public RemoveICICI$: Observable<Action> = this.action$
+
+    public RemoveICICI$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.REMOVE_ICICI_PAYMENT),
             switchMap((action: CustomActions) => this.settingsIntegrationService.RemoveICICI(action.payload))
-            , map(response => this.RemovePaymentInfoResponse(response)));
+            , map(response => this.RemovePaymentInfoResponse(response))));
 
-    @Effect()
-    public RemoveICICIResponse$: Observable<Action> = this.action$
+
+    public RemoveICICIResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.REMOVE_ICICI_PAYMENT_RESPONSE),
             map((response: CustomActions) => {
@@ -522,17 +518,17 @@ export class SettingsIntegrationActions {
                 this.store.dispatch(this._companyAction.getAllRegistrations());
             }
             return { type: 'EmptyAction' };
-        }));
+        })));
 
-    @Effect()
-    public RemoveGmailIntegration$: Observable<Action> = this.action$
+
+    public RemoveGmailIntegration$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.REMOVE_GMAIL_INTEGRATION),
             switchMap((action: CustomActions) => this.settingsIntegrationService.RemoveGmailIntegration())
-            , map(response => this.RemoveGmailIntegrationResponse(response)));
+            , map(response => this.RemoveGmailIntegrationResponse(response))));
 
-    @Effect()
-    public RemoveGmailIntegrationResponse$: Observable<Action> = this.action$
+
+    public RemoveGmailIntegrationResponse$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_INTEGRATION_ACTIONS.REMOVE_GMAIL_INTEGRATION_RESPONSE),
             map((response: CustomActions) => {
@@ -543,7 +539,7 @@ export class SettingsIntegrationActions {
                 this.toasty.successToast(data.body, '');
             }
             return { type: 'EmptyAction' };
-        }));
+        })));
 
     constructor(private action$: Actions,
         private toasty: ToasterService,

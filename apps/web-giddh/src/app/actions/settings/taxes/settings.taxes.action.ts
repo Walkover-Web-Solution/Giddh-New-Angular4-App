@@ -1,6 +1,6 @@
 import {map, switchMap, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Actions, Effect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import {ToasterService} from '../../../services/toaster.service';
 import {Action, Store} from '@ngrx/store';
 import {AppState} from '../../../store/roots';
@@ -15,17 +15,16 @@ import {GeneralActions} from "../../general/general.actions";
 @Injectable()
 export class SettingsTaxesActions {
 
-    @Effect()
-    public CreateTax$: Observable<Action> = this.action$
+     public CreateTax$: Observable<Action> =createEffect( ()=>  this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX),
             switchMap((action: CustomActions) => {
                 return this.settingsTaxesService.CreateTax(action.payload).pipe(
                     map(response => this.CreateTaxResponse(response)));
-            }));
+            })));
 
-    @Effect()
-    public CreateTaxResponse$: Observable<Action> = this.action$
+
+    public CreateTaxResponse$: Observable<Action> =createEffect( ()=>  this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE),
             map((response: CustomActions) => {
@@ -36,19 +35,19 @@ export class SettingsTaxesActions {
                     this.toasty.successToast('Tax Created Successfully.');
                 }
                 return {type: 'EmptyAction'};
-            }));
+            })));
 
-    @Effect()
-    public UpdateTax$: Observable<Action> = this.action$
+
+    public UpdateTax$: Observable<Action> =createEffect( ()=>  this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX),
             switchMap((action: CustomActions) => {
                 return this.settingsTaxesService.UpdateTax(action.payload, action.payload.uniqueName).pipe(
                     map(response => this.UpdateTaxResponse(response)));
-            }));
+            })));
 
-    @Effect()
-    public UpdateTaxResponse$: Observable<Action> = this.action$
+
+    public UpdateTaxResponse$: Observable<Action> =createEffect( ()=>  this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE),
             map((response: CustomActions) => {
@@ -59,10 +58,10 @@ export class SettingsTaxesActions {
                     this.toasty.successToast('Tax Updated Successfully.');
                 }
                 return {type: 'EmptyAction'};
-            }));
+            })));
 
-    @Effect()
-    public DeleteTax$: Observable<Action> = this.action$
+
+    public DeleteTax$: Observable<Action> =createEffect( ()=>  this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX),
             switchMap((action: CustomActions) => {
@@ -73,10 +72,10 @@ export class SettingsTaxesActions {
                         }
                     }),
                     map(response => this.DeleteTaxResponse(response)));
-            }));
+            })));
 
-    @Effect()
-    public DeleteTaxResponse$: Observable<Action> = this.action$
+
+    public DeleteTaxResponse$: Observable<Action> =createEffect( ()=>  this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE),
             map((response: CustomActions) => {
@@ -87,16 +86,16 @@ export class SettingsTaxesActions {
                     this.toasty.successToast('Tax Deleted Successfully.');
                 }
                 return {type: 'EmptyAction'};
-            }));
+            })));
 
-    @Effect()
-    public GetTaxList$: Observable<Action> = this.action$
+
+    public GetTaxList$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.GET_TAX),
             switchMap((action: CustomActions) => {
                 return this.settingsTaxesService.GetTaxList(action.payload).pipe(
                     map(response => this.GetTaxListResponse(response)));
-            }));
+            })));
 
     constructor(private action$: Actions,
                 private toasty: ToasterService,
