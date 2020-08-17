@@ -8,7 +8,7 @@ import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { BsDropdownConfig } from 'ngx-bootstrap';
+import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyResponse, BranchFilterRequest } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';

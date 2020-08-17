@@ -13,7 +13,8 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
 import { KeyboardService } from 'apps/web-giddh/src/app/accounting/keyboard.service';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { AccountingSidebarComponent } from 'apps/web-giddh/src/app/accounting/accouting-sidebar/accounting-sidebar.component';
-import { TooltipModule, TypeaheadModule } from 'ngx-bootstrap';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { TextMaskModule } from 'angular2-text-mask';
 import { VirtualScrollModule } from '../theme/ng-virtual-select/virtual-scroll';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';

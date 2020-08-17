@@ -6,11 +6,10 @@ import { AppState } from '../../store';
 import { ProformaService } from '../../services/proforma.service';
 import { CustomActions } from '../../store/customActions';
 import { PROFORMA_ACTIONS } from './proforma.const';
-import { ActionTypeAfterVoucherGenerateOrUpdate, GenericRequestForGenerateSCD, VoucherClass } from '../../models/api-models/Sales';
+import { ActionTypeAfterVoucherGenerateOrUpdate, VoucherClass } from '../../models/api-models/Sales';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { InvoiceReceiptFilter } from '../../models/api-models/recipt';
 import { ProformaFilter, ProformaGetAllVersionRequest, ProformaGetAllVersionsResponse, ProformaGetRequest, ProformaResponse, ProformaUpdateActionRequest } from '../../models/api-models/proforma';
 
 @Injectable()

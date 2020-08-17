@@ -5,7 +5,8 @@ import { GstReconcileActionsEnum, GstReconcileInvoiceRequest, GstrSheetDownloadR
 import { select, Store } from '@ngrx/store';
 import { ToasterService } from '../../../services/toaster.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AlertConfig, BsDropdownConfig } from 'ngx-bootstrap';
+import { AlertConfig } from 'ngx-bootstrap/alert';
+import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';

@@ -13,7 +13,8 @@ import { ExpenseDetailsComponent } from './components/expense-details/expense-de
 import { LedgerModule } from '../ledger/ledger.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { NgxUploaderModule } from 'ngx-uploader';
-import { PaginationModule, ModalModule } from 'ngx-bootstrap';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';

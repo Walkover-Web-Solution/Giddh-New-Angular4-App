@@ -15,11 +15,9 @@ import { InventoryUpdateGroupComponent } from "./components/update-group-compone
 import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
 import { TooltipModule } from "ngx-bootstrap/tooltip";
 import { SharedModule } from "../shared/shared.module";
-import {
-    BsDropdownModule,
-    PaginationComponent,
-    TabsModule
-} from "ngx-bootstrap";
+import { BsDropdownModule} from "ngx-bootstrap/dropdown";
+import { PaginationComponent} from "ngx-bootstrap/pagination";
+import { TabsModule} from "ngx-bootstrap/tabs";
 import { AsideCustomStockComponent } from "../inventory/components/aside-custom-stock.components/aside-custom-stock.component";
 import { AsideInventoryComponent } from "../inventory/components/aside-inventory.components/aside-inventory.components";
 import { Daterangepicker } from "../theme/ng2-daterangepicker/daterangepicker.module";

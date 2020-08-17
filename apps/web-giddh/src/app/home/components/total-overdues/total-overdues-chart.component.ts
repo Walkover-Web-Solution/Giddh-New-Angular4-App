@@ -1,6 +1,6 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
-import { Options } from 'highcharts';
+import { Chart } from 'angular-highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
@@ -42,11 +42,10 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public toDate: string;
     @Input() public refresh: boolean = false;
     public imgPath: string = '';
-    public options: Options;
     public companies$: Observable<CompanyResponse[]>;
     public activeCompanyUniqueName$: Observable<string>;
     public requestInFlight: boolean = true;
-    public totaloverDueChart: Options;
+    public totaloverDueChart: any;
     public sundryDebtorResponse: any = {};
     public sundryCreditorResponse: any = {};
     public totalRecievable: number = 0;
@@ -127,7 +126,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         let baseCurrencySymbol = this.amountSettings.baseCurrencySymbol;
         let cPipe = this.currencyPipe;
 
-        this.totaloverDueChart = {
+        this.totaloverDueChart = new Chart({
             colors: ['#F85C88', '#0CB1AF'],
             chart: {
                 type: 'pie',
@@ -183,7 +182,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
                 name: 'Total Overdues',
                 data: [['Customer Due', this.totalRecievable], ['Vendor Due', this.totalPayable]],
             }],
-        };
+        });
 
         this.requestInFlight = false;
         this.cdRef.detectChanges();
