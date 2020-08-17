@@ -1,7 +1,7 @@
 <div class="invoice-modal-content">
     <div>
         <div>
-            <div class="col-sm-4 col-xs-12 pd0 invoice-sidebar-wrapper">
+            <div class="col-sm-4 col-md-4 col-xs-12 pd0 invoice-sidebar-wrapper">
                 <div>
                     <div class="invoice-search-box">
                         <input type="text" placeholder="search" #searchElement>
@@ -14,7 +14,7 @@
                             <li class="single-invoice-detail cp"
                                 *ngFor="let row of filteredData; let i = index;">
                                 <div class="row" (click)="showPurchaseOrderPreview(row.uniqueName)">
-                                    <div class="col-xs-7">
+                                    <div class="col-xs-12 col-sm-7">
                                         <div class="invoice-number-date">
                                             <span class="order-number">
                                                 {{row.voucherNumber}}
@@ -27,7 +27,7 @@
                                             <p>{{row.vendor?.name}}</p>
                                         </div>
                                     </div>
-                                    <div class="col-xs-5">
+                                    <div class="col-xs-12 col-sm-5">
                                         <div class="inovice-amount pull-right">
                                             {{row.grandTotal?.amountForAccount | giddhCurrency}}
                                         </div>
@@ -41,7 +41,7 @@
             </div>
             <!-- endregion -->
 
-            <div class="col-sm-8 col-xs-12 pd0 invoice-detail-wrapper">
+            <div class="col-sm-8 col-md-8 col-xs-12  pd0 invoice-detail-wrapper">
 
                 <div class="scroll-half">
                     <div class="invoice-detail">
