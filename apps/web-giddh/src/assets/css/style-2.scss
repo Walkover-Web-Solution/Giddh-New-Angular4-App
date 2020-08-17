@@ -1799,7 +1799,8 @@ input::-moz-placeholder,
 input:-ms-input-placeholder,
 .form-control:-moz-placeholder,
 input:-moz-placeholder {
-    color: #999999;
+    color: $nobel !important;
+    font-size: 14px;
 }
 
 .form-control:focus {

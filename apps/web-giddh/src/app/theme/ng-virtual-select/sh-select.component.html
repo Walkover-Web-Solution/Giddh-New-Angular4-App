@@ -15,7 +15,7 @@
             </ng-container>
 
             <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
-            <input type="text" class="pdL1" [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0"
+            <input type="text" class="pdL1 form-control" [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0"
                 (click)="show($event);" [placeholder]="selectedValues?.length > 0 && !showCheckbox ? filter : placeholder"
                 [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
         </div>

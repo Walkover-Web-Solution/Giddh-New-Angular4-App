@@ -340,7 +340,7 @@ p {
     margin-bottom: 5px;
 }
 
-#default .docTitle {
+#default .doc-title {
     width: 100%;
     line-height: 20px;
     text-align: center;
@@ -348,7 +348,7 @@ p {
     position: relative;
 }
 
-#default .docTitle h2 {
+#default .doc-title h2 {
     text-align: center;
     position: absolute;
     right: 0;
@@ -356,7 +356,7 @@ p {
     width: 100%;
 }
 
-#default .docTitle h2:after {
+#default .doc-title h2:after {
     content: attr(title);
     width: auto;
     position: relative;
@@ -370,7 +370,7 @@ p {
     left: 0;
 }
 
-#default .docTitle h2.no-content:after {
+#default .doc-title h2.no-content:after {
     content: "";
     background: transparent;
 }
@@ -396,7 +396,7 @@ p {
     z-index: 0;
 }
 
-.docTitle hr {
+.doc-title hr {
     position: absolute;
     height: 2px;
     top: 50%;

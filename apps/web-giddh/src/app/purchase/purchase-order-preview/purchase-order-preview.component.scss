@@ -927,3 +927,48 @@ table.tax-table.item {
         top: 10px;
     }
 }
+@media (max-width:1024px) and (min-width:768px){
+    .invoice-search-box{
+        flex-direction: column;
+        button.btn{
+            width: 100%;
+            margin: 10px 0 !important;
+        }
+        input{
+            flex: auto;
+        }
+    }
+}
+@media(max-width:767px){
+    .invoice-modal-content{
+        top:0;
+        position: static;
+        .invoice-sidebar{
+            height: 300px;
+        }
+        .invoice-detail-wrapper{
+            height: 100%;
+        }
+        .invoice-detail-header{
+            .edit-change-status{
+                    margin-top: 10px;
+            }
+        }
+        .invoice-image-section{
+            margin-top: 15px;
+                height: auto;
+        }
+    }
+}
+@media(max-width:575px){
+    .invoice-search-box{
+        flex-direction: column;
+        button.btn{
+            width: 100%;
+            margin: 10px 0 !important;
+        }
+        input{
+            flex: auto;
+        }
+    }
+}
