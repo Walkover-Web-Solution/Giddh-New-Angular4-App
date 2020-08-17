@@ -235,11 +235,11 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
         }
         this.clearFilter();
 
-        if (!this.multiple) {
-            if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
-                callChanges = false;
-            }
-        }
+        // if (!this.multiple) {
+        //     if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
+        //         callChanges = false;
+        //     }
+        // }
 
         if (this.multiple) {
             this.selectMultiple(item);

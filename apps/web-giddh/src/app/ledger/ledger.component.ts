@@ -338,7 +338,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             to fetch the correct stock details as the first preference is always the current ledger account and then particular account
             This logic is only required in ledger.
         */
-        const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
+        const accountUniqueName = e.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
             this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
             e.additional.uniqueName;
         this.searchService.loadDetails(accountUniqueName, requestObject).subscribe(data => {
@@ -373,10 +373,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 //#region unit rates logic
                 if (txn.selectedAccount && txn.selectedAccount.stock) {
                     let defaultUnit = {
-                        stockUnitCode: txn.selectedAccount.stock.unitRates[0].name,
-                        code: txn.selectedAccount.stock.unitRates[0].stockUnitCode,
-                        rate: txn.selectedAccount.stock.unitRates[0].rate,
-                        name: txn.selectedAccount.stock.unitRates[0].stockUnitName
+                        stockUnitCode: txn.selectedAccount.stock.stockUnitCode,
+                        code: txn.selectedAccount.stock.stockUnitCode,
+                        rate: txn.selectedAccount.stock.rate,
+                        name: txn.selectedAccount.stock.name
                     };
                     txn.unitRate = txn.selectedAccount.stock.unitRates.map(unitRate => ({...unitRate, code: unitRate.stockUnitCode}));
                     stockName = defaultUnit.name;
@@ -551,7 +551,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (!Array.isArray(resp[0])) {
                 return;
             }
-
+            this.resetPreviousSearchResults();
             this.hideEledgerWrap();
             let dateObj = resp[0];
             let params = resp[1];
@@ -1897,31 +1897,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     private handleRcmVisibility(transaction: TransactionVM): void {
-        this.lc.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => {
-            if (accounts) {
-                let currentLedgerAccountDetails, selectedAccountDetails;
-                const transactionUniqueName = (transaction.selectedAccount) ? transaction.selectedAccount.uniqueName : '';
-                for (let index = 0; index < accounts.length; index++) {
-                    const account = accounts[index];
-                    if (account.uniqueName === this.lc.accountUnq) {
-                        // Found the current ledger details
-                        currentLedgerAccountDetails = _.cloneDeep(account);
-                    }
-                    if (account.uniqueName === transactionUniqueName) {
-                        // Found the user selected particular account
-                        selectedAccountDetails = _.cloneDeep(account);
-                    }
-                    if (currentLedgerAccountDetails && selectedAccountDetails) {
-                        // Accounts found, break the loop
-                        break;
-                    }
-                }
-                const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
-                if (this.lc && this.lc.currentBlankTxn) {
-                    this.lc.currentBlankTxn['shouldShowRcmEntry'] = shouldShowRcmEntry;
-                }
-            }
-        });
+        const currentLedgerAccountDetails = {
+            uniqueName: transaction.selectedAccount ? transaction.selectedAccount.uniqueName : '',
+            parentGroups: transaction.selectedAccount ? transaction.selectedAccount.parentGroups : []
+        };
+        const selectedAccountDetails = {
+            uniqueName: this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '',
+            parentGroups: this.lc.activeAccount.parentGroups ? this.lc.activeAccount.parentGroups : []
+        };
+        const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
+        if (this.lc && this.lc.currentBlankTxn) {
+            this.lc.currentBlankTxn['shouldShowRcmEntry'] = shouldShowRcmEntry;
+        }
     }
 
     /**
