@@ -60,7 +60,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     /** True if the compoonent should be used as dynamic search component instead of static search */
     @Input() public enableDynamicSearch: boolean;
     /** Emits the scroll to bottom event when pagination is required  */
-    @Output() public srollEnd: EventEmitter<void> = new EventEmitter();
+    @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
     @Output() public dynamicSearchedQuery: EventEmitter<string> = new EventEmitter();
     /** Subject to emit current searched value */
@@ -199,6 +199,12 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
     }
 
+    /**
+     * Input change handler
+     *
+     * @param {string} inputText Current input text
+     * @memberof ShSelectComponent
+     */
     public handleInputChange(inputText: string): void {
         if (this.enableDynamicSearch) {
             this.dynamicSearchQueryChanged.next(inputText);
@@ -255,11 +261,11 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
         this.clearFilter();
 
-        if (!this.multiple) {
-            if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
-                callChanges = false;
-            }
-        }
+        // if (!this.multiple) {
+        //     if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
+        //         callChanges = false;
+        //     }
+        // }
 
         if (callChanges && !this.multiple) {
             // check last selected value is there
@@ -446,6 +452,11 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         //
     }
 
+    /**
+     * Subscribes to query change for dynamic search
+     *
+     * @memberof ShSelectComponent
+     */
     public subscribeToQueryChange(): void {
         if (this.enableDynamicSearch) {
             this.stopDynamicSearch$.next(true);
@@ -454,7 +465,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             this.dynamicSearchQueryChanged = new Subject();
             this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
                 if (query && query.length > 1) {
-                    console.log('Sending the query: ', query);
                     this.dynamicSearchedQuery.emit(query);
                 }
             });
@@ -554,10 +564,21 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
     }
 
-    public reachedEnd() {
-        this.srollEnd.emit();
+    /**
+     * Scroll to bottom handler
+     *
+     * @memberof ShSelectComponent
+     */
+
+    public reachedEnd(): void {
+        this.scrollEnd.emit();
     }
 
+    /**
+     * Refreshes the list on new items
+     *
+     * @memberof ShSelectComponent
+     */
     public refreshList(): void {
         if (this.menuEle && this.menuEle.virtualScrollElm) {
             this.menuEle.virtualScrollElm.refresh();

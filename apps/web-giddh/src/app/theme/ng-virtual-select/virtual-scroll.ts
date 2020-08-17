@@ -72,7 +72,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     /** True when pagination should be enabled */
     @Input() isPaginationEnabled: boolean;
     /** Emits the scroll to bottom event when pagination is required  */
-    @Output() public srollEnd: EventEmitter<void> = new EventEmitter();
+    @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
 
     @ViewChild('content', { read: ElementRef })
     public contentElementRef: ElementRef;
@@ -92,12 +92,17 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
         return viewWidth;
     }
 
-    handleScroll() {
+    /**
+     * Scroll handler
+     *
+     * @memberof VirtualScrollComponent
+     */
+    handleScroll(): void {
         this.refresh();
-        if (this.element.nativeElement && this.isPaginationEnabled) {
+        if (this.element && this.element.nativeElement && this.isPaginationEnabled) {
             // Scrolled to bottom
             if ((this.element.nativeElement.scrollHeight - this.element.nativeElement.scrollTop) === this.element.nativeElement.clientHeight) {
-                this.srollEnd.emit();
+                this.scrollEnd.emit();
             }
         }
     }

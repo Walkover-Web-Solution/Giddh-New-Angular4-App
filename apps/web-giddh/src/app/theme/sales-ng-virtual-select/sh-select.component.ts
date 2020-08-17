@@ -87,7 +87,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     /** True if the compoonent should be used as dynamic search component instead of static search */
     @Input() public enableDynamicSearch: boolean;
     /** Emits the scroll to bottom event when pagination is required  */
-    @Output() public srollEnd: EventEmitter<void> = new EventEmitter();
+    @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
     @Output() public dynamicSearchedQuery: EventEmitter<string> = new EventEmitter();
     /** Subject to emit current searched value */
@@ -235,11 +235,11 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
         }
         this.clearFilter();
 
-        if (!this.multiple) {
-            if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
-                callChanges = false;
-            }
-        }
+        // if (!this.multiple) {
+        //     if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
+        //         callChanges = false;
+        //     }
+        // }
 
         if (this.multiple) {
             this.selectMultiple(item);
@@ -461,16 +461,32 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
         }
     }
 
-    public reachedEnd() {
-        this.srollEnd.emit();
+    /**
+     * Scroll to bottom handler
+     *
+     * @memberof SalesShSelectComponent
+     */
+    public reachedEnd(): void {
+        this.scrollEnd.emit();
     }
 
+    /**
+     * Refreshes the list
+     *
+     * @memberof SalesShSelectComponent
+     */
     public refreshList(): void {
         if (this.menuEle && this.menuEle.virtualScrollElm) {
             this.menuEle.virtualScrollElm.refresh();
         }
     }
 
+    /**
+     * Input change handler
+     *
+     * @param {string} inputText Current input text
+     * @memberof SalesShSelectComponent
+     */
     public handleInputChange(inputText: string): void {
         if (this.enableDynamicSearch) {
             this.dynamicSearchQueryChanged.next(inputText);
@@ -479,6 +495,11 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
         }
     }
 
+    /**
+     * Subscribes to query change for dynamic search
+     *
+     * @memberof SalesShSelectComponent
+     */
     public subscribeToQueryChange(): void {
         if (this.enableDynamicSearch) {
             this.stopDynamicSearch$.next(true);
@@ -487,7 +508,6 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
             this.dynamicSearchQueryChanged = new Subject();
             this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
                 if (query && query.length > 1) {
-                    console.log('Sending the query: ', query);
                     this.dynamicSearchedQuery.emit(query);
                 }
             });

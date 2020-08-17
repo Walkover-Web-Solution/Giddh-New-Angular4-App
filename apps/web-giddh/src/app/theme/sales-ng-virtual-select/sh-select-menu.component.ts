@@ -26,7 +26,7 @@ export class SalesShSelectMenuComponent implements OnChanges {
     /** True when pagination should be enabled */
     @Input() isPaginationEnabled: boolean;
     /** Emits the scroll to bottom event when pagination is required  */
-    @Output() public srollEnd: EventEmitter<void> = new EventEmitter();
+    @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
 
     @Output() public noToggleClick: EventEmitter<any> = new EventEmitter<any>();
     @Output() public noResultClicked = new EventEmitter<null>();
@@ -59,8 +59,13 @@ export class SalesShSelectMenuComponent implements OnChanges {
         this.noToggleClick.emit(row);
     }
 
-    public reachedEnd() {
-        this.srollEnd.emit();
+    /**
+     * Scroll to bottom handler
+     *
+     * @memberof SalesShSelectMenuComponent
+     */
+    public reachedEnd(): void {
+        this.scrollEnd.emit();
     }
 
 }

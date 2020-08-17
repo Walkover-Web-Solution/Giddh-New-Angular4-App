@@ -50,7 +50,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
             // this.filteredData = this.normalData.filter(item => {
             // 	return item.name.toLowerCase().includes(res.toLowerCase()) || item.uniqueName.toLowerCase().includes(res.toLowerCase());
             // });
-            if (res && res.length > 2) {
+            if (res && res.length > 1) {
                 this.onSearchQueryChanged(res, 1);
             }
         });
@@ -58,7 +58,14 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
         // this.parseDataToDisplay(this.data);
     }
 
-    public onSearchQueryChanged(query: string, page: number = 1) {
+    /**
+     * Search query change handler
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @memberof ProformaAddBulkItemsComponent
+     */
+    public onSearchQueryChanged(query: string, page: number = 1): void {
         this.searchResultsPaginationData.query = query;
         const requestObject = this.getSearchRequestObject(query, page);
         this.searchAccount(requestObject).subscribe(data => {
@@ -71,10 +78,24 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
         });
     }
 
+    /**
+     * Searches account
+     *
+     * @param {*} requestObject Request payload for search API
+     * @returns {Observable<any>} Observable to carry out further operations
+     * @memberof ProformaAddBulkItemsComponent
+     */
     public searchAccount(requestObject: any): Observable<any> {
         return this.searchService.searchAccount(requestObject);
     }
 
+    /**
+     * Prepares the search list when the data is received
+     *
+     * @param {*} results Search results
+     * @param {number} [currentPage=1] Current page requested
+     * @memberof ProformaAddBulkItemsComponent
+     */
     public prepareSearchLists(results: any, currentPage: number = 1): void {
         const searchResults = results.map(result => {
             return {
@@ -95,6 +116,14 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
         }
     }
 
+    /**
+     * Returns the search request object
+     *
+     * @param {string} query Search Query
+     * @param {number} [page=1]
+     * @returns {*}
+     * @memberof ProformaAddBulkItemsComponent
+     */
     public getSearchRequestObject(query: string, page: number = 1): any {
         let group = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
             'operatingcost, indirectexpenses' : 'otherincome, revenuefromoperations';
@@ -136,7 +165,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
             return;
         }
         let requestObject = {
-            stockUniqueName: item.additional.stock.uniqueName
+            stockUniqueName: item.additional && item.additional.stock ? item.additional.stock.uniqueName : ''
         };
         this.searchService.loadDetails(item.additional.uniqueName, requestObject).subscribe(data => {
             if (data && data.body) {
@@ -184,8 +213,12 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
         }
     }
 
-    onScrollEnd() {
-        console.log('Reached end');
+    /**
+     * Scroll to bottom handler
+     *
+     * @memberof ProformaAddBulkItemsComponent
+     */
+    onScrollEnd(): void {
         if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
             this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
         }
