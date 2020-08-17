@@ -50,7 +50,7 @@
         (click)="$event.stopPropagation();clear();">&times;</span>
     <sh-select-menu #menuEle [isOpen]="isOpen" [rows]="rows" [selectedValues]="selectedValues"
         [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)"
-        [isPaginationEnabled]="isPaginationEnabled" (srollEnd)="reachedEnd()"
+        [isPaginationEnabled]="isPaginationEnabled" (scrollEnd)="reachedEnd()"
         (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink"
         [noResultLinkTemplate]="notFoundLinkTemplate" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText"
         [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
