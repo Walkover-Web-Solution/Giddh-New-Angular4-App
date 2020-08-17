@@ -2,7 +2,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DatePickerComponent } from './date-picker.component';
 import { CommonModule } from '@angular/common';
-import { DatepickerModule } from 'ngx-bootstrap';
+import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
     declarations: [DatePickerComponent],

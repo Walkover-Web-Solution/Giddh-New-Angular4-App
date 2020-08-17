@@ -55,11 +55,11 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 	]
 })
 export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestroy, AfterViewInit {
-	@ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
-	@ViewChild('accountName') public accountName: ElementRef;
-	@ViewChild('shCategory') public shCategory: ShSelectComponent;
-	@ViewChild('shCategoryType') public shCategoryType: ShSelectComponent;
-    @ViewChild('shValueCondition') public shValueCondition: ShSelectComponent;
+	@ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
+	@ViewChild('accountName', {static: true}) public accountName: ElementRef;
+	@ViewChild('shCategory', {static: true}) public shCategory: ShSelectComponent;
+	@ViewChild('shCategoryType', {static: true}) public shCategoryType: ShSelectComponent;
+    @ViewChild('shValueCondition', {static: true}) public shValueCondition: ShSelectComponent;
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;

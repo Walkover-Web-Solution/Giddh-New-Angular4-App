@@ -441,6 +441,15 @@ export interface GenericRequestForGenerateSCD extends GenericRequest {
     templateDetails?: TemplateDetailsClass
     deposit?: AmountClassMulticurrency;
     roundOffApplicable?: boolean;
+    roundOffTotal?: AmountMulticurrency;
+    warehouse?: any;
+    account?: any;
+    subVoucher?: string;
+    touristSchemeApplicable?: boolean;
+    passportNumber?: string;
+    voucherAdjustments?: VoucherAdjustments;
+    attachedFileName?: string;
+    attachedFiles?: Array<string>;
 }
 
 /**
@@ -529,6 +538,11 @@ export class TemplateDetailsClass {
     }
 }
 
+export class AmountMulticurrency {
+    public amountForAccount: number;
+    public amountForCompany: number;
+}
+
 export class VoucherClass {
     public voucherDetails: VoucherDetailsClass;
     public companyDetails: CompanyDetailsClass;
@@ -545,6 +559,11 @@ export class VoucherClass {
     public subVoucher?: string;
     public voucherAdjustments?: VoucherAdjustments;
     public subTotal?: AmountClassMulticurrency
+    public roundOffTotal?: AmountMulticurrency;
+    public warehouse?: any;
+    public account?: any;
+    public attachedFileName?: string;
+    public attachedFiles?: Array<string>;
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();

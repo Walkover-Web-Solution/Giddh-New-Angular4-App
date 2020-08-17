@@ -1,6 +1,6 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Options } from 'highcharts';
+import { Chart } from 'angular-highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
@@ -21,7 +21,7 @@ import { GeneralService } from "../../../services/general.service";
 export class RevenueChartComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
     public requestInFlight: boolean = false;
-    public options: Options;
+    public options: any;
     public companies$: Observable<CompanyResponse[]>;
     public activeCompanyUniqueName$: Observable<string>;
     public revenueGraphTypes: any[] = [];
@@ -224,7 +224,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public generateChart() {
         let chartType = this.chartType;
 
-        this.options = {
+        this.options = new Chart({
             chart: {
                 type: chartType,
                 height: '300px'
@@ -266,7 +266,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                     text: ''
                 }
             }
-        };
+        });
 
         this.requestInFlight = false;
     }

@@ -19,7 +19,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 })
 export class SettingsTagsComponent implements OnInit, OnDestroy {
 
-	@ViewChild('confirmationModal') public confirmationModal: ModalDirective;
+	@ViewChild('confirmationModal', {static: true}) public confirmationModal: ModalDirective;
 
 	public newTag: TagRequest = new TagRequest();
 	public tags$: Observable<TagRequest[]>;

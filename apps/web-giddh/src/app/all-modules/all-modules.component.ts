@@ -18,8 +18,8 @@ import { VAT_SUPPORTED_COUNTRIES } from '../app.constant';
 
 export class AllModulesComponent implements OnInit {
 
-    @ViewChild('addmanage') public addmanage: ElementViewContainerRef;
-    @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
+    @ViewChild('addmanage', {static: true}) public addmanage: ElementViewContainerRef;
+    @ViewChild('manageGroupsAccountsModal', {static: true}) public manageGroupsAccountsModal: ModalDirective;
 
     public activeCompany: any;
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;

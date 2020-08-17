@@ -170,7 +170,7 @@
 </section> -->
 
 <!--email varify modal  -->
-<div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true">
+<div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="noBrdRdsModal">
@@ -216,7 +216,7 @@
 <!--email varify modal  -->
 
 <!--mobile varify form  -->
-<div class="modal fade" tabindex="-1" bsModal #mobileVerifyModal="bs-modal" role="dialog" aria-hidden="true">
+<div class="modal fade" tabindex="-1" bsModal #mobileVerifyModal="bs-modal" role="dialog" aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="noBrdRdsModal">
@@ -260,7 +260,7 @@
 <!--mobile verify form  -->
 
 <!-- two way auth popup -->
-<div class="modal fade" tabindex="-1" bsModal #twoWayAuthModal="bs-modal" role="dialog" aria-hidden="true">
+<div class="modal fade" tabindex="-1" bsModal #twoWayAuthModal="bs-modal" role="dialog" aria-hidden="true" [config]="{backdrop: 'static'}" (onHidden)="onHiddenAuthModal($event)">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="noBrdRdsModal">

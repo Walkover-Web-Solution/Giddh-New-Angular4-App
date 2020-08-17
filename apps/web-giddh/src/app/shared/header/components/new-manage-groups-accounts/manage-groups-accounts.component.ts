@@ -1,6 +1,6 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GroupsAccountSidebarComponent } from '../new-group-account-sidebar/groups-account-sidebar.component';
-import { AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
@@ -8,7 +8,7 @@ import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
-import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.component';
+import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { GeneralService } from "../../../../services/general.service";
 
 @Component({
@@ -18,14 +18,14 @@ import { GeneralService } from "../../../../services/general.service";
 })
 export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewChecked {
 	@Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
-	@ViewChild('header') public header: ElementRef;
-	@ViewChild('grpSrch') public groupSrch: ElementRef;
+	@ViewChild('header', {static: true}) public header: ElementRef;
+	@ViewChild('grpSrch', {static: true}) public groupSrch: ElementRef;
 	public headerRect: any;
 	public showForm: boolean = false;
-	@ViewChild('myModel') public myModel: ElementRef;
-	@ViewChild('groupsidebar') public groupsidebar: GroupsAccountSidebarComponent;
+	@ViewChild('myModel', {static: true}) public myModel: ElementRef;
+	@ViewChild('groupsidebar', {static: true}) public groupsidebar: GroupsAccountSidebarComponent;
 	public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
-	@ViewChild('perfectdirective') public directiveScroll: PerfectScrollbarComponent;
+	@ViewChild('perfectdirective', {static: true}) public directiveScroll: PerfectScrollbarComponent;
 
 	public breadcrumbPath: string[] = [];
 	public breadcrumbUniquePath: string[] = [];

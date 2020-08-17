@@ -52,7 +52,7 @@ import {OnboardingComponent} from './onboarding/onboarding.component';
 import {NotFoundComponent} from './404/404-component';
 import {IS_ELECTRON_WA} from './app.constant';
 import {UniversalListModule} from './theme/universal-list/universal.list.module';
-import {StoreRouterConnectingModule} from '@ngrx/router-store';
+//import {StoreRouterConnectingModule} from '@ngrx/router-store';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {BrowserDetectComponent} from './browser-support/browserDetect.component';
 import {CustomPreloadingStrategy} from './services/lazy-preloading.service';
@@ -168,7 +168,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             preloadingStrategy: CustomPreloadingStrategy,
             onSameUrlNavigation: 'reload'
         }),
-        StoreRouterConnectingModule,
+        //StoreRouterConnectingModule,
         ...CONDITIONAL_IMPORTS,
 
         /**

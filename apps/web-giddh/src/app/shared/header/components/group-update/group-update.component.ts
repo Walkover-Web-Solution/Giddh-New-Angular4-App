@@ -40,9 +40,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public needToReCalculate: BehaviorSubject<boolean>;
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
-    @ViewChild('discount') public discountControl: LedgerDiscountComponent;
-    @ViewChild('tax') public taxControll: TaxControlComponent;
-    @ViewChild('autoFocused') public autoFocus: ElementRef;
+    @ViewChild('discount', {static: true}) public discountControl: LedgerDiscountComponent;
+    @ViewChild('tax', {static: true}) public taxControll: TaxControlComponent;
+    @ViewChild('autoFocused', {static: true}) public autoFocus: ElementRef;
 
     public companyTaxDropDown: Observable<IOption[]>;
     public groupDetailForm: FormGroup;
@@ -72,8 +72,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public groupsList: IOption[] = [];
     public accountList: any[];
     public showTaxes: boolean = false;
-    @ViewChild('deleteGroupModal') public deleteGroupModal: ModalDirective;
-    @ViewChild('moveToGroupDropDown') public moveToGroupDropDown: ShSelectComponent;
+    @ViewChild('deleteGroupModal', {static: true}) public deleteGroupModal: ModalDirective;
+    @ViewChild('moveToGroupDropDown', {static: true}) public moveToGroupDropDown: ShSelectComponent;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

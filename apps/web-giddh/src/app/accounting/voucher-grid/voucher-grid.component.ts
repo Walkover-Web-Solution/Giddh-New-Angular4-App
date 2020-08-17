@@ -59,21 +59,21 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     @Input() public newSelectedAccount: AccountResponse;
     @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 
-    @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
-    @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
-    @ViewChild('chequeEntryModal') public chequeEntryModal: ModalDirective;
+    @ViewChild('quickAccountComponent', {static: true}) public quickAccountComponent: ElementViewContainerRef;
+    @ViewChild('quickAccountModal', {static: true}) public quickAccountModal: ModalDirective;
+    @ViewChild('chequeEntryModal', {static: true}) public chequeEntryModal: ModalDirective;
     @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
-    @ViewChild('particular') public accountField: any;
-    @ViewChild('dateField') public dateField: ElementRef;
-    @ViewChild('narrationBox') public narrationBox: ElementRef;
-    @ViewChild('chequeNumberInput') public chequeNumberInput: ElementRef;
-    @ViewChild('chequeClearanceDateInput') public chequeClearanceDateInput: ElementRef;
-    @ViewChild('chqFormSubmitBtn') public chqFormSubmitBtn: ElementRef;
-    @ViewChild('submitButton') public submitButton: ElementRef;
-    @ViewChild('resetButton') public resetButton: ElementRef;
-    @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
-    @ViewChild('byAmountField') public byAmountField: ElementRef;
-    @ViewChild('toAmountField') public toAmountField: ElementRef;
+    @ViewChild('particular', {static: true}) public accountField: any;
+    @ViewChild('dateField', {static: true}) public dateField: ElementRef;
+    @ViewChild('narrationBox', {static: true}) public narrationBox: ElementRef;
+    @ViewChild('chequeNumberInput', {static: true}) public chequeNumberInput: ElementRef;
+    @ViewChild('chequeClearanceDateInput', {static: true}) public chequeClearanceDateInput: ElementRef;
+    @ViewChild('chqFormSubmitBtn', {static: true}) public chqFormSubmitBtn: ElementRef;
+    @ViewChild('submitButton', {static: true}) public submitButton: ElementRef;
+    @ViewChild('resetButton', {static: true}) public resetButton: ElementRef;
+    @ViewChild('manageGroupsAccountsModal', {static: true}) public manageGroupsAccountsModal: ModalDirective;
+    @ViewChild('byAmountField', {static: true}) public byAmountField: ElementRef;
+    @ViewChild('toAmountField', {static: true}) public toAmountField: ElementRef;
 
     public showLedgerAccountList: boolean = false;
     public selectedInput: 'by' | 'to' = 'by';

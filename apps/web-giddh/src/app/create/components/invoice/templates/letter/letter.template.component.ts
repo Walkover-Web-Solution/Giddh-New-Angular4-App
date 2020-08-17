@@ -39,7 +39,7 @@ export class LetterTemplateComponent implements OnInit, OnDestroy {
 	public taxableValue: number;
 	public total: number;
 	@Output() public closeAndDestroyComponent: EventEmitter<any> = new EventEmitter();
-	@ViewChild('invoicePreviewModal') public invoicePreviewModal: ModalDirective;
+	@ViewChild('invoicePreviewModal', {static: true}) public invoicePreviewModal: ModalDirective;
 
 	public invFormData: VoucherClass;
 	public isGenDtlCollapsed: boolean = false;

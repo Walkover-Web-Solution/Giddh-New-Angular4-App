@@ -142,13 +142,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public searchStr$ = new Subject<string>();
     public searchStr: string = '';
     @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
-    @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
-    @ViewChild('staticTabs') public staticTabs: TabsetComponent;
-    @ViewChild('mailModal') public mailModal: ModalDirective;
-    @ViewChild('messageBox') public messageBox: ElementRef;
-    @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
-
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
+    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
+    @ViewChild('mailModal', {static: true}) public mailModal: ModalDirective;
+    @ViewChild('messageBox', {static: true}) public messageBox: ElementRef;
+    @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
 
     // @Input('sort-direction')
     // sortDirection: string = '';
@@ -276,19 +275,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
 
-        // get default datepicker options from store
-        this.store.pipe(select(storeConfig => storeConfig.company.dateRangePickerConfig), take(2)).subscribe(a => {
-            if (a) {
-                this.datePickerOptions = a;
-                if (this.universalDate) {
-                    this.datePickerOptions = {
-                        ...this.datePickerOptions, startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-                        endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate()
-                    };
-                }
-            }
-        });
-
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.store.select(s => s.agingreport.data).pipe(takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.results) {
@@ -358,8 +344,15 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.store.pipe(select(p => p.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
                 this.datePickerOptions = a;
-                this.fromDate = moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT);
+                if (this.universalDate) {
+                    this.datePickerOptions = {
+                        ...this.datePickerOptions, startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(),
+                        endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate()
+                    };
+
+                    this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                    this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                }
             }
         });
 

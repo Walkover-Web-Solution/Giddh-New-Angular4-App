@@ -20,9 +20,9 @@ import { GeneralService } from '../../../services/general.service';
 })
 export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy {
 
-    @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
-    @ViewChild('permissionModel') public permissionModel: ModalDirective;
-    @ViewChild('permissionConfirmationModel') public permissionConfirmationModel: ModalDirective;
+    @ViewChild(ElementViewContainerRef, {static: true}) public elementViewContainerRef: ElementViewContainerRef;
+    @ViewChild('permissionModel', {static: true}) public permissionModel: ModalDirective;
+    @ViewChild('permissionConfirmationModel', {static: true}) public permissionConfirmationModel: ModalDirective;
 
     public localState: any;
     public allRoles: IRoleCommonResponseAndRequest[] = [];

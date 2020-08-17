@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BsDatepickerModule } from 'ngx-bootstrap';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CommonModule } from '@angular/common';
 import { LaddaModule } from 'angular2-ladda';
 import { GenericAsideMenuAccountComponent } from './generic.aside.menu.account.component';

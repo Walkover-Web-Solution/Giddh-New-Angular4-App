@@ -52,11 +52,11 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @Input() public salesShSelectPading: number = 0;
     @Input() public tabIndex: number = 0;
 
-    @ViewChild('inputFilter') public inputFilter: ElementRef;
-    @ViewChild('mainContainer') public mainContainer: ElementRef;
-    @ViewChild('menuEle') public menuEle: SalesShSelectMenuComponent;
-    @ContentChild('optionTemplate') public optionTemplate: TemplateRef<any>;
-    @ViewChild('dd') public ele: ElementRef;
+    @ViewChild('inputFilter', {static: true}) public inputFilter: ElementRef;
+    @ViewChild('mainContainer', {static: true}) public mainContainer: ElementRef;
+    @ViewChild('menuEle', {static: true}) public menuEle: SalesShSelectMenuComponent;
+    @ContentChild('optionTemplate', {static: true}) public optionTemplate: TemplateRef<any>;
+    @ViewChild('dd', {static: true}) public ele: ElementRef;
     @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onClear: EventEmitter<any[]> = new EventEmitter<any[]>();

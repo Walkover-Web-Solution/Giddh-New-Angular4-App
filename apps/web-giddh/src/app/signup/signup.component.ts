@@ -37,10 +37,10 @@ import {GeneralService} from "../services/general.service";
 })
 export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithMobileSubmited$: Observable<boolean>;
-    @ViewChild("emailVerifyModal") public emailVerifyModal: ModalDirective;
+    @ViewChild("emailVerifyModal", {static: true}) public emailVerifyModal: ModalDirective;
     public isLoginWithEmailSubmited$: Observable<boolean>;
-    @ViewChild("mobileVerifyModal") public mobileVerifyModal: ModalDirective;
-    @ViewChild("twoWayAuthModal") public twoWayAuthModal: ModalDirective;
+    @ViewChild("mobileVerifyModal", {static: true}) public mobileVerifyModal: ModalDirective;
+    @ViewChild("twoWayAuthModal", {static: true}) public twoWayAuthModal: ModalDirective;
     public urlPath: string = "";
     public isSubmited: boolean = false;
     public mobileVerifyForm: FormGroup;

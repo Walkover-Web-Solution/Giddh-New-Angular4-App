@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { AlertModule, TabsModule } from 'ngx-bootstrap';
+import { AlertModule } from 'ngx-bootstrap/alert';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';

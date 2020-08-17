@@ -22,9 +22,9 @@ import { GeneralActions } from '../../../actions/general/general.actions';
 
 export class ReverseChargeReport implements OnInit, OnDestroy {
     public inlineSearch: any = '';
-    @ViewChild('suppliersNameField') public suppliersNameField;
-    @ViewChild('invoiceNumberField') public invoiceNumberField;
-    @ViewChild('supplierCountryField') public supplierCountryField;
+    @ViewChild('suppliersNameField', {static: true}) public suppliersNameField;
+    @ViewChild('invoiceNumberField', {static: true}) public invoiceNumberField;
+    @ViewChild('supplierCountryField', {static: true}) public supplierCountryField;
 
     public showEntryDate = true;
     public activeCompanyUniqueName$: Observable<string>;

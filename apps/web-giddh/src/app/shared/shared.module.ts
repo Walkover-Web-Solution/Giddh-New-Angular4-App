@@ -8,7 +8,8 @@ import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directiv
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CKEditorModule } from 'ng2-ckeditor';
-import { BsDatepickerModule, DatepickerModule, PaginationModule } from 'ngx-bootstrap';
+import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';

@@ -43,8 +43,8 @@ import {createSelector} from 'reselect';
 })
 
 export class GstComponent implements OnInit {
-    @ViewChild('monthWise') public monthWise: BsDropdownDirective;
-    @ViewChild('periodDropdown') public periodDropdown;
+    @ViewChild('monthWise', {static: true}) public monthWise: BsDropdownDirective;
+    @ViewChild('periodDropdown', {static: true}) public periodDropdown;
 
     public showCalendar: boolean = false;
     public period: any = null;

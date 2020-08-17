@@ -66,11 +66,11 @@ const COMPARISON_FILTER = [
     templateUrl: './invoice.generate.component.html'
 })
 export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
-    @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
+    @ViewChild(ElementViewContainerRef, {static: true}) public elementViewContainerRef: ElementViewContainerRef;
     // @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
-    @ViewChild(DaterangePickerComponent) public dp: DaterangePickerComponent;
-    @ViewChild('particularSearch') public particularSearch: ElementRef;
-    @ViewChild('accountUniqueNameSearch') public accountUniqueNameSearch: ElementRef;
+    @ViewChild(DaterangePickerComponent, {static: true}) public dp: DaterangePickerComponent;
+    @ViewChild('particularSearch', {static: true}) public particularSearch: ElementRef;
+    @ViewChild('accountUniqueNameSearch', {static: true}) public accountUniqueNameSearch: ElementRef;
     @Input() public selectedVoucher: string = 'invoice';
 
     public accounts$: Observable<IOption[]>;

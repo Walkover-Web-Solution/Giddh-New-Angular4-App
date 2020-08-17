@@ -93,28 +93,28 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
-    @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
-    @ViewChild('companynewadd') public companynewadd: ElementViewContainerRef;
+    @ViewChild('companyadd', {static: true}) public companyadd: ElementViewContainerRef;
+    @ViewChild('companynewadd', {static: true}) public companynewadd: ElementViewContainerRef;
     // @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
 
-    @ViewChild('addmanage') public addmanage: ElementViewContainerRef;
-    @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
-    @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
-    @ViewChild('addCompanyNewModal') public addCompanyNewModal: ModalDirective;
+    @ViewChild('addmanage', {static: true}) public addmanage: ElementViewContainerRef;
+    @ViewChild('manageGroupsAccountsModal', {static: true}) public manageGroupsAccountsModal: ModalDirective;
+    @ViewChild('addCompanyModal', {static: true}) public addCompanyModal: ModalDirective;
+    @ViewChild('addCompanyNewModal', {static: true}) public addCompanyNewModal: ModalDirective;
 
-    @ViewChild('deleteCompanyModal') public deleteCompanyModal: ModalDirective;
-    @ViewChild('navigationModal') public navigationModal: TemplateRef<any>; // CMD + K
-    @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
-    @ViewChild('dropdown') public companyDropdown: BsDropdownDirective;
+    @ViewChild('deleteCompanyModal', {static: true}) public deleteCompanyModal: ModalDirective;
+    @ViewChild('navigationModal', {static: true}) public navigationModal: TemplateRef<any>; // CMD + K
+    @ViewChild('dateRangePickerCmp', {static: true}) public dateRangePickerCmp: ElementRef;
+    @ViewChild('dropdown', {static: true}) public companyDropdown: BsDropdownDirective;
     // @ViewChild('talkSalesModal') public talkSalesModal: ModalDirective;
-    @ViewChild('supportTab') public supportTab: TabsetComponent;
-    @ViewChild('searchCmpTextBox') public searchCmpTextBox: ElementRef;
-    @ViewChild('expiredPlan') public expiredPlan: ModalDirective;
-    @ViewChild('expiredPlanModel') public expiredPlanModel: TemplateRef<any>;
-    @ViewChild('crossedTxLimitModel') public crossedTxLimitModel: TemplateRef<any>;
-    @ViewChild('companyDetailsDropDownWeb') public companyDetailsDropDownWeb: BsDropdownDirective;
+    @ViewChild('supportTab', {static: true}) public supportTab: TabsetComponent;
+    @ViewChild('searchCmpTextBox', {static: true}) public searchCmpTextBox: ElementRef;
+    @ViewChild('expiredPlan', {static: true}) public expiredPlan: ModalDirective;
+    @ViewChild('expiredPlanModel', {static: true}) public expiredPlanModel: TemplateRef<any>;
+    @ViewChild('crossedTxLimitModel', {static: true}) public crossedTxLimitModel: TemplateRef<any>;
+    @ViewChild('companyDetailsDropDownWeb', {static: true}) public companyDetailsDropDownWeb: BsDropdownDirective;
     /** All modules popover instance */
-    @ViewChild('allModulesPopover') public allModulesPopover: PopoverDirective;
+    @ViewChild('allModulesPopover', {static: true}) public allModulesPopover: PopoverDirective;
 
     public hideAsDesignChanges: false;
     public title: Observable<string>;
@@ -242,7 +242,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public forceOpenNavigation: boolean = false;
     /** VAT supported countries to show the Vat Report section in all modules */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
 
     /* This will store modal reference */
     public modalRef: BsModalRef;

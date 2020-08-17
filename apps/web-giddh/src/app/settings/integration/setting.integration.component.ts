@@ -93,10 +93,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isUpdateBankFormValid$: Observable<boolean> = of(false);
 
     @Input() private selectedTabParent: number;
-    @ViewChild('integrationTab') public integrationTab: TabsetComponent;
-    @ViewChild('removegmailintegration') public removegmailintegration: ModalDirective;
-    @ViewChild('paymentForm') paymentForm: NgForm;
-    @ViewChild('paymentFormAccountName') paymentFormAccountName: ShSelectComponent;
+    @ViewChild('integrationTab', {static: true}) public integrationTab: TabsetComponent;
+    @ViewChild('removegmailintegration', {static: true}) public removegmailintegration: ModalDirective;
+    @ViewChild('paymentForm', {static: true}) paymentForm: NgForm;
+    @ViewChild('paymentFormAccountName', {static: true}) paymentFormAccountName: ShSelectComponent;
 
 
     //variable holding account Info

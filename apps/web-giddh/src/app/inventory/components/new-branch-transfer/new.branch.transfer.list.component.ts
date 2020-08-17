@@ -45,10 +45,10 @@ import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 })
 
 export class NewBranchTransferListComponent implements OnInit, OnDestroy {
-    @ViewChild('branchtransfertemplate') public branchtransfertemplate: ElementRef;
-    @ViewChild('deleteBranchTransferModal') public deleteBranchTransferModal: ModalDirective;
-    @ViewChild('senderReceiverField') public senderReceiverField;
-    @ViewChild('warehouseNameField') public warehouseNameField;
+    @ViewChild('branchtransfertemplate', {static: true}) public branchtransfertemplate: ElementRef;
+    @ViewChild('deleteBranchTransferModal', {static: true}) public deleteBranchTransferModal: ModalDirective;
+    @ViewChild('senderReceiverField', {static: true}) public senderReceiverField;
+    @ViewChild('warehouseNameField', {static: true}) public warehouseNameField;
 
     public modalRef: BsModalRef;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

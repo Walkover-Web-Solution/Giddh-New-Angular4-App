@@ -6,7 +6,7 @@ import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, Afte
 import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { BsDropdownConfig } from 'ngx-bootstrap';
+import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyAddNewUiComponent } from '../../shared/header/components';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -36,10 +36,10 @@ export const IsyncData = [
 })
 
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
-    @ViewChild('branchModal') public branchModal: ModalDirective;
-    @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
-    @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
-    @ViewChild('confirmationModal') public confirmationModal: ModalDirective;
+    @ViewChild('branchModal', {static: true}) public branchModal: ModalDirective;
+    @ViewChild('addCompanyModal', {static: true}) public addCompanyModal: ModalDirective;
+    @ViewChild('companyadd', {static: true}) public companyadd: ElementViewContainerRef;
+    @ViewChild('confirmationModal', {static: true}) public confirmationModal: ModalDirective;
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
         dateInputFormat: 'DD-MM-YYYY',

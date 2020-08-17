@@ -50,7 +50,7 @@ const taxDuration = [
 })
 export class SettingTaxesComponent implements OnInit {
 
-    @ViewChild('taxConfirmationModel') public taxConfirmationModel: ModalDirective;
+    @ViewChild('taxConfirmationModel', {static: true}) public taxConfirmationModel: ModalDirective;
 
     public availableTaxes: TaxResponse[] = [];
     public newTaxObj: TaxResponse = new TaxResponse();

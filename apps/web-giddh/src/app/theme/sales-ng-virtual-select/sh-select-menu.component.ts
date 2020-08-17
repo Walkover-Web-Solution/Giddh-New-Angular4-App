@@ -25,8 +25,8 @@ export class SalesShSelectMenuComponent implements OnChanges {
 
     @Output() public noToggleClick: EventEmitter<any> = new EventEmitter<any>();
     @Output() public noResultClicked = new EventEmitter<null>();
-    @ViewChild(VirtualScrollComponent) public virtualScrollElm: VirtualScrollComponent;
-    @ViewChild('listContainer') public listContainer: ElementRef;
+    @ViewChild(VirtualScrollComponent, {static: true}) public virtualScrollElm: VirtualScrollComponent;
+    @ViewChild('listContainer', {static: true}) public listContainer: ElementRef;
     public math: any = Math;
     public viewPortItems: IOption[];
 

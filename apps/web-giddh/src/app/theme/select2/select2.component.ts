@@ -18,7 +18,7 @@ export const SELECT2_VALUE_ACCESSOR: any = {
 	providers: [SELECT2_VALUE_ACCESSOR]
 })
 export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, OnInit, ControlValueAccessor {
-	@ViewChild('selector') public selector: ElementRef;
+	@ViewChild('selector', {static: true}) public selector: ElementRef;
 
 	// data for select2 drop down
 	@Input() public data: Select2OptionData[];

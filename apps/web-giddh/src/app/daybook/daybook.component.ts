@@ -4,7 +4,7 @@ import { DaybookActions } from 'apps/web-giddh/src/app/actions/daybook/daybook.a
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as moment from 'moment/moment';
-import { PaginationComponent } from 'ngx-bootstrap';
+import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
@@ -42,12 +42,12 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     /** True, If advance search applied */
     public showAdvanceSearchIcon: boolean = false;
-    @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
-    @ViewChild('exportDaybookModal') public exportDaybookModal: ModalDirective;
-    @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent }) public dateRangePickerCmp: DaterangePickerComponent;
-    @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+    @ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
+    @ViewChild('exportDaybookModal', {static: true}) public exportDaybookModal: ModalDirective;
+    @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent, static: true }) public dateRangePickerCmp: DaterangePickerComponent;
+    @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
     /** Daybook advance search component reference */
-    @ViewChild('daybookAdvanceSearch') public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
+    @ViewChild('daybookAdvanceSearch', {static: true}) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
     public datePickerOptions: any = {
         locale: {
             applyClass: 'btn-green',

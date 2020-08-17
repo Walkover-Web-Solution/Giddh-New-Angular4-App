@@ -36,8 +36,8 @@ export class PurchaseRegisterExpandComponent implements OnInit {
 
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     // searching
-    @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
-    @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
+    @ViewChild('invoiceSearch', {static: true}) public invoiceSearch: ElementRef;
+    @ViewChild('filterDropDownList', {static: true}) public filterDropDownList: BsDropdownDirective;
     public voucherNumberInput: FormControl = new FormControl();
     public monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"

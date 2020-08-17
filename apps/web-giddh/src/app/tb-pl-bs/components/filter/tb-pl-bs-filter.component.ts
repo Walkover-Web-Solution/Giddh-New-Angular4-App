@@ -95,7 +95,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
 
     @Input() public showLabels: boolean = false;
     @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
-    @ViewChild('createTagModal') public createTagModal: ModalDirective;
+    @ViewChild('createTagModal', {static: true}) public createTagModal: ModalDirective;
 
     public universalDate$: Observable<any>;
     public newTagForm: FormGroup;

@@ -31,7 +31,8 @@ import { NumberToWordsModule } from '../shared/helpers/pipes/numberToWords/numbe
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { ButtonsModule, PaginationComponent } from 'ngx-bootstrap';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { QuickAccountModule } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.module';

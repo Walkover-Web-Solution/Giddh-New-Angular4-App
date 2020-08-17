@@ -25,7 +25,7 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
     public CanNewTBLoadOnThisEnv: boolean = false;
     public isWalkoverCompany: boolean = false;
 
-    @ViewChild('staticTabsTBPL') public staticTabs: TabsetComponent;
+    @ViewChild('staticTabsTBPL', {static: true}) public staticTabs: TabsetComponent;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

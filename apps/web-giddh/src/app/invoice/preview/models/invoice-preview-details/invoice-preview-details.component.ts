@@ -38,14 +38,14 @@ import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 })
 
 export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-    @ViewChild('searchElement') public searchElement: ElementRef;
-    @ViewChild(PdfJsViewerComponent) public pdfViewer: PdfJsViewerComponent;
-    @ViewChild('showEmailSendModal') public showEmailSendModal: ModalDirective;
-    @ViewChild('downloadVoucherModal') public downloadVoucherModal: ModalDirective;
-    @ViewChild('invoiceDetailWrapper') invoiceDetailWrapperView: ElementRef;
-    @ViewChild('invoicedetail') invoiceDetailView: ElementRef;
+    @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
+    @ViewChild(PdfJsViewerComponent, {static: true}) public pdfViewer: PdfJsViewerComponent;
+    @ViewChild('showEmailSendModal', {static: true}) public showEmailSendModal: ModalDirective;
+    @ViewChild('downloadVoucherModal', {static: true}) public downloadVoucherModal: ModalDirective;
+    @ViewChild('invoiceDetailWrapper', {static: true}) invoiceDetailWrapperView: ElementRef;
+    @ViewChild('invoicedetail', {static: true}) invoiceDetailView: ElementRef;
     /** Attached document preview container instance */
-    @ViewChild('attachedDocumentPreview') attachedDocumentPreview: ElementRef;
+    @ViewChild('attachedDocumentPreview', {static: true}) attachedDocumentPreview: ElementRef;
 
     @Input() public items: InvoicePreviewDetailsVm[];
     @Input() public selectedItem: InvoicePreviewDetailsVm;
