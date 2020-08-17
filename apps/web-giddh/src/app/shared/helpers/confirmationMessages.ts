@@ -25,4 +25,6 @@ export const confirmationMessages: ConfirmationMessages[] = [
     { module: 'purchaselist', title: 'Confirmation', message1: 'Do you want to delete the selected records?', message2: 'They will be deleted permanently and will no longer be accessible from any other module.' },
     { module: 'credit note', title: 'Confirmation', message1: 'Do you want to delete the selected vouchers?', message2: 'They will be deleted permanently and will no longer be accessible from any other module.' },
     { module: 'debit note', title: 'Confirmation', message1: 'Do you want to delete the selected vouchers?', message2: 'They will be deleted permanently and will no longer be accessible from any other module.' },
+    { module: 'purchaseorder', title: 'Confirmation', message1: 'Do you want to delete the order?', message2: 'It will be deleted permanently and will no longer be accessible from any other module.' },
+    { module: 'purchaseorderlist', title: 'Confirmation', message1: 'Do you want to delete the selected orders?', message2: 'They will be deleted permanently and will no longer be accessible from any other module.' },
 ];

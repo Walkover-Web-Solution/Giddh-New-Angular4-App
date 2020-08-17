@@ -10,7 +10,7 @@
     [ngStyle]="{'font-size': inputTemplate.fontSize +'px', 'font-family': inputTemplate.font ? inputTemplate.font : 'Open Sans', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
     <!--class="disabled-area"-->
     <div>
-        <div id="Template-header"
+        <div id="template-header"
             [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }"
             (click)="onClickSection('header')">
             <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header">
@@ -152,7 +152,7 @@
             </table>
 
         </div>
-        <div id="Template-table"
+        <div id="template-table"
             [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }"
             (click)="onClickSection('table')">
             <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table">
@@ -518,7 +518,7 @@
                 </table>
             </article>
         </div>
-        <div id="Template-footer"
+        <div id="template-footer"
             [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }"
             (click)="onClickSection('footer')">
             <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">

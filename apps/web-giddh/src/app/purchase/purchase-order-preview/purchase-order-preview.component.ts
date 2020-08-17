@@ -1,0 +1,375 @@
+import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
+import { PurchaseOrderService } from '../../services/purchase-order.service';
+import { ToasterService } from '../../services/toaster.service';
+import { Router } from '@angular/router';
+import { GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { takeUntil, debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
+import { AppState } from '../../store';
+import { select, Store } from '@ngrx/store';
+import { ReplaySubject, fromEvent } from 'rxjs';
+import { OnboardingFormRequest } from '../../models/api-models/Common';
+import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { CommonActions } from '../../actions/common.actions';
+import { InvoiceActions } from '../../actions/invoice/invoice.actions';
+
+@Component({
+    selector: 'purchase-order-preview',
+    templateUrl: './purchase-order-preview.component.html',
+    styleUrls: ['./purchase-order-preview.component.scss']
+})
+
+export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
+    /* Taking input of all purchase orders */
+    @Input() public purchaseOrders: any;
+    /* Taking input of company unique name */
+    @Input() public companyUniqueName: any;
+    /* Taking input of purchase order unique name */
+    @Input() public purchaseOrderUniqueName: any;
+    /* Search element */
+    @ViewChild('searchElement') public searchElement: ElementRef;
+    /* Confirm box */
+    @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
+    /* Modal instance */
+    public modalRef: BsModalRef;
+    /* This will hold state of activity history aside pan */
+    public activityHistoryAsideState: string = 'out';
+    /* This will hold purchase order data */
+    public purchaseOrder: any = {};
+    /* Send email request params object */
+    public sendEmailRequest: any = {};
+    /* This will hold if it's loading or not */
+    public isLoading: boolean = false;
+    /* This will hold giddh date format */
+    public giddhDateFormat: any = GIDDH_DATE_FORMAT_UI;
+    /* This will hold inventory settings */
+    public inventorySettings: any;
+    /* Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold the filtered orders */
+    public filteredData: any[] = [];
+    /* This will hold if we need to show GST */
+    public showGSTINNo: boolean;
+    /* This will hold if we need to show TRN */
+    public showTRNNo: boolean;
+    /* This will hold selected company details */
+    public selectedCompany: any;
+    /* This will hold list of vat supported countries */
+    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    /* This will hold form fields */
+    public formFields: any[] = [];
+    /* True, if the Giddh supports the taxation of the country (not supported now: UK, US, Nepal, Australia) */
+    public shouldShowTrnGstField: boolean = false;
+    /* Onboarding params object */
+    public onboardingFormRequest: OnboardingFormRequest = { formName: 'onboarding', country: '' };
+
+    constructor(private store: Store<AppState>, private modalService: BsModalService, public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public router: Router, private commonActions: CommonActions, private invoiceActions: InvoiceActions) {
+        this.getInventorySettings();
+        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+    }
+
+    /**
+     * Initializes the component
+     *
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public ngOnInit(): void {
+        this.getPurchaseOrder();
+
+        if (this.purchaseOrders && this.purchaseOrders.items) {
+            this.filteredData = this.purchaseOrders.items;
+        }
+
+        this.store.pipe(select(state => {
+            if (!state.session.companies) {
+                return;
+            }
+            state.session.companies.forEach(cmp => {
+                if (cmp.uniqueName === state.session.companyUniqueName) {
+                    this.selectedCompany = cmp;
+                }
+            });
+        })).subscribe();
+
+        this.store.pipe(select(state => state.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                if (res.fields) {
+                    this.formFields = [];
+                    Object.keys(res.fields).forEach(key => {
+                        if (res.fields[key]) {
+                            this.formFields[res.fields[key].name] = [];
+                            this.formFields[res.fields[key].name] = res.fields[key];
+                        }
+                    });
+                }
+                if (this.formFields && this.formFields['taxName']) {
+                    this.shouldShowTrnGstField = true;
+                } else {
+                    this.shouldShowTrnGstField = false;
+                }
+            }
+        });
+    }
+
+    /**
+     * This will update the value of input variables on change
+     *
+     * @param {SimpleChanges} changes
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.purchaseOrders && changes.purchaseOrders.currentValue && changes.purchaseOrders.currentValue.items) {
+            this.filteredData = changes.purchaseOrders.currentValue.items;
+        }
+
+        if (changes.purchaseOrderUniqueName && changes.purchaseOrderUniqueName.currentValue && changes.purchaseOrderUniqueName.currentValue !== this.purchaseOrder.uniqueName) {
+            this.purchaseOrderUniqueName = changes.purchaseOrderUniqueName.currentValue;
+            this.getPurchaseOrder();
+        }
+    }
+
+    /**
+     * This will get called after component has initialized
+     *
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public ngAfterViewInit(): void {
+        this.searchElement.nativeElement.focus();
+        fromEvent(this.searchElement.nativeElement, 'input')
+            .pipe(
+                debounceTime(500),
+                distinctUntilChanged(),
+                map((event: any) => event.target.value)
+            )
+            .subscribe((term => {
+                this.filteredData = this.purchaseOrders.items.filter(item => {
+                    return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
+                        item.vendor.name.toLowerCase().includes(term.toLowerCase()) ||
+                        item.voucherDate.includes(term) ||
+                        item.grandTotal.amountForAccount.toString().includes(term);
+                });
+            }))
+    }
+
+    /**
+     * This will get the purchase order details
+     *
+     * @returns {void}
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public getPurchaseOrder(): void {
+        if (this.isLoading) {
+            return;
+        }
+
+        this.isLoading = true;
+        let getRequest = { companyUniqueName: this.companyUniqueName, poUniqueName: this.purchaseOrderUniqueName };
+        this.purchaseOrderService.getPreview(getRequest).subscribe(response => {
+            this.isLoading = false;
+            if (response) {
+                if (response.status === "success") {
+                    this.purchaseOrder = response.body;
+
+                    if (this.purchaseOrder.account.billingDetails.country) {
+                        this.showGstAndTrnUsingCountry(this.purchaseOrder.account.billingDetails.country.countryCode, this.purchaseOrder.account.billingDetails.country.countryName);
+                    } else {
+                        this.showGstAndTrnUsingCountry('', '');
+                    }
+                } else {
+                    this.toaster.errorToast(response.message);
+                }
+            } else {
+                this.router.navigate(['/pages/purchase-management/purchase-orders']);
+            }
+        });
+    }
+
+    /**
+     * This will toggle the activity history aside pan
+     *
+     * @param {*} [event]
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public toggleActivityHistoryAsidePane(event?: any): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.activityHistoryAsideState = this.activityHistoryAsideState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
+    /**
+     * This will toggle the fixed class on body
+     *
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public toggleBodyClass(): void {
+        if (this.activityHistoryAsideState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+
+    /**
+     * This will open the send email modal
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public openSendMailModal(template: TemplateRef<any>): void {
+        this.sendEmailRequest.email = this.purchaseOrder.account.email;
+        this.sendEmailRequest.uniqueName = this.purchaseOrder.uniqueName;
+        this.sendEmailRequest.accountUniqueName = this.purchaseOrder.account.uniqueName;
+        this.sendEmailRequest.companyUniqueName = this.companyUniqueName;
+        this.modalRef = this.modalService.show(template);
+    }
+
+    /**
+     * This will change the selected purchase order
+     *
+     * @param {*} poUniqueName
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public showPurchaseOrderPreview(poUniqueName: any): void {
+        this.router.navigate(['/pages/purchase-management/purchase-orders/preview/' + poUniqueName]);
+    }
+
+    /**
+     * This will close the send email popup
+     *
+     * @param {*} event
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public closeSendMailPopup(event: any): void {
+        if (event) {
+            this.modalRef.hide();
+        }
+    }
+
+    /**
+     * This will close the confirmation modal
+     *
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public closeConfirmationPopup(): void {
+        this.poConfirmationModel.hide();
+    }
+
+    /**
+     * This will delete the purchase order
+     *
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public deleteItem(): void {
+        let getRequest = { companyUniqueName: this.companyUniqueName, poUniqueName: this.purchaseOrder.uniqueName };
+
+        this.purchaseOrderService.delete(getRequest).subscribe((res) => {
+            if (res) {
+                if (res.status === 'success') {
+                    this.closeConfirmationPopup();
+                    this.toaster.successToast(res.body);
+                    this.router.navigate(['/pages/purchase-management/purchase-orders']);
+                } else {
+                    this.closeConfirmationPopup();
+                    this.toaster.errorToast(res.message);
+                }
+            }
+        });
+    }
+
+    /**
+     * This will show the confirmation modal
+     *
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public confirmDelete(): void {
+        this.poConfirmationModel.show();
+    }
+
+    /**
+     * This will update the status of purchase order
+     *
+     * @param {*} action
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public statusUpdate(action: any): void {
+        if (this.purchaseOrder && this.purchaseOrder.number) {
+            let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.purchaseOrder.account.uniqueName };
+            let postRequest = { purchaseNumber: this.purchaseOrder.number, action: action };
+
+            this.purchaseOrderService.statusUpdate(getRequest, postRequest).subscribe((res) => {
+                if (res) {
+                    if (res.status === 'success') {
+                        this.getPurchaseOrder();
+                        this.toaster.successToast(res.body);
+                    } else {
+                        this.toaster.errorToast(res.message);
+                    }
+                }
+            });
+        } else {
+            this.toaster.errorToast("Invalid Purchase Order");
+        }
+    }
+
+    /**
+     * This function is used to get inventory settings from store
+     *
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public getInventorySettings(): void {
+        this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
+            if (settings && settings.companyInventorySettings) {
+                this.inventorySettings = settings.companyInventorySettings;
+            }
+        });
+    }
+
+    /**
+     * Releases the memory
+     *
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    /**
+     * This will show/hide GST/TRN based on country
+     *
+     * @private
+     * @param {string} code
+     * @param {string} name
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    private showGstAndTrnUsingCountry(code: string, name: string): void {
+        if (this.selectedCompany.country === name) {
+            if (name === 'India') {
+                this.showGSTINNo = true;
+                this.showTRNNo = false;
+                this.getOnboardingForm('IN')
+            } else if (this.vatSupportedCountries.includes(code)) {
+                this.showGSTINNo = false;
+                this.showTRNNo = true;
+                this.getOnboardingForm(code);
+            }
+        } else {
+            this.showGSTINNo = false;
+            this.showTRNNo = false;
+        }
+    }
+
+    /**
+     * To fetch regex call for onboarding countries (gulf)
+     *
+     * @param {*} countryCode
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public getOnboardingForm(countryCode): void {
+        this.onboardingFormRequest.country = countryCode;
+        this.store.dispatch(this.commonActions.GetOnboardingForm(this.onboardingFormRequest));
+    }
+}

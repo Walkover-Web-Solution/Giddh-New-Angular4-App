@@ -54,5 +54,5 @@ export const validateEmail = (emailStr: string) => {
 
 
 export const giddhRoundOff = (number, decimals = 0) => {
-    return Number(`${Math.round(Number(number + 'e' + decimals))}e-${decimals}`);
+    return (!isNaN(Number(`${Math.round(Number(number + 'e' + decimals))}e-${decimals}`))) ? Number(`${Math.round(Number(number + 'e' + decimals))}e-${decimals}`) : 0;
 };

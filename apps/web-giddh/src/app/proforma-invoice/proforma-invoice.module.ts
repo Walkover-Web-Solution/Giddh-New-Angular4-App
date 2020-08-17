@@ -77,7 +77,7 @@ import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjust
         SettingsServiceModule,
         AdvanceReceiptAdjustmentModule
     ],
-    exports: [ProformaInvoiceComponent, SalesAddStockComponent, SalesAddStockGroupComponent, AsideMenuProductServiceComponent],
+    exports: [ProformaInvoiceComponent, SalesAddStockComponent, SalesAddStockGroupComponent, AsideMenuProductServiceComponent, ProformaAddBulkItemsComponent],
     declarations: [
         ProformaInvoiceRendererComponent,
         ProformaInvoiceComponent,

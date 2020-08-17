@@ -119,7 +119,7 @@
                             </ul>
                         </div>
                     </th>
-                    <th class="td_in_searchBox" width="15%" (clickOutside)="clickedOutside($event,null, 'account')">
+                    <th class="td-search-box" width="15%" (clickOutside)="clickedOutside($event,null, 'account')">
                         <div [hidden]="showAccountSearch">
                             <span>Account Name</span>
                             <i class="icon-search" (click)="showAccountSearchBox()"></i>
@@ -314,7 +314,8 @@
                 <tr>
                     <td colspan="10" class="text-center empty_table">
                         <img src="assets/images/search-data-not-found.svg" />
-                        <h1 [class.stock-not-found]="stockNotFoundMessage">{{ (stockNotFoundMessage) ? stockNotFoundMessage : 'No Report Found !!' }}</h1>
+                        <h1 [class.stock-not-found]="stockNotFoundMessage">
+                            {{ (stockNotFoundMessage) ? stockNotFoundMessage : 'No Report Found !!' }}</h1>
                     </td>
                 </tr>
             </tbody>

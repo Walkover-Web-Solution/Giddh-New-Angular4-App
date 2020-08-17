@@ -245,7 +245,7 @@ body {
     border: 1px dashed #808080;
 }
 
-#Template-table {
+#template-table {
     float: left;
     width: 100%;
 }
@@ -254,7 +254,7 @@ body {
     clear: both;
 }
 
-#Template-footer {
+#template-footer {
     float: left;
     width: 100%;
 }
