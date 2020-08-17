@@ -75,8 +75,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             value: '%s_AN',
         },
     ];
-    @ViewChild('mailModal') public mailModal: ModalDirective;
-    @ViewChild('messageBox') public messageBox: ElementRef;
+    @ViewChild('mailModal', {static: true}) public mailModal: ModalDirective;
+    @ViewChild('messageBox', {static: true}) public messageBox: ElementRef;
     public searchRequest$: Observable<SearchRequest>;
     public isAllChecked: boolean = false;
 

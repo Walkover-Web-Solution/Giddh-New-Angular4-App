@@ -115,6 +115,7 @@
             "scripts": [
               "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
               "apps/web-giddh/src/assets/js/lodash.min.js",
+              "node_modules/bootstrap-daterangepicker/moment.min.js",
               "node_modules/bootstrap-daterangepicker/daterangepicker.js"
             ],
             "customWebpackConfig": {
@@ -396,7 +397,7 @@
             "scripts": [
               "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
               "apps/web-giddh/src/assets/jQuery.electron.js",
-              "node_modules/bootstrap-daterangepicker/moment.js",
+              "node_modules/bootstrap-daterangepicker/moment.min.js",
               "apps/web-giddh/src/assets/js/lodash.min.js",
               "node_modules/bootstrap-daterangepicker/daterangepicker.js"
             ]
@@ -614,7 +615,7 @@
             "scripts": [
               "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
               "apps/web-giddh/src/assets/jQuery.electron.js",
-              "node_modules/bootstrap-daterangepicker/moment.js",
+              "node_modules/bootstrap-daterangepicker/moment.min.js",
               "apps/web-giddh/src/assets/js/lodash.min.js",
               "node_modules/bootstrap-daterangepicker/daterangepicker.js"
             ]

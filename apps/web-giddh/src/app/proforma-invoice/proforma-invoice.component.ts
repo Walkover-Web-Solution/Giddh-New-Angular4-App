@@ -176,40 +176,40 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @Input() public invoiceType: VoucherTypeEnum = VoucherTypeEnum.sales;
     @Input() public selectedItem: InvoicePreviewDetailsVm;
 
-    @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
-    @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
-    @ViewChild('createAcModal') public createAcModal: ModalDirective;
-    @ViewChild('bulkItemsModal') public bulkItemsModal: ModalDirective;
-    @ViewChild('sendEmailModal') public sendEmailModal: ModalDirective;
-    @ViewChild('printVoucherModal') public printVoucherModal: ModalDirective;
+    @ViewChild(ElementViewContainerRef, {static: true}) public elementViewContainerRef: ElementViewContainerRef;
+    @ViewChild('createGroupModal', {static: true}) public createGroupModal: ModalDirective;
+    @ViewChild('createAcModal', {static: true}) public createAcModal: ModalDirective;
+    @ViewChild('bulkItemsModal', {static: true}) public bulkItemsModal: ModalDirective;
+    @ViewChild('sendEmailModal', {static: true}) public sendEmailModal: ModalDirective;
+    @ViewChild('printVoucherModal', {static: true}) public printVoucherModal: ModalDirective;
 
-    @ViewChild('copyPreviousEstimate') public copyPreviousEstimate: ElementRef;
-    @ViewChild('unregisteredBusiness') public unregisteredBusiness: ElementRef;
+    @ViewChild('copyPreviousEstimate', {static: true}) public copyPreviousEstimate: ElementRef;
+    @ViewChild('unregisteredBusiness', {static: true}) public unregisteredBusiness: ElementRef;
 
-    @ViewChild('invoiceForm', {read: NgForm}) public invoiceForm: NgForm;
-    @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
-    @ViewChild(TaxControlComponent) public taxControlComponent: TaxControlComponent;
-    @ViewChild('customerNameDropDown') public customerNameDropDown: ShSelectComponent;
+    @ViewChild('invoiceForm', {read: NgForm, static: true}) public invoiceForm: NgForm;
+    @ViewChild('discountComponent', {static: true}) public discountComponent: DiscountListComponent;
+    @ViewChild(TaxControlComponent, {static: true}) public taxControlComponent: TaxControlComponent;
+    @ViewChild('customerNameDropDown', {static: true}) public customerNameDropDown: ShSelectComponent;
 
     @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
     @ViewChildren('description') public description: QueryList<ElementRef>;
 
-    @ViewChild('inputCustomerName') public inputCustomerName: ElementRef;
-    @ViewChild('customerBillingAddress') public customerBillingAddress: ElementRef;
+    @ViewChild('inputCustomerName', {static: true}) public inputCustomerName: ElementRef;
+    @ViewChild('customerBillingAddress', {static: true}) public customerBillingAddress: ElementRef;
     @ViewChildren(BsDatepickerDirective) public datePickers: QueryList<BsDatepickerDirective>;
 
     /** RCM popup instance */
-    @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
+    @ViewChild('rcmPopup', {static: true}) public rcmPopup: PopoverDirective;
     /** Purchase record modal instance */
-    @ViewChild('purchaseRecordConfirmationPopup') public purchaseRecordConfirmationPopup: ModalDirective;
+    @ViewChild('purchaseRecordConfirmationPopup', {static: true}) public purchaseRecordConfirmationPopup: ModalDirective;
     /** Billing state instance */
-    @ViewChild('billingState') billingState: ElementRef;
+    @ViewChild('billingState', {static: true}) billingState: ElementRef;
     /** Shipping state instance */
-    @ViewChild('shippingState') shippingState: ElementRef;
+    @ViewChild('shippingState', {static: true}) shippingState: ElementRef;
 
     /**Adjust advance receipts */
-    @ViewChild('adjustPaymentModal') public adjustPaymentModal: ModalDirective;
-    @ViewChild('advanceReceiptComponent') public advanceReceiptComponent: AdvanceReceiptAdjustmentComponent;
+    @ViewChild('adjustPaymentModal', {static: true}) public adjustPaymentModal: ModalDirective;
+    @ViewChild('advanceReceiptComponent', {static: true}) public advanceReceiptComponent: AdvanceReceiptAdjustmentComponent;
     public showAdvanceReceiptAdjust: boolean = false;
 
 

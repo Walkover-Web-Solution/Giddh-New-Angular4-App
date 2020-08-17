@@ -41,10 +41,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
     public isLoginWithMobileSubmited$: Observable<boolean>;
-    @ViewChild("emailVerifyModal") public emailVerifyModal: ModalDirective;
+    @ViewChild("emailVerifyModal", { static: true }) public emailVerifyModal: ModalDirective;
     public isLoginWithEmailSubmited$: Observable<boolean>;
-    @ViewChild("mobileVerifyModal") public mobileVerifyModal: ModalDirective;
-    @ViewChild("twoWayAuthModal") public twoWayAuthModal: ModalDirective;
+    @ViewChild("mobileVerifyModal", { static: true }) public mobileVerifyModal: ModalDirective;
+    @ViewChild("twoWayAuthModal", { static: true }) public twoWayAuthModal: ModalDirective;
     // @ViewChild('forgotPasswordModal') public forgotPasswordModal: ModalDirective;
 
     public isSubmited: boolean = false;
@@ -165,11 +165,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
-
-        this.emailVerifyModal.config = { backdrop: "static" };
-        this.twoWayAuthModal.config = { backdrop: "static" };
-        this.mobileVerifyModal.config = { backdrop: "static" };
-
         this.getElectronAppVersion();
         this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
@@ -263,11 +258,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.twoWayAuthModal.onHidden.subscribe(e => {
-            if (e && e.dismissReason === "esc") {
-                return this.resetTwoWayAuthModal();
-            }
-        });
         this.isLoginWithPasswordSuccessNotVerified$.subscribe(res => {
             if (res) {
                 //
@@ -280,12 +270,18 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
     }
 
-    public showEmailModal() {
-        this.emailVerifyModal.show();
-        this.emailVerifyModal.onShow.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.isSubmited = false;
-        });
+    public onHiddenAuthModal(event: any): void {
+        if (event && event.dismissReason === "esc") {
+            return this.resetTwoWayAuthModal();
+        }
     }
+
+    // public showEmailModal() {
+    //     this.emailVerifyModal.show();
+    //     this.emailVerifyModal.onShow.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+    //         this.isSubmited = false;
+    //     });
+    // }
 
     public LoginWithEmail(email: string) {
         let data = new SignupwithEmaillModel();

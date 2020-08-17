@@ -17,7 +17,7 @@ import { createSelector } from 'reselect';
 	encapsulation: ViewEncapsulation.Emulated
 })
 export class FilingComponent implements OnInit, OnDestroy {
-	@ViewChild('staticTabs') public staticTabs: TabsetComponent;
+	@ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
 
 	public currentPeriod: GstDatePeriod = null;
 	public selectedGst: string = null;

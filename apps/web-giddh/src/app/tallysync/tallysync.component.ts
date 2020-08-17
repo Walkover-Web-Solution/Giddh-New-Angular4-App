@@ -14,7 +14,7 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 export class TallysyncComponent implements OnInit, OnDestroy {
     public activeTab: string = 'inprogress';
     public showInvoiceNav: boolean = false;
-    @ViewChild('staticTabs') public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

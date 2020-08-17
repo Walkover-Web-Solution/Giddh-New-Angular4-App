@@ -69,13 +69,13 @@ import { download } from "@giddh-workspaces/utils";
     ]
 })
 export class LedgerComponent implements OnInit, OnDestroy {
-    @ViewChild('updateledgercomponent') public updateledgercomponent: ElementViewContainerRef;
-    @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
-    @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
-    @ViewChild('sharLedger') public sharLedger: ShareLedgerComponent;
-    @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+    @ViewChild('updateledgercomponent', {static: true}) public updateledgercomponent: ElementViewContainerRef;
+    @ViewChild('quickAccountComponent', {static: true}) public quickAccountComponent: ElementViewContainerRef;
+    @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
+    @ViewChild('sharLedger', {static: true}) public sharLedger: ShareLedgerComponent;
+    @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
 
-    @ViewChild('advanceSearchComp') public advanceSearchComp: AdvanceSearchModelComponent;
+    @ViewChild('advanceSearchComp', {static: true}) public advanceSearchComp: AdvanceSearchModelComponent;
 
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
     public imgPath: string = '';
@@ -87,17 +87,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public advanceSearchRequest: AdvanceSearchRequest;
     public isLedgerCreateSuccess$: Observable<boolean>;
     public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    @ViewChild('newLedPanel') public newLedgerComponent: NewLedgerEntryPanelComponent;
-    @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;
-    @ViewChild('exportLedgerModal') public exportLedgerModal: ModalDirective;
-    @ViewChild('shareLedgerModal') public shareLedgerModal: ModalDirective;
-    @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
-    @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
-    @ViewChild('bulkActionConfirmationModal') public bulkActionConfirmationModal: ModalDirective;
-    @ViewChild('bulkActionGenerateVoucherModal') public bulkActionGenerateVoucherModal: ModalDirective;
-    @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
+    @ViewChild('newLedPanel', {static: true}) public newLedgerComponent: NewLedgerEntryPanelComponent;
+    @ViewChild('updateLedgerModal', {static: true}) public updateLedgerModal: ModalDirective;
+    @ViewChild('exportLedgerModal', {static: true}) public exportLedgerModal: ModalDirective;
+    @ViewChild('shareLedgerModal', {static: true}) public shareLedgerModal: ModalDirective;
+    @ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
+    @ViewChild('quickAccountModal', {static: true}) public quickAccountModal: ModalDirective;
+    @ViewChild('bulkActionConfirmationModal', {static: true}) public bulkActionConfirmationModal: ModalDirective;
+    @ViewChild('bulkActionGenerateVoucherModal', {static: true}) public bulkActionGenerateVoucherModal: ModalDirective;
+    @ViewChild('ledgerSearchTerms', {static: true}) public ledgerSearchTerms: ElementRef;
     /** datepicker element reference  */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
     public showUpdateLedgerForm: boolean = false;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;

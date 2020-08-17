@@ -47,8 +47,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
 
 
 
-    @ViewChild('tdsTypeBox') public tdsTypeBox: ElementRef;
-    @ViewChild('tdsAmountBox') public tdsAmountBox: ElementRef;
+    @ViewChild('tdsTypeBox', {static: true}) public tdsTypeBox: ElementRef;
+    @ViewChild('tdsAmountBox', {static: true}) public tdsAmountBox: ElementRef;
 
     public adjustPayment: AdjustAdvancePaymentModal = {
         customerName: '',

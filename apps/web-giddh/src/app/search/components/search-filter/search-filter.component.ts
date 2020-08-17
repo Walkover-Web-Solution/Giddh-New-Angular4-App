@@ -19,7 +19,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
 	@Output() public createCsv = new EventEmitter();
 	@Output() public openEmailDialog = new EventEmitter();
 	@Output() public openSmsDialog = new EventEmitter();
-	@ViewChild('filterDropdown') public filterDropdown: BsDropdownDirective;
+	@ViewChild('filterDropdown', {static: true}) public filterDropdown: BsDropdownDirective;
 	public queryTypes = [
 		{ name: 'Closing Balance', uniqueName: 'closingBalance' },
 		{ name: 'Opening Balance', uniqueName: 'openingBalance' },

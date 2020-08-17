@@ -74,10 +74,10 @@ const fileGstrOptions = [
     ]
 })
 export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
-    @ViewChild('pgGstNotFoundOnPortal') public pgGstNotFoundOnPortal: ElementViewContainerRef;
-    @ViewChild('pgGstNotFoundOnGiddh') public pgGstNotFoundOnGiddh: ElementViewContainerRef;
-    @ViewChild('pgPartiallyMatched') public pgPartiallyMatched: ElementViewContainerRef;
-    @ViewChild('pgMatched') public pgMatched: ElementViewContainerRef;
+    @ViewChild('pgGstNotFoundOnPortal', {static: true}) public pgGstNotFoundOnPortal: ElementViewContainerRef;
+    @ViewChild('pgGstNotFoundOnGiddh', {static: true}) public pgGstNotFoundOnGiddh: ElementViewContainerRef;
+    @ViewChild('pgPartiallyMatched', {static: true}) public pgPartiallyMatched: ElementViewContainerRef;
+    @ViewChild('pgMatched', {static: true}) public pgMatched: ElementViewContainerRef;
 
     public allPurchaseInvoicesBackup: IInvoicePurchaseResponse;
     public allPurchaseInvoices: IInvoicePurchaseResponse = new IInvoicePurchaseResponse();

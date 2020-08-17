@@ -25,11 +25,11 @@ const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, 
 
 export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
 
-    @ViewChild('mainEle') public mainEle: ElementRef;
-    @ViewChild('searchEle') public searchEle: ElementRef;
-    @ViewChild('searchWrapEle') public searchWrapEle: ElementRef;
-    @ViewChild('wrapper') public wrapper: ElementRef;
-    @ViewChild(ScrollComponent) public virtualScrollElem: ScrollComponent;
+    @ViewChild('mainEle', {static: true}) public mainEle: ElementRef;
+    @ViewChild('searchEle', {static: true}) public searchEle: ElementRef;
+    @ViewChild('searchWrapEle', {static: true}) public searchWrapEle: ElementRef;
+    @ViewChild('wrapper', {static: true}) public wrapper: ElementRef;
+    @ViewChild(ScrollComponent, {static: true}) public virtualScrollElem: ScrollComponent;
 
     @Input() public preventOutSideClose: boolean = false;
     @Input() public dontShowNoResultMsg: boolean = false;

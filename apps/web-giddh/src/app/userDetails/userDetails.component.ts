@@ -28,7 +28,7 @@ import { API_POSTMAN_DOC_URL } from '../app.constant';
     styleUrls: [`./userDetails.component.scss`],
 })
 export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('staticTabs') public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
     public userAuthKey: string = '';
     public expandLongCode: boolean = false;
     public twoWayAuth: boolean = false;

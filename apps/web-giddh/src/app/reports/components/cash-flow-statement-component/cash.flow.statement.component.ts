@@ -19,7 +19,7 @@ import { saveAs } from "file-saver";
 })
 
 export class CashFlowStatementComponent implements OnInit, OnDestroy {
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
 
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;

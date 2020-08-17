@@ -29,8 +29,8 @@ export class AccountDetailModalComponent implements OnChanges {
     // take voucher type from parent component
     @Input() public voucherType: VoucherTypeEnum;
 
-    @ViewChild('mailModal') public mailModal: ModalDirective;
-    @ViewChild('messageBox') public messageBox: ElementRef;
+    @ViewChild('mailModal', {static: true}) public mailModal: ModalDirective;
+    @ViewChild('messageBox', {static: true}) public messageBox: ElementRef;
 
     public messageBody = {
         header: {

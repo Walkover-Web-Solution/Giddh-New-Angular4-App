@@ -24,7 +24,7 @@ import { GeneralService } from '../services/general.service';
 })
 
 export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
-    @ViewChild('tabset') tabset: TabsetComponent;
+    @ViewChild('tabset', {static: true}) tabset: TabsetComponent;
 
     public universalDate: Date[];
     public universalDate$: Observable<any>;

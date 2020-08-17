@@ -100,7 +100,7 @@ export interface DateRangeClicked {
 
 export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges {
     /* This will check if scrolling reached bottom or top */
-    @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
+    @ViewChild(CdkVirtualScrollViewport, {static: true}) virtualScroll: CdkVirtualScrollViewport;
 
     modalRef: BsModalRef;
     chosenLabel: string;
@@ -122,8 +122,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     // used in template for compile time support of enum values.
     sideEnum = DateType;
     hoveredDate: any;
-    @ViewChild('startDateElement') startDateElement: ElementRef;
-    @ViewChild('endDateElement') endDateElement: ElementRef;
+    @ViewChild('startDateElement', {static: true}) startDateElement: ElementRef;
+    @ViewChild('endDateElement', {static: true}) endDateElement: ElementRef;
     @Input()
     minDate: _moment.Moment = _moment().subtract(1, 'year').startOf('month').month(0); // default min date of previous year first month
     @Input()
@@ -192,7 +192,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     @Output() choosedDate: EventEmitter<DateRangeClicked>;
     @Output() rangeClicked: EventEmitter<DateRangeClicked>;
     @Output() datesUpdated: EventEmitter<DateRangeClicked>;
-    @ViewChild('pickerContainer') pickerContainer: ElementRef;
+    @ViewChild('pickerContainer', {static: true}) pickerContainer: ElementRef;
     showMonthPicker = false;
     public isMobileScreen: boolean = false;
     public dropdownShow: boolean = false;

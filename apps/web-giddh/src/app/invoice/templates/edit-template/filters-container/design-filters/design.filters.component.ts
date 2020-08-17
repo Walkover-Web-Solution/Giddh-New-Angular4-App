@@ -80,7 +80,7 @@ export class DesignFiltersContainerComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public showUploadButton: boolean = false;
     public showDeleteButton: boolean = false;
-    @ViewChild('fileInput') logoFile: ElementRef;
+    @ViewChild('fileInput', {static: true}) logoFile: ElementRef;
     public selectedFont: string = "";
     public selectedFontSize: string = "";
 

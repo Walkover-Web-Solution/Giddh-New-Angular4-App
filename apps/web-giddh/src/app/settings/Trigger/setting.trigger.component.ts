@@ -56,7 +56,7 @@ const taxDuration = [
 })
 export class SettingTriggerComponent implements OnInit {
 
-    @ViewChild('triggerConfirmationModel') public triggerConfirmationModel: ModalDirective;
+    @ViewChild('triggerConfirmationModel', {static: true}) public triggerConfirmationModel: ModalDirective;
 
     public availableTriggers: any[] = [];
     public newTriggerObj: any = {};

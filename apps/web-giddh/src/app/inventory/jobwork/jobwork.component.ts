@@ -37,12 +37,12 @@ import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/datera
 })
 export class JobworkComponent implements OnInit, OnDestroy {
 	public asideTransferPaneState: string = 'out';
-	@ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
-	@ViewChild('senderName') public senderName: ElementRef;
-	@ViewChild('receiverName') public receiverName: ElementRef;
-	@ViewChild('productName') public productName: ElementRef;
-	@ViewChild('comparisionFilter') public comparisionFilter: ShSelectComponent;
-	@ViewChild(DaterangePickerComponent) public datePicker: DaterangePickerComponent;
+	@ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
+	@ViewChild('senderName', {static: true}) public senderName: ElementRef;
+	@ViewChild('receiverName', {static: true}) public receiverName: ElementRef;
+	@ViewChild('productName', {static: true}) public productName: ElementRef;
+	@ViewChild('comparisionFilter', {static: true}) public comparisionFilter: ShSelectComponent;
+	@ViewChild(DaterangePickerComponent, {static: true}) public datePicker: DaterangePickerComponent;
 
 	public senderUniqueNameInput: FormControl = new FormControl();
 	public receiverUniqueNameInput: FormControl = new FormControl();

@@ -56,8 +56,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
         backdrop: 'static',
         ignoreBackdropClick: true
     };
-    @ViewChild('customerSearch') public customerSearch: ElementRef;
-    @ViewChild(BsDatepickerDirective) public bsd: BsDatepickerDirective;
+    @ViewChild('customerSearch', {static: true}) public customerSearch: ElementRef;
+    @ViewChild(BsDatepickerDirective, {static: true}) public bsd: BsDatepickerDirective;
 
     public showInvoiceNumberSearch = false;
     public showCustomerNameSearch = false;
