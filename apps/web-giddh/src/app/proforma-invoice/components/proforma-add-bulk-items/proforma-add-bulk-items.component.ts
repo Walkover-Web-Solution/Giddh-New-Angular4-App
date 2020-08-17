@@ -65,7 +65,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
      * @param {number} [page=1] Page to request
      * @memberof ProformaAddBulkItemsComponent
      */
-    public onSearchQueryChanged(query: string, page: number = 1) {
+    public onSearchQueryChanged(query: string, page: number = 1): void {
         this.searchResultsPaginationData.query = query;
         const requestObject = this.getSearchRequestObject(query, page);
         this.searchAccount(requestObject).subscribe(data => {
@@ -165,7 +165,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
             return;
         }
         let requestObject = {
-            stockUniqueName: item.additional.stock.uniqueName
+            stockUniqueName: item.additional && item.additional.stock ? item.additional.stock.uniqueName : ''
         };
         this.searchService.loadDetails(item.additional.uniqueName, requestObject).subscribe(data => {
             if (data && data.body) {

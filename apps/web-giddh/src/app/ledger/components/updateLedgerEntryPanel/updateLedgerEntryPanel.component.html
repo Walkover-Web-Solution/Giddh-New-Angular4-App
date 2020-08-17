@@ -9,7 +9,7 @@
             {{(baseAccount$ | async)?.name}} A/c</h3>
 
         <sh-select *ngIf="openDropDown" class="d-inline-block" [disabled]="false" placeholder="Select Group"
-            [isPaginationEnabled]="true" (srollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+            [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
             [enableDynamicSearch]="true"
             filterPlaceholder="Type to filter.." name="accountUniqueName" [(ngModel)]="baseAccountName$" [showClear]="false"
             [options]="searchResults" style="width:30%">
@@ -112,7 +112,7 @@
                                                         (dbtSelect.isOpen && dbtSelect.filter))">To</span>
                                                 <sh-select id="dbtID" [notFoundLink]="true"
                                                     (noResultsClicked)="showQuickAccountModal()"
-                                                    [isPaginationEnabled]="true" (srollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                    [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
                                                     [enableDynamicSearch]="true"
                                                     (keydown)="keydownPressed($event)"
                                                     [options]="searchResults" #dbtSelect
@@ -298,7 +298,7 @@
                                                         (crdSelect.isOpen && crdSelect.filter))">By</span>
                                                 <sh-select id="crdID" [notFoundLink]="true"
                                                     (noResultsClicked)="showQuickAccountModal()"
-                                                    [isPaginationEnabled]="true" (srollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                    [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
                                                     [enableDynamicSearch]="true"
                                                     (keydown)="keydownPressed($event)"
                                                     [fixedValue]="txn.particular.name"
