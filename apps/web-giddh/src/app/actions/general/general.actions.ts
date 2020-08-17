@@ -1,20 +1,20 @@
-import { map, switchMap } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
-import { GroupService } from '../../services/group.service';
-import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { Action } from '@ngrx/store';
-import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
-import { GENERAL_ACTIONS } from './general.const';
-import { Observable } from 'rxjs';
-import { FlattenAccountsResponse } from '../../models/api-models/Account';
-import { AccountService } from '../../services/account.service';
-import { States, StatesRequest } from '../../models/api-models/Company';
-import { CompanyService } from '../../services/companyService.service';
-import { CustomActions } from '../../store/customActions';
-import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
-import { IUlist } from '../../models/interfaces/ulist.interface';
-import { CurrentPage } from '../../models/api-models/Common';
+import {map, switchMap} from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Actions, Effect} from '@ngrx/effects';
+import {GroupService} from '../../services/group.service';
+import {BaseResponse} from '../../models/api-models/BaseResponse';
+import {Action} from '@ngrx/store';
+import {GroupsWithAccountsResponse} from '../../models/api-models/GroupsWithAccounts';
+import {GENERAL_ACTIONS} from './general.const';
+import {Observable} from 'rxjs';
+import {FlattenAccountsResponse} from '../../models/api-models/Account';
+import {AccountService} from '../../services/account.service';
+import {States, StatesRequest} from '../../models/api-models/Company';
+import {CompanyService} from '../../services/companyService.service';
+import {CustomActions} from '../../store/customActions';
+import {IPaginatedResponse} from '../../models/interfaces/paginatedResponse.interface';
+import {IUlist} from '../../models/interfaces/ulist.interface';
+import {CurrentPage} from '../../models/api-models/Common';
 
 @Injectable()
 export class GeneralActions {
@@ -150,7 +150,7 @@ export class GeneralActions {
     public setAppTitle(uniqueName: string, additional?: { tab: string, tabIndex: number }) {
         return {
             type: GENERAL_ACTIONS.SET_APP_HEADER_TITLE,
-            payload: { uniqueName, additional }
+            payload: {uniqueName, additional}
         }
     }
 
@@ -172,10 +172,18 @@ export class GeneralActions {
             payload: currentPageObj
         }
     }
+
     public isOpenCalendlyModel(isOpen: boolean) {
         return {
             type: GENERAL_ACTIONS.OPEN_CALENDLY_MODEL,
             payload: isOpen
+        }
+    }
+
+    public updateCurrentLiabilities(uniqueName: string) {
+        return {
+            type: GENERAL_ACTIONS.UPDATE_CURRENT_LIABILITIES,
+            payload: uniqueName
         }
     }
 }

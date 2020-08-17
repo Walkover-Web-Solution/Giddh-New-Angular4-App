@@ -175,7 +175,7 @@
                                                     <div class="col-sm-6 bill-add">
 
                                                         <div class="form-group">
-                                                            <label>Billing Address</label>
+                                                            <label class="pb-0">Billing Address</label>
 
                                                             <div class="billing-address clearfix">
                                                                 <textarea name="billingDetails.address" class="form-control" (keyup)="autoFillShippingDetails()" rows="3" autocomplete="off" [(ngModel)]="invFormData.accountDetails.billingDetails.address[0]" autofocus="off" aria-autocomplete="none" #customerBillingAddress></textarea>
@@ -211,7 +211,7 @@
                                                     <div class="col-sm-6 bill-add">
 
                                                         <div class="form-group p0 width100">
-                                                            <label>
+                                                            <label class="pb-0">
                                                                 <input type="checkbox" autocomplete="None"
                                                                        (change)="autoFillShippingDetails()"
                                                                        name="autoFillShipping"
@@ -364,17 +364,50 @@
                             <!-- region invoice no, invoice date, Expiry date -->
                             <div class="row mTB1">
                                 <div class="col-sm-2">
-                                    <label> {{ invoiceNoLabel }}</label>
+                                    <label> {{ invoiceNoLabel }} </label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
                                         <!-- Enabled for CR/DR update flow -->
-                                        <input type="text" name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo" [ngClass]="{'dateinvoice': !isPurchaseInvoice }" [disabled]="(isUpdateMode && !(isCreditNote || isDebitNote || isPurchaseInvoice)) ? 'disabled' : null" [(ngModel)]="invFormData.voucherDetails.voucherNumber"
-                                        />
+                                        <div>
+                                            <input *ngIf="(!isCreditNote && !isDebitNote)" type="text"
+                                                name="accountDetails.invoiceNum" class="form-control invoiceDate attentionTo"
+                                                [ngClass]="{'dateinvoice': !isPurchaseInvoice }"
+                                                [disabled]="(isUpdateMode && !(isDebitNote || isPurchaseInvoice)) ? 'disabled' : null"
+                                                [(ngModel)]="invFormData.voucherDetails.voucherNumber" />
+
+                                            <ng-container *ngIf="isCreditNote || isDebitNote">
+                                                <sh-select [options]="invoiceList" placeholder="Select Accounts"
+                                                    [forceClearReactive]="invoiceForceClearReactive$ | async" [notFoundLink]="false"
+                                                    [(ngModel)]="selectedInvoice" [ngModelOptions]="{standalone: true}"
+                                                    (selected)="creditNoteInvoiceSelected($event)" [multiple]="false" [ItemHeight]="67" [showClear]="false">
+                                                    <ng-template *ngIf="invoiceList?.length" #optionTemplate let-option="option">
+                                                        <a href="javascript:void(0)" class="list-item sh-template">
+                                                            <div class="item">{{ option.label }}
+                                                            </div>
+                                                            <div class="item_unq">
+                                                                (Dated: {{ option.additional?.voucherDate}})
+                                                            </div>
+                                                            <div class="item_unq">
+                                                                (Due:
+                                                                {{ option.additional?.balanceDue?.amountForAccount | giddhCurrency }})
+                                                            </div>
+                                                        </a>
+                                                    </ng-template>
+                                                </sh-select>
+                                            </ng-container>
+                                        </div>
+                                        <div *ngIf="(isCreditNote || isDebitNote) && selectedInvoice" class="cp for-mobile-screen remove-invoice" (click)="removeSelectedInvoice()">
+                                            <span class="remove-invoice-icon mr-05">×</span>
+                                            <span class="remove-invoice-label">Remove</span>
+                                        </div>
                                     </div>
                                     <div class="col-sm-6 invoiceDateDueDate">
                                         <div class="form-inline">
-
+                                            <div *ngIf="(isCreditNote || isDebitNote) && selectedInvoice" class="cp remove-invoice" (click)="removeSelectedInvoice()">
+                                                <span class="remove-invoice-icon mr-05">×</span>
+                                                <span class="remove-invoice-label">Remove</span>
+                                            </div>
                                             <div class="form-group">
                                                 <label>{{ invoiceDateLabel }}</label>
 
@@ -995,7 +1028,7 @@
 
                             <div class="row">
 
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-xs-4 mb-0">
                                     <input type="text" #shippingDate="ngModel" [placeholder]="templatePlaceholder?.shippedDateLabel" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                         [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
                                     <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
@@ -1003,11 +1036,11 @@
                                     </p>
                                 </div>
 
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-xs-4 mb-0">
                                     <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" [placeholder]="templatePlaceholder?.shippedViaLabel || 'Ship Via'" />
                                 </div>
 
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-xs-4 mb-0">
                                     <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" [placeholder]="templatePlaceholder?.trackingNumber || 'Tracking No.'" />
                                 </div>
 
@@ -1015,15 +1048,15 @@
 
                             <div class="row">
 
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-xs-4 mb-0">
                                     <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" [placeholder]="templatePlaceholder?.customField1Label || 'Field 1'" />
                                 </div>
 
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-xs-4 mb-0">
                                     <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" [placeholder]="templatePlaceholder?.customField2Label || 'Field 2'" />
                                 </div>
 
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-xs-4 mb-0">
                                     <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" [placeholder]="templatePlaceholder?.customField3Label || 'Field 3'" />
                                 </div>
 
@@ -1051,10 +1084,13 @@
                                         Attachment</label>
 
                     <label class="custom-file-label form-control cp pos-rel" for="invoiceFile">
-                                        <em *ngIf="!selectedFileName">Drag/Drop file or click here</em>
-                                        <em *ngIf="selectedFileName" class="text-success">{{selectedFileName}}</em>
+                                        <em *ngIf="!selectedFileName && !isFileUploading">Drag/Drop file or click here</em>
+                                        <div *ngIf="isFileUploading" class="d-flex justify-content-center align-items-center">
+                                            <i class="fa fa-spinner rotate"></i>
+                                        </div>
+                                        <em *ngIf="selectedFileName && !isFileUploading" class="text-success">{{selectedFileName}}</em>
                                         <span class="text-success"><i class="fa fa-check"
-                                                                      *ngIf="selectedFileName"></i></span>
+                                                                      *ngIf="selectedFileName && !isFileUploading"></i></span>
                                         <input type="file" name="invoiceFile" id="invoiceFile"
                                                [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput"
                                                (uploadOutput)="onUploadOutput($event)"
@@ -1232,14 +1268,14 @@
                                                             </a>
                                                         </ng-template>
                                                     </sh-select>
-                                                    <label class="pull-right">Payment Mode</label>
+                                                    <label class="pull-right pt-1">Payment Mode</label>
                                                 </div>
                                             </li>
 
                                             <li class="clearfix mrT1" *ngIf="isSalesInvoice">
                                                 <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount" name="dueAmount" class="form-control amountField text-right pull-right max100" [(ngModel)]="depositAmount" [prefix]="depositCurrSymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                                 />
-                                                <label class="pull-right">Amount</label>
+                                                <label class="pull-right pt-1">Amount</label>
                                             </li>
 
                                             <li class="clearfix mrT1" *ngIf="isCashInvoice">
@@ -1247,7 +1283,7 @@
                                                                     <span
                                                                         *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span> {{invFormData.voucherDetails.balanceDue
                                                 | giddhCurrency}}</span>
-                                                <label class="pull-right">Amount</label>
+                                                <label class="pull-right pt-1">Amount</label>
                                             </li>
 
                                             <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
@@ -1777,30 +1813,30 @@
 
                     <div class="row">
 
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-4 mb-0">
                             <input type="text" #shippingDate="ngModel" [placeholder]="templatePlaceholder?.shippedDateLabel" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                 [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
                             <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                 Invalid Date</p>
                         </div>
 
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-4 mb-0">
                             <input type="text" name="shippedVia" [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control" [placeholder]="templatePlaceholder?.shippedViaLabel || 'Ship Via'" />
                         </div>
 
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-4 mb-0">
                             <input type="text" name="trackingNumber" [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control" [placeholder]="templatePlaceholder?.trackingNumber || 'Tracking No.'" />
                         </div>
 
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-4 mb-0">
                             <input type="text" name="customField1" [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control" [placeholder]="templatePlaceholder?.customField1Label || 'Field 1'" />
                         </div>
 
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-4 mb-0">
                             <input type="text" name="customField2" [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control" [placeholder]="templatePlaceholder?.customField2Label || 'Field 2'" />
                         </div>
 
-                        <div class="form-group col-xs-4">
+                        <div class="form-group col-xs-4 mb-0">
                             <input type="text" name="customField3" [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control" [placeholder]="templatePlaceholder?.customField3Label || 'Field 3'" />
                         </div>
                     </div>
@@ -1924,21 +1960,21 @@
                                                 </a>
                                             </ng-template>
                                         </sh-select>
-                                        <label class="pull-right">Payment Mode</label>
+                                        <label class="pull-right pt-1">Payment Mode</label>
                                     </div>
                                 </li>
 
                                 <li class="clearfix mrT1" *ngIf="isSalesInvoice">
                                     <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount" name="dueAmount" class="form-control amountField text-right pull-right max100" [(ngModel)]="depositAmount" [prefix]="depositCurrSymbol" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                     />
-                                    <label class="pull-right">Amount</label>
+                                    <label class="pull-right pt-1">Amount</label>
                                 </li>
 
                                 <li class="clearfix mrT1" *ngIf="isCashInvoice">
                                     <span class="amountField pull-right max100 amountFiledCash">
                                                         <span
                                                             *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span> {{invFormData.voucherDetails.balanceDue | giddhCurrency}}</span>
-                                    <label class="pull-right">Amount</label>
+                                    <label class="pull-right pt-1">Amount</label>
                                 </li>
 
                                 <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
@@ -1994,7 +2030,7 @@
                                 <!-- <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
                             class="btn btn-default" *ngIf="isCustomerSelected">Save &amp; Update A/c
                         </button> -->
-                                <button type="button" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
+                                <button type="button" [disabled]="isFileUploading" (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default">Save
                                 </button>
                             </span>
@@ -2084,7 +2120,7 @@
             <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">Cancel
                             </button>
 
-            <button type="button" class="btn btn-default" (click)="submitUpdateForm(invoiceForm)">
+            <button type="button" class="btn btn-default" [disabled]="isFileUploading" (click)="submitUpdateForm(invoiceForm)">
                                 Update
                                 <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                     Cash
@@ -2223,8 +2259,11 @@
 <div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent [isUpdateMode]="isUpdateMode" [depositAmount]="depositAmount" [invoiceFormDetails]="invFormData" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
-                (closeModelEvent)="closeAdvanceReceiptModal()" (submitClicked)="getAdvanceReceiptAdjustData($event)">
+            <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent
+                [isUpdateMode]="isUpdateMode" [depositAmount]="depositAmount" [invoiceFormDetails]="invFormData"
+                [isVoucherModule]="true" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
+                (closeModelEvent)="closeAdvanceReceiptModal()"
+                (submitClicked)="getAdvanceReceiptAdjustData($event)" [isVoucherModule]="true">
             </advance-receipt-adjustment-component>
         </div>
     </div>

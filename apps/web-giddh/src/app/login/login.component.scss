@@ -522,6 +522,20 @@ small {
     border-color: $chetwode-blue;
 }
 
+.loader-main {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 9999999;
+    background: $white;
+    top: 0;
+    right: 0;
+    left: 0;
+    margin: 0px;
+    align-items: center;
+    display: flex;
+}
+
 @media only screen and (max-width: 768px) {
     .giddh-login {
         margin: 0 auto;

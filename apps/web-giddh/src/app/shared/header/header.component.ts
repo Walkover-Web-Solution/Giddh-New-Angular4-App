@@ -319,7 +319,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.setCurrentPage();
 
         // SETTING CURRENT PAGE ON ROUTE CHANGE
-        this.router.events.subscribe(event => {
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            if (event instanceof NavigationStart) {
+                this.addClassInBodyIfPageHasTabs();
+            }
             if (event instanceof NavigationEnd) {
                 this.setCurrentPage();
 
@@ -327,8 +330,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentState = this.router.url;
                     this.setCurrentAccountNameInHeading();
                 }
-
-                this.addClassInBodyIfPageHasTabs();
             }
         });
 
@@ -498,7 +499,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         if (this.isSubscribedPlanHaveAdditionalCharges) {
-            if(!this.isMobileSite) {
+            if (!this.isMobileSite) {
                 this.openCrossedTxLimitModel(this.crossedTxLimitModel);
             }
         }
@@ -739,7 +740,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
 
         if (this.selectedPlanStatus === 'expired') {// active expired
-            if(!this.isMobileSite) {
+            if (!this.isMobileSite) {
                 this.openExpiredPlanModel(this.expiredPlanModel);
             }
         }
@@ -873,7 +874,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      *
      * @memberof HeaderComponent
      */
-    public closeSettingPaneOnOutsideClick():void {
+    public closeSettingPaneOnOutsideClick(): void {
         setTimeout(() => {
             if (this.asideSettingMenuState === "in") {
                 this.asideSettingMenuState = 'out';
@@ -886,7 +887,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      *
      * @memberof HeaderComponent
      */
-    public closeHelpPaneOnOutsideClick():void {
+    public closeHelpPaneOnOutsideClick(): void {
         setTimeout(() => {
             if (this.asideHelpSupportMenuState === "in") {
                 this.asideHelpSupportMenuState = 'out';
@@ -968,7 +969,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public analyzeAccounts(e: any, acc) {
         if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
-            this.onItemSelected(acc);
+            this.onItemSelected(acc, null, true);
             return;
         }
         e.preventDefault();
@@ -1331,7 +1332,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.doEntryInDb('groups', item);
     }
 
-    public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null) {
+    public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null, isCtrlClicked?: boolean) {
         this.oldSelectedPage = _.cloneDeep(this.selectedPage);
         if (this.modelRef) {
             this.modelRef.hide();
@@ -1357,7 +1358,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             // if (!this.isLedgerAccSelected) {
             //   this.navigateToUser = true;
             // }
-            this.router.navigate([url]); // added link in routerLink
+            if (!isCtrlClicked) {
+                this.router.navigate([url]); // added link in routerLink
+            }     
         }
         // save data to db
         item.time = +new Date();
@@ -1405,7 +1408,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
         this.modelRefCrossLimit = this.modalService.show(template);
-         
+
     }
 
     /**
@@ -1644,7 +1647,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (acc) {
                 this.isLedgerAccSelected = true;
                 this.selectedLedgerName = acc.uniqueName;
-                if(this.isMobileSite) {
+                if (this.isMobileSite) {
                     this.selectedPage = acc.name;
                 } else {
                     this.selectedPage = 'ledger - ' + acc.name;
@@ -1718,25 +1721,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public addClassInBodyIfPageHasTabs(): void {
         setTimeout(() => {
-            if (document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0 && !this.router.url.includes("/vendor")) {
-                if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
-                    this.sideBarStateChange(false);
-                    document.querySelector('body').classList.add('on-setting-page');
-                    document.querySelector('body').classList.remove('page-has-tabs');
-                    document.querySelector('body').classList.remove('on-user-page');
-                } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page").length > 0) {
-                    document.querySelector('body').classList.add('on-user-page');
-                    document.querySelector('body').classList.remove('page-has-tabs');
-                    document.querySelector('body').classList.remove('on-setting-page');
-                } else {
-                    document.querySelector('body').classList.add('page-has-tabs');
-                    document.querySelector('body').classList.remove('on-setting-page');
-                    document.querySelector('body').classList.remove('on-user-page');
-                }
+            if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
+                this.sideBarStateChange(true);
+                document.querySelector('body').classList.add('on-setting-page');
+                document.querySelector('body').classList.remove('page-has-tabs');
+                document.querySelector('body').classList.remove('on-user-page');
+            } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page").length > 0) {
+                document.querySelector('body').classList.add('on-user-page');
+                document.querySelector('body').classList.remove('page-has-tabs');
+                document.querySelector('body').classList.remove('on-setting-page');
+                document.querySelector('body').classList.remove('mobile-setting-sidebar');
+            } else if (document.getElementsByTagName("tabset") && document.getElementsByTagName("tabset").length > 0 && !this.router.url.includes("/vendor")) {
+                document.querySelector('body').classList.add('page-has-tabs');
+                document.querySelector('body').classList.remove('on-setting-page');
+                document.querySelector('body').classList.remove('on-user-page');
+                document.querySelector('body').classList.remove('mobile-setting-sidebar');
             } else {
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
+                document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
         }, 500);
     }
@@ -1823,7 +1827,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleBodyScroll(): void {
-        if(this.companyDropdown.isOpen && !this.isMobileSite) {
+        if (this.companyDropdown.isOpen && !this.isMobileSite) {
             document.querySelector('body').classList.add('prevent-body-scroll');
         } else {
             document.querySelector('body').classList.remove('prevent-body-scroll');
