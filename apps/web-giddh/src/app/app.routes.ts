@@ -32,7 +32,8 @@ export const ROUTES: Routes = [
         path: 'token-verify',
         component: TokenVerifyComponent
     },
-    { path: 'create-invoice', loadChildren: './create/create.module#CreateModule' },
+    // { path: 'create-invoice', loadChildren: './create/create.module#CreateModule' },
+    { path: 'create-invoice', loadChildren: () => import('./create/create.module').then(m => m.CreateModule) },
     { path: 'login', loadChildren: './login/login.module#LoginModule', canActivate: [BrowserSupported, UserAuthenticated] },
     { path: 'signup', loadChildren: './signup/signup.module#SignupModule' },
     { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
@@ -124,7 +125,7 @@ export const ROUTES: Routes = [
             { path: 'mobile-home', component: MobileHomeComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-home-sidebar', component: MobileHomeSidebarComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-search-company', component: MobileSearchCompanyComponent, canActivate: [NeedsAuthorization] },
-            
+
             { path: 'tallysync', loadChildren: './tallysync/tallysync.module#TallysyncModule', canActivate: [NeedsAuthorization] },
 
             { path: 'expenses-manager', loadChildren: './expenses/expenses.module#ExpensesModule', canActivate: [NeedsAuthorization] },
@@ -132,7 +133,7 @@ export const ROUTES: Routes = [
             { path: 'vat-report', loadChildren: './vat-report/vatReport.module#VatReportModule', canActivate: [NeedsAuthorization] },
             { path: 'purchase-management', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
-            
+
             // {path: '**', pathMatch: 'full', component: NotFoundComponent},
 
         ]
