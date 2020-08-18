@@ -213,7 +213,7 @@
                             </tr>
                             <tr class="cursor-pointer" data-ember-action="" data-ember-action-1223="1223">
                                 <td>(c) Other outward supplies (Nil rated, exempted)</td>
-                                <td class="text-right btn-link"><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.osup_nil_exmp?.txval ? gstr3BData?.sup_details?.osup_nil_exmp?.txval : 0 |giddhCurrency}}
+                                <td class="text-right btn-link"><i class="fa fa-inr"></i>{{(gstr3BData?.sup_details?.osup_nil_exmp?.txval ? gstr3BData?.sup_details?.osup_nil_exmp?.txval : 0) | giddhCurrency}}
                                 </td>
                                 <td class="text-center gstr3b-null"></td>
                                 <td class="text-center gstr3b-null"></td>
@@ -222,20 +222,20 @@
                             </tr>
                             <tr class="cursor-pointer" data-ember-action="" data-ember-action-1224="1224">
                                 <td>(d) Inward supplies (liable to reverse charge)</td>
-                                <td class="text-right btn-link"><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.isup_rev?.txval ? gstr3BData?.sup_details?.isup_rev?.txval: 0 |giddhCurrency}}
+                                <td class="text-right btn-link"><i class="fa fa-inr"></i>{{(gstr3BData?.sup_details?.isup_rev?.txval ? gstr3BData?.sup_details?.isup_rev?.txval: 0 )| giddhCurrency}}
                                 </td>
-                                <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.isup_rev?.iamt? gstr3BData?.sup_details?.isup_rev?.iamt: 0 |giddhCurrency}}
+                                <td class="text-right "><i class="fa fa-inr"></i>{{(gstr3BData?.sup_details?.isup_rev?.iamt? gstr3BData?.sup_details?.isup_rev?.iamt: 0 )| giddhCurrency}}
                                 </td>
-                                <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.isup_rev?.camt? gstr3BData?.sup_details?.isup_rev?.camt: 0 |giddhCurrency}}
+                                <td class="text-right "><i class="fa fa-inr"></i>{{(gstr3BData?.sup_details?.isup_rev?.camt? gstr3BData?.sup_details?.isup_rev?.camt: 0 )| giddhCurrency}}
                                 </td>
-                                <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.isup_rev?.samt? gstr3BData?.sup_details?.isup_rev?.samt: 0 |giddhCurrency}}
+                                <td class="text-right "><i class="fa fa-inr"></i>{{(gstr3BData?.sup_details?.isup_rev?.samt? gstr3BData?.sup_details?.isup_rev?.samt: 0 )| giddhCurrency}}
                                 </td>
-                                <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.isup_rev?.csamt? gstr3BData?.sup_details?.isup_rev?.csamt: 0 |giddhCurrency}}
+                                <td class="text-right "><i class="fa fa-inr"></i>{{(gstr3BData?.sup_details?.isup_rev?.csamt? gstr3BData?.sup_details?.isup_rev?.csamt: 0 )| giddhCurrency}}
                                 </td>
                             </tr>
                             <tr class="cursor-pointer" data-ember-action="" data-ember-action-1225="1225">
                                 <td>(e) Non-GST outward supplies</td>
-                                <td class="text-right btn-link"><i class="fa fa-inr"></i>{{gstr3BData?.sup_details?.osup_nongst?.txval?gstr3BData?.sup_details?.osup_nongst?.txval: 0 |giddhCurrency}}
+                                <td class="text-right btn-link"><i class="fa fa-inr"></i>{{(gstr3BData?.sup_details?.osup_nongst?.txval?gstr3BData?.sup_details?.osup_nongst?.txval: 0 )| giddhCurrency}}
                                 </td>
                                 <td class="text-center gstr3b-null"></td>
                                 <td class="text-center gstr3b-null"></td>
@@ -244,15 +244,15 @@
                             </tr>
                             <tr>
                                 <td class="bold">Total Value</td>
-                                <td class="text-right"><i class="fa fa-inr"></i>{{this.gstr3BData?.sumTaxVal ? this.gstr3BData?.sumTaxVal : 0 |giddhCurrency}}
+                                <td class="text-right"><i class="fa fa-inr"></i>{{(this.gstr3BData?.sumTaxVal ? this.gstr3BData?.sumTaxVal : 0 )| giddhCurrency}}
                                 </td>
-                                <td class="text-right"><i class="fa fa-inr"></i>{{this.gstr3BData?.sumIamtVal ? this.gstr3BData?.sumIamtVal : 0 |giddhCurrency}}
+                                <td class="text-right"><i class="fa fa-inr"></i>{{(this.gstr3BData?.sumIamtVal ? this.gstr3BData?.sumIamtVal : 0 )| giddhCurrency}}
                                 </td>
-                                <td class="text-right"><i class="fa fa-inr"></i>{{this.gstr3BData?.sumCamtval ? this.gstr3BData?.sumCamtval : 0 |giddhCurrency}}
+                                <td class="text-right"><i class="fa fa-inr"></i>{{(this.gstr3BData?.sumCamtval ? this.gstr3BData?.sumCamtval : 0 )| giddhCurrency}}
                                 </td>
-                                <td class="text-right"><i class="fa fa-inr"></i>{{this.gstr3BData?.sumSamtval ? this.gstr3BData?.sumSamtval : 0 |giddhCurrency}}
+                                <td class="text-right"><i class="fa fa-inr"></i>{{(this.gstr3BData?.sumSamtval ? this.gstr3BData?.sumSamtval : 0 )| giddhCurrency}}
                                 </td>
-                                <td class="text-right"><i class="fa fa-inr"></i>{{this.gstr3BData?.sumCsamtval ? this.gstr3BData?.sumCsamtval : 0 |giddhCurrency}}
+                                <td class="text-right"><i class="fa fa-inr"></i>{{(this.gstr3BData?.sumCsamtval ? this.gstr3BData?.sumCsamtval : 0 )| giddhCurrency}}
                                 </td>
                             </tr>
                         </tbody>
@@ -282,9 +282,9 @@
                             <ng-container *ngIf="gstr3BData?.inter_sup?.unreg_details">
                                 <tr style="pointer-events:none;" *ngFor="let item of gstr3BData?.inter_sup?.unreg_details">
                                     <td class="text-right">&nbsp;</td>
-                                    <td class="text-center">{{item?.pos |giddhCurrency}}</td>
-                                    <td class="text-right">{{item?.txval |giddhCurrency}}</td>
-                                    <td class="text-right">{{item?.iamt |giddhCurrency}}</td>
+                                    <td class="text-center">{{item?.pos | giddhCurrency}}</td>
+                                    <td class="text-right">{{item?.txval | giddhCurrency}}</td>
+                                    <td class="text-right">{{item?.iamt | giddhCurrency}}</td>
                                 </tr>
                             </ng-container>
                             <tr class="text-muted gstr3-subheading ">
@@ -293,9 +293,9 @@
                             <ng-container *ngIf="gstr3BData?.inter_sup?.comp_details">
                                 <tr style="pointer-events:none;" *ngFor="let item of gstr3BData?.inter_sup?.comp_details">
                                     <td class="text-right">&nbsp;</td>
-                                    <td class="text-center">{{item?.pos |giddhCurrency}}</td>
-                                    <td class="text-right">{{item?.txval |giddhCurrency}}</td>
-                                    <td class="text-right">{{item?.iamt |giddhCurrency}}</td>
+                                    <td class="text-center">{{item?.pos | giddhCurrency}}</td>
+                                    <td class="text-right">{{item?.txval | giddhCurrency}}</td>
+                                    <td class="text-right">{{item?.iamt | giddhCurrency}}</td>
                                 </tr>
                             </ng-container>
                             <tr class="text-muted gstr3-subheading ">
@@ -304,9 +304,9 @@
                             <ng-container *ngIf="gstr3BData?.inter_sup?.uin_details">
                                 <tr style="pointer-events:none;" *ngFor="let item of gstr3BData?.inter_sup?.uin_details">
                                     <td class="text-right">&nbsp;</td>
-                                    <td class="text-center">{{item?.pos |giddhCurrency}}</td>
-                                    <td class="text-right">{{item?.txval |giddhCurrency}}</td>
-                                    <td class="text-right">{{item?.iamt |giddhCurrency}}</td>
+                                    <td class="text-center">{{item?.pos | giddhCurrency}}</td>
+                                    <td class="text-right">{{item?.txval | giddhCurrency}}</td>
+                                    <td class="text-right">{{item?.iamt | giddhCurrency}}</td>
                                 </tr>
                             </ng-container>
                         </tbody>
@@ -340,29 +340,29 @@
                                     <ng-container *ngIf="item?.ty==='IMPG'">
                                         <tr class="cursor-pointer" data-ember-action="" data-ember-action-1226="1226">
                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;(1) Import of Goods </td>
-                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt |giddhCurrency}}</td>
+                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt | giddhCurrency}}</td>
                                             <td class="text-right gstr3b-null"></td>
                                             <td class="text-right gstr3b-null"></td>
-                                            <td class="text-right"><i class="fa fa-inr"></i>{{item?.csamt |giddhCurrency}} </td>
+                                            <td class="text-right"><i class="fa fa-inr"></i>{{item?.csamt | giddhCurrency}} </td>
                                         </tr>
                                     </ng-container>
                                     <ng-container *ngIf="item?.ty==='IMPS'">
                                         <tr class="cursor-pointer" data-ember-action="" data-ember-action-1227="1227">
                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;(2) Import of Services</td>
-                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt |giddhCurrency}}</td>
+                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt | giddhCurrency}}</td>
                                             <td class="text-center gstr3b-null"></td>
                                             <td class="text-center gstr3b-null"></td>
-                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.csamt |giddhCurrency}} </td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.csamt | giddhCurrency}} </td>
                                         </tr>
                                     </ng-container>
                                     <ng-container *ngIf="item?.ty==='ISRC'">
                                         <tr class="cursor-pointer" data-ember-action="" data-ember-action-1228="1228">
                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;(3) Inward supplies (liable to reverse charge)
                                             </td>
-                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt |giddhCurrency}}</td>
-                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.camt |giddhCurrency}}</td>
-                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.samt |giddhCurrency}}</td>
-                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.csamt |giddhCurrency}} </td>
+                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt | giddhCurrency}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.camt | giddhCurrency}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.samt | giddhCurrency}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.csamt | giddhCurrency}} </td>
                                         </tr>
                                     </ng-container>
                                     <ng-container *ngIf="item?.ty==='ISD'">
@@ -391,19 +391,19 @@
                                     <ng-container *ngIf="item?.ty==='RUL'">
                                         <tr class="cursor-pointer" data-ember-action="" data-ember-action-1230="1230">
                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;(1) As per rules 42 & 43 of CGST Rules</td>
-                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt |giddhCurrency}}</td>
-                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.camt |giddhCurrency}}</td>
-                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.samt |giddhCurrency}}</td>
-                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.csamt |giddhCurrency}} </td>
+                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt | giddhCurrency}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.camt | giddhCurrency}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.samt | giddhCurrency}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.csamt | giddhCurrency}} </td>
                                         </tr>
                                     </ng-container>
                                     <ng-container *ngIf="item?.ty==='OTH'">
                                         <tr class="cursor-pointer" data-ember-action="" data-ember-action-1231="1231">
                                             <td>&nbsp;&nbsp;&nbsp;&nbsp;(2) Others</td>
-                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt |giddhCurrency}}</td>
-                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.camt |giddhCurrency}}</td>
-                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.samt |giddhCurrency}}</td>
-                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.csamt |giddhCurrency}} </td>
+                                            <td class="text-right btn-link"><i class="fa fa-inr"></i>{{item?.iamt | giddhCurrency}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.camt | giddhCurrency}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.samt | giddhCurrency}}</td>
+                                            <td class="text-right "><i class="fa fa-inr"></i>{{item?.csamt | giddhCurrency}} </td>
                                         </tr>
                                     </ng-container>
                                 </ng-container>
@@ -414,13 +414,13 @@
                             <ng-container>
                                 <tr class="cursor-pointer" data-ember-action="" data-ember-action-1231="1231">
                                     <td>(C) Net ITC Available (A)-(B)</td>
-                                    <td class="text-right btn-link"><i class="fa fa-inr"></i>{{gstr3BData?.itc_elg?.itc_net?.iamt? gstr3BData?.itc_elg?.itc_net?.iamt: 0 |giddhCurrency }}
+                                    <td class="text-right btn-link"><i class="fa fa-inr"></i>{{(gstr3BData?.itc_elg?.itc_net?.iamt? gstr3BData?.itc_elg?.itc_net?.iamt: 0 )| giddhCurrency }}
                                     </td>
-                                    <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.itc_elg?.itc_net?.camt?gstr3BData?.itc_elg?.itc_net?.camt: 0 |giddhCurrency}}
+                                    <td class="text-right "><i class="fa fa-inr"></i>{{(gstr3BData?.itc_elg?.itc_net?.camt? gstr3BData?.itc_elg?.itc_net?.camt: 0 ) | giddhCurrency}}
                                     </td>
-                                    <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.itc_elg?.itc_net?.samt? gstr3BData?.itc_elg?.itc_net?.samt: 0 |giddhCurrency}}
+                                    <td class="text-right "><i class="fa fa-inr"></i>{{(gstr3BData?.itc_elg?.itc_net?.samt? gstr3BData?.itc_elg?.itc_net?.samt: 0) | giddhCurrency}}
                                     </td>
-                                    <td class="text-right "><i class="fa fa-inr"></i>{{gstr3BData?.itc_elg?.itc_net?.csamt? gstr3BData?.itc_elg?.itc_net?.csamt: 0 |giddhCurrency}}
+                                    <td class="text-right "><i class="fa fa-inr"></i>{{(gstr3BData?.itc_elg?.itc_net?.csamt? gstr3BData?.itc_elg?.itc_net?.csamt: 0) | giddhCurrency}}
                                     </td>
                                 </tr>
                             </ng-container>
