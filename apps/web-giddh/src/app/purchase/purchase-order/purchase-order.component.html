@@ -1,6 +1,6 @@
 <div class="container-fluid" *ngIf="!purchaseOrderUniqueName">
     <div class="d-flex justify-content-between mt-15 purchase-order-header">
-        <div class="d-flex date-advanceSearch">
+        <div class="d-flex date-advance-search">
             <form #invoiceForm="ngForm" novalidate class="form-inline">
                 <div class="form-group mrR1 d-flex">
                     <div class="input-group">
@@ -10,7 +10,7 @@
                                 class="giddh-datepicker form-control date-range-picker" />
                         </span>
                     </div>
-                    <div class="advance-icon" style="align-items: center" tooltip="Advance Search"
+                    <div class="advance-icon" tooltip="Advance Search"
                         (click)="openAdvanceSearchModal(purchaseAdvanceSearch)">
                         <span class="icon-advance-filter"></span>
                     </div>
@@ -30,7 +30,7 @@
                         More
                         <span class="caret"></span>
                     </button>
-                    <ul *dropdownMenu class="dropdown-menu fixedDropdownPlus" role="menu"
+                    <ul *dropdownMenu class="dropdown-menu fixed-dropdown-plus" role="menu"
                         aria-labelledby="button-basic">
                         <!-- <li role="menuitem">
                             <a class="dropdown-item cp" href="javascript:void(0)"
@@ -71,7 +71,7 @@
                     More
                     <span class="caret"></span>
                 </button>
-                <ul *dropdownMenu class="dropdown-menu fixedDropdownPlus" role="menu" aria-labelledby="button-basic">
+                <ul *dropdownMenu class="dropdown-menu fixed-dropdown-plus" role="menu" aria-labelledby="button-basic">
                     <!-- <li role="menuitem">
                         <a class="dropdown-item cp" href="javascript:void(0)"
                             (click)="openModalBulkUpdate(template)">Bulk
@@ -233,7 +233,7 @@
             </tbody>
             <tbody *ngIf="!isLoading && !purchaseOrders.totalItems">
                 <tr>
-                    <td colspan="7" class="text-center empty_table">
+                    <td colspan="7" class="text-center empty-table">
                         <h1>No Record Found !!</h1>
                     </td>
                 </tr>

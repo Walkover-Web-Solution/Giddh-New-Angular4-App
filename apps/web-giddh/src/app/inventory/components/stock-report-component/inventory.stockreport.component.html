@@ -295,37 +295,38 @@
                 <!-- TODO: Show loader only when API request is in process and not base it on data of stock report
                     For current use, integrated it with case when stock not found so as to avoid loader
                 -->
-                <!-- in case of all entity with group -->
-                <tr>
-                    <td colspan="10" class="text-center empty_table">
-                        <!--loading-->
-                        <div class="no-data mrT2 loader-main">
-                            <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
-                            <div class="spinner2">
-                                <div class="cube1"></div>
-                                <div class="cube2"></div>
+                    <!-- in case of all entity with group -->
+                    <tr>
+                        <td colspan="10" class="text-center empty-table">
+                            <!--loading-->
+                            <div class="no-data mrT2 loader-main">
+                                <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+                                <div class="spinner2">
+                                    <div class="cube1"></div>
+                                    <div class="cube2"></div>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
+                        </td>
+                    </tr>
+                </tbody>
 
-            <tbody *ngIf="(stockReport && stockReport.count < 1) || stockNotFoundMessage" class="table-border">
-                <tr>
-                    <td colspan="10" class="text-center empty_table">
-                        <img src="assets/images/search-data-not-found.svg" />
-                        <h1 [class.stock-not-found]="stockNotFoundMessage">{{ (stockNotFoundMessage) ? stockNotFoundMessage : 'No Report Found !!' }}</h1>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot *ngIf="stockReport && stockReport.totalPages > 1">
-                <tr>
-                    <td colspan="10" class="text-center">
-                        <pagination [totalItems]="stockReport.totalPages" [(ngModel)]="stockReport.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+                <tbody *ngIf="(stockReport && stockReport.count < 1) || stockNotFoundMessage" class="table-border">
+                    <tr>
+                        <td colspan="10" class="text-center empty-table">
+                            <img src="assets/images/search-data-not-found.svg" />
+                            <h1 [class.stock-not-found]="stockNotFoundMessage">{{ (stockNotFoundMessage) ? stockNotFoundMessage : 'No Report Found !!' }}</h1>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot *ngIf="stockReport && stockReport.totalPages > 1">
+                    <tr>
+                        <td colspan="10" class="text-center">
+                            <pagination [totalItems]="stockReport.totalPages" [(ngModel)]="stockReport.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </section>
 
 
