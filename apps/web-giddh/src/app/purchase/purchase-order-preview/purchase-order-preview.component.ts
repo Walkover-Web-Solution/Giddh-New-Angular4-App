@@ -90,7 +90,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                     this.selectedCompany = cmp;
                 }
             });
-        })).subscribe();
+        }), takeUntil(this.destroyed$)).subscribe();
 
         this.store.pipe(select(state => state.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -140,7 +140,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             .pipe(
                 debounceTime(500),
                 distinctUntilChanged(),
-                map((event: any) => event.target.value)
+                map((event: any) => event.target.value),
+                takeUntil(this.destroyed$)
             )
             .subscribe((term => {
                 this.filteredData = this.purchaseOrders.items.filter(item => {
@@ -171,7 +172,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                 if (response.status === "success") {
                     this.purchaseOrder = response.body;
 
-                    if (this.purchaseOrder.account.billingDetails.country) {
+                    if (this.purchaseOrder && this.purchaseOrder.account && this.purchaseOrder.account.billingDetails.country) {
                         this.showGstAndTrnUsingCountry(this.purchaseOrder.account.billingDetails.country.countryCode, this.purchaseOrder.account.billingDetails.country.countryName);
                     } else {
                         this.showGstAndTrnUsingCountry('', '');

@@ -51,6 +51,14 @@ export class PurchaseOrderService {
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
 
+    /**
+     * This will bulk update the data
+     *
+     * @param {*} getRequestObject
+     * @param {*} postRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseOrderService
+     */
     public bulkUpdate(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.BULK_UPDATE;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
@@ -59,6 +67,14 @@ export class PurchaseOrderService {
         return this.http.patch(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
 
+    /**
+     * This will bulk update the status of orders
+     *
+     * @param {*} getRequestObject
+     * @param {*} postRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseOrderService
+     */
     public statusUpdate(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.STATUS_UPDATE;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
@@ -67,6 +83,13 @@ export class PurchaseOrderService {
         return this.http.patch(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
 
+    /**
+     * This will delete the order
+     *
+     * @param {*} getRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseOrderService
+     */
     public delete(getRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.DELETE;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
@@ -75,6 +98,14 @@ export class PurchaseOrderService {
         return this.http.delete(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
 
+    /**
+     * This will send email
+     *
+     * @param {*} getRequestObject
+     * @param {*} postRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseOrderService
+     */
     public sendEmail(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.EMAIL;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
@@ -84,6 +115,13 @@ export class PurchaseOrderService {
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
 
+    /**
+     * This will get the order
+     *
+     * @param {*} getRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseOrderService
+     */
     public get(getRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
@@ -92,6 +130,14 @@ export class PurchaseOrderService {
         return this.http.get(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
 
+    /**
+     * This will update the order
+     *
+     * @param {*} getRequestObject
+     * @param {*} postRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseOrderService
+     */
     public update(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.UPDATE;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
@@ -100,6 +146,13 @@ export class PurchaseOrderService {
         return this.http.put(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
 
+    /**
+     * This will get the preview data
+     *
+     * @param {*} getRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseOrderService
+     */
     public getPreview(getRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_PREVIEW;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
