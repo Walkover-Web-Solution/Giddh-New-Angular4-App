@@ -129,7 +129,7 @@
             "local": {
               "outputPath": "dist/apps/web-giddh-local",
               "customWebpackConfig": {
-                "path": "./webpack.local.partial.js",
+                "path": "apps/web-giddh/webpack.local.partial.js",
                 "mergeStrategies": {
                   "externals": "replace"
                 }
@@ -165,7 +165,7 @@
             "stage": {
               "outputPath": "dist/apps/web-giddh-stage",
               "customWebpackConfig": {
-                "path": "./webpack.stage.partial.js",
+                "path": "apps/web-giddh/webpack.stage.partial.js",
                 "mergeStrategies": {
                   "externals": "replace"
                 }
@@ -194,7 +194,7 @@
             "prod": {
               "outputPath": "dist/apps/web-giddh-prod",
               "customWebpackConfig": {
-                "path": "./webpack.prod.partial.js",
+                "path": "apps/web-giddh/webpack.prod.partial.js",
                 "mergeStrategies": {
                   "externals": "replace"
                 }
@@ -230,7 +230,7 @@
             "test": {
               "outputPath": "dist/apps/web-giddh-test",
               "customWebpackConfig": {
-                "path": "./webpack.test.partial.js",
+                "path": "apps/web-giddh/webpack.test.partial.js",
                 "mergeStrategies": {
                   "externals": "replace"
                 }
@@ -273,7 +273,7 @@
             "port": 3000,
             "browserTarget": "web-giddh:build",
             "customWebpackConfig": {
-              "path": "./webpack.partial.js",
+              "path": "apps/web-giddh/webpack.partial.js",
               "mergeStrategies": {
                 "externals": "replace"
               }
@@ -406,7 +406,7 @@
             "local": {
               "outputPath": "dist/apps/web-giddh-local",
               "customWebpackConfig": {
-                "path": "./webpack.electron.partial.js",
+                "path": "apps/web-giddh/webpack.electron.partial.js",
                 "mergeStrategies": {
                   "externals": "replace"
                 }
@@ -441,7 +441,7 @@
             "stage": {
               "outputPath": "dist/apps/web-giddh-stage",
               "customWebpackConfig": {
-                "path": "./webpack.stage.partial.js",
+                "path": "apps/web-giddh/webpack.stage.partial.js",
                 "mergeStrategies": {
                   "externals": "replace"
                 }
@@ -469,7 +469,7 @@
             "prod": {
               "outputPath": "dist/apps/web-giddh-prod",
               "customWebpackConfig": {
-                "path": "./webpack.electron.prod.partial.js",
+                "path": "apps/web-giddh/webpack.electron.prod.partial.js",
                 "mergeStrategies": {
                   "externals": "replace"
                 }
@@ -504,7 +504,7 @@
             "test": {
               "outputPath": "dist/apps/web-giddh-test",
               "customWebpackConfig": {
-                "path": "./webpack.test.partial.js",
+                "path": "apps/web-giddh/webpack.test.partial.js",
                 "mergeStrategies": {
                   "externals": "replace"
                 }
@@ -545,7 +545,7 @@
             "port": 4200,
             "browserTarget": "electron-giddh:build:local",
             "customWebpackConfig": {
-              "path": "./webpack.electron.partial.js",
+              "path": "apps/web-giddh/webpack.electron.partial.js",
               "mergeStrategies": {
                 "externals": "replace"
               }
@@ -624,7 +624,7 @@
             "local": {
               "outputPath": "apps/giddh-cordova/giddh/www",
               "customWebpackConfig": {
-                "path": "./webpack.cordova.local.partial.js",
+                "path": "apps/web-giddh/webpack.cordova.local.partial.js",
                 "mergeStrategies": {
                   "externals": "replace"
                 }
@@ -652,7 +652,7 @@
             "stage": {
               "outputPath": "apps/giddh-cordova/giddh/www",
               "customWebpackConfig": {
-                "path": "./webpack.cordova.stage.partial.js",
+                "path": "apps/web-giddh/webpack.cordova.stage.partial.js",
                 "mergeStrategies": {
                   "externals": "replace"
                 }
@@ -680,7 +680,7 @@
             "prod": {
               "outputPath": "apps/giddh-cordova/giddh/www",
               "customWebpackConfig": {
-                "path": "./webpack.cordova.prod.partial.js",
+                "path": "apps/web-giddh/webpack.cordova.prod.partial.js",
                 "mergeStrategies": {
                   "externals": "replace"
                 }
@@ -721,7 +721,7 @@
             "port": 3000,
             "browserTarget": "giddh-cordova:build:local",
             "customWebpackConfig": {
-              "path": "./webpack.cordova.local.partial.js",
+              "path": "apps/web-giddh/webpack.cordova.local.partial.js",
               "mergeStrategies": {
                 "externals": "replace"
               }
