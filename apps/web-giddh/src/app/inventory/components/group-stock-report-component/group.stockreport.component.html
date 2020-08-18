@@ -422,7 +422,7 @@
                 <tbody *ngIf="groupStockReportInProcess">
                     <!-- in case of all entity with group -->
                     <tr>
-                        <td colspan="10" class="text-center empty_table">
+                        <td colspan="10" class="text-center empty-table">
                             <!--loading-->
                             <div class="no-data mt-0 loader-main">
                                 <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
@@ -438,8 +438,8 @@
                 <tbody *ngIf="(groupStockReport && groupStockReport.count < 1 && !groupStockReportInProcess) || groupNotFoundMessage">
                     <tr>
                         <!-- in case of all entity with group -->
-                        <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'" class="text-center empty_table">
-                            <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails!='allEntity'" class="text-center empty_table">
+                        <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'" class="text-center empty-table">
+                            <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails!='allEntity'" class="text-center empty-table">
                                 <!-- in case of all entity with group -->
                                 <img src="assets/images/search-data-not-found.svg" />
                                 <h1 [class.group-not-found]="groupNotFoundMessage">
