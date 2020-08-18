@@ -336,7 +336,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     @HostListener('click', ['$event'])
     public clicked(e) {
-        if (this.sh && !this.sh.ele.nativeElement.contains(e.path[3])) {
+        if (this.sh && e.path && !this.sh.ele.nativeElement.contains(e.path[3])) {
             this.sh.hide();
         }
     }
