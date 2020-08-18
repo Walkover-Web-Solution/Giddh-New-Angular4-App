@@ -283,8 +283,11 @@
                                                                 class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger">
                                                                 <div *ngIf="txn.type === 'DEBIT'"
                                                                     (click)="showBankLedgerPopup(txn, item);">
-                                                                    <sh-select [options]="lc.flattenAccountList | async"
+                                                                    <sh-select [options]="searchResults"
                                                                         [(ngModel)]="txn.particular"
+                                                                        [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
+                                                                        (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                                        [enableDynamicSearch]="true"
                                                                         (selected)="selectAccount($event,txn)"
                                                                         [placeholder]="'Select Accounts'"
                                                                         [notFoundLink]="true"
@@ -403,9 +406,12 @@
                                                                 class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger ">
                                                                 <div *ngIf="txn.type === 'CREDIT'"
                                                                     (click)="showBankLedgerPopup(txn, item);">
-                                                                    <sh-select [options]="lc.flattenAccountList | async"
+                                                                    <sh-select [options]="searchResults"
                                                                         [(ngModel)]="txn.particular"
                                                                         (selected)="selectAccount($event,txn)"
+                                                                        [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
+                                                                        (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                                        [enableDynamicSearch]="true"
                                                                         [placeholder]="'Select Accounts'"
                                                                         [notFoundLink]="true"
                                                                         (noResultsClicked)="showQuickAccountModal()"
