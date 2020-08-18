@@ -37,3 +37,21 @@
         font-size: 12px;
     }
 }
+
+@media (min-width:992px) and (max-width:1359px){
+    .profile-form{
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+    .decimal-system{
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+@media (min-width:1360px) and (max-width:1386px){
+    .number-system{
+        flex-flow: column;
+        display: flex;
+    }
+}
