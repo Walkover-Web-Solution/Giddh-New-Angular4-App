@@ -21,6 +21,7 @@
 }
 .input-group {
     position: relative;
+    width: auto !important;
     input.form-control {
         padding-left: 35px !important;
         background-image: url("../../../../assets/images/calender.svg") !important;
@@ -124,7 +125,7 @@
     margin-right: 10px;
 }
 .invoice-footer h1 {
-    font-size: 28px;
+    font-size: 22px;
     color: #333;
     display: block;
 }

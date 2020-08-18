@@ -1194,7 +1194,7 @@
                     <!--region balance due for non-purchase-->
                     <div class="tableRow" *ngIf="((isSalesInvoice || isCashInvoice)) && !(isPendingVoucherType && isCashInvoice) && !(!(isAccountHaveAdvanceReceipts || isInvoiceAdjustedWithAdvanceReceipts) && isUpdateMode)">
 
-                        <div class="tableCell depositeSection">
+                        <div class="tableCell deposite-section">
 
                             <div class="btn-group">
 
@@ -1938,7 +1938,7 @@
             <!--region balance due for non-purchase-->
             <div class="tableRow" *ngIf="((isSalesInvoice || isCashInvoice) && !isUpdateMode )">
 
-                <div class="tableCell depositeSection">
+                <div class="tableCell deposite-section">
 
                     <div class="btn-group">
 
@@ -2184,7 +2184,7 @@
 
 <!-- region last estimate modal-->
 <ng-template #lastEstimateModal let-show>
-    <div *ngIf="show" class="lastEstimateModal">
+    <div *ngIf="show" class="last-estimate-modal">
         <proforma-last-invoices-component [data]="lastInvoices" (invoiceSelected)="getLastInvoiceDetails($event)">
         </proforma-last-invoices-component>
     </div>
