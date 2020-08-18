@@ -10685,3 +10685,9 @@ body.prevent-body-scroll {
 .hide-payment-tab ul li:nth-child(5) {
     display: none;
 }
+
+@media (max-width: 991px) and (min-width: 768px){
+    .hidden-sm {
+        display: none!important;
+    }
+}
