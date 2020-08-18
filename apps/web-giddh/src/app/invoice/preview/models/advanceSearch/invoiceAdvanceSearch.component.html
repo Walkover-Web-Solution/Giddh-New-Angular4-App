@@ -14,19 +14,19 @@
 
                 <div class="row">
 
-                    <div class="col-sm-4 col-xs-12">
+                    <div class="col-md-4 col-sm-12">
                         <label>Invoice Date Range</label>
                     </div>
 
-                    <div class="col-sm-8 col-xs-12">
+                    <div class="col-md-8 col-sm-12">
                         <div class="row mr-0 ml-0">
 
-                            <div class="col-sm-4 col-xs-6" style="padding-left: 0">
+                            <div class="col-md-4 col-sm-6 col-6" style="padding-left: 0">
                                 <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
                                     (selected)="dateChanged($event, 'invoice')"></sh-select>
                             </div>
 
-                            <div class="col-sm-8 col-xs-6" style="padding: 0">
+                            <div class="col-md-8 col-sm-6 col-6" style="padding: 0">
                                 <input type="text" name="invoiceDateRange" bsDatepicker class="form-control"
                                     style="width: 100%" [(ngModel)]="request.invoiceDate"
                                     [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" />
@@ -39,22 +39,27 @@
 
                 <div class="row mt-2 mb-2">
 
-                    <div class="col-sm-4 col-xs-12">
+                    <div class="col-md-4 col-sm-12">
                         <label>Invoice Total Amt</label>
                     </div>
 
-                    <div class="col-sm-8 col-xs-12">
+                    <div class="col-md-8 col-sm-12">
 
                         <div class="total-amount row mr-0 ml-0">
 
-                            <div class="col-sm-8 col-xs-6" style="padding-left: 0">
+                            <div class="col-md-8 col-sm-6 col-6" style="padding-left: 0">
                                 <sh-select placeholder="Select" name="entryTotalBy" [options]="filtersForEntryTotal"
                                     [ItemHeight]="33" (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
 
+<<<<<<< HEAD
                             <div class="col-sm-4 col-xs-6" style="padding: 0">
                                 <input class="form-control" type="tel" placeholder="00" name="total"
                                     [(ngModel)]="request.total">
+=======
+                            <div class="col-md-4 col-sm-6 col-6" style="padding: 0">
+                                <input class="form-control" type="tel" placeholder="00" name="total" [(ngModel)]="request.total">
+>>>>>>> 4830578b3... invoice and subscription responsive
 
                             </div>
 
@@ -67,20 +72,20 @@
 
                 <div class="row mt-2">
 
-                    <div class="col-sm-4 col-xs-12">
+                    <div class="col-md-4 col-sm-12">
                         <label>Due Date Range</label>
                     </div>
 
-                    <div class="col-sm-8 col-xs-12">
+                    <div class="col-md-8 col-sm-12">
 
                         <div class="row mr-0 ml-0">
 
-                            <div class="col-sm-4 col-xs-6" style="padding-left: 0">
+                            <div class="col-md-4 col-sm-6 col-6" style="padding-left: 0">
                                 <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
                                     (selected)="dateChanged($event, 'due')"></sh-select>
                             </div>
 
-                            <div class="col-sm-8 col-xs-6" style="padding: 0">
+                            <div class="col-md-8 col-sm-6 col-6" style="padding: 0">
                                 <input type="text" bsDatepicker class="form-control" style="width: 100%" name="dueDate"
                                     [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" [(ngModel)]="request.dueDate" />
                             </div>
@@ -91,20 +96,20 @@
 
                 <div class="row mt-2">
 
-                    <div class="col-sm-4 col-xs-12">
+                    <div class="col-md-4 col-sm-12">
                         <label>Due Amount</label>
                     </div>
 
-                    <div class="col-sm-8 col-xs-12">
+                    <div class="col-md-8 col-sm-12">
 
                         <div class="due-amount row mr-0 ml-0">
 
-                            <div class="col-sm-8 col-xs-6" style="padding-left: 0">
+                            <div class="col-md-8 col-sm-6 col-6" style="padding-left: 0">
                                 <sh-select placeholder="Select" name="entryTotalBy" [options]="filtersForEntryTotal"
                                     [ItemHeight]="33" (selected)="dueTotalRangeChanged($event)"></sh-select>
                             </div>
 
-                            <div class="col-sm-4 col-xs-6" style="padding: 0">
+                            <div class="col-md-4 col-sm-6 col-6" style="padding: 0">
                                 <input class="form-control" type="tel" placeholder="00" name="balanceDue"
                                     [(ngModel)]="request.balanceDue">
                             </div>
@@ -116,21 +121,21 @@
 
                 <div class="row mt-2">
 
-                    <div class="col-sm-4 col-xs-12">
+                    <div class="col-md-4 col-sm-12">
                         <label>Status</label>
                     </div>
 
-                    <div class="col-sm-8 col-xs-12">
+                    <div class="col-md-8 col-sm-12">
 
                         <div class="status-description row mr-0 ml-0">
 
-                            <div class="col-sm-8 col-xs-12" style="padding-left: 0">
+                            <div class="col-md-8 col-sm-12" style="padding-left: 0">
                                 <sh-select placeholder="Select Action" [multiple]="true"
                                     [options]="statusDropdownOptions" name="balanceStatus"
                                     [(ngModel)]="request.balanceStatus" [ItemHeight]="33"></sh-select>
                             </div>
 
-                            <div class="col-xs-4 col-sm-4" style="padding: 0">
+                            <div class="col-sm-4 col-md-4" style="padding: 0">
                             </div>
 
                         </div>
@@ -139,20 +144,20 @@
 
                 <div class="row mt-2">
 
-                    <div class="col-sm-4 col-xs-12">
+                    <div class="col-md-4 col-sm-12">
                         <label>Description</label>
                     </div>
 
-                    <div class="col-sm-8 col-xs-12">
+                    <div class="col-md-8 col-sm-12">
 
                         <div class="status-description row mr-0 ml-0">
 
-                            <div class="col-sm-8 col-xs-12" style="padding-left: 0">
+                            <div class="col-md-8 col-sm-12" style="padding-left: 0">
                                 <textarea class="form-control" name="description"
                                     [(ngModel)]="request.description"></textarea>
                             </div>
 
-                            <div class="col-xs-4 col-sm-4" style="padding: 0">
+                            <div class="col-sm-4 col-md-4" style="padding: 0">
                             </div>
 
                         </div>
@@ -167,20 +172,28 @@
 
                 <div class="row">
 
-                    <div class="col-xs-4 col-sm-4">
+                    <div class="col-sm-4 col-md-4">
                         <label>Date Range</label>
                     </div>
 
-                    <div class="col-xs-8 col-sm-8">
+                    <div class="col-sm-8 col-md-8">
 
                         <div class="row mr-0 ml-0">
 
+<<<<<<< HEAD
                             <div class="col-xs-12 col-sm-4" style="padding-left: 0">
+=======
+                            <div class="col-sm-4 col-md-4" style="padding-left: 0">
+>>>>>>> 4830578b3... invoice and subscription responsive
                                 <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
                                     (selected)="dateChanged($event, 'invoice')"></sh-select>
                             </div>
 
+<<<<<<< HEAD
                             <div class="col-xs-12 col-sm-8" style="padding: 0">
+=======
+                            <div class="col-sm-8 col-md-8" style="padding: 0">
+>>>>>>> 4830578b3... invoice and subscription responsive
                                 <input type="text" name="invoiceDate" bsDatepicker class="form-control"
                                     style="width: 100%" [(ngModel)]="request.invoiceDate"
                                     [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" />
@@ -194,11 +207,19 @@
 
                 <div class="row mt-2 mb-2">
 
+<<<<<<< HEAD
                     <div class="col-sm-4 col-xs-12">
                         <label>Invoice Total Amt</label>
                     </div>
 
                     <div class="col-xs-8">
+=======
+                    <div class="col-sm-4 col-md-4">
+                        <label>Invoice Total Amt</label>
+                    </div>
+
+                    <div class="col-sm-8 col-md-8">
+>>>>>>> 4830578b3... invoice and subscription responsive
 
                         <div class="total-amount row mr-0 ml-0">
                         <div class="col-sm-8 col-xs-6" style="padding-left: 0">
@@ -206,9 +227,21 @@
                                 (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                         </div>
 
+<<<<<<< HEAD
                         <div class="col-sm-4 col-xs-6" style="padding: 0">
                             <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total"
                                 type="tel">
+=======
+                            <div class="col-md-8 col-sm-6 col-6" style="padding-left: 0">
+                                <sh-select placeholder="Select Range" [options]="filtersForEntryTotal" [ItemHeight]="33"
+                                    (selected)="invoiceTotalRangeChanged($event)"></sh-select>
+                            </div>
+
+                            <div class="col-md-4 col-sm-6 col-6" style="padding: 0">
+                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total" type="tel">
+
+                            </div>
+>>>>>>> 4830578b3... invoice and subscription responsive
 
                         </div>
 
@@ -225,11 +258,11 @@
 
                 <div class="row">
 
-                    <div class="col-sm-4 col-xs-12">
+                    <div class="col-md-4 col-sm-12">
                         <label>Expiry Date</label>
                     </div>
 
-                    <div class="col-sm-8 col-xs-12">
+                    <div class="col-md-8 col-sm-12">
 
                         <div class="">
 
@@ -247,24 +280,29 @@
 
                 <div class="row mt-2 mb-2">
 
-                    <div class="col-sm-4 col-xs-12">
+                    <div class="col-md-4 col-sm-12">
                         <label>Total Amt</label>
                     </div>
 
-                    <div class="col-sm-8 col-xs-12">
+                    <div class="col-md-8 col-sm-12">
 
                         <div class="total-amount row mr-0 ml-0">
 
-                            <div class="col-sm-8 col-xs-6" style="padding-left: 0">
+                            <div class="col-md-8 col-sm-6 col-6" style="padding-left: 0">
                                 <sh-select placeholder="Select Range" name="amountFieldSelector"
                                     [options]="filtersForAmount" [(ngModel)]="request.amountFieldSelector"
                                     [ItemHeight]="33" (selected)="amountRangeChanged($event)">
                                 </sh-select>
                             </div>
 
+<<<<<<< HEAD
                             <div class="col-sm-4 col-xs-6" style="padding: 0">
                                 <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.amount"
                                     type="tel">
+=======
+                            <div class="col-md-4 col-sm-6 col-6" style="padding: 0">
+                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.amount" type="tel">
+>>>>>>> 4830578b3... invoice and subscription responsive
 
                             </div>
 
@@ -300,6 +338,7 @@
                     <div class="col-sm-4 col-xs-12">
                         <label>Invoice Total Amt</label>
                     </div>
+<<<<<<< HEAD
                     <div class="col-sm-8 col-xs-12">
                         <div class="status-description">
                             <div class="col-sm-8 col-xs-6" style="padding-left: 0">
@@ -309,15 +348,25 @@
                             <div class="col-sm-4 col-xs-6" style="padding: 0">
                                 <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total"
                                     type="tel">
+=======
+                    <div class="col-8">
+                        <div class="status-description row mr-0 ml-0">
+                            <div class="col-md-8 col-sm-12" style="padding-left: 0">
+                                <sh-select placeholder="Select Range" [options]="filtersForEntryTotal" [ItemHeight]="33"
+                                    (selected)="invoiceTotalRangeChanged($event)"></sh-select>
+                            </div>
+                            <div class="col-md-4 col-sm-12" style="padding: 0">
+                                <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total" type="tel">
+>>>>>>> 4830578b3... invoice and subscription responsive
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-sm-4 col-xs-12">
+                    <div class="col-md-4 col-sm-12">
                         <label>Due Date Range</label>
                     </div>
-                    <div class="col-sm-8 col-xs-12">
+                    <div class="col-md-8 col-sm-12">
                         <div class="status-description row mr-0 ml-0">
                             <div class="col-4" style="padding-left: 0">
                                 <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
