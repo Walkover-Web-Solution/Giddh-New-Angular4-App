@@ -1125,7 +1125,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                         //added update mode as causing trouble in multicurrency
                         if (obj.entries.length) {
-                            obj.entries = this.parseEntriesFromResponse(obj.entries, results[0]);
+                            obj.entries = this.parseEntriesFromResponse(obj.entries);
                         }
 
                         this.autoFillShipping = isEqual(obj.accountDetails.billingDetails, obj.accountDetails.shippingDetails);
@@ -1231,9 +1231,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
 
                     if (tempSelectedAcc) {
+                        this.customerAcList$ = observableOf([{label: tempSelectedAcc.name, value: tempSelectedAcc.uniqueName, additional: tempSelectedAcc}]);
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
                         this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName;
-
                         this.isCustomerSelected = true;
                         this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
                         this.customerCountryName = tempSelectedAcc.country.countryName;
@@ -2185,9 +2185,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public onNoResultsClicked(idx?: number) {
-        if (_.isUndefined(idx)) {
-            this.getAllFlattenAc();
-        } else {
+        if (!_.isUndefined(idx)) {
             this.innerEntryIdx = idx;
         }
         this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
@@ -3871,7 +3869,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    private parseEntriesFromResponse(entries: SalesEntryClass[], flattenAccounts: IFlattenAccountsResultItem[]) {
+    private parseEntriesFromResponse(entries: SalesEntryClass[]) {
         return entries.map((entry, index) => {
             this.activeIndx = index;
             entry.otherTaxModal = new SalesOtherTaxesModal();
@@ -4974,7 +4972,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => flattenAccounts = accounts);
         if (result.voucherDetails) {
             if (result.entries && result.entries.length > 0) {
-                result.entries = this.parseEntriesFromResponse(result.entries, flattenAccounts);
+                result.entries = this.parseEntriesFromResponse(result.entries);
                 result.entries.forEach((entry) => {
                     entry['isMergedPurchaseEntry'] = true;
                     this.invFormData.entries.push(entry);

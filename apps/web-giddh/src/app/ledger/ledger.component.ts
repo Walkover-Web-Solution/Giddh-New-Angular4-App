@@ -236,13 +236,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).pipe(takeUntil(this.destroyed$), shareReplay(1));
         this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$));
         this.lc.groupsArray$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
-        this.lc.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+        // this.lc.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
         this.lc.companyProfile$ = this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
         this.isTransactionRequestInProcess$ = this.store.select(p => p.ledger.transactionInprogress).pipe(takeUntil(this.destroyed$));
         this.ledgerBulkActionSuccess$ = this.store.select(p => p.ledger.ledgerBulkActionSuccess).pipe(takeUntil(this.destroyed$));
-        this.store.dispatch(this._generalActions.getFlattenAccount());
+        // this.store.dispatch(this._generalActions.getFlattenAccount());
         // this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         this.store.dispatch(this._settingsTagActions.GetALLTags());
@@ -760,10 +760,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
-        observableCombineLatest(this.lc.activeAccount$, this.lc.flattenAccountListStream$, this.lc.companyProfile$).subscribe(data => {
+        observableCombineLatest(this.lc.activeAccount$, this.lc.companyProfile$).subscribe(data => {
 
-            if (data[0] && data[1] && data[2]) {
-                let profile = cloneDeep(data[2]);
+            if (data[0] && data[1]) {
+                let profile = cloneDeep(data[1]);
                 this.lc.activeAccount = data[0];
                 this.profileObj = profile;
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
@@ -771,10 +771,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.needToShowLoader = true;
                 this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
 
-                let stockListFormFlattenAccount: IFlattenAccountsResultItem;
-                if (data[1]) {
-                    stockListFormFlattenAccount = data[1].find((acc) => acc.uniqueName === this.lc.accountUnq);
-                }
+                // let stockListFormFlattenAccount: IFlattenAccountsResultItem;
+                // if (data[1]) {
+                //     stockListFormFlattenAccount = data[1].find((acc) => acc.uniqueName === this.lc.accountUnq);
+                // }
 
                 let accountDetails: AccountResponse = data[0];
                 let parentOfAccount = accountDetails.parentGroups[0];
@@ -823,51 +823,51 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
 
                 // check if account is stockable
-                let isStockableAccount = parentOfAccount ?
-                    (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
-                        parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
-                let accountsArray: IOption[] = [];
-                if (isStockableAccount) {
-                    // stocks from ledger account
-                    data[1].map(acc => {
-                        // normal entry
-                        accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
-                        // check if taxable or roundoff account then don't assign stocks
-                        let notRoundOff = acc.uniqueName === 'roundoff';
-                        let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
-                        // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
-                        if (!isTaxAccount && !notRoundOff && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
-                            stockListFormFlattenAccount.stocks.map(as => {
-                                // stock entry
-                                accountsArray.push({
-                                    value: uuid.v4(),
-                                    label: `${acc.name}` + ` (${as.name})`,
-                                    additional: Object.assign({}, acc, { stock: as })
-                                });
-                            });
-                        }
-                    });
-                } else {
-                    // stocks from account itself
-                    data[1].map(acc => {
-                        if (acc.stocks) {
-                            // normal entry
-                            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
-                            // stock entry
-                            acc.stocks.map(as => {
-                                accountsArray.push({
-                                    value: uuid.v4(),
-                                    // label: acc.name + '(' + as.uniqueName + ')',
-                                    label: `${acc.name}` + ` (${as.name})`,
-                                    additional: Object.assign({}, acc, { stock: as })
-                                });
-                            });
-                        } else {
-                            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
-                        }
-                    });
-                }
-                this.lc.flattenAccountList = observableOf(orderBy(accountsArray, 'label'));
+                // let isStockableAccount = parentOfAccount ?
+                //     (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
+                //         parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
+                // let accountsArray: IOption[] = [];
+                // if (isStockableAccount) {
+                //     // stocks from ledger account
+                //     data[1].map(acc => {
+                //         // normal entry
+                //         accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+                //         // check if taxable or roundoff account then don't assign stocks
+                //         let notRoundOff = acc.uniqueName === 'roundoff';
+                //         let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
+                //         // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
+                //         if (!isTaxAccount && !notRoundOff && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
+                //             stockListFormFlattenAccount.stocks.map(as => {
+                //                 // stock entry
+                //                 accountsArray.push({
+                //                     value: uuid.v4(),
+                //                     label: `${acc.name}` + ` (${as.name})`,
+                //                     additional: Object.assign({}, acc, { stock: as })
+                //                 });
+                //             });
+                //         }
+                //     });
+                // } else {
+                //     // stocks from account itself
+                //     data[1].map(acc => {
+                //         if (acc.stocks) {
+                //             // normal entry
+                //             accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+                //             // stock entry
+                //             acc.stocks.map(as => {
+                //                 accountsArray.push({
+                //                     value: uuid.v4(),
+                //                     // label: acc.name + '(' + as.uniqueName + ')',
+                //                     label: `${acc.name}` + ` (${as.name})`,
+                //                     additional: Object.assign({}, acc, { stock: as })
+                //                 });
+                //             });
+                //         } else {
+                //             accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+                //         }
+                //     });
+                // }
+                // this.lc.flattenAccountList = observableOf(orderBy(accountsArray, 'label'));
             }
         });
 

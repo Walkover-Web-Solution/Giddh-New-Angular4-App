@@ -172,7 +172,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public keydownClassAdded: boolean = false;
     public tcsOrTds: 'tcs' | 'tds' = 'tcs';
     public totalTdElementWidth: number = 0;
-    public multiCurrencyAccDetails: IFlattenAccountsResultItem = null;
+    public multiCurrencyAccDetails: any = null;
     public selectedPettycashEntry$: Observable<PettyCashResonse>;
     /** Amount of invoice select for credit note */
     public selectedInvoiceAmount: number = 0;
@@ -735,7 +735,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
                 isStockableAccount = this.activeAccount.uniqueName !== 'roundoff' ? incomeAndExpensesAccArray.includes(parentAcc) : false;
                 // set account details for multi currency account
-                this.prepareMultiCurrencyObject(this.vm.selectedLedger.particular.uniqueName);
+                this.prepareMultiCurrencyObject(this.vm.selectedLedger);
                 // end multi currency assign
                 // if (isStockableAccount) {
                 //     // stocks from ledger account
@@ -893,8 +893,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
     }
 
-    private prepareMultiCurrencyObject(accountUniqueName) {
-        this.multiCurrencyAccDetails = cloneDeep(this.vm.flatternAccountList.find(f => f.uniqueName === accountUniqueName));
+    private prepareMultiCurrencyObject(accountDetails: any) {
+        if (this.isPettyCash) {
+            // In case of petty cash account unique name will be received
+            this.multiCurrencyAccDetails = cloneDeep(this.vm.flatternAccountList.find(f => f.uniqueName === accountDetails));
+        } else {
+            // In other cases account will be received
+            this.multiCurrencyAccDetails = {
+                currency: String(accountDetails.particular.currency.code)
+            };
+        };
 
         this.vm.isMultiCurrencyAvailable = this.multiCurrencyAccDetails ?
             !!(this.multiCurrencyAccDetails.currency && this.multiCurrencyAccDetails.currency !== this.profileObj.baseCurrency)
