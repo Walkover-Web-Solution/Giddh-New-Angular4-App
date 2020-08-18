@@ -8,8 +8,8 @@
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"importHelpers": true,
-		"target": "es5",
-		"module": "es2015",
+		"target": "ES2015",
+		"module": "ESNext",
 		"typeRoots": [
 			"node_modules/@types"
 		],
