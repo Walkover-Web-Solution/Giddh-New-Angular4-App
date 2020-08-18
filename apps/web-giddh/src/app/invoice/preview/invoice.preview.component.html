@@ -95,7 +95,7 @@
             <!-- Invoice E-way bill, export to excel for a single selected item along with
                 New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-12">
                     <div class="more-export-btn d-flex mt-1">
                         <div style="height: 30px; " *ngIf="selectedItems.length === 1">
                             <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()" style="margin-bottom: 10px;display: inline-block !important;">
@@ -164,17 +164,17 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                    <div class="col-sm-6 col-md-6 full-width-on-mobile">
                         <div class="input-container">
                             <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox name="voucherNumberInput" [formControl]="voucherNumberInput" />
                         </div>
                     </div>
-                    <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                    <div class="col-sm-6 col-md-6 full-width-on-mobile">
                         <div class="input-container">
                             <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
                         </div>
                     </div>
-                    <div class="col-sm-6 col-xs-6 mt-2">
+                    <div class="col-sm-6 col-md-6 mt-2">
                         <button class="btn btn-pink">Submit</button>
                     </div>
 
@@ -491,18 +491,18 @@
         </div>
 
         <ng-container *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && (selectedVoucher === 'sales' || selectedVoucher === 'purchase') && isMobileView">
-            <div class="card mobileTable" *ngFor="let item of voucherData?.items; let i = index">
-                <table class="table basic table-bordered mt-15 invoice-table" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
+            <div class="card mobileTable mt-15" *ngFor="let item of voucherData?.items; let i = index">
+                <table class="table basic table-bordered invoice-table" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
                     <tr>
-                        <td class="card-header clearfix">
-                            <div class="col-xs-4 p-0">
+                        <td class="card-header clearfix row mr-0 ml-0">
+                            <div class="col-4 p-0">
                                 <div class="mh18_img pull-left" style="justify-content: center;">
                                     <img src="assets/images/unchecked.png" *ngIf="!item.isSelected" (click)="toggleItem(item, true)">
                                     <img src="assets/images/checked.png" *ngIf="item.isSelected" (click)="toggleItem(item, false)">
                                 </div>
                                 <div style="justify-content: left;display: flex">#{{ i + 1}} </div>
                             </div>
-                            <div class="col-xs-8 p-0">
+                            <div class="col-8 p-0">
                                 <div class="d-flex">
                                     <div class="flex-fill text-right dueDate">
                                         <strong>Due Date</strong>
@@ -513,11 +513,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td id="inovice_td">
-                            <div class="col-xs-6 p-0">
+                        <td id="inovice_td" class="row mr-0 ml-0">
+                            <div class="col-6 p-0">
                                 <strong> Invoice No.</strong>
                             </div>
-                            <div class="col-xs-6 p-0">
+                            <div class="col-6 p-0">
                                 <div class="invoice-name-download">
                                     <a class="invoiceNumberA">
                                         {{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
@@ -549,8 +549,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="row">
-                            <div class="col-xs-6 p-0">
+                        <td class="row mr-0 ml-0">
+                            <div class="col-6 p-0">
                                 <div class="d-flex">
                                     <div class="flex-fill">
                                         <strong>Invoice Date</strong>
@@ -561,7 +561,7 @@
                                 </div>
                             </div>
 
-                            <div *ngIf="selectedVoucher !== 'purchase'" class="col-xs-6 p-0">
+                            <div *ngIf="selectedVoucher !== 'purchase'" class="col-6 p-0">
                                 <div class="d-flex">
                                     <div class="flex-fill">
                                         <strong>Status</strong>
@@ -600,8 +600,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <div class="col-xs-6 p-0">
+                        <td class="row mr-0 ml-0">
+                            <div class="col-6 p-0">
                                 <div class="d-flex">
                                     <div class="flex-fill">
                                         <strong>Total Amt.</strong>
@@ -611,7 +611,7 @@
                                     {{item.accountCurrencySymbol}} {{item.grandTotal?.amountForAccount | giddhCurrency}}
                                 </div>
                             </div>
-                            <div *ngIf="selectedVoucher !== 'purchase'" class="col-xs-6 p-0">
+                            <div *ngIf="selectedVoucher !== 'purchase'" class="col-6 p-0">
                                 <div class="d-flex">
                                     <div class="flex-fill">
                                         <strong> Balance Due </strong>
