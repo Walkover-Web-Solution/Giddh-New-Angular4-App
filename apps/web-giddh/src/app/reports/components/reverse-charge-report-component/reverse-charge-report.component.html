@@ -131,11 +131,11 @@
             <div class="col-sm-6 totalDueSale">
                 <h3>Total Taxable Value: </h3>
                 <h1>{{activeCompany?.baseCurrencySymbol}}
-                    {{reverseChargeReportResults?.totalTaxableValue}}<span>/-</span></h1>
+                    {{reverseChargeReportResults?.totalTaxableValue | giddhCurrency }}<span>/-</span></h1>
             </div>
             <div class="col-sm-6 totalDueSale">
                 <h3>Total Tax Amount:</h3>
-                <h1>{{activeCompany?.baseCurrencySymbol}} {{reverseChargeReportResults?.totalTaxAmount}}<span>/-</span>
+                <h1>{{activeCompany?.baseCurrencySymbol}} {{reverseChargeReportResults?.totalTaxAmount | giddhCurrency}}<span>/-</span>
                 </h1>
             </div>
         </div>
