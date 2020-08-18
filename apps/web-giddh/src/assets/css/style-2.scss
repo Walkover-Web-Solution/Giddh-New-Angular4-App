@@ -10593,6 +10593,14 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
+@media(max-width:1300px) and (min-width:1024px){
+     .dashboard-container {
+        .card{
+            margin-bottom: 20px;
+            min-height: 452px;
+        }
+    }
+}
 
 /*** iPhone and iOS Form Input Zoom Fixes ***/
 

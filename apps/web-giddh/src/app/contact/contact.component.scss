@@ -112,7 +112,9 @@ ul.list-unstyled li a {
     min-width: 0px !important;
     min-height: 0px !important;
 }
-
+.dropdown-menu-right{
+    z-index: 1;
+}
 .model-position {
     float: right;
     right: -234px;
