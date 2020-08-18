@@ -153,7 +153,7 @@ export function provideConfig() {
         ReactiveFormsModule,
         ModalModule,
         DatepickerModule,
-        TypeaheadModule,
+        TypeaheadModule.forRoot(),
         UniversalListModule,
         NgbTypeaheadModule,
         TooltipModule,

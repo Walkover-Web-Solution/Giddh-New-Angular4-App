@@ -452,6 +452,12 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             this.datepickerTemplate,
             Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
+
+        this.modalService.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            setTimeout(() => {
+                document.querySelector('body').classList.add('modal-open');
+            }, 500);
+        });
     }
 
     /**
@@ -484,7 +490,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 this.toDate = moment(value.endDate, GIDDH_DATE_FORMAT).toDate();
                 let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
                 bsDaterangepicker.patchValue([this.fromDate, this.toDate]);
-
             }
         }
     }

@@ -53,7 +53,7 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
         SalesRoutingModule,
         ModalModule,
         TooltipModule,
-        TypeaheadModule,
+        TypeaheadModule.forRoot(),
         CollapseModule,
         BsDatepickerModule.forRoot(),
         SharedModule,

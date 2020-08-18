@@ -79,7 +79,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 
-    @ViewChild('taxInputElement', {static: true}) public taxInputElement: ElementRef;
+    @ViewChild('taxInputElement', {static: false}) public taxInputElement: ElementRef;
 
     public taxSum: number = 0;
     public taxTotalAmount: number = 0;

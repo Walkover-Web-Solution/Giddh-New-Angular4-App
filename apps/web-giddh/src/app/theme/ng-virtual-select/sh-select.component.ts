@@ -53,7 +53,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public showCheckbox: boolean = false;
     @Input() public fixedValue: string = "";
 
-    @ViewChild('inputFilter', {static: true}) public inputFilter: ElementRef;
+    @ViewChild('inputFilter', {static: false}) public inputFilter: ElementRef;
     @ViewChild('mainContainer', {static: true}) public mainContainer: ElementRef;
     @ViewChild('menuEle', {static: true}) public menuEle: ShSelectMenuComponent;
     @ContentChild('optionTemplate', {static: true}) public optionTemplate: TemplateRef<any>;

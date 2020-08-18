@@ -52,7 +52,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @Input() public salesShSelectPading: number = 0;
     @Input() public tabIndex: number = 0;
 
-    @ViewChild('inputFilter', {static: true}) public inputFilter: ElementRef;
+    @ViewChild('inputFilter', {static: false}) public inputFilter: ElementRef;
     @ViewChild('mainContainer', {static: true}) public mainContainer: ElementRef;
     @ViewChild('menuEle', {static: true}) public menuEle: SalesShSelectMenuComponent;
     @ContentChild('optionTemplate', {static: true}) public optionTemplate: TemplateRef<any>;
