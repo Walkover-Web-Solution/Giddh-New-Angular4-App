@@ -84,8 +84,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public customField1: boolean = false;
     public customField2: boolean = false;
     public tdstcsTypes: any = ['tdsrc', 'tcsrc', 'tdspay', 'tcspay'];
-
-
+    /** To clear purchase account  */
+    public forceClearPurchaseAccount$: Observable<IForceClear> = of({ status: false });
+    /** To clear sales account  */
+    public forceClearSalesAccount$: Observable<IForceClear> = of({ status: false });
+    /** To clear purchase stock  */
+    public forceClearPurchaseStock$: Observable<IForceClear> = of({ status: false });
+    /** To clear sales stock  */
+    public forceClearSalesStock$: Observable<IForceClear> = of({ status: false });
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
@@ -217,22 +223,24 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         // subscribe enablePurchase checkbox for enable/disable unit/rate
-        this.addStockForm.controls['enablePurchase'].valueChanges.subscribe((a) => {
+        this.addStockForm.controls['enablePurchase'].valueChanges.subscribe((isEnable) => {
             const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
-            if (a) {
+            if (isEnable) {
                 purchaseUnitRatesControls.enable();
             } else {
                 purchaseUnitRatesControls.disable();
+                this.resetPurchaseInformation();
             }
         });
 
         // subscribe enableSales checkbox for enable/disable unit/rate
-        this.addStockForm.controls['enableSales'].valueChanges.subscribe((a) => {
+        this.addStockForm.controls['enableSales'].valueChanges.subscribe((isEnable) => {
             const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
-            if (a) {
+            if (isEnable) {
                 saleUnitRatesControls.enable();
             } else {
                 saleUnitRatesControls.disable();
+                this.resetSalesInformation();
             }
         });
 
@@ -575,7 +583,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             if (isNaN(Number(rate))) {
                 rate = '0';
             }
-            this.addStockForm.patchValue({ stockRate:  rate});
+            this.addStockForm.patchValue({ stockRate: rate });
         } else if (!quantity || !amount) {
             this.addStockForm.controls['stockRate'].patchValue('');
         }
@@ -1208,5 +1216,37 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             return formEntries.length === 0;
         }
         return true;
+    }
+
+    /**
+     * To reset purchase information if purchase information unchecked
+     *
+     * @memberof InventoryAddStockComponent
+     */
+    public resetPurchaseInformation(): void {
+        const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
+        this.addStockForm.get('purchaseAccountUniqueName').patchValue(null);
+        this.forceClearPurchaseAccount$ = of({ status: true });
+        this.forceClearPurchaseStock$ = of({ status: true });
+        for (let control of purchaseUnitRatesControls.controls) {
+            control.get('stockUnitCode').patchValue(null);
+            control.get('rate').patchValue(null);
+        }
+    }
+
+    /**
+     * To reset sales information if sales information unchecked  
+     *
+     * @memberof InventoryAddStockComponent
+     */
+    public resetSalesInformation(): void {
+        const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
+        this.addStockForm.get('salesAccountUniqueName').patchValue(null);
+        this.forceClearSalesAccount$ = of({ status: true });
+        this.forceClearSalesStock$ = of({ status: true });
+        for (let control of saleUnitRatesControls.controls) {
+            control.get('stockUnitCode').patchValue(null);
+            control.get('rate').patchValue(null);
+        }
     }
 }

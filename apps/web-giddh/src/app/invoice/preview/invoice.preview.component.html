@@ -12,7 +12,7 @@
                         </span>
                     </div>
                     <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
-                        <span class="icon-advance-search" (click)="toggleAdvanceSearchPopup(false)"></span>
+                        <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup(false)"></span>
                     </div>
 
                     <div class="search-icon-block" (click)="openModal(template)">
@@ -298,6 +298,18 @@
                             </div>
                         </th>
 
+                        <!-- Linked invoices -->
+                        <th *ngIf="selectedVoucher === 'credit note'">
+                            <div class="d-flex">
+                                <div>Linked Invoice</div>
+                            </div>
+                        </th>
+                        <th *ngIf="selectedVoucher === 'debit note'">
+                            <div class="d-flex">
+                                <div>Linked Voucher</div>
+                            </div>
+                        </th>
+
                         <th>
                             <div class="d-flex">
                                 <div class="flex-fill text-right ">Total amount</div>
@@ -448,6 +460,9 @@
                         </td>
                         <!-- Date -->
                         <td>{{item.voucherDate}}</td>
+
+                        <!-- Linked invoices -->
+                        <td *ngIf="selectedVoucher === 'credit note' || selectedVoucher === 'debit note'">{{item.invoiceLinkingRequest?.linkedInvoices?.length ? item.invoiceLinkingRequest?.linkedInvoices[0].invoiceNumber : '-'}}</td>
 
                         <!-- Total Amount with multicurrency for CR/DR note -->
                         <td *ngIf="(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" [tooltip]="grandTotalPopupTemplate" class="text-right">{{item.accountCurrencySymbol}} {{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
@@ -750,7 +765,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent [isUpdateMode]="isUpdateMode" [depositAmount]="depositAmount" [invoiceFormDetails]="invFormData" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
-                (closeModelEvent)="closeAdvanceReceiptModal()" (submitClicked)="getAdvanceReceiptAdjustData($event)">
+                (closeModelEvent)="closeAdvanceReceiptModal()" (submitClicked)="getAdvanceReceiptAdjustData($event)" [isVoucherModule]="true">
             </advance-receipt-adjustment-component>
         </div>
     </div>

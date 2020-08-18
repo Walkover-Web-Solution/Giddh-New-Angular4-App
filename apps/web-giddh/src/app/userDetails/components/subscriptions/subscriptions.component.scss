@@ -98,7 +98,7 @@
     color: $nobel;
     line-height: 14px;
 }
-.associated-companies > ul > li {
+.associated-companies-li {
     border-bottom: 1px solid $gainsboro;
     list-style-type: none;
     position: relative;
@@ -106,7 +106,7 @@
     align-items: center;
     justify-content: space-between;
 }
-.associated-companies > ul > li > a {
+.associated-companies-li > a {
     color: $nero;
     font-size: 14px;
     padding: 12px 20px;
@@ -115,15 +115,21 @@
     word-break: break-all;
     width: 100%;
 }
-.associated-companies > ul > li > a span {
-    margin-right: 20px;
+.associated-companies-li > a span {
+    margin-right: 8px;
     white-space: nowrap;
+    min-width: 20px;
 }
-.associated-companies > ul > li > a:hover {
+.associated-companies-li > a:hover {
     color: $deep-sky-blue;
 }
 .associated-company-name{
     flex-direction: column;
+    p{
+        img{
+            width: 16px;
+        }
+    }
     .custom-dropdown{
         right: 0;
         top: 13px;
@@ -167,6 +173,12 @@
     border-left: 1px solid $gainsboro;
     padding-left: 0px;
     padding-bottom: 60px;
+    padding-right: 0;
+    .custom-dropdown {
+      .dropdown-toggle{
+          margin-right: 13px;
+      }
+    }
 }
 .giddh-table tbody {
     tr:last-child {
@@ -188,15 +200,6 @@
 }
 .associated-companies-list {
     max-height: 600px;
-    overflow-y: auto;
-}
-.associated-companies-list::-webkit-scrollbar {
-    width:5px;
-}
-.associated-companies-list::-webkit-scrollbar-thumb {
-    background-color: $gainsboro;
-    outline: 1px solid $gray;
-    border-radius: 20px;
 }
 .plan-row {
     color: $nero;
@@ -240,10 +243,6 @@
         border: none;
         margin-bottom: 0;
         margin-top: 0;
-    }
-    .associated-companies-list {
-        max-height: 300px;
-        overflow-y: auto;
     }
     .transaction-popup {
         position: relative;
@@ -310,6 +309,11 @@
                 .search-company-here{
                     padding-right: 20px;
                 }
+        }
+        .custom-dropdown{
+            .dropdown-toggle{
+                 margin-right: 0;
+                }
             }
         }
         .btn-group.custom-dropdown {
@@ -356,4 +360,7 @@
     .custom-input-search .form-control {
         font-size: 12px !important;
     }
+}
+cdk-virtual-scroll-viewport{
+    height: 540px;
 }

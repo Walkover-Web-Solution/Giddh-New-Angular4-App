@@ -6,7 +6,7 @@
 <!-- nodata end -->
 
 <div>
-    <div *ngIf="!noData">
+    <div *ngIf="!noData" class="tb-wrapper">
         <div class="mrT2 clearfix">
             <!--top heading  labels-->
 
@@ -17,23 +17,20 @@
                 <div class="income mrB1">
                     <div class="clearfix profitLoss">
 
-                        <table class="mrB table basic">
+                        <table class="mrB table basic bs-table-grid">
                             <thead>
-                                <tr style="border-bottom: 2px solid #b7b7b8;">
-                                    <th class="col-xs-3"
-                                        style="padding:0px !important; border-left: unset !important;border-right: 2px solid #b7b7b8;">
-
+                                <tr>
+                                    <th class="col-xs-3 pd-0">
                                         <div #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
 
                                             <div [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}"
                                                 style="display:flex">
-                                                <span style="margin-left: 15px; flex: 1;">Particular</span>
-                                                <i class="glyphicon glyphicon-search" (click)="toggleSearch()"
-                                                    style="position: relative;top:3px;left:-1%;z-index: 1; font-size: 13px;color: #A6A6A6;cursor: pointer;"></i>
+                                                <span class="ml-15 mr-1">Particular</span>
+                                                <i class="glyphicon glyphicon-search" (click)="toggleSearch()"></i>
                                             </div>
 
                                             <div [hidden]="!showClearSearch">
-                                                <input style="height: 39px;" type="search" #searchInputEl
+                                                <input type="search" #searchInputEl
                                                     class="form-control" placeholder="Search"
                                                     aria-describedby="sizing-addon3" id="w-398px"
                                                     [formControl]="bsSearchControl">
@@ -44,12 +41,12 @@
                                         </div>
 
                                     </th>
-                                    <th class="col-xs-3 text-right" style="border-right: 2px solid #b7b7b8;">As Of
+                                    <th class="col-xs-3 text-right">As Of
                                         <span
                                             *ngIf="bsData && bsData.dates && bsData.dates.to && bsData.dates.to!=='Invalid date'">
                                             {{ moment(bsData?.dates?.to, 'DD-MM-YYYY').toString() | date:'dd MMMM yyyy' }}</span>
                                     </th>
-                                    <th class="col-xs-3 text-right" style="padding: 8px;">As Of
+                                    <th class="col-xs-3 text-right">As Of
                                         <span
                                             *ngIf="bsData && bsData.dates && bsData.dates.from && bsData.dates.from!=='Invalid date'">
                                             {{ moment(bsData?.dates?.from, 'DD-MM-YYYY').add(-1, 'days').toString() | date:'dd MMMM yyyy' }}</span>
@@ -61,7 +58,7 @@
                         <!--Grid-->
                         <div class="mr1">
                             <div class="">
-                                <strong class="fs18">I EQUITY AND LIABILITIES </strong>
+                                <strong class="font-16">I EQUITY AND LIABILITIES </strong>
                             </div>
                         </div>
                         <!-- <section class="row row-1" *ngFor="let liabilityGrp  of  bsData?.liabilities | tbsearch: search" bs-grid-row [groupDetail]="liabilityGrp"
@@ -110,7 +107,7 @@
                         <!--Grid-->
                         <div class="mr1">
                             <div class="">
-                                <strong class="fs18">II ASSETS</strong>
+                                <strong class="font-16">II ASSETS</strong>
                             </div>
                         </div>
                         <!-- <section class="row row-1" *ngFor="let assets of bsData?.assets | tbsearch: search" bs-grid-row [groupDetail]="assets" [search]="search"

@@ -4,7 +4,7 @@
 
         <!-- start auth tab tab -->
         <tab heading="Auth Key" [active]="activeTab == 'auth-key'" (select)="onTabChanged('auth-key')">
-            <div class="wrap-tab-content-pd-15">
+            <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'auth-key'">
                 <div class="box clearfix mrT2">
                     <h1 class="section-head pdT0">Main Auth-key</h1>
                     <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
@@ -22,8 +22,8 @@
             </div>
         </tab>
         <!-- end of auth tab tab -->
-        <tab heading="Mobile Number" [active]="activeTab == 'mobile-number'" select="getUserDetails()" (select)="onTabChanged('mobile-number')">
-            <div class="wrap-tab-content-pd-15">
+        <tab heading="Mobile Number" [active]="activeTab == 'mobile-number'" (select)="onTabChanged('mobile-number');">
+            <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'mobile-number'">
                 <div class="box clearfix mrT2">
                     <form class="" name="mobileForm" novalidate>
                         <h1 class="section-head">Add/Edit Mobile Number</h1>
@@ -37,14 +37,17 @@
                             <b>Note: </b>Format should be like 9898989898</p>
                     </form>
 
-                    <div class="pd2 clearfix" *ngIf="showVerificationBox" style="padding-top:0;">
+                    <div class="clearfix" *ngIf="showVerificationBox" style="padding-top:0;">
                         <hr>
-                        <h1 class="mrT2">Enter verification Code</h1>
-                        <div class="max350 mrT">
-                            <input class="form-control" type="text" placeholder="Verification Code" [(ngModel)]="oneTimePassword" />
+                        <h1 class="mrT2 max350">
+                            <span>Enter verification Code</span>
+                            <!--<button class="btn-link pull-right pr-0">Resend</button>-->
+                        </h1>
+                        <div class="mrT">
+                            <input class="form-control max350 pull-left" type="text" placeholder="Verification Code" [(ngModel)]="oneTimePassword" />
+                            <button class="btn btn-success mrL1" [ladda]="isVerifyAddNewMobileNoInProcess$ | async" (click)="verifyNumber()">Verify
+                            </button>
                         </div>
-                        <button class="btn btn-success mrT" [ladda]="isVerifyAddNewMobileNoInProcess$ | async" (click)="verifyNumber()">Verify
-                        </button>
                     </div>
                     <section class="row">
                         <div class="container adjust-width pull-left">
@@ -124,7 +127,7 @@
 
         <!-- start session tab tab -->
         <tab heading="Session" [active]="activeTab == 'session'" (select)="onTabChanged('session')">
-            <div class="wrap-tab-content-pd-15">
+            <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'session'">
                 <div class="box clearfix mrT2">
                     <div class="max900 d-flex pdB1  activity-title">
                         <h1 class="section-head pdT0">Activity History</h1>
@@ -144,15 +147,6 @@
                                 </tr>
                             </thead>
                             <tbody *ngIf="userSessionList.length">
-                                <!-- <tr>
-                <td>111.118.250.236</td>
-                <td>02/04/2018</td>
-                <td>11:22:00</td>
-                <td>0d:01:55:02</td>
-                <td>Chrome</td>
-                <td class="ico-btn text-center">
-                </td>
-            </tr> -->
                                 <tr *ngFor="let session of userSessionList; index as sessionIndex">
                                     <td>{{ session.ipAddress }}</td>
                                     <td>{{ moment(session.createdAt).format('DD/MM/YYYY') }}</td>
@@ -163,11 +157,9 @@
                                         <span *ngIf="userSessionId === session.sessionId">Current</span>
                                         <button type="button" class="btn btn-xs" (click)="deleteSession(session.sessionId, sessionIndex)" *ngIf="userSessionId !== session.sessionId">
                                             <i class="icon-trash" aria-hidden="true" tooltip="Delete"></i>
-
                                         </button>
                                     </td>
                                 </tr>
-
                             </tbody>
                             <tbody *ngIf="!userSessionList.length">
                                 <tr>
@@ -184,13 +176,13 @@
 
         <tab heading="Subscription" [active]="activeTab == 'subscription'" (select)="onTabChanged('subscription')">
             <div class="wrap-tab-content-pd-15">
-                <subscriptions></subscriptions>
+                <subscriptions [activeTab]="activeTab"></subscriptions>
             </div>
         </tab>
 
-        <tab heading="Company" [active]="activeTab == 'company'" (select)="onTabChanged('company')">
+        <!-- <tab heading="Company" [active]="activeTab == 'company'" (select)="onTabChanged('company')">
             <user-detail-company></user-detail-company>
-        </tab>
+        </tab> -->
         <!-- end of session tab -->
 
     </tabset>

@@ -3,7 +3,7 @@ import { IClosingBalance, IForwardBalance, ILedger, ILedgerTransactionItem, ITot
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from './Sales';
 import { PettyCashEntryStatus } from './Expences';
-import { AdvanceReceiptAdjustment } from './AdvanceReceiptsAdjust';
+import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
 
 /*
  * Model for ledger create api request
@@ -124,11 +124,12 @@ export class LedgerResponse {
     public reverseChargeTaxableAmount?: number;
     public passportNumber?: string;
     public touristSchemeApplicable?: boolean;
-    public invoiceAdvanceReceiptAdjustment?: InvoiceAdvanceReceiptAdjustment;
-    public advanceReceiptAdjustment?: AdvanceReceiptAdjustment
+    public voucherAdjustments?: VoucherAdjustments
+    public invoiceLinkingRequest?: IInvoiceLinkingRequest;
+    public unitRates?: Array<any>;
 }
 /** Model for Ledger Advance receipts for invoices */
-export class InvoiceAdvanceReceiptAdjustment {
+export class VoucherAdjustmentsForInvoice {
     adjustedInvoices: AdjustedInvoice[];
     totalAdjustmentAmount: number;
     description: string;
@@ -151,6 +152,17 @@ export class AdjustedAmount {
     amountForCompany: number;
 }
 
+/** Model invoice linking request */
+export class IInvoiceLinkingRequest {
+    public linkedInvoices: ILinkedInvoice[];
+}
+
+/** Model linked invoice */
+export class ILinkedInvoice {
+    public invoiceUniqueName: string;
+    public invoiceNumber?: string;
+    public voucherType: string;
+}
 
 /*
  * Model for mail ledger api request

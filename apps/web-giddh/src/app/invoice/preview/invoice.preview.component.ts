@@ -52,7 +52,7 @@ import { PurchaseRecordUpdateModel } from '../../purchase/purchase-record/consta
 import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.service';
 import { PurchaseRecordActions } from '../../actions/purchase-record/purchase-record.action';
 import { Location } from '@angular/common';
-import { AdvanceReceiptAdjustment, AdjustAdvancePaymentModal } from '../../models/api-models/AdvanceReceiptsAdjust';
+import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { SalesService } from '../../services/sales.service';
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
@@ -230,7 +230,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /** To check is advance receipts modal in update mode */
     public isUpdateMode = false;
     /** selected invoice adjust advance receipts data */
-    public advanceReceiptAdjustmentData: AdvanceReceiptAdjustment;
+    public advanceReceiptAdjustmentData: VoucherAdjustments;
     /** Observable to get observable store data of voucher */
     public voucherDetails$: Observable<any>;
     /** selected invoice details data  */
@@ -1522,10 +1522,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /**
     * To get all advance adjusted data
     *
-    * @param {{ adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
+    * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
     * @memberof InvoicePreviewComponent
     */
-    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: AdvanceReceiptAdjustment, adjustPaymentData: AdjustAdvancePaymentModal }) {
+    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }) {
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
         this.advanceReceiptAdjustmentData.adjustments.map(item => {
             item.voucherDate = (item.voucherDate.toString().includes('/')) ? item.voucherDate.trim().replace(/\//g, '-') : item.voucherDate;
