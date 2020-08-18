@@ -8,7 +8,7 @@
 		<!-- end header -->
 
 		<ng-container *ngIf="searchedItems && searchedItems.length > 0">
-			<div #mainEle tabindex="0" class="universal-list-items" [style.width.px]="ItemWidth">
+			<div #mainEle tabindex="0" class="universal-list-items">
 				<ng-container *ngIf="isOpen">
 					<ng-container>
 						<commandk-virtual-scroll [items]="searchedItems" [childHeight]="ItemHeight" (highLightedItemEmitter)="handleHighLightedItemEvent($event)"

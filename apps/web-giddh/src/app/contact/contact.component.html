@@ -1,6 +1,6 @@
 <tabset #staticTabs class="custom-tabs" [ngClass]="{'hide-header': activeTab === 'vendor'}">
     <!-- region Customer/Vendor -->
-    <tab heading="Customer" (select)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')" [active]="activeTab !== 'aging-report'">
+    <tab heading="Customer" (selectTab)="tabSelected(activeTab === 'vendor' ? 'vendor' : 'customer')" [active]="activeTab !== 'aging-report'">
         <div class="container-fluid">
 
             <div class="top-bar clearfix">
@@ -192,7 +192,7 @@
     <!-- endregion -->
 
     <!-- region Aging Report -->
-    <tab heading="Aging Report" (select)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
+    <tab heading="Aging Report" (selectTab)="tabSelected('aging-report')" [active]="activeTab === 'aging-report'">
         <!--    <div *ngIf="activeTab === 'aging'">-->
         <aging-report (creteNewCustomerEvent)="openAddAndManage('customer')"></aging-report>
         <!--    </div>-->

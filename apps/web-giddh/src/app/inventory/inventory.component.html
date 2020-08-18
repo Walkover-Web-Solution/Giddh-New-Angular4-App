@@ -2,7 +2,7 @@
     <div class="inventory-controll">
         <tabset #inventoryStaticTabs>
 
-            <tab heading="Inventory" (select)="redirectUrlToActiveTab('inventory', $event)"
+            <tab heading="Inventory" (selectTab)="redirectUrlToActiveTab('inventory', $event)"
                 [active]="activeTabIndex === 0">
                 <!--sidebar-->
                 <ng-container *ngIf="activeTabIndex === 0 && activeView !== 'receipt'">
@@ -32,7 +32,7 @@
                 </ng-container>
             </tab>
 
-            <tab heading="Job Work" (select)="redirectUrlToActiveTab('jobwork', $event)"
+            <tab heading="Job Work" (selectTab)="redirectUrlToActiveTab('jobwork', $event)"
                 [active]="activeTabIndex === 1">
 
                 <ng-container *ngIf="activeTabIndex === 1">
@@ -42,7 +42,7 @@
             </tab>
 
 
-            <tab heading="Manufacturing" (select)="redirectUrlToActiveTab('manufacturing', $event)"
+            <tab heading="Manufacturing" (selectTab)="redirectUrlToActiveTab('manufacturing', $event)"
                 [active]="activeTabIndex === 2">
 
                 <ng-container *ngIf="activeTabIndex === 2">
@@ -51,7 +51,7 @@
 
             </tab>
 
-            <tab heading="Report" (select)="redirectUrlToActiveTab('report', $event)" [active]="activeTabIndex === 3">
+            <tab heading="Report" (selectTab)="redirectUrlToActiveTab('report', $event)" [active]="activeTabIndex === 3">
                 <ng-container *ngIf="activeTabIndex === 3">
                     <new-branch-transfer-list></new-branch-transfer-list>
                 </ng-container>

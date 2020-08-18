@@ -39,7 +39,7 @@ import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 
 export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
-    @ViewChild(PdfJsViewerComponent, {static: true}) public pdfViewer: PdfJsViewerComponent;
+    @ViewChild(PdfJsViewerComponent, {static: false}) public pdfViewer: PdfJsViewerComponent;
     @ViewChild('showEmailSendModal', {static: true}) public showEmailSendModal: ModalDirective;
     @ViewChild('downloadVoucherModal', {static: true}) public downloadVoucherModal: ModalDirective;
     @ViewChild('invoiceDetailWrapper', {static: true}) invoiceDetailWrapperView: ElementRef;
