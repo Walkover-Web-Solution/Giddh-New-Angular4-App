@@ -164,7 +164,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      *
      * @memberof AuditLogsFormComponent
      */
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.auditLogFormVM.reset();
         this.store.dispatch(this.auditLogsActions.ResetLogs());
         this.destroyed$.next(true);
