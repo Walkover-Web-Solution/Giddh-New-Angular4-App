@@ -228,6 +228,15 @@
         }
     }
 }
+
+.list-inline {
+    padding-left: 0;
+    list-style: none;
+    >li{
+        display: inline-block;
+    }
+}
+
 /*resposnive*/
 @media only screen and (max-width: 1024px) {
     .table-subscription {

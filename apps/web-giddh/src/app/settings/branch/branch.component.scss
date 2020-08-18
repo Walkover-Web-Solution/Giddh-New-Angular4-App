@@ -121,6 +121,14 @@
 .branch-views {
     cursor: pointer;
 }
+.btn-link{
+    border-width:0px!important;
+    background: $white!important;
+}
+
+.wd-900{
+    width:900px !important;
+}
 @media (max-width: 375px) {
     .grey_clr button.btn.btn-default {
         margin-left: 0;
@@ -172,3 +180,13 @@
         }
     }
 }
+
+@media(min-width:992px) and (max-width:1359px){
+    .branch-card-view{
+        .col-lg-4{
+            flex: 0 0 50% !important;
+            max-width: 50% !important;
+        }
+    }
+}
+
