@@ -5,7 +5,7 @@
         <div class="row">
 
             <!-- region sidebar -->
-            <div class="col-sm-4  col-xs-12 pr-0" style="z-index:200;">
+            <div class="col-sm-12 col-md-4 col-xs-12 pr-0" style="z-index:200;">
 
                 <div class="invoice-sidebarWrapper">
 
@@ -42,7 +42,7 @@
                                 [ngClass]="{'activeItem': item.uniqueName === selectedItem.uniqueName}"
                                 (click)="selectVoucher(item)">
 
-                                <div class="row">
+                                <div class="row mr-0">
 
                                     <div class="col-xs-7 col-sm-7">
 
@@ -75,14 +75,14 @@
             </div>
             <!-- endregion -->
 
-            <div class="col-sm-8 col-xs-12 pd0 invoice-detailWrapper" #invoiceDetailWrapper>
+            <div class="col-sm-12 col-md-8 col-xs-12 pd0 invoice-detailWrapper" #invoiceDetailWrapper>
 
                 <div class="scroll-half">
                     <div class="invoice-detail" #invoicedetail>
 
                         <div class="invoiceDetail-header">
 
-                            <div class="row">
+                            <div class="row mr-0 ml-0">
 
                                 <div class="col-sm-4 col-xs-12">
                                     <div class="invoice-num-holder">
@@ -102,8 +102,7 @@
                                         <div class="btn-group changeStatus-dropdown pull-right" dropdown
                                              *ngIf="only4ProformaEstimates">
 
-                                            <label class="labeled text-capitalize">
-                                                {{ selectedItem.voucherStatus }}</label>
+                                            
 
                                             <button id="button-basic" dropdownToggle type="button"
                                                     class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic">
@@ -135,6 +134,9 @@
                                                     class="dropdown-item">Expired</a></li>
                                             </ul>
 
+                                            <label class="labeled text-capitalize">
+                                                {{ selectedItem.voucherStatus }}</label>
+
                                         </div>
                                         <!-- endregion -->
 
@@ -142,9 +144,6 @@
                                         <div class="btn-group changeStatus-dropdown pull-right" dropdown
                                              *ngIf="!only4ProformaEstimates && selectedItem?.voucherType !== 'purchase'">
 
-                                            <label *ngIf="selectedItem.voucherStatus === 'cancel'" class="labeled">
-                                                {{ selectedItem.voucherStatus }}
-                                            </label>
 
                                             <button id="button-basic2" dropdownToggle type="button"
                                                     class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2"
@@ -174,6 +173,11 @@
                                                     (click)="updateVoucherAction.emit('cancel')"><a
                                                     class="dropdown-item">Cancel</a></li>
                                             </ul>
+
+
+                                            <label *ngIf="selectedItem.voucherStatus === 'cancel'" class="labeled">
+                                                {{ selectedItem.voucherStatus }}
+                                            </label>
 
                                         </div>
                                         <!-- endregion -->
