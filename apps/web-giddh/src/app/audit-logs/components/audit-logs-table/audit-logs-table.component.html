@@ -323,6 +323,13 @@
                             <p class="address-field"> {{log?.details?.description}}
                             </p>
                         </div>
+                        <div class="mr-05" *ngIf="log?.details?.hasAttachment">
+                            <label>
+                           File Attached:
+                        </label>
+                            <p class="address-field"> {{log?.details?.hasAttachment ? 'Yes': 'No'}}
+                            </p>
+                        </div>
                     </ng-container>
                 </div>
                 <!-- etries log block end -->
@@ -667,6 +674,13 @@
                            Description:
                         </label>
                                 <p class="address-field"> {{log?.old?.details?.description}}
+                                </p>
+                            </div>
+                            <div class="mr-05" *ngIf="log?.old?.details?.hasAttachment">
+                                <label>
+                           File Attached:
+                        </label>
+                                <p class="address-field"> {{log?.old?.details?.hasAttachment ? 'Yes': 'No'}}
                                 </p>
                             </div>
                         </ng-container>
