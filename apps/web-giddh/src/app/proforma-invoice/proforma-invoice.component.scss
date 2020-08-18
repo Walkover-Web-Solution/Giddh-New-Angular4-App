@@ -1285,7 +1285,7 @@ section.newtable {
     padding-left: 10px;
 }
 
-.lastEstimateModal {
+.last-estimate-modal {
     min-width: 230px;
     position: absolute;
     top: 30px;
@@ -1368,7 +1368,7 @@ table.table.table-custom-invoice.basic {
     width: 100% !important;
 }
 
-.depositeSection {
+.deposite-section {
     transform: translateX(140px);
 }
 
@@ -1792,6 +1792,10 @@ span.eligible-ITC {
     #actionPane .generateInvoie {
         min-width: 189px;
     }
+    .last-estimate-modal {
+        left: auto;
+        right: 30px;
+    }
 }
 
 @media (max-width: 414px) {
@@ -1808,14 +1812,14 @@ span.eligible-ITC {
     .otherDetail-card .form-group.col-xs-4 {
         width: 50%;
     }
-    .depositeSection {
+    .deposite-section {
         transform: translateX(100px);
     }
 }
 
 @media (max-width: 375px) {
-    .depositeSection {
-        transform: translateX(60px);
+    .deposite-section {
+        transform: translateX(30px);
     }
     .total-amountDiscription .tableSec {
         display: block;
@@ -1851,7 +1855,7 @@ span.eligible-ITC {
 }
 
 @media (max-width: 320px) {
-    .depositeSection {
+    .deposite-section {
         transform: translateX(20px);
     }
     .total-amountDiscription .tableSec .tableRow .figureCell {
