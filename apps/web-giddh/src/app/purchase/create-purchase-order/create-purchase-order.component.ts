@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { BsModalRef, BsDatepickerDirective, PopoverDirective, ModalDirective } from 'ngx-bootstrap'
+import { BsModalRef, ModalDirective } from 'ngx-bootstrap/modal'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { IOption } from '../../theme/ng-select/ng-select';
@@ -47,6 +47,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
 import { GeneralActions } from '../../actions/general/general.actions';
+import { PopoverDirective } from 'ngx-bootstrap/popover';
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 
 const THEAD_ARR_READONLY = [
     {

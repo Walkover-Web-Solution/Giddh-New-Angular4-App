@@ -153,17 +153,17 @@ export class SettingsFinancialYearActions {
      * @type {Observable<Action>}
      * @memberof SettingsFinancialYearActions
      */
-    @Effect()
-    public getFinancialYearLimits$: Observable<Action> = this.action$
-        .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_FINANCIAL_YEAR_LIMITS).pipe(
+    public getFinancialYearLimits$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_FINANCIAL_YEAR_LIMITS),
             switchMap((action: CustomActions) => this._settingsFinancialYearService.getFinancialYearLimits()),
-            map(res => this.validateResponse<any, any>(res, {
+            map((res: any) => this.validateResponse<any, any>(res, {
                 type: SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_FINANCIAL_YEAR_LIMITS_RESPONSE,
                 payload: res
             }, true, {
                 type: SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_FINANCIAL_YEAR_LIMITS_RESPONSE,
                 payload: res
-            })));        
+            }))));
 
     constructor(private action$: Actions,
         private toasty: ToasterService,
