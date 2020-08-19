@@ -1880,4 +1880,30 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         this.isAllModuleOpen = !this.isAllModuleOpen;
     }
+
+    /** 
+     * This will init the notification on window orientation change
+     *
+     * @param {*} event
+     * @memberof HeaderComponent
+     */
+    @HostListener('window:orientationchange', ['$event'])
+    onOrientationChange(event) {
+        if(window['Headway'] !== undefined) {
+            window['Headway'].init();
+        }
+    }
+
+    /**
+     * This will init the notification on window resize
+     *
+     * @param {*} event
+     * @memberof HeaderComponent
+     */
+    @HostListener('window:resize', ['$event'])
+    windowResize(event) {
+        if(window['Headway'] !== undefined) {
+            window['Headway'].init();
+        }
+    }
 }
