@@ -333,6 +333,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
             if (event instanceof NavigationEnd) {
                 this.setCurrentPage();
+                this.addClassInBodyIfPageHasTabs();
 
                 if (this.router.url.includes("/ledger")) {
                     this.currentState = this.router.url;
