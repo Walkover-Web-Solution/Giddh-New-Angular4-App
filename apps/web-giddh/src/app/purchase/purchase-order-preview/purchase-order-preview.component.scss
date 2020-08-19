@@ -191,13 +191,15 @@
 }
 
 span.close-modal.cp.pull-right {
-    display: inline-grid;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     height: 32px;
     width: 32px;
     background-color: $gainsboro;
     border: 1px solid $gainsboro;
+    position: static;
+    transform: inherit;
 }
 
 .change-status-dropdown .dropdown-menu {
@@ -279,6 +281,8 @@ span.close-modal.cp.pull-right {
             justify-content: center;
             align-items: center;
             margin-right: 10px;
+            position: static;
+            transform: inherit;
         }
     }
     .invoice-editBody {
