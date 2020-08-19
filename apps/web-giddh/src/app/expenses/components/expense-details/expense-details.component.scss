@@ -74,6 +74,8 @@ span.close-modal.cp.pull-right {
     justify-content: center;
     align-items: center;
     height: 30px;
+    position: static;
+    transform: inherit;
 }
 
 .close-modal img {

@@ -48,7 +48,7 @@
                             </li>
 
 
-                            
+
                         </ul>
                 </div>
 
@@ -56,7 +56,7 @@
                 <div id="setting-tab">
                     <ng-template [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'">
 
-                        
+
                         <tabset #staticTabs>
 
                             <tab heading="Debit Note" [active]="activeTab === 'debit note'" (select)="tabChanged('debit note', $event);voucherChanged('debitNote')">
@@ -154,15 +154,6 @@
                                     <app-invoice-preview></app-invoice-preview>
                                 </div>
                             </tab> -->
-                            <tab heading="Pending">
-                                <div>
-                                </div>
-                            </tab>
-                            <tab heading="Setting">
-                                <div>
-                                </div>
-                            </tab>
-
                         </tabset>
 
                     </ng-template>
