@@ -32,8 +32,8 @@ import {
     SocialLoginModule,
 } from '../theme/ng-social-login-module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { VsForDirective } from '../theme/ng2-vs-for/ng2-vs-for';
 import { FormWizardModule } from '../theme/ng2-wizard';
 import { UniversalListModule } from '../theme/universal-list/universal.list.module';
 import { WelcomeComponent } from '../welcome/welcome.component';
@@ -133,7 +133,6 @@ export function provideConfig() {
         GroupUpdateComponent,
         ShareGroupModalComponent,
         ShareAccountModalComponent,
-        VsForDirective,
         CheckPermissionDirective,
         ExportGroupLedgerComponent,
         AsideMenuOtherTaxes,
@@ -180,7 +179,8 @@ export function provideConfig() {
         CKEditorModule,
         NgxMaskModule,
         CommandKModule,
-        NgxDaterangepickerMd.forRoot()
+        NgxDaterangepickerMd.forRoot(),
+        ScrollingModule
     ],
     exports: [
         CommonModule,
@@ -207,7 +207,6 @@ export function provideConfig() {
         OnBoardingComponent,
         ConfirmModalModule,
         NgbTypeaheadModule,
-        VsForDirective,
         AccountsSideBarComponent,
         AsideHelpSupportComponent,
         AsideSettingComponent,

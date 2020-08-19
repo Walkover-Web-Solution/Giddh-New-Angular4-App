@@ -2,7 +2,6 @@ import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
-import { VsForDirective } from './../../theme/ng2-vs-for/ng2-vs-for';
 import { ToasterService } from './../../services/toaster.service';
 import { KeyboardService } from './../keyboard.service';
 import { LedgerActions } from './../../actions/ledger/ledger.actions';
@@ -62,7 +61,6 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     @ViewChild('quickAccountComponent', {static: true}) public quickAccountComponent: ElementViewContainerRef;
     @ViewChild('quickAccountModal', {static: true}) public quickAccountModal: ModalDirective;
     @ViewChild('chequeEntryModal', {static: true}) public chequeEntryModal: ModalDirective;
-    @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
     @ViewChild('particular', {static: true}) public accountField: any;
     @ViewChild('dateField', {static: true}) public dateField: ElementRef;
     @ViewChild('narrationBox', {static: true}) public narrationBox: ElementRef;

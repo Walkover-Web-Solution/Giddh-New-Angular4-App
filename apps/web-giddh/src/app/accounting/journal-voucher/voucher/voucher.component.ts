@@ -39,7 +39,6 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-select/option.interface';
-import { VsForDirective } from '../../../theme/ng2-vs-for/ng2-vs-for';
 import { QuickAccountComponent } from '../../../theme/quick-account-component/quickAccount.component';
 import { KeyboardService } from '../../keyboard.service';
 import { KEYS, VOUCHERS } from '../journal-voucher.component';
@@ -81,7 +80,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     @ViewChild('chequeEntryModal', {static: true}) public chequeEntryModal: ModalDirective;
 
-    @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
     @ViewChild('particular', {static: true}) public accountField: any;
     @ViewChild('dateField', {static: true}) public dateField: ElementRef;
     @ViewChild('narrationBox', {static: true}) public narrationBox: ElementRef;
