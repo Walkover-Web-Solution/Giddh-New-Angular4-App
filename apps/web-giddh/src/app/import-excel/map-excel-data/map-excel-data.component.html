@@ -12,19 +12,19 @@
                 </div>
 
                 <div class="row mt-2 d-flex">
-                    <div class="col-xs-6">
+                    <div class="col-xs-6 col-sm-6">
                         <small class="text-light-2">Imported File Fields</small>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-xs-6 col-sm-6">
                         <small class="text-light-2">Giddh Fields</small>
                     </div>
                 </div>
 
                 <div class="row mt-2 d-flex" *ngFor="let data of dataModel">
-                    <div class="col-xs-6 d-flex" style="align-items:center"><label>{{data.field.columnHeader}}</label>
+                    <div class="col-xs-6 col-sm-6 d-flex" style="align-items:center"><label>{{data.field.columnHeader}}</label>
                     </div>
 
-                    <div class="col-xs-6">
+                    <div class="col-xs-6 col-sm-6">
 
                         <sh-select [options]="data.options" class="pull-left mrR1" [placeholder]="'Select Field'"
                             [(ngModel)]="data.selected" (selected)="columnSelected($event,data)"
@@ -65,9 +65,9 @@
 
         <div class="row mt-2 d-flex" *ngFor="let manField of mandatoryHeadersModel">
 
-            <div class="col-xs-8"><label class="font-12px">{{ manField.field | titlecase}}</label></div>
+            <div class="col-xs-8 col-sm-8"><label class="font-12px">{{ manField.field | titlecase}}</label></div>
 
-            <div class="col-xs-4">
+            <div class="col-xs-4 col-sm-4">
                 <img src="{{imgPath}}checked.png" *ngIf="manField.selected" width="20" height="20" />
                 <img src="{{imgPath}}unchecked.png" *ngIf="!manField.selected" width="20" height="20" />
             </div>
@@ -96,9 +96,9 @@
 
             <div class="row d-flex inner-row" *ngFor="let g of grp">
 
-                <div class="col-xs-8"><label class="font-12px">{{ g.field | titlecase}}</label></div>
+                <div class="col-xs-8 col-sm-8"><label class="font-12px">{{ g.field | titlecase}}</label></div>
 
-                <div class="col-xs-4">
+                <div class="col-xs-4 col-sm-4">
                     <img src="{{imgPath}}checked.png" *ngIf="g.selected" width="20" height="20" />
                     <img src="{{imgPath}}unchecked.png" *ngIf="!g.selected" width="20" height="20" />
                 </div>

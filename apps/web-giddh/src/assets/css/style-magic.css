@@ -5223,7 +5223,7 @@ perfect-scrollbar.ps-show-active
 body.fixed {
     overflow-y: hidden;
 }
-#blankLedgerContainer tbody tr:empty {
+#blank-ledger-container tbody tr:empty {
     display: none;
 }
 #getGroupModal {

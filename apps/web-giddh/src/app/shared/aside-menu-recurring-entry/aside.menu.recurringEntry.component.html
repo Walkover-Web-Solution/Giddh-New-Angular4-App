@@ -6,15 +6,15 @@
 	<div class="aside-body">
         <div class="aside-pane-form">
 		<form [formGroup]="form">
-			<div class="row pdT2">
-				<div class="col-xs-4 form-group">
+			<div class="row">
+				<div class="col-xs-4 col-sm-4 form-group">
 					<label class="mrB1">Start Date<span class="text-danger">*</span></label>
 					<input name="dateRange" formControlName="nextCronDate" type="text" autocomplete="off"
 						class="form-control" bsDatepicker [minDate]="today"
 						[bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
 				</div>
 
-				<div class="col-xs-4 form-group" *ngIf="!IsNotExpirable">
+				<div class="col-xs-4 col-sm-4 form-group" *ngIf="!IsNotExpirable">
 					<label class="mrB1">End Date<span class="text-danger">*</span></label>
 					<input name="dateRange" formControlName="cronEndDate" type="text" autocomplete="off"
 						[minDate]="maxEndDate" class="form-control" bsDatepicker

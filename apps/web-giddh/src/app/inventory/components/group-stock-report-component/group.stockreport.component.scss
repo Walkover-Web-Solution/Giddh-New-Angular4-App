@@ -313,3 +313,8 @@ button.btn.btn-filter {
 .group-not-found {
     text-transform: none;
 }
+.input-group-addon{
+    border: 1px solid $gainsboro;
+    border-left: 0;
+    background-color: $whisper-light;
+}

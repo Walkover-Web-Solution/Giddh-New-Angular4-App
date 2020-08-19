@@ -161,15 +161,15 @@
 
 /* voucher type DDL */
 .c-3 {
-    color: #fff;
+    color: $white;
 }
 .btn-group-voucher-type {
     width: 100%;
-    color: #1c1c1c;
+    color: $nero !important;
     button {
         text-align: left;
         width: 100%;
-        color: #1c1c1c;
+        color: $nero;
         &:focus,
         &:hover {
             text-decoration: none;

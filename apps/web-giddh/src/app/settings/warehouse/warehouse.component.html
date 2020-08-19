@@ -14,8 +14,8 @@
                 </button>
             </div>
         </div>
-        <div class="row">
-                <div *ngFor="let warehouse of warehouses; index as warehouseIndex" class="col-md-4 col-sm-6">
+        <div class="row warehouse-box">
+                <div *ngFor="let warehouse of warehouses; index as warehouseIndex" class="col-lg-4 col-md-6 col-sm-12">
                     <div class="warehouse-card">
                         <div class="d-flex">
                             <h3>{{ warehouse.name }}</h3>
@@ -74,7 +74,7 @@
 <!-- Warehouse on boarding modal (Step 1) -->
 <div bsModal #warehouseOnBoardingModal="bs-modal" [config]="{ ignoreBackdropClick: 'true', keyboard: 'true'}"
     tabindex="-1" class="modal fade openPoup" role="dialog" (onHidden)="onBoardingModalDismiss($event)">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <ng-template element-view-container-ref #onBoardingContainer="elementviewcontainerref">
             </ng-template>

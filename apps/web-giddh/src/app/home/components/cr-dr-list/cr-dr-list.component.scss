@@ -32,6 +32,12 @@ table.basic td {
     font-size: 16px;
     color: #484848;
 }
+.table thead th{
+    vertical-align: bottom;
+    border-bottom: 1px solid #dee2e6;
+    border-top: none;
+    padding-left: 0;
+}
 .credtors-table tr:last-child td {
     border-bottom: none !important;
 }

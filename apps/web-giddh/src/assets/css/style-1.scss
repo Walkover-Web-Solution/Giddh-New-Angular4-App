@@ -472,7 +472,7 @@ aside-menu-account .container-fluid {
 }
 
 .pdL1 {
-    padding-left: 10px;
+    padding-left: 10px !important;
 }
 
 .pdl1imp {
@@ -480,19 +480,19 @@ aside-menu-account .container-fluid {
 }
 
 .pdR1 {
-    padding-right: 10px;
+    padding-right: 10px !important;
 }
 
 .pdB2 {
-    padding-bottom: 20px;
+    padding-bottom: 20px !important;
 }
 
 .pdL2 {
-    padding-left: 20px;
+    padding-left: 20px !important;
 }
 
 .pdR2 {
-    padding-right: 20px;
+    padding-right: 20px !important;
 }
 
 .pdB3 {
@@ -576,11 +576,11 @@ aside-menu-account .container-fluid {
 }
 
 .mrT1 {
-    margin-top: 10px;
+    margin-top: 10px !important;
 }
 
 .mrB1 {
-    margin-bottom: 10px;
+    margin-bottom: 10px !important;
 }
 
 .mrB15 {
@@ -664,7 +664,7 @@ aside-menu-account .container-fluid {
 }
 
 .bdrB {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid $gainsboro !important;
 }
 
 .bdrL {
@@ -1356,6 +1356,7 @@ li:last-child .angular-ui-tree-handle {
 
 .table .table {
     margin-bottom: 0;
+    background-color:transparent;
 }
 
 .ledgerTable.table .nopad {
@@ -1522,7 +1523,6 @@ li:last-child .angular-ui-tree-handle {
 .max500 {
     max-width: 500px;
 }
-
 /* styles for trial-balance */
 
 .page-title {
@@ -2941,6 +2941,7 @@ ul.pills li {
     cursor: pointer;
     background-color: rgb(244, 245, 248);
     color: #333;
+    display: inline-block;
     border: 1px solid #ddd;
 }
 
@@ -4817,6 +4818,25 @@ border-bottom: 1px solid #e0e0e0;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
 }
 
+.dropdown-menu {
+    position: absolute;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
 /*invoice pages global styles  */
 
 /*full width modal  */
@@ -4948,6 +4968,8 @@ border-bottom: 1px solid #e0e0e0;
 .panel-heading {
     color: rgba(0, 0, 0, 0.8) !important;
     text-transform: capitalize;
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent
 }
 
 strong {
@@ -5164,7 +5186,7 @@ perfect-scrollbar.ps-show-active
 body.fixed {
     overflow-y: hidden;
 }
-#blankLedgerContainer tbody tr:empty {
+#blank-ledger-container tbody tr:empty {
     display: none;
 }
 #getGroupModal {

@@ -34,7 +34,7 @@ span.month-dropdown {
 .dashboard-filter {
     display: inline-flex;
     color: $dark-gray;
-    align-items: flex-end;
+    align-items: center;
 
 }
 
@@ -63,11 +63,35 @@ span.icon-rupees {
     border-radius: 30px;
     border: 1px solid $gainsboro;
 }
+@media (max-width: 1300px) and (min-width:769px){
+    .panel-heading{
+        align-items: baseline;
+        flex-direction: column;
+        .dashboard-filter{
+            flex-direction: row-reverse;
+            margin-top: 5px;
+             i{
+                margin-left: 15px;
+            }
+        }
+    }
+}
 @media(max-width:480px){
     .dashboard-filter{
         display: flex;
         float: none !important;
         margin-top: 10px;
+    }
+    .panel-heading{
+        align-items: baseline;
+        flex-direction: column;
+        .dashboard-filter{
+            flex-direction: row-reverse;
+            margin-top: 5px;
+             i{
+                margin-left: 15px;
+            }
+        }
     }
 }
 @media(max-width:360px){

@@ -17,6 +17,9 @@
 
 .btn-link {
     padding-top: 0 !important;
+    &:hover{
+        text-decoration: none;
+    }
 }
 
 .stock-grp-list .active a,
@@ -72,4 +75,10 @@ stock-list ::ng-deep.in-list a div {
             }
         }
     }
+}
+.inventory-group-name{
+    float: left;
+    width: 90%;
+    white-space: normal;
+    word-break: break-word;
 }

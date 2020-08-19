@@ -41,10 +41,10 @@
                     <h3 class="primary_clr ellp">{{template.name}}</h3>
 
                     <span *ngIf="template.isDefault" class="badge btn-pink mrT2"><i
-                            class="glyphicon glyphicon-star"></i> Default
+                            class="icon-favorite-selected"></i> Default
                         Template</span>
                     <span *ngIf="!template.isDefault" class="badge btn-success mrT2 cp"
-                        (click)="onSetTemplateAsDefault(template,'invoice')"><i class="glyphicon glyphicon-star"></i>
+                        (click)="onSetTemplateAsDefault(template,'invoice')"><i class="icon-favorite-selected"></i>
                         Set as
                         Default</span>
                 </div>
@@ -52,15 +52,15 @@
                 <div class="template_action">
                     <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
                     <button class="btn btn-default" (click)="onPreview(template)">
-                        <i class="glyphicon glyphicon-eye-open" tooltip="Preview" aria-hidden="true"></i>
+                        <i class="icon-eye" tooltip="Preview" aria-hidden="true"></i>
                     </button>
                     <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
                     <button class="btn btn-default" (click)="onUpdateTemplate(template)">
-                        <i class="fa fa-pencil" tooltip="Edit template" aria-hidden="true"></i>
+                        <i class="icon-edit-pencil" tooltip="Edit template" aria-hidden="true"></i>
                     </button>
                     <button [disabled]="template.isDefault" class="btn btn-default"
                         (click)="onDeleteTemplate(template)">
-                        <i class="glyphicon glyphicon-trash" tooltip="Delete" aria-hidden="true"></i>
+                        <i class="icon-trash" tooltip="Delete" aria-hidden="true"></i>
                     </button>
 
                     <div class="template_meta">
@@ -77,25 +77,25 @@
                         <h3 class="primary_clr ellp">{{template.name}}</h3>
 
                         <span *ngIf="template.isDefaultForVoucher" class="badge btn-pink mrT2"><i
-                                class="glyphicon glyphicon-star"></i> Default Template</span>
+                                class="icon-favorite-selected"></i> Default Template</span>
                         <span *ngIf="!template.isDefaultForVoucher" class="badge btn-success mrT2 cp"
                             (click)="onSetTemplateAsDefault(template,'voucher')"><i
-                                class="glyphicon glyphicon-star"></i> Set as
+                                class="icon-favorite-selected"></i> Set as
                             Default</span>
                     </div>
 
                     <div class="template_action">
                         <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
                         <button class="btn btn-default" (click)="onPreview(template)">
-                            <i class="glyphicon glyphicon-eye-open" tooltip="Preview" aria-hidden="true"></i>
+                            <i class="icon-eye" tooltip="Preview" aria-hidden="true"></i>
                         </button>
                         <!-- [hidden]="template.uniqueName === 'gst_template_b' || template.uniqueName === 'gst_template_c' || template.uniqueName === 'gst_template_d' || template.uniqueName === 'gst_template_e'" -->
                         <button class="btn btn-default" (click)="onUpdateTemplate(template)">
-                            <i class="fa fa-pencil" tooltip="Edit template" aria-hidden="true"></i>
+                            <i class="icon-edit-pencil" tooltip="Edit template" aria-hidden="true"></i>
                         </button>
                         <button [disabled]="template.isDefaultForVoucher" class="btn btn-default"
                             (click)="onDeleteTemplate(template)">
-                            <i class="glyphicon glyphicon-trash" tooltip="Delete" aria-hidden="true"></i>
+                            <i class="icon-trash" tooltip="Delete" aria-hidden="true"></i>
                         </button>
 
                         <div class="template_meta">
@@ -111,7 +111,7 @@
 </div>
 <!-- Template modal -->
 <div bsModal #templateModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
-    <div class="modal-dialog" style="width: 100%;margin:0;">
+    <div class="modal-dialog full-modal">
         <!-- modal-liq90 class is removed for now-->
         <div class="modal-content" style="border-radius:0px;">
             <invoice-template-modal [templateSections]="currentTemplateSections" [templateId]="templateId"
@@ -156,7 +156,7 @@
 <!--invoice-template-preview-modal -->
 <div bsModal #invoiceTemplatePreviewModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
     tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <!-- modal-liq90 class is removed for now-->
         <div class="modal-content">
             <invoice-template-preview-modal (closeModelEvent)="onClosePreviewModal()"></invoice-template-preview-modal>

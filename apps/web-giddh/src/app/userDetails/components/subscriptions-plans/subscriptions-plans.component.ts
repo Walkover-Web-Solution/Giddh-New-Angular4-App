@@ -150,7 +150,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionsPlansComponent
      */
     public allFeaturesModal(AllFeatures: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(AllFeatures, { class: 'modal-lg all-features-modal' });
+        this.modalRef = this.modalService.show(AllFeatures, { class: 'modal-xl all-features-modal' });
     }
 
     /**

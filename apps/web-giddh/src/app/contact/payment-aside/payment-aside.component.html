@@ -115,7 +115,7 @@
                                 </div>
                             </div>
                             <div class="amount-remark-section">
-                                <div class="d-flex">
+                                <div class="d-flex flex-column flex-md-row">
                                     <div class="form-group pr-15">
                                         <label>Amount<span class="text-danger">*</span></label>
                                         <input class="form-control" name="closingBalanceAmount{{entryIdx}}" maxLength="12" decimalDigitsDirective (blur)="getTotalAmount();preventZero(item.closingBalanceAmount, entryIdx)" [mask]="inputMaskFormat" [(ngModel)]="item.closingBalanceAmount" type="text"

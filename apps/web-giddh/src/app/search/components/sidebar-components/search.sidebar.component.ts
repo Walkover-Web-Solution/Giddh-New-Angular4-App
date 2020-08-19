@@ -14,7 +14,8 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
 	selector: 'search-sidebar',  // <home></home>
-	templateUrl: './search.sidebar.component.html'
+    templateUrl: './search.sidebar.component.html',
+    styleUrls: [`./search.sidebar.component.scss`],
 })
 export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -79,7 +80,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 	public ngOnInit() {
 		this.fromDate = moment().add(-1, 'month').format('DD-MM-YYYY');
 		this.toDate = moment().format('DD-MM-YYYY');
-	
+
 		// Get source for Group Name Input selection
 		this.groupsList$.subscribe(data => {
 			if (data && data.length) {
@@ -91,7 +92,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 				this.dataSource = groups;
 			}
         });
-        
+
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);

@@ -52,6 +52,7 @@
     padding: 6px;
     height: 100%;
     background: $white;
+    font-size:14px;
 }
 .tooltip-box {
     position: absolute;
@@ -60,6 +61,10 @@
     .icon-info {
         color: $gray;
     }
+}
+
+.form-control{
+    width:100%;
 }
 @media(max-width:1359px) {
     .xs-pl-15 {
@@ -125,5 +130,17 @@
             margin-right: 0;
             margin-left: 15px;
         }
+    }
+}
+
+
+@media (max-width:1359px) and (min-width:992px){
+    .payment-col{
+        flex: 0 0 33.333333% !important;
+        max-width:33.333333% !important; 
+    }
+    .payment-col1{
+        flex: 0 0 25% !important;
+        max-width:25% !important; 
     }
 }

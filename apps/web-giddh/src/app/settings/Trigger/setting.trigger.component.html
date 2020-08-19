@@ -52,14 +52,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class=col-xs-12>
+                <div class="col-sm-12">
                     <button type="submit" class="btn btn-success">Add</button>
                     <button type="button" (click)="onCancel()" class="btn btn-cancel">Cancel</button>
                 </div>
             </div>
         </form>
     </div>
-    <div class="col-xs-12 pdT2">
+    <div class="col-sm-12 pdT2">
         <div class="row">
             <h1 class="section-head pdT1">Added Triggers</h1>
             <div class="table-responsive">
@@ -122,7 +122,7 @@
                             </td>
 
                             <td class="text-center ico-btn" data-title="Action">
-                                <button *ngIf="!triggerToEdit[i]" type="button" class="btn btn-xs" (click)="triggerToEdit = [];triggerToEdit[i] = true"><i class="fa fa-pencil"
+                                <button *ngIf="!triggerToEdit[i]" type="button" class="btn btn-xs" (click)="triggerToEdit = [];triggerToEdit[i] = true"><i class="icon-edit-pencil"
                                         aria-hidden="true" tooltip="Edit"></i></button>
                                 <button *ngIf="!triggerToEdit[i]" type="button" class="btn btn-xs" (click)="deleteTax(trigger);"><i class="fa fa-trash" aria-hidden="true"
                                         tooltip="Delete"></i></button>

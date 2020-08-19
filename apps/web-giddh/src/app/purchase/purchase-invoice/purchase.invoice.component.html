@@ -82,7 +82,7 @@
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default"
                                     (click)="showGSTR1DatePicker = !showGSTR1DatePicker">
-                                    <i class="glyphicon glyphicon-calendar"></i>
+                                    <i class="icon-calender"></i>
                                 </button>
                             </span>
                         </div>
@@ -114,7 +114,7 @@
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-default"
                                     (click)="showGSTR1DatePicker = !showGSTR1DatePicker">
-                                <i class="glyphicon glyphicon-calendar"></i>
+                                <i class="icon-calender"></i>
                             </button>
                         </span>
                     </div> -->
@@ -272,7 +272,7 @@
                     <br />
                     <div class="row">
                         <div class="input-group col-xs-12 pull-right"> <span class="input-group-btn"><i
-                                    class="glyphicon glyphicon-search"></i></span>
+                                    class="icon-search2"></i></span>
                             <input type="text" (keyup)="filterPurchaseInvoice(searchBox.value)" #searchBox
                                 class="form-control" placeholder="Search">
                         </div>
@@ -388,7 +388,7 @@
                             [disabled]="!editMode || (selectedRowIndex != i && editMode)" /></td>
                     <td class="text-center ico-btn"><button class="btn btn-xs" type="button" [disabled]=""
                             *ngIf="!editMode || (selectedRowIndex != i && editMode)" (click)="editRow(i)"> <i
-                                aria-hidden="true" class="fa fa-pencil"></i> </button>
+                                aria-hidden="true" class="icon-edit-pencil"></i> </button>
                         <button class="btn btn-xs" type="button" (click)="updateEntry(invoice)"
                             *ngIf="selectedRowIndex == i && editMode"> <i aria-hidden="true" class="fa fa-check"></i>
                         </button></td>

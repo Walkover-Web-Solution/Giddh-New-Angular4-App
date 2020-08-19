@@ -1,16 +1,15 @@
 .clear-filter-close {
-    display: flex;
-    flex: 1;
     justify-content: flex-end;
     align-items: center;
 }
 .clear-filter-close a {
     color: #fff;
     font-size: 14px;
+    line-height: 2.2;
 }
 .modal-header {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 .modal-header .close {
     color: #fff;
@@ -71,5 +70,5 @@
         .mb-1{
             margin-bottom: 0;
         }
-    }  
+    }
 }

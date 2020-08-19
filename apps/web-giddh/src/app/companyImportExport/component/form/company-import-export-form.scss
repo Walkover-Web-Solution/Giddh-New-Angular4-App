@@ -1,0 +1,8 @@
+.export-data-form{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+        .file-type-label, .select-file-lable{
+            min-width: 250px;
+        }
+}

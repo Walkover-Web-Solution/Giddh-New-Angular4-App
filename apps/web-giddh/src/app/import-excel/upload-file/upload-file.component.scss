@@ -5,8 +5,11 @@
     position: relative;
     align-items: center;
     justify-content: center;
+    margin: 20px auto 0 !important;
 }
-
+.center-block{
+    margin: 0 auto;
+}
 .max500 {
     max-width: 500px;
 }

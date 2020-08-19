@@ -204,6 +204,7 @@ svg.icon.icon-xxlg {
 
 .tax-engine .gstr3b-header .sel-tab li {
     list-style: none;
+    display:inline-block;
 }
 
 .tax-engine .gstr3b-page-header {
@@ -502,6 +503,26 @@ dropdown-menu-right {
     background: $chetwode-blue;
 }
 
+.file-your-return{
+    font-size:18px;
+}
+
+.authenticate-btn{
+    font-size:14px;
+}
+
 ul#dropdown-menu {
     top: 30px !important;
+}
+
+
+.list-inline {
+    padding-left: 0;
+    margin-left: -5px;
+    list-style: none;
+    >li {
+        display: inline-block;
+        padding-right: 5px;
+        padding-left: 5px;
+    }
 }

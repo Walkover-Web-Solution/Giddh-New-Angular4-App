@@ -1,7 +1,9 @@
 <div class="container-fluid clearfix" *ngIf="allRoles.length > 0">
     <a href="javascript:void(0)" *ngIf="showBackButton" class="btn btn-pink pull-right mt-1" [routerLink]="['/pages/settings/permission']">Back</a>
-    <div class="col-xs-12 mrT2 pd0 role clearfix" *ngFor="let role of allRoles">
-        <div class="col-xs-3 pd0 rolehead cp">
+    <br>
+    <div class="col-sm-12 mrT2 pd0 role clearfix" *ngFor="let role of allRoles">
+        <div class="row mr-0 ml-0">
+        <div class="col-3 pd0 rolehead cp">
             <span class="vcenter">
                 <h1>{{role.name}}</h1>
                 <div class="text-center mrT2 onHover">
@@ -14,14 +16,15 @@
                 </div>
             </span>
         </div>
-        <div class="col-xs-9">
+        <div class="col-9">
             <ul>
                 <li *ngFor="let item of role.scopes">{{ item.name | capitalize }}</li>
             </ul>
         </div>
     </div>
+    </div>
 
-    <div class="col-xs-12 mrT2 mrB2 role text-center clearfix pd4 new_box">
+    <div class="col-sm-12 mrT2 mrB2 role text-center clearfix pd4 new_box">
         <h1 class="inline-block cursor-pointer" (click)="openPermissionModal()">+ Add New Role</h1>
     </div>
 

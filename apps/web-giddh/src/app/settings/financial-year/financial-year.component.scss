@@ -2,8 +2,11 @@
     white-space: normal;
     word-break: break-word;
 }
+.financial-year-field{
+    flex-direction:column;
+}
 @media (max-width: 767px) {
-    .financialYearField .btn {
+    .financial-year-field .btn {
         margin-top: 10px;
     }
 }

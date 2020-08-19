@@ -3,7 +3,7 @@
 
         <div class="mt-2 mb-2 input-grp-dateRangePicker d-flex">
             <!-- Invoice filter section -->
-            <div class="mrR1 d-flex" style="flex: 1 1 auto;">
+            <div class="mrR1 d-flex">
                 <div class="input-group">
                     <span class="input-wrapper">
                         <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
@@ -175,7 +175,8 @@
     </div>
 
     <div class=" mt-5 invoice-footer invoice-footer row">
-        <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12 total-due-sale-wrap">
+        <div class="col-lg-10 col-md-8 col-sm-12 col-xs-12 total-due-sale-wrap">
+            <div class="row">
             <div class="col-md-3 col-sm-3 total-due-sale">
                 <h3>Advance Receipts</h3>
                 <h1>{{receiptsSummaryData?.advance?.symbol}}{{receiptsSummaryData?.advance?.amount | giddhCurrency}}/-
@@ -200,12 +201,13 @@
             </div>
         </div>
     </div>
+    </div>
 </div>
 
 <!-- Adjust Payment modal start -->
 <div bsModal #receiptAdvanceSearchModalContainer="bs-modal" [config]="{ ignoreBackdropClick: 'true', keyboard: 'true'}"
     tabindex="-1" class="modal fade openPoup" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <ng-template element-view-container-ref #receiptAdvanceSearchFilterModal="elementviewcontainerref">
             </ng-template>

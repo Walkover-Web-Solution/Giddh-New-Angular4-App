@@ -1,12 +1,12 @@
 <section id="manufacture" class="clearfix">
     <!-- page Title -->
-    <div class="top-bar col-xs-12 clearfix bdrB">
+    <div class="top-bar col-xs-12 col-sm-12 clearfix bdrB">
         <h1 class="section-title d-inline-block"><strong>Mfg. Journal Register</strong></h1>
         <button class="btn isActive pull-right mr-0" (click)="goToCreateNewPage()" type="button">Create
             Manufacture</button>
     </div>
     <!-- form -->
-    <div class="col-xs-12">
+    <div class="col-xs-12 col-sm-12">
         <div class="mfStockSearchRequestForm clearfix">
             <form #mfStockSearchRequestForm="ngForm" class="col-xs-12 pl-0 pr-0 mt-2 mb-05 manufacturing-form" (submit)="getReports()"
                 autocomplete="off">
@@ -26,7 +26,7 @@
                                 required>
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default" (click)="dp.toggle()"><i
-                                        class="glyphicon glyphicon-calendar"></i></button>
+                                        class="icon-calender"></i></button>
                             </span>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                         <input type="text" decimalDigitsDirective [DecimalPlaces]="4" class="form-control"
                             placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
                     </div>
-                    <div class="form-group pull-left ml-15">
+                    <div class="form-group col-md-1">
                         <label class="d-block d-none-sm">&nbsp;</label>
                         <!-- [disabled]="mfStockSearchRequestForm.invalid" -->
                         <button class="btn btn-success" type="submit">Go</button>
@@ -61,27 +61,44 @@
     <section *ngIf="(isReportLoading$ | async)" class="clearfix mart100 col-xs-12">
         <p class="lead alC mrT4">Loading...</p>
     </section>
-    <div class="no-data mart100 col-xs-12"
+    <div class="no-data mart100 col-xs-12 col-sm-12"
         *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length === 0">
         <h1>No entries found within given criteria.</h1>
         <h1>Do search with some other dates</h1>
     </div>
     <section *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length > 0">
         <div class="" id="mfReportTbl">
-            <div class="col-xs-12">
+            <div class="col-xs-12 col-sm-12">
                 <table class="table basic table-bordered">
                     <thead>
                         <tr>
-                            <th width="15%">Date</th>
-                            <th width="10%">Vch. No.</th>
-                            <th width="15%">Final Product</th>
-                            <th width="24%" class="alC">Raw Products</th>
-                            <th width="12%" class="alC">Product Inwards</th>
-                            <th width="24%" class="alC">Quantity Outwards</th>
+                            <th>Date</th>
+                            <th>Vch. No.</th>
+                            <th>Final Product</th>
+                            <th>Raw Products</th>
+                            <th>Product Inwards</th>
+                            <th>Quantity Outwards</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)" class="cp">
+                            <td>{{item.date}}</td>
+                            <td>{{item.voucherNumber}}</td>
+                            <td>{{item.stockName}}</td>
+                            <td>{{item.manufacturingQuantity}} {{item.manufacturingUnit}}</td>
+                            <td>
+                                <span *ngFor="let row of item.linkedStocks">
+                                    {{row.stockName}}
+                                </span>
+                            </td>
+                            <td>
+                                <span *ngFor="let row of item.linkedStocks">
+                                    {{row.manufacturingQuantity}} {{row.manufacturingUnit}}
+                                </span>
+                            </td>
+                        </tr>
+
+                        <!-- <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)" class="cp">
                             <td>{{item.date}}</td>
                             <td>{{item.voucherNumber}}</td>
                             <td>{{item.stockName}}</td>
@@ -102,7 +119,7 @@
                                     </tbody>
                                 </table>
                             </td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
                 <div *ngIf="reportData?.totalPages > 1" class="paginationWrapper">

@@ -26,6 +26,7 @@
 .aging-table {
     max-width: 1170px;
     width: 100%;
+    background: transparent;
 }
 .paginationWrapper {
     width: 100%;
@@ -62,14 +63,15 @@
     background-color: #fff !important;
     border-color: $midnight-express !important;
 }
-span.inputAddon {
+span.input-addon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
     background-color: $chetwode-blue;
     color: #fff;
-    font-size: 20px;
+    font-size: 18px;
     border-radius: 2px;
+    top: 0;
 }
 tr.aging-table-top {
     border-bottom: 1px solid $gainsboro;
@@ -110,11 +112,11 @@ tr.aging-table-top td {
     }
     .customer-right-wrap {
         padding-bottom: 10px;
-        padding: 0 15px 10px;
+        padding: 0 0 10px;
     }
 }
 @media (max-width: 767px) {
-    span.inputAddon {
+    span.input-addon {
         top: 0;
     }
     .result-total {
@@ -136,11 +138,9 @@ tr.aging-table-top td {
         span{
             width: 36px;
             height: 36px;
-            background-color: $white;
-            border: 1px solid $gainsboro;
-            display: inline-flex;
             justify-content: center;
             align-items: center;
+            display: flex;
             i{
                 color: $gray;
             }
@@ -226,7 +226,7 @@ tr.aging-table-top td {
         float: none;
         width: 100%;
     }
-    .form-inline{
+    .aging-form-inline{
         .btn-group{
             width: 100%;
             .btn{

@@ -349,7 +349,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     public openModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(
             template,
-            Object.assign({}, { class: 'gray modal-lg sales-invoice-modal' })
+            Object.assign({}, { class: 'gray modal-xl sales-invoice-modal' })
         );
     }
 

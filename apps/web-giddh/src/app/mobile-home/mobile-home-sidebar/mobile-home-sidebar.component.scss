@@ -34,6 +34,13 @@
             p.company-name{
                 white-space: normal;
                 word-break: break-word;
+                font-size:14px;
+            }
+            p{
+                line-height:18px;
+            }
+            small{
+                font-size:12px;
             }
         }
     }
@@ -47,6 +54,7 @@
                     color: $nero;
                     font-family: 'opensans-semibold';
                     display: flex;
+                    font-size: 14px;
                     &:hover{
                         background-color: $lavender;
                     }

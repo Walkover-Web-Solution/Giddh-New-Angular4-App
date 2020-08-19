@@ -262,7 +262,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
 
     // // advance modal
     // adjustModal(adjustInvoiceModal: TemplateRef<any>) {
-    //     this.modalRef = this.modalService.show(adjustInvoiceModal, { class: 'modal-lg' });
+    //     this.modalRef = this.modalService.show(adjustInvoiceModal, { class: 'modal-xl' });
     // }
 
     // // refuns amount modal

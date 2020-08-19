@@ -4,66 +4,64 @@
         <div class="container-fluid">
 
             <div class="top-bar clearfix">
-                <div class="form-inline">
-                    <div>
-                        <div class="dis pull-left mrR1">
+                <div class="customer-form-inline">
+                    <div class="dis pull-left mrR1">
 
-                            <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'right'">
-                                <i dropdownToggle class="icon-options pd cp fs20"></i>
+                        <div *ngIf="activeTab !== 'aging'" class="btn-group" #filterDropDownList="bs-dropdown" dropdown [autoClose]="false" (clickOutside)="hideListItems()" [tooltip]="'Enable / Disable Column'" [placement]="'bottom'">
+                            <i dropdownToggle class="icon-options pd cp fs20"></i>
 
-                                <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
-                                    <li role="menuitem">
-                                        <a class="dropdown-item">
-                                            <input type="checkbox" name="selectAll" [(ngModel)]="showFieldFilter.selectAll" (ngModelChange)="selectAllColumns($event)"> Select All
-                                        </a>
-                                    </li>
+                            <ul *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu" [style.width.px]="'200'">
+                                <li role="menuitem">
+                                    <a class="dropdown-item">
+                                        <input type="checkbox" name="selectAll" [(ngModel)]="showFieldFilter.selectAll" (ngModelChange)="selectAllColumns($event)"> Select All
+                                    </a>
+                                </li>
 
-                                    <li role="menuitem">
-                                        <a class="dropdown-item">
-                                            <input type="checkbox" name="field_filter.parentGroup" (ngModelChange)="columnFilter($event, 'parentGroup')" [(ngModel)]="showFieldFilter.parentGroup" /> Parent Group
-                                        </a>
-                                    </li>
+                                <li role="menuitem">
+                                    <a class="dropdown-item">
+                                        <input type="checkbox" name="field_filter.parentGroup" (ngModelChange)="columnFilter($event, 'parentGroup')" [(ngModel)]="showFieldFilter.parentGroup" /> Parent Group
+                                    </a>
+                                </li>
 
-                                    <li role="menuitem">
-                                        <a class="dropdown-item">
-                                            <input type="checkbox" name="field_filter.openingBalance" (ngModelChange)="columnFilter($event, 'openingBalance')" [(ngModel)]="showFieldFilter.openingBalance" /> Opening
-                                        </a>
-                                    </li>
+                                <li role="menuitem">
+                                    <a class="dropdown-item">
+                                        <input type="checkbox" name="field_filter.openingBalance" (ngModelChange)="columnFilter($event, 'openingBalance')" [(ngModel)]="showFieldFilter.openingBalance" /> Opening
+                                    </a>
+                                </li>
 
-                                    <li role="menuitem">
-                                        <a class="dropdown-item">
-                                            <input type="checkbox" name="field_filter.mobile" (ngModelChange)="columnFilter($event, 'mobile')" [(ngModel)]="showFieldFilter.mobile" /> Mobile No.</a>
-                                    </li>
+                                <li role="menuitem">
+                                    <a class="dropdown-item">
+                                        <input type="checkbox" name="field_filter.mobile" (ngModelChange)="columnFilter($event, 'mobile')" [(ngModel)]="showFieldFilter.mobile" /> Mobile No.</a>
+                                </li>
 
-                                    <li role="menuitem">
-                                        <a class="dropdown-item">
-                                            <input type="checkbox" name="field_filter.email" (ngModelChange)="columnFilter($event, 'email')" [(ngModel)]="showFieldFilter.email" /> Email Id</a>
-                                    </li>
+                                <li role="menuitem">
+                                    <a class="dropdown-item">
+                                        <input type="checkbox" name="field_filter.email" (ngModelChange)="columnFilter($event, 'email')" [(ngModel)]="showFieldFilter.email" /> Email Id</a>
+                                </li>
 
-                                    <li role="menuitem">
-                                        <a class="dropdown-item">
-                                            <input type="checkbox" name="field_filter.state" (ngModelChange)="columnFilter($event, 'state')" [(ngModel)]="showFieldFilter.state" /> State</a>
-                                    </li>
+                                <li role="menuitem">
+                                    <a class="dropdown-item">
+                                        <input type="checkbox" name="field_filter.state" (ngModelChange)="columnFilter($event, 'state')" [(ngModel)]="showFieldFilter.state" /> State</a>
+                                </li>
 
-                                    <li *ngIf="shouldShowTaxFilter" role="menuitem">
-                                        <a class="dropdown-item">
-                                            <input type="checkbox" name="field_filter.gstin" (ngModelChange)="columnFilter($event, 'gstin')" [(ngModel)]="showFieldFilter.gstin" /> Tax Number</a>
-                                    </li>
-                                    <li role="menuitem">
-                                        <a class="dropdown-item">
-                                            <input type="checkbox" name="field_filter.comment" (ngModelChange)="columnFilter($event, 'comment')" [(ngModel)]="showFieldFilter.comment" /> Comment
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                                <li *ngIf="shouldShowTaxFilter" role="menuitem">
+                                    <a class="dropdown-item">
+                                        <input type="checkbox" name="field_filter.gstin" (ngModelChange)="columnFilter($event, 'gstin')" [(ngModel)]="showFieldFilter.gstin" /> Tax Number</a>
+                                </li>
+                                <li role="menuitem">
+                                    <a class="dropdown-item">
+                                        <input type="checkbox" name="field_filter.comment" (ngModelChange)="columnFilter($event, 'comment')" [(ngModel)]="showFieldFilter.comment" /> Comment
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="pull-left header-left">
-                            <div class="form-group max250 searchField" *ngIf="activeTab !== 'aging'">
-                                <input type="text" placeholder="Name/Email/Mobile" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
-                                <span class="inputAddon">
+                    </div>
+                    <div class="pull-left header-left">
+                        <div class="form-group max250 searchField" *ngIf="activeTab !== 'aging'">
+                            <input type="text" placeholder="Name/Email/Mobile" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
+                            <span class="input-addon">
                                 <i class="icon-search"></i>
                             </span>
-                            </div>
 
                         </div>
                     </div>
@@ -758,7 +756,7 @@
                             <button *ngIf="account?.bankPaymentDetails && account?.country?.code==='IN'" class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
                             Pay Now </button>
                             <!-- (click)="openPaymentAside(account)" -->
-                            <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-succes " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
+                            <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-light " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
                             </button>
                         </td>
                     </tr>

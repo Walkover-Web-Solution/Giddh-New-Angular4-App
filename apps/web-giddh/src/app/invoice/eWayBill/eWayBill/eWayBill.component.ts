@@ -307,7 +307,7 @@ export class EWayBillComponent implements OnInit {
     public openModalWithClass(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(
             template,
-            Object.assign({}, { class: 'modal-lg modal-consolidated-details' })
+            Object.assign({}, { class: 'modal-xl modal-consolidated-details' })
         );
     }
     public cancelEwayBill(cancelEway: NgForm) {

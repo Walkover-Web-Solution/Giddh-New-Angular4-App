@@ -10,7 +10,8 @@ import { Observable, ReplaySubject } from 'rxjs';
 
 @Component({
 	selector: 'company-import-export-form-component',
-	templateUrl: 'company-import-export-form.html',
+    templateUrl: 'company-import-export-form.html',
+    styleUrls: [`./company-import-export-form.scss`],
 })
 
 export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
