@@ -259,6 +259,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isAllowedForBetaTesting: boolean = false;
     /* This will hold value if settings sidebar is open through mobile hamburger icon */
     public isMobileSidebar: boolean = false;
+    /** To check all module menu open */
+    public isAllModuleOpen: boolean = false;
+
+    /** update IndexDb flags observable **/
+    public updateIndexDbInProcess$: Observable<boolean>;
+    public updateIndexDbSuccess$: Observable<boolean>;
+    /* This will hold if resolution is less than 768 to consider as mobile screen */
+    public isMobileScreen: boolean = false;
 
     /**
      *
@@ -285,7 +293,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _windowRef: WindowRef,
         private _breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
-        private commonActions: CommonActions
+        private commonActions: CommonActions,
+        private breakPointObservar: BreakpointObserver
     ) {
         this._windowRef.nativeWindow.superformIds = ['Jkvq'];
         /* This will get the date range picker configurations */
@@ -460,6 +469,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
         this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
             if (value === 'logoutCordova') {
                 this.zone.run(() => {
