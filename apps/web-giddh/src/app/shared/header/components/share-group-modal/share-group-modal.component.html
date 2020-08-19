@@ -35,7 +35,7 @@
                                 <div class="user-name-email">
                                     <i class="fa fa-user pdR1"></i>
                                     <span class="user-email">
-                                        <small>Shalinee Rathore</small>
+                                        <small *ngIf=" val.emailId!==val.userName">{{val.userName}}</small>
                                         <small>{{ val.emailId }}</small>
                                     </span>
                                 </div>
