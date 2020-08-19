@@ -1,7 +1,5 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "newProjectRoot": "",
   "projects": {
     "libs": {
       "root": "libs",
@@ -10,7 +8,7 @@
       "prefix": "foo",
       "architect": {
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/custom-webpack:karma",
           "options": {
             "main": "testing/test.libs.ts",
             "tsConfig": "testing/tsconfig.libs.spec.json",
@@ -18,7 +16,7 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-builders/custom-webpack:tslint",
           "options": {
             "tsConfig": [
               "testing/tsconfig.libs.json",
@@ -38,7 +36,7 @@
       "prefix": "foo",
       "architect": {
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/custom-webpack:karma",
           "options": {
             "main": "testing/test.xplat.ts",
             "tsConfig": "testing/tsconfig.xplat.spec.json",
@@ -46,7 +44,7 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-builders/custom-webpack:tslint",
           "options": {
             "tsConfig": [
               "testing/tsconfig.xplat.json",
@@ -65,15 +63,15 @@
       "projectType": "application",
       "prefix": "foo",
       "schematics": {
-        "@nrwl/schematics:component": {
+        "@nrwl/angular:component": {
           "style": "scss"
         }
       },
       "architect": {
         "build": {
-          "builder": "ngx-build-plus:build",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "baseHref": "http://localhost:3000",
+            "allowedCommonJsDependencies": ["lodash", "file-saver", "angular2-text-mask", "ngrx-store-localstorage", "util", "is-cidr", "css-element-queries", "jspdf", "jspdf-autotable", "ng-contenteditable", "webfontloader", "ng2-order-pipe", "jquery", "uuid"],
             "outputPath": "dist/apps/web-giddh",
             "index": "apps/web-giddh/src/index.html",
             "main": "apps/web-giddh/src/main.ts",
@@ -116,19 +114,27 @@
             ],
             "scripts": [
               "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
-              "node_modules/bootstrap-daterangepicker/moment.js",
               "apps/web-giddh/src/assets/js/lodash.min.js",
+              "node_modules/bootstrap-daterangepicker/moment.min.js",
               "node_modules/bootstrap-daterangepicker/daterangepicker.js"
             ],
-            "es5BrowserSupport": true,
-            "extraWebpackConfig": "./webpack.partial.js"
+            "customWebpackConfig": {
+              "path": "apps/web-giddh/webpack.partial.js",
+              "mergeStrategies": {
+                "externals": "replace"
+              }
+            }
           },
           "configurations": {
             "local": {
               "outputPath": "dist/apps/web-giddh-local",
-              "extraWebpackConfig": "./webpack.local.partial.js",
+              "customWebpackConfig": {
+                "path": "apps/web-giddh/webpack.local.partial.js",
+                "mergeStrategies": {
+                  "externals": "replace"
+                }
+              },
               "baseHref": "http://localhost:3000",
-              "baseUrl": "localhost:3000",
               "fileReplacements": [
                 {
                   "replace": "apps/web-giddh/src/index.html",
@@ -158,9 +164,13 @@
             },
             "stage": {
               "outputPath": "dist/apps/web-giddh-stage",
-              "extraWebpackConfig": "./webpack.stage.partial.js",
+              "customWebpackConfig": {
+                "path": "apps/web-giddh/webpack.stage.partial.js",
+                "mergeStrategies": {
+                  "externals": "replace"
+                }
+              },
               "baseHref": "https://stage.giddh.com/",
-              "baseUrl": "stage.giddh.com",
               "fileReplacements": [
                 {
                   "replace": "apps/web-giddh/src/index.html",
@@ -183,9 +193,13 @@
             },
             "prod": {
               "outputPath": "dist/apps/web-giddh-prod",
-              "extraWebpackConfig": "./webpack.prod.partial.js",
+              "customWebpackConfig": {
+                "path": "apps/web-giddh/webpack.prod.partial.js",
+                "mergeStrategies": {
+                  "externals": "replace"
+                }
+              },
               "baseHref": "https://app.giddh.com/",
-              "baseUrl": "app.giddh.com",
               "fileReplacements": [
                 {
                   "replace": "apps/web-giddh/src/index.html",
@@ -215,9 +229,13 @@
             },
             "test": {
               "outputPath": "dist/apps/web-giddh-test",
-              "extraWebpackConfig": "./webpack.test.partial.js",
+              "customWebpackConfig": {
+                "path": "apps/web-giddh/webpack.test.partial.js",
+                "mergeStrategies": {
+                  "externals": "replace"
+                }
+              },
               "baseHref": "https://test.giddh.com/",
-              "baseUrl": "test.giddh.com",
               "fileReplacements": [
                 {
                   "replace": "apps/web-giddh/src/index.html",
@@ -248,16 +266,18 @@
           }
         },
         "serve": {
-          "builder": "ngx-build-plus:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
             "host": "localhost",
             "baseHref": "http://localhost:3000",
             "port": 3000,
-            "baseUrl": "localhost:3000",
             "browserTarget": "web-giddh:build",
-            "extraWebpackConfig": "./webpack.partial.js",
-            "assets": [],
-            "plugin": "./hook.js"
+            "customWebpackConfig": {
+              "path": "apps/web-giddh/webpack.partial.js",
+              "mergeStrategies": {
+                "externals": "replace"
+              }
+            }
           },
           "configurations": {
             "prod": {
@@ -266,7 +286,7 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-builders/custom-webpack:tslint",
           "options": {
             "tsConfig": [
               "apps/web-giddh/tsconfig.app.json",
@@ -278,15 +298,12 @@
           }
         },
         "test": {
-          "builder": "ngx-build-plus:karma",
+          "builder": "@angular-builders/custom-webpack:karma",
           "options": {
             "main": "apps/web-giddh/src/test.ts",
             "tsConfig": "apps/web-giddh/tsconfig.spec.json",
             "karmaConfig": "apps/web-giddh/karma.conf.js",
-            "polyfills": "apps/web-giddh/src/polyfills.ts",
-            "styles": [],
-            "scripts": [],
-            "assets": []
+            "polyfills": "apps/web-giddh/src/polyfills.ts"
           }
         }
       }
@@ -297,7 +314,7 @@
       "prefix": "",
       "architect": {
         "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
+          "builder": "@angular-builders/custom-webpack:protractor",
           "options": {
             "protractorConfig": "apps/web-giddh-e2e/protractor.conf.js",
             "devServerTarget": "web-giddh:serve"
@@ -309,7 +326,7 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-builders/custom-webpack:tslint",
           "options": {
             "tsConfig": "apps/web-giddh-e2e/tsconfig.e2e.json",
             "exclude": [
@@ -331,7 +348,7 @@
       },
       "architect": {
         "build": {
-          "builder": "ngx-build-plus:build",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
             "index": "apps/web-giddh/src/index.html",
             "main": "apps/web-giddh/src/main.electron.ts",
@@ -380,16 +397,20 @@
             "scripts": [
               "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
               "apps/web-giddh/src/assets/jQuery.electron.js",
-              "node_modules/bootstrap-daterangepicker/moment.js",
+              "node_modules/bootstrap-daterangepicker/moment.min.js",
               "apps/web-giddh/src/assets/js/lodash.min.js",
               "node_modules/bootstrap-daterangepicker/daterangepicker.js"
-            ],
-            "es5BrowserSupport": true
+            ]
           },
           "configurations": {
             "local": {
               "outputPath": "dist/apps/web-giddh-local",
-              "extraWebpackConfig": "./webpack.electron.partial.js",
+              "customWebpackConfig": {
+                "path": "apps/web-giddh/webpack.electron.partial.js",
+                "mergeStrategies": {
+                  "externals": "replace"
+                }
+              },
               "fileReplacements": [
                 {
                   "replace": "apps/web-giddh/src/index.html",
@@ -419,8 +440,12 @@
             },
             "stage": {
               "outputPath": "dist/apps/web-giddh-stage",
-              "extraWebpackConfig": "./webpack.stage.partial.js",
-              "baseUrl": "stage.giddh.com",
+              "customWebpackConfig": {
+                "path": "apps/web-giddh/webpack.stage.partial.js",
+                "mergeStrategies": {
+                  "externals": "replace"
+                }
+              },
               "fileReplacements": [
                 {
                   "replace": "apps/web-giddh/src/index.html",
@@ -443,7 +468,12 @@
             },
             "prod": {
               "outputPath": "dist/apps/web-giddh-prod",
-              "extraWebpackConfig": "./webpack.electron.prod.partial.js",
+              "customWebpackConfig": {
+                "path": "apps/web-giddh/webpack.electron.prod.partial.js",
+                "mergeStrategies": {
+                  "externals": "replace"
+                }
+              },
               "fileReplacements": [
                 {
                   "replace": "apps/web-giddh/src/index.html",
@@ -473,8 +503,12 @@
             },
             "test": {
               "outputPath": "dist/apps/web-giddh-test",
-              "extraWebpackConfig": "./webpack.test.partial.js",
-              "baseUrl": "test.giddh.com",
+              "customWebpackConfig": {
+                "path": "apps/web-giddh/webpack.test.partial.js",
+                "mergeStrategies": {
+                  "externals": "replace"
+                }
+              },
               "fileReplacements": [
                 {
                   "replace": "apps/web-giddh/src/index.html",
@@ -505,14 +539,17 @@
           }
         },
         "serve": {
-          "builder": "ngx-build-plus:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
             "host": "localhost",
             "port": 4200,
-            "baseUrl": "localhost:4200",
             "browserTarget": "electron-giddh:build:local",
-            "extraWebpackConfig": "./webpack.electron.partial.js",
-            "plugin": "./hook.js"
+            "customWebpackConfig": {
+              "path": "apps/web-giddh/webpack.electron.partial.js",
+              "mergeStrategies": {
+                "externals": "replace"
+              }
+            }
           },
           "configurations": {
             "prod": {
@@ -534,7 +571,7 @@
       },
       "architect": {
         "build": {
-          "builder": "ngx-build-plus:build",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
             "index": "apps/web-giddh/src/index.html",
             "main": "apps/web-giddh/src/main.cordova.ts",
@@ -578,16 +615,20 @@
             "scripts": [
               "apps/web-giddh/src/assets/js/jquery-1.11.3.min.js",
               "apps/web-giddh/src/assets/jQuery.electron.js",
-              "node_modules/bootstrap-daterangepicker/moment.js",
+              "node_modules/bootstrap-daterangepicker/moment.min.js",
               "apps/web-giddh/src/assets/js/lodash.min.js",
               "node_modules/bootstrap-daterangepicker/daterangepicker.js"
-            ],
-            "es5BrowserSupport": true
+            ]
           },
           "configurations": {
             "local": {
               "outputPath": "apps/giddh-cordova/giddh/www",
-              "extraWebpackConfig": "./webpack.cordova.local.partial.js",
+              "customWebpackConfig": {
+                "path": "apps/web-giddh/webpack.cordova.local.partial.js",
+                "mergeStrategies": {
+                  "externals": "replace"
+                }
+              },
               "fileReplacements": [
                 {
                   "replace": "apps/web-giddh/src/index.html",
@@ -610,7 +651,12 @@
             },
             "stage": {
               "outputPath": "apps/giddh-cordova/giddh/www",
-              "extraWebpackConfig": "./webpack.cordova.stage.partial.js",
+              "customWebpackConfig": {
+                "path": "apps/web-giddh/webpack.cordova.stage.partial.js",
+                "mergeStrategies": {
+                  "externals": "replace"
+                }
+              },
               "fileReplacements": [
                 {
                   "replace": "apps/web-giddh/src/index.html",
@@ -633,7 +679,12 @@
             },
             "prod": {
               "outputPath": "apps/giddh-cordova/giddh/www",
-              "extraWebpackConfig": "./webpack.cordova.prod.partial.js",
+              "customWebpackConfig": {
+                "path": "apps/web-giddh/webpack.cordova.prod.partial.js",
+                "mergeStrategies": {
+                  "externals": "replace"
+                }
+              },
               "fileReplacements": [
                 {
                   "replace": "apps/web-giddh/src/index.html",
@@ -664,14 +715,17 @@
           }
         },
         "serve": {
-          "builder": "ngx-build-plus:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
             "host": "localhost",
             "port": 3000,
-            "baseUrl": "10.0.2.2:3000",
             "browserTarget": "giddh-cordova:build:local",
-            "extraWebpackConfig": "./webpack.cordova.local.partial.js",
-            "plugin": "./hook.js"
+            "customWebpackConfig": {
+              "path": "apps/web-giddh/webpack.cordova.local.partial.js",
+              "mergeStrategies": {
+                "externals": "replace"
+              }
+            }
           },
           "configurations": {
             "prod": {
@@ -683,18 +737,16 @@
     }
   },
   "cli": {
-    "warnings": {
-      "typescriptMismatch": false,
-      "versionMismatch": false
-    },
-    "defaultCollection": "@nstudio/schematics"
+    "defaultCollection": "@nrwl/angular",
+    "analytics": "69d6b0ae-2848-419a-9569-8ea7bbf4545f"
   },
   "schematics": {
-    "@nrwl/schematics:application": {
-      "style": "scss"
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
     },
-    "@nrwl/schematics:library": {
-      "style": "scss"
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
     }
   }
 }

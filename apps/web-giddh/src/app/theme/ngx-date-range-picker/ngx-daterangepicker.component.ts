@@ -101,7 +101,7 @@ export interface DateRangeClicked {
 
 export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
     /* This will check if scrolling reached bottom or top */
-    @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
+    @ViewChild(CdkVirtualScrollViewport, { static: true }) virtualScroll: CdkVirtualScrollViewport;
 
     modalRef: BsModalRef;
     chosenLabel: string;
@@ -123,12 +123,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     // used in template for compile time support of enum values.
     sideEnum = DateType;
     hoveredDate: any;
-    @ViewChild('startDateElement') startDateElement: ElementRef;
-    @ViewChild('endDateElement') endDateElement: ElementRef;
+    @ViewChild('startDateElement', {static: true}) startDateElement: ElementRef;
+    @ViewChild('endDateElement', {static: true}) endDateElement: ElementRef;
     @Input()
-    minDate: _moment.Moment;
+    minDate: _moment.Moment = _moment().subtract(1, 'year').startOf('month').month(0); // default min date of previous year first month
     @Input()
-    maxDate: _moment.Moment;
+    maxDate: _moment.Moment = _moment().add(1, 'year').endOf('month').month(11); // default max date of next year last month
     @Input()
     autoApply: boolean = false;
     @Input()
@@ -193,7 +193,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     @Output() choosedDate: EventEmitter<DateRangeClicked>;
     @Output() rangeClicked: EventEmitter<DateRangeClicked>;
     @Output() datesUpdated: EventEmitter<DateRangeClicked>;
-    @ViewChild('pickerContainer') pickerContainer: ElementRef;
+    @ViewChild('pickerContainer', {static: true}) pickerContainer: ElementRef;
     showMonthPicker = false;
     public isMobileScreen: boolean = false;
     public dropdownShow: boolean = false;
@@ -268,6 +268,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         });
 
         this.getFinancialYears();
+        this.updateMonthsInView();
     }
 
     _locale: LocaleConfig = {};
@@ -1833,6 +1834,14 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 let lastFinancialYear;
                 let allFinancialYears = [];
 
+                if (res.body.financialYears[0].financialYearStarts) {
+                    this.minDate = moment(moment(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate());
+                }
+
+                if (res.body.financialYears[res.body.financialYears.length - 1].financialYearEnds) {
+                    this.maxDate = moment(moment(res.body.financialYears[res.body.financialYears.length - 1].financialYearEnds, GIDDH_DATE_FORMAT).toDate());
+                }
+
                 res.body.financialYears.forEach(key => {
                     let financialYearStarts = moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     let financialYearEnds = moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
@@ -2081,7 +2090,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         if (this.initialCalendarRender === true) {
             this.initialCalendarRender = false;
-            
+
             for (let loop = 0; loop <= 4; loop++) {
                 this.onScroll("top");
             }
@@ -2175,7 +2184,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     this.setActiveMonth(this.calendarMonths[this.initialScrollToIndexBottom], 'end');
                 }
             }
-        }, 100);    
+        }, 100);
     }
 
     /**

@@ -3,29 +3,29 @@
     max-width: 760px;
     width: 100%;
 }
-.trial-balance{
-    span{
-        i.glyphicon-search{
-        position: relative;
-        z-index: 1;
-        font-size: 13px;
-        color: $gray;
-        padding-right: 8px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
+.trial-balance {
+    span {
+        i.glyphicon-search {
+            position: relative;
+            z-index: 1;
+            font-size: 13px;
+            color: $gray;
+            padding-right: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
         }
     }
-      input{
+    input {
         height: 47px;
     }
 }
-.tb-wrapper{
+.tb-wrapper {
     width: 70%;
     margin: auto;
 }
-@media(max-width:991px){
-    .tb-wrapper{
+@media (max-width: 991px) {
+    .tb-wrapper {
         width: 100%;
         margin: auto;
     }

@@ -10,14 +10,17 @@ import { ComparisionChartComponent } from './components/comparision/comparision-
 import { HistoryChartComponent } from './components/history/history-chart.component';
 import { NetworthChartComponent } from './components/networth/networth-chart.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { ChartModule } from 'angular2-highcharts';
-import { TooltipModule } from 'ngx-bootstrap';
-import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
+import { ChartModule, HIGHCHARTS_MODULES } from 'angular-highcharts';
+import * as more from 'highcharts/highcharts-more.src';
+import * as exporting from 'highcharts/modules/exporting.src';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { LaddaModule } from 'angular2-ladda';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { RatioAnalysisChartComponent } from './components/ratio-analysis/ratio-analysis-chart.component';
 import { TotalOverduesChartComponent } from './components/total-overdues/total-overdues-chart.component';
-import { BsDropdownModule, TabsModule, BsDatepickerModule } from 'ngx-bootstrap';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ProfitLossComponent } from './components/profit-loss/profile-loss.component';
 import { gstComponent } from './components/gst/gst.component';
 import { BankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
@@ -28,16 +31,6 @@ import { DatepickeroptionsComponent } from './components/datepickeroptions/datep
 import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
 import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
 import { SharedModule } from '../shared/shared.module';
-
-export function highchartsFactory() {
-    // @ts-ignore
-    const hc = require('highcharts');
-    // @ts-ignore
-    const dd = require('highcharts/modules/drilldown');
-    dd(hc);
-
-    return hc;
-}
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: false,
@@ -65,10 +58,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ],
     exports: [HomeComponent],
     providers: [
-        {
-            provide: HighchartsStatic,
-            useFactory: highchartsFactory
-        },
+        { provide: HIGHCHARTS_MODULES, useFactory: () => [ more, exporting ] },
         {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG

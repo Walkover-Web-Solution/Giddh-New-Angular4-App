@@ -5,7 +5,7 @@ import { AppState } from '../store';
 import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
-import { TabsetComponent } from 'ngx-bootstrap';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 
 @Component({
     styleUrls: ['./tallysync.component.scss'],
@@ -14,7 +14,7 @@ import { TabsetComponent } from 'ngx-bootstrap';
 export class TallysyncComponent implements OnInit, OnDestroy {
     public activeTab: string = 'inprogress';
     public showInvoiceNav: boolean = false;
-    @ViewChild('staticTabs') public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

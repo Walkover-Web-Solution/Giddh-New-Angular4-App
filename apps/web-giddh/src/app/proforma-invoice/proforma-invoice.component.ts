@@ -17,13 +17,13 @@ import {
 } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {
-    BsDatepickerDirective,
     BsModalRef,
     BsModalService,
-    ModalDirective,
-    ModalOptions,
-    PopoverDirective
-} from 'ngx-bootstrap';
+    ModalOptions
+} from 'ngx-bootstrap/modal';
+import {BsDatepickerDirective} from 'ngx-bootstrap/datepicker';
+import {PopoverDirective} from 'ngx-bootstrap/popover';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../store';
 import {SalesActions} from '../actions/sales/sales.action';
@@ -176,40 +176,40 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @Input() public invoiceType: VoucherTypeEnum = VoucherTypeEnum.sales;
     @Input() public selectedItem: InvoicePreviewDetailsVm;
 
-    @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
-    @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
-    @ViewChild('createAcModal') public createAcModal: ModalDirective;
-    @ViewChild('bulkItemsModal') public bulkItemsModal: ModalDirective;
-    @ViewChild('sendEmailModal') public sendEmailModal: ModalDirective;
-    @ViewChild('printVoucherModal') public printVoucherModal: ModalDirective;
+    @ViewChild(ElementViewContainerRef, {static: true}) public elementViewContainerRef: ElementViewContainerRef;
+    @ViewChild('createGroupModal', {static: true}) public createGroupModal: ModalDirective;
+    @ViewChild('createAcModal', {static: true}) public createAcModal: ModalDirective;
+    @ViewChild('bulkItemsModal', {static: true}) public bulkItemsModal: ModalDirective;
+    @ViewChild('sendEmailModal', {static: true}) public sendEmailModal: ModalDirective;
+    @ViewChild('printVoucherModal', {static: true}) public printVoucherModal: ModalDirective;
 
-    @ViewChild('copyPreviousEstimate') public copyPreviousEstimate: ElementRef;
-    @ViewChild('unregisteredBusiness') public unregisteredBusiness: ElementRef;
+    @ViewChild('copyPreviousEstimate', {static: true}) public copyPreviousEstimate: ElementRef;
+    @ViewChild('unregisteredBusiness', {static: true}) public unregisteredBusiness: ElementRef;
 
-    @ViewChild('invoiceForm', {read: NgForm}) public invoiceForm: NgForm;
-    @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
-    @ViewChild(TaxControlComponent) public taxControlComponent: TaxControlComponent;
-    @ViewChild('customerNameDropDown') public customerNameDropDown: ShSelectComponent;
+    @ViewChild('invoiceForm', { read: NgForm, static: true }) public invoiceForm: NgForm;
+    @ViewChild('discountComponent', { static: true }) public discountComponent: DiscountListComponent;
+    @ViewChild(TaxControlComponent, { static: true }) public taxControlComponent: TaxControlComponent;
+    @ViewChild('customerNameDropDown', { static: true }) public customerNameDropDown: ShSelectComponent;
 
     @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
     @ViewChildren('description') public description: QueryList<ElementRef>;
 
-    @ViewChild('inputCustomerName') public inputCustomerName: ElementRef;
-    @ViewChild('customerBillingAddress') public customerBillingAddress: ElementRef;
+    @ViewChild('inputCustomerName', {static: true}) public inputCustomerName: ElementRef;
+    @ViewChild('customerBillingAddress', {static: true}) public customerBillingAddress: ElementRef;
     @ViewChildren(BsDatepickerDirective) public datePickers: QueryList<BsDatepickerDirective>;
 
     /** RCM popup instance */
-    @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
+    @ViewChild('rcmPopup', {static: true}) public rcmPopup: PopoverDirective;
     /** Purchase record modal instance */
-    @ViewChild('purchaseRecordConfirmationPopup') public purchaseRecordConfirmationPopup: ModalDirective;
+    @ViewChild('purchaseRecordConfirmationPopup', {static: true}) public purchaseRecordConfirmationPopup: ModalDirective;
     /** Billing state instance */
-    @ViewChild('billingState') billingState: ElementRef;
+    @ViewChild('billingState', {static: true}) billingState: ElementRef;
     /** Shipping state instance */
-    @ViewChild('shippingState') shippingState: ElementRef;
+    @ViewChild('shippingState', {static: true}) shippingState: ElementRef;
 
     /**Adjust advance receipts */
-    @ViewChild('adjustPaymentModal') public adjustPaymentModal: ModalDirective;
-    @ViewChild('advanceReceiptComponent') public advanceReceiptComponent: AdvanceReceiptAdjustmentComponent;
+    @ViewChild('adjustPaymentModal', {static: true}) public adjustPaymentModal: ModalDirective;
+    @ViewChild('advanceReceiptComponent', {static: true}) public advanceReceiptComponent: AdvanceReceiptAdjustmentComponent;
     public showAdvanceReceiptAdjust: boolean = false;
 
 
@@ -924,7 +924,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     this.prdSerAcListForCred.push({
                                         value: `${item.uniqueName}#${as.uniqueName}`,
                                         label: `${item.name} (${as.name})`,
-                                        additional: Object.assign({}, item, { stock: as })
+                                        additional: Object.assign({}, item, {stock: as})
                                     });
                                 });
                             } else {
@@ -1256,7 +1256,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // endregion
 
         // listen for newly added stock and assign value
-        combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
+        combineLatest([this.newlyCreatedStockAc$, this.salesAccounts$]).subscribe((resp: any[]) => {
             let o = resp[0];
             let acData = resp[1];
             if (o && acData) {
@@ -1335,14 +1335,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 } else {
                     if (result[1]) {
                         result[1] = result[1] as ProformaResponse;
-                        result[1].items.forEach(item => {
-                            arr.push({
-                                versionNumber: this.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
-                                date: item.voucherDate,
-                                grandTotal: item.grandTotal,
-                                account: {name: item.customerName, uniqueName: item.customerUniqueName}
+                        if (result[1] && result[1].items) {
+                            result[1].items.forEach(item => {
+                                arr.push({
+                                    versionNumber: this.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
+                                    date: item.voucherDate,
+                                    grandTotal: item.grandTotal,
+                                    account: {name: item.customerName, uniqueName: item.customerUniqueName}
+                                });
                             });
-                        });
+                        }
                     }
                 }
                 this.lastInvoices = [...arr];
@@ -1734,7 +1736,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isGenDtlCollapsed = true;
         this.isMlngAddrCollapsed = true;
         this.isOthrDtlCollapsed = false;
-        this.forceClear$ = observableOf({status: true});
+        this.forceClear$ = observableOf({ status: true });
         this.invoiceForceClearReactive$ = observableOf({ status: true });
         this.isCustomerSelected = false;
         this.selectedFileName = '';
@@ -2103,6 +2105,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 if (this.isCreditNote || this.isDebitNote) {
                     updatedData['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
+                    updatedData['invoiceLinkingRequest'] = data.voucherDetails.invoiceLinkingRequest;
                 }
                 if (this.isCreditNote) {
                     updatedData['invoiceLinkingRequest'] = data.voucherDetails.invoiceLinkingRequest;

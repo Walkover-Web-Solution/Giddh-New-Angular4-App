@@ -41,17 +41,17 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public historyComparisionChartData$: Observable<IComparisionChartResponse>;
     public expensesChartData$: Observable<IExpensesChartClosingBalanceResponse>;
     public comparisionChartData$: Observable<IComparisionChartResponse>;
-    @ViewChild('liveaccount') public liveaccount: LiveAccountsComponent;
-    @ViewChild('expence') public expence: ExpensesChartComponent;
-    @ViewChild('revenue') public revenue: RevenueChartComponent;
-    @ViewChild('compare') public compare: ComparisionChartComponent;
-    @ViewChild('history') public history: HistoryChartComponent;
-    @ViewChild('networth') public networth: NetworthChartComponent;
-    @ViewChild('profitloss') public profitloss: ProfitLossComponent;
-    @ViewChild('gst') public gst: gstComponent;
-    @ViewChild('bankaccount') public bankaccount: BankAccountsComponent;
-    @ViewChild('crdrlist') public crdrlist: CrDrComponent;
-    @ViewChild('totalSales') public totalSales: TotalSalesComponent;
+    @ViewChild('liveaccount', {static: true}) public liveaccount: LiveAccountsComponent;
+    @ViewChild('expence', {static: true}) public expence: ExpensesChartComponent;
+    @ViewChild('revenue', {static: true}) public revenue: RevenueChartComponent;
+    @ViewChild('compare', {static: true}) public compare: ComparisionChartComponent;
+    @ViewChild('history', {static: true}) public history: HistoryChartComponent;
+    @ViewChild('networth', {static: true}) public networth: NetworthChartComponent;
+    @ViewChild('profitloss', {static: true}) public profitloss: ProfitLossComponent;
+    @ViewChild('gst', {static: true}) public gst: gstComponent;
+    @ViewChild('bankaccount', {static: true}) public bankaccount: BankAccountsComponent;
+    @ViewChild('crdrlist', {static: true}) public crdrlist: CrDrComponent;
+    @ViewChild('totalSales', {static: true}) public totalSales: TotalSalesComponent;
 
     public selectedCompany: Observable<CompanyResponse>;
     public subscribedPlan: SubscriptionsUser;

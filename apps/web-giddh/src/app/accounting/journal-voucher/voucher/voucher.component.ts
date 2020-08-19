@@ -23,7 +23,8 @@ import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-serv
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import * as moment from 'moment';
-import { BsDatepickerConfig, BsDatepickerDirective, ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsDatepickerConfig, BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
+import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 
@@ -39,7 +40,6 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-select/option.interface';
-import { VsForDirective } from '../../../theme/ng2-vs-for/ng2-vs-for';
 import { QuickAccountComponent } from '../../../theme/quick-account-component/quickAccount.component';
 import { KeyboardService } from '../../keyboard.service';
 import { KEYS, VOUCHERS } from '../journal-voucher.component';
@@ -82,24 +82,23 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @Input() public currentDate: string;
     @Output() public showAccountList: EventEmitter<boolean> = new EventEmitter();
 
-    @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
-    @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
+    @ViewChild('quickAccountComponent', {static: true}) public quickAccountComponent: ElementViewContainerRef;
+    @ViewChild('quickAccountModal', {static: true}) public quickAccountModal: ModalDirective;
 
-    @ViewChild('chequeEntryModal') public chequeEntryModal: ModalDirective;
+    @ViewChild('chequeEntryModal', {static: true}) public chequeEntryModal: ModalDirective;
 
-    @ViewChildren(VsForDirective) public columnView: QueryList<VsForDirective>;
-    @ViewChild('particular') public accountField: any;
-    @ViewChild('dateField') public dateField: ElementRef;
-    @ViewChild('narrationBox') public narrationBox: ElementRef;
-    @ViewChild('chequeNumberInput') public chequeNumberInput: ElementRef;
-    @ViewChild('chequeClearanceInputField') public chequeClearanceInputField: ElementRef;
-    @ViewChild('chqFormSubmitBtn') public chqFormSubmitBtn: ElementRef;
-    @ViewChild('submitButton') public submitButton: ElementRef;
-    @ViewChild('resetButton') public resetButton: ElementRef;
+    @ViewChild('particular', {static: true}) public accountField: any;
+    @ViewChild('dateField', {static: true}) public dateField: ElementRef;
+    @ViewChild('narrationBox', {static: true}) public narrationBox: ElementRef;
+    @ViewChild('chequeNumberInput', {static: true}) public chequeNumberInput: ElementRef;
+    @ViewChild('chequeClearanceInputField', {static: true}) public chequeClearanceInputField: ElementRef;
+    @ViewChild('chqFormSubmitBtn', {static: true}) public chqFormSubmitBtn: ElementRef;
+    @ViewChild('submitButton', {static: true}) public submitButton: ElementRef;
+    @ViewChild('resetButton', {static: true}) public resetButton: ElementRef;
 
-    @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
+    @ViewChild('manageGroupsAccountsModal', {static: true}) public manageGroupsAccountsModal: ModalDirective;
     /* Selector for receipt entry modal */
-    @ViewChild('receiptEntry') public receiptEntry: TemplateRef<any>;
+    @ViewChild('receiptEntry', {static: true}) public receiptEntry: TemplateRef<any>;
     /* Selector for adjustment type field */
     @ViewChildren('adjustmentTypesField') public adjustmentTypesField: ShSelectComponent;
     /** List of all 'DEBIT' amount fields when 'By' entries are made  */
@@ -239,8 +238,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private salesService: SalesService,
         private companyActions: CompanyActions) {
 
-        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
-        this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
+        this.universalDate$ = this.store.pipe(select(sessionStore => sessionStore.session.applicationDate), takeUntil(this.destroyed$));
+        this.activeCompanyUniqueName$ = this.store.pipe(select(companySession => companySession.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.createdAccountDetails$ = combineLatest([
             this.store.pipe(select(appState => appState.sales.createAccountSuccess)),
             this.store.pipe(select(appState => appState.sales.createdAccountDetails))
@@ -309,7 +308,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         this.activeCompanyUniqueName$.pipe(take(1)).subscribe(activeCompanyName => {
-            this.store.pipe(select(state => state.session.companies), takeUntil(this.destroyed$)).subscribe(res => {
+            this.store.pipe(select(companySession => companySession.session.companies), takeUntil(this.destroyed$)).subscribe(res => {
                 if (!res) {
                     return;
                 }
@@ -1561,7 +1560,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public getTaxList(): void {
-        this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(companyStore => companyStore.company), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 if (res.taxes) {
                     let taxList: IOption[] = [];

@@ -6,7 +6,7 @@ import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../
 import { AppState } from '../../../store';
 import { saveAs } from 'file-saver';
 import * as _ from '../../../lodash-optimized';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyService } from '../../../services/companyService.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { map, take } from 'rxjs/operators';
@@ -75,8 +75,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             value: '%s_AN',
         },
     ];
-    @ViewChild('mailModal') public mailModal: ModalDirective;
-    @ViewChild('messageBox') public messageBox: ElementRef;
+    @ViewChild('mailModal', {static: true}) public mailModal: ModalDirective;
+    @ViewChild('messageBox', {static: true}) public messageBox: ElementRef;
     public searchRequest$: Observable<SearchRequest>;
     public isAllChecked: boolean = false;
 

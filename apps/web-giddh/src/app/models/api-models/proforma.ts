@@ -8,7 +8,8 @@ export class ProformaFilter extends InvoiceReceiptFilter {
 	public proformaNumber: string;
 }
 
-export class ProformaResponse extends CommonPaginatedResponse<ProformaItem> {
+export class ProformaResponse extends CommonPaginatedResponse<ProformaItem | any> {
+    items: any;
 }
 
 export class ProformaItem {
@@ -26,6 +27,9 @@ export class ProformaItem {
 	public uniqueName?: string;
 	public invoiceDate?: string;
 	public expiredDays: number;
+    public voucherDate: string;
+    public grandTotalTooltipText?: string;
+    public amount?: any;
 }
 
 export class ProformaGetRequest {
@@ -68,6 +72,6 @@ export class ProformaVersionItem {
 export class PreviousInvoicesVm {
 	versionNumber: string;
 	account: INameUniqueName;
-	grandTotal: number;
+	grandTotal: any;
 	date: string;
 }

@@ -54,7 +54,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
     };
     /** Template reference for success payment model */
-    @ViewChild('successTemplate') public successTemplate: TemplateRef<any>;
+    @ViewChild('successTemplate', {static: true}) public successTemplate: TemplateRef<any>;
     /** directive to emit boolean for close model */
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
     /** Integrated bank list sh-select options */

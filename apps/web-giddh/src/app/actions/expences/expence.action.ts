@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { CustomActions } from '../../store/customActions';
 import { ToasterService } from '../../services/toaster.service';
@@ -20,19 +20,21 @@ export class ExpencesAction {
 	public static readonly GET_PETTYCASH_REJECTED_REPORT_RESPONSE = 'GET_PETTYCASH_REJECTED_REPORT_RESPONSE';
 
 
-	@Effect()
-	public GetPettycashReportRequest$: Observable<Action> = this.action$
-		.ofType(ExpencesAction.GET_PETTYCASH_REPORT_REQUEST).pipe(
+
+	public GetPettycashReportRequest$: Observable<Action> =createEffect( ()=> this.action$
+		.pipe(
+            ofType(ExpencesAction.GET_PETTYCASH_REPORT_REQUEST),
 			switchMap((action: CustomActions) =>
 				this._expenseService.getPettycashReports(action.payload)
 			),
 			map(response => {
 				return this.GetPettycashReportResponse(response);
-			}));
+			})));
 
-	@Effect()
-	private GetPettycashReportResponse$: Observable<Action> = this.action$
-		.ofType(ExpencesAction.GET_PETTYCASH_REPORT_RESPONSE).pipe(
+
+	public GetPettycashReportResponse$: Observable<Action> =createEffect( ()=> this.action$
+		.pipe(
+            ofType(ExpencesAction.GET_PETTYCASH_REPORT_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<any, CommonPaginatedRequest> = response.payload;
 				if (data.status === 'error') {
@@ -41,20 +43,22 @@ export class ExpencesAction {
 					// this._toasty.successToast(data.body);
 				}
 				return { type: 'EmptyAction' };
-			}));
-	@Effect()
-	public GetPettycashRejectedReportRequest$: Observable<Action> = this.action$
-		.ofType(ExpencesAction.GET_PETTYCASH_REJECTED_REPORT_REQUEST).pipe(
+			})));
+
+	public GetPettycashRejectedReportRequest$: Observable<Action> =createEffect( ()=> this.action$
+		.pipe(
+            ofType(ExpencesAction.GET_PETTYCASH_REJECTED_REPORT_REQUEST),
 			switchMap((action: CustomActions) =>
 				this._expenseService.getPettycashRejectedReports(action.payload)
 			),
 			map(response => {
 				return this.GetPettycashRejectedReportResponse(response);
-			}));
+			})));
 
-	@Effect()
-	private GetPettycashRejectedReportRequestResponse$: Observable<Action> = this.action$
-		.ofType(ExpencesAction.GET_PETTYCASH_REJECTED_REPORT_RESPONSE).pipe(
+
+	public GetPettycashRejectedReportRequestResponse$: Observable<Action> =createEffect( ()=> this.action$
+		.pipe(
+            ofType(ExpencesAction.GET_PETTYCASH_REJECTED_REPORT_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<any, CommonPaginatedRequest> = response.payload;
 				if (data.status === 'error') {
@@ -63,20 +67,22 @@ export class ExpencesAction {
 					// this._toasty.successToast(data.body);
 				}
 				return { type: 'EmptyAction' };
-			}));
-	@Effect()
-	public GetPettycashEntryRequest$: Observable<Action> = this.action$
-		.ofType(ExpencesAction.GET_PETTYCASH_ENTRY_REQUEST).pipe(
+			})));
+
+	public GetPettycashEntryRequest$: Observable<Action> =createEffect( ()=> this.action$
+		.pipe(
+            ofType(ExpencesAction.GET_PETTYCASH_ENTRY_REQUEST),
 			switchMap((action: CustomActions) =>
 				this._expenseService.getPettycashEntry(action.payload)
 			),
 			map(response => {
 				return this.getPettycashEntryResponse(response);
-			}));
+			})));
 
-	@Effect()
-	private GetPettycashEntryResponse$: Observable<Action> = this.action$
-		.ofType(ExpencesAction.GET_PETTYCASH_ENTRY_RESPONSE).pipe(
+
+	public GetPettycashEntryResponse$: Observable<Action> =createEffect( ()=> this.action$
+		.pipe(
+            ofType(ExpencesAction.GET_PETTYCASH_ENTRY_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<PettyCashResonse, any> = response.payload;
 				if (data.status === 'error') {
@@ -85,7 +91,7 @@ export class ExpencesAction {
 					// this._toasty.successToast(data.body);
 				}
 				return { type: 'EmptyAction' };
-			}));
+			})));
 
 	constructor(private action$: Actions,
 		private _toasty: ToasterService,

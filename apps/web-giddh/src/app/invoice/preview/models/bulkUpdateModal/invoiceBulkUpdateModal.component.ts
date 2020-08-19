@@ -18,8 +18,7 @@ import { NgForm } from '@angular/forms';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
-import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
-
+import { ModalOptions, ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'invoice-bulk-update-modal-component',
@@ -31,8 +30,8 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges {
     @Input() public voucherType: string = '';
     @Input() public selectedInvoices;
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('bulkUpdateForm') public bulkUpdateForm: NgForm;
-    @ViewChild('bulkUpdateImageSlogan') public bulkUpdateImageSlogan: ModalDirective;
+    @ViewChild('bulkUpdateForm', {static: true}) public bulkUpdateForm: NgForm;
+    @ViewChild('bulkUpdateImageSlogan', {static: true}) public bulkUpdateImageSlogan: ModalDirective;
 
     public fieldOptions: IOption[] = [
         { label: 'PDF Template', value: 'pdfTemplate' },

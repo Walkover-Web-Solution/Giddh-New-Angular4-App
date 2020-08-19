@@ -27,7 +27,7 @@ import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import { DownloadOrSendInvoiceOnMailComponent } from 'apps/web-giddh/src/app/invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
@@ -75,19 +75,19 @@ const COMPARISON_FILTER = [
 })
 export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public validateInvoiceobj: ValidateInvoice = { invoiceNumber: null };
-    @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
-    @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
-    @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
-    @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
-    @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
-    @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
-    @ViewChild(DaterangePickerComponent) public dp: DaterangePickerComponent;
-    @ViewChild('bulkUpdate') public bulkUpdate: ModalDirective;
-    @ViewChild('eWayBill') public eWayBill: ModalDirective;
-    @ViewChild('searchBox') public searchBox: ElementRef;
-    @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
+    @ViewChild('invoiceConfirmationModel', {static: true}) public invoiceConfirmationModel: ModalDirective;
+    @ViewChild('performActionOnInvoiceModel', {static: true}) public performActionOnInvoiceModel: ModalDirective;
+    @ViewChild('downloadOrSendMailModel', {static: true}) public downloadOrSendMailModel: ModalDirective;
+    @ViewChild('invoiceGenerateModel', {static: true}) public invoiceGenerateModel: ModalDirective;
+    @ViewChild('downloadOrSendMailComponent', {static: true}) public downloadOrSendMailComponent: ElementViewContainerRef;
+    @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
+    @ViewChild(DaterangePickerComponent, {static: true}) public dp: DaterangePickerComponent;
+    @ViewChild('bulkUpdate', {static: true}) public bulkUpdate: ModalDirective;
+    @ViewChild('eWayBill', {static: true}) public eWayBill: ModalDirective;
+    @ViewChild('searchBox', {static: true}) public searchBox: ElementRef;
+    @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent, static: true }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
     @Input() public selectedVoucher: VoucherTypeEnum = VoucherTypeEnum.sales;
-    @ViewChild(InvoicePaymentModelComponent) public invoicePaymentModelComponent: InvoicePaymentModelComponent;
+    @ViewChild(InvoicePaymentModelComponent, {static: true}) public invoicePaymentModelComponent: InvoicePaymentModelComponent;
 
     public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
     public bsConfig: Partial<BsDatepickerConfig> = {
@@ -225,7 +225,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public paginationLimit: number = PAGINATION_LIMIT;
     public purchaseRecord: any = {};
     /**Adjust advance receipts */
-    @ViewChild('adjustPaymentModal') public adjustPaymentModal: ModalDirective;
+    @ViewChild('adjustPaymentModal', {static: true}) public adjustPaymentModal: ModalDirective;
     /** To add advance receipt modal in DOM */
     public showAdvanceReceiptAdjust: boolean = false;
     /** To check is advance receipts modal in update mode */

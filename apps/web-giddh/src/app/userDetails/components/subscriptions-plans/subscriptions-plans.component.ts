@@ -2,7 +2,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, TemplateRef, Output, EventEmitter, Input } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UserDetails } from '../../../models/api-models/loginModels';
 import { GeneralService } from '../../../services/general.service';
 import { CreateCompanyUsersPlan, SubscriptionRequest } from '../../../models/api-models/Company';

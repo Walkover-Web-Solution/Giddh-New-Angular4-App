@@ -16,7 +16,7 @@ const TEMPLATES_ID = ['t001', 't002', 't003'];
 export class CreateInvoiceTemplateComponent implements OnInit, OnDestroy {
 
 	// templates
-	@ViewChild('letterTemplateComponent') public letterTemplateComponent: ElementViewContainerRef;
+	@ViewChild('letterTemplateComponent', {static: true}) public letterTemplateComponent: ElementViewContainerRef;
 
 	public TEMPLATES_ID: string[] = TEMPLATES_ID;
 	public TEMPLATES: string[] = TEMPLATES;

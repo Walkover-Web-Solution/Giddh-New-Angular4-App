@@ -85,7 +85,7 @@ export class BsComponent implements AfterViewInit, OnDestroy, OnChanges {
     public to: string;
     @Input() public isDateSelected: boolean = false;
 
-    @ViewChild('bsGrid') public bsGrid: BsGridComponent;
+    @ViewChild('bsGrid', {static: true}) public bsGrid: BsGridComponent;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     private _selectedCompany: CompanyResponse;

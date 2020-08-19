@@ -13,7 +13,7 @@ import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { LaddaModule } from 'angular2-ladda';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { BsDropdownModule } from 'ngx-bootstrap';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 
@@ -36,7 +36,7 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
         ReactiveFormsModule,
         SearchRoutingModule,
         DatepickerModule,
-        TypeaheadModule,
+        TypeaheadModule.forRoot(),
         ModalModule,
         LaddaModule,
         DecimalDigitsModule,

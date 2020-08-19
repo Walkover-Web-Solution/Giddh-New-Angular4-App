@@ -88,7 +88,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public newSalesInvCount: number = 0;
     public totalSalesInvCount: number = 0;
     public invoiceCountAll: number = 0;
-    @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+    @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
     private searchFilterData: any = null;
 
     constructor(private store: Store<AppState>, private _NewVsOldInvoicesActions: NewVsOldInvoicesActions,

@@ -12,7 +12,7 @@ import { LoginActions } from '../actions/login.action';
 import { AuthService } from '../theme/ng-social-login-module/index';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommandKRequest } from '../models/api-models/Common';
-import { BsDropdownConfig } from 'ngx-bootstrap';
+import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { DOCUMENT } from '@angular/common';
 
 @Component({
@@ -28,9 +28,9 @@ import { DOCUMENT } from '@angular/common';
 
 export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     /* This will hold the object of search field */
-    @ViewChild('searchElement') public searchElement: ElementRef;
+    @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
     /* This will hold the object of mobile home view element */
-    @ViewChild('mobileHomeView') public mobileHomeView: ElementRef;
+    @ViewChild('mobileHomeView', {static: true}) public mobileHomeView: ElementRef;
 
     /* This will make sure if load more is possible */
     public allowLoadMore: boolean = false;

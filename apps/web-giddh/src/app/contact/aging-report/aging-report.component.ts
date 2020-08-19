@@ -11,7 +11,10 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import * as _ from 'lodash';
 import { ContactService } from '../../services/contact.service';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
-import { BsDropdownDirective, ModalDirective, ModalOptions, PaginationComponent } from 'ngx-bootstrap';
+import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
+import { PaginationComponent } from 'ngx-bootstrap/pagination';
+import {ModalOptions} from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
@@ -60,9 +63,9 @@ export class AgingReportComponent implements OnInit {
     public agingAdvanceSearchModal: AgingAdvanceSearchModal = new AgingAdvanceSearchModal();
     public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
 
-    @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
-    @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
-    @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
+    @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
+    @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
+    @ViewChild('filterDropDownList', {static: true}) public filterDropDownList: BsDropdownDirective;
     @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
     private createAccountIsSuccess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

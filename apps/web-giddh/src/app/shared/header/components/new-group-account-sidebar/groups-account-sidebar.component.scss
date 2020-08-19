@@ -1,0 +1,8 @@
+.list-item:focus,
+.list-item:focus .list-item {
+    color: #fff !important;
+    background: #2d9ee0;
+}
+.virtual-group-list {
+    height: 100%;
+}

@@ -1,5 +1,4 @@
 import { SETTINGS_PERMISSION_ACTIONS } from '../../actions/settings/permissions/settings.permissions.const';
-import { LinkedAccountsState, SettingsState } from './Settings.reducer';
 import * as _ from '../../lodash-optimized';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SETTINGS_INTEGRATION_ACTIONS } from '../../actions/settings/settings.integration.const';
@@ -405,6 +404,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 newState.financialYears = null;
                 newState.usersWithCompanyPermissions = response.body;
             }
+            break;
         }
         case SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT_RESPONSE: {
             let response: BaseResponse<any, string> = action.payload;

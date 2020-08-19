@@ -1,34 +1,52 @@
-import { AfterViewInit, ChangeDetectionStrategy, TemplateRef, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { fromEvent, ReplaySubject, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, takeUntil, take } from 'rxjs/operators';
-import { InvoiceSetting } from '../../../../models/interfaces/invoice.setting.interface';
-import { InvoicePaymentRequest, InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
-import { ToasterService } from '../../../../services/toaster.service';
-import { ProformaService } from '../../../../services/proforma.service';
-import { ProformaDownloadRequest, ProformaGetAllVersionRequest, ProformaVersionItem } from '../../../../models/api-models/proforma';
-import { ActionTypeAfterVoucherGenerateOrUpdate, VoucherTypeEnum, PurchaseRecordRequest } from '../../../../models/api-models/Sales';
-import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
-import { base64ToBlob } from '../../../../shared/helpers/helperFunctions';
-import { DownloadVoucherRequest } from '../../../../models/api-models/recipt';
-import { ReceiptService } from '../../../../services/receipt.service';
-import { select, Store } from '@ngrx/store';
-import { AppState } from '../../../../store';
-import { ProformaActions } from '../../../../actions/proforma/proforma.actions';
-import { ModalDirective, BsModalService, BsModalRef } from 'ngx-bootstrap';
-import { Router } from '@angular/router';
-import { InvoiceReceiptActions } from '../../../../actions/invoice/receipt/receipt.actions';
-import { GeneralActions } from '../../../../actions/general/general.actions';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { saveAs } from 'file-saver';
-import { PurchaseRecordService } from 'apps/web-giddh/src/app/services/purchase-record.service';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChanges,
+    ViewChild,
+} from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { FILE_ATTACHMENT_TYPE, Configuration } from 'apps/web-giddh/src/app/app.constant';
-import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
+import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { Configuration, FILE_ATTACHMENT_TYPE } from 'apps/web-giddh/src/app/app.constant';
 import { LEDGER_API } from 'apps/web-giddh/src/app/services/apiurls/ledger.api';
-import { BaseResponse } from 'apps/web-giddh/src/app/models/api-models/BaseResponse';
-import { ProformaListComponent } from '../../../proforma/proforma-list.component';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { PurchaseRecordService } from 'apps/web-giddh/src/app/services/purchase-record.service';
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
+import { saveAs } from 'file-saver';
+import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
+import { fromEvent, Observable, ReplaySubject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, take, takeUntil } from 'rxjs/operators';
+
+import { GeneralActions } from '../../../../actions/general/general.actions';
+import { InvoiceReceiptActions } from '../../../../actions/invoice/receipt/receipt.actions';
+import { ProformaActions } from '../../../../actions/proforma/proforma.actions';
+import { InvoicePaymentRequest, InvoicePreviewDetailsVm } from '../../../../models/api-models/Invoice';
+import {
+    ProformaDownloadRequest,
+    ProformaGetAllVersionRequest,
+    ProformaVersionItem,
+} from '../../../../models/api-models/proforma';
+import { DownloadVoucherRequest } from '../../../../models/api-models/recipt';
+import { ActionTypeAfterVoucherGenerateOrUpdate, VoucherTypeEnum } from '../../../../models/api-models/Sales';
+import { InvoiceSetting } from '../../../../models/interfaces/invoice.setting.interface';
+import { ProformaService } from '../../../../services/proforma.service';
+import { ReceiptService } from '../../../../services/receipt.service';
+import { ToasterService } from '../../../../services/toaster.service';
+import { base64ToBlob } from '../../../../shared/helpers/helperFunctions';
+import { AppState } from '../../../../store';
+import { ProformaListComponent } from '../../../proforma/proforma-list.component';
 
 @Component({
     selector: 'invoice-preview-details-component',
@@ -38,14 +56,14 @@ import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 })
 
 export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-    @ViewChild('searchElement') public searchElement: ElementRef;
-    @ViewChild(PdfJsViewerComponent) public pdfViewer: PdfJsViewerComponent;
-    @ViewChild('showEmailSendModal') public showEmailSendModal: ModalDirective;
-    @ViewChild('downloadVoucherModal') public downloadVoucherModal: ModalDirective;
-    @ViewChild('invoiceDetailWrapper') invoiceDetailWrapperView: ElementRef;
-    @ViewChild('invoicedetail') invoiceDetailView: ElementRef;
+    @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
+    @ViewChild(PdfJsViewerComponent, {static: false}) public pdfViewer: PdfJsViewerComponent;
+    @ViewChild('showEmailSendModal', {static: true}) public showEmailSendModal: ModalDirective;
+    @ViewChild('downloadVoucherModal', {static: true}) public downloadVoucherModal: ModalDirective;
+    @ViewChild('invoiceDetailWrapper', {static: true}) invoiceDetailWrapperView: ElementRef;
+    @ViewChild('invoicedetail', {static: true}) invoiceDetailView: ElementRef;
     /** Attached document preview container instance */
-    @ViewChild('attachedDocumentPreview') attachedDocumentPreview: ElementRef;
+    @ViewChild('attachedDocumentPreview', {static: true}) attachedDocumentPreview: ElementRef;
 
     @Input() public items: InvoicePreviewDetailsVm[];
     @Input() public selectedItem: InvoicePreviewDetailsVm;

@@ -1,31 +1,33 @@
-import {map, switchMap, tap} from 'rxjs/operators';
-import {Injectable} from '@angular/core';
-import {Actions, Effect} from '@ngrx/effects';
-import {ToasterService} from '../../../services/toaster.service';
-import {Action, Store} from '@ngrx/store';
-import {AppState} from '../../../store/roots';
-import {Observable} from 'rxjs';
-import {BaseResponse} from '../../../models/api-models/BaseResponse';
-import {Router} from '@angular/router';
-import {SETTINGS_TAXES_ACTIONS} from './settings.taxes.const';
-import {SettingsTaxesService} from '../../../services/settings.taxes.service';
-import {CustomActions} from '../../../store/customActions';
-import {GeneralActions} from "../../general/general.actions";
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Action, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
+
+import { BaseResponse } from '../../../models/api-models/BaseResponse';
+import { SettingsTaxesService } from '../../../services/settings.taxes.service';
+import { ToasterService } from '../../../services/toaster.service';
+import { CustomActions } from '../../../store/customActions';
+import { AppState } from '../../../store/roots';
+import { GeneralActions } from '../../general/general.actions';
+import { SETTINGS_TAXES_ACTIONS } from './settings.taxes.const';
 
 @Injectable()
 export class SettingsTaxesActions {
 
-    @Effect()
-    public CreateTax$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX).pipe(
+     public CreateTax$: Observable<Action> =createEffect( ()=>  this.action$
+        .pipe(
+            ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX),
             switchMap((action: CustomActions) => {
                 return this.settingsTaxesService.CreateTax(action.payload).pipe(
                     map(response => this.CreateTaxResponse(response)));
-            }));
+            })));
 
-    @Effect()
-    public CreateTaxResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE).pipe(
+
+    public CreateTaxResponse$: Observable<Action> =createEffect( ()=>  this.action$
+        .pipe(
+            ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -34,19 +36,21 @@ export class SettingsTaxesActions {
                     this.toasty.successToast('Tax Created Successfully.');
                 }
                 return {type: 'EmptyAction'};
-            }));
+            })));
 
-    @Effect()
-    public UpdateTax$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX).pipe(
+
+    public UpdateTax$: Observable<Action> =createEffect( ()=>  this.action$
+        .pipe(
+            ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX),
             switchMap((action: CustomActions) => {
                 return this.settingsTaxesService.UpdateTax(action.payload, action.payload.uniqueName).pipe(
                     map(response => this.UpdateTaxResponse(response)));
-            }));
+            })));
 
-    @Effect()
-    public UpdateTaxResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE).pipe(
+
+    public UpdateTaxResponse$: Observable<Action> =createEffect( ()=>  this.action$
+        .pipe(
+            ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -55,11 +59,12 @@ export class SettingsTaxesActions {
                     this.toasty.successToast('Tax Updated Successfully.');
                 }
                 return {type: 'EmptyAction'};
-            }));
+            })));
 
-    @Effect()
-    public DeleteTax$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX).pipe(
+
+    public DeleteTax$: Observable<Action> =createEffect( ()=>  this.action$
+        .pipe(
+            ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX),
             switchMap((action: CustomActions) => {
                 return this.settingsTaxesService.DeleteTax(action.payload.value).pipe(
                     tap(resp => {
@@ -68,11 +73,12 @@ export class SettingsTaxesActions {
                         }
                     }),
                     map(response => this.DeleteTaxResponse(response)));
-            }));
+            })));
 
-    @Effect()
-    public DeleteTaxResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE).pipe(
+
+    public DeleteTaxResponse$: Observable<Action> =createEffect( ()=>  this.action$
+        .pipe(
+            ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -81,15 +87,16 @@ export class SettingsTaxesActions {
                     this.toasty.successToast('Tax Deleted Successfully.');
                 }
                 return {type: 'EmptyAction'};
-            }));
+            })));
 
-    @Effect()
-    public GetTaxList$: Observable<Action> = this.action$
-        .ofType(SETTINGS_TAXES_ACTIONS.GET_TAX).pipe(
+
+    public GetTaxList$: Observable<Action> = createEffect( ()=> this.action$
+        .pipe(
+            ofType(SETTINGS_TAXES_ACTIONS.GET_TAX),
             switchMap((action: CustomActions) => {
                 return this.settingsTaxesService.GetTaxList(action.payload).pipe(
                     map(response => this.GetTaxListResponse(response)));
-            }));
+            })));
 
     constructor(private action$: Actions,
                 private toasty: ToasterService,

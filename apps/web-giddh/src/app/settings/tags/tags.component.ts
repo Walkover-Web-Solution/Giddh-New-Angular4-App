@@ -10,7 +10,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { createSelector } from 'reselect';
 import { SettingsTagActions } from '../../actions/settings/tag/settings.tag.actions';
 import { TagRequest } from '../../models/api-models/settingsTags';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
 	selector: 'setting-tags',
@@ -19,7 +19,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 })
 export class SettingsTagsComponent implements OnInit, OnDestroy {
 
-	@ViewChild('confirmationModal') public confirmationModal: ModalDirective;
+	@ViewChild('confirmationModal', {static: true}) public confirmationModal: ModalDirective;
 
 	public newTag: TagRequest = new TagRequest();
 	public tags$: Observable<TagRequest[]>;

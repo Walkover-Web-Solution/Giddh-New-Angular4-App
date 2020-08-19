@@ -7,7 +7,7 @@ import { AppState } from '../../../store';
 import { take, takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../../services/toaster.service';
 import { ReverseChargeService } from '../../../services/reversecharge.service';
-import { BsDaterangepickerConfig } from 'ngx-bootstrap';
+import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { CurrentPage } from '../../../models/api-models/Common';
@@ -22,9 +22,9 @@ import { GeneralActions } from '../../../actions/general/general.actions';
 
 export class ReverseChargeReport implements OnInit, OnDestroy {
     public inlineSearch: any = '';
-    @ViewChild('suppliersNameField') public suppliersNameField;
-    @ViewChild('invoiceNumberField') public invoiceNumberField;
-    @ViewChild('supplierCountryField') public supplierCountryField;
+    @ViewChild('suppliersNameField', {static: true}) public suppliersNameField;
+    @ViewChild('invoiceNumberField', {static: true}) public invoiceNumberField;
+    @ViewChild('supplierCountryField', {static: true}) public supplierCountryField;
 
     public showEntryDate = true;
     public activeCompanyUniqueName$: Observable<string>;
