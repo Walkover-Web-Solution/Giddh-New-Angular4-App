@@ -62,53 +62,61 @@
                             <span class="input-addon">
                                 <i class="icon-search"></i>
                             </span>
+                            </div>
+
                         </div>
-
                     </div>
-
-                    <div class="btn-group  pull-right onDesktopView">
-                        <button *ngIf="activeTab == 'customer'" class="btn btn-pink" style="margin-right: 5px" (click)="openAddAndManage('customer')">
+                    <!-- Invoice filter section ends -->
+                    <button class="btn btn-group btn-filter desktop-button-filter " *ngIf="selectedAccountsList.length>0" (click)="clearSelectedContacts();">
+                            <span class="icon-cross"></span> Clear Selected
+                    </button>
+                    <div>
+                        <div class="btn-group  pull-right onDesktopView">
+                            <button *ngIf="activeTab == 'customer'" class="btn btn-pink" style="margin-right: 5px" (click)="openAddAndManage('customer')">
                             + New Customer
                         </button>
-                        <button *ngIf="activeTab == 'vendor'" class="btn btn-pink " (click)="openAddAndManage('vendor')">
+                            <button *ngIf="activeTab == 'vendor'" class="btn btn-pink " (click)="openAddAndManage('vendor')">
                             + New Vendor
                         </button>
-                    </div>
-                    <div class="customer-footer-box pull-right ">
+                        </div>
+                        <div class="customer-footer-box pull-right ">
 
-                        <div class="clearfix customer-inner-box">
-                            <span class="pull-left mrR1 totalContacts">
+                            <div class="clearfix customer-inner-box">
+                                <span class="pull-left mrR1 totalContacts">
                                 <h5>
                                     <span *ngIf="!selectedCheckedContacts.length"
                                         class="numbertotal">{{Totalcontacts}}</span>
-                            <span *ngIf="selectedCheckedContacts.length>0" class="numbertotal">{{selectedCheckedContacts.length}}</span> Contacts
-                            </h5>
-                            </span>
-                            <div class="btn-group moreBtn" dropdown>
-                                <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle" aria-controls="dropdown-basic">
+                                <span *ngIf="selectedCheckedContacts.length>0" class="numbertotal">{{selectedCheckedContacts.length}}</span> Contacts
+                                </h5>
+                                </span>
+                                <div class="btn-group moreBtn" dropdown>
+                                    <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle" aria-controls="dropdown-basic">
                                     More
                                     <span class="caret"></span>
                                 </button>
-                                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                                    <li role="menuitem" (click)="openEmailDialog();">Email</li>
-                                    <li role="menuitem" (click)="openSmsDialog();">SMS</li>
-                                    <li role="menuitem" (click)="downloadCSV();">Download CSV</li>
-                                    <li role="menuitem" *ngIf="selectedAccountsList.length>0" (click)="openBulkPaymentModal(template)">Bulk Payment</li>
-                                </ul>
+                                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                                        <li role="menuitem" (click)="openEmailDialog();">Email</li>
+                                        <li role="menuitem" (click)="openSmsDialog();">SMS</li>
+                                        <li role="menuitem" (click)="downloadCSV();">Download CSV</li>
+                                        <li role="menuitem" *ngIf="selectedAccountsList.length>0 && activeTab === 'vendor'" (click)="openBulkPaymentModal(template)">Bulk Payment</li>
+                                    </ul>
+                                </div>
                             </div>
+                            <button class="btn btn-group btn-filter mobile-button-filter" *ngIf="selectedAccountsList.length>0" (click)="clearSelectedContacts();">
+                            <span class="icon-cross"></span> Clear Selected
+                    </button>
+
                         </div>
 
-                    </div>
-
-                    <div class="btn-group  pull-right onMobileView">
-                        <button *ngIf="activeTab == 'customer'" class="btn btn-pink" style="margin-right: 5px" (click)="openAddAndManage('customer')">
+                        <div class="btn-group  pull-right onMobileView">
+                            <button *ngIf="activeTab == 'customer'" class="btn btn-pink" style="margin-right: 5px" (click)="openAddAndManage('customer')">
                             + New Customer
                         </button>
-                        <button *ngIf="activeTab == 'vendor'" class="btn btn-pink " (click)="openAddAndManage('vendor')">
+                            <button *ngIf="activeTab == 'vendor'" class="btn btn-pink " (click)="openAddAndManage('vendor')">
                             + New Vendor
                         </button>
+                        </div>
                     </div>
-
 
                 </div>
             </div>
@@ -797,7 +805,7 @@
 
 
 <ng-template #template>
-    <payment-aside *ngIf="isBulkPaymentShow" [selectedAccountsForBulkPayment]="selectedAccountsList" [selectedAccForPayment]="selectedAccForPayment" (closeModelEvent)="closeBulkPaymentModel()"></payment-aside>
+    <payment-aside *ngIf="isBulkPaymentShow" [selectedAccountsForBulkPayment]="selectedAccountsList" [selectedAccForPayment]="selectedAccForPayment" (closeModelEvent)="closeBulkPaymentModel($event)"></payment-aside>
 </ng-template>
 <!-- endregion -->
 
