@@ -267,6 +267,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /** update IndexDb flags observable **/
     public updateIndexDbInProcess$: Observable<boolean>;
     public updateIndexDbSuccess$: Observable<boolean>;
+    /* This will hold if resolution is less than 768 to consider as mobile screen */
+    public isMobileScreen: boolean = false;
 
     /**
      *
@@ -295,7 +297,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private generalService: GeneralService,
         private commonActions: CommonActions,
         private location: Location,
-        private settingsFinancialYearActions: SettingsFinancialYearActions
+        private settingsFinancialYearActions: SettingsFinancialYearActions,
+        private breakPointObservar: BreakpointObserver
     ) {
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         //this._windowRef.nativeWindow.superformIds = ['Jkvq'];
@@ -470,10 +473,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.removeCompanySessionData();
             }
         });
-
     }
 
     public ngOnInit() {
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
         this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
             if (value === 'logoutCordova') {
                 this.zone.run(() => {
