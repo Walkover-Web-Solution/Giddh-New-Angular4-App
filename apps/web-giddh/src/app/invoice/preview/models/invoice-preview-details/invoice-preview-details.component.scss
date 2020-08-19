@@ -301,6 +301,8 @@ span.close-modal.cp.pull-right {
     width: 32px;
     background-color: #ddd;
     border: 1px solid $gainsboro;
+    position: static;
+    transform: inherit;
 }
 
 .changeStatus-dropdown .dropdown-menu {
@@ -386,6 +388,8 @@ span.close-modal.cp.pull-right {
             justify-content: center;
             align-items: center;
             margin-right: 10px;
+            position: static;
+            transform: inherit;
         }
     }
     .invoice-editBody {

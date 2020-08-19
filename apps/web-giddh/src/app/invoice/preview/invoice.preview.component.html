@@ -252,7 +252,7 @@
                             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Bill#', fieldName: 'invoiceNumber',
              formControl: voucherNumberInput}"></ng-container>
                         </th>
-                        <th>Purchase Order</th>
+                        <!-- <th>Purchase Order</th> -->
                         <th width="19%" class="td-search-box" #searchCustomerContainer
                             (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
                             <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
