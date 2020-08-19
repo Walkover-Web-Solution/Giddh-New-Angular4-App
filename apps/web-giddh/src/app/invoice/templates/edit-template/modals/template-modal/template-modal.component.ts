@@ -17,7 +17,7 @@ export class InvoiceTemplateModalComponent implements DoCheck, OnChanges {
     @Input() public templateSections: ISection;
     @Input() public editMode: string;
     @Output() public downloadOrSendMailEvent: EventEmitter<object> = new EventEmitter();
-    @ViewChild(EditFiltersContainersComponent) public editFiltersComponent: EditFiltersContainersComponent;
+    @ViewChild(EditFiltersContainersComponent, {static: true}) public editFiltersComponent: EditFiltersContainersComponent;
 
     public isEmailTabSelected: boolean = false;
     public isPreviewMode: boolean = true;

@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { VirtualScrollModule } from 'apps/web-giddh/src/app/theme/ng-virtual-select/virtual-scroll';
 import { NgxMaskModule } from '../../shared/helpers/directives/ngx-mask';
-import { TooltipModule } from "ngx-bootstrap";
+import { TooltipModule } from "ngx-bootstrap/tooltip";
 
 @NgModule({
     imports: [CommonModule, FormsModule, ClickOutsideModule, VirtualScrollModule, NgxMaskModule, TooltipModule],
@@ -14,7 +14,7 @@ import { TooltipModule } from "ngx-bootstrap";
 })
 
 export class TaxControlModule {
-    public static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders<unknown> {
         return {
             ngModule: TaxControlModule,
             providers: []

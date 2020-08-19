@@ -8,7 +8,7 @@ import { LogsRequest, LogsResponse, GetAuditLogsRequest, AuditLogsResponse } fro
  * Created by ad on 04-07-2017.
  */
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AUDIT_LOGS_ACTIONS, AUDIT_LOGS_ACTIONS_V2 } from './audit-logs.const';
@@ -16,8 +16,10 @@ import { CustomActions } from '../../store/customActions';
 
 @Injectable()
 export class AuditLogsActions {
-    @Effect() private GET_LOGS$: Observable<Action> = this.action$
-        .ofType(AUDIT_LOGS_ACTIONS.GET_LOGS).pipe(
+
+    public GET_LOGS$: Observable<Action> = createEffect( ()=> this.action$
+        .pipe(
+            ofType(AUDIT_LOGS_ACTIONS.GET_LOGS),
             switchMap((action: CustomActions) => {
                 return this.logService.GetAuditLogs(action.payload.request, action.payload.page).pipe(
                     map((r) => this.validateResponse<LogsResponse, LogsRequest>(r, {
@@ -27,10 +29,11 @@ export class AuditLogsActions {
                         type: AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE,
                         payload: r
                     })));
-            }));
+            })));
 
-    @Effect() private LoadMore$: Observable<Action> = this.action$
-        .ofType(AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS).pipe(
+     public LoadMore$: Observable<Action> =  createEffect( ()=>this.action$
+        .pipe(
+            ofType(AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS),
             switchMap((action: CustomActions) => {
                 return this.logService.GetAuditLogs(action.payload.request, action.payload.page).pipe(
                     map((r) => this.validateResponse<LogsResponse, LogsRequest>(r, {
@@ -40,10 +43,10 @@ export class AuditLogsActions {
                         type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS_RESPONSE,
                         payload: r
                     })));
-            }));
+            })));
 
 
-    @Effect() private getAuditLogs$: Observable<Action> = this.action$
+    public getAuditLogs$: Observable<Action> = createEffect(() => this.action$
         .pipe(ofType(AUDIT_LOGS_ACTIONS_V2.GET_LOGS_REQUEST),
             switchMap((action: CustomActions) => {
                 return this.logService.getAuditLogs(action.payload.request, action.payload.page).pipe(
@@ -54,7 +57,7 @@ export class AuditLogsActions {
                         type: AUDIT_LOGS_ACTIONS_V2.GET_LOGS_RESPONSE_V2,
                         payload: response
                     })));
-            }));
+            })));
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,

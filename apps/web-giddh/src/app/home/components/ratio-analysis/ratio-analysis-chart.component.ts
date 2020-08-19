@@ -1,6 +1,6 @@
 import { skipWhile, take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Options } from 'highcharts';
+import { Chart } from 'angular-highcharts';
 import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
@@ -22,17 +22,17 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
 
     // public ApiToCALL: API_TO_CALL[] = [API_TO_CALL.PL];
-    public options: Options;
+    //public options: Options;
     public activeFinancialYear: ActiveFinancialYear;
     public lastFinancialYear: ActiveFinancialYear;
     public companies$: Observable<CompanyResponse[]>;
     public activeCompanyUniqueName$: Observable<string>;
     @Input() public comparisionChartData: Observable<IComparisionChartResponse>;
     public requestInFlight = true;
-    public currentRatioOption: Options;
-    public debtOptions: Options;
-    public proprietaryOption: Options;
-    public fixedAssetOption: Options;
+    public currentRatioOption: any;
+    public debtOptions: any;
+    public proprietaryOption: any;
+    public fixedAssetOption: any;
     public rationResponse$: Observable<any>;
     public ratioObj: any = {};
 
@@ -107,7 +107,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     }
 
     public generateCharts() {
-        this.currentRatioOption = {
+        this.currentRatioOption = new Chart({
             colors: ['#2C6EBD', '#4693F1'],
             chart: {
                 type: 'pie',
@@ -173,9 +173,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 // showInLegend: false,
                 data: [['Current Assets', this.ratioObj.currentRatio * 100], ['Current Liabilities', 100]],
             }],
-        };
+        });
 
-        this.debtOptions = {
+        this.debtOptions = new Chart({
             colors: ['#EFBB35', '#FED46A'],
             chart: {
                 type: 'pie',
@@ -242,9 +242,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 data: [['Current Liab + NonCurrent Liab', this.ratioObj.debtEquityRatio * 100], ['Shareholders fund', 100]],
 
             }]
-        };
+        });
 
-        this.proprietaryOption = {
+        this.proprietaryOption = new Chart({
             colors: ['#D93664', '#F85C88'],
             chart: {
                 type: 'pie',
@@ -311,9 +311,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 data: [['Shareholders fund', this.ratioObj.proprietaryRatio * 100], ['Total Assets', 100]],
 
             }]
-        };
+        });
 
-        this.fixedAssetOption = {
+        this.fixedAssetOption = new Chart({
             colors: ['#087E7D', '#0CB1AF'],
             chart: {
                 type: 'pie',
@@ -378,7 +378,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 name: 'Fixed Assets Ratio',
                 data: [['Fixed Assets / NonCurrent Liab', this.ratioObj.fixedAssetRatio * 100], ['Shareholders fund', 100]],
             }]
-        };
+        });
     }
 
     public ngOnDestroy() {

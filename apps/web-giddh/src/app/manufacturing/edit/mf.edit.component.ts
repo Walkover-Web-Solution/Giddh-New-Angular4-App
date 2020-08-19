@@ -14,7 +14,7 @@ import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { GroupService } from '../../services/group.service';
 import { ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { InventoryService } from '../../services/inventory.service';
 import { AccountService } from '../../services/account.service';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
@@ -29,7 +29,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 })
 
 export class MfEditComponent implements OnInit {
-    @ViewChild('manufacturingConfirmationModal') public manufacturingConfirmationModal: ModalDirective;
+    @ViewChild('manufacturingConfirmationModal', {static: true}) public manufacturingConfirmationModal: ModalDirective;
 
     public stockListDropDown$: Observable<IOption[]>;
     public allStocksDropDown$: Observable<IOption[]>;

@@ -47,8 +47,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
 
 
 
-    @ViewChild('tdsTypeBox') public tdsTypeBox: ElementRef;
-    @ViewChild('tdsAmountBox') public tdsAmountBox: ElementRef;
+    @ViewChild('tdsTypeBox', {static: true}) public tdsTypeBox: ElementRef;
+    @ViewChild('tdsAmountBox', {static: true}) public tdsAmountBox: ElementRef;
 
     public adjustPayment: AdjustAdvancePaymentModal = {
         customerName: '',
@@ -119,7 +119,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.invoiceFormDetails.voucherDetails.tdsTotal = this.invoiceFormDetails.voucherDetails.tdsTotal || 0;
             this.assignVoucherDetails();
         }
-        console.log('Invoice form details: ', this.invoiceFormDetails);
         if (!this.isVoucherModule) {
             const voucherType =
                 (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt) ? 'receipt' : this.adjustedVoucherType;
@@ -141,9 +140,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
                 }
             }
             this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate).subscribe((response) => {
-                console.log('Response received: ', response);
                 if (response && response.body) {
-                    this.allAdvanceReceiptResponse = response.body.results
+                    this.allAdvanceReceiptResponse = response.body.results;
                     this.adjustVoucherOptions = [];
                     if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
                         this.allAdvanceReceiptResponse.forEach(item => {

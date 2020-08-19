@@ -1,6 +1,6 @@
 import {take, takeUntil, distinctUntilChanged} from 'rxjs/operators';
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit, ViewChild} from '@angular/core';
-import {ModalDirective} from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import {VerifyMobileActions} from '../../../../actions/verifyMobile.actions';
 import {LocationService} from '../../../../services/location.service';
 import {CompanyActions} from '../../../../actions/company.actions';
@@ -39,8 +39,8 @@ import * as googleLibphonenumber from 'google-libphonenumber';
 export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
     @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
-    @ViewChild('logoutModal') public logoutModal: ModalDirective;
-    @ViewChild('companyForm') public companyForm: NgForm;
+    @ViewChild('logoutModal', {static: true}) public logoutModal: ModalDirective;
+    @ViewChild('companyForm', {static: true}) public companyForm: NgForm;
     @Input() public createBranch: boolean = false;
 
     public imgPath: string = '';

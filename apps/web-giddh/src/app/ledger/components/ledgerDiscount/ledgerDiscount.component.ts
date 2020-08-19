@@ -28,7 +28,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 	public discountFromVal: boolean = true;
 	public discountPercentageModal: number = 0;
 	public discountFixedValueModal: number = 0;
-	@ViewChild('disInptEle') public disInptEle: ElementRef;
+	@ViewChild('disInptEle', {static: true}) public disInptEle: ElementRef;
 
 	@Input() public discountMenu: boolean;
 	@Input() public maskInput: string;

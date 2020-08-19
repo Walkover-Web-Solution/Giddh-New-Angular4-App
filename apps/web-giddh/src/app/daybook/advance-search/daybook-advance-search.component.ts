@@ -38,7 +38,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 	@Input() public startDate: any;
 	@Input() public endDate: any;
 	@Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
-	@ViewChild('dateRangePickerDir', { read: DaterangePickerComponent }) public dateRangePickerDir: DaterangePickerComponent;
+	@ViewChild('dateRangePickerDir', { read: DaterangePickerComponent, static: true }) public dateRangePickerDir: DaterangePickerComponent;
 
 	public advanceSearchObject: DayBookRequestModel = null;
 	public advanceSearchForm: FormGroup;

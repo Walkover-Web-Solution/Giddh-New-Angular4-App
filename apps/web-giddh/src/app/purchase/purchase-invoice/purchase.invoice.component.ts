@@ -2,7 +2,8 @@ import { take, takeUntil } from 'rxjs/operators';
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { BsDropdownConfig, PaginationComponent } from 'ngx-bootstrap';
+import { PaginationComponent } from 'ngx-bootstrap/pagination';
+import {BsDropdownConfig} from 'ngx-bootstrap/dropdown';
 import * as  moment from 'moment/moment';
 import * as  _ from '../../lodash-optimized';
 import { GeneratePurchaseInvoiceRequest, IInvoicePurchaseItem, IInvoicePurchaseResponse, ITaxResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
@@ -76,10 +77,10 @@ const fileGstrOptions = [
     ]
 })
 export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
-    @ViewChild('pgGstNotFoundOnPortal') public pgGstNotFoundOnPortal: ElementViewContainerRef;
-    @ViewChild('pgGstNotFoundOnGiddh') public pgGstNotFoundOnGiddh: ElementViewContainerRef;
-    @ViewChild('pgPartiallyMatched') public pgPartiallyMatched: ElementViewContainerRef;
-    @ViewChild('pgMatched') public pgMatched: ElementViewContainerRef;
+    @ViewChild('pgGstNotFoundOnPortal', {static: true}) public pgGstNotFoundOnPortal: ElementViewContainerRef;
+    @ViewChild('pgGstNotFoundOnGiddh', {static: true}) public pgGstNotFoundOnGiddh: ElementViewContainerRef;
+    @ViewChild('pgPartiallyMatched', {static: true}) public pgPartiallyMatched: ElementViewContainerRef;
+    @ViewChild('pgMatched', {static: true}) public pgMatched: ElementViewContainerRef;
 
     public allPurchaseInvoicesBackup: IInvoicePurchaseResponse;
     public allPurchaseInvoices: IInvoicePurchaseResponse = new IInvoicePurchaseResponse();

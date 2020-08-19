@@ -437,7 +437,7 @@
       <div class="row">
         <tabset #staticTabs id="c-tab">
           <tab heading="{{'Missing in GSTN (' + (gstNotFoundOnPortalData$ | async)?.count + ')' }}"
-               (select)="reconcileTabChanged('NOT_ON_PORTAL')">
+               (selectTab)="reconcileTabChanged('NOT_ON_PORTAL')">
             <div>
               <reconcileDesign [data]="(gstNotFoundOnPortalData$ | async)?.data">
               </reconcileDesign>
@@ -453,7 +453,7 @@
             </div>
           </tab>
           <tab heading="{{'Missing in Giddh (' + (gstNotFoundOnGiddhData$ | async)?.count + ')'}}"
-               (select)="reconcileTabChanged('NOT_ON_GIDDH')">
+               (selectTab)="reconcileTabChanged('NOT_ON_GIDDH')">
             <div>
               <reconcileDesign [data]="(gstNotFoundOnGiddhData$ | async)?.data">
               </reconcileDesign>
@@ -470,7 +470,7 @@
 
           </tab>
           <tab heading="{{'Partially Matched (' + (gstPartiallyMatchedData$ | async)?.count + ')'}}"
-               (select)="reconcileTabChanged('PARTIALLY_MATCHED')">
+               (selectTab)="reconcileTabChanged('PARTIALLY_MATCHED')">
             <div>
 
               <reconcileDesign [data]="(gstPartiallyMatchedData$ | async)?.data">
@@ -487,7 +487,7 @@
 
           </tab>
           <tab heading="{{'Matched (' + (gstMatchedData$ | async)?.count + ')'}}"
-               (select)="reconcileTabChanged('MATCHED')">
+               (selectTab)="reconcileTabChanged('MATCHED')">
             <div>
               <reconcileDesign [data]="(gstMatchedData$ | async)?.data">
               </reconcileDesign>

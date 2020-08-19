@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -28,17 +28,18 @@ import {GeneralService} from "../../services/general.service";
 @Injectable()
 export class SalesActions {
 
-    @Effect()
-    public GetAccountDetails$: Observable<Action> = this.action$
-        .ofType(SALES_ACTIONS.GET_ACCOUNT_DETAILS).pipe(
+    public GetAccountDetails$: Observable<Action> = createEffect( ()=> this.action$
+        .pipe(
+            ofType(SALES_ACTIONS.GET_ACCOUNT_DETAILS),
             switchMap((action: CustomActions) => this._accountService.GetAccountDetailsV2(action.payload)),
             map(response => {
                 return this.getAccountDetailsForSalesResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public GetAccountDetailsResponse$: Observable<Action> = this.action$
-        .ofType(SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE).pipe(
+
+    public GetAccountDetailsResponse$: Observable<Action> = createEffect( ()=> this.action$
+        .pipe(
+            ofType(SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE),
             map((action: CustomActions) => {
                 let data: BaseResponse<AccountResponseV2, string> = action.payload;
                 if (action.payload.status === 'error') {
@@ -47,17 +48,19 @@ export class SalesActions {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
-    @Effect()
-    public GetGroupsListForSales$: Observable<Action> = this.action$
-        .ofType(SALES_ACTIONS.GET_HIERARCHICAL_STOCK_GROUPS).pipe(
+
+    public GetGroupsListForSales$: Observable<Action> = createEffect( ()=> this.action$
+        .pipe(
+            ofType(SALES_ACTIONS.GET_HIERARCHICAL_STOCK_GROUPS),
             switchMap((action: CustomActions) => this._inventoryService.GetGroupsWithStocksFlatten()),
-            map(response => this.getGroupsListForSalesResponse(response)));
+            map(response => this.getGroupsListForSalesResponse(response))));
 
-    @Effect()
-    public GetGroupsListForSalesResponse$: Observable<Action> = this.action$
-        .ofType(SALES_ACTIONS.GET_HIERARCHICAL_STOCK_GROUPS_RESPONSE).pipe(
+
+    public GetGroupsListForSalesResponse$: Observable<Action> = createEffect( ()=> this.action$
+        .pipe(
+            ofType(SALES_ACTIONS.GET_HIERARCHICAL_STOCK_GROUPS_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -65,12 +68,13 @@ export class SalesActions {
                 return {
                     type: 'EmptyAction'
                 };
-            }));
+            })));
 
     // get purhase Ac list
-    @Effect()
-    public getFlattenAcOfPurchase$: Observable<Action> = this.action$
-        .ofType(SALES_ACTIONS.GET_PURCHASE_AC_LIST).pipe(
+
+    public getFlattenAcOfPurchase$: Observable<Action> = createEffect( ()=> this.action$
+        .pipe(
+            ofType(SALES_ACTIONS.GET_PURCHASE_AC_LIST),
             switchMap((action: CustomActions) => this._accountService.GetFlatternAccountsOfGroup(action.payload)),
             map(res => this.validateResponse<FlattenAccountsResponse, { groupUniqueNames: string[] }>(res, {
                 type: SALES_ACTIONS.GET_PURCHASE_AC_LIST_RESPONSE,
@@ -78,12 +82,13 @@ export class SalesActions {
             }, true, {
                 type: SALES_ACTIONS.GET_PURCHASE_AC_LIST_RESPONSE,
                 payload: res
-            })));
+            }))));
 
     // get sales Ac list
-    @Effect()
-    public getFlattenAcOfSales$: Observable<Action> = this.action$
-        .ofType(SALES_ACTIONS.GET_SALES_AC_LIST).pipe(
+
+    public getFlattenAcOfSales$: Observable<Action> = createEffect( ()=> this.action$
+        .pipe(
+            ofType(SALES_ACTIONS.GET_SALES_AC_LIST),
             switchMap((action: CustomActions) => this._accountService.GetFlatternAccountsOfGroup(action.payload)),
             map(res => this.validateResponse<FlattenAccountsResponse, { groupUniqueNames: string[] }>(res, {
                 type: SALES_ACTIONS.GET_SALES_AC_LIST_RESPONSE,
@@ -91,19 +96,21 @@ export class SalesActions {
             }, true, {
                 type: SALES_ACTIONS.GET_SALES_AC_LIST_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public CreateAccountDetails$: Observable<Action> = this.action$
-        .ofType(SALES_ACTIONS.ADD_ACCOUNT_DETAILS).pipe(
+
+    public CreateAccountDetails$: Observable<Action> = createEffect( ()=> this.action$
+        .pipe(
+            ofType(SALES_ACTIONS.ADD_ACCOUNT_DETAILS),
             switchMap((action: CustomActions) => this._accountService.CreateAccountV2(action.payload.accountRequest, action.payload.activeGroupUniqueName)),
             map(response => {
                 return this.addAccountDetailsForSalesResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public CreateAccountResponseDetails$: Observable<Action> = this.action$
-        .ofType(SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE).pipe(
+
+    public CreateAccountResponseDetails$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toasty.clearAllToaster();
@@ -121,11 +128,12 @@ export class SalesActions {
                     // }
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public UpdateAccountDetails$: Observable<Action> = this.action$
-        .ofType(SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS).pipe(
+
+    public UpdateAccountDetails$: Observable<Action> = createEffect( ()=> this.action$
+        .pipe(
+            ofType(SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS),
             switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.accountRequest, action.payload.value)),
             map(response => {
                 if(response && response.body && response.queryString) {
@@ -141,11 +149,12 @@ export class SalesActions {
                     this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
                 }
                 return this.updateAccountDetailsForSalesResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public UpdateAccountDetailsResponse$: Observable<Action> = this.action$
-        .ofType(SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE).pipe(
+
+    public UpdateAccountDetailsResponse$: Observable<Action> = createEffect( ()=> this.action$
+        .pipe(
+            ofType(SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE),
             map((action: CustomActions) => {
                 let resData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
                 if (action.payload.status === 'error') {
@@ -155,7 +164,7 @@ export class SalesActions {
                     this._toasty.successToast('Account Updated Successfully');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,

@@ -5,7 +5,9 @@ import { GstReconcileActionsEnum, GstReconcileInvoiceRequest, GstrSheetDownloadR
 import { select, Store } from '@ngrx/store';
 import { ToasterService } from '../../../services/toaster.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AlertConfig, BsDropdownConfig, ModalDirective } from 'ngx-bootstrap';
+import { AlertConfig } from 'ngx-bootstrap/alert';
+import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
 import { take, takeUntil } from 'rxjs/operators';
@@ -45,7 +47,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isMonthSelected: boolean = false;
     @Input() public fileReturn: {} = { isAuthenticate: false };
     @Input() public fileGstr3b: {} = { via: null };
-    @ViewChild('cancelConfirmationModel') public cancelConfirmationModel: ModalDirective;
+    @ViewChild('cancelConfirmationModel', {static: true}) public cancelConfirmationModel: ModalDirective;
 
     public gstAuthenticated$: Observable<boolean>;
     public GstAsidePaneState: string = 'out';

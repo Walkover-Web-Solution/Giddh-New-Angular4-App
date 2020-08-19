@@ -11,7 +11,7 @@
                     <tabset class="sub-filter-nav-band">
 
                         <!-- region Missing in GSTN -->
-                        <tab (select)="reconcileTabChanged('notfoundonportal')">
+                        <tab (selectTab)="reconcileTabChanged('notfoundonportal')">
 
                             <ng-template tabHeading>
                                 Missing in GSTN <span
@@ -40,7 +40,7 @@
                         <!-- endregion -->
 
                         <!-- region Missing in Giddh -->
-                        <tab (select)="reconcileTabChanged('notfoundongiddh')">
+                        <tab (selectTab)="reconcileTabChanged('notfoundongiddh')">
                             <ng-template tabHeading>
                                 Missing in Giddh <span
                                 class="count">{{'(' + (gstNotFoundOnGiddhData$ | async)?.count + ')'}}</span>
@@ -67,7 +67,7 @@
                         <!-- endregion -->
 
                         <!-- region Partially Matched -->
-                        <tab (select)="reconcileTabChanged('partiallymatched')">
+                        <tab (selectTab)="reconcileTabChanged('partiallymatched')">
 
                             <ng-template tabHeading>
                                 Partially Matched <span
@@ -96,7 +96,7 @@
                         <!-- endregion -->
 
                         <!-- region Matched -->
-                        <tab (select)="reconcileTabChanged('matched')">
+                        <tab (selectTab)="reconcileTabChanged('matched')">
 
                             <ng-template tabHeading>
                                 Matched <span class="count">{{'(' + (gstMatchedData$ | async)?.count + ')'}}</span>

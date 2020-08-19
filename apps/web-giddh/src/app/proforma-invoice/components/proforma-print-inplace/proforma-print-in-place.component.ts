@@ -17,7 +17,7 @@ import { ReceiptService } from '../../../services/receipt.service';
 export class ProformaPrintInPlaceComponent implements OnInit {
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
     @Input() public selectedItem: { voucherNumber: string, uniqueName: string, blob?: Blob };
-    @ViewChild(PdfJsViewerComponent) public pdfViewer: PdfJsViewerComponent;
+    @ViewChild(PdfJsViewerComponent, {static: true}) public pdfViewer: PdfJsViewerComponent;
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     public isVoucherDownloading: boolean = false;

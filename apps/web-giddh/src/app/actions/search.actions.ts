@@ -1,9 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
-/**
- * Created by ad on 04-07-2017.
- */
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -19,8 +16,9 @@ export class SearchActions {
     public static readonly SEARCH_RESPONSE = 'SEARCH_RESPONSE';
     public static readonly RESET_SEARCH_STATE = 'RESET_SEARCH_STATE';
 
-    @Effect() private Search$: Observable<Action> = this.action$
-        .ofType(SearchActions.SEARCH_REQUEST).pipe(
+    private Search$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(SearchActions.SEARCH_REQUEST),
             switchMap((action: CustomActions) => {
                 return this._searchService.Search(action.payload).pipe(
                     map((r) => this.validateResponse<any, SearchRequest>(r, {
@@ -30,7 +28,7 @@ export class SearchActions {
                         type: SearchActions.SEARCH_RESPONSE,
                         payload: r
                     })));
-            }));
+            })));
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,

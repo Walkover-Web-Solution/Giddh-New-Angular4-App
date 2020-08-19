@@ -14,7 +14,7 @@ import { ToasterService } from '../../../services/toaster.service';
 
 export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestroy {
 	@Input() public data: IOption[] = [];
-	@ViewChild('searchElement') public searchElement: ElementRef;
+	@ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
 	@Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
 	@Output() public saveItemsEvent: EventEmitter<SalesAddBulkStockItems[]> = new EventEmitter();
 

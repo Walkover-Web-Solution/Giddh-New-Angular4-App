@@ -1,5 +1,5 @@
 export class BaseResponse<TResponce, TRequest> {
-    public status: string;
+    public status?: string;
     public code?: string;
     public message?: string;
     public body?: TResponce;

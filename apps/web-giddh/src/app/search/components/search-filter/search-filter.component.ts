@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@
 import { SearchDataSet } from '../../../models/api-models/Search';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../shared/helpers/customValidationHelper';
-import { BsDropdownDirective } from 'ngx-bootstrap';
+import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 
 @Component({
 	selector: 'search-filter',  // <home></home>
@@ -19,7 +19,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
 	@Output() public createCsv = new EventEmitter();
 	@Output() public openEmailDialog = new EventEmitter();
 	@Output() public openSmsDialog = new EventEmitter();
-	@ViewChild('filterDropdown') public filterDropdown: BsDropdownDirective;
+	@ViewChild('filterDropdown', {static: true}) public filterDropdown: BsDropdownDirective;
 	public queryTypes = [
 		{ name: 'Closing Balance', uniqueName: 'closingBalance' },
 		{ name: 'Opening Balance', uniqueName: 'openingBalance' },

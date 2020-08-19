@@ -1,6 +1,6 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
-import { Options } from 'highcharts';
+import { Chart } from 'angular-highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
@@ -20,7 +20,7 @@ import {
 import { TBPlBsActions } from "../../../actions/tl-pl.actions";
 import * as Highcharts from 'highcharts';
 import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 
 @Component({
@@ -31,7 +31,7 @@ import { GeneralService } from '../../../services/general.service';
 
 export class ProfitLossComponent implements OnInit, OnDestroy {
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store modal reference */
@@ -52,11 +52,10 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public toDate: string;
     @Input() public refresh: boolean = false;
     public imgPath: string = '';
-    public options: Options;
     public companies$: Observable<CompanyResponse[]>;
     public activeCompanyUniqueName$: Observable<string>;
     public requestInFlight: boolean = true;
-    public profitLossChart: Options;
+    public profitLossChart: any;
     public totalIncome: number = 0;
     public totalIncomeType: string = '';
     public totalExpense: number = 0;
@@ -173,7 +172,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         let baseCurrencySymbol = this.amountSettings.baseCurrencySymbol;
         let cPipe = this.currencyPipe;
 
-        this.profitLossChart = {
+        this.profitLossChart = new Chart({
             colors: ['#FED46A', '#4693F1'],
             chart: {
                 type: 'pie',
@@ -229,7 +228,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 name: 'Profit & Loss',
                 data: [['Total Income', this.totalIncome], ['Total Expenses', this.totalExpense]],
             }],
-        };
+        });
 
         this.requestInFlight = false;
         this.cdRef.detectChanges();

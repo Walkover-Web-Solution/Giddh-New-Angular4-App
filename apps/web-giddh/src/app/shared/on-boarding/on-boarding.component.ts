@@ -5,7 +5,7 @@ import { select, Store } from '@ngrx/store';
 import { OnBoardingType } from 'apps/web-giddh/src/app/app.constant';
 import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModels';
 import * as googleLibphonenumber from 'google-libphonenumber';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 
@@ -31,8 +31,8 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 export class OnBoardingComponent implements OnInit, OnDestroy {
     @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
     @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
-    @ViewChild('logoutModal') public logoutModal: ModalDirective;
-    @ViewChild('companyForm') public companyForm: NgForm;
+    @ViewChild('logoutModal', {static: true}) public logoutModal: ModalDirective;
+    @ViewChild('companyForm', {static: true}) public companyForm: NgForm;
     @Input() public createBranch: boolean = false;
 
     /** Stores the on boarding type of any item */

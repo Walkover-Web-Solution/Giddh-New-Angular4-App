@@ -16,7 +16,7 @@ import * as _ from '../../../lodash-optimized';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { LogsService } from '../../../services/logs.service';
 import { IForceClear } from '../../../models/api-models/Sales';

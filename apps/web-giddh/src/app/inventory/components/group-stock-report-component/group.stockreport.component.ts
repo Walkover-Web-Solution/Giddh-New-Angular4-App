@@ -5,7 +5,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, takeUntil } from 'rxjs/operators';
@@ -50,15 +51,15 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 })
 
 export class InventoryGroupStockReportComponent implements OnChanges, OnInit, OnDestroy {
-    @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
-    @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
-    @ViewChild("productName") productName: ElementRef;
-    @ViewChild("sourceName") sourceName: ElementRef;
-    @ViewChild('advanceSearchForm') formValues;
-    @ViewChild('shCategory') public shCategory: ShSelectComponent;
-    @ViewChild('shCategoryType') public shCategoryType: ShSelectComponent;
-    @ViewChild('shValueCondition') public shValueCondition: ShSelectComponent;
-    @ViewChild('template') public template: ElementRef;
+    @ViewChild('dateRangePickerCmp', {static: true}) public dateRangePickerCmp: ElementRef;
+    @ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
+    @ViewChild("productName", {static: true}) productName: ElementRef;
+    @ViewChild("sourceName", {static: true}) sourceName: ElementRef;
+    @ViewChild('advanceSearchForm', {static: true}) formValues;
+    @ViewChild('shCategory', {static: true}) public shCategory: ShSelectComponent;
+    @ViewChild('shCategoryType', {static: true}) public shCategoryType: ShSelectComponent;
+    @ViewChild('shValueCondition', {static: true}) public shValueCondition: ShSelectComponent;
+    @ViewChild('template', {static: true}) public template: ElementRef;
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;

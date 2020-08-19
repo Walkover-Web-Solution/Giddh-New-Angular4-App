@@ -22,7 +22,7 @@ import { CountryRequest, OnboardingFormRequest } from "../../../../models/api-mo
 import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
 import * as googleLibphonenumber from 'google-libphonenumber';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
@@ -61,11 +61,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @Input() public isDebtorCreditor: boolean = false;
     @Input() public showDeleteButton: boolean = true;
     @Input() public accountDetails: any;
-    @ViewChild('autoFocusUpdate') public autoFocusUpdate: ElementRef;
+    @ViewChild('autoFocusUpdate', {static: true}) public autoFocusUpdate: ElementRef;
     public moveAccountForm: FormGroup;
     public taxGroupForm: FormGroup;
-    @ViewChild('deleteMergedAccountModal') public deleteMergedAccountModal: ModalDirective;
-    @ViewChild('moveMergedAccountModal') public moveMergedAccountModal: ModalDirective;
+    @ViewChild('deleteMergedAccountModal', {static: true}) public deleteMergedAccountModal: ModalDirective;
+    @ViewChild('moveMergedAccountModal', {static: true}) public moveMergedAccountModal: ModalDirective;
 
     public activeCompany: CompanyResponse;
     @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>

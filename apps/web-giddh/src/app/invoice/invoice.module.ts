@@ -8,7 +8,7 @@ import { PurchaseModule } from '../purchase/purchase.module';
     declarations: [],
     imports: [
         InvoiceRoutingModule,
-        NgbTypeaheadModule.forRoot(),
+        NgbTypeaheadModule,
         ProformaInvoiceModule,
         DigitsOnlyModule,
         PurchaseModule,

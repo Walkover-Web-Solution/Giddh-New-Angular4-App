@@ -12,7 +12,7 @@ import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.a
 import { createSelector } from 'reselect';
 import { Observable, ReplaySubject } from 'rxjs';
 import { TagRequest } from '../../../models/api-models/settingsTags';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
@@ -95,7 +95,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
 
     @Input() public showLabels: boolean = false;
     @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
-    @ViewChild('createTagModal') public createTagModal: ModalDirective;
+    @ViewChild('createTagModal', {static: true}) public createTagModal: ModalDirective;
 
     public universalDate$: Observable<any>;
     public newTagForm: FormGroup;
