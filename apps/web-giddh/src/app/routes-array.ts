@@ -26,7 +26,6 @@ export const ROUTES = [
     { path: 'daybook', redirectTo: 'pages/daybook', pathMatch: 'full' },
     { path: 'purchase', redirectTo: 'pages/purchase-management', pathMatch: 'full' },
     { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
-    // { path: 'accounting-voucher', redirectTo: 'pages/accounting', pathMatch: 'full' },
     { path: 'journal-voucher', redirectTo: 'pages/journal-voucher', pathMatch: 'full' },
     { path: 'contact', redirectTo: 'pages/contact' },
     { path: 'aging-report', redirectTo: 'pages/aging-report', pathMatch: 'full' },

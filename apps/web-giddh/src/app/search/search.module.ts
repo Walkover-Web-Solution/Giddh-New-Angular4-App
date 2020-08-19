@@ -35,7 +35,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
         ReactiveFormsModule,
         SearchRoutingModule,
         DatepickerModule,
-        TypeaheadModule,
+        TypeaheadModule.forRoot(),
         ModalModule,
         LaddaModule,
         DecimalDigitsModule,

@@ -87,7 +87,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public advanceSearchRequest: AdvanceSearchRequest;
     public isLedgerCreateSuccess$: Observable<boolean>;
     public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    @ViewChild('newLedPanel', {static: true}) public newLedgerComponent: NewLedgerEntryPanelComponent;
+    @ViewChild('newLedPanel', {static: false}) public newLedgerComponent: NewLedgerEntryPanelComponent;
     @ViewChild('updateLedgerModal', {static: true}) public updateLedgerModal: ModalDirective;
     @ViewChild('exportLedgerModal', {static: true}) public exportLedgerModal: ModalDirective;
     @ViewChild('shareLedgerModal', {static: true}) public shareLedgerModal: ModalDirective;

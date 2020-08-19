@@ -59,7 +59,7 @@ import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
         SharedModule,
         ClickOutsideModule,
         TooltipModule,
-        TypeaheadModule,
+        TypeaheadModule.forRoot(),
         TextMaskModule,
         VirtualScrollModule,
         ElementViewChildModule,
