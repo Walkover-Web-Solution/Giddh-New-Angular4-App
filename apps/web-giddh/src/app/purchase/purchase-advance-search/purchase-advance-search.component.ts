@@ -114,6 +114,10 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
             this.datepickerTemplate,
             Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
+
+        this.modalService.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.hideGiddhDatepicker();
+        });
     }
 
     /**
