@@ -25,12 +25,10 @@ import { CommonActions } from '../../actions/common.actions';
 import { VAT_SUPPORTED_COUNTRIES, RATE_FIELD_PRECISION, SubVoucher } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, SalesEntryClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, AccountDetailsClass } from '../../models/api-models/Sales';
-import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { TaxResponse } from '../../models/api-models/Company';
 import { IContentCommon } from '../../models/api-models/Invoice';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { cloneDeep } from '../../lodash-optimized';
-import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import * as moment from 'moment/moment';
 import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
 import { TaxControlComponent } from '../../theme/tax-control/tax-control.component';
@@ -47,6 +45,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
 import { GeneralActions } from '../../actions/general/general.actions';
+import { InvoiceService } from '../../services/invoice.service';
 
 const THEAD_ARR_READONLY = [
     {
@@ -285,10 +284,19 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public showLoaderUntilDataPrefilled: boolean = false;
     /* Onboarding params object */
     public onboardingFormRequest: OnboardingFormRequest = { formName: 'onboarding', country: '' };
+    /* This will hold invoice settings */
+    public invoiceSettings: any = {};
+    /* This will hold input mask format */
+    public inputMaskFormat: string = '';
+    /* This is to hide few tax types */
+    public exceptTaxTypes: string[];
+    /* This holds if other details is collapsed */
+    public isOthrDtlCollapsed: boolean = false;
+    /* This holds exchange rate */
+    public originalExchangeRate: any = 1;
 
-    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions) {
-        this.getInventorySettings();
-        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService) {
+        this.getInvoiceSettings();
         this.store.dispatch(this.generalActions.getFlattenAccount());
         this.flattenAccountListStream$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$));
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
@@ -301,6 +309,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.createdAccountDetails$ = this.store.pipe(select(state => state.sales.createdAccountDetails), takeUntil(this.destroyed$));
         this.updatedAccountDetails$ = this.store.pipe(select(state => state.sales.updatedAccountDetails), takeUntil(this.destroyed$));
         this.updateAccountSuccess$ = this.store.pipe(select(state => state.sales.updateAccountSuccess), takeUntil(this.destroyed$));
+        this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
     }
 
     /**
@@ -412,6 +421,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 this.companyCountryName = profile.country;
                 this.baseCurrencySymbol = profile.baseCurrencySymbol;
                 this.companyCurrency = profile.baseCurrency || 'INR';
+                this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
 
                 if (profile.addresses && profile.addresses.length > 0) {
                     this.companyAddresses = profile.addresses;
@@ -529,6 +539,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public assignDates(): void {
         let date = _.cloneDeep(this.universalDate);
         this.purchaseOrder.voucherDetails.voucherDate = date;
+
+        if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
+            this.assignDueDate();
+        }
 
         this.purchaseOrder.entries.forEach((entry: SalesEntryClass) => {
             entry.transactions.forEach((txn: SalesTransactionItemClass) => {
@@ -1331,19 +1345,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         transaction.sacNumber = null;
         transaction.hsnNumber = null;
         transaction.sacNumberExists = false;
-    }
-
-    /**
-     * This function is used to get inventory settings from store
-     *
-     * @memberof CreatePurchaseOrderComponent
-     */
-    public getInventorySettings(): void {
-        this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
-            if (settings && settings.companyInventorySettings) {
-                this.inventorySettings = settings.companyInventorySettings;
-            }
-        });
     }
 
     /**
@@ -2710,5 +2711,48 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         currentPageObj.name = title;
         currentPageObj.url = this.router.url;
         this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
+    }
+
+    /**
+     * This will get the invoice/purchase settings
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public getInvoiceSettings(): void {
+        this.invoiceService.GetInvoiceSetting().subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                this.invoiceSettings = _.cloneDeep(response.body);
+                this.inventorySettings = this.invoiceSettings.companyInventorySettings;
+                this.assignDueDate();
+            }
+        });
+    }
+
+    /**
+     * This will update the exchange rate
+     *
+     * @param {*} val
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public updateExchangeRate(val: any): void {
+        val = val.replace(this.baseCurrencySymbol, '');
+        let total = parseFloat(val.replace(/,/g, "")) || 0;
+        if (this.isMulticurrencyAccount) {
+            this.exchangeRate = total / this.purchaseOrder.voucherDetails.grandTotal || 0;
+            this.originalExchangeRate = this.exchangeRate;
+        }
+    }
+
+    /**
+     * This will update the due date based on settings
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public assignDueDate(): void {
+        if (!this.isUpdateMode) {
+            let duePeriod: number;
+            duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
+            this.purchaseOrder.voucherDetails.dueDate = duePeriod > 0 ? moment().add(duePeriod, 'days').toDate() : moment().toDate();
+        }
     }
 }
