@@ -616,10 +616,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public createVendorList(): void {
-        let sundryCreditorsAcList = [];
-        let stockAccountsList = [];
         this.flattenAccountListStream$.pipe(takeUntil(this.destroyed$)).subscribe(items => {
             if (items && items.length > 0) {
+                let sundryCreditorsAcList = [];
+                let stockAccountsList = [];
                 let existingAccounts = [];
                 items.forEach(item => {
                     if (item.parentGroups.some(group => group.uniqueName === 'sundrycreditors') && existingAccounts.indexOf(item.uniqueName) === -1) {
