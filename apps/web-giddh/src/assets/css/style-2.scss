@@ -9202,6 +9202,7 @@ input.checkbox-custom[type="checkbox"] {
 
 .inventory-page.modal-open .receipt-note-modal {
     margin-bottom: 0;
+    max-width: 100% !important;
 }
 
 .aside-body .btn-lg.btn-primary {
@@ -10271,6 +10272,9 @@ span#HW_badge_cont:nth-child(3) {
     .on-setting-page aside-setting.setting-sidebar, .on-user-page aside-setting.setting-sidebar{
         left: 0;
     }
+    #dashboard .panel-heading i{
+        margin-right: 10px !important;
+    }
 }
 
 @media (max-width: 575px) {
@@ -10698,4 +10702,9 @@ body.prevent-body-scroll {
     .hidden-sm {
         display: none!important;
     }
+}
+@media (max-width: 1199px) and (min-width: 992px){
+.hidden-md {
+    display: none!important;
+}
 }
