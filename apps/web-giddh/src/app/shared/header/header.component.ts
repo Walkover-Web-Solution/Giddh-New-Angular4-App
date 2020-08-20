@@ -17,7 +17,7 @@ import {
     OnInit,
     Output,
     TemplateRef,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import {
@@ -65,6 +65,7 @@ import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { CountryRequest, CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'app-header',
@@ -294,7 +295,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
         private commonActions: CommonActions,
-        private breakPointObservar: BreakpointObserver
+        private breakPointObservar: BreakpointObserver,
+        private location: Location
     ) {
         this._windowRef.nativeWindow.superformIds = ['Jkvq'];
         /* This will get the date range picker configurations */
@@ -330,6 +332,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
             if (event instanceof NavigationEnd) {
                 this.setCurrentPage();
+                this.addClassInBodyIfPageHasTabs();
 
                 if (this.router.url.includes("/ledger")) {
                     this.currentState = this.router.url;
@@ -1869,5 +1872,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if(window['Headway'] !== undefined) {
             window['Headway'].init();
         }
+    }
+    /**
+     * Toggle all module to previous selected module
+     *
+     * @memberof HeaderComponent
+     */
+    public navigateToAllModules(): void {
+        if(this.isAllModuleOpen) {
+           this.location.back();
+        } else {
+          this.router.navigate(['/pages/all-modules']);
+        }
+        this.isAllModuleOpen = !this.isAllModuleOpen;
     }
 }

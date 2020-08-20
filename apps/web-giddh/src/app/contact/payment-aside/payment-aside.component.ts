@@ -231,10 +231,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
             item.totalDueAmount = item.closingBalanceAmount;
         });
-
-
         this.getIntegratedBankDetails();
-
     }
 
 
@@ -260,7 +257,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             }
         }
         if (this.selectedAccForBulkPayment && !this.selectedAccForBulkPayment.length) {
-            this.closePaymentModel();
+            this.closePaymentModel(false);
         }
         this.getTotalAmount();
     }
@@ -330,7 +327,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         bankTransferConfirmOtpRequest.otp = this.receivedOtp;
         this._companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, bankTransferConfirmOtpRequest).subscribe((res) => {
             if (res && res.status === 'success') {
-                this.closePaymentModel();
+                this.closePaymentModel(true);
                 this.openModalWithClass(this.successTemplate);
             } else {
                 if (res.status === 'error' && res.code === 'BANK_ERROR') {
@@ -363,11 +360,11 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @returns {*}
      * @memberof PaymentAsideComponent
      */
-    public closePaymentModel(): void {
+    public closePaymentModel(isPaySuccess: boolean): void {
         this.resetFormData();
         this.totalSelectedAccountAmount = null;
         this.selectedAccForPayment = null;
-        this.closeModelEvent.emit(true);
+        this.closeModelEvent.emit(isPaySuccess);
     }
 
     /**
