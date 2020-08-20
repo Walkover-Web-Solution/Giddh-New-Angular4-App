@@ -3,7 +3,7 @@ import { CustomActions } from '../../store/customActions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GST_RECONCILE_ACTIONS, GSTR_ACTIONS } from './GstReconcile.const';
 import { FileGstr1Request, GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceRequest, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest, Gstr3bOverviewResult } from '../../models/api-models/GstReconcile';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
@@ -16,7 +16,7 @@ import { base64ToBlob } from '../../shared/helpers/helperFunctions';
 @Injectable()
 export class GstReconcileActions {
 
-    @Effect() private GstReconcileOtpRequest$: Observable<Action> = this.action$
+     public GstReconcileOtpRequest$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(GST_RECONCILE_ACTIONS.GST_RECONCILE_OTP_REQUEST)
             , switchMap((action: CustomActions) => {
@@ -31,9 +31,9 @@ export class GstReconcileActions {
                             }
                             return this.GstReconcileOtpResponse(response);
                         }));
-            }));
+            })));
 
-    @Effect() private GstReconcileVerifyOtpRequest$: Observable<Action> = this.action$
+    public GstReconcileVerifyOtpRequest$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(GST_RECONCILE_ACTIONS.GST_RECONCILE_VERIFY_OTP_REQUEST)
             , switchMap((action: CustomActions) => {
@@ -48,9 +48,9 @@ export class GstReconcileActions {
                             }
                             return this.GstReconcileVerifyOtpResponse(response);
                         }));
-            }));
+            })));
 
-    @Effect() private GstReconcileInvoicePeriodRequest$: Observable<Action> = this.action$
+    public GstReconcileInvoicePeriodRequest$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_REQUEST)
             , switchMap((action: CustomActions) => {
@@ -65,9 +65,9 @@ export class GstReconcileActions {
                             }
                             return this.GstReconcileInvoiceResponse(response);
                         }));
-            }));
+            })));
 
-    @Effect() private GetGstr1OverView$: Observable<Action> = this.action$
+    public GetGstr1OverView$: Observable<Action> = createEffect( ()=>this.action$
         .pipe(
             ofType(GSTR_ACTIONS.GET_GSTR1_OVERVIEW)
             , switchMap((action: CustomActions) => {
@@ -82,9 +82,9 @@ export class GstReconcileActions {
                             }
                             return this.GetOverViewResponse(response);
                         }));
-            }));
+            })));
 
-    @Effect() private GetGstr2OverView$: Observable<Action> = this.action$
+    public GetGstr2OverView$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(GSTR_ACTIONS.GET_GSTR2_OVERVIEW)
             , switchMap((action: CustomActions) => {
@@ -99,8 +99,8 @@ export class GstReconcileActions {
                             }
                             return this.GetOverViewResponse(response);
                         }));
-            }));
-    @Effect() private GetGstr3BOverView$: Observable<Action> = this.action$
+            })));
+    public GetGstr3BOverView$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(GSTR_ACTIONS.GET_GSTR3B_OVERVIEW)
             , switchMap((action: CustomActions) => {
@@ -115,19 +115,20 @@ export class GstReconcileActions {
                             // }
                             return this.GetGstr3BOverViewResponse(response);
                         }));
-            }));
-    @Effect()
-    private GetGstr3BOverViewResponse$: Observable<Action> = this.action$
-        .ofType(GSTR_ACTIONS.GET_GSTR3B_OVERVIEW_RESPONSE).pipe(
+            })));
+
+    public GetGstr3BOverViewResponse$: Observable<Action> = createEffect( ()=>this.action$
+        .pipe(
+            ofType(GSTR_ACTIONS.GET_GSTR3B_OVERVIEW_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, GstOverViewRequest> = response.payload;
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect() private GetSummaryTransaction$: Observable<Action> = this.action$
+    public GetSummaryTransaction$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS)
             , switchMap((action: CustomActions) => {
@@ -142,9 +143,9 @@ export class GstReconcileActions {
                             }
                             return this.GetSummaryTransactionResponse(response);
                         }));
-            }));
+            })));
 
-    @Effect() private GetGSTR1SummaryDetails$: Observable<Action> = this.action$
+    public GetGSTR1SummaryDetails$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(GSTR_ACTIONS.GET_GSTR1_SUMMARY_DETAILS)
             , switchMap((action: CustomActions) => {
@@ -159,19 +160,21 @@ export class GstReconcileActions {
                             }
                             return this.GetGSTR1SummaryDetailsResponse(response);
                         }));
-            }));
+            })));
 
-    @Effect()
-    private DownloadGSTRSheet$: Observable<Action> = this.action$
-        .ofType(GSTR_ACTIONS.DOWNLOAD_GSTR_SHEET).pipe(
+
+    public DownloadGSTRSheet$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(GSTR_ACTIONS.DOWNLOAD_GSTR_SHEET),
             switchMap((action: CustomActions) => {
                 return this._reconcileService.DownloadGSTRSheet(action.payload).pipe(
                     map(response => this.DownloadGstrSheetResponse(response)));
-            }));
+            })));
 
-    @Effect()
-    private DownloadGSTRSheetResponse$: Observable<Action> = this.action$
-        .ofType(GSTR_ACTIONS.DOWNLOAD_GSTR_SHEET_RESPONSE).pipe(
+
+    public DownloadGSTRSheetResponse$: Observable<Action> = createEffect( ()=>this.action$
+        .pipe(
+            ofType(GSTR_ACTIONS.DOWNLOAD_GSTR_SHEET_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, GstrSheetDownloadRequest> = response.payload;
                 if (data.status === 'error') {
@@ -181,22 +184,24 @@ export class GstReconcileActions {
                     this._toasty.successToast('Sheet Downloaded Successfully.');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    private GstSaveGSPSession$: Observable<Action> = this.action$
-        .ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION).pipe(
+
+    public GstSaveGSPSession$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION),
             switchMap((action: CustomActions) => {
                 return this._reconcileService.SaveGSPSession(action.payload).pipe(
                     map(response => this.SaveGSPSessionResponse(response)));
-            }));
+            })));
 
     /**
      * Save Tax Pro RESPONSE
      */
-    @Effect()
-    private GstSaveGSPSessionResponse$: Observable<Action> = this.action$
-        .ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_RESPONSE).pipe(
+
+    public GstSaveGSPSessionResponse$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, GstSaveGspSessionRequest> = response.payload;
                 if (data.status === 'error') {
@@ -205,19 +210,21 @@ export class GstReconcileActions {
                     this._toasty.successToast(data.body);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    private GstSaveGSPSessionWithOTP$: Observable<Action> = this.action$
-        .ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP).pipe(
+
+    public GstSaveGSPSessionWithOTP$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP),
             switchMap((action: CustomActions) => {
                 return this._reconcileService.SaveGSPSessionWithOTP(action.payload).pipe(
                     map(response => this.SaveGSPSessionWithOTPResponse(response)));
-            }));
+            })));
 
-    @Effect()
-    private GstSaveGSPSessionWithOTPResponse$: Observable<Action> = this.action$
-        .ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE).pipe(
+
+    public GstSaveGSPSessionWithOTPResponse$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, GstSaveGspSessionRequest> = response.payload;
                 if (data.status === 'error') {
@@ -226,9 +233,9 @@ export class GstReconcileActions {
                     this._toasty.successToast(data.body);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect() private FileGstr1$: Observable<Action> = this.action$
+    public FileGstr1$: Observable<Action> =createEffect( ()=> this.action$
         .pipe(
             ofType(GSTR_ACTIONS.FILE_GSTR1)
             , switchMap((action: CustomActions) => {
@@ -243,15 +250,16 @@ export class GstReconcileActions {
                             }
                             return this.FileGstr1Response(response);
                         }));
-            }));
+            })));
 
-    @Effect()
-    private GetGSPSession$: Observable<Action> = this.action$
-        .ofType(GSTR_ACTIONS.GST_GET_GSP_SESSION).pipe(
+
+    public GetGSPSession$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(GSTR_ACTIONS.GST_GET_GSP_SESSION),
             switchMap((action: CustomActions) => {
                 return this._reconcileService.GetGSPSession(action.payload).pipe(
                     map(response => this.GetGSPSessionResponse(response)));
-            }));
+            })));
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,

@@ -23,7 +23,8 @@ import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { TabsetComponent, ModalDirective } from "ngx-bootstrap";
+import { TabsetComponent, TabDirective } from "ngx-bootstrap/tabs";
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { CurrentPage } from '../../models/api-models/Common';
@@ -91,10 +92,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isUpdateBankFormValid$: Observable<boolean> = of(false);
 
     @Input() private selectedTabParent: number;
-    @ViewChild('integrationTab') public integrationTab: TabsetComponent;
-    @ViewChild('removegmailintegration') public removegmailintegration: ModalDirective;
-    @ViewChild('paymentForm') paymentForm: NgForm;
-    @ViewChild('paymentFormAccountName') paymentFormAccountName: ShSelectComponent;
+    @ViewChild('integrationTab', {static: true}) public integrationTab: TabsetComponent;
+    @ViewChild('removegmailintegration', {static: true}) public removegmailintegration: ModalDirective;
+    @ViewChild('paymentForm', {static: true}) paymentForm: NgForm;
+    @ViewChild('paymentFormAccountName', {static: true}) paymentFormAccountName: ShSelectComponent;
 
 
     //variable holding account Info

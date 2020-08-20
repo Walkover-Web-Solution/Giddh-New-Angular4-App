@@ -32,7 +32,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { BranchFilterRequest, CompanyResponse } from '../../../models/api-models/Company';
 import { createSelector } from 'reselect';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { InvViewService } from '../../inv.view.service';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
@@ -55,11 +55,11 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
     ]
 })
 export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
-    @ViewChild('accountName') public accountName: ElementRef;
-    @ViewChild('shCategory') public shCategory: ShSelectComponent;
-    @ViewChild('shCategoryType') public shCategoryType: ShSelectComponent;
-    @ViewChild('shValueCondition') public shValueCondition: ShSelectComponent;
+    @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: ModalDirective;
+    @ViewChild('accountName', { static: true }) public accountName: ElementRef;
+    @ViewChild('shCategory', { static: true }) public shCategory: ShSelectComponent;
+    @ViewChild('shCategoryType', { static: true }) public shCategoryType: ShSelectComponent;
+    @ViewChild('shValueCondition', { static: true }) public shValueCondition: ShSelectComponent;
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;
@@ -345,7 +345,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             }
         });
 
-        this.selectedCompany$ = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+        this.selectedCompany$ = this.store.select(createSelector([(sessionStore: AppState) => sessionStore.session.companies, (companyStore: AppState) => companyStore.session.companyUniqueName], (companies, uniqueName) => {
             if (!companies) {
                 return;
             }

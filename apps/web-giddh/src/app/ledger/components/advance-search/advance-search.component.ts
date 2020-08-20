@@ -18,7 +18,8 @@ import * as moment from 'moment';
 import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
-import { BsDaterangepickerConfig, BsDaterangepickerDirective, BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import {BsDaterangepickerConfig, BsDaterangepickerDirective} from 'ngx-bootstrap/datepicker';
 import { GeneralService } from '../../../services/general.service';
 
 const COMPARISON_FILTER = [
@@ -57,7 +58,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     private moment = moment;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** datepickerTemplate element reference  */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store modal reference */
@@ -451,6 +452,12 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             this.datepickerTemplate,
             Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
+
+        this.modalService.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            setTimeout(() => {
+                document.querySelector('body').classList.add('modal-open');
+            }, 500);
+        });
     }
 
     /**
@@ -483,7 +490,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 this.toDate = moment(value.endDate, GIDDH_DATE_FORMAT).toDate();
                 let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
                 bsDaterangepicker.patchValue([this.fromDate, this.toDate]);
-
             }
         }
     }

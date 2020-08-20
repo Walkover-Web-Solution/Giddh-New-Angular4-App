@@ -8,7 +8,7 @@ import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { Component, OnInit, Output, ViewChild, OnDestroy, EventEmitter } from '@angular/core';
-import { TabsetComponent } from 'ngx-bootstrap';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { Store } from '@ngrx/store';
@@ -30,16 +30,16 @@ import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions
     styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
-    @ViewChild('staticTabs') public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('integrationComponent') public integrationComponent: SettingIntegrationComponent;
-    @ViewChild('profileComponent') public profileComponent: SettingProfileComponent;
-    @ViewChild('financialYearComp') public financialYearComp: FinancialYearComponent;
-    @ViewChild('eBankComp') public eBankComp: SettingLinkedAccountsComponent;
-    @ViewChild('permissionComp') public permissionComp: SettingPermissionComponent;
-    @ViewChild('tagComp') public tagComp: SettingsTagsComponent;
-    @ViewChild('bunchComp') public bunchComp: BunchComponent;
+    @ViewChild('integrationComponent', {static: true}) public integrationComponent: SettingIntegrationComponent;
+    @ViewChild('profileComponent', {static: true}) public profileComponent: SettingProfileComponent;
+    @ViewChild('financialYearComp', {static: true}) public financialYearComp: FinancialYearComponent;
+    @ViewChild('eBankComp', {static: true}) public eBankComp: SettingLinkedAccountsComponent;
+    @ViewChild('permissionComp', {static: true}) public permissionComp: SettingPermissionComponent;
+    @ViewChild('tagComp', {static: true}) public tagComp: SettingsTagsComponent;
+    @ViewChild('bunchComp', {static: true}) public bunchComp: BunchComponent;
 
     public isUserSuperAdmin: boolean = false;
     public isUpdateCompanyInProgress$: Observable<boolean>;

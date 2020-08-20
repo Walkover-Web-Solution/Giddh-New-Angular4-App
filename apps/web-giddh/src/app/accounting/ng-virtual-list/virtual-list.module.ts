@@ -21,7 +21,7 @@ import { AVAccountListComponent } from './virtual-list-menu.component';
 })
 
 export class AVShSelectModule {
-    public static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders<unknown> {
         return {
             ngModule: AVShSelectModule
         };

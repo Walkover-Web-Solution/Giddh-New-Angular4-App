@@ -17,7 +17,7 @@ import { Configuration, SubVoucher, RATE_FIELD_PRECISION } from 'apps/web-giddh/
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
-import { BsDatepickerDirective, ModalDirective, PopoverDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
@@ -52,6 +52,8 @@ import { UpdateLedgerVm } from './updateLedger.vm';
 import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../../../models/api-models/AdvanceReceiptsAdjust';
+import { PopoverDirective } from "ngx-bootstrap/popover";
+import { BsDatepickerDirective } from "ngx-bootstrap/datepicker";
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -84,20 +86,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() pettyCashBaseAccountTypeString: string;
     @Input() pettyCashBaseAccountUniqueName: string;
 
-    @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
-    @ViewChild('fileInputUpdate') public fileInputElement: ElementRef<any>;
-    @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
-    @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
-    @ViewChild('tax') public taxControll: TaxControlComponent;
-    @ViewChild('updateBaseAccount') public updateBaseAccount: ModalDirective;
-    @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+    @ViewChild('deleteAttachedFileModal', {static: true}) public deleteAttachedFileModal: ModalDirective;
+    /** fileinput element ref for clear value after remove attachment **/
+    @ViewChild('fileInputUpdate', {static: true}) public fileInputElement: ElementRef<any>;
+    @ViewChild('deleteEntryModal', {static: true}) public deleteEntryModal: ModalDirective;
+    @ViewChild('discount', {static: true}) public discountComponent: UpdateLedgerDiscountComponent;
+    @ViewChild('tax', {static: true}) public taxControll: TaxControlComponent;
+    @ViewChild('updateBaseAccount', {static: true}) public updateBaseAccount: ModalDirective;
+    @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
     /** Advance receipt remove confirmation modal reference */
-    @ViewChild('advanceReceiptRemoveConfirmationModal') public advanceReceiptRemoveConfirmationModal: ModalDirective;
+    @ViewChild('advanceReceiptRemoveConfirmationModal', {static: true}) public advanceReceiptRemoveConfirmationModal: ModalDirective;
     /** Adjustment modal */
-    @ViewChild('adjustPaymentModal') public adjustPaymentModal: ModalDirective;
+    @ViewChild('adjustPaymentModal', {static: true}) public adjustPaymentModal: ModalDirective;
 
     /** RCM popup instance */
-    @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
+    @ViewChild('rcmPopup', {static: true}) public rcmPopup: PopoverDirective;
 
     /** Warehouse data for warehouse drop down */
     public warehouses: Array<any>;
@@ -331,7 +334,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.fileUploadOptions = { concurrency: 0 };
 
         // get flatten_accounts list && get transactions list && get ledger account list
-        observableCombineLatest(this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$)
+        observableCombineLatest([this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$])
             .subscribe((resp: any[]) => {
                 if (resp[0] && resp[1] && resp[2]) {
                     // insure we have account details, if we are normal ledger mode and not petty cash mode ( special case for others entry in petty cash )
@@ -597,10 +600,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                 }
                             }
                         }
-
-                        // if (!this.isMultiCurrencyAvailable) {
-                        //   this.isMultiCurrencyAvailable = !!t.convertedAmountCurrency;
-                        // }
                         if (t.inventory) {
                             // TODO: Prateek start
                             // let findStocks = accountsArray.find(f => f.value === t.particular.uniqueName + '#' + t.inventory.stock.uniqueName);
@@ -1417,8 +1416,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         if ((this.isAdjustAdvanceReceiptSelected || this.isAdjustReceiptSelected || this.isAdjustVoucherSelected) && this.vm.selectedLedger.voucherAdjustments && (!this.vm.selectedLedger.voucherAdjustments.adjustments.length || isUpdateMode)) {
             this.prepareAdjustVoucherConfiguration();
-            console.log(this.vm.selectedLedger);
-            console.log(this.profileObj);
             this.openAdjustPaymentModal();
         }
     }
@@ -1791,7 +1788,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
             let totalAmount: number = 0;
             this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(item => {
-                totalAmount = Number(totalAmount) + Number(item.adjustmentAmount.amountForAccount);
+                totalAmount = Number(totalAmount) + (item.adjustmentAmount ? Number(item.adjustmentAmount.amountForAccount) : 0);
             });
             this.vm.selectedLedger.voucherAdjustments.totalAdjustmentAmount = totalAmount;
             this.checkAdjustedAmountExceed(Number(totalAmount));
@@ -1819,7 +1816,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.vm.selectedLedger && this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments) {
             let totalAmount: number = 0;
             this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(item => {
-                totalAmount = Number(totalAmount) + Number(item.adjustmentAmount.amountForAccount);
+                totalAmount = Number(totalAmount) + (item.adjustmentAmount ? Number(item.adjustmentAmount.amountForAccount) : 0);
             });
             this.totalAdjustedAmount = totalAmount;
             this.checkAdjustedAmountExceed(Number(totalAmount));
@@ -1892,7 +1889,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public getAdjustedPaymentData(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
-        console.log(this.vm.selectedLedger);
         if (event && event.adjustPaymentData && event.adjustVoucherData) {
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             if (adjustments) {
@@ -1908,7 +1904,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     tdsAmount: null,
                     description: null
                 };
-                console.log(this.vm.selectedLedger);
                 if (!adjustments.length) {
                     // No adjustments done clear the adjustment checkbox
                     this.isAdjustReceiptSelected = false;
@@ -1932,7 +1927,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.vm.selectedLedger.voucherAdjustments && this.vm.selectedLedger.voucherAdjustments.adjustments && !this.vm.selectedLedger.voucherAdjustments.adjustments.length) {
             // No adjustments done clear the adjustment checkbox
             this.isAdjustReceiptSelected = false;
-            this.isAdjustVoucherSelected = false
+            this.isAdjustVoucherSelected = false;
             this.isAdjustAdvanceReceiptSelected = false;
 
             if (!this.vm.isInvoiceGeneratedAlready) {
@@ -1974,7 +1969,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             },
             activeAccountUniqueName: this.activeAccount.uniqueName
         };
-        console.log('Reached', this.vm.selectedLedger);
     }
 
     /**

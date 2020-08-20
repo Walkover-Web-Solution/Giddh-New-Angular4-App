@@ -6,7 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ElementViewContainerRef } from '../../../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../../../store';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { takeUntil } from 'rxjs/operators';
 import { GStTransactionRequest, GstTransactionResult, GstTransactionSummary } from '../../../../../models/api-models/GstReconcile';
 import { GstReconcileActions } from '../../../../../actions/gst-reconcile/GstReconcile.actions';
@@ -79,9 +80,9 @@ export class ViewTransactionsComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public isTransactionSummary: boolean;
     // @Input() public filterParam = filterTransaction;
 
-    @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
-    @ViewChild('downloadOrSendMailComponent') public downloadOrSendMailComponent: ElementViewContainerRef;
-    @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
+    @ViewChild('downloadOrSendMailModel', {static: true}) public downloadOrSendMailModel: ModalDirective;
+    @ViewChild('downloadOrSendMailComponent', {static: true}) public downloadOrSendMailComponent: ElementViewContainerRef;
+    @ViewChild('invoiceGenerateModel', {static: true}) public invoiceGenerateModel: ModalDirective;
 
     public viewTransaction$: Observable<GstTransactionResult> = of(null);
     public gstr1entityType = Gstr1TransactionType;

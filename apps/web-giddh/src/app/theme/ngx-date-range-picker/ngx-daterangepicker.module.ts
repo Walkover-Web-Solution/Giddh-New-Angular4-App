@@ -46,7 +46,7 @@ export class NgxDaterangepickerMd {
     constructor() {
     }
 
-    static forRoot(config: LocaleConfig = {}): ModuleWithProviders {
+    static forRoot(config: LocaleConfig = {}): ModuleWithProviders<unknown> {
         return {
             ngModule: NgxDaterangepickerMd,
             providers: [

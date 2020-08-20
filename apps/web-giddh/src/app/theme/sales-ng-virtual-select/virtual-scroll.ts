@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, NgModule, OnChanges, OnDestroy, OnInit, Output, Renderer, SimpleChanges, ViewChild, } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, NgModule, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewChild, } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { IOption } from './sh-options.interface';
@@ -63,7 +63,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     public start: EventEmitter<ChangeEvent> = new EventEmitter<ChangeEvent>();
     @Output()
     public end: EventEmitter<ChangeEvent> = new EventEmitter<ChangeEvent>();
-    @ViewChild('content', { read: ElementRef })
+    @ViewChild('content', { read: ElementRef, static: true })
     public contentElementRef: ElementRef;
     @Input() public salesShSelectPading: number;
     public onScrollListener: any;
@@ -73,7 +73,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     public previousEnd: number;
     public startupLoop: boolean = true;
 
-    constructor(private element: ElementRef, private renderer: Renderer) {
+    constructor(private element: ElementRef, private renderer: Renderer2) {
     }
 
     get width(): any {

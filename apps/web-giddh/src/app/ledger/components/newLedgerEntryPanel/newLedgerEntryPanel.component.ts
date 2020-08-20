@@ -20,7 +20,8 @@ import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
 import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
-import { BsDatepickerDirective, ModalDirective, PopoverDirective } from 'ngx-bootstrap';
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -56,6 +57,7 @@ import { FileTransfer } from "@ionic-native/file-transfer/ngx";
 import { FileChooser } from "@ionic-native/file-chooser/ngx";
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
+import { PopoverDirective } from "ngx-bootstrap/popover";
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -100,7 +102,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedSuffixForCurrency: string;
     @Input() public inputMaskFormat: string = '';
     @Input() public giddhBalanceDecimalPlaces: number = 2;
-    @ViewChild('webFileInput') public webFileInput: ElementRef;
+    @ViewChild('webFileInput', {static: true}) public webFileInput: ElementRef;
     /** True, if RCM taxable amount needs to be displayed in create new ledger component as per criteria */
     @Input() public shouldShowRcmTaxableAmount: boolean = false;
     /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
@@ -118,16 +120,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
     /** Emit event for getting invoice list for credit note linking */
     @Output() public getInvoiceListsForCreditNote: EventEmitter<any> = new EventEmitter();
-    @ViewChild('entryContent') public entryContent: ElementRef;
-    @ViewChild('sh') public sh: ShSelectComponent;
-    @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+    @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
+    @ViewChild('sh', { static: true }) public sh: ShSelectComponent;
+    @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
 
-    @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
-    @ViewChild('discount') public discountControl: LedgerDiscountComponent;
-    @ViewChild('tax') public taxControll: TaxControlComponent;
+    @ViewChild('deleteAttachedFileModal', {static: true}) public deleteAttachedFileModal: ModalDirective;
+    @ViewChild('discount', {static: true}) public discountControl: LedgerDiscountComponent;
+    @ViewChild('tax', {static: true}) public taxControll: TaxControlComponent;
 
     /** RCM popup instance */
-    @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
+    @ViewChild('rcmPopup', {static: true}) public rcmPopup: PopoverDirective;
 
     public sourceWarehouse: true;
     public uploadInput: EventEmitter<UploadInput>;
@@ -142,7 +144,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isFileUploading: boolean = false;
     public isLedgerCreateInProcess$: Observable<boolean>;
     // bank map eledger related
-    @ViewChild('confirmBankTxnMapModal') public confirmBankTxnMapModal: ModalDirective;
+    @ViewChild('confirmBankTxnMapModal', {static: true}) public confirmBankTxnMapModal: ModalDirective;
     public matchingEntriesData: ReconcileResponse[] = [];
     public showMatchingEntries: boolean = false;
     public mapBodyContent: string;
@@ -204,7 +206,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Stores the details for adjustment component */
     public adjustVoucherConfiguration: any;
     /** Adjustment modal */
-    @ViewChild('adjustPaymentModal') public adjustPaymentModal: ModalDirective;
+    @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: ModalDirective;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -1214,7 +1216,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public allowAlphanumericChar(event: any): void {
         if (event && event.value) {
-            this.blankLedger.passportNumber = this.generalService.allowAlphanumericChar(event.value)
+            this.blankLedger.passportNumber = this.generalService.allowAlphanumericChar(event.value);
         }
     }
 
@@ -1225,7 +1227,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public getAdjustedPaymentData(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal}): void {
-        console.log(event);
         if (event && event.adjustPaymentData && event.adjustVoucherData) {
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             adjustments.forEach(adjustment => {
@@ -1239,7 +1240,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 tdsAmount: null,
                 description: null
             };
-            console.log(this.currentTxn);
             if (!adjustments.length)  {
                 // No adjustments done clear the adjustment checkbox
                 if (this.currentTxn['subVoucher'] === SubVoucher.AdvanceReceipt) {
@@ -1359,7 +1359,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             },
             activeAccountUniqueName: this.activeAccount.uniqueName
         };
-        console.log('Reached', this.currentTxn);
     }
 
     /**

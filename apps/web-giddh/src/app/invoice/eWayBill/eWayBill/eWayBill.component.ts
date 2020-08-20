@@ -28,8 +28,8 @@ import { createSelector } from 'reselect';
 })
 
 export class EWayBillComponent implements OnInit {
-    @ViewChild('cancelEwayForm') public cancelEwayForm: NgForm;
-    @ViewChild('updateVehicleForm') public updateVehicleForm: NgForm;
+    @ViewChild('cancelEwayForm', {static: true}) public cancelEwayForm: NgForm;
+    @ViewChild('updateVehicleForm', {static: true}) public updateVehicleForm: NgForm;
 
     public isGetAllEwaybillRequestInProcess$: Observable<boolean>;
     public isGetAllEwaybillRequestSuccess$: Observable<boolean>;
@@ -51,8 +51,8 @@ export class EWayBillComponent implements OnInit {
     public showAdvanceSearchIcon: boolean = false;
 
     // searching
-    @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
-    @ViewChild('customerSearch') public customerSearch: ElementRef;
+    @ViewChild('invoiceSearch', {static: true}) public invoiceSearch: ElementRef;
+    @ViewChild('customerSearch', {static: true}) public customerSearch: ElementRef;
     public voucherNumberInput: FormControl = new FormControl();
     public customerNameInput: FormControl = new FormControl();
     public showSearchInvoiceNo: boolean = false;
@@ -128,7 +128,7 @@ export class EWayBillComponent implements OnInit {
         vehicleType: null,
     };
 
-    @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+    @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
     public selectedEway: Result;
     public states: any[] = [];
 

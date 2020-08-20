@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ReplaySubject } from 'rxjs';
 
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
@@ -29,8 +29,8 @@ export class AccountDetailModalComponent implements OnChanges {
     // take voucher type from parent component
     @Input() public voucherType: VoucherTypeEnum;
 
-    @ViewChild('mailModal') public mailModal: ModalDirective;
-    @ViewChild('messageBox') public messageBox: ElementRef;
+    @ViewChild('mailModal', {static: true}) public mailModal: ModalDirective;
+    @ViewChild('messageBox', {static: true}) public messageBox: ElementRef;
 
     public messageBody = {
         header: {

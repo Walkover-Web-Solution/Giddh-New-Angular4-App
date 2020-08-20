@@ -13,7 +13,7 @@ import {
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { ModalOptions } from 'ngx-bootstrap';
+import { ModalOptions } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import * as googleLibPhoneNumber from 'google-libphonenumber';
@@ -180,15 +180,15 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() itemDetails: any;
 
     /** States dropdown instance */
-    @ViewChild('states') statesDropdown: ShSelectComponent;
+    @ViewChild('states', {static: true}) statesDropdown: ShSelectComponent;
     /** GST number field */
-    @ViewChild('gstNumberField') gstNumberField: ElementRef<any>;
+    @ViewChild('gstNumberField', {static: true}) gstNumberField: ElementRef<any>;
     /** Contact number field */
-    @ViewChild('mobileNoEl') contactNumberField: ElementRef<any>;
+    @ViewChild('mobileNoEl', {static: true}) contactNumberField: ElementRef<any>;
     /** Address field */
-    @ViewChild('address') addressField: ElementRef<any>;
+    @ViewChild('address', {static: true}) addressField: ElementRef<any>;
     /** Form instance */
-    @ViewChild('welcomeForm') welcomeForm: NgForm;
+    @ViewChild('welcomeForm', {static: true}) welcomeForm: NgForm;
 
     /**
      * Returns true, if onboarding of Warehouse is going on

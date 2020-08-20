@@ -93,7 +93,7 @@
 
     <tabset #staticTabs class="custom-tabs " id="asidePaneFormTabs">
         <ng-container>
-            <tab heading="Address" class="gstinAddress" [active]="isDebtorCreditor" [disabled]="!isDebtorCreditor" (select)="tabChanged('address')">
+            <tab heading="Address" class="gstinAddress" [active]="isDebtorCreditor" [disabled]="!isDebtorCreditor" (selectTab)="tabChanged('address')">
                 <ng-container>
                     <div class="gstinForm" formArrayName="addresses">
                         <ng-container *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last" [formGroupName]="i">
@@ -187,7 +187,7 @@
             </tab>
         </ng-container>
 
-        <tab heading="Contact" class="ContactFromWrap" [active]="!isDebtorCreditor" (select)="tabChanged('contacts')">
+        <tab heading="Contact" class="ContactFromWrap" [active]="!isDebtorCreditor" (selectTab)="tabChanged('contacts')">
             <div class="contactForm">
                 <div class="row">
                     <div class="col-sm-6">
@@ -250,7 +250,7 @@
 
 
         <!-- bank details visible when sundry credtiors selected , right now is hide -->
-        <tab heading="Bank Details" class="bankDetialsForm" *ngIf="showBankDetail" (select)="tabChanged('bank')">
+        <tab heading="Bank Details" class="bankDetialsForm" *ngIf="showBankDetail" (selectTab)="tabChanged('bank')">
             <div *ngIf="showBankDetail">
                 <div formArrayName="accountBankDetails">
                     <div class="row" *ngFor="let bank of addAccountForm.get('accountBankDetails')['controls'];let i = index;let f = first; let l = last" [formGroupName]="i">
@@ -290,7 +290,7 @@
             </div>
         </tab>
 
-        <tab heading="Others " class="otherFormWrap " (select)="tabChanged('others')">
+        <tab heading="Others " class="otherFormWrap " (selectTab)="tabChanged('others')">
 
             <div class="otherForm ">
                 <div class="row ">

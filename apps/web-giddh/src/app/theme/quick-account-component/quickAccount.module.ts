@@ -5,7 +5,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { SharedModule } from 'apps/web-giddh/src/app/shared/shared.module';
 import { QuickAccountComponent } from './quickAccount.component';
 import { ShSelectModule } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.module';
-import { TooltipModule } from 'ngx-bootstrap';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { LaddaModule } from 'angular2-ladda';
 
 @NgModule({
@@ -24,7 +24,7 @@ import { LaddaModule } from 'angular2-ladda';
 })
 
 export class QuickAccountModule {
-    public static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders<unknown> {
         return {
             ngModule: QuickAccountModule,
             providers: []

@@ -1,70 +1,74 @@
-import {map, switchMap} from 'rxjs/operators';
-import {Injectable} from '@angular/core';
-import {Actions, Effect} from '@ngrx/effects';
-import {GroupService} from '../../services/group.service';
-import {BaseResponse} from '../../models/api-models/BaseResponse';
-import {Action} from '@ngrx/store';
-import {GroupsWithAccountsResponse} from '../../models/api-models/GroupsWithAccounts';
-import {GENERAL_ACTIONS} from './general.const';
-import {Observable, of} from 'rxjs';
-import {FlattenAccountsResponse} from '../../models/api-models/Account';
-import {AccountService} from '../../services/account.service';
-import {States, StatesRequest} from '../../models/api-models/Company';
-import {CompanyService} from '../../services/companyService.service';
-import {CustomActions} from '../../store/customActions';
-import {IPaginatedResponse} from '../../models/interfaces/paginatedResponse.interface';
-import {IUlist, IUpdateDbRequest} from '../../models/interfaces/ulist.interface';
-import {CurrentPage} from '../../models/api-models/Common';
-import {DbService} from "../../services/db.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import { Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Action } from '@ngrx/store';
+import { Observable, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+
+import { FlattenAccountsResponse } from '../../models/api-models/Account';
+import { BaseResponse } from '../../models/api-models/BaseResponse';
+import { CurrentPage } from '../../models/api-models/Common';
+import { States, StatesRequest } from '../../models/api-models/Company';
+import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
+import { IPaginatedResponse } from '../../models/interfaces/paginatedResponse.interface';
+import { IUlist, IUpdateDbRequest } from '../../models/interfaces/ulist.interface';
+import { AccountService } from '../../services/account.service';
+import { CompanyService } from '../../services/companyService.service';
+import { DbService } from '../../services/db.service';
+import { GroupService } from '../../services/group.service';
+import { CustomActions } from '../../store/customActions';
+import { GENERAL_ACTIONS } from './general.const';
 
 @Injectable()
 export class GeneralActions {
-    @Effect()
-    public GetGroupsWithAccount$: Observable<Action> = this.action$
-        .ofType(GENERAL_ACTIONS.GENERAL_GET_GROUP_WITH_ACCOUNTS).pipe(
+
+    public GetGroupsWithAccount$: Observable<Action> = createEffect( ()=>this.action$
+        .pipe(
+            ofType(GENERAL_ACTIONS.GENERAL_GET_GROUP_WITH_ACCOUNTS),
             switchMap((action: CustomActions) =>
                 this._groupService.GetGroupsWithAccounts(action.payload)
             ),
             map(response => {
                 return this.getGroupWithAccountsResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public GetFlattenGroups$: Observable<Action> = this.action$
-        .ofType(GENERAL_ACTIONS.FLATTEN_GROUPS_REQ).pipe(
+
+    public GetFlattenGroups$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(GENERAL_ACTIONS.FLATTEN_GROUPS_REQ),
             switchMap((action: CustomActions) =>
                 this._groupService.GetFlattenGroups(action.payload)
             ),
             map(response => {
                 return this.getFlattenGroupsRes(response);
-            }));
+            })));
 
-    @Effect()
-    public getFlattenAccounts$: Observable<Action> = this.action$
-        .ofType(GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS).pipe(
+
+    public getFlattenAccounts$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS),
             switchMap((action: CustomActions) =>
                 this._accountService.getFlattenAccounts(action.payload)
             ),
             map(response => {
                 return this.getFlattenAccountResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public getAllState$: Observable<Action> = this.action$
-        .ofType(GENERAL_ACTIONS.GENERAL_GET_ALL_STATES).pipe(
+
+    public getAllState$: Observable<Action> = createEffect( ()=>this.action$
+        .pipe(
+            ofType(GENERAL_ACTIONS.GENERAL_GET_ALL_STATES),
             switchMap((action: CustomActions) => this._companyService.getAllStates(action.payload)),
-            map(resp => this.getAllStateResponse(resp)));
+            map(resp => this.getAllStateResponse(resp))));
 
-    @Effect()
-    public updateIndexDb$: Observable<Action> = this.action$
-        .ofType(GENERAL_ACTIONS.UPDATE_INDEX_DB).pipe(
+    public updateIndexDb$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(GENERAL_ACTIONS.UPDATE_INDEX_DB),
             switchMap((action: CustomActions) => {
                 const payload: IUpdateDbRequest = action.payload;
                 return this._dbService.getItemDetails(payload.uniqueName).pipe(map(itemData => ({itemData, payload})))
             }),
             switchMap(data => {
-                // debugger;
                 if (data.itemData && data.payload) {
                     const payload = data.payload;
                     const items = data.itemData;
@@ -96,11 +100,11 @@ export class GeneralActions {
                     return of(this.updateIndexDbComplete());
                 }
             })
-        );
+        ));
 
-    @Effect()
-    deleteIndexDbEntry$: Observable<Action> = this.action$
-        .ofType(GENERAL_ACTIONS.DELETE_ENTRY_FROM_INDEX_DB).pipe(
+    public deleteIndexDbEntry$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(GENERAL_ACTIONS.DELETE_ENTRY_FROM_INDEX_DB),
             switchMap((action: CustomActions) => {
                 const payload: IUpdateDbRequest = action.payload;
                 return this._dbService.removeItem(payload.uniqueName, payload.type, payload.deleteUniqueName).then(res => {
@@ -113,7 +117,7 @@ export class GeneralActions {
                     return this.deleteEntryFromIndexDbError();
                 }).catch(error => this.deleteEntryFromIndexDbError());
             })
-        )
+        ));
 
     constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService, private _companyService: CompanyService, private _dbService: DbService, private _activatedRoute: ActivatedRoute, private route: Router) {
         //

@@ -8,7 +8,7 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { AccountService } from '../../services/account.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsLinkedAccountsService } from '../../services/settings.linked.accounts.service';
 import { SettingsLinkedAccountsActions } from '../../actions/settings/linked-accounts/settings.linked.accounts.action';
 import { IEbankAccount } from '../../models/api-models/SettingsLinkedAccounts';
@@ -31,10 +31,10 @@ import { GeneralService } from '../../services/general.service';
 })
 export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
-    @ViewChild('connectBankModel') public connectBankModel: ModalDirective;
-    @ViewChild('confirmationModal') public confirmationModal: ModalDirective;
-    @ViewChild('yodleeFormHTML') public yodleeFormHTML: HTMLFormElement;
-    @ViewChild('yodleeIframe') public yodleeIframe: HTMLIFrameElement;
+    @ViewChild('connectBankModel', {static: true}) public connectBankModel: ModalDirective;
+    @ViewChild('confirmationModal', {static: true}) public confirmationModal: ModalDirective;
+    @ViewChild('yodleeFormHTML', {static: true}) public yodleeFormHTML: HTMLFormElement;
+    @ViewChild('yodleeIframe', {static: true}) public yodleeIframe: HTMLIFrameElement;
 
     public iframeSource: string = null;
     public ebankAccounts: BankAccountsResponse[] = [];

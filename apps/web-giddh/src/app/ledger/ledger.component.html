@@ -353,7 +353,8 @@
                                                         (saveBlankLedger)="saveBankTransaction()"
                                                         (clickedOutsideEvent)="hideBankLedgerPopup($event)"
                                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
-                                                        [invoiceList]="invoiceList" (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
+                                                        [invoiceList]="invoiceList"
+                                                        (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
                                                         [isTouristSchemeApplicable]="isTouristSchemeApplicable">
                                                     </new-ledger-entry-panel>
                                                 </div>
@@ -470,9 +471,10 @@
                                                         [needToReCalculate]="needToReCalculate"
                                                         (changeTransactionType)="toggleTransactionType($event)"
                                                         [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
-                                                        (saveBlankLedger)="saveBankTransaction()" (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
+                                                        (saveBlankLedger)="saveBankTransaction()"
                                                         (clickedOutsideEvent)="hideBankLedgerPopup($event)"
                                                         (clickUnpaidInvoiceList)="clickUnpaidInvoiceList($event)"
+                                                        (getInvoiceListsForCreditNote)="getInvoiceListsForCreditNote($event)"
                                                         [invoiceList]="invoiceList">
                                                     </new-ledger-entry-panel>
                                                 </div>
@@ -764,8 +766,8 @@
                                                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                         [(ngModel)]="lc.blankLedger.entryDate"
                                                         [placeholder]="lc.formatPlaceholder" [outsideClick]="true"
-                                                        (click)="$event.stopPropagation()" autocomplete="off" (ngModelChange)="getInvoiceListsForCreditNote(true)"/>
-
+                                                        (ngModelChange)="getInvoiceListsForCreditNote(true)"
+                                                        (click)="$event.stopPropagation()" autocomplete="off" />
                                                 </div>
                                             </td>
 

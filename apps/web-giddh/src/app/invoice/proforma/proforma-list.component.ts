@@ -24,7 +24,8 @@ import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operat
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import * as moment from 'moment/moment';
 import { cloneDeep, uniqBy } from '../../lodash-optimized';
-import { ModalDirective, BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceAdvanceSearchComponent } from '../preview/models/advanceSearch/invoiceAdvanceSearch.component';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
@@ -44,10 +45,10 @@ const VOUCHER_TYPES = ['proformas', 'estimates'];
 })
 
 export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
-    @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
+    @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
     /** Confirmation popup for delete operation */
-    @ViewChild('deleteConfirmationModel') public deleteConfirmationModel: ModalDirective;
-    @ViewChild(InvoiceAdvanceSearchComponent) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
+    @ViewChild('deleteConfirmationModel', {static: true}) public deleteConfirmationModel: ModalDirective;
+    @ViewChild(InvoiceAdvanceSearchComponent, {static: true}) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.proforma;
     public voucherData: ProformaResponse;
     public selectedDateRange: any;

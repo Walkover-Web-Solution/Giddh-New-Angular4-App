@@ -1,7 +1,7 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnInit, Output, Renderer, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from './sh-options.interface';
 import { SalesShSelectMenuComponent } from './sh-select-menu.component';
@@ -53,11 +53,11 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
     @Input() public tabIndex: number = 0;
     @Input() public fixedValue: string = "";
 
-    @ViewChild('inputFilter') public inputFilter: ElementRef;
-    @ViewChild('mainContainer') public mainContainer: ElementRef;
-    @ViewChild('menuEle') public menuEle: SalesShSelectMenuComponent;
-    @ContentChild('optionTemplate') public optionTemplate: TemplateRef<any>;
-    @ViewChild('dd') public ele: ElementRef;
+    @ViewChild('inputFilter', {static: false}) public inputFilter: ElementRef;
+    @ViewChild('mainContainer', {static: true}) public mainContainer: ElementRef;
+    @ViewChild('menuEle', {static: true}) public menuEle: SalesShSelectMenuComponent;
+    @ContentChild('optionTemplate', {static: true}) public optionTemplate: TemplateRef<any>;
+    @ViewChild('dd', {static: true}) public ele: ElementRef;
     @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onClear: EventEmitter<any[]> = new EventEmitter<any[]>();
@@ -81,7 +81,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
         DOWN: 40
     };
 
-    constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef) {
+    constructor(private element: ElementRef, private renderer: Renderer2, private cdRef: ChangeDetectorRef) {
     }
 
     public _options: IOption[] = [];
@@ -452,7 +452,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
             this.filter = ev.target.value;
             this.show(ev);
             setTimeout(() => {
-                this.renderer.invokeElementMethod(this.inputFilter.nativeElement, 'focus');
+                (this.inputFilter.nativeElement as any)['focus'].apply(this.inputFilter.nativeElement);
             }, 10);
         }
     }

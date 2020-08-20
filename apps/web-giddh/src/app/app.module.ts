@@ -43,7 +43,7 @@ import {NgbTypeaheadModule} from '@ng-bootstrap/ng-bootstrap';
 import {localStorageSync} from 'ngrx-store-localstorage';
 import {ActionModule} from './actions/action.module';
 import {DecoratorsModule} from './decorators/decorators.module';
-import {PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
+import {PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
 import {Configuration} from 'apps/web-giddh/src/app/app.constant';
 import {ServiceConfig} from 'apps/web-giddh/src/app/services/service.config';
 import {Daterangepicker} from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
@@ -52,7 +52,7 @@ import {OnboardingComponent} from './onboarding/onboarding.component';
 import {NotFoundComponent} from './404/404-component';
 import {IS_ELECTRON_WA} from './app.constant';
 import {UniversalListModule} from './theme/universal-list/universal.list.module';
-import {StoreRouterConnectingModule} from '@ngrx/router-store';
+//import {StoreRouterConnectingModule} from '@ngrx/router-store';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {BrowserDetectComponent} from './browser-support/browserDetect.component';
 import {CustomPreloadingStrategy} from './services/lazy-preloading.service';
@@ -149,7 +149,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         BsDatepickerModule.forRoot(),
         ModalModule.forRoot(),
         PopoverModule.forRoot(),
-        NgbTypeaheadModule.forRoot(),
+        NgbTypeaheadModule,
         BsDropdownModule.forRoot(),
         TabsModule.forRoot(),
         TooltipModule.forRoot(),
@@ -168,7 +168,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
             preloadingStrategy: CustomPreloadingStrategy,
             onSameUrlNavigation: 'reload'
         }),
-        StoreRouterConnectingModule,
+        //StoreRouterConnectingModule,
         ...CONDITIONAL_IMPORTS,
 
         /**

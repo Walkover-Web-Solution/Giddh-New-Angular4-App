@@ -1,9 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
-/**
- * Created by ad on 04-07-2017.
- */
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../services/toaster.service';
 import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -36,8 +33,9 @@ export class TBPlBsActions {
 
 	public static readonly DOWNLOAD_BALANCE_SHEET_EXCEL_REQUEST = 'DOWNLOAD_BALANCE_SHEET_EXCEL_REQUEST';
 
-	@Effect() private GetTrialBalance$: Observable<Action> = this.action$
-		.ofType(TBPlBsActions.GET_TRIAL_BALANCE_REQUEST).pipe(
+	private GetTrialBalance$: Observable<Action> = createEffect(() => this.action$
+		.pipe(
+			ofType(TBPlBsActions.GET_TRIAL_BALANCE_REQUEST),
 			switchMap((action: CustomActions) => {
 				return this._tlPlService.GetTrailBalance(action.payload).pipe(
 					map((r) => this.validateResponse<AccountDetails, TrialBalanceRequest>(r, {
@@ -47,10 +45,11 @@ export class TBPlBsActions {
 						type: TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE,
 						payload: null
 					})));
-			}));
+			})));
 
-	@Effect() private GetV2TrialBalance$: Observable<Action> = this.action$
-		.ofType(TBPlBsActions.GET_V2_TRIAL_BALANCE_REQUEST).pipe(
+	private GetV2TrialBalance$: Observable<Action> = createEffect(() => this.action$
+		.pipe(
+			ofType(TBPlBsActions.GET_V2_TRIAL_BALANCE_REQUEST),
 			switchMap((action: CustomActions) => {
 				return this._tlPlService.GetV2TrailBalance(action.payload).pipe(
 					map((r) => this.validateResponse<AccountDetails, TrialBalanceRequest>(r, {
@@ -60,10 +59,11 @@ export class TBPlBsActions {
 						type: TBPlBsActions.GET_V2_TRIAL_BALANCE_RESPONSE,
 						payload: null
 					})));
-			}));
+			})));
 
-	@Effect() private GetProfitLoss$: Observable<Action> = this.action$
-		.ofType(TBPlBsActions.GET_PROFIT_LOSS_REQUEST).pipe(
+	private GetProfitLoss$: Observable<Action> = createEffect(() => this.action$
+		.pipe(
+			ofType(TBPlBsActions.GET_PROFIT_LOSS_REQUEST),
 			switchMap((action: CustomActions) => {
 				return this._tlPlService.GetProfitLoss(action.payload).pipe(
 					map((r) => this.validateResponse<AccountDetails, ProfitLossRequest>(r, {
@@ -73,10 +73,11 @@ export class TBPlBsActions {
 						type: TBPlBsActions.GET_PROFIT_LOSS_RESPONSE,
 						payload: []
 					})));
-			}));
+			})));
 
-	@Effect() private GetCogs$: Observable<Action> = this.action$
-		.ofType(TBPlBsActions.GET_COGS_REQUEST).pipe(
+	private GetCogs$: Observable<Action> = createEffect(() => this.action$
+		.pipe(
+			ofType(TBPlBsActions.GET_COGS_REQUEST),
 			switchMap((action: CustomActions) => {
 				return this._tlPlService.GetCogs(action.payload).pipe(
 					map((r) => this.validateResponse<GetCogsResponse, GetCogsRequest>(r, {
@@ -86,10 +87,11 @@ export class TBPlBsActions {
 						type: TBPlBsActions.GET_COGS_RESPONSE,
 						payload: r.body
 					})));
-			}));
+			})));
 
-	@Effect() private GetBalanceSheet$: Observable<Action> = this.action$
-		.ofType(TBPlBsActions.GET_BALANCE_SHEET_REQUEST).pipe(
+	private GetBalanceSheet$: Observable<Action> = createEffect(() => this.action$
+		.pipe(
+			ofType(TBPlBsActions.GET_BALANCE_SHEET_REQUEST),
 			switchMap((action: CustomActions) => {
 				return this._tlPlService.GetBalanceSheet(action.payload).pipe(
 					map((r) => this.validateResponse<AccountDetails, BalanceSheetRequest>(r, {
@@ -99,28 +101,31 @@ export class TBPlBsActions {
 						type: TBPlBsActions.GET_BALANCE_SHEET_RESPONSE,
 						payload: []
 					})));
-			}));
+			})));
 
-	@Effect() private DownloadTrailBalanceExcel$: Observable<Action> = this.action$
-		.ofType(TBPlBsActions.DOWNLOAD_TRIAL_BALANCE_EXCEL_REQUEST).pipe(
+	private DownloadTrailBalanceExcel$: Observable<Action> = createEffect(() => this.action$
+		.pipe(
+			ofType(TBPlBsActions.DOWNLOAD_TRIAL_BALANCE_EXCEL_REQUEST),
 			switchMap((action: CustomActions) => {
 				return this._tlPlService.DownloadTrialBalanceExcel(action.payload).pipe(
 					map((r) => ({ type: 'EmptyAction' })));
-			}));
+			})));
 
-	@Effect() private DownloadTBalanceSheetExcel$: Observable<Action> = this.action$
-		.ofType(TBPlBsActions.DOWNLOAD_BALANCE_SHEET_EXCEL_REQUEST).pipe(
+	private DownloadTBalanceSheetExcel$: Observable<Action> = createEffect(() => this.action$
+		.pipe(
+			ofType(TBPlBsActions.DOWNLOAD_BALANCE_SHEET_EXCEL_REQUEST),
 			switchMap((action: CustomActions) => {
 				return this._tlPlService.DownloadBalanceSheetExcel(action.payload).pipe(
 					map((r) => ({ type: 'EmptyAction' })));
-			}));
+			})));
 
-	@Effect() private DownloadProfitLossExcel$: Observable<Action> = this.action$
-		.ofType(TBPlBsActions.DOWNLOAD_PROFIT_LOSS_EXCEL_REQUEST).pipe(
+	private DownloadProfitLossExcel$: Observable<Action> = createEffect(() => this.action$
+		.pipe(
+			ofType(TBPlBsActions.DOWNLOAD_PROFIT_LOSS_EXCEL_REQUEST),
 			switchMap((action: CustomActions) => {
 				return this._tlPlService.DownloadProfitLossExcel(action.payload).pipe(
 					map((r) => ({ type: 'EmptyAction' })));
-			}));
+			})));
 
 	constructor(private action$: Actions,
 		private _toasty: ToasterService,

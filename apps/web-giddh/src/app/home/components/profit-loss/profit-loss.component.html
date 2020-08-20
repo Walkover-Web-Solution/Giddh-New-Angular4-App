@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
-                <chart [options]="profitLossChart" *ngIf="dataFound" #currentRatio></chart>
+                <chart [chart]="profitLossChart" *ngIf="dataFound" #currentRatio></chart>
                 <div class="noDataAvailable" *ngIf="!dataFound">
                     <img src="{{imgPath}}noDataChart.svg" alt="no data found">
                 </div>

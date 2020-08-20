@@ -22,7 +22,7 @@ import { AppState } from '../store';
 import { Injectable, NgZone } from '@angular/core';
 import { map, switchMap, take } from 'rxjs/operators';
 import { userLoginStateEnum } from '../models/user-login-state';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { DbService } from '../services/db.service';
 import { CompanyService } from '../services/companyService.service';
 import { GeneralService } from '../services/general.service';
@@ -100,19 +100,21 @@ export class LoginActions {
 
     public static AutoLoginWithPasswdResponse = 'AutoLoginWithPasswdResponse';
 
-    @Effect()
-    public signupWithGoogle$: Observable<Action> = this.actions$
-        .ofType(LoginActions.SIGNUP_WITH_GOOGLE_REQUEST).pipe(
+
+    public signupWithGoogle$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.SIGNUP_WITH_GOOGLE_REQUEST),
             switchMap((action: CustomActions) =>
                 this.auth.LoginWithGoogle(action.payload)
             ),
             map(response => {
                 return this.signupWithGoogleResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public signupWithGoogleResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE).pipe(
+
+    public signupWithGoogleResponse$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE),
             map((action: CustomActions) => {
                 let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
                 if (response) {
@@ -133,19 +135,21 @@ export class LoginActions {
                         type: 'EmptyAction'
                     };
                 }
-            }));
+            })));
 
-    @Effect()
-    public signupWithLinkedin$: Observable<Action> = this.actions$
-        .ofType(LoginActions.SIGNUP_WITH_LINKEDIN_REQUEST).pipe(
+
+    public signupWithLinkedin$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.SIGNUP_WITH_LINKEDIN_REQUEST),
             switchMap((action: CustomActions) =>
                 this.auth.LoginWithLinkedin(action.payload)
             ),
-            map(response => this.signupWithLinkedinResponse(response)));
+            map(response => this.signupWithLinkedinResponse(response))));
 
-    @Effect()
-    public signupWithLinkedinResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE).pipe(
+
+    public signupWithLinkedinResponse$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE),
             map((action: CustomActions) => {
                 let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
                 if (response.status === 'error') {
@@ -160,17 +164,19 @@ export class LoginActions {
                 } else {
                     return this.LoginSuccess();
                 }
-            }));
+            })));
 
-    @Effect()
-    public signupWithEmail$: Observable<Action> = this.actions$
-        .ofType(LoginActions.SignupWithEmailRequest).pipe(
+
+    public signupWithEmail$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.SignupWithEmailRequest),
             switchMap((action: CustomActions) => this.auth.SignupWithEmail(action.payload)),
-            map(response => this.SignupWithEmailResponce(response)));
+            map(response => this.SignupWithEmailResponce(response))));
 
-    @Effect()
-    public signupWithEmailResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.SignupWithEmailResponce).pipe(
+
+    public signupWithEmailResponse$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.SignupWithEmailResponce),
             map((action: CustomActions) => {
                 if (action.payload.status === 'success') {
                     this._toaster.successToast(action.payload.body);
@@ -178,19 +184,21 @@ export class LoginActions {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public verifyEmail$: Observable<Action> = this.actions$
-        .ofType(LoginActions.VerifyEmailRequest).pipe(
+
+    public verifyEmail$: Observable<Action> = createEffect( ()=>this.actions$
+        .pipe(
+            ofType(LoginActions.VerifyEmailRequest),
             switchMap((action: CustomActions) =>
                 this.auth.VerifyEmail(action.payload as VerifyEmailModel)
             ),
-            map(response => this.VerifyEmailResponce(response)));
+            map(response => this.VerifyEmailResponce(response))));
 
-    @Effect()
-    public verifyEmailResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.VerifyEmailResponce).pipe(
+
+    public verifyEmailResponse$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.VerifyEmailResponce),
             map((action: CustomActions) => {
                 let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
                 if (response.status === 'error') {
@@ -198,17 +206,19 @@ export class LoginActions {
                     return { type: 'EmptyAction' };
                 }
                 return this.LoginSuccess();
-            }));
+            })));
 
-    @Effect()
-    public signupWithMobile$: Observable<Action> = this.actions$
-        .ofType(LoginActions.SignupWithMobileRequest).pipe(
+
+    public signupWithMobile$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.SignupWithMobileRequest),
             switchMap((action: CustomActions) => this.auth.SignupWithMobile(action.payload)),
-            map(response => this.SignupWithMobileResponce(response)));
+            map(response => this.SignupWithMobileResponce(response))));
 
-    @Effect()
-    public signupWithMobileResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.SignupWithMobileResponce).pipe(
+
+    public signupWithMobileResponse$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.SignupWithMobileResponce),
             map((action: CustomActions) => {
                 if (action.payload.status === 'success') {
                     this._toaster.successToast(action.payload.body);
@@ -216,11 +226,12 @@ export class LoginActions {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public loginSuccessByURL$: Observable<Action> = this.actions$
-        .ofType(LoginActions.LoginSuccessBYUrl).pipe(
+
+    public loginSuccessByURL$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.LoginSuccessBYUrl),
             switchMap((action) => {
                 console.log("Login Init");
                 return observableZip(this._companyService.getStateDetails(''), this._companyService.CompanyList(), this._companyService.CurrencyList());
@@ -270,10 +281,11 @@ export class LoginActions {
                         return this.doSameStuffs(companies);
                     }
                 }
-            }));
-    @Effect()
-    public loginSuccess$: Observable<Action> = this.actions$
-        .ofType(LoginActions.LoginSuccess).pipe(
+            })));
+
+    public loginSuccess$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.LoginSuccess),
             switchMap((action) => {
                 console.log("Login Init");
                 return observableZip(this._companyService.getStateDetails(''), this._companyService.CompanyList(), this._companyService.CurrencyList());
@@ -323,11 +335,12 @@ export class LoginActions {
                         return this.doSameStuffs(companies);
                     }
                 }
-            }));
+            })));
 
-    @Effect()
-    public logoutSuccess$: Observable<Action> = this.actions$
-        .ofType(LoginActions.LogOut).pipe(
+
+    public logoutSuccess$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.LogOut),
             map((action: CustomActions) => {
                 if (PRODUCTION_ENV && !(isElectron || isCordova)) {
                     window.location.href = 'https://giddh.com/login/';
@@ -340,19 +353,21 @@ export class LoginActions {
                     window.location.href = AppUrl + 'login/';
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public verifyMobile$: Observable<Action> = this.actions$
-        .ofType(LoginActions.VerifyMobileRequest).pipe(
+
+    public verifyMobile$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.VerifyMobileRequest),
             switchMap((action: CustomActions) =>
                 this.auth.VerifyOTP(action.payload as VerifyMobileModel)
             ),
-            map(response => this.VerifyMobileResponce(response)));
+            map(response => this.VerifyMobileResponce(response))));
 
-    @Effect()
-    public verifyMobileResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.VerifyMobileResponce).pipe(
+
+    public verifyMobileResponse$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.VerifyMobileResponce),
             map((action: CustomActions) => {
                 let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
                 if (response.status === 'error') {
@@ -360,19 +375,21 @@ export class LoginActions {
                     return { type: 'EmptyAction' };
                 }
                 return this.LoginSuccess();
-            }));
+            })));
 
-    @Effect()
-    public verifyTwoWayAuth$: Observable<Action> = this.actions$
-        .ofType(LoginActions.VerifyTwoWayAuthRequest).pipe(
+
+    public verifyTwoWayAuth$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.VerifyTwoWayAuthRequest),
             switchMap((action: CustomActions) =>
                 this.auth.VerifyOTP(action.payload as VerifyMobileModel)
             ),
-            map(response => this.VerifyTwoWayAuthResponse(response)));
+            map(response => this.VerifyTwoWayAuthResponse(response))));
 
-    @Effect()
-    public verifyTwoWayAuthResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.VerifyTwoWayAuthResponse).pipe(
+
+    public verifyTwoWayAuthResponse$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.VerifyTwoWayAuthResponse),
             map((action: CustomActions) => {
                 let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
                 if (response.status === 'error') {
@@ -380,11 +397,12 @@ export class LoginActions {
                     return { type: 'EmptyAction' };
                 }
                 return this.LoginSuccess();
-            }));
+            })));
 
-    @Effect()
-    public GoogleElectronLogin$: Observable<Action> = this.actions$
-        .ofType(LoginActions.GoogleLoginElectron).pipe(
+
+    public GoogleElectronLogin$: Observable<Action> =createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.GoogleLoginElectron),
             switchMap((action: CustomActions) => {
                 return this.http.get(Configuration.ApiUrl + 'v2/login-with-google', {
                     headers: action.payload,
@@ -398,11 +416,12 @@ export class LoginActions {
                 }
                 // return this.LoginSuccess();
                 return this.signupWithGoogleResponse(data);
-            }));
+            })));
 
-    @Effect()
-    public LinkedInElectronLogin$: Observable<Action> = this.actions$
-        .ofType(LoginActions.LinkedInLoginElectron).pipe(
+
+    public LinkedInElectronLogin$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.LinkedInLoginElectron),
             switchMap((action: CustomActions) => {
                 let args: any = { headers: {} };
                 args.headers['cache-control'] = 'no-cache';
@@ -422,20 +441,22 @@ export class LoginActions {
                 }
                 // return this.LoginSuccess();
                 return this.signupWithGoogleResponse(data);
-            }));
+            })));
 
-    @Effect()
-    public ClearSession$: Observable<Action> = this.actions$
-        .ofType(LoginActions.ClearSession).pipe(
+
+    public ClearSession$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.ClearSession),
             switchMap((action: CustomActions) => {
                 return this.auth.ClearSession();
             }), map(data => {
                 return this.LogOut();
-            }));
+            })));
 
-    @Effect()
-    public CHANGE_COMPANY$: Observable<Action> = this.actions$
-        .ofType(CompanyActions.CHANGE_COMPANY).pipe(
+
+    public CHANGE_COMPANY$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(CompanyActions.CHANGE_COMPANY),
             switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload)),
             map(response => {
                 if ((response.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) === -1) || (response.status === 'error' || response.code === 'NOT_FOUND')) {
@@ -480,11 +501,12 @@ export class LoginActions {
                 }
 
                 return this.ChangeCompanyResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public ChangeCompanyResponse$: Observable<Action> = this.actions$
-        .ofType(CompanyActions.CHANGE_COMPANY_RESPONSE).pipe(
+
+    public ChangeCompanyResponse$: Observable<Action> =createEffect( ()=> this.actions$
+        .pipe(
+            ofType(CompanyActions.CHANGE_COMPANY_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'success') {
                     // get groups with accounts for general use
@@ -493,17 +515,19 @@ export class LoginActions {
                     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public addNewMobile$: Observable<Action> = this.actions$
-        .ofType(LoginActions.AddNewMobileNo).pipe(
+
+    public addNewMobile$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.AddNewMobileNo),
             switchMap((action: CustomActions) => this.auth.VerifyNumber(action.payload)),
-            map(response => this.AddNewMobileNoResponce(response)));
+            map(response => this.AddNewMobileNoResponce(response))));
 
-    @Effect()
-    public addNewMobileResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.AddNewMobileNoResponse).pipe(
+
+    public addNewMobileResponse$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.AddNewMobileNoResponse),
             map((action: CustomActions) => {
                 if (action.payload.status === 'success') {
                     this._toaster.successToast('You will receive a verification code on your mobile shortly.');
@@ -511,19 +535,20 @@ export class LoginActions {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public verifyAddNewMobile$: Observable<Action> = this.actions$
-        .ofType(LoginActions.VerifyAddNewMobileNo).pipe(
+
+    public verifyAddNewMobile$: Observable<Action> =  createEffect( () =>this.actions$
+        .pipe(
+            ofType(LoginActions.VerifyAddNewMobileNo),
             switchMap((action: CustomActions) =>
                 this.auth.VerifyNumberOTP(action.payload as VerifyMobileModel)
             ),
-            map(response => this.VerifyAddNewMobileNoResponce(response)));
+            map(response => this.VerifyAddNewMobileNoResponce(response))));
 
-    @Effect()
-    public verifyAddNewMobileResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.VerifyAddNewMobileNoResponse).pipe(
+    public verifyAddNewMobileResponse$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.VerifyAddNewMobileNoResponse),
             map((action: CustomActions) => {
                 let response: BaseResponse<string, VerifyMobileModel> = action.payload;
                 if (response.status === 'error') {
@@ -532,57 +557,64 @@ export class LoginActions {
                 }
                 this._toaster.successToast(response.body);
                 return this.FetchUserDetails();
-            }));
+            })));
 
-    @Effect()
-    public FectchUserDetails$: Observable<Action> = this.actions$
-        .ofType(LoginActions.FetchUserDetails).pipe(
+
+    public FectchUserDetails$: Observable<Action> = createEffect( ()=>this.actions$
+        .pipe(
+            ofType(LoginActions.FetchUserDetails),
             switchMap((action: CustomActions) => this.auth.FetchUserDetails()),
-            map(response => this.FetchUserDetailsResponse(response)));
+            map(response => this.FetchUserDetailsResponse(response))));
 
-    @Effect()
-    public FectchUserDetailsResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.FetchUserDetailsResponse).pipe(
+
+    public FectchUserDetailsResponse$: Observable<Action> =createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.FetchUserDetailsResponse),
             map((action: CustomActions) => {
                 if (action.payload && action.payload.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public AddBalance$: Observable<Action> = this.actions$
-        .ofType(LoginActions.AddBalance).pipe(
+
+    public AddBalance$: Observable<Action> =createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.AddBalance),
             switchMap((action: CustomActions) => this.auth.AddBalance(action.payload)),
-            map(response => this.AddBalanceResponse(response)));
+            map(response => this.AddBalanceResponse(response))));
 
-    @Effect()
-    public AddBalanceResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.AddBalanceResponse).pipe(
+
+    public AddBalanceResponse$: Observable<Action> = createEffect(() =>this.actions$
+        .pipe(
+            ofType(LoginActions.AddBalanceResponse),
             map((action: CustomActions) => {
                 if (action.payload.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public ReportInvalidJSON$: Observable<Action> = this.actions$
-        .ofType('REPORT_INVALID_JSON').pipe(
+
+    public ReportInvalidJSON$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType('REPORT_INVALID_JSON'),
             switchMap((action: CustomActions) => this.auth.ReportInvalidJSON(action.payload)),
             map((res) => {
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public SignupWithPasswdRequest$: Observable<Action> = this.actions$
-        .ofType(LoginActions.SignupWithPasswdRequest).pipe(
+
+    public SignupWithPasswdRequest$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.SignupWithPasswdRequest),
             switchMap((action: CustomActions) => this.auth.SignupWithPassword(action.payload)),
-            map(response => this.SignupWithPasswdResponse(response)));
+            map(response => this.SignupWithPasswdResponse(response))));
 
-    @Effect()
-    public SignupWithPasswdResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.SignupWithPasswdResponse).pipe(
+
+    public SignupWithPasswdResponse$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.SignupWithPasswdResponse),
             map((action: CustomActions) => {
                 if (action.payload.status === 'success') {
                     this._toaster.successToast('A verification code has been sent to your email account.');
@@ -593,17 +625,19 @@ export class LoginActions {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public LoginWithPasswdRequest$: Observable<Action> = this.actions$
-        .ofType(LoginActions.LoginWithPasswdRequest).pipe(
+
+    public LoginWithPasswdRequest$: Observable<Action> =  createEffect( ()=>this.actions$
+        .pipe(
+            ofType(LoginActions.LoginWithPasswdRequest),
             switchMap((action: CustomActions) => this.auth.LoginWithPassword(action.payload)),
-            map(response => this.LoginWithPasswdResponse(response)));
+            map(response => this.LoginWithPasswdResponse(response))));
 
-    @Effect()
-    public LoginWithPasswdResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.LoginWithPasswdResponse).pipe(
+
+    public LoginWithPasswdResponse$: Observable<Action> = createEffect( ()=>this.actions$
+        .pipe(
+            ofType(LoginActions.LoginWithPasswdResponse),
             map((action: CustomActions) => {
                 if (action.payload.status === 'success') {
 
@@ -618,17 +652,19 @@ export class LoginActions {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public forgotPasswordRequest$: Observable<Action> = this.actions$
-        .ofType(LoginActions.forgotPasswordRequest).pipe(
+
+    public forgotPasswordRequest$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.forgotPasswordRequest),
             switchMap((action: CustomActions) => this.auth.forgotPassword(action.payload)),
-            map(response => this.forgotPasswordResponse(response)));
+            map(response => this.forgotPasswordResponse(response))));
 
-    @Effect()
-    public forgotPasswordResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.forgotPasswordResponse).pipe(
+
+    public forgotPasswordResponse$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.forgotPasswordResponse),
             map((action: CustomActions) => {
                 if (action.payload.status === 'success') {
                     // return this.LoginSuccess();
@@ -637,17 +673,19 @@ export class LoginActions {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public resetPasswordRequest$: Observable<Action> = this.actions$
-        .ofType(LoginActions.resetPasswordRequest).pipe(
+
+    public resetPasswordRequest$: Observable<Action> = createEffect( ()=>this.actions$
+        .pipe(
+            ofType(LoginActions.resetPasswordRequest),
             switchMap((action: CustomActions) => this.auth.resetPassword(action.payload)),
-            map(response => this.resetPasswordResponse(response)));
+            map(response => this.resetPasswordResponse(response))));
 
-    @Effect()
-    public resetPasswordResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.resetPasswordResponse).pipe(
+
+    public resetPasswordResponse$: Observable<Action> =createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.resetPasswordResponse),
             map((action: CustomActions) => {
                 if (action.payload.status === 'success') {
                     // return this.LoginSuccess();
@@ -656,25 +694,27 @@ export class LoginActions {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public renewSession$: Observable<Action> = this.actions$
-        .ofType(LoginActions.renewSessionRequest).pipe(
+    public renewSession$: Observable<Action> = createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.renewSessionRequest),
             switchMap((action: CustomActions) => this.auth.renewSession()),
-            map(response => this.renewSessionResponse(response)));
+            map(response => this.renewSessionResponse(response))));
 
-    @Effect()
-    public renewSessionResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.renewSessionResponse).pipe(
+
+    public renewSessionResponse$: Observable<Action> =createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.renewSessionResponse),
             map((action: CustomActions) => {
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public autoLoginwithPasswordResponse$: Observable<Action> = this.actions$
-        .ofType(LoginActions.AutoLoginWithPasswdResponse).pipe(
-            map((action: CustomActions) => this.LoginSuccessByOtherUrl()));
+
+    public autoLoginwithPasswordResponse$: Observable<Action> =createEffect( ()=> this.actions$
+        .pipe(
+            ofType(LoginActions.AutoLoginWithPasswdResponse),
+            map((action: CustomActions) => this.LoginSuccessByOtherUrl())));
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

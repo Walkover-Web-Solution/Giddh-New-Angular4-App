@@ -1,14 +1,7 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, TemplateRef } from '@angular/core';
-import {
-    BsDropdownDirective,
-    BsModalRef,
-    BsModalService,
-    ModalDirective,
-    ModalOptions,
-    TabsetComponent, 
-    PopoverDirective
-} from 'ngx-bootstrap'
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+
 @Component({
     selector: 'aside-order-history',
     templateUrl: './order-history.component.html',
@@ -25,7 +18,7 @@ export class OrderHistoryComponent implements OnInit{
     ) { }
     ngOnInit() {
     }
-   
+
     public closeAsidePane(event) {
         this.closeAsideEvent.emit(event);
     }

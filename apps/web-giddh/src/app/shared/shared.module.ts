@@ -8,7 +8,8 @@ import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directiv
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CKEditorModule } from 'ng2-ckeditor';
-import { BsDatepickerModule, DatepickerModule, PaginationModule } from 'ngx-bootstrap';
+import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
@@ -16,7 +17,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
 
 import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
 import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
@@ -31,8 +32,8 @@ import {
     SocialLoginModule,
 } from '../theme/ng-social-login-module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { VsForDirective } from '../theme/ng2-vs-for/ng2-vs-for';
 import { FormWizardModule } from '../theme/ng2-wizard';
 import { UniversalListModule } from '../theme/universal-list/universal.list.module';
 import { WelcomeComponent } from '../welcome/welcome.component';
@@ -132,7 +133,6 @@ export function provideConfig() {
         GroupUpdateComponent,
         ShareGroupModalComponent,
         ShareAccountModalComponent,
-        VsForDirective,
         CheckPermissionDirective,
         ExportGroupLedgerComponent,
         AsideMenuOtherTaxes,
@@ -152,7 +152,7 @@ export function provideConfig() {
         ReactiveFormsModule,
         ModalModule,
         DatepickerModule,
-        TypeaheadModule,
+        TypeaheadModule.forRoot(),
         UniversalListModule,
         NgbTypeaheadModule,
         TooltipModule,
@@ -179,7 +179,8 @@ export function provideConfig() {
         CKEditorModule,
         NgxMaskModule,
         CommandKModule,
-        NgxDaterangepickerMd.forRoot()
+        NgxDaterangepickerMd.forRoot(),
+        ScrollingModule
     ],
     exports: [
         CommonModule,
@@ -206,7 +207,6 @@ export function provideConfig() {
         OnBoardingComponent,
         ConfirmModalModule,
         NgbTypeaheadModule,
-        VsForDirective,
         AccountsSideBarComponent,
         AsideHelpSupportComponent,
         AsideSettingComponent,
@@ -251,7 +251,7 @@ export function provideConfig() {
     ]
 })
 export class SharedModule {
-    public static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders<unknown> {
         return {
             ngModule: SharedModule,
             providers: []

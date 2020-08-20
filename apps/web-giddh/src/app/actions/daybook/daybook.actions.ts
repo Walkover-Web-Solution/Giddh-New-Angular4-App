@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { CustomActions } from '../../store/customActions';
 import { ToasterService } from '../../services/toaster.service';
@@ -23,8 +23,9 @@ export class DaybookActions {
     public static readonly EXPORT_DAYBOOK_POST_REQUEST = 'EXPORT_DAYBOOK_POST_REQUEST';
     public static readonly EXPORT_DAYBOOK_POST_RESPONSE = 'EXPORT_DAYBOOK_POST_RESPONSE';
 
-    @Effect() private GetDaybook$: Observable<Action> = this.action$
-        .ofType(DaybookActions.GET_DAYBOOK_REQUEST).pipe(
+     public GetDaybook$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(DaybookActions.GET_DAYBOOK_REQUEST),
             switchMap((action: CustomActions) => {
                 return this._daybookService.GetDaybook(action.payload.request, action.payload.queryRequest).pipe(
                     map((r) => this.validateResponse<DayBookResponseModel, DayBookRequestModel>(r, {
@@ -34,10 +35,11 @@ export class DaybookActions {
                         type: DaybookActions.GET_DAYBOOK_RESPONSE,
                         payload: null
                     })));
-            }));
+            })));
 
-    @Effect() private ExportDaybook$: Observable<Action> = this.action$
-        .ofType(DaybookActions.EXPORT_DAYBOOK_REQUEST).pipe(
+     public ExportDaybook$: Observable<Action> = createEffect( ()=>this.action$
+        .pipe(
+            ofType(DaybookActions.EXPORT_DAYBOOK_REQUEST),
             switchMap((action: CustomActions) => {
                 return this._daybookService.ExportDaybook(action.payload.request, action.payload.queryRequest).pipe(
                     map((res) => {
@@ -51,10 +53,11 @@ export class DaybookActions {
                         }
                         return { type: 'EmptyAction' };
                     }));
-            }));
+            })));
 
-    @Effect() private ExportDaybookPost$: Observable<Action> = this.action$
-        .ofType(DaybookActions.EXPORT_DAYBOOK_POST_REQUEST).pipe(
+    public ExportDaybookPost$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(DaybookActions.EXPORT_DAYBOOK_POST_REQUEST),
             switchMap((action: CustomActions) => {
                 return this._daybookService.ExportDaybookPost(action.payload.request, action.payload.queryRequest).pipe(
                     map((res) => {
@@ -68,7 +71,7 @@ export class DaybookActions {
                         }
                         return { type: 'EmptyAction' };
                     }));
-            }));
+            })));
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,

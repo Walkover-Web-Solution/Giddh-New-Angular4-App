@@ -1,25 +1,25 @@
 <tabset class="setting-page" id="setting-tab" #staticTabsTBPL>
     <tab heading="Trial Balance"
-        (select)="setCurrentPageTitle('Trial Balance'); CanTBLoad = true;CanPLLoad = false;CanBSLoad = false;">
+        (selectTab)="setCurrentPageTitle('Trial Balance'); CanTBLoad = true;CanPLLoad = false;CanBSLoad = false;">
         <div class="container-fluid">
             <tb [isV2]="false" [selectedCompany]="selectedCompany" *ngIf="CanTBLoad"></tb>
         </div>
     </tab>
     <tab heading="Profit &amp; Loss"
-        (select)="setCurrentPageTitle('Profit &amp; Loss'); CanPLLoad = true;CanTBLoad = false;CanBSLoad = false;">
+        (selectTab)="setCurrentPageTitle('Profit &amp; Loss'); CanPLLoad = true;CanTBLoad = false;CanBSLoad = false;">
         <div class="container-fluid">
             <pl [selectedCompany]="selectedCompany" *ngIf="CanPLLoad"></pl>
         </div>
     </tab>
     <tab heading="Balance Sheet"
-        (select)="setCurrentPageTitle('Balance Sheet'); CanBSLoad = true;CanTBLoad = false;CanPLLoad = false;">
+        (selectTab)="setCurrentPageTitle('Balance Sheet'); CanBSLoad = true;CanTBLoad = false;CanPLLoad = false;">
         <div class="container-fluid">
             <bs [selectedCompany]="selectedCompany" *ngIf="CanBSLoad"></bs>
         </div>
     </tab>
 
     <!--hide this tab for now-->
-    <!--<tab *ngIf="CanNewTBLoadOnThisEnv || isWalkoverCompany" heading="Trial Balance New" (select)="CanNewTBLoad = true; CanTBLoad = false">-->
+    <!--<tab *ngIf="CanNewTBLoadOnThisEnv || isWalkoverCompany" heading="Trial Balance New" (selectTab)="CanNewTBLoad = true; CanTBLoad = false">-->
     <!--<tb *ngIf="CanNewTBLoad" [isV2]="true" [selectedCompany]="selectedCompany"></tb>-->
     <!--</tab>-->
 

@@ -763,22 +763,16 @@
                                 </div>
                                 <div class="col-md-4 col-sm-5 pl-05 pr-05">
                                     <div class="form-group">
-                                        <label>Amount<span class="text-danger">*</span> <span *ngIf="item.voucherType === 'receipt' && isAdvanceReceipt"
-                                                class="text-light font-12 ml-05">(Inclusive
-                                                Tax)</span></label>
-                                        <input type="text" class="form-control mb-1" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
-                                            [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective
-                                            [(ngModel)]="item.adjustmentAmount.amountForAccount" disabled>
-                                        <input type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat"
-                                            [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedInvoiceAmountChange()"
-                                            *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode" [(ngModel)]="item.adjustmentAmount.amountForAccount">
+                                        <label>Amount<span class="text-danger">*</span> <span *ngIf="item.voucherType === 'receipt' && isAdvanceReceipt" class="text-light font-12 ml-05">(Inclusive
+                            Tax)</span></label>
+                                        <input type="text" class="form-control mb-1" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective [(ngModel)]="item.adjustmentAmount.amountForAccount" disabled>
+                                        <input type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedInvoiceAmountChange()" *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode" [(ngModel)]="item.adjustmentAmount.amountForAccount">
                                     </div>
                                 </div>
-                                <div *ngIf="item.voucherType === 'receipt'" class="col-sm-2 pl-05">
+                                <div *ngIf="item.voucherType === 'receipt' && item.subVoucher === 'ADVANCE_RECEIPT'" class="col-sm-2 pl-05">
                                     <div class="form-group">
                                         <label>Tax</label>
-                                        <input type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat"
-                                            [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.calculatedTaxAmount" disabled>
+                                        <input type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.calculatedTaxAmount" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -820,14 +814,11 @@
                                 <div class="col-md-4 col-sm-5 pl-05 pr-05">
                                     <div class="form-group">
                                         <label>Amount<span class="text-danger">*</span> <span class="text-light font-12 ml-05">(Inclusive
-                                                Tax)</span></label>
-                                        <input type="text" class="form-control mb-1" name="amountForAccount"
-                                            *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" [mask]="vm.inputMaskFormat"
-                                            [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective
-                                            [(ngModel)]="item.adjustmentAmount.amountForAccount" disabled>
-                                        <input type="text" class="form-control mb-1" name="amountForAccount" decimalDigitsDirective
-                                            [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedReceiptsAmountChange()"
-                                            *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode" [(ngModel)]="item.adjustmentAmount.amountForAccount">
+                            Tax)</span></label>
+                                        <input type="text" class="form-control mb-1" name="amountForAccount" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective [(ngModel)]="item.adjustmentAmount.amountForAccount"
+                                            disabled>
+                                        <input type="text" class="form-control mb-1" name="amountForAccount" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedReceiptsAmountChange()" *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode"
+                                            [(ngModel)]="item.adjustmentAmount.amountForAccount">
                                     </div>
                                 </div>
                                 <div class="col-sm-2 pl-05">
@@ -844,7 +835,7 @@
                         <p *ngIf="isAdjustedAmountExcess" class="font-12 text-light">Excess
                             amount:{{ vm.baseCurrencyDetails?.symbol}}{{adjustedExcessAmount | giddhCurrency}} <i
                                 class="icon-info pointer" tooltip="Adjustment amount is more than receipts."></i></p>
-                    </div>
+                    </div> -->
                     <!--End adjusted advance receipts list  -->
 
                 </div>
