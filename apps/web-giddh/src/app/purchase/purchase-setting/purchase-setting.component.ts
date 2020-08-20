@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal'
-import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { InvoiceActions } from '../../actions/invoice/invoice.actions';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { ToasterService } from '../../services/toaster.service';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
+import { InvoiceService } from '../../services/invoice.service';
+import { PurchaseOrderService } from '../../services/purchase-order.service';
+import { GeneralService } from '../../services/general.service';
+import { AuthenticationService } from '../../services/authentication.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'purchase-setting',
@@ -18,58 +19,88 @@ import { SettingsIntegrationActions } from '../../actions/settings/settings.inte
     styleUrls: ['./purchase-setting.component.scss']
 })
 
-export class PurchaseSettingComponent implements OnInit {
-
-    public modelRef: BsModalRef;
+export class PurchaseSettingComponent implements OnInit, OnDestroy {
     public isInvalidfield: boolean = true;
     public isMulticurrencyAccount: true;
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public purchaseBillSettings: any = {};
-    public isLockDateSet: boolean = false;
+    public invoiceSettings: any = { purchaseBillSettings: {} };
     public lockDate: Date = new Date();
     public isEmailChanged: boolean = false;
     public originalEmail: string;
     public isGmailIntegrated: boolean;
+    /* Active company unique name */
+    public activeCompanyUniqueName$: Observable<string>;
+    public companyUniqueName: any;
+    public gmailAuthCodeUrl$: Observable<string> = null;
+    private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private modalService: BsModalService, private generalService: GeneralService, private invoiceActions: InvoiceActions, private store: Store<AppState>, private toaster: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions) {
-        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+    constructor(private store: Store<AppState>, private toaster: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions, private invoiceService: InvoiceService, public purchaseOrderService: PurchaseOrderService, private generalService: GeneralService, public authenticationService: AuthenticationService, private route: ActivatedRoute) {
+        this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
+
+        this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl()).replace(':client_id', this.generalService.getGoogleCredentials().GOOGLE_CLIENT_ID);
+        this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
     }
 
     public ngOnInit(): void {
-        this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
-            if (setting && setting.invoiceSettings && setting.webhooks) {
-                this.purchaseBillSettings = _.cloneDeep(setting.purchaseBillSettings);
+        this.activeCompanyUniqueName$.subscribe(response => {
+            this.companyUniqueName = response;
+        });
 
-                if (this.purchaseBillSettings.lockDate) {
-                    this.isLockDateSet = true;
-                    this.lockDate = moment(this.purchaseBillSettings.lockDate, GIDDH_DATE_FORMAT).toDate();
-                } else {
-                    this.isLockDateSet = false;
-                }
-            } else if (!setting || !setting.purchaseBillSettings) {
-                this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+            if (val.code) {
+                this.saveGmailAuthCode(val.code);
             }
         });
 
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+        this.initSettings();
+    }
 
-        this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    public initSettings(): void {
+        this.invoiceService.GetInvoiceSetting().subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                this.invoiceSettings = _.cloneDeep(response.body);
+
+                if (this.invoiceSettings.purchaseBillSettings.lockDate) {
+                    this.lockDate = moment(this.invoiceSettings.purchaseBillSettings.lockDate, GIDDH_DATE_FORMAT).toDate();
+                }
+            }
+        });
+
+        this.store.pipe(select(state => state.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
             this.isGmailIntegrated = result;
         });
     }
 
     public resetForm(): void {
-
+        this.initSettings();
     }
 
     public updateForm(): void {
+        let formToSave = _.cloneDeep(this.invoiceSettings);
 
+        if (formToSave.purchaseBillSettings.lockDate instanceof Date) {
+            formToSave.purchaseBillSettings.lockDate = moment(formToSave.purchaseBillSettings.lockDate).format(GIDDH_DATE_FORMAT);
+        }
+
+        this.invoiceService.UpdateInvoiceSetting(formToSave).subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                this.toaster.successToast(response.body);
+            } else {
+                this.toaster.errorToast(response.message);
+            }
+        });
     }
 
-    public verfiyEmail(emailId: any): boolean {
+    public verifyEmail(emailId: any): boolean {
         let email = new RegExp(/[a-z0-9!#$%&'*+=?^_{|}~-]+(?:.[a-z0-9!#$%&’*+=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g);
         if (email.test(emailId)) {
-            this.store.dispatch(this.invoiceActions.updateInvoiceEmail(emailId));
+            this.updateSettingsEmail(emailId);
             return true;
         } else {
             this.toaster.warningToast('Invalid Email Address.');
@@ -81,14 +112,54 @@ export class PurchaseSettingComponent implements OnInit {
         if (!emailId) {
             return false;
         } else {
-            let emailTodelete = _.cloneDeep(emailId);
-            emailTodelete = null;
-            this.store.dispatch(this.invoiceActions.deleteInvoiceEmail(emailTodelete));
+            this.updateSettingsEmail(null);
             return true;
         }
     }
 
     public onChangeEmail(email: string): void {
         this.isEmailChanged = email !== this.originalEmail;
+    }
+
+    public updateSettingsEmail(emailAddress: any): void {
+        let getRequestObject = {
+            companyUniqueName: this.companyUniqueName
+        };
+
+        let postRequestObject = {
+            emailAddress: emailAddress
+        };
+
+        this.purchaseOrderService.updateSettingsEmail(getRequestObject, postRequestObject).subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                this.initSettings();
+                this.toaster.successToast(response.body);
+            } else {
+                this.toaster.errorToast(response.message);
+            }
+        });
+    }
+
+    private saveGmailAuthCode(authCode: string): void {
+        const dataToSave = {
+            code: authCode,
+            client_secret: this.generalService.getGoogleCredentials().GOOGLE_CLIENT_SECRET,
+            client_id: this.generalService.getGoogleCredentials().GOOGLE_CLIENT_ID,
+            grant_type: 'authorization_code',
+            redirect_uri: this.getRedirectUrl()
+        };
+
+        this.authenticationService.saveGmailAuthCode(dataToSave).subscribe((res) => {
+            if (res.status === 'success') {
+                this.toaster.successToast('Gmail account added successfully.', 'Success');
+            } else {
+                this.toaster.errorToast(res.message, res.code);
+            }
+            this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+        });
+    }
+
+    public getRedirectUrl(): string {
+        return AppUrl + 'pages/purchase-management/purchase-settings';
     }
 }
