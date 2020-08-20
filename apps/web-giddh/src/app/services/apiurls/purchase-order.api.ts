@@ -10,5 +10,6 @@ export const PURCHASE_ORDER_API = {
     DELETE: `${PURCHASE_ORDER}purchase-order?uniqueName=:poUniqueName`,
     EMAIL: `${PURCHASE_ORDER}accounts/:accountUniqueName/purchase-order/:poUniqueName/mail`,
     UPDATE: `${PURCHASE_ORDER}accounts/:accountUniqueName/purchase-order`,
-    GET_PREVIEW: `${PURCHASE_ORDER}purchase-order/preview?uniqueName=:poUniqueName`
+    GET_PREVIEW: `${PURCHASE_ORDER}purchase-order/preview?uniqueName=:poUniqueName`,
+    UPDATE_SETTINGS_EMAIL: `${PURCHASE_ORDER}purchase-bill-setting`
 }
