@@ -17,7 +17,7 @@ import {
     OnInit,
     Output,
     TemplateRef,
-    ViewChild
+    ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import {
@@ -65,6 +65,7 @@ import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { CountryRequest, CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'app-header',
@@ -259,6 +260,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isAllowedForBetaTesting: boolean = false;
     /* This will hold value if settings sidebar is open through mobile hamburger icon */
     public isMobileSidebar: boolean = false;
+    /** To check all module menu open */
+    public isAllModuleOpen: boolean = false;
+
+    /** update IndexDb flags observable **/
+    public updateIndexDbInProcess$: Observable<boolean>;
+    public updateIndexDbSuccess$: Observable<boolean>;
+    /* This will hold if resolution is less than 768 to consider as mobile screen */
+    public isMobileScreen: boolean = false;
 
     /**
      *
@@ -285,7 +294,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _windowRef: WindowRef,
         private _breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
-        private commonActions: CommonActions
+        private commonActions: CommonActions,
+        private location: Location
     ) {
         this._windowRef.nativeWindow.superformIds = ['Jkvq'];
         /* This will get the date range picker configurations */
@@ -321,6 +331,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
             if (event instanceof NavigationEnd) {
                 this.setCurrentPage();
+                this.addClassInBodyIfPageHasTabs();
 
                 if (this.router.url.includes("/ledger")) {
                     this.currentState = this.router.url;
@@ -460,6 +471,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        this._breakpointObserver.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
         this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
             if (value === 'logoutCordova') {
                 this.zone.run(() => {
@@ -965,7 +982,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public analyzeAccounts(e: any, acc) {
         if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
-            this.onItemSelected(acc);
+            this.onItemSelected(acc, null, true);
             return;
         }
         e.preventDefault();
@@ -1328,7 +1345,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.doEntryInDb('groups', item);
     }
 
-    public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null) {
+    public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null, isCtrlClicked?: boolean) {
         this.oldSelectedPage = _.cloneDeep(this.selectedPage);
         if (this.modelRef) {
             this.modelRef.hide();
@@ -1354,7 +1371,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             // if (!this.isLedgerAccSelected) {
             //   this.navigateToUser = true;
             // }
-            this.router.navigate([url]); // added link in routerLink
+            if (!isCtrlClicked) {
+                this.router.navigate([url]); // added link in routerLink
+            }     
         }
         // save data to db
         item.time = +new Date();
@@ -1826,5 +1845,44 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         } else {
             document.querySelector('body').classList.remove('prevent-body-scroll');
         }
+    }
+
+    /**
+     * This will init the notification on window orientation change
+     *
+     * @param {*} event
+     * @memberof HeaderComponent
+     */
+    @HostListener('window:orientationchange', ['$event'])
+    onOrientationChange(event) {
+        if(window['Headway'] !== undefined) {
+            window['Headway'].init();
+        }
+    }
+
+    /**
+     * This will init the notification on window resize
+     *
+     * @param {*} event
+     * @memberof HeaderComponent
+     */
+    @HostListener('window:resize', ['$event'])
+    windowResize(event) {
+        if(window['Headway'] !== undefined) {
+            window['Headway'].init();
+        }
+    }
+    /**
+     * Toggle all module to previous selected module
+     *
+     * @memberof HeaderComponent
+     */
+    public navigateToAllModules(): void {
+        if(this.isAllModuleOpen) {
+           this.location.back();
+        } else {
+          this.router.navigate(['/pages/all-modules']);
+        }
+        this.isAllModuleOpen = !this.isAllModuleOpen;
     }
 }
