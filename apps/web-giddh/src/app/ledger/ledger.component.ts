@@ -416,7 +416,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.handleRcmVisibility(txn);
                 this.handleTaxableAmountVisibility(txn);
                 this.newLedgerComponent.calculatePreAppliedTax();
-                // this.newLedgerComponent.recalculateTax();
                 this.newLedgerComponent.calculateTax();
                 this.newLedgerComponent.calculateTotal();
                 setTimeout(() => {

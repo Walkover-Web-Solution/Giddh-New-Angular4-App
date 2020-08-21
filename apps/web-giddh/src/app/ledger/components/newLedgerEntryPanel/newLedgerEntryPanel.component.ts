@@ -439,13 +439,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.calculateTax();
     }
 
-    public recalculateTax(): void {
-        if (this.taxControll) {
-            this.taxControll.prepareTaxObject();
-            this.taxControll.change();
-        }
-    }
-
     public calculateTax() {
         let totalPercentage: number;
         totalPercentage = this.currentTxn.taxesVm.reduce((pv, cv) => {
