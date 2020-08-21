@@ -1810,7 +1810,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.noResultsFoundLabel = SearchResultText.NewSearch;
     }
 
-    public handleSuggestionHide() {
+    /**
+     * Handler when search suggestions get hidden when user focuses the
+     * pointer away
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public handleSuggestionHide(): void {
         this.noResultsFoundLabel = SearchResultText.NewSearch;
     }
 

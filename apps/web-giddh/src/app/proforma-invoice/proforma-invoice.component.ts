@@ -4483,7 +4483,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public updateBankAccountObject(data) {
+    /**
+     * Creates the bank/cash account list from API data
+     *
+     * @param {*} data Data of bank/cash account from API response
+     * @returns
+     * @memberof ProformaInvoiceComponent
+     */
+    public updateBankAccountObject(data: any) {
         let bankAccounts: IOption[] = [];
         if (data && data.body && data.body.results) {
             data.body.results.forEach(account => {
