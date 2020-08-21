@@ -2434,7 +2434,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      *
      * @memberof CreatePurchaseOrderComponent
      */
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.resetForm(this.poForm);
         this.destroyed$.next(true);
         this.destroyed$.complete();
