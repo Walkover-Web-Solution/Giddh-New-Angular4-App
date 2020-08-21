@@ -47,10 +47,10 @@ export class GetAuditLogsRequest {
     public fromDate: string;
     public toDate: string;
     public operation: string;
-    public userUniqueName?: string;
+    public userUniqueNames?: string[] = [];
     public entity: string;
-    public accountUniqueName?: string;
-    public groupUniqueName?: string;
+    public accountUniqueNames?: string[] = [];
+    public groupUniqueNames?: string[] = [];
 }
 
 /** Audit log response*/

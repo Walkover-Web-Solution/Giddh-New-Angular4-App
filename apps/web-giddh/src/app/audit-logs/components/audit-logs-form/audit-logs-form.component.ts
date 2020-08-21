@@ -20,6 +20,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { GeneralService } from '../../../services/general.service';
 import { LogsService } from '../../../services/logs.service';
 import { IForceClear } from '../../../models/api-models/Sales';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
     selector: 'audit-logs-form',
@@ -31,32 +32,14 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     public auditLogFormVM: AuditLogsSidebarVM;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    // @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
-    // /* This will store modal reference */
-    // public modalRef: BsModalRef;
-    // /* This will store selected date range to use in api */
-    // public selectedDateRange: any;
-    // /* This will store selected date range to show on UI */
-    // public selectedDateRangeUi: any;
-    // /* This will store available date ranges */
-    // public datePickerOptions: any;
     /* Moment object */
     public moment = moment;
-    // /* Selected from date */
-    // public fromDate: string;
-    // /* Selected to date */
-    // public toDate: string;
     /* Selected range label */
     public selectedRangeLabel: any = "";
-    /* Universal date observer */
-    // public universalDate$: Observable<any>;
     /* Active company details */
     public activeCompany: any;
-    /* This will store the x/y position of the field to show datepicker under it */
-    // public dateFieldPosition: any = { x: 0, y: 0 };
     /** Audit log filter form data */
     public auditLogFilterForm: any[] = [];
     /** To clear entity sh-select options   */
@@ -77,6 +60,9 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     @Input() public fromDate: string;
     /** To date value of parent datepicker */
     @Input() public toDate: string;
+    /** Entity sh-selct refence */
+    @ViewChild('selectEntity') public shSelectEntityReference: ShSelectComponent;
+
 
 
     constructor(private store: Store<AppState>,
@@ -88,7 +74,6 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         private auditLogsService: LogsService,
         private generalService: GeneralService) {
 
-        // this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.rangeInputFormat = GIDDH_DATE_FORMAT;
         this.bsConfig.showWeekNumbers = false;
@@ -141,23 +126,6 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
             }
         });
         this.auditLogFormVM.reset();
-
-        // /** Universal date observer */
-        // this.universalDate$.subscribe(dateObj => {
-        //     if (dateObj) {
-        //         let universalDate = _.cloneDeep(dateObj);
-        //         this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-        //         this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-        //         this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-        //         this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-        //     }
-        // });
-        // /* This will get the date range picker configurations */
-        // this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-        //     if (config) {
-        //         this.datePickerOptions = config;
-        //     }
-        // });
     }
 
     /**
@@ -263,10 +231,11 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                     this.auditLogFilterForm = response.body;
                     this.auditLogFormVM.filters = [];
                     this.auditLogFormVM.entities = [];
-                    response.body.forEach(element => {
-                        this.auditLogFormVM.entities.push({ label: element.entity, value: element.entity.toLocaleLowerCase() });
+                    this.auditLogFilterForm.forEach(element => {
+                        this.auditLogFormVM.entities.push(element.entity);
                     });
                 }
+                this.focusOnEntity();
             }
         });
     }
@@ -294,17 +263,15 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      */
     public getOperationsFilterData(entityType: string): any {
         this.auditLogFormVM.filters = [];
+        // this.forceClearOperations$ = observableOf({ status: true });
         if (entityType) {
             let selectedEntityObject = this.auditLogFilterForm.filter(element => {
-                if (element.entity.toLocaleLowerCase() === entityType.toLocaleLowerCase()) {
+                if (element.entity.label.toLocaleLowerCase() === entityType.toLocaleLowerCase()) {
                     return element;
                 }
             });
             if (selectedEntityObject && selectedEntityObject.length) {
-                selectedEntityObject[0].operations.map(element => {
-                    let operatios: IOption = { label: element, value: element.toLocaleLowerCase() };
-                    this.auditLogFormVM.filters.push(operatios);
-                });
+                this.auditLogFormVM.filters = _.cloneDeep(selectedEntityObject[0].operations)
             }
 
         }
@@ -335,53 +302,6 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         }
     }
 
-
-    // /**
-    //  *To show the datepicker
-    //  *
-    //  * @param {*} element
-    //  * @memberof AuditLogsFormComponent
-    //  */
-    // public showGiddhDatepicker(element: any): void {
-    //     if (element) {
-    //         this.dateFieldPosition = this.generalService.getPosition(element.target);
-    //     }
-    //     this.modalRef = this.modalService.show(
-    //         this.datepickerTemplate,
-    //         Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
-    //     );
-    // }
-
-    // /**
-    //  * This will hide the datepicker
-    //  *
-    //  * @memberof AuditLogsFormComponent
-    //  */
-    // public hideGiddhDatepicker(): void {
-    //     this.modalRef.hide();
-    // }
-
-    // /**
-    //  * Call back function for date/range selection in datepicker
-    //  *
-    //  * @param {*} value
-    //  * @memberof AuditLogsFormComponent
-    //  */
-    // public dateSelectedCallback(value: any): void {
-    //     this.selectedRangeLabel = "";
-
-    //     if (value && value.name) {
-    //         this.selectedRangeLabel = value.name;
-    //     }
-    //     this.hideGiddhDatepicker();
-    //     if (value && value.startDate && value.endDate) {
-    //         this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-    //         this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-    //         this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-    //         this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-    //     }
-    // }
-
     /**
      * To prepare get audit log request model
      *
@@ -390,14 +310,31 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      */
     public prepareAuditLogFormRequest(): GetAuditLogsRequest {
         let getAuditLogsRequest: GetAuditLogsRequest = new GetAuditLogsRequest();
+        getAuditLogsRequest.userUniqueNames = [];
+        getAuditLogsRequest.accountUniqueNames = [];
+        getAuditLogsRequest.groupUniqueNames = [];
         getAuditLogsRequest.entity = this.auditLogFormVM.selectedEntity;
         getAuditLogsRequest.operation = this.auditLogFormVM.selectedOperation;
         getAuditLogsRequest.fromDate = this.fromDate;
         getAuditLogsRequest.toDate = this.toDate;
+        getAuditLogsRequest.userUniqueNames.push(this.auditLogFormVM.selectedUserUniqueName);
+        getAuditLogsRequest.accountUniqueNames.push(this.auditLogFormVM.selectedAccountUniqueName);
+        getAuditLogsRequest.groupUniqueNames.push(this.auditLogFormVM.selectedGroupUniqueName);
         return getAuditLogsRequest;
-        // Note:- *commenting* we will use in next build
-        // getAuditLogsRequest.userUniqueName = this.auditLogFormVM.selectedUserUniqueName;
-        // getAuditLogsRequest.accountUniqueName = this.auditLogFormVM.selectedAccountUnq;
-        // getAuditLogsRequest.groupUniqueName = this.auditLogFormVM.selectedGroupUnq;
+    }
+
+    /**
+     * To auto focus on entity dropdown
+     *
+     * @memberof AuditLogsFormComponent
+     */
+    public focusOnEntity(): void {
+        if (this.shSelectEntityReference) {
+            setTimeout(() => {
+                if (this.shSelectEntityReference) {
+                    this.shSelectEntityReference.show('');
+                }
+            }, 1000);
+        }
     }
 }

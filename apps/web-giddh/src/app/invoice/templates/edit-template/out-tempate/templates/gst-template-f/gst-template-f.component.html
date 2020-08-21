@@ -42,7 +42,8 @@
             <tbody>
                 <tr>
                     <td>
-                        <table class="numDetail" *ngIf="fieldsAndVisibility.header.formNameTaxInvoice?.display">
+                        <table class="number-detail-series"
+                            *ngIf="fieldsAndVisibility.header.formNameTaxInvoice?.display">
                             <tbody>
                                 <tr>
                                     <td>
@@ -249,7 +250,7 @@
             </tbody>
         </table>
     </div>
-    <div class="clearfix" id="Template-table" class="pos-rel" (click)="onClickSection('table')"
+    <div class="clearfix" id="template-table" class="pos-rel" (click)="onClickSection('table')"
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table">
             <i class="fa fa-pencil"></i>
@@ -373,7 +374,7 @@
 
     </div>
 
-    <div class="clearfix" id="Template-footer" class=""
+    <div class="clearfix" id="template-footer" class=""
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }"
         (click)="onClickSection('footer')">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
@@ -421,7 +422,7 @@
         </table>
 
         <!--
-    <div id="Template-footer" class="" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }" (click)="onClickSection('footer')">
+    <div id="template-footer" class="" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }" (click)="onClickSection('footer')">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
             <i class="fa fa-pencil"></i>
         </a> -->

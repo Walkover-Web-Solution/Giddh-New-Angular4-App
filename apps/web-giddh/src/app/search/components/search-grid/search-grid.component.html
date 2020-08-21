@@ -100,7 +100,7 @@
                     </td>
                 </tr>
                 <tr *ngIf="!(searchResponseFiltered$ | async).length">
-                    <td colspan="9" class="text-center empty_table">
+                    <td colspan="9" class="text-center empty-table">
                         <h1>No Record Found !!</h1>
                     </td>
                 </tr>
@@ -128,7 +128,7 @@
                 <div class="modal-header themeBg pdL2 pdR2 clearfix">
                     <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>
-                    <!-- <i class="fa fa-times text-right close_modal" aria-hidden="true" ></i> -->
+                    <!-- <i class="fa fa-times text-right close-modal" aria-hidden="true" ></i> -->
                 </div>
                 <div class="modal-body pdL2 pdR2 clearfix">
                     <h1 class="mrB1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>

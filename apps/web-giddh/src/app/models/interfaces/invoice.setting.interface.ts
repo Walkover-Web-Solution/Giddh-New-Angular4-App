@@ -61,6 +61,7 @@ Walkover Test11343`;
 // }
 
 export interface InvoiceSetting {
+    purchaseBillSettings?: any;
 	invoiceSettings: InvoiceSettings;
 	proformaSettings: ProformaSettings;
 	estimateSettings: EstimateSettings;
