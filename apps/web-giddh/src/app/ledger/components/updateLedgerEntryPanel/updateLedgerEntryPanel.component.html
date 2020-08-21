@@ -8,7 +8,7 @@
         <h3 *ngIf="!openDropDown" (dblclick)="openHeaderDropDown()" class="d-inline-block mr-1">
             {{(baseAccount$ | async)?.name}} A/c</h3>
 
-        <sh-select *ngIf="openDropDown" class="d-inline-block" [disabled]="false" placeholder="Select Group"
+        <sh-select id="update-ledger-select-account" *ngIf="openDropDown" class="d-inline-block" [disabled]="false" placeholder="Select Group"
             filterPlaceholder="Type to filter.." name="accountUniqueName" [(ngModel)]="baseAccountName$"
             [useInBuiltFilterForFlattenAc]="true" [showClear]="false" [options]="vm.flatternAccountList4BaseAccount"
             style="width:30%">
@@ -94,7 +94,7 @@
                                 <ng-container *ngIf="txn.type === 'DEBIT'">
 
                                     <td class="col-xs-2" data-title="Date">
-                                        <input type="text" autocomplete="off" name="datess" #dbs='bsDatepicker'
+                                        <input id="giddh-datepicker" type="text" autocomplete="off" name="datess" #dbs='bsDatepicker'
                                             [(ngModel)]="vm.selectedLedger.entryDate" class="form-control" bsDatepicker
                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                             (click)="addBlankTrx('DEBIT', txn, $event)" placeholder="date"
@@ -194,7 +194,7 @@
 
                                     <td class="col-xs-2 text-right" data-title="Amount">
 
-                                        <input type="text" [(ngModel)]="txn.amount" class="form-control text-right"
+                                        <input id="update-ledger-amount" type="text" [(ngModel)]="txn.amount" class="form-control text-right"
                                             name="{{txn[i]}}.amount" [mask]="vm.inputMaskFormat"
                                             [rawInputValue]="txn.amount" [prefix]="vm.selectedPrefixForCurrency"
                                             [suffix]="vm.selectedSuffixForCurrency"
@@ -280,7 +280,7 @@
                                 <ng-container *ngIf="txn.type == 'CREDIT'">
 
                                     <td data-title="Date" class="col-xs-2">
-                                        <input class="form-control" autocomplete="off" name="datepic" type="text"
+                                        <input id="giddh-datepicker" class="form-control" autocomplete="off" name="datepic" type="text"
                                             [(ngModel)]="vm.selectedLedger.entryDate"
                                             (click)="addBlankTrx('CREDIT', txn, $event)" #cbs='bsDatepicker'
                                             bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
@@ -348,7 +348,7 @@
                                         </ng-template>
 
                                         <ng-template [ngIf]="txn?.isDiscount">
-                                            <input [disabled]="true" [(ngModel)]="txn.particular.name"
+                                            <input id="update-ledger-discount" [disabled]="true" [(ngModel)]="txn.particular.name"
                                                 class="trxFakeInput" />
                                         </ng-template>
 
@@ -372,7 +372,7 @@
                                     </td>
 
                                     <td data-title="Amount" class="col-xs-2 text-right">
-                                        <input class="form-control text-right" type="text" [(ngModel)]="txn.amount"
+                                        <input id="update-ledger-bank-amount" class="form-control text-right" type="text" [(ngModel)]="txn.amount"
                                             [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
                                             [suffix]="vm.selectedSuffixForCurrency" [rawInputValue]="txn.amount"
                                             (click)="addBlankTrx('CREDIT', txn, $event)"
@@ -482,7 +482,7 @@
                         <ng-template [ngIf]="(vm.showNewEntryPanel && vm.stockTrxEntry)">
                             <div [ngClass]="{width40: vm.stockTrxEntry}" class="table-amount text-right pr-1 width-80">
                                 <label class="font-12">Quantity</label>
-                                <input type="text" name="" class="form-control text-right"
+                                <input id="update-ledger-quantity" type="text" name="" class="form-control text-right"
                                     [(ngModel)]="vm.stockTrxEntry.inventory.quantity" decimalDigitsDirective
                                     [DecimalPlaces]="4" (paste)="vm.inventoryQuantityChanged($event)"
                                     (change)="handleQuantityChange($event?.target?.value);" />
@@ -490,7 +490,7 @@
 
                             <div class="text-right table-amount width-80">
                                 <label class="font-12">Unit</label>
-                                <select class="form-control text-right no-padding"
+                                <select id="update-ledger-unit" class="form-control text-right no-padding"
                                     [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
                                     (change)="vm.unitChanged($event.target.value)">
                                     <option *ngFor="let item of vm.stockTrxEntry.unitRate" [value]="item.code">
@@ -508,7 +508,7 @@
                         <ng-template [ngIf]="(vm.showNewEntryPanel && vm.stockTrxEntry)">
                             <div class="text-right table-amount">
                                 <label class="font-12">Price</label>
-                                <input type="text" name="unitPrice"
+                                <input id="update-ledger-price" type="text" name="unitPrice"
                                     (blur)="vm.inventoryPriceChanged(vm.stockTrxEntry.inventory.rate)"
                                     [mask]="vm.inputMaskFormat" [customDecimalPlaces]="ratePrecision"
                                     [prefix]="vm.selectedPrefixForCurrency" [suffix]="vm.selectedSuffixForCurrency"
@@ -530,12 +530,12 @@
                         <div *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields"
                             class="text-right table-amount">
                             <label class="font-12">Amount</label>
-                            <input *ngIf="isAdvanceReceipt" type="text" name="advanceAmount"
+                            <input id="update-ledger-amount-receipt" *ngIf="isAdvanceReceipt" type="text" name="advanceAmount"
                                 class="form-control text-right" [mask]="vm.inputMaskFormat"
                                 [rawInputValue]="vm.advanceReceiptAmount" [prefix]="vm.selectedPrefixForCurrency"
                                 [suffix]="vm.selectedSuffixForCurrency" [(ngModel)]="vm.advanceReceiptAmount"
                                 disabled />
-                            <input *ngIf="!isAdvanceReceipt" type="text" name="amount" class="form-control text-right"
+                            <input id="update-ledger-amount" *ngIf="!isAdvanceReceipt" type="text" name="amount" class="form-control text-right"
                                 [mask]="vm.inputMaskFormat" [rawInputValue]="vm.totalAmount"
                                 [prefix]="vm.selectedPrefixForCurrency" [suffix]="vm.selectedSuffixForCurrency"
                                 (focus)="hideDiscountTax()" (blur)="vm.inventoryAmountChanged()"
@@ -554,7 +554,7 @@
                         <div *ngIf="vm.showNewEntryPanel && !shouldShowAdvanceReceiptMandatoryFields"
                             class="text-right table-amount">
                             <span auto-close="outsideClick">
-                                <update-ledger-discount #discount [discountAccountsDetails]="vm.discountArray"
+                                <update-ledger-discount id="update-ledger-discount-amount" #discount [discountAccountsDetails]="vm.discountArray"
                                     [ledgerAmount]="vm.selectedLedger.actualAmount"
                                     [prefixInput]="vm.selectedPrefixForCurrency" [maskInput]="vm.inputMaskFormat"
                                     [suffixInput]="vm.selectedSuffixForCurrency"
@@ -583,7 +583,7 @@
                         <div class="dropdown-container dropdown-left text-right table-amount"
                             *ngIf="(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) && (vm.companyTaxesList$ | async)?.length">
                             <span auto-close="outsideClick">
-                                <update-ledger-tax-control #tax [taxes]="vm.companyTaxesList$ | async"
+                                <update-ledger-tax-control id="update-ledger-tax-amount" #tax [taxes]="vm.companyTaxesList$ | async"
                                     [customHeading]="shouldShowAdvanceReceiptMandatoryFields ? 'Tax on Advance' : isRcmEntry ? 'Tax (RCM)' : ''"
                                     [isMandatory]="isRcmEntry" [date]="vm.selectedLedger.entryDate"
                                     [taxRenderData]="vm.taxRenderData" [totalForTax]="vm.totalForTax"
@@ -614,7 +614,7 @@
                         <div *ngIf="(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields)"
                             class="text-right table-amount" (resized)="onResized($event)">
                             <label class="font-12">Total Amt.</label>
-                            <input type="text" name="" class="form-control text-right" [(ngModel)]="vm.grandTotal"
+                            <input type="text" id="update-ledger-total-amount" name="" class="form-control text-right" [(ngModel)]="vm.grandTotal"
                                 [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
                                 [rawInputValue]="vm.grandTotal" [suffix]="vm.selectedSuffixForCurrency"
                                 (blur)="vm.inventoryTotalChanged()" />
@@ -630,7 +630,7 @@
                             <div class="text-right">
 
                                 <div *ngIf="!vm.selectedLedger.isOtherTaxesApplicable" class="other-tax">
-                                    <input type="checkbox" [(ngModel)]="vm.selectedLedger.isOtherTaxesApplicable"
+                                    <input type="checkbox" id="update-ledger-other-tax" [(ngModel)]="vm.selectedLedger.isOtherTaxesApplicable"
                                         *ngIf="!vm.selectedLedger.isOtherTaxesApplicable"
                                         (ngModelChange)="toggleOtherTaxesAsideMenu.emit(vm)" />
                                     <p class="font-14 nowrap" *ngIf="!vm.selectedLedger.isOtherTaxesApplicable">Other
@@ -644,7 +644,7 @@
                                         </a>
                                     </label>
 
-                                    <input class="text-right form-control" disabled="disabled"
+                                    <input id="update-ledger-other-tax-disabled" class="text-right form-control" disabled="disabled"
                                         [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
                                         [suffix]="vm.selectedSuffixForCurrency"
                                         [rawInputValue]="vm.selectedLedger.otherTaxesSum"
@@ -670,7 +670,7 @@
                         <div class="col-sm-6 pdR1">
                             <div class="selectWarehouse">
                                 <label class="font-12">Select Warehouse</label>
-                                <sh-select [(ngModel)]="selectedWarehouse" [placeholder]="'Select Warehouse'"
+                                <sh-select id="update-ledger-select-warehouse" [(ngModel)]="selectedWarehouse" [placeholder]="'Select Warehouse'"
                                     [options]="warehouses">
                                 </sh-select>
                             </div>
@@ -707,7 +707,7 @@
                     <ng-container *ngIf="shouldShowRcmTaxableAmount">
                         <div class="taxable-amount-section">
                             <label class="primary_clr">Taxable Amount</label>
-                            <input type="text" name="taxable-amount" class="form-control text-right"
+                            <input id="update-ledger-taxable-amount" type="text" name="taxable-amount" class="form-control text-right"
                                 [prefix]="vm.selectedPrefixForCurrency" [suffix]="vm.selectedSuffixForCurrency"
                                 [mask]="vm.inputMaskFormat"
                                 [(ngModel)]="vm.selectedLedger.reverseChargeTaxableAmount" />
@@ -716,7 +716,7 @@
                     <ng-container *ngIf="shouldShowItcSection">
                         <div class="taxable-amount-section">
                             <label class="primary_clr itc-label">ITC Type</label>
-                            <sh-select [(ngModel)]="vm.selectedLedger.itcAvailable" [placeholder]="'ITC Type'"
+                            <sh-select id="update-ledger-itc-type" [(ngModel)]="vm.selectedLedger.itcAvailable" [placeholder]="'ITC Type'"
                                 [options]="availableItcList">
                             </sh-select>
                         </div>
@@ -724,7 +724,7 @@
 
                     <div class="row">
                         <div class="col-xs-12">
-                            <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control"
+                            <textarea id="update-ledger-description" rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control"
                                 placeholder="Description"></textarea>
                         </div>
                     </div>
@@ -758,27 +758,21 @@
                                         <label>Adjustment Vouchers
                                             <span class="text-danger">*</span>
                                         </label>
-                                        <input type="text" class="form-control mb-1" [(ngModel)]="item.voucherNumber" disabled>
+                                        <input id="update-ledger-adjust-vouchar" type="text" class="form-control mb-1" [(ngModel)]="item.voucherNumber" disabled>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-5 pl-05 pr-05">
                                     <div class="form-group">
-                                        <label>Amount<span class="text-danger">*</span> <span *ngIf="item.voucherType === 'receipt' && isAdvanceReceipt"
-                                                class="text-light font-12 ml-05">(Inclusive
-                                                Tax)</span></label>
-                                        <input type="text" class="form-control mb-1" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode"
-                                            [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective
-                                            [(ngModel)]="item.adjustmentAmount.amountForAccount" disabled>
-                                        <input type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat"
-                                            [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedInvoiceAmountChange()"
-                                            *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode" [(ngModel)]="item.adjustmentAmount.amountForAccount">
+                                        <label>Amount<span class="text-danger">*</span> <span *ngIf="item.voucherType === 'receipt' && isAdvanceReceipt" class="text-light font-12 ml-05">(Inclusive
+                            Tax)</span></label>
+                                        <input id="update-ledger-inclusive-tax" type="text" class="form-control mb-1" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective [(ngModel)]="item.adjustmentAmount.amountForAccount" disabled>
+                                        <input id="update-ledger-inclusive-tax" type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedInvoiceAmountChange()" *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode" [(ngModel)]="item.adjustmentAmount.amountForAccount">
                                     </div>
                                 </div>
                                 <div *ngIf="item.voucherType === 'receipt'" class="col-sm-2 pl-05">
                                     <div class="form-group">
                                         <label>Tax</label>
-                                        <input type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat"
-                                            [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.calculatedTaxAmount" disabled>
+                                        <input type="text" id="update-ledger-vouchar-tax" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.calculatedTaxAmount" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -876,7 +870,7 @@
                                 <td class="select2-parent pdR1">
                                     <div class="form-group">
                                         <label class="default_clr">Voucher Type</label>
-                                        <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true"
+                                        <sh-select id="update-ledger-vouchar-type" [options]="vm.voucherTypeList" [isFilterEnabled]="true"
                                             [(ngModel)]="vm.selectedLedger.voucher.shortCode" [showClear]="false"
                                             (selected)="getInvoiceListsData($event)" [ItemHeight]="'auto'"
                                             [width]="'161px'">
@@ -888,7 +882,7 @@
                                     *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur' || vm.selectedLedger.voucher.shortCode == 'pay')">
                                     <div class="form-group">
                                         <label class="default_clr">Invoice No.</label>
-                                        <input type="text" placeholder="Invoice no." class="form-control"
+                                        <input id="update-ledger-invoice-number" type="text" placeholder="Invoice no." class="form-control"
                                             [(ngModel)]="vm.selectedLedger.invoiceNumberAgainstVoucher" />
                                     </div>
                                 </td>
@@ -924,7 +918,7 @@
                                     <div class="form-group">
                                         <label class="default_clr">{{vm.selectedLedger.voucher.shortCode == 'debit note' ? 'Voucher' : 'Invoice'}} No.</label>
 
-                                        <sh-select [options]="invoiceList" placeholder="Select Accounts"
+                                        <sh-select id="update-ledger-invoice-number" [options]="invoiceList" placeholder="Select Accounts"
                                             [(ngModel)]="selectedInvoice" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
                                             (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"
                                             [ItemHeight]="67" [showClear]="false">
@@ -951,7 +945,7 @@
                                 <td class="pdR1">
                                     <div class="form-group">
                                         <label class="default_clr">Voucher No.</label>
-                                        <input type="text" placeholder="Voucher no." class="form-control"
+                                        <input id="update-ledger-vouchar-number" type="text" placeholder="Voucher no." class="form-control"
                                             [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true"
                                             [style.width.px]="80" />
                                     </div>
@@ -964,7 +958,7 @@
                             <tr>
                                 <td *ngIf="(vm.selectedLedger.voucher.shortCode !== 'jr' && vm.selectedLedger.voucher.shortCode !== 'cntr' && vm.selectedLedger.voucher.shortCode !== 'rcpt'
                                 && vm.selectedLedger.voucher.shortCode !== 'advance-receipt')" class="pdR1 pb-1">
-                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdjustVoucherSelected" (change)="handleVoucherAdjustment()">
+                                    <input type="checkbox" id="update-ledger-sale" name="advanceReceipt" [(ngModel)]="isAdjustVoucherSelected" (change)="handleVoucherAdjustment()">
                                     Adjust {{
                                         vm.selectedLedger.voucher.shortCode === 'sal' ? 'Sales' :
                                         vm.selectedLedger.voucher.shortCode === 'pur' ? 'Purchase' :
@@ -974,10 +968,10 @@
                                     }}
                                 </td>
                                 <td *ngIf="vm.selectedLedger.voucher.shortCode == 'advance-receipt' && isAdvanceReceipt" class="pdR1 pb-1">
-                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdjustAdvanceReceiptSelected" (change)="handleVoucherAdjustment()">Adjust Advance Receipt
+                                    <input type="checkbox" id="update-ledger-advance-receipt" name="advanceReceipt" [(ngModel)]="isAdjustAdvanceReceiptSelected" (change)="handleVoucherAdjustment()">Adjust Advance Receipt
                                 </td>
                                 <td *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt' && !isAdvanceReceipt" class="pdR1 pb-1">
-                                    <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdjustReceiptSelected" (change)="handleVoucherAdjustment()">Adjust Receipt
+                                    <input type="checkbox" id="update-ledger-adjust-receipt" name="advanceReceipt" [(ngModel)]="isAdjustReceiptSelected" (change)="handleVoucherAdjustment()">Adjust Receipt
                                 </td>
                             </tr>
                         </table>
@@ -990,13 +984,13 @@
                                 <tr>
                                     <td class="pdR1">
                                         <label class="default_clr">Cheque Number</label>
-                                        <input type="text" placeholder="XXXX2619" class="form-control"
+                                        <input type="text" id="update-ledger-cheque-number" placeholder="XXXX2619" class="form-control"
                                             [(ngModel)]="vm.selectedLedger.chequeNumber" />
                                     </td>
 
                                     <td>
                                         <label class="default_clr">Cheque Clearance Date</label>
-                                        <input type="text" autocomplete="off" class="form-control"
+                                        <input id="update-ledger-cheque-clearance" type="text" autocomplete="off" class="form-control"
                                             [(ngModel)]="vm.selectedLedger.chequeClearanceDate" bsDatepicker
                                             #chbs='bsDatepicker' [bsConfig]="{ dateInputFormat: giddhDateFormat }" />
                                     </td>
@@ -1014,7 +1008,7 @@
                                 <tr>
                                     <td class="pdR1">
                                         <label class="default_clr">Assign Tag</label>
-                                        <sh-select [options]="tags$ | async" [isFilterEnabled]="true"
+                                        <sh-select id="update-ledger-assign-tag" [options]="tags$ | async" [isFilterEnabled]="true"
                                             [placeholder]="'Select Tag'" [showClear]="false" [multiple]="true"
                                             name="tagNames" [(ngModel)]="vm.selectedLedger.tagNames"
                                             [ItemHeight]="'auto'"></sh-select>
@@ -1033,7 +1027,7 @@
 
                             <div class="mrR1 form-group pull-left cp">
                                 <label class="pull-left cp fs16">
-                                    <input class="pull-left" type="checkbox" name="generateInvoice"
+                                    <input id="update-ledger-generate-voucher" class="pull-left" type="checkbox" name="generateInvoice"
                                         [(ngModel)]="vm.selectedLedger.generateInvoice"
                                         [disabled]="(vm.isInvoiceGeneratedAlready || (isAdvanceReceipt && vm.selectedLedger.generateInvoice)) ? 'disabled': null">
                                     Generate Voucher
@@ -1076,7 +1070,7 @@
                                     </li>
 
                                     <li>
-                                        <input type="text" class="price-input"
+                                        <input type="text" id="update-ledger-price-input" class="price-input"
                                             [(ngModel)]="vm.selectedLedger.exchangeRateForDisplay"
                                             (blur)="exchangeRateChanged()"> {{ vm.selectedCurrencyForDisplay === 0 ? vm.foreignCurrencyDetails?.code : vm.baseCurrencyDetails?.code
                                         }}
@@ -1094,7 +1088,7 @@
                                 </div>
 
                                 <label class="upload_div" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
-                                    <input type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
+                                    <input id="update-ledger-upload-file" type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
                                         [uploadInput]="uploadInput" (uploadOutput)="onUploadOutputUpdate($event)">
                                     <label for="invoiceFile" class="cp fs16">
                                         <i [ngClass]="!isFileUploading ? 'glyphicon glyphicon-paperclip' : 'fa fa-spinner rotate'"></i> Attach file</label>
@@ -1110,8 +1104,8 @@
                             <!--                            </div>-->
 
                             <div class="d-flex">
-                                <button class="btn btn-danger" (click)="showDeleteEntryModal()">Delete</button>
-                                <button class="btn btn-success" [disabled]="isFileUploading" [ladda]="(isTxnUpdateInProcess$ | async)"
+                                <button class="btn btn-danger" id="update-ledger-delete-button" (click)="showDeleteEntryModal()">Delete</button>
+                                <button class="btn btn-success" id="update-ledger-update-button" [disabled]="isFileUploading" [ladda]="(isTxnUpdateInProcess$ | async)"
                                     (click)="saveLedgerTransaction()">Update
                                 </button>
                             </div>
@@ -1192,7 +1186,7 @@
         <div *ngIf="vm.selectedLedger.touristSchemeApplicable">
             <div class="d-flex align-items-center justify-content-end ml-1 xs-justify-content-start">
                 <span class="nowrap">Passport Number </span>
-                <input type="text" name="selectedLedger.passportNumber" placeholder="Passport Number" #passportNumber
+                <input id="update-ledger-passport-number" type="text" name="selectedLedger.passportNumber" placeholder="Passport Number" #passportNumber
                     (blur)="allowAlphanumericChar(passportNumber)" (keypress)="allowAlphanumericChar(passportNumber)"
                     class="form-control width-115 ml-1" [(ngModel)]="vm.selectedLedger.passportNumber" />
             </div>
