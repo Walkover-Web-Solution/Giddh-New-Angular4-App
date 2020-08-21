@@ -3,10 +3,10 @@ import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import isCidr from 'is-cidr';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ShareRequestForm } from '../../../models/api-models/Permission';
 import { ToasterService } from '../../../services/toaster.service';
@@ -15,6 +15,7 @@ import { AccountsAction } from '../../../actions/accounts.actions';
 import { SettingsPermissionService } from '../../../services/settings.permission.service';
 import * as moment from 'moment';
 import { GeneralService } from '../../../services/general.service';
+import { IForceClear } from '../../../models/api-models/Sales';
 // some local const
 const DATE_RANGE = 'daterange';
 const PAST_PERIOD = 'pastperiod';
@@ -43,13 +44,18 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public permissionForm: FormGroup;
     public allRoles: object[] = [];
     public selectedTimeSpan: string = 'Date Range';
-    public selectedIPRange: string = 'IP Address';
+    // Selected Type of IP range
+    public selectedIPRange: string = 'CIDR Range';
     public createPermissionInProcess$: Observable<boolean>;
     public dateRangePickerValue: Date[] = [];
     /** To open model */
     public opened = false;
     /** To show model */
     public show: boolean = false;
+    // observable to observe create new permission is successfull
+    public createPermissionSuccess$: Observable<boolean>;
+    // observable to clear role permission dropdown
+    public permissionRoleClear$: Observable<IForceClear> = observableOf({ status: false });
     // private methods
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -62,7 +68,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         private _fb: FormBuilder,
         private generalService: GeneralService
     ) {
-        this.createPermissionInProcess$ = this.store.select(p => p.permission.createPermissionInProcess).pipe(takeUntil(this.destroyed$));
+        this.createPermissionInProcess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionInProcess),takeUntil(this.destroyed$));
+        this.createPermissionSuccess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionSuccess),takeUntil(this.destroyed$));
     }
 
     public ngOnDestroy() {
@@ -82,8 +89,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             this.initAcForm();
         }
         // reset form
-        this.createPermissionInProcess$.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
-            if (val) {
+        this.createPermissionSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
+            if (value) {
                 this.permissionForm.reset();
                 this.initAcForm();
             }
@@ -221,6 +228,9 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             let allowedCidrs = this.permissionForm.get('allowedCidrs') as FormArray;
             allowedCidrs.push(this.initRangeForm());
             allowedIps.push(this.initRangeForm());
+            this.selectedTimeSpan = 'Date Range';
+            this.selectedIPRange = 'CIDR Range';
+            this.permissionRoleClear$ = observableOf({ status: true });
         }
     }
 

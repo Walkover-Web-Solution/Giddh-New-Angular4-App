@@ -29,6 +29,7 @@ import { AccountingComponent } from './accounting.component';
 import { InvoiceGridComponent } from './invoice-grid/invoice-grid.component';
 import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
 import { ReceiptEntryModalComponent } from './journal-voucher/voucher/receipt-entry-modal/receipt-entry-modal.component';
+import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 
 @NgModule({
     declarations: [
@@ -67,6 +68,7 @@ import { ReceiptEntryModalComponent } from './journal-voucher/voucher/receipt-en
         QuickAccountModule.forRoot(),
         InventoryModule,
         GenericAsideMenuAccountModule,
+        NgxMaskModule.forRoot(),
     ],
 })
 export class AccountingModule {

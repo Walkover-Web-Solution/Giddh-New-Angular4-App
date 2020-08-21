@@ -218,6 +218,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public advanceReceiptExists: boolean = false;
     /* This will clear the select value in sh-select */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    /** selected base currency symbol */
+    public baseCurrencySymbol: string;
+    /** Input mast for number format */
+    public inputMaskFormat: string = '';
 
     constructor(
         private _accountService: AccountService,
@@ -241,13 +245,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.store.pipe(select(appState => appState.sales.createAccountSuccess)),
             this.store.pipe(select(appState => appState.sales.createdAccountDetails))
         ]).pipe(debounceTime(0), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(profileStore => profileStore.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            this.baseCurrencySymbol = profile.baseCurrencySymbol;
+            this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+        });
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
 
         this.requestObj.transactions = [];
         this._keyboardService.keyInformation.subscribe((key) => {
             this.watchKeyboardEvent(key);
         });
-
         this.tallyModuleService.selectedPageInfo.pipe(distinctUntilChanged((p, q) => {
             if (p && q) {
                 return (_.isEqual(p, q));

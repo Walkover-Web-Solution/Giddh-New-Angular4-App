@@ -24,10 +24,10 @@
                                         <div class="col-xs-7 p0">
                                             <h4 class="text-orange text-right">
                                                 <div *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
-                                                    <span class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems}}</span>
+                                                    <span class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems | giddhCurrency}}</span>
                                                 </div>
                                                 <div class="" *ngIf="GroupStockReportRequest.branchDetails!=='allEntity'">
-                                                    <span class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems}}</span>
+                                                    <span class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems | giddhCurrency}}</span>
                                                 </div>
                                                 <div class="mt-1">
                                                     <span class="text-orange d-block">{{groupStockReport.profit | giddhCurrency}}
@@ -41,7 +41,7 @@
                                             <h4>Inward</h4>
                                         </div>
                                         <div class="col-xs-2 p0">
-                                            <h4>&nbsp;<span>{{groupStockReport.InwardBalance.transactionCount}}</span></h4>
+                                            <h4>&nbsp;<span>{{groupStockReport.InwardBalance.transactionCount | giddhCurrency}}</span></h4>
                                         </div>
                                     </div>
                                     <div class="row" *ngIf="groupStockReport.outwardBalance.transactionCount">
@@ -49,7 +49,7 @@
                                             <h4>Outward</h4>
                                         </div>
                                         <div class="col-xs-2 p0">
-                                            <h4>&nbsp;<span>{{groupStockReport.outwardBalance.transactionCount}}</span></h4>
+                                            <h4>&nbsp;<span>{{groupStockReport.outwardBalance.transactionCount | giddhCurrency}}</span></h4>
                                         </div>
                                     </div>
                                 </div>
@@ -57,9 +57,9 @@
                                     <div class="flex-col">
                                         <div class="cont d-flex justify-content-between pt-1">
                                             <h4 class="text-light">Opening Value</h4>
-                                            <h2>{{groupStockReport.openingBalance.amount}}</h2>
+                                            <h2>{{groupStockReport.openingBalance.amount | giddhCurrency}}</h2>
                                             <h4 *ngIf="groupStockReport.openingBalance.quantity">
-                                                ({{groupStockReport.openingBalance.quantity}} {{groupStockReport.openingBalance.stockUnit}})
+                                                ({{groupStockReport.openingBalance.quantity | giddhCurrency}} {{groupStockReport.openingBalance.stockUnit}})
                                             </h4>
                                         </div>
 
@@ -70,9 +70,9 @@
                                     <div class="flex-col">
                                         <div class="cont d-flex justify-content-between pt-1">
                                             <h4 class="text-light">Inward Value</h4>
-                                            <h2>{{groupStockReport.inwardBalance.amount}}</h2>
+                                            <h2>{{groupStockReport.inwardBalance.amount | giddhCurrency}}</h2>
                                             <h4 *ngIf="groupStockReport.inwardBalance.quantity">
-                                                ({{groupStockReport.inwardBalance.quantity}} {{groupStockReport.inwardBalance.stockUnit}})
+                                                ({{groupStockReport.inwardBalance.quantity | giddhCurrency}} {{groupStockReport.inwardBalance.stockUnit}})
                                             </h4>
                                         </div>
                                     </div>
@@ -82,9 +82,9 @@
                                     <div class="flex-col">
                                         <div class="cont d-flex justify-content-between pt-1">
                                             <h4 class="text-light">Outward Value</h4>
-                                            <h2>{{groupStockReport.outwardBalance.amount}}</h2>
+                                            <h2>{{groupStockReport.outwardBalance.amount | giddhCurrency}}</h2>
                                             <h4 *ngIf="groupStockReport.outwardBalance.quantity">
-                                                ({{groupStockReport.outwardBalance.quantity}} {{groupStockReport.outwardBalance.stockUnit}})
+                                                ({{groupStockReport.outwardBalance.quantity | giddhCurrency}} {{groupStockReport.outwardBalance.stockUnit}})
                                             </h4>
                                         </div>
                                     </div>
@@ -94,9 +94,9 @@
                                     <div class="flex-col">
                                         <div class="cont d-flex justify-content-between pt-1">
                                             <h4 class="text-light">Closing Value</h4>
-                                            <h2 class="text-orange">{{groupStockReport.closingBalance.amount}}</h2>
+                                            <h2 class="text-orange">{{groupStockReport.closingBalance.amount | giddhCurrency}}</h2>
                                             <h4 class="text-orange" *ngIf="groupStockReport.closingBalance.quantity">
-                                                ({{groupStockReport.closingBalance.quantity}} {{groupStockReport.closingBalance.stockUnit}})
+                                                ({{groupStockReport.closingBalance.quantity | giddhCurrency}} {{groupStockReport.closingBalance.stockUnit}})
                                             </h4>
                                         </div>
                                     </div>
@@ -384,30 +384,30 @@
                             <td data-title="Opening stock -" class="td-mobile-head"></td>
 
                             <td class="bdrB bdrR text-right brNone" data-title="Qty">
-                                <span [ngClass]="{'text-danger': txn.openingBalance?.quantity<0 }">{{txn.openingBalance?.quantity}}</span>
+                                <span [ngClass]="{'text-danger': txn.openingBalance?.quantity<0 }">{{txn.openingBalance?.quantity | giddhCurrency}}</span>
                             </td>
-                            <td class="bdrB bdrR text-right" data-title="Value">{{txn.openingBalance?.amount}}</td>
+                            <td class="bdrB bdrR text-right" data-title="Value">{{txn.openingBalance?.amount | giddhCurrency}}</td>
 
                             <td data-title="inwards -" class="td-mobile-head" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)"></td>
 
                             <td class="bdrB bdrR text-right brNone" data-title="Qty" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">
-                                <span [ngClass]="{'text-danger': txn.inwards?.quantity<0 }">{{txn.inwards?.quantity}}</span>
+                                <span [ngClass]="{'text-danger': txn.inwards?.quantity<0 }">{{txn.inwards?.quantity | giddhCurrency}}</span>
                             </td>
-                            <td class="bdrB bdrR text-right" data-title="Value" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">{{txn.inwards?.amount}}</td>
+                            <td class="bdrB bdrR text-right" data-title="Value" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">{{txn.inwards?.amount | giddhCurrency}}</td>
 
                             <td data-title="Outwards -" class="td-mobile-head" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)"></td>
 
                             <td class="bdrB bdrR text-right brNone" data-title="Qty" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">
-                                {{txn.outwards?.quantity}}
+                                {{txn.outwards?.quantity | giddhCurrency}}
                             </td>
-                            <td class="bdrB bdrR text-right" data-title="Value" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">{{txn.outwards?.amount}}</td>
+                            <td class="bdrB bdrR text-right" data-title="Value" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">{{txn.outwards?.amount | giddhCurrency}}</td>
 
                             <td data-title="Closing stock -" class="td-mobile-head"></td>
 
                             <td class="bdrB bdrR text-right brNone" data-title="Qty">
-                                <span [ngClass]="{'text-danger': txn.closingBalance?.quantity<0 }">{{txn.closingBalance?.quantity}}</span>
+                                <span [ngClass]="{'text-danger': txn.closingBalance?.quantity<0 }">{{txn.closingBalance?.quantity | giddhCurrency}}</span>
                             </td>
-                            <td class="bdrB bdrR text-right" data-title="Value">{{txn.closingBalance?.amount}}</td>
+                            <td class="bdrB bdrR text-right" data-title="Value">{{txn.closingBalance?.amount | giddhCurrency}}</td>
 
                         </ng-container>
 
@@ -422,7 +422,7 @@
                 <tbody *ngIf="groupStockReportInProcess">
                     <!-- in case of all entity with group -->
                     <tr>
-                        <td colspan="10" class="text-center empty_table">
+                        <td colspan="10" class="text-center empty-table">
                             <!--loading-->
                             <div class="no-data mt-0 loader-main">
                                 <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
@@ -438,8 +438,8 @@
                 <tbody *ngIf="(groupStockReport && groupStockReport.count < 1 && !groupStockReportInProcess) || groupNotFoundMessage">
                     <tr>
                         <!-- in case of all entity with group -->
-                        <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'" class="text-center empty_table">
-                            <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails!='allEntity'" class="text-center empty_table">
+                        <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'" class="text-center empty-table">
+                            <td colspan="10" *ngIf="GroupStockReportRequest.branchDetails!='allEntity'" class="text-center empty-table">
                                 <!-- in case of all entity with group -->
                                 <img src="assets/images/search-data-not-found.svg" />
                                 <h1 [class.group-not-found]="groupNotFoundMessage">
@@ -481,10 +481,10 @@
                                 <div class="col-xs-8 p0">
                                     <h4 class="text-orange text-left">
                                         <div *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
-                                            <span class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems}}</span>
+                                            <span class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems  | giddhCurrency}}</span>
                                         </div>
                                         <div class="" *ngIf="GroupStockReportRequest.branchDetails!=='allEntity'">
-                                            <span class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems}}</span>
+                                            <span class="text-orange" *ngIf="groupStockReport.totalItems">&nbsp;{{groupStockReport.totalItems  | giddhCurrency}}</span>
                                         </div>
                                         <div class="mt-1">
                                             <span class="text-orange d-block">{{groupStockReport.profit | giddhCurrency}}
@@ -498,7 +498,7 @@
                                     <h4>Inward</h4>
                                 </div>
                                 <div class="col-xs-2 p0">
-                                    <h4>&nbsp;<span>{{groupStockReport.InwardBalance.transactionCount}}</span></h4>
+                                    <h4>&nbsp;<span>{{groupStockReport.InwardBalance.transactionCount | giddhCurrency}}</span></h4>
                                 </div>
                             </div>
                             <div class="row" *ngIf="groupStockReport.outwardBalance.transactionCount">
@@ -506,7 +506,7 @@
                                     <h4>Outward</h4>
                                 </div>
                                 <div class="col-xs-2 p0">
-                                    <h4>&nbsp;<span>{{groupStockReport.outwardBalance.transactionCount}}</span></h4>
+                                    <h4>&nbsp;<span>{{groupStockReport.outwardBalance.transactionCount | giddhCurrency}}</span></h4>
                                 </div>
                             </div>
                         </div>
@@ -514,9 +514,9 @@
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Opening Value</h4>
-                                    <h2>{{groupStockReport.openingBalance.amount}}</h2>
+                                    <h2>{{groupStockReport.openingBalance.amount | giddhCurrency}}</h2>
                                     <h4 *ngIf="groupStockReport.openingBalance.quantity">
-                                        ({{groupStockReport.openingBalance.quantity}} {{groupStockReport.openingBalance.stockUnit}})
+                                        ({{groupStockReport.openingBalance.quantity | giddhCurrency}} {{groupStockReport.openingBalance.stockUnit}})
                                     </h4>
                                 </div>
 
@@ -527,9 +527,9 @@
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Inward Value</h4>
-                                    <h2>{{groupStockReport.inwardBalance.amount}}</h2>
+                                    <h2>{{groupStockReport.inwardBalance.amount | giddhCurrency}}</h2>
                                     <h4 *ngIf="groupStockReport.inwardBalance.quantity">
-                                        ({{groupStockReport.inwardBalance.quantity}} {{groupStockReport.inwardBalance.stockUnit}})
+                                        ({{groupStockReport.inwardBalance.quantity | giddhCurrency}} {{groupStockReport.inwardBalance.stockUnit}})
                                     </h4>
                                 </div>
                             </div>
@@ -539,9 +539,9 @@
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Outward Value</h4>
-                                    <h2>{{groupStockReport.outwardBalance.amount}}</h2>
+                                    <h2>{{groupStockReport.outwardBalance.amount | giddhCurrency}}</h2>
                                     <h4 *ngIf="groupStockReport.outwardBalance.quantity">
-                                        ({{groupStockReport.outwardBalance.quantity}} {{groupStockReport.outwardBalance.stockUnit}})
+                                        ({{groupStockReport.outwardBalance.quantity | giddhCurrency}} {{groupStockReport.outwardBalance.stockUnit}})
                                     </h4>
                                 </div>
                             </div>
@@ -551,9 +551,9 @@
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Closing Value</h4>
-                                    <h2 class="text-orange">{{groupStockReport.closingBalance.amount}}</h2>
+                                    <h2 class="text-orange">{{groupStockReport.closingBalance.amount | giddhCurrency}}</h2>
                                     <h4 class="text-orange" *ngIf="groupStockReport.closingBalance.quantity">
-                                        ({{groupStockReport.closingBalance.quantity}} {{groupStockReport.closingBalance.stockUnit}})
+                                        ({{groupStockReport.closingBalance.quantity | giddhCurrency}} {{groupStockReport.closingBalance.stockUnit}})
                                     </h4>
                                 </div>
                             </div>
