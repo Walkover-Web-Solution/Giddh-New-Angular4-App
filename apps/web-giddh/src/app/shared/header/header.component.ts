@@ -297,8 +297,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private generalService: GeneralService,
         private commonActions: CommonActions,
         private location: Location,
-        private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private breakPointObservar: BreakpointObserver
+        private settingsFinancialYearActions: SettingsFinancialYearActions
     ) {
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         //this._windowRef.nativeWindow.superformIds = ['Jkvq'];
@@ -476,7 +475,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
-        this.breakPointObservar.observe([
+        this._breakpointObserver.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
