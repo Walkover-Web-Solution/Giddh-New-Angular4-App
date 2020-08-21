@@ -1995,9 +1995,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public savePurchaseOrder(poForm: NgForm, type: string): void {
-        if (poForm.invalid) {
-            return;
-        }
         let data: VoucherClass = _.cloneDeep(this.purchaseOrder);
 
         // special check if gst no filed is visible then and only then check for gst validation
