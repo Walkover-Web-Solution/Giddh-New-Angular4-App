@@ -287,6 +287,7 @@
                                                                         [(ngModel)]="txn.particular"
                                                                         [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
                                                                         (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                                        [notFoundMsg]="noResultsFoundLabel"
                                                                         [enableDynamicSearch]="true"
                                                                         (selected)="selectAccount($event,txn)"
                                                                         [placeholder]="'Select Accounts'"
@@ -411,6 +412,7 @@
                                                                         (selected)="selectAccount($event,txn)"
                                                                         [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
                                                                         (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                                        [notFoundMsg]="noResultsFoundLabel"
                                                                         [enableDynamicSearch]="true"
                                                                         [placeholder]="'Select Accounts'"
                                                                         [notFoundLink]="true"
@@ -787,7 +789,7 @@
                                                     <sh-select [idEl]="txn.id" #shDebit
                                                         [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
                                                         (dynamicSearchedQuery)="onSearchQueryChanged($event)"
-                                                        [enableDynamicSearch]="true"
+                                                        [enableDynamicSearch]="true" [notFoundMsg]="noResultsFoundLabel"
                                                         [options]="searchResults"
                                                         [(ngModel)]="txn.particular" vr-item tabindex="-1" #select
                                                         [showClear]="false" (keydown.enter)="onEnter(select,txn)"
@@ -1062,7 +1064,7 @@
                                                         [options]="searchResults" vr-item tabindex="-1"
                                                         [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
                                                         (dynamicSearchedQuery)="onSearchQueryChanged($event)"
-                                                        [enableDynamicSearch]="true"
+                                                        [enableDynamicSearch]="true" [notFoundMsg]="noResultsFoundLabel"
                                                         #select (keydown.enter)="onEnter(shCredit,txn)"
                                                         (onShow)="isSelectOpen=true;bsd.hide()"
                                                         (onHide)="onSelectHide()" [(ngModel)]="txn.particular"

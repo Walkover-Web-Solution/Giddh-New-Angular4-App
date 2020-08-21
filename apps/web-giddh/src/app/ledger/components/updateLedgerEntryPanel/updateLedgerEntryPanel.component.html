@@ -10,7 +10,7 @@
 
         <sh-select *ngIf="openDropDown" class="d-inline-block" [disabled]="false" placeholder="Select Group"
             [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
-            [enableDynamicSearch]="true"
+            [enableDynamicSearch]="true" [notFoundMsg]="noResultsFoundLabel" (onHide)="handleSuggestionHide()"
             filterPlaceholder="Type to filter.." name="accountUniqueName" [(ngModel)]="baseAccountName$" [showClear]="false"
             [options]="searchResults" style="width:30%">
             <ng-template #optionTemplate let-option="option">
@@ -113,7 +113,8 @@
                                                 <sh-select id="dbtID" [notFoundLink]="true"
                                                     (noResultsClicked)="showQuickAccountModal()"
                                                     [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
-                                                    [enableDynamicSearch]="true"
+                                                    [enableDynamicSearch]="true" [notFoundMsg]="noResultsFoundLabel"
+                                                    (onHide)="handleSuggestionHide()"
                                                     (keydown)="keydownPressed($event)"
                                                     [options]="searchResults" #dbtSelect
                                                     (click)="addBlankTrx('DEBIT', txn, $event)"
@@ -299,7 +300,8 @@
                                                 <sh-select id="crdID" [notFoundLink]="true"
                                                     (noResultsClicked)="showQuickAccountModal()"
                                                     [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
-                                                    [enableDynamicSearch]="true"
+                                                    [enableDynamicSearch]="true" [notFoundMsg]="noResultsFoundLabel"
+                                                    (onHide)="handleSuggestionHide()"
                                                     (keydown)="keydownPressed($event)"
                                                     [options]="searchResults" #crdSelect
                                                     (click)="addBlankTrx('CREDIT', txn, $event)"
