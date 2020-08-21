@@ -9,6 +9,9 @@ import { AuditLogsRoutingModule } from './audit-logs.routing.module';
 import { AuditLogsGridComponent } from './components/audit-logs-grid/audit-logs-grid.component';
 import { AuditLogsSidebarComponent } from './components/sidebar-components/audit-logs.sidebar.component';
 import { AuditLogsServiceModule } from './services/audit-logs.service.module';
+import { AuditLogsFormComponent } from './components/audit-logs-form/audit-logs-form.component';
+import { AuditLogsTableComponent } from './components/audit-logs-table/audit-logs-table.component';
+import { SharedModule } from '../shared/shared.module';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 
 @NgModule({
@@ -16,7 +19,9 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
         // Components / Directives/ Pipes
         AuditLogsComponent,
         AuditLogsSidebarComponent,
-        AuditLogsGridComponent
+        AuditLogsGridComponent,
+        AuditLogsTableComponent,
+        AuditLogsFormComponent
     ],
     exports: [
         AuditLogsComponent,
@@ -33,6 +38,7 @@ import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyTyp
         LaddaModule,
         ShSelectModule,
         AuditLogsServiceModule,
+        SharedModule,
         CurrencyModule
     ],
 })
