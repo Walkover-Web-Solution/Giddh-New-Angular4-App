@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, Eve
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SearchResultText } from 'apps/web-giddh/src/app/app.constant';
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
@@ -205,6 +205,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         totalPages: 0,
         query: ''
     };
+    /** No results found label for dynamic search */
+    public noResultsFoundLabel = SearchResultText.NewSearch;
 
     constructor(
         private store: Store<AppState>,
@@ -348,6 +350,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (data.body.stock) {
                     taxes.push(...data.body.stock.taxes);
                 }
+                if (txn.taxesVm) {
+                    txn.taxesVm.forEach(tax => {
+                        tax.isChecked = false;
+                        tax.isDisabled = false;
+                    });
+                }
                 txn.selectedAccount = {
                     ...e.additional,
                     label: e.label,
@@ -364,6 +372,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     stock: data.body.stock,
                     uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                 };
+                this.lc.currentBlankTxn = txn;
                 let rate = 0;
                 let unitCode = '';
                 let unitName = '';
@@ -406,8 +415,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
                 this.handleRcmVisibility(txn);
                 this.handleTaxableAmountVisibility(txn);
+                this.newLedgerComponent.calculatePreAppliedTax();
+                this.newLedgerComponent.calculateTax();
                 this.newLedgerComponent.calculateTotal();
-                this.newLedgerComponent.detectChanges();
+                setTimeout(() => {
+                    this.newLedgerComponent.detectChanges();
+                }, 200);
                 this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
             }
         });
@@ -1145,7 +1158,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (this.isLedgerAccountAllowsMultiCurrency) {
             this.getCurrencyRate('blankLedger');
         }
-        this.hideNewLedgerEntryPopup();
+        this.resetPreviousSearchResults();
+        // this.hideNewLedgerEntryPopup();
     }
 
     public showNewLedgerEntryPopup(trx: TransactionVM) {
@@ -1156,6 +1170,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public onSelectHide() {
         // To Prevent Race condition
         setTimeout(() => this.isSelectOpen = false, 500);
+        this.noResultsFoundLabel = SearchResultText.NewSearch;
     }
 
     public onEnter(se, txn) {
@@ -1488,6 +1503,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         additional: result
                     }
                 }) || [];
+                this.noResultsFoundLabel = SearchResultText.NotFound;
                 if (page === 1) {
                     this.searchResults = searchResults;
                 } else {
@@ -1514,6 +1530,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             totalPages: 0,
             query: ''
         };
+        this.noResultsFoundLabel = SearchResultText.NewSearch;
     }
 
     public loadPaginationComponent(s) {

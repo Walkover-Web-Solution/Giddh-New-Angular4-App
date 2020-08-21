@@ -83,7 +83,7 @@ import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-sele
 import { EMAIL_REGEX_PATTERN } from '../shared/helpers/universalValidations';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION } from '../app.constant';
+import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
@@ -473,6 +473,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         totalPages: 0,
         query: ''
     };
+    /** No results found label for dynamic search */
+    public noResultsFoundLabel = SearchResultText.NewSearch;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -522,7 +524,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.getInventorySettings();
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
-        this.store.dispatch(this._generalActions.getFlattenAccount());
+        // this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.companyActions.getTax());
         // this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
@@ -671,6 +673,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.getDefaultTemplateData();
                 this.prepareInvoiceTypeFlags();
                 this.saveStateDetails();
+                if (this.isCashInvoice) {
+                    this.loadBankCashAccounts('');
+                }
             }
 
             if (params['invoiceType'] && params['accUniqueName']) {
@@ -860,168 +865,165 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.fileUploadOptions = {concurrency: 0};
 
         //region combine get voucher details && all flatten A/c's && create account and update account success from sidebar
-        combineLatest([this.flattenAccountListStream$, this.voucherDetails$, this.createAccountIsSuccess$, this.updateAccountSuccess$])
+        combineLatest([this.voucherDetails$, this.createAccountIsSuccess$, this.updateAccountSuccess$])
             .pipe(takeUntil(this.destroyed$), auditTime(700))
             .subscribe(async results => {
                 //this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
                 // create mode because voucher details are not available
-                if (results[0]) {
-                    let flattenAccounts: IFlattenAccountsResultItem[] = results[0];
-                    // assign flatten A/c's
-                    let bankaccounts: IOption[] = [];
-                    this.sundryDebtorsAcList = [];
-                    this.sundryCreditorsAcList = [];
-                    this.prdSerAcListForDeb = [];
-                    this.prdSerAcListForCred = [];
+                // if (results[0]) {
+                //     this.sundryDebtorsAcList = [];
+                //     this.sundryCreditorsAcList = [];
+                //     this.prdSerAcListForDeb = [];
+                //     this.prdSerAcListForCred = [];
 
-                    // flattenAccounts.forEach(item => {
+                //     // flattenAccounts.forEach(item => {
 
-                    //     // if (item.parentGroups.some(p => p.uniqueName === 'sundrydebtors')) {
-                    //     //     this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
-                    //     // }
+                //     //     // if (item.parentGroups.some(p => p.uniqueName === 'sundrydebtors')) {
+                //     //     //     this.sundryDebtorsAcList.push({label: item.name, value: item.uniqueName, additional: item});
+                //     //     // }
 
-                    //     // if (item.parentGroups.some(p => p.uniqueName === 'sundrycreditors')) {
-                    //     //     this.sundryCreditorsAcList.push({
-                    //     //         label: item.name,
-                    //     //         value: item.uniqueName,
-                    //     //         additional: item
-                    //     //     });
-                    //     // }
+                //     //     // if (item.parentGroups.some(p => p.uniqueName === 'sundrycreditors')) {
+                //     //     //     this.sundryCreditorsAcList.push({
+                //     //     //         label: item.name,
+                //     //     //         value: item.uniqueName,
+                //     //     //         additional: item
+                //     //     //     });
+                //     //     // }
 
-                    //     // if (item.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
-                    //     //     bankaccounts.push({label: item.name, value: item.uniqueName, additional: item});
-                    //     //     if (this.isPurchaseInvoice) {
-                    //     //         this.sundryCreditorsAcList.push({
-                    //     //             label: item.name,
-                    //     //             value: item.uniqueName,
-                    //     //             additional: item
-                    //     //         });
-                    //     //     }
-                    //     // }
+                //     //     // if (item.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
+                //     //     //     bankaccounts.push({label: item.name, value: item.uniqueName, additional: item});
+                //     //     //     if (this.isPurchaseInvoice) {
+                //     //     //         this.sundryCreditorsAcList.push({
+                //     //     //             label: item.name,
+                //     //     //             value: item.uniqueName,
+                //     //     //             additional: item
+                //     //     //         });
+                //     //     //     }
+                //     //     // }
 
-                    //     // if (item.parentGroups.some(p => p.uniqueName === 'otherincome' || p.uniqueName === 'revenuefromoperations')) {
-                    //     //     if (item.stocks) {
-                    //     //         // normal entry
-                    //     //         this.prdSerAcListForDeb.push({
-                    //     //             value: item.uniqueName,
-                    //     //             label: item.name,
-                    //     //             additional: item
-                    //     //         });
+                //     //     // if (item.parentGroups.some(p => p.uniqueName === 'otherincome' || p.uniqueName === 'revenuefromoperations')) {
+                //     //     //     if (item.stocks) {
+                //     //     //         // normal entry
+                //     //     //         this.prdSerAcListForDeb.push({
+                //     //     //             value: item.uniqueName,
+                //     //     //             label: item.name,
+                //     //     //             additional: item
+                //     //     //         });
 
-                    //     //         // stock entry
-                    //     //         item.stocks.map(as => {
-                    //     //             this.prdSerAcListForDeb.push({
-                    //     //                 value: `${item.uniqueName}#${as.uniqueName}`,
-                    //     //                 label: `${item.name} (${as.name})`,
-                    //     //                 additional: Object.assign({}, item, {stock: as})
-                    //     //             });
-                    //     //         });
-                    //     //     } else {
-                    //     //         this.prdSerAcListForDeb.push({
-                    //     //             value: item.uniqueName,
-                    //     //             label: item.name,
-                    //     //             additional: item
-                    //     //         });
-                    //     //     }
-                    //     // }
+                //     //     //         // stock entry
+                //     //     //         item.stocks.map(as => {
+                //     //     //             this.prdSerAcListForDeb.push({
+                //     //     //                 value: `${item.uniqueName}#${as.uniqueName}`,
+                //     //     //                 label: `${item.name} (${as.name})`,
+                //     //     //                 additional: Object.assign({}, item, {stock: as})
+                //     //     //             });
+                //     //     //         });
+                //     //     //     } else {
+                //     //     //         this.prdSerAcListForDeb.push({
+                //     //     //             value: item.uniqueName,
+                //     //     //             label: item.name,
+                //     //     //             additional: item
+                //     //     //         });
+                //     //     //     }
+                //     //     // }
 
-                    //     // if (item.parentGroups.some(p => p.uniqueName === 'operatingcost' || p.uniqueName === 'indirectexpenses')) {
-                    //     //     if (item.stocks) {
-                    //     //         // normal entry
-                    //     //         this.prdSerAcListForCred.push({
-                    //     //             value: item.uniqueName,
-                    //     //             label: item.name,
-                    //     //             additional: item
-                    //     //         });
+                //     //     // if (item.parentGroups.some(p => p.uniqueName === 'operatingcost' || p.uniqueName === 'indirectexpenses')) {
+                //     //     //     if (item.stocks) {
+                //     //     //         // normal entry
+                //     //     //         this.prdSerAcListForCred.push({
+                //     //     //             value: item.uniqueName,
+                //     //     //             label: item.name,
+                //     //     //             additional: item
+                //     //     //         });
 
-                    //     //         // stock entry
-                    //     //         item.stocks.map(as => {
-                    //     //             this.prdSerAcListForCred.push({
-                    //     //                 value: `${item.uniqueName}#${as.uniqueName}`,
-                    //     //                 label: `${item.name} (${as.name})`,
-                    //     //                 additional: Object.assign({}, item, {stock: as})
-                    //     //             });
-                    //     //         });
-                    //     //     } else {
-                    //     //         this.prdSerAcListForCred.push({
-                    //     //             value: item.uniqueName,
-                    //     //             label: item.name,
-                    //     //             additional: item
-                    //     //         });
-                    //     //     }
-                    //     // }
-                    // });
+                //     //     //         // stock entry
+                //     //     //         item.stocks.map(as => {
+                //     //     //             this.prdSerAcListForCred.push({
+                //     //     //                 value: `${item.uniqueName}#${as.uniqueName}`,
+                //     //     //                 label: `${item.name} (${as.name})`,
+                //     //     //                 additional: Object.assign({}, item, {stock: as})
+                //     //     //             });
+                //     //     //         });
+                //     //     //     } else {
+                //     //     //         this.prdSerAcListForCred.push({
+                //     //     //             value: item.uniqueName,
+                //     //     //             label: item.name,
+                //     //     //             additional: item
+                //     //     //         });
+                //     //     //     }
+                //     //     // }
+                //     // });
 
-                    // this.makeCustomerList();
+                //     // this.makeCustomerList();
 
-                    /*
-                      find and select customer from accountUniqueName basically for account-details-modal popup. only applicable when invoice no
-                      is not available. if invoice no is there then it should be update mode
-                    */
-                    if (this.accountUniqueName && !this.invoiceNo) {
-                        if (!this.isCashInvoice) {
-                            // this.customerAcList$.pipe(take(1)).subscribe(data => {
-                            //     if (data && data.length) {
-                            //         let item = data.find(f => f.value === this.accountUniqueName);
-                            //         if (item) {
-                            //             this.invFormData.voucherDetails.customerName = item.label;
-                            //             this.invFormData.voucherDetails.customerUniquename = item.value;
-                            //             this.isCustomerSelected = true;
-                            //             this.invFormData.accountDetails.name = '';
-                            //         }
-                            //     }
-                            // });
-                            // this.onSearchQueryChanged(this.accountUniqueName, 1, SEARCH_TYPE.CUSTOMER);
-                            const requestObject = this.getSearchRequestObject(this.accountUniqueName, 1, SEARCH_TYPE.CUSTOMER);
-                            this.searchAccount(requestObject).subscribe(data => {
-                                if (data && data.body && data.body.results) {
-                                    this.prepareSearchLists([{
-                                        name: this.invFormData.accountDetails.name,
-                                        uniqueName: this.invFormData.accountDetails.uniqueName
-                                    }], 1, SEARCH_TYPE.CUSTOMER);
-                                    this.makeCustomerList();
-                                    this.focusInCustomerName();
-                                    const item = data.body.results.find(result => result.uniqueName === this.accountUniqueName);
-                                    if (item) {
-                                        this.invFormData.voucherDetails.customerName = item.name;
-                                        this.invFormData.voucherDetails.customerUniquename = item.accountUniqueName;
-                                        this.isCustomerSelected = true;
-                                        this.invFormData.accountDetails.name = '';
-                                    }
-                                }
-                            });
-                        } else {
-                            this.prepareSearchLists([{
-                                name: this.invFormData.accountDetails.name,
-                                uniqueName: this.invFormData.accountDetails.uniqueName
-                            }], 1, SEARCH_TYPE.CUSTOMER);
-                            this.makeCustomerList();
-                            this.focusInCustomerName();
-                            this.invFormData.voucherDetails.customerName = this.invFormData.accountDetails.name;
-                            this.invFormData.voucherDetails.customerUniquename = this.invFormData.accountDetails.uniqueName;
-                        }
-                    }
+                //     /*
+                //       find and select customer from accountUniqueName basically for account-details-modal popup. only applicable when invoice no
+                //       is not available. if invoice no is there then it should be update mode
+                //     */
+                //     // if (this.accountUniqueName && !this.invoiceNo) {
+                //     //     if (!this.isCashInvoice) {
+                //     //         // this.customerAcList$.pipe(take(1)).subscribe(data => {
+                //     //         //     if (data && data.length) {
+                //     //         //         let item = data.find(f => f.value === this.accountUniqueName);
+                //     //         //         if (item) {
+                //     //         //             this.invFormData.voucherDetails.customerName = item.label;
+                //     //         //             this.invFormData.voucherDetails.customerUniquename = item.value;
+                //     //         //             this.isCustomerSelected = true;
+                //     //         //             this.invFormData.accountDetails.name = '';
+                //     //         //         }
+                //     //         //     }
+                //     //         // });
+                //     //         // this.onSearchQueryChanged(this.accountUniqueName, 1, SEARCH_TYPE.CUSTOMER);
+                //     //         const requestObject = this.getSearchRequestObject(this.accountUniqueName, 1, SEARCH_TYPE.CUSTOMER);
+                //     //         this.searchAccount(requestObject).subscribe(data => {
+                //     //             if (data && data.body && data.body.results) {
+                //     //                 this.prepareSearchLists([{
+                //     //                     name: this.invFormData.accountDetails.name,
+                //     //                     uniqueName: this.invFormData.accountDetails.uniqueName
+                //     //                 }], 1, SEARCH_TYPE.CUSTOMER);
+                //     //                 this.makeCustomerList();
+                //     //                 this.focusInCustomerName();
+                //     //                 const item = data.body.results.find(result => result.uniqueName === this.accountUniqueName);
+                //     //                 if (item) {
+                //     //                     this.invFormData.voucherDetails.customerName = item.name;
+                //     //                     this.invFormData.voucherDetails.customerUniquename = item.accountUniqueName;
+                //     //                     this.isCustomerSelected = true;
+                //     //                     this.invFormData.accountDetails.name = '';
+                //     //                 }
+                //     //             }
+                //     //         });
+                //     //     } else {
+                //     //         this.prepareSearchLists([{
+                //     //             name: this.invFormData.accountDetails.name,
+                //     //             uniqueName: this.invFormData.accountDetails.uniqueName
+                //     //         }], 1, SEARCH_TYPE.CUSTOMER);
+                //     //         this.makeCustomerList();
+                //     //         this.focusInCustomerName();
+                //     //         this.invFormData.voucherDetails.customerName = this.invFormData.accountDetails.name;
+                //     //         this.invFormData.voucherDetails.customerUniquename = this.invFormData.accountDetails.uniqueName;
+                //     //     }
+                //     // }
 
-                    // bankaccounts = _.orderBy(bankaccounts, 'label');
-                    // this.bankAccounts$ = observableOf(bankaccounts);
+                //     // bankaccounts = _.orderBy(bankaccounts, 'label');
+                //     // this.bankAccounts$ = observableOf(bankaccounts);
 
-                    /** voucher type pending will not be allow as cash type*/
-                    if (this.invFormData.accountDetails && !this.isPendingVoucherType) {
-                        if (!this.invFormData.accountDetails.uniqueName) {
-                            this.invFormData.accountDetails.uniqueName = 'cash';
-                        }
-                    }
-                    this.depositAccountUniqueName = 'cash';
-                    this.startLoader(false);
-                    this.focusInCustomerName();
-                }
+                //     /** voucher type pending will not be allow as cash type*/
+                //     // if (this.invFormData.accountDetails && !this.isPendingVoucherType) {
+                //     //     if (!this.invFormData.accountDetails.uniqueName) {
+                //     //         this.invFormData.accountDetails.uniqueName = 'cash';
+                //     //     }
+                //     // }
+                //     // this.depositAccountUniqueName = 'cash';
+                //     // this.startLoader(false);
+                //     // this.focusInCustomerName();
+                // }
 
                 // update mode because voucher details is available
                 /** results[1] :- get voucher details response */
-                if (results[0] && results[1]) {
+                if (results[0]) {
                     let obj;
 
-                    if (results[1].roundOffTotal && results[1].roundOffTotal.amountForAccount === 0 && results[1].roundOffTotal.amountForCompany === 0) {
+                    if (results[0].roundOffTotal && results[0].roundOffTotal.amountForAccount === 0 && results[0].roundOffTotal.amountForCompany === 0) {
                         this.applyRoundOff = false;
                     }
 
@@ -1053,20 +1055,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                         if (this.isMultiCurrencyModule()) {
                             // parse normal response to multi currency response
-                            let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
+                            let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
                             tempObj = cloneDeep(convertedRes1) as VoucherClass;
                         } else {
-                            tempObj = cloneDeep((results[1] as GenericRequestForGenerateSCD).voucher);
+                            tempObj = cloneDeep((results[0] as GenericRequestForGenerateSCD).voucher);
                         }
 
                         obj.entries = tempObj.entries;
                     } else {
                         if (this.isMultiCurrencyModule()) {
                             // parse normal response to multi currency response
-                            let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
-                            this.initializeWarehouse(results[1].warehouse);
-                            if (results[1].account.currency) {
-                                this.companyCurrencyName = results[1].account.currency.code;
+                            let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
+                            this.initializeWarehouse(results[0].warehouse);
+                            if (results[0].account.currency) {
+                                this.companyCurrencyName = results[0].account.currency.code;
                             }
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                             this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => {
@@ -1075,34 +1077,34 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 }
                             });
                         } else if (this.isPurchaseInvoice) {
-                            let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
-                            this.isRcmEntry = (results[1]) ? results[1].subVoucher === SubVoucher.ReverseCharge : false;
+                            let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
+                            this.isRcmEntry = (results[0]) ? results[0].subVoucher === SubVoucher.ReverseCharge : false;
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                         } else {
-                            let convertedRes1 = await this.modifyMulticurrencyRes(results[1]);
-                            if (results[1].account.currency) {
-                                this.companyCurrencyName = results[1].account.currency.code;
+                            let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
+                            if (results[0].account.currency) {
+                                this.companyCurrencyName = results[0].account.currency.code;
                             }
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                         }
                     }
                     /** Tourist scheme added in case of sales invoice  */
                     if (this.isSalesInvoice || this.isCashInvoice) {
-                        if (results[1] && results[1].touristSchemeApplicable) {
-                            obj.touristSchemeApplicable = results[1].touristSchemeApplicable;
-                            obj.passportNumber = results[1].passportNumber;
+                        if (results[0] && results[0].touristSchemeApplicable) {
+                            obj.touristSchemeApplicable = results[0].touristSchemeApplicable;
+                            obj.passportNumber = results[0].passportNumber;
                         } else {
                             obj.touristSchemeApplicable = false;
                             obj.passportNumber = '';
                         }
                     }
                     //  If last invoice copied then no need to add voucherAdjustments as pre-fill ref:- G0-5554
-                    if (this.isSalesInvoice || (results[1] && results[1].voucherAdjustments)) {
-                        if (results[1].voucherAdjustments.adjustments && results[1].voucherAdjustments.adjustments.length && !this.isLastInvoiceCopied) {
+                    if (this.isSalesInvoice || (results[0] && results[0].voucherAdjustments)) {
+                        if (results[0].voucherAdjustments.adjustments && results[0].voucherAdjustments.adjustments.length && !this.isLastInvoiceCopied) {
                             this.isInvoiceAdjustedWithAdvanceReceipts = true;
-                            this.calculateAdjustedVoucherTotal(results[1].voucherAdjustments.adjustments);
-                            this.advanceReceiptAdjustmentData = results[1].voucherAdjustments;
-                            this.adjustPaymentData.totalAdjustedAmount = results[1].voucherAdjustments.totalAdjustmentAmount;
+                            this.calculateAdjustedVoucherTotal(results[0].voucherAdjustments.adjustments);
+                            this.advanceReceiptAdjustmentData = results[0].voucherAdjustments;
+                            this.adjustPaymentData.totalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentAmount;
                             this.isAdjustAmount = true;
                         } else {
                             this.isInvoiceAdjustedWithAdvanceReceipts = false;
@@ -1207,9 +1209,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     this.isUpdateDataInProcess = false;
                     if (this.isPurchaseInvoice) {
-                        this.selectedFileName = results[1].attachedFileName;
+                        this.selectedFileName = results[0].attachedFileName;
                         if (this.invFormData && this.invFormData.entries && this.invFormData.entries[0]) {
-                            this.invFormData.entries[0].attachedFile = (results[1].attachedFiles) ? results[1].attachedFiles[0] : '';
+                            this.invFormData.entries[0].attachedFile = (results[0].attachedFiles) ? results[0].attachedFiles[0] : '';
                         }
                         this.saveCurrentPurchaseRecordDetails();
                     }
@@ -1217,7 +1219,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
 
                 // create account success then close sidebar, and add customer details
-                if (results[2]) {
+                if (results[1]) {
                     // toggle sidebar if it's open
                     if (this.accountAsideMenuState === 'in') {
                         this.toggleAccountAsidePane();
@@ -1260,7 +1262,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
 
                 // update account success then close sidebar, and update customer details
-                if (results[3]) {
+                if (results[2]) {
                     // toggle sidebar if it's open
                     if (this.accountAsideMenuState === 'in') {
                         this.toggleAccountAsidePane();
@@ -1293,6 +1295,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             });
         // endregion
 
+        this.initiateVoucherModule();
         // listen for newly added stock and assign value
         combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
             let o = resp[0];
@@ -1410,6 +1413,63 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.setTemplatePlaceholder(templateData);
         });
         this.prepareInvoiceTypeFlags();
+    }
+
+    /**
+     * Initializes voucher module
+     *
+     * @private
+     * @memberof ProformaInvoiceComponent
+     */
+    private initiateVoucherModule(): void {
+        this.sundryDebtorsAcList = [];
+        this.sundryCreditorsAcList = [];
+        this.prdSerAcListForDeb = [];
+        this.prdSerAcListForCred = [];
+        /**
+            find and select customer from accountUniqueName basically for account-details-modal popup. only applicable when invoice no
+            is not available. if invoice no is there then it should be update mode
+        */
+        if (this.accountUniqueName && !this.invoiceNo) {
+            if (!this.isCashInvoice) {
+                const requestObject = this.getSearchRequestObject(this.accountUniqueName, 1, SEARCH_TYPE.CUSTOMER);
+                this.searchAccount(requestObject).subscribe(data => {
+                    if (data && data.body && data.body.results) {
+                        this.prepareSearchLists([{
+                            name: this.invFormData.accountDetails.name,
+                            uniqueName: this.invFormData.accountDetails.uniqueName
+                        }], 1, SEARCH_TYPE.CUSTOMER);
+                        this.makeCustomerList();
+                        this.focusInCustomerName();
+                        const item = data.body.results.find(result => result.uniqueName === this.accountUniqueName);
+                        if (item) {
+                            this.invFormData.voucherDetails.customerName = item.name;
+                            this.invFormData.voucherDetails.customerUniquename = item.accountUniqueName;
+                            this.isCustomerSelected = true;
+                            this.invFormData.accountDetails.name = '';
+                        }
+                    }
+                });
+            } else {
+                this.prepareSearchLists([{
+                    name: this.invFormData.accountDetails.name,
+                    uniqueName: this.invFormData.accountDetails.uniqueName
+                }], 1, SEARCH_TYPE.CUSTOMER);
+                this.makeCustomerList();
+                this.focusInCustomerName();
+                this.invFormData.voucherDetails.customerName = this.invFormData.accountDetails.name;
+                this.invFormData.voucherDetails.customerUniquename = this.invFormData.accountDetails.uniqueName;
+            }
+        }
+        /** voucher type pending will not be allow as cash type*/
+        if (this.invFormData.accountDetails && !this.isPendingVoucherType) {
+            if (!this.invFormData.accountDetails.uniqueName) {
+                this.invFormData.accountDetails.uniqueName = 'cash';
+            }
+        }
+        this.depositAccountUniqueName = 'cash';
+        this.startLoader(false);
+        this.focusInCustomerName();
     }
 
     private async prepareCompanyCountryAndCurrencyFromProfile(profile) {
@@ -1657,7 +1717,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public getAllFlattenAc() {
         // call to get flatten account from store
-        this.store.dispatch(this._generalActions.getFlattenAccount());
+        // this.store.dispatch(this._generalActions.getFlattenAccount());
     }
 
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
@@ -1668,6 +1728,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             uniqueName: data.uniqueName
         }], 1, SEARCH_TYPE.CUSTOMER);
         this.makeCustomerList();
+        if (this.isSalesInvoice) {
+            this.loadBankCashAccounts(data.currency);
+        }
         this.focusInCustomerName();
         if (this.isInvoiceRequestedFromPreviousPage) {
             this.invFormData.voucherDetails.customerUniquename = data.uniqueName;
@@ -2854,7 +2917,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             if (this.isSalesInvoice && this.isMulticurrencyAccount) {
                 this.bankAccounts$ = observableOf([]);
-                // this.bankAccounts$ = observableOf(this.updateBankAccountObject(item.additional.currency));
             }
 
             if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
@@ -3088,7 +3150,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public onSelectPaymentMode(event) {
+    public onSelectPaymentMode(event: any) {
         if (event && event.value) {
             if (this.isCashInvoice) {
                 this.invFormData.accountDetails.name = event.label;
@@ -3102,9 +3164,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 // check if selected payment account currency is different then company currency
                 // also get rates for selected account currency if it's multi-currency
                 if (this.isCashInvoice) {
-                    this.isMulticurrencyAccount = event.additional.currency !== this.companyCurrency;
+                    this.isMulticurrencyAccount = event.additional.currency.code !== this.companyCurrency;
                     if (this.isMulticurrencyAccount) {
-                        this.getCurrencyRate(this.companyCurrency, event.additional ? event.additional.currency : '',
+                        this.getCurrencyRate(this.companyCurrency, event.additional && event.additional.currency ? event.additional.currency.code : '',
                             moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
                     }
                 }
@@ -3113,18 +3175,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.isMulticurrencyAccount) {
                 if (this.isCashInvoice) {
                     //this.getAccountDetails(event.value);
-                    this.invFormData.accountDetails.currencySymbol = event.additional.currencySymbol || this.baseCurrencySymbol;
+                    this.invFormData.accountDetails.currencySymbol = event.additional.currency.symbol || this.baseCurrencySymbol;
                     this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol;
                 }
                 if (this.isSalesInvoice) {
-                    this.depositCurrSymbol = event.additional && event.additional.currencySymbol || this.baseCurrencySymbol;
+                    this.depositCurrSymbol = event.additional && event.additional.currency.symbol || this.baseCurrencySymbol;
                 }
             } else {
                 this.invFormData.accountDetails.currencySymbol = this.baseCurrencySymbol;
             }
 
             if (this.isCashInvoice) {
-                this.companyCurrencyName = event.additional.currency;
+                this.companyCurrencyName = event.additional.currency.code;
             }
         } else {
             this.depositAccountUniqueName = '';
@@ -4413,17 +4475,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public updateBankAccountObject(accCurr) {
+    public updateBankAccountObject(data) {
         let bankAccounts: IOption[] = [];
-        this.flattenAccountListStream$.pipe(take(1)).subscribe(a => {
-            a.forEach(acc => {
-                if (acc.parentGroups.some(p => p.uniqueName === 'bankaccounts' || p.uniqueName === 'cash')) {
-                    if (!acc.currency || acc.currency === accCurr || acc.currency === this.companyCurrency) {
-                        bankAccounts.push({label: acc.name, value: acc.uniqueName, additional: acc});
-                    }
-                }
+        if (data && data.body && data.body.results) {
+            data.body.results.forEach(account => {
+                bankAccounts.push({label: account.name, value: account.uniqueName, additional: account});
             });
-        });
+        }
         return _.orderBy(bankAccounts, 'label');
     }
 
@@ -4968,8 +5026,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // Confirmation received, delete old merged entries
         this.invFormData.entries = this.invFormData.entries.filter(entry => !entry['isMergedPurchaseEntry'])
         const result = (await this.modifyMulticurrencyRes(this.matchingPurchaseRecord, false)) as VoucherClass;
-        let flattenAccounts;
-        this.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => flattenAccounts = accounts);
         if (result.voucherDetails) {
             if (result.entries && result.entries.length > 0) {
                 result.entries = this.parseEntriesFromResponse(result.entries);
@@ -5209,6 +5265,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (data && data.body && data.body.results) {
                 this.prepareSearchLists(data.body.results, page, searchType);
                 this.makeCustomerList();
+                this.noResultsFoundLabel = SearchResultText.NotFound;
                 if (searchType === SEARCH_TYPE.CUSTOMER) {
                     this.focusInCustomerName();
                 }
@@ -5322,6 +5379,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             totalPages: 0,
             query: ''
         };
+        this.noResultsFoundLabel = SearchResultText.NewSearch;
     }
 
     /**
@@ -5368,6 +5426,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }
         }
+    }
+
+    /**
+     * Loads bank and cash account of given currency
+     *
+     * @private
+     * @param {string} customerCurrency Currency of the customer selected
+     * @memberof ProformaInvoiceComponent
+     */
+    private loadBankCashAccounts(customerCurrency: string): void {
+        this.salesService.getAccountsWithCurrency('cash, bankaccounts', `${customerCurrency}, ${this.companyCurrency}`).subscribe(data => {
+            this.bankAccounts$ = observableOf(this.updateBankAccountObject(data));
+        });
     }
 
     /**

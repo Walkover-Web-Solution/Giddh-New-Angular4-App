@@ -183,7 +183,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     public getFilteredArrOfIOptionItems(array: IOption[], term: string, action: string) {
         if (action === FLATTEN_SEARCH_TERM) {
             return array.filter((item) => {
-                let mergedAccounts = _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase()));
+                let mergedAccounts = item.additional && item.additional.mergedAccounts ?
+                    _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase())) : '';
                 let stockName = '';
                 let stockUnqName = '';
                 if (item.additional.stock && item.additional.stock.name) {
