@@ -21,7 +21,14 @@
         width: 100%;
         .verified-icon {
             position: absolute;
-            color: green !important;
+            color: $green !important;
+            right: 10px;
+            z-index: 2;
+            top: 10px;
+        }
+        .unverified-icon {
+            position: absolute;
+            color: $red !important;
             right: 10px;
             z-index: 2;
             top: 10px;

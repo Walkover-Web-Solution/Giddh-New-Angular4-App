@@ -22,7 +22,7 @@ const INVOICE_ROUTES: Routes = [
             { path: 'purchase-order/:action/:purchaseOrderUniqueName', component: CreatePurchaseOrderComponent },
             { path: 'purchase-orders', component: PurchaseOrderComponent },
             { path: 'purchase-orders/preview/:purchaseOrderUniqueName', component: PurchaseOrderComponent },
-            { path: 'purchase-setting', component: PurchaseSettingComponent },
+            { path: 'purchase-settings', component: PurchaseSettingComponent },
             { path: 'purchase', component: PurchaseRecordComponent },
             { path: 'purchase/:accountUniqueName/:purchaseRecordUniqueName', component: PurchaseRecordComponent }
         ]

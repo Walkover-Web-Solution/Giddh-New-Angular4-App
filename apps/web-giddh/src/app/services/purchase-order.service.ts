@@ -160,4 +160,19 @@ export class PurchaseOrderService {
 
         return this.http.get(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
+
+    /**
+     * This will update/verify the purchase order settings email
+     *
+     * @param {*} getRequestObject
+     * @param {*} postRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseOrderService
+     */
+    public updateSettingsEmail(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.UPDATE_SETTINGS_EMAIL;
+        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+
+        return this.http.put(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
 }
