@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SubVoucher, RATE_FIELD_PRECISION, SearchResultText } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
@@ -215,6 +215,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         totalPages: 0,
         query: ''
     };
+
+    /** No results found label for dynamic search */
+    public noResultsFoundLabel = SearchResultText.NewSearch;
 
     /** True, if all the transactions are of type 'Tax' or 'Reverse Charge' */
     private taxOnlyTransactions: boolean;
@@ -1777,6 +1780,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         additional: result
                     }
                 }) || [];
+                this.noResultsFoundLabel = SearchResultText.NotFound;
                 if (page === 1) {
                     this.searchResults = searchResults;
                 } else {
@@ -1803,6 +1807,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             totalPages: 0,
             query: ''
         };
+        this.noResultsFoundLabel = SearchResultText.NewSearch;
+    }
+
+    public handleSuggestionHide() {
+        this.noResultsFoundLabel = SearchResultText.NewSearch;
     }
 
     /**
