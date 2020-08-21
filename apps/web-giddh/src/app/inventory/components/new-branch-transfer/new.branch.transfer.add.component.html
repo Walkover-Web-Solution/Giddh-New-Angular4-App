@@ -36,7 +36,7 @@
                                     {{branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'}} <span class="red-text">*</span>
                                 </label>
                             </div>
-                            <div class="col-md-4 ddd">
+                            <div class="col-md-4">
                                 <input type="text" placeholder="{{branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'}}" class="form-control" name="dateOfSupply" [(ngModel)]="tempDateParams.dateOfSupply" (bsValueChange)="selectDateOfSupply($event)" required bsDatepicker
                                     [readonly]="!editBranchTransferUniqueName" [disabled]="editBranchTransferUniqueName ? 'disabled' : null" [bsConfig]="bsConfig">
                             </div>
