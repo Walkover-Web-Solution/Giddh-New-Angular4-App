@@ -205,7 +205,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             value: '%s_AN',
         },
     ];
-    public isAllChecked: boolean = false;
     public selectedItems: string[] = [];
     public totalSales: number = 0;
     public totalDue: number = 0;
@@ -317,22 +316,21 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public openBulkPaymentModal(template: TemplateRef<any>, item?: any): void {
         this.isBulkPaymentShow = true;
         this.selectedAccForPayment = null;
-        if (item && this.selectedAccountsList.length < 2) {
+        if (this.selectedAccountsList.length) {
+            this.selectedAccountsList = this.selectedAccountsList.filter(itemObject => {
+                return itemObject.bankPaymentDetails === true;
+            });
+            this.selectedAccountsList = this.selectedAccountsList.filter((data, index) => {
+                return this.selectedAccountsList.indexOf(data) === index;
+            });
+        }
+        if (!this.selectedAccountsList.length && item) {
             if (item.bankPaymentDetails) {
                 this.selectedAccForPayment = item;
             }
-        } else {
-            if (this.selectedAccountsList.length) {
-                this.selectedAccountsList = this.selectedAccountsList.filter(itemObject => {
-                    return itemObject.bankPaymentDetails === true;
-                });
-                this.selectedAccountsList = this.selectedAccountsList.filter((data, index) => {
-                    return this.selectedAccountsList.indexOf(data) === index;
-                });
-                if (this.selectedAccountsList.length < this.selectedCheckedContacts.length) {
-                    this._toaster.infoToast(`${this.selectedCheckedContacts.length - this.selectedAccountsList.length} out of ${this.selectedCheckedContacts.length} transactions could not be processed as bank details of those accounts are not updated.`);
-                }
-            }
+        }
+        if (this.selectedAccountsList.length < this.selectedCheckedContacts.length) {
+            this._toaster.infoToast(`${this.selectedCheckedContacts.length - this.selectedAccountsList.length} out of ${this.selectedCheckedContacts.length} transactions could not be processed as bank details of those accounts are not updated.`);
         }
         if (this.selectedAccountsList.length || this.selectedAccForPayment) {
             this.bulkPaymentModalRef = this.modalService.show(template,
@@ -498,9 +496,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public performActions(type: number, account: any, event?: any) {
-        this.selectedCheckedContacts = [];
-        this.selectedCheckedContacts.push(account.uniqueName);
-
         switch (type) {
             case 0: // go to add and manage
                 this.store.dispatch(this._groupWithAccountsAction.getGroupWithAccounts(account.name));
@@ -554,9 +549,15 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public tabSelected(tabName: 'customer' | 'aging-report' | 'vendor') {
-        this.searchStr = '';
-        this.selectedCheckedContacts = [];
-        this.selectedAccountsList = [];
+        if (!this.searchStr) {
+            this.searchStr = '';
+            this.selectedCheckedContacts = [];
+            this.selectedAccountsList = [];
+            this.allSelectionModel = false;
+            this.checkboxInfo = {
+                selectedPage: 1
+            };
+        }
         if (tabName !== this.activeTab) {
             this.activeTab = tabName;
             this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, '');
@@ -573,8 +574,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public setActiveTab(tabName: 'customer' | 'aging-report' | 'vendor', type: string) {
-        this.tabSelected(tabName);
         this.searchStr = '';
+        this.tabSelected(tabName);
         if (tabName === 'vendor') {
             this.getAccounts(this.fromDate, this.toDate, type, null, 'true', PAGINATION_LIMIT, '');
         }
@@ -680,9 +681,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
     public pageChanged(event: any): void {
         if (this.currentPage !== event.page) {
+            this.checkboxInfo.selectedPage = event.page;
+            this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
             let selectedGrp = this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors';
-            this.selectedCheckedContacts = [];
-            this.selectedAccountsList = [];
             this.getAccounts(this.fromDate, this.toDate, selectedGrp, event.page, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
         }
     }
@@ -845,7 +846,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                         selectedPage: 1
                     };
                     this.selectedItems = [];
-                    this.isAllChecked = false;
+                    this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
                 });
         } else if (this.messageBody.btn.set === 'Send Sms') {
             let temp = request;
@@ -857,7 +858,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                         selectedPage: 1
                     };
                     this.selectedItems = [];
-                    this.isAllChecked = false;
+                    this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
+
                 });
         }
         this.mailModal.hide();
@@ -918,36 +920,39 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public toggleAllSelection(action: boolean) {
+
+        this.checkboxInfo[this.checkboxInfo.selectedPage] = action;
+        this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
         if (action) {
             if (this.activeTab === 'customer') {
-                this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(m => {
-                    m.isSelected = action;
-                    return m;
+                this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(element => {
+                    element.isSelected = action;
+                    this.prepareSelectedContactsList(element, true);
+                    return element;
                 });
-                this.selectedAccountsList = this.sundryDebtorsAccounts;
-                this.selectedCheckedContacts = this.sundryDebtorsAccounts.map(m => m.uniqueName);
             } else {
-                this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(m => {
-                    m.isSelected = action;
-                    return m;
+                this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(element => {
+                    element.isSelected = action;
+                    this.prepareSelectedContactsList(element, true);
+                    return element;
                 });
-                this.selectedAccountsList = this.sundryCreditorsAccounts;
-                this.selectedCheckedContacts = this.sundryCreditorsAccounts.map(m => m.uniqueName);
             }
+
         } else {
-            this.selectedCheckedContacts = [];
-            this.selectedAccountsList = [];
             if (this.activeTab === 'customer') {
-                this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(m => {
-                    m.isSelected = action;
-                    return m;
+                this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(element => {
+                    element.isSelected = action;
+                    this.prepareSelectedContactsList(element, false);
+                    return element;
                 });
             } else {
-                this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(m => {
-                    m.isSelected = action;
-                    return m;
+                this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(element => {
+                    element.isSelected = action;
+                    this.prepareSelectedContactsList(element, false);
+                    return element;
                 });
             }
+
         }
     }
 
@@ -956,19 +961,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public selectAccount(ev: any, item: any) {
-        // this.selectedcus = true;
-        if (ev.target.checked) {
-            this.selectedCheckedContacts.push(item.uniqueName);
-            if (item.bankPaymentDetails) {
-                this.selectedAccountsList.push(item);
-            }
-        } else {
-            // this.selectCustomer = false;
-            let itemIndx = this.selectedCheckedContacts.findIndex((element) => element === item.uniqueName);
-            this.selectedCheckedContacts.splice(itemIndx, 1);
-            this.selectedAccountsList.splice(itemIndx, 1);
-
-
+        this.prepareSelectedContactsList(item, ev.target.checked);
+        if (!ev.target.checked) {
+            this.checkboxInfo[this.checkboxInfo.selectedPage] = false;
+            this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
             if (this.selectedCheckedContacts.length === 0) {
                 this.selectAllCustomer = false;
                 this.selectAllVendor = false;
@@ -1140,6 +1136,15 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                         }
                     });
                     this.sundryDebtorsAccounts = _.cloneDeep(res.body.results);
+                    this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(element => {
+                        let indexOfItem = this.selectedCheckedContacts.indexOf(element.uniqueName);
+                        if (indexOfItem === -1) {
+                            element.isSelected = false;
+                        } else {
+                            element.isSelected = true;
+                        }
+                        return element;
+                    });
 
                 } else {
                     this.Totalcontacts = res.body.totalItems;
@@ -1152,10 +1157,20 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                         }
                     });
                     this.sundryCreditorsAccounts = _.cloneDeep(res.body.results);
+                    this.selectedAccountsList = [];
+                    this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(element => {
+                        let indexOfItem = this.selectedCheckedContacts.indexOf(element.uniqueName);
+                        if (indexOfItem === -1) {
+                            element.isSelected = false;
+                        } else {
+                            element.isSelected = true;
+                            this.selectedAccountsList.push(element);
+                        }
+                        return element;
+                    });
 
                 }
-                this.selectedAccountsList = [];
-                this.selectedCheckedContacts = [];
+                this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
                 this.detectChanges();
             }
             this.isGetAccountsInProcess = false;
@@ -1245,13 +1260,15 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      *
      * @memberof ContactComponent
      */
-    public closeBulkPaymentModel(): void {
+    public closeBulkPaymentModel(event: any): void {
+        //  if bulk paymemt success then clear all selected contacts lists
+        if (event) {
+            this.clearSelectedContacts();
+        }
         this.isBulkPaymentShow = false;
         this.selectedAccForPayment = null;
         this.bulkPaymentModalRef.hide();
-        this.selectedAccountsList = [];
-        this.toggleAllSelection(false);
-        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr);
+        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr);
     }
 
     /**
@@ -1311,5 +1328,46 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
+    }
+
+
+    /**
+     * To prepare selected contacts list
+     *
+     * @param {*} element Selected contact
+     * @param {boolean} [isChecked] To check is check box selected
+     * @memberof ContactComponent
+     */
+    public prepareSelectedContactsList(element: any, isChecked: boolean): void {
+        // selected accounts or creditors list for bulk payment
+        let indexOfEntry = this.selectedAccountsList.indexOf(element);
+        if (indexOfEntry === -1 && isChecked) {
+            this.selectedAccountsList.push(element);
+        } else if (indexOfEntry > -1 && !this.allSelectionModel) {
+            this.selectedAccountsList.splice(indexOfEntry, 1);
+        }
+        // selected contacts list
+        let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element.uniqueName);
+        if (indexOfEntrySelected === -1 && isChecked) {
+            this.selectedCheckedContacts.push(element.uniqueName);
+        } else if (indexOfEntrySelected > -1 && !this.allSelectionModel) {
+            this.selectedCheckedContacts.splice(indexOfEntrySelected, 1);
+        }
+    }
+
+    /**
+     * To clear selected contacts list
+     *
+     * @memberof ContactComponent
+     */
+    public clearSelectedContacts(): void {
+        this.searchStr = '';
+        this.selectedCheckedContacts = [];
+        this.selectedAccountsList = [];
+        this.allSelectionModel = false;
+        this.checkboxInfo = {
+            selectedPage: 1
+        };
+        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr);
     }
 }
