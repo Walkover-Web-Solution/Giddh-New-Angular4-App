@@ -264,6 +264,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /** To check all module menu open */
     public isAllModuleOpen: boolean = false;
 
+    /** update IndexDb flags observable **/
+    public updateIndexDbInProcess$: Observable<boolean>;
+    public updateIndexDbSuccess$: Observable<boolean>;
+    /* This will hold if resolution is less than 768 to consider as mobile screen */
+    public isMobileScreen: boolean = false;
+
     /**
      *
      */
@@ -326,6 +332,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
             if (event instanceof NavigationEnd) {
                 this.setCurrentPage();
+                this.addClassInBodyIfPageHasTabs();
 
                 if (this.router.url.includes("/ledger")) {
                     this.currentState = this.router.url;
@@ -465,6 +472,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        this._breakpointObserver.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
         this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
             if (value === 'logoutCordova') {
                 this.zone.run(() => {
@@ -974,7 +987,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public analyzeAccounts(e: any, acc) {
         if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
-            this.onItemSelected(acc);
+            this.onItemSelected(acc, null, true);
             return;
         }
         e.preventDefault();
@@ -1337,7 +1350,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.doEntryInDb('groups', item);
     }
 
-    public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null) {
+    public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null, isCtrlClicked?: boolean) {
         this.oldSelectedPage = _.cloneDeep(this.selectedPage);
         if (this.modelRef) {
             this.modelRef.hide();
@@ -1363,7 +1376,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             // if (!this.isLedgerAccSelected) {
             //   this.navigateToUser = true;
             // }
-            this.router.navigate([url]); // added link in routerLink
+            if (!isCtrlClicked) {
+                this.router.navigate([url]); // added link in routerLink
+            }     
         }
         // save data to db
         item.time = +new Date();
@@ -1837,6 +1852,31 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
+    /**
+     * This will init the notification on window orientation change
+     *
+     * @param {*} event
+     * @memberof HeaderComponent
+     */
+    @HostListener('window:orientationchange', ['$event'])
+    onOrientationChange(event) {
+        if(window['Headway'] !== undefined) {
+            window['Headway'].init();
+        }
+    }
+
+    /**
+     * This will init the notification on window resize
+     *
+     * @param {*} event
+     * @memberof HeaderComponent
+     */
+    @HostListener('window:resize', ['$event'])
+    windowResize(event) {
+        if(window['Headway'] !== undefined) {
+            window['Headway'].init();
+        }
+    }
     /**
      * Toggle all module to previous selected module
      *

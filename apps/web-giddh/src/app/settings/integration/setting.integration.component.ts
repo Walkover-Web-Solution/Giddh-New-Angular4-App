@@ -23,13 +23,12 @@ import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { TabsetComponent, ModalDirective, TabDirective } from "ngx-bootstrap";
+import { TabsetComponent, ModalDirective } from "ngx-bootstrap";
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { CurrentPage } from '../../models/api-models/Common';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { Configuration } from "../../app.constant";
-import { GoogleLoginProvider, LinkedinLoginProvider } from "../../theme/ng-social-login-module/providers";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
@@ -37,9 +36,9 @@ import { forIn } from '../../lodash-optimized';
 import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
-import { elementStylingMap } from '@angular/core/src/render3';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
 import { SettingsPermissionService } from '../../services/settings.permission.service';
+import { SettingsIntegrationTab } from '../constants/settings.constant';
 
 export declare const gapi: any;
 
@@ -266,7 +265,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
         //logic to get all registered account for integration tab
-        this.store.dispatch(this._companyActions.getAllRegistrations());
+        // this.store.dispatch(this._companyActions.getAllRegistrations());
 
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.account) {
@@ -298,17 +297,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
 
-        // this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
-        //     if (res && !_.isEmpty(res)) {
-        //         if (res && res.ecommerceDetails && res.ecommerceDetails.length > 0) {
-        //             res.ecommerceDetails.forEach(item => {
-        //                 if (item && item.ecommerceType && item.ecommerceType.name && item.ecommerceType.name === "shopify") {
-        //                     this.getShopifyVerifyStatus(item.uniqueName);
-        //                 }
-        //             })
-        //         }
-        //     }
-        // });
+        this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res && !_.isEmpty(res)) {
+                if (res && res.ecommerceDetails && res.ecommerceDetails.length > 0) {
+                    res.ecommerceDetails.forEach(item => {
+                        if (item && item.ecommerceType && item.ecommerceType.name && item.ecommerceType.name === "shopify") {
+                            this.getShopifyVerifyStatus(item.uniqueName);
+                        }
+                    })
+                }
+            }
+        });
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
@@ -362,23 +361,24 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
         }
+        this.loadTabData();
     }
 
-    public getInitialData() {
-        this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
-        this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
-        this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
-        this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
-        this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
-        this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
-        this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
-        this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-        this.store.pipe(take(1)).subscribe(s => {
-            this.selectedCompanyUniqueName = s.session.companyUniqueName;
-            this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
-            this.getValidationForm('ICICI')
-        });
-    }
+    // public getInitialData() {
+    //     // this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
+    //     // this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
+    //     this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
+    //     this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
+    //     this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
+    //     this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
+    //     this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
+    //     // this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+    //     this.store.pipe(take(1)).subscribe(s => {
+    //         this.selectedCompanyUniqueName = s.session.companyUniqueName;
+    //         this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+    //         this.getValidationForm('ICICI')
+    //     });
+    // }
 
     public setDummyData() {
         this.razorPayObj.userName = '';
@@ -1291,5 +1291,88 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public customApproverNameListSorting(preItem: IOption, postItem: IOption): any {
         return (parseInt(preItem.label));
+    }
+
+    /**
+     * Loads payment tab data
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public loadPaymentData(): void {
+        this.store.dispatch(this._companyActions.getAllRegistrations());
+        this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
+        this.store.pipe(take(1)).subscribe(s => {
+            this.selectedCompanyUniqueName = s.session.companyUniqueName;
+            this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+            this.getValidationForm('ICICI')
+        });
+    }
+
+    /**
+     * Loads E-Commerce tab data
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public loadEcommerceData(): void {
+        this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
+    }
+
+    /**
+     * Loads Collection tab data
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public loadCollectionData(): void {
+        this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
+        this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
+        this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
+        this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
+    }
+
+    /**
+     * Loads the Email tab data
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public loadEmailData(): void {
+        this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+        this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
+    }
+
+    /**
+     * Loads SMS tab data
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public loadSmsData(): void {
+        this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
+    }
+
+    /**
+     * Loads the tab data based on tab selected
+     *
+     * @private
+     * @memberof SettingIntegrationComponent
+     */
+    private loadTabData(): void {
+        switch(this.selectedTabParent) {
+            case SettingsIntegrationTab.Sms:
+                this.loadSmsData();
+                break;
+            case SettingsIntegrationTab.Email:
+                this.loadEmailData();
+                break;
+            case SettingsIntegrationTab.Collection:
+                this.loadCollectionData();
+                break;
+            case SettingsIntegrationTab.ECommerce:
+                this.loadEcommerceData();
+                break;
+            case SettingsIntegrationTab.Payment:
+                this.loadPaymentData();
+                break;
+            default:
+                break;
+        }
     }
 }

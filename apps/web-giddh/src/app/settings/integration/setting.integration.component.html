@@ -1,6 +1,6 @@
 <div class="clearfix">
     <tabset [ngClass]="{'tab-integraton': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab id="tab-integration">
-        <tab>
+        <tab (select)="loadSmsData()">
             <ng-template tabHeading>
                 <span class="icon-chat2"></span> SMS
             </ng-template>
@@ -36,7 +36,7 @@
             </div>
         </tab>
 
-        <tab>
+        <tab (select)="loadEmailData()">
             <ng-template tabHeading>
                 <span class="icon-mail"></span> Email
             </ng-template>
@@ -100,7 +100,7 @@
 
         </tab>
 
-        <tab>
+        <tab (select)="loadCollectionData()">
             <ng-template tabHeading>
                 <span class="icon-card"></span> Collection
             </ng-template>
@@ -305,7 +305,7 @@
             </div>
         </tab>
 
-        <tab>
+        <tab (select)="loadEcommerceData()">
             <ng-template tabHeading>
                 <span class="icon-ecomm"></span> E-Comm
             </ng-template>
@@ -368,15 +368,15 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="mrT2 box clearfix">
+            <div class="mrT2 box clearfix">
                 <h3 class="section-head mb-2">Shopify</h3>
                 <span *ngIf="isEcommerceShopifyUserVerified">Your company is successfully connected with Shopify.</span>
-                <a href="https://apps.shopify.com/accounting-software" target="_blank" *ngIf="!isEcommerceShopifyUserVerified">
+                <a href="https://shopify.giddh.com/signup.php" target="_blank" *ngIf="!isEcommerceShopifyUserVerified">
                     <span>Connect with Shopify</span></a>
-            </div> -->
+            </div>
 
         </tab>
-        <tab [hidden]="!isIndianCompany">
+        <tab (select)="loadPaymentData()" [hidden]="!isIndianCompany">
             <div *ngIf="isIndianCompany">
                 <ng-template tabHeading>
                     <span class="icon-payment"></span> Payment
@@ -709,7 +709,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group col-sm-4 col-md-2">
-                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Approval Name <span class="required">*</span>
+                                    <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Approver Name <span class="required">*</span>
                                     <i class="icon-info cursor-pointer"  tooltip="Content here.."></i>
                                 </label></ng-container>
                                     <div class="custom-select select-caret pos-rel" *ngIf="item.otpType!=='BANK'">

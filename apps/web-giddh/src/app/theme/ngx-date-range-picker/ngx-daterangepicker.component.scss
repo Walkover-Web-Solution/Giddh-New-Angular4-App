@@ -243,6 +243,7 @@ $input-height: 3rem !default;
         height: 2em;
         width: 2em;
         font-style: initial;
+
         &.available {
             &.prev {
                 display: block;
@@ -256,6 +257,7 @@ $input-height: 3rem !default;
                     margin: 0;
                 }
             }
+
             &.next {
                 transform: rotate(180deg);
                 display: block;
@@ -266,11 +268,13 @@ $input-height: 3rem !default;
                 opacity: 0.8;
                 transition: background-color 0.2s ease;
                 border-radius: 2em;
+
                 &:hover {
                     margin: 0;
                     transform: rotate(180deg);
                 }
             }
+
             &:hover {
                 background-color: $md-drppicker-cell-hover-bg-color;
                 border-color: $md-drppicker-cell-hover-border-color;
@@ -283,6 +287,7 @@ $input-height: 3rem !default;
                 transition: background-color 0.2s ease;
             }
         }
+
         &.week {
             font-size: 80%;
             color: $very-light-gray;
@@ -487,6 +492,17 @@ $input-height: 3rem !default;
             text-decoration: line-through;
         }
     }
+
+    /* new calendar */
+    .td-div,
+    option {
+        &.disabled {
+            color: $nobel;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+    }
+    /* new calendar */
 
     /* new calendar */
     .td-div,
@@ -808,11 +824,9 @@ $input-height: 3rem !default;
         }
     }
 }
-
 .md-drppicker td.in-range.in-range-start::before {
     border-radius: 50% 0 0 50% !important;
 }
-
 .md-drppicker td.in-range.in-range-end::before {
     border-radius: 0 50% 50% 0 !important;
 }
@@ -830,31 +844,9 @@ $input-height: 3rem !default;
     color: $nero;
     border-color: $gray;
 }
-
-td.in-range.in-range-start.in-range-hovered.in-range-end::before {
+.td-div.in-range.in-range-start.in-range-hovered.in-range-end::before {
     border: none !important;
 }
-
-/* new calendar */
-.md-drppicker .td-div.in-range.in-range-start::before {
-    border-radius: 50% 0 0 50% !important;
-}
-.md-drppicker .td-div.in-range.in-range-end::before {
-    border-radius: 0 50% 50% 0 !important;
-}
-.md-drppicker .td-div.in-range.in-range-start.in-range-end::before {
-    border-radius: 50% !important;
-    text-align: center;
-    width: 80%;
-    display: none;
-}
-.md-drppicker .td-div.in-range.in-range-start.in-range-end span {
-    background-color: $portage !important;
-    border-radius: 50%;
-    color: $nero;
-    border-color: $gray;
-}
-
 /* new calendar */
 
 .invalid-date.error-msg {
@@ -864,15 +856,12 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     left: 0;
     color: $red;
 }
-
 .mb-3 {
     margin-bottom: 30px;
 }
-
 .relative {
     position: relative;
 }
-
 .ranges-perfect-scrollbar {
     border-right: 1px solid $gainsboro;
 }
@@ -1051,25 +1040,6 @@ td:hover span {
 
 .md-drppicker td.end-date.active {
     background-color:$white!important;
-
-    span {
-        background-color: $portage !important;
-        color: $nero !important;
-    }
-    .available:hover {
-        background-color: unset !important;
-    }
-    &:hover {
-        span {
-            background-color: $white-smoke !important;
-            border-color: $gray !important;
-        }
-    }
-}
-
-/* new calendar */
-.md-drppicker .td-div.end-date.active {
-    background-color:$white !important;
 
     span {
         background-color: $portage !important;
@@ -1471,11 +1441,9 @@ td span {
         }
     }
 }
-
 .in-range-hovered {
     position: relative;
 }
-
 .off.in-range-hovered {
     &::before {
         display: none;
@@ -1495,7 +1463,6 @@ td span {
         display: inline-block;
     }
 }
-
 tr:first-child.in-range-hovered.available {
     &::before {
         border-radius: 50% 0 0 50%;
