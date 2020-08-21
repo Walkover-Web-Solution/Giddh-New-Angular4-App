@@ -102,7 +102,7 @@
                                         <div class="btn-group changeStatus-dropdown pull-right" dropdown
                                              *ngIf="only4ProformaEstimates">
 
-                                            
+
 
                                             <button id="button-basic" dropdownToggle type="button"
                                                     class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic">
@@ -134,16 +134,15 @@
                                                     class="dropdown-item">Expired</a></li>
                                             </ul>
 
-                                            <label class="labeled text-capitalize">
-                                                {{ selectedItem.voucherStatus }}</label>
-
                                         </div>
                                         <!-- endregion -->
 
                                         <!-- region for invoice -->
                                         <div class="btn-group changeStatus-dropdown pull-right" dropdown
                                              *ngIf="!only4ProformaEstimates && selectedItem?.voucherType !== 'purchase'">
-
+                                            <label *ngIf="selectedItem.voucherStatus === 'cancel'" class="labeled">
+                                                {{ selectedItem.voucherStatus }}
+                                            </label>
 
                                             <button id="button-basic2" dropdownToggle type="button"
                                                     class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2"
@@ -173,11 +172,6 @@
                                                     (click)="updateVoucherAction.emit('cancel')"><a
                                                     class="dropdown-item">Cancel</a></li>
                                             </ul>
-
-
-                                            <label *ngIf="selectedItem.voucherStatus === 'cancel'" class="labeled">
-                                                {{ selectedItem.voucherStatus }}
-                                            </label>
 
                                         </div>
                                         <!-- endregion -->

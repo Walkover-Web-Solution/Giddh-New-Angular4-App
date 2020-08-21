@@ -13,7 +13,8 @@
             <!--/sidebar-->
         </div>
         <div class="col-12 col-sm-9">
-            <audit-logs-grid></audit-logs-grid>
+            <audit-logs-grid *ngIf="!isNewVersion"></audit-logs-grid>
+            <audit-logs-table *ngIf="isNewVersion"></audit-logs-table>
         </div>
     </div>
 </div>
