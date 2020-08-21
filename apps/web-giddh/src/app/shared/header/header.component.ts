@@ -974,7 +974,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public analyzeAccounts(e: any, acc) {
         if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
-            this.onItemSelected(acc);
+            this.onItemSelected(acc, null, true);
             return;
         }
         e.preventDefault();
@@ -1337,7 +1337,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.doEntryInDb('groups', item);
     }
 
-    public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null) {
+    public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null, isCtrlClicked?: boolean) {
         this.oldSelectedPage = _.cloneDeep(this.selectedPage);
         if (this.modelRef) {
             this.modelRef.hide();
@@ -1363,7 +1363,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             // if (!this.isLedgerAccSelected) {
             //   this.navigateToUser = true;
             // }
-            this.router.navigate([url]); // added link in routerLink
+            if (!isCtrlClicked) {
+                this.router.navigate([url]); // added link in routerLink
+            }     
         }
         // save data to db
         item.time = +new Date();
