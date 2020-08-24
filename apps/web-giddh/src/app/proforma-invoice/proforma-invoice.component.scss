@@ -1055,8 +1055,6 @@ section.newtable {
 .pd {
     padding: 3px 5px;
 }
-
-.showOnsmall-screen,
 .card-invoiceTable-wrapper,
 .add-btn,
 .otherDetail-card,
@@ -1633,14 +1631,8 @@ span.eligible-ITC {
         width: 100%;
         max-width: 50.01%;
     }
-    .wrap-billing-address .bill-add:nth-child(2) {
-        margin-top: 20px;
-    }
     .customerInvoiceTable label {
         font-size: 13px;
-    }
-    .showOnsmall-screen {
-        display: block;
     }
     .invoice-date-due-date {
         display: none;
@@ -1658,7 +1650,12 @@ span.eligible-ITC {
     }
 }
 
-@media (max-width: 840px) {
+@media (max-width: 1024px) {
+    .collapse-pane{
+        .form-group{
+            margin-bottom: 15px !important;
+        }
+    }
     .card-invoiceTable-wrapper,
     .add-btn,
     .otherDetail-card,

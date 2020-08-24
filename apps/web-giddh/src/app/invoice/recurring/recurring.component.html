@@ -4,7 +4,7 @@
     <form #recurringForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr" (ngSubmit)="submit()">
 
         <div class="d-flex search-icon-block"  *ngIf="isMobileScreen">
-            <div (click)="openModal(template)">
+            <div class="mb-15" (click)="openModal(template)">
                 <i class="icon-search"></i>
             </div>
             <ng-template #template>
@@ -49,7 +49,7 @@
                         <div class="form-group">
                             <label class="d-block">Last Invoice Date</label>
                             <div class="input-group">
-                                <input name="lastInvoiceDate" placeholder="Select Date"
+                                <input class="w-100" name="lastInvoiceDate" placeholder="Select Date"
                                     [(ngModel)]="filter.lastInvoiceDate" type="text"
                                     [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" autocomplete="off" class="form-control"
                                     bsDatepicker required>
@@ -86,9 +86,12 @@
                     </div>
                 </div>
             </ng-template>
+
+        </div>
+        <div>
             <div class="reccuring-form" *ngIf="!isMobileScreen">
                 <div class="form-group mrR1">
-                    <label class="d-block">Invoice Type</label>
+                    <label class="d-block mr-15">Invoice Type</label>
                     <div class="ng-select-wrap">
                         <sh-select name="invoiceType" [placeholder]="'Select Account'" [(ngModel)]="filter.status"
                             [options]="invoiceTypeOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
@@ -102,7 +105,7 @@
                     </div>
                 </div>
                 <div class="form-group mrR1">
-                    <label class="d-block">Interval</label>
+                    <label class="d-block mr-15">Interval</label>
                     <div class="ng-select-wrap">
                         <sh-select name="interval" [placeholder]="'Select Account'" [options]="intervalOptions"
                             [notFoundLink]="false" [multiple]="false" [(ngModel)]="filter.duration" [ItemHeight]="33"
@@ -117,7 +120,7 @@
                 </div>
 
                 <div class="form-group mrR1">
-                    <label class="d-block">Last Invoice Date</label>
+                    <label class="d-block mr-15">Last Invoice Date</label>
                     <div class="input-group">
                         <input name="lastInvoiceDate" placeholder="Select Date" [(ngModel)]="filter.lastInvoiceDate" type="text"
                             [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" autocomplete="off" class="form-control" bsDatepicker
@@ -150,56 +153,56 @@
                     <label class="d-block">&nbsp;</label>
                     <button class="btn btn-success btn-sm">Search</button>
                     <a class="cp" href="javascript: void 0">
-                        <i aria-hidden="true" class="icon-refrsh" tooltip="Reset Filter"
-                            *ngIf="showResetFilterButton" (click)="resetFilter()"></i>
+                        <i aria-hidden="true" class="icon-refrsh" tooltip="Reset Filter" *ngIf="showResetFilterButton"
+                            (click)="resetFilter()"></i>
                     </a>
                 </div>
-             </div>
-            <div class="d-flex " style="margin-top: 24px">
-                    <div style="height: 30px;" *ngIf="selectedItems.length < 0">
-                        <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
-                            style="margin-bottom: 10px;display:inline-block !important;">
+            </div>
+            <div class="d-flex mb-2">
+                <div style="height: 30px;" *ngIf="selectedItems.length < 0">
+                    <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
+                        style="margin-bottom: 10px;display:inline-block !important;">
 
-                            <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
-                                aria-controls="dropdown-basic">
-                                More
-                                <span class="caret"></span>
-                            </button>
+                        <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
+                            aria-controls="dropdown-basic">
+                            More
+                            <span class="caret"></span>
+                        </button>
 
-                            <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic"
-                                style="right: -53px !important;">
+                        <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic"
+                            style="right: -53px !important;">
 
-                                <li role="menuitem">
-                                    <a class="dropdown-item cp" href="javascript:void(0)">Bulk Note</a>
-                                </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp" href="javascript:void(0)">Bulk Note</a>
+                            </li>
 
-                                <li role="menuitem">
-                                    <a class="dropdown-item cp" href="javascript:void(0)">Send Email</a>
-                                </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp" href="javascript:void(0)">Send Email</a>
+                            </li>
 
-                                <li role="menuitem">
-                                    <a class="dropdown-item cp" href="javascript:void(0)">Print</a>
-                                </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp" href="javascript:void(0)">Print</a>
+                            </li>
 
-                                <li role="menuitem">
-                                    <a class="dropdown-item cp" href="javascript:void(0)">Export Pdf</a>
-                                </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp" href="javascript:void(0)">Export Pdf</a>
+                            </li>
 
-                                <li role="menuitem" *ngIf="!isMobileScreen">
-                                    <a class="dropdown-item cp" href="javascript:void(0)">Generate E-way Bill</a>
-                                </li>
+                            <li role="menuitem" *ngIf="!isMobileScreen">
+                                <a class="dropdown-item cp" href="javascript:void(0)">Generate E-way Bill</a>
+                            </li>
 
-                                <li role="menuitem">
-                                    <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
-                                </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp" href="javascript:void(0)">Create Credit Note</a>
+                            </li>
 
-                                <li role="menuitem">
-                                    <a class="dropdown-item cp" href="javascript:void(0)">Delete</a>
-                                </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item cp" href="javascript:void(0)">Delete</a>
+                            </li>
 
-                            </ul>
-                        </div>
+                        </ul>
                     </div>
+                </div>
 
             </div>
         </div>

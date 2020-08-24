@@ -94,14 +94,14 @@
 
                                 <div class="row">
                                     <!-- region customer name -->
-                                    <div class=" col-sm-2">
+                                    <div class="col-sm-12 col-md-2 col-xs-12">
                                         <label>{{!isPurchaseInvoice ? 'Customer' : 'Vendor'}} Name<span
                                                 class="red-text">*</span></label>
                                     </div>
                                     <!-- endregion -->
 
                                     <!-- region customer dropdown -->
-                                    <div class="col-sm-7 selectCustomerName">
+                                    <div class="col-sm-12 col-md-7 col-xs-12 selectCustomerName">
 
                                         <div class="clearfix d-flex" style="flex-direction: column">
                                             <div class="d-flex">
@@ -199,17 +199,15 @@
                             <!-- region customer address section -->
                             <div class="row">
 
-                                <div class="col-sm-9 offset-sm-2">
+                                <div class="col-sm-12 col-md-9 offset-md-2 ">
                                     <ng-container>
-
-                                        <section class="form-inline"
-                                            [ngClass]="{' billing-addressWrap' : !invFormData.voucherDetails.customerName }">
+                                        <section [ngClass]="{' billing-addressWrap' : !invFormData.voucherDetails.customerName }">
 
                                             <div class="wrap-billing-address clearfix w-100">
 
                                                 <div class="row">
                                                     <!-- region billing address -->
-                                                    <div class="col-sm-6 bill-add">
+                                                    <div class="col-sm-12 col-md-6 bill-add">
 
                                                         <div class="form-group">
                                                             <label class="pb-0">Billing Address</label>
@@ -268,7 +266,7 @@
                                                     <!-- endregion -->
 
                                                     <!-- region shipping address -->
-                                                    <div class="col-sm-6 bill-add">
+                                                    <div class="col-sm-12 col-md-6 bill-add">
 
                                                         <div class="form-group p0 width100">
                                                             <label class="pb-0">
@@ -289,7 +287,7 @@
                                                                     [(ngModel)]="invFormData.accountDetails.shippingDetails.address[0]"
                                                                     rows="3" autocomplete="off"></textarea>
 
-                                                                <div class="clearfix form-group">
+                                                                <div class="clearfix form-group mb-0">
 
                                                                     <div class="row">
 
@@ -356,7 +354,7 @@
                         </div>
 
                         <!-- region balance due -->
-                        <div class="col-sm-3 balanceDueAbs"
+                        <div class="col-sm-3 col-md-3 balanceDueAbs"
                             *ngIf="isSalesInvoice || isProformaInvoice || isEstimateInvoice">
 
                             <div class="text-right">
@@ -397,12 +395,12 @@
                             <!-- region attention to -->
                             <div class="row">
 
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-3 col-xs-12">
                                     <label>Attention to</label>
                                 </div>
 
-                                <div class="col-sm-9">
-                                    <div class=" pl0  col-sm-6">
+                                <div class="col-sm-12 col-md-9 col-xs-12">
+                                    <div class=" pl0  col-sm-12 col-md-6">
 
                                         <input type="text" name="accountDetails.attention" placeholder="Attention to"
                                             class="form-control attentionTo"
@@ -415,11 +413,11 @@
 
                             <!-- region email -->
                             <div class="row mTB1">
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-3 col-xs-12">
                                     <label>Email Id</label>
                                 </div>
-                                <div class="col-sm-9">
-                                    <div class="col-sm-6 pl-0">
+                                <div class="col-sm-12 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-md-6 pl-0">
                                         <input type="email" placeholder="someone@example.com"
                                             name="accountDetails.email" class="form-control attentionTo"
                                             [(ngModel)]="invFormData.accountDetails.email" />
@@ -432,12 +430,12 @@
                             <!-- region mobile no -->
                             <div class="row mTB1">
 
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-3 col-xs-12">
                                     <label>Mobile Number</label>
                                 </div>
 
-                                <div class="col-sm-9">
-                                    <div class="col-sm-6 pl-0">
+                                <div class="col-sm-12 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-md-6 pl-0">
                                         <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="tel"
                                             name="accountDetails.mobileNumber" class="form-control attentionTo"
                                             [(ngModel)]="invFormData.accountDetails.mobileNumber" />
@@ -447,11 +445,11 @@
                             <!-- endregion-->
                             <!-- warehouse selection -->
                             <div class="row mTB1" *ngIf="shouldShowWarehouse">
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-3 col-xs-12">
                                     <label>Warehouse</label>
                                 </div>
-                                <div class="col-sm-9">
-                                    <div class="col-sm-6 pl-0">
+                                <div class="col-sm-12 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-md-6 pl-0">
                                         <sh-select class="multi-select" name="warehouse"
                                             [placeholder]="'Select Warehouse'" [(ngModel)]="selectedWarehouse"
                                             [options]="warehouses">
@@ -464,18 +462,18 @@
                             <!--
                                 Delivery from DIV for purchase record page
                                 <div class="row mb-1 delivery-from-field">
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-3 col-xs-12">
                                     <label>Deliver From<span class="red-text">*</span></label>
                                 </div>
 
-                                <div class="col-sm-9 select-customer-name">
+                                <div class="col-sm-12 col-md-9 col-xs-12 select-customer-name">
                                     <section class="form-inline">
 
                                         <div class="wrap-billing-address clearfix">
 
                                             <div class="row">
 
-                                                <div class="col-sm-6 bill-add">
+                                                <div class="col-sm-12 col-md-6 bill-add">
 
                                                     <div class="form-group">
                                                         <label>Billing Address</label>
@@ -486,13 +484,13 @@
                                                                 aria-autocomplete="none"></textarea>
 
                                                             <div>
-                                                                <div class="col-sm-6 pd ">
+                                                                <div class="col-sm-12 col-md-6 pd ">
                                                                     <label class="sales-country-label">
                                                                         India
                                                                     </label>
                                                                 </div>
 
-                                                                <div class="col-sm-6 pd" #billingState>
+                                                                <div class="col-sm-12 col-md-6 pd" #billingState>
                                                                     <sh-select [placeholder]="'State'"
                                                                         class="select-border-bottom">
                                                                     </sh-select>
@@ -514,7 +512,7 @@
 
                                                 </div>
 
-                                                <div class="col-sm-6 bill-add">
+                                                <div class="col-sm-12 col-md-6 bill-add">
 
                                                     <div class="form-group p0 width100">
                                                         <label>
@@ -531,7 +529,7 @@
 
                                                                 <div class="form-group">
 
-                                                                    <div class="col-sm-6 pd ">
+                                                                    <div class="col-sm-12 col-md-6 pd ">
                                                                         <div class="form-group">
 
                                                                             <label class="sales-country-label">
@@ -540,7 +538,7 @@
                                                                         </div>
                                                                     </div>
 
-                                                                    <div class="col-sm-6 pd select-border-bottom">
+                                                                    <div class="col-sm-12 col-md-6 pd select-border-bottom">
                                                                         <sh-select></sh-select>
                                                                     </div>
 
@@ -566,11 +564,11 @@
 
                             <!-- Link purchase order (make it functional)-->
                             <!-- <div class="row mTB1" hidden>
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-3 col-xs-12">
                                     <label>Link Purchase Order</label>
                                 </div>
-                                <div class="col-sm-9">
-                                    <div class="col-sm-6 pl-0">
+                                <div class="col-sm-12 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-md-6 pl-0">
                                         <sh-select></sh-select>
 
                                     </div>
@@ -581,11 +579,11 @@
 
                             <!-- region invoice no, invoice date, Expiry date -->
                             <div class="row mTB1">
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-3 col-xs-12">
                                     <label> {{ invoiceNoLabel }} </label>
                                 </div>
-                                <div class="col-sm-9">
-                                    <div class="col-sm-6 pl-0">
+                                <div class="col-sm-12 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-md-6 pl-0">
                                         <!-- Enabled for CR/DR update flow -->
                                         <div>
                                             <input *ngIf="(!isCreditNote && !isDebitNote)" type="text"
@@ -626,7 +624,7 @@
                                             <span class="remove-invoice-label">Remove</span>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 invoice-date-due-date">
+                                    <div class="col-sm-12 col-md-6 invoice-date-due-date" *ngIf="!isMobileScreen">
                                         <div class="form-inline flex-row flex-nowrap">
                                             <div *ngIf="(isCreditNote || isDebitNote) && selectedInvoice"
                                                 class="cp remove-invoice" (click)="removeSelectedInvoice()">
@@ -674,12 +672,12 @@
                                 </div>
                             </div>
 
-                            <div class="row mTB1 showOnsmall-screen">
-                                <div class="col-sm-2">
+                            <div class="row mTB1" *ngIf="isMobileScreen">
+                                <div class="col-sm-12 col-md-3 col-xs-12">
                                     <label>{{ invoiceDateLabel }}</label>
                                 </div>
-                                <div class="col-sm-9">
-                                    <div class="col-sm-6 pl-0">
+                                <div class="col-sm-12 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-md-6 pl-0">
                                         <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel"
                                             name="voucherDate" class="form-control dateinvoice" bsDatepicker
                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
@@ -696,13 +694,13 @@
                                 </div>
                             </div>
 
-                            <div class="row mTB1 showOnsmall-screen"
-                                *ngIf="isSalesInvoice || isPurchaseInvoice || isProformaInvoice || isEstimateInvoice">
-                                <div class="col-sm-2">
+                            <div class="row mTB1"
+                                *ngIf="isMobileScreen && (isSalesInvoice || isPurchaseInvoice || isProformaInvoice || isEstimateInvoice)">
+                                <div class="col-sm-12 col-md-3 col-xs-12">
                                     <label>{{ invoiceDueDateLabel }}</label>
                                 </div>
-                                <div class="col-sm-9">
-                                    <div class="col-sm-6 pl-0">
+                                <div class="col-sm-12 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-md-6 pl-0">
                                         <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel"
                                             name="dueDate" class="form-control dateinvoice" bsDatepicker
                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
@@ -718,10 +716,10 @@
                             <!-- reverse charge transction start -->
                             <!-- for purchase record start -->
                             <div class="row mTB1" *ngIf="isPurchaseInvoice">
-                                <div class="col-sm-2" *ngIf="!isMobileView">
+                                <div class="col-sm-12 col-md-3 col-xs-12" *ngIf="!isMobileView">
                                     <label></label>
                                 </div>
-                                <div class="col-sm-9">
+                                <div class="col-sm-12 col-md-9 col-xs-12">
                                     <div class="col-sm-6 pl-0">
                                         <input id="reverse-charge" name="rcmEntry" class="checkbox-custom"
                                             type="checkbox" [ngModel]="isRcmEntry" (click)="toggleRcmCheckbox($event)">
@@ -743,10 +741,10 @@
                             <!-- for sales invoice start (ngModelChange)="touristSchemeApplicableToggle($event)"-->
                             <ng-container *ngIf="companyCountryCode === 'AE'">
                                 <div class="row mTB1" *ngIf="isSalesInvoice || isCashInvoice">
-                                    <div class="col-sm-2" *ngIf="!isMobileView">
+                                    <div class="col-sm-12 col-md-3 col-xs-12" *ngIf="!isMobileView">
                                         <label></label>
                                     </div>
-                                    <div class="col-sm-9">
+                                    <div class="col-sm-12 col-md-9 col-xs-12">
                                         <div class="col-sm-6 pl-0">
                                             <input id="tourist-scheme" type="checkbox" name="touristSchemeApplicable"
                                                 class="checkbox-custom"
@@ -762,10 +760,10 @@
                                 <!-- endregion -->
                                 <div class="row mTB1 "
                                     *ngIf="(isSalesInvoice || isCashInvoice) && invFormData.touristSchemeApplicable ">
-                                    <div class="col-sm-2 " *ngIf="!isMobileView ">
+                                    <div class="col-sm-12 col-md-3 col-xs-12 " *ngIf="!isMobileView ">
                                         <label>Passport Number</label>
                                     </div>
-                                    <div class="col-sm-9 ">
+                                    <div class="col-sm-12 col-md-9 col-xs-12 ">
                                         <div class="col-sm-6 pl-0 ">
                                             <input type="text" name="passportNumber" #passportNumber
                                                 placeholder="Passport Number" class="form-control attentionTo"
@@ -811,7 +809,7 @@
 
                 <!-- region normal view -->
                 <section class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0"
-                    *ngIf="!isMobileView">
+                    *ngIf="!isMobileScreen">
 
                     <ng-container
                         *ngIf="isSalesInvoice || isCashInvoice || isCreditNote || isDebitNote || isProformaInvoice || isEstimateInvoice">
@@ -1750,14 +1748,14 @@
                 <!-- endregion -->
 
                 <!-- region mobile view -->
-                <div class="showInMobile" *ngIf="isMobileView">
+                <div class="showInMobile" *ngIf="isMobileScreen">
                     <div class="card-invoiceTable-wrapper"
                         *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
                         <ng-container *ngFor="let transaction of entry.transactions;">
                             <!-- region static entry -->
                             <div class="card-invoiceTable" [hidden]="activeIndx === entryIdx">
                                 <div class="row">
-                                    <div class="col-xs-12">
+                                    <div class="col-xs-12 col-sm-12">
                                         <div class="single-card-row">
                                             <div class="productName">
                                                 <label class="card-label">Product/Service Description</label>
@@ -1778,14 +1776,14 @@
                                             <div class="dateHsnCode pdR0">
                                                 <div class="row">
 
-                                                    <div class="col-xs-6" *ngIf="entry.entryDate">
+                                                    <div class="col-xs-6 col-sm-6" *ngIf="entry.entryDate">
                                                         <div class="entryDate">
                                                             <label>Entry Date: {{entry.entryDate | date: 'dd-MM-yyyy'}}
                                                             </label>
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-xs-6 pdL0" *ngIf="transaction.hsnNumber || transaction.sacNumber">
+                                                    <div class="col-xs-6 col-sm-6 pdL0" *ngIf="transaction.hsnNumber || transaction.sacNumber">
                                                         <div class="hsnCode text-right">
                                                             <label>HSN/SAC:
                                                                 {{(inventorySettings?.manageInventory || !transaction.sacNumberExists) ? transaction.hsnNumber : transaction.sacNumber}}</label>
@@ -1798,7 +1796,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-6 col-sm-6">
                                         <div class="single-card-row">
                                             <div class="qty-unit">
                                                 <label class="card-label">Qty/Unit</label>
@@ -1808,7 +1806,7 @@
 
                                     </div>
 
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-6 col-sm-6">
                                         <div class="single-card-row">
                                             <div class="card-rate">
                                                 <label class="card-label">Rate</label>
@@ -1829,7 +1827,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-6 col-sm-6">
                                         <div class="single-card-row">
                                             <div class="card-amount">
                                                 <label class="card-label">Amount</label>
@@ -1845,7 +1843,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-6 col-sm-6">
                                         <div class="single-card-row">
                                             <div class="card-discount">
                                                 <label class="card-label">Discount</label>
@@ -1862,7 +1860,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-6 col-sm-6">
                                         <div class="single-card-row">
                                             <div class="card-tax">
                                                 <label class="card-label">Tax</label>
@@ -1877,7 +1875,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-6 col-sm-6">
                                         <div class="single-card-row">
                                             <div class="card-total">
                                                 <label class="card-label">Total</label>
@@ -1908,7 +1906,7 @@
                             <!-- region dynamic entry -->
                             <div class="card-invoiceTable edit-card-invoiceTable" [hidden]="activeIndx !== entryIdx">
                                 <div class="row">
-                                    <div class="col-xs-12">
+                                    <div class="col-xs-12 col-sm-12">
                                         <div class="single-card-row">
                                             <div class="productName">
                                                 <label class="card-label">Product/Service Description</label>
@@ -2049,21 +2047,21 @@
                                 </div>
 
                                 <div class="row quantityUnitW100">
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-6 col-sm-6">
 
                                         <div class="single-card-row">
                                             <div class="qty-unit">
 
                                                 <div class="row">
 
-                                                    <div class="col-xs-6" style="padding-right:0;">
+                                                    <div class="col-xs-6 col-sm-6" style="padding-right:0;">
                                                         <label class="card-label text-right">Qty</label>
                                                         <input type="text" [disabled]="!transaction.isStockTxn"
                                                             (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity"
                                                             decimalDigitsDirective name="transaction.quantity_{{entryIdx}}"
                                                             class="form-control text-right" [(ngModel)]="transaction.quantity" />
                                                     </div>
-                                                    <div class="col-xs-6">
+                                                    <div class="col-xs-6 col-sm-6">
                                                         <label class="card-label text-right">Unit</label>
                                                         <select class="form-control" [disabled]="!transaction.isStockTxn"
                                                             name="transaction.stockUnit_{{entryIdx}}"
@@ -2082,7 +2080,7 @@
 
                                     </div>
 
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-6 col-sm-6">
 
                                         <div class="single-card-row">
 
@@ -2111,7 +2109,7 @@
 
                                 <div class="row">
 
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-6 col-sm-6">
 
                                         <div class="single-card-row">
 
@@ -2135,7 +2133,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-6 col-sm-6">
 
                                         <div class="single-card-row">
 
@@ -2165,7 +2163,7 @@
 
                                 <div class="row">
 
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-6 col-sm-6">
 
                                         <div class="single-card-row">
                                             <div class="card-tax">
@@ -2193,7 +2191,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-6 col-sm-6">
                                         <div class="single-card-row">
                                             <div class="card-total">
                                                 <label class="card-label text-right">Total</label>
@@ -2294,7 +2292,7 @@
 
                                     <div class="row">
 
-                                        <div class="form-group col-xs-4 mb-0">
+                                        <div class="form-group col-12 col-sm-4 mb-0">
                                             <input type="text" #shippingDate="ngModel"
                                                 [placeholder]="templatePlaceholder?.shippedDateLabel" bsDatepicker name="shippingDate"
                                                 [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control"
@@ -2305,31 +2303,32 @@
                                                 Invalid Date</p>
                                         </div>
 
-                                        <div class="form-group col-xs-4 mb-0">
+                                        <div class="form-group col-12 col-sm-4 mb-0">
                                             <input type="text" name="shippedVia"
                                                 [(ngModel)]="invFormData.templateDetails.other.shippedVia" class="form-control"
                                                 [placeholder]="templatePlaceholder?.shippedViaLabel || 'Ship Via'" />
                                         </div>
 
-                                        <div class="form-group col-xs-4 mb-0">
+                                        <div class="form-group col-12 col-sm-4 mb-0">
                                             <input type="text" name="trackingNumber"
                                                 [(ngModel)]="invFormData.templateDetails.other.trackingNumber" class="form-control"
                                                 [placeholder]="templatePlaceholder?.trackingNumber || 'Tracking No.'" />
                                         </div>
-
-                                        <div class="form-group col-xs-4 mb-0">
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-12 col-sm-4 mb-0">
                                             <input type="text" name="customField1"
                                                 [(ngModel)]="invFormData.templateDetails.other.customField1" class="form-control"
                                                 [placeholder]="templatePlaceholder?.customField1Label || 'Field 1'" />
                                         </div>
 
-                                        <div class="form-group col-xs-4 mb-0">
+                                        <div class="form-group col-12 col-sm-4 mb-0">
                                             <input type="text" name="customField2"
                                                 [(ngModel)]="invFormData.templateDetails.other.customField2" class="form-control"
                                                 [placeholder]="templatePlaceholder?.customField2Label || 'Field 2'" />
                                         </div>
 
-                                        <div class="form-group col-xs-4 mb-0">
+                                        <div class="form-group col-12 col-sm-4 mb-0">
                                             <input type="text" name="customField3"
                                                 [(ngModel)]="invFormData.templateDetails.other.customField3" class="form-control"
                                                 [placeholder]="templatePlaceholder?.customField3Label || 'Field 3'" />
@@ -2441,7 +2440,7 @@
                             <!--region balance due for non-purchase-->
                             <div class="tableRow" *ngIf="((isSalesInvoice || isCashInvoice) && !isUpdateMode )">
 
-                                <div class="tableCell depositeSection">
+                                <div class="tableCell deposit-section">
 
                                     <div class="btn-group">
 

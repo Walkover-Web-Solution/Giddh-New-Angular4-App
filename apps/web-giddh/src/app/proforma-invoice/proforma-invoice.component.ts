@@ -219,7 +219,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public showCurrencyValue: boolean = false;
     public autoSaveIcon: boolean = false;
     public editPencilIcon: boolean = true;
-
+    public isMobileScreen: boolean = true;
     public isSalesInvoice: boolean = true;
     public isCashInvoice: boolean = false;
     public isProformaInvoice: boolean = false;
@@ -502,7 +502,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private warehouseActions: WarehouseActions,
         private commonActions: CommonActions,
         private purchaseRecordAction: PurchaseRecordActions,
-        private modalService: BsModalService
+        private modalService: BsModalService,
     ) {
         this.getInventorySettings();
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
@@ -599,6 +599,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngOnInit() {
+
         this.autoFillShipping = true;
         this.isUpdateMode = false;
 
@@ -1269,10 +1270,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         });
 
         this._breakpointObserver
-            .observe(['(max-width: 840px)'])
+            .observe(['(max-width: 1024px)'])
             .pipe(takeUntil(this.destroyed$))
             .subscribe((st: BreakpointState) => {
                 this.isMobileView = st.matches;
+                this.isMobileScreen = st.matches;
             });
 
         this.bulkItemsModal.onHidden.subscribe(() => {

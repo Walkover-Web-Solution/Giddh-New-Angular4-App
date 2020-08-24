@@ -538,6 +538,7 @@
         <!-- endregion -->
         <div class="mobile-ledger-view clearfix" *ngIf="isMobileScreen">
             <table *ngIf="allTransactionDates && allTransactionDates.length > 0">
+                <tbody>
                 <tr *ngFor="let transactionDate of allTransactionDates;">
                     <td class="border-none pt-0 pb-0">
                         <table width="100%">
@@ -586,6 +587,7 @@
                         </table>
                     </td>
                 </tr>
+                </tbody>
             </table>
             <!-- region pagination -->
             <div class="text-center mrT2 page-count pa">

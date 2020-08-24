@@ -23,22 +23,22 @@
             <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
                     <div class="row">
                         <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
-                            <chart [options]="currentRatioOption" #currentRatio></chart>
+                            <chart [chart]="currentRatioOption" #currentRatio></chart>
                             <h1 class="mrB1">Current Ratio</h1>
                             <small>Current Assets /<br /> Current Liabilities</small>
                         </div>
                         <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
-                            <chart [options]="debtOptions" #debtRatio></chart>
+                            <chart [chart]="debtOptions" #debtRatio></chart>
                             <h1 class="mrB1">Debt Equity Ratio</h1>
                             <small>Current Liab. + <br /> NonCurrent Liab. /<br /> Shareholder's fund</small>
                         </div>
                         <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
-                            <chart [options]="proprietaryOption" #propreitaryRatio></chart>
+                            <chart [chart]="proprietaryOption" #propreitaryRatio></chart>
                             <h1 class="mrB1">Proprietary Ratio</h1>
                             <small>Shareholder's fund /<br /> Total Assets</small>
                         </div>
                         <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
-                            <chart [options]="fixedAssetOption" #fixedAsset></chart>
+                            <chart [chart]="fixedAssetOption" #fixedAsset></chart>
                             <h1 class="mrB1">Fixed Assets Ratio</h1>
                             <small>Fixed Assets/<br />NonCurrent Liab. + <br /> Shareholder's fund</small>
                         </div>
