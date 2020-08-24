@@ -8,7 +8,8 @@ import { debounceTime } from 'rxjs/operators';
 
 @Component({
 	selector: 'bs-grid',  // <home></home>
-	templateUrl: './bs-grid.component.html',
+    templateUrl: './bs-grid.component.html',
+    styleUrls: [`./bs-grid.component.scss`],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {

@@ -1,13 +1,16 @@
 <div class="clearfix">
     <div class="clearfix">
 
-        <div class="row" style="margin: 0px;display: flex;">
+        <div class="row">
 
-            <div class="col" style="flex: 1;">
+            <div class="col-lg-9 col-sm-9">
 
                 <form [formGroup]="filterForm" (submit)="filterData()" class="form-inline financial-selectYear"
                     name="fromToDateForm" novalidate>
-                    <div class="form-group mrR1" *ngIf="showLabels">
+                    <!-- this code is commented for , need to remove this dropdown but for funcationality I am not removing this
+                        will remove it after universal datepicker added
+                    -->
+                    <div class="form-group mr-1" *ngIf="showLabels">
                         <div class="form-group">
                             <sh-select [options]="dateOptions" (selected)="dateOptionIsSelected($event)"
                                 formControlName="selectedDateOption" [isFilterEnabled]="true"
@@ -15,57 +18,39 @@
                             </sh-select>
                         </div>
                     </div>
-                    <div class="form-group mrR1" *ngIf="filterForm.get('selectedDateOption').value == '0'">
+                    <div class="form-group mr-1" *ngIf="filterForm.get('selectedDateOption').value == '0'">
                         <div class="form-group">
                             <sh-select [options]="financialOptions" formControlName="selectedFinancialYearOption"
                                 [isFilterEnabled]="true" [placeholder]="'Select Option'" [showClear]="false"
                                 (selected)="selectFinancialYearOption($event)" [ItemHeight]="33"></sh-select>
                         </div>
                     </div>
-                    <div class="form-group mrR1" *ngIf="filterForm.get('selectedDateOption').value == '1'">
+                    <div class="form-group relative mr-1 datepicker-field" *ngIf="filterForm.get('selectedDateOption').value == '1'">
                         <span class="inputWrapper">
                             <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
                                    (applyDaterangepicker)="selectedDate($event)"
-                                   class="form-control date-range-picker daterange_picker_tb-pl-bs mrR1" /></span>
+                                   class="form-control date-range-picker daterange_picker_tb-pl-bs mr-1 giddh-datepicker" /></span>
 
-<!--                        <input type="text"-->
-<!--                               formControlName="selectedDateRange"-->
-<!--                               ngxDaterangepickerMd-->
-<!--                               [alwaysShowCalendars]="true"-->
-<!--                               [ranges]="datePickerOptions.ranges"-->
-<!--                               [showClearButton]="false"-->
-<!--                               [showCancel]="true"-->
-<!--                               [showDropdowns]="true"-->
-<!--                               [locale]="{applyLabel: 'Done'}"-->
-<!--                               (datesUpdated)="selectedDate($event)"-->
-<!--                               [keepCalendarOpeningWithRange]="true"-->
-<!--                               [showRangeLabelOnInput]="false"-->
-<!--                               class="form-control date-range-picker daterange_picker_tb-pl-bs mrR1"-->
-<!--                               placeholder="Select please..."/>-->
+
                     </div>
-                    <!--
-                    <div class="form-group tb-btnApply">
-                        <br />
-                        <button type="submit" class="btn btn-success">
-                            Apply
-                        </button>
-                    </div> -->
-                    <div class="form-group mrR1" *ngIf="!(showLoader)">
 
-                        <div class="form-group pull-left mrR1 " style="margin-left: 0px;margin-top: -18px;"
-                            *ngIf="(tags$ | async)?.length">
 
-                            <i class="glyphicon glyphicon-triangle-bottom"
-                                style="top: 27px;z-index: 1;position: relative; left: 182px;font-size: 9px;color: #CCCCCC;"></i>
+
+
+                    <div class="form-group" *ngIf="!(showLoader)">
+
+                        <div class="form-group pull-left mr-1 d-inline-flex relative" *ngIf="(tags$ | async)?.length">
+
+                            <i class="glyphicon glyphicon-triangle-bottom"></i>
                             <sh-select [options]="tags$ | async" name="selectedTag" formControlName="tagName"
                                 [isFilterEnabled]="true" (selected)="onTagSelected($event)" [placeholder]="'Select Tag'"
                                 [ItemHeight]="35" [notFoundLink]="false" (noResultsClicked)="toggleTagsModal()"
-                                [showNotFoundLinkAsDefault]="false" [width]="'200px'">
+                                [showNotFoundLinkAsDefault]="false" [width]="'170px'">
                             </sh-select>
                         </div>
                         <!-- Filter by Tag -->
 
-                        <div class="form-group pull-left" style="margin-right: 10px;">
+                        <div class="form-group pull-left">
 
                             <a class="cp expanIcon" (click)="emitExpand()" data-placement="top" tooltip="Expand All"
                                 *ngIf="!expand">
@@ -80,65 +65,31 @@
                             </a>
 
                         </div>
-
-
-
-                        <div class="mrT1 pull-right" *ngIf="showLabels">
-
-                            <div class="tbplList">
-
-                                <ul class="list-inline color-codes pull-right">
-
-                                    <li>
-                                        <span class="circle square liabilities"></span>
-                                        <span>Liabilities</span>
-                                    </li>
-
-                                    <li>
-                                        <span class="circle square  assets"></span>
-                                        <span>Assets</span>
-                                    </li>
-
-                                    <li>
-                                        <span class="circle square income"></span>
-                                        <span>Income</span>
-                                    </li>
-
-                                    <li>
-                                        <span class="circle square expenses"></span>
-                                        <span>Expenses</span>
-                                    </li>
-
-                                </ul>
-                            </div>
-
-                            <!-- end of column -->
-                        </div>
                     </div>
                 </form>
 
             </div>
 
-            <div class="col" style="display: flex;align-items: center;">
+            <div class="col-lg-3 col-sm-3 download-data-icon">
 
-                <a class="cp" style="color: #36A1E9; font-family: 'opensans-regular'" (click)="refreshData()">
-                    <span class="glyphicon glyphicon-refresh" style="top: 3px !important"></span>
-                    Reload Data </a>
+                <a (click)="refreshData()" tooltip="Reload data">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                </a>
 
-                <div style="margin-left: 15px">
+                <div class="ml-1">
 
                     <tb-export-csv *ngIf="tbExportCsv" [trialBalanceRequest]="filterForm.value"
                         [selectedCompany]="selectedCompany" (tbExportCsvEvent)="tbExportCsvEvent.emit($event)"
                         class="pull-right">
                     </tb-export-csv>
 
-                    <tb-export-xls *ngIf="tbExportXLS" [trialBalanceRequest]="filterForm.value" class="pull-right mrR1">
+                    <tb-export-xls *ngIf="tbExportXLS" [trialBalanceRequest]="filterForm.value" class="pull-right mr-1">
                     </tb-export-xls>
 
 
                     <tb-export-pdf *ngIf="tbExportPdf" [trialBalanceRequest]="filterForm.value"
                         [selectedCompany]="selectedCompany" (tbExportPdfEvent)="tbExportPdfEvent.emit($event)"
-                        class="pull-right mrR1"></tb-export-pdf>
+                        class="pull-right mr-1"></tb-export-pdf>
 
                     <pl-export-xls *ngIf="plBsExportXLS" [fy]="filterForm.controls['fy'].value"
                         [filters]="filterForm.value" class="pull-right"></pl-export-xls>

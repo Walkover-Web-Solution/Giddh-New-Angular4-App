@@ -82,7 +82,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         private modalService: BsModalService,
         private generalService: GeneralService) {
         this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
-        this.store.dispatch(this.inventoryAction.GetManufacturingStock());
+        // this.store.dispatch(this.inventoryAction.GetManufacturingStock());
         this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     }
 
