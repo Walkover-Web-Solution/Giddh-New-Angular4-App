@@ -1,46 +1,40 @@
 <div class="bdrR row view_forms" id="middleBody" style="margin:0" [perfectScrollbar]="config"
     *ngIf="!(showNewForm$ | async)">
     <!--breadcrumbs-->
-    <div class="breadcrumbs container-fluid top-bar bdrB" *ngIf="breadcrumbPath?.length > 0">
-        <div class="col-xs-8">
+    <div class="breadcrumbs container-fluid top-bar bdrB row mr-0 ml-0 h-100" *ngIf="breadcrumbPath?.length > 0">
+        <div class="col-sm-8">
             <ol class="breadcrumb row">
                 <li *ngFor="let value of breadcrumbPath;let last = last;" [ngClass]="{'active': last}">
-                    <a href="javascript:void(0)">{{ value }}
-                    </a>
+                    <a href="javascript:void(0)"> {{ value }}</a>
                 </li>
             </ol>
         </div>
-        <!--share group/account-->
-        <div>
-            <!--group-->
-            <div class="pull-right col-xs-4 pdR0 text-right">
-                <button class="btn btn-share mrR1" *ngIf="(showEditGroup$ | async)" (click)="exportGroupLedger()">
-                    Export
-                </button>
-                <button class="btn btn-share pull-right" *ngIf="(showEditGroup$ | async)"
-                    (click)="showShareGroupModal()">Share
-                </button>
-                <div class="primary_clr text-right pull-right mrT1 clearfix"
-                    *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
-                    Shared with {{ (activeGroupSharedWith$ | async)?.length }} people
-                </div>
-            </div>
-            <!--account-->
-            <div class="pull-right col-xs-4 pdR0">
-                <button class="btn btn-share pull-right" *ngIf="(showEditAccount$ | async)"
-                    (click)="showShareAccountModal()">
-                    Share
-                </button>
-                <div class="primary_clr text-right pull-right mrT1 clearfix"
-                    *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length">
-                    Shared with {{ (activeAccountSharedWith$ | async)?.length }} people
-                </div>
+        <div class="pull-right col-sm-4 pdR0 text-right" *ngIf="(showEditGroup$ | async)">
+            <button class="btn btn-share mrR1" (click)="exportGroupLedger()">
+                Export
+            </button>
+            <button class="btn btn-share pull-right" *ngIf="(showEditGroup$ | async)" (click)="showShareGroupModal()">Share
+            </button>
+            <div class="primary_clr text-right pull-right mrT1 clearfix"
+                *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
+                Shared with {{ (activeGroupSharedWith$ | async)?.length }} people
             </div>
         </div>
+        <!--account-->
+        <div class="pull-right col-sm-4 pdR0" *ngIf="(showEditAccount$ | async)">
+            <button class="btn btn-share pull-right" (click)="showShareAccountModal()">
+                Share
+            </button>
+            <div class="primary_clr text-right pull-right mrT1 clearfix"
+                *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length">
+                Shared with {{ (activeAccountSharedWith$ | async)?.length }} people
+            </div>
+        </div>
+        <!--share group/account-->
     </div>
 
     <!--add/edit group form-->
-    <div class="" *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)">
+    <div class="" *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)" class="w-100">
         <group-add class="form_box" *ngIf="(showAddNewGroup$ | async)"></group-add>
         <group-update *ngIf="(showEditGroup$ | async)"></group-update>
     </div>
@@ -342,7 +336,7 @@
 
 <!--deleteMergedAccount account modal  -->
 <div bsModal #deleteMergedAccountModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <confirm-modal [title]="'Delete Merged Account'" [body]='deleteMergedAccountModalBody'
                 (cancelCallBack)="hideDeleteMergedAccountModal()" (successCallBack)="deleteMergedAccount()">

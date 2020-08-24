@@ -15,9 +15,10 @@ input {
     border-right: 1px solid $gainsboro;
     font-size: 13px;
     color: $nero;
-    max-width: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
 }
 .ledg-head table td.pdR25imp {
     padding-right: 25px !important;
@@ -36,7 +37,6 @@ input {
     border-bottom: 1px solid $gainsboro;
     border-right: 1px solid $gainsboro;
     font-size: 13px;
-    max-width: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -118,6 +118,18 @@ input {
     padding-left: 0;
     padding-top: 5px;
     padding-bottom: 10px;
+    &.first-child{
+        span{
+            position: relative;
+            right: 15px;
+        }
+    }
+}
+.ledger-head th:first-child{
+    span{
+        position: relative;
+        right: 15px;
+    }
 }
 .total_col td {
     border: 0;
@@ -239,9 +251,6 @@ input {
 .d-none {
     display: none;
 }
-.h-table tr {
-    height: 45px;
-}
 .dateStep {
     padding: 0 !important;
     font-size: 13px;
@@ -278,6 +287,7 @@ sh-select:focus {
 .ledger-book .left-col-new,
 .ledger-book .right-col-new {
     background: #fff;
+    padding: 0 15px 350px;
 }
 .left-col-new table.width100.h-table tbody tr td:last-child,
 .left-col-new table.width100.h-table thead tr th:last-child {
@@ -330,7 +340,7 @@ sh-select:focus {
     padding: 6px 9px;
     color: #fff;
 }
-#blankLedgerContainer .ledger-main .no-leftBorder {
+.left-col-new table.width100.h-table#blank-ledger-container .no-left-border{
     border-left: none !important;
 }
 .ledger-row input[type="checkbox"] {
@@ -425,7 +435,8 @@ sh-select:focus {
     margin-right: 10px;
 }
 .modal-ledger {
-    width: 70%;
+    width: 100%;
+    max-width: 1350px;
 }
 .justify-content-between {
     justify-content: space-between;
@@ -461,6 +472,7 @@ sh-select:focus {
 }
 .ledger-account-label {
     align-items: center;
+    flex: auto;
     span {
         padding-left: 10px;
     }
@@ -633,12 +645,7 @@ sh-select:focus {
         width: 100%;
         max-width: 100%;
     }
-    .ledg-head table td[class*="col-"],
-    toggle-switch .ledg-head table td .select2-container {
-        min-height: initial;
-        height: initial;
-        max-height: initial;
-    }
+
 }
 @media (max-width: 991px) {
     .daterngoption {
@@ -724,7 +731,7 @@ sh-select:focus {
     .ledger-row td:empty {
         display: none !important;
     }
-    #blankLedgerContainer tbody tr:empty {
+    #blank-ledger-container tbody tr:empty {
         display: none;
     }
     .ledger-head-top {

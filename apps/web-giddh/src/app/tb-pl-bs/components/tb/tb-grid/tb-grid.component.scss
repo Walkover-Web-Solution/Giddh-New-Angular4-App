@@ -24,6 +24,14 @@
     width: 70%;
     margin: auto;
 }
+.list-inline {
+    padding-left: 0;
+    list-style: none;
+    >li {
+        display: inline-block;
+        padding-right: 5px;
+    }
+}
 @media (max-width: 991px) {
     .tb-wrapper {
         width: 100%;

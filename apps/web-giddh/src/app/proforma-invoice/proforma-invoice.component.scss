@@ -738,25 +738,18 @@ a.copyInvoice img {
     margin-right: 6px;
 }
 
-.invoiceDateDueDate .form-group,
-.invoiceDateDueDate label {
+.invoice-date-due-date .form-group,
+.invoice-date-due-date label {
     display: inline-block !important;
 }
 
-.invoiceDateDueDate label {
+.invoice-date-due-date label {
     padding-right: 10px;
 }
 
 .p-0 {
     padding: 0;
 }
-
-// .invoiceDateDueDate{
-// position: absolute;
-// left: 406px;
-// top: 0;
-// width: 100%;
-// }
 .shipping-address textarea {
     border-bottom: 1px solid #ccc !important;
 }
@@ -960,7 +953,7 @@ table.table.customerInvoiceTable {
     padding: 8px 15px;
 }
 
-.invoiceDateDueDate input {
+.invoice-date-due-date input {
     width: 112px !important;
 }
 
@@ -969,10 +962,11 @@ section.staticInvoiceTable {
     margin-top: -20px;
 }
 
-.invoiceDateDueDate {
+.invoice-date-due-date {
     position: absolute;
     width: 100%;
     left: 0;
+    top: 0;
     margin-left: 48%;
 }
 
@@ -1061,15 +1055,15 @@ section.newtable {
 .pd {
     padding: 3px 5px;
 }
-
-.showOnsmall-screen,
 .card-invoiceTable-wrapper,
 .add-btn,
 .otherDetail-card,
 .total-amountDiscription {
     display: none;
 }
-
+.custom-file-label::after, .dropdown-toggle::after{
+    display: none !important;
+}
 // card css
 .card-invoiceTable-wrapper {
     max-width: 400px;
@@ -1285,7 +1279,7 @@ section.newtable {
     padding-left: 10px;
 }
 
-.lastEstimateModal {
+.last-estimate-modal {
     min-width: 230px;
     position: absolute;
     top: 30px;
@@ -1323,7 +1317,7 @@ section.newtable {
     position: relative;
 }
 
-.p-4.aqua-color.add-line-bulk-item {
+.add-line-bulk-item {
     position: relative;
     height: 33px;
     width: 470% !important;
@@ -1368,7 +1362,7 @@ table.table.table-custom-invoice.basic {
     width: 100% !important;
 }
 
-.depositeSection {
+.deposit-section {
     transform: translateX(140px);
 }
 
@@ -1637,16 +1631,10 @@ span.eligible-ITC {
         width: 100%;
         max-width: 50.01%;
     }
-    .wrap-billing-address .bill-add:nth-child(2) {
-        margin-top: 20px;
-    }
     .customerInvoiceTable label {
         font-size: 13px;
     }
-    .showOnsmall-screen {
-        display: block;
-    }
-    .invoiceDateDueDate {
+    .invoice-date-due-date {
         display: none;
     }
     .wrapperCustomerTable .col-sm-2 {
@@ -1662,7 +1650,12 @@ span.eligible-ITC {
     }
 }
 
-@media (max-width: 840px) {
+@media (max-width: 1024px) {
+    .collapse-pane{
+        .form-group{
+            margin-bottom: 15px !important;
+        }
+    }
     .card-invoiceTable-wrapper,
     .add-btn,
     .otherDetail-card,
@@ -1721,7 +1714,7 @@ span.eligible-ITC {
 }
 
 @media (max-width: 767px) {
-    .invoiceDateDueDate {
+    .invoice-date-due-date {
         position: static;
         width: 100%;
         left: 0;
@@ -1792,6 +1785,10 @@ span.eligible-ITC {
     #actionPane .generateInvoie {
         min-width: 189px;
     }
+    .last-estimate-modal {
+        left: auto;
+        right: 30px;
+    }
 }
 
 @media (max-width: 414px) {
@@ -1808,14 +1805,14 @@ span.eligible-ITC {
     .otherDetail-card .form-group.col-xs-4 {
         width: 50%;
     }
-    .depositeSection {
+    .deposit-section {
         transform: translateX(100px);
     }
 }
 
 @media (max-width: 375px) {
-    .depositeSection {
-        transform: translateX(60px);
+    .deposit-section {
+        transform: translateX(30px);
     }
     .total-amountDiscription .tableSec {
         display: block;
@@ -1851,7 +1848,7 @@ span.eligible-ITC {
 }
 
 @media (max-width: 320px) {
-    .depositeSection {
+    .deposit-section {
         transform: translateX(20px);
     }
     .total-amountDiscription .tableSec .tableRow .figureCell {

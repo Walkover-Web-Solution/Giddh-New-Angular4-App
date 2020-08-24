@@ -10,7 +10,7 @@
                     </span>
                 </div>
                 <div class="advance-icon pointer" tooltip="Advance Search" (click)="openSearchModal(template)">
-                    <span class="icon-advance-search"></span>
+                    <span class="icon-advance-filter"></span>
                 </div>
             </div>
             <div class="text-center">
@@ -24,8 +24,8 @@
                     (click)="toggleTransferAsidePane()">+ New Transfer</button>
             </div>
         </div>
-        <div class="report-table">
-            <table class="table basic">
+        <div class="report-table table-responsive">
+            <table class="table basic giddh-table">
                 <thead>
                     <tr (clickOutside)="inlineSearch = null">
                         <th width="3%">#</th>

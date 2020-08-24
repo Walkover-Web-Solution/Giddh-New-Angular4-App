@@ -112,7 +112,9 @@ ul.list-unstyled li a {
     min-width: 0px !important;
     min-height: 0px !important;
 }
-
+.dropdown-menu-right{
+    z-index: 1;
+}
 .model-position {
     float: right;
     right: -234px;
@@ -275,16 +277,16 @@ i.icon-options:hover {
     background-color: #fff !important;
     border-color: $midnight-express !important;
 }
-
-span.inputAddon {
+span.input-addon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
     background-color: $chetwode-blue;
     color: #fff;
-    font-size: 20px;
+    font-size: 18px;
     border-radius: 2px;
     height: 36px;
+    top: 0;
 }
 
 .aging-table .btn-small {
@@ -424,7 +426,7 @@ button.btn.btn-filter span.icon-cross {
     .date-range-picker {
         height: 26px !important;
     }
-    span.inputAddon {
+    span.input-addon {
         top: 0;
     }
     .btn-group.plus-btn {
@@ -438,7 +440,7 @@ button.btn.btn-filter span.icon-cross {
         padding-bottom: 10px;
         float: right !important;
     }
-    .form-inline {
+    .customer-form-inline{
         position: relative;
         .dis {
             position: absolute;

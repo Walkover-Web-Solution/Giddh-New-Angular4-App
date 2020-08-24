@@ -39,7 +39,7 @@
         <!-- region transactions -->
         <div class="ledg-head entry-popup">
 
-            <table class="col-xs-12 ledger-head mrT1 hidden-xs">
+            <table class="w-100 ledger-head mrT1 hidden-xs">
                 <thead>
                     <tr>
                         <th [ngClass]="Shown ? 'active' : ''" class="col-xs-6 hidden-xs">
@@ -177,8 +177,7 @@
                                             (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)"
                                             [placement]="'left'" [containerClass]="'col-xs-3'"
                                             tooltip="Download file : {{vm.selectedLedger.attachedFileName}}">
-                                            <i class="glyphicon glyphicon-download pull-left"
-                                                style="font-size:15px;"></i>
+                                            <i class="icon-download-circle pull-left" ></i>
                                         </span>
 
                                         <span class="download-invoice-ledger "
@@ -186,8 +185,7 @@
                                             [placement]="'left'" [containerClass]="'col-xs-3'"
                                             tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
                                             (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
-                                            <i class="glyphicon glyphicon-download pull-left"
-                                                style="font-size:15px;"></i>
+                                            <i class="icon-download-circle pull-left"></i>
                                         </span>
 
                                     </td>
@@ -221,7 +219,7 @@
                         <tbody>
                             <tr class="total_col">
 
-                                <td colspan="12" class="col-xs-12 text-right h32">
+                                <td colspan="12" class="col-xs-12 col-sm-12 text-right h32">
                                     <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd2"
                                         [tooltip]="vm.ledgerUnderStandingObj.balanceText.cr" [placement]="'top'">
                                         C/F: CR {{ vm.baseCurrencyDetails.symbol}} {{ vm.compoundTotal | giddhCurrency}}
@@ -232,7 +230,7 @@
 
                             <tr class="total_col">
                                 <!-- reckoning -->
-                                <td colspan="12" class="col-xs-12 text-right h32">
+                                <td colspan="12" class="col-xs-12 col-sm-12 text-right h32">
 
                                     <span class="bdrT pr-1 pl-1 width-200">
                                         {{ vm.baseCurrencyDetails?.symbol}} {{ (vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal)
@@ -357,8 +355,7 @@
                                             [placement]="'left'" [containerClass]="'col-xs-3'"
                                             tooltip="Download file : {{vm.selectedLedger.attachedFileName}}"
                                             (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
-                                            <i class="glyphicon glyphicon-download pull-left"
-                                                style="font-size:15px;"></i>
+                                            <i class="icon-download-circle pull-left"></i>
                                         </span>
 
                                         <span class="download-invoice-ledger"
@@ -366,8 +363,7 @@
                                             [placement]="'left'" [containerClass]="'col-xs-3'"
                                             tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
                                             (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
-                                            <i class="glyphicon glyphicon-download pull-left"
-                                                style="font-size:15px;"></i>
+                                            <i class="icon-download-circle pull-left"></i>
                                         </span>
                                     </td>
 
@@ -395,7 +391,7 @@
                     <table class="ledger-footer-1">
                         <tbody>
                             <tr class="total_col">
-                                <td colspan="12" class="col-xs-12  text-right h32">
+                                <td colspan="12" class="col-xs-12  col-sm-12 text-right h32">
                                     <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
                                         <span class="primary_clr pd2"
                                             [tooltip]="vm.ledgerUnderStandingObj.balanceText.dr" [placement]="'top'">
@@ -406,7 +402,7 @@
                             </tr>
                             <tr class="total_col">
                                 <!-- reckoning -->
-                                <td colspan="12" class="col-xs-12 text-right h32"
+                                <td colspan="12" class="col-xs-12 col-sm-12 text-right h32"
                                     style="padding-right:10px !important;">
                                     <span class="bdrT">
                                         {{ vm.baseCurrencyDetails?.symbol }} {{ (vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal)
@@ -723,7 +719,7 @@
                     </ng-container>
 
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-xs-12 col-sm-12">
                             <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control"
                                 placeholder="Description"></textarea>
                         </div>
@@ -1020,7 +1016,7 @@
 
                     <div class="row">
 
-                        <div class="col-xs-12 clearfix mrT1">
+                        <div class="col-xs-12 col-sm-12 clearfix mrT1">
 
                             <div class="mrR1 form-group pull-left cp">
                                 <label class="pull-left cp fs16">
@@ -1049,11 +1045,10 @@
 
                         </div>
 
-                        <div class="clearfix mb-2">
+                        <div class="d-flex w-100 mb-2 justify-content-between">
 
-                            <div class="pull-left pl-15" *ngIf="vm.isMultiCurrencyAvailable">
-
-                                <ul class="list-inline font-14 currency-convertor">
+                            <div class="w-100 d-flex pl-15" *ngIf="vm.isMultiCurrencyAvailable">
+                                <ul class="list-inline d-flex font-14 currency-convertor">
 
                                     <li>
                                         1
@@ -1076,7 +1071,7 @@
                                 </ul>
                             </div>
 
-                            <div class="pull-right pr-15" *ngIf="!isPettyCash">
+                            <div class="d-flex justify-content-end w-100 pr-15" *ngIf="!isPettyCash">
                                 <div class="file_attached pull-right text-right"
                                     *ngIf="(vm.selectedLedger)?.attachedFile?.length > 0">
                                     <span>{{ (vm.selectedLedger)?.attachedFileName }}</span>
@@ -1088,13 +1083,13 @@
                                     <input type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
                                         [uploadInput]="uploadInput" (uploadOutput)="onUploadOutputUpdate($event)">
                                     <label for="invoiceFile" class="cp fs16">
-                                        <i [ngClass]="!isFileUploading ? 'glyphicon glyphicon-paperclip' : 'fa fa-spinner rotate'"></i> Attach file</label>
+                                        <i [ngClass]="!isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'"></i> Attach file</label>
                                 </label>
                             </div>
 
                         </div>
 
-                        <div class="col-xs-12 pdT1 d-flex align-items-center xs-d-block" *ngIf="!isPettyCash">
+                        <div class="col-xs-12 col-sm-12 pdT1 d-flex align-items-center xs-d-block" *ngIf="!isPettyCash">
                             <!--                            <div class="width-100 mb-05">-->
                             <!--                                    <p *ngIf="isAdjustedAmountExcess">Note: The adjusted amount of the linked invoice/s is more than the receipt;-->
                             <!--                                        update them first and try again.</p>-->
@@ -1121,7 +1116,7 @@
 <!-- region modals -->
 <!--deleteAttachedFile  -->
 <div bsModal #deleteAttachedFileModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete the attached file?'"
                 (cancelCallBack)="hideDeleteAttachedFileModal()" (successCallBack)="deleteAttachedFile()">
@@ -1132,7 +1127,7 @@
 
 <!--delete entry  -->
 <div bsModal #deleteEntryModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete this entry?'"
                 (cancelCallBack)="hideDeleteEntryModal()" (successCallBack)="deleteTrxEntry()">
@@ -1206,7 +1201,7 @@
 </div>
 
 <div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true, keyboard: false }" bsModal role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <advance-receipt-adjustment-component *ngIf="adjustPaymentModal.isShown"
                 #advanceReceiptComponent [adjustedVoucherType]="vm.selectedLedger.voucher.shortCode"

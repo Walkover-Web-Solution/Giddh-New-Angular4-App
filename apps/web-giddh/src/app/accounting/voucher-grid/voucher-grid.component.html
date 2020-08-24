@@ -1,6 +1,6 @@
 <div class="col-xs-10">
-    <div class="col-xs-12 bg_wrap">
-        <div class="row">
+    <div class="col-xs-12 col-sm-12 bg_wrap">
+        <div>
             <div class="clearfix pdT2">
                 <span class="btn label isActive">{{requestObj.voucherType}}</span>
                 <div class="pull-right text-right mrB1" (clickOutside)="showFromDatePicker = false;">
@@ -131,7 +131,7 @@
             </div>
 
             <div class="clearfix">
-                <div class="col-xs-4">
+                <div class="col-xs-4 col-sm-4">
                     <div class="form-group">
                         <label>Narration:</label>
                         <textarea #narrationBox onReturn id="narration" class="form-control" name="narration"

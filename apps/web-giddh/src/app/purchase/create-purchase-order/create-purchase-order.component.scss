@@ -870,7 +870,7 @@ span.eligible-ITC {
     align-items: center;
     flex-direction: row-reverse;
 }
-.deposite-section {
+.deposit-section {
     transform: translateX(120px);
     label {
         display: block;
@@ -1238,13 +1238,13 @@ span.eligible-ITC {
     .other-detail-card .form-group.col-xs-4 {
         width: 50%;
     }
-    .deposite-section {
+    .deposit-section {
         transform: translateX(100px);
     }
 }
 
 @media (max-width: 375px) {
-    .deposite-section {
+    .deposit-section {
         transform: translateX(60px);
     }
     .total-amount-description .table-section {
@@ -1281,7 +1281,7 @@ span.eligible-ITC {
 }
 
 @media (max-width: 320px) {
-    .deposite-section {
+    .deposit-section {
         transform: translateX(20px);
     }
     .total-amount-description .table-section .table-row .figure-cell {

@@ -23,14 +23,13 @@
 }
 
 .account-search .input-group-addon {
-    border-color: $gainsboro;
-    border-radius: 20px 0 0 20px;
-    color: #484848;
+    color: $charcoal;
     font-size: 12px;
     padding-right: 0px;
     background-color: transparent;
     vertical-align: top;
     line-height: 1.8;
+    border:0px solid $white;
 }
 
 .account-search .input-group-addon i.icon-search {
@@ -41,11 +40,9 @@
 
 .account-search .form-control {
     background: none !important;
-    border-color: $gainsboro;
-    border-left: 0px;
-    border-radius: 0px 20px 20px 0 !important;
     height: 36px;
     padding-left: 3px !important;
+    border: 0px solid $white !important;
 }
 
 .account-search .form-control:focus {
@@ -54,9 +51,12 @@
 }
 
 .account-search {
-    margin: 10px 15px 5px 15px;
     position: relative;
     height: 36px;
+    border-color: $gainsboro;
+    border-radius: 20px 20px 20px 20px !important;
+    border: 1px solid $gainsboro;
+    margin: 10px 0px 5px 0px;
 }
 
 .account-search:hover:after {
@@ -79,7 +79,7 @@ a[vr-item]:focus {
     right: 10px;
     font-size: 12px;
     line-height: 36px;
-    color: #484848;
+    color: $charcoal;
 }
 
 .account-search .form-control:after {
@@ -92,28 +92,28 @@ a[vr-item]:focus {
 }
 
 .account-search .form-control::-webkit-input-placeholder {
-    color: #484848;
+    color: $charcoal;
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control::-moz-placeholder {
-    color: #484848;
+    color: $charcoal;
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-ms-input-placeholder {
-    color: #484848;
+    color: $charcoal;
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-moz-placeholder {
-    color: #484848;
+    color: $charcoal;
     font-size: 12px;
     position: relative;
     top: -2px;
@@ -124,15 +124,20 @@ a[vr-item]:focus {
 .account-search .form-control::-moz-placeholder,
 .account-search .form-control:-ms-input-placeholder,
 .account-search .form-control:-moz-placeholder {
-    color: #484848 !important;
+    color: $charcoal !important;
 }
 
 .left_fixed_header li:hover {
     cursor: pointer;
 }
 
-.main-company-name > li > a {
-    padding: 6px 15px !important;
+.main-company-name{
+    padding:0 15px !important;
+    > li{
+        > a{
+            padding: 6px 15px !important;
+        }
+    }
 }
 
 .main-company-name > li > a:hover .cText .cName,
@@ -195,7 +200,7 @@ a[vr-item]:focus {
     vertical-align: middle;
     padding-left: 0px;
     text-align: left;
-    color: #262626;
+    color: $nero;
     letter-spacing: 0.6px;
     font-weight: normal;
     font-family: "opensans-semibold";
@@ -628,7 +633,7 @@ ul.sub-list {
 }
 
 .company-name .ellp {
-    white-space: inherit;
+   //white-space: inherit;
     font-size: 14px;
 }
 
@@ -791,6 +796,7 @@ ul.sub-list {
         .navbar-nav {
             margin-bottom: 5px;
             display: flex;
+            flex-direction: row;
             .hamburger_menu {
                 display: flex;
                 align-items: center;
@@ -836,6 +842,7 @@ ul.sub-list {
     .lower-layer-header {
         display: flex;
         justify-content: space-between;
+        width: 100%;
         #add-manage.btn-gray {
             padding-left: 0;
             padding-right: 0;
@@ -957,4 +964,10 @@ ul.sub-list {
     .not-today {
         padding-right: 0 !important;
     }
+}
+
+@media (min-width: 992px){
+.modal-lg, .modal-xl {
+    max-width: 100% !important;
+}
 }

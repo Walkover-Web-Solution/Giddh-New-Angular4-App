@@ -30,15 +30,15 @@
 }
 
 .dashboard-option li h3 {
-    color: #666666;
+    color: $dark-gray;
 }
 .left-column {
     border-right: 1px solid #ddd;
     margin: 5px 0;
 }
 span.this-week {
-    color: #666666;
-    padding-left: 20px;
+    color: $dark-gray;
+    padding-left: 5px;
     font-size: 16px;
     text-decoration: underline;
 }
@@ -79,7 +79,7 @@ p.bankName {
 }
 
 p.bankBalnc {
-    color: #666666;
+    color: $dark-gray;
     font-size: 14px;
     display: flex;
     justify-content: space-between;
@@ -92,7 +92,7 @@ p.bankBalnc {
 a.connectBnk {
     position: absolute;
     bottom: 10px;
-    color: #262626;
+    color: $nero;
     font-size: 14px;
     text-decoration: underline;
 }
@@ -107,7 +107,7 @@ a.connectBnk {
 }
 .dashboard-container label {
     font-size: 14px;
-    color: #484848;
+    color: $charcoal;
     margin-bottom: 3px;
 }
 .daterang-block .form-control {
@@ -208,7 +208,7 @@ a.connectBnk {
     min-height: 60px;
 }
 .single-sale-data p {
-    color: #484848;
+    color: $charcoal;
     font-size: 16px;
 }
 .single-sale-data h3 {
@@ -233,7 +233,7 @@ span.dateWiseSale {
     border-right: none;
 }
 .total-sales-tabs a {
-    color: #484848;
+    color: $charcoal;
     cursor: pointer;
 }
 .total-sales-tabs a.active-graph {
@@ -248,9 +248,14 @@ input:read-only:focus {
 .total-sales-header label {
     margin-bottom: 5px;
 }
-.panel-heading-inner-coonent{
+.panel-heading-inner-content{
     display: flex;
     justify-content: space-between;
+}
+.refresh-btn{
+    align-items: center;
+    display: flex;
+    flex-direction: row-reverse;
 }
 @media(max-width:991px){
     .about-date {
@@ -279,7 +284,7 @@ input:read-only:focus {
     .left-column {
         border-right: none;
     }
-    .panel-heading-inner-coonent {
+    .panel-heading-inner-content {
         display: flex;
         justify-content: normal;
         flex-direction: column;
@@ -295,7 +300,7 @@ input:read-only:focus {
                 right: 0;
                 top: 2px !important;
             }
-        }   
+        }
         .this-week {
             position: absolute;
             right: 30px;

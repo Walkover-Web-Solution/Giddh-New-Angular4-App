@@ -4,7 +4,7 @@
     border: 1px solid $gainsboro;
     width: 100%;
     max-width: 100%;
-    border-collapse: separate;
+    border-collapse: collapse;
     border: 0;
 
     thead > tr > td,
@@ -133,7 +133,7 @@
     /*card responsive code*/
     .on-mobile-view {
         display: block;
-        .table-bordered > tfoot > tr > td {
+       .table-bordered > tfoot > tr > td {
             border: none;
         }
         .table-bordered {
@@ -180,7 +180,7 @@
             display: block;
             padding: 5px 10px 5px 50% !important;
             position: relative;
-            text-align: left;
+            text-align: left !important;
             height: auto !important;
             min-height: 30px !important;
             word-wrap: inherit !important;

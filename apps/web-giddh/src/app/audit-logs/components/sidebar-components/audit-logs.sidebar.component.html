@@ -23,13 +23,13 @@
 
 <div class="clearfix mrT2" *ngIf="vm.selectedDateOption == '0'">
     <!-- <label>Select Log Date or Entry Date</label> -->
-    <div class="row" style="margin-left:0">
+    <div class="mb-2 select-log" >
         <p class="input-group pull-left" for="entryDate">
             <label>Entry Date
                 <input id="entryDate" type="radio" name="entryDate" [(ngModel)]="vm.logOrEntry" value="entryDate" />
             </label>
         </p>
-        <p class="input-group pull-left mrL2" for="logDate">
+        <p class="input-group pull-left" for="logDate">
             <label>Log Date
                 <input id="logDate" type="radio" name="logDate" [(ngModel)]="vm.logOrEntry" value="logDate" />
             </label>

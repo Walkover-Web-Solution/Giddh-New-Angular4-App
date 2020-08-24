@@ -61,7 +61,7 @@
 
             <!--remove account integration confirmation modal-->
             <div bsModal #removegmailintegration="bs-modal" class="modal fade" role="dialog">
-                <div class="modal-dialog modal-lg">
+                <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <confirm-modal [title]="'Remove Gmail Integration'" [body]="'Are you sure you want to remove gmail account?'" (cancelCallBack)="removegmailintegration.toggle()" (successCallBack)="removeGmailAccount();removegmailintegration.toggle()"></confirm-modal>
                     </div>
@@ -134,7 +134,7 @@
                                         <sh-select placeholder="Link Account" name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName" [options]="accounts$ | async" (selected)="selectAccount($event)" [forceClearReactive]="forceClearLinkAccount$ | async">
                                         </sh-select>
                                         <div class="input-group-addon cp" *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name">
-                                            <span (click)="unlinkAccountFromRazorPay()" class="glyphicon glyphicon-trash"></span>
+                                            <span (click)="unlinkAccountFromRazorPay()" class="icon-trash"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -149,7 +149,7 @@
 
 
                     <div class="row">
-                        <div class="col-xs-12 form-group ">
+                        <div class="col-sm-12 form-group ">
                             <button *ngIf="!updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid" (click)="saveRazorPayDetails()">Save
                             </button>
                             <button *ngIf="updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid" (click)="updateRazorPayDetails()">Update
@@ -204,7 +204,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-xs-12 form-group ">
+                            <div class="col-sm-12 form-group ">
                                 <button *ngIf="!payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid" (click)="submitCashfreeDetail(payoutObj)">Save
                                 </button>
                                 <button *ngIf="payoutAdded" class="btn btn-success" [disabled]="payoutForm.invalid" (click)="updateCashfreeDetail(payoutObj)">Update
@@ -255,7 +255,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-xs-12 form-group ">
+                            <div class="col-sm-12 form-group ">
                                 <button type="submit" *ngIf="!autoCollectAdded" class="btn btn-success" [disabled]="autoCollectform.invalid" (click)="submitAutoCollect(autoCollectObj)">Save
                                 </button>
                                 <button type="submit" *ngIf="autoCollectAdded" class="btn btn-success" [disabled]="autoCollectform.invalid" (click)="updateAutoCollect(autoCollectObj)">Update
@@ -289,7 +289,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-12 form-group ">
+                            <div class="col-sm-12 form-group ">
                                 <button *ngIf="!paymentGatewayAdded" class="btn btn-success" [disabled]="paymentGatewayForm.invalid" (click)="submitPaymentGateway(paymentGateway)">Save
                                 </button>
                                 <button *ngIf="paymentGatewayAdded" class="btn btn-success" [disabled]="paymentGatewayForm.invalid" (click)="updatePaymentGateway(paymentGateway)">Update
@@ -361,7 +361,7 @@
                 </form>
 
                 <div class="row mt-1">
-                    <div class="col-xs-12 form-group ">
+                    <div class="col-sm-12 form-group ">
                         <!-- <button class="btn btn-success" (click)="saveAmazonSeller()">Save</button> -->
                         <button class="btn btn-success" (click)="addAmazonSellerRow()">Add more</button>
                         <!-- <button class="btn btn-danger">Delete</button> -->
@@ -387,37 +387,37 @@
                         <div class="d-flex justify-content-between">
                             <h2 class="font-20 bold mb-2">ICICI Bank</h2>
                             <div class="ico-btn">
-                                <button class="btn btn-xs" *ngIf="isBankUpdateInEdit !== parentIndex " (click)="editRegisterForm(parentIndex, regAcc)" type="button"><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-xs" *ngIf="isBankUpdateInEdit === parentIndex " (click)="editRegisterForm(null)" type="button"><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-xs" *ngIf="isBankUpdateInEdit !== parentIndex " (click)="editRegisterForm(parentIndex, regAcc)" type="button"><i class="icon-edit-pencil"></i></button>
+                                <button class="btn btn-xs" *ngIf="isBankUpdateInEdit === parentIndex " (click)="editRegisterForm(null)" type="button"><i class="icon-edit-pencil"></i></button>
                                 <button class="btn btn-xs mr-0" type="button" (click)="deRegisterForm(regAcc)"><i class="fa fa-trash-o"></i></button>
                             </div>
                         </div>
                         <div *ngIf="isBankUpdateInEdit === parentIndex ">
                             <form [formGroup]="addBankForm" (ngSubmit)="updateIciciDetails(addBankForm.value, parentIndex)">
                                 <div class="row">
-                                    <div class="form-group col-sm-4 col-md-2">
+                                    <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                         <div class="">
                                             <label>Corporate ID <span class="required">*</span></label>
                                             <br>
                                             <input type="text" placeholder="Enter Corporate ID" class="form-control" disabled formControlName="corpId" name="corpId" autocomplete="off" />
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-4 col-md-2">
+                                    <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                         <label>User ID <span class="required">*</span></label>
                                         <br>
                                         <input type="text" placeholder="Enter User ID" class="form-control" disabled formControlName="userId" name="userId" required autocomplete="off" />
                                     </div>
-                                    <div class="form-group col-sm-4 col-md-2">
+                                    <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                         <label>Account Number <span class="required">*</span></label>
                                         <br>
                                         <input type="text" placeholder="Enter Account Number" class="form-control" disabled formControlName="accountNo" name="accountNo" autocomplete="off" />
                                     </div>
-                                    <div class="form-group col-sm-4 col-md-2">
+                                    <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                         <label>Alias ID</label>
                                         <br>
                                         <input type="text" placeholder="Enter Alias ID" class="form-control" name="aliasId" disabled formControlName="aliasId" />
                                     </div>
-                                    <div class="form-group col-sm-4 col-md-2">
+                                    <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                         <label>Accounts <span class="required">*</span></label>
                                         <br>
                                         <sh-select #paymentFormAccountName [options]="bankAccounts$ | async" name="accountUniqueName" formControlName="accountUniqueName" placeholder="Select Account" [ItemHeight]="33" autocomplete="off">
@@ -427,7 +427,7 @@
                                 <ng-container formArrayName="userAmountRanges">
                                     <ng-container *ngFor="let item of addBankForm.get('userAmountRanges')['controls'];let index = index;let f = first; let l = last" [formGroupName]="index">
                                         <div class="row">
-                                            <div class="form-group col-sm-4 col-md-2" *ngIf="item.get('maxBankLimit').value ==='max'">
+                                            <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col" *ngIf="item.get('maxBankLimit').value ==='max'">
                                                 <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
                                                 </ng-container>
                                                 <div class="custom-select max select-caret pos-rel">
@@ -438,7 +438,7 @@
                                                 </div>
                                                 <p class="error-msg text-right"></p>
                                             </div>
-                                            <div class="form-group col-sm-3  col-md-2" *ngIf="item.get('maxBankLimit').value!=='max'">
+                                            <div class="form-group col-sm-4 col-lg-2 col-md-3 payment-col1" *ngIf="item.get('maxBankLimit').value!=='max'">
                                                 <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
                                                 </ng-container>
                                                 <div class="d-flex">
@@ -454,7 +454,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-sm-4 col-md-2">
+                                            <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col1">
                                                 <ng-container *ngIf="index===0">
                                                     <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approver Name"></i></div></label>
                                                 </ng-container>
@@ -463,7 +463,7 @@
                                                     </sh-select>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-sm-4 col-md-2">
+                                            <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                                 <ng-container *ngIf="index===0">
                                                     <label class="d-flex relative info-icon">Approver Name <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i></div></label>
 
@@ -519,34 +519,34 @@
 
                         <form #paymentFormUpdate="ngForm" *ngIf="isBankUpdateInEdit !== parentIndex ">
                             <div class="row">
-                                <div class="form-group col-sm-4 col-md-2">
+                                <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                     <label>Corporate ID <span class="required">*</span></label>
                                     <br>
                                     <input type="text" placeholder="Enter Corporate ID" required name="corpId" class="form-control" [(ngModel)]="regAcc.corpId" disabled />
 
                                 </div>
-                                <div class="form-group col-sm-4 col-md-2">
+                                <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                     <label>User ID <span class="required">*</span></label>
                                     <br>
 
                                     <input type="text" placeholder="Enter User ID" name="userId" required class="form-control" [(ngModel)]="regAcc.userId" disabled />
 
                                 </div>
-                                <div class="form-group col-sm-4 col-md-2">
+                                <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                     <label>Account Number <span class="required">*</span></label>
                                     <br>
 
                                     <input type="text" placeholder="Enter Account Number" name="accountNo" required class="form-control" [(ngModel)]="regAcc.accountNo" disabled />
 
                                 </div>
-                                <div class="form-group col-sm-4 col-md-2">
+                                <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                     <label>Alias ID</label>
                                     <br>
 
                                     <input type="text" placeholder="Enter Alias ID" name="aliasId" class="form-control" [(ngModel)]="regAcc.aliasId" disabled />
 
                                 </div>
-                                <div class="form-group col-sm-4 col-md-2" *ngIf="bankAccounts$ && regAcc?.account?.uniqueName">
+                                <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col" *ngIf="bankAccounts$ && regAcc?.account?.uniqueName">
 
                                     <label>Accounts <span class="required">*</span></label>
                                     <br>
@@ -557,7 +557,7 @@
                             <!-- Added this new row make it dynamic -->
                             <ng-container *ngFor="let item of regAcc.userAmountRanges; let index = index; let firstIndex = first; let lastIndex = last">
                                 <div class="row">
-                                    <div class="form-group col-sm-4 col-md-2" *ngIf="item.maxBankLimit ==='max'">
+                                    <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col" *ngIf="item.maxBankLimit ==='max'">
                                         <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
                                         </ng-container>
                                         <div class="custom-select select-caret pos-rel">
@@ -566,7 +566,7 @@
                                         </div>
                                         <p class="error-msg text-right"></p>
                                     </div>
-                                    <div class="form-group col-sm-4 col-md-2" *ngIf="item.maxBankLimit !== 'max'">
+                                    <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col" *ngIf="item.maxBankLimit !== 'max'">
                                         <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
                                         </ng-container>
                                         <div class="d-flex">
@@ -582,7 +582,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-4 col-md-2">
+                                    <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                         <ng-container *ngIf="index===0">
                                             <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in approver Name"></i></div></label>
                                         </ng-container>
@@ -591,7 +591,7 @@
                                             </sh-select>
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-4 col-md-2">
+                                    <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                         <ng-container *ngIf="index===0">
                                             <label class="d-flex relative info-icon">Approver Name <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i></div></label>
 
@@ -616,7 +616,7 @@
                                 <a href="javascript:void(0)" (click)="addNewAmountRangeRow(parentIndex+1)" class="btn btn-link pl-0 pt-0">+ Add New Row</a>
                             </div>
                             <!-- New code -->
-                            <div class="row">
+                            <div>
                                 <div class="form-group update-btn-wrapper">
                                     <label>&nbsp;</label>
                                     <br>
@@ -771,29 +771,29 @@
                     <h3 class="font-20 bold mb-2">ICICI Bank</h3>
                     <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm)" *ngIf="!(isPaymentAdditionSuccess$ | async)">
                         <div class="row">
-                            <div class="form-group col-sm-4 col-md-2">
+                            <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                 <div class="">
                                     <label>Corporate ID <span class="required">*</span></label>
                                     <br>
                                     <input type="text" placeholder="Enter Corporate ID" class="form-control" formControlName="corpId" name="corpId" autocomplete="off" />
                                 </div>
                             </div>
-                            <div class="form-group col-sm-4 col-md-2">
+                            <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                 <label>User ID <span class="required">*</span></label>
                                 <br>
                                 <input type="text" placeholder="Enter User ID" class="form-control" formControlName="userId" name="userId" required autocomplete="off" />
                             </div>
-                            <div class="form-group col-sm-4 col-md-2">
+                            <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                 <label>Account Number <span class="required">*</span></label>
                                 <br>
                                 <input type="text" placeholder="Enter Account Number" class="form-control" formControlName="accountNo" name="accountNo" autocomplete="off" />
                             </div>
-                            <div class="form-group col-sm-4 col-md-2">
+                            <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                 <label>Alias ID</label>
                                 <br>
                                 <input type="text" placeholder="Enter Alias ID" class="form-control" name="aliasId" formControlName="aliasId" />
                             </div>
-                            <div class="form-group col-sm-4 col-md-2">
+                            <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                 <label>Accounts <span class="required">*</span></label>
                                 <br>
                                 <sh-select #paymentFormAccountName [options]="bankAccounts$ | async" name="accountUniqueName" formControlName="accountUniqueName" [forceClearReactive]="forceClear$ | async" placeholder="Select Account" [ItemHeight]="33" autocomplete="off">
@@ -803,7 +803,7 @@
                         <ng-container formArrayName="userAmountRanges">
                             <ng-container *ngFor="let item of addBankForm.get('userAmountRanges')['controls'];let index = index;let f = first; let l = last" [formGroupName]="index">
                                 <div class="row">
-                                    <div class="form-group col-sm-4 col-md-2" *ngIf="item.get('maxBankLimit').value ==='max'">
+                                    <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col" *ngIf="item.get('maxBankLimit').value ==='max'">
                                         <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
                                         </ng-container>
                                         <div class="custom-select max select-caret pos-rel">
@@ -814,7 +814,7 @@
                                         </div>
                                         <p class="error-msg text-right"></p>
                                     </div>
-                                    <div class="form-group col-sm-3  col-md-2" *ngIf="item.get('maxBankLimit').value!=='max'">
+                                    <div class="form-group col-sm-3  col-lg-2 col-md-4 payment-col" *ngIf="item.get('maxBankLimit').value!=='max'">
                                         <ng-container *ngIf="index===0"> <label class="d-flex relative info-icon">Amount Upto <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The client can not select the same amount in the custom more than once."></i></div></label>
                                         </ng-container>
                                         <div class="d-flex">
@@ -830,7 +830,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-4 col-md-2">
+                                    <div class="form-group col-sm-4 col-lg-2 col-md-3 payment-col1">
                                         <ng-container *ngIf="index===0">
                                             <label class="d-flex relative info-icon">Select OTP <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="The OTP will reach the person selected in Approver Name"></i></div></label>
                                         </ng-container>
@@ -839,7 +839,7 @@
                                             </sh-select>
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-4 col-md-2">
+                                    <div class="form-group col-sm-4 col-lg-2 col-md-4 payment-col">
                                         <ng-container *ngIf="index===0">
                                             <label class="d-flex relative info-icon">Approver Name <span class="required">*</span> <div class="tooltip-box"><i class="icon-info cursor-pointer" tooltip="A list of verified, non-verified and bank registered users to which the OTP will be send."></i></div></label>
 
@@ -869,7 +869,7 @@
                                             <input type="text" class="form-control" disabled placeholder="Registered" formControlName="approvalUniqueName" name="approvalUniqueName">
                                         </div>
                                     </div>
-                                    <div class="form-group plus-cross-btn col-sm-1 pl-0 pr-0">
+                                    <div class="form-group plus-cross-btn col-sm-1 col-md-1 pl-0 pr-0">
                                         <label *ngIf="index===0" class="d-flex hidden-1359">&nbsp;</label>
                                         <div class="mt-1 xs-pl-15">
                                             <i (click)="removeUserAmountRangesForm(index)" class="icon-trash cursor-pointer"></i>

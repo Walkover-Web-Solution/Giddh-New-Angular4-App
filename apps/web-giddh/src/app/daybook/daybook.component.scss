@@ -79,6 +79,9 @@
     td.text-right.hideTd {
         display: none;
     }
+    .transactions-page{
+        margin-top: 20px !important;
+    }
 }
 @media (max-width: 575px) {
     .expand-collapse-btn.form-group {

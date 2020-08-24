@@ -20,8 +20,8 @@
     <div class="col-md-12">
         <div class="">
 
-            <div class="form-inline">
-                <div class=" form-group">
+            <div class="form-inline d-block flex-row flex-nowrap">
+                <div class="form-group">
 
                     <span class="inputWrapper"> <input type="text" #dateRangePickerCmp name="daterangeInput"
                             daterangepicker [options]="datePickerOptions"
@@ -29,7 +29,7 @@
                     </span>
 
                 </div>
-                <div class=" form-group">
+                <div class="form-group">
 
 
                     <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
@@ -40,7 +40,7 @@
                     <!-- <button type="button" class="btn btn-success" (click)="go()">GO</button> -->
 
                 </div>
-                <div class=" form-group expand-collapse-btn">
+                <div class="form-group expand-collapse-btn">
 
                     <button type="button" class="btn btn-default" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
                               'Expand All'}}
@@ -53,8 +53,7 @@
                     </button>
                 </div>
                 <div class="expand-export">
-                    <button type="button" class="btn btn-default expandBtnHideDesktop" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
-                                              'Expand All'}}
+                    <button type="button" class="btn btn-default expandBtnHideDesktop" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :'Expand All'}}
                     </button>
                     <button type="button" class="btn btn-default export-btn pull-right"
                         (click)="exportDaybook()">Export</button>
@@ -174,7 +173,7 @@
         </div>
 
         <!-- pagination -->
-        <div style="text-align: center;">
+        <div class="mt-1">
             <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
         </div>
         <!-- pagination -->
@@ -185,7 +184,7 @@
 
 <!-- Advance search popup -->
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <daybook-advance-search-model #daybookAdvanceSearch [startDate]="daybookQueryRequest.from"
                 [endDate]="daybookQueryRequest.to" (closeModelEvent)="closeAdvanceSearchPopup($event)">

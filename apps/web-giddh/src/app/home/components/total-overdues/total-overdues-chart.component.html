@@ -1,23 +1,23 @@
 <div id="live">
-    <div class="panel panel-default">
+    <div class="card">
 
         <div class="panel-heading">
             <strong>Total Overdues</strong>
-            <i class="glyphicon glyphicon-refresh ml-1" (click)="refreshChart()"></i>
             <div class="pull-right dashboard-filter">
                 <!-- <div class="btn-group" dropdown>
 					<span id="button-basic" dropdownToggle class="dropdown-toggle month-dropdown"
 						aria-controls="dropdown-basic">
 						<datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
 					</span>
-				</div> - -->
+                </div> - -->
+                <i class="icon-refrsh mr-1" (click)="refreshChart()"></i>
                 <div (click)="showGiddhDatepicker($event)">
                     <input type="text" readonly name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker dashboard-datepicker" />
                 </div>
             </div>
         </div>
 
-        <div class="panel-body pos-rel {{requestInFlight}}">
+        <div class="card-body pos-rel {{requestInFlight}}">
             <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
                 <div class="no-data mrT2 loader-main">
                     <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
