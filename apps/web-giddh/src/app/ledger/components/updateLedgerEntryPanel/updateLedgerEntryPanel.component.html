@@ -1085,7 +1085,7 @@
 
                                 <label class="upload_div" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
                                     <input type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
-                                           [uploadInput]="uploadInput" (uploadOutput)="onUploadOutputUpdate($event)">
+                                        [uploadInput]="uploadInput" (uploadOutput)="onUploadOutputUpdate($event)">
                                     <label for="invoiceFile" class="cp fs16">
                                         <i [ngClass]="!isFileUploading ? 'glyphicon glyphicon-paperclip' : 'fa fa-spinner rotate'"></i> Attach file</label>
                                 </label>
@@ -1101,7 +1101,8 @@
 
                             <div class="d-flex">
                                 <button class="btn btn-danger" (click)="showDeleteEntryModal()">Delete</button>
-                                <button class="btn btn-success" [disabled]="isFileUploading" [ladda]="(isTxnUpdateInProcess$ | async)" (click)="saveLedgerTransaction()">Update
+                                <button class="btn btn-success" [disabled]="isFileUploading" [ladda]="(isTxnUpdateInProcess$ | async)"
+                                    (click)="saveLedgerTransaction()">Update
                                 </button>
                             </div>
                         </div>

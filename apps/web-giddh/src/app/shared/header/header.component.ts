@@ -264,6 +264,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /** To check all module menu open */
     public isAllModuleOpen: boolean = false;
 
+    /** update IndexDb flags observable **/
+    public updateIndexDbInProcess$: Observable<boolean>;
+    public updateIndexDbSuccess$: Observable<boolean>;
+    /* This will hold if resolution is less than 768 to consider as mobile screen */
+    public isMobileScreen: boolean = false;
+
     /**
      *
      */
@@ -326,6 +332,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
             if (event instanceof NavigationEnd) {
                 this.setCurrentPage();
+                this.addClassInBodyIfPageHasTabs();
 
                 if (this.router.url.includes("/ledger")) {
                     this.currentState = this.router.url;
@@ -465,6 +472,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        this._breakpointObserver.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
         this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
             if (value === 'logoutCordova') {
                 this.zone.run(() => {
@@ -1839,6 +1852,31 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
+    /**
+     * This will init the notification on window orientation change
+     *
+     * @param {*} event
+     * @memberof HeaderComponent
+     */
+    @HostListener('window:orientationchange', ['$event'])
+    onOrientationChange(event) {
+        if(window['Headway'] !== undefined) {
+            window['Headway'].init();
+        }
+    }
+
+    /**
+     * This will init the notification on window resize
+     *
+     * @param {*} event
+     * @memberof HeaderComponent
+     */
+    @HostListener('window:resize', ['$event'])
+    windowResize(event) {
+        if(window['Headway'] !== undefined) {
+            window['Headway'].init();
+        }
+    }
     /**
      * Toggle all module to previous selected module
      *

@@ -355,8 +355,20 @@
                                                     *ngIf="!((!calendarMonth.end.minDate || calendarMonth.end.minDate.isBefore(calendarMonth.end.calendar.firstDay)) && (!this.linkedCalendars))">
 
                                                 </ng-container>
+
+                                                <div class="th-div">
+                                                    <ng-container
+                                                        *ngIf="!calendarMonth.end.maxDate || calendarMonth.end.maxDate.isAfter(calendarMonth.end.calendar.lastDay) && (!linkedCalendars || singleDatePicker || true)">
+
+                                                    </ng-container>
+                                                    <ng-container
+                                                        *ngIf="!(!calendarMonth.end.maxDate || calendarMonth.end.maxDate.isAfter(calendarMonth.end.calendar.lastDay) && (!linkedCalendars || singleDatePicker || true))">
+
+                                                    </ng-container>
+                                                </div>
+
                                             </div>
-                                            
+
                                             <div class="th-div">
                                                 <ng-container
                                                     *ngIf="!calendarMonth.end.maxDate || calendarMonth.end.maxDate.isAfter(calendarMonth.end.calendar.lastDay) && (!linkedCalendars || singleDatePicker || true)">

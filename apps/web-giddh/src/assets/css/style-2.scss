@@ -8932,11 +8932,9 @@ p.remvBrnchName {
         display: none;
     }
 }
-
 .popover.adjustment-popover {
     margin: 0;
 }
-
 @media (min-width: 564px) {
     #date-range-picker-parent .daterangepicker {
         width: 100%;
@@ -9364,38 +9362,28 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
-
-.on-setting-page .nav-left-bar.open,
-.on-user-page .nav-left-bar.open on-user-page {
+.on-setting-page .nav-left-bar.open , .on-user-page .nav-left-bar.open on-user-page {
     left: -215px !important;
     display: none !important;
 }
-
-.setting-sidebar-open .nav-left-bar {
+.setting-sidebar-open .nav-left-bar{
     display: none;
 }
-
 .menu_open aside-setting.setting-sidebar {
     left: 0 !important;
 }
-
-.on-setting-page aside-setting.setting-sidebar,
-.on-user-page aside-setting.setting-sidebar {
+.on-setting-page aside-setting.setting-sidebar, .on-user-page aside-setting.setting-sidebar{
     left: -225px;
 }
-
 .setting-sidebar-open #content_wrapper.menu_open {
     padding-left: -215px;
 }
-
 .setting-sidebar-open .desktop-header {
     padding-left: 0;
 }
-
 .setting-sidebar-open .desktop-header.menu_open {
     padding-left: 215px;
 }
-
 
 /* responsive */
 
@@ -9680,12 +9668,10 @@ span#HW_badge_cont:nth-child(3) {
     .setting-sidebar-open .desktop-header {
         padding-left: 0;
     }
-    .setting-data,
-    .setting-sidebar-open .white-row {
+    .setting-data, .setting-sidebar-open .white-row {
         padding-left: 15px !important;
     }
-    .setting-data,
-    .setting-sidebar-open .white-row {
+    .setting-data, .setting-sidebar-open .white-row {
         padding-left: 15px !important;
     }
 }
@@ -10076,8 +10062,7 @@ span#HW_badge_cont:nth-child(3) {
     .digit-blue .tooltip.bs-tooltip-top {
         display: block !important;
     }
-    .on-setting-page aside-setting.setting-sidebar,
-    .on-user-page aside-setting.setting-sidebar {
+    .on-setting-page aside-setting.setting-sidebar, .on-user-page aside-setting.setting-sidebar{
         left: 0;
     }
 }
