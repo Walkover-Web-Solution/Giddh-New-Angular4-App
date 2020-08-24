@@ -444,7 +444,7 @@
                         <!-- Balance Due -->
                         <td class="text-right" *ngIf="(selectedVoucher !== 'purchase')"
                             [tooltip]="balanceDuePopupTemplate" container="body" containerClass="invoice-preview">
-                            {{item.accountCurrencySymbol}} {{item.balanceDue?.amountForAccount | giddhCurrency}}
+                            {{item.accountCurrencySymbol}} {{item.totalBalance | giddhCurrency}}
                         </td>
                         <ng-template #balanceDuePopupTemplate><span [innerHTML]="item.balanceDueTooltipText"></span>
                         </ng-template>
@@ -747,7 +747,7 @@
                                     </div>
                                 </div>
                                 <div>{{item.accountCurrencySymbol}}
-                                    {{item.balanceDue?.amountForAccount | giddhCurrency}}</div>
+                                    {{item.totalBalance | giddhCurrency}}</div>
                             </div>
                         </td>
                     </tr>
