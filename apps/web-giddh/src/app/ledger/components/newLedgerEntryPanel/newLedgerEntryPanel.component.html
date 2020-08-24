@@ -392,7 +392,7 @@
 
                                 <td>
                                     <label class="default_clr">Cheque Clearance Date</label>
-                                    <input id="ledger-cheque-clearance" type="text" autocomplete="off" class="form-control" id="chequeClearanceDate"
+                                    <input type="text" autocomplete="off" class="form-control" id="chequeClearanceDate"
                                         [(ngModel)]="blankLedger.chequeClearanceDate" bsDatepicker #chbs='bsDatepicker'
                                         [outsideClick]="true"
                                         [bsConfig]="{ dateInputFormat: giddhDateFormat, containerClass: 'chkclrbsdp theme-green' }" />
@@ -505,7 +505,7 @@
                 </div>
 
                 <div class="pull-right">
-                    <input id="ledger-upload-file" type="file" [hidden]="true" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions"
+                    <input type="file" [hidden]="true" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions"
                         ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onWebUpload($event)" #webFileInput
                         (click)="onUploadOutput()">
                     <label class="upload_div pr-15"
@@ -542,7 +542,7 @@
                         to CR
                     </button>
 
-                    <button id="ledger-save-button" id="saveLedger" class="btn btn-success btn-sm mr-0" [disabled]="isFileUploading"
+                    <button id="saveLedger" class="btn btn-success btn-sm mr-0" [disabled]="isFileUploading"
                         [ladda]="isLedgerCreateInProcess$ | async" (click)="saveLedger()">Save
                     </button>
                 </div>

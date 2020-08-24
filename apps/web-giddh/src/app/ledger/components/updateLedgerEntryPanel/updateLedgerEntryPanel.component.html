@@ -1084,7 +1084,7 @@
                                 </div>
 
                                 <label class="upload_div" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
-                                    <input id="update-ledger-upload-file" type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
+                                    <input type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
                                         [uploadInput]="uploadInput" (uploadOutput)="onUploadOutputUpdate($event)">
                                     <label for="invoiceFile" class="cp fs16">
                                         <i [ngClass]="!isFileUploading ? 'glyphicon glyphicon-paperclip' : 'fa fa-spinner rotate'"></i> Attach file</label>
