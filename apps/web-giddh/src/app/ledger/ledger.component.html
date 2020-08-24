@@ -4,9 +4,9 @@
     </button>
     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
         <!-- <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onOpenAdvanceSearch()">Advance Search</a></li> -->
-        <li role="menuitem"><a class="dropdown-item" id="share-ledger" href="javascript:void(0)" (click)="showShareLedgerModal()">Share
+        <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="showShareLedgerModal()">Share
                 ledger</a></li>
-        <li role="menuitem"><a class="dropdown-item" id="export-ledger" href="javascript:void(0)"
+        <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)"
                 (click)="showExportLedgerModal()">Export</a></li>
     </ul>
 </div>
@@ -21,19 +21,19 @@
                     <!-- please remove hidden attribute after functionality works -->
                     <div class="select-all-icons" *ngIf="checkedTrxWhileHovering.length > 0 && isMobileScreen">
                         <div *ngIf="visibleTransactionTypeMobile && checkedTrxWhileHovering.length > 0">
-                            <input id="select-all-entries" type="checkbox" [(ngModel)]="debitCreditSelectAll"
+                            <input type="checkbox" [(ngModel)]="debitCreditSelectAll"
                                 (click)="selectAllEntries($event, visibleTransactionTypeMobile)"> Select All
                         </div>
                         <div class="d-flex ml-15">
-                            <button class="btn btn-danger" id="delete-ledger" (click)="performBulkAction('delete')" container="body"
+                            <button class="btn btn-danger" (click)="performBulkAction('delete')" container="body"
                                 tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i>
                             </button>
 
-                            <button class="btn btn-warning" id="generate-invoice" (click)="performBulkAction('generate')" container="body"
+                            <button class="btn btn-warning" (click)="performBulkAction('generate')" container="body"
                                 tooltip="Generate Voucher" [placement]="'top'"><i class="icon-generate-invoice"></i>
                             </button>
 
-                            <button class="btn btn-success mr-0" id="attach-file"
+                            <button class="btn btn-success mr-0"
                                 (click)="performBulkAction('upload', BulkUploadfileInput)" container="body"
                                 tooltip="Attach File" [placement]="'top'"><i class="icon-file-path"></i>
                             </button>
@@ -47,7 +47,7 @@
                         <span
                             [ngClass]="{'default-width-input': (searchText || isAdvanceSearchImplemented) && isMobileScreen,
                                          'full-width-input': (searchText || !isAdvanceSearchImplemented) && isMobileScreen }">
-                            <input type="search" id="ledger-search" [(ngModel)]="searchText" name="searchText" class="form-control"
+                            <input type="search" [(ngModel)]="searchText" name="searchText" class="form-control"
                                 (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
                             <i class="icon-search1 pos-abs"></i>
                         </span>
@@ -59,37 +59,37 @@
                     </div>
 
                     <!-- Functionality not working -->
-                    <div class="ledger-datepicker" id="giddh-datepicker"  container="body" *ngIf="isMobileScreen">
+                    <div class="ledger-datepicker" container="body" *ngIf="isMobileScreen">
                         <img (click)="showGiddhDatepicker($event)" src="{{imgPath}}calender-icon.svg">
                     </div>
                     <span class="input-wrapper ipad-view-datepicker">
                         <!-- <input type="text" class="form-control daterange_picker_ledger" daterangepicker
                             [options]="datePickerOptions" (applyDaterangepicker)="selectedDate($event)"
                             name="daterangeInput" /> -->
-                        <input id="giddk-datepicker" type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
+                        <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
                             [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                             class="giddh-datepicker date-range-picker" />
                     </span>
-                    <span *ngIf="!isMobileScreen" id="advance-filter" class="advance-icon d-flex advance-search-filter pointer"
+                    <span *ngIf="!isMobileScreen" class="advance-icon d-flex advance-search-filter pointer"
                         [tooltip]="'Advance Search'" [placement]="'top'"
                         [ngStyle]="{'margin-left': checkedTrxWhileHovering.length === 0 ? '7px': '0px'}">
                         <span class="icon-advance-filter" (click)="onOpenAdvanceSearch()"></span>
                     </span>
-                    <a class="cp mrL1 clear-filter-btn" id="clear-filter" *ngIf="isAdvanceSearchImplemented && !isMobileScreen"
+                    <a class="cp mrL1 clear-filter-btn" *ngIf="isAdvanceSearchImplemented && !isMobileScreen"
                         href="javascript:;" (click)="resetAdvanceSearch()" tooltip="Reset Advance Search">
                         <i aria-hidden="true" class="glyphicon glyphicon-refresh"></i> Clear Filter
                     </a>
                     <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0 && !isMobileScreen">
 
-                        <button class="btn btn-danger" id="delete-ledger" (click)="performBulkAction('delete')" container="body"
+                        <button class="btn btn-danger" (click)="performBulkAction('delete')" container="body"
                             tooltip="Delete" [placement]="'top'"><i class="fa fa-trash-o"></i>
                         </button>
 
-                        <button class="btn btn-warning" id="generate-invoice" (click)="performBulkAction('generate')" container="body"
+                        <button class="btn btn-warning" (click)="performBulkAction('generate')" container="body"
                             tooltip="Generate Voucher" [placement]="'top'"><i class="icon-generate-invoice"></i>
                         </button>
 
-                        <button class="btn btn-success mr-0" id="attach-file" (click)="performBulkAction('upload', BulkUploadfileInput)"
+                        <button class="btn btn-success mr-0" (click)="performBulkAction('upload', BulkUploadfileInput)"
                             container="body" tooltip="Attach File" [placement]="'top'"><i class="icon-file-path"></i>
                         </button>
                         <input type="file" #BulkUploadfileInput style="display: none;" name="BulkUploadfileInput"
@@ -108,7 +108,7 @@
                         <!-- <input type="text" class="form-control daterange_picker_ledger" daterangepicker
                             [options]="datePickerOptions" (applyDaterangepicker)="selectedDate($event)"
                             name="daterangeInput" /> -->
-                        <input id="giddk-datepicker" type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
+                        <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
                             [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                             class="giddh-datepicker date-range-picker" />
                     </span>
@@ -145,7 +145,7 @@
                             [tooltip]="'Share Ledger'" [placement]="'top'" (click)="showShareLedgerModal()">
                             <i class="fa icon-ledger-path" style="line-height: 0px"></i>
                         </a>
-                        <a class="icomoon_ico d-flex align-items-center" id="export-ledger" href="javascript:void(0)" title=""
+                        <a class="icomoon_ico d-flex align-items-center" href="javascript:void(0)" title=""
                             [tooltip]="'Export'" [placement]="'top'" (click)="showExportLedgerModal()">
                             <i class="icon-ledger-union-5" style="line-height: 0px"></i>
                         </a>
@@ -161,10 +161,10 @@
 
             <div class="toggle d-inline-block currencyToggler" data-key="disabled">
 
-                <input type="checkbox" id="currency-toggle" class="toggle-checkbox" id="disabled" [(ngModel)]="currencyTogglerModel"
+                <input type="checkbox" class="toggle-checkbox" id="disabled" [(ngModel)]="currencyTogglerModel"
                     (click)="toggleCurrency($event)">
 
-                <label id="toggle" class="toggle-label" for="disabled">
+                <label class="toggle-label" for="disabled">
                     <span class="toggle-inner"></span>
                     <span class="toggle-switch"></span>
                 </label>
@@ -178,13 +178,13 @@
             <tabset>
                 <ul class="nav nav-tabs pt-0">
                     <li [ngClass]="{'active': visibleTransactionTypeMobile === 'all'}">
-                        <a href="javascript:void(0)" id="ledger-all-tab" (click)="toggleMobileTransactionType('all');">All</a>
+                        <a href="javascript:void(0)" (click)="toggleMobileTransactionType('all');">All</a>
                     </li>
                     <li role="presentation" [ngClass]="{'active': visibleTransactionTypeMobile === 'debit'}">
-                        <a href="javascript:void(0)" id="ledger-debit-tab" (click)="toggleMobileTransactionType('debit')">Debit</a>
+                        <a href="javascript:void(0)" (click)="toggleMobileTransactionType('debit')">Debit</a>
                     </li>
                     <li role="presentation" [ngClass]="{'active': visibleTransactionTypeMobile === 'credit'}">
-                        <a href="javascript:void(0)" id="ledger-credit-tab" (click)="toggleMobileTransactionType('credit')">Credit</a>
+                        <a href="javascript:void(0)" (click)="toggleMobileTransactionType('credit')">Credit</a>
                     </li>
                 </ul>
             </tabset>
@@ -267,7 +267,7 @@
                                                                 <div class="d-flex align-items-center"
                                                                      >
                                                                     <span class="pl-05">
-                                                                        <input type="checkbox" id="select-entry-cr"
+                                                                        <input type="checkbox"
                                                                             (click)="selectEntryForBulkAction($event, item)" /></span>
                                                                     <span class="ml-05">
                                                                         <input class="form-control" [maxlength]="10"
@@ -330,7 +330,7 @@
                                                             </td>
 
                                                             <td class="col-xs-4 col-md-3 col-lg-3  pos-rel">
-                                                                <input class="form-control alR" type="text" id="enter-amount-dr"
+                                                                <input class="form-control alR" type="text"
                                                                     decimalDigitsDirective [DecimalPlaces]="2"
                                                                     [(ngModel)]="txn.amount"
                                                                     (input)="needToReCalculate.next(true)"
@@ -382,7 +382,7 @@
                                                                 <div class="d-flex align-items-center"
                                                                     >
                                                                     <span class="pl-05">
-                                                                        <input type="checkbox" id="select-entry-cr"
+                                                                        <input type="checkbox"
                                                                             [(ngModel)]="txn.isChecked"
                                                                             (click)="selectEntryForBulkAction($event, item)" />
                                                                     </span>
@@ -450,7 +450,7 @@
                                                             </td>
 
                                                             <td class="col-xs-4 col-md-3 col-lg-3 pos-rel">
-                                                                <input class="form-control alR" type="text"  id="enter-amount-cr"
+                                                                <input class="form-control alR" type="text"
                                                                     decimalDigitsDirective [DecimalPlaces]="2"
                                                                     [(ngModel)]="txn.amount"
                                                                     (input)="needToReCalculate.next(true)"
@@ -549,7 +549,7 @@
                                     (mouseover)="entryHovered(transactions.entryUniqueName)"
                                     (mouseout)="selectedTrxWhileHovering = ''">
                                     <span class="pull-left account-holder-checkbox">
-                                        <input type="checkbox" id="select-entry-cr"
+                                        <input type="checkbox"
                                             [ngClass]="{'d-none': (selectedTrxWhileHovering !== transactions.entryUniqueName && !(transactions.isChecked) && checkedTrxWhileHovering.length === 0)}"
                                             class="d-none" [(ngModel)]="transactions.isChecked"
                                             (click)="entrySelected($event, transactions.entryUniqueName)">
@@ -637,7 +637,7 @@
                             <!--</td>-->
 
                             <td class="col-xs-3 col-md-3 col-lg-3" data-title="Date">
-                                <input type="checkbox" id="select-all-entries-cr" [(ngModel)]="debitSelectAll"
+                                <input type="checkbox" [(ngModel)]="debitSelectAll"
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event, 'debit')">
                             </td>
@@ -693,7 +693,7 @@
 
                                 <div class="d-flex align-items-center">
                                     <span style="float: left">
-                                        <input type="checkbox" id="select-entry-dr"
+                                        <input type="checkbox"
                                             [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering.length === 0)}"
                                             class="d-none" [(ngModel)]="txn.isChecked"
                                             (click)="entrySelected($event, txn.entryUniqueName)" />
@@ -777,7 +777,7 @@
                                                     <span *ngIf="( (!shDebit.isOpen && txn.particular) ||
                                                                 (shDebit.isOpen && shDebit.filter))">To
                                                     </span>
-                                                    <sh-select id="select-account-dr" [idEl]="txn.id" #shDebit
+                                                    <sh-select [idEl]="txn.id" #shDebit
                                                         [options]="lc.flattenAccountList | async"
                                                         [(ngModel)]="txn.particular" vr-item tabindex="-1" #select
                                                         [showClear]="false" (keydown.enter)="onEnter(select,txn)"
@@ -828,7 +828,7 @@
                                             </td>
 
                                             <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 pos-rel">
-                                                <input class="form-control alR" type="text"  id="enter-bank-amount-dr"
+                                                <input class="form-control alR" type="text"
                                                     [prefix]="selectedPrefixForCurrency"
                                                     [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                                     [(ngModel)]="txn.amount" (input)="handleAmountInput(txn);"
@@ -905,7 +905,7 @@
                             <!--</td>-->
 
                             <td class="col-xs-3 col-md-3 col-lg-3" data-title="Date">
-                                <input type="checkbox" id="select-all-entries-dr" [(ngModel)]="creditSelectAll"
+                                <input type="checkbox" [(ngModel)]="creditSelectAll"
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event,'credit')">
                             </td>
@@ -935,7 +935,7 @@
                             <!--(click)="selectAllEntries($event,'credit')"></td>-->
 
                             <td class="col-xs-3 col-md-3 col-lg-3">
-                                <input type="checkbox"  id="select-all-entries-cr" [(ngModel)]="creditSelectAll"
+                                <input type="checkbox" [(ngModel)]="creditSelectAll"
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event,'credit')">
                             </td>
@@ -962,7 +962,7 @@
                                 <div class="d-flex align-items-center">
                                     <span class="ledger-checkbox" style="float: left">
 
-                                        <input type="checkbox"  id="select-entry-cr"
+                                        <input type="checkbox"
                                             [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering.length === 0)}"
                                             class="d-none" [(ngModel)]="txn.isChecked"
                                             (click)="entrySelected($event, txn.entryUniqueName)" />
@@ -1052,7 +1052,7 @@
                                                         (!shCredit.isOpen && txn.particular) ||
                                                         (shCredit.isOpen && shCredit.filter))">By </span>
 
-                                                    <sh-select id="select-account-cr" [idEl]="txn.id" #shCredit
+                                                    <sh-select [idEl]="txn.id" #shCredit
                                                         [options]="lc.flattenAccountList | async" vr-item tabindex="-1"
                                                         #select (keydown.enter)="onEnter(shCredit,txn)"
                                                         (onShow)="isSelectOpen=true;bsd.hide()"
@@ -1104,7 +1104,7 @@
                                             </td>
 
                                             <td class="col-xs-4 col-md-3 col-lg-3 pos-rel" data-title="Amount">
-                                                <input class="form-control alR" type="text"  id="enter-bank-amount-cr"
+                                                <input class="form-control alR" type="text"
                                                     [prefix]="selectedPrefixForCurrency"
                                                     [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                                     [(ngModel)]="txn.amount" (input)="handleAmountInput(txn);"
