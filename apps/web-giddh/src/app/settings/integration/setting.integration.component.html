@@ -1,6 +1,6 @@
 <div class="clearfix">
     <tabset [ngClass]="{'tab-integraton': true, 'hide-payment-tab' : !isIndianCompany}" #integrationTab id="tab-integration">
-        <tab (select)="loadSmsData()">
+        <tab (select)="loadSmsData($event)">
             <ng-template tabHeading>
                 <span class="icon-chat2"></span> SMS
             </ng-template>
@@ -36,7 +36,7 @@
             </div>
         </tab>
 
-        <tab (select)="loadEmailData()">
+        <tab (select)="loadEmailData($event)">
             <ng-template tabHeading>
                 <span class="icon-mail"></span> Email
             </ng-template>
@@ -100,7 +100,7 @@
 
         </tab>
 
-        <tab (select)="loadCollectionData()">
+        <tab (select)="loadCollectionData($event)">
             <ng-template tabHeading>
                 <span class="icon-card"></span> Collection
             </ng-template>
@@ -305,7 +305,7 @@
             </div>
         </tab>
 
-        <tab (select)="loadEcommerceData()">
+        <tab (select)="loadEcommerceData($event)">
             <ng-template tabHeading>
                 <span class="icon-ecomm"></span> E-Comm
             </ng-template>
@@ -376,7 +376,7 @@
             </div> -->
 
         </tab>
-        <tab (select)="loadPaymentData()" [hidden]="!isIndianCompany">
+        <tab (select)="loadPaymentData($event)" [hidden]="!isIndianCompany">
             <div *ngIf="isIndianCompany">
                 <ng-template tabHeading>
                     <span class="icon-payment"></span> Payment
