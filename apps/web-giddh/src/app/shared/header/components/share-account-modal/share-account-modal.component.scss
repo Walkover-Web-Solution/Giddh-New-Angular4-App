@@ -1,12 +1,12 @@
 @import "../../../../../assets/css/color.scss";
-.group-shared-list{
+.group-shared-list {
     display: flex;
     flex-direction: column;
     width: 100%;
     border-top: 1px solid $gainsboro;
     margin-top: 15px;
     padding-top: 20px;
-    li{
+    li {
         border-bottom: none;
         display: flex;
         width: 100%;
@@ -15,7 +15,7 @@
         align-items: center;
         margin-bottom: 10px;
     }
-    .custom-select{
+    .custom-select {
         width: 40%;
         select.form-control {
             border: 1px solid $gainsboro !important;
@@ -27,11 +27,11 @@
             padding-right: 25px !important;
         }
     }
-    .delete-icon{
+    .delete-icon {
         font-size: 14px;
         line-height: 1.5;
         border-radius: 3px;
-        background: #eee;
+        background: $whisper-light;
         border: 1px solid $gainsboro;
         width: 30px;
         height: 30px;
@@ -39,23 +39,25 @@
         justify-content: center;
         align-items: center;
     }
-    .user-name-email{
+    .user-name-email {
         width: 40%;
-        color:$extra-dark-gray;
-        .user-email{
+        color: $extra-dark-gray;
+        .user-email {
             display: inline-flex;
             flex-direction: column;
-            small{
-                &:first-child{
-                        font-size: 16px;
+            small {
+                &:first-child {
+                    font-size: 16px;
                 }
             }
         }
     }
 }
-.selected-permission{
+
+.selected-permission {
     width: calc(100% - 96px) !important;
 }
-.btn-share{
+
+.btn-share {
     float: right;
 }
