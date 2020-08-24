@@ -765,14 +765,14 @@
                                     <div class="form-group">
                                         <label>Amount<span class="text-danger">*</span> <span *ngIf="item.voucherType === 'receipt' && isAdvanceReceipt" class="text-light font-12 ml-05">(Inclusive
                             Tax)</span></label>
-                                        <input id="update-ledger-inclusive-tax" type="text" class="form-control mb-1" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective [(ngModel)]="item.adjustmentAmount.amountForAccount" disabled>
+                                        <input id="update-ledger-inclusive-tax-edit-mode" type="text" class="form-control mb-1" *ngIf="!selectedAdvanceReceiptAdjustInvoiceEditMode" [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" decimalDigitsDirective [(ngModel)]="item.adjustmentAmount.amountForAccount" disabled>
                                         <input id="update-ledger-inclusive-tax" type="text" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" (blur)="adjustedInvoiceAmountChange()" *ngIf="selectedAdvanceReceiptAdjustInvoiceEditMode" [(ngModel)]="item.adjustmentAmount.amountForAccount">
                                     </div>
                                 </div>
                                 <div *ngIf="item.voucherType === 'receipt'" class="col-sm-2 pl-05">
                                     <div class="form-group">
                                         <label>Tax</label>
-                                        <input type="text" id="update-ledger-vouchar-tax" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.calculatedTaxAmount" disabled>
+                                        <input type="text" id="update-ledger-voucher-tax" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.calculatedTaxAmount" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -870,7 +870,7 @@
                                 <td class="select2-parent pdR1">
                                     <div class="form-group">
                                         <label class="default_clr">Voucher Type</label>
-                                        <sh-select id="update-ledger-vouchar-type" [options]="vm.voucherTypeList" [isFilterEnabled]="true"
+                                        <sh-select id="update-ledger-voucher-type-default" [options]="vm.voucherTypeList" [isFilterEnabled]="true"
                                             [(ngModel)]="vm.selectedLedger.voucher.shortCode" [showClear]="false"
                                             (selected)="getInvoiceListsData($event)" [ItemHeight]="'auto'"
                                             [width]="'161px'">
@@ -918,7 +918,7 @@
                                     <div class="form-group">
                                         <label class="default_clr">{{vm.selectedLedger.voucher.shortCode == 'debit note' ? 'Voucher' : 'Invoice'}} No.</label>
 
-                                        <sh-select id="update-ledger-invoice-number" [options]="invoiceList" placeholder="Select Accounts"
+                                        <sh-select id="update-ledger-invoice-voucher-number" [options]="invoiceList" placeholder="Select Accounts"
                                             [(ngModel)]="selectedInvoice" [notFoundLink]="false" [forceClearReactive]="forceClear$ | async"
                                             (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"
                                             [ItemHeight]="67" [showClear]="false">
@@ -945,7 +945,7 @@
                                 <td class="pdR1">
                                     <div class="form-group">
                                         <label class="default_clr">Voucher No.</label>
-                                        <input id="update-ledger-vouchar-number" type="text" placeholder="Voucher no." class="form-control"
+                                        <input id="update-ledger-voucher-type" type="text" placeholder="Voucher no." class="form-control"
                                             [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true"
                                             [style.width.px]="80" />
                                     </div>
@@ -1088,7 +1088,7 @@
                                 </div>
 
                                 <label class="upload_div" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
-                                    <input id="update-ledger-upload-file" type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
+                                    <input type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
                                         [uploadInput]="uploadInput" (uploadOutput)="onUploadOutputUpdate($event)">
                                     <label for="invoiceFile" class="cp fs16">
                                         <i [ngClass]="!isFileUploading ? 'glyphicon glyphicon-paperclip' : 'fa fa-spinner rotate'"></i> Attach file</label>
