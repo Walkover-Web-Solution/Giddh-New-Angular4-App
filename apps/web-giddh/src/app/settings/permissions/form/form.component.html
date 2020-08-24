@@ -44,7 +44,7 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <label>From - To</label>
-                            <input name="DateRangePicker" [bsValue]="dateRangePickerValue"
+                            <input name="DateRangePicker" [bsValue]="dateRangePickerValue" [bsConfig]="dateRangeConfig"
                                 (bsValueChange)="onSelectDateRange($event)" placeholder="Select Date Range" type="text"
                                 class="form-control" bsDaterangepicker>
 
