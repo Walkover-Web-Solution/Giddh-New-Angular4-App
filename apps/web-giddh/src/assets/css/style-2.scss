@@ -10560,3 +10560,6 @@ body.prevent-body-scroll {
 .hide-payment-tab ul li:nth-child(5) {
     display: none;
 }
+.modal.fade.giddh-calendar.show {
+    z-index: 999999;
+}
