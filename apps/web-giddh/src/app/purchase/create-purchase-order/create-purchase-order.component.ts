@@ -543,14 +543,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
             this.assignDueDate();
         }
-
-        this.purchaseOrder.entries.forEach((entry: SalesEntryClass) => {
-            entry.transactions.forEach((txn: SalesTransactionItemClass) => {
-                if (!txn.accountUniqueName) {
-                    entry.entryDate = date;
-                }
-            });
-        });
     }
 
     /**
@@ -1466,10 +1458,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             trx.rate = giddhRoundOff((trx.amount / trx.quantity), this.ratePrecision);
         }
 
-        if (this.isUpdateMode) {
-            this.applyRoundOff = true;
-        }
-
         this.calculateTotalDiscountOfEntry(entry, trx, false);
         this.calculateEntryTaxSum(entry, trx, false);
         this.calculateEntryTotal(entry, trx);
@@ -1713,7 +1701,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public calculateGrandTotal(): void {
-
         let calculatedGrandTotal = 0;
         calculatedGrandTotal = this.purchaseOrder.voucherDetails.grandTotal = this.purchaseOrder.entries.reduce((pv, cv) => {
             return pv + cv.transactions.reduce((pvt, cvt) => pvt + cvt.total, 0);
@@ -1843,10 +1830,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         if (!txn) {
             let entry: SalesEntryClass = new SalesEntryClass();
             if (this.isUpdateMode) {
-                entry.entryDate = this.purchaseOrder.entries[0] ? this.purchaseOrder.entries[0].entryDate : this.universalDate || new Date();
                 entry.isNewEntryInUpdateMode = true;
-            } else {
-                entry.entryDate = this.universalDate || new Date();
             }
             this.purchaseOrder.entries.push(entry);
             setTimeout(() => {
@@ -2013,7 +1997,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
         if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
             this.startLoader(false);
-            this.toaster.errorToast('Due date cannot be less than Order Date');
+            this.toaster.errorToast('Expected delivery date cannot be less than Order Date');
             return;
         }
 
@@ -2072,8 +2056,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         if (data.entries && data.entries.length > 0) {
             _.forEach(data.entries, (entry) => {
                 _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
-                    // convert date object
-                    entry.entryDate = this.convertDateForAPI(entry.entryDate);
                     txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), 2) : 0;
 
                     // will get errors of string and if not error then true boolean
@@ -2188,7 +2170,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             salesEntryClass.voucherType = entry.voucherType;
             salesEntryClass.uniqueName = entry.uniqueName;
             salesEntryClass.description = entry.description;
-            salesEntryClass.date = entry.entryDate;
             entry.taxList.forEach(t => {
                 salesEntryClass.taxes.push({ uniqueName: t });
             });
@@ -2299,7 +2280,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 }
 
                 this.activeIndex = lastIndex;
-                this.purchaseOrder.entries[lastIndex].entryDate = this.universalDate;
                 this.purchaseOrder.entries[lastIndex].transactions[0].fakeAccForSelect2 = salesItem.value;
                 this.purchaseOrder.entries[lastIndex].isNewEntryInUpdateMode = true;
                 this.onSelectSalesAccount(salesItem, this.purchaseOrder.entries[lastIndex].transactions[0], this.purchaseOrder.entries[lastIndex]);
@@ -2335,15 +2315,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public resetForm(poForm: NgForm): void {
-        if (poForm) {
-            this.purchaseOrder = new PurchaseOrder();
-            this.resetVendor();
+        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
+        this.purchaseOrder = new PurchaseOrder();
+        this.resetVendor();
+        if (this.vendorNameDropDown) {
             this.vendorNameDropDown.clear();
-            this.isRcmEntry = false;
-            this.initializeWarehouse();
-            this.fillCompanyAddress("reset");
-            this.assignDates();
         }
+        this.isRcmEntry = false;
+        this.initializeWarehouse();
+        this.fillCompanyAddress("reset");
+        this.assignDates();
     }
 
     /**
@@ -2495,6 +2476,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public modifyEntries(entries: any[]): any {
         let convertedEntries = [];
         this.activeIndex = 0;
+        let entryTaxes = this.companyTaxesList;
 
         entries.forEach(entry => {
             let salesEntryClass = new SalesEntryClass();
@@ -2531,13 +2513,23 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                             salesEntryClass.tcsTaxList.push(tax.uniqueName);
                         }
                     } else {
+                        let selectedTax;
+
+                        if (entryTaxes && entryTaxes.length > 0) {
+                            entryTaxes.forEach(entryTax => {
+                                if (entryTax.uniqueName === tax.uniqueName) {
+                                    selectedTax = entryTax;
+                                }
+                            });
+                        }
+
                         salesEntryClass.taxes.push({
                             amount: tax.taxPercent,
                             uniqueName: tax.uniqueName,
                             isChecked: true,
                             isDisabled: false,
                             type: tax.taxType,
-                            name: tax.name || tax.accountName || ''
+                            name: tax.name || (selectedTax && selectedTax.name) || ''
                         });
                     }
                 });
@@ -2553,8 +2545,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     salesTransactionItemClass.stockUnit = transaction.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = transaction.account.uniqueName + '#' + transaction.stock.uniqueName;
 
-                    let selectedAcc = this.flattenAccounts.find(d => {
-                        return (d.uniqueName === transaction.account.uniqueName);
+                    let selectedAcc = this.flattenAccounts.find(account => {
+                        return (account.uniqueName === transaction.account.uniqueName);
                     });
 
                     let stock = selectedAcc.stocks.find(stock => stock.uniqueName === transaction.stock.uniqueName);
@@ -2614,7 +2606,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             salesEntryClass.voucherType = entry.voucherType;
             salesEntryClass.uniqueName = entry.uniqueName;
             salesEntryClass.description = entry.description;
-            salesEntryClass.entryDate = moment(entry.date, GIDDH_DATE_FORMAT).toDate();
             this.calculateOtherTaxes(salesEntryClass.otherTaxModal, salesEntryClass);
             convertedEntries.push(salesEntryClass);
             this.activeIndex++;
@@ -2674,7 +2665,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public cancelUpdate(): void {
-        this.router.navigate(['/pages/purchase-management/purchase-orders']);
+        this.router.navigate(['/pages/purchase-management/purchase-orders/preview/' + this.purchaseOrderUniqueName]);
     }
 
     /**
