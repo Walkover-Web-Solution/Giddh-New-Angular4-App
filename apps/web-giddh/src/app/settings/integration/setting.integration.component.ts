@@ -23,7 +23,7 @@ import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { TabsetComponent, ModalDirective } from "ngx-bootstrap";
+import { TabsetComponent, ModalDirective, TabDirective } from "ngx-bootstrap";
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { CurrentPage } from '../../models/api-models/Common';
@@ -1296,56 +1296,73 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /**
      * Loads payment tab data
      *
+     * @param {any} event Tab select event
      * @memberof SettingIntegrationComponent
      */
-    public loadPaymentData(): void {
-        this.store.dispatch(this._companyActions.getAllRegistrations());
-        this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
-        this.store.pipe(take(1)).subscribe(s => {
-            this.selectedCompanyUniqueName = s.session.companyUniqueName;
-            this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
-            this.getValidationForm('ICICI')
-        });
+    public loadPaymentData(event?: any): void {
+        if (event && event instanceof TabDirective || !event) {
+            this.store.dispatch(this._companyActions.getAllRegistrations());
+            this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
+            this.store.pipe(take(1)).subscribe(s => {
+                this.selectedCompanyUniqueName = s.session.companyUniqueName;
+                this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+                this.getValidationForm('ICICI')
+            });
+        }
     }
 
     /**
      * Loads E-Commerce tab data
      *
+     * @param {any} event Tab select event
      * @memberof SettingIntegrationComponent
      */
-    public loadEcommerceData(): void {
-        this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
+    public loadEcommerceData(event?: any): void {
+        if (event && event instanceof TabDirective || !event) {
+            this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
+        }
     }
 
     /**
      * Loads Collection tab data
      *
+     * @param {any} event Tab select event
      * @memberof SettingIntegrationComponent
      */
-    public loadCollectionData(): void {
-        this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
-        this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
-        this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
-        this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
+    public loadCollectionData(event?): void {
+        if (event && event instanceof TabDirective || !event) {
+            this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
+            this.store.dispatch(this.settingsIntegrationActions.GetCashfreeDetails());
+            this.store.dispatch(this.settingsIntegrationActions.GetAutoCollectDetails());
+            this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
+        }
     }
 
     /**
      * Loads the Email tab data
      *
+     * @param {any} event Tab select event
      * @memberof SettingIntegrationComponent
      */
-    public loadEmailData(): void {
-        this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-        this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
+    public loadEmailData(event?: any): void {
+        if (event && event instanceof TabDirective || !event) {
+            this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+            this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
+        }
     }
 
     /**
      * Loads SMS tab data
      *
+     * @param {any} event Tab select event
      * @memberof SettingIntegrationComponent
      */
-    public loadSmsData(): void {
-        this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
+    public loadSmsData(event?: any): void {
+        if (event && event instanceof TabDirective || !event) {
+            if (event && event instanceof TabDirective || !event) {
+                this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
+            }
+        }
     }
 
     /**
