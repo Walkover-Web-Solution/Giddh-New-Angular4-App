@@ -91,6 +91,7 @@
     font-size: 14px !important;
     font-family: opensans-regular !important;
 }
+
 ul.list-unstyled li a {
     color: black;
 }
@@ -196,9 +197,14 @@ tr.aging-table-top td {
     max-width: 1170px;
     width: 100%;
     -moz-transform: translate(1px, 0);
-    th,td {
-        &:first-child{
-            min-width:250px;
+    th {
+        &:first-child {
+            min-width: 250px;
+        }
+    }
+    td {
+        &:first-child {
+            min-width: 250px;
         }
     }
 }
@@ -510,7 +516,7 @@ button.btn.btn-filter span.icon-cross {
     .customer-footer-box {
         padding-bottom: 10px;
         float: none !important;
-        di .customer-inner-box {
+        .customer-inner-box {
             display: flex;
             align-items: center;
             padding-top: 6px;
