@@ -16,7 +16,7 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
     public _currencyNumberType: string;
     public currencyDecimalType: number;
 
-    constructor(private _currencyType: GeneralService, private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
+    constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions,
         private _generalService: GeneralService) {
         if (!this._generalService.isCurrencyPipeLoaded) {
             this._generalService.isCurrencyPipeLoaded = true;
