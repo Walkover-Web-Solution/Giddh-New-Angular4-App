@@ -1,3 +1,4 @@
+@import "../../../assets/css/color.scss";
 .input-group-addon {
     position: relative;
     position: relative;
@@ -16,13 +17,12 @@
 }
 
 .custom-select{
-    border: 0px solid #ced4da;
     padding:0 !important;
 }
 .form-group{
     .input-group {
         .input-group-addon {
-        border-left: 1px solid #cccccc !important;
+        border-left: 1px solid $very-light-gray !important;
     }
     input{
             border-left: none !important;

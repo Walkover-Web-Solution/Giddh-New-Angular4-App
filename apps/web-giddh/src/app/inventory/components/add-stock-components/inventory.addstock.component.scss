@@ -1,3 +1,4 @@
+@import "../../../../assets/css/color.scss";
 .output_row > td {
     padding: 12px 10px 12px 0 !important;
 }
@@ -61,7 +62,7 @@ tr.fsstock td {
     padding-bottom: 15px;
 }
 .table_label strong {
-    color: #484848;
+    color: $charcoal;
     font-weight: normal !important;
     font-size: 14px;
     font-family: "opensans-regular";

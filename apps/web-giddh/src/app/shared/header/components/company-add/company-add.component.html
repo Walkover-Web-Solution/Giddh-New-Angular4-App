@@ -42,8 +42,8 @@
                             <span>
                                 <label for="country" class="d-block">Country<sup>*</sup></label>
                                 <sh-select id="country" [options]="countrySource" [isFilterEnabled]="true"
-                                    name="country" [(ngModel)]="company.country" class="pull-left select-caret"
-                                    [required]='true' style="width: 100%">
+                                    name="country" [(ngModel)]="company.country" class="pull-left select-caret w-100"
+                                    [required]='true'>
                                 </sh-select>
                             </span>
 
@@ -93,7 +93,7 @@
                         </div>
 
                         <div class="col-xs-12 col-sm-12 mrT1">
-                            <button class="btn btn-pink mrL1" style="margin-left: 0 !important;" type="submit"
+                            <button class="btn btn-pink ml-1" type="submit"
                                 (click)="createCompany()" [disabled]="createCompanyForm.invalid">Next
                             </button>
                         </div>

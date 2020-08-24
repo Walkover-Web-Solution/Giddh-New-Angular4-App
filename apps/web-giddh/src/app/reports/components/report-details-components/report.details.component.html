@@ -28,9 +28,8 @@
                             class="dropdown-item dropdown-toggle cursor-pointer">Quarterly</a>
                     </li>
                     <li role="menuitem" dropdown placement="right" container="body">
-                        <a dropdownToggle class="dropdown-item dropdown-toggle cursor-pointer" (click)="false">Weekly <span
-                                style="margin-left: 80px" class="caret"></span></a>
-                        <ul class="dropdown-menu reportDropdown" style=" top: 0px !important;" role="menu">
+                        <a dropdownToggle class="dropdown-item dropdown-toggle cursor-pointer" (click)="false">Weekly <span class="caret"></span></a>
+                        <ul class="dropdown-menu reportDropdown" role="menu">
                             <li role="menuitem" *ngFor="let month of monthNames"><a (click)="populateRecords('weekly', month)"
                                     class="dropdown-item">{{month | slice:0:3}}</a></li>
                         </ul>

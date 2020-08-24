@@ -3,7 +3,7 @@
 * {
     border: 0;
     box-sizing: content-box;
-    color: #262626;
+    color: $nero;
     font-family: inherit;
     font-style: inherit;
     font-weight: inherit;
@@ -120,7 +120,7 @@ p {
     border: 0;
     padding: 0;
     text-align: left;
-    color: #262626;
+    color: $nero;
 }
 
 .hidden-label {

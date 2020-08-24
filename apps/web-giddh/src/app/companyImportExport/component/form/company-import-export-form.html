@@ -1,8 +1,5 @@
 <div class="row" style="margin-top: 30px">
-
-
     <div class="col-xs-12 col-sm-12">
-
             <div class="export-data-form">
                 <div class="d-flex">
                     <div class="mr-15 file-type-label">
@@ -46,46 +43,6 @@
                     <button class="btn btn-default pull-right"  (click)="backButtonPressed()">Back
                     </button>
                 </div>
-
-</div>
-
-<!--
-            <div class="col-xs-2 col-sm-2 date-range pdR0" *ngIf="mode === 'export' && fileType === '0'">
-                <label class="d-block">Data Range</label>
-                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-                    (hideDaterangepicker)="selectedDate($event)" (applyDaterangepicker)="selectedDate($event)"
-                    class="form-control" />
             </div>
-
-            <div class="col-xs-2 col-sm-2" *ngIf="mode === 'import'">
-                <label class="d-block">Select File</label>
-
-                <div class="form-group input-upload">
-                    <div class="input-file">
-                        <label for="fileUpload" class="form-control ellp">
-                            <span class="text-success" *ngIf="selectedFile">
-                                {{ selectedFile?.name }}
-                            </span>
-                            <span *ngIf="!selectedFile">
-                                Browse file
-                            </span></label>
-                        <input type="file" id="fileUpload" accept="application/json" style="display: none;"
-                            (change)="fileSelected($event.target.files)" />
-                    </div>
-
-                </div>
-
-            </div>
-
-            <button class="btn btn-success" *ngIf="mode === 'import'" style="margin-top: 24px" (click)="save()"
-                [ladda]="isImportInProcess$ | async" [disabled]="(!fileType || !selectedFile)"> Import
-            </button>
-
-            <div class="col-xs-6 col-sm-6 pull-right">
-                <button class="btn btn-default pull-right" style="margin-top: 24px" (click)="backButtonPressed()">Back
-                </button>
-            </div>
--->
-
     </div>
 </div>

@@ -23,9 +23,7 @@
 }
 
 .account-search .input-group-addon {
-    //border-color: $gainsboro;
-    //border-radius: 20px 0 0 20px;
-    color: #484848;
+    color: $charcoal;
     font-size: 12px;
     padding-right: 0px;
     background-color: transparent;
@@ -42,9 +40,6 @@
 
 .account-search .form-control {
     background: none !important;
-    //border-color: $gainsboro;
-    //border-left: 0px;
-    //border-radius: 0px 20px 20px 0 !important;
     height: 36px;
     padding-left: 3px !important;
     border: 0px solid $white !important;
@@ -60,7 +55,7 @@
     height: 36px;
     border-color: $gainsboro;
     border-radius: 20px 20px 20px 20px !important;
-    border: 1px solid #d9d9d9;
+    border: 1px solid $gainsboro;
     margin: 10px 0px 5px 0px;
 }
 
@@ -84,7 +79,7 @@ a[vr-item]:focus {
     right: 10px;
     font-size: 12px;
     line-height: 36px;
-    color: #484848;
+    color: $charcoal;
 }
 
 .account-search .form-control:after {
@@ -97,28 +92,28 @@ a[vr-item]:focus {
 }
 
 .account-search .form-control::-webkit-input-placeholder {
-    color: #484848;
+    color: $charcoal;
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control::-moz-placeholder {
-    color: #484848;
+    color: $charcoal;
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-ms-input-placeholder {
-    color: #484848;
+    color: $charcoal;
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-moz-placeholder {
-    color: #484848;
+    color: $charcoal;
     font-size: 12px;
     position: relative;
     top: -2px;
@@ -129,7 +124,7 @@ a[vr-item]:focus {
 .account-search .form-control::-moz-placeholder,
 .account-search .form-control:-ms-input-placeholder,
 .account-search .form-control:-moz-placeholder {
-    color: #484848 !important;
+    color: $charcoal !important;
 }
 
 .left_fixed_header li:hover {
@@ -205,7 +200,7 @@ a[vr-item]:focus {
     vertical-align: middle;
     padding-left: 0px;
     text-align: left;
-    color: #262626;
+    color: $nero;
     letter-spacing: 0.6px;
     font-weight: normal;
     font-family: "opensans-semibold";

@@ -4,9 +4,8 @@ p.bank-name {
     color: $midnight-blue;
     margin-bottom: 5px;
 }
-
 p.bankBalnc {
-    color: #666666;
+    color: $dark-gray;
     font-size: 14px;
     display: flex;
     justify-content: space-between;
@@ -19,7 +18,7 @@ p.bankBalnc {
 a.connectBnk {
     position: absolute;
     bottom: 10px;
-    color: #262626;
+    color: $nero;
     text-decoration: underline;
 }
 table.basic td {
@@ -30,7 +29,7 @@ table.basic td {
     padding-top: 20px;
     padding-bottom: 3px;
     font-size: 16px;
-    color: #484848;
+    color: $charcoal;
 }
 .table thead th{
     vertical-align: bottom;
@@ -52,7 +51,7 @@ table.basic th {
     margin-bottom: 50px;
 }
 span.this-week {
-    color: #666666;
+    color: $dark-gray;
     text-decoration: underline;
     font-size: 16px;
 }

@@ -1,8 +1,8 @@
 <div class="padd15">
 
-    <div class="d-flex" style="flex-direction: column">
+    <div class="d-flex flex-column">
         <div class="text-right">
-            <button class="btn btn-pink" style="margin: 0 !important;" (click)="importFiles()">Import Files</button>
+            <button class="btn btn-pink mr-0" (click)="importFiles()">Import Files</button>
         </div>
         <div class="mt-15 import-data-table">
             <div class="no-data h-100" *ngIf="!importStatusResponse?.results?.length">
@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-xs-6 col-sm-6 mb-2" *ngFor="let item of importStatusResponse.results">
                     <div class="import-card">
-                       <i class="hover-orange" style="position: absolute;right: 15px;cursor: pointer;z-index: 2;"
+                       <i class="hover-orange"
                             (click)="downloadItem(item)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="13.333" height="15" viewBox="0 0 13.333 15"
                                 class="download-import">

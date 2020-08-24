@@ -9,7 +9,7 @@
 				<form [formGroup]="searchQueryForm" novalidate name="searchQueryForm" id="searchQueryForm"
 					class="form-inline flex-row flex-wrap pd1">
 					<!-- repeater -->
-					<div class="pos-rel query_list query_list d-flex" [ngClass]="{'mrT2': i !== 0}"
+					<div class="pos-rel query-list query-list d-flex" [ngClass]="{'mrT2': i !== 0}"
 						formArrayName="searchQuery"
 						*ngFor="let item of searchQueryForm.get('searchQuery')['controls'];let i = index; let l = last;">
 						<div [formGroupName]="i" class="d-flex">

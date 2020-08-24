@@ -14,3 +14,9 @@
 .mrgeBtn {
     padding: 8px 16px;
 }
+.move-group-form{
+    width: calc(100% - 92px);
+}
+.all-taxes{
+  width: calc(100% - 95px);
+}

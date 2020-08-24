@@ -6,7 +6,6 @@
             <!-- hide div for future use of design if shubhndra wants to change deisgn as per preious one -->
                 <div class="col-sm-5" *ngIf="hideAsDesignChanges">
                     <ul class="main-company-name">
-                        <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen"  [attachOutsideOnClick]="true" (clickOutside)="closeUserMenu(dropdown)"-->
                         <li class="company-name pos-rel" dropdown #companyDetailsDropDownWeb="bs-dropdown"
                             [autoClose]="false" [attachOutsideOnClick]="true"
                             (clickOutside)="companyDetailsDropDownWeb.hide()" [exclude]="'.company-name'">
@@ -117,9 +116,6 @@
                                                                 src="assets/images/users-white.svg">
 
                                                         </a>
-                                                        <!-- commented by meghna
-            <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="icon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
-            -->
                                                     </li>
 
                                                 </ul>
@@ -164,7 +160,6 @@
                                     <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">Upcoming</a>
                                 </li>
                                 <li>
-                                    <!-- <a href="https://giddh.canny.io/" target="_blank">Feature Request</a> -->
                                     <a href="https://giddh.canny.io/feature-requests" target="_blank">Feature Request</a>
                                 </li>
                                 <li>
@@ -213,8 +208,6 @@
                 </div>
                 <div class="col-sm-3">
                     <div class="giddh-logo" (click)="forceOpenNavigation = true;">
-
-                        <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen"  [attachOutsideOnClick]="true" (clickOutside)="closeUserMenu(dropdown)"-->
                         <li class="company-name pos-rel" (click)="toggleBodyScroll()" [autoClose]="false" dropdown
                             #dropdown="bs-dropdown" [attachOutsideOnClick]="true"
                             (clickOutside)="dropdown.isOpen = false; toggleBodyScroll();">
@@ -284,27 +277,6 @@
                             <span (click)="toggleHelpSupportPane(true)">
                                 <i class="icon-help-support-icon"></i>
                             </span>
-
-                            <!-- <span class="icon-support dropdown-toggle" dropdownToggle></span>
-                            <ul *dropdownMenu class="dropdown-menu dropdown-menu-right mrT1 pd1" role="menu" aria-labelledby="button-basic" [style.min-width.px]="230">
-                                <li>
-                                    <button class="btn btn-block btn-gray">
-                                        <img src="{{imgPath}}support-white.svg" [style.max-width.px]="24" />
-                                        Support
-                                    </button>
-                                </li>
-                                <li class="mrT2 text-center mrB2">
-
-                                    <p><a href="mailto:support@giddh.com" target="_blank" class="grey_clr">support@giddh.com</a></p>
-                                </li>
-                                <li class="row text-center">
-                                    <button class="btn btn-link tdUndr" (click)="openScheduleCalendlyModel();">Talk to Sales</button> |
-                                    <span class="text-center"><a href="http://faq.giddh.com/" target="_blank"
-                                            class="btn btn-link tdUndr">FAQs</a></span>
-                                </li>
-
-
-                            </ul> -->
                         </div>
                     </div>
 
@@ -321,8 +293,6 @@
     <div class="menu_wrapper">
 
         <ul class="main-company-name">
-
-            <!-- [attachOutsideOnClick]="true" [isOpen]="companyMenu.isopen"  [attachOutsideOnClick]="true" (clickOutside)="closeUserMenu(dropdown)"-->
             <li *ngIf="isMobileSite" [autoClose]="false" class="company-name pos-rel hidden-lg hidden-md hidden-sm"
                 dropdown #dropdown="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false">
 
@@ -921,7 +891,6 @@
         <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">Upcoming</a>
     </li>
     <li>
-        <!-- <a href="https://giddh.canny.io/" target="_blank">Feature Request</a> -->
         <a href="https://giddh.canny.io/feature-requests" target="_blank">Feature Request</a>
     </li>
     <li>

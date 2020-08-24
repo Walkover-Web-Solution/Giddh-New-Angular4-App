@@ -177,8 +177,7 @@
                                             (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)"
                                             [placement]="'left'" [containerClass]="'col-xs-3'"
                                             tooltip="Download file : {{vm.selectedLedger.attachedFileName}}">
-                                            <i class="icon-download-circle pull-left"
-                                                style="font-size:15px;"></i>
+                                            <i class="icon-download-circle pull-left" ></i>
                                         </span>
 
                                         <span class="download-invoice-ledger "
@@ -186,8 +185,7 @@
                                             [placement]="'left'" [containerClass]="'col-xs-3'"
                                             tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
                                             (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
-                                            <i class="icon-download-circle pull-left"
-                                                style="font-size:15px;"></i>
+                                            <i class="icon-download-circle pull-left"></i>
                                         </span>
 
                                     </td>
@@ -357,8 +355,7 @@
                                             [placement]="'left'" [containerClass]="'col-xs-3'"
                                             tooltip="Download file : {{vm.selectedLedger.attachedFileName}}"
                                             (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
-                                            <i class="icon-download-circle pull-left"
-                                                style="font-size:15px;"></i>
+                                            <i class="icon-download-circle pull-left"></i>
                                         </span>
 
                                         <span class="download-invoice-ledger"
@@ -366,8 +363,7 @@
                                             [placement]="'left'" [containerClass]="'col-xs-3'"
                                             tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
                                             (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
-                                            <i class="icon-download-circle pull-left"
-                                                style="font-size:15px;"></i>
+                                            <i class="icon-download-circle pull-left"></i>
                                         </span>
                                     </td>
 

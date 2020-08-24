@@ -1587,7 +1587,7 @@
                                         <div class="tableRow"
                                             *ngIf="((isSalesInvoice || isCashInvoice)) && !(isPendingVoucherType && isCashInvoice) && !(!(isAccountHaveAdvanceReceipts || isInvoiceAdjustedWithAdvanceReceipts) && isUpdateMode)">
 
-                                            <div class="tableCell deposite-section">
+                                            <div class="tableCell deposit-section">
 
                                                 <div class="btn-group">
 
@@ -2414,7 +2414,7 @@
                                 </div>
                             </div>
                             <div class="tableRow" *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">
-                                <div class="tableCell biggerDollar">
+                                <div class="tableCell bigger-dollar">
                                     <strong>Total <span>{{baseCurrencySymbol}}</span>
                                     </strong>
                                 </div>
@@ -2488,7 +2488,7 @@
                                                     <label class="pull-right pt-1">Amount</label>
                                                 </li>
 
-                                                <li class="clearfix mrT1 biggerDollar" *ngIf="isSalesInvoice ">
+                                                <li class="clearfix mrT1 bigger-dollar" *ngIf="isSalesInvoice ">
                                                     <strong class="pull-right balanceDueText"> <span
                                                             *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
                                                         {{invFormData.voucherDetails.balanceDue | giddhCurrency}}

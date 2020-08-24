@@ -1,4 +1,7 @@
 @import "../../../../../assets/css/color.scss";
+.invoice-preview-sidebar{
+    z-index: 200;
+}
 .invoice-modal-content:after {
     position: fixed;
     content: "";
