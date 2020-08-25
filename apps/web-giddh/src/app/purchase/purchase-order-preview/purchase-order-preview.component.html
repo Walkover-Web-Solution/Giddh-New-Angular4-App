@@ -11,7 +11,7 @@
                     <ul class="invoice-sidebar">
                         <perfect-scrollbar
                             *ngIf="filteredData && filteredData.length > 0">
-                            <li class="single-invoice-detail cp"
+                            <li class="single-invoice-detail cp" [ngClass]="{'activeItem': row.uniqueName === purchaseOrderUniqueName}"
                                 *ngFor="let row of filteredData; let i = index;">
                                 <div class="row" (click)="showPurchaseOrderPreview(row.uniqueName)">
                                     <div class="col-xs-12 col-sm-7">
