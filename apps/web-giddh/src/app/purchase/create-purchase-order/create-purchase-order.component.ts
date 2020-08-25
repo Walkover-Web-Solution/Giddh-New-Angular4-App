@@ -131,7 +131,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     /* This will hold if it's multi currency account */
     public isMulticurrencyAccount: boolean = false;
     /* This will hold if it's mobile device*/
-    public isMobileScreen: boolean = true;
+    public isMobileScreen: boolean = false;
     /* Observable for list of flatten accounts */
     public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     /* Observable for list of vendors */
@@ -294,6 +294,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public isOthrDtlCollapsed: boolean = false;
     /* This holds exchange rate */
     public originalExchangeRate: any = 1;
+    /* This will hold object for time interval */
+    public interval: any;
 
     constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService) {
         this.getInvoiceSettings();
@@ -336,15 +338,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 this.urlParams = params;
 
                 if (params['action'] === "new") {
-                    this.resetForm(this.poForm);
+                    this.resetForm();
                     this.setCurrentPageTitle("New Purchase Order");
                     this.isUpdateMode = false;
+                    this.autoFillVendorShipping = true;
                 }
 
                 if (params['action'] === "edit") {
-                    this.resetForm(this.poForm);
                     this.setCurrentPageTitle("Edit Purchase Order");
                     this.isUpdateMode = true;
+                    this.autoFillVendorShipping = false;
                 }
             }
         });
@@ -670,9 +673,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 this.vendorAccountsLoaded = true;
 
                 if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails && !this.getAccountInProgress) {
+                    this.getAccountInProgress = true;
                     this.getAccountDetails(this.purchaseOrderDetails.account.uniqueName);
-
-                    this.purchaseOrder.entries = this.modifyEntries(this.purchaseOrderDetails.entries);
                 }
 
                 this.focusInVendorName();
@@ -716,7 +718,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 item.additional['currency'] = item.additional.currency || this.companyCurrency;
                 this.isMulticurrencyAccount = item.additional.currency !== this.companyCurrency;
             }
-
             this.getAccountDetails(item.value);
         }
     }
@@ -1060,7 +1061,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public getStateCode(type: string, statesEle: SalesShSelectComponent, addressType: string): void {
-        let gstVal = _.cloneDeep(this.purchaseOrder.account[type].gstNumber).toString();
+        let gstVal;
+        if (addressType === "vendor") {
+            gstVal = _.cloneDeep(this.purchaseOrder.account[type].gstNumber).toString();
+        } else {
+            gstVal = _.cloneDeep(this.purchaseOrder.company[type].gstNumber).toString();
+        }
+
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.statesSource.find(item => item.stateGstCode === gstVal.substring(0, 2));
             if (selectedState) {
@@ -1978,7 +1985,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @returns {*}
      * @memberof CreatePurchaseOrderComponent
      */
-    public savePurchaseOrder(poForm: NgForm, type: string): void {
+    public savePurchaseOrder(type: string): void {
         let data: VoucherClass = _.cloneDeep(this.purchaseOrder);
 
         // special check if gst no filed is visible then and only then check for gst validation
@@ -2130,7 +2137,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             this.purchaseOrderService.create(getRequestObject, updatedData).subscribe(response => {
                 this.toaster.clearAllToaster();
                 if (response && response.status === "success") {
-                    this.resetForm(this.poForm);
+                    this.resetForm();
                     this.toaster.successToast("Purchase order created succesfully with voucher number - " + response.body.number);
                 } else {
                     this.toaster.errorToast(response.message);
@@ -2182,17 +2189,17 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 salesEntryClass.sacNumber = transaction.sacNumber;
                 salesEntryClass.description = transaction.description;
                 if (transaction.isStockTxn) {
-                    let saalesAddBulkStockItems = new SalesAddBulkStockItems();
-                    saalesAddBulkStockItems.name = transaction.stockDetails.name;
-                    saalesAddBulkStockItems.uniqueName = transaction.stockDetails.uniqueName;
-                    saalesAddBulkStockItems.quantity = transaction.quantity;
-                    saalesAddBulkStockItems.rate = {};
-                    saalesAddBulkStockItems.rate.amountForAccount = transaction.rate;
-                    saalesAddBulkStockItems.sku = transaction.stockDetails.skuCode;
-                    saalesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
-                    saalesAddBulkStockItems.stockUnit.code = transaction.stockUnit;
+                    let salesAddBulkStockItems = new SalesAddBulkStockItems();
+                    salesAddBulkStockItems.name = transaction.stockDetails.name;
+                    salesAddBulkStockItems.uniqueName = transaction.stockDetails.uniqueName;
+                    salesAddBulkStockItems.quantity = transaction.quantity;
+                    salesAddBulkStockItems.rate = {};
+                    salesAddBulkStockItems.rate.amountForAccount = transaction.rate;
+                    salesAddBulkStockItems.sku = transaction.stockDetails.skuCode;
+                    salesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
+                    salesAddBulkStockItems.stockUnit.code = transaction.stockUnit;
 
-                    transactionClassMul.stock = saalesAddBulkStockItems;
+                    transactionClassMul.stock = salesAddBulkStockItems;
                 }
                 salesEntryClass.transactions.push(transactionClassMul);
             });
@@ -2314,7 +2321,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @param {NgForm} poForm
      * @memberof CreatePurchaseOrderComponent
      */
-    public resetForm(poForm: NgForm): void {
+    public resetForm(): void {
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.purchaseOrder = new PurchaseOrder();
         this.resetVendor();
@@ -2413,7 +2420,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public ngOnDestroy(): void {
-        this.resetForm(this.poForm);
+        this.resetForm();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -2432,11 +2439,26 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             if (response) {
                 if (response.status === "success") {
                     this.purchaseOrderDetails = response.body;
+                    let entriesUpdated = false;
 
-                    if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails && !this.getAccountInProgress && this.vendorAccountsLoaded) {
-                        this.getAccountDetails(this.purchaseOrderDetails.account.uniqueName);
-                        this.purchaseOrder.entries = this.modifyEntries(this.purchaseOrderDetails.entries);
+                    if (this.purchaseOrderDetails.roundOffTotal && this.purchaseOrderDetails.roundOffTotal.amountForAccount === 0 && this.purchaseOrderDetails.roundOffTotal.amountForCompany === 0) {
+                        this.applyRoundOff = false;
                     }
+
+                    if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails && !this.getAccountInProgress) {
+                        this.getAccountInProgress = true;
+                        this.getAccountDetails(this.purchaseOrderDetails.account.uniqueName);
+                    }
+
+                    this.interval = setInterval(() => {
+                        if (this.purchaseOrderDetails && this.purchaseOrderDetails.entries && this.vendorAccountsLoaded && !entriesUpdated && this.copiedAccountDetails) {
+                            entriesUpdated = true;
+                            clearInterval(this.interval);
+                            this.purchaseOrder.entries = this.modifyEntries(this.purchaseOrderDetails.entries);
+                            this.showLoaderUntilDataPrefilled = false;
+                            this.startLoader(false);
+                        }
+                    }, 500);
 
                     this.purchaseOrder.templateDetails = this.purchaseOrderDetails.templateDetails;
 
@@ -2610,8 +2632,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             convertedEntries.push(salesEntryClass);
             this.activeIndex++;
         });
-
-        this.showLoaderUntilDataPrefilled = false;
 
         return convertedEntries;
     }

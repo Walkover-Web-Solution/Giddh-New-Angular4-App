@@ -363,7 +363,7 @@
                         </div>
                         <!-- endregion -->
                     </div>
-                    <div class="row mTB1">
+                    <!-- <div class="row mTB1">
                         <div class="col-sm-2" *ngIf="!isMobileScreen">
                             <label></label>
                         </div>
@@ -380,7 +380,7 @@
                     <ng-template #rcmTemplate>
                         <confirmation-modal [configuration]="rcmConfiguration"
                             (buttonClicked)="handleRcmChange($event)"></confirmation-modal>
-                    </ng-template>
+                    </ng-template> -->
                 </div>
             </div>
         </div>
@@ -458,7 +458,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="text-right  item-amount">
+                        <td class="text-right item-amount">
                             <div class="td-wrapper">
                                 <div>
                                     <div class="wrap-td-data">
@@ -579,10 +579,6 @@
                             </div>
 
                             <div *ngIf="transaction.fakeAccForSelect2">
-                                <!-- <div class="skuNumber">
-                                    <label>SKU:</label>Number
-                                </div> -->
-
                                 <div class="description mt-1">
                                     <textarea type="text" placeholder="Add Description"
                                         name="transaction.description_{{entryIdx}}" class="form-control"
@@ -1628,11 +1624,11 @@
 
             <!-- region generate mode -->
             <div class="pull-right pr update-mode" *ngIf="!isUpdateMode">
-                <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="resetForm(poForm)">Clear</button>
+                <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="resetForm()">Clear</button>
 
                 <!-- region purchase invoice -->
                 <span class="d-inline-block v-align-middle">
-                    <button type="button" class="btn btn-default" (click)="savePurchaseOrder(poForm, 'create')">Save</button>
+                    <button type="button" class="btn btn-default" (click)="savePurchaseOrder('create')">Save</button>
                 </span>
                 <!-- endregion -->
 
@@ -1641,11 +1637,8 @@
 
             <!-- region update mode -->
             <div class="pull-right pr" *ngIf="isUpdateMode">
-
-                <button type="button" class="btn btn-danger d-inline-block v-align-middle"
-                    (click)="cancelUpdate()">Cancel</button>
-
-                <button type="button" class="btn btn-default" (click)="savePurchaseOrder(poForm, 'update')">Update</button>
+                <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">Cancel</button>
+                <button type="button" class="btn btn-default" (click)="savePurchaseOrder('update')">Update</button>
             </div>
             <!-- endregion -->
 

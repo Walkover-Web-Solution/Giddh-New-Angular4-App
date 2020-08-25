@@ -60,8 +60,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         to: '',
         page: 1,
         count: PAGINATION_LIMIT,
-        sort: '',
-        sortBy: ''
+        sort: 'DESC',
+        sortBy: 'purchaseDate'
     };
     /* This will hold the post params of get all PO api */
     public purchaseOrderPostRequest: any = {
@@ -294,8 +294,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         this.purchaseOrderGetRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
         this.purchaseOrderGetRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         this.purchaseOrderGetRequest.page = 1;
-        this.purchaseOrderGetRequest.sort = '';
-        this.purchaseOrderGetRequest.sortBy = '';
+        this.purchaseOrderGetRequest.sort = 'DESC';
+        this.purchaseOrderGetRequest.sortBy = 'purchaseDate';
 
         this.purchaseOrderPostRequest = {
             purchaseOrderNumber: '',
@@ -364,7 +364,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof PurchaseOrderComponent
      */
     public showClearFilterButton(): boolean {
-        if (this.purchaseOrderPostRequest.purchaseOrderNumber || this.purchaseOrderPostRequest.grandTotal || this.purchaseOrderPostRequest.grandTotalOperation || (this.purchaseOrderPostRequest.statuses && this.purchaseOrderPostRequest.statuses.length > 0) || this.purchaseOrderPostRequest.dueFrom || this.purchaseOrderPostRequest.dueTo || this.purchaseOrderPostRequest.vendorName || this.purchaseOrderGetRequest.sortBy || (this.universalDate && (this.purchaseOrderGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.purchaseOrderGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)))) {
+        if (this.purchaseOrderPostRequest.purchaseOrderNumber || this.purchaseOrderPostRequest.grandTotal || this.purchaseOrderPostRequest.grandTotalOperation || (this.purchaseOrderPostRequest.statuses && this.purchaseOrderPostRequest.statuses.length > 0) || this.purchaseOrderPostRequest.dueFrom || this.purchaseOrderPostRequest.dueTo || this.purchaseOrderPostRequest.vendorName || (this.purchaseOrderGetRequest.sortBy && this.purchaseOrderGetRequest.sortBy !== "purchaseDate") || (this.universalDate && (this.purchaseOrderGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.purchaseOrderGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)))) {
             return true;
         } else {
             return false;
