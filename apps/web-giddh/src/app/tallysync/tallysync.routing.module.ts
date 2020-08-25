@@ -26,7 +26,6 @@ import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.
 import { TextMaskModule } from 'angular2-text-mask';
 import { Daterangepicker } from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { TallySyncService } from "../services/tally-sync.service";
 
@@ -69,8 +68,7 @@ const _ROUTES: Routes = [
         BsDropdownModule,
         SalesShSelectModule,
         TextMaskModule,
-        Daterangepicker,
-        NgbTypeaheadModule
+        Daterangepicker
     ],
     exports: [
         RouterModule,

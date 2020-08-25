@@ -58,7 +58,6 @@ import { GenerateEWayBillComponent } from './preview/models/generateEWayBill/gen
 import { EWayBillCredentialsComponent } from './eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component';
 import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { DownloadOrPreviewEwayComponent } from './eWayBill/download-or-preview-eway/download-or-preview-eway.component';
 import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview-details/invoice-preview-details.component';
@@ -166,7 +165,6 @@ const INVOICE_ROUTES: Routes = [
         Daterangepicker,
         AccountDetailModalModule,
         CurrencyModule,
-        NgbTypeaheadModule,
         PerfectScrollbarModule,
         ProformaInvoiceModule,
         DigitsOnlyModule,
