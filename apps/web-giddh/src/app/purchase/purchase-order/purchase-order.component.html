@@ -126,11 +126,11 @@
 
                     <th width="15%" class="td-search-box" (clickOutside)="showPurchaseOrderNumberSearch = false">
                         <div>
-                            <span [hidden]="showPurchaseOrderNumberSearch">Purchase Order#</span>
+                            <span [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber">Purchase Order#</span>
                             <i class="icon-search" (click)="showInlineSearch('purchaseOrderNumber', searchBox);"
-                                [hidden]="showPurchaseOrderNumberSearch"></i>
+                                [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber"></i>
                         </div>
-                        <div class="input-container" [hidden]="!showPurchaseOrderNumberSearch">
+                        <div class="input-container" [hidden]="!showPurchaseOrderNumberSearch && !purchaseOrderPostRequest.purchaseOrderNumber">
                             <input type="text" placeholder="Search Purchase Order#" class="w100" #searchBox
                                 [(ngModel)]="purchaseOrderPostRequest.purchaseOrderNumber" (keyup)="columnSearch()"
                                 (keydown)="columnSearch()" />
@@ -139,11 +139,11 @@
 
                     <th width="15%" class="td-search-box" (clickOutside)="showVendorNameSearch = false">
                         <div>
-                            <span [hidden]="showVendorNameSearch">Vendor Name</span>
+                            <span [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName">Vendor Name</span>
                             <i class="icon-search" (click)="showInlineSearch('vendorName', searchBox);"
-                                [hidden]="showVendorNameSearch"></i>
+                                [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName"></i>
                         </div>
-                        <div class="input-container" [hidden]="!showVendorNameSearch">
+                        <div class="input-container" [hidden]="!showVendorNameSearch && !purchaseOrderPostRequest.vendorName">
                             <input type="text" placeholder="Search Vendor Name" class="w100" #searchBox
                                 [(ngModel)]="purchaseOrderPostRequest.vendorName" (keyup)="columnSearch()"
                                 (keydown)="columnSearch()" />
@@ -252,7 +252,7 @@
             </tbody>
         </table>
     </div>
-    <pagination *ngIf="purchaseOrders.totalPages > 1" class="pagination" [totalItems]="purchaseOrders.totalItems" [itemsPerPage]="purchaseOrderGetRequest.count" [maxSize]="5" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+    <pagination *ngIf="purchaseOrders.totalPages > 1" class="pagination" [(ngModel)]="purchaseOrderGetRequest.page" [totalItems]="purchaseOrders.totalItems" [itemsPerPage]="purchaseOrderGetRequest.count" [maxSize]="5" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
 </div>
 <ng-template #template>
     <div class="purchase-order-bulk-update">
