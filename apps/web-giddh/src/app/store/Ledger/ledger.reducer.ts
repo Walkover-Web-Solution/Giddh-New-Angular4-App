@@ -7,7 +7,7 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
 import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 
 export interface LedgerState {
     account?: AccountResponse;
@@ -501,7 +501,7 @@ const markCheckedUnChecked = (transactionDetails: TransactionsResponse, mode: 'd
             });
         }
     }
-    
+
     return newResponse;
 };
 

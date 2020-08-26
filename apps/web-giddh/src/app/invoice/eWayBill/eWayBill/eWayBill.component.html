@@ -408,12 +408,14 @@
                         <!-- <input type="text" required placeholder="" class="form-control input" /> -->
                         <!-- <input [ngbTypeahead]="dataSource" type="text" autocomplete="off" (keyup)="onChangeCityName()" [(ngModel)]="company.city" name="city" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" required maxlength="50" placeholder="Branch City"
                                 pattern="^[^\s]+(\s+[^\s]+)*$"> -->
-                        <input [ngbTypeahead]="dataSource" class="form-control input " placeholder="Enter city"
+
+                        <!-- Commented for now can be replaced with new dynamic search sh-select
+                            <input [ngbTypeahead]="dataSource" class="form-control input " placeholder="Enter city"
                             type="text" autocomplete="off" [(ngModel)]="updateEwayVehicleform.fromPlace"
                             name="fromPlace" [resultTemplate]="rt" required maxlength="50">
                         <ng-template #rt let-r="result" let-t="term">
                             <span>{{ r }}</span>
-                        </ng-template>
+                        </ng-template> -->
 
                     </div>
                 </div>

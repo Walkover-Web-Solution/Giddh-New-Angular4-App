@@ -2,7 +2,7 @@ import { distinctUntilChanged, take } from 'rxjs/operators';
 import { IPageInfo, TallyModuleService } from './../tally-service';
 import { ReplaySubject } from 'rxjs';
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
-import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
+import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'accounting-sidebar',
@@ -36,7 +36,7 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
 
         this._tallyModuleService.selectedPageInfo.pipe(distinctUntilChanged((p, q) => {
             if (p && q) {
-                return (_.isEqual(p, q));
+                return (isEqual(p, q));
             }
             if ((p && !q) || (!p && q)) {
                 return false;

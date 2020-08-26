@@ -14,8 +14,6 @@ import { InventoryService } from '../../services/inventory.service';
 import { CustomActions } from '../../store/customActions';
 import { InventoryAction } from './inventory.actions';
 
-// import { from } from 'rxjs/observable/from';
-
 @Injectable()
 export class SidebarAction {
 

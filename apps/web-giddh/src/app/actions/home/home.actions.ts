@@ -10,7 +10,7 @@ import { DashboardService } from '../../services/dashboard.service';
 import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IRevenueChartClosingBalanceResponse, ITotalOverDuesResponse } from '../../models/interfaces/dashboard.interface';
 import { BankAccountsResponse, DashboardResponse, GroupHistoryRequest, GroupHistoryResponse, RefreshBankAccountResponse, GraphTypesResponse, RevenueGraphDataRequest, RevenueGraphDataResponse } from '../../models/api-models/Dashboard';
-import * as _ from '../../lodash-optimized';
+import { cloneDeep } from '../../lodash-optimized';
 import { CustomActions } from '../../store/customActions';
 
 @Injectable()
@@ -166,7 +166,7 @@ export class HomeActions {
                             revenueActiveYear: res[0].body ? res[0].body.groups : null,
                             ExpensesActiveYear: res[1].body ? res[1].body.groups : null,
                             ProfitLossActiveYear: res[2].body,
-                            NetworthActiveYear: _.cloneDeep(res[2].body),
+                            NetworthActiveYear: cloneDeep(res[2].body),
                             refresh: (res[3] as CustomActions).payload.refresh
                         };
                         return {
@@ -180,7 +180,7 @@ export class HomeActions {
                             revenueActiveYear: res[0].body ? res[0].body.groups : null,
                             ExpensesActiveYear: res[1].body ? res[1].body.groups : null,
                             ProfitLossActiveYear: res[2].body,
-                            NetworthActiveYear: _.cloneDeep(res[2].body),
+                            NetworthActiveYear: cloneDeep(res[2].body),
                             refresh: (res[3] as CustomActions).payload.refresh
                         };
                         return {
@@ -194,7 +194,7 @@ export class HomeActions {
                             revenueActiveYear: res[0].body ? res[0].body.groups : null,
                             ExpensesActiveYear: res[1].body ? res[1].body.groups : null,
                             ProfitLossActiveYear: res[2].body,
-                            NetworthActiveYear: _.cloneDeep(res[2].body),
+                            NetworthActiveYear: cloneDeep(res[2].body),
                             refresh: (res[3] as CustomActions).payload.refresh
                         };
                         return {
@@ -208,7 +208,7 @@ export class HomeActions {
                             revenueActiveYear: res[0].body ? res[0].body.groups : null,
                             ExpensesActiveYear: res[1].body ? res[1].body.groups : null,
                             ProfitLossActiveYear: res[2].body,
-                            NetworthActiveYear: _.cloneDeep(res[2].body),
+                            NetworthActiveYear: cloneDeep(res[2].body),
                             refresh: (res[3] as CustomActions).payload.refresh
                         };
                         return {
@@ -269,7 +269,7 @@ export class HomeActions {
                             revenueLastYear: res[0].body ? res[0].body.groups : null,
                             ExpensesLastYear: res[1].body ? res[1].body.groups : null,
                             ProfitLossLastYear: res[2].body,
-                            NetworthLastYear: _.cloneDeep(res[2].body),
+                            NetworthLastYear: cloneDeep(res[2].body),
                             refresh: (res[3] as CustomActions).payload.refresh
                         };
                         return {
@@ -283,7 +283,7 @@ export class HomeActions {
                             revenueLastYear: res[0].body ? res[0].body.groups : null,
                             ExpensesLastYear: res[1].body ? res[1].body.groups : null,
                             ProfitLossLastYear: res[2].body,
-                            NetworthLastYear: _.cloneDeep(res[2].body),
+                            NetworthLastYear: cloneDeep(res[2].body),
                             refresh: (res[3] as CustomActions).payload.refresh
                         };
                         return {
@@ -297,7 +297,7 @@ export class HomeActions {
                             revenueLastYear: res[0].body ? res[0].body.groups : null,
                             ExpensesLastYear: res[1].body ? res[1].body.groups : null,
                             ProfitLossLastYear: res[2].body,
-                            NetworthLastYear: _.cloneDeep(res[2].body),
+                            NetworthLastYear: cloneDeep(res[2].body),
                             refresh: (res[3] as CustomActions).payload.refresh
                         };
                         return {
@@ -311,7 +311,7 @@ export class HomeActions {
                             revenueLastYear: res[0].body ? res[0].body.groups : null,
                             ExpensesLastYear: res[1].body ? res[1].body.groups : null,
                             ProfitLossLastYear: res[2].body,
-                            NetworthLastYear: _.cloneDeep(res[2].body),
+                            NetworthLastYear: cloneDeep(res[2].body),
                             refresh: (res[3] as CustomActions).payload.refresh
                         };
                         return {

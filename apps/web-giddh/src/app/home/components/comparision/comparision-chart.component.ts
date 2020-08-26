@@ -1,18 +1,15 @@
-import { skipWhile, take, takeUntil } from 'rxjs/operators';
-import { Component, Input, OnInit } from '@angular/core';
-//import { Options } from 'highcharts';
-import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
-import { Observable, ReplaySubject } from 'rxjs';
-import { HomeActions } from '../../../actions/home/home.actions';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/roots';
-import * as moment from 'moment/moment';
-import * as _ from '../../../lodash-optimized';
-import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
-import { isNullOrUndefined } from 'util';
-//import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOptionsExtention';
-import { API_TO_CALL, CHART_CALLED_FROM } from '../../../actions/home/home.const';
 
+import { HomeActions } from '../../../actions/home/home.actions';
+import { AppState } from '../../../store/roots';
+
+//import { Options } from 'highcharts';
+// import * as moment from 'moment/moment';
+// import * as _ from '../../../lodash-optimized';
+// import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
+// import { isNullOrUndefined } from 'util';
+//import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOptionsExtention';
 @Component({
     selector: 'compare-chart',
     templateUrl: 'comparision-chart.component.html',

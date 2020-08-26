@@ -38,7 +38,6 @@ import {
 import {
     SalesAddStockComponent,
 } from './components/aside-menu-product-service/components/create-stock/sales.create.stock.component';
-import { ProformaAddBulkItemsComponent } from './components/proforma-add-bulk-items/proforma-add-bulk-items.component';
 import { ProformaGstTreatmentComponent } from './components/proforma-gst-treatment/proforma-gst-treatment.component';
 import { ProformaLastInvoicesComponent } from './components/proforma-last-invoices/proforma-last-invoices.component';
 import { ProformaPrintInPlaceComponent } from './components/proforma-print-inplace/proforma-print-in-place.component';
@@ -80,11 +79,10 @@ import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjust
         SettingsServiceModule,
         AdvanceReceiptAdjustmentModule
     ],
-    exports: [ProformaInvoiceComponent, SalesAddStockComponent, SalesAddStockGroupComponent, AsideMenuProductServiceComponent, ProformaAddBulkItemsComponent],
+    exports: [ProformaInvoiceComponent, SalesAddStockComponent, SalesAddStockGroupComponent, AsideMenuProductServiceComponent],
     declarations: [
         ProformaInvoiceRendererComponent,
         ProformaInvoiceComponent,
-        ProformaAddBulkItemsComponent,
         ProformaLastInvoicesComponent,
         ProformaGstTreatmentComponent,
         SalesAddStockComponent,
