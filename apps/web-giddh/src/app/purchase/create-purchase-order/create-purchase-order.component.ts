@@ -1451,7 +1451,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public calculateStockEntryAmount(trx: SalesTransactionItemClass): void {
-        trx.amount = giddhRoundOff((Number(trx.quantity) * Number(trx.rate)), this.ratePrecision);
+        trx.amount = Number(trx.quantity) * Number(trx.rate);
     }
 
     /**
