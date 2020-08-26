@@ -22,7 +22,7 @@ import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-s
 import { ToasterService } from '../../services/toaster.service';
 import { OnboardingFormRequest, CurrentPage } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
-import { VAT_SUPPORTED_COUNTRIES, RATE_FIELD_PRECISION, SubVoucher } from '../../app.constant';
+import { VAT_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, SalesEntryClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, AccountDetailsClass } from '../../models/api-models/Sales';
 import { TaxResponse } from '../../models/api-models/Company';
@@ -224,6 +224,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public activeIndex: number;
     /* Rate should have precision up to 4 digits for better calculation */
     public ratePrecision = RATE_FIELD_PRECISION;
+    /* Rate should have precision up to 4 digits for better calculation */
+    public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
     /* This will hold if we need to apply round off */
     public applyRoundOff: boolean = true;
     /* This will hold if we need to hide total tax and have to exclude tax amount from total invoice amount */
@@ -1449,7 +1451,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public calculateStockEntryAmount(trx: SalesTransactionItemClass): void {
-        trx.amount = Number(trx.quantity) * Number(trx.rate);
+        trx.amount = giddhRoundOff((Number(trx.quantity) * Number(trx.rate)), this.ratePrecision);
     }
 
     /**
@@ -2520,6 +2522,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 salesTransactionItemClass.date = transaction.date;
                 salesEntryClass.transactions.push(salesTransactionItemClass);
 
+                let usedTaxes = [];
+
                 entry.taxes.forEach(tax => {
                     let taxTypeArr = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
                     if (taxTypeArr.indexOf(tax.taxType) > -1) {
@@ -2536,23 +2540,26 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                         }
                     } else {
                         let selectedTax;
+                        if(usedTaxes.indexOf(tax.uniqueName) === -1) {
+                            usedTaxes.push(tax.uniqueName);
+                        
+                            if (entryTaxes && entryTaxes.length > 0) {
+                                entryTaxes.forEach(entryTax => {
+                                    if (entryTax.uniqueName === tax.uniqueName) {
+                                        selectedTax = entryTax;
+                                    }
+                                });
+                            }
 
-                        if (entryTaxes && entryTaxes.length > 0) {
-                            entryTaxes.forEach(entryTax => {
-                                if (entryTax.uniqueName === tax.uniqueName) {
-                                    selectedTax = entryTax;
-                                }
+                            salesEntryClass.taxes.push({
+                                amount: tax.taxPercent,
+                                uniqueName: tax.uniqueName,
+                                isChecked: true,
+                                isDisabled: false,
+                                type: tax.taxType,
+                                name: tax.name || (selectedTax && selectedTax.name) || ''
                             });
                         }
-
-                        salesEntryClass.taxes.push({
-                            amount: tax.taxPercent,
-                            uniqueName: tax.uniqueName,
-                            isChecked: true,
-                            isDisabled: false,
-                            type: tax.taxType,
-                            name: tax.name || (selectedTax && selectedTax.name) || ''
-                        });
                     }
                 });
 
@@ -2572,6 +2579,27 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     });
 
                     let stock = selectedAcc.stocks.find(stock => stock.uniqueName === transaction.stock.uniqueName);
+
+                    if(stock) {
+                        let description = [];
+                        let skuCodeHeading = stock.skuCodeHeading ? stock.skuCodeHeading : 'SKU Code';
+
+                        if (stock.skuCode) {
+                            description.push(skuCodeHeading + ':' + stock.skuCode);
+                        }
+
+                        let customField1Heading = stock.customField1Heading ? stock.customField1Heading : 'Custom field 1';
+                        if (stock.customField1Value) {
+                            description.push(customField1Heading + ':' + stock.customField1Value);
+                        }
+
+                        let customField2Heading = stock.customField2Heading ? stock.customField2Heading : 'Custom field 2';
+                        if (stock.customField2Value) {
+                            description.push(customField2Heading + ':' + stock.customField2Value);
+                        }
+
+                        salesTransactionItemClass.sku_and_customfields = description.join(', ');
+                    }
 
                     salesTransactionItemClass.stockList = [];
                     if (stock.accountStockDetails.unitRates.length) {

@@ -663,7 +663,7 @@
                                         class="form-control transaction-rate text-right" [(ngModel)]="transaction.rate"
                                         [prefix]="purchaseOrder.accountDetails.currencySymbol"
                                         [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                                        [customDecimalPlaces]="ratePrecision" />
+                                        [customDecimalPlaces]="highPrecisionRate" />
                                 </div>
                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
                                     <span>{{baseCurrencySymbol}}</span>
@@ -1273,7 +1273,7 @@
                                             [(ngModel)]="transaction.rate"
                                             [prefix]="purchaseOrder.accountDetails.currencySymbol"
                                             [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
-                                            [customDecimalPlaces]="ratePrecision" />
+                                            [customDecimalPlaces]="highPrecisionRate" />
                                     </div>
                                     <!-- please add condition for show and hide -->
                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount && isMultiCurrencySupported">
