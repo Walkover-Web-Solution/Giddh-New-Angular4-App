@@ -151,7 +151,7 @@
                     </th>
 
                     <th width="15%">
-                        <div class="d-flex justify-content-end">
+                        <div class="d-flex">
                             <div class="text-right"> Total Amt.</div>
                             <div class="icon-pointer">
                                 <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}">
@@ -203,7 +203,7 @@
                     <td data-title="Vendor Name">
                         {{item.vendor?.name}}
                     </td>
-                    <td data-title="Total Amt." class="text-right">
+                    <td data-title="Total Amt.">
                         {{item.grandTotal?.amountForAccount | giddhCurrency}}
                     </td>
                     <td data-title="Expected Delivery">
@@ -211,7 +211,7 @@
                         <span *ngIf="item.dueDays && item.dueDays > 7">{{item.dueDate}}</span>
                         <span class="ontime-delivery" *ngIf="item.dueDays === 0">Today</span>
                     </td>
-                    <td data-title="status" class="d-flex align-items-center">
+                    <td data-title="status" class="d-flex align-items-center status_mobile">
                         <span class="d-flex">
                             {{item.status}}</span>
                         <div class="action-icon ml-15" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
