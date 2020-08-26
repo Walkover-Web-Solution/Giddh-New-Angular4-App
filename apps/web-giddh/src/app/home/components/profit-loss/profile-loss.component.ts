@@ -1,6 +1,6 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
-import { Chart } from 'angular-highcharts';
+import * as Highcharts from 'highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
@@ -54,7 +54,8 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public companies$: Observable<CompanyResponse[]>;
     public activeCompanyUniqueName$: Observable<string>;
     public requestInFlight: boolean = true;
-    public profitLossChart: any;
+    public profitLossChart: typeof Highcharts = Highcharts;
+    public chartOptions: Highcharts.Options;
     public totalIncome: number = 0;
     public totalIncomeType: string = '';
     public totalExpense: number = 0;
@@ -171,7 +172,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         let baseCurrencySymbol = this.amountSettings.baseCurrencySymbol;
         let cPipe = this.currencyPipe;
 
-        this.profitLossChart = new Chart({
+        this.chartOptions = {
             colors: ['#FED46A', '#4693F1'],
             chart: {
                 type: 'pie',
@@ -225,9 +226,10 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
             },
             series: [{
                 name: 'Profit & Loss',
+                type: 'pie',
                 data: [['Total Income', this.totalIncome], ['Total Expenses', this.totalExpense]],
             }],
-        });
+        };
 
         this.requestInFlight = false;
         this.cdRef.detectChanges();

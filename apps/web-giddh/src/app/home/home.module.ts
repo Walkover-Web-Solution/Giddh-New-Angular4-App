@@ -10,9 +10,7 @@ import { ComparisionChartComponent } from './components/comparision/comparision-
 import { HistoryChartComponent } from './components/history/history-chart.component';
 import { NetworthChartComponent } from './components/networth/networth-chart.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { ChartModule, HIGHCHARTS_MODULES } from 'angular-highcharts';
-import * as more from 'highcharts/highcharts-more.src';
-import * as exporting from 'highcharts/modules/exporting.src';
+import { HighchartsChartModule } from 'highcharts-angular';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { LaddaModule } from 'angular2-ladda';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
@@ -58,7 +56,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ],
     exports: [HomeComponent],
     providers: [
-        { provide: HIGHCHARTS_MODULES, useFactory: () => [ more, exporting ] },
         {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
@@ -70,7 +67,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FormsModule,
         HomeRoutingModule,
         ModalModule,
-        ChartModule,
+        HighchartsChartModule,
         LaddaModule,
         PerfectScrollbarModule,
         BsDropdownModule,

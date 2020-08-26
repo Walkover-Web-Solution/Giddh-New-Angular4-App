@@ -44,7 +44,8 @@
                         <div class="chart-div" google-chart chart="myChartObject">
                             <perfect-scrollbar [scrollIndicators]="true">
                                 <div id="leftIncomeChart">
-                                    <chart [chart]="options"></chart>
+                                    <!-- <chart [chart]="options"></chart> -->
+                                    <highcharts-chart *ngIf="chartOptions" [Highcharts]="revenueChart" [options]="chartOptions"></highcharts-chart>
                                 </div>
                             </perfect-scrollbar>
                         </div>
@@ -141,7 +142,7 @@
                 </div>
             </div>
             <div id="incomeChart">
-                <chart [options]="options"></chart>
+                <highcharts-chart *ngIf="chartOptions" [Highcharts]="revenueChart" [options]="chartOptions"></highcharts-chart>
             </div>
             <div class="total-sale-data clearfix">
                 <div class="row">

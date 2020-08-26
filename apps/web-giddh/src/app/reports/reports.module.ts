@@ -11,8 +11,6 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { ReportsGraphComponent } from './components/report-graph-component/report.graph.component';
 import { ReportsTableComponent } from './components/report-table-components/report.table.component';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
-
-import { ChartModule } from 'angular-highcharts';
 import { SalesRegisterComponent } from './components/sales-register-component/sales.register.component';
 import { SalesRegisterExpandComponent } from './components/salesRegister-expand-component/sales.register.expand.component';
 import { SalesRegisterDetailsComponent } from './components/sales-register-details-component/sales.register.details.component';
@@ -74,7 +72,6 @@ import { SharedModule } from '../shared/shared.module';
         ReportsRoutingModule,
         BsDatepickerModule.forRoot(),
         CommonModule,
-        ChartModule,
         Daterangepicker,
         BsDropdownModule,
         PaginationModule,
