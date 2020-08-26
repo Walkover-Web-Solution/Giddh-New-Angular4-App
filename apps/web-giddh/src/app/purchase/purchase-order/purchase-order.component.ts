@@ -108,6 +108,27 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.purchaseOrderListFilters$ = this.store.pipe(select(state => state.purchaseOrder.listFilters), (takeUntil(this.destroyed$)));
 
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params && params['purchaseOrderUniqueName']) {
+                this.purchaseOrderUniqueName = params['purchaseOrderUniqueName'];
+            } else {
+                this.purchaseOrderUniqueName = '';
+            }
+        });
+    }
+
+    /**
+     * Initializes the component
+     *
+     * @memberof PurchaseOrderComponent
+     */
+    public ngOnInit(): void {
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
                 this.pageUrl = event.url;
@@ -116,14 +137,6 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 } else {
                     this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({}));
                 }
-            }
-        });
-
-        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if (params && params['purchaseOrderUniqueName']) {
-                this.purchaseOrderUniqueName = params['purchaseOrderUniqueName'];
-            } else {
-                this.purchaseOrderUniqueName = '';
             }
         });
 
@@ -141,19 +154,6 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                     this.useStoreFilters = true;
                 }
             }
-        });
-    }
-
-    /**
-     * Initializes the component
-     *
-     * @memberof PurchaseOrderComponent
-     */
-    public ngOnInit(): void {
-        this.breakPointObservar.observe([
-            '(max-width: 767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
         });
 
         /* Observer to store universal from/to date */
