@@ -43,7 +43,7 @@
                                                 </ng-template>
 
                                                 <ng-template #notFoundLinkTemplate>
-                                                    <a href="javascript:void(0)" class="list-item pl-05 pr-05"
+                                                    <a href="javascript:void(0)" class="list-item pl-05 pr-05 d-flex justify-content-between w-100"
                                                         [keyboardShortcut]="'alt+c'">
                                                         <div class="item">{{ vendorNotFoundText }}</div>
                                                         <div class="item">Alt+C</div>
@@ -386,7 +386,7 @@
         </div>
     </div>
     <ng-container *ngIf="!purchaseOrder.account.uniqueName">
-        <img src="assets/images/new/search_customer.svg" class="img-responsive search-arrow-image" />
+        <img src="assets/images/new/search-vendor.svg" class="img-responsive search-arrow-image" />
     </ng-container>
     <section *ngIf="!isMobileScreen"
         class="static-purchase-table create-purchase-order-table clearfix mb-2 bg-white container-fluid">
