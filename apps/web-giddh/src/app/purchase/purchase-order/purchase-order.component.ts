@@ -96,8 +96,11 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public showSelectAllItemCheckbox: boolean = false;
     /* Send email request params object */
     public sendEmailRequest: any = {};
+    /* Observable for filters applied */
     public purchaseOrderListFilters$: Observable<any>;
+    /* This will hold if we need to overwriter filters */
     public useStoreFilters: boolean = false;
+    /* This will hold current page url */
     public pageUrl: string = "pages/purchase-management/purchase-orders";
 
     constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions) {
