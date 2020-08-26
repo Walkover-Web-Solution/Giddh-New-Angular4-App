@@ -2,7 +2,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as _ from '../../../../lodash-optimized';
+import { indexOf } from '../../../../lodash-optimized';
 import { ElementViewContainerRef } from '../../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { LetterTemplateComponent } from './letter/letter.template.component';
 
@@ -34,7 +34,7 @@ export class CreateInvoiceTemplateComponent implements OnInit, OnDestroy {
 	public ngOnInit() {
 		// check if route params exist else redirect to dashboard
 		this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-			if (params['templateId'] && (_.indexOf(TEMPLATES_ID, params['templateId']) !== -1)) {
+			if (params['templateId'] && (indexOf(TEMPLATES_ID, params['templateId']) !== -1)) {
 				this.templateId = params['templateId'];
 				this.loadComponents();
 			} else {

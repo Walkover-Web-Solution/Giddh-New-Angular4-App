@@ -1,8 +1,5 @@
-import { CompanyService } from '../services/companyService.service';
-import { BulkEmailRequest } from '../models/api-models/Search';
-import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import {
     ChangeDetectorRef,
     Component,
@@ -12,48 +9,50 @@ import {
     OnDestroy,
     OnInit,
     SimpleChanges,
+    TemplateRef,
     ViewChild,
-    TemplateRef
 } from '@angular/core';
-import { select, Store } from '@ngrx/store';
-import { AppState } from '../store';
-import { ToasterService } from '../services/toaster.service';
-import { StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
-import { DashboardService } from '../services/dashboard.service';
-import { ContactService } from '../services/contact.service';
+import { saveAs } from 'file-saver';
+import * as moment from 'moment/moment';
+import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
+import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap/modal';
+import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import {BsDropdownDirective} from 'ngx-bootstrap/dropdown';
-import {PaginationComponent} from 'ngx-bootstrap/pagination';
-import { BsModalService, BsModalRef, ModalOptions } from 'ngx-bootstrap/modal';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
-import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
+import { createSelector } from 'reselect';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+
+import { cloneDeep, find, forEach, map as lodashMap, uniq } from '../../app/lodash-optimized';
+import { CommonActions } from '../actions/common.actions';
+import { CompanyActions } from '../actions/company.actions';
+import { GeneralActions } from '../actions/general/general.actions';
+import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
-import * as _ from 'lodash';
+import { PAGINATION_LIMIT } from '../app.constant';
+import { OnboardingFormRequest } from '../models/api-models/Common';
+import { StateDetailsRequest } from '../models/api-models/Company';
 import {
     ContactAdvanceSearchCommonModal,
     ContactAdvanceSearchModal,
     CustomerVendorFiledFilter,
     DueAmountReportQueryRequest,
-    DueAmountReportResponse
+    DueAmountReportResponse,
 } from '../models/api-models/Contact';
-import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import * as moment from 'moment/moment';
-import { saveAs } from 'file-saver';
-import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
-import { createSelector } from 'reselect';
-import { GeneralActions } from '../actions/general/general.actions';
+import { BulkEmailRequest } from '../models/api-models/Search';
+import { CashfreeClass } from '../models/api-models/SettingsIntegraion';
+import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
+import { CompanyService } from '../services/companyService.service';
+import { ContactService } from '../services/contact.service';
+import { DashboardService } from '../services/dashboard.service';
 import { GeneralService } from '../services/general.service';
-import { BreakpointObserver } from '@angular/cdk/layout';
+import { ToasterService } from '../services/toaster.service';
+import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { AppState } from '../store';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../shared/helpers/defaultDateFormat';
-import { OnboardingFormRequest } from '../models/api-models/Common';
-import { CommonActions } from '../actions/common.actions';
-import { PAGINATION_LIMIT } from '../app.constant';
-import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 
 const CustomerType = [
     { label: 'Customer', value: 'customer' },
@@ -368,7 +367,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
         this.store.select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                let universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
                 this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = moment(universalDate[0]).format('DD-MM-YYYY');
@@ -391,7 +390,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             if (data) {
                 let accounts: IOption[] = [];
                 let bankAccounts: IOption[] = [];
-                _.forEach(data, (item) => {
+                forEach(data, (item) => {
                     accounts.push({ label: item.name, value: item.uniqueName });
                     let findBankIndx = item.parentGroups.findIndex((grp) => grp.uniqueName === 'bankaccounts');
                     if (findBankIndx !== -1) {
@@ -668,7 +667,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
     public submitCashfreeDetail(f) {
         if (f && f.userName && f.password) {
-            let objToSend = _.cloneDeep(f);
+            let objToSend = cloneDeep(f);
             this.store.dispatch(this.settingsIntegrationActions.SaveCashfreeDetails(objToSend));
         } else {
             this._toasty.errorToast('Please enter Cashfree details.', 'Validation');
@@ -730,11 +729,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public canDeleteComment(accountUniqueName) {
         let account;
         if (this.activeTab === 'customer') {
-            account = _.find(this.sundryDebtorsAccountsBackup.results, (o: any) => {
+            account = find(this.sundryDebtorsAccountsBackup.results, (o: any) => {
                 return o.uniqueName === accountUniqueName;
             });
         } else {
-            account = _.find(this.sundryCreditorsAccountsBackup.results, (o: any) => {
+            account = find(this.sundryCreditorsAccountsBackup.results, (o: any) => {
                 return o.uniqueName === accountUniqueName;
             });
         }
@@ -752,11 +751,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public canUpdateComment(accountUniqueName, comment) {
         let account;
         if (this.activeTab === 'customer') {
-            account = _.find(this.sundryDebtorsAccountsBackup.results, (o: any) => {
+            account = find(this.sundryDebtorsAccountsBackup.results, (o: any) => {
                 return o.uniqueName === accountUniqueName;
             });
         } else {
-            account = _.find(this.sundryCreditorsAccountsBackup.results, (o: any) => {
+            account = find(this.sundryCreditorsAccountsBackup.results, (o: any) => {
                 return o.uniqueName === accountUniqueName;
             });
         }
@@ -773,7 +772,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             this._contactService.addComment(account.comment, account.uniqueName).subscribe(res => {
                 if (res.status === 'success') {
                     this.updateCommentIdx = null;
-                    account.comment = _.cloneDeep(res.body.description);
+                    account.comment = cloneDeep(res.body.description);
                     this.updateInList(account.uniqueName, account.comment);
                 }
             });
@@ -824,7 +823,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             data: {
                 subject: this.messageBody.subject,
                 message: this.messageBody.msg,
-                accounts: _.uniq(this.selectedCheckedContacts),
+                accounts: uniq(this.selectedCheckedContacts),
             },
             params: {
                 from: this.fromDate,
@@ -1123,16 +1122,16 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 this.Totalcontacts = 0;
 
                 if (groupUniqueName === 'sundrydebtors') {
-                    this.sundryDebtorsAccountsBackup = _.cloneDeep(res.body);
+                    this.sundryDebtorsAccountsBackup = cloneDeep(res.body);
                     this.Totalcontacts = res.body.totalItems;
-                    _.map(res.body.results, (obj) => {
+                    lodashMap(res.body.results, (obj) => {
                         obj.closingBalanceAmount = obj.closingBalance.amount;
                         obj.openingBalanceAmount = obj.openingBalance.amount;
                         if (obj && obj.state) {
                             obj.stateName = obj.state.name;
                         }
                     });
-                    this.sundryDebtorsAccounts = _.cloneDeep(res.body.results);
+                    this.sundryDebtorsAccounts = cloneDeep(res.body.results);
                     this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(element => {
                         let indexOfItem = this.selectedCheckedContacts.indexOf(element.uniqueName);
                         if (indexOfItem === -1) {
@@ -1145,15 +1144,15 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
 
                 } else {
                     this.Totalcontacts = res.body.totalItems;
-                    this.sundryCreditorsAccountsBackup = _.cloneDeep(res.body);
-                    _.map(res.body.results, (obj) => {
+                    this.sundryCreditorsAccountsBackup = cloneDeep(res.body);
+                    lodashMap(res.body.results, (obj) => {
                         obj.closingBalanceAmount = obj.closingBalance.amount;
                         obj.openingBalanceAmount = obj.openingBalance.amount;
                         if (obj && obj.state) {
                             obj.stateName = obj.state.name;
                         }
                     });
-                    this.sundryCreditorsAccounts = _.cloneDeep(res.body.results);
+                    this.sundryCreditorsAccounts = cloneDeep(res.body.results);
                     this.selectedAccountsList = [];
                     this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(element => {
                         let indexOfItem = this.selectedCheckedContacts.indexOf(element.uniqueName);

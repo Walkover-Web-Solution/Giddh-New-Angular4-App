@@ -1,13 +1,12 @@
-import { take, takeUntil } from 'rxjs/operators';
-import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
-import { ILogsItem } from '../../../models/interfaces/logs.interface';
-import { Store, select } from '@ngrx/store';
-import * as _ from '../../../lodash-optimized';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
-import { AppState } from '../../../store/roots';
-import { AuditLogsSidebarVM } from '../audit-logs-form/Vm';
+import { take, takeUntil } from 'rxjs/operators';
+
+import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
+import { cloneDeep } from '../../../lodash-optimized';
 import { GetAuditLogsRequest } from '../../../models/api-models/Logs';
+import { AppState } from '../../../store/roots';
 
 @Component({
     selector: 'audit-logs-table',  // <home></home>
@@ -41,7 +40,7 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *  Component lifecycle call stack 
+     *  Component lifecycle call stack
      *
      * @memberof AuditLogsTableComponent
      */
@@ -50,7 +49,7 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *  Component lifecycle call stack 
+     *  Component lifecycle call stack
      *
      * @memberof AuditLogsTableComponent
      */
@@ -66,7 +65,7 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
      */
     public loadMoreLogs(): void{
         this.store.pipe(select(state => state.auditlog), take(1)).subscribe((response) => {
-            let request = _.cloneDeep(response.auditLogsRequest);
+            let request = cloneDeep(response.auditLogsRequest);
             let page = response.currentPage + 1;
             this.store.dispatch(this.auditLogsActions.getAuditLogs(request, page));
         });

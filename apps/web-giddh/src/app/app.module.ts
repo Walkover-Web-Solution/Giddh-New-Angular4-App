@@ -8,7 +8,6 @@ import {NgModule, ErrorHandler} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActionReducer, MetaReducer, StoreModule} from '@ngrx/store';
-import * as _ from './lodash-optimized';
 /*
  * Platform and Environment providers/pipes/pipes
  */

@@ -78,7 +78,6 @@
     "@ionic-native/file-picker": "5.27.0",
     "@ionic-native/file-transfer": "5.27.0",
     "@ionic-native/user-agent": "5.27.0",
-    "@ng-bootstrap/ng-bootstrap": "7.0.0",
     "@ngrx/effects": "10.0.0",
     "@ngrx/router-store": "10.0.0",
     "@ngrx/store": "10.0.0",
@@ -96,7 +95,7 @@
     "dexie": "3.0.2",
     "electron-notarize": "1.0.0",
     "file-saver": "2.0.2",
-    "google-libphonenumber": "3.2.10",
+    "google-libphonenumber": "3.2.12",
     "is-cidr": "^4.0.0",
     "jquery": "3.5.1",
     "jspdf": "1.5.3",
@@ -121,6 +120,7 @@
     "reflect-metadata": "0.1.12",
     "reselect": "4.0.0",
     "rxjs": "6.6.2",
+    "uuid": "^8.3.0",
     "zone.js": "0.10.3"
   },
   "devDependencies": {

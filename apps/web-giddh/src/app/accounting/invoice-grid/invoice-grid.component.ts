@@ -11,7 +11,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep, forEach, isEqual, sumBy, concat, find, without, orderBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import * as moment from 'moment';
 import { FlyAccountsActions } from 'apps/web-giddh/src/app/actions/fly-accounts.actions';
 import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
@@ -159,7 +159,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
 		this._tallyModuleService.selectedPageInfo.pipe(distinctUntilChanged((p, q) => {
 			if (p && q) {
-				return (_.isEqual(p, q));
+				return (isEqual(p, q));
 			}
 			if ((p && !q) || (!p && q)) {
 				return false;
@@ -198,7 +198,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
 		this._tallyModuleService.requestData.pipe(distinctUntilChanged((p, q) => {
 			if (p && q) {
-				return (_.isEqual(p, q));
+				return (isEqual(p, q));
 			}
 			if ((p && !q) || (!p && q)) {
 				return false;
@@ -206,7 +206,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 			return true;
 		})).subscribe((data) => {
 			if (data) {
-				this.data = _.cloneDeep(data);
+				this.data = cloneDeep(data);
 				if (this.gridType === 'invoice') {
 					this.prepareDataForInvoice(this.data);
 				}
@@ -243,7 +243,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 					accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
 				});
 				this.flattenAccounts = accList;
-				this.inputForList = _.cloneDeep(this.flattenAccounts);
+				this.inputForList = cloneDeep(this.flattenAccounts);
 			}
 		});
 
@@ -392,7 +392,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 		this.selectedAccIdx = indx;
 		// this.showLedgerAccountList = true;
 
-		this.inputForList = _.cloneDeep(this.flattenAccounts);
+		this.inputForList = cloneDeep(this.flattenAccounts);
 		this.selectedField = 'account';
 
 		if (this.isAccountListFiltered) {
@@ -557,7 +557,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	 */
 	public watchKeyboardEvent(event) {
 		if (event) {
-			let navigateTo = _.find(this.navigateURL, (o: any) => o.code === event.key);
+			let navigateTo = find(this.navigateURL, (o: any) => o.code === event.key);
 			if (navigateTo) {
 				this._router.navigate(['accounting', navigateTo.route]);
 			}
@@ -568,9 +568,9 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	 * removeBlankTransaction
 	 */
 	public removeBlankTransaction(transactions) {
-		_.forEach(transactions, function (obj: any) {
+		forEach(transactions, function (obj: any) {
 			if (obj && !obj.particular && !obj.amount) {
-				transactions = _.without(transactions, obj);
+				transactions = without(transactions, obj);
 			}
 		});
 		return transactions;
@@ -590,7 +590,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	public onSelectStock(item) {
 		if (item) {
 			let idx = this.selectedRowIdx;
-			let entryItem = _.cloneDeep(item);
+			let entryItem = cloneDeep(item);
 			this.prepareEntry(entryItem, idx);
 			setTimeout(() => {
 				// this.selectedInput.focus();
@@ -645,7 +645,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	 */
 	public changePrice(idx, val) {
 		let i = this.selectedRowIdx;
-		this.stocksTransaction[i].inventory.unit.rate = Number(_.cloneDeep(val));
+		this.stocksTransaction[i].inventory.unit.rate = Number(cloneDeep(val));
 		this.stocksTransaction[i].inventory.amount = Number((this.stocksTransaction[i].inventory.unit.rate * this.stocksTransaction[i].inventory.quantity).toFixed(2));
 		this.stocksTransaction[i].amount = this.stocksTransaction[i].inventory.amount;
 		this.amountChanged(idx);
@@ -662,7 +662,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 			}
 		}
 		this.stocksTransaction[i].amount = this.stocksTransaction[i].inventory.amount;
-		let stockTotal = _.sumBy(this.stocksTransaction, (o: any) => Number(o.inventory.amount));
+		let stockTotal = sumBy(this.stocksTransaction, (o: any) => Number(o.inventory.amount));
 		this.stockTotal = stockTotal;
 	}
 
@@ -684,7 +684,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	 * calculateAmount
 	 */
 	public calculateAmount() {
-		let Total = _.sumBy(this.accountsTransaction, (o) => Number(o.amount));
+		let Total = sumBy(this.accountsTransaction, (o) => Number(o.amount));
 		this.accountsTotal = Total;
 	}
 
@@ -713,7 +713,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 			this._toaster.errorToast("Party A/c Name can't be blank.");
 			return setTimeout(() => this.partyAccNameInputField.nativeElement.focus(), 200);
 		}
-		let data = _.cloneDeep(this.data);
+		let data = cloneDeep(this.data);
 		data.generateInvoice = data.invoiceNumberAgainstVoucher ? !!data.invoiceNumberAgainstVoucher.trim() : false;
 		// let idx = 0;
 		data.transactions = this.prepareDataForVoucher();
@@ -722,33 +722,33 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
 		let accUniqueName: string = this.creditorAcc.uniqueName;
 
-		_.forEach(data.transactions, (element: any) => {
+		forEach(data.transactions, (element: any) => {
 			element.type = (element.type === 'by') ? 'debit' : 'credit';
 		});
 
 		if (data.voucherType === 'Sales') {
-			_.forEach(data.transactions, (element: any) => {
+			forEach(data.transactions, (element: any) => {
 				if (!element.particular) {
 					element.particular = 'sales';
 				}
 				element.type = 'debit';
 			});
 		} else if (data.voucherType === 'Purchase') {
-			_.forEach(data.transactions, (element: any) => {
+			forEach(data.transactions, (element: any) => {
 				if (!element.particular) {
 					element.particular = 'purchases';
 				}
 				element.type = 'credit';
 			});
 		} else if (data.voucherType === 'Credit note') {
-			_.forEach(data.transactions, (element: any) => {
+			forEach(data.transactions, (element: any) => {
 				if (!element.particular) {
 					element.particular = 'sales';
 				}
 				element.type = 'credit';
 			});
 		} else if (data.voucherType === 'Debit note') {
-			_.forEach(data.transactions, (element: any) => {
+			forEach(data.transactions, (element: any) => {
 				if (!element.particular) {
 					element.particular = 'purchases';
 				}
@@ -765,7 +765,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 		let filterData = this._tallyModuleService.prepareRequestForAPI(data);
 
 		if (filterData.transactions.length) {
-			_.forEach(filterData.transactions, function (o, i) {
+			forEach(filterData.transactions, function (o, i) {
 				if (o.inventory && o.inventory.amount) {
 					stocksTransaction.push(o);
 				} else {
@@ -786,10 +786,10 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	}
 
 	public prepareDataForVoucher() {
-		let transactions = _.concat(_.cloneDeep(this.accountsTransaction), _.cloneDeep(this.stocksTransaction));
+		let transactions = concat(cloneDeep(this.accountsTransaction), cloneDeep(this.stocksTransaction));
 		//  let result = _.chain(transactions).groupBy('particular').value();
-		transactions = _.orderBy(transactions, 'type');
-		_.forEach(transactions, function (obj, idx) {
+		transactions = orderBy(transactions, 'type');
+		forEach(transactions, function (obj, idx) {
 			let inventoryArr = [];
 			if (obj.inventory && obj.inventory.amount) {
 				inventoryArr.push(obj.inventory);
@@ -856,12 +856,12 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 	 */
 	public getFlattenGrpofAccounts(parentGrpUnqName, q?: string, forceRefresh: boolean = false, focusTargetElement: boolean = false) {
 		if (this.allStocks && this.allStocks.length && !forceRefresh) {
-			this.sortStockItems(_.cloneDeep(this.allStocks));
+			this.sortStockItems(cloneDeep(this.allStocks));
 		} else {
 			this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
 				if (data.status === 'success') {
 					this.sortStockItems(data.body.results);
-					this.allStocks = _.cloneDeep(data.body.results);
+					this.allStocks = cloneDeep(data.body.results);
 					if (focusTargetElement) {
 						this.selectedStockInputField.focus();
 					}
@@ -881,7 +881,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
 	public sortStockItems(ItemArr) {
 		let stockAccountArr: IOption[] = [];
-		_.forEach(ItemArr, (obj: any) => {
+		forEach(ItemArr, (obj: any) => {
 			stockAccountArr.push({
 				label: `${obj.name} (${obj.uniqueName})`,
 				value: obj.uniqueName,
@@ -889,7 +889,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 			});
 		});
 		this.stockList = stockAccountArr;
-		this.inputForList = _.cloneDeep(this.stockList);
+		this.inputForList = cloneDeep(this.stockList);
 		setTimeout(() => {
 			this.showLedgerAccountList = true;
 		}, 200);
@@ -1138,7 +1138,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 			if (a && a !== '') {
 				this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
 					if (data.status === 'success') {
-						this.allFlattenAccounts = _.cloneDeep(data.body.results);
+						this.allFlattenAccounts = cloneDeep(data.body.results);
 						if (groupUniqueName) {
 							const filteredAccounts: IFlattenAccountsResultItem[] = data.body.results.filter((acc) => acc.parentGroups.findIndex((g) => g.uniqueName === groupUniqueName) > -1);
 							this._tallyModuleService.setFlattenAccounts(filteredAccounts);
