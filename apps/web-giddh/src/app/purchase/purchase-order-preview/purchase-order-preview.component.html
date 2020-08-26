@@ -11,7 +11,7 @@
                     <ul class="invoice-sidebar">
                         <perfect-scrollbar
                             *ngIf="filteredData && filteredData.length > 0">
-                            <li class="single-invoice-detail cp"
+                            <li class="single-invoice-detail cp" [ngClass]="{'activeItem': row.uniqueName === purchaseOrderUniqueName}"
                                 *ngFor="let row of filteredData; let i = index;">
                                 <div class="row" (click)="showPurchaseOrderPreview(row.uniqueName)">
                                     <div class="col-xs-12 col-sm-7">
@@ -72,8 +72,8 @@
 
                                             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                                 aria-labelledby="button-basic">
-                                                <li class="cp" role="menuitem"><a class="dropdown-item">Convert to
-                                                        Bill</a></li>
+                                                <!-- <li class="cp" role="menuitem"><a class="dropdown-item">Convert to
+                                                        Bill</a></li> -->
 
                                                 <li class="cp" role="menuitem"><a class="dropdown-item" [routerLink]="['/pages/purchase-management/purchase-order/new/'+purchaseOrderUniqueName]">Copy</a></li>
 

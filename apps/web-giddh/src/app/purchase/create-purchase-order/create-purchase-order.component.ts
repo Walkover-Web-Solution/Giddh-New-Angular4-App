@@ -22,15 +22,13 @@ import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-s
 import { ToasterService } from '../../services/toaster.service';
 import { OnboardingFormRequest, CurrentPage } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
-import { VAT_SUPPORTED_COUNTRIES, RATE_FIELD_PRECISION, SubVoucher } from '../../app.constant';
+import { VAT_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, SalesEntryClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, AccountDetailsClass } from '../../models/api-models/Sales';
-import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { TaxResponse } from '../../models/api-models/Company';
 import { IContentCommon } from '../../models/api-models/Invoice';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { cloneDeep } from '../../lodash-optimized';
-import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import * as moment from 'moment/moment';
 import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
 import { TaxControlComponent } from '../../theme/tax-control/tax-control.component';
@@ -47,6 +45,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
 import { GeneralActions } from '../../actions/general/general.actions';
+import { InvoiceService } from '../../services/invoice.service';
 
 const THEAD_ARR_READONLY = [
     {
@@ -132,7 +131,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     /* This will hold if it's multi currency account */
     public isMulticurrencyAccount: boolean = false;
     /* This will hold if it's mobile device*/
-    public isMobileScreen: boolean = true;
+    public isMobileScreen: boolean = false;
     /* Observable for list of flatten accounts */
     public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     /* Observable for list of vendors */
@@ -225,6 +224,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public activeIndex: number;
     /* Rate should have precision up to 4 digits for better calculation */
     public ratePrecision = RATE_FIELD_PRECISION;
+    /* Rate should have precision up to 4 digits for better calculation */
+    public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
     /* This will hold if we need to apply round off */
     public applyRoundOff: boolean = true;
     /* This will hold if we need to hide total tax and have to exclude tax amount from total invoice amount */
@@ -285,10 +286,21 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public showLoaderUntilDataPrefilled: boolean = false;
     /* Onboarding params object */
     public onboardingFormRequest: OnboardingFormRequest = { formName: 'onboarding', country: '' };
+    /* This will hold invoice settings */
+    public invoiceSettings: any = {};
+    /* This will hold input mask format */
+    public inputMaskFormat: string = '';
+    /* This is to hide few tax types */
+    public exceptTaxTypes: string[];
+    /* This holds if other details is collapsed */
+    public isOthrDtlCollapsed: boolean = false;
+    /* This holds exchange rate */
+    public originalExchangeRate: any = 1;
+    /* This will hold object for time interval */
+    public interval: any;
 
-    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private invoiceActions: InvoiceActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions) {
-        this.getInventorySettings();
-        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService) {
+        this.getInvoiceSettings();
         this.store.dispatch(this.generalActions.getFlattenAccount());
         this.flattenAccountListStream$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$));
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
@@ -301,6 +313,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.createdAccountDetails$ = this.store.pipe(select(state => state.sales.createdAccountDetails), takeUntil(this.destroyed$));
         this.updatedAccountDetails$ = this.store.pipe(select(state => state.sales.updatedAccountDetails), takeUntil(this.destroyed$));
         this.updateAccountSuccess$ = this.store.pipe(select(state => state.sales.updateAccountSuccess), takeUntil(this.destroyed$));
+        this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
     }
 
     /**
@@ -327,15 +340,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 this.urlParams = params;
 
                 if (params['action'] === "new") {
-                    this.resetForm(this.poForm);
+                    this.resetForm();
                     this.setCurrentPageTitle("New Purchase Order");
                     this.isUpdateMode = false;
+                    this.autoFillVendorShipping = true;
                 }
 
                 if (params['action'] === "edit") {
-                    this.resetForm(this.poForm);
                     this.setCurrentPageTitle("Edit Purchase Order");
                     this.isUpdateMode = true;
+                    this.autoFillVendorShipping = false;
                 }
             }
         });
@@ -412,6 +426,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 this.companyCountryName = profile.country;
                 this.baseCurrencySymbol = profile.baseCurrencySymbol;
                 this.companyCurrency = profile.baseCurrency || 'INR';
+                this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
 
                 if (profile.addresses && profile.addresses.length > 0) {
                     this.companyAddresses = profile.addresses;
@@ -530,13 +545,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         let date = _.cloneDeep(this.universalDate);
         this.purchaseOrder.voucherDetails.voucherDate = date;
 
-        this.purchaseOrder.entries.forEach((entry: SalesEntryClass) => {
-            entry.transactions.forEach((txn: SalesTransactionItemClass) => {
-                if (!txn.accountUniqueName) {
-                    entry.entryDate = date;
-                }
-            });
-        });
+        if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
+            this.assignDueDate();
+        }
     }
 
     /**
@@ -616,10 +627,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public createVendorList(): void {
-        let sundryCreditorsAcList = [];
-        let stockAccountsList = [];
         this.flattenAccountListStream$.pipe(takeUntil(this.destroyed$)).subscribe(items => {
             if (items && items.length > 0) {
+                let sundryCreditorsAcList = [];
+                let stockAccountsList = [];
                 let existingAccounts = [];
                 items.forEach(item => {
                     if (item.parentGroups.some(group => group.uniqueName === 'sundrycreditors') && existingAccounts.indexOf(item.uniqueName) === -1) {
@@ -664,9 +675,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 this.vendorAccountsLoaded = true;
 
                 if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails && !this.getAccountInProgress) {
+                    this.getAccountInProgress = true;
                     this.getAccountDetails(this.purchaseOrderDetails.account.uniqueName);
-
-                    this.purchaseOrder.entries = this.modifyEntries(this.purchaseOrderDetails.entries);
                 }
 
                 this.focusInVendorName();
@@ -710,7 +720,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 item.additional['currency'] = item.additional.currency || this.companyCurrency;
                 this.isMulticurrencyAccount = item.additional.currency !== this.companyCurrency;
             }
-
             this.getAccountDetails(item.value);
         }
     }
@@ -1054,7 +1063,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public getStateCode(type: string, statesEle: SalesShSelectComponent, addressType: string): void {
-        let gstVal = _.cloneDeep(this.purchaseOrder.account[type].gstNumber).toString();
+        let gstVal;
+        if (addressType === "vendor") {
+            gstVal = _.cloneDeep(this.purchaseOrder.account[type].gstNumber).toString();
+        } else {
+            gstVal = _.cloneDeep(this.purchaseOrder.company[type].gstNumber).toString();
+        }
+
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.statesSource.find(item => item.stateGstCode === gstVal.substring(0, 2));
             if (selectedState) {
@@ -1334,19 +1349,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This function is used to get inventory settings from store
-     *
-     * @memberof CreatePurchaseOrderComponent
-     */
-    public getInventorySettings(): void {
-        this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
-            if (settings && settings.companyInventorySettings) {
-                this.inventorySettings = settings.companyInventorySettings;
-            }
-        });
-    }
-
-    /**
      * Toggle hsn/sac dropdown and hide all open date-pickers because it's overlapping hsn/sac dropdown
      *
      * @param {*} transaction
@@ -1449,7 +1451,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public calculateStockEntryAmount(trx: SalesTransactionItemClass): void {
-        trx.amount = Number(trx.quantity) * Number(trx.rate);
+        trx.amount = giddhRoundOff((Number(trx.quantity) * Number(trx.rate)), this.ratePrecision);
     }
 
     /**
@@ -1463,10 +1465,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         trx.amount = Number(trx.amount);
         if (trx.isStockTxn) {
             trx.rate = giddhRoundOff((trx.amount / trx.quantity), this.ratePrecision);
-        }
-
-        if (this.isUpdateMode) {
-            this.applyRoundOff = true;
         }
 
         this.calculateTotalDiscountOfEntry(entry, trx, false);
@@ -1712,7 +1710,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public calculateGrandTotal(): void {
-
         let calculatedGrandTotal = 0;
         calculatedGrandTotal = this.purchaseOrder.voucherDetails.grandTotal = this.purchaseOrder.entries.reduce((pv, cv) => {
             return pv + cv.transactions.reduce((pvt, cvt) => pvt + cvt.total, 0);
@@ -1842,10 +1839,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         if (!txn) {
             let entry: SalesEntryClass = new SalesEntryClass();
             if (this.isUpdateMode) {
-                entry.entryDate = this.purchaseOrder.entries[0] ? this.purchaseOrder.entries[0].entryDate : this.universalDate || new Date();
                 entry.isNewEntryInUpdateMode = true;
-            } else {
-                entry.entryDate = this.universalDate || new Date();
             }
             this.purchaseOrder.entries.push(entry);
             setTimeout(() => {
@@ -1993,10 +1987,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @returns {*}
      * @memberof CreatePurchaseOrderComponent
      */
-    public savePurchaseOrder(poForm: NgForm, type: string): void {
-        if (poForm.invalid) {
-            return;
-        }
+    public savePurchaseOrder(type: string): void {
         let data: VoucherClass = _.cloneDeep(this.purchaseOrder);
 
         // special check if gst no filed is visible then and only then check for gst validation
@@ -2015,7 +2006,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
         if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
             this.startLoader(false);
-            this.toaster.errorToast('Due date cannot be less than Order Date');
+            this.toaster.errorToast('Expected delivery date cannot be less than Order Date');
             return;
         }
 
@@ -2074,8 +2065,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         if (data.entries && data.entries.length > 0) {
             _.forEach(data.entries, (entry) => {
                 _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
-                    // convert date object
-                    entry.entryDate = this.convertDateForAPI(entry.entryDate);
                     txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), 2) : 0;
 
                     // will get errors of string and if not error then true boolean
@@ -2150,7 +2139,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             this.purchaseOrderService.create(getRequestObject, updatedData).subscribe(response => {
                 this.toaster.clearAllToaster();
                 if (response && response.status === "success") {
-                    this.resetForm(this.poForm);
+                    this.resetForm();
                     this.toaster.successToast("Purchase order created succesfully with voucher number - " + response.body.number);
                 } else {
                     this.toaster.errorToast(response.message);
@@ -2190,7 +2179,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             salesEntryClass.voucherType = entry.voucherType;
             salesEntryClass.uniqueName = entry.uniqueName;
             salesEntryClass.description = entry.description;
-            salesEntryClass.date = entry.entryDate;
             entry.taxList.forEach(t => {
                 salesEntryClass.taxes.push({ uniqueName: t });
             });
@@ -2203,17 +2191,17 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 salesEntryClass.sacNumber = transaction.sacNumber;
                 salesEntryClass.description = transaction.description;
                 if (transaction.isStockTxn) {
-                    let saalesAddBulkStockItems = new SalesAddBulkStockItems();
-                    saalesAddBulkStockItems.name = transaction.stockDetails.name;
-                    saalesAddBulkStockItems.uniqueName = transaction.stockDetails.uniqueName;
-                    saalesAddBulkStockItems.quantity = transaction.quantity;
-                    saalesAddBulkStockItems.rate = {};
-                    saalesAddBulkStockItems.rate.amountForAccount = transaction.rate;
-                    saalesAddBulkStockItems.sku = transaction.stockDetails.skuCode;
-                    saalesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
-                    saalesAddBulkStockItems.stockUnit.code = transaction.stockUnit;
+                    let salesAddBulkStockItems = new SalesAddBulkStockItems();
+                    salesAddBulkStockItems.name = transaction.stockDetails.name;
+                    salesAddBulkStockItems.uniqueName = transaction.stockDetails.uniqueName;
+                    salesAddBulkStockItems.quantity = transaction.quantity;
+                    salesAddBulkStockItems.rate = {};
+                    salesAddBulkStockItems.rate.amountForAccount = transaction.rate;
+                    salesAddBulkStockItems.sku = transaction.stockDetails.skuCode;
+                    salesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
+                    salesAddBulkStockItems.stockUnit.code = transaction.stockUnit;
 
-                    transactionClassMul.stock = saalesAddBulkStockItems;
+                    transactionClassMul.stock = salesAddBulkStockItems;
                 }
                 salesEntryClass.transactions.push(transactionClassMul);
             });
@@ -2301,7 +2289,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 }
 
                 this.activeIndex = lastIndex;
-                this.purchaseOrder.entries[lastIndex].entryDate = this.universalDate;
                 this.purchaseOrder.entries[lastIndex].transactions[0].fakeAccForSelect2 = salesItem.value;
                 this.purchaseOrder.entries[lastIndex].isNewEntryInUpdateMode = true;
                 this.onSelectSalesAccount(salesItem, this.purchaseOrder.entries[lastIndex].transactions[0], this.purchaseOrder.entries[lastIndex]);
@@ -2336,16 +2323,17 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @param {NgForm} poForm
      * @memberof CreatePurchaseOrderComponent
      */
-    public resetForm(poForm: NgForm): void {
-        if (poForm) {
-            this.purchaseOrder = new PurchaseOrder();
-            this.resetVendor();
+    public resetForm(): void {
+        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
+        this.purchaseOrder = new PurchaseOrder();
+        this.resetVendor();
+        if (this.vendorNameDropDown) {
             this.vendorNameDropDown.clear();
-            this.isRcmEntry = false;
-            this.initializeWarehouse();
-            this.fillCompanyAddress("reset");
-            this.assignDates();
         }
+        this.isRcmEntry = false;
+        this.initializeWarehouse();
+        this.fillCompanyAddress("reset");
+        this.assignDates();
     }
 
     /**
@@ -2433,8 +2421,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      *
      * @memberof CreatePurchaseOrderComponent
      */
-    public ngOnDestroy() {
-        this.resetForm(this.poForm);
+    public ngOnDestroy(): void {
+        this.resetForm();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -2453,11 +2441,26 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             if (response) {
                 if (response.status === "success") {
                     this.purchaseOrderDetails = response.body;
+                    let entriesUpdated = false;
 
-                    if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails && !this.getAccountInProgress && this.vendorAccountsLoaded) {
-                        this.getAccountDetails(this.purchaseOrderDetails.account.uniqueName);
-                        this.purchaseOrder.entries = this.modifyEntries(this.purchaseOrderDetails.entries);
+                    if (this.purchaseOrderDetails && this.purchaseOrderDetails.roundOffTotal && this.purchaseOrderDetails.roundOffTotal.amountForAccount === 0 && this.purchaseOrderDetails.roundOffTotal.amountForCompany === 0) {
+                        this.applyRoundOff = false;
                     }
+
+                    if (this.purchaseOrderDetails && this.purchaseOrderDetails.account && !this.copiedAccountDetails && !this.getAccountInProgress) {
+                        this.getAccountInProgress = true;
+                        this.getAccountDetails(this.purchaseOrderDetails.account.uniqueName);
+                    }
+
+                    this.interval = setInterval(() => {
+                        if (this.purchaseOrderDetails && this.purchaseOrderDetails.entries && this.vendorAccountsLoaded && !entriesUpdated && this.copiedAccountDetails) {
+                            entriesUpdated = true;
+                            clearInterval(this.interval);
+                            this.purchaseOrder.entries = this.modifyEntries(this.purchaseOrderDetails.entries);
+                            this.showLoaderUntilDataPrefilled = false;
+                            this.startLoader(false);
+                        }
+                    }, 500);
 
                     this.purchaseOrder.templateDetails = this.purchaseOrderDetails.templateDetails;
 
@@ -2497,6 +2500,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public modifyEntries(entries: any[]): any {
         let convertedEntries = [];
         this.activeIndex = 0;
+        let entryTaxes = this.companyTaxesList;
 
         entries.forEach(entry => {
             let salesEntryClass = new SalesEntryClass();
@@ -2518,6 +2522,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 salesTransactionItemClass.date = transaction.date;
                 salesEntryClass.transactions.push(salesTransactionItemClass);
 
+                let usedTaxes = [];
+
                 entry.taxes.forEach(tax => {
                     let taxTypeArr = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
                     if (taxTypeArr.indexOf(tax.taxType) > -1) {
@@ -2533,14 +2539,27 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                             salesEntryClass.tcsTaxList.push(tax.uniqueName);
                         }
                     } else {
-                        salesEntryClass.taxes.push({
-                            amount: tax.taxPercent,
-                            uniqueName: tax.uniqueName,
-                            isChecked: true,
-                            isDisabled: false,
-                            type: tax.taxType,
-                            name: tax.name || tax.accountName || ''
-                        });
+                        let selectedTax;
+                        if(usedTaxes.indexOf(tax.uniqueName) === -1) {
+                            usedTaxes.push(tax.uniqueName);
+                        
+                            if (entryTaxes && entryTaxes.length > 0) {
+                                entryTaxes.forEach(entryTax => {
+                                    if (entryTax.uniqueName === tax.uniqueName) {
+                                        selectedTax = entryTax;
+                                    }
+                                });
+                            }
+
+                            salesEntryClass.taxes.push({
+                                amount: tax.taxPercent,
+                                uniqueName: tax.uniqueName,
+                                isChecked: true,
+                                isDisabled: false,
+                                type: tax.taxType,
+                                name: tax.name || (selectedTax && selectedTax.name) || ''
+                            });
+                        }
                     }
                 });
 
@@ -2555,11 +2574,32 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     salesTransactionItemClass.stockUnit = transaction.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = transaction.account.uniqueName + '#' + transaction.stock.uniqueName;
 
-                    let selectedAcc = this.flattenAccounts.find(d => {
-                        return (d.uniqueName === transaction.account.uniqueName);
+                    let selectedAcc = this.flattenAccounts.find(account => {
+                        return (account.uniqueName === transaction.account.uniqueName);
                     });
 
                     let stock = selectedAcc.stocks.find(stock => stock.uniqueName === transaction.stock.uniqueName);
+
+                    if(stock) {
+                        let description = [];
+                        let skuCodeHeading = stock.skuCodeHeading ? stock.skuCodeHeading : 'SKU Code';
+
+                        if (stock.skuCode) {
+                            description.push(skuCodeHeading + ':' + stock.skuCode);
+                        }
+
+                        let customField1Heading = stock.customField1Heading ? stock.customField1Heading : 'Custom field 1';
+                        if (stock.customField1Value) {
+                            description.push(customField1Heading + ':' + stock.customField1Value);
+                        }
+
+                        let customField2Heading = stock.customField2Heading ? stock.customField2Heading : 'Custom field 2';
+                        if (stock.customField2Value) {
+                            description.push(customField2Heading + ':' + stock.customField2Value);
+                        }
+
+                        salesTransactionItemClass.sku_and_customfields = description.join(', ');
+                    }
 
                     salesTransactionItemClass.stockList = [];
                     if (stock.accountStockDetails.unitRates.length) {
@@ -2616,13 +2656,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             salesEntryClass.voucherType = entry.voucherType;
             salesEntryClass.uniqueName = entry.uniqueName;
             salesEntryClass.description = entry.description;
-            salesEntryClass.entryDate = moment(entry.date, GIDDH_DATE_FORMAT).toDate();
             this.calculateOtherTaxes(salesEntryClass.otherTaxModal, salesEntryClass);
             convertedEntries.push(salesEntryClass);
             this.activeIndex++;
         });
-
-        this.showLoaderUntilDataPrefilled = false;
 
         return convertedEntries;
     }
@@ -2676,7 +2713,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public cancelUpdate(): void {
-        this.router.navigate(['/pages/purchase-management/purchase-orders']);
+        this.router.navigate(['/pages/purchase-management/purchase-orders/preview/' + this.purchaseOrderUniqueName]);
     }
 
     /**
@@ -2710,5 +2747,48 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         currentPageObj.name = title;
         currentPageObj.url = this.router.url;
         this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
+    }
+
+    /**
+     * This will get the invoice/purchase settings
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public getInvoiceSettings(): void {
+        this.invoiceService.GetInvoiceSetting().subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                this.invoiceSettings = _.cloneDeep(response.body);
+                this.inventorySettings = this.invoiceSettings.companyInventorySettings;
+                this.assignDueDate();
+            }
+        });
+    }
+
+    /**
+     * This will update the exchange rate
+     *
+     * @param {*} val
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public updateExchangeRate(val: any): void {
+        val = val.replace(this.baseCurrencySymbol, '');
+        let total = parseFloat(val.replace(/,/g, "")) || 0;
+        if (this.isMulticurrencyAccount) {
+            this.exchangeRate = total / this.purchaseOrder.voucherDetails.grandTotal || 0;
+            this.originalExchangeRate = this.exchangeRate;
+        }
+    }
+
+    /**
+     * This will update the due date based on settings
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public assignDueDate(): void {
+        if (!this.isUpdateMode) {
+            let duePeriod: number;
+            duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
+            this.purchaseOrder.voucherDetails.dueDate = duePeriod > 0 ? moment().add(duePeriod, 'days').toDate() : moment().toDate();
+        }
     }
 }
