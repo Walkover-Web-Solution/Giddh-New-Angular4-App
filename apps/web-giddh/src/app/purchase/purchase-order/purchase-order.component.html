@@ -103,7 +103,7 @@
             <thead class="t-h-bg1" (mouseleave)="showSelectAllItemCheckbox = false">
                 <tr (mouseenter)="showSelectAllItemCheckbox = true">
                     <th width="3%">
-                        <div>
+                        <div class="mh18-img">
                             <span *ngIf="!showSelectAllItemCheckbox && !allItemsSelected">#</span>
                             <div class="table-checkbox-field" *ngIf="showSelectAllItemCheckbox || allItemsSelected">
                                 <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
@@ -126,11 +126,11 @@
 
                     <th width="15%" class="td-search-box" (clickOutside)="showPurchaseOrderNumberSearch = false">
                         <div>
-                            <span [hidden]="showPurchaseOrderNumberSearch">Purchase Order#</span>
+                            <span [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber">Purchase Order#</span>
                             <i class="icon-search" (click)="showInlineSearch('purchaseOrderNumber', searchBox);"
-                                [hidden]="showPurchaseOrderNumberSearch"></i>
+                                [hidden]="showPurchaseOrderNumberSearch || purchaseOrderPostRequest.purchaseOrderNumber"></i>
                         </div>
-                        <div class="input-container" [hidden]="!showPurchaseOrderNumberSearch">
+                        <div class="input-container" [hidden]="!showPurchaseOrderNumberSearch && !purchaseOrderPostRequest.purchaseOrderNumber">
                             <input type="text" placeholder="Search Purchase Order#" class="w100" #searchBox
                                 [(ngModel)]="purchaseOrderPostRequest.purchaseOrderNumber" (keyup)="columnSearch()"
                                 (keydown)="columnSearch()" />
@@ -139,11 +139,11 @@
 
                     <th width="15%" class="td-search-box" (clickOutside)="showVendorNameSearch = false">
                         <div>
-                            <span [hidden]="showVendorNameSearch">Vendor Name</span>
+                            <span [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName">Vendor Name</span>
                             <i class="icon-search" (click)="showInlineSearch('vendorName', searchBox);"
-                                [hidden]="showVendorNameSearch"></i>
+                                [hidden]="showVendorNameSearch || purchaseOrderPostRequest.vendorName"></i>
                         </div>
-                        <div class="input-container" [hidden]="!showVendorNameSearch">
+                        <div class="input-container" [hidden]="!showVendorNameSearch && !purchaseOrderPostRequest.vendorName">
                             <input type="text" placeholder="Search Vendor Name" class="w100" #searchBox
                                 [(ngModel)]="purchaseOrderPostRequest.vendorName" (keyup)="columnSearch()"
                                 (keydown)="columnSearch()" />
@@ -151,7 +151,7 @@
                     </th>
 
                     <th width="15%">
-                        <div class="d-flex justify-content-end">
+                        <div class="d-flex">
                             <div class="text-right"> Total Amt.</div>
                             <div class="icon-pointer">
                                 <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}">
@@ -184,7 +184,7 @@
                 <tr *ngFor="let item of purchaseOrders.items; let i = index;" (mouseenter)="hoveredItem = item.uniqueName">
                     <td data-title="#">
                         <span *ngIf="hoveredItem !== item.uniqueName && !item.isSelected && selectedItem !== item.uniqueName">{{ (purchaseOrderGetRequest.count * (purchaseOrderGetRequest.page - 1)) + (i+1) }}</span>
-                        <div class="mh18_img" class="justify-content-sm-start table-checkbox-field" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
+                        <div class="mh18-img" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
                             <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
                                 (click)="toggleItem(item, true)" />
                             <img *ngIf="item.isSelected" src="assets/images/checked.png"
@@ -203,7 +203,7 @@
                     <td data-title="Vendor Name">
                         {{item.vendor?.name}}
                     </td>
-                    <td data-title="Total Amt." class="text-right">
+                    <td data-title="Total Amt.">
                         {{item.grandTotal?.amountForAccount | giddhCurrency}}
                     </td>
                     <td data-title="Expected Delivery">
@@ -211,7 +211,7 @@
                         <span *ngIf="item.dueDays && item.dueDays > 7">{{item.dueDate}}</span>
                         <span class="ontime-delivery" *ngIf="item.dueDays === 0">Today</span>
                     </td>
-                    <td data-title="status" class="d-flex align-items-center">
+                    <td data-title="status" class="d-flex align-items-center status_mobile">
                         <span class="d-flex">
                             {{item.status}}</span>
                         <div class="action-icon ml-15" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
@@ -219,10 +219,10 @@
                                 <span class="icon-tick font-12"></span>
                             </a> -->
                             <a tooltip="Send Email" (click)="openSendMailModal(item, sendEmailModal)">
-                                <span class="icon-envelope font-12"></span>
+                                <span class="icon-envelope font-10"></span>
                             </a>
                             <a tooltip="Copy" [routerLink]="['/pages/purchase-management/purchase-order/new/'+item.uniqueName]">
-                                <span class="icon-copy-small font-14"></span>
+                                <span class="icon-copy-small font-12"></span>
                             </a>
                             <a tooltip="Delete" (click)="confirmDelete(item)">
                                 <i class="icon-trash"></i>
@@ -252,7 +252,7 @@
             </tbody>
         </table>
     </div>
-    <pagination *ngIf="purchaseOrders.totalPages > 1" class="pagination" [totalItems]="purchaseOrders.totalItems" [itemsPerPage]="purchaseOrderGetRequest.count" [maxSize]="5" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+    <pagination *ngIf="purchaseOrders.totalPages > 1" class="pagination" [(ngModel)]="purchaseOrderGetRequest.page" [totalItems]="purchaseOrders.totalItems" [itemsPerPage]="purchaseOrderGetRequest.count" [maxSize]="5" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
 </div>
 <ng-template #template>
     <div class="purchase-order-bulk-update">

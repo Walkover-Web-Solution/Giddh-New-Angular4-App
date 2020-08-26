@@ -6,12 +6,13 @@ import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter, take } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
 import { PAGINATION_LIMIT } from '../../app.constant';
 import * as moment from 'moment/moment';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-order.action';
 
 @Component({
     selector: 'purchase-order',
@@ -95,10 +96,17 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public showSelectAllItemCheckbox: boolean = false;
     /* Send email request params object */
     public sendEmailRequest: any = {};
+    /* Observable for filters applied */
+    public purchaseOrderListFilters$: Observable<any>;
+    /* This will hold if we need to overwriter filters */
+    public useStoreFilters: boolean = false;
+    /* This will hold current page url */
+    public pageUrl: string = "pages/purchase-management/purchase-orders";
 
-    constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute) {
+    constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
-        this.universalDate$ = this.store.select(state => state.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+        this.purchaseOrderListFilters$ = this.store.pipe(select(state => state.purchaseOrder.listFilters), (takeUntil(this.destroyed$)));
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params && params['purchaseOrderUniqueName']) {
@@ -121,18 +129,52 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             this.isMobileScreen = result.matches;
         });
 
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            if (event instanceof NavigationStart) {
+                this.pageUrl = event.url;
+                if (event.url.includes('/purchase-order/new') || event.url.includes('/purchase-orders/preview') || event.url.includes('/purchase-order/edit') || event.url.includes('/purchase-orders')) {
+                    this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({ getRequest: this.purchaseOrderGetRequest, postRequest: this.purchaseOrderPostRequest }));
+                } else {
+                    this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({}));
+                }
+            }
+        });
+
+        this.purchaseOrderListFilters$.pipe(takeUntil(this.destroyed$)).subscribe(filters => {
+            if (filters && (this.pageUrl.includes('/purchase-orders/preview') || this.pageUrl.includes('/purchase-orders'))) {
+                if (filters.getRequest) {
+                    this.purchaseOrderGetRequest = filters.getRequest;
+                    this.purchaseOrderGetRequest.page = 1;
+                }
+                if (filters.postRequest) {
+                    this.purchaseOrderPostRequest = filters.postRequest;
+                }
+
+                if (filters.getRequest || filters.postRequest) {
+                    this.useStoreFilters = true;
+                }
+            }
+        });
+
         /* Observer to store universal from/to date */
-        this.universalDate$.subscribe(dateObj => {
+        this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
 
-                this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
-                this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                if(!this.useStoreFilters) {
+                    this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
+                    this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
-                this.purchaseOrderGetRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.purchaseOrderGetRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                    this.purchaseOrderGetRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                    this.purchaseOrderGetRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-                this.getAllPurchaseOrders(true);
+                    this.getAllPurchaseOrders(true);
+                } else {
+                    this.selectedDateRange = { startDate: moment(this.purchaseOrderGetRequest.from, GIDDH_DATE_FORMAT), endDate: moment(this.purchaseOrderGetRequest.to, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = moment(this.purchaseOrderGetRequest.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.purchaseOrderGetRequest.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.useStoreFilters = false;
+                    this.getAllPurchaseOrders(true);
+                }
             }
         });
 
@@ -143,7 +185,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.activeCompanyUniqueName$.subscribe(response => {
+        this.activeCompanyUniqueName$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.purchaseOrderGetRequest.companyUniqueName = response;
             this.getAllPurchaseOrders(true);
         });
@@ -179,7 +221,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof PurchaseOrderComponent
      */
     public getAllPurchaseOrders(resetPage: boolean): void {
-        if (this.purchaseOrderGetRequest.companyUniqueName && this.purchaseOrderGetRequest.from && this.purchaseOrderGetRequest.to) {
+        if (this.purchaseOrderGetRequest.companyUniqueName && this.purchaseOrderGetRequest.from && this.purchaseOrderGetRequest.to && !this.isLoading) {
             this.isLoading = true;
             this.purchaseOrders = {};
 
@@ -293,6 +335,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public clearFilter(): void {
         this.purchaseOrderGetRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
         this.purchaseOrderGetRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
+        this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.purchaseOrderGetRequest.page = 1;
         this.purchaseOrderGetRequest.sort = 'DESC';
         this.purchaseOrderGetRequest.sortBy = 'purchaseDate';
