@@ -118,7 +118,7 @@ import { PurchaseRecordActions } from './purchase-record/purchase-record.action'
     exports: [EffectsModule]
 })
 export class ActionModule {
-    public static forRoot(): ModuleWithProviders<unknown> {
+    public static forRoot(): ModuleWithProviders<ActionModule> {
         return {
             ngModule: ActionModule,
             providers: []

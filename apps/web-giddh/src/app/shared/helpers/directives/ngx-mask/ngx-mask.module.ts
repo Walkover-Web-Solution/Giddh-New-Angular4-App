@@ -9,7 +9,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
     declarations: [MaskDirective, MaskPipe],
 })
 export class NgxMaskModule {
-    public static forRoot(configValue?: optionsConfig | (() => optionsConfig)): ModuleWithProviders<unknown> {
+    public static forRoot(configValue?: optionsConfig | (() => optionsConfig)): ModuleWithProviders<NgxMaskModule> {
         return {
             ngModule: NgxMaskModule,
             providers: [
@@ -30,7 +30,7 @@ export class NgxMaskModule {
             ],
         };
     }
-    public static forChild(_configValue?: optionsConfig): ModuleWithProviders<unknown> {
+    public static forChild(_configValue?: optionsConfig): ModuleWithProviders<NgxMaskModule> {
         return {
             ngModule: NgxMaskModule,
         };

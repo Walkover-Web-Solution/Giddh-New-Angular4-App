@@ -251,7 +251,7 @@ export function provideConfig() {
     ]
 })
 export class SharedModule {
-    public static forRoot(): ModuleWithProviders<unknown> {
+    public static forRoot(): ModuleWithProviders<SharedModule> {
         return {
             ngModule: SharedModule,
             providers: []

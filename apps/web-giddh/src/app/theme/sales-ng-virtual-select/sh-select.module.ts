@@ -21,7 +21,7 @@ import { SalesShSelectMenuComponent } from './sh-select-menu.component';
 })
 
 export class SalesShSelectModule {
-    public static forRoot(): ModuleWithProviders<unknown> {
+    public static forRoot(): ModuleWithProviders<SalesShSelectModule> {
         return {
             ngModule: SalesShSelectModule
         };

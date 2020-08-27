@@ -14,7 +14,7 @@ import { TooltipModule } from "ngx-bootstrap/tooltip";
 })
 
 export class TaxControlModule {
-    public static forRoot(): ModuleWithProviders<unknown> {
+    public static forRoot(): ModuleWithProviders<TaxControlModule> {
         return {
             ngModule: TaxControlModule,
             providers: []

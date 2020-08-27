@@ -28,7 +28,7 @@ import {userLoginStateEnum} from '../../../../models/user-login-state';
 import {UserDetails} from 'apps/web-giddh/src/app/models/api-models/loginModels';
 import {NgForm} from '@angular/forms';
 import {CountryRequest} from "../../../../models/api-models/Common";
-import * as googleLibphonenumber from 'google-libphonenumber';
+import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 
 @Component({
     selector: 'company-add-new-ui-component',
@@ -99,7 +99,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public isNewUser: boolean = false;
-    public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public selectedCountry: string = '';
     /* This will hold if it's production env or not */
     public isProdMode: boolean = false;
@@ -306,8 +305,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
     public checkMobileNo(ele) {
         try {
-            let parsedNumber = this.phoneUtility.parse('+' + this.company.phoneCode + ele.value, this.company.country);
-            if (this.phoneUtility.isValidNumber(parsedNumber)) {
+            let parsedNumber = parsePhoneNumberFromString('+' + this.company.phoneCode + ele.value, this.company.country as CountryCode);
+            if (parsedNumber.isValid()) {
                 ele.classList.remove('error-box');
                 this.isMobileNumberValid = true;
             } else {
