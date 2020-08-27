@@ -336,20 +336,26 @@
                         </div>
                         <!-- endregion -->
                     </div>
-                    <div class="row mb-1">
+                    <div class="row mb-1 height-row">
                         <!-- region customer name -->
-                        <div class="col-sm-2" *ngIf="invoiceSettings?.purchaseBillSettings?.useCustomPONumber">
+                        <div class="col-sm-2">
+                        <div *ngIf="invoiceSettings?.purchaseBillSettings?.useCustomPONumber">
                             <label>Order #</label>
                         </div>
+                    </div>
                         <!-- region customer dropdown -->
                         <div class="select-customer-name order-expected-delivery d-flex" [ngClass]="{'col-sm-9': invoiceSettings?.purchaseBillSettings?.useCustomPONumber, 'col-sm-12': !invoiceSettings?.purchaseBillSettings?.useCustomPONumber}">
                             <!-- region if not cashinvoice show customer dropdown -->
-                            <div class="col-sm-6 pl-0" *ngIf="invoiceSettings?.purchaseBillSettings?.useCustomPONumber">
+                            
+                            <div class="col-sm-6 pl-0">
+                                <div *ngIf="invoiceSettings?.purchaseBillSettings?.useCustomPONumber">
                                 <input type="text" class="form-control" name="purchaseOrderNumber"
-                                    [(ngModel)]="purchaseOrder.number">
+                                    [(ngModel)]="purchaseOrder.number"/>
+                                </div>
                             </div>
                             <!-- endregion -->
-                            <div class="invoice-due-date" [ngClass]="{'col-sm-6': invoiceSettings?.purchaseBillSettings?.useCustomPONumber, 'col-sm-12': !invoiceSettings?.purchaseBillSettings?.useCustomPONumber}">
+                            <div [ngClass]="{'col-sm-6': invoiceSettings?.purchaseBillSettings?.useCustomPONumber, 'col-sm-12': !invoiceSettings?.purchaseBillSettings?.useCustomPONumber}">
+                                <div class="invoice-due-date">
                                 <div class="d-flex">
                                     <label>Order Date<span class="red-text">*</span></label>
                                     <input type="text" class="form-control" placeholder="Select Date" [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseOrderDate" [(ngModel)]="purchaseOrder.voucherDetails.voucherDate" bsDatepicker>
@@ -360,6 +366,7 @@
                                         name="purchaseDueDate" [(ngModel)]="purchaseOrder.voucherDetails.dueDate" bsDatepicker>
                                 </div>
                             </div>
+                        </div>
                         </div>
                         <!-- endregion -->
                     </div>
