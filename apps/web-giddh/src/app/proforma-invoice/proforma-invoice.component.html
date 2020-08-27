@@ -223,14 +223,14 @@
                                                                     autofocus="off" aria-autocomplete="none"
                                                                     #customerBillingAddress></textarea>
 
-                                                                <div>
-                                                                    <div class="col-sm-6 pd ">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12 col-md-6">
                                                                         <label class="salesCountryLabel">
                                                                             {{ customerCountryName }}
                                                                         </label>
                                                                     </div>
 
-                                                                    <div class="col-sm-6 pd" #billingState>
+                                                                    <div class="col-sm-12 col-md-6" #billingState>
                                                                         <sales-sh-select [placeholder]="'State'"
                                                                             class="select-bdr-bottom"
                                                                             (selected)="fillShippingBillingDetails($event, true); autoFillShippingDetails()"
@@ -293,8 +293,8 @@
 
                                                                     <div class="form-group">
 
-                                                                        <div class="col-sm-6 pd ">
-                                                                            <div class="form-group">
+                                                                        <div class="col-sm-12 col-md-6">
+                                                                            <div class="form-group mb-0">
 
                                                                                 <label class="salesCountryLabel">
                                                                                     {{ customerCountryName }}
@@ -302,7 +302,7 @@
                                                                             </div>
                                                                         </div>
 
-                                                                        <div class="col-sm-6 pd" #shippingState>
+                                                                        <div class="col-sm-12 col-md-6" #shippingState>
 
                                                                             <sales-sh-select
                                                                                 [disabled]="autoFillShipping"
@@ -396,7 +396,7 @@
                             <!-- region attention to -->
                             <div class="row">
 
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-2 col-xs-12">
                                     <label>Attention to</label>
                                 </div>
 
@@ -414,7 +414,7 @@
 
                             <!-- region email -->
                             <div class="row mTB1">
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-2 col-xs-12">
                                     <label>Email Id</label>
                                 </div>
                                 <div class="col-sm-9">
@@ -431,7 +431,7 @@
                             <!-- region mobile no -->
                             <div class="row mTB1">
 
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-2 col-xs-12">
                                     <label>Mobile Number</label>
                                 </div>
 
@@ -446,7 +446,7 @@
                             <!-- endregion-->
                             <!-- warehouse selection -->
                             <div class="row mTB1" *ngIf="shouldShowWarehouse">
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-2 col-xs-12">
                                     <label>Warehouse</label>
                                 </div>
                                 <div class="col-sm-9">
@@ -463,7 +463,7 @@
                             <!--
                                 Delivery from DIV for purchase record page
                                 <div class="row mb-1 delivery-from-field">
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-2 col-xs-12">
                                     <label>Deliver From<span class="red-text">*</span></label>
                                 </div>
 
@@ -565,7 +565,7 @@
 
                             <!-- Link purchase order (make it functional)-->
                             <!-- <div class="row mTB1" hidden>
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-2 col-xs-12">
                                     <label>Link Purchase Order</label>
                                 </div>
                                 <div class="col-sm-9">
@@ -580,7 +580,7 @@
 
                             <!-- region invoice no, invoice date, Expiry date -->
                             <div class="row mTB1">
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-md-2 col-xs-12">
                                     <label> {{ invoiceNoLabel }} </label>
                                 </div>
                                 <div class="col-sm-9">
@@ -666,8 +666,8 @@
                                 </div>
                             </div>
 
-                            <div class="row mTB1 showOnsmall-screen">
-                                <div class="col-sm-2">
+                            <div class="row mTB1" *ngIf="isMobileScreen">
+                                <div class="col-sm-12 col-md-2 col-xs-12">
                                     <label>{{ invoiceDateLabel }}</label>
                                 </div>
                                 <div class="col-sm-9">
@@ -688,9 +688,9 @@
                                 </div>
                             </div>
 
-                            <div class="row mTB1 showOnsmall-screen"
-                                *ngIf="isSalesInvoice || isPurchaseInvoice || isProformaInvoice || isEstimateInvoice">
-                                <div class="col-sm-2">
+                            <div class="row mTB1"
+                                *ngIf="isMobileScreen && (isSalesInvoice || isPurchaseInvoice || isProformaInvoice || isEstimateInvoice)">
+                                <div class="col-sm-12 col-md-2 col-xs-12">
                                     <label>{{ invoiceDueDateLabel }}</label>
                                 </div>
                                 <div class="col-sm-9">
@@ -710,7 +710,7 @@
                             <!-- reverse charge transction start -->
                             <!-- for purchase record start -->
                             <div class="row mTB1" *ngIf="isPurchaseInvoice">
-                                <div class="col-sm-2" *ngIf="!isMobileView">
+                                <div class="col-sm-12 col-md-2 col-xs-12" *ngIf="!isMobileView">
                                     <label></label>
                                 </div>
                                 <div class="col-sm-9">
@@ -735,11 +735,11 @@
                             <!-- for sales invoice start (ngModelChange)="touristSchemeApplicableToggle($event)"-->
                             <ng-container *ngIf="companyCountryCode === 'AE'">
                                 <div class="row mTB1" *ngIf="isSalesInvoice || isCashInvoice">
-                                    <div class="col-sm-2" *ngIf="!isMobileView">
+                                    <div class="col-sm-12 col-md-2 col-xs-12" *ngIf="!isMobileView">
                                         <label></label>
                                     </div>
-                                    <div class="col-sm-9">
-                                        <div class="col-sm-6 pl-0">
+                                    <div class="col-sm-12 col-md-9 col-xs-12">
+                                        <div class="col-sm-12 col-md-6 pl-0">
                                             <input id="tourist-scheme" type="checkbox" name="touristSchemeApplicable"
                                                 class="checkbox-custom"
                                                 [(ngModel)]="invFormData.touristSchemeApplicable"
@@ -754,11 +754,11 @@
                                 <!-- endregion -->
                                 <div class="row mTB1 "
                                     *ngIf="(isSalesInvoice || isCashInvoice) && invFormData.touristSchemeApplicable ">
-                                    <div class="col-sm-2 " *ngIf="!isMobileView ">
+                                    <div class="col-sm-12 col-md-2 col-xs-12">
                                         <label>Passport Number</label>
                                     </div>
-                                    <div class="col-sm-9 ">
-                                        <div class="col-sm-6 pl-0 ">
+                                    <div class="col-sm-12 col-md-9 col-xs-12 ">
+                                        <div class="col-sm-12 col-md-6 pl-0 ">
                                             <input type="text" name="passportNumber" #passportNumber
                                                 placeholder="Passport Number" class="form-control attentionTo"
                                                 (blur)="allowAlphanumericChar(passportNumber)"
@@ -1681,7 +1681,7 @@
                                                                     </div>
                                                                 </li>
 
-                                                                <li class="clearfix mrT1" *ngIf="isSalesInvoice">
+                                                                <li class="clearfix mrT1 d-flex align-items-center payment-mode-amount" *ngIf="isSalesInvoice">
                                                                     <input type="text" (blur)="calculateBalanceDue()"
                                                                         placeholder="Amount" name="dueAmount"
                                                                         class="form-control amountField text-right pull-right max100"
@@ -1692,7 +1692,7 @@
                                                                     <label class="pull-right">Amount</label>
                                                                 </li>
 
-                                                                <li class="clearfix mrT1" *ngIf="isCashInvoice">
+                                                                <li class="clearfix mrT1  d-flex align-items-center payment-mode-amount" *ngIf="isCashInvoice">
                                                                     <span
                                                                         class="amountField pull-right max100 amountFiledCash">
                                                                         <span
@@ -2521,16 +2521,15 @@
                                                     </div>
                                                 </li>
 
-                                                <li class="clearfix mrT1" *ngIf="isSalesInvoice">
-                                                    <input type="text" (blur)="calculateBalanceDue()"
-                                                        placeholder="Amount" name="dueAmount"
-                                                        class="form-control amountField text-right pull-right max100"
+                                                <li class="clearfix mrT1  d-flex align-items-center payment-mode-amount" *ngIf="isSalesInvoice">
+                                                    <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount"
+                                                        name="dueAmount" class="form-control amountField text-right pull-right max100"
                                                         [(ngModel)]="depositAmount" [prefix]="depositCurrSymbol"
                                                         [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat" />
                                                     <label class="pull-right">Amount</label>
                                                 </li>
 
-                                                <li class="clearfix mrT1" *ngIf="isCashInvoice">
+                                                <li class="clearfix mrT1  d-flex align-items-center payment-mode-amount" *ngIf="isCashInvoice">
                                                     <span class="amountField pull-right max100 amountFiledCash">
                                                         <span
                                                             *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
@@ -2978,13 +2977,13 @@
                     <div *ngIf="!options">
                         <div class="form-group clearfix">
                             <label class="col-md-2">TDS Account</label>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <input type="text" class="form-control" placeholder="Select Amount">
                             </div>
                         </div>
                         <div class="form-group clearfix">
                             <label class="col-md-2">Amount</label>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <input type="text" class="form-control" placeholder="Enter Amount">
                             </div>
                         </div>

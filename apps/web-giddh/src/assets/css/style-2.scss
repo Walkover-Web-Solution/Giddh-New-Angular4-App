@@ -5326,7 +5326,6 @@ label {
 
 #dashboard .panel-heading i {
     position: relative;
-    top: 4px;
     color: $gray;
 }
 
@@ -9446,6 +9445,39 @@ span#HW_badge_cont:nth-child(3) {
 }
 .giddh-datepicker-modal {
     z-index: 99999;
+}
+.purchase-record-confirmation-modal{
+    .modal-content{
+        box-shadow: 0 5px 15px rgba(0,0,0,.5);
+    }
+}
+.dropdown-toggle::after{
+    display: none;
+}
+.page-count .pagination{
+    justify-content: center;
+    margin-top: 15px;
+}
+.dashboard-container {
+    .card{
+        margin-bottom: 20px;
+        min-height: 426px;
+    }
+}
+.daterangepicker td,
+.daterangepicker th {
+    font-weight: 400;
+    font-size: 14px;
+    padding: 4px;
+}
+.open>.dropdown-menu {
+    display: block;
+}
+.daterangepicker.dropdown-menu{
+    box-shadow: 0 3px 28px 0 rgba(0,0,0,.14);
+    color: #616161;
+    border: 1px solid #ccc;
+    z-index: 9999!important;
 }
 /* responsive */
 
