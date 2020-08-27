@@ -11,7 +11,7 @@ import { AppState } from '../../store';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { SalesActions } from '../../actions/sales/sales.action';
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';
-import { PurchaseOrder, StateCode } from '../../models/api-models/Purchase';
+import { PurchaseOrder, StateCode, Address } from '../../models/api-models/Purchase';
 import { SalesService } from '../../services/sales.service';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { WarehouseDetails } from '../../ledger/ledger.vm';
@@ -619,6 +619,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 });
             }
         }
+        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
     }
 
     /**
@@ -737,12 +738,28 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                 this.purchaseOrder.voucherDetails.customerUniquename = null;
                 this.purchaseOrder.accountDetails = new AccountDetailsClass();
                 this.purchaseOrder.accountDetails.uniqueName = '';
+                this.purchaseOrder.account.uniqueName = '';
+                this.purchaseOrder.account.name = '';
+                this.purchaseOrder.account.billingDetails = new Address();
+                this.purchaseOrder.account.billingDetails.address = [];
+                this.purchaseOrder.account.billingDetails.state = new StateCode();
+                this.purchaseOrder.account.shippingDetails = new Address();
+                this.purchaseOrder.account.shippingDetails.state = new StateCode();
+                this.purchaseOrder.account.shippingDetails.address = [];
             }
         } else {
             this.purchaseOrder.voucherDetails.customerName = null;
             this.purchaseOrder.voucherDetails.customerUniquename = null;
             this.purchaseOrder.accountDetails = new AccountDetailsClass();
             this.purchaseOrder.accountDetails.uniqueName = '';
+            this.purchaseOrder.account.uniqueName = '';
+            this.purchaseOrder.account.name = '';
+            this.purchaseOrder.account.billingDetails = new Address();
+            this.purchaseOrder.account.billingDetails.address = [];
+            this.purchaseOrder.account.billingDetails.state = new StateCode();
+            this.purchaseOrder.account.shippingDetails = new Address();
+            this.purchaseOrder.account.shippingDetails.state = new StateCode();
+            this.purchaseOrder.account.shippingDetails.address = [];
         }
     }
 
@@ -908,7 +925,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     private initializeWarehouse(warehouse?: WarehouseDetails): void {
-        this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), take(1)).subscribe((warehouses: any) => {
+        this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
             if (warehouses) {
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
                 let defaultWarehouseUniqueName;
