@@ -32,6 +32,9 @@
         padding-right: 5px;
     }
 }
+.table-footer th {
+    border-top: none !important;
+}
 @media (max-width: 991px) {
     .tb-wrapper {
         width: 100%;
