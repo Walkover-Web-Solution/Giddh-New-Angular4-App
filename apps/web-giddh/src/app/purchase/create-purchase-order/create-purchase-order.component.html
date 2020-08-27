@@ -339,22 +339,22 @@
                     <div class="row mb-1 height-row">
                         <!-- region customer name -->
                         <div class="col-sm-2">
-                        <div *ngIf="invoiceSettings?.purchaseBillSettings?.useCustomPONumber">
-                            <label>Order #</label>
+                            <div>
+                                <label>Order #</label>
+                            </div>
                         </div>
-                    </div>
                         <!-- region customer dropdown -->
-                        <div class="select-customer-name order-expected-delivery d-flex" [ngClass]="{'col-sm-9': invoiceSettings?.purchaseBillSettings?.useCustomPONumber, 'col-sm-12': !invoiceSettings?.purchaseBillSettings?.useCustomPONumber}">
+                        <div class="select-customer-name order-expected-delivery d-flex col-sm-9">
                             <!-- region if not cashinvoice show customer dropdown -->
                             
                             <div class="col-sm-6 pl-0">
-                                <div *ngIf="invoiceSettings?.purchaseBillSettings?.useCustomPONumber">
+                                <div>
                                 <input type="text" class="form-control" name="purchaseOrderNumber"
-                                    [(ngModel)]="purchaseOrder.number"/>
+                                    [(ngModel)]="purchaseOrder.number" [disabled]="!invoiceSettings?.purchaseBillSettings?.useCustomPONumber" placeholder="Enter Order #" />
                                 </div>
                             </div>
                             <!-- endregion -->
-                            <div [ngClass]="{'col-sm-6': invoiceSettings?.purchaseBillSettings?.useCustomPONumber, 'col-sm-12': !invoiceSettings?.purchaseBillSettings?.useCustomPONumber}">
+                            <div class="col-sm-6">
                                 <div class="invoice-due-date">
                                 <div class="d-flex">
                                     <label>Order Date<span class="red-text">*</span></label>
