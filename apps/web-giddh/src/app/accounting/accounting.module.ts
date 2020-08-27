@@ -28,6 +28,7 @@ import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-acco
 import { AccountingComponent } from './accounting.component';
 import { InvoiceGridComponent } from './invoice-grid/invoice-grid.component';
 import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
+import {NgxMaskModule} from "../shared/helpers/directives/ngx-mask";
 
 @NgModule({
     declarations: [
@@ -64,7 +65,8 @@ import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
         ElementViewChildModule,
         QuickAccountModule.forRoot(),
         InventoryModule,
-        GenericAsideMenuAccountModule
+        GenericAsideMenuAccountModule,
+        NgxMaskModule.forRoot(),
     ],
 })
 export class AccountingModule {
