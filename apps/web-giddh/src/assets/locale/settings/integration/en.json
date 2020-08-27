@@ -76,6 +76,5 @@
         "select_otp": "Select OTP",
         "approver_name": "Approver Name",
         "select_otp_tooltip": "The OTP will reach the person selected in Approver Name"
-
     }
 }

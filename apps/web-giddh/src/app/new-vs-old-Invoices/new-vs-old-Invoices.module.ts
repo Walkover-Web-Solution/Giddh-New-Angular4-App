@@ -10,6 +10,7 @@ import { SelectModule } from '../theme/ng-select/ng-select';
 import { NewVsOldInvoicesComponent } from './new-vs-old-Invoices.component';
 import { NewVsOldInvoicesRoutingModule } from './new-vs-old-Invoices.routing.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -33,7 +34,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         SharedModule,
         SelectModule.forRoot(),
         ModalModule,
-        PaginationModule
+        PaginationModule,
+        CurrencyModule
     ],
     providers: []
 })
