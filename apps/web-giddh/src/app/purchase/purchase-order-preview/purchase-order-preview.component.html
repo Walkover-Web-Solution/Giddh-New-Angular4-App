@@ -79,7 +79,7 @@
 
                                                 <li>
                                                     <a class="cp" href="javascript:void(0)" (click)="statusUpdate('cancelled')" *ngIf="purchaseOrder.status === 'OPEN'">Cancel</a>
-                                                    <a class="cp" href="javascript:void(0)" (click)="statusUpdate('open')" *ngIf="purchaseOrder.status === 'CANCELLED'">Open</a>
+                                                    <a class="cp" href="javascript:void(0)" (click)="statusUpdate('open')" *ngIf="purchaseOrder.status === 'CANCELLED' || purchaseOrder.status === 'EXPIRED'">Open</a>
                                                 </li>
 
                                                 <li>

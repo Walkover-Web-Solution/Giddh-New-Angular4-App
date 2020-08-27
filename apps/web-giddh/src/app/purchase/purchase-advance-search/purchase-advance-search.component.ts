@@ -99,6 +99,11 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
                 this.datePickerOptions = config;
             }
         });
+
+        if(this.purchaseOrderPostRequest && this.purchaseOrderPostRequest.dueFrom && this.purchaseOrderPostRequest.dueTo) {
+            this.selectedDateRange = { startDate: moment(this.purchaseOrderPostRequest.dueFrom, GIDDH_DATE_FORMAT), endDate: moment(this.purchaseOrderPostRequest.dueTo, GIDDH_DATE_FORMAT) };
+            this.selectedDateRangeUi = moment(this.purchaseOrderPostRequest.dueFrom, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.purchaseOrderPostRequest.dueTo, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+        }
     }
 
     /**
