@@ -36,12 +36,15 @@ const STATUS_FILTER = [
 })
 
 export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
+    /* This will hold the amount filter */
     public filtersForAmount: IOption[] = AMOUNT_COMPARISON_FILTER;
+    /* This will hold the status filter */
     public filtersForStatus: IOption[] = STATUS_FILTER;
-
+    /* This will input the filters to preselect them */
     @Input() public purchaseOrderPostRequest;
+    /* Emitter for filters */
     @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
-
+    /* Datepicker template */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
 
     /* This will store if device is mobile or not */
