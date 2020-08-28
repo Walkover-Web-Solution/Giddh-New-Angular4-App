@@ -37,8 +37,8 @@
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <input type="text" placeholder="{{branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'}}" class="form-control" name="dateOfSupply" [(ngModel)]="tempDateParams.dateOfSupply" (bsValueChange)="selectDateOfSupply($event)" required readonly
-                                    bsDatepicker [bsConfig]="bsConfig">
+                                <input type="text" placeholder="{{branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'}}" class="form-control" name="dateOfSupply" [(ngModel)]="tempDateParams.dateOfSupply" (bsValueChange)="selectDateOfSupply($event)" required [readonly]="!editBranchTransferUniqueName"
+                                    [disabled]="editBranchTransferUniqueName ? 'disabled' : null" bsDatepicker [bsConfig]="bsConfig">
                             </div>
                         </div>
                         <div *ngIf="transferType === 'senders'" class="row mrB2">
@@ -168,8 +168,8 @@
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                <input type="text" placeholder="{{branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'}}" class="form-control" name="dateOfSupply" [(ngModel)]="tempDateParams.dateOfSupply" (bsValueChange)="selectDateOfSupply($event)" required readonly
-                                    bsDatepicker>
+                                <input type="text" placeholder="{{branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'}}" class="form-control" name="dateOfSupply" [(ngModel)]="tempDateParams.dateOfSupply" (bsValueChange)="selectDateOfSupply($event)" required [readonly]="!editBranchTransferUniqueName"
+                                    [disabled]="editBranchTransferUniqueName ? 'disabled' : null" bsDatepicker>
                             </div>
                         </div>
                         <div *ngIf="transferType === 'senders'" class="row mrB2">

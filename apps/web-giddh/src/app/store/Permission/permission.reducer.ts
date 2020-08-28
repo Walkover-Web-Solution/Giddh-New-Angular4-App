@@ -6,12 +6,14 @@ import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
+import { FindValueSubscriber } from 'rxjs/internal/operators/find';
 
 export interface PermissionState {
     roles: IRoleCommonResponseAndRequest[];
     newRole: object;
     pages: string[];
     createPermissionInProcess: boolean;
+    createPermissionSuccess: boolean;
     addUpdateRoleInProcess: boolean;
     permissions: GetAllPermissionResponse[];
 }
@@ -21,6 +23,7 @@ export const initialState: PermissionState = {
     newRole: {},
     pages: [],
     createPermissionInProcess: false,
+    createPermissionSuccess: false,
     addUpdateRoleInProcess: false,
     permissions: []
 };
@@ -122,10 +125,19 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             return Object.assign({}, state, newState);
         }
         case AccountsAction.SHARE_ENTITY: {
-            return Object.assign({}, state, {createPermissionInProcess: true});
+            return Object.assign({}, state, {createPermissionInProcess: true, createPermissionSuccess: false});
         }
         case AccountsAction.SHARE_ENTITY_RESPONSE: {
-            return Object.assign({}, state, {createPermissionInProcess: false});
+            let res = action.payload;
+            if (res.status === 'success') {
+                return Object.assign({}, state, {
+                    createPermissionInProcess: false, createPermissionSuccess: true
+                });
+            } else {
+                return Object.assign({}, state, {
+                    createPermissionInProcess: false, createPermissionSuccess: false
+                });
+            }
         }
         default: {
             return state;
