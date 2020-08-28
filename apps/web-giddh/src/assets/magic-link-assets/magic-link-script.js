@@ -194,7 +194,7 @@ var app = new Vue({
                         if((from && to) || (e && e.response && e.response.data && e.response.data.code !== "NOT_FOUND")) {
                             this.$toaster.error(msg);
                         }
-                    });    
+                    });
             } else {
                 this.$toaster.error('Magic link ID not found.');
             }
@@ -367,14 +367,14 @@ var app = new Vue({
                 case 'dev.giddh.com':
                 case 'test.giddh.com':
                 case 'stage.giddh.com':
-                    apiBaseUrl = 'https://apitest.giddh.com/';
+                    apiBaseUrl = 'https://api.giddh.com/';
                     break;
                 case 'giddh.com':
                 case 'app.giddh.com':
                     apiBaseUrl = 'https://api.giddh.com/';
                     break;
                 default:
-                    apiBaseUrl = 'https://apitest.giddh.com/';
+                    apiBaseUrl = 'https://api.giddh.com/';
             }
             return apiBaseUrl;
         }
