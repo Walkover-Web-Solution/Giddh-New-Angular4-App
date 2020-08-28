@@ -98,7 +98,7 @@
                                                         name="amount" [(ngModel)]="entry.amount"
                                                         (keydown)="validateAmount($event, entry)"
                                                         (blur)="validateEntry(entry)" decimalDigitsDirective
-                                                        [DecimalPlaces]="2" (ngModelChange)="formatAmount(entry)">
+                                                        [mask]="inputMaskFormat" (ngModelChange)="formatAmount(entry)">
                                                 </div>
                                                 <div class="single-field cr-dr-field">
                                                     <p>
@@ -135,8 +135,8 @@
                                                             [(ngModel)]="inventory.quantity"
                                                             (ngModelChange)="changeQuantity(idx, inventory.quantity)"
                                                             [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}"
-                                                            decimalDigitsDirective [DecimalPlaces]="2"
-                                                            (focus)="selectedIdx = i" />
+                                                            decimalDigitsDirective [mask]="inputMaskFormat"
+                                                               (focus)="selectedIdx = i" />
                                                     </td>
                                                     <td>
 
@@ -146,7 +146,7 @@
                                                             (ngModelChange)="changePrice(idx, inventory.unit.rate)"
                                                             (focus)="selectedStockIdx = idx;selectedIdx = i;"
                                                             [ngClass]="{'focus': isSelectedRow && selectedStockIdx === idx}"
-                                                            decimalDigitsDirective [DecimalPlaces]="2" />
+                                                            decimalDigitsDirective [mask]="inputMaskFormat" />
                                                     </td>
                                                     <td>
                                                         <input type="text" placeholder="Unit"
@@ -164,7 +164,7 @@
                                                             (ngModelChange)="amountChanged(idx)"
                                                             (keydown.Tab)="validateAndAddNewStock(idx)"
                                                             (keyup.Enter)="validateAndAddNewStock(idx)"
-                                                            decimalDigitsDirective [DecimalPlaces]="2" />
+                                                            decimalDigitsDirective [mask]="inputMaskFormat"  />
                                                     </td>
                                                 </tr>
                                             </ng-container>
@@ -176,8 +176,8 @@
                                         [disabled]="!transaction.selectedAccount.name || transaction.type !== 'by'"
                                         [hidden]="transaction.type !== 'by'" type="text"
                                         class="form-control text-right debit-credit" #byAmountField
-                                        decimalDigitsDirective #amountField1 [DecimalPlaces]="2"
-                                        [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()"
+                                        decimalDigitsDirective #amountField1 [mask]="inputMaskFormat"
+                                           [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()"
                                         (keydown.Enter)="addNewEntry(transaction.amount,transaction, i)"
                                         (blur)="addNewEntry(transaction.amount,transaction, i);"
                                         [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
@@ -189,8 +189,8 @@
                                         [disabled]="!transaction.selectedAccount.name || transaction.type !== 'to'"
                                         [hidden]="transaction.type !== 'to'" type="text"
                                         class="form-control text-right debit-credit" #toAmountField
-                                        decimalDigitsDirective #amountField2 [DecimalPlaces]="2"
-                                        [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()"
+                                        decimalDigitsDirective #amountField2  [mask]="inputMaskFormat"
+                                           [(ngModel)]="transaction.amount" (focus)="selectRow(true,i);hideListItems()"
                                         (keydown.Enter)="addNewEntry(transaction.amount,transaction, i)"
                                         (blur)="addNewEntry(transaction.amount,transaction, i); openAdjustmentModal($event, transaction, receiptEntry)"
                                         [ngClass]="{'focus': isSelectedRow && selectedIdx === i}"
@@ -228,8 +228,8 @@
                     </div>
                 </div>
                 <div class="total_box text-right pull-right">
-                    <span><strong>{{totalDebitAmount | number: '1.2-2' }}</strong></span>
-                    <span><strong>{{totalCreditAmount | number: '1.2-2' }}</strong></span>
+                    <span><strong>{{totalDebitAmount | giddhCurrency }}</strong></span>
+                    <span><strong>{{totalCreditAmount | giddhCurrency }}</strong></span>
                 </div>
             </div>
         </div>
