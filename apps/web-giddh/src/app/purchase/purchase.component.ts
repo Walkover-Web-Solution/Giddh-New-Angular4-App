@@ -8,6 +8,7 @@ import { AppState } from '../store/roots';
 import { Store } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';
 
+
 @Component({
     styleUrls: [`./purchase.component.scss`],
     templateUrl: './purchase.component.html'

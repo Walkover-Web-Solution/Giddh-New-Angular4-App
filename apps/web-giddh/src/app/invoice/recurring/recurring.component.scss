@@ -1,10 +1,10 @@
 /*td-in-searchbox_style*/
 @import "../../../assets/css/color.scss";
- 
-.reccuring-form{
+
+.reccuring-form {
     flex: 1;
 }
-.search-icon-block{
+.search-icon-block {
     width: 36px;
     height: 36px;
     display: flex;
@@ -13,21 +13,21 @@
     font-size: 18px;
     border: 1px solid $gainsboro;
     border-radius: 2px;
-    color:gray;
+    color: gray;
     background: #fff;
     align-items: center;
     justify-content: center;
 }
-.td_in_searchBox div {
+.td-search-box div {
     display: flex;
 }
 
-.td_in_searchBox div span {
+.td-search-box div span {
     // flex: 1 1 auto;
     padding-left: 8px;
 }
 
-.td_in_searchBox div i {
+.td-search-box div i {
     margin-top: 4px;
     color: $wild-blue-yonder;
     padding-right: 8px;
@@ -35,12 +35,12 @@
     padding-left: 10px;
 }
 
-.td_in_searchBox {
+.td-search-box {
     padding: 0px !important;
     position: relative;
 }
 
-.td_in_searchBox .input-container input {
+.td-search-box .input-container input {
     height: 50px;
     min-width: 100%;
     padding: 11px;
@@ -49,7 +49,7 @@
     background-color: #f2f2f2;
 }
 
-.td_in_searchBox .input-container i {
+.td-search-box .input-container i {
     position: absolute;
     right: 10px;
     top: 12px;
@@ -77,7 +77,7 @@
     cursor: pointer;
 }
 
-.td_in_searchBox div i:hover {
+.td-search-box div i:hover {
     color: $deep-sky-blue;
 }
 
@@ -101,20 +101,20 @@
 .btn-link-2 {
     color: #1c1c1c;
 }
-.search-invoice-filed{
+.search-invoice-filed {
     display: none;
 }
 // responsive
 @media (max-width: 1023px) {
-    .input-group{
+    .input-group {
         display: block;
     }
 }
 @media (max-width: 768px) {
-    .form-view .input-group{
+    .form-view .input-group {
         display: flex;
     }
-    .reccuring-form{
+    .reccuring-form {
         display: none;
     }
     .justify-content-sm {
@@ -137,7 +137,7 @@
     .input-grp-dateRangePicker.form-inline .form-group:nth-child(2n) {
         margin-right: 0 !important;
     }
-    .search-invoice-filed{
+    .search-invoice-filed {
         display: block;
     }
 }
@@ -160,8 +160,8 @@
         margin-bottom: 5px;
     }
 }
-@media(min-width:769px){
-    .search-icon-block{
+@media (min-width: 769px) {
+    .search-icon-block {
         display: none;
     }
 }

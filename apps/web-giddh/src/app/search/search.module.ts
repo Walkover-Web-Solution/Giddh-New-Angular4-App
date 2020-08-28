@@ -15,6 +15,7 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { BsDropdownModule } from 'ngx-bootstrap';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 
 @NgModule({
     declarations: [
@@ -41,7 +42,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
         DecimalDigitsModule,
         Daterangepicker,
         BsDropdownModule,
-        ClickOutsideModule
+        ClickOutsideModule,
+        CurrencyModule
     ]
 })
 export class SearchModule {
