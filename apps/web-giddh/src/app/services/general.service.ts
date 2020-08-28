@@ -433,6 +433,9 @@ export class GeneralService {
             yPosition = element.clientY + 20;
         }
 
+        if (window.innerHeight - yPosition < 450) {
+            yPosition -= (window.innerHeight - yPosition) / 2;
+        }
 
         return { x: xPosition, y: yPosition };
     }
