@@ -140,14 +140,14 @@ i.close.icon.clear:hover::after {
     border: 0;
 }
 .header .bdr > input[type="text"]::-webkit-input-placeholder {
-    color: #c1c1c1 !important;
+    color: $nobel !important;
 }
 .header .bdr > input[type="text"]::-moz-placeholder {
-    color: #c1c1c1 !important;
+    color: $nobel !important;
 }
 .header .bdr > input[type="text"]:-ms-input-placeholder {
-    color: #c1c1c1 !important;
+    color: $nobel !important;
 }
 .header .bdr > input[type="text"]:-moz-placeholder {
-    color: #c1c1c1 !important;
+    color: $nobel !important;
 }

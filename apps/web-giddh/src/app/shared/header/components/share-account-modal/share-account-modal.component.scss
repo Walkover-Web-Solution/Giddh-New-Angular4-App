@@ -1,0 +1,63 @@
+@import "../../../../../assets/css/color.scss";
+.group-shared-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-top: 1px solid $gainsboro;
+    margin-top: 15px;
+    padding-top: 20px;
+    li {
+        border-bottom: none;
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        text-align: left;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .custom-select {
+        width: 40%;
+        select.form-control {
+            border: 1px solid $gainsboro !important;
+            padding: 7px !important;
+            display: block;
+            min-width: 200px;
+            margin: 0 !important;
+            width: 100%;
+            padding-right: 25px !important;
+        }
+    }
+    .delete-icon {
+        font-size: 14px;
+        line-height: 1.5;
+        border-radius: 3px;
+        background: $whisper-light;
+        border: 1px $gainsboro;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .user-name-email {
+        width: 40%;
+        color: $extra-dark-gray;
+        .user-email {
+            display: inline-flex;
+            flex-direction: column;
+            small {
+                &:first-child {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}
+
+.selected-permission {
+    width: calc(100% - 96px) !important;
+}
+
+.btn-share {
+    float: right;
+}

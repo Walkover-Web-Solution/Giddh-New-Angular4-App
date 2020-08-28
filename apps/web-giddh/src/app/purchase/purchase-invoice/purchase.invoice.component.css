@@ -51,7 +51,7 @@
 }
 
 .bt-border-1px {
-    border-bottom: 1px solid gainsboro;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .tr-td-div > td div {
