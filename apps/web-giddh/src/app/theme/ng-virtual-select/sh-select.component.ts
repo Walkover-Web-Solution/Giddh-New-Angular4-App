@@ -51,6 +51,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public defaultValue: string = "";
     @Input() public readonlyInput: boolean;
     @Input() public showCheckbox: boolean = false;
+    /* This is used to set the value */
     @Input() public fixedValue: string = "";
 
     @ViewChild('inputFilter') public inputFilter: ElementRef;

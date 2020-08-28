@@ -1,12 +1,13 @@
 import { GiddhCurrencyPipe } from './currencyType.pipe';
 import { GeneralService } from './../../../../services/general.service';
 import { NgModule } from '@angular/core';
+import { ServiceModule } from 'apps/web-giddh/src/app/services/service.module';
 
 @NgModule({
-    imports: [],
+    imports: [ServiceModule],
     exports: [GiddhCurrencyPipe],
     declarations: [GiddhCurrencyPipe],
-    providers: [GeneralService]
+    providers: []
 })
 export class CurrencyModule {
 

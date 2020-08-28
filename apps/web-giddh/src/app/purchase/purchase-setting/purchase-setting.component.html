@@ -1,0 +1,162 @@
+<section id="setting-tab-wrapper" class="setting-tab-data">
+    <div id="invoice-setting" class="invoce-controll mt-15">
+        <tabset class="tab-integraton">
+            <tab>
+                <ng-template tabHeading>
+                    <span class="icon-mail"></span> Integration
+                </ng-template>
+                <div class="single-tab-block">
+                    <div class="box clearfix mb-2">
+                        <h4 class="clearfix bdrB">Integration<span> (These settings will be applicable on Purchase Order and Bill)</span></h4>
+                        <div class="clearfix">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3 lh34"><label>From Email</label></div>
+                                <div class="col-xs-12 col-sm-9">
+                                    <div class="row">
+                                        <div class="col-sm-5 col-xs-12">
+                                            <div class="form-group">
+                                                <div class="relative" [ngClass]="{'input-group': true}">
+                                                    <input type="email" class="form-control"
+                                                        placeholder="Enter email id" name="email" [(ngModel)]="invoiceSettings.purchaseBillSettings.email" />
+                                                    <span class="verified-icon" *ngIf="invoiceSettings.purchaseBillSettings.emailVerified"><i class="icon-tick" tooltip="Verified"></i></span>
+                                                    <span class="unverified-icon" *ngIf="!invoiceSettings.purchaseBillSettings.emailVerified"><i class="icon-cross" tooltip="Unverified"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 row">
+                                            <div class="btn-wrapper">
+                                                <button class="btn btn-success mr-1" (click)="verifyEmail(invoiceSettings.purchaseBillSettings.email)" [disabled]="!isEmailChanged && (!invoiceSettings.purchaseBillSettings.email || invoiceSettings.purchaseBillSettings.email.length < 4 || invoiceSettings.purchaseBillSettings.emailVerified)">
+                                                    Verify
+                                                </button>
+                                                <button class="btn btn-danger" (click)="deleteEmail(invoiceSettings.purchaseBillSettings.email)" [disabled]="!invoiceSettings.purchaseBillSettings.email || invoiceSettings.purchaseBillSettings.email.length < 4">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix pdT1">
+                            <div class="row">
+                                <div class="col-sm-3 col-xs-12">
+                                    <input type="checkbox" class="show-on-mobile" name="sendThroughGmail" [(ngModel)]="invoiceSettings.purchaseBillSettings.sendThroughGmail" [disabled]="!isGmailIntegrated" />
+                                    <label>Send email through Gmail</label>
+                                </div>
+                                <div class="col-xs-9 form-group" style="display: flex;align-items: center">
+                                    <input type="checkbox" class="hide-on-mobile" name="sendThroughGmail" [(ngModel)]="invoiceSettings.purchaseBillSettings.sendThroughGmail" [disabled]="!isGmailIntegrated" />
+                                    <span class="ml-1 integrated-email">
+                                        <a [href]="gmailAuthCodeUrl$ | async">Integrate Gmail</a>
+                                    </span>
+                                </div>
+                            </div>
+                            <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+            <tab>
+                <ng-template tabHeading>
+                    <span class="icon-sales-order"></span> Pur. Order
+                </ng-template>
+                <div class="sales-order-tab single-tab-block">
+                    <div class="box clearfix mb-2">
+                        <h4 class="clearfix bdrB">Purchase Order</h4>
+                        <div class="clearfix">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-3 lh34"><label>Default expiry days</label></div>
+                                <div class="col-xs-12 col-sm-9">
+                                    <div class="default-cxpiry">
+                                        <div>
+                                            <div class="form-group">
+                                                <div class="expiry-days" [ngClass]="{'input-group': true}">
+                                                    <input type="tel" class="form-control" maxlength="3" placeholder="00" decimalDigitsDirective name="poDuePeriod" [(ngModel)]="invoiceSettings.purchaseBillSettings.poDuePeriod" />
+                                                    <span class="ml-05"> Days </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix pdT1">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <input type="checkbox" class="show-on-mobile" name="changePOStatusOnExpiry" [(ngModel)]="invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry" />
+                                        <label>Auto change status (on expiry)</label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-9 form-group">
+                                        <input type="checkbox" class="hide-on-mobile" name="changePOStatusOnExpiry" [(ngModel)]="invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix pdT1">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <input type="checkbox" class="show-on-mobile" name="sendPOLinkOnSms" [(ngModel)]="invoiceSettings.purchaseBillSettings.sendPOLinkOnSms" />
+                                        <label>Enable send PO via SMS</label></div>
+                                    <div class="col-xs-12 col-sm-9 ">
+                                        <div class="form-group clearfix">
+                                            <input type="checkbox" class="hide-on-mobile" name="sendPOLinkOnSms" [(ngModel)]="invoiceSettings.purchaseBillSettings.sendPOLinkOnSms" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix pdT1">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <label>Custom Purchase Order#</label></div>
+                                    <div class="col-xs-12 col-sm-9 ">
+                                        <div class="form-group clearfix">
+                                            <input type="checkbox" class="hide-on-mobile" name="useCustomPONumber" [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
+                    </div>
+                </div>
+            </tab>
+            <tab>
+                <ng-template tabHeading>
+                    <span class="icon-invoice-icon"></span>Pur. Bill
+                </ng-template>
+                <div class="single-tab-block">
+                    <div class="box clearfix mb-2">
+                        <h4 class="clearfix bdrB">Purchase Bill</h4>
+                        <div class="clearfix">
+                            <div class="clearfix">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <label>Bill Lock Date</label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-9">
+                                        <div class="form-group mb-0 bill-lock-date">
+                                            <input type="text" class="form-control invoice-lock-date" name="lockDate" bsDatepicker #dp="bsDatepicker" [(ngModel)]="invoiceSettings.purchaseBillSettings.lockDate" [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY'}">
+                                            <span class="icon-calender" (click)="dp.toggle()"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix pdT1">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <input type="checkbox" class="show-on-mobile" name="enableNarration" [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration" /> <label>Show narration to ledger</label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-9 form-group">
+                                        <input type="checkbox" class="hide-on-mobile" name="enableNarration" [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration" />
+                                    </div>
+                                </div>
+                            </div>
+                            <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+        </tabset>
+    </div>
+</section>
+<ng-template #buttonsSection>
+    <div class="btn-group mrT2" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-success mrR1" (click)="updateForm()">Save</button>
+        <button type="button" class="btn btn-cancel" (click)="resetForm()">Cancel</button>
+    </div>
+</ng-template>

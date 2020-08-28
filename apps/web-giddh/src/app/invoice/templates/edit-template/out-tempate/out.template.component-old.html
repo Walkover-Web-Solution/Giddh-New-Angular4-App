@@ -91,7 +91,7 @@
             text-align: right !important;
         }
 
-        #default header .numDetail strong {
+        #default header .number-detail-series strong {
             width: 50px;
             float: left;
         }
@@ -408,7 +408,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                <table class="numDetail">
+                                <table class="number-detail-series">
                                     <tbody>
                                         <tr>
                                             <td><strong>{{inputTemplate.sections[0].content[1].label}}</strong>
@@ -568,7 +568,7 @@
                 </tbody>
             </table>
         </div>
-        <div id="Template-table"
+        <div id="template-table"
             [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }"
             (click)="onClickSection('table')">
             <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table"><i
@@ -704,7 +704,7 @@
                 </table>
             </article>
         </div>
-        <div id="Template-footer"
+        <div id="template-footer"
             [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }"
             (click)="onClickSection('footer')">
             <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer"><i

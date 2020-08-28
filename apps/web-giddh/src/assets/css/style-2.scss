@@ -1515,7 +1515,7 @@ modal-container.modal {
 
 .list-icon-group input:checked+label {
     background-color: $white;
-    box-shadow: 2px 2px 5px gainsboro;
+    box-shadow: 2px 2px 5px $gainsboro;
 }
 
 .modal-consolidated-details {
@@ -1799,7 +1799,8 @@ input::-moz-placeholder,
 input:-ms-input-placeholder,
 .form-control:-moz-placeholder,
 input:-moz-placeholder {
-    color: #999999;
+    color: $nobel !important;
+    font-size: 14px;
 }
 
 .form-control:focus {
@@ -1957,7 +1958,8 @@ header .navbar {
 .btn-primary:active,
 .open>.dropdown-toggle.btn-primary,
 .btn-primary:active:focus,
-.btn-primary:active:hover {
+.btn-primary:active:hover,
+.open > .dropdown-toggle.btn-primary:focus {
     background: $chetwode-blue;
     color: $white;
     border-color: $chetwode-blue;
@@ -4031,9 +4033,10 @@ a.btn.btn-xs.btn-link.pull-right {
     position: relative;
     background: $midnight-blue !important;
     border-radius: 5px 5px 0 0;
+    color: $white !important;
 }
 
-.close_modal {
+.close-modal {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -5771,7 +5774,7 @@ input[type="checkbox"][disabled] {
     padding-right: 8px;
 }
 
-.empty_table h1 {
+.empty-table h1 {
     font-size: 130%;
     color: rgba(0, 0, 0, 0.4);
     padding: 8px;
@@ -8716,11 +8719,11 @@ button.btn.btn-filter {
     margin-left: 10px !important;
 }
 
-.td_in_searchBox {
+.td-search-box {
     min-width: 190px !important;
 }
 
-.td_in_searchBox div i.icon-search:hover {
+.td-search-box div i.icon-search:hover {
     color: $deep-sky-blue !important;
 }
 
@@ -9385,6 +9388,48 @@ span#HW_badge_cont:nth-child(3) {
     padding-left: 215px;
 }
 
+
+
+
+/*flex css start*/
+.flex-column {
+    flex-direction: column;
+}
+/*flex css start*/
+.select-border-bottom {
+    .form-control {
+        border: none;
+        border-bottom: 1px solid #d9d9d9;
+        width: 100%;
+    }
+}
+.preview-lightbox-overlay {
+    z-index: 999 !important;
+}
+.preview-lightbox {
+    img {
+        width: 100%;
+    }
+    .close {
+        width: 30px;
+        height: 30px;
+        opacity: 1;
+    }
+    .moday-body {
+        padding: 30px 15px;
+    }
+    .header-close-btn {
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+    }
+}
+.estimation-date-modal{
+    z-index: 99999;
+}
+.giddh-datepicker-modal {
+    z-index: 99999;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9437,6 +9482,16 @@ span#HW_badge_cont:nth-child(3) {
     }
     .groups-buttons {
         height: auto;
+    }
+    #setting-tab-wrapper .tab-integraton .nav-tabs {
+        display: inline-block;
+        width: 100%;
+        white-space: nowrap;
+    }
+    #setting-tab-wrapper .tab-integraton .nav-tabs > li > a {
+        width: 90px;
+        height: 90px;
+        font-size: 14px;
     }
 }
 
@@ -9612,7 +9667,7 @@ span#HW_badge_cont:nth-child(3) {
         padding: 0 3px;
         border: none;
     }
-    table.table td.text-center.empty_table {
+    table.table td.text-center.empty-table {
         padding: 5px 10px 5px 0% !important;
         text-align: center;
         width: 100%;
@@ -9961,7 +10016,7 @@ span#HW_badge_cont:nth-child(3) {
     //     padding-top: 126px;
     // }
     .padding-top-fixed-mobile {
-        padding-top: 90px;
+        padding-top: 95px;
     }
     .page-has-tabs .padding-top-fixed-mobile,
     .on-user-page .padding-top-fixed-mobile {
@@ -9971,7 +10026,7 @@ span#HW_badge_cont:nth-child(3) {
         padding-top: 85px !important;
     }
     .on-setting-page .padding-top-fixed-mobile {
-        padding-top: 90px !important;
+        padding-top: 95px !important;
     }
     ngx-daterangepicker-material {
         position: fixed;
@@ -10134,6 +10189,9 @@ span#HW_badge_cont:nth-child(3) {
     }
     .welcome_header:after {
         bottom: 0;
+    }
+    #setting-tab-wrapper .tab-integraton .nav-tabs {
+        overflow-y: hidden;
     }
 }
 
@@ -10312,6 +10370,9 @@ span#HW_badge_cont:nth-child(3) {
     .edit-modal.modal-small {
         display: none;
     }
+    .modal-sm {
+        width: 450px !important;
+    }
 }
 
 @media (min-width: 480px) and (max-width: 667px) {
@@ -10460,4 +10521,7 @@ body.prevent-body-scroll {
 
 .hide-payment-tab ul li:nth-child(5) {
     display: none;
+}
+.modal.fade.giddh-calendar.show {
+    z-index: 999999;
 }
