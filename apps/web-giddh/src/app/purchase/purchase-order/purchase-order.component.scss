@@ -86,7 +86,7 @@
                 border: 1px solid $gainsboro;
                 a {
                     width: 30px;
-                    font-size: 14px;
+                    font-size: 18px;
                     color: $gray;
                     border-right: 1px solid $gainsboro;
                     display: flex;
@@ -95,7 +95,7 @@
                     padding: 0 5px;
                     cursor: pointer;
                     align-items: stretch;
-                    height: 18px;
+                    height: 24px;
                     align-items: center;
                     background-color: $white;
                 }
@@ -173,6 +173,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.status_mobile{
+    .d-flex{
+        padding: 14px 0;
+    }
 }
 @media (max-width: 768px) {
     .action-icon {

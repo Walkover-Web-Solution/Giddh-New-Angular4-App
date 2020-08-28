@@ -211,7 +211,7 @@
                         <span *ngIf="item.dueDays && item.dueDays > 7">{{item.dueDate}}</span>
                         <span class="ontime-delivery" *ngIf="item.dueDays === 0">Today</span>
                     </td>
-                    <td data-title="status" class="d-flex align-items-center status_mobile">
+                    <td data-title="status" class="d-flex align-items-center status_mobile pt-0 pb-0">
                         <span class="d-flex">
                             {{item.status}}</span>
                         <div class="action-icon ml-15" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
@@ -219,10 +219,10 @@
                                 <span class="icon-tick font-12"></span>
                             </a> -->
                             <a tooltip="Send Email" (click)="openSendMailModal(item, sendEmailModal)">
-                                <span class="icon-envelope font-10"></span>
+                                <span class="icon-envelope font-12"></span>
                             </a>
                             <a tooltip="Copy" [routerLink]="['/pages/purchase-management/purchase-order/new/'+item.uniqueName]">
-                                <span class="icon-copy-small font-12"></span>
+                                <span class="icon-copy-small font-14"></span>
                             </a>
                             <a tooltip="Delete" (click)="confirmDelete(item)">
                                 <i class="icon-trash"></i>
@@ -324,7 +324,7 @@
 <div bsModal #poConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <delete-role-confirmation-model
+            <delete-role-confirmation-model *ngIf="poConfirmationModel.isShown"
                 [module]="deleteModule"
                 (confirmDeleteEvent)="processDelete()"
                 (closeModelEvent)="closeConfirmationPopup()">

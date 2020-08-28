@@ -217,12 +217,14 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
         };
 
         this.authenticationService.saveGmailAuthCode(dataToSave).subscribe((res) => {
-            if (res.status === 'success') {
-                this.toaster.successToast('Gmail account added successfully.', 'Success');
-            } else {
-                this.toaster.errorToast(res.message, res.code);
+            if(res) {
+                if (res.status === 'success') {
+                    this.toaster.successToast('Gmail account added successfully.', 'Success');
+                } else {
+                    this.toaster.errorToast(res.message, res.code);
+                }
+                this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
             }
-            this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
         });
     }
 
