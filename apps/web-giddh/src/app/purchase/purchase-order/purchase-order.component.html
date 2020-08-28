@@ -324,7 +324,7 @@
 <div bsModal #poConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <delete-role-confirmation-model
+            <delete-role-confirmation-model *ngIf="deleteModule"
                 [module]="deleteModule"
                 (confirmDeleteEvent)="processDelete()"
                 (closeModelEvent)="closeConfirmationPopup()">
