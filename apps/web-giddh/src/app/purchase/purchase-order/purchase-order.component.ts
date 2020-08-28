@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, TemplateRef, OnDestroy } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -6,7 +6,7 @@ import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
-import { takeUntil, filter, take } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
 import { PAGINATION_LIMIT } from '../../app.constant';
 import * as moment from 'moment/moment';
@@ -20,7 +20,7 @@ import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-orde
     styleUrls: ['./purchase-order.component.scss']
 })
 
-export class PurchaseOrderComponent implements OnInit, OnDestroy, AfterViewInit {
+export class PurchaseOrderComponent implements OnInit, OnDestroy {
     /* Datepicker component */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /* Input element for column search */
@@ -188,12 +188,6 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy, AfterViewInit 
         this.activeCompanyUniqueName$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.purchaseOrderGetRequest.companyUniqueName = response;
             this.getAllPurchaseOrders(true);
-        });
-    }
-
-    public ngAfterViewInit(): void {
-        this.poConfirmationModel.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.deleteModule = "";
         });
     }
 
