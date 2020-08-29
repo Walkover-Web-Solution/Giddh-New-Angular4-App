@@ -1,4 +1,4 @@
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewChecked,
     AfterViewInit,
@@ -16,48 +16,61 @@ import {
     SimpleChanges,
     ViewChild,
 } from '@angular/core';
+import { isAndroidCordova, isIOSCordova } from '@giddh-workspaces/utils';
+import { FileChooser } from '@ionic-native/file-chooser/ngx';
+import { IOSFilePicker } from '@ionic-native/file-picker/ngx';
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
+import {
+    Configuration,
+    HIGH_RATE_FIELD_PRECISION,
+    RATE_FIELD_PRECISION,
+    SubVoucher,
+} from 'apps/web-giddh/src/app/app.constant';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
-import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../../common/confirmation-modal/confirmation-modal.interface';
+import {
+    CONFIRMATION_ACTIONS,
+    ConfirmationModalConfiguration,
+} from '../../../common/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
-import { forEach, sumBy, cloneDeep } from '../../../lodash-optimized';
+import { cloneDeep, forEach, sumBy } from '../../../lodash-optimized';
+import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
-import { ReconcileRequest, ReconcileResponse, TransactionsResponse } from '../../../models/api-models/Ledger';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, IForceClear, VoucherTypeEnum } from '../../../models/api-models/Sales';
+import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
+import {
+    IForceClear,
+    SalesOtherTaxesCalculationMethodEnum,
+    SalesOtherTaxesModal,
+    VoucherTypeEnum,
+} from '../../../models/api-models/Sales';
 import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
+import { GeneralService } from '../../../services/general.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../store';
+import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
-import { BlankLedgerVM, TransactionVM, AVAILABLE_ITC_LIST } from '../../ledger.vm';
+import { AVAILABLE_ITC_LIST, BlankLedgerVM, TransactionVM } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
-import { GeneralService } from '../../../services/general.service';
-import { isAndroidCordova, isIOSCordova } from "@giddh-workspaces/utils";
-import { IOSFilePicker } from "@ionic-native/file-picker/ngx";
-import { FileTransfer } from "@ionic-native/file-transfer/ngx";
-import { FileChooser } from "@ionic-native/file-chooser/ngx";
-import { CurrentCompanyState } from '../../../store/Company/company.reducer';
-import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
-import { PopoverDirective } from "ngx-bootstrap/popover";
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [

@@ -56,7 +56,6 @@ import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjust
         ShSelectModule,
         KeyboardShortutModule,
         SalesShSelectModule,
-        BsDatepickerModule,
         DecimalDigitsModule,
         // SalesModule,
         CollapseModule,

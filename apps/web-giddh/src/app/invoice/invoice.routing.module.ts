@@ -148,7 +148,6 @@ const INVOICE_ROUTES: Routes = [
         InvoiceTemplatesModule,
         KeyboardShortutModule,
         FontPickerModule,
-        BsDatepickerModule.forRoot(),
         CollapseModule.forRoot(),
         NgxUploaderModule,
         SelectModule,
