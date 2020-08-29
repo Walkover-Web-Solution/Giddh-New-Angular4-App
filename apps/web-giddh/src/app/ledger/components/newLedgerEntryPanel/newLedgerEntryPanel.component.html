@@ -269,7 +269,7 @@
                             <td class="select2-parent pdR1">
                                 <div class="form-group">
                                     <label class="default_clr">Voucher Type</label>
-                                    <sh-select id="ledger-vouchar-type" #sh [options]="voucherTypeList | async" [isFilterEnabled]="true"
+                                    <sh-select id="ledger-voucher-type" #sh [options]="voucherTypeList | async" [isFilterEnabled]="true"
                                         (selected)="getInvoiceListsData($event)" [placeholder]="'Select Vouchers'"
                                         [(ngModel)]="blankLedger.voucherType" [ItemHeight]="'auto'"
                                         [style.width.px]="161"></sh-select>
@@ -316,7 +316,7 @@
                                 <div class="form-group">
                                     <label class="default_clr">Voucher No.</label>
 
-                                    <sh-select id="ledger-vouchar-number" [options]="invoiceList" #invoice placeholder="Select Invoice"
+                                    <sh-select id="ledger-voucher-number" [options]="invoiceList" #invoice placeholder="Select Invoice"
                                         [(ngModel)]="selectedInvoiceForCreditNote" [notFoundLink]="false"
                                         [forceClearReactive]="forceClear$ | async"
                                         (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"

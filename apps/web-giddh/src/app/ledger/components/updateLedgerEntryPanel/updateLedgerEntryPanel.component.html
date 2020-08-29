@@ -758,7 +758,7 @@
                                         <label>Adjustment Vouchers
                                             <span class="text-danger">*</span>
                                         </label>
-                                        <input id="update-ledger-adjust-vouchar" type="text" class="form-control mb-1" [(ngModel)]="item.voucherNumber" disabled>
+                                        <input id="update-ledger-adjust-voucher" type="text" class="form-control mb-1" [(ngModel)]="item.voucherNumber" disabled>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-5 pl-05 pr-05">
@@ -772,7 +772,7 @@
                                 <div *ngIf="item.voucherType === 'receipt' && item.subVoucher === 'ADVANCE_RECEIPT'" class="col-sm-2 pl-05">
                                     <div class="form-group">
                                         <label>Tax</label>
-                                        <input type="text" id="update-ledger-vouchar-tax" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.calculatedTaxAmount" disabled>
+                                        <input type="text" id="update-ledger-voucher-tax" class="form-control mb-1" decimalDigitsDirective [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency" [(ngModel)]="item.calculatedTaxAmount" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -867,7 +867,7 @@
                                 <td class="select2-parent pdR1">
                                     <div class="form-group">
                                         <label class="default_clr">Voucher Type</label>
-                                        <sh-select id="update-ledger-vouchar-type" [options]="vm.voucherTypeList" [isFilterEnabled]="true"
+                                        <sh-select id="update-ledger-voucher-type" [options]="vm.voucherTypeList" [isFilterEnabled]="true"
                                             [(ngModel)]="vm.selectedLedger.voucher.shortCode" [showClear]="false"
                                             (selected)="getInvoiceListsData($event)" [ItemHeight]="'auto'"
                                             [width]="'161px'">
@@ -941,7 +941,7 @@
                                 <td class="pdR1">
                                     <div class="form-group">
                                         <label class="default_clr">Voucher No.</label>
-                                        <input id="update-ledger-vouchar-number" type="text" placeholder="Voucher no." class="form-control"
+                                        <input id="update-ledger-voucher-number" type="text" placeholder="Voucher no." class="form-control"
                                             [ngModel]="vm.selectedLedger.voucherNo" [disabled]="true"
                                             [style.width.px]="80" />
                                     </div>
