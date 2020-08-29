@@ -94,7 +94,7 @@
                                 <ng-container *ngIf="txn.type === 'DEBIT'">
 
                                     <td class="col-xs-2" data-title="Date">
-                                        <input id="giddh-datepicker" type="text" autocomplete="off" name="datess" #dbs='bsDatepicker'
+                                        <input id="giddh-datepicker-left" type="text" autocomplete="off" name="datess" #dbs='bsDatepicker'
                                             [(ngModel)]="vm.selectedLedger.entryDate" class="form-control" bsDatepicker
                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                             (click)="addBlankTrx('DEBIT', txn, $event)" placeholder="date"
@@ -280,7 +280,7 @@
                                 <ng-container *ngIf="txn.type == 'CREDIT'">
 
                                     <td data-title="Date" class="col-xs-2">
-                                        <input id="giddh-datepicker" class="form-control" autocomplete="off" name="datepic" type="text"
+                                        <input id="giddh-datepicker-right" class="form-control" autocomplete="off" name="datepic" type="text"
                                             [(ngModel)]="vm.selectedLedger.entryDate"
                                             (click)="addBlankTrx('CREDIT', txn, $event)" #cbs='bsDatepicker'
                                             bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
