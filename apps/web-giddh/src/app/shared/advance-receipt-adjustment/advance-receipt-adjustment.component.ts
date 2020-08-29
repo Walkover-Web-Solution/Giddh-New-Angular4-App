@@ -36,7 +36,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     public offset: number = 0;
     public companyCurrency: string;
     public baseCurrencySymbol: string;
-    public currencySymbol: string;
+    public currencySymbol: string = '';
     public inputMaskFormat: string = '';
     public isInvalidForm: boolean = false;
     /** Message for toaster when due amount get negative  */
@@ -181,11 +181,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.companyCurrency = profile.baseCurrency || 'INR';
             this.baseCurrencySymbol = profile.baseCurrencySymbol;
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+            if (this.invoiceFormDetails && this.invoiceFormDetails.accountDetails && this.invoiceFormDetails.accountDetails.currencySymbol) {
+                this.currencySymbol = this.invoiceFormDetails.accountDetails.currencySymbol || this.baseCurrencySymbol;
+            }
         });
 
-        if (this.invoiceFormDetails && this.invoiceFormDetails.accountDetails && this.invoiceFormDetails.accountDetails.currencySymbol) {
-            this.currencySymbol = this.invoiceFormDetails.accountDetails.currencySymbol;
-        }
     }
 
     /**
