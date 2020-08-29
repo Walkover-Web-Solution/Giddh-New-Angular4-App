@@ -182,7 +182,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.baseCurrencySymbol = profile.baseCurrencySymbol;
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (this.invoiceFormDetails && this.invoiceFormDetails.accountDetails && this.invoiceFormDetails.accountDetails.currencySymbol) {
-                this.currencySymbol = this.invoiceFormDetails.accountDetails.currencySymbol || this.baseCurrencySymbol;
+                this.currencySymbol = this.invoiceFormDetails.accountDetails.currencySymbol;
+            } else {
+                this.currencySymbol = this.baseCurrencySymbol;
             }
         });
 
