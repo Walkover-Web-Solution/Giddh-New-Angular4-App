@@ -39,7 +39,7 @@
         [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
         [showNotFoundLinkAsDefault]="showNotFoundLinkAsDefault" [noResultLinkEnabled]="noResultLinkEnabled">
 
-        <div  id="select-menu" class="item" *ngFor="let row of viewPortItems" [class.selected]="selectedValues?.indexOf(row) !== -1"
+        <div id="select-menu-show-checkbox" class="item" *ngFor="let row of viewPortItems" [class.selected]="selectedValues?.indexOf(row) !== -1"
             [class.hilighted]="row.isHilighted" [style.height.px]="ItemHeight">
             <ng-template [ngTemplateOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
             <ng-container *ngIf="!optionTemplate">
@@ -49,12 +49,12 @@
             </ng-container>
         </div>
 
-        <div id="noresult" *ngIf="viewPortItems?.length === 0" class="item"
+        <div id="noresult-show-checkbox" *ngIf="viewPortItems?.length === 0" class="item"
             [style.height.px]="noResultLinkEnabled ? NoFoundMsgHeight : (NoFoundMsgHeight - 20)">
             <a href="javascript:void(0);">{{notFoundMsg}}</a>
         </div>
 
-        <div  id="no-item" class="item no-result-link"
+        <div id="no-item-show-checkbox" class="item no-result-link"
             *ngIf="((viewPortItems?.length === 0 && noResultLinkEnabled) || showNotFoundLinkAsDefault)"
             [style.height.px]="NoFoundLinkHeight">
             <a class="btn-link" href="javascript:void(0);" (click)="$event.stopPropagation();noResultClicked.emit()">

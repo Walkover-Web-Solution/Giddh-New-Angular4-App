@@ -59,14 +59,14 @@
                     </div>
 
                     <!-- Functionality not working -->
-                    <div class="ledger-datepicker" id="giddh-datepicker"  container="body" *ngIf="isMobileScreen">
+                    <div class="ledger-datepicker" id="giddh-datepicker-mobile-view" container="body" *ngIf="isMobileScreen">
                         <img (click)="showGiddhDatepicker($event)" src="{{imgPath}}calender-icon.svg">
                     </div>
                     <span class="input-wrapper ipad-view-datepicker">
                         <!-- <input type="text" class="form-control daterange_picker_ledger" daterangepicker
                             [options]="datePickerOptions" (applyDaterangepicker)="selectedDate($event)"
                             name="daterangeInput" /> -->
-                        <input id="giddk-datepicker" type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
+                        <input id="giddh-datepicker-ipad-view" type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
                             [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                             class="giddh-datepicker date-range-picker" />
                     </span>
