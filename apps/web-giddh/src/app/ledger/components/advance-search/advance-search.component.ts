@@ -233,6 +233,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
     public onCancel() {
         this.closeModelEvent.emit({ advanceSearchData: this.advanceSearchRequest, isClose: true });
+        this.hideGiddhDatepicker();
     }
 
     /**
@@ -459,7 +460,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+        if (this.modalRef) {
+            this.modalRef.hide();
+        }
     }
 
     /**
