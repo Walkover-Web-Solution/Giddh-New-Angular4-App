@@ -69,7 +69,7 @@
 <div *ngIf="(branches$ | async)?.length > 0">
     <div class="branch-card-view mt-2" *ngIf="branchViewType === 'card'">
         <div class="row">
-            <div class="col-md-4 col-sm-6 col-xs-12" *ngFor="let branch of branches$ | async">
+            <div class="col-md-6 col-lg-4 col-sm-12" *ngFor="let branch of branches$ | async">
                 <div class="branch-card">
                     <div class="card-basic-details">
                         <div class="clearfix">
@@ -152,7 +152,7 @@
         <div class="illustration_box">
             <img src="assets/images/new/branch-Illus.png" />
             <div class="" *ngIf="!parentCompanyName">
-                <h3 class="lead mrT2 fs18">Add branch under <strong class="primary_clr txtCpc">{{ currentBranch }} <span
+                <h3 class="lead mrT2 mrB2 fs18">Add branch under <strong class="primary_clr txtCpc">{{ currentBranch }} <span
                             *ngIf="currentBranchNameAlias">( {{currentBranchNameAlias}} )</span></strong> headquarter.
                 </h3>
                 <button class="btn btn-default mrL1 btn-lg" (click)="openAddBranchModal()">Add Branch</button>
@@ -238,7 +238,7 @@
 
 <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: 'true'}" tabindex="-1"
     class="modal fade openPoup" role="dialog" (onHidden)="onHide()">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl wd-900">
         <div class="modal-content">
             <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
             </ng-template>

@@ -428,6 +428,17 @@ span.eligible-ITC {
     -moz-animation:spin 4s linear infinite;
     animation:spin 4s linear infinite;
 }
+.ledger-head th:first-child{
+    span{
+        position: relative;
+        right: 15px;
+    }
+}
+.list-inline>li {
+    display: inline-block;
+    padding-right: 5px;
+    padding-left: 5px;
+}
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg) } }

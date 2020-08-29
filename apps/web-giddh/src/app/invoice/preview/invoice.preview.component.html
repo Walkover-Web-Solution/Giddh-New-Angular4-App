@@ -1,5 +1,5 @@
 <ng-container>
-    <div class="invoice-container">
+    <div class="invoice-container w-100">
         <!-- For desktop screen sizes -->
         <div class="d-flex date-advance-search" id="dateRangePickerParent">
             <!-- Invoice filter section -->
@@ -12,7 +12,7 @@
                                 (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
                         </span>
                     </div>
-                    <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
+                    <div class="advance-icon align-items-center"  tooltip="Advance Search">
                         <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup(false)"></span>
                     </div>
 
@@ -111,7 +111,7 @@
             <!-- Invoice E-way bill, export to excel for a single selected item along with
                 New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-12">
                     <div class="more-export-btn d-flex mt-1">
                         <div class="clear-filter visible-on-mobile" *ngIf="showAdvanceSearchIcon"
                             (click)="resetAdvanceSearch()">
@@ -203,19 +203,19 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                    <div class="col-sm-6 col-md-6 full-width-on-mobile">
                         <div class="input-container">
                             <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox
                                 name="voucherNumberInput" [formControl]="voucherNumberInput" />
                         </div>
                     </div>
-                    <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                    <div class="col-sm-6 col-md-6 full-width-on-mobile">
                         <div class="input-container">
                             <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox
                                 name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
                         </div>
                     </div>
-                    <div class="col-sm-6 col-xs-6 mt-2">
+                    <div class="col-sm-6 col-md-6 mt-2">
                         <button class="btn btn-pink">Submit</button>
                     </div>
 
@@ -227,7 +227,7 @@
         <!-- For mobile screen sizes ends -->
 
         <div class="invoice-preview  table-responsive">
-            <table class="table basic table-bordered mt-15 invoice-table desktop-table  giddh-table table-responsive">
+            <table class="table basic table-bordered mt-15 invoice-table desktop-table  giddh-table">
 
                 <!--sales-->
                 <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
@@ -592,14 +592,12 @@
             </table>
         </div>
 
-        <ng-container
-            *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && (selectedVoucher === 'sales' || selectedVoucher === 'purchase') && isMobileView">
-            <div class="card mobileTable" *ngFor="let item of voucherData?.items; let i = index">
-                <table class="table basic table-bordered mt-15 invoice-table"
-                    *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
+        <ng-container *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && (selectedVoucher === 'sales' || selectedVoucher === 'purchase') && isMobileView">
+            <div class="card mobileTable mt-15" *ngFor="let item of voucherData?.items; let i = index">
+                <table class="table basic table-bordered invoice-table" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
                     <tr>
-                        <td class="card-header clearfix">
-                            <div class="col-xs-4 p-0">
+                        <td class="card-header clearfix row mr-0 ml-0">
+                            <div class="col-4 p-0">
                                 <div class="mh18_img pull-left" style="justify-content: center;">
                                     <img src="assets/images/unchecked.png" *ngIf="!item.isSelected"
                                         (click)="toggleItem(item, true)">
@@ -608,7 +606,7 @@
                                 </div>
                                 <div style="justify-content: left;display: flex">#{{ i + 1}} </div>
                             </div>
-                            <div class="col-xs-8 p-0">
+                            <div class="col-8 p-0">
                                 <div class="d-flex">
                                     <div class="flex-fill text-right dueDate">
                                         <strong>Due Date</strong>
@@ -619,11 +617,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td id="inovice_td">
-                            <div class="col-xs-6 p-0">
+                        <td id="inovice_td" class="row mr-0 ml-0">
+                            <div class="col-6 p-0">
                                 <strong> Invoice No.</strong>
                             </div>
-                            <div class="col-xs-6 p-0">
+                            <div class="col-6 p-0">
                                 <div class="invoice-name-download">
                                     <a class="invoiceNumberA">
                                         {{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
@@ -660,8 +658,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="row">
-                            <div class="col-xs-6 p-0">
+                        <td class="row mr-0 ml-0">
+                            <div class="col-6 p-0">
                                 <div class="d-flex">
                                     <div class="flex-fill">
                                         <strong>Invoice Date</strong>
@@ -672,7 +670,7 @@
                                 </div>
                             </div>
 
-                            <div *ngIf="selectedVoucher !== 'purchase'" class="col-xs-6 p-0">
+                            <div *ngIf="selectedVoucher !== 'purchase'" class="col-6 p-0">
                                 <div class="d-flex">
                                     <div class="flex-fill">
                                         <strong>Status</strong>
@@ -729,8 +727,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <div class="col-xs-6 p-0">
+                        <td class="row mr-0 ml-0">
+                            <div class="col-6 p-0">
                                 <div class="d-flex">
                                     <div class="flex-fill">
                                         <strong>Total Amt.</strong>
@@ -740,7 +738,7 @@
                                     {{item.accountCurrencySymbol}} {{item.grandTotal?.amountForAccount | giddhCurrency}}
                                 </div>
                             </div>
-                            <div *ngIf="selectedVoucher !== 'purchase'" class="col-xs-6 p-0">
+                            <div *ngIf="selectedVoucher !== 'purchase'" class="col-6 p-0">
                                 <div class="d-flex">
                                     <div class="flex-fill">
                                         <strong> Balance Due </strong>
@@ -788,7 +786,7 @@
             </div>
         </div>
 
-        <!-- Perform action on invoice model -->
+    <!-- Perform action on invoice model -->
         <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
             tabindex="-1">
             <div class="modal-dialog modal-md perform-payment">
@@ -800,18 +798,15 @@
                 </div>
             </div>
         </div>
-
-        <!-- Download or Send Invoice on mail -->
-        <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
-            tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div element-view-container-ref #downloadOrSendMailComponent=elementviewcontainerref>
-                    </div>
+    <!-- Download or Send Invoice on mail -->
+    <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div element-view-container-ref #downloadOrSendMailComponent=elementviewcontainerref>
                 </div>
             </div>
         </div>
-
+    </div>
         <!-- modal dialog -->
         <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig"
             tabindex="-1">
@@ -919,9 +914,8 @@
 <!-- endregion -->
 
 <!-- Advance receipt adjust modal start -->
-<div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal"
-    [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true }" bsModal role="dialog">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <advance-receipt-adjustment-component *ngIf="showAdvanceReceiptAdjust" #advanceReceiptComponent [isUpdateMode]="isUpdateMode" [depositAmount]="depositAmount" [invoiceFormDetails]="invFormData" [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
                 (closeModelEvent)="closeAdvanceReceiptModal()" (submitClicked)="getAdvanceReceiptAdjustData($event)" [isVoucherModule]="true">

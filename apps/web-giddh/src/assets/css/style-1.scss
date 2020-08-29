@@ -224,7 +224,7 @@ aside-menu-account .container-fluid {
 }
 
 .navbar-inverse .navbar-text {
-    color: #fff;
+    color: $white;
 }
 
 #cmpWrp {
@@ -291,7 +291,7 @@ aside-menu-account .container-fluid {
     display: block;
     width: 240px;
     padding: 12px;
-    color: #fff;
+    color: $white;
     text-decoration: none;
     border-bottom: 1px solid rgba(256, 256, 256, 0.2);
     color: #fff !important;
@@ -472,7 +472,7 @@ aside-menu-account .container-fluid {
 }
 
 .pdL1 {
-    padding-left: 10px;
+    padding-left: 10px !important;
 }
 
 .pdl1imp {
@@ -480,19 +480,19 @@ aside-menu-account .container-fluid {
 }
 
 .pdR1 {
-    padding-right: 10px;
+    padding-right: 10px !important;
 }
 
 .pdB2 {
-    padding-bottom: 20px;
+    padding-bottom: 20px !important;
 }
 
 .pdL2 {
-    padding-left: 20px;
+    padding-left: 20px !important;
 }
 
 .pdR2 {
-    padding-right: 20px;
+    padding-right: 20px !important;
 }
 
 .pdB3 {
@@ -576,11 +576,11 @@ aside-menu-account .container-fluid {
 }
 
 .mrT1 {
-    margin-top: 10px;
+    margin-top: 10px !important;
 }
 
 .mrB1 {
-    margin-bottom: 10px;
+    margin-bottom: 10px !important;
 }
 
 .mrB15 {
@@ -664,7 +664,7 @@ aside-menu-account .container-fluid {
 }
 
 .bdrB {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid $gainsboro !important;
 }
 
 .bdrL {
@@ -692,7 +692,7 @@ aside-menu-account .container-fluid {
 }
 
 .witClr {
-    color: #fff;
+    color: $white;
 }
 
 .gryClr {
@@ -705,7 +705,7 @@ aside-menu-account .container-fluid {
 }
 
 .witBg {
-    background: #fff;
+    background: $white;
 }
 
 .transBg {
@@ -1269,25 +1269,25 @@ li:last-child .angular-ui-tree-handle {
 .LIB:hover,
 .LIB.active {
     background-color: #f90;
-    color: #fff;
+    color: $white;
 }
 
 .ASS:hover,
 .ASS.active {
     background-color: #39f;
-    color: #fff;
+    color: $white;
 }
 
 .INC:hover,
 .INC.active {
     background-color: #009900;
-    color: #fff;
+    color: $white;
 }
 
 .EXP:hover,
 .EXP.active {
     background-color: #c0f;
-    color: #fff;
+    color: $white;
 }
 
 .LIB1:hover,
@@ -1312,22 +1312,22 @@ li:last-child .angular-ui-tree-handle {
 
 .LIB1:hover a,
 .LIB1.active a {
-    color: #fff;
+    color: $white;
 }
 
 .ASS2:hover a,
 .ASS2.active a {
-    color: #fff;
+    color: $white;
 }
 
 .INC3:hover a,
 .INC3.active a {
-    color: #fff;
+    color: $white;
 }
 
 .EXP4:hover a,
 .EXP4.active a {
-    color: #fff;
+    color: $white;
 }
 
 /*ledger style*/
@@ -1356,6 +1356,7 @@ li:last-child .angular-ui-tree-handle {
 
 .table .table {
     margin-bottom: 0;
+    background-color:transparent;
 }
 
 .ledgerTable.table .nopad {
@@ -1369,7 +1370,7 @@ li:last-child .angular-ui-tree-handle {
 
 .splBg th {
     background-color: #5c534d;
-    color: #fff;
+    color: $white;
 }
 
 .ledgerBodyContent td {
@@ -1380,7 +1381,7 @@ li:last-child .angular-ui-tree-handle {
     width: 100%;
     border: 0;
     padding: 8px;
-    background-color: #fff;
+    background-color: $white;
 }
 
 .ledgerBodyContent input.nobdr.error {
@@ -1522,7 +1523,6 @@ li:last-child .angular-ui-tree-handle {
 .max500 {
     max-width: 500px;
 }
-
 /* styles for trial-balance */
 
 .page-title {
@@ -1549,12 +1549,12 @@ li:last-child .angular-ui-tree-handle {
 .tb-head {
     margin: 0;
     /* background: #337ab7; */
-    /* color: #fff; */
+    /* color: $white; */
 }
 
 .tb-head th {
     padding: 8px !important;
-    border-right: 1px solid #fff;
+    border-right: 1px solid $white;
 }
 
 .tb-head th:last-child {
@@ -1863,7 +1863,7 @@ v-pane-header.show-pseudo {
     left: -165px;
     top: -35px;
     background: #000;
-    color: #fff;
+    color: $white;
     border-radius: 5px;
     z-index: 9999;
     opacity: 0.9;
@@ -1880,7 +1880,7 @@ v-pane-header.show-pseudo {
     right: -140px;
     top: -35px;
     background: #000;
-    color: #fff;
+    color: $white;
     border-radius: 5px;
     z-index: 9999;
     opacity: 0.9;
@@ -1922,11 +1922,11 @@ v-pane-header.show-pseudo {
     cursor: pointer;
     line-height: 25px;
     padding: 5px 10px;
-    border-bottom: 1px solid #fff;
+    border-bottom: 1px solid $white;
 }
 
 .export-options > ul > li > a {
-    color: #fff;
+    color: $white;
 }
 
 .export-options > ul > li:last-child {
@@ -2043,7 +2043,7 @@ table.borderless th {
 }
 
 .table-l tr:last-child {
-    border-top: 1px solid #fff;
+    border-top: 1px solid $white;
 }
 
 .table-r {
@@ -2080,7 +2080,7 @@ table.borderless th {
 
 .total {
     border-bottom: 1px solid;
-    background: #fff;
+    background: $white;
 }
 
 .pdf-export,
@@ -2362,7 +2362,7 @@ padding: 0;
     margin-left: 0px;
 }
 .account-card:hover {
-    background: #fff;
+    background: $white;
     box-shadow: 0 5px 5px 0 rgba(58, 58, 58, 0.18);
 }
 
@@ -2463,7 +2463,7 @@ padding: 0;
     right: 0;
     background: rgba(0, 0, 0, 0.7);
     z-index: 9;
-    color: #fff;
+    color: $white;
     text-align: center;
 }
 
@@ -2509,7 +2509,7 @@ padding: 0;
 
 .add-manage-grouplist .group {
     height: 42px;
-    background: #fff;
+    background: $white;
     line-height: 43px;
     border-bottom: 1px solid #f5f5f5;
 }
@@ -2557,7 +2557,7 @@ background: #f9f9f9;
     margin: 10px 10px 0 0;
     padding: 10px;
     color: #444;
-    background: #fff;
+    background: $white;
     border-radius: 2px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     transition: all 0.2s ease-in-out;
@@ -2733,7 +2733,7 @@ background: #f9f9f9;
 .ng2-select-box {
     height: 34px;
     width: 150px;
-    background: #fff;
+    background: $white;
     border-radius: 3px;
     border: 1px solid $gainsboro;
     position: relative;
@@ -2941,6 +2941,7 @@ ul.pills li {
     cursor: pointer;
     background-color: rgb(244, 245, 248);
     color: #333;
+    display: inline-block;
     border: 1px solid #ddd;
 }
 
@@ -3108,7 +3109,7 @@ ul.pills li {
 
 .t-h-bg1 th {
     background: #5c534d;
-    color: #fff;
+    color: $white;
 }
 
 .t-h-bg2 th,
@@ -3169,11 +3170,11 @@ ul.pills li {
 /*}*/
 
 .bdr-w-t {
-    border-top: 1px solid #fff;
+    border-top: 1px solid $white;
 }
 
 .white {
-    color: #fff;
+    color: $white;
 }
 
 .h42 {
@@ -3204,7 +3205,7 @@ ul.pills li {
 .add-entry-row .ledger-row td,
 .add-entry-row .ledger-row td input {
     background: #5c534d;
-    color: #fff;
+    color: $white;
 }
 
 .ledger-panel {
@@ -3373,7 +3374,7 @@ ul.pills li {
     position: absolute;
     right: 10px;
     top: 8px;
-    color: #fff;
+    color: $white;
 }
 
 .company-list-container {
@@ -3490,7 +3491,7 @@ ul.pills li {
     left: -95px;
     top: 0;
     background: #000;
-    color: #fff;
+    color: $white;
     border-radius: 5px;
     z-index: 9999;
     opacity: 0.9;
@@ -3507,7 +3508,7 @@ ul.pills li {
     right: -95px;
     top: -15px;
     background: #000;
-    color: #fff;
+    color: $white;
     border-radius: 5px;
     z-index: 9999;
     opacity: 0.9;
@@ -3549,11 +3550,11 @@ ul.pills li {
     cursor: pointer;
     line-height: 25px;
     padding: 5px 10px;
-    border-bottom: 1px solid #fff;
+    border-bottom: 1px solid $white;
 }
 
 .export-ledger-options > ul > li > a {
-    color: #fff;
+    color: $white;
 }
 
 .export-ledger-options > ul > li:last-child {
@@ -3719,7 +3720,7 @@ tr.db-bnk-account > td.reconnectDiv {
     top: 0;
     left: 0;
     bottom: 0;
-    background: #fff;
+    background: $white;
     z-index: 1040;
     opacity: 0.8;
 }
@@ -4089,7 +4090,7 @@ tr.db-bnk-account > td.reconnectDiv {
     bottom: 16px;
     right: 16px;
     border: 1px solid black;
-    background-color: #fff;
+    background-color: $white;
     padding: 0 4px;
     opacity: 0.7;
 }
@@ -4154,7 +4155,7 @@ font-weight: normal;
 line-height: 1.42857143;
 text-align: left;
 white-space: normal;
-background-color: #fff;
+background-color: $white;
 -webkit-background-clip: padding-box;
         background-clip: padding-box;
 border: 1px solid $gainsboro;
@@ -4208,7 +4209,7 @@ border-bottom-width: 0;
 bottom: 1px;
 margin-left: -10px;
 content: " ";
-border-top-color: #fff;
+border-top-color: $white;
 border-bottom-width: 0;
 }
 .popover.bottom > .arrow {
@@ -4224,7 +4225,7 @@ top: 1px;
 margin-left: -10px;
 content: " ";
 border-top-width: 0;
-border-bottom-color: #fff;
+border-bottom-color: $white;
 }
 */
 
@@ -4338,7 +4339,7 @@ width:30px;
 }
 
 .invoice-wrapper-m.a4 .hasVar input:disabled {
-    background: #fff;
+    background: $white;
     border: none;
     box-shadow: none;
 }
@@ -4580,8 +4581,8 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 .recurring-entry-grid .re-header > div:not(last-child) {
-    border-right: 1px solid #fff;
-    color: #fff;
+    border-right: 1px solid $white;
+    color: $white;
     padding: 5px;
 }
 
@@ -4639,7 +4640,7 @@ border-bottom: 1px solid #e0e0e0;
     width: 100%;
     height: auto;
     padding: 10px;
-    background: #fff;
+    background: $white;
     overflow: hidden;
     border-top: 1px solid #f5f5f5;
     position: relative;
@@ -4750,7 +4751,7 @@ border-bottom: 1px solid #e0e0e0;
 .map-txn-container {
     position: absolute;
     z-index: 99;
-    background: #fff;
+    background: $white;
     left: 160px;
     right: 18px;
     top: -6px;
@@ -4808,13 +4809,32 @@ border-bottom: 1px solid #e0e0e0;
     font-size: 14px;
     text-align: left;
     list-style: none;
-    background-color: #fff;
+    background-color: $white;
     background-clip: padding-box;
     border: 1px solid $gainsboro;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+}
+
+.dropdown-menu {
+    position: absolute;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: $white;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
 }
 
 /*invoice pages global styles  */
@@ -4869,7 +4889,7 @@ border-bottom: 1px solid #e0e0e0;
 
 .select2-parent .select2-container--default .select2-selection--single {
     border-radius: 0;
-    background-color: #fff;
+    background-color: $white;
     border: 1px solid #cecece;
 }
 
@@ -4948,6 +4968,8 @@ border-bottom: 1px solid #e0e0e0;
 .panel-heading {
     color: rgba(0, 0, 0, 0.8) !important;
     text-transform: capitalize;
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent
 }
 
 strong {
@@ -5146,12 +5168,12 @@ perfect-scrollbar.ps-show-active
 /* my css */
 
 .basic {
-    background: #fff;
+    background: $white;
 }
 
 .basic thead tr th {
     background: #e5e5e5;
-    color: #262626;
+    color: $nero;
     border: 0;
     font-family: "" opensans-semibold "";
     text-transform: capitalize;
@@ -5164,7 +5186,7 @@ perfect-scrollbar.ps-show-active
 body.fixed {
     overflow-y: hidden;
 }
-#blankLedgerContainer tbody tr:empty {
+#blank-ledger-container tbody tr:empty {
     display: none;
 }
 #getGroupModal {
@@ -5237,9 +5259,9 @@ form#groupDetailForm {
             .nav-tabs{
                 display:none;
             }
-        }   
+        }
     }
-    
+
     .mobileHeader {
         display: block;
         position: fixed !important;

@@ -74,11 +74,11 @@
 
 <!--move group-->
 <div class="horizontal-form  form-group mrB1 clearfix" *ngIf="(activeGroup$ | async) && !(activeGroup$ | async)?.fixed">
-    <form name="moveGroupForm" class="col-xs-12 " novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
+    <form name="moveGroupForm" class="col-xs-12 col-sm-12" novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
         <label class="d-block">Move to group</label>
         <span>
             <sh-select #moveToGroupDropDown formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList"
-                [isFilterEnabled]="true" class="pull-left" style="width: calc(100% - 92px);">
+                [isFilterEnabled]="true" class="pull-left move-group-form">
                 <!--template for move group typeahead [customFilter]="customMoveGroupFilter"-->
                 <ng-template #optionTemplate let-option="option">
                     <a href="javascript:void(0)" class="list-item" style="border-bottom:1px solid #e0e0e0;">
@@ -98,7 +98,7 @@
 
 <!-- Taxes collapse -->
 <div class="clearfix tax-operation horizontal-form" *ngIf="isTaxableGroup$ | async">
-    <div class="col-xs-12">
+    <div class="col-xs-12 col-sm-12">
         <div class="form-group toggle-btn mrB">
             <label class="cp" (click)="showTaxes = !showTaxes; taxHierarchy()">
                 <i class="fa cp" aria-hidden="true"
@@ -108,7 +108,7 @@
     </div>
     <!-- taxes container -->
     <ng-container *ngIf="showTaxes">
-        <div class="col-xs-12">
+        <div class="col-xs-12 col-sm-12">
 
             <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
                 <div class="tax-label">
@@ -116,8 +116,8 @@
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <sh-select formControlName="taxes" [placeholder]="'Select Tax'"
-                            [options]="companyTaxDropDown | async" [multiple]="true" style="width: calc(100% - 12px);">
+                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'"
+                            [options]="companyTaxDropDown | async" [multiple]="true">
                         </sh-select>
                         <span class="input-group-btn pdL2"> <button type="submit"
                                 class="btn btn-success">Save</button></span>

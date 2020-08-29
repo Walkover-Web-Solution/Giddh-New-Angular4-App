@@ -2,7 +2,7 @@
 
     <div class="top-bar clearfix">
 
-        <div class="form-inline">
+        <div class="aging-form-inline">
 
             <div class="pull-left d-flex wrap-searching-aging">
 
@@ -10,7 +10,7 @@
                     <input type="text" placeholder="Name/amount" class="form-control" [(ngModel)]="searchStr"
                         (ngModelChange)="searchStr$.next($event)" style="width:210px" />
 
-                    <span class="inputAddon">
+                    <span class="input-addon">
                         <i class="icon-search"></i>
                     </span>
                 </div>
@@ -23,7 +23,7 @@
 
                     <span style="line-height: 2.1" class="ml-1" *ngIf="isAdvanceSearchApplied">
                         <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()">
-                            <i aria-hidden="true" class="glyphicon glyphicon-refresh"
+                            <i aria-hidden="true" class="icon-refrsh"
                                 tooltip="Reset Filter"></i>
                         </a>
                     </span>
@@ -72,7 +72,7 @@
 
 <div class="result-total">
     <div class="container-fluid">
-        <div class="row">
+        <div class="mx-md-n3">
             <div class="customer-right-wrap">
                 <div class="text-right xs-left pl-2 pr-2">
                     <h4 class="mb-1 pr-1">Result Total </h4>

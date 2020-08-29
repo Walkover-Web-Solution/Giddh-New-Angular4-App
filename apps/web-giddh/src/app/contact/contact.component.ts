@@ -324,7 +324,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }
         if (this.selectedAccountsList.length || this.selectedAccForPayment) {
             this.bulkPaymentModalRef = this.modalService.show(template,
-                Object.assign({}, { class: 'payment-modal modal-lg' })
+                Object.assign({}, { class: 'payment-modal modal-xl' })
             );
         }
     }
@@ -1314,7 +1314,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
     }
 

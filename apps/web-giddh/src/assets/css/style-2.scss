@@ -58,8 +58,8 @@
 
 /*
 .aging-table > thead > tr > th {
-    background: #e5e5e5;
-    color: #262626;
+    background: $whisper-color;
+    color: $nero;
     border: 0;
     font-family: "" opensans-semibold "";
     text-transform: capitalize;
@@ -67,6 +67,7 @@
     border-top: 1px solid #cac8c6;
     border-bottom: 1px solid #cac8c6;
 }*/
+
 
 @media (max-width: 768px) {
     .onMobileView tbody tr {
@@ -98,7 +99,7 @@
         display: block;
         padding: 5px 10px 5px 50% !important;
         position: relative;
-        text-align: left;
+        text-align: left !important;
         height: auto !important;
         min-height: 30px !important;
         word-wrap: inherit !important;
@@ -195,7 +196,16 @@
 }
 
 /* start MDB tweaks */
-
+.caret{
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}
 .border-none {
     border: none !important;
 }
@@ -604,6 +614,7 @@ input {
 .navbar {
     min-height: auto;
     margin-bottom: 10px;
+    padding: 0rem !important;
 }
 
 .invoice-bg {
@@ -616,12 +627,12 @@ input {
     margin-left: 0 !important;
     padding-bottom: 7px !important;
     font-size: 14px;
-    color: #262626 !important;
+    color: $nero !important;
 }
 
 .invoce-controll .nav-tabs > li.active > a {
     border-bottom: 4px solid #01a9f4 !important;
-    color: #262626 !important;
+    color: $nero !important;
 }
 
 .otherAccountEntry .header {
@@ -679,39 +690,39 @@ input {
 }
 
 .ml-15 {
-    margin-left: 15px;
+    margin-left: 15px !important;
 }
 
 .mr-15 {
-    margin-right: 15px;
+    margin-right: 15px !important;
 }
 
 .mt-1 {
-    margin-top: 10px;
+    margin-top: 10px !important;
 }
 
 .mt-2 {
-    margin-top: 20px;
+    margin-top: 20px !important;
 }
 
 .mt-3 {
-    margin-top: 30px;
+    margin-top: 30px !important;
 }
 
 .mt-4 {
-    margin-top: 40px;
+    margin-top: 40px !important;
 }
 
 .mt-5 {
-    margin-top: 50px;
+    margin-top: 50px !important;
 }
 
 .mt-6 {
-    margin-top: 60px;
+    margin-top: 60px !important;
 }
 
 .mt-15 {
-    margin-top: 15px;
+    margin-top: 15px !important;
 }
 
 .mrB0 {
@@ -719,59 +730,59 @@ input {
 }
 
 .mb-1 {
-    margin-bottom: 10px;
+    margin-bottom: 10px !important;
 }
 
 .mb-2 {
-    margin-bottom: 20px;
+    margin-bottom: 20px !important;
 }
 
 .mb-3 {
-    margin-bottom: 30px;
+    margin-bottom: 30px !important;
 }
 
 .mb-4 {
-    margin-bottom: 40px;
+    margin-bottom: 40px !important;
 }
 
 .mb-5 {
-    margin-bottom: 50px;
+    margin-bottom: 50px !important;
 }
 
 .mb-15 {
-    margin-bottom: 15px;
+    margin-bottom: 15px !important;
 }
 
 .ml-15 {
-    margin-left: 15px;
+    margin-left: 15px !important;
 }
 
 .mr-15 {
-    margin-right: 15px;
+    margin-right: 15px !important;
 }
 
 .mt-15 {
-    margin-top: 15px;
+    margin-top: 15px !important;
 }
 
 .mr-1 {
-    margin-right: 10px;
+    margin-right: 10px !important;
 }
 
 .mr-2 {
-    margin-right: 20px;
+    margin-right: 20px !important;
 }
 
 .mr-3 {
-    margin-right: 30px;
+    margin-right: 30px !important;
 }
 
 .mr-4 {
-    margin-right: 40px;
+    margin-right: 40px !important;
 }
 
 .mr-5 {
-    margin-right: 50px;
+    margin-right: 50px !important;
 }
 
 .ml-0 {
@@ -791,23 +802,23 @@ input {
 }
 
 .ml-1 {
-    margin-left: 10px;
+    margin-left: 10px !important;
 }
 
 .ml-2 {
-    margin-left: 20px;
+    margin-left: 20px !important;
 }
 
 .ml-3 {
-    margin-left: 30px;
+    margin-left: 30px !important;
 }
 
 .ml-4 {
-    margin-left: 40px;
+    margin-left: 40px !important;
 }
 
 .ml-5 {
-    margin-left: 50px;
+    margin-left: 50px !important;
 }
 
 .ml-05 {
@@ -860,10 +871,11 @@ ul.sub-list {
     margin-top: 5px;
 }
 
-.user_dropdown > li > a .glyphicon-menu-right {
-    font-size: 10px;
+.user_dropdown>li>a .icon-arrow-down {
+    font-size: 12px;
     float: right;
     padding-top: 4px;
+    transform: rotate(270deg);
 }
 
 .sub-list li a {
@@ -875,7 +887,9 @@ ul.sub-list {
 }
 
 .company-list .input-group {
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid  $gainsboro;
+    display: flex;
+    align-items: center;
 }
 
 .company-list .input-group .form-control {
@@ -888,10 +902,13 @@ ul.sub-list {
     background: no-repeat;
     border-radius: 0px;
     border: 0px;
-    font-size: 9px;
+    font-size: 14px;
     color: #333333;
-    border-left: 1px solid #d2d2d2;
+    border-left: 1px solid  $gainsboro !important;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    height: 36px;
 }
 
 .bold {
@@ -904,6 +921,12 @@ ul.sub-list {
 
 .modal-open {
     overflow: auto !important;
+}
+
+
+.invoice-preview.table-responsive {
+    display: block !important;
+    width: 100%;
 }
 
 /* file upload css start */
@@ -1019,6 +1042,7 @@ ul.sub-list {
     padding-left: 0;
     padding-right: 0;
     border-bottom: 4px solid transparent;
+    display: inline-block;
 }
 
 .custom-tabs .nav.nav-tabs > li a:hover {
@@ -1064,7 +1088,7 @@ ul.sub-list {
 }
 
 .top-aging-table-top {
-    background: #e5e5e5;
+    background: $whisper-color;
     position: relative;
 }
 
@@ -1112,6 +1136,7 @@ ul.sub-list {
 .aging-table {
     border: 0px;
     margin-bottom: 0px;
+    background: $white !important;
 }
 
 .d-none {
@@ -1138,7 +1163,7 @@ ul.sub-list {
     padding: 20px;
     box-shadow: 0 0 19px rgba(0, 0, 0, 0.2);
     top: 75px;
-    z-index: 999;
+    z-index: 1;
 }
 
 .top-aging-table-top1 p {
@@ -1255,8 +1280,9 @@ ul.sub-list {
 }
 
 .Advance-Search .input-group-addon {
-    border-left: 0px;
+    border: 1px solid $gainsboro;
     background: none;
+    border-left: 0 !important;
 }
 
 .Advance-Search .input-group .form-control {
@@ -1363,7 +1389,7 @@ ul.sub-list {
 }
 
 .choose-size input:checked + label {
-    background: #e5e5e5;
+    background: $whisper-color;
     clear: both;
 }
 
@@ -1415,6 +1441,7 @@ modal-container.modal {
         margin: 0;
         width: 100%;
         height: 100%;
+        max-width:100% !important;
         .modal-content {
             height: 100%;
             overflow: scroll;
@@ -2328,7 +2355,8 @@ fieldset[disabled] .btn-primary:hover {
 
 #companyList {
     background: $white;
-    padding-bottom: 4px;
+    padding-bottom: 0;
+    padding: 0;
 }
 
 #companyList li:not(.divider) {
@@ -2509,10 +2537,14 @@ input[type="checkbox"]:checked:after {
 .btn-success:hover,
 .btn-success:active:focus,
 .btn-success:active:hover,
-.btn-success:focus {
+.btn-success:focus ,
+.btn-success:not(:disabled):not(.disabled):active,
+.btn-success:not(:disabled):not(.disabled).active,
+.show > .btn-success.dropdown-toggle{
     background: #087e7d;
     color: $white;
     border: 1px solid #087e7d;
+    box-shadow: none;
 }
 
 .btn-success:disabled,
@@ -2521,7 +2553,12 @@ input[type="checkbox"]:checked:after {
     border: 1px solid #81d4d4;
     background: #81d4d4;
 }
-
+.btn-warning{
+    color: $white !important;
+}
+.btn-warning:not(:disabled):not(.disabled):active:focus, .btn-warning:not(:disabled):not(.disabled).active:focus, .show > .btn-warning.dropdown-toggle:focus{
+    box-shadow: none;
+}
 .btn-default:disabled,
 .btn-danger:disabled {
     opacity: 0.5;
@@ -2841,7 +2878,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .head-title {
-    background: #e5e5e5;
+    background: $whisper-color;
     padding: 11px 20px;
     font-size: 14px;
     font-family: "" opensans-semibold "";
@@ -3227,7 +3264,9 @@ input,
 button:focus {
     outline: none !important;
 }
-
+.btn:focus, .btn.focus{
+    box-shadow:none !important;
+}
 .Inpt_dwn {
     padding-right: 25px !important;
     text-align: right;
@@ -3593,7 +3632,7 @@ a.btn.btn-xs.btn-link.pull-right {
     width: 100%;
     float: left;
     border: 0;
-    border-right: 1px solid #e5e5e5;
+    border-right: 1px solid $whisper-color;
 }
 
 #linkedStock .table_theme {
@@ -4005,8 +4044,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .modal-header {
     position: relative;
     background: $midnight-blue !important;
-    border-radius: 5px 5px 0 0;
-    color: $white !important;
+    border-radius: 0 !important;
 }
 
 .close-modal {
@@ -4526,7 +4564,7 @@ label {
     width: 100%;
     overflow-y: scroll;
     height: 100%;
-    min-height: 550px;
+    //min-height: 550px;
     padding-bottom: 80px;
 }
 
@@ -4644,7 +4682,7 @@ label {
     padding: 4px 8px;
     color: #808080;
     border-radius: 3px;
-    background: #e5e5e5;
+    background: $whisper-color;
     margin: 0px 0 4px 4px;
 }
 
@@ -4706,7 +4744,7 @@ label {
 .accmerge li a {
     padding: 4px 8px;
     color: #808080;
-    background: #e5e5e5;
+    background: $whisper-color;
     float: left;
     border-radius: 2px;
 }
@@ -4748,7 +4786,7 @@ label {
 .breadcrumb > li + li:before {
     padding-left: 4px;
     content: ">";
-    font-size: 15px;
+    font-size: 13px;
     color: #808080;
 }
 
@@ -5150,20 +5188,24 @@ label {
     transition: all 0.3s ease;
 }
 
-.custom-select select {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    -webkit-border-radius: 0;
-    border-radius: 0;
-    padding-right: 22px !important;
-}
-
-.custom-select .select_drop {
-    position: absolute;
-    bottom: 16px;
-    top: inherit;
-    z-index: 9;
-    right: 6px;
+.custom-select{
+        height: auto;
+        padding: 0px;
+        border:0px solid $gainsboro;
+        select {
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            -webkit-border-radius: 0;
+            border-radius: 0;
+            padding-right: 22px !important;
+        }
+        .select_drop {
+            position: absolute;
+            bottom: 16px;
+            top: inherit;
+            z-index: 9;
+            right: 6px;
+        }
 }
 
 #mfReportTbl table > tbody > tr > td > table.table {
@@ -5457,7 +5499,7 @@ label {
     border-radius: 0;
     border: 0;
     box-shadow: none;
-    background: #e5e5e5;
+    background: $whisper-color;
 }
 
 #customInvoice .templateEditor .btn-group-lg > .btn:focus {
@@ -5471,6 +5513,10 @@ label {
 #customInvoice {
     background: #f4f5f8;
     height: calc(100vh - 70px);
+}
+
+.panel-body {
+    padding: 15px;
 }
 
 #customInvoice h2 {
@@ -5606,7 +5652,7 @@ label {
     width: 100%;
     object-fit: contain;
     border-radius: 4px;
-    border: 1px solid #e5e5e5;
+    border: 1px solid $whisper-color;
 }
 
 .logo-preview {
@@ -5712,8 +5758,9 @@ input[type="checkbox"][disabled] {
 }
 
 .top-bar {
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+    border-bottom:0px solid $white;
     /* padding-left: 240px; */
 }
 
@@ -5746,7 +5793,7 @@ input[type="checkbox"][disabled] {
 .input-group-btn .btn-default {
     background: #eeeeee;
     border: 1px solid #d6d6d6;
-    color: #484848;
+    color: $charcoal;
 }
 
 .input-group-btn .btn-default:hover {
@@ -5970,7 +6017,7 @@ input[type="checkbox"][disabled]:after {
 }
 
 .table-container thead tr th:first-child {
-    border-left: 6px solid #e5e5e5;
+    border-left: 6px solid $whisper-color;
 }
 
 .table-container .account {
@@ -5987,9 +6034,9 @@ input[type="checkbox"][disabled]:after {
 }
 
 .active-toggle-btn {
-    color: $white;
-    background-color: $chetwode-blue;
-    border-color: $chetwode-blue;
+    color: $white !important;
+    background-color: $chetwode-blue !important;
+    border-color: $chetwode-blue !important;
 }
 
 .input-group-addon input[type="radio"] {
@@ -6190,6 +6237,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     font-weight: 100;
     text-shadow: none;
     font-size: 30px;
+    cursor: pointer;
 }
 
 /**new modal design**/
@@ -6415,7 +6463,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     border-right: 1px solid #ccc;
     font-size: 13px;
     color: #4d4d4d;
-    max-width: 0;
     text-overflow: ellipsis;
     /* // overflow: hidden; */
     white-space: nowrap;
@@ -6436,7 +6483,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     border-right: 1px solid #ccc;
     font-size: 13px;
     color: #4d4d4d;
-    max-width: 0;
     text-overflow: ellipsis;
     /* overflow: hidden; */
     white-space: nowrap;
@@ -6527,10 +6573,11 @@ table td[class*=col-]:last-child {
 #pagination {
     margin: 0 auto;
     overflow: hidden;
-    width: 100%;
     text-align: center;
 }
-
+.pagination{
+    justify-content: center;
+}
 .ledger-panel label {
     font-weight: 400;
 }
@@ -6821,11 +6868,22 @@ table td[class*=col-]:last-child {
     overflow: auto;
 }
 
-.dropdown-menu > li > a {
-    padding: 2px 10px;
-    color: $nero;
+.dropdown-menu{
+    .divider{
+        height: 1px;
+        margin: 9px 0;
+        overflow: hidden;
+        background-color: $whisper-color;
+    }
+    >li{
+        >a {
+            padding: 4px 10px;
+            color: $nero;
+            display:block;
+            line-height: 1.4;
+        }
+    }
 }
-
 /* ==================================================
     Branch
 ================================================== */
@@ -6914,7 +6972,7 @@ table td[class*=col-]:last-child {
 .condition_tag {
     position: absolute;
     top: 2px;
-    right: 6px;
+    right: -48px;
     background: #eee;
     border-radius: 100%;
     padding: 7px 7px;
@@ -6927,22 +6985,22 @@ table td[class*=col-]:last-child {
     position: absolute;
     height: 41px;
     width: 2px;
-    background: #e5e5e5;
+    background: $whisper-color;
     top: 29px;
     left: 19px;
     z-index: -1;
 }
 
-.query_list .form-control {
+.query-list .form-control {
     margin: 0 6px;
 }
 
-.query_list:nth-last-child(3) .condition_tag:after {
+.query-list:nth-last-child(3) .condition_tag:after {
     content: " ";
     position: absolute;
     height: 2px;
     width: 30px;
-    background: #e5e5e5;
+    background: $whisper-color;
     top: 68px;
     left: -10px;
 }
@@ -8243,6 +8301,8 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 .paginationWrapper {
     padding: 20px 0;
     text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
 .pagination > li > a,
@@ -8356,6 +8416,8 @@ span.red-text {
 .ledger-book .tooltip-inner {
     word-break: break-word !important;
     white-space: pre-line !important;
+    min-width: 200px;
+    font-size: 14px;
 }
 
 .selectCustomerName .scrollable-content > .item {
@@ -8390,7 +8452,7 @@ span.red-text {
 }
 
 .total-sales-tabs .nav-tabs li a {
-    color: #484848;
+    color: $charcoal;
     font-size: 16px;
     padding: 0 5px;
     position: relative;
@@ -8401,7 +8463,7 @@ span.red-text {
     content: "";
     height: 15px;
     width: 1px;
-    background-color: #484848;
+    background-color: $charcoal;
     right: 0;
     top: 5px;
 }
@@ -8496,13 +8558,19 @@ ul.dropdown-menu p.lead.pd {
     border-bottom: 4px solid $deep-sky-blue !important;
     padding-bottom: 7px !important;
     font-family: $opensans-semibold;
+    background: transparent;
+    border-color: transparent;
 }
 
 .invoce-controll .nav-tabs > li > a {
     border-bottom: 4px solid transparent !important;
 }
 
-.dropdown-menu > li > a:hover {
+.invoce-controll .nav-tabs > li > a:hover {
+    border-color: 0px solid transparent !important;
+}
+
+.dropdown-menu>li>a:hover {
     color: $chetwode-blue !important;
     background: #eeeff9 !important;
 }
@@ -8534,7 +8602,7 @@ ul.dropdown-menu p.lead.pd {
 #invoice-setting ul.nav.nav-tabs a {
     border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
     font-family: "opensans-regular";
-    color: #484848 !important;
+    color: $charcoal !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
     border-radius: 4px;
@@ -8639,6 +8707,11 @@ ul.dropdown-menu p.lead.pd {
 
 .input-group-addon {
     padding: 5px 12px;
+    color: $davy-grey;
+    text-align: center;
+    background-color: $whisper-light;
+    border: 1px solid $very-light-gray;
+    border-left: none !important;
 }
 
 .mrTop {
@@ -8694,6 +8767,10 @@ button.btn.btn-filter {
 .mangeAccountPopup.fullScreenMy.modal.fade .modal-dialog {
     transform: translateY(0) !important;
     margin: 0 auto;
+}
+
+.mangeAccountPopup.fullScreenMy.modal.fade .width100{
+    width:100% !important;
 }
 
 .translatY8 {
@@ -8753,7 +8830,7 @@ button.btn.btn-filter {
 // .custom-tabs#asidePaneFormTabs .nav.nav-tabs > li {
 //     padding-right: 0;
 // }
-.mangeAccountPopup .modal-dialog.modal-lg {
+.mangeAccountPopup .modal-dialog.modal-xl {
     margin: 0 auto;
 }
 
@@ -8923,6 +9000,7 @@ p.remvBrnchName {
 .receipt-note-modal {
     width: 100% !important;
     top: 0;
+    max-width: 100% !important;
 }
 
 .inventory-page .modal,
@@ -9123,6 +9201,7 @@ input.checkbox-custom[type="checkbox"] {
 
 .inventory-page.modal-open .receipt-note-modal {
     margin-bottom: 0;
+    max-width: 100% !important;
 }
 
 .aside-body .btn-lg.btn-primary {
@@ -9132,9 +9211,16 @@ input.checkbox-custom[type="checkbox"] {
 
 .modal-content {
     border: none !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,.5);
+    position: relative;
+    background-color: $white;
+    background-clip: padding-box;
+    border-radius: 6px;
+    outline: 0;
+    display:block;
 }
 
-.panel-block .panel-body {
+.panel-block .card-body {
     min-height: 350px;
 }
 
@@ -9406,7 +9492,6 @@ span#HW_badge_cont:nth-child(3) {
 .setting-sidebar-open .desktop-header.menu_open {
     padding-left: 215px;
 }
-
 /*flex css start*/
 .flex-column {
     flex-direction: column;
@@ -9668,6 +9753,7 @@ span#HW_badge_cont:nth-child(3) {
     .aging-table.table-aging-report tr td:first-child,
     .aging-table.table-aging-report tr th:first-child {
         padding-left: 50% !important;
+        width: auto;
     }
     .basic > tbody > tr td:first-child,
     .basic > thead > tr th:first-child {
@@ -9782,6 +9868,9 @@ span#HW_badge_cont:nth-child(3) {
     }
     .setting-data, .setting-sidebar-open .white-row {
         padding-left: 15px !important;
+    }
+    .aging-table{
+        background: transparent !important;
     }
 }
 
@@ -9933,7 +10022,7 @@ span#HW_badge_cont:nth-child(3) {
         top: 0;
         display: none;
     }
-    .user_dropdown > li > a .glyphicon-menu-right {
+    .user_dropdown>li>a .icon-arrow-down {
         transform: rotate(90deg);
     }
     #setting-tab .tab-container .nav.nav-tabs {
@@ -9963,7 +10052,7 @@ span#HW_badge_cont:nth-child(3) {
         padding-top: 0;
     }
     .custom-tabs.hide-header .top-bar {
-        margin-top: 0;
+        margin-top: 10px;
     }
     .invoce-controll .nav.nav-tabs {
         padding: 0 0 0 15px !important;
@@ -10073,7 +10162,7 @@ span#HW_badge_cont:nth-child(3) {
     body.hide-scroll-body {
         overflow-y: hidden !important;
     }
-    .panel-block .panel-body {
+    .panel-block .card-body {
         min-height: auto;
     }
     // .tabs-page .padding-top-fixed-mobile {
@@ -10134,8 +10223,7 @@ span#HW_badge_cont:nth-child(3) {
     .page-has-tabs .invoice-genrate-container,
     .page-has-tabs .invoice-container,
     .page-has-tabs .proforma-container,
-    .page-has-tabs .proforma-container,
-    .page-has-tabs .recurring-container {
+    .page-has-tabs .proforma-container{
         padding-top: 15px !important;
     }
     .page-has-tabs
@@ -10148,6 +10236,7 @@ span#HW_badge_cont:nth-child(3) {
     }
     .page-has-tabs .recurring-container {
         margin-top: 0px !important;
+        padding-top: 10px !important;
     }
     .on-user-page .user-detail-page.company-page {
         padding-top: 15px !important;
@@ -10187,6 +10276,9 @@ span#HW_badge_cont:nth-child(3) {
     }
     .on-setting-page aside-setting.setting-sidebar, .on-user-page aside-setting.setting-sidebar{
         left: 0;
+    }
+    #dashboard .panel-heading i{
+        margin-right: 10px !important;
     }
 }
 
@@ -10233,13 +10325,10 @@ span#HW_badge_cont:nth-child(3) {
     .pagination > li > span {
         padding: 6px 6px;
     }
-    // header .hamburger_menu h4 {
-    //     white-space: nowrap;
-    //     overflow: hidden;
-    //     text-overflow: ellipsis;
-    //     min-height: 20px;
-    //     width: calc(100% - 30px);
-    // }
+    .pagination{
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
 }
 
 @media (max-width: 360px) {
@@ -10437,6 +10526,16 @@ span#HW_badge_cont:nth-child(3) {
     }
 }
 
+@media (min-width:576px){
+    .modal-dialog {
+        max-width: 100% !important;
+    }
+        #shareModal select {
+        width: auto;
+        max-width: 300px;
+    }
+}
+
 @media (min-width: 768px) {
     .invoice-modal-content .modal-dialog {
         margin: 70px auto;
@@ -10444,12 +10543,18 @@ span#HW_badge_cont:nth-child(3) {
     .edit-modal.modal-small {
         display: none;
     }
-    .modal-sm {
-        width: 450px !important;
+    .modal-dialog{
+        max-width: 600px !important;
+        margin: 30px auto;
+    }
+    .modal-dialog.modal-xl{
+        max-width: 1140px !important;
+    }
+    .receipt-note-modal {
+        max-width: 100% !important;
     }
 }
-
-@media (min-width: 480px) and (max-width: 667px) {
+@media(min-width:480px) and (max-width:667px) {
     .edit-modal {
         margin: 20px auto;
         padding-top: 0;
@@ -10494,6 +10599,14 @@ span#HW_badge_cont:nth-child(3) {
                     z-index: 999;
                 }
             }
+        }
+    }
+}
+@media(max-width:1300px) and (min-width:1024px){
+     .dashboard-container {
+        .card{
+            margin-bottom: 20px;
+            min-height: 452px;
         }
     }
 }
@@ -10588,4 +10701,15 @@ body.prevent-body-scroll {
 }
 .hide-payment-tab ul li:nth-child(5) {
     display: none;
+}
+
+@media (max-width: 991px) and (min-width: 768px){
+    .hidden-sm {
+        display: none!important;
+    }
+}
+@media (max-width: 1199px) and (min-width: 992px){
+.hidden-md {
+    display: none!important;
+}
 }

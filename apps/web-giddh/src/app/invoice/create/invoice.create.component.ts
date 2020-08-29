@@ -20,6 +20,7 @@ import { ReciptRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { StatesRequest, TaxResponse } from '../../models/api-models/Company';
 import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 let THEAD_ARR_READONLY = [
     {
@@ -99,7 +100,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     public tx_discount: number = 0;
     public tx_total: number = 0;
     public states: any[] = [];
-
+    public isMobileScreen: boolean = true;
     @ViewChild('discountComponent', {static: true}) public discountComponent: DiscountListComponent;
     // public methods above
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -113,12 +114,19 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
         private _router: Router,
         private _activatedRoute: ActivatedRoute,
         private _ledgerActions: LedgerActions,
-        private receiptActions: InvoiceReceiptActions
+        private receiptActions: InvoiceReceiptActions,
+        private _breakPointObservar: BreakpointObserver
     ) {
         this.isInvoiceGenerated$ = this.store.select(state => state.invoice.isInvoiceGenerated).pipe(takeUntil(this.destroyed$), distinctUntilChanged());
     }
 
     public ngOnInit() {
+
+        this._breakPointObservar.observe([
+            '(max-width: 1023px)'
+        ]).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
 
         this._activatedRoute.params.subscribe(a => {
             if (a) {

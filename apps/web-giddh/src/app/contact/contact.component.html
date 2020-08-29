@@ -4,7 +4,7 @@
         <div class="container-fluid">
 
             <div class="top-bar clearfix">
-                <div class="form-inline">
+                <div class="customer-form-inline">
                     <div>
                         <div class="dis pull-left mrR1">
 
@@ -60,11 +60,11 @@
                         <div class="pull-left header-left">
                             <div class="form-group max250 searchField" *ngIf="activeTab !== 'aging'">
                                 <input type="text" placeholder="Name/Email/Mobile" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
-                                <span class="inputAddon">
+                                <span class="input-addon">
                                 <i class="icon-search"></i>
                             </span>
-                            </div>
 
+                        </div>
                         </div>
                     </div>
                     <!-- Invoice filter section ends -->
@@ -156,47 +156,47 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="clearfix pagination-main">
-            <div class=" mt-5 mb-100px">
-                <div class="">
-                    <div class="customer-right-wrap clearfix">
-                        <div class="text-right">
-                            <h4 class="mb-1 pdR2">Result Total</h4>
-                        </div>
-
-                        <div class="bg-white clearfix">
-                            <div class="customer-right  clearfix" style="width: 100%;">
-                                <table class="text-right">
-                                    <tr>
-                                        <td>
-                                            <p *ngIf="activeTab === 'vendor'">Purchase</p>
-                                            <p *ngIf="activeTab === 'customer'">Sales</p>
-                                            <h3>{{totalSales |giddhCurrency }}/-</h3>
-                                        </td>
-                                        <td>
-                                            <p *ngIf="activeTab === 'vendor'">Payment</p>
-                                            <p *ngIf="activeTab === 'customer'">Receipt</p>
-                                            <h3>{{totalReceipts | giddhCurrency}}/-</h3>
-                                        </td>
-                                        <td>
-                                            <p>Due</p>
-                                            <h3>{{totalDue | giddhCurrency}}/-</h3>
-                                        </td>
-
-                                    </tr>
-
-                                </table>
+            </div>
+            <div class="clearfix pagination-main">
+                <div class=" mt-5 mb-100px">
+                    <div class="">
+                        <div class="customer-right-wrap clearfix">
+                            <div class="text-right">
+                                <h4 class="mb-1 pdR2">Result Total</h4>
                             </div>
 
+                            <div class="bg-white clearfix">
+                                <div class="customer-right  clearfix" style="width: 100%;">
+                                    <table class="text-right">
+                                        <tr>
+                                            <td>
+                                                <p *ngIf="activeTab === 'vendor'">Purchase</p>
+                                                <p *ngIf="activeTab === 'customer'">Sales</p>
+                                                <h3>{{totalSales |giddhCurrency }}/-</h3>
+                                            </td>
+                                            <td>
+                                                <p *ngIf="activeTab === 'vendor'">Payment</p>
+                                                <p *ngIf="activeTab === 'customer'">Receipt</p>
+                                                <h3>{{totalReceipts | giddhCurrency}}/-</h3>
+                                            </td>
+                                            <td>
+                                                <p>Due</p>
+                                                <h3>{{totalDue | giddhCurrency}}/-</h3>
+                                            </td>
+
+                                        </tr>
+
+                                    </table>
+                                </div>
+
+                            </div>
                         </div>
+
                     </div>
 
+
                 </div>
-
-
             </div>
-        </div>
     </tab>
     <!-- endregion -->
 
@@ -758,7 +758,7 @@
                             <button *ngIf="account?.bankPaymentDetails && account?.country?.code==='IN'" class="btn btn-small btn-success" (click)="openBulkPaymentModal(template, account)">
                             Pay Now </button>
                             <!-- (click)="openPaymentAside(account)" -->
-                            <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-succes " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
+                            <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-light " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
                             </button>
                         </td>
                     </tr>

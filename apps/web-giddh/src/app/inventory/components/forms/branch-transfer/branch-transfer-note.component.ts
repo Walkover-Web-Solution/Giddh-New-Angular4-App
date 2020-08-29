@@ -79,7 +79,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
 
     /* setModalClass() {
          this.valueWidth = !this.valueWidth;
-         const modalWidth = this.valueWidth ? 'modal-lg' : 'modal-sm';
+         const modalWidth = this.valueWidth ? 'modal-xl' : 'modal-sm';
          this.modalRef.setClass(modalWidth);
      }*/
 
