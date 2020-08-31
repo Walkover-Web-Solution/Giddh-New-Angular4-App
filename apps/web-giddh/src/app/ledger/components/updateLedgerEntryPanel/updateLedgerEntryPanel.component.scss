@@ -383,11 +383,11 @@ span.eligible-ITC {
         border-bottom: none;
     }
     sh-select#credit-select,
-    sh-select#dabit-select {
+    sh-select#debit-select {
         width: 185px;
     }
     #credit-select input,
-    #dabit-select input {
+    #debit-select input {
         border: 1px solid $gainsboro !important;
         height: 36px;
     }

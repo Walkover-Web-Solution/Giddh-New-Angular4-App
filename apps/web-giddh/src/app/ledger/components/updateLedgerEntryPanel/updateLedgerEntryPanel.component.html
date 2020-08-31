@@ -101,7 +101,7 @@
                                             (ngModelChange)="getInvoiceListsForCreditNote()">
                                     </td>
 
-                                    <td data-title="Particular" id="{{'dabit-id-' + i}}"
+                                    <td data-title="Particular" id="{{'debit-id-' + i}}"
                                         [ngClass]="{ 'otherAccountEntry': txn.particular.uniqueName === 'others' }"
                                         class="col-xs-6 pos-rel select2-parent select2-ledger">
 
@@ -111,7 +111,7 @@
                                                 <span *ngIf="(
                                                         (!dbtSelect.isOpen && txn.particular.uniqueName) ||
                                                         (dbtSelect.isOpen && dbtSelect.filter))">To</span>
-                                                <sh-select id="{{'dabit-select-' + i }}" [notFoundLink]="true"
+                                                <sh-select id="{{'debit-select-' + i }}" [notFoundLink]="true"
                                                     (noResultsClicked)="showQuickAccountModal()"
                                                     (keydown)="keydownPressed($event)"
                                                     [options]="vm.flatternAccountList4Select | async" #dbtSelect
