@@ -5,7 +5,7 @@
         [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
         [showNotFoundLinkAsDefault]="showNotFoundLinkAsDefault" [noResultLinkEnabled]="noResultLinkEnabled">
 
-        <div id="select-menu" class="item" *ngFor="let row of viewPortItems" [class.selected]="selectedValues?.indexOf(row) !== -1"
+        <div  id="{{ 'select-menu-' + i}}" class="item" *ngFor="let row of viewPortItems; let i = index" [class.selected]="selectedValues?.indexOf(row) !== -1"
             [class.hilighted]="row.isHilighted" [class.disabled]="row.disabled" (click)="toggleSelected(row)" [style.height.px]="ItemHeight">
             <ng-template [ngTemplateOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
             <ng-container *ngIf="!optionTemplate">
@@ -39,7 +39,7 @@
         [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"
         [showNotFoundLinkAsDefault]="showNotFoundLinkAsDefault" [noResultLinkEnabled]="noResultLinkEnabled">
 
-        <div id="select-menu-show-checkbox" class="item" *ngFor="let row of viewPortItems" [class.selected]="selectedValues?.indexOf(row) !== -1"
+        <div id="{{'select-menu-show-checkbox-' + i }}" class="item" *ngFor="let row of viewPortItems; let i = index" [class.selected]="selectedValues?.indexOf(row) !== -1"
             [class.hilighted]="row.isHilighted" [style.height.px]="ItemHeight">
             <ng-template [ngTemplateOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
             <ng-container *ngIf="!optionTemplate">

@@ -251,7 +251,7 @@
                         </tr>
                         <tr class="transaction-table-row">
                             <td class="nopad bdrL bdrR" colspan="3">
-                                <ng-container *ngFor="let item of lc.bankTransactionsData;">
+                                <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
                                 <table class="width100"
                                     (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                                     <tbody>
@@ -268,8 +268,7 @@
                                                                 <div class="d-flex align-items-center"
                                                                      >
                                                                     <span class="pl-05">
-                                                                            <input type="checkbox" id="select-entry-debit-cr"
-                                                                                (click)="selectEntryForBulkAction($event, item)" /></span>
+                                                                        <input type="checkbox" id="{{'transaction-mapped-select-entry-dr-' + i}" click)="selectEntryForBulkAction($event, item)" /></span>
                                                                     <span class="ml-05">
                                                                         <input class="form-control" [maxlength]="10"
                                                                             autocomplete="off" name="bsdateledger"
@@ -331,7 +330,7 @@
                                                             </td>
 
                                                             <td class="col-xs-4 col-md-3 col-lg-3  pos-rel">
-                                                                <input class="form-control alR" type="text" id="enter-amount-dr"
+                                                                <input class="form-control alR" type="text" id="{{'enter-amount-dr-' + i}}"
                                                                     decimalDigitsDirective [DecimalPlaces]="2"
                                                                     [(ngModel)]="txn.amount"
                                                                     (input)="needToReCalculate.next(true)"
@@ -369,7 +368,7 @@
                                 </ng-container>
                             </td>
                             <td colspan="3" class="nopad bdrL bdrR">
-                                <ng-container *ngFor="let item of lc.bankTransactionsData;">
+                                <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
                                 <table class="width100"
                                     (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
                                     <tbody>
@@ -384,8 +383,7 @@
                                                                 <div class="d-flex align-items-center"
                                                                     >
                                                                     <span class="pl-05">
-                                                                        <input type="checkbox" id="select-entry-tax-checked-cr"
-                                                                            [(ngModel)]="txn.isChecked"
+                                                                        <input type="checkbox" id="{{'transaction-mapped-select-entry-cr-' + i}}"[(ngModel)]="txn.isChecked"
                                                                             (click)="selectEntryForBulkAction($event, item)" />
                                                                     </span>
                                                                     <span class="ml-05">
@@ -452,7 +450,7 @@
                                                             </td>
 
                                                             <td class="col-xs-4 col-md-3 col-lg-3 pos-rel">
-                                                                <input class="form-control alR" type="text"  id="enter-amount-cr"
+                                                                <input class="form-control alR" type="text"  id="{{'enter-amount-cr-' + i}}"
                                                                     decimalDigitsDirective [DecimalPlaces]="2"
                                                                     [(ngModel)]="txn.amount"
                                                                     (input)="needToReCalculate.next(true)"
@@ -545,14 +543,14 @@
                             <tr>
                                 <td class="transction-date pl-15 pr-15 pt-05" colspan="2">{{transactionDate}}</td>
                             </tr>
-                            <tr class="second-row" *ngFor="let transactions of allTransactionsList[transactionDate];">
+                            <tr class="second-row" *ngFor="let transactions of allTransactionsList[transactionDate]; let i = index">
                                 <td class="pl-15 pr-15 relative"
                                     [ngClass]="{compoundEntry: transactions.entryUniqueName === lc.selectedTxnUniqueName || transactions.isChecked}"
                                     tooltip="{{transactions.description}}"
                                     (mouseover)="entryHovered(transactions.entryUniqueName)"
                                     (mouseout)="selectedTrxWhileHovering = ''">
                                     <span class="pull-left account-holder-checkbox">
-                                        <input type="checkbox" id="all-transaction-select-entry-cr"
+                                        <input type="checkbox" id="{{'mobile-view-select-entry-cr-' + i}}"
                                             [ngClass]="{'d-none': (selectedTrxWhileHovering !== transactions.entryUniqueName && !(transactions.isChecked) && checkedTrxWhileHovering.length === 0)}"
                                             class="d-none" [(ngModel)]="transactions.isChecked"
                                             (click)="entrySelected($event, transactions.entryUniqueName)">
@@ -602,6 +600,7 @@
             </div>
             <!-- endregion -->
         </div>
+        <!-- end mobile view -->
         <!-- region main transactions-->
         <div class="ledger-book" *ngIf="!isMobileScreen"
             [navigationWalker]="{horizontal:'hr-item',vertical:'vr-item', ignore: 'no-tree'}"
@@ -640,7 +639,7 @@
                             <!--</td>-->
 
                             <td class="col-xs-3 col-md-3 col-lg-3" data-title="Date">
-                                <input type="checkbox" id="select-all-entries-debit" [(ngModel)]="debitSelectAll"
+                                <input type="checkbox" id="select-entries-date-cr" [(ngModel)]="debitSelectAll"
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event, 'debit')">
                             </td>
@@ -671,7 +670,7 @@
                             <!--(click)="selectAllEntries($event, 'debit')"></td>-->
 
                             <td class="col-xs-3 col-md-3 col-lg-3" data-title="Select All">
-                                <input type="checkbox" [(ngModel)]="debitSelectAll"
+                                <input type="checkbox" [(ngModel)]="debitSelectAll" id="select-entries-all-cr"
                                     *ngIf="checkedTrxWhileHovering.length > 0"
                                     (click)="selectAllEntries($event, 'debit')">
                             </td>
@@ -682,7 +681,7 @@
 
                         <!-- region debit transaction loop over transactions -->
                         <tr vr-item tabindex="-1" class="ledger-row "
-                            *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;"
+                            *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions; let i = index"
                             (dblclick)="showUpdateLedgerModal(txn)" (keydown.enter)="showUpdateLedgerModal(txn)"
                             [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
                             tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
@@ -696,7 +695,7 @@
 
                                 <div class="d-flex align-items-center">
                                     <span style="float: left">
-                                        <input type="checkbox" id="select-entry-dr"
+                                        <input type="checkbox" id="{{ 'select-entry-dr-' + i}}"
                                             [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering.length === 0)}"
                                             class="d-none" [(ngModel)]="txn.isChecked"
                                             (click)="entrySelected($event, txn.entryUniqueName)" />
@@ -748,7 +747,7 @@
                     (clickOutside)="hideNewLedgerEntryPopup($event)">
                     <tbody>
 
-                        <tr *ngFor="let txn of lc.blankLedger.transactions;">
+                        <tr *ngFor="let txn of lc.blankLedger.transactions; let i = index">
 
                             <td class="width100" *ngIf="txn.type === 'DEBIT'">
 
@@ -781,7 +780,7 @@
                                                     <span *ngIf="( (!shDebit.isOpen && txn.particular) ||
                                                                 (shDebit.isOpen && shDebit.filter))">To
                                                     </span>
-                                                    <sh-select id="select-account-dr" [idEl]="txn.id" #shDebit
+                                                    <sh-select id="{{'select-account-dr-' + i}}" [idEl]="txn.id" #shDebit
                                                         [options]="lc.flattenAccountList | async"
                                                         [(ngModel)]="txn.particular" vr-item tabindex="-1" #select
                                                         [showClear]="false" (keydown.enter)="onEnter(select,txn)"
@@ -832,7 +831,7 @@
                                             </td>
 
                                             <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 pos-rel">
-                                                <input class="form-control alR" type="text"  id="enter-bank-amount-dr"
+                                                <input class="form-control alR" type="text"  id="{{'enter-bank-amount-dr-' + i}}"
                                                     [prefix]="selectedPrefixForCurrency"
                                                     [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                                                     [(ngModel)]="txn.amount" (input)="handleAmountInput(txn);"
@@ -950,7 +949,7 @@
                         <!-- endregion -->
 
                         <!-- region credit transaction loop over transactions -->
-                        <tr class="ledger-row " *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;"
+                        <tr class="ledger-row " *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions; let i = index"
                             (dblclick)="showUpdateLedgerModal(txn)" vr-item tabindex="-1"
                             (keydown.enter)="showUpdateLedgerModal(txn)"
                             [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
@@ -966,7 +965,7 @@
                                 <div class="d-flex align-items-center">
                                     <span class="ledger-checkbox" style="float: left">
 
-                                        <input type="checkbox"  id="all-transaction-select-entry-dr"
+                                        <input type="checkbox" id="{{'select-entry-cr-' + i }}"
                                             [ngClass]="{'d-none': (selectedTrxWhileHovering !== txn.entryUniqueName && !(txn.isChecked) && checkedTrxWhileHovering.length === 0)}"
                                             class="d-none" [(ngModel)]="txn.isChecked"
                                             (click)="entrySelected($event, txn.entryUniqueName)" />
@@ -1020,7 +1019,7 @@
                     (click)="$event.stopPropagation()">
                     <tbody>
 
-                        <tr *ngFor="let txn of lc.blankLedger.transactions;">
+                        <tr *ngFor="let txn of lc.blankLedger.transactions; let i = index">
 
                             <td class="width100" *ngIf="txn.type === 'CREDIT'">
 
@@ -1056,7 +1055,7 @@
                                                         (!shCredit.isOpen && txn.particular) ||
                                                         (shCredit.isOpen && shCredit.filter))">By </span>
 
-                                                    <sh-select id="select-account-cr" [idEl]="txn.id" #shCredit
+                                                    <sh-select id="{{'select-account-cr-' + i}}" [idEl]="txn.id" #shCredit
                                                         [options]="lc.flattenAccountList | async" vr-item tabindex="-1"
                                                         #select (keydown.enter)="onEnter(shCredit,txn)"
                                                         (onShow)="isSelectOpen=true;bsd.hide()"
