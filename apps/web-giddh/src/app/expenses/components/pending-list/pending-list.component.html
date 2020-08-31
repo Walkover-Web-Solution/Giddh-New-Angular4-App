@@ -13,13 +13,13 @@
                         </div>
                     </th>
 
-                    <th class="td_in_searchBox" #submittedBySearchContainer
+                    <th class="td-search-box" #submittedBySearchContainer
                         (clickOutside)="clickedOutside($event, submittedBySearchContainer, 'submittedBy')">
                         <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSubmittedBySearch,
           title: 'Submitted By', fieldName: 'submittedBy', formControl: submittedBySearchInput}"></ng-container>
                     </th>
 
-                    <th class="td_in_searchBox" #accountSearchContainer
+                    <th class="td-search-box" #accountSearchContainer
                         (clickOutside)="clickedOutside($event, accountSearchContainer, 'account')">
                         <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showAccountSearch,
                         title: 'Account', fieldName: 'account', formControl: accountSearchInput}"></ng-container>
@@ -32,7 +32,7 @@
                         </div>
                     </th>
 
-                    <th class="td_in_searchBox" #paymentReceiptSearchContainer
+                    <th class="td-search-box" #paymentReceiptSearchContainer
                         (clickOutside)="clickedOutside($event, paymentReceiptSearchContainer, 'payment/receive')">
                         <ng-container
                             *ngTemplateOutlet="searchTemplate;context:{ $implicit: showPaymentReceiveSearch,
