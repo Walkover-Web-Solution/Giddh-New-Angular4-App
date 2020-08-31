@@ -51,14 +51,6 @@
                                                 </ng-template>
 
                                             </sales-sh-select>
-                                            <!-- endregion -->
-                                            <!-- <div hidden>
-                                                <p><small>Pending Purchase order of selected vendor</small></p>
-                                                <p class="font-14"><a href="javascript(void)">PO84709832 |</a>
-                                                    <a href="javascript(void)"> PO02948023 |</a>
-
-                                                </p>
-                                            </div> -->
                                             <!-- region Unregistered Business / customer details -->
                                             <div class="d-flex aqua-color"
                                                 *ngIf="purchaseOrder.voucherDetails.customerName">
@@ -69,6 +61,10 @@
                                                 </span>
                                             </div>
                                             <!-- endregion -->
+                                            <div *ngIf="purchaseOrders && purchaseOrders.length > 0">
+                                                <p><small>Pending Purchase order of selected vendor</small></p>
+                                                <p class="font-14"><a href="javascript:;" *ngFor="let order of purchaseOrders; let i = index;">{{order.voucherNumber}}<span *ngIf="checkIfPipeSymbolRequired(i)">&nbsp;|&nbsp;</span></a></p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

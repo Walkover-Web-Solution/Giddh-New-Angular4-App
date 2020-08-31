@@ -34,7 +34,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     /* Modal instance */
     public modalRef: BsModalRef;
     /* This will hold state of activity history aside pan */
-    public activityHistoryAsideState: string = 'out';
+    public revisionHistoryAsideState: string = 'out';
     /* This will hold purchase order data */
     public purchaseOrder: any = {};
     /* Send email request params object */
@@ -196,7 +196,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         if (event) {
             event.preventDefault();
         }
-        this.activityHistoryAsideState = this.activityHistoryAsideState === 'out' ? 'in' : 'out';
+        this.revisionHistoryAsideState = this.revisionHistoryAsideState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
 
@@ -206,7 +206,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public toggleBodyClass(): void {
-        if (this.activityHistoryAsideState === 'in') {
+        if (this.revisionHistoryAsideState === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');

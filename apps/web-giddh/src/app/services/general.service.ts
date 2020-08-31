@@ -538,4 +538,7 @@ export class GeneralService {
         return { fromDate: fromDateInMmDdYy, toDate: toDateInMmDdYy }
     }
 
+    public getRevisionField(type: any): string {
+        return type.replace(/_/g, " ");
+    }
 }

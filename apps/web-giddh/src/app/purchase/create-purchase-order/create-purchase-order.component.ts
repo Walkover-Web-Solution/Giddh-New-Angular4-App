@@ -298,6 +298,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public originalExchangeRate: any = 1;
     /* This will hold object for time interval */
     public interval: any;
+    /* This will hold the purchase orders */
+    public purchaseOrders: any[] = [];
 
     constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService) {
         this.getInvoiceSettings();
@@ -770,6 +772,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public getAccountDetails(accountUniqueName: string): void {
+        this.getVendorPurchaseOrders(accountUniqueName);
         this.store.dispatch(this.salesAction.getAccountDetailsForSales(accountUniqueName));
     }
 
@@ -2557,9 +2560,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                         }
                     } else {
                         let selectedTax;
-                        if(usedTaxes.indexOf(tax.uniqueName) === -1) {
+                        if (usedTaxes.indexOf(tax.uniqueName) === -1) {
                             usedTaxes.push(tax.uniqueName);
-                        
+
                             if (entryTaxes && entryTaxes.length > 0) {
                                 entryTaxes.forEach(entryTax => {
                                     if (entryTax.uniqueName === tax.uniqueName) {
@@ -2597,7 +2600,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
                     let stock = selectedAcc.stocks.find(stock => stock.uniqueName === transaction.stock.uniqueName);
 
-                    if(stock) {
+                    if (stock) {
                         let description = [];
                         let skuCodeHeading = stock.skuCodeHeading ? stock.skuCodeHeading : 'SKU Code';
 
@@ -2806,6 +2809,48 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             let duePeriod: number;
             duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
             this.purchaseOrder.voucherDetails.dueDate = duePeriod > 0 ? moment().add(duePeriod, 'days').toDate() : moment().toDate();
+        }
+    }
+
+    /**
+     * This will get the list of PO by vendor
+     *
+     * @param {*} vendorName
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public getVendorPurchaseOrders(vendorName: any): void {
+        let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, page: 1, from: '', to: '', count: 10, sort: '', sortBy: '' };
+        let purchaseOrderPostRequest = { vendorName: vendorName, statuses: ['open', 'partially-received'] };
+
+        if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
+            this.purchaseOrders = [];
+
+            this.purchaseOrderService.getAll(purchaseOrderGetRequest, purchaseOrderPostRequest).subscribe((res) => {
+                if (res) {
+                    if (res.status === 'success') {
+                        if (res.body && res.body.items) {
+                            this.purchaseOrders = res.body.items;
+                        }
+                    } else {
+                        this.toaster.errorToast(res.message);
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * This will check if we need to show pipe symbol
+     *
+     * @param {number} loop
+     * @returns {boolean}
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public checkIfPipeSymbolRequired(loop: number): boolean {
+        if (loop < (this.purchaseOrders.length - 1)) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

@@ -63,7 +63,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
-    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold the response object*/
     public purchaseOrders: any = {};
@@ -119,7 +119,9 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public bulkUpdateFields: IOption[] = BULK_UPDATE_FIELDS;
     /* Stores warehouses for a company */
     public warehouses: Array<any>;
+    /* Bulk update get params */
     public bulkUpdateGetParams: any = { companyUniqueName: '', action: '' };
+    /* Bulk update post params */
     public bulkUpdatePostParams: any = {};
     /* This will hold giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;

@@ -124,11 +124,10 @@
                                             </span>
                                         </div>
 
-                                        <!-- <div class="history-btn">
+                                        <div class="history-btn">
                                             <button class="btn btn-primary" (click)="toggleActivityHistoryAsidePane()">
                                                 <i class="icon-history-icon font-12"></i> History</button>
-                                        </div> -->
-
+                                        </div>
                                     </div>
                                 </div>
 
@@ -483,11 +482,10 @@
 <ng-template #sendEmailModal>
     <purchase-send-email-modal *ngIf="purchaseOrder" [sendEmailRequest]="sendEmailRequest" (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
 </ng-template>
-<!-- <div class="aside-overlay" *ngIf="activityHistoryAsideState === 'in'"></div>
-<div *ngIf="activityHistoryAsideState === 'in'">
-    <aside-order-history (closeAsideEvent)="toggleActivityHistoryAsidePane($event)">
-    </aside-order-history>
-</div> -->
+<div class="aside-overlay" *ngIf="revisionHistoryAsideState === 'in'"></div>
+<div *ngIf="revisionHistoryAsideState === 'in'">
+    <aside-order-history (closeAsideEvent)="toggleActivityHistoryAsidePane()" [purchaseOrder]="purchaseOrder"></aside-order-history>
+</div>
 <div bsModal #poConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
