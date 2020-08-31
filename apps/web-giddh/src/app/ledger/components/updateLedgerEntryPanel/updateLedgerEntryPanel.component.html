@@ -94,14 +94,14 @@
                                 <ng-container *ngIf="txn.type === 'DEBIT'">
 
                                     <td class="col-xs-2" data-title="Date">
-                                        <input id="giddh-datepicker" type="text" autocomplete="off" name="datess" #dbs='bsDatepicker'
+                                        <input id="{{'giddh-datepicker-left-' + i}}" type="text" autocomplete="off" name="datess" #dbs='bsDatepicker'
                                             [(ngModel)]="vm.selectedLedger.entryDate" class="form-control" bsDatepicker
                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                             (click)="addBlankTrx('DEBIT', txn, $event)" placeholder="date"
                                             (ngModelChange)="getInvoiceListsForCreditNote()">
                                     </td>
 
-                                    <td data-title="Particular" id="DbtTd"
+                                    <td data-title="Particular" id="{{'dabit-id-' + i}}"
                                         [ngClass]="{ 'otherAccountEntry': txn.particular.uniqueName === 'others' }"
                                         class="col-xs-6 pos-rel select2-parent select2-ledger">
 
@@ -111,7 +111,7 @@
                                                 <span *ngIf="(
                                                         (!dbtSelect.isOpen && txn.particular.uniqueName) ||
                                                         (dbtSelect.isOpen && dbtSelect.filter))">To</span>
-                                                <sh-select id="dbtID" [notFoundLink]="true"
+                                                <sh-select id="{{'dabit-select-' + i }}" [notFoundLink]="true"
                                                     (noResultsClicked)="showQuickAccountModal()"
                                                     (keydown)="keydownPressed($event)"
                                                     [options]="vm.flatternAccountList4Select | async" #dbtSelect
@@ -194,7 +194,7 @@
 
                                     <td class="col-xs-2 text-right" data-title="Amount">
 
-                                        <input id="update-ledger-amount" type="text" [(ngModel)]="txn.amount" class="form-control text-right"
+                                        <input id="{{'update-ledger-amount-dr-' + i}}" type="text" [(ngModel)]="txn.amount" class="form-control text-right"
                                             name="{{txn[i]}}.amount" [mask]="vm.inputMaskFormat"
                                             [rawInputValue]="txn.amount" [prefix]="vm.selectedPrefixForCurrency"
                                             [suffix]="vm.selectedSuffixForCurrency"
@@ -276,17 +276,17 @@
 
                         <tbody class="ledger-main">
 
-                            <tr *ngFor="let txn of vm.selectedLedger.transactions;" class="credit-blank-row">
+                            <tr *ngFor="let txn of vm.selectedLedger.transactions; let i = index" class="credit-blank-row">
                                 <ng-container *ngIf="txn.type == 'CREDIT'">
 
                                     <td data-title="Date" class="col-xs-2">
-                                        <input id="giddh-datepicker" class="form-control" autocomplete="off" name="datepic" type="text"
+                                        <input id="{{'giddh-datepicker-right-' + i }}" class="form-control" autocomplete="off" name="datepic" type="text"
                                             [(ngModel)]="vm.selectedLedger.entryDate"
                                             (click)="addBlankTrx('CREDIT', txn, $event)" #cbs='bsDatepicker'
                                             bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }">
                                     </td>
 
-                                    <td data-title="Particular" id="crdIDTd"
+                                    <td data-title="Particular" id="{{'credit-id-' + i}}"
                                         class="pos-rel col-xs-6 select2-parent select2-ledger"
                                         [ngClass]="{ otherAccountEntry: txn.particular.uniqueName === 'others' }">
 
@@ -295,7 +295,7 @@
                                                 <span *ngIf="(
                                                         (!crdSelect.isOpen && txn.particular.uniqueName) ||
                                                         (crdSelect.isOpen && crdSelect.filter))">By</span>
-                                                <sh-select id="crdID" [notFoundLink]="true"
+                                                <sh-select id="{{'credit-select-' + i}}" [notFoundLink]="true"
                                                     (noResultsClicked)="showQuickAccountModal()"
                                                     (keydown)="keydownPressed($event)"
                                                     [options]="vm.flatternAccountList4Select | async" #crdSelect
@@ -372,7 +372,7 @@
                                     </td>
 
                                     <td data-title="Amount" class="col-xs-2 text-right">
-                                        <input id="update-ledger-bank-amount" class="form-control text-right" type="text" [(ngModel)]="txn.amount"
+                                        <input id="{{'update-ledger-amount-cr-' + i}}" class="form-control text-right" type="text" [(ngModel)]="txn.amount"
                                             [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
                                             [suffix]="vm.selectedSuffixForCurrency" [rawInputValue]="txn.amount"
                                             (click)="addBlankTrx('CREDIT', txn, $event)"

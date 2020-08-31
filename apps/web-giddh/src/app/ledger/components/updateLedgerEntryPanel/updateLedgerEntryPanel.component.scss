@@ -382,12 +382,12 @@ span.eligible-ITC {
     .card-table tbody tr:last-child {
         border-bottom: none;
     }
-    sh-select#crdID,
-    sh-select#dbtID {
+    sh-select#credit-select,
+    sh-select#dabit-select {
         width: 185px;
     }
-    #crdID input,
-    #dbtID input {
+    #credit-select input,
+    #dabit-select input {
         border: 1px solid $gainsboro !important;
         height: 36px;
     }
