@@ -8,7 +8,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
 import { AgingReportActions } from '../../actions/aging-report.actions';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import * as _ from 'lodash';
+import { cloneDeep, map as lodashMap } from '../../lodash-optimized';
 import { ContactService } from '../../services/contact.service';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
@@ -96,7 +96,7 @@ export class AgingReportComponent implements OnInit {
             }
             this.dueAmountReportData$ = of(data);
             if (data) {
-                _.map(data.results, (obj: any) => {
+                lodashMap(data.results, (obj: any) => {
                     obj.depositAmount = obj.currentAndPastDueAmount[0].dueAmount;
                     obj.dueAmount1 = obj.currentAndPastDueAmount[1].dueAmount;
                     obj.dueAmount2 = obj.currentAndPastDueAmount[2].dueAmount;
@@ -141,7 +141,7 @@ export class AgingReportComponent implements OnInit {
 
         this.store.dispatch(this._agingReportActions.GetDueRange());
         this.agingDropDownoptions$.subscribe(p => {
-            this.agingDropDownoptions = _.cloneDeep(p);
+            this.agingDropDownoptions = cloneDeep(p);
         });
 
         this.searchStr$.pipe(
@@ -275,7 +275,7 @@ export class AgingReportComponent implements OnInit {
     private getSundrydebtorsAccounts(fromDate: string, toDate: string, count: number = 200000) {
         this._contactService.GetContacts(fromDate, toDate, 'sundrydebtors', 1, 'false', count).subscribe((res) => {
             if (res.status === 'success') {
-                this.sundryDebtorsAccountsForAgingReport = _.cloneDeep(res.body.results).map(p => ({
+                this.sundryDebtorsAccountsForAgingReport = cloneDeep(res.body.results).map(p => ({
                     label: p.name,
                     value: p.uniqueName
                 }));

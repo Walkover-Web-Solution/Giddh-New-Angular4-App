@@ -71,7 +71,7 @@
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "allowedCommonJsDependencies": ["lodash", "file-saver", "angular2-text-mask", "ngrx-store-localstorage", "util", "is-cidr", "css-element-queries", "jspdf", "jspdf-autotable", "webfontloader", "ng2-order-pipe", "jquery", "uuid"],
+            "allowedCommonJsDependencies": ["file-saver", "angular2-text-mask", "ngrx-store-localstorage", "util", "css-element-queries", "jspdf", "jspdf-autotable", "webfontloader", "ng2-order-pipe", "jquery"],
             "outputPath": "dist/apps/web-giddh",
             "index": "apps/web-giddh/src/index.html",
             "main": "apps/web-giddh/src/main.ts",

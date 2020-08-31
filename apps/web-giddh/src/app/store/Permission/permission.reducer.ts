@@ -6,7 +6,6 @@ import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { FindValueSubscriber } from 'rxjs/internal/operators/find';
 
 export interface PermissionState {
     roles: IRoleCommonResponseAndRequest[];

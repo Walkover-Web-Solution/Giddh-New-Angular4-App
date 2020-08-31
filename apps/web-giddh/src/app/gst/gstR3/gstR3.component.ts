@@ -14,7 +14,6 @@ import { Route, Router, ActivatedRoute } from '@angular/router';
 import { ToasterService } from '../../services/toaster.service';
 import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
 import * as moment from 'moment/moment';
-import * as _ from 'lodash';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 
@@ -214,7 +213,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         if (!this.userEmail) {
             return this._toasty.errorToast("Email Id can't be empty");
         }
-        // Note:- appended ",1" with selectedMonth (July 2020) because "July 2020" format does not support for firefox browser and ("July 2020, 1") is valid format for chrome and firefox browser  
+        // Note:- appended ",1" with selectedMonth (July 2020) because "July 2020" format does not support for firefox browser and ("July 2020, 1") is valid format for chrome and firefox browser
         let convertValidDateFormatForMoment = this.selectedMonth + ',1';
         let monthToSend = moment(convertValidDateFormatForMoment).format("MM") + "-" + moment(convertValidDateFormatForMoment).format("YYYY");
         if (!monthToSend) {

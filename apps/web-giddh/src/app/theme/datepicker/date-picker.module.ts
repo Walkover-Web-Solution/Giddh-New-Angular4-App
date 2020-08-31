@@ -11,7 +11,7 @@ import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 
 })
 export class DatePickerCustomModule {
-    public static forRoot(): ModuleWithProviders<unknown> {
+    public static forRoot(): ModuleWithProviders<DatePickerCustomModule> {
         return {
             ngModule: DatePickerCustomModule,
             providers: []

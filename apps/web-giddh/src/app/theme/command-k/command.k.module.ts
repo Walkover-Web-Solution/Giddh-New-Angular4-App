@@ -40,7 +40,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 })
 
 export class CommandKModule {
-    public static forRoot(): ModuleWithProviders<unknown> {
+    public static forRoot(): ModuleWithProviders<CommandKModule> {
         return {
             ngModule: CommandKModule
         };

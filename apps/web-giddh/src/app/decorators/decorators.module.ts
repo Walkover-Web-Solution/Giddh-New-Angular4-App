@@ -11,7 +11,7 @@ import { BrowserSupported } from './BrowserSupported';
     exports: []
 })
 export class DecoratorsModule {
-    public static forRoot(): ModuleWithProviders<unknown> {
+    public static forRoot(): ModuleWithProviders<DecoratorsModule> {
         return {
             ngModule: DecoratorsModule,
             providers: [

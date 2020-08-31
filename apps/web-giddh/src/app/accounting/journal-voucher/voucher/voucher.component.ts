@@ -20,7 +20,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
-import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep, forEach, isEqual, sumBy, filter, find, without, maxBy , findIndex} from 'apps/web-giddh/src/app/lodash-optimized';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import * as moment from 'moment';
 import { BsDatepickerConfig, BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
@@ -257,7 +257,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
         this.tallyModuleService.selectedPageInfo.pipe(distinctUntilChanged((p, q) => {
             if (p && q) {
-                return (_.isEqual(p, q));
+                return (isEqual(p, q));
             }
             if ((p && !q) || (!p && q)) {
                 return false;
@@ -301,7 +301,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public ngOnInit() {
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
-                this.universalDate = _.cloneDeep(dateObj);
+                this.universalDate = cloneDeep(dateObj);
                 this.journalDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 this.dateEntered();
             }
@@ -328,7 +328,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         this.tallyModuleService.requestData.pipe(distinctUntilChanged((p, q) => {
             if (p && q) {
-                return (_.isEqual(p, q));
+                return (isEqual(p, q));
             }
             if ((p && !q) || (!p && q)) {
                 return false;
@@ -336,7 +336,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             return true;
         })).subscribe((data) => {
             if (data) {
-                this.requestObj = _.cloneDeep(data);
+                this.requestObj = cloneDeep(data);
             }
         });
 
@@ -482,7 +482,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.selectedParticular = elem;
         this.selectRow(true, indx);
         this.filterAccount(trxnType);
-        this.inputForList = _.cloneDeep(this.flattenAccounts);
+        this.inputForList = cloneDeep(this.flattenAccounts);
     }
 
     public onStockFocus(ev, stockIndx: number, indx: number) {
@@ -684,10 +684,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         transactionObj.amount = Number(amount);
         transactionObj.total = transactionObj.amount;
 
-        let debitTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'by');
-        this.totalDebitAmount = _.sumBy(debitTransactions, (o: any) => Number(o.amount));
-        let creditTransactions = _.filter(this.requestObj.transactions, (o: any) => o.type === 'to');
-        this.totalCreditAmount = _.sumBy(creditTransactions, (o: any) => Number(o.amount));
+        let debitTransactions = filter(this.requestObj.transactions, (o: any) => o.type === 'by');
+        this.totalDebitAmount = sumBy(debitTransactions, (o: any) => Number(o.amount));
+        let creditTransactions = filter(this.requestObj.transactions, (o: any) => o.type === 'to');
+        this.totalCreditAmount = sumBy(creditTransactions, (o: any) => Number(o.amount));
         if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
             if (this.totalCreditAmount < this.totalDebitAmount) {
                 if (this.requestObj.voucherType !== VOUCHERS.RECEIPT) {
@@ -723,7 +723,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * saveEntry
      */
     public saveEntry() {
-        let data = _.cloneDeep(this.requestObj);
+        let data = cloneDeep(this.requestObj);
         data.entryDate = moment(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         data.transactions = this.validateTransaction(data.transactions);
 
@@ -815,13 +815,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     data.transactions[1].type = "to"; // changing it to "to" so that it becomes debit in loop below
                 }
 
-                _.forEach(data.transactions, (element: any) => {
+                forEach(data.transactions, (element: any) => {
                     if (element) {
                         element.type = (element.type === 'by') ? 'credit' : 'debit';
                     }
                 });
-                let accUniqueName: string = _.maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
-                let indexOfMaxAmountEntry = _.findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
+                let accUniqueName: string = maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
+                let indexOfMaxAmountEntry = findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
                 if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
                     data.transactions.splice(0, 2);
                 } else {
@@ -957,7 +957,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public watchKeyboardEvent(event) {
         if (event) {
-            let navigateTo = _.find(this.navigateURL, (o: any) => o.code === event.key);
+            let navigateTo = find(this.navigateURL, (o: any) => o.code === event.key);
             if (navigateTo) {
                 this.router.navigate(['accounting', navigateTo.route]);
             }
@@ -968,9 +968,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * removeBlankTransaction
      */
     public removeBlankTransaction(transactions) {
-        _.forEach(transactions, function (obj: any, idx) {
+        forEach(transactions, function (obj: any, idx) {
             if (obj && !obj.particular && !obj.amount) {
-                transactions = _.without(transactions, obj);
+                transactions = without(transactions, obj);
             }
         });
         return transactions;
@@ -982,7 +982,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public validateTransaction(transactions) {
         let validEntry = this.removeBlankTransaction(transactions);
         let entryIsValid = true;
-        _.forEach(validEntry, function (obj: any, idx) {
+        forEach(validEntry, function (obj: any, idx) {
             if (obj.particular && !obj.amount) {
                 obj.amount = 0;
             } else if (obj && !obj.particular) {
@@ -1015,7 +1015,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public onSelectStock(item) {
         if (item) {
             let idx = this.selectedStockIdx;
-            let entryItem = _.cloneDeep(item);
+            let entryItem = cloneDeep(item);
             this.prepareEntry(entryItem, this.selectedIdx);
             // setTimeout(() => {
             //   this.selectedStk.focus();
@@ -1061,7 +1061,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public changePrice(idx, val) {
         let i = this.selectedIdx;
-        this.requestObj.transactions[i].inventory[idx].unit.rate = !Number.isNaN(val) ? Number(_.cloneDeep(val)) : 0;
+        this.requestObj.transactions[i].inventory[idx].unit.rate = !Number.isNaN(val) ? Number(cloneDeep(val)) : 0;
         this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(2));
         this.amountChanged(idx);
     }
@@ -1183,19 +1183,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public getStock(parentGrpUnqName?, q?: string, forceRefresh: boolean = false, needToFocusStockInputField: boolean = false) {
         if (this.allStocks && this.allStocks.length && !forceRefresh) {
-            // this.inputForList = _.cloneDeep(this.allStocks);
-            this.sortStockItems(_.cloneDeep(this.allStocks));
+            // this.inputForList = cloneDeep(this.allStocks);
+            this.sortStockItems(cloneDeep(this.allStocks));
         } else {
             const reqArray = parentGrpUnqName ? [parentGrpUnqName] : null;
             this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data.status === 'success') {
-                    this.allStocks = _.cloneDeep(data.body.results);
+                    this.allStocks = cloneDeep(data.body.results);
                     this.sortStockItems(this.allStocks);
                     if (needToFocusStockInputField) {
                         this.selectedStockInputField.value = '';
                         this.selectedStockInputField.focus();
                     }
-                    // this.inputForList = _.cloneDeep(this.allStocks);
+                    // this.inputForList = cloneDeep(this.allStocks);
                 } else {
                     // this.noResult = true;
                 }
@@ -1208,7 +1208,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public sortStockItems(ItemArr) {
         let stockAccountArr: IOption[] = [];
-        _.forEach(ItemArr, (obj: any) => {
+        forEach(ItemArr, (obj: any) => {
             stockAccountArr.push({
                 label: `${obj.name} (${obj.uniqueName})`,
                 value: obj.uniqueName,
@@ -1216,7 +1216,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             });
         });
         this.stockList = stockAccountArr;
-        this.inputForList = _.cloneDeep(this.stockList);
+        this.inputForList = cloneDeep(this.stockList);
     }
 
     public loadQuickAccountComponent() {
@@ -1404,7 +1404,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 }
             });
             this.flattenAccounts = accList;
-            this.inputForList = _.cloneDeep(this.flattenAccounts);
+            this.inputForList = cloneDeep(this.flattenAccounts);
         }
     }
 

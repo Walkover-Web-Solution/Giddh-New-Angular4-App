@@ -10,7 +10,7 @@ export { Select2Component } from './select2.component';
     exports: [Select2Component]
 })
 export class Select2Module {
-    public static forRoot(): ModuleWithProviders<unknown> {
+    public static forRoot(): ModuleWithProviders<Select2Module> {
         return {
             ngModule: Select2Module,
             providers: []

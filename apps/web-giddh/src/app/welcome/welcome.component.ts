@@ -16,7 +16,7 @@ import { select, Store } from '@ngrx/store';
 import { ModalOptions } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import * as googleLibPhoneNumber from 'google-libphonenumber';
+import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 
 import { CommonActions } from '../actions/common.actions';
 import { CompanyActions } from '../actions/company.actions';
@@ -202,8 +202,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Phone utility to check the validity of a contact number */
-    private phoneUtility: any = googleLibPhoneNumber.PhoneNumberUtil.getInstance();
 
     public isCreateCompanyInProgress: boolean = false;
     public isCompanyCreated$: Observable<boolean>;
@@ -792,8 +790,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public isContactNumberValid(): boolean {
         const contactNumberElement = this.contactNumberField.nativeElement;
         try {
-            let parsedNumber = this.phoneUtility.parse('+' + this.createNewCompanyPreparedObj.phoneCode + contactNumberElement.value, this.company.country);
-            if (this.phoneUtility.isValidNumber(parsedNumber)) {
+            let parsedNumber = parsePhoneNumberFromString('+' + this.createNewCompanyPreparedObj.phoneCode + contactNumberElement.value, this.company.country as CountryCode);
+            if (parsedNumber.isValid()) {
                 contactNumberElement.classList.remove('error-box');
                 return true;
             } else {

@@ -18,7 +18,7 @@ import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
-import * as uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
@@ -747,7 +747,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     // stocks from ledger account
                     data[1].map(acc => {
                         // normal entry
-                        accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+                        accountsArray.push({ value: uuidv4(), label: acc.name, additional: acc });
                         // check if taxable or roundoff account then don't assign stocks
                         let notRoundOff = acc.uniqueName === 'roundoff';
                         let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
@@ -756,7 +756,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             stockListFormFlattenAccount.stocks.map(as => {
                                 // stock entry
                                 accountsArray.push({
-                                    value: uuid.v4(),
+                                    value: uuidv4(),
                                     label: `${acc.name}` + ` (${as.name})`,
                                     additional: Object.assign({}, acc, { stock: as })
                                 });
@@ -768,18 +768,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     data[1].map(acc => {
                         if (acc.stocks) {
                             // normal entry
-                            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+                            accountsArray.push({ value: uuidv4(), label: acc.name, additional: acc });
                             // stock entry
                             acc.stocks.map(as => {
                                 accountsArray.push({
-                                    value: uuid.v4(),
+                                    value: uuidv4(),
                                     // label: acc.name + '(' + as.uniqueName + ')',
                                     label: `${acc.name}` + ` (${as.name})`,
                                     additional: Object.assign({}, acc, { stock: as })
                                 });
                             });
                         } else {
-                            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+                            accountsArray.push({ value: uuidv4(), label: acc.name, additional: acc });
                         }
                     });
                 }

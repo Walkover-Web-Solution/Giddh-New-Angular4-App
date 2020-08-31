@@ -1,17 +1,11 @@
-import { take, takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-//import { Options } from 'highcharts';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/roots';
-import { Observable, ReplaySubject } from 'rxjs';
-import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
-import { HomeActions } from '../../../actions/home/home.actions';
-import * as moment from 'moment/moment';
-import * as _ from 'lodash';
-import { IChildGroups, IExpensesChartClosingBalanceResponse } from '../../../models/interfaces/dashboard.interface';
-import { AccountChartDataLastCurrentYear } from '../../../models/view-models/AccountChartDataLastCurrentYear';
-import { INameUniqueName } from '../../../models/api-models/Inventory';
+import { ReplaySubject } from 'rxjs';
 
+import { HomeActions } from '../../../actions/home/home.actions';
+import { AppState } from '../../../store/roots';
+
+//import { Options } from 'highcharts';
 @Component({
     selector: 'expenses-chart',
     templateUrl: 'expenses-chart.component.html',

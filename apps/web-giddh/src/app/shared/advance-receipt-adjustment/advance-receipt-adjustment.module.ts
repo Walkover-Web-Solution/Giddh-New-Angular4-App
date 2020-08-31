@@ -1,20 +1,19 @@
-import { AdvanceReceiptAdjustmentComponent } from './advance-receipt-adjustment.component';
-import { SharedModule } from '../shared.module';
-import { SelectModule } from '../../theme/ng-select/ng-select';
-import { LaddaModule } from 'angular2-ladda';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LaddaModule } from 'angular2-ladda';
+
+import { SelectModule } from '../../theme/ng-select/ng-select';
 import { NgxMaskModule } from '../helpers/directives/ngx-mask';
 import { CurrencyModule } from '../helpers/pipes/currencyPipe/currencyType.module';
+import { SharedModule } from '../shared.module';
+import { AdvanceReceiptAdjustmentComponent } from './advance-receipt-adjustment.component';
 
 @NgModule({
     declarations: [AdvanceReceiptAdjustmentComponent],
     imports: [
         FormsModule,
         ReactiveFormsModule,
-        BsDatepickerModule.forRoot(),
         CommonModule,
         LaddaModule,
         SelectModule,

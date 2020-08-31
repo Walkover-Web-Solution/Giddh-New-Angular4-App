@@ -4,7 +4,7 @@ import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChange, SimpleChanges, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import {
     CompanyResponse
 } from '../../../models/api-models/Company';

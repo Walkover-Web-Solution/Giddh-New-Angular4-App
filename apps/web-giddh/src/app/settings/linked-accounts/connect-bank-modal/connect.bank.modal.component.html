@@ -7,7 +7,8 @@
     <div class="" *ngIf="step === 1">
         <div class="form-group">
             <label>Search Provider <sup>*</sup></label>
-            <input [ngbTypeahead]="dataSource" type="text" [(ngModel)]="selectedProvider.name" name="providers"
+            <!-- Commented for now can be replaced with new dynamic search sh-select
+                <input [ngbTypeahead]="dataSource" type="text" [(ngModel)]="selectedProvider.name" name="providers"
                 [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" autocomplete="off"
                 required maxlength="50" placeholder="Search Provider" pattern="^[^\s]+(\s+[^\s]+)*$" (click)="click$.next($any($event).target.value)">
 
@@ -15,7 +16,7 @@
                 <span (keyup.enter)="typeaheadOnSelect(r)"> <span class="provider_ico"><img
                             src="{{r.favicon}}" /></span>
                     {{ r.name }} <label *ngIf="r.countryISOCode">({{r.countryISOCode}})</label></span>
-            </ng-template>
+            </ng-template> -->
         </div>
         <button class="btn btn-success btn-sm" (click)="onSelectProvider()"
             [disabled]="!selectedProvider.id">Next</button>
