@@ -203,7 +203,8 @@ export class ExpensesComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public openModal(filterModal: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(filterModal, { class: 'modal-md' });
+        // this.modalRef = this.modalService.show(filterModal, { class: 'modal-md' });
+        this.modalRef = this.modalService.show(filterModal);
     }
 
     public bsValueChange(event: any) {

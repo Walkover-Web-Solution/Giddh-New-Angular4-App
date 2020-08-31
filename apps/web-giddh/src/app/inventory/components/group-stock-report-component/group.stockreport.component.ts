@@ -809,7 +809,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     openModal() {
         this.modalRef = this.modalService.show(
             this.template,
-            Object.assign({}, { class: 'modal-xl receipt-note-modal ' })
+            // Object.assign({}, { class: 'modal-xl receipt-note-modal ' })
+            {}
         );
     }
 
@@ -824,7 +825,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     }
 
     /**
-     * To open edit model 
+     * To open edit model
      *
      * @memberof InventoryGroupStockReportComponent
      */

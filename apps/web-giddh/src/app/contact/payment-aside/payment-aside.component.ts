@@ -148,7 +148,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public openModalWithClass(template: TemplateRef<any>): void {
         this.successModalRef = this.modalService.show(
             template,
-            Object.assign({}, { class: 'payment-success-modal' })
+            // Object.assign({}, { class: 'payment-success-modal' })
+            {}
         );
     }
 

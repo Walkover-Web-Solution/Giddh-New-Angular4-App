@@ -9,6 +9,7 @@
         // "baseUrl": "./src",
         "outDir": "../../dist/out-tsc/apps/web-giddh",
         "types": [],
+        "target": "ES2015",
         "typeRoots": [
             "./src/customTypes"
         ]

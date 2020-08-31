@@ -121,7 +121,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     }
 
     openModal(RejectionReason: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(RejectionReason, { class: 'modal-md' });
+        // this.modalRef = this.modalService.show(RejectionReason, { class: 'modal-md' });
+        this.modalRef = this.modalService.show(RejectionReason);
     }
 
     public ngOnInit() {
@@ -221,7 +222,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     }
 
     public showApproveConfirmPopup(ref: TemplateRef<any>) {
-        this.approveEntryModalRef = this.modalService.show(ref, { class: 'modal-md' });
+        // this.approveEntryModalRef = this.modalService.show(ref, { class: 'modal-md' });
+        this.approveEntryModalRef = this.modalService.show(ref);
         this.selectedEntryForApprove = cloneDeep(this.selectedItem);
         this.selectedEntryForApprove.amount = this.updateLedgerComponentInstance.vm.compoundTotal;
     }

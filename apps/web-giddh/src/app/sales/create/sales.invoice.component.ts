@@ -342,14 +342,16 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     openBulkModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(
             template,
-            Object.assign({}, { class: 'addBulkItemmodal ' })
+            // Object.assign({}, { class: 'addBulkItemmodal ' })
+            {}
         );
     }
 
     public openModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(
             template,
-            Object.assign({}, { class: 'gray modal-xl sales-invoice-modal' })
+            // Object.assign({}, { class: 'gray modal-xl sales-invoice-modal' })
+            {}
         );
     }
 

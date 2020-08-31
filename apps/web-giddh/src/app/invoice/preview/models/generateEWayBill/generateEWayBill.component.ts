@@ -49,7 +49,8 @@ export class GenerateEWayBillComponent implements OnInit {
 		this.router.navigate(['pages', 'invoice', 'ewaybill', 'create']);
 	}
 	public openModal(template: TemplateRef<any>) {
-		this.modalRef = this.modalService.show(template, { class: 'modal-455' });
+		// this.modalRef = this.modalService.show(template, { class: 'modal-455' });
+		this.modalRef = this.modalService.show(template);
 	}
 
 }

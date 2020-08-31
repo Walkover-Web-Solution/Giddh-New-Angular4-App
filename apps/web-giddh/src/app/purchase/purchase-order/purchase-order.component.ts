@@ -158,7 +158,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public openModalBulkUpdate(template: TemplateRef<any>): void {
         this.modalRef = this.modalService.show(
             template,
-            Object.assign({}, { class: 'modal-sm' })
+            // Object.assign({}, { class: 'modal-sm' })
+            {}
         );
     }
 
@@ -221,7 +222,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+            // Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+            Object.assign({}, { backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
     }
 

@@ -1959,7 +1959,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.currentTransaction = transaction;
             this.modalRef = this.modalService.show(
                 template,
-                Object.assign({}, { class: 'modal-lg', ignoreBackdropClick: true })
+                // Object.assign({}, { class: 'modal-lg', ignoreBackdropClick: true })
+                Object.assign({}, { ignoreBackdropClick: true })
             );
         }
     }

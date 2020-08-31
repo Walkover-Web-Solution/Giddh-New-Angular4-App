@@ -648,9 +648,9 @@ export class TransactionClassMulticurrency {
     public description?: string;
 
     constructor() {
-        this.account = new class implements INameUniqueName {
-            name: 'sales';
-            uniqueName: 'sales';
+        this.account = {
+            name: 'sales',
+            uniqueName: 'sales'
         };
         this.amount = new AmountClassMulticurrency();
     }

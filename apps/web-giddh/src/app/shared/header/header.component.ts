@@ -1435,7 +1435,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
         if (!this.modalService.getModalsCount()) {
             this.modelRefExpirePlan = this.modalService.show(template,
-                Object.assign({}, { class: 'subscription-upgrade' })
+                // Object.assign({}, { class: 'subscription-upgrade' })
+                {}
             );
         }
     }
@@ -1596,7 +1597,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         );
 
         this.subscriptions.push(_combine);
-        let config: ModalOptions = { class: 'universal_modal', show: true, keyboard: true, animated: false };
+        // let config: ModalOptions = { class: 'universal_modal', show: true, keyboard: true, animated: false };
+        let config: ModalOptions = { show: true, keyboard: true, animated: false };
         this.modelRef = this.modalService.show(this.navigationModal, config);
     }
 
@@ -1799,7 +1801,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileSite })
+            // Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileSite })
+            Object.assign({}, { backdrop: false, ignoreBackdropClick: this.isMobileSite })
         );
     }
 

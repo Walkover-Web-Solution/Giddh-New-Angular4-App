@@ -111,7 +111,8 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+            // Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+            Object.assign({}, { backdrop: false, ignoreBackdropClick: false })
         );
     }
 

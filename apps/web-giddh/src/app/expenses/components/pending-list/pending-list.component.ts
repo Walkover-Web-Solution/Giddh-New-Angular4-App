@@ -78,7 +78,8 @@ export class PendingListComponent implements OnInit, OnChanges {
     }
 
     public showApproveConfirmPopup(ref: TemplateRef<any>, item: ExpenseResults) {
-        this.approveEntryModalRef = this._modalService.show(ref, { class: 'modal-md', backdrop: true, ignoreBackdropClick: true });
+        // this.approveEntryModalRef = this._modalService.show(ref, { class: 'modal-md', backdrop: true, ignoreBackdropClick: true });
+        this.approveEntryModalRef = this._modalService.show(ref, { backdrop: true, ignoreBackdropClick: true });
         this.selectedEntryForApprove = item;
     }
 
@@ -92,7 +93,8 @@ export class PendingListComponent implements OnInit, OnChanges {
     }
 
     public showFilterModal(ref: TemplateRef<any>) {
-        this.filterModalRef = this._modalService.show(ref, { class: 'modal-md' });
+        // this.filterModalRef = this._modalService.show(ref, { class: 'modal-md' });
+        this.filterModalRef = this._modalService.show(ref);
     }
 
     public hideFilterModal() {

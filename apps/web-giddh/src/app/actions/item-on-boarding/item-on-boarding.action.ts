@@ -6,7 +6,6 @@ import { OnBoardingType } from '../../app.constant';
  * Actions related to item on boarding
  *
  * @export
- * @class ItemOnBoardingActions
  */
 @Injectable()
 export class ItemOnBoardingActions {

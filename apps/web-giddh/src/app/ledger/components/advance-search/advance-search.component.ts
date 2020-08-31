@@ -462,7 +462,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+            // Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+            Object.assign({}, { backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
 
         this.modalService.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(response => {
