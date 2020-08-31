@@ -32,11 +32,11 @@
                     </button>
                     <ul *dropdownMenu class="dropdown-menu fixed-dropdown-plus" role="menu"
                         aria-labelledby="button-basic">
-                        <!-- <li role="menuitem">
+                        <li role="menuitem">
                             <a class="dropdown-item cp" href="javascript:void(0)"
                                 (click)="openModalBulkUpdate(template)">Bulk Update</a>
                         </li>
-                        <li role="menuitem">
+                        <!-- <li role="menuitem">
                             <a class="dropdown-item cp" href="javascript:void(0)">
                                 Convert to bill</a>
                         </li> -->
@@ -72,12 +72,12 @@
                     <span class="caret"></span>
                 </button>
                 <ul *dropdownMenu class="dropdown-menu fixed-dropdown-plus" role="menu" aria-labelledby="button-basic">
-                    <!-- <li role="menuitem">
+                    <li role="menuitem">
                         <a class="dropdown-item cp" href="javascript:void(0)"
                             (click)="openModalBulkUpdate(template)">Bulk
                             Update</a>
                     </li>
-                    <li role="menuitem">
+                    <!-- <li role="menuitem">
                         <a class="dropdown-item cp" href="javascript:void(0)">
                             Convert to bill</a>
                     </li> -->
@@ -267,21 +267,23 @@
                 <div class="d-flex flex-column">
                     <p class="mb-3">Choose a field from the dropdown and update with new information.</p>
                     <div class="d-flex justify-content-between mb-3 modal-form">
-                        <sh-select class="mr-15"></sh-select>
-                        <div class="select-date">
+                        <sh-select class="mr-15" name="bulkUpdate" [(ngModel)]="bulkUpdateGetParams.action" [options]="bulkUpdateFields" [ItemHeight]="33"></sh-select>
+                        <div class="select-date" *ngIf="bulkUpdateGetParams.action === 'purchasedate' || bulkUpdateGetParams.action === 'duedate' || bulkUpdateGetParams.action === 'warehouse'">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Select date">
-                                <span class="input-group-addon">
+                                <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseDate" [(ngModel)]="bulkUpdatePostParams.purchaseDate" placeholder="Select date" *ngIf="bulkUpdateGetParams.action === 'purchasedate'">
+                                <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="dueDate" [(ngModel)]="bulkUpdatePostParams.dueDate" placeholder="Select date" *ngIf="bulkUpdateGetParams.action === 'duedate'">
+                                <span class="input-group-addon" *ngIf="bulkUpdateGetParams.action === 'purchasedate' || bulkUpdateGetParams.action === 'duedate'">
                                     <span class="icon-calender"></span>
                                 </span>
+                                <sh-select name="warehouse" [placeholder]="'Select Warehouse'" [(ngModel)]="bulkUpdatePostParams.warehouseUniqueName" [options]="warehouses" *ngIf="bulkUpdateGetParams.action === 'warehouse'"></sh-select>
                             </div>
                         </div>
                     </div>
                     <p class="mb-3">Note: All the selected Purchase Orders will be updated with new information and you
                         cannot undo this.</p>
                     <div class="btn-group">
-                        <button class="btn btn-success">Update</button>
-                        <button class="btn btn-cancel">Cancel</button>
+                        <button class="btn btn-success" (click)="validateBulkUpdateFields()">Update</button>
+                        <button class="btn btn-cancel" (click)="modalRef.hide()">Cancel</button>
                     </div>
                 </div>
             </div>

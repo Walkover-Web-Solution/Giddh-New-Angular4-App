@@ -6,13 +6,26 @@ import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
 import { PAGINATION_LIMIT } from '../../app.constant';
 import * as moment from 'moment/moment';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-order.action';
+import { IOption } from '../../theme/ng-select/ng-select';
+import { SettingsUtilityService } from '../../settings/services/settings-utility.service';
+import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
+
+/* Status filters */
+const BULK_UPDATE_FIELDS = [
+    { label: 'Purchase Date', value: 'purchasedate' },
+    { label: 'Expected Delivery Date', value: 'duedate' },
+    { label: 'Warehouse', value: 'warehouse' },
+    { label: 'Expire', value: 'expire' },
+    { label: 'Delete', value: 'delete' },
+    { label: 'Create Purchase Bill', value: 'create_purchase_bill' }
+];
 
 @Component({
     selector: 'purchase-order',
@@ -102,8 +115,16 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public useStoreFilters: boolean = false;
     /* This will hold current page url */
     public pageUrl: string = "pages/purchase-management/purchase-orders";
+    /* This holds the fields which can be updated in bulk */
+    public bulkUpdateFields: IOption[] = BULK_UPDATE_FIELDS;
+    /* Stores warehouses for a company */
+    public warehouses: Array<any>;
+    public bulkUpdateGetParams: any = { companyUniqueName: '', action: '' };
+    public bulkUpdatePostParams: any = {};
+    /* This will hold giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
-    constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions) {
+    constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.purchaseOrderListFilters$ = this.store.pipe(select(state => state.purchaseOrder.listFilters), (takeUntil(this.destroyed$)));
@@ -115,6 +136,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 this.purchaseOrderUniqueName = '';
             }
         });
+
+        this.initBulkUpdateFields();
     }
 
     /**
@@ -161,7 +184,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
 
-                if(!this.useStoreFilters) {
+                if (!this.useStoreFilters) {
                     this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
                     this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
@@ -187,6 +210,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
 
         this.activeCompanyUniqueName$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.purchaseOrderGetRequest.companyUniqueName = response;
+            this.bulkUpdateGetParams.companyUniqueName = response;
             this.getAllPurchaseOrders(true);
         });
     }
@@ -198,10 +222,20 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof PurchaseOrderComponent
      */
     public openModalBulkUpdate(template: TemplateRef<any>): void {
-        this.modalRef = this.modalService.show(
-            template,
-            Object.assign({}, { class: 'modal-sm' })
-        );
+        let purchaseNumbers = this.getSelectedItems();
+        this.initBulkUpdateFields();
+
+        if (purchaseNumbers.length > 0) {
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
+            this.getAllWarehouses();
+
+            this.modalRef = this.modalService.show(
+                template,
+                Object.assign({}, { class: 'modal-sm' })
+            );
+        } else {
+            this.toaster.errorToast("Please select atleast 1 Purchase Order");
+        }
     }
 
     /**
@@ -233,6 +267,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 if (res) {
                     this.isLoading = false;
                     if (res.status === 'success') {
+                        this.allItemsSelected = false;
                         this.purchaseOrders = res.body;
                     } else {
                         this.toaster.errorToast(res.message);
@@ -517,12 +552,17 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         let purchaseNumbers = this.getSelectedItems();
 
         if (purchaseNumbers.length > 0) {
-            let getRequest = { companyUniqueName: this.purchaseOrderGetRequest.companyUniqueName, action: action };
-            let postRequest = { purchaseNumbers: purchaseNumbers };
+            this.bulkUpdatePostParams.purchaseNumbers = purchaseNumbers;
 
-            this.purchaseOrderService.bulkUpdate(getRequest, postRequest).subscribe((res) => {
+            this.purchaseOrderService.bulkUpdate(this.bulkUpdateGetParams, this.bulkUpdatePostParams).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
+
+                        if (this.modalRef) {
+                            this.initBulkUpdateFields();
+                            this.modalRef.hide();
+                        }
+
                         this.getAllPurchaseOrders(false);
                         if (action === "delete") {
                             this.closeConfirmationPopup();
@@ -595,5 +635,59 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         if (event) {
             this.modalRef.hide();
         }
+    }
+
+    /**
+     * This will get all warehouses
+     *
+     * @memberof PurchaseOrderComponent
+     */
+    public getAllWarehouses(): void {
+        this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            if (warehouses) {
+                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
+                if (warehouseData) {
+                    this.warehouses = warehouseData.formattedWarehouses;
+                }
+            }
+        });
+    }
+
+    /**
+     * This will validate bulk update form and will update fields
+     *
+     * @memberof PurchaseOrderComponent
+     */
+    public validateBulkUpdateFields(): void {
+        let isValid = true;
+        if (this.bulkUpdateGetParams.action === 'purchasedate') {
+            if (!this.bulkUpdatePostParams.purchaseDate) {
+                isValid = false;
+                this.toaster.errorToast("Please select Purchase date");
+            } else {
+                this.bulkUpdatePostParams.purchaseDate = moment(this.bulkUpdatePostParams.purchaseDate).format(GIDDH_DATE_FORMAT);
+            }
+        } else if (this.bulkUpdateGetParams.action === 'duedate') {
+            if (!this.bulkUpdatePostParams.dueDate) {
+                isValid = false;
+                this.toaster.errorToast("Please select Expected delivery date");
+            } else {
+                this.bulkUpdatePostParams.dueDate = moment(this.bulkUpdatePostParams.dueDate).format(GIDDH_DATE_FORMAT);
+            }
+        } else if (this.bulkUpdateGetParams.action === 'warehouse') {
+            if (!this.bulkUpdatePostParams.warehouseUniqueName) {
+                isValid = false;
+                this.toaster.errorToast("Please select Warehouse");
+            }
+        }
+
+        if (isValid) {
+            this.bulkUpdate(this.bulkUpdateGetParams.action);
+        }
+    }
+
+    public initBulkUpdateFields(): void {
+        this.bulkUpdateGetParams.action = "";
+        this.bulkUpdatePostParams = { purchaseNumbers: [], purchaseDate: '', dueDate: '', warehouseUniqueName: '' };
     }
 }
