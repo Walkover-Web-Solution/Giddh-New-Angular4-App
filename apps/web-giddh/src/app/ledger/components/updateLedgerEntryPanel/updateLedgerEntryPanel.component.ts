@@ -9,30 +9,32 @@ import {
     OnInit,
     Output,
     SimpleChanges,
-    ViewChild,
+    ViewChild
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, RATE_FIELD_PRECISION, SubVoucher } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
+import { BsDatepickerDirective } from "ngx-bootstrap/datepicker";
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { PopoverDirective } from "ngx-bootstrap/popover";
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
-import { CONFIRMATION_ACTIONS, ConfirmationModalConfiguration } from '../../../common/confirmation-modal/confirmation-modal.interface';
+import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../../common/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
 import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
 import { AccountResponse } from '../../../models/api-models/Account';
+import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { PettyCashResonse } from '../../../models/api-models/Expences';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, VoucherTypeEnum, IForceClear } from '../../../models/api-models/Sales';
+import { IForceClear, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
@@ -44,16 +46,14 @@ import { ToasterService } from '../../../services/toaster.service';
 import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
 import { base64ToBlob, giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../store';
+import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
+import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { UpdateLedgerVm } from './updateLedger.vm';
-import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
-import { CurrentCompanyState } from '../../../store/Company/company.reducer';
-import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../../../models/api-models/AdvanceReceiptsAdjust';
-import { PopoverDirective } from "ngx-bootstrap/popover";
-import { BsDatepickerDirective } from "ngx-bootstrap/datepicker";
+
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';

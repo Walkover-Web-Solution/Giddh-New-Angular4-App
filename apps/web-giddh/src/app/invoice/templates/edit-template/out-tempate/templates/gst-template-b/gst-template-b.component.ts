@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, S
 import { Store } from '@ngrx/store';
 import { from, Observable, ReplaySubject } from 'rxjs';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
-import * as _ from 'lodash';
+import * as _ from '../../../../../../lodash-optimized';
 import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
 import { InvoiceUiDataService } from '../../../../services/invoice.ui.data.service';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';

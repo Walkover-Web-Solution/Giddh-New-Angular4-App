@@ -22,7 +22,7 @@ export * from './select.component';
     ]
 })
 export class SelectModule {
-    public static forRoot(): ModuleWithProviders<unknown> {
+    public static forRoot(): ModuleWithProviders<SelectModule> {
         return {
             ngModule: SelectModule,
             providers: []

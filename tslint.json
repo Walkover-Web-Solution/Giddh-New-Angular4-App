@@ -12,7 +12,8 @@
     },
     "import-blacklist": [
       true,
-      "rxjs/Rx"
+      "rxjs/Rx",
+      "rxjs/internal/operators"
     ],
     "interface-over-type-literal": true,
     "member-access": false,

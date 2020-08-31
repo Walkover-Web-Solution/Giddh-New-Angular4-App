@@ -18,7 +18,7 @@ import { WindowRefService } from '../theme/universal-list/service';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { OnboardingFormRequest } from "../models/api-models/Common";
 import { CommonActions } from '../actions/common.actions';
-import * as googleLibphonenumber from 'google-libphonenumber';
+import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { environment } from '../../environments/environment.prod';
 
 @Component({
@@ -72,7 +72,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     public formFields: any[] = [];
     public stateGstCode: any[] = [];
     public disableState: boolean = false;
-    public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = true;
     public liveRazorPayKeyforAuthentication = 'rzp_live_rM2Ub3IHfDnvBq';
     public testRazorPayKeyforAuthentication = 'rzp_test_QS3CQB90ukHDIF';
@@ -452,8 +451,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
     public checkMobileNo(ele) {
         try {
-            let parsedNumber = this.phoneUtility.parse('+' + this.createNewCompany.phoneCode + ele.value, this.createNewCompany.country);
-            if (this.phoneUtility.isValidNumber(parsedNumber)) {
+            let parsedNumber = parsePhoneNumberFromString('+' + this.createNewCompany.phoneCode + ele.value, this.createNewCompany.country as CountryCode);
+            if (parsedNumber.isValid()) {
                 ele.classList.remove('error-box');
                 this.isMobileNumberValid = true;
             } else {

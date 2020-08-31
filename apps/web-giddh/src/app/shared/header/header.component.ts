@@ -48,7 +48,6 @@ import {
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
-import * as _ from 'lodash';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
@@ -57,7 +56,7 @@ import { createSelector } from 'reselect';
 import * as moment from 'moment/moment';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
-import { cloneDeep, concat, orderBy, sortBy } from '../../lodash-optimized';
+import { clone, cloneDeep, concat, orderBy, sortBy, map as lodashMap, slice, find } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { CompAidataModel } from '../../models/db';
 import { WindowRef } from '../helpers/window.object';
@@ -353,7 +352,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // GETTING CURRENT PAGE
         this.store.pipe(select(s => s.general.currentPage), takeUntil(this.destroyed$)).subscribe(response => {
             this.isLedgerAccSelected = false;
-            let currentPageResponse = _.clone(response);
+            let currentPageResponse = clone(response);
             if (currentPageResponse) {
                 if (currentPageResponse && currentPageResponse.url && currentPageResponse.url.includes('ledger/')) {
                     this.isLedgerAccSelected = true;
@@ -395,7 +394,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return;
             }
 
-            let orderedCompanies = _.orderBy(companies, 'name');
+            let orderedCompanies = orderBy(companies, 'name');
             this.companies$ = observableOf(orderedCompanies);
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
@@ -502,7 +501,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.user$.pipe(take(1)).subscribe((u) => {
             if (u) {
                 let userEmail = u.email;
-                this.userEmail = _.clone(userEmail);
+                this.userEmail = clone(userEmail);
                 // this.getUserAvatar(userEmail);
                 let userEmailDomain = userEmail.replace(/.*@/, '');
                 this.userIsCompanyUser = userEmailDomain && this.companyDomains.indexOf(userEmailDomain) !== -1;
@@ -816,7 +815,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 //     this.isTodaysDateSelected = true;
                 // }
                 if (this.isTodaysDateSelected) {
-                    let today = _.cloneDeep([moment(), moment()]);
+                    let today = cloneDeep([moment(), moment()]);
                     this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
                     this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 } else {
@@ -937,7 +936,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @param queryParamsObj additional data
      */
     public analyzeMenus(e: any, pageName: string, queryParamsObj?: any) {
-        this.oldSelectedPage = _.cloneDeep(this.selectedPage);
+        this.oldSelectedPage = cloneDeep(this.selectedPage);
         this.isLedgerAccSelected = false;
         if (e) {
             if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
@@ -958,7 +957,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let menu: any = {};
         menu.time = +new Date();
 
-        let o: IUlist = _.find(NAVIGATION_ITEM_LIST, (item) => {
+        let o: IUlist = find(NAVIGATION_ITEM_LIST, (item) => {
             if (queryParamsObj) {
                 if (item.additional) {
                     return item.uniqueName.toLowerCase() === pageName.toLowerCase() && item.additional.tabIndex === queryParamsObj.tabIndex;
@@ -1018,9 +1017,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let menuList: IUlist[] = [];
         let groupList: IUlist[] = [];
         let acList: IUlist[] = [];
-        let defaultGrp = _.cloneDeep(_.map(DEFAULT_GROUPS, (o: any) => o.uniqueName));
-        let defaultAcc = _.cloneDeep(_.map(DEFAULT_AC, (o: any) => o.uniqueName));
-        let defaultMenu = _.cloneDeep(DEFAULT_MENUS);
+        let defaultGrp = cloneDeep(lodashMap(DEFAULT_GROUPS, (o: any) => o.uniqueName));
+        let defaultAcc = cloneDeep(lodashMap(DEFAULT_AC, (o: any) => o.uniqueName));
+        let defaultMenu = cloneDeep(DEFAULT_MENUS);
 
         // parse and push default menu to menulist for sidebar menu for initial usage
         defaultMenu.forEach(item => {
@@ -1077,11 +1076,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             // slice menus
             if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
-                this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
+                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 10);
+                this.accountItemsFromIndexDB = slice(dbResult.aidata.accounts, 0, 7);
             } else {
-                this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 8);
-                this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
+                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 8);
+                this.accountItemsFromIndexDB = slice(dbResult.aidata.accounts, 0, 5);
             }
 
             // sortby name
@@ -1099,8 +1098,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             // slice default menus and account on small screen
             if (!(window.innerWidth > 1440 && window.innerHeight > 717)) {
-                this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 8);
-                this.accountItemsFromIndexDB = _.slice(this.accountItemsFromIndexDB, 0, 5);
+                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 8);
+                this.accountItemsFromIndexDB = slice(this.accountItemsFromIndexDB, 0, 5);
             }
         }
     }
@@ -1282,7 +1281,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     // public setApplicationDate(ev) {
-    //     let data = ev ? _.cloneDeep(ev) : null;
+    //     let data = ev ? cloneDeep(ev) : null;
     //     if (data && data.picker) {
     //         let dates = {
     //             fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
@@ -1290,7 +1289,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     //             chosenLabel: data.picker.chosenLabel
     //         };
     //         if (data.picker.chosenLabel === 'This Financial Year to Date') {
-    //           data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
+    //           data.picker.startDate = moment(clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
     //           dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
     //         }
     //         if (data.picker.chosenLabel === 'Last Financial Year') {
@@ -1303,7 +1302,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     //         this.store.dispatch(this.companyActions.SetApplicationDate(dates));
     //     } else {
     //         this.isTodaysDateSelected = true;
-    //         let today = _.cloneDeep([moment(), moment()]);
+    //         let today = cloneDeep([moment(), moment()]);
     //         // this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
     //         this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
     //         this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -1368,7 +1367,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null, isCtrlClicked?: boolean) {
-        this.oldSelectedPage = _.cloneDeep(this.selectedPage);
+        this.oldSelectedPage = cloneDeep(this.selectedPage);
         if (this.modelRef) {
             this.modelRef.hide();
         }
@@ -1839,7 +1838,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         } else {
             this.isTodaysDateSelected = true;
-            let today = _.cloneDeep([moment(), moment()]);
+            let today = cloneDeep([moment(), moment()]);
             // this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
             this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
             this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);

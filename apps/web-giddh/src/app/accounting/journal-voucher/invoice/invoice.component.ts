@@ -18,7 +18,7 @@ import {
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
-import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep, forEach, isEqual, sumBy, concat, find, without, orderBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import * as moment from 'moment';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -168,7 +168,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
 		this._tallyModuleService.selectedPageInfo.pipe(distinctUntilChanged((p, q) => {
 			if (p && q) {
-				return (_.isEqual(p, q));
+				return (isEqual(p, q));
 			}
 			if ((p && !q) || (!p && q)) {
 				return false;
@@ -207,7 +207,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
 		this._tallyModuleService.requestData.pipe(distinctUntilChanged((p, q) => {
 			if (p && q) {
-				return (_.isEqual(p, q));
+				return (isEqual(p, q));
 			}
 			if ((p && !q) || (!p && q)) {
 				return false;
@@ -215,7 +215,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 			return true;
 		})).subscribe((data) => {
 			if (data) {
-				this.data = _.cloneDeep(data);
+				this.data = cloneDeep(data);
 				if (this.gridType === 'invoice') {
 					this.prepareDataForInvoice(this.data);
 				}
@@ -252,7 +252,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 					accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
 				});
 				this.flattenAccounts = accList;
-				this.inputForList = _.cloneDeep(this.flattenAccounts);
+				this.inputForList = cloneDeep(this.flattenAccounts);
 			}
 		});
 
@@ -384,7 +384,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		this.showConfirmationBox = false;
 		this.selectedAccIdx = indx;
 
-		this.inputForList = _.cloneDeep(this.flattenAccounts);
+		this.inputForList = cloneDeep(this.flattenAccounts);
 		this.selectedField = 'account';
 
 		if (this.isAccountListFiltered) {
@@ -542,7 +542,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	 */
 	public watchKeyboardEvent(event) {
 		if (event) {
-			let navigateTo = _.find(this.navigateURL, (o: any) => o.code === event.key);
+			let navigateTo = find(this.navigateURL, (o: any) => o.code === event.key);
 			if (navigateTo) {
 				this._router.navigate(['accounting', navigateTo.route]);
 			}
@@ -553,9 +553,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	 * removeBlankTransaction
 	 */
 	public removeBlankTransaction(transactions) {
-		_.forEach(transactions, function (obj: any) {
+		forEach(transactions, function (obj: any) {
 			if (obj && !obj.particular && !obj.amount) {
-				transactions = _.without(transactions, obj);
+				transactions = without(transactions, obj);
 			}
 		});
 		return transactions;
@@ -575,7 +575,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	public onSelectStock(item) {
 		if (item) {
 			let idx = this.selectedRowIdx;
-			let entryItem = _.cloneDeep(item);
+			let entryItem = cloneDeep(item);
 			this.prepareEntry(entryItem, idx);
 			setTimeout(() => {
 				// this.selectedInput.focus();
@@ -616,7 +616,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	 */
 	public changePrice(idx, val) {
 		let i = this.selectedRowIdx;
-		this.stocksTransaction[i].inventory.unit.rate = Number(_.cloneDeep(val));
+		this.stocksTransaction[i].inventory.unit.rate = Number(cloneDeep(val));
 		this.stocksTransaction[i].inventory.amount = Number((this.stocksTransaction[i].inventory.unit.rate * this.stocksTransaction[i].inventory.quantity).toFixed(2));
 		this.stocksTransaction[i].amount = this.stocksTransaction[i].inventory.amount;
 		this.amountChanged(idx);
@@ -633,7 +633,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 			}
 		}
 		this.stocksTransaction[i].amount = this.stocksTransaction[i].inventory.amount;
-		let stockTotal = _.sumBy(this.stocksTransaction, (o: any) => Number(o.inventory.amount));
+		let stockTotal = sumBy(this.stocksTransaction, (o: any) => Number(o.inventory.amount));
 		this.stockTotal = stockTotal;
 	}
 
@@ -655,7 +655,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	 * calculateAmount
 	 */
 	public calculateAmount() {
-		let Total = _.sumBy(this.accountsTransaction, (o) => Number(o.amount));
+		let Total = sumBy(this.accountsTransaction, (o) => Number(o.amount));
 		this.accountsTotal = Total;
 	}
 
@@ -680,7 +680,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 			this._toaster.errorToast("Party A/c Name can't be blank.");
 			return setTimeout(() => this.partyAccNameInputField.nativeElement.focus(), 200);
 		}
-		let data = _.cloneDeep(this.data);
+		let data = cloneDeep(this.data);
 		data.generateInvoice = data.invoiceNumberAgainstVoucher ? !!data.invoiceNumberAgainstVoucher.trim() : false;
 		// let idx = 0;
 		data.transactions = this.prepareDataForVoucher();
@@ -689,33 +689,33 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
 		let accUniqueName: string = this.creditorAcc.uniqueName;
 
-		_.forEach(data.transactions, (element: any) => {
+		forEach(data.transactions, (element: any) => {
 			element.type = (element.type === 'by') ? 'debit' : 'credit';
 		});
 
 		if (data.voucherType === 'Sales') {
-			_.forEach(data.transactions, (element: any) => {
+			forEach(data.transactions, (element: any) => {
 				if (!element.particular) {
 					element.particular = 'sales';
 				}
 				element.type = 'debit';
 			});
 		} else if (data.voucherType === 'Purchase') {
-			_.forEach(data.transactions, (element: any) => {
+			forEach(data.transactions, (element: any) => {
 				if (!element.particular) {
 					element.particular = 'purchases';
 				}
 				element.type = 'credit';
 			});
 		} else if (data.voucherType === 'Credit note') {
-			_.forEach(data.transactions, (element: any) => {
+			forEach(data.transactions, (element: any) => {
 				if (!element.particular) {
 					element.particular = 'sales';
 				}
 				element.type = 'credit';
 			});
 		} else if (data.voucherType === 'Debit note') {
-			_.forEach(data.transactions, (element: any) => {
+			forEach(data.transactions, (element: any) => {
 				if (!element.particular) {
 					element.particular = 'purchases';
 				}
@@ -732,7 +732,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 		let filterData = this._tallyModuleService.prepareRequestForAPI(data);
 
 		if (filterData.transactions.length) {
-			_.forEach(filterData.transactions, function (o, i) {
+			forEach(filterData.transactions, function (o, i) {
 				if (o.inventory && o.inventory.amount) {
 					stocksTransaction.push(o);
 				} else {
@@ -753,9 +753,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	}
 
 	public prepareDataForVoucher() {
-		let transactions = _.concat(_.cloneDeep(this.accountsTransaction), _.cloneDeep(this.stocksTransaction));
-		transactions = _.orderBy(transactions, 'type');
-		_.forEach(transactions, function (obj, idx) {
+		let transactions = concat(cloneDeep(this.accountsTransaction), cloneDeep(this.stocksTransaction));
+		transactions = orderBy(transactions, 'type');
+		forEach(transactions, function (obj, idx) {
 			let inventoryArr = [];
 			if (obj.inventory && obj.inventory.amount) {
 				inventoryArr.push(obj.inventory);
@@ -810,12 +810,12 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 	 */
 	public getFlattenGrpofAccounts(parentGrpUnqName, q?: string, forceRefresh: boolean = false, focusTargetElement: boolean = false) {
 		if (this.allStocks && this.allStocks.length && !forceRefresh) {
-			this.sortStockItems(_.cloneDeep(this.allStocks));
+			this.sortStockItems(cloneDeep(this.allStocks));
 		} else {
 			this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
 				if (data.status === 'success') {
 					this.sortStockItems(data.body.results);
-					this.allStocks = _.cloneDeep(data.body.results);
+					this.allStocks = cloneDeep(data.body.results);
 					if (focusTargetElement) {
 						this.selectedStockInputField.focus();
 					}
@@ -826,7 +826,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 
 	public sortStockItems(ItemArr) {
 		let stockAccountArr: IOption[] = [];
-		_.forEach(ItemArr, (obj: any) => {
+		forEach(ItemArr, (obj: any) => {
 			stockAccountArr.push({
 				label: `${obj.name} (${obj.uniqueName})`,
 				value: obj.uniqueName,
@@ -834,7 +834,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 			});
 		});
 		this.stockList = stockAccountArr;
-		this.inputForList = _.cloneDeep(this.stockList);
+		this.inputForList = cloneDeep(this.stockList);
 		setTimeout(() => {
 			this.showLedgerAccountList = true;
 		}, 200);
@@ -1039,7 +1039,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
 			if (a && a !== '') {
 				this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
 					if (data.status === 'success') {
-						this.allFlattenAccounts = _.cloneDeep(data.body.results);
+						this.allFlattenAccounts = cloneDeep(data.body.results);
 						if (groupUniqueName) {
 							const filteredAccounts: IFlattenAccountsResultItem[] = data.body.results.filter((acc) => acc.parentGroups.findIndex((g) => g.uniqueName === groupUniqueName) > -1);
 							this._tallyModuleService.setFlattenAccounts(filteredAccounts);

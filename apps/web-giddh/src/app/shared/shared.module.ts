@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
@@ -76,6 +75,7 @@ import { AsideSettingComponent } from './header/components/aside-setting/aside-s
 import { DeleteTemplateConfirmationModelComponent } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
 import { DatepickerWrapperComponent } from './datepicker-wrapper/datepicker.wrapper.component';
 import { LoaderComponent } from '../loader/loader.component';
+import { ProformaAddBulkItemsComponent } from '../proforma-invoice/components/proforma-add-bulk-items/proforma-add-bulk-items.component';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -142,7 +142,8 @@ export function provideConfig() {
         ConfirmationModalComponent,
         DeleteTemplateConfirmationModelComponent,
         DatepickerWrapperComponent,
-        LoaderComponent
+        LoaderComponent,
+        ProformaAddBulkItemsComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -154,7 +155,6 @@ export function provideConfig() {
         DatepickerModule,
         TypeaheadModule.forRoot(),
         UniversalListModule,
-        NgbTypeaheadModule,
         TooltipModule,
         BsDropdownModule,
         PopoverModule.forRoot(),
@@ -206,7 +206,6 @@ export function provideConfig() {
         PerfectScrollbarModule,
         OnBoardingComponent,
         ConfirmModalModule,
-        NgbTypeaheadModule,
         AccountsSideBarComponent,
         AsideHelpSupportComponent,
         AsideSettingComponent,
@@ -227,7 +226,8 @@ export function provideConfig() {
         NgxDaterangepickerMd,
         DeleteTemplateConfirmationModelComponent,
         DatepickerWrapperComponent,
-        LoaderComponent
+        LoaderComponent,
+        ProformaAddBulkItemsComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
@@ -251,7 +251,7 @@ export function provideConfig() {
     ]
 })
 export class SharedModule {
-    public static forRoot(): ModuleWithProviders<unknown> {
+    public static forRoot(): ModuleWithProviders<SharedModule> {
         return {
             ngModule: SharedModule,
             providers: []

@@ -1,18 +1,11 @@
-import { skipWhile, take, takeUntil } from 'rxjs/operators';
-import { Component, Input, OnInit } from '@angular/core';
-//import { Options } from 'highcharts';
-import { Observable, ReplaySubject } from 'rxjs';
-import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
-import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+
 import { HomeActions } from '../../../actions/home/home.actions';
 import { AppState } from '../../../store/roots';
-import { Store } from '@ngrx/store';
-import { isNullOrUndefined } from 'util';
-import * as  moment from 'moment/moment';
-import * as _ from '../../../lodash-optimized';
-//import { IndividualSeriesOptionsExtension } from './IndividualSeriesOptionsExtention';
-import { API_TO_CALL, CHART_CALLED_FROM } from '../../../actions/home/home.const';
 
+//import { Options } from 'highcharts';
+//import { IndividualSeriesOptionsExtension } from './IndividualSeriesOptionsExtention';
 @Component({
     selector: 'history-chart',
     templateUrl: 'history-chart.component.html',

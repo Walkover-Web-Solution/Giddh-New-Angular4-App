@@ -21,7 +21,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { CountryRequest, OnboardingFormRequest } from '../../../models/api-models/Common';
 import { digitsOnly } from '../../../shared/helpers';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import * as googleLibphonenumber from 'google-libphonenumber';
+import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 
 @Component({
     selector: 'aside-sender-receiver-details-pane',
@@ -119,7 +119,6 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     public countryPhoneCode: IOption[] = [];
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public stateGstCode: any[] = [];
-    public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
     public isGstValid: boolean;
@@ -468,8 +467,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     }
     public checkMobileNo(ele) {
         try {
-            let parsedNumber = this.phoneUtility.parse('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value);
-            if (this.phoneUtility.isValidNumber(parsedNumber)) {
+            let parsedNumber = parsePhoneNumberFromString('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value as CountryCode);
+            if (parsedNumber.isValid()) {
                 ele.classList.remove('error-box');
                 this.isMobileNumberValid = true;
             } else {
