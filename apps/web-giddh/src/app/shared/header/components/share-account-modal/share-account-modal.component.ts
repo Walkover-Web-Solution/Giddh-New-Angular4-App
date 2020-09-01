@@ -13,7 +13,8 @@ import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'share-account-modal',
-    templateUrl: './share-account-modal.component.html'
+    templateUrl: './share-account-modal.component.html',
+    styleUrls: [`./share-account-modal.component.scss`]
 })
 
 export class ShareAccountModalComponent implements OnInit, OnDestroy {

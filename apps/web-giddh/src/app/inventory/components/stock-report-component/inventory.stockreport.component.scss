@@ -46,7 +46,7 @@
     padding-right: 40px;
     color: #1c1c1c;
     border: none;
-    background-color: #f2f2f2;
+    background-color: $white-smoke;
 }
 
 .td-search-box .input-container i {
@@ -64,23 +64,23 @@
 }
 
 .td-search-box div i:hover {
-    color: #999;
+    color: $nobel;
 }
 
 .dropdown-menu > li > a:hover {
     color: $chetwode-blue;
-    background: #e5e5e5;
+    background: $gray-90;
 }
 .stock-input {
     background-color: transparent !important;
-    border-bottom: 1px dotted #fff !important;
+    border-bottom: 1px dotted $white !important;
     border: none;
     width: auto;
     padding: 0 !important;
     height: auto;
     text-align: center;
     min-width: 155px;
-    color: #fff;
+    color: $white;
 }
 .inventory-stock-table input.form-control.stock-input {
     color: #1c1c1c;
@@ -91,10 +91,10 @@
     text-align: left;
 }
 .footer-tr td {
-    background-color: #e5e5e5;
+    background-color: $gray-90;
 }
 .total-footer {
-    background-color: white;
+    background-color: $white;
     display: flex;
     .footitem {
         padding: 41px;
@@ -161,15 +161,15 @@
 
 /* voucher type DDL */
 .c-3 {
-    color: #fff;
+    color: $white;
 }
 .btn-group-voucher-type {
     width: 100%;
-    color: #1c1c1c;
+    color: $nero;
     button {
         text-align: left;
         width: 100%;
-        color: #1c1c1c;
+        color: $nero;
         &:focus,
         &:hover {
             text-decoration: none;

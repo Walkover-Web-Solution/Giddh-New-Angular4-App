@@ -249,7 +249,7 @@
 
                         <th width="13%" class="td-search-box" #searchInvoiceContainer
                             (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-                            <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Bill#', fieldName: 'invoiceNumber',
+                            <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Invoice No.', fieldName: 'invoiceNumber',
              formControl: voucherNumberInput}"></ng-container>
                         </th>
                         <!-- <th>Purchase Order</th> -->
@@ -261,7 +261,7 @@
 
                         <th width="10%">
                             <div class="d-flex">
-                                <div class="">Bill Date</div>
+                                <div class="">Invoice Date</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'voucherDate'}">
                                     </ng-container>
@@ -444,7 +444,7 @@
                         <!-- Balance Due -->
                         <td class="text-right" *ngIf="(selectedVoucher !== 'purchase')"
                             [tooltip]="balanceDuePopupTemplate" container="body" containerClass="invoice-preview">
-                            {{item.accountCurrencySymbol}} {{item.balanceDue?.amountForAccount | giddhCurrency}}
+                            {{item.accountCurrencySymbol}} {{item.totalBalance | giddhCurrency}}
                         </td>
                         <ng-template #balanceDuePopupTemplate><span [innerHTML]="item.balanceDueTooltipText"></span>
                         </ng-template>
@@ -496,7 +496,7 @@
                         <!--for cancelled status-->
                         <td *ngIf="(selectedVoucher !== 'purchase') && item.balanceStatus === 'cancel'">
                             <span>{{ item.balanceStatus}}</span>
-                            <div class="action-icon ml-15">
+                            <!-- <div class="action-icon ml-15">
                                 <a tooltip="Convert to bill">
                                     <span class="icon-tick font-12"></span>
                                 </a>
@@ -509,7 +509,7 @@
                                 <a tooltip="Delete">
                                     <i class="icon-trash"></i>
                                 </a>
-                            </div>
+                            </div> -->
                         </td>
 
                     </tr>
@@ -710,7 +710,7 @@
 
                                 <div *ngIf="item.balanceStatus === 'cancel'">
                                     <span>{{ item.balanceStatus}}</span>
-                                    <div class="action-icon ml-15">
+                                    <!-- <div class="action-icon ml-15">
                                         <a tooltip="Convert to bill">
                                             <span class="icon-tick font-12"></span>
                                         </a>
@@ -723,7 +723,7 @@
                                         <a tooltip="Delete">
                                             <i class="icon-trash"></i>
                                         </a>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </td>
@@ -747,7 +747,7 @@
                                     </div>
                                 </div>
                                 <div>{{item.accountCurrencySymbol}}
-                                    {{item.balanceDue?.amountForAccount | giddhCurrency}}</div>
+                                    {{item.totalBalance | giddhCurrency}}</div>
                             </div>
                         </td>
                     </tr>

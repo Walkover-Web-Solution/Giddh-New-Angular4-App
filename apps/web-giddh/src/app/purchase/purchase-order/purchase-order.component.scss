@@ -72,6 +72,11 @@
     }
 }
 
+.mh18-img img {
+    max-height: 20px;
+    cursor: pointer;
+}
+
 .giddh-table {
     tr {
         td {
@@ -81,7 +86,7 @@
                 border: 1px solid $gainsboro;
                 a {
                     width: 30px;
-                    font-size: 20px;
+                    font-size: 18px;
                     color: $gray;
                     border-right: 1px solid $gainsboro;
                     display: flex;
@@ -90,7 +95,7 @@
                     padding: 0 5px;
                     cursor: pointer;
                     align-items: stretch;
-                    height: 30px;
+                    height: 24px;
                     align-items: center;
                     background-color: $white;
                 }
@@ -169,12 +174,21 @@
     align-items: center;
     justify-content: center;
 }
+
+.status_mobile{
+    .d-flex{
+        padding: 14px 0;
+    }
+}
 @media (max-width: 768px) {
     .action-icon {
         display: flex !important;
-        width: 120px;
-        margin-left: 0;
+        margin-left: 0px;
         margin-top: 5px;
+    }
+    .status_mobile{
+        display: flex !important;
+        justify-content: space-between !important;
     }
     .mobile-search {
         display: flex;
@@ -211,9 +225,15 @@
                 &::before {
                     left: 15px;
                 }
+                .action-icon {
+                    a {
+                        height:24px;
+                    }
+                }
             }
         }
     }
+
 }
 @media (max-width: 767px) {
     .mobile-search {
@@ -255,4 +275,29 @@
 }
 .late-delivery {
     color: $red;
+}
+
+@media (max-width: 445px) {
+    .status_mobile{
+        display: block !important;
+    }
+
+    .giddh-table {
+        tr {
+            td {
+                .action-icon {
+                    a {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width:768px) and (min-width:445px){
+    .status_mobile::before{
+        display:flex;
+        align-items: center;
+    }
 }
