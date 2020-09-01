@@ -4,7 +4,7 @@
 
     <a id="tax" class="clearfix">
         <div class="multi-select adjust">
-            <input #taxInputElement type="text" readonly [mask]="maskInput" [rawInputValue]="formattedTotal" [prefix]="prefixInput" [suffix]="suffixInput" name=""
+            <input #taxInputElement type="text" id="update-ledger-tax" readonly [mask]="maskInput" [rawInputValue]="formattedTotal" [prefix]="prefixInput" [suffix]="suffixInput" name=""
                 class="form-control cursor-pointer text-right" [(ngModel)]="formattedTotal"
                 (focus)="handleInputFocus()" />
             <span class="caret"></span>
@@ -15,10 +15,10 @@
     <div class="pr">
         <ul class="dropdown-menu pd" [ngStyle]="{'display': showTaxPopup ? 'block': 'none'}"
             (click)="$event.stopPropagation()" style="max-height: 102px;min-height: 40px">
-            <li *ngFor="let tax of taxRenderData;trackBy: trackByFn">
+            <li *ngFor="let tax of taxRenderData;trackBy: trackByFn; let i = index">
                 <label class="checkbox oh width100 p0 m0 customItem bdrB" style="padding: 5px;margin-bottom: 5px;"
                     (click)="$event.stopPropagation()" [ngClass]="{'disabled-label': tax.isDisabled}">
-                    <input class="pull-left" type="checkbox" [(ngModel)]="tax.isChecked" [disabled]="tax.isDisabled"
+                    <input class="pull-left" id="{{ 'update-ledger-tax-checkbox-' + i }}" type="checkbox" [(ngModel)]="tax.isChecked" [disabled]="tax.isDisabled"
                         (change)="change()" (click)="$event.stopPropagation()" />
                     <span class="pull-left ellp">{{tax.name}}</span>
                 </label>
