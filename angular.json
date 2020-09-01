@@ -687,8 +687,7 @@
       "typescriptMismatch": false,
       "versionMismatch": false
     },
-    "defaultCollection": "@nstudio/schematics",
-    "analytics": "01002829-c7d1-478a-8011-37ba60d87c36"
+    "defaultCollection": "@nstudio/schematics"
   },
   "schematics": {
     "@nrwl/schematics:application": {
