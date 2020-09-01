@@ -12,7 +12,8 @@
                     <p><span class="text-gray">{{result.versionTime | date: 'dd/MM/yyyy, hh:mm aa' }}</span></p>
                     <p>{{change.message}} <span class="text-gray">by {{result.user?.name}}</span></p>
                 </div>
-            </ng-container>    
+            </ng-container>
+            <pagination *ngIf="purchaseOrderVersions.totalPages > 1" class="pagination" [(ngModel)]="purchaseOrderVersions.page" [totalItems]="purchaseOrderVersions.totalItems" [itemsPerPage]="purchaseOrderVersions.count" [maxSize]="5" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>
 </div>
