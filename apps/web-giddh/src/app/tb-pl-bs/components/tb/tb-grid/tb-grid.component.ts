@@ -122,7 +122,7 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
      * @param {boolean} isVisible Current visibility status
      * @memberof TbGridComponent
      */
-    toggleGroupVisibility(group: Array<ChildGroup>, isVisible: boolean): void {
+    public toggleGroupVisibility(group: Array<ChildGroup>, isVisible: boolean): void {
         const stack = [...group];
         while (stack.length) {
             const currentGroup = stack.pop();
