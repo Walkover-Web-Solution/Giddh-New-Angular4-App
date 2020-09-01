@@ -114,7 +114,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     /* This will hold if we need to overwriter filters */
     public useStoreFilters: boolean = false;
     /* This will hold current page url */
-    public pageUrl: string = "pages/purchase-management/purchase-orders";
+    public pageUrl: string = "pages/purchase-management/purchase";
     /* This holds the fields which can be updated in bulk */
     public bulkUpdateFields: IOption[] = BULK_UPDATE_FIELDS;
     /* Stores warehouses for a company */
@@ -157,7 +157,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
                 this.pageUrl = event.url;
-                if (event.url.includes('/purchase-order/new') || event.url.includes('/purchase-orders/preview') || event.url.includes('/purchase-order/edit') || event.url.includes('/purchase-orders')) {
+                if (event.url.includes('/purchase-order/new') || event.url.includes('/purchase-orders/preview') || event.url.includes('/purchase-order/edit') || event.url.includes('/purchase-management/purchase')) {
                     this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({ getRequest: this.purchaseOrderGetRequest, postRequest: this.purchaseOrderPostRequest }));
                 } else {
                     this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({}));
@@ -166,7 +166,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         });
 
         this.purchaseOrderListFilters$.pipe(takeUntil(this.destroyed$)).subscribe(filters => {
-            if (filters && (this.pageUrl.includes('/purchase-orders/preview') || this.pageUrl.includes('/purchase-orders'))) {
+            if (filters && (this.pageUrl.includes('/purchase-orders/preview') || this.pageUrl.includes('/purchase-management/purchase'))) {
                 if (filters.getRequest) {
                     this.purchaseOrderGetRequest = filters.getRequest;
                     this.purchaseOrderGetRequest.page = 1;
@@ -175,7 +175,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                     this.purchaseOrderPostRequest = filters.postRequest;
                 }
 
-                if (filters.getRequest || filters.postRequest) {
+                if (filters.getRequest && filters.getRequest.from && filters.getRequest.to) {
                     this.useStoreFilters = true;
                 }
             }
@@ -550,8 +550,14 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @param {*} action
      * @memberof PurchaseOrderComponent
      */
-    public bulkUpdate(action: any): void {
+    public bulkUpdate(action: any, purchaseOrderNumber?: any): void {
         let purchaseNumbers = this.getSelectedItems();
+
+        if (purchaseOrderNumber) {
+            purchaseNumbers.push(purchaseOrderNumber);
+        }
+
+        this.bulkUpdateGetParams.action = action;
 
         if (purchaseNumbers.length > 0) {
             this.bulkUpdatePostParams.purchaseNumbers = purchaseNumbers;
@@ -662,25 +668,31 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      */
     public validateBulkUpdateFields(): void {
         let isValid = true;
-        if (this.bulkUpdateGetParams.action === 'purchasedate') {
-            if (!this.bulkUpdatePostParams.purchaseDate) {
-                isValid = false;
-                this.toaster.errorToast("Please select Purchase date");
-            } else {
-                this.bulkUpdatePostParams.purchaseDate = moment(this.bulkUpdatePostParams.purchaseDate).format(GIDDH_DATE_FORMAT);
+
+        if (this.bulkUpdateGetParams.action) {
+            if (this.bulkUpdateGetParams.action === 'purchasedate') {
+                if (!this.bulkUpdatePostParams.purchaseDate) {
+                    isValid = false;
+                    this.toaster.errorToast("Please select Purchase date");
+                } else {
+                    this.bulkUpdatePostParams.purchaseDate = moment(this.bulkUpdatePostParams.purchaseDate).format(GIDDH_DATE_FORMAT);
+                }
+            } else if (this.bulkUpdateGetParams.action === 'duedate') {
+                if (!this.bulkUpdatePostParams.dueDate) {
+                    isValid = false;
+                    this.toaster.errorToast("Please select Expected delivery date");
+                } else {
+                    this.bulkUpdatePostParams.dueDate = moment(this.bulkUpdatePostParams.dueDate).format(GIDDH_DATE_FORMAT);
+                }
+            } else if (this.bulkUpdateGetParams.action === 'warehouse') {
+                if (!this.bulkUpdatePostParams.warehouseUniqueName) {
+                    isValid = false;
+                    this.toaster.errorToast("Please select Warehouse");
+                }
             }
-        } else if (this.bulkUpdateGetParams.action === 'duedate') {
-            if (!this.bulkUpdatePostParams.dueDate) {
-                isValid = false;
-                this.toaster.errorToast("Please select Expected delivery date");
-            } else {
-                this.bulkUpdatePostParams.dueDate = moment(this.bulkUpdatePostParams.dueDate).format(GIDDH_DATE_FORMAT);
-            }
-        } else if (this.bulkUpdateGetParams.action === 'warehouse') {
-            if (!this.bulkUpdatePostParams.warehouseUniqueName) {
-                isValid = false;
-                this.toaster.errorToast("Please select Warehouse");
-            }
+        } else {
+            isValid = false;
+            this.toaster.errorToast("Please choose a field to update");
         }
 
         if (isValid) {
@@ -688,6 +700,11 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will reset the bulk update fields
+     *
+     * @memberof PurchaseOrderComponent
+     */
     public initBulkUpdateFields(): void {
         this.bulkUpdateGetParams.action = "";
         this.bulkUpdatePostParams = { purchaseNumbers: [], purchaseDate: '', dueDate: '', warehouseUniqueName: '' };

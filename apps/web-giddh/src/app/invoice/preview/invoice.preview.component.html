@@ -249,24 +249,27 @@
 
                         <th width="13%" class="td-search-box" #searchInvoiceContainer
                             (clickOutside)="clickedOutside($event, searchInvoiceContainer, 'invoiceNumber')">
-                            <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: 'Invoice No.', fieldName: 'invoiceNumber',
-             formControl: voucherNumberInput}"></ng-container>
+                            <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showInvoiceNoSearch, title: ((selectedVoucher === 'purchase') ? 'Bill No.' : 'Invoice No.'), fieldName: 'invoiceNumber', formControl: voucherNumberInput}"></ng-container>
                         </th>
-                        <!-- <th>Purchase Order</th> -->
+                        
                         <th width="19%" class="td-search-box" #searchCustomerContainer
                             (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')">
-                            <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput,
-            title: (selectedVoucher === 'purchase') ? 'Vendor' : 'Customer'}"></ng-container>
+                            <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showCustomerSearch, fieldName: 'accountUniqueName',formControl: accountUniqueNameInput, title: (selectedVoucher === 'purchase') ? 'Vendor' : 'Customer'}"></ng-container>
                         </th>
 
                         <th width="10%">
                             <div class="d-flex">
-                                <div class="">Invoice Date</div>
+                                <div>{{(selectedVoucher === 'purchase') ? "Bill Date" : "Invoice Date"}}</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'voucherDate'}">
                                     </ng-container>
                                 </div>
                             </div>
+                        </th>
+
+                        <th width="12%" *ngIf="selectedVoucher === 'purchase'" class="td-search-box" #searchPurchaseOrderContainer
+                        (clickOutside)="clickedOutside($event, searchPurchaseOrderContainer, 'purchaseOrderNumbers')">
+                            <ng-container *ngTemplateOutlet="searchTemplate;context:{ $implicit: showPurchaseOrderSearch, fieldName: 'purchaseOrderNumbers', formControl: purchaseOrderNumbersInput, title: 'Purchase Order #'}"></ng-container>
                         </th>
 
                         <th width="12%">
@@ -299,7 +302,7 @@
                             </div>
                         </th>
 
-                        <th width="10%" *ngIf="selectedVoucher !== 'purchase'">
+                        <th width="10%">
                             <div class="d-flex">
                                 <div class="flex-fill">Status</div>
                             </div>
@@ -432,6 +435,8 @@
                         <!-- Invoice Date -->
                         <td>{{item.voucherDate}}</td>
 
+                        <td>{{item.purchaseOrderNumbers}}</td>
+
                         <!-- Total Amt. -->
                         <td class="text-right"
                             [tooltip]="(selectedVoucher !== 'purchase') ? grandTotalPopupTemplate : ''" container="body"
@@ -496,10 +501,11 @@
                         <!--for cancelled status-->
                         <td *ngIf="(selectedVoucher !== 'purchase') && item.balanceStatus === 'cancel'">
                             <span>{{ item.balanceStatus}}</span>
-                            <!-- <div class="action-icon ml-15">
-                                <a tooltip="Convert to bill">
-                                    <span class="icon-tick font-12"></span>
-                                </a>
+                        </td>
+
+                        <td *ngIf="selectedVoucher === 'purchase'">
+                            <span>{{ item.balanceStatus}}</span>
+                            <div class="action-icon ml-15">
                                 <a tooltip="send Email">
                                     <span class="icon-envelope font-12"></span>
                                 </a>
@@ -509,9 +515,8 @@
                                 <a tooltip="Delete">
                                     <i class="icon-trash"></i>
                                 </a>
-                            </div> -->
+                            </div>
                         </td>
-
                     </tr>
                 </tbody>
 

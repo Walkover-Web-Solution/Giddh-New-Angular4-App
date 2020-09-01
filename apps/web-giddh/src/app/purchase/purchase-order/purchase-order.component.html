@@ -36,10 +36,10 @@
                             <a class="dropdown-item cp" href="javascript:void(0)"
                                 (click)="openModalBulkUpdate(template)">Bulk Update</a>
                         </li>
-                        <!-- <li role="menuitem">
-                            <a class="dropdown-item cp" href="javascript:void(0)">
+                        <li role="menuitem">
+                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('create_purchase_bill')">
                                 Convert to bill</a>
-                        </li> -->
+                        </li>
                         <li role="menuitem">
                             <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('expire')">
                                 Expired</a>
@@ -77,10 +77,10 @@
                             (click)="openModalBulkUpdate(template)">Bulk
                             Update</a>
                     </li>
-                    <!-- <li role="menuitem">
-                        <a class="dropdown-item cp" href="javascript:void(0)">
+                    <li role="menuitem">
+                        <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('create_purchase_bill')">
                             Convert to bill</a>
-                    </li> -->
+                    </li>
                     <li role="menuitem">
                         <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('expire')">
                             Expired</a>
@@ -215,9 +215,9 @@
                         <span class="d-flex">
                             {{item.status}}</span>
                         <div class="action-icon ml-15" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
-                            <!-- <a tooltip="Convert to bill">
+                            <a tooltip="Convert to bill" (click)="bulkUpdate('create_purchase_bill', item.voucherNumber)">
                                 <span class="icon-tick font-12"></span>
-                            </a> -->
+                            </a>
                             <a tooltip="Send Email" (click)="openSendMailModal(item, sendEmailModal)">
                                 <span class="icon-envelope font-12"></span>
                             </a>

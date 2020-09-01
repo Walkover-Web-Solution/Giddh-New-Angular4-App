@@ -244,6 +244,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public selectedPerformAdjustPaymentAction: boolean = false;
     /** To check is selected account/customer have advance receipts */
     public isAccountHaveAdvanceReceipts: boolean = false;
+    public showPurchaseOrderSearch: boolean = false;
+    public purchaseOrderNumbersInput: FormControl = new FormControl();
 
     constructor(
         private store: Store<AppState>,
@@ -596,9 +598,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         ).subscribe(s => {
             this.invoiceSearchRequest.q = s;
             this.getVoucher(this.isUniversalDateApplicable);
-            // if (s === '') {
-            //   this.showCustomerSearch ? this.showInvoiceNoSearch = false : this.showInvoiceNoSearch = true;
-            // }
         });
 
         this.accountUniqueNameInput.valueChanges.pipe(
@@ -608,9 +607,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         ).subscribe(s => {
             this.invoiceSearchRequest.q = s;
             this.getVoucher(this.isUniversalDateApplicable);
-            // if (s === '') {
-            //   this.showInvoiceNoSearch ? this.showCustomerSearch = false : this.showCustomerSearch = true;
-            // }
+        });
+
+        this.purchaseOrderNumbersInput.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
+        ).subscribe(s => {
+            this.invoiceSearchRequest.q = s;
+            this.getVoucher(this.isUniversalDateApplicable);
         });
 
         this.store.pipe(select(s => s.general.sideMenuBarOpen), takeUntil(this.destroyed$))
@@ -1086,14 +1091,22 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.showInvoiceNoSearch = true;
             this.showCustomerSearch = false;
             this.showProformaSearch = false;
+            this.showPurchaseOrderSearch = false;
         } else if (fieldName === 'ProformaPurchaseOrder') {
             this.showInvoiceNoSearch = false;
             this.showCustomerSearch = false;
             this.showProformaSearch = true;
-        } else {
+            this.showPurchaseOrderSearch = false;
+        } else if(fieldName === 'accountUniqueName') {
             this.showCustomerSearch = true;
             this.showInvoiceNoSearch = false;
             this.showProformaSearch = false;
+            this.showPurchaseOrderSearch = false;
+        } else if(fieldName === 'purchaseOrderNumbers') {
+            this.showCustomerSearch = false;
+            this.showInvoiceNoSearch = false;
+            this.showProformaSearch = false;
+            this.showPurchaseOrderSearch = true;
         }
 
         setTimeout(() => {
@@ -1179,16 +1192,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
         if (fieldName === 'invoiceNumber') {
             if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
-                // this.voucherNumberInput.setValue('');
                 return;
             }
         } else if (fieldName === 'accountUniqueName') {
             if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
                 return;
             }
-            //event.stopPropagation();  // due to this dropdown auto close was not working
         } else if (fieldName === 'ProformaPurchaseOrder') {
             if (this.ProformaPurchaseOrder.value !== null && this.ProformaPurchaseOrder.value !== '') {
+                return;
+            }
+        } else if (fieldName === 'purchaseOrderNumbers') {
+            if (this.purchaseOrderNumbersInput.value !== null && this.purchaseOrderNumbersInput.value !== '') {
                 return;
             }
         }
@@ -1200,6 +1215,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 this.showInvoiceNoSearch = false;
             } else if (fieldName === 'accountUniqueName') {
                 this.showCustomerSearch = false;
+            } else if (fieldName === 'purchaseOrderNumbers') {
+                this.showPurchaseOrderSearch = false;
             }
             // else {
             //   if (fieldName === 'accountUniqueName') {

@@ -181,7 +181,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                     this.toaster.errorToast(response.message);
                 }
             } else {
-                this.router.navigate(['/pages/purchase-management/purchase-orders']);
+                this.router.navigate(['/pages/purchase-management/purchase']);
             }
         });
     }
@@ -271,7 +271,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                 if (res.status === 'success') {
                     this.closeConfirmationPopup();
                     this.toaster.successToast(res.body);
-                    this.router.navigate(['/pages/purchase-management/purchase-orders']);
+                    this.router.navigate(['/pages/purchase-management/purchase']);
                 } else {
                     this.closeConfirmationPopup();
                     this.toaster.errorToast(res.message);
@@ -372,5 +372,26 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public getOnboardingForm(countryCode): void {
         this.onboardingFormRequest.country = countryCode;
         this.store.dispatch(this.commonActions.GetOnboardingForm(this.onboardingFormRequest));
+    }
+
+    /**
+     * This will convert the purchase order to bill
+     *
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public convertToBill(): void {
+        let purchaseNumbers = [this.purchaseOrder.number];
+        let bulkUpdateGetParams = { action: "create_purchase_bill", companyUniqueName: this.purchaseOrder.company.uniqueName };
+        let bulkUpdatePostParams = { purchaseNumbers: purchaseNumbers };
+
+        this.purchaseOrderService.bulkUpdate(bulkUpdateGetParams, bulkUpdatePostParams).subscribe((res) => {
+            if (res) {
+                if (res.status === 'success') {
+                    this.toaster.successToast(res.body);
+                } else {
+                    this.toaster.errorToast(res.message);
+                }
+            }
+        });
     }
 }
