@@ -73,6 +73,11 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     public previousEnd: number;
     public startupLoop: boolean = true;
 
+    /** True when pagination should be enabled */
+    @Input() isPaginationEnabled: boolean;
+    /** Emits the scroll to bottom event when pagination is required  */
+    @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
+
     constructor(private element: ElementRef, private renderer: Renderer) {
     }
 
@@ -82,8 +87,25 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
         return viewWidth;
     }
 
+    /**
+     * Scroll handler
+     *
+     * @memberof VirtualScrollComponent
+     */
+    handleScroll(): void {
+        this.refresh();
+        if (this.element && this.element.nativeElement && this.isPaginationEnabled) {
+            // Scrolled to bottom
+            if ((this.element.nativeElement.scrollHeight - this.element.nativeElement.scrollTop) === this.element.nativeElement.clientHeight) {
+                this.scrollEnd.emit();
+            }
+        }
+    }
+
     public ngOnInit() {
-        this.onScrollListener = this.renderer.listen(this.element.nativeElement, 'scroll', this.refresh.bind(this));
+        this.onScrollListener = this.renderer.listen(this.element.nativeElement, 'scroll', () => {
+            this.handleScroll();
+        });
         this.scrollbarWidth = 0; // this.element.nativeElement.offsetWidth - this.element.nativeElement.clientWidth;
         this.scrollbarHeight = 0; // this.element.nativeElement.offsetHeight - this.element.nativeElement.clientHeight;
     }

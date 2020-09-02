@@ -113,6 +113,10 @@
                                                         [(ngModel)]="invFormData.voucherDetails.customerUniquename"
                                                         [customFilter]="customMoveGroupFilter"
                                                         (noOptionsFound)="noResultsForCustomer($event)"
+                                                        [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('customer')"
+                                                        (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'customer')"
+                                                        [notFoundMsg]="noResultsFoundLabel"
+                                                        [enableDynamicSearch]="true" (onHide)="resetPreviousSearchResults()"
                                                         (selected)="onSelectCustomer($event);"
                                                         [placeholder]="customerPlaceHolder" [notFoundLink]="true"
                                                         [doNotReset]="true" [forceClearReactive]="forceClear$ | async"
@@ -1049,6 +1053,11 @@
                                                     name="transaction.fakeAccForSelect2_{{entryIdx}}"
                                                     (selected)="onSelectSalesAccount($event,transaction, entry)"
                                                     [placeholder]="'Select A/c'" [notFoundLink]="true"
+                                                    [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('item')"
+                                                    (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
+                                                    (onHide)="noResultsFoundLabel = 'Type to search a/c'"
+                                                    [notFoundMsg]="noResultsFoundLabel"
+                                                    [enableDynamicSearch]="true"
                                                     [fixedValue]="(transaction.stockDetails && transaction.stockDetails.name) ? transaction.accountName+' ('+transaction.stockDetails?.name+')' : transaction.accountName"
                                                     [forceClearReactive]="forceClear$ | async"
                                                     (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false"
@@ -1926,6 +1935,10 @@
                                                             name="transaction.fakeAccForSelect2_{{entryIdx}}"
                                                             (selected)="onSelectSalesAccount($event,transaction, entry)"
                                                             [placeholder]="'Select A/cc'" [notFoundLink]="true"
+                                                            [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('item')"
+                                                            (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
+                                                            [notFoundMsg]="noResultsFoundLabel"
+                                                            [enableDynamicSearch]="true" (onHide)="resetPreviousSearchResults()"
                                                             [forceClearReactive]="forceClear$ | async"
                                                             (noResultsClicked)="onNoResultsClicked(entryIdx)"
                                                             [multiple]="false" [ItemHeight]="67"
@@ -2759,8 +2772,7 @@
     [config]="{ animated: true,keyboard: false,backdrop: false,ignoreBackdropClick: true }">
 
     <ng-container *ngIf="showBulkItemModal">
-        <proforma-add-bulk-items-component [data]="salesAccounts$ | async" (saveItemsEvent)="addBulkStockItems($event)"
-            (closeEvent)="bulkItemsModal.hide()"></proforma-add-bulk-items-component>
+        <proforma-add-bulk-items-component [invoiceType]="invoiceType" (saveItemsEvent)="addBulkStockItems($event)" (closeEvent)="bulkItemsModal.hide()"></proforma-add-bulk-items-component>
     </ng-container>
 
 </div>

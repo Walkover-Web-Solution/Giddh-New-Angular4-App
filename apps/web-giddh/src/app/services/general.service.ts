@@ -7,6 +7,7 @@ import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import * as moment from 'moment';
+import { find } from '../lodash-optimized';
 
 @Injectable()
 export class GeneralService {
@@ -414,7 +415,7 @@ export class GeneralService {
      * This will calculate the position of element
      *
      * @param {*} elementTarget
-     * @param {*} element 
+     * @param {*} element
      * @returns
      * @memberof DatepickerWrapperComponent
      */
@@ -538,4 +539,39 @@ export class GeneralService {
         return { fromDate: fromDateInMmDdYy, toDate: toDateInMmDdYy }
     }
 
+    /**
+     * Returns the account category
+     *
+     * @param {*} account Account object
+     * @param {string} accountName Account unique name
+     * @returns {string} Account category
+     * @memberof GeneralService
+     */
+    public getAccountCategory(account: any, accountName: string): string {
+        let parent = account.parentGroups ? account.parentGroups[0] : '';
+        if (parent) {
+            if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent.uniqueName)) {
+                return 'liabilities';
+            } else if (find(['fixedassets'], p => p === parent.uniqueName)) {
+                return 'fixedassets';
+            } else if (find(['noncurrentassets', 'currentassets'], p => p === parent.uniqueName)) {
+                return 'assets';
+            } else if (find(['revenuefromoperations', 'otherincome'], p => p === parent.uniqueName)) {
+                return 'income';
+            } else if (find(['operatingcost', 'indirectexpenses'], p => p === parent.uniqueName)) {
+                if (accountName === 'roundoff') {
+                    return 'roundoff';
+                }
+                let subParent = account.parentGroups[1];
+                if (subParent && subParent.uniqueName === 'discount') {
+                    return 'discount';
+                }
+                return 'expenses';
+            } else {
+                return '';
+            }
+        } else {
+            return '';
+        }
+    }
 }
