@@ -14,10 +14,9 @@
                 </span>
             </ng-container>
             <!-- (click)="show($event);" -->
-            <input type="text" class="pdL1"
+            <input type="text" class="pdL1 input1"
                 [ngClass]="{'hasValue':filter?.length, 'bottom-border-only' : showBottomBorderOnly}" #inputFilter
                 tabindex="0" (blur)="filterInputBlur($event)"
-                (focus)="subscribeToQueryChange()"
                 [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter"
                 (ngModelChange)="updateFilter($event)">
         </div>
@@ -29,7 +28,7 @@
             [hidden]="((!isOpen || !isFilterEnabled))">{{selectedValues[0]?.label}}
         </button>
 
-        <input type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" class="form-control" #inputFilter
+        <input type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" class="form-control input2" #inputFilter
             *ngIf="!multiple && !showLabelOnly" [hidden]="((!isOpen || !isFilterEnabled))"
             (focus)="subscribeToQueryChange()"
             (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter"
@@ -43,12 +42,13 @@
                         *ngIf="showLabelOnly">{{selectedValues[0]?.label}}</button>
                     <input type="text" *ngIf="!showLabelOnly" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}"
                         (input)="openListIfNotOpened($event)" (click)="selectText($event);" type="text"
-                        value="{{selectedValues[0].label}}" class="form-control selectedVal cp" />
+                        value="{{selectedValues[0].label}}" class="form-control selectedVal cp input3" />
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">
                 <input type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" *ngIf="!showLabelOnly"
-                    [tabindex]="tabIndex" class="firstElementToFocus form-control" name="filter2" [(ngModel)]="filter"
+                    (focus)="subscribeToQueryChange()"
+                    [tabindex]="tabIndex" class="firstElementToFocus form-control input4" name="filter2" [(ngModel)]="filter"
                     (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [value]="filter"
                     style="padding-right: 28px !important;" />
             </ng-container>

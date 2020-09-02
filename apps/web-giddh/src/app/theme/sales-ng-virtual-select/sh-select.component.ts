@@ -458,6 +458,9 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
             this.show(ev);
             setTimeout(() => {
                 this.renderer.invokeElementMethod(this.inputFilter.nativeElement, 'focus');
+                if (this.enableDynamicSearch) {
+                    this.dynamicSearchQueryChanged.next(ev.target.value);
+                }
             }, 10);
         }
     }
