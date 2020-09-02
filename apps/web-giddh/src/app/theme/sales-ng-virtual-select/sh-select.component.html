@@ -17,7 +17,6 @@
             <input type="text" class="pdL1"
                 [ngClass]="{'hasValue':filter?.length, 'bottom-border-only' : showBottomBorderOnly}" #inputFilter
                 tabindex="0" (blur)="filterInputBlur($event)"
-                (focus)="subscribeToQueryChange()"
                 [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter"
                 (ngModelChange)="updateFilter($event)">
         </div>
@@ -48,6 +47,7 @@
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">
                 <input type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" *ngIf="!showLabelOnly"
+                    (focus)="subscribeToQueryChange()"
                     [tabindex]="tabIndex" class="firstElementToFocus form-control" name="filter2" [(ngModel)]="filter"
                     (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [value]="filter"
                     style="padding-right: 28px !important;" />
