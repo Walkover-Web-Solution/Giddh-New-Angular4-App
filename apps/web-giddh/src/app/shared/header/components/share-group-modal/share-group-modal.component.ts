@@ -15,7 +15,8 @@ import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
 	selector: 'share-group-modal',
-	templateUrl: './share-group-modal.component.html'
+    templateUrl: './share-group-modal.component.html',
+    styleUrls: [`./share-group-modal.component.scss`]
 })
 
 export class ShareGroupModalComponent implements OnInit, OnDestroy {

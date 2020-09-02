@@ -3,7 +3,7 @@
 
 	<a id="discount">
 		<div class="multi-select adjust text-right">
-			<input type="text" [prefix]="prefixInput" [suffix]="suffixInput" [mask]="maskInput" name=""
+			<input type="text" [prefix]="prefixInput" id="ledger-discount" [suffix]="suffixInput" [mask]="maskInput" name=""
 				class="form-control cursor-pointer text-right" (focus)="discountMenu = true;hideOtherPopups.emit(true)"
 				[(ngModel)]="discountTotal" readonly />
 			<span class="caret"></span>
@@ -20,7 +20,7 @@
 				<label class="mr-1 align-items-center d-flex" style="width: 50px">Percent</label>
 
 				<div class="pos-rel">
-					<input type="text" class="form-control text-right cursor-pointer" [disabled]="!discountFromPer"
+					<input type="text" id="ledger-discount-percent" class="form-control text-right cursor-pointer" [disabled]="!discountFromPer"
 						decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="discountPercentageModal"
 						(input)="discountFromInput('PERCENTAGE', $event.target.value)"
 						style="width: 100px;padding-right: 20px !important;">
@@ -30,7 +30,7 @@
 			</div>
 
 			<div class="d-flex mb-1">
-				<label class="mr-1 align-items-center d-flex" style="width: 50px">Value</label>
+				<label class="mr-1 align-items-center d-flex" id="ledger-discount-value" style="width: 50px">Value</label>
 				<input type="text" class="form-control text-right cursor-pointer" [disabled]="!discountFromVal"
 					decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="discountFixedValueModal"
 					(input)="discountFromInput('FIX_AMOUNT', $event.target.value)" style="width: 100px">
@@ -48,7 +48,7 @@
 				<ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
 					<li *ngIf="idx > 0" class="customItem" style="padding: 5px;margin-bottom: 5px;">
 						<label class="checkbox oh width100 p0 m0" (click)="$event.stopPropagation()">
-							<input class="pull-left" name="tax_{{idx}}" type="checkbox" [(ngModel)]="discount.isActive"
+							<input id="{{'discount-checkbox-' + i}}" class="pull-left" name="tax_{{idx}}" type="checkbox" [(ngModel)]="discount.isActive"
 								(change)="change()" (click)="$event.stopPropagation()" />
 							<span class="pull-left ellp">{{discount.name}}</span>
 						</label>

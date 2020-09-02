@@ -164,6 +164,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public accountAsideMenuState: string = 'out';
     /** Category of accounts to display based on voucher type */
     public categoryOfAccounts: string;
+    /** selected base currency symbol */
+    public baseCurrencySymbol: string;
+    /** Input mast for number format */
+    public inputMaskFormat: string = '';
 
     constructor(
         private _accountService: AccountService,
@@ -184,6 +188,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.store.pipe(select(appState => appState.sales.createAccountSuccess)),
             this.store.pipe(select(appState => appState.sales.createdAccountDetails))
         ]).pipe(debounceTime(0), takeUntil(this.destroyed$));
+        this.store.pipe(select(profileStore => profileStore.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            this.baseCurrencySymbol = profile.baseCurrencySymbol;
+            this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+        });
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
 
         this.requestObj.transactions = [];
