@@ -283,8 +283,12 @@
                                                                 class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger">
                                                                 <div *ngIf="txn.type === 'DEBIT'"
                                                                     (click)="showBankLedgerPopup(txn, item);">
-                                                                    <sh-select [options]="lc.flattenAccountList | async"
+                                                                    <sh-select [options]="searchResults"
                                                                         [(ngModel)]="txn.particular"
+                                                                        [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
+                                                                        (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                                        [notFoundMsg]="noResultsFoundLabel"
+                                                                        [enableDynamicSearch]="true"
                                                                         (selected)="selectAccount($event,txn)"
                                                                         [placeholder]="'Select Accounts'"
                                                                         [notFoundLink]="true"
@@ -403,9 +407,13 @@
                                                                 class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger ">
                                                                 <div *ngIf="txn.type === 'CREDIT'"
                                                                     (click)="showBankLedgerPopup(txn, item);">
-                                                                    <sh-select [options]="lc.flattenAccountList | async"
+                                                                    <sh-select [options]="searchResults"
                                                                         [(ngModel)]="txn.particular"
                                                                         (selected)="selectAccount($event,txn)"
+                                                                        [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
+                                                                        (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                                        [notFoundMsg]="noResultsFoundLabel"
+                                                                        [enableDynamicSearch]="true"
                                                                         [placeholder]="'Select Accounts'"
                                                                         [notFoundLink]="true"
                                                                         (noResultsClicked)="showQuickAccountModal()"
@@ -783,7 +791,10 @@
                                                                 (shDebit.isOpen && shDebit.filter))">To
                                                     </span>
                                                     <sh-select id="{{'select-account-dr-' + i}}" [idEl]="txn.id" #shDebit
-                                                        [options]="lc.flattenAccountList | async"
+                                                        [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
+                                                        (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                        [enableDynamicSearch]="true" [notFoundMsg]="noResultsFoundLabel"
+                                                        [options]="searchResults"
                                                         [(ngModel)]="txn.particular" vr-item tabindex="-1" #select
                                                         [showClear]="false" (keydown.enter)="onEnter(select,txn)"
                                                         (onShow)="isSelectOpen=true;bs.hide();"
@@ -1058,7 +1069,10 @@
                                                         (shCredit.isOpen && shCredit.filter))">By </span>
 
                                                     <sh-select id="{{'select-account-cr-' + i}}" [idEl]="txn.id" #shCredit
-                                                        [options]="lc.flattenAccountList | async" vr-item tabindex="-1"
+                                                        [options]="searchResults" vr-item tabindex="-1"
+                                                        [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()"
+                                                        (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                        [enableDynamicSearch]="true" [notFoundMsg]="noResultsFoundLabel"
                                                         #select (keydown.enter)="onEnter(shCredit,txn)"
                                                         (onShow)="isSelectOpen=true;bsd.hide()"
                                                         (onHide)="onSelectHide()" [(ngModel)]="txn.particular"

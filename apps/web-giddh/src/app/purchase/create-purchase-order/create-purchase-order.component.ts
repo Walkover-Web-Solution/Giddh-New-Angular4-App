@@ -298,6 +298,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public originalExchangeRate: any = 1;
     /* This will hold object for time interval */
     public interval: any;
+    /** Voucher type */
+    public invoiceType: VoucherTypeEnum = VoucherTypeEnum.purchase;
 
     constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService) {
         this.getInvoiceSettings();
@@ -2559,7 +2561,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                         let selectedTax;
                         if(usedTaxes.indexOf(tax.uniqueName) === -1) {
                             usedTaxes.push(tax.uniqueName);
-                        
+
                             if (entryTaxes && entryTaxes.length > 0) {
                                 entryTaxes.forEach(entryTax => {
                                     if (entryTax.uniqueName === tax.uniqueName) {

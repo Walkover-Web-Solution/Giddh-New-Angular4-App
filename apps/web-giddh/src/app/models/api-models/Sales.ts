@@ -573,6 +573,7 @@ export class SalesAddBulkStockItems {
     sku?: string = '';
     stockUnitCode?: CodeStockMulticurrency;
     stockUnit?: CodeStockMulticurrency;
+    additional?: any;
 }
 
 export class CodeStockMulticurrency {
