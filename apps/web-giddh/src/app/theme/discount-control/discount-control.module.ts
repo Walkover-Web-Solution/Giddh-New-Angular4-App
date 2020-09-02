@@ -12,7 +12,7 @@ import { NgxMaskModule } from "../../shared/helpers/directives/ngx-mask";
         CommonModule,
         FormsModule,
         ClickOutsideModule,
-        NgxMaskModule
+        NgxMaskModule.forRoot(),
     ],
     exports: [
         DiscountControlComponent

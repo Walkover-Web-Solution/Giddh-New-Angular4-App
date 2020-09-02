@@ -377,6 +377,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         });
 
         this.getAllYearsBetweenDates();
+
+        document.querySelector(".giddh-datepicker-modal").parentElement.classList.add("giddh-calendar");
     }
 
     public ngOnChanges(changes: SimpleChanges) {

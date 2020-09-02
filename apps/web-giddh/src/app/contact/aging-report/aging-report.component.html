@@ -18,9 +18,7 @@
                 <div class="cp advance-clear-filter-icons">
 
                     <div class="advance-icon" tooltip="Advance Search">
-
                         <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup()"></span>
-
                     </div>
 
                     <span style="line-height: 2.1" class="ml-1" *ngIf="isAdvanceSearchApplied">
@@ -237,7 +235,7 @@
 
             <ng-container *ngIf="!(dueAmountReportData$ | async)?.results?.length">
                 <tr>
-                    <td colspan="8" class="text-center empty_table">
+                    <td colspan="8" class="text-center empty-table">
                         <h1>No Record Found !!</h1>
                     </td>
                 </tr>

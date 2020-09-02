@@ -43,6 +43,8 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild('disInptEle') public disInptEle: ElementRef;
 
     @Input() public discountMenu: boolean;
+    /** Mask format for decimal number and comma separation  */
+    public inputMaskFormat: string = '';
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -82,6 +84,10 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         } else {
             this.discountPercentageModal = this.defaultDiscount.amount;
         }
+
+        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
