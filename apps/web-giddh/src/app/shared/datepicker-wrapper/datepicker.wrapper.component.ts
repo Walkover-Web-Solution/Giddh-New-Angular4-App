@@ -132,7 +132,7 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
                 let positionX = this.dateFieldPosition.x;
 
                 if (totalWidth > screenWidth) {
-                    positionX = positionX - (totalWidth - screenWidth);
+                    positionX = positionX - (totalWidth - screenWidth) - 15;
                 }
 
                 this._renderer.setStyle(container, 'top', this.dateFieldPosition.y + 'px');
