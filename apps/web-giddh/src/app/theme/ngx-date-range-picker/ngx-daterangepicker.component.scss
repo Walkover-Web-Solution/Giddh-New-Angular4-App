@@ -953,6 +953,9 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
 .ranges-perfect-scrollbar {
     border-right: 1px solid $gainsboro;
 }
+.ranges-perfect-scrollbar .ps__rail-x{
+    display: none;
+}
 @media (min-width: 564px) {
     .md-drppicker {
         width: auto;
@@ -1344,7 +1347,7 @@ td span {
     position: absolute;
     background-color: $white;
     right: -100%;
-    top: -20px;
+    top: -30px;
     z-index: 9999;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
@@ -1602,7 +1605,7 @@ tr:first-child.in-range-hovered.available {
     }
 }
 cdk-virtual-scroll-viewport{
-    height: 284px;
+    height: 250px;
 }
 cdk-virtual-scroll-viewport::-webkit-scrollbar {
   width: 5px;
