@@ -777,7 +777,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         // get account details and set it to local var
         this.selectedAccountDetails$.subscribe(accountDetails => {
-            if (accountDetails && (!this.isUpdateMode || (this.isUpdateMode && (this.invoiceType === VoucherTypeEnum.sales || this.invoiceType === VoucherTypeEnum.cash)))) {
+            if (accountDetails) {
                 this.assignAccountDetailsValuesInForm(accountDetails);
             }
         });
@@ -1435,10 +1435,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 const requestObject = this.getSearchRequestObject(this.accountUniqueName, 1, SEARCH_TYPE.CUSTOMER);
                 this.searchAccount(requestObject).subscribe(data => {
                     if (data && data.body && data.body.results) {
-                        this.prepareSearchLists([{
-                            name: this.invFormData.accountDetails.name,
-                            uniqueName: this.invFormData.accountDetails.uniqueName
-                        }], 1, SEARCH_TYPE.CUSTOMER);
+                        this.prepareSearchLists(data.body.results, 1, SEARCH_TYPE.CUSTOMER);
                         this.makeCustomerList();
                         this.focusInCustomerName();
                         const item = data.body.results.find(result => result.uniqueName === this.accountUniqueName);
@@ -1572,6 +1569,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public pageChanged(val: string, label: string) {
         this.voucherTypeChanged = true;
+        this.resetPreviousSearchResults();
+        this.sundryCreditorsAcList = [];
+        this.sundryDebtorsAcList = [];
+        this.customerAcList$ = observableOf([]);
+        this.salesAccounts$ = observableOf([]);
         this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
         this.selectedVoucherType = val;
         if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
@@ -1609,7 +1611,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     let invoiceSelected;
                     if (this.isUpdateMode) {
-                        const selectedInvoice = this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0];
+                        const selectedInvoice = this.invFormData.voucherDetails && this.invFormData.voucherDetails.invoiceLinkingRequest ?
+                            this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0] : '';
                         if (selectedInvoice) {
                             selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
                             invoiceSelected = {
@@ -5341,8 +5344,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let group: string;
         if (searchType === SEARCH_TYPE.CUSTOMER) {
             this.searchResultsPaginationData.query = query;
-            group = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
-                'sundrycreditors, bankaccounts, cash' : 'sundrydebtors';
+            group = (this.invoiceType === VoucherTypeEnum.debitNote) ? 'sundrycreditors' :
+                (this.invoiceType === VoucherTypeEnum.purchase) ?
+                    'sundrycreditors, bankaccounts, cash' : 'sundrydebtors';
             this.selectedGrpUniqueNameForAddEditAccountModal = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
                 'sundrycreditors' : 'sundrydebtors';
         } else if (searchType === SEARCH_TYPE.ITEM) {
