@@ -7,7 +7,10 @@ import { AuditLogsComponent } from './audit-logs.component';
     imports: [
         RouterModule.forChild([
             {
-                path: '', component: AuditLogsComponent, canActivate: [NeedsAuthentication]
+                path: '', component: AuditLogsComponent, canActivate: [NeedsAuthentication],
+            },
+            {
+                path: ':version', component: AuditLogsComponent, canActivate: [NeedsAuthentication],
             }
         ])
     ],
