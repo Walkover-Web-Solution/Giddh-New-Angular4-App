@@ -6,5 +6,6 @@ export const PURCHASE_RECORD_API = {
     DOWNLOAD_ATTACHMENT: `${PURCHASE_RECORD}purchase-record/download-file`,
     VALIDATE_RECORD: `${PURCHASE_RECORD}purchase-record/validate`,
     UPDATE: `${PURCHASE_RECORD}purchase-record`,
-    DELETE: `company/:companyUniqueName/purchase-record?uniqueName=:uniqueName`
+    DELETE: `company/:companyUniqueName/purchase-record?uniqueName=:uniqueName`,
+    GET_ALL_VERSIONS: `${PURCHASE_RECORD}purchase-record/versions/all?page=:page&count=:count`,
 }

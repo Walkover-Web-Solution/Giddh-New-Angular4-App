@@ -75,6 +75,7 @@ import { AsideSettingComponent } from './header/components/aside-setting/aside-s
 import { DeleteTemplateConfirmationModelComponent } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
 import { DatepickerWrapperComponent } from './datepicker-wrapper/datepicker.wrapper.component';
 import { LoaderComponent } from '../loader/loader.component';
+import { RevisionHistoryComponent } from './revision-history/revision-history.component';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -142,7 +143,8 @@ export function provideConfig() {
         ConfirmationModalComponent,
         DeleteTemplateConfirmationModelComponent,
         DatepickerWrapperComponent,
-        LoaderComponent
+        LoaderComponent,
+        RevisionHistoryComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -227,7 +229,8 @@ export function provideConfig() {
         NgxDaterangepickerMd,
         DeleteTemplateConfirmationModelComponent,
         DatepickerWrapperComponent,
-        LoaderComponent
+        LoaderComponent,
+        RevisionHistoryComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

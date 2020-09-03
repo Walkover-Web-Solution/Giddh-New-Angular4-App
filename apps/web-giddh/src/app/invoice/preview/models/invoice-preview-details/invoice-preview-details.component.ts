@@ -100,7 +100,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public proformaListComponent: ProformaListComponent;
     /** To check is selected account/customer have advance receipts */
     public isAccountHaveAdvanceReceipts: boolean = false;
-    public orderHistoryAsideState: string = 'out';
+    public revisionHistoryAsideState: string = 'out';
+    public companyUniqueName: string = '';
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -166,6 +167,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         });
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
+
+        this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -224,21 +227,15 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.invoiceDetailViewHeight = this.invoiceDetailView.nativeElement.offsetHeight;
         this.invoiceImageSectionViewHeight = this.invoiceDetailWrapperHeight - this.invoiceDetailViewHeight - 90;
     }
-    // public toggleOrderHistoryAsidePane(event?): void {
-    //     if (event) {
-    //         event.preventDefault();
-    //     }
-    //     this.orderHistoryAsideState = this.orderHistoryAsideState === 'out' ? 'in' : 'out';
 
-    //     this.toggleBodyClass();
-    // }
-    // public toggleBodyClass() {
-    //     if (this.orderHistoryAsideState === 'in') {
-    //         document.querySelector('body').classList.add('fixed');
-    //     } else {
-    //         document.querySelector('body').classList.remove('fixed');
-    //     }
-    // }
+    public toggleActivityHistoryAsidePane(event?: any): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.revisionHistoryAsideState = this.revisionHistoryAsideState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
     public toggleEditMode() {
         this.store.dispatch(this._generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
         this.showEditMode = !this.showEditMode;
@@ -250,7 +247,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     public toggleBodyClass() {
-        if (!this.showEditMode || this.orderHistoryAsideState === 'in') {
+        if (!this.showEditMode || this.revisionHistoryAsideState === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');

@@ -20,7 +20,6 @@ import { PurchaseInvoiceComponent } from './purchase-invoice/purchase.invoice.co
 import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
 import { CreatePurchaseOrderComponent } from './create-purchase-order/create-purchase-order.component';
 import { PurchaseOrderPreviewComponent } from './purchase-order-preview/purchase-order-preview.component'
-import { RevisionHistoryComponent } from './revision-history/revision-history.component'
 import { ReconcileDesignComponent } from './purchase-invoice/reconcileDesign/reconcileDesign.component';
 import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
 import { PurchaseSettingComponent } from './purchase-setting/purchase-setting.component';
@@ -48,7 +47,6 @@ import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.modu
         AsideMenuPurchaseInvoiceSettingComponent,
         ReconcileDesignComponent,
         PurchaseRecordComponent,
-        RevisionHistoryComponent,
         PurchaseSettingComponent,
         PurchaseAdvanceSearchComponent,
         PurchaseSendEmailModalComponent

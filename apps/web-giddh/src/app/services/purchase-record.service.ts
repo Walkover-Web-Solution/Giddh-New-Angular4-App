@@ -99,4 +99,14 @@ export class PurchaseRecordService {
         return this._http.delete(contextPath).pipe(
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
     }
+
+    public getAllVersions(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_RECORD_API.GET_ALL_VERSIONS;
+        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);
+        url = url.replace(':page', getRequestObject.page);
+        url = url.replace(':count', getRequestObject.count);
+
+        return this._http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
 }
