@@ -9,7 +9,7 @@ Error.stackTraceLimit = Infinity;
 
 export const environment: Environment = {
     production: false,
-    AppUrl: 'https://dev.giddh.com/',
+    AppUrl: 'https://beta.giddh.com/',
     ApiUrl: 'https://api.giddh.com/',
     isElectron: false,
     isCordova: false,

@@ -73,7 +73,7 @@
                 "build": {
                     "builder": "ngx-build-plus:build",
                     "options": {
-                        "baseHref": "https://dev.giddh.com",
+                        "baseHref": "https://beta.giddh.com",
                         "outputPath": "dist/apps/web-giddh",
                         "index": "apps/web-giddh/src/index.html",
                         "main": "apps/web-giddh/src/main.ts",
@@ -132,7 +132,7 @@
                         "local": {
                             "outputPath": "dist/apps/web-giddh-local",
                             "extraWebpackConfig": "./webpack.local.partial.js",
-                            "baseHref": "https://dev.giddh.com",
+                            "baseHref": "https://beta.giddh.com",
                             "baseUrl": "localhost:3000",
                             "fileReplacements": [
                                 {
