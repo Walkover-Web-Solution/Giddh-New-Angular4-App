@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy, TemplateRef } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { BsModalRef, BsDatepickerDirective, PopoverDirective, ModalDirective } from 'ngx-bootstrap'
+import { BsModalRef, BsDatepickerDirective, PopoverDirective, ModalDirective, BsModalService } from 'ngx-bootstrap'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { IOption } from '../../theme/ng-select/ng-select';
@@ -127,7 +127,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     /* Tax Control instance */
     @ViewChild(TaxControlComponent) public taxControlComponent: TaxControlComponent;
     /* Modal instance */
-    public modelRef: BsModalRef;
+    public modalRef: BsModalRef;
     /* This will hold if it's multi currency account */
     public isMulticurrencyAccount: boolean = false;
     /* This will hold if it's mobile device*/
@@ -300,8 +300,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public interval: any;
     /* This will hold the purchase orders */
     public purchaseOrders: any[] = [];
+    /* This will hold po unique name for preview */
+    public purchaseOrderPreviewUniqueName: string = '';
 
-    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService) {
+    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService, private modalService: BsModalService) {
         this.getInvoiceSettings();
         this.store.dispatch(this.generalActions.getFlattenAccount());
         this.flattenAccountListStream$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$));
@@ -2851,6 +2853,21 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public openPurchaseOrderPreviewPopup(template: TemplateRef<any>, purchaseOrderUniqueName: any): void {
+        this.purchaseOrderPreviewUniqueName = purchaseOrderUniqueName;
+        
+        this.modalRef = this.modalService.show(
+            template,
+            Object.assign({}, { class: 'modal-sm' })
+        );
+    }
+
+    public closePurchaseOrderPreviewPopup(event: any): void {
+        if (event) {
+            this.modalRef.hide();
         }
     }
 }

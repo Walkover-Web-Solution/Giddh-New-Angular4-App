@@ -100,6 +100,14 @@ export class PurchaseRecordService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
     }
 
+    /**
+     * This will get all the revisions
+     *
+     * @param {*} getRequestObject
+     * @param {*} postRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseRecordService
+     */
     public getAllVersions(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_RECORD_API.GET_ALL_VERSIONS;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);

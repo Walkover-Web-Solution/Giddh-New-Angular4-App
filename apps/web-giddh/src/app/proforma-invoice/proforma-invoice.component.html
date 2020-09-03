@@ -564,17 +564,16 @@
                             </div> -->
 
                             <!-- Link purchase order (make it functional)-->
-                            <!-- <div class="row mTB1" hidden>
+                            <div class="row mTB1" *ngIf="isPurchaseInvoice">
                                 <div class="col-sm-2">
                                     <label>Link Purchase Order</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
-                                        <sh-select></sh-select>
-
+                                        <sh-select [showCheckbox]="true" [options]="purchaseOrders" [multiple]="true"></sh-select>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                             <!-- end Link purchase order -->
 
 

@@ -10,7 +10,7 @@
             <ng-template [ngTemplateOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
             <ng-container *ngIf="!optionTemplate">
                 <a href="javascript:void(0)" class="list-item">
-                    <div class="item">{{row.label}}</div>
+                    <div class="item" [innerHTML]="row.label"></div>
                 </a>
             </ng-container>
         </div>
@@ -44,7 +44,7 @@
             <ng-template [ngTemplateOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
             <ng-container *ngIf="!optionTemplate">
                 <a href="javascript:void(0)" class="list-item">
-                    <div class="item"><span><input type="checkbox" class="form-control" [value]="row.value" [checked]="selectedValues?.indexOf(row) !== -1" (change)="toggleSelected(row)"></span> <span (click)="toggleSelected(row)">{{row.label}}</span></div>
+                    <div class="item"><span><input type="checkbox" class="form-control" [value]="row.value" [checked]="selectedValues?.indexOf(row) !== -1" (change)="toggleSelected(row)"></span> <span (click)="toggleSelected(row)" [innerHTML]="row.label"></span></div>
                 </a>
             </ng-container>
         </div>

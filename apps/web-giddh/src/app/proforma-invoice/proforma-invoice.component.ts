@@ -111,6 +111,7 @@ import { AdvanceReceiptAdjustmentComponent } from '../shared/advance-receipt-adj
 import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../models/api-models/AdvanceReceiptsAdjust';
 import { CurrentCompanyState } from '../store/Company/company.reducer';
 import { CustomTemplateState } from '../store/Invoice/invoice.template.reducer';
+import { PurchaseOrderService } from '../services/purchase-order.service';
 
 const THEAD_ARR_READONLY = [
     {
@@ -459,6 +460,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public companyCountryName: string = '';
     /** this property is return whether invoice have at least on correct entry or not **/
     public hasVoucherEntry: boolean;
+    /* This will hold the purchase orders */
+    public purchaseOrders: IOption[] = [];
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -502,7 +505,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private warehouseActions: WarehouseActions,
         private commonActions: CommonActions,
         private purchaseRecordAction: PurchaseRecordActions,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        public purchaseOrderService: PurchaseOrderService
     ) {
         this.getInventorySettings();
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
@@ -2763,6 +2767,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public getAccountDetails(accountUniqueName: string) {
+        if(this.isPurchaseInvoice) {
+            this.getVendorPurchaseOrders(accountUniqueName);
+        }
         this.store.dispatch(this.salesAction.getAccountDetailsForSales(accountUniqueName));
     }
 
@@ -5176,6 +5183,35 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if ((this.companyCountryName === "India" && data.country.countryName !== "India") || isPartyTypeSez) {
                 this.excludeTax = true;
             }
+        }
+    }
+
+    /**
+     * This will get the list of PO by vendor
+     *
+     * @param {*} vendorName
+     * @memberof ProformaInvoiceComponent
+     */
+    public getVendorPurchaseOrders(vendorName: any): void {
+        let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, page: 1, from: '', to: '', count: 100, sort: '', sortBy: '' };
+        let purchaseOrderPostRequest = { vendorName: vendorName, statuses: ['open', 'partially-received'] };
+
+        if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
+            this.purchaseOrders = [];
+
+            this.purchaseOrderService.getAll(purchaseOrderGetRequest, purchaseOrderPostRequest).subscribe((res) => {
+                if (res) {
+                    if (res.status === 'success') {
+                        if (res.body && res.body.items && res.body.items.length > 0) {
+                            res.body.items.forEach(item => {
+                                this.purchaseOrders.push({label: item.voucherNumber + "<br>Amount: " + item.grandTotal.amountForCompany, value: item.voucherNumber});
+                            });
+                        }
+                    } else {
+                        this._toasty.errorToast(res.message);
+                    }
+                }
+            });
         }
     }
 }

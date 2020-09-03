@@ -76,6 +76,7 @@ import { DeleteTemplateConfirmationModelComponent } from '../invoice/templates/e
 import { DatepickerWrapperComponent } from './datepicker-wrapper/datepicker.wrapper.component';
 import { LoaderComponent } from '../loader/loader.component';
 import { RevisionHistoryComponent } from './revision-history/revision-history.component';
+import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -144,7 +145,8 @@ export function provideConfig() {
         DeleteTemplateConfirmationModelComponent,
         DatepickerWrapperComponent,
         LoaderComponent,
-        RevisionHistoryComponent
+        RevisionHistoryComponent,
+        PurchaseOrderPreviewModalComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -230,7 +232,8 @@ export function provideConfig() {
         DeleteTemplateConfirmationModelComponent,
         DatepickerWrapperComponent,
         LoaderComponent,
-        RevisionHistoryComponent
+        RevisionHistoryComponent,
+        PurchaseOrderPreviewModalComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
