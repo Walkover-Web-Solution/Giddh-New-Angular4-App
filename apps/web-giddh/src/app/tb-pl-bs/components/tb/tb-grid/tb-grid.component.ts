@@ -50,8 +50,8 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
             //
             if (this.data$) {
                 // this.cd.detach();
-                this.zone.run(() => {
-                    this.toggleVisibility(this.data$.groupDetails, changes.expandAll.currentValue);
+                this.zone.runOutsideAngular(() => {
+                    this.toggleGroupVisibility(this.data$.groupDetails, changes.expandAll.currentValue);
                     if (this.data$) {
                         // always make first level visible ....
                         _.each(this.data$.groupDetails, (grp: ChildGroup) => {
@@ -68,7 +68,6 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
                 });
 
                 // this.data$ = _.cloneDeep(this.data$);
-                this.cd.detectChanges();
             }
         }
     }
@@ -116,19 +115,31 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
         return !!c;
     }
 
-    private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
-        _.each(data, (grp: ChildGroup) => {
-            if (grp.isIncludedInSearch) {
-                grp.isCreated = true;
-                grp.isVisible = isVisible;
-                _.each(grp.accounts, (acc: Account) => {
-                    if (acc.isIncludedInSearch) {
-                        acc.isCreated = true;
-                        acc.isVisible = isVisible;
+    /**
+     * Toggles group visibility
+     *
+     * @param {Array<ChildGroup>} group Groups received
+     * @param {boolean} isVisible Current visibility status
+     * @memberof TbGridComponent
+     */
+    public toggleGroupVisibility(group: Array<ChildGroup>, isVisible: boolean): void {
+        const stack = [...group];
+        while (stack.length) {
+            const currentGroup = stack.pop();
+            if (currentGroup.isIncludedInSearch) {
+                currentGroup.isCreated = true;
+                currentGroup.isVisible = isVisible;
+                for (let accountIndex = 0; accountIndex < currentGroup.accounts.length; accountIndex++) {
+                    const account = currentGroup.accounts[accountIndex];
+                    if (account.isIncludedInSearch) {
+                        account.isCreated = true;
+                        account.isVisible = isVisible;
                     }
-                });
-                this.toggleVisibility(grp.childGroups, isVisible);
+                }
+                if (currentGroup.childGroups && currentGroup.childGroups.length > 0) {
+                    stack.push(...currentGroup.childGroups);
+                }
             }
-        });
+        }
     }
 }
