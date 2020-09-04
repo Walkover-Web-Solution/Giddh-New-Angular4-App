@@ -268,7 +268,7 @@
                                                                 <div class="d-flex align-items-center"
                                                                      >
                                                                     <span class="pl-05">
-                                                                        <input type="checkbox" id="{{'transaction-mapped-select-entry-dr-' + i}" click)="selectEntryForBulkAction($event, item)" /></span>
+                                                                        <input type="checkbox" id="{{'transaction-mapped-select-entry-dr-' + i}" (click)="selectEntryForBulkAction($event, item)" /></span>
                                                                     <span class="ml-05">
                                                                         <input class="form-control" [maxlength]="10"
                                                                             autocomplete="off" name="bsdateledger"
