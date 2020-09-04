@@ -750,7 +750,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                 }
             }
-
+            this.focusInCustomerName();
             this.getAllLastInvoices();
         });
 
