@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { Observable, of } from 'rxjs';
 import { LoaderService } from '../loader/loader.service';
+import { GeneralService } from './general.service';
+import { OrganizationType } from '../models/user-login-state';
 
 @Injectable()
 export class GiddhHttpInterceptor implements HttpInterceptor {
@@ -11,7 +13,8 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
 
     constructor(
         private _toasterService: ToasterService,
-        private loadingService: LoaderService
+        private loadingService: LoaderService,
+        private generalService: GeneralService
     ) {
         window.addEventListener('online', () => {
             this.isOnline = true;
@@ -22,6 +25,10 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
     }
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        console.log('Url with params: ', request.urlWithParams,' ', request.method);
+        if (this.generalService.currentOrganizationType === OrganizationType.Branch && request && request.urlWithParams) {
+            request = this.addBranchUnqiueName(request);
+        }
         if (this.isOnline) {
             return next.handle(request);
         } else {
@@ -35,5 +42,15 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
                 return of();
             }
         }
+    }
+
+    private addBranchUnqiueName(request: HttpRequest<any>): HttpRequest<any> {
+        const delemiter = request.urlWithParams.includes('?') ? '&' : '?';
+        if (!request.urlWithParams.includes('branchUniqueName')) {
+            request = request.clone({
+                url: `${request.url}${delemiter}branchUniqueName=12345`
+            });
+        }
+        return request;
     }
 }

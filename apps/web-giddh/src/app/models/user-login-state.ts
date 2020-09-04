@@ -4,3 +4,8 @@ export enum userLoginStateEnum {
     newUserLoggedIn,
     needTwoWayAuth
 }
+
+export enum OrganizationType {
+    Company = 'COMPANY',
+    Branch = 'BRANCH'
+}
