@@ -5278,9 +5278,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.prepareSearchLists(data.body.results, page, searchType);
                 this.makeCustomerList();
                 this.noResultsFoundLabel = SearchResultText.NotFound;
-                if (searchType === SEARCH_TYPE.CUSTOMER) {
-                    this.focusInCustomerName();
-                }
                 this._cdr.detectChanges();
                 this.searchResultsPaginationData.page = data.body.page;
                 this.searchResultsPaginationData.totalPages = data.body.totalPages;
