@@ -60,7 +60,7 @@ import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Accoun
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
-import { userLoginStateEnum } from '../../models/user-login-state';
+import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { CountryRequest, CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
@@ -385,9 +385,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
 
             let orderedCompanies = _.orderBy(companies, 'name');
+            orderedCompanies.map((company, index) => {
+                if (index > 0) {
+                    company['isBranch'] = true;
+                }
+                return company;
+            });
             this.companies$ = observableOf(orderedCompanies);
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
+            console.log(this.companyListForFilter);
             this.store.dispatch(this.companyActions.setTotalNumberofCompanies(this.companyList.length));
             let selectedCmp = companies.find(cmp => {
                 if (cmp && cmp.uniqueName) {
@@ -1122,6 +1129,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public changeCompany(selectedCompanyUniqueName: string) {
         this.companyDropdown.isOpen = false;
+        this.generalService.currentOrganizationType = OrganizationType.Branch;
         this.toggleBodyScroll();
         this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName));
     }
@@ -1373,7 +1381,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             // }
             if (!isCtrlClicked) {
                 this.router.navigate([url]); // added link in routerLink
-            }     
+            }
         }
         // save data to db
         item.time = +new Date();

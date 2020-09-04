@@ -8,6 +8,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import * as moment from 'moment';
 import { find } from '../lodash-optimized';
+import { OrganizationType } from '../models/user-login-state';
 
 @Injectable()
 export class GeneralService {
@@ -15,6 +16,9 @@ export class GeneralService {
     // TODO : It is commented due to we have implement calendly and its under discussion to remove
     // public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public isCurrencyPipeLoaded: boolean = false;
+
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
