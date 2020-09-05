@@ -462,6 +462,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public hasVoucherEntry: boolean;
     /* This will hold the purchase orders */
     public purchaseOrders: IOption[] = [];
+    public linkedPO: any[] = [];
+    public linkedPONumbers: any[] = [];
+    public linkedPOValue: string = "";
+    public poFilterDates: any = {from: '', to: ''};
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -817,6 +821,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.store.pipe(select((p: AppState) => p.session.applicationDate)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 try {
+                    this.poFilterDates = {from: moment(dateObj[0]).format(GIDDH_DATE_FORMAT), to: moment(dateObj[1]).format(GIDDH_DATE_FORMAT)}
                     this.universalDate = moment(dateObj[1]).toDate();
                     this.assignDates();
                 } catch (e) {
@@ -5193,18 +5198,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public getVendorPurchaseOrders(vendorName: any): void {
-        let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, page: 1, from: '', to: '', count: 100, sort: '', sortBy: '' };
+        let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, page: 1, from: this.poFilterDates.from, to: this.poFilterDates.to, count: 100, sort: '', sortBy: '' };
         let purchaseOrderPostRequest = { vendorName: vendorName, statuses: ['open', 'partially-received'] };
 
         if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
             this.purchaseOrders = [];
+            this.linkedPONumbers = [];
 
             this.purchaseOrderService.getAll(purchaseOrderGetRequest, purchaseOrderPostRequest).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
                         if (res.body && res.body.items && res.body.items.length > 0) {
                             res.body.items.forEach(item => {
-                                this.purchaseOrders.push({label: item.voucherNumber + "<br>Amount: " + item.grandTotal.amountForCompany, value: item.voucherNumber});
+                                this.purchaseOrders.push({label: item.voucherNumber + "<br>Amount: " + item.grandTotal.amountForCompany, value: item.uniqueName});
+
+                                this.linkedPONumbers[item.uniqueName] = [];
+                                this.linkedPONumbers[item.uniqueName]['voucherNumber'] = item.voucherNumber;
+                                this.linkedPONumbers[item.uniqueName]['items'] = [];
                             });
                         }
                     } else {
@@ -5213,5 +5223,77 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             });
         }
+    }
+
+    public getPurchaseOrder(event: any): void {
+        console.log(event);
+        this.linkedPOValue = "";
+
+        if(event && event.length > 0) {
+            let selectedOrders = [];
+            event.forEach(order => {
+                selectedOrders.push(this.linkedPONumbers[order.value]);
+
+                let getRequest = { companyUniqueName: this.selectedCompany.uniqueName, poUniqueName: order.value };
+                this.purchaseOrderService.getPreview(getRequest).subscribe(response => {
+                    if (response) {
+                        if (response.status === "success") {
+                            if(response.body && response.body.entries && response.body.entries.length > 0) {
+                                this.linkedPONumbers[order.value]['items'] = response.body.entries;
+                                this.addPOItems(response.body.entries);
+                            } else {
+                                this.linkedPONumbers[order.value]['items'] = [];
+                            }
+                        } else {
+                            this._toasty.errorToast(response.message);
+                        }
+                    }
+                });
+            });
+            this.linkedPOValue = selectedOrders.join(", ");
+        }
+    }
+
+    public addPOItems(entries: any) {
+        let salesAccs: IOption[] = [];
+        this.salesAccounts$.pipe(take(1)).subscribe(data => salesAccs = data);
+
+        entries.forEach(entry => {
+            let transactionLoop = 0;
+            entry.transactions.forEach(item => {
+                let transaction = item.stock;
+
+                let salesItem: IOption = salesAccs.find(sa => sa.value === "purchases#" + transaction.uniqueName);
+                if (salesItem) {
+                    salesItem.additional = {...salesItem.additional, quantity: transaction.quantity};
+                    let lastIndex = -1;
+                    let blankItemIndex = this.invFormData.entries.findIndex(f => !f.transactions[transactionLoop].accountUniqueName);
+
+                    if (blankItemIndex > -1) {
+                        lastIndex = blankItemIndex;
+                        this.invFormData.entries[lastIndex] = new SalesEntryClass();
+                    } else {
+                        this.invFormData.entries.push(new SalesEntryClass());
+                        lastIndex = this.invFormData.entries.length - 1;
+                    }
+
+                    this.activeIndx = lastIndex;
+                    this.invFormData.entries[lastIndex].entryDate = this.universalDate;
+                    this.invFormData.entries[lastIndex].transactions[transactionLoop].fakeAccForSelect2 = salesItem.value;
+
+                    this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
+                    this.invFormData.entries[lastIndex].transactions[transactionLoop].description = entry.description;
+                    this.invFormData.entries[lastIndex].discounts = this.parseDiscountFromResponse(entry);
+                    this.invFormData.entries[lastIndex].taxList = entry.taxes.map(tax => tax.uniqueName);
+                    this.onSelectSalesAccount(salesItem, this.invFormData.entries[lastIndex].transactions[transactionLoop], this.invFormData.entries[lastIndex]);
+                    this.invFormData.entries[lastIndex].transactions[transactionLoop].applicableTaxes = this.invFormData.entries[lastIndex].taxList;
+                    this.invFormData.entries[lastIndex].transactions[transactionLoop].rate = transaction.rate.amountForAccount;
+
+                    this.calculateStockEntryAmount(this.invFormData.entries[lastIndex].transactions[transactionLoop]);
+                    this.calculateWhenTrxAltered(this.invFormData.entries[lastIndex], this.invFormData.entries[lastIndex].transactions[transactionLoop]);
+                }
+                transactionLoop++;
+            });
+        });
     }
 }

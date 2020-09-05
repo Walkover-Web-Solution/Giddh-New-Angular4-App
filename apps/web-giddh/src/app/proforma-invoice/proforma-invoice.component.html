@@ -570,7 +570,7 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
-                                        <sh-select [showCheckbox]="true" [options]="purchaseOrders" [multiple]="true"></sh-select>
+                                        <sh-select [showCheckbox]="true" [options]="purchaseOrders" [placeholder]="'Select Order'" [fixedValue]="linkedPOValue" [multiple]="true" name="linkedPO" [(ngModel)]="linkedPO" (selected)="getPurchaseOrder($event)" [isFilterEnabled]="false"></sh-select>
                                     </div>
                                 </div>
                             </div>
