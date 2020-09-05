@@ -215,6 +215,14 @@ export class SalesService {
         return this._http.get(contextPath);
     }
 
+    /**
+     * This will get the list of due invoices
+     *
+     * @param {*} voucherDate
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SalesService
+     */
     public getInvoiceListForReceiptVoucher(voucherDate: any, model: any): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + SALES_API_V2.GET_INVOICE_LIST_FOR_RECEIPT_VOUCHER;
         this.companyUniqueName = this._generalService.companyUniqueName;
