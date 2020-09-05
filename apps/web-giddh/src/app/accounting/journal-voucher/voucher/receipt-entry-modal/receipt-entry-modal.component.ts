@@ -270,7 +270,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
      * @memberof ReceiptEntryModalComponent
      */
     public getInvoiceListForReceiptVoucher(): void {
-        this.salesService.getInvoiceListForReceiptVoucher(moment(this.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT), this.pendingInvoicesListParams).subscribe(response => {
+        this.salesService.getInvoiceList(this.pendingInvoicesListParams, moment(this.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)).subscribe(response => {
             if (response && response.status === "success" && response.body && response.body.results && response.body.results.length > 0) {
                 let pendingInvoiceList: IOption[] = [];
 

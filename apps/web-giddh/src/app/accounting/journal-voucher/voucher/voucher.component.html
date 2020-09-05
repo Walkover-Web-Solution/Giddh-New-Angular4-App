@@ -98,7 +98,7 @@
                                                         name="amount" [(ngModel)]="entry.amount"
                                                         (keydown)="validateAmount($event, entry)"
                                                         (blur)="validateEntry(entry)" decimalDigitsDirective
-                                                        [DecimalPlaces]="2" (ngModelChange)="formatAmount(entry)">
+                                                        [mask]="inputMaskFormat" (ngModelChange)="formatAmount(entry)">
                                                 </div>
                                                 <div class="single-field cr-dr-field">
                                                     <p>
