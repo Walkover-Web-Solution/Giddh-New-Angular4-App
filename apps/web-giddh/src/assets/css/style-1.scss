@@ -2600,7 +2600,7 @@ background: #f9f9f9;
         overflow-x: hidden !important;
     }
     .container {
-        width: 1000px;
+        width: 100%;
     }
     .header-container {
         width: 100%;
@@ -4977,11 +4977,11 @@ strong {
     color: rgba(0, 0, 0, 0.8);
 }
 
-.hamburger_menu a:hover {
+.hamburger-menu a:hover {
     color: #fff !important;
 }
 
-.hamburger_menu.open a {
+.hamburger-menu.open a {
     background: transparent !important;
     color: #fff !important;
 }

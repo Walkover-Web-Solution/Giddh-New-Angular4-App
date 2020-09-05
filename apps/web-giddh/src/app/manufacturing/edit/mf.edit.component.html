@@ -112,7 +112,7 @@
                                     <td>{{ stock.rate | number:'1.0-4'}}</td>
                                     <!--<td><input type="text" [(ngModel)]="stock.rate" name="rate_{{i}}"></td>-->
                                     <td>{{ stock.amount | number:'1.0-2'}}</td>
-                                    <td class="action"><i class="fa fa-times" (click)="removeConsumptionItem(i)" aria-hidden="true"></i>
+                                    <td class="action"><i class="icon-cross" (click)="removeConsumptionItem(i)" aria-hidden="true"></i>
                                     </td>
                                 </tr>
 
@@ -196,7 +196,7 @@
                                     <td class="text-right w100">
                                         <div class="pd"><input type="text" decimalDigitsDirective [DecimalPlaces]="2" required placeholder="Amount" [(ngModel)]="expense.transactions[0].amount" name="amount{{i}}" class="form-control text-right"></div>
                                     </td>
-                                    <td class="text-center"><i class="fa fa-times" aria-hidden="true" (click)="removeExpenseItem(i)"></i></td>
+                                    <td class="text-center"><i class="icon-cross" aria-hidden="true" (click)="removeExpenseItem(i)"></i></td>
                                 </tr>
 
                                 <tr *ngIf="toggleAddExpenses">

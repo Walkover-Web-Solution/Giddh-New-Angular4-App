@@ -723,6 +723,9 @@ ul.sub-list {
 .setting-sidebar {
     box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2);
 }
+.desktop-header .hamburger-menu{
+    display: flex;
+}
 /* responsive */
 @media (max-height: 800px) {
     .nav-wrapper {
@@ -758,7 +761,7 @@ ul.sub-list {
     .lower-layer-header {
         padding-top: 5px;
     }
-    .hamburger_menu button {
+    .hamburger-menu button {
         width: 32px;
         padding: 4px 4px 3px 0;
         i {
@@ -797,7 +800,7 @@ ul.sub-list {
             margin-bottom: 5px;
             display: flex;
             flex-direction: row;
-            .hamburger_menu {
+            .hamburger-menu {
                 display: flex;
                 align-items: center;
             }

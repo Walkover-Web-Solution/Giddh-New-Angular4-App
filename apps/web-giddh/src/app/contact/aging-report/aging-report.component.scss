@@ -51,15 +51,16 @@
     background: #fff;
 }
 
-.searchField {
+.search-field {
     position: relative;
+    margin-bottom: 0;
 }
-.searchField input {
+.search-field input {
     width: 235px;
     background-color: #e6e7e8 !important;
     border-color: #e6e7e8 !important;
 }
-.searchField input:focus {
+.search-field input:focus {
     background-color: #fff !important;
     border-color: $midnight-express !important;
 }

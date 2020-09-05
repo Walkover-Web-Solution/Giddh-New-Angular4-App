@@ -263,17 +263,18 @@ i.icon-options:hover {
     background-color: #eaeaea;
 }
 
-.searchField {
+.search-field {
     position: relative;
+    margin-bottom: 0;
 }
 
-.searchField input {
+.search-field input {
     width: 235px;
     background-color: #e6e7e8 !important;
     border-color: #e6e7e8 !important;
 }
 
-.searchField input:focus {
+.search-field input:focus {
     background-color: #fff !important;
     border-color: $midnight-express !important;
 }
@@ -354,11 +355,21 @@ button.btn.btn-filter span.icon-cross {
 .mobile-button-filter {
     display: none !important;
 }
-
-
+.customer-form-inline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 /*responsive*/
-
 @media (max-width: 768px) {
+    button.btn.btn-filter{
+        margin-left: auto;
+        margin-bottom: 10px;
+        display: flex;
+    }
+    .customer-form-inline{
+        display: block;
+    }
     .aging-table>tbody>tr input[type="checkbox"] {
         top: 2px;
     }
@@ -419,6 +430,9 @@ button.btn.btn-filter span.icon-cross {
     }
     .aging-table .btn-small {
         min-width: auto;
+    }
+    .top-aging-table-top{
+        margin-bottom: 8px;
     }
 }
 

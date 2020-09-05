@@ -329,10 +329,6 @@ sh-select:focus {
 .ledger-section {
     display: flex;
 }
-.ledger-section {
-    display: flex;
-}
-
 .advanc-search-block .icon-search {
     right: 0;
     top: 0;
@@ -640,6 +636,13 @@ sh-select:focus {
         max-width: 1280px;
     }
 }
+@media(max-width:1190px){
+    .date-advance-search{
+        &:before, &:after{
+            display: none;
+        }
+    }
+}
 @media only screen and (max-width: 1024px) {
     .container {
         width: 100%;
@@ -859,6 +862,7 @@ sh-select:focus {
     }
     .search-ledger-wrapper {
         width: 100% !important;
+        margin-top: 7px;
     }
     .download-invoice-ledger {
         top: 8px;
@@ -873,6 +877,9 @@ sh-select:focus {
     }
     .hidden-xs {
         display: none !important;
+    }
+    .ledger-head th{
+        padding-top: 0;
     }
 }
 @media (min-width: 768px) {

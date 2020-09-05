@@ -107,6 +107,13 @@
     display: none;
 }
 // responsive
+@media(max-width:1190px){
+    .reccuring-form {
+        .input-group {
+            width: 125px;
+        }
+    }
+}
 @media (max-width: 1023px) {
     .input-group {
         display: block;

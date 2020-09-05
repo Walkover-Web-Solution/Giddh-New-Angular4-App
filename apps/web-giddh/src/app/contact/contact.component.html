@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         <div class="pull-left header-left">
-                            <div class="form-group max250 searchField" *ngIf="activeTab !== 'aging'">
+                            <div class="form-group max250 search-field" *ngIf="activeTab !== 'aging'">
                                 <input type="text" placeholder="Name/Email/Mobile" class="form-control" [(ngModel)]="searchStr" (ngModelChange)="searchStr$.next($event)" />
                                 <span class="input-addon">
                                 <i class="icon-search"></i>
@@ -217,7 +217,7 @@
                 <div class="modal-header themeBg pdL2 pdR2 clearfix">
                     <h3 class="modal-title bg" id="modal-title-mail-vendor">{{messageBody.header.set}}</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>
-                    <!-- <i class="fa fa-times text-right close-modal" aria-hidden="true" ></i> -->
+                    <!-- <i class="icon-cross text-right close-modal" aria-hidden="true" ></i> -->
                 </div>
                 <div class="modal-body pdL2 pdR2 clearfix">
                     <h1 class="mrB1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
@@ -256,7 +256,7 @@
                 <div class="modal-header themeBg pdL2 pdR2 clearfix">
                     <h3 class="modal-title bg" id="modal-title-mail-customer">{{messageBody.header.set}}</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>
-                    <!-- <i class="fa fa-times text-right close-modal" aria-hidden="true" ></i> -->
+                    <!-- <i class="icon-cross text-right close-modal" aria-hidden="true" ></i> -->
                 </div>
 
                 <div class="modal-body pdL2 pdR2 clearfix">

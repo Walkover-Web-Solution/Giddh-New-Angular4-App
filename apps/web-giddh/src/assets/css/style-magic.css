@@ -5019,11 +5019,11 @@ strong {
     color: rgba(0, 0, 0, 0.8);
 }
 
-.hamburger_menu a:hover {
+.hamburger-menu a:hover {
     color: #fff !important;
 }
 
-.hamburger_menu.open a {
+.hamburger-menu.open a {
     background: transparent !important;
     color: #fff !important;
 }

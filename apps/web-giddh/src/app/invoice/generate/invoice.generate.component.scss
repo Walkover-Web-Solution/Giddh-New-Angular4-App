@@ -282,8 +282,34 @@ span.close-modal.cp.pull-right {
         padding: 0 !important;
         border: none !important;
         margin: 0 !important;
-        width: 100% !important;
+        width: 50% !important;
         float: left;
+    }
+    .pending-table.onMobileView{
+        tr{
+            td{
+                .table.nested_table{
+                    tr{
+                        td{
+                        padding: 8px 0 !important;
+                        width: 100%;
+                        display: flex;
+                        border-bottom: none;
+                        padding-left: 10px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .pending-table.onMobileView tr td .table.nested_table tr:first-child td{
+        border-left: 1px solid $gainsboro !important;
+    }
+    .pending-table.onMobileView tr td .table.nested_table tr td:last-child{
+        border-bottom: 1px solid $gainsboro !important;
+    }
+    .pending-table.onMobileView tr td .table.nested_table tr:first-child td{
+        border-bottom: none !important;
     }
     .pending-table .nested_table > tbody tr td {
         padding: 0 !important;
@@ -324,6 +350,7 @@ span.close-modal.cp.pull-right {
     .mobile-width-100 {
         width: 100%;
     }
+
 }
 
 @media (max-width: 767px) {

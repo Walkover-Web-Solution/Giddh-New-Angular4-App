@@ -125,7 +125,7 @@
         display: table-cell;
         font-weight: 500;
         height: 100%;
-        left: 27px;
+        left: 15px;
         margin: auto;
         position: absolute;
         vertical-align: middle;
@@ -690,39 +690,39 @@ input {
 }
 
 .ml-15 {
-    margin-left: 15px !important;
+    margin-left: 15px;
 }
 
 .mr-15 {
-    margin-right: 15px !important;
+    margin-right: 15px;
 }
 
 .mt-1 {
-    margin-top: 10px !important;
+    margin-top: 10px;
 }
 
 .mt-2 {
-    margin-top: 20px !important;
+    margin-top: 20px;
 }
 
 .mt-3 {
-    margin-top: 30px !important;
+    margin-top: 30px;
 }
 
 .mt-4 {
-    margin-top: 40px !important;
+    margin-top: 40px;
 }
 
 .mt-5 {
-    margin-top: 50px !important;
+    margin-top: 50px;
 }
 
 .mt-6 {
-    margin-top: 60px !important;
+    margin-top: 60px;
 }
 
 .mt-15 {
-    margin-top: 15px !important;
+    margin-top: 15px;
 }
 
 .mrB0 {
@@ -730,59 +730,59 @@ input {
 }
 
 .mb-1 {
-    margin-bottom: 10px !important;
+    margin-bottom: 10px;
 }
 
 .mb-2 {
-    margin-bottom: 20px !important;
+    margin-bottom: 20px;
 }
 
 .mb-3 {
-    margin-bottom: 30px !important;
+    margin-bottom: 30px;
 }
 
 .mb-4 {
-    margin-bottom: 40px !important;
+    margin-bottom: 40px;
 }
 
 .mb-5 {
-    margin-bottom: 50px !important;
+    margin-bottom: 50px;
 }
 
 .mb-15 {
-    margin-bottom: 15px !important;
+    margin-bottom: 15px;
 }
 
 .ml-15 {
-    margin-left: 15px !important;
+    margin-left: 15px;
 }
 
 .mr-15 {
-    margin-right: 15px !important;
+    margin-right: 15px;
 }
 
 .mt-15 {
-    margin-top: 15px !important;
+    margin-top: 15px;
 }
 
 .mr-1 {
-    margin-right: 10px !important;
+    margin-right: 10px;
 }
 
 .mr-2 {
-    margin-right: 20px !important;
+    margin-right: 20px;
 }
 
 .mr-3 {
-    margin-right: 30px !important;
+    margin-right: 30px;
 }
 
 .mr-4 {
-    margin-right: 40px !important;
+    margin-right: 40px;
 }
 
 .mr-5 {
-    margin-right: 50px !important;
+    margin-right: 50px;
 }
 
 .ml-0 {
@@ -802,23 +802,23 @@ input {
 }
 
 .ml-1 {
-    margin-left: 10px !important;
+    margin-left: 10px;
 }
 
 .ml-2 {
-    margin-left: 20px !important;
+    margin-left: 20px;
 }
 
 .ml-3 {
-    margin-left: 30px !important;
+    margin-left: 30px;
 }
 
 .ml-4 {
-    margin-left: 40px !important;
+    margin-left: 40px;
 }
 
 .ml-5 {
-    margin-left: 50px !important;
+    margin-left: 50px;
 }
 
 .ml-05 {
@@ -1413,7 +1413,7 @@ ul.sub-list {
 
 .tooltip {
     white-space: normal;
-    z-index: 9998;
+    z-index: 9990;
 }
 
 .nowrap {
@@ -7222,10 +7222,10 @@ perfect-scrollbar > .ps > .ps-overlay {
     background: #eeeff9;
 }
 
-.hamburger_menu button,
-.hamburger_menu button:hover,
-.hamburger_menu button:focus,
-.hamburger_menu button:active {
+.hamburger-menu button,
+.hamburger-menu button:hover,
+.hamburger-menu button:focus,
+.hamburger-menu button:active {
     padding-left: 0;
     background: transparent;
     outline: none;
@@ -7235,7 +7235,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding: 0 10px 0 0;
 }
 
-.hamburger_menu h4 {
+.hamburger-menu h4 {
     font-size: 20px;
     text-transform: capitalize;
     width: auto;
@@ -8433,7 +8433,7 @@ span.red-text {
     word-break: initial;
 }
 
-.hamburger_menu i.icon-bar {
+.hamburger-menu i.icon-bar {
     color: $midnight-blue;
 }
 
@@ -9581,7 +9581,7 @@ span#HW_badge_cont:nth-child(3) {
         top: 96px;
     }
     #setting-tab .tab-container .nav.nav-tabs {
-        margin: 0 0 7px;
+        margin: 0 0 4px;
         padding: 10px 0px 0;
         white-space: nowrap;
         display: inline-block;
@@ -9872,6 +9872,9 @@ span#HW_badge_cont:nth-child(3) {
     .aging-table{
         background: transparent !important;
     }
+    .invoice-preview table{
+        margin-top: 0 !important;
+    }
 }
 
 @media (max-width: 1280px) {
@@ -9907,7 +9910,7 @@ span#HW_badge_cont:nth-child(3) {
         .mobile-back-btn {
             display: inline-flex !important;
         }
-        .hamburger_menu {
+        .hamburger-menu {
             .btn {
                 display: none !important;
             }
@@ -9945,11 +9948,11 @@ span#HW_badge_cont:nth-child(3) {
         background-color: $midnight-blue !important;
         border-bottom: none !important;
     }
-    header .hamburger_menu h4 {
+    header .hamburger-menu h4 {
         color: $white;
         font-size: 16px;
     }
-    header .hamburger_menu i.icon-bar {
+    header .hamburger-menu i.icon-bar {
         color: $white;
     }
     .dropdown-width ul.dropdown-menu.pd {

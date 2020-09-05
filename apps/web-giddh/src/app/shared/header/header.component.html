@@ -425,7 +425,7 @@
         <div class="container-fluid pdT1 pdB1">
             <div class="navbar_header">
                 <ul class="nav navbar-nav">
-                    <li class="hamburger_menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
+                    <li class="hamburger-menu cp" (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
                         <button class="btn mrR0" [tooltip]="sideMenu.isopen ? 'Collapse' : 'Expand'" placement="right">
                             <i class="icon-bar"></i>
                         </button>
@@ -478,7 +478,7 @@
                 <div class="upper-layer-header">
                     <ul class="nav navbar-nav">
                         <!-- (isOpenChange)="sideBarStateChange($event)" -->
-                        <li class="hamburger_menu cp pull-left">
+                        <li class="hamburger-menu cp pull-left">
                             <button class="btn mrR0" placement="right" (click)="redirectToMobileHome()">
                                 <i class="icon-home-icon"></i>
 
@@ -488,7 +488,7 @@
                             <span class="mobile-back-btn" (click)="redirectToMobileHome()"><i
                                     class="icon-back-arrow"></i></span>
                         </li>
-                        <li class="hamburger_menu cp pull-left"
+                        <li class="hamburger-menu cp pull-left"
                             (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
                             <h4 class="inline text-capitalize" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
                                 <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected"
