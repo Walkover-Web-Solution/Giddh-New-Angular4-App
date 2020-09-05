@@ -45,4 +45,50 @@ export class SearchService {
                 catchError((e) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(e)));
     }
 
+    /**
+     * Searches account
+     *
+     * @param {*} params Request payload for API call
+     * @returns {Observable<any>} Observable to carry out further operations
+     * @memberof SearchService
+     */
+    public searchAccount(params: any): Observable<any> {
+        const companyUniqueName = this._generalService.companyUniqueName;
+        let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_SEARCH}`.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        if (params) {
+            Object.keys(params).forEach((key, index) => {
+                const delimiter = index === 0 ? '?' : '&'
+                if (params[key]) {
+                    contextPath += `${delimiter}${key}=${params[key]}`
+                }
+            });
+        }
+        return this._http.get(contextPath)
+            .pipe(catchError((error) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(error)));
+    }
+
+    /**
+     * Loads the detail of the searched item
+     *
+     * @param {string} uniqueName Unique name of searched item
+     * @param {*} [params] Request payload
+     * @returns {Observable<any>} Observable to carry out further operation
+     * @memberof SearchService
+     */
+    public loadDetails(uniqueName: string, params?: any): Observable<any> {
+        const companyUniqueName = this._generalService.companyUniqueName;
+        let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_DETAIL}`
+        .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+        .replace(':accountUniqueName', uniqueName);
+        if (params) {
+            Object.keys(params).forEach((key, index) => {
+                const delimiter = index === 0 ? '?' : '&'
+                contextPath += `${delimiter}${key}=${params[key]}`
+            });
+        }
+
+        return this._http.get(contextPath)
+            .pipe(catchError((error) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(error)));
+    }
+
 }

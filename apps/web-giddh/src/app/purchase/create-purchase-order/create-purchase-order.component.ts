@@ -302,6 +302,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public purchaseOrders: any[] = [];
     /* This will hold po unique name for preview */
     public purchaseOrderPreviewUniqueName: string = '';
+    /** Voucher type */
+    public invoiceType: VoucherTypeEnum = VoucherTypeEnum.purchase;
 
     constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService, private modalService: BsModalService) {
         this.getInvoiceSettings();
