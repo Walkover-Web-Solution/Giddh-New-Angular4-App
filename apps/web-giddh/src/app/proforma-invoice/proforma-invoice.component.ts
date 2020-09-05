@@ -520,6 +520,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /* This will hold if PO linking is updated */
     public poLinkUpdated: boolean = false;
 
+    /** account's applied tax list */
+    public accountAssignedApplicableTaxes: string[] = [];
     /**
      * Returns true, if Purchase Record creation record is broken
      *
@@ -2858,7 +2860,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     txn.isStockTxn = true;
                                 }
                             }
-    
+
                             if(selectedAcc.stock.quantity && selectedAcc.stock.rate) {
                                 this.calculateStockEntryAmount(txn);
                             } else {
@@ -4633,7 +4635,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if(!this.linkedPoNumbers[order.uniqueName]) {
                         this.purchaseOrders.push({label: order.number, value: order.uniqueName, additional: {amount: order.grandTotal.amountForAccount}});
                     }
-                    
+
                     this.linkedPoNumbers[order.uniqueName] = [];
                     this.linkedPoNumbers[order.uniqueName]['voucherNumber'] = order.number;
                     this.linkedPoNumbers[order.uniqueName]['items'] = order.entries;
@@ -5753,6 +5755,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.excludeTax = true;
             }
         }
+        if (data && data.applicableTaxes) {
+            this.accountAssignedApplicableTaxes = data.applicableTaxes;
+        }
     }
 
     /**
@@ -5877,7 +5882,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.invFormData.entries[lastIndex].purchaseOrderItemMapping = {uniqueName: poUniqueName, entryUniqueName: entry.uniqueName};
 
                 this.onSelectSalesAccount(item, this.invFormData.entries[lastIndex].transactions[transactionLoop], this.invFormData.entries[lastIndex], false, true);
-            
+
                 transactionLoop++;
             });
         });
@@ -5911,7 +5916,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                             }
 
                                             let stockUniqueName = (item.stock && item.stock.uniqueName) ? item.stock.uniqueName : "";
-                                            if(item.stock.uniqueName) { 
+                                            if(item.stock.uniqueName) {
                                                 stockUniqueName = stockUniqueName.replace("purchases#", "");
                                             }
 
