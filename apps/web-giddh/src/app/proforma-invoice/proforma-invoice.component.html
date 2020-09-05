@@ -574,7 +574,7 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
-                                        <sh-select [options]="purchaseOrders" [placeholder]="'Select Order'" [fixedValue]="linkedPOValue" [multiple]="true" name="linkedPO" [(ngModel)]="linkedPO" (selected)="getPurchaseOrder($event)" [isFilterEnabled]="false">
+                                        <sh-select [options]="purchaseOrders" [placeholder]="'Select Order'" [multiple]="true" name="linkedPO" [(ngModel)]="linkedPO" (selected)="getPurchaseOrder($event)" [isFilterEnabled]="false">
                                             <ng-template #optionTemplate let-option="option">
                                                 <ng-container>
                                                     <a href="javascript:void(0)"

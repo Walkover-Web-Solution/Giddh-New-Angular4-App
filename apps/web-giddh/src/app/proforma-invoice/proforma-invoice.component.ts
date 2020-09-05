@@ -472,7 +472,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public purchaseOrders: IOption[] = [];
     public linkedPO: any[] = [];
     public linkedPONumbers: any[] = [];
-    public linkedPOValue: string = "";
     public poFilterDates: any = {from: '', to: ''};
     /** Stores the search results */
     public searchResults: Array<IOption> = [];
@@ -5577,13 +5576,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public getPurchaseOrder(event: any): void {
-        this.linkedPOValue = "";
-
         if(event && event.length > 0) {
-            let selectedOrders = [];
             event.forEach(order => {
-                selectedOrders.push(this.linkedPONumbers[order.value]);
-
                 let getRequest = { companyUniqueName: this.selectedCompany.uniqueName, poUniqueName: order.value };
                 this.purchaseOrderService.getPreview(getRequest).subscribe(response => {
                     if (response) {
@@ -5600,7 +5594,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                 });
             });
-            this.linkedPOValue = selectedOrders.join(", ");
         }
     }
 

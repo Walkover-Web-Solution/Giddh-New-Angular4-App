@@ -72,7 +72,7 @@
 
                                             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                                 aria-labelledby="button-basic">
-                                                <li class="cp" role="menuitem"><a class="dropdown-item" (click)="convertToBill()">Convert to Bill</a></li>
+                                                <li class="cp" role="menuitem" *ngIf="purchaseOrder.status === 'OPEN'"><a class="dropdown-item" (click)="convertToBill()">Convert to Bill</a></li>
                                                 <li class="cp" role="menuitem"><a class="dropdown-item" [routerLink]="['/pages/purchase-management/purchase-order/new/'+purchaseOrderUniqueName]">Copy</a></li>
                                                 <li>
                                                     <a class="cp" href="javascript:void(0)" (click)="statusUpdate('cancelled')" *ngIf="purchaseOrder.status === 'OPEN'">Cancel</a>
