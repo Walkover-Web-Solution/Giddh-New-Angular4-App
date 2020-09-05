@@ -72,6 +72,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public groupsList: IOption[] = [];
     public accountList: any[];
     public showTaxes: boolean = false;
+    // list of groups with less details (parent information)
+    public groupWithParentLessDetailsList:any[] = [];
     @ViewChild('deleteGroupModal') public deleteGroupModal: ModalDirective;
     @ViewChild('moveToGroupDropDown') public moveToGroupDropDown: ShSelectComponent;
 
@@ -140,6 +142,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 let activeGroupUniqueName: string;
                 this.activeGroup$.pipe(take(1)).subscribe(grp => activeGroupUniqueName = grp.uniqueName);
                 let grpsList = this.makeGroupListFlatwithLessDtl(this.flattenGroup(a, []));
+                this.groupWithParentLessDetailsList = _.cloneDeep(grpsList);
                 let flattenGroupsList: IOption[] = [];
 
                 grpsList.forEach(grp => {
@@ -489,15 +492,18 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public getAccountFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: boolean): boolean {
-        groupList.forEach(el => {
-            if (el && el.accounts) {
-                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses')) {
-                    result = true;
-                    return;
+        groupList.forEach(element => {
+            if (element && element.accounts) {
+                if (element.uniqueName === uniqueName) {
+                    let isDebCred = this.isDebtorCreditorGroup(uniqueName);
+                    if (element.category === 'income' || element.category === 'expenses' || isDebCred) {
+                        result = true;
+                        return;
+                    }
                 }
             }
-            if (el && el.groups) {
-                result = this.getAccountFromGroup(el.groups, uniqueName, result);
+            if (element && element.groups) {
+                result = this.getAccountFromGroup(element.groups, uniqueName, result);
             }
         });
         return result;
@@ -514,11 +520,20 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.destroyed$.complete();
     }
 
-
-
-
-
-
-
+    /**
+    * To get sub group belongs to mentioned group (currentliabilities , currentassets)
+    *
+    * @param {*} item
+    * @memberof GroupUpdateComponent
+    */
+    public isDebtorCreditorGroup(itemUniqueName: any): boolean {
+        let isTaxableGroup: boolean = false;
+        this.groupWithParentLessDetailsList.forEach(element => {
+            if (itemUniqueName === element.uniqueName) {
+                isTaxableGroup = element.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
+            }
+        });
+        return isTaxableGroup;
+    }
 
 }

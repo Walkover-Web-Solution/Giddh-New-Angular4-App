@@ -464,7 +464,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         for (const el of groupList) {
             if (el.accounts) {
-                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses')) {
+                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses' || this.isDebtorCreditor)) {
                     result = true;
                     break;
                 }
@@ -1365,7 +1365,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public bankDetailsValidator(element, type: string): void {
         if (element.value && type) {
             let trim: string = '';
-            // changes account number validation for country india as well ref card : GIDK-1119 
+            // changes account number validation for country india as well ref card : GIDK-1119
             trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
             let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetail.controls) {

@@ -475,7 +475,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     };
     /** No results found label for dynamic search */
     public noResultsFoundLabel = SearchResultText.NewSearch;
-
+    /** account's applied tax list */
+    public accountAssignedApplicableTaxes: string[] = [];
     /**
      * Returns true, if Purchase Record creation record is broken
      *
@@ -5495,6 +5496,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.excludeTax = true;
             }
         }
+        if (data && data.applicableTaxes) {
+            this.accountAssignedApplicableTaxes = data.applicableTaxes;
+        }
     }
-
 }
