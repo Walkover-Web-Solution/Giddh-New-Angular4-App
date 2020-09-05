@@ -11,7 +11,7 @@
                 <!--share account from-->
                 <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" class="form-inline clearfix" autocomplete="off">
                     <div class="input-group form-group col-xs-12">
-                        <input name="userEmail" type="email" [(ngModel)]="email" required placeholder="Email ID" class="form-control" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                        <input name="userEmail" type="email" [(ngModel)]="email" required placeholder="Email ID" class="form-control" pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
                         <div class="input-group-btn mrL1">
                             <select name="selectedPermission" class="form-control selected-permission" [(ngModel)]="selectedPermission" required>
                                 <option value="">-Select permission-</option>
