@@ -3110,7 +3110,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             case ActionTypeAfterVoucherGenerateOrUpdate.generateAndRecurring: {
                 this.startLoader(false);
-                this.toggleRecurringAsidePane();
                 break;
             }
         }
