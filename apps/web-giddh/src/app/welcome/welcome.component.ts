@@ -64,7 +64,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public businessTypeList: IOption[] = [];
     public businessNatureList: IOption[] = [];
     public selectedTaxes: string[] = [];
-    public isbranch: boolean = false;
+    public isBranch: boolean = false;
     public modalConfig: ModalOptions = {
         animated: true,
         keyboard: true,
@@ -253,7 +253,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
             this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
                 if (res) {
-                    this.isbranch = res.isBranch;
+                    this.isBranch = res.isBranch;
                     this.createNewCompany = res;
                     this.company = this.createNewCompany;
                     this.company.contactNo = this.getFormattedContactNumber(this.company.contactNo);
@@ -358,6 +358,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.createNewCompanyPreparedObj.isBranch = this.company.isBranch;
             this.createNewCompanyPreparedObj.country = this.company.country ? this.company.country : '';
             this.createNewCompanyPreparedObj.baseCurrency = this.company.baseCurrency ? this.company.baseCurrency : '';
+            this.createNewCompanyPreparedObj.nameAlias = this.company.nameAlias ? this.company.nameAlias : '';
             this.getCountry();
             this.getCurrency();
             this.getCallingCodes();
@@ -387,7 +388,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this._generalService.createNewCompany = this.createNewCompanyPreparedObj;
             this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreparedObj));
             setTimeout(() => {
-                this.createCompany();
+                if (this.isBranch) {
+                    this.createBranch();
+                } else {
+                    this.createCompany();
+                }
             }, 100);
             //this._router.navigate(['select-plan']);
         } else {
@@ -542,10 +547,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         event.stopPropagation();
     }
 
-    public back(isbranch: boolean) {
+    public back(isBranch: boolean) {
         if (!this.isOnBoardingInProgress) {
             /* Company or Branch on boarding is going on */
-            if (isbranch) {
+            if (isBranch) {
                 this._router.navigate(['pages', 'settings', 'branch']); // <!-- pages/settings/branch -->
             } else {
                 this.zone.run(() => {
@@ -1009,5 +1014,14 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.createNewCompanyPreObj.subscriptionRequest = this.subscriptionRequestObj;
             this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompanyPreObj));
         }
+    }
+
+    public createBranch(): void {
+        this._companyService.createNewBranch(this.activeCompany.uniqueName, this.createNewCompanyPreObj).subscribe(data => {
+            this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
+            this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
+            this.store.dispatch(this.companyActions.removeCompanyCreateSession());
+            this._router.navigate(['pages/settings/branch']);
+        });
     }
 }

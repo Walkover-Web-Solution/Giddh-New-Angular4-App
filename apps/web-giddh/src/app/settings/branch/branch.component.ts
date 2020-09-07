@@ -202,7 +202,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public openAddBranchModal() {
         this.removeCompanySessionData();
-        this.branchModal.show();
+        this.openCreateCompanyModal();
     }
 
     public onHide() {
@@ -283,10 +283,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         branchFilterRequest.from = this.filters['from'];
         branchFilterRequest.to = this.filters['to'];
 
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
-        this.store.dispatch(this.settingsBranchActions.GetParentCompany());
-        this.store.dispatch(this.settingsBranchActions.ResetBranchRemoveResponse());
+        if (branchFilterRequest.from && branchFilterRequest.to) {
+            this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+            this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
+            this.store.dispatch(this.settingsBranchActions.GetParentCompany());
+            this.store.dispatch(this.settingsBranchActions.ResetBranchRemoveResponse());
+        }
     }
 
     private isAllCompaniesSelected() {
@@ -335,5 +337,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this._generalService.createNewCompany = null;
         this.store.dispatch(this.commonActions.resetCountry());
         this.store.dispatch(this.companyActions.removeCompanyCreateSession());
+        this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
+        this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
     }
 }

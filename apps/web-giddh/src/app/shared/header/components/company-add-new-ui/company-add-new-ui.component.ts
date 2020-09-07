@@ -103,6 +103,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     public selectedCountry: string = '';
     /* This will hold if it's production env or not */
     public isProdMode: boolean = false;
+    /** Stores active company details */
+    public activeCompanyDetails: any;
 
     constructor(private socialAuthService: AuthService,
                 private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
@@ -112,7 +114,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.getCountry();
-        this.getCurrency();
         this.getCallingCodes();
 
         this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
@@ -129,6 +130,9 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             }
             this.isMobileNumberValid = true;
         }
+        this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe(data => {
+            this.activeCompanyDetails = data;
+        });
         this._generalService.createNewCompany = null;
         this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
@@ -306,14 +310,19 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
     public checkMobileNo(ele) {
         try {
-            let parsedNumber = this.phoneUtility.parse('+' + this.company.phoneCode + ele.value, this.company.country);
-            if (this.phoneUtility.isValidNumber(parsedNumber)) {
-                ele.classList.remove('error-box');
-                this.isMobileNumberValid = true;
+            if (ele) {
+                let parsedNumber = this.phoneUtility.parse('+' + this.company.phoneCode + ele.value, this.company.country);
+                if (this.phoneUtility.isValidNumber(parsedNumber)) {
+                    ele.classList.remove('error-box');
+                    this.isMobileNumberValid = true;
+                } else {
+                    this.isMobileNumberValid = false;
+                    this._toaster.errorToast('Invalid Contact number');
+                    ele.classList.add('error-box');
+                }
             } else {
-                this.isMobileNumberValid = false;
-                this._toaster.errorToast('Invalid Contact number');
-                ele.classList.add('error-box');
+                // branch on-boarding is carried out where no mobile field is there
+                this.isMobileNumberValid = true;
             }
         } catch (error) {
             this.isMobileNumberValid = false;
@@ -373,6 +382,11 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                     }
                 });
                 this.countrySource$ = observableOf(this.countrySource);
+                if (this.createBranch) {
+                    this.company.country = this.activeCompanyDetails && this.activeCompanyDetails.countryV2 ?
+                        this.activeCompanyDetails.countryV2.alpha2CountryCode : '';
+                }
+                this.getCurrency();
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = 'onboarding';
@@ -388,6 +402,10 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                     this.currencies.push({label: res[key].code, value: res[key].code});
                 });
                 this.currencySource$ = observableOf(this.currencies);
+                if (this.createBranch) {
+                    this.company.baseCurrency = this.activeCompanyDetails ?
+                        this.activeCompanyDetails.baseCurrency : '';
+                }
             } else {
                 this.store.dispatch(this.commonActions.GetCurrency());
             }
