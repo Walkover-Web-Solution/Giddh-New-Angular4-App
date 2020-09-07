@@ -173,6 +173,9 @@
             margin: 10px auto 22px;
             width: 100%;
             max-width: 100%;
+            &:first-child{
+                margin-top: 0;
+            }
         }
 
         tbody > tr > td {

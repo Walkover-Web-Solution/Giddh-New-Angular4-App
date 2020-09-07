@@ -1,23 +1,23 @@
-<div class="box clearfix" *ngIf="!(getCompanyProfileInProgress$ | async)">
+<div class="box clearfix mt-md-1" *ngIf="!(getCompanyProfileInProgress$ | async)">
     <div class="row">
         <form (ngSubmit)="updateProfile(companyProfileObj)" class="col-lg-10 col-md-12 profile-form">
             <div class="row">
-                <div class="form-group col-md-4 col-sm-12">
+                <div class="form-group col-lg-4 col-md-12 col-sm-12">
                     <label>Company Name</label><br>
                     <input type="text" placeholder="Company name" class="form-control" [(ngModel)]="companyProfileObj.name" name="name" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
                     <!-- (keydown)="keyDownSubject$.next($event)" -->
                 </div>
-                <div class="form-group col-md-4 col-sm-12">
+                <div class="form-group col-lg-4 col-md-12 col-sm-12">
                     <label>Unique Name</label><br>
                     <input type="text" placeholder="Unique Name" [readonly]="true" class="form-control" [(ngModel)]="companyProfileObj.uniqueName" name="uniqueName" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
                 </div>
-                <div class="form-group col-md-4 col-sm-12">
+                <div class="form-group col-lg-4 col-md-12 col-sm-12">
                     <label>Email Address</label><br>
                     <input type="text" placeholder="Email Address" class="form-control" [(ngModel)]="companyProfileObj.email" name="email" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-4 col-sm-12">
+                <div class="form-group col-lg-4 col-md-12 col-sm-12">
                     <label>Contact No.</label>
                     <input type="tel" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo" #mobileNumberField name="contactNo" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
                     <!-- commented temporary due to static countryCode  -->
@@ -27,7 +27,7 @@
     (blur)="isValidMobileNumber(mobileNumberField)" name="contactNo" />
 </div> -->
                 </div>
-                <div class="col-md-4 col-sm-12 pd0 d-flex">
+                <div class="col-lg-4 col-md-12 col-sm-12 pd0 d-flex">
                     <div class="form-group col-sm-4 pdR0">
                         <label>Currency</label><br>
                         <div class="custom-select pos-rel">
@@ -48,7 +48,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="col-lg-3 col-md-4 col-xs-4">
+                <!-- <div class="col-lg-3 col-lg-4 col-md-12 col-xs-4">
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="form-group">
@@ -65,7 +65,7 @@
                     </div>
                 </div>
             </div> -->
-                <div class="col-md-4 col-sm-12">
+                <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group clearfix">
@@ -99,11 +99,11 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-4 col-sm-12">
+                <div class="form-group col-lg-4 col-md-12 col-sm-12">
                     <label>Address</label><br>
                     <textarea rows="4" style="height: 170px;" type="text" placeholder="Address" class="form-control" [(ngModel)]="companyProfileObj.address" name="address" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)"></textarea>
                 </div>
-                <div class="form-group  col-md-4 col-sm-12">
+                <div class="form-group  col-lg-4 col-md-12 col-sm-12">
                     <div class="clearfix">
                         <div class="form-group">
                             <label>Country</label><br>
@@ -144,7 +144,7 @@
             </div>
           </div> -->
                 </div>
-                <div class="col-md-4 col-sm-12 ">
+                <div class="col-lg-4 col-md-12 col-sm-12 ">
                     <div class="row ">
                         <div class="form-group col-sm-12 col-md-12 col-lg-6 decimal-system">
                             <label>Digits After Decimal</label><br>
@@ -202,7 +202,7 @@
                     <div *ngIf="companyProfileObj.addresses !== undefined && companyProfileObj.addresses.length > 0">
                         <div *ngFor="let gst of companyProfileObj.addresses; let i = index" class="mrT1 company_gst" [ngClass]="{'mrT2': i != gst.length-1, 'bdrB': i != gst.length-1}">
                             <div class="row">
-                                <div class="col-md-4 col-sm-12">
+                                <div class="col-lg-4 col-md-12 col-sm-12">
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group">
@@ -229,7 +229,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4 col-sm-12">
+                                <div class="col-lg-4 col-md-12 col-sm-12">
                                     <div class="form-group">
                                         <label>Address</label><br>
                                         <textarea rows="4" type="text" placeholder="Address" class="form-control" [(ngModel)]="gst.address" #gstAddressField name="newaddress+{{i}}" (keydown)="gstKeyDownSubject$.next($event)"></textarea>

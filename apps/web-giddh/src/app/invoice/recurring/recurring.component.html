@@ -3,8 +3,8 @@
 
     <form #recurringForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr" (ngSubmit)="submit()">
 
-        <div class="d-flex search-icon-block"  *ngIf="isMobileScreen">
-            <div class="mb-15" (click)="openModal(template)">
+        <div class="d-flex search-icon-block mb-15"  *ngIf="isMobileScreen">
+            <div (click)="openModal(template)">
                 <i class="icon-search"></i>
             </div>
             <ng-template #template>
@@ -48,7 +48,7 @@
                         </div>
                         <div class="form-group">
                             <label class="d-block">Last Invoice Date</label>
-                            <div class="input-group">
+                            <div>
                                 <input class="w-100" name="lastInvoiceDate" placeholder="Select Date"
                                     [(ngModel)]="filter.lastInvoiceDate" type="text"
                                     [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" autocomplete="off" class="form-control"
@@ -89,10 +89,10 @@
 
         </div>
         <div>
-            <div class="reccuring-form" *ngIf="!isMobileScreen">
+            <div class="recurring-form" *ngIf="!isMobileScreen">
                 <div class="form-group mrR1">
                     <label class="d-block mr-15">Invoice Type</label>
-                    <div class="ng-select-wrap">
+                    <div class="ng-select-wrap input-group">
                         <sh-select name="invoiceType" [placeholder]="'Select Account'" [(ngModel)]="filter.status"
                             [options]="invoiceTypeOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
                             [useInBuiltFilterForIOptionTypeItems]="true">
@@ -106,7 +106,7 @@
                 </div>
                 <div class="form-group mrR1">
                     <label class="d-block mr-15">Interval</label>
-                    <div class="ng-select-wrap">
+                    <div class="ng-select-wrap input-group">
                         <sh-select name="interval" [placeholder]="'Select Account'" [options]="intervalOptions"
                             [notFoundLink]="false" [multiple]="false" [(ngModel)]="filter.duration" [ItemHeight]="33"
                             [useInBuiltFilterForIOptionTypeItems]="true">

@@ -1,7 +1,7 @@
 /*td-in-searchbox_style*/
 @import "../../../assets/css/color.scss";
 
-.reccuring-form {
+.recurring-form {
     flex: 1;
     display: flex;
 
@@ -107,6 +107,13 @@
     display: none;
 }
 // responsive
+@media(max-width:1190px){
+    .recurring-form {
+        .input-group {
+            width: 125px;
+        }
+    }
+}
 @media (max-width: 1023px) {
     .input-group {
         display: block;
@@ -116,7 +123,7 @@
     .form-view .input-group {
         display: flex;
     }
-    .reccuring-form {
+    .recurring-form {
         display: none;
     }
     .justify-content-sm {

@@ -6,7 +6,7 @@
 
             <div class="pull-left d-flex wrap-searching-aging">
 
-                <div class="form-group searchField max250" [ngClass]="{'default-width':isAdvanceSearchApplied}">
+                <div class="form-group search-field max250" [ngClass]="{'default-width':isAdvanceSearchApplied}">
                     <input type="text" placeholder="Name/amount" class="form-control" [(ngModel)]="searchStr"
                         (ngModelChange)="searchStr$.next($event)" style="width:210px" />
 
