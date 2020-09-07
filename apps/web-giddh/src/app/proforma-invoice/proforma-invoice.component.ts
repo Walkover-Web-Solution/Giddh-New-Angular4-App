@@ -5672,21 +5672,28 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if(items && items[0] && items[0].transactions && items[0].transactions.length > 0 && this.invFormData.entries && this.invFormData.entries.length > 0) {
                         items[0].transactions.forEach(item => {
                             let entryLoop = 0;
+                            let remainingQuantity = (item.stock && item.stock.quantity) ? item.stock.quantity : 1;
+
                             this.invFormData.entries.forEach(entry => {
-                                if(entry && entry.transactions && entry.transactions.length > 0) {
+                                if(entry && entry.transactions && entry.transactions.length > 0 && remainingQuantity > 0) {
                                     let transactionLoop = 0;
                                     entry.transactions.forEach(transaction => {
-                                        if(item.stock && transaction.accountUniqueName) {
-                                            if(item.stock.uniqueName === transaction.accountUniqueName) {
-                                                if(transaction.quantity > item.stock.quantity) {
-                                                    this.invFormData.entries[entryLoop].transactions[transactionLoop].quantity = transaction.quantity - item.stock.quantity;
-                                                } else {
-                                                    this.removeTransaction(transactionLoop);
+                                        if(remainingQuantity > 0) {
+                                            if(item.stock && item.stock.uniqueName && transaction.accountUniqueName) {
+                                                if(item.stock.uniqueName === transaction.accountUniqueName) {
+                                                    if(transaction.quantity > item.stock.quantity) {
+                                                        remainingQuantity -= item.stock.quantity;
+                                                        this.invFormData.entries[entryLoop].transactions[transactionLoop].quantity = transaction.quantity - item.stock.quantity;
+                                                    } else {
+                                                        remainingQuantity -= transaction.quantity;
+                                                        this.removeTransaction(entryLoop);
+                                                    }
                                                 }
-                                            }
-                                        } else if(item.account && transaction.accountUniqueName) {
-                                            if(item.account.uniqueName === transaction.accountUniqueName) {
-                                                this.removeTransaction(transactionLoop);
+                                            } else if(item.account && item.account.uniqueName && transaction.accountUniqueName) {
+                                                if(item.account.uniqueName === transaction.accountUniqueName) {
+                                                    remainingQuantity = 0;
+                                                    this.removeTransaction(entryLoop);
+                                                }
                                             }
                                         }
                                         transactionLoop++;
