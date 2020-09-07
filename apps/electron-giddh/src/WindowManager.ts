@@ -76,7 +76,8 @@ export default class WindowManager {
                 icon: __dirname + '/assets/icon/favicon.ico',
                 show: false,
                 webPreferences: {
-                    nodeIntegration: true
+                    nodeIntegration: true,
+                    webSecurity: false
                 },
                 tabbingIdentifier: 'giddh'
             };
