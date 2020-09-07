@@ -143,7 +143,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
         // Get groups with accounts
         this._groupService.GetFlattenGroupsAccounts().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
+            if (data && data.status === 'success' && data.body && data.body.results ) {
                 let groups: IOption[] = [];
                 data.body.results.map(d => {
                     groups.push({ label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName });
