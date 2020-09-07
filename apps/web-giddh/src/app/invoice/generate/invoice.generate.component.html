@@ -217,13 +217,13 @@
                     <td data-title="Date">{{item.entryDate}}</td>
 
                     <td data-title="Particular">
-                        <table class="table nested_table">
+                        <table class="table nested_table particular-nested-table">
                             <tr *ngFor="let transaction of item.transactions">
                                 <td>
-                                    {{transaction.particular.name}}
+                                    {{transaction.particular.name }}
                                     <span
-                                        *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}}
-                                        )</span>
+                                        *ngIf="transaction.inventory && transaction.inventory.stock">{{transaction.inventory.stock.name}}
+                                    </span>
                                 </td>
 
                             </tr>
@@ -231,10 +231,10 @@
                     </td>
 
                     <td data-title="Amount">
-                        <table class="table nested_table">
+                        <table class="table nested_table amount-nested-table">
                             <tr *ngFor="let transaction of item.transactions">
                                 <td class="text-right">
-                                    {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency}}
+                                    {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency }}
                                 </td>
                             </tr>
                         </table>

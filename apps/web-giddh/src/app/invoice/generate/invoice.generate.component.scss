@@ -303,10 +303,10 @@ span.close-modal.cp.pull-right {
         }
     }
     .pending-table.onMobileView tr td .table.nested_table tr:first-child td{
-        border-left: 1px solid $gainsboro !important;
+        border-right: 1px solid $gainsboro !important;
     }
     .pending-table.onMobileView tr td .table.nested_table tr td:last-child{
-        border-bottom: 1px solid $gainsboro !important;
+        border-bottom: none !important;
     }
     .pending-table.onMobileView tr td .table.nested_table tr:first-child td{
         border-bottom: none !important;
@@ -349,6 +349,9 @@ span.close-modal.cp.pull-right {
     }
     .mobile-width-100 {
         width: 100%;
+    }
+    .particular-nested-table tr td{
+        border-top: none !important;
     }
 
 }
