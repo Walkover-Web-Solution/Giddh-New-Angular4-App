@@ -10171,18 +10171,20 @@ span#HW_badge_cont:nth-child(3) {
     // .tabs-page .padding-top-fixed-mobile {
     //     padding-top: 126px;
     // }
-    .padding-top-fixed-mobile {
-        padding-top: 95px;
-    }
-    //.page-has-tabs .padding-top-fixed-mobile,
-    //.on-user-page .padding-top-fixed-mobile {
-    //    padding-top: 130px !important;
-   // }
+   
+    .page-has-tabs .padding-top-fixed-mobile,
+    .on-user-page .padding-top-fixed-mobile {
+       padding-top: 130px !important;
+   }
     .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile {
         padding-top: 85px !important;
     }
     .on-setting-page .padding-top-fixed-mobile {
         padding-top: 95px !important;
+    }
+
+     .padding-top-fixed-mobile {
+       padding-top: 95px;
     }
     ngx-daterangepicker-material {
         position: fixed;
