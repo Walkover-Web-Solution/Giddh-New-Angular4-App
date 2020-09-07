@@ -470,8 +470,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public hasVoucherEntry: boolean;
     /* This will hold the purchase orders */
     public purchaseOrders: IOption[] = [];
+    /* This will hold linked PO */
     public linkedPO: any[] = [];
+    /* This will hold linked PO items*/
     public linkedPONumbers: any[] = [];
+    /* This will hold filter dates for PO */
     public poFilterDates: any = {from: '', to: ''};
     /** Stores the search results */
     public searchResults: Array<IOption> = [];
@@ -483,6 +486,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     };
     /** No results found label for dynamic search */
     public noResultsFoundLabel = SearchResultText.NewSearch;
+    /* This will hold selected PO */
+    public selectedPOItems: any[] = [];
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -2703,12 +2708,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if(isLinkedPOItem) {
                             txn.applicableTaxes = entry.taxList;
                             if(selectedAcc.stock) {
-                                txn.quantity = selectedAcc.stock.quantity;
-                                txn.rate = selectedAcc.stock.rate.amountForAccount;
-                                txn.isStockTxn = true;
+                                if(selectedAcc.stock.quantity) {
+                                    txn.quantity = selectedAcc.stock.quantity;
+                                }
+                                if(selectedAcc.stock.rate) {
+                                    txn.rate = selectedAcc.stock.rate.amountForAccount;
+                                    txn.isStockTxn = true;
+                                }
                             }
     
-                            this.calculateStockEntryAmount(txn);
+                            if(selectedAcc.stock.quantity && selectedAcc.stock.rate) {
+                                this.calculateStockEntryAmount(txn);
+                            } else {
+                                if(selectedAcc.amount) {
+                                    txn.amount = selectedAcc.amount.amountForAccount;
+                                }
+                            }
                             this.calculateWhenTrxAltered(entry, txn);
                         }
                     }
@@ -5577,36 +5592,49 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public getPurchaseOrder(event: any): void {
         if(event && event.length > 0) {
-            event.forEach(order => {
+            let order = event[event.length - 1];
+            if(!this.selectedPOItems.includes(order.value)) {
                 let getRequest = { companyUniqueName: this.selectedCompany.uniqueName, poUniqueName: order.value };
                 this.purchaseOrderService.getPreview(getRequest).subscribe(response => {
                     if (response) {
                         if (response.status === "success") {
-                            if(response.body && response.body.entries && response.body.entries.length > 0) {
-                                this.linkedPONumbers[order.value]['items'] = response.body.entries;
-                                this.addPOItems(response.body.entries);
-                            } else {
-                                this.linkedPONumbers[order.value]['items'] = [];
+                            if(this.linkedPO.includes(response.body.uniqueName)) {
+                                if(response.body && response.body.entries && response.body.entries.length > 0) {
+                                    this.selectedPOItems.push(response.body.uniqueName);
+                                    this.linkedPONumbers[order.value]['items'] = response.body.entries;
+                                    this.addPOItems(response.body.entries);
+                                } else {
+                                    this.linkedPONumbers[order.value]['items'] = [];
+                                }
                             }
                         } else {
                             this._toasty.errorToast(response.message);
                         }
                     }
                 });
-            });
+            } else {
+                this.removePOItem();
+            }
+        } else {
+            this.removePOItem();
         }
     }
 
-    public addPOItems(entries: any) {
+    public addPOItems(entries: any): void {
         entries.forEach(entry => {
             let transactionLoop = 0;
             entry.transactions.forEach(item => {
-                item.stock.uniqueName = "purchases#" + item.stock.uniqueName;
-                item.uniqueName = item.stock.uniqueName;
-                item.value = item.stock.uniqueName;
-
-                let transaction = item.stock;
-                item.additional = transaction;
+                if(item.stock) {
+                    item.stock.uniqueName = "purchases#" + item.stock.uniqueName;
+                    item.uniqueName = item.stock.uniqueName;
+                    item.value = item.stock.uniqueName;
+                    item.additional = item.stock;
+                } else {
+                    item.stock = {};
+                    item.uniqueName = item.account.uniqueName;
+                    item.value = item.account.uniqueName;
+                    item.additional = item.account;
+                }
 
                 let lastIndex = -1;
                 let blankItemIndex = this.invFormData.entries.findIndex(f => !f.transactions[transactionLoop].accountUniqueName);
@@ -5632,5 +5660,49 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 transactionLoop++;
             });
         });
+    }
+
+    public removePOItem(): void {
+        if(this.selectedPOItems && this.selectedPOItems.length > 0) {
+            let selectedPOItems = [];
+            this.selectedPOItems.forEach(order => {
+                if(!this.linkedPO.includes(order)) {
+                    let items = this.linkedPONumbers[order]['items'];
+
+                    if(items && items[0] && items[0].transactions && items[0].transactions.length > 0 && this.invFormData.entries && this.invFormData.entries.length > 0) {
+                        items[0].transactions.forEach(item => {
+                            let entryLoop = 0;
+                            this.invFormData.entries.forEach(entry => {
+                                if(entry && entry.transactions && entry.transactions.length > 0) {
+                                    let transactionLoop = 0;
+                                    entry.transactions.forEach(transaction => {
+                                        if(item.stock && transaction.accountUniqueName) {
+                                            if(item.stock.uniqueName === transaction.accountUniqueName) {
+                                                if(transaction.quantity > item.stock.quantity) {
+                                                    this.invFormData.entries[entryLoop].transactions[transactionLoop].quantity = transaction.quantity - item.stock.quantity;
+                                                } else {
+                                                    this.removeTransaction(transactionLoop);
+                                                }
+                                            }
+                                        } else if(item.account && transaction.accountUniqueName) {
+                                            if(item.account.uniqueName === transaction.accountUniqueName) {
+                                                this.removeTransaction(transactionLoop);
+                                            }
+                                        }
+                                        transactionLoop++;
+                                    });
+                                }
+                                entryLoop++;
+                            });
+                        });
+                    }
+                } else {
+                    selectedPOItems.push(order);
+                }
+            });
+
+            this.selectedPOItems = selectedPOItems;
+            console.log(this.invFormData.entries);
+        }
     }
 }

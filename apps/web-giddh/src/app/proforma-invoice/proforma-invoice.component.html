@@ -577,23 +577,20 @@
                                         <sh-select [options]="purchaseOrders" [placeholder]="'Select Order'" [multiple]="true" name="linkedPO" [(ngModel)]="linkedPO" (selected)="getPurchaseOrder($event)" [isFilterEnabled]="false">
                                             <ng-template #optionTemplate let-option="option">
                                                 <ng-container>
-                                                    <a href="javascript:void(0)"
-                                                        class="list-item"
-                                                        style="border-bottom: 1px solid #ccc;">
-                                                        <span><input type="checkbox" class="form-control" [value]="option.value"></span>
+                                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                                        <span><input type="checkbox" class="form-control" [checked]="linkedPO && linkedPO.includes(option.value)" [value]="option.value"></span>
                                                         <div class="item">{{ option.label }}</div>
                                                         <div class="item_unq" *ngIf="option.additional?.amount">
                                                             Amount: {{ option.additional?.amount }}
                                                         </div>
                                                     </a>
                                                 </ng-container>
-                                        </ng-template>
+                                            </ng-template>
                                         </sh-select>
                                     </div>
                                 </div>
                             </div>
                             <!-- end Link purchase order -->
-
 
                             <!-- region invoice no, invoice date, Expiry date -->
                             <div class="row mTB1">
