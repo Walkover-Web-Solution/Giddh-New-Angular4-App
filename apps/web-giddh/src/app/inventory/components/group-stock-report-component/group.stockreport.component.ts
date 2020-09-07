@@ -446,7 +446,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
      * getAllBranch
      */
     public getAllBranch() {
-        //this.store.dispatch(this.settingsBranchActions.GetALLBranches());
         this.store.select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
             if (entities) {
                 if (entities.results.length) {

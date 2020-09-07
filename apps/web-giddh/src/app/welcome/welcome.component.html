@@ -14,14 +14,14 @@
                 <div class=" clearfix row">
                     <div class="col-12 mr-b2">
                         <ng-container *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemName">
-                            <label for="name" class="m-t-30" *ngIf="!isbranch">Company Name<sup
+                            <label for="name" class="m-t-30" *ngIf="!isBranch">Company Name<sup
                                     class="text-danger">*</sup></label>
                             <!-- Need to show when creat branch  -->
-                            <label for="name" class="m-t-30" *ngIf="isbranch">Branch Name<sup
+                            <label for="name" class="m-t-30" *ngIf="isBranch">Branch Name<sup
                                     class="text-danger">*</sup></label>
                         </ng-container>
                         <ng-template #onBoardingItemName>
-                            <label for="name" class="m-t-30" *ngIf="!isbranch">{{itemOnBoardingDetails?.onBoardingType}}
+                            <label for="name" class="m-t-30" *ngIf="!isBranch">{{itemOnBoardingDetails?.onBoardingType}}
                                 Name<sup class="text-danger">*</sup></label>
                         </ng-template>
                         <input name="name" id="name" type="text" required
@@ -57,7 +57,7 @@
                                 [defaultValue]="createNewCompanyPreparedObj.baseCurrency"></sh-select>
                         </div>
                     </div>
-                    <div class="col-12 mr-b2">
+                    <div *ngIf="!isBranch" class="col-12 mr-b2">
                         <span>
                             <label for="contactNo" class="d-block">Mobile Number<sup class="text-danger">*</sup></label>
                             <div class="d-flex">
@@ -110,17 +110,17 @@
 
                                 <label for="gstinNum" class="d-block">{{formFields['taxName'].label}}<sup
                                         class="text-danger">*</sup></label>
-                                <input type="text" [ngClass]="{'gstinWidth' : isbranch || isOnBoardingInProgress}"
+                                <input type="text" [ngClass]="{'gstinWidth' : isBranch || isOnBoardingInProgress}"
                                     class="form-control" autocomplete="false" required #gstNumberField
                                     (change)="handleGstChange(gstNumberField, states)" name="gstNumber"
                                     [(ngModel)]="companyProfileObj.taxNumber"
                                     placeholder="Enter {{formFields['taxName'].label}}" />
 
-                                <span class="sameAsHead" *ngIf="isbranch || isOnBoardingInProgress"> <input
+                                <span class="sameAsHead" *ngIf="isBranch || isOnBoardingInProgress"> <input
                                         type="checkbox" name="isTaxNumberSameAsHeadQuarter"
                                         [(ngModel)]="isTaxNumberSameAsHeadQuarter" value="1"
                                         (change)="sameAsHeadQuarter(gstNumberField, states);"> Same as
-                                    Headquarter</span>
+                                    Company</span>
 
                             </div>
                         </div>
@@ -135,7 +135,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="!(isOnBoardingInProgress && isWarehouse)" class="col-12 mr-b2 selectBox">
+                        <div *ngIf="!(isOnBoardingInProgress && isWarehouse) && !isBranch" class="col-12 mr-b2 selectBox">
                             <div class="">
                                 <label for="taxes_dd">Applicable Tax</label>
                                 <div class="btn-group btn-block select-caret invoice-btn" dropdown>
@@ -168,7 +168,7 @@
                         <div *ngIf="selectedBusinesstype || isWarehouse" class="clearfix">
                             <ng-container
                                 *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemAddress">
-                                <label for="address" class="d-block">{{isbranch ? 'Branch' : 'Company'}} Address <sup
+                                <label for="address" class="d-block">{{isBranch ? 'Branch' : 'Company'}} Address <sup
                                         *ngIf="selectedBusinesstype === 'Registered'"
                                         class="text-danger">*</sup></label>
                             </ng-container>
@@ -188,7 +188,7 @@
                         <p class="taxation-not-supported" *ngIf="!formFields['taxName']">Create and apply taxes on all types of transactions! To get tax reports, contact <a href="mailto:sales@giddh.com">sales@giddh.com</a>!</p>
                     </div>
                     <div class="col-12 d-flex mrT5">
-                        <button class="btn btn-primary" (click)="back(isbranch)">Back</button>
+                        <button class="btn btn-primary" (click)="back(isBranch)">Back</button>
                         <button type="submit" class="btn btn-sky-blue" (click)="submit(welcomeForm)" [disabled]="welcomeForm.invalid || !isGstValid || isCreateCompanyInProgress">
                             {{itemOnBoardingDetails?.isOnBoardingInProgress ? itemOnBoardingDetails?.isItemUpdateInProgress ? 'Update ' +  itemOnBoardingDetails?.onBoardingType : 'Create ' + itemOnBoardingDetails?.onBoardingType : 'Submit'
                             }}

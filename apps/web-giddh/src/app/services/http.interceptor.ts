@@ -25,7 +25,6 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
     }
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log('Url with params: ', request.urlWithParams,' ', request.method);
         if (this.generalService.currentOrganizationType === OrganizationType.Branch && request && request.urlWithParams) {
             request = this.addBranchUnqiueName(request);
         }

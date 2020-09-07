@@ -490,4 +490,32 @@ export class CompanyService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, '')));
     }
+
+    public createNewBranch(companyUniqueName: string, requestObject: any) {
+        const requestPayload = {
+            name: requestObject.name,
+            uniqueName: requestObject.uniqueName,
+            alias: requestObject.nameAlias,
+            parent_branch_unique_name: '',
+            businessType: requestObject.businessType || '',
+            businessNature: requestObject.businessNature || '',
+            addresses: []
+        }
+        if (requestObject.addresses && requestObject.addresses.length) {
+            const addressDetails = requestObject.addresses[0];
+            requestPayload.addresses = [
+                {
+                    gstin: addressDetails.taxNumber,
+                    state: {
+                        stateCode: addressDetails.stateCode,
+                        stateName: addressDetails.stateName
+                    },
+                    addresses: addressDetails.address
+                }
+            ];
+        }
+        return this._http.post(this.config.apiUrl + COMPANY_API.CREATE_NEW_BRANCH
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), requestPayload).pipe(
+                catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
+    }
 }
