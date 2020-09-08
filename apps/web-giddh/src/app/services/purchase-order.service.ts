@@ -193,4 +193,20 @@ export class PurchaseOrderService {
 
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
+
+    /**
+     * This will get the PDF
+     *
+     * @param {*} getRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseOrderService
+     */
+    public getPdf(getRequestObject: any): any {
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_PDF;
+        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);
+        url = url.replace(':poUniqueName', getRequestObject.poUniqueName);
+
+        return this.http.get(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
 }

@@ -63,7 +63,7 @@
                                             <!-- endregion -->
                                             <div *ngIf="purchaseOrders && purchaseOrders.length > 0">
                                                 <p><small>Pending Purchase order of selected vendor</small></p>
-                                                <p class="font-14"><a href="javascript:;" (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order.uniqueName)" *ngFor="let order of purchaseOrders; let i = index;">{{order.voucherNumber}}<span *ngIf="checkIfPipeSymbolRequired(i)">&nbsp;|&nbsp;</span></a></p>
+                                                <p class="font-14"><a href="javascript:;" (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order.uniqueName, order.vendor.uniqueName)" *ngFor="let order of purchaseOrders; let i = index;">{{order.voucherNumber}}<span *ngIf="checkIfPipeSymbolRequired(i)">&nbsp;|&nbsp;</span></a></p>
                                             </div>
                                         </div>
                                     </div>
@@ -1679,5 +1679,5 @@
     </div>
 </ng-template>
 <ng-template #purchaseOrderPreviewModal>
-    <purchase-order-preview-modal [purchaseOrderUniqueName]="purchaseOrderPreviewUniqueName" (closeModelEvent)="closePurchaseOrderPreviewPopup($event)"></purchase-order-preview-modal>
+    <purchase-order-preview-modal [purchaseOrderUniqueName]="purchaseOrderPreviewUniqueName" [purchaseOrderAccountUniqueName]="purchaseOrderPreviewAccountUniqueName" [purchaseOrderCompanyUniqueName]="selectedCompany?.uniqueName" (closeModelEvent)="closePurchaseOrderPreviewPopup($event)"></purchase-order-preview-modal>
 </ng-template>

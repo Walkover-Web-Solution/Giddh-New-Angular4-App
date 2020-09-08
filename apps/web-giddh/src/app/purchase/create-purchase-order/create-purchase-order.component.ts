@@ -302,6 +302,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public purchaseOrders: any[] = [];
     /* This will hold po unique name for preview */
     public purchaseOrderPreviewUniqueName: string = '';
+    /* This will hold po account unique name for preview */
+    public purchaseOrderPreviewAccountUniqueName: string = '';
     /** Voucher type */
     public invoiceType: VoucherTypeEnum = VoucherTypeEnum.purchase;
 
@@ -2858,8 +2860,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         }
     }
 
-    public openPurchaseOrderPreviewPopup(template: TemplateRef<any>, purchaseOrderUniqueName: any): void {
+    /**
+     * This will open the purchase order preview popup
+     *
+     * @param {TemplateRef<any>} template
+     * @param {*} purchaseOrderUniqueName
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public openPurchaseOrderPreviewPopup(template: TemplateRef<any>, purchaseOrderUniqueName: any, accountUniqueName: any): void {
         this.purchaseOrderPreviewUniqueName = purchaseOrderUniqueName;
+        this.purchaseOrderPreviewAccountUniqueName = accountUniqueName;
         
         this.modalRef = this.modalService.show(
             template,
@@ -2867,6 +2877,12 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         );
     }
 
+    /**
+     * This will close the purchase order preview popup
+     *
+     * @param {*} event
+     * @memberof CreatePurchaseOrderComponent
+     */
     public closePurchaseOrderPreviewPopup(event: any): void {
         if (event) {
             this.modalRef.hide();

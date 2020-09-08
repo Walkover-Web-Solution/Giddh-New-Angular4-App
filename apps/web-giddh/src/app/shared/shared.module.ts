@@ -77,6 +77,7 @@ import { DatepickerWrapperComponent } from './datepicker-wrapper/datepicker.wrap
 import { LoaderComponent } from '../loader/loader.component';
 import { RevisionHistoryComponent } from './revision-history/revision-history.component';
 import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
+import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -183,7 +184,8 @@ export function provideConfig() {
         CKEditorModule,
         NgxMaskModule,
         CommandKModule,
-        NgxDaterangepickerMd.forRoot()
+        NgxDaterangepickerMd.forRoot(),
+        PdfJsViewerModule
     ],
     exports: [
         CommonModule,

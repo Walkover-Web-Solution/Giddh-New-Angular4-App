@@ -13,4 +13,5 @@ export const PURCHASE_ORDER_API = {
     GET_PREVIEW: `${PURCHASE_ORDER}purchase-order/preview?uniqueName=:poUniqueName`,
     UPDATE_SETTINGS_EMAIL: `${PURCHASE_ORDER}purchase-bill-setting`,
     GET_ALL_VERSIONS: `${PURCHASE_ORDER}accounts/:accountUniqueName/purchase-order/versions/all?page=:page&count=:count`,
+    GET_PDF: `${PURCHASE_ORDER}accounts/:accountUniqueName/purchase-order/:poUniqueName/download?fileType=base64`,
 }

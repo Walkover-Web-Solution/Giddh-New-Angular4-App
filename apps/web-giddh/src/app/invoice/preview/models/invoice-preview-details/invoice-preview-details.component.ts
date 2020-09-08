@@ -102,6 +102,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public isAccountHaveAdvanceReceipts: boolean = false;
     public revisionHistoryAsideState: string = 'out';
     public companyUniqueName: string = '';
+    public purchaseOrderNumbers: any[] = [];
+    /* This will hold po unique name for preview */
+    public purchaseOrderPreviewUniqueName: string = '';
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -149,6 +152,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
             if (this.only4ProformaEstimates) {
                 this.getVoucherVersions();
+            }
+
+            if(this.selectedItem.voucherType === VoucherTypeEnum.purchase && this.selectedItem.purchaseOrderNumbers) {
+                this.purchaseOrderNumbers = this.selectedItem.purchaseOrderNumbers.split(",");
             }
         }
 
@@ -586,6 +593,49 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     this.isAccountHaveAdvanceReceipts = false;
                 }
             });
+        }
+    }
+
+    /**
+     * This will check if we need to show pipe symbol
+     *
+     * @param {number} loop
+     * @returns {boolean}
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public checkIfPipeSymbolRequired(loop: number): boolean {
+        if (loop < (this.purchaseOrderNumbers.length - 1)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * This will open the purchase order preview popup
+     *
+     * @param {TemplateRef<any>} template
+     * @param {*} purchaseOrderUniqueName
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public openPurchaseOrderPreviewPopup(template: TemplateRef<any>, purchaseOrderUniqueName: any): void {
+        this.purchaseOrderPreviewUniqueName = purchaseOrderUniqueName;
+        
+        this.modalRef = this.modalService.show(
+            template,
+            Object.assign({}, { class: 'modal-sm' })
+        );
+    }
+
+    /**
+     * This will close the purchase order preview popup
+     *
+     * @param {*} event
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public closePurchaseOrderPreviewPopup(event: any): void {
+        if (event) {
+            this.modalRef.hide();
         }
     }
 }

@@ -285,15 +285,13 @@
 
                             </div>
                         </div>
-                        <div class="linked-purchase-order font-14 mt-15" *ngIf="voucherType === 'purchase'">
+                        <div class="linked-purchase-order font-14 mt-15" *ngIf="selectedItem?.voucherType === 'purchase' && purchaseOrderNumbers && purchaseOrderNumbers.length > 0">
                             <p><span class="icon-file-path"></span> Linked Purchase Order(s):</p>
                             <div class="purchase-order-number">
-                                <a class="aqua-color">PO934850 </a> | <a
-                                    class="aqua-color">PO934850 </a> | <a class="aqua-color">PO934850 </a>
+                                <a href="javascript:;" class="aqua-color" (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order)" *ngFor="let order of purchaseOrderNumbers; let i = index;">{{order}}<span *ngIf="checkIfPipeSymbolRequired(i)">&nbsp;|&nbsp;</span></a>
                             </div>
                         </div>
                     </div>
-                    <!-- class="invoice-image-section" [style.height.px]="invoiceImageSectionViewHeight" -->
 
                     <div *ngIf="!isMobileView" class="invoice-image-section">
                         <div class="relative">
@@ -918,4 +916,8 @@
 
 <ng-template #purchaseBillTemplate>
     <purchase-bill-template></purchase-bill-template>
+</ng-template>
+
+<ng-template #purchaseOrderPreviewModal>
+    <purchase-order-preview-modal [purchaseOrderUniqueName]="purchaseOrderPreviewUniqueName" [purchaseOrderAccountUniqueName]="selectedItem?.account?.uniqueName" [purchaseOrderCompanyUniqueName]="companyUniqueName" (closeModelEvent)="closePurchaseOrderPreviewPopup($event)"></purchase-order-preview-modal>
 </ng-template>

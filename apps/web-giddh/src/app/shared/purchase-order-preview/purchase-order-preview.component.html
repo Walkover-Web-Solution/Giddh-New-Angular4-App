@@ -7,7 +7,7 @@
 <div class="modal-body">
     <div class="row mrB1">
         <div class="col-sm-12">
-            
+            <ng2-pdfjs-viewer pagemode="none" viewerId="MyUniqueID" [hidden]="isLoading" [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="pagesLoaded($event);" [openFile]="false" [viewBookmark]="false" [download]="false"></ng2-pdfjs-viewer>
         </div>
     </div>
 </div>
