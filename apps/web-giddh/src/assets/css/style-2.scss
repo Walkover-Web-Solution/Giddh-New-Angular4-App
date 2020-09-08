@@ -134,8 +134,15 @@
         text-align: left;
     }
     .onMobileView .table-bordered > tfoot > tr > td {
-        border: none;
+        border: none !important;
     }
+    
+    .table-bordered th, .table-bordered td {
+        border:0px !important;
+        font-size:14px !important;
+        padding: 5px 14px;
+    }
+
     .onMobileView th {
         display: none;
     }
@@ -144,7 +151,7 @@
         background: transparent;
     }
     .onMobileView.table-bordered {
-        border: none;
+        border: none !important;
         background: transparent;
         margin-top: 0;
     }

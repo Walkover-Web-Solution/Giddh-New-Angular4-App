@@ -170,7 +170,7 @@
 
 .card .basic > tbody > tr > td,
 .card .basic > thead > tr > th {
-    padding: 5px 14px;
+    padding: 5px 14px !important;
     border: none !important;
 }
 
@@ -186,10 +186,10 @@ td.card-header.clearfix {
 
 .card #inovice_td {
     border-bottom: 1px solid #ddd !important;
-    padding-bottom: 20px;
+    padding-bottom: 20px !important;
     background-color: #f9f9f9;
     border-top: 1px solid #ddd !important;
-    padding-top: 10px;
+    padding-top: 10px !important;
 }
 
 .card .overDueDate {
@@ -645,9 +645,9 @@ span.icon-export-icon {
     .totalDueSale {
         padding-bottom: 5px;
     }
-    .invoice-table {
-        margin-bottom: 22px;
-    }
+   // .invoice-table {
+      //  margin-bottom: 22px;
+    //}
 }
 
 @media (max-width: 575px) {
