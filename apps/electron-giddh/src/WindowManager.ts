@@ -76,8 +76,7 @@ export default class WindowManager {
                 icon: __dirname + '/assets/icon/favicon.ico',
                 show: false,
                 webPreferences: {
-                    nodeIntegration: true,
-                    webSecurity: false
+                    nodeIntegration: true
                 },
                 tabbingIdentifier: 'giddh'
             };
@@ -98,10 +97,12 @@ export default class WindowManager {
             if (isMaximized) {
                 window.maximize();
             }
-            window.loadURL(descriptor.url);
-            window.show();
-            this.registerWindowEventHandlers(window, descriptor);
-            this.windows.push(window);
+            app.on('ready', () => {
+                window.loadURL(descriptor.url);
+                window.show();
+                this.registerWindowEventHandlers(window, descriptor);
+                this.windows.push(window);
+            });
         }
 
         // tslint:disable-next-line:no-unused-expression
