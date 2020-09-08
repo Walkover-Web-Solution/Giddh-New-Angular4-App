@@ -1,8 +1,8 @@
 <div class="container-fluid pt-2 pb-2">
     <div class="clearfix reports-main">
-        <div class="row">
-            <div *ngFor="let item of list">
-                <div class="col-md-3 col-sm-3 mb-5 col-xs-6">
+        <div class="row clearfix">
+            <div *ngFor="let item of list" class="col-md-3 col-sm-3 mb-5 col-xs-6 single-report-list">
+                <div>
                     <p>{{item.groupHeading}}</p>
                     <ng-container *ngFor="let routeItem of item.items">
                         <p>
