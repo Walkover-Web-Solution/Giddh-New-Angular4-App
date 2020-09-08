@@ -97,12 +97,12 @@ export default class WindowManager {
             if (isMaximized) {
                 window.maximize();
             }
-            app.on('ready', () => {
+            setTimeout(() => {
                 window.loadURL(descriptor.url);
                 window.show();
                 this.registerWindowEventHandlers(window, descriptor);
                 this.windows.push(window);
-            });
+            }, 2* 1000);
         }
 
         // tslint:disable-next-line:no-unused-expression
