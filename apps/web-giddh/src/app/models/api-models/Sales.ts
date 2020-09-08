@@ -456,6 +456,7 @@ export interface PurchaseRecordRequest extends GenericRequest {
     attachedFiles?: Array<string>;
     entries?: SalesEntryClass[];
     templateDetails?: TemplateDetailsClass;
+    purchaseOrders?: Array<any>;
 }
 
 export class VoucherDetailsClass {

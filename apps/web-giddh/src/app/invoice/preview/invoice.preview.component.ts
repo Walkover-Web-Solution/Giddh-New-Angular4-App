@@ -1418,6 +1418,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         obj.account = invoice.account;
         obj.voucherStatus = invoice.balanceStatus;
         obj.accountCurrencySymbol = invoice.accountCurrencySymbol;
+        obj.purchaseOrderNumbers = invoice.purchaseOrderNumbers;
         return obj;
     }
 

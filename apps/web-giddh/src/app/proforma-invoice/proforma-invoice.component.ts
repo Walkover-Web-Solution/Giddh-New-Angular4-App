@@ -113,6 +113,7 @@ import { CurrentCompanyState } from '../store/Company/company.reducer';
 import { CustomTemplateState } from '../store/Invoice/invoice.template.reducer';
 import { PurchaseOrderService } from '../services/purchase-order.service';
 import { SearchService } from '../services/search.service';
+import { PURCHASE_ORDER_STATUS } from '../shared/helpers/purchaseOrderStatus';
 
 const THEAD_ARR_READONLY = [
     {
@@ -1095,6 +1096,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
                             this.isRcmEntry = (results[0]) ? results[0].subVoucher === SubVoucher.ReverseCharge : false;
                             obj = cloneDeep(convertedRes1) as VoucherClass;
+
+                            console.log(results[0]);
                         } else {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
                             if (results[0].account.currency) {
@@ -1874,6 +1877,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.purchaseRecordInvoiceNumber = '';
         this.adjustPaymentBalanceDueData = 0;
         this.depositAmount = 0;
+        this.selectedPOItems = [];
+        this.linkedPO = [];
+        this.linkedPONumbers = [];
+        this.purchaseOrders = [];
         this.startLoader(false);
 
         this.assignDates();
@@ -2066,6 +2073,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                     }
 
+                    if(this.isPurchaseInvoice && this.selectedPOItems && this.selectedPOItems.length > 0) {
+                        txn.accountUniqueName = txn.accountUniqueName.indexOf('#') > -1 ? txn.accountUniqueName.slice(0, txn.accountUniqueName.indexOf('#')) : txn.accountUniqueName;
+                    }
+
                     // will get errors of string and if not error then true boolean
                     if (!txn.isValid()) {
                         this.startLoader(false);
@@ -2175,6 +2186,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             }
         } else {
+
+            let purchaseOrders = [];
+
+            if(this.selectedPOItems && this.selectedPOItems.length > 0) {
+                this.selectedPOItems.forEach(order => {
+                    purchaseOrders.push({name: this.linkedPONumbers[order].voucherNumber, uniqueName: order});
+                });
+            }
+
             requestObject = {
                 account: data.accountDetails,
                 number: this.invFormData.voucherDetails.voucherNumber || '',
@@ -2184,7 +2204,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 type: this.invoiceType,
                 attachedFiles: (this.invFormData.entries[0] && this.invFormData.entries[0].attachedFile) ? [this.invFormData.entries[0].attachedFile] : [],
                 templateDetails: data.templateDetails,
-                subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : ''
+                subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : '',
+                purchaseOrders: purchaseOrders
             } as PurchaseRecordRequest;
         }
 
@@ -2707,6 +2728,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                         if(isLinkedPOItem) {
                             txn.applicableTaxes = entry.taxList;
+                            txn.stockDetails = selectedAcc.stock;
+
+                            if(txn.stockDetails.uniqueName) {
+                                let stockUniqueName = txn.stockDetails.uniqueName.split('#');
+                                txn.stockDetails.uniqueName = stockUniqueName[1];
+                            }
+
                             if(selectedAcc.stock) {
                                 if(selectedAcc.stock.quantity) {
                                     txn.quantity = selectedAcc.stock.quantity;
@@ -3186,6 +3214,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
             }
         }
+
+        this.selectedPOItems = [];
+        this.linkedPO = [];
+        this.linkedPONumbers = [];
+        this.purchaseOrders = [];
     }
 
     public ngOnChanges(s: SimpleChanges) {
@@ -3752,6 +3785,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             txn.fakeAccForSelect2 = txn.accountUniqueName.indexOf('#') > -1 ? txn.fakeAccForSelect2.slice(0, txn.fakeAccForSelect2.indexOf('#')) : txn.fakeAccForSelect2;
                         }
                     }
+
+                    if(this.isPurchaseInvoice && this.selectedPOItems && this.selectedPOItems.length > 0) {
+                        txn.accountUniqueName = txn.accountUniqueName.indexOf('#') > -1 ? txn.accountUniqueName.slice(0, txn.accountUniqueName.indexOf('#')) : txn.accountUniqueName;
+                    }
+
                     // will get errors of string and if not error then true boolean
                     if (!txn.isValid()) {
                         this._toasty.warningToast('Product/Service can\'t be empty');
@@ -5564,7 +5602,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public getVendorPurchaseOrders(vendorName: any): void {
         let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, page: 1, from: this.poFilterDates.from, to: this.poFilterDates.to, count: 100, sort: '', sortBy: '' };
-        let purchaseOrderPostRequest = { vendorName: vendorName, statuses: ['open', 'partially-received'] };
+        let purchaseOrderPostRequest = { vendorName: vendorName, statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyReceived, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
 
         if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
             this.purchaseOrders = [];
@@ -5575,7 +5613,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (res.status === 'success') {
                         if (res.body && res.body.items && res.body.items.length > 0) {
                             res.body.items.forEach(item => {
-                                this.purchaseOrders.push({label: item.voucherNumber, value: item.uniqueName, additional: {amount: item.grandTotal.amountForCompany}});
+                                this.purchaseOrders.push({label: item.voucherNumber, value: item.uniqueName, additional: {amount: item.grandTotal.amountForAccount}});
 
                                 this.linkedPONumbers[item.uniqueName] = [];
                                 this.linkedPONumbers[item.uniqueName]['voucherNumber'] = item.voucherNumber;
@@ -5590,7 +5628,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public getPurchaseOrder(event: any): void {
+    /**
+     * This will get the PO details
+     *
+     * @param {*} event
+     * @memberof ProformaInvoiceComponent
+     */
+    public getPurchaseOrder(event: any, addRemove: boolean): void {
         if(event && event.length > 0) {
             let order = event[event.length - 1];
             if(!this.selectedPOItems.includes(order.value)) {
@@ -5602,7 +5646,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 if(response.body && response.body.entries && response.body.entries.length > 0) {
                                     this.selectedPOItems.push(response.body.uniqueName);
                                     this.linkedPONumbers[order.value]['items'] = response.body.entries;
-                                    this.addPOItems(response.body.entries);
+                                    if(addRemove) {
+                                        this.addPOItems(response.body.entries);
+                                    }
                                 } else {
                                     this.linkedPONumbers[order.value]['items'] = [];
                                 }
@@ -5613,13 +5659,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                 });
             } else {
-                this.removePOItem();
+                if(addRemove) {
+                    this.removePOItem();
+                }
             }
         } else {
-            this.removePOItem();
+            if(addRemove) {
+                this.removePOItem();
+            }
         }
     }
 
+    /**
+     * This will add the items if linked PO is selected
+     *
+     * @param {*} entries
+     * @memberof ProformaInvoiceComponent
+     */
     public addPOItems(entries: any): void {
         entries.forEach(entry => {
             let transactionLoop = 0;
@@ -5649,6 +5705,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                 this.activeIndx = lastIndex;
                 this.invFormData.entries[lastIndex].entryDate = this.universalDate;
+                this.invFormData.entries[lastIndex].transactions[transactionLoop].accountUniqueName = item.uniqueName;
                 this.invFormData.entries[lastIndex].transactions[transactionLoop].fakeAccForSelect2 = item.uniqueName;
                 this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
                 this.invFormData.entries[lastIndex].transactions[transactionLoop].description = entry.description;
@@ -5662,6 +5719,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         });
     }
 
+    /**
+     * This will remove the Items if linked PO is removed
+     *
+     * @memberof ProformaInvoiceComponent
+     */
     public removePOItem(): void {
         if(this.selectedPOItems && this.selectedPOItems.length > 0) {
             let selectedPOItems = [];
@@ -5709,7 +5771,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             });
 
             this.selectedPOItems = selectedPOItems;
-            console.log(this.invFormData.entries);
         }
     }
 }
