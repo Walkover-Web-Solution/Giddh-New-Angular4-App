@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="col-xs-9 form-group d-flex align-items-center">
                                     <input type="checkbox" class="hide-on-mobile" name="sendThroughGmail" [(ngModel)]="invoiceSettings.purchaseBillSettings.sendThroughGmail" [disabled]="!isGmailIntegrated" />
-                                    <span class="ml-1 integrated-email">
+                                    <span class="ml-1 integrated-email" *ngIf="!isGmailIntegrated">
                                         <a [href]="gmailAuthCodeUrl$ | async">Integrate Gmail</a>
                                     </span>
                                 </div>
