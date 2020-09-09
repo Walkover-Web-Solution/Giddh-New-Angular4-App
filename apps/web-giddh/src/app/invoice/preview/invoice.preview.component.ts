@@ -1659,4 +1659,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
         return newAccountUniqueName;
     }
+
+    public deletePurchaseBill(billUniqueName: any): void {
+        let allInvoices = _.cloneDeep(this.voucherData.items);
+        this.selectedInvoice = allInvoices.find((inv) => inv.uniqueName === billUniqueName);
+        this.invoiceConfirmationModel.show();
+    }
 }

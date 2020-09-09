@@ -505,14 +505,14 @@
 
                         <td *ngIf="selectedVoucher === 'purchase'">
                             <span>{{ item.balanceStatus}}</span>
-                            <div class="action-icon ml-15">
-                                <a tooltip="send Email">
+                            <div class="action-icon ml-15" *ngIf="hoveredItemForAction === item.uniqueName">
+                                <a tooltip="Send Email">
                                     <span class="icon-envelope font-12"></span>
                                 </a>
                                 <a tooltip="Copy">
                                     <span class="icon-copy-small font-14"></span>
                                 </a>
-                                <a tooltip="Delete">
+                                <a tooltip="Delete" (click)="deletePurchaseBill(item.uniqueName);">
                                     <i class="icon-trash"></i>
                                 </a>
                             </div>
