@@ -294,7 +294,7 @@
                         <div class="linked-purchase-order font-14 mt-15" *ngIf="selectedItem?.voucherType === 'purchase' && purchaseOrderNumbers && purchaseOrderNumbers.length > 0">
                             <p><span class="icon-file-path"></span> Linked Purchase Order(s):</p>
                             <div class="purchase-order-number">
-                                <a href="javascript:;" class="aqua-color" (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order)" *ngFor="let order of purchaseOrderNumbers; let i = index;">{{order}}<span *ngIf="checkIfPipeSymbolRequired(i)">&nbsp;|&nbsp;</span></a>
+                                <a href="javascript:;" class="aqua-color" (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order.uniqueName)" *ngFor="let order of purchaseOrderNumbers; let i = index;">{{order.number}}<span *ngIf="checkIfPipeSymbolRequired(i)">&nbsp;|&nbsp;</span></a>
                             </div>
                         </div>
                     </div>

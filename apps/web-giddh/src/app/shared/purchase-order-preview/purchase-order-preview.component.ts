@@ -22,6 +22,8 @@ export class PurchaseOrderPreviewModalComponent implements OnInit {
 
     public isLoading: boolean = false;
     public pageCount: number = 0;
+    public pdfPreviewLoaded: boolean = false;
+    public pdfPreviewHasError: boolean = false;
 
     constructor(public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService) {
 
@@ -52,6 +54,8 @@ export class PurchaseOrderPreviewModalComponent implements OnInit {
      */
     public getPdf(): void {
         this.isLoading = true;
+        this.pdfPreviewHasError = false;
+        this.pdfPreviewLoaded = false;
         let getRequest = { companyUniqueName: this.purchaseOrderCompanyUniqueName, accountUniqueName: this.purchaseOrderAccountUniqueName, poUniqueName: this.purchaseOrderUniqueName };
 
         this.purchaseOrderService.getPdf(getRequest).subscribe(response => {
@@ -60,6 +64,9 @@ export class PurchaseOrderPreviewModalComponent implements OnInit {
                 this.pdfViewer.pdfSrc = blob;
                 this.pdfViewer.showSpinner = true;
                 this.pdfViewer.refresh();
+                this.pdfPreviewLoaded = true;
+            } else {
+                this.pdfPreviewHasError = true;
             }
             this.isLoading = false;
         });

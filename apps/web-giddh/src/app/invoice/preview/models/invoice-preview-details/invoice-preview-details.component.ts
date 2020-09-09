@@ -157,7 +157,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             }
 
             if(this.selectedItem.voucherType === VoucherTypeEnum.purchase) {
-                
+                this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account.uniqueName, this.selectedItem.uniqueName).subscribe((res: any) => {
+                    if (res && res.body) {
+                        this.purchaseOrderNumbers = res.body.purchaseOrderDetails;
+                    }
+                });
             }
         }
 
