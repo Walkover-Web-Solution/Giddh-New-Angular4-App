@@ -92,14 +92,14 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnChanges {
 
 		// tslint:disable-next-line:no-shadowed-variable
 		this._store.select(createSelector([(state: AppState) => state.settings.branches], (branches) => {
-			if (branches && branches.results.length > 0) {
-				_.each(branches.results, (branch) => {
+			if (branches && branches.length > 0) {
+				_.each(branches, (branch) => {
 					if (branch.addresses && branch.addresses.length) {
 						branch.addresses = [_.find(branch.addresses, (gst) => gst.isDefault)];
 					}
 				});
-				this.branches$ = observableOf(_.orderBy(branches.results, 'name'));
-			} else if (branches && branches.results.length === 0) {
+				this.branches$ = observableOf(_.orderBy(branches, 'name'));
+			} else if (branches && branches.length === 0) {
 				this.branches$ = observableOf(null);
 			}
 		})).pipe(takeUntil(this.destroyed$)).subscribe();

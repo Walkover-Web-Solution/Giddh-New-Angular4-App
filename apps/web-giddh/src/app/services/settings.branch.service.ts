@@ -9,6 +9,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { SETTINGS_BRANCH_API } from './apiurls/settings.branch.api';
 import { BranchFilterRequest } from '../models/api-models/Company';
+import { COMPANY_API } from './apiurls/comapny.api';
 
 @Injectable()
 export class SettingsBranchService {
@@ -30,7 +31,7 @@ export class SettingsBranchService {
         let from = (request.from) ? request.from : "";
         let to = (request.to) ? request.to : "";
 
-        let url = this.config.apiUrl + SETTINGS_BRANCH_API.GET_ALL_BRANCHES;
+        let url = this.config.apiUrl + COMPANY_API.GET_ALL_BRANCHES;
         url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url.replace(':from', from);
         url = url.replace(':to', to);
