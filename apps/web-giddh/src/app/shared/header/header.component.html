@@ -769,6 +769,11 @@
                                 <img class="pull-right permission_icon" *ngIf="hoveredIndx === i && cmp.createdBy.email !== (user$ | async)?.email" src="assets/images/users-white.svg">
 
                             </a>
+                            <ul>
+                                <li class="company-branch" (click)="switchToBranch(branch.uniqueName, $event)" *ngFor="let branch of cmp?.branches">
+                                    {{branch.name}}
+                                </li>
+                            </ul>
                             <!-- commented by meghna
 <i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
 -->

@@ -1,5 +1,5 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { TaxResponse } from '../../models/api-models/Company';
+import { TaxResponse, Organization } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
 import { SETTINGS_TAXES_ACTIONS } from '../../actions/settings/taxes/settings.taxes.const';
 import * as _ from '../../lodash-optimized';
@@ -28,6 +28,7 @@ export interface CurrentCompanyState {
     isTcsTdsApplicable: boolean;
     isGetAllIntegratedBankInProgress: boolean;
     integratedBankList: IntegratedBankList[];
+    currentOrganizationDetails: Organization;
 }
 
 /**
@@ -62,7 +63,8 @@ const initialState: CurrentCompanyState = {
     isCompanyActionInProgress: false,
     isAccountInfoLoading: false,
     isTcsTdsApplicable: false,
-    isGetAllIntegratedBankInProgress: false
+    isGetAllIntegratedBankInProgress: false,
+    currentOrganizationDetails: null
 };
 
 export function CompanyReducer(state: CurrentCompanyState = initialState, action: CustomActions): CurrentCompanyState {
@@ -232,6 +234,10 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                     isGetAllIntegratedBankInProgress: false
                 });
             }
+        case CompanyActions.SET_COMPANY_BRANCH:
+            return Object.assign({}, state, {
+                currentOrganizationDetails: action.payload
+            });
         default:
             return state;
     }

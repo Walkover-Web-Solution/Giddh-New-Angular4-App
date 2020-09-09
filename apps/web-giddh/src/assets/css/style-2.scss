@@ -7176,9 +7176,14 @@ perfect-scrollbar>.ps>.ps-overlay {
     opacity: 0;
 }
 
-.cmp:hover,
+.cmp address:hover,
 .user_dropdown>li a:hover .userName_wrap small {
     color: #666;
+}
+
+.cmp .company-branch:hover {
+    color: $dark-gray;
+    background-color: #f9f9f9;
 }
 
 .user_dropdown>li a:hover {

@@ -38,7 +38,9 @@ import {
     CompanyCountry,
     CompanyCreateRequest,
     CompanyResponse,
-    StatesRequest
+    StatesRequest,
+    Organization,
+    OrganizationDetails
 } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
@@ -66,6 +68,7 @@ import { CountryRequest, CurrentPage, OnboardingFormRequest } from '../../models
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
+import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 
 @Component({
     selector: 'app-header',
@@ -179,6 +182,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     public companies$: Observable<CompanyResponse[]>;
     public selectedCompany: Observable<CompanyResponse>;
+    /** Stores the active company details */
+    public selectedCompanyDetails: CompanyResponse;
     public seletedCompanywithBranch: string = '';
     public selectedCompanyCountry: string;
     public markForDeleteCompany: CompanyResponse;
@@ -269,6 +274,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /* This will hold if resolution is less than 768 to consider as mobile screen */
     public isMobileScreen: boolean = false;
 
+    /** Observable to store the branches of current company */
+    private currentCompanyBranches$: Observable<any>;
+
     /**
      *
      */
@@ -295,7 +303,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
         private commonActions: CommonActions,
-        private location: Location
+        private location: Location,
+        private settingsBranchAction: SettingsBranchActions
     ) {
         this._windowRef.nativeWindow.superformIds = ['Jkvq'];
         /* This will get the date range picker configurations */
@@ -375,6 +384,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).pipe(takeUntil(this.destroyed$));
         this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
         this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
 
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
             if (!companies) {
@@ -385,12 +395,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
 
             let orderedCompanies = _.orderBy(companies, 'name');
-            orderedCompanies.map((company, index) => {
-                if (index > 0) {
-                    company['isBranch'] = true;
-                }
-                return company;
-            });
             this.companies$ = observableOf(orderedCompanies);
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
@@ -408,7 +412,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             if (selectedCmp) {
                 this.selectedCompany = observableOf(selectedCmp);
-
+                this.selectedCompanyDetails = selectedCmp;
                 let selectedCompanyArray = selectedCmp.name.split(" ");
                 let companyInitials = [];
                 for (let loop = 0; loop < selectedCompanyArray.length; loop++) {
@@ -474,6 +478,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.removeCompanySessionData();
             }
         });
+
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                if (this.selectedCompanyDetails) {
+                    response.forEach(element => {
+                        element.isBranch = true;
+                    });
+                    this.companyList.forEach((company) => {
+                        if (company.uniqueName === this.selectedCompanyDetails.uniqueName) {
+                            company.branches = response;
+                        }
+                        return company;
+                    });
+                }
+            }
+        })
     }
 
     public ngOnInit() {
@@ -491,8 +511,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
             }
         });
+
         this.sideBarStateChange(true);
         this.getElectronAppVersion();
+
         this.store.dispatch(this.companyActions.GetApplicationDate());
 
         this.user$.pipe(take(1)).subscribe((u) => {
@@ -543,6 +565,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
             }
         });
+
+        this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
 
         // region creating list for cmd+g modal
         combineLatest(
@@ -710,6 +734,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.totalNumberOfcompanies$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.totalNumberOfcompanies = res;
         });
+
+        this.store.pipe(select(appStore => appStore.company.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+            if (organization && organization.details && organization.details.branchDetails) {
+                this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
+                this.generalService.currentOrganizationType = organization.type;
+            } else {
+                this.generalService.currentOrganizationType = OrganizationType.Company;
+            }
+        });
+
         this.getPartyTypeForCreateAccount();
         this.getAllCountries();
     }
@@ -1128,9 +1162,33 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public changeCompany(selectedCompanyUniqueName: string) {
         this.companyDropdown.isOpen = false;
-        this.generalService.currentOrganizationType = OrganizationType.Branch;
+        const details = {
+            branchDetails: {
+                uniqueName: ''
+            }
+        };
+        this.setOrganziationDetails(OrganizationType.Company, details);
         this.toggleBodyScroll();
         this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName));
+    }
+
+    /**
+     * Switches to branch mode
+     *
+     * @param {string} branchUniqueName Branch uniqueName
+     * @memberof HeaderComponent
+     */
+    public switchToBranch(branchUniqueName: string, event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
+        this.companyDropdown.isOpen = false;
+        this.toggleBodyScroll();
+        const details = {
+            branchDetails: {
+                uniqueName: branchUniqueName
+            }
+        };
+        this.setOrganziationDetails(OrganizationType.Branch, details);
     }
 
     public deleteCompany(e: Event) {
@@ -1891,5 +1949,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.router.navigate(['/pages/all-modules']);
         }
         this.isAllModuleOpen = !this.isAllModuleOpen;
+    }
+
+    /**
+     * Sets the organization details
+     *
+     * @private
+     * @param {OrganizationType} type Type of the organization
+     * @param {OrganizationDetails} branchDetails Branch details of an organization
+     * @memberof HeaderComponent
+     */
+    private setOrganziationDetails(type: OrganizationType, branchDetails: OrganizationDetails): void {
+        const organization: Organization = {
+            type, // Mode to which user is switched to
+            uniqueName: this.selectedCompanyDetails ? this.selectedCompanyDetails.uniqueName : '',
+            details: branchDetails
+        };
+        this.store.dispatch(this.companyActions.setCompanyBranch(organization));
     }
 }

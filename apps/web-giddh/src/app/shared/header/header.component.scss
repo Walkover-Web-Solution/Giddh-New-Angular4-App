@@ -596,6 +596,10 @@ span.icon-support.dropdown-toggle {
 ul.sub-list {
     min-height: 50px;
     max-height: 290px;
+    .company-branch {
+        padding-left: 32px;
+        cursor: pointer;
+    }
 }
 
 .upgradePlan.list-inline > li {
