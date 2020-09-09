@@ -19,7 +19,8 @@ export class GeneralService {
 
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
-
+    /** Stores the branch unique name */
+    public currentBranchUniqueName: string;
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);

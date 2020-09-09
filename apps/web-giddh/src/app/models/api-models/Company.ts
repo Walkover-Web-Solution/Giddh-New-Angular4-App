@@ -1,5 +1,6 @@
 import { ITax, ITaxDetail } from '../interfaces/tax.interface';
 import { INameUniqueName } from './Inventory';
+import { OrganizationType } from '../user-login-state';
 
 export class CompanyRequest {
     public name: string;
@@ -103,6 +104,7 @@ export class CompanyResponse {
     public balanceDecimalPlaces?: string;
     public baseCurrencySymbol?: string;
     public companyTotals: CompanyTotals;
+    public branches?: Array<any>;
 }
 
 export interface UserEntityRole {
@@ -355,4 +357,16 @@ export class StateList {
 export class BranchFilterRequest {
     from: string;
     to: string;
+}
+
+export interface OrganizationDetails {
+    branchDetails: {
+        uniqueName: string;
+    };
+}
+
+export interface Organization {
+    type: OrganizationType;
+    uniqueName: string;
+    details: OrganizationDetails;
 }

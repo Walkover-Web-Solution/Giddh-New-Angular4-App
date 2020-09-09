@@ -7242,6 +7242,11 @@ perfect-scrollbar > .ps > .ps-overlay {
     color: #666;
 }
 
+.cmp .company-branch:hover {
+    color: $dark-gray;
+    background-color: #f9f9f9;
+}
+
 .user-dropdown-header > li a:hover {
     color: $chetwode-blue;
     background: #eeeff9;

@@ -1,17 +1,28 @@
-import { map, switchMap, take } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { CompanyService } from '../services/companyService.service';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse, TaxResponse, CompanyCreateRequest, CreateCompanyUsersPlan, CompanyCountry } from '../models/api-models/Company';
 import { Injectable } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
-import { ToasterService } from '../services/toaster.service';
-import { BaseResponse } from '../models/api-models/BaseResponse';
-import { AppState } from '../store/roots';
-import { CustomActions } from '../store/customActions';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { Observable } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
+
+import { BaseResponse } from '../models/api-models/BaseResponse';
+import {
+    CompanyCountry,
+    CompanyCreateRequest,
+    CompanyRequest,
+    CompanyResponse,
+    CreateCompanyUsersPlan,
+    Organization,
+    StateDetailsRequest,
+    StateDetailsResponse,
+    TaxResponse,
+} from '../models/api-models/Company';
+import { IRegistration } from '../models/interfaces/registration.interface';
+import { CompanyService } from '../services/companyService.service';
+import { ToasterService } from '../services/toaster.service';
+import { CustomActions } from '../store/customActions';
+import { AppState } from '../store/roots';
 import { COMMON_ACTIONS } from './common.const';
-import { IRegistration } from "../models/interfaces/registration.interface";
 
 @Injectable()
 
@@ -62,6 +73,7 @@ export class CompanyActions {
 
     public static GET_ALL_INTEGRATED_BANK = 'GET_ALL_INTEGRATED_BANK';
     public static GET_ALL_INTEGRATED_BANK_RESPONSE = 'GET_ALL_INTEGRATED_BANK_RESPONSE';
+    public static SET_COMPANY_BRANCH = 'SET_COMPANY_BRANCH';
 
     public createCompany$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -675,5 +687,10 @@ export class CompanyActions {
         };
     }
 
-
+    public setCompanyBranch(organizationDetails: Organization): CustomActions {
+        return {
+            type: CompanyActions.SET_COMPANY_BRANCH,
+            payload: organizationDetails
+        };
+    }
 }

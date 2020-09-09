@@ -47,7 +47,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
         const delemiter = request.urlWithParams.includes('?') ? '&' : '?';
         if (!request.urlWithParams.includes('branchUniqueName')) {
             request = request.clone({
-                url: `${request.url}${delemiter}branchUniqueName=12345`
+                url: `${request.url}${delemiter}branchUniqueName=${this.generalService.currentBranchUniqueName}`
             });
         }
         return request;
