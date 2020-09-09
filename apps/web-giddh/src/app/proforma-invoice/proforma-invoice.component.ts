@@ -5271,6 +5271,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public onSearchQueryChanged(query: string, page: number = 1, searchType: string) {
+        this.searchResultsPaginationData.query = query;
         const requestObject = this.getSearchRequestObject(query, page, searchType);
         this.searchAccount(requestObject).subscribe(data => {
             if (data && data.body && data.body.results) {
