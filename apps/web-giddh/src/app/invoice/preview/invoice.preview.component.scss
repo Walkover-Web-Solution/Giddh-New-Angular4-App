@@ -480,6 +480,9 @@ span.icon-export-icon {
                     border-right: none !important;
                 }
             }
+            .item-selected {
+                display: flex !important;
+            }
         }
     }
     &:hover {
