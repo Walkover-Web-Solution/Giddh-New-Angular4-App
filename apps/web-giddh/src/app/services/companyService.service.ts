@@ -505,12 +505,11 @@ export class CompanyService {
             const addressDetails = requestObject.addresses[0];
             requestPayload.addresses = [
                 {
-                    gstin: addressDetails.taxNumber,
-                    state: {
-                        stateCode: addressDetails.stateCode,
-                        stateName: addressDetails.stateName
-                    },
-                    addresses: addressDetails.address
+                    taxNumber: addressDetails.taxNumber,
+                    isDefault: true,
+                    stateCode: addressDetails.stateCode,
+                    stateName: addressDetails.stateName,
+                    address: addressDetails.address
                 }
             ];
         }

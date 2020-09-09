@@ -463,16 +463,16 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         // tslint:disable-next-line:no-shadowed-variable
         this.store.select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
             if (entities) {
-                if (entities.results.length) {
-                    if (this.selectedCmp && entities.results.findIndex(p => p.uniqueName === this.selectedCmp.uniqueName) === -1) {
+                if (entities.length) {
+                    if (this.selectedCmp && entities.findIndex(p => p.uniqueName === this.selectedCmp.uniqueName) === -1) {
                         this.selectedCmp['label'] = this.selectedCmp.name;
-                        entities.results.push(this.selectedCmp);
+                        entities.push(this.selectedCmp);
                     }
-                    entities.results.forEach(element => {
+                    entities.forEach(element => {
                         element['label'] = element.name;
                     });
-                    this.entities$ = observableOf(_.orderBy(entities.results, 'name'));
-                } else if (entities.results.length === 0) {
+                    this.entities$ = observableOf(_.orderBy(entities, 'name'));
+                } else if (entities.length === 0) {
                     this.entities$ = observableOf(null);
                 }
             }

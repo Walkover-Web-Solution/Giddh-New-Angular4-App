@@ -133,14 +133,14 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
             if (branches) {
-                if (branches.results.length) {
-                    _.each(branches.results, (branch) => {
+                if (branches.length) {
+                    _.each(branches, (branch) => {
                         if (branch.addresses && branch.addresses.length) {
                             branch.addresses = [_.find(branch.addresses, (gst) => gst.isDefault)];
                         }
                     });
-                    this.branches$ = observableOf(_.orderBy(branches.results, 'name'));
-                } else if (branches.results.length === 0) {
+                    this.branches$ = observableOf(_.orderBy(branches, 'name'));
+                } else if (branches.length === 0) {
                     this.branches$ = observableOf(null);
                 }
             }
@@ -149,8 +149,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 _.each(companies, (cmp) => {
                     _.each(cmp.userEntityRoles, (company) => {
                         if (company.entity.entity === 'COMPANY' && company.role.uniqueName === 'super_admin') {
-                            if (branches && branches.results.length) {
-                                let existIndx = branches.results.findIndex((b) => b.uniqueName === cmp.uniqueName);
+                            if (branches && branches.length) {
+                                let existIndx = branches.findIndex((b) => b.uniqueName === cmp.uniqueName);
                                 if (existIndx === -1) {
                                     companiesWithSuperAdminRole.push(cmp);
                                 }
