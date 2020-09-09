@@ -95,6 +95,9 @@ $greyClr: #6d6d6d;
     }
 }
 
+.item_unq{
+    font-size:12px;
+}
 // select box
 .pure-css-select-wrapper {
     position: relative;
@@ -297,6 +300,8 @@ $greyClr: #6d6d6d;
 
 .list-item {
     font-size: 14px;
+    border-bottom: 1px solid $very-light-gray;
+    display:flex !important;
 }
 
 .fs12 {

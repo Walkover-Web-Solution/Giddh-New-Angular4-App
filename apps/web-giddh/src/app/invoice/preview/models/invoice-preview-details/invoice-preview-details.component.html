@@ -286,9 +286,9 @@
                             </div>
                         </div>
                         <div class="linked-purchase-order font-14 mt-15" *ngIf="selectedItem?.voucherType === 'purchase' && purchaseOrderNumbers && purchaseOrderNumbers.length > 0">
-                            <p><span class="icon-file-path"></span> Linked Purchase Order(s):</p>
+                            <p class="mt-1 mb-1"><span class="icon-file-path"></span> Linked Purchase Order(s):</p>
                             <div class="purchase-order-number">
-                                <a href="javascript:;" class="aqua-color" (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order)" *ngFor="let order of purchaseOrderNumbers; let i = index;">{{order}}<span *ngIf="checkIfPipeSymbolRequired(i)">&nbsp;|&nbsp;</span></a>
+                                <a href="javascript:;" class="aqua-color" (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order)" *ngFor="let order of purchaseOrderNumbers; let i = index;">{{order}}<span *ngIf="checkIfPipeSymbolRequired(i)">|</span></a>
                             </div>
                         </div>
                     </div>
@@ -345,6 +345,9 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="expand-file">
+                                <a href="" class="cp"><span><img src="assets/images/expand.svg"></span>Expand</a>
                             </div>
                         </div>
                     </div>

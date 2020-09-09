@@ -17,6 +17,7 @@
 
 .invoiceDetail-header {
     padding-top: 25px;
+    padding-bottom: 25px;
 }
 
 .invoice-modal-content {
@@ -442,6 +443,20 @@ label.labeled {
     overflow-y: auto !important;
 }
 
+.expand-file{
+    position: absolute;
+    right: 0px;
+    font-size: 14px;
+    margin-right:15px;
+    top:0;
+    a{
+        color: $gray;
+        span {
+            margin-right: 5px;
+        }
+    }
+}
+
 @keyframes loading {
     from {
         left: 0px;
@@ -509,6 +524,10 @@ label.labeled {
         .aqua-color {
             color: $deep-sky-blue;
             cursor: pointer;
+            span{
+                color: $very-light-gray;
+                margin:0 10px;
+            }
         }
     }
 }

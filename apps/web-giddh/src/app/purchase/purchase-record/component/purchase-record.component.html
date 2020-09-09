@@ -1,17 +1,19 @@
-<tabset>
-    <tab heading="Purchase Order" [active]="activeTab == 'order'" (select)="onTabChanged('order')">
-        <div>
-            <purchase-order></purchase-order>
-        </div>
-    </tab>
-    <tab heading="Purchase Bill" [active]="activeTab == 'bill'" (select)="onTabChanged('bill')">
-        <div>
-            <app-invoice-preview [selectedVoucher]="'purchase'"></app-invoice-preview>
-        </div>
-    </tab>
-    <tab heading="Settings" [active]="activeTab == 'settings'" (select)="onTabChanged('settings')">
-        <div>
-            <purchase-setting></purchase-setting>
-        </div>
-    </tab>
-</tabset>
+<div _ngcontent-xlm-c43="" class="invoce-controll">
+    <tabset>
+        <tab heading="Purchase Order" [active]="activeTab == 'order'" (select)="onTabChanged('order')">
+            <div>
+                <purchase-order></purchase-order>
+            </div>
+        </tab>
+        <tab heading="Purchase Bill" [active]="activeTab == 'bill'" (select)="onTabChanged('bill')">
+            <div>
+                <app-invoice-preview [selectedVoucher]="'purchase'"></app-invoice-preview>
+            </div>
+        </tab>
+        <tab heading="Settings" [active]="activeTab == 'settings'" (select)="onTabChanged('settings')">
+            <div>
+                <purchase-setting></purchase-setting>
+            </div>
+        </tab>
+    </tabset>
+</div>
