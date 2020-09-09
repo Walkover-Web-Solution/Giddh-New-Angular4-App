@@ -619,6 +619,12 @@ input {
     color: #262626 !important;
 }
 
+.invoce-controll .nav > li > a:hover{
+    border-color: transparent !important;;
+    background-color: transparent !important;;
+}
+
+
 .invoce-controll .nav-tabs > li.active > a {
     border-bottom: 4px solid #01a9f4 !important;
     color: #262626 !important;
@@ -668,6 +674,12 @@ input {
     padding: 2px 5px;
     border-radius: 4px;
     right: 0;
+}
+
+.history-btn{
+    .btn{
+        padding: 5px 10px !important;
+    }
 }
 
 .mt-15 {
@@ -8497,10 +8509,8 @@ ul.dropdown-menu p.lead.pd {
     border-bottom: 4px solid $deep-sky-blue !important;
     padding-bottom: 7px !important;
     font-family: $opensans-semibold;
-}
-
-.invoce-controll .nav-tabs > li > a {
-    border-bottom: 4px solid transparent !important;
+    background-color: inherit;
+    border-width: 0px 0 4px 0 !important;
 }
 
 .dropdown-menu > li > a:hover {

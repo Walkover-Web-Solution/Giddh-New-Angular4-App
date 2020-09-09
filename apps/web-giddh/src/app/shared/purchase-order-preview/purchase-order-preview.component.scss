@@ -20,3 +20,12 @@
     background-color: #5b64c9;
     animation: loading 2s linear infinite;
 }
+
+.modal-body{
+    .pdf-viewer{
+        height: 600px;
+    }
+    .pdf-preview{
+        height:100%;
+    }
+}

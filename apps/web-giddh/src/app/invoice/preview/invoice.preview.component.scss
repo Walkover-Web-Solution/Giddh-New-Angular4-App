@@ -499,9 +499,20 @@ span.icon-export-icon {
 .visible-on-desktop {
     display: inline-flex;
 }
+
+.status_mobile{
+    .d-flex{
+        padding: 14px 0;
+    }
+}
 /* responsive */
 
 @media (max-width: 768px) {
+
+    .status_mobile{
+        display: flex !important;
+        justify-content: space-between !important;
+    }
     .invoice-name-download {
         a {
             padding-right: 0 !important;
@@ -721,5 +732,30 @@ span.icon-export-icon {
 @media (max-width: 320px) {
     .mobile-search .input-container input {
         letter-spacing: -0.99px;
+    }
+}
+
+@media (max-width: 445px) {
+    .status_mobile{
+        display: block !important;
+    }
+
+    .giddh-table {
+        tr {
+            td {
+                .action-icon {
+                    a {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width:768px) and (min-width:445px){
+    .status_mobile::before{
+        display:flex;
+        align-items: center;
     }
 }

@@ -581,12 +581,14 @@
                                         <sh-select [options]="purchaseOrders" [placeholder]="'Select Order'" [multiple]="true" name="linkedPO" [(ngModel)]="linkedPO" (selected)="getPurchaseOrder($event, true)" [isFilterEnabled]="false">
                                             <ng-template #optionTemplate let-option="option">
                                                 <ng-container>
-                                                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
-                                                        <span><input type="checkbox" class="form-control" [checked]="linkedPO && linkedPO.includes(option.value)" [value]="option.value"></span>
-                                                        <div class="item">{{ option.label }}</div>
+                                                    <a href="javascript:void(0)" class="list-item d-flex">
+                                                        <span><input type="checkbox" [checked]="linkedPO && linkedPO.includes(option.value)" [value]="option.value"></span>&nbsp;
+                                                        <span>
+                                                            <div class="item">{{ option.label }}</div>
                                                         <div class="item_unq" *ngIf="option.additional?.amount">
                                                             Amount: {{ option.additional?.amount }}
                                                         </div>
+                                                        </span>
                                                     </a>
                                                 </ng-container>
                                             </ng-template>
