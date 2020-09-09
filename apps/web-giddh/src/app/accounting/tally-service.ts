@@ -100,13 +100,13 @@ export class TallyModuleService {
                     }
                 }
                 if (this.selectedPageInfo.value.page === 'Receipt') {
-                    if (type === 'by') {
-                        filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value));
-                        this.filteredAccounts.next(filteredAccounts);
-                    } else if (type === 'to') {
+                    // if (type === 'by') {
+                    //     filteredAccounts = _.cloneDeep(this.cashAccounts.value.concat(this.bankAccounts.value));
+                    //     this.filteredAccounts.next(filteredAccounts);
+                    // } else if (type === 'to') {
                         filteredAccounts = _.cloneDeep(this.flattenAccounts.value);
                         this.filteredAccounts.next(filteredAccounts);
-                    }
+                    //}
                 }
                 if (this.selectedPageInfo.value.page === 'Debit note') {
                     if (type === 'by') {
