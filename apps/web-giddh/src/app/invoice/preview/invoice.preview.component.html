@@ -510,7 +510,7 @@
                                 (click)="openSendMailModal(sendEmailModal, item)">
                                     <span class="icon-envelope font-12"></span>
                                 </a>
-                                <a tooltip="Copy">
+                                <a tooltip="Copy" [routerLink]="['/pages/proforma-invoice/invoice/purchase/'+item.account.uniqueName+'/'+item.uniqueName+'/copy']">
                                     <span class="icon-copy-small font-14"></span>
                                 </a>
                                 <a tooltip="Delete" (click)="deletePurchaseBill(item.uniqueName);">
