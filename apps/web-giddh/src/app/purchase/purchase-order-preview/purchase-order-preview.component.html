@@ -109,20 +109,15 @@
                                                         class="fa fa-envelope-o"></i></a>
                                             </span>
 
-                                            <!-- <span>
-                                                <a href="javascript:;" tooltip="Print" placement="top"><i
+                                            <span>
+                                                <a href="javascript:;" tooltip="Print" placement="top" (click)="printVoucher()"><i
                                                         class="fa fa-print"></i></a>
-                                            </span> -->
-
-                                            <!-- <span>
-                                                <a href="javascript:;" tooltip="Download" placement="top"><i
-                                                        class="fa fa-file-pdf-o"></i></a>
                                             </span>
 
                                             <span>
-                                                <a href="javascript:;" tooltip="Download" placement="top"><i
-                                                        class="icon-download"></i></a>
-                                            </span> -->
+                                                <a href="javascript:;" tooltip="Download" placement="top" (click)="downloadFile()"><i
+                                                        class="fa fa-file-pdf-o"></i></a>
+                                            </span>
 
                                             <span>
                                                 <a href="javascript:;" tooltip="Delete" placement="top"
@@ -150,10 +145,10 @@
                                     Purchase Order Preview is not available right now! Please try again..
                                 </span>
                             </div>
-                            <div class="fixed-ng2pdfview pdf-preview"
+                            <div class="fixed-ng2pdfview pdf-preview" #attachedDocumentPreview
                                 [ngClass]="{'fixed-ng2pdfview-2': pageCount === 2, 'fixed-ng2pdfview': pageCount === 1, 'fixed-ng2pdfview-3': pageCount === 3,'fixed-ng2pdfview-4': pageCount === 4}">
                                 <ng2-pdfjs-viewer pagemode="none" viewerId="MyUniqueID" [hidden]="!pdfPreviewLoaded"
-                                    [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="pagesLoaded($event);"
+                                    [downloadFileName]="'purchaseorder.pdf'" (onDocumentLoad)="pagesLoaded($event);"
                                     [openFile]="false" [viewBookmark]="false" [download]="false"></ng2-pdfjs-viewer>
                             </div>
                         </div>
@@ -165,7 +160,7 @@
     <!-- endregion -->
 </div>
 <ng-template #sendEmailModal>
-    <purchase-send-email-modal *ngIf="purchaseOrder" [sendEmailRequest]="sendEmailRequest"
+    <purchase-send-email-modal *ngIf="purchaseOrder" [module]="'purchase-order'" [sendEmailRequest]="sendEmailRequest"
         (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
 </ng-template>
 <div class="aside-overlay" *ngIf="revisionHistoryAsideState === 'in'"></div>

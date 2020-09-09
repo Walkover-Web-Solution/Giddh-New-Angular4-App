@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -15,6 +15,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
 import { base64ToBlob } from '../../shared/helpers/helperFunctions';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'purchase-order-preview',
@@ -34,6 +35,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     /* Confirm box */
     @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
     @ViewChild(PdfJsViewerComponent) public pdfViewer: PdfJsViewerComponent;
+    /** Attached document preview container instance */
+    @ViewChild('attachedDocumentPreview') attachedDocumentPreview: ElementRef;
     /* Modal instance */
     public modalRef: BsModalRef;
     /* This will hold state of activity history aside pan */
@@ -69,6 +72,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public pageCount: number = 0;
     public pdfPreviewLoaded: boolean = false;
     public pdfPreviewHasError: boolean = false;
+    /** Stores the BLOB of attached document */
+    private attachedDocumentBlob: Blob;
 
     constructor(private store: Store<AppState>, private modalService: BsModalService, public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public router: Router, private commonActions: CommonActions, private invoiceActions: InvoiceActions) {
         this.getInventorySettings();
@@ -169,7 +174,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         if (this.isLoading) {
             return;
         }
-        
+
         this.pdfPreviewHasError = false;
         this.pdfPreviewLoaded = false;
         this.isLoading = true;
@@ -411,6 +416,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         this.purchaseOrderService.getPdf(getRequest).subscribe(response => {
             if (response && response.status === "success" && response.body) {
                 let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
+                this.attachedDocumentBlob = blob;
                 this.pdfViewer.pdfSrc = blob;
                 this.pdfViewer.showSpinner = true;
                 this.pdfViewer.refresh();
@@ -423,5 +429,34 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
 
     public pagesLoaded(count: number): void {
         this.pageCount = count;
+    }
+
+    public downloadFile(): void {
+        if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
+            return;
+        }
+        saveAs(this.attachedDocumentBlob, 'purchaseorder.pdf');
+    }
+
+    public printVoucher(): void {
+        if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
+            return;
+        }
+        if (this.pdfViewer && this.pdfViewer.pdfSrc) {
+            this.pdfViewer.startPrint = true;
+            this.pdfViewer.refresh();
+            this.pdfViewer.startPrint = false;
+        } else if (this.attachedDocumentPreview) {
+            const windowWidth = window.innerWidth
+                || document.documentElement.clientWidth
+                || document.body.clientWidth
+                || 0;
+            const left = (windowWidth / 2) - 450;
+            const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
+            printWindow.document.write((this.attachedDocumentPreview.nativeElement as HTMLElement).innerHTML);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+        }
     }
 }

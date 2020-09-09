@@ -506,7 +506,8 @@
                         <td *ngIf="selectedVoucher === 'purchase'">
                         <span>{{ item.balanceStatus}}</span>
                             <div class="action-icon ml-15" [ngClass]="{'item-selected': hoveredItemForAction === item.uniqueName || item.isSelected}" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected">
-                                <a tooltip="Send Email">
+                                <a tooltip="Send Email"
+                                (click)="openSendMailModal(sendEmailModal, item)">
                                     <span class="icon-envelope font-12"></span>
                                 </a>
                                 <a tooltip="Copy">
@@ -935,3 +936,6 @@
     </div>
 </div>
 <!-- end -->
+<ng-template #sendEmailModal>
+    <purchase-send-email-modal [module]="'purchase-bill'" [sendEmailRequest]="sendEmailRequest" (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
+</ng-template>

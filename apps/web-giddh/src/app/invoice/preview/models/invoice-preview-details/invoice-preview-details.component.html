@@ -190,6 +190,12 @@
                                                         class="fa fa-envelope-o"></i></a>
                                             </span>
 
+                                            <span class="pos-rel" *ngIf="selectedItem?.voucherType === 'purchase'">
+                                                <a href="javascript:;" tooltip="Send Email" placement="top"
+                                                    (click)="openSendMailModal(sendEmailModal)"><i
+                                                        class="fa fa-envelope-o"></i></a>
+                                            </span>
+
                                             <span *ngIf="shouldShowPrintDocument"
                                                   [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading}">
                                                 <a href="javascript:void 0" tooltip="Print" placement="top"
@@ -541,4 +547,8 @@
 
 <ng-template #purchaseOrderPreviewModal>
     <purchase-order-preview-modal [purchaseOrderUniqueName]="purchaseOrderPreviewUniqueName" [purchaseOrderAccountUniqueName]="selectedItem?.account?.uniqueName" [purchaseOrderCompanyUniqueName]="companyUniqueName" (closeModelEvent)="closePurchaseOrderPreviewPopup($event)"></purchase-order-preview-modal>
+</ng-template>
+
+<ng-template #sendEmailModal>
+    <purchase-send-email-modal [module]="'purchase-bill'" [sendEmailRequest]="sendEmailRequest" (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
 </ng-template>
