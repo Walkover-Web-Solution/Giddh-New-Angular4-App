@@ -36,6 +36,7 @@ import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { DiscountControlModule } from '../theme/discount-control/discount-control.module';
 import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
+import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 
 @NgModule({
     declarations: [
@@ -75,7 +76,8 @@ import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.modu
         NgxMaskModule.forRoot(),
         TaxControlModule,
         DiscountControlModule,
-        ProformaInvoiceModule
+        ProformaInvoiceModule,
+        PdfJsViewerModule
     ],
     entryComponents: [],
     exports: [

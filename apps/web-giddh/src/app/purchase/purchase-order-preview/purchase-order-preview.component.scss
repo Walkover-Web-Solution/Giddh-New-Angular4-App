@@ -976,3 +976,25 @@ table.tax-table.item {
         }
     }
 }
+.loader {
+    height: 4px;
+    width: 100%;
+    position: absolute;
+    overflow: hidden;
+    z-index: 9;
+    top: 0px;
+    left: 0px;
+}
+
+.loader:before {
+    display: block;
+    position: absolute;
+    z-index: 1000000;
+    content: "";
+    left: 0px;
+    top: 0px;
+    width: 200px;
+    height: 4px;
+    background-color: #5b64c9;
+    animation: loading 2s linear infinite;
+}

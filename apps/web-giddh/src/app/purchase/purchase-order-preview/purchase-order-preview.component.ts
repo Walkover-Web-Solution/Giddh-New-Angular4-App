@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -13,6 +13,8 @@ import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonActions } from '../../actions/common.actions';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
+import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
+import { base64ToBlob } from '../../shared/helpers/helperFunctions';
 
 @Component({
     selector: 'purchase-order-preview',
@@ -31,6 +33,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('searchElement') public searchElement: ElementRef;
     /* Confirm box */
     @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
+    @ViewChild(PdfJsViewerComponent) public pdfViewer: PdfJsViewerComponent;
     /* Modal instance */
     public modalRef: BsModalRef;
     /* This will hold state of activity history aside pan */
@@ -63,6 +66,9 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public shouldShowTrnGstField: boolean = false;
     /* Onboarding params object */
     public onboardingFormRequest: OnboardingFormRequest = { formName: 'onboarding', country: '' };
+    public pageCount: number = 0;
+    public pdfPreviewLoaded: boolean = false;
+    public pdfPreviewHasError: boolean = false;
 
     constructor(private store: Store<AppState>, private modalService: BsModalService, public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public router: Router, private commonActions: CommonActions, private invoiceActions: InvoiceActions) {
         this.getInventorySettings();
@@ -163,7 +169,9 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         if (this.isLoading) {
             return;
         }
-
+        
+        this.pdfPreviewHasError = false;
+        this.pdfPreviewLoaded = false;
         this.isLoading = true;
         let getRequest = { companyUniqueName: this.companyUniqueName, poUniqueName: this.purchaseOrderUniqueName };
         this.purchaseOrderService.getPreview(getRequest).subscribe(response => {
@@ -171,6 +179,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             if (response) {
                 if (response.status === "success") {
                     this.purchaseOrder = response.body;
+
+                    this.getPdf();
 
                     if (this.purchaseOrder && this.purchaseOrder.account && this.purchaseOrder.account.billingDetails.country) {
                         this.showGstAndTrnUsingCountry(this.purchaseOrder.account.billingDetails.country.countryCode, this.purchaseOrder.account.billingDetails.country.countryName);
@@ -393,5 +403,25 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                 }
             }
         });
+    }
+
+    public getPdf(): void {
+        let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.purchaseOrder.account.uniqueName, poUniqueName: this.purchaseOrderUniqueName };
+
+        this.purchaseOrderService.getPdf(getRequest).subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
+                this.pdfViewer.pdfSrc = blob;
+                this.pdfViewer.showSpinner = true;
+                this.pdfViewer.refresh();
+                this.pdfPreviewLoaded = true;
+            } else {
+                this.pdfPreviewHasError = true;
+            }
+        });
+    }
+
+    public pagesLoaded(count: number): void {
+        this.pageCount = count;
     }
 }

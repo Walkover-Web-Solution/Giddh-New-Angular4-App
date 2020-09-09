@@ -21,7 +21,6 @@ export class PurchaseOrderPreviewModalComponent implements OnInit {
     @ViewChild(PdfJsViewerComponent) public pdfViewer: PdfJsViewerComponent;
 
     public isLoading: boolean = false;
-    public pdfBlob: any;
     public pageCount: number = 0;
 
     constructor(public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService) {

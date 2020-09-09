@@ -9,9 +9,9 @@
                             New Order</button>
                     </div>
                     <ul class="invoice-sidebar">
-                        <perfect-scrollbar
-                            *ngIf="filteredData && filteredData.length > 0">
-                            <li class="single-invoice-detail cp" [ngClass]="{'activeItem': row.uniqueName === purchaseOrderUniqueName}"
+                        <perfect-scrollbar *ngIf="filteredData && filteredData.length > 0">
+                            <li class="single-invoice-detail cp"
+                                [ngClass]="{'activeItem': row.uniqueName === purchaseOrderUniqueName}"
                                 *ngFor="let row of filteredData; let i = index;">
                                 <div class="row" (click)="showPurchaseOrderPreview(row.uniqueName)">
                                     <div class="col-xs-12 col-sm-7">
@@ -60,7 +60,8 @@
                                 <div class="col-sm-8 col-xs-12 pd0">
                                     <div class="edit-change-status">
 
-                                        <span class="close-modal cp pull-right" [routerLink]="['/pages/purchase-management/purchase']">
+                                        <span class="close-modal cp pull-right"
+                                            [routerLink]="['/pages/purchase-management/purchase']">
                                             <img src="assets/images/multiply.svg"></span>
 
                                         <div class="btn-group change-status-dropdown pull-right" dropdown>
@@ -72,14 +73,23 @@
 
                                             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                                 aria-labelledby="button-basic">
-                                                <li class="cp" role="menuitem" *ngIf="purchaseOrder.status === 'OPEN'"><a class="dropdown-item" (click)="convertToBill()">Convert to Bill</a></li>
-                                                <li class="cp" role="menuitem"><a class="dropdown-item" [routerLink]="['/pages/purchase-management/purchase-order/new/'+purchaseOrderUniqueName]">Copy</a></li>
-                                                <li>
-                                                    <a class="cp" href="javascript:void(0)" (click)="statusUpdate('cancelled')" *ngIf="purchaseOrder.status === 'OPEN'">Cancel</a>
-                                                    <a class="cp" href="javascript:void(0)" (click)="statusUpdate('open')" *ngIf="purchaseOrder.status === 'CANCELLED' || purchaseOrder.status === 'EXPIRED'">Open</a>
+                                                <li class="cp" role="menuitem" *ngIf="purchaseOrder.status === 'OPEN'">
+                                                    <a class="dropdown-item" (click)="convertToBill()">Convert to
+                                                        Bill</a></li>
+                                                <li class="cp" role="menuitem"><a class="dropdown-item"
+                                                        [routerLink]="['/pages/purchase-management/purchase-order/new/'+purchaseOrderUniqueName]">Copy</a>
                                                 </li>
                                                 <li>
-                                                    <a class="cp" href="javascript:void(0)" (click)="confirmDelete()">Delete</a>
+                                                    <a class="cp" href="javascript:void(0)"
+                                                        (click)="statusUpdate('cancelled')"
+                                                        *ngIf="purchaseOrder.status === 'OPEN'">Cancel</a>
+                                                    <a class="cp" href="javascript:void(0)"
+                                                        (click)="statusUpdate('open')"
+                                                        *ngIf="purchaseOrder.status === 'CANCELLED' || purchaseOrder.status === 'EXPIRED'">Open</a>
+                                                </li>
+                                                <li>
+                                                    <a class="cp" href="javascript:void(0)"
+                                                        (click)="confirmDelete()">Delete</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -88,7 +98,8 @@
 
                                         <div class="edit-action-btn-groups pull-right">
                                             <span>
-                                                <a href="javascript:;" tooltip="Edit" placement="top" [routerLink]="['/pages/purchase-management/purchase-order/edit/'+purchaseOrderUniqueName]"><i
+                                                <a href="javascript:;" tooltip="Edit" placement="top"
+                                                    [routerLink]="['/pages/purchase-management/purchase-order/edit/'+purchaseOrderUniqueName]"><i
                                                         class="fa fa-pencil"></i></a>
                                             </span>
 
@@ -114,8 +125,8 @@
                                             </span> -->
 
                                             <span>
-                                                <a href="javascript:;" tooltip="Delete" placement="top" (click)="confirmDelete()"><i
-                                                        class="fa fa-trash"></i></a>
+                                                <a href="javascript:;" tooltip="Delete" placement="top"
+                                                    (click)="confirmDelete()"><i class="fa fa-trash"></i></a>
                                             </span>
                                         </div>
 
@@ -130,363 +141,42 @@
                         </div>
                     </div>
                     <div class="invoice-image-section">
-
                         <div class="relative">
-                            <div class="loader"></div>
-                        </div>
-
-                        <!-- <div class="error" hidden>
-                            <span>
-                                Invoice Preview is not available right now!Please try again..
-                            </span>
-                        </div>
-                        <div class="preview-not-supported-attachment" hidden>
-                            <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and PDF
-                                (.pdf); to print other formats, download them. </span>
-                        </div>
-                        <div class="upload-excel center-block box mrT2 dashed-border">
-                            <input type="file" id="csv-upload-input" placeholder="Upload an EXCEL or CSV file"
-                                droppable="true" class="form-control" />
-                            <div class="clearfix pos-rel width100">
-                                <div class="file-input-wrapper text-center">
-                                    <div class="clearfix mrB2">
-                                        <img src="assets/images/new/import_icon.svg" />
-                                    </div>
-                                    <div class="clearfix pr-2 pd-2">
-                                        <label class="clearfix text-light-2">Drop file to upload</label>
-                                        <div class="mrT3">
-                                            <label class="file-uplod-penal" for="csv-upload-input"> <span>Browse
-                                                    file</span></label>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="pos-rel" *ngIf="!pdfPreviewHasError && !pdfPreviewLoaded">
+                                <div class="loader"></div>
+                            </div>
+                            <div class="error" [hidden]="!pdfPreviewHasError">
+                                <span>
+                                    Purchase Order Preview is not available right now! Please try again..
+                                </span>
+                            </div>
+                            <div class="fixed-ng2pdfview pdf-preview"
+                                [ngClass]="{'fixed-ng2pdfview-2': pageCount === 2, 'fixed-ng2pdfview': pageCount === 1, 'fixed-ng2pdfview-3': pageCount === 3,'fixed-ng2pdfview-4': pageCount === 4}">
+                                <ng2-pdfjs-viewer pagemode="none" viewerId="MyUniqueID" [hidden]="!pdfPreviewLoaded"
+                                    [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="pagesLoaded($event);"
+                                    [openFile]="false" [viewBookmark]="false" [download]="false"></ng2-pdfjs-viewer>
                             </div>
                         </div>
-                        <div class="fixed-ng2pdfview pdf-preview" hidden>
-                            <img class="image-preview" />
-                        </div> -->
-                        <!-- template -->
-
-                        <!-- <body id="default" *ngIf="false">
-                            <div class="pl-3 pr-3">
-                                <div id="Template-header">
-                                    <header class="mb-1">
-                                        <table cellspacing="0" cellpadding="0">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="text-left" width="30%">
-                                                        <table class="number-detail-series">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                        <img src="{{purchaseOrder?.templateDetails?.logoPath}}" alt="">
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                    <td class="pull-right">
-                                                        <table>
-                                                            <tbody>
-                                                                <ng-container>
-                                                                    <tr>
-                                                                        <td colspan="3">
-                                                                            <h3 class="text-right title-template">
-                                                                                Purchase Order</h3>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <span class="mb-0">Delivery: </span>{{purchaseOrder?.dueDate}}
-                                                                        </td>
-                                                                        <td>
-                                                                            <span class="mb-0"> #{{purchaseOrder?.number}}</span>
-                                                                        </td>
-                                                                        <td>
-                                                                            <span class="mb-0">PO Date: </span>{{purchaseOrder?.date}}
-                                                                        </td>
-                                                                    </tr>
-                                                                </ng-container>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </header>
-                                    <table class="warehouse-table" cellspacing="0" cellpadding="0">
-                                        <tbody>
-                                            <tr>
-                                                <td class="text-left">
-                                                    <p class="mb-05">
-                                                        From
-                                                    </p>
-                                                    <p class="strong"><strong>{{purchaseOrder?.account?.name}}</strong></p>
-                                                    <p>{{purchaseOrder?.account?.billingDetails?.address[0]}}</p>
-                                                    <p>{{purchaseOrder?.account?.billingDetails?.stateName}} {{purchaseOrder?.account?.billingDetails?.countryName}}</p>
-                                                    <p *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">{{showGSTINNo ? 'GSTIN' : 'TRN'}}: {{purchaseOrder?.account?.billingDetails?.gstNumber}}</p>
-                                                </td>
-                                                <td class="text-left">
-                                                    <p class="mb-05">
-                                                        Shipped From
-                                                    </p>
-                                                    <p class="strong"><strong>{{purchaseOrder?.account?.name}}</strong></p>
-                                                    <p>{{purchaseOrder?.account?.shippingDetails?.address[0]}}</p>
-                                                    <p>{{purchaseOrder?.account?.shippingDetails?.stateName}} {{purchaseOrder?.account?.shippingDetails?.countryName}}</p>
-                                                    <p *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">{{showGSTINNo ? 'GSTIN' : 'TRN'}}: {{purchaseOrder?.account?.shippingDetails?.gstNumber}}</p>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <table class="warehouse-table">
-                                        <tbody>
-                                            <tr>
-                                                <td class="text-left">
-                                                    <p class="mb-05">
-                                                        Bill To:
-                                                    </p>
-                                                    <p class="strong"><strong>{{purchaseOrder?.company?.name}}</strong></p>
-                                                    <p>{{purchaseOrder?.company?.billingDetails?.address[0]}}</p>
-                                                    <p>{{purchaseOrder?.company?.billingDetails?.stateName}} {{purchaseOrder?.company?.billingDetails?.countryName}}</p>
-                                                    <p>GSTIN:{{purchaseOrder?.company?.billingDetails?.gstNumber}}</p>
-                                                </td>
-                                                <td class="text-left">
-                                                    <p class="mb-05">
-                                                        Shipped To:
-                                                    </p>
-                                                    <p class="strong"><strong>{{purchaseOrder?.company?.name}}</strong></p>
-                                                    <p>{{purchaseOrder?.company?.shippingDetails?.address[0]}}</p>
-                                                    <p>{{purchaseOrder?.company?.shippingDetails?.stateName}} {{purchaseOrder?.company?.shippingDetails?.countryName}}</p>
-                                                    <p>GSTIN:{{purchaseOrder?.company?.shippingDetails?.gstNumber}}</p>
-                                                </td>
-
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
-                                </div>
-                                <div id="template-table">
-                                    <article>
-                                        <table id="item" class="item" cellpadding="0" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-right">
-                                                        #
-                                                    </th>
-                                                    <th class="text-left">
-                                                        Item
-                                                    </th>
-                                                    <th class="text-right ">
-                                                        HSN/SAC
-                                                    </th>
-                                                    <th class="text-right">
-                                                        Qty
-                                                    </th>
-                                                    <th class="text-right">
-                                                        Rate/Item
-                                                    </th>
-
-                                                    <th class="text-right">
-                                                        Dis/Item
-                                                    </th>
-                                                    <th class="text-right">
-                                                        Taxable Value
-                                                    </th>
-                                                    <th class="text-right">
-                                                        SGST
-                                                    </th>
-                                                    <th class="text-right">
-                                                        CGST
-                                                    </th>
-                                                    <th class="text-right">
-                                                        CESS
-                                                    </th>
-                                                    <th class="text-right">
-                                                        Taxes
-                                                    </th>
-                                                    <th class="text-right">
-                                                        Total
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody *ngIf="purchaseOrder?.entries && purchaseOrder?.entries?.length > 0">
-                                                <tr *ngFor="let entry of purchaseOrder.entries; let i = index;">
-                                                    <td class="text-right">{{i+1}}</td>
-                                                    <td class="text-left">
-                                                        <span *ngIf="entry?.transactions[0]?.stock">{{entry?.transactions[0]?.stock?.name}}</span>
-                                                        <span *ngIf="!entry?.transactions[0]?.stock">{{entry?.transactions[0]?.account?.name}}</span><br>
-                                                        <span>{{entry?.description}}</span>
-                                                    </td>
-                                                    <td class="text-right">{{inventorySettings?.manageInventory ? entry?.hsnNumber : entry?.sacNumber}}
-                                                        <p>({{inventorySettings?.manageInventory ? 'H' : 'S'}})</p>
-                                                    </td>
-                                                    <td class="text-right nowrap">{{entry?.transactions[0]?.stock?.quantity}} {{entry?.transactions[0]?.stock?.stockUnit?.code}}
-                                                    </td>
-                                                    <td class="text-right "><span></span>{{entry?.transactions[0]?.stock?.rate?.amountForAccount}}</td>
-                                                    <td class="text-right">
-                                                        {{entry?.discounts[0]?.amount?.amountForAccount}}
-                                                    </td>
-                                                    <td class="text-right"><span></span>{{entry?.taxableValue?.amountForAccount}}</td>
-                                                    <td class="text-right ">
-                                                        0.000
-                                                    </td>
-                                                    <td class="text-right ">
-                                                        0.000
-                                                    </td>
-                                                    <td class="text-right ">
-                                                        0.000
-                                                    </td>
-                                                    <td class="text-right ">
-                                                        {{entry?.taxes[0]?.amount?.amountForAccount}}
-                                                        <p *ngIf="entry?.taxes[0]?.taxPercent">@{{entry?.taxes[0]?.taxPercent}}%</p>
-                                                    </td>
-                                                    <td class="text-right "><span></span>{{entry?.transactions[0]?.amount?.amountForAccount}}
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>&nbsp;
-                                                    </th>
-                                                    <th class="text-right ">&nbsp;
-                                                    </th>
-                                                    <th class="text-right ">&nbsp;
-                                                    </th>
-                                                    <th class="text-right ">&nbsp;
-                                                    </th>
-                                                    <th class="text-right ">&nbsp;
-                                                    </th>
-                                                    <th class="text-right ">&nbsp;
-                                                    </th>
-                                                    <th class="text-right ">&nbsp;
-                                                    </th>
-                                                    <th class="text-right text-right nowrap">&nbsp; <span>6 No.</span>
-                                                    </th>
-                                                    <th class="text-right">
-                                                        0.00
-                                                    </th>
-                                                    <th class="text-right "><span></span>0.00</th>
-                                                    <th class="text-right "><span></span>0.00</th>
-                                                    <th class="text-right "><span></span>0.00</th>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </article>
-                                </div>
-                                <div id="template-footer">
-                                    <div class="clearfix">
-                                        <article>
-                                            <table class="balance">
-                                                <tr>
-                                                    <td>
-                                                        Taxable Amount
-                                                    </td>
-                                                    <td>
-                                                        <span></span> 7200.00
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Total Tax
-                                                    </td>
-                                                    <td>
-                                                        <span></span> 966.00
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="strong">
-                                                        Invoice Total({{purchaseOrder?.account?.currency?.code}})
-                                                    </td>
-                                                    <td class="strong">
-                                                        <span></span>{{purchaseOrder?.grandTotal?.amountForAccount}}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        Total (In words)
-                                                    </td>
-                                                    <td>
-                                                        {{purchaseOrder?.totalAsWords?.amountForAccount}}
-                                                        <div class="inner mr-0">&nbsp;</div>
-                                                    </td>
-                                                </tr>
-                                                <tr hidden>
-                                                    <td>TCS</td>
-                                                    <td><span></span>&nbsp;</td>
-                                                </tr>
-                                                <tr hidden>
-                                                    <td>TDS</td>
-                                                    <td><span></span>&nbsp;</td>
-                                                </tr>
-                                                <tr hidden>
-                                                    <td class="strong">Total Due</td>
-                                                    <td><span class="strong"></span>&nbsp;</td>
-                                                </tr>
-                                            </table>
-                                        </article>
-                                    </div>
-
-                                    <div class="clearfix">
-                                        <aside class="pb-5">
-                                            <table cellpadding="0" cellspacing="0" class="subfooter">
-                                                <tbody>
-                                                    <tr>
-                                                        <td class="text-left">
-                                                            <ng-container>
-                                                                <p class="strong">Note</p>
-                                                                <p class="font-12">
-                                                                    <span class="mb-2">{{purchaseOrder?.templateDetails?.other?.message2}}</span>
-                                                                </p>
-                                                            </ng-container>
-
-                                                        </td>
-                                                        <td class="text-right">
-                                                            <p class="strong">{{purchaseOrder?.company?.name}}</p>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-left">
-                                                            <strong>
-                                                                <h4 class="eastern-blue-text">Thank You for your
-                                                                    business.</h4>
-                                                            </strong>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </aside>
-                                        <footer class="company-address">
-                                            <p class="font-10">
-                                                405-406, Capt. C. S. Naidu Arcade Near Greater Kailash Hospital 10/2,
-                                                10/2, New Palasia, Indore, Woking, Madhya Pradesh 452001
-                                            </p>
-                                        </footer>
-                                    </div>
-                                </div>
-                            </div>
-                        </body> -->
-
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
     <!-- endregion -->
 </div>
 <ng-template #sendEmailModal>
-    <purchase-send-email-modal *ngIf="purchaseOrder" [sendEmailRequest]="sendEmailRequest" (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
+    <purchase-send-email-modal *ngIf="purchaseOrder" [sendEmailRequest]="sendEmailRequest"
+        (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
 </ng-template>
 <div class="aside-overlay" *ngIf="revisionHistoryAsideState === 'in'"></div>
 <div *ngIf="revisionHistoryAsideState === 'in'">
-    <aside-revision-history (closeAsideEvent)="toggleActivityHistoryAsidePane()" [purchaseOrder]="purchaseOrder"></aside-revision-history>
+    <aside-revision-history (closeAsideEvent)="toggleActivityHistoryAsidePane()" [purchaseOrder]="purchaseOrder">
+    </aside-revision-history>
 </div>
 <div bsModal #poConfirmationModel="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <delete-role-confirmation-model
-                [module]="'purchaseorder'"
-                (confirmDeleteEvent)="deleteItem()"
+            <delete-role-confirmation-model [module]="'purchaseorder'" (confirmDeleteEvent)="deleteItem()"
                 (closeModelEvent)="closeConfirmationPopup()">
             </delete-role-confirmation-model>
         </div>
