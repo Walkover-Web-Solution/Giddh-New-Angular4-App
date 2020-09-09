@@ -78,6 +78,7 @@ import { LoaderComponent } from '../loader/loader.component';
 import { RevisionHistoryComponent } from './revision-history/revision-history.component';
 import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
 import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
+import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -147,7 +148,8 @@ export function provideConfig() {
         DatepickerWrapperComponent,
         LoaderComponent,
         RevisionHistoryComponent,
-        PurchaseOrderPreviewModalComponent
+        PurchaseOrderPreviewModalComponent,
+        PurchaseSendEmailModalComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -235,7 +237,8 @@ export function provideConfig() {
         DatepickerWrapperComponent,
         LoaderComponent,
         RevisionHistoryComponent,
-        PurchaseOrderPreviewModalComponent
+        PurchaseOrderPreviewModalComponent,
+        PurchaseSendEmailModalComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

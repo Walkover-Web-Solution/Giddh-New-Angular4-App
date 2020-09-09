@@ -49,7 +49,6 @@ export interface ReceiptItem {
     accountCurrencySymbol?: string;
     invoiceLinkingRequest?: IInvoiceLinkingRequest;
     totalBalance: number;
-    purchaseOrderNumbers?: string;
 }
 
 export interface ReciptResponse {

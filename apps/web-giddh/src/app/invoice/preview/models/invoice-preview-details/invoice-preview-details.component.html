@@ -190,6 +190,12 @@
                                                         class="fa fa-envelope-o"></i></a>
                                             </span>
 
+                                            <span class="pos-rel" *ngIf="selectedItem?.voucherType === 'purchase'">
+                                                <a href="javascript:;" tooltip="Send Email" placement="top"
+                                                    (click)="openSendMailModal(sendEmailModal)"><i
+                                                        class="fa fa-envelope-o"></i></a>
+                                            </span>
+
                                             <span *ngIf="shouldShowPrintDocument"
                                                   [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading}">
                                                 <a href="javascript:void 0" tooltip="Print" placement="top"
@@ -288,7 +294,7 @@
                         <div class="linked-purchase-order font-14 mt-15" *ngIf="selectedItem?.voucherType === 'purchase' && purchaseOrderNumbers && purchaseOrderNumbers.length > 0">
                             <p class="mt-1 mb-1"><span class="icon-file-path"></span> Linked Purchase Order(s):</p>
                             <div class="purchase-order-number">
-                                <a href="javascript:;" class="aqua-color" (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order)" *ngFor="let order of purchaseOrderNumbers; let i = index;">{{order}}<span *ngIf="checkIfPipeSymbolRequired(i)">|</span></a>
+                                <a href="javascript:;" class="aqua-color" (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order.uniqueName)" *ngFor="let order of purchaseOrderNumbers; let i = index;">{{order.number}}<span *ngIf="checkIfPipeSymbolRequired(i)">|</span></a>
                             </div>
                         </div>
                     </div>
@@ -544,4 +550,8 @@
 
 <ng-template #purchaseOrderPreviewModal>
     <purchase-order-preview-modal [purchaseOrderUniqueName]="purchaseOrderPreviewUniqueName" [purchaseOrderAccountUniqueName]="selectedItem?.account?.uniqueName" [purchaseOrderCompanyUniqueName]="companyUniqueName" (closeModelEvent)="closePurchaseOrderPreviewPopup($event)"></purchase-order-preview-modal>
+</ng-template>
+
+<ng-template #sendEmailModal>
+    <purchase-send-email-modal [module]="'purchase-bill'" [sendEmailRequest]="sendEmailRequest" (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
 </ng-template>

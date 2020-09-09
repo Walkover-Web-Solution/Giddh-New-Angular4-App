@@ -246,6 +246,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public isAccountHaveAdvanceReceipts: boolean = false;
     public showPurchaseOrderSearch: boolean = false;
     public purchaseOrderNumbersInput: FormControl = new FormControl();
+    /* Send email request params object */
+    public sendEmailRequest: any = {};
+    public companyName$: Observable<string>;
+    public companyUniqueName: string = '';
 
     constructor(
         private store: Store<AppState>,
@@ -282,6 +286,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.exportedInvoiceBase64res$ = this.store.select(p => p.invoice.exportInvoicebase64Data).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
         this.voucherDetails$ = this.store.pipe(select(s => s.receipt.voucher), takeUntil(this.destroyed$));
+        this.companyName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
         //this._invoiceService.getTotalAndBalDue();
     }
     openModal(template: TemplateRef<any>) {
@@ -293,6 +298,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         ]).subscribe(result => {
             this.isMobileView = result.matches;
         });
+
+        this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
 
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = PAGINATION_LIMIT;
@@ -1418,7 +1425,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         obj.account = invoice.account;
         obj.voucherStatus = invoice.balanceStatus;
         obj.accountCurrencySymbol = invoice.accountCurrencySymbol;
-        obj.purchaseOrderNumbers = invoice.purchaseOrderNumbers;
         return obj;
     }
 
@@ -1660,9 +1666,41 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         return newAccountUniqueName;
     }
 
+    /**
+     * This will show confirmation modal for delete PB
+     *
+     * @param {*} billUniqueName
+     * @memberof InvoicePreviewComponent
+     */
     public deletePurchaseBill(billUniqueName: any): void {
         let allInvoices = _.cloneDeep(this.voucherData.items);
         this.selectedInvoice = allInvoices.find((inv) => inv.uniqueName === billUniqueName);
         this.invoiceConfirmationModel.show();
+    }
+
+    /**
+     * This will open the send email modal
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof InvoicePreviewComponent
+     */
+    public openSendMailModal(template: TemplateRef<any>, item: any): void {
+        this.sendEmailRequest.email = item.account.email;
+        this.sendEmailRequest.uniqueName = item.uniqueName;
+        this.sendEmailRequest.accountUniqueName = item.account.uniqueName;
+        this.sendEmailRequest.companyUniqueName = this.companyUniqueName;
+        this.modalRef = this.modalService.show(template);
+    }
+
+    /**
+     * This will close the send email popup
+     *
+     * @param {*} event
+     * @memberof InvoicePreviewComponent
+     */
+    public closeSendMailPopup(event: any): void {
+        if (event) {
+            this.modalRef.hide();
+        }
     }
 }

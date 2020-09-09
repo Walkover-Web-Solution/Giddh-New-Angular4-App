@@ -105,6 +105,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public purchaseOrderNumbers: any[] = [];
     /* This will hold po unique name for preview */
     public purchaseOrderPreviewUniqueName: string = '';
+    /* Send email request params object */
+    public sendEmailRequest: any = {};
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -154,8 +156,12 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.getVoucherVersions();
             }
 
-            if(this.selectedItem.voucherType === VoucherTypeEnum.purchase && this.selectedItem.purchaseOrderNumbers) {
-                this.purchaseOrderNumbers = this.selectedItem.purchaseOrderNumbers.split(",");
+            if(this.selectedItem.voucherType === VoucherTypeEnum.purchase) {
+                this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account.uniqueName, this.selectedItem.uniqueName).subscribe((res: any) => {
+                    if (res && res.body) {
+                        this.purchaseOrderNumbers = res.body.purchaseOrderDetails;
+                    }
+                });
             }
         }
 
@@ -634,6 +640,32 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * @memberof InvoicePreviewDetailsComponent
      */
     public closePurchaseOrderPreviewPopup(event: any): void {
+        if (event) {
+            this.modalRef.hide();
+        }
+    }
+
+    /**
+     * This will open the send email modal
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public openSendMailModal(template: TemplateRef<any>): void {
+        this.sendEmailRequest.email = this.selectedItem.account.email;
+        this.sendEmailRequest.uniqueName = this.selectedItem.uniqueName;
+        this.sendEmailRequest.accountUniqueName = this.selectedItem.account.uniqueName;
+        this.sendEmailRequest.companyUniqueName = this.companyUniqueName;
+        this.modalRef = this.modalService.show(template);
+    }
+
+    /**
+     * This will close the send email popup
+     *
+     * @param {*} event
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public closeSendMailPopup(event: any): void {
         if (event) {
             this.modalRef.hide();
         }

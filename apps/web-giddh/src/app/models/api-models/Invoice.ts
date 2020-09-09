@@ -749,7 +749,6 @@ export class InvoicePreviewDetailsVm {
     blob?: Blob;
     voucherStatus?: string;
     accountCurrencySymbol?: string;
-    purchaseOrderNumbers?: string;
 }
 
 

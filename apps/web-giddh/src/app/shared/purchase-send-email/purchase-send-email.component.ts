@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
+import { PurchaseRecordService } from '../../services/purchase-record.service';
 
 @Component({
     selector: 'purchase-send-email-modal',
@@ -9,6 +10,7 @@ import { ToasterService } from '../../services/toaster.service';
 })
 
 export class PurchaseSendEmailModalComponent implements OnInit {
+    @Input() public module: string;
     /* Taking input all the params */
     @Input() public sendEmailRequest: any;
     /* Output emitter (boolean) */
@@ -17,7 +19,7 @@ export class PurchaseSendEmailModalComponent implements OnInit {
     /* This will hold email id of receiver */
     public emailId: any = '';
 
-    constructor(public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService) {
+    constructor(public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public purchaseRecordService: PurchaseRecordService) {
 
     }
 
@@ -38,19 +40,32 @@ export class PurchaseSendEmailModalComponent implements OnInit {
      * @memberof PurchaseSendEmailModalComponent
      */
     public sendEmail(): void {
-        let getRequest = { companyUniqueName: this.sendEmailRequest.companyUniqueName, accountUniqueName: this.sendEmailRequest.accountUniqueName, poUniqueName: this.sendEmailRequest.uniqueName };
+        let getRequest = { companyUniqueName: this.sendEmailRequest.companyUniqueName, accountUniqueName: this.sendEmailRequest.accountUniqueName, uniqueName: this.sendEmailRequest.uniqueName };
         let postRequest = { emailId: [this.emailId] };
 
-        this.purchaseOrderService.sendEmail(getRequest, postRequest).subscribe((res) => {
-            if (res) {
-                if (res.status === 'success') {
-                    this.toaster.successToast(res.body);
-                    this.hideModal();
-                } else {
-                    this.toaster.errorToast(res.message);
+        if(this.module === "purchase-order") {
+            this.purchaseOrderService.sendEmail(getRequest, postRequest).subscribe((res) => {
+                if (res) {
+                    if (res.status === 'success') {
+                        this.toaster.successToast(res.body);
+                        this.hideModal();
+                    } else {
+                        this.toaster.errorToast(res.message);
+                    }
                 }
-            }
-        });
+            });
+        } else if(this.module === "purchase-bill") {
+            this.purchaseRecordService.sendEmail(getRequest, postRequest).subscribe((res) => {
+                if (res) {
+                    if (res.status === 'success') {
+                        this.toaster.successToast(res.body);
+                        this.hideModal();
+                    } else {
+                        this.toaster.errorToast(res.message);
+                    }
+                }
+            });
+        }
     }
 
     /**
