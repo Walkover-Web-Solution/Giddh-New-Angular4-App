@@ -202,6 +202,11 @@
                                                     (click)="printVoucher()"><i class="fa fa-print"></i></a>
                                             </span>
 
+                                            <span *ngIf="selectedItem.voucherType === 'purchase' && pdfPreviewLoaded">
+                                                <a href="javascript:void 0" tooltip="Download" placement="top"
+                                                    (click)="downloadPurchaseBillPDF()"><i class="fa fa-file-pdf-o"></i></a>
+                                            </span>
+
                                             <span
                                                 *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
                                                 [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">

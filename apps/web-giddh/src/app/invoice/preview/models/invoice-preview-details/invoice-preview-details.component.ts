@@ -112,6 +112,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public sendEmailRequest: any = {};
     /* This will hold if attachment is expanded */
     public isAttachmentExpanded: boolean = false;
+    /* This will hold if pdf preview loaded */
+    public pdfPreviewLoaded: boolean = false;
+    /* This will hold if pdf preview has error */
+    public pdfPreviewHasError: boolean = false;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -148,13 +152,12 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     public get shouldShowPrintDocument(): boolean {
         return this.selectedItem.voucherType !== VoucherTypeEnum.purchase ||
+            (this.selectedItem.voucherType === VoucherTypeEnum.purchase && this.pdfPreviewLoaded) || 
             (this.selectedItem.voucherType === VoucherTypeEnum.purchase && this.attachedDocumentType &&
                 (this.attachedDocumentType.type === 'pdf' || this.attachedDocumentType.type === 'image'));
     }
 
     ngOnInit() {
-        this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
-
         if (this.selectedItem) {
             this.downloadVoucher('base64');
             this.only4ProformaEstimates = [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType);
@@ -392,6 +395,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.handleDownloadError(error);
             });
 
+            this.pdfPreviewHasError = false;
+            this.pdfPreviewLoaded = false;
+
+            this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
+
             let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.selectedItem.account.uniqueName, uniqueName: this.selectedItem.uniqueName };
 
             this.purchaseRecordService.getPdf(getRequest).subscribe(response => {
@@ -401,7 +409,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     this.pdfViewer.pdfSrc = blob;
                     this.pdfViewer.showSpinner = true;
                     this.pdfViewer.refresh();
+                    this.pdfPreviewLoaded = true;
                     this.detectChanges();
+                } else {
+                    this.pdfPreviewHasError = true;
                 }
             });
         } else {
@@ -693,5 +704,18 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         if (event) {
             this.modalRef.hide();
         }
+    }
+
+    /**
+     * This will download purchase bill PDF
+     *
+     * @returns {void}
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public downloadPurchaseBillPDF(): void {
+        if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
+            return;
+        }
+        saveAs(this.attachedDocumentBlob, 'purchaseorder.pdf');
     }
 }
