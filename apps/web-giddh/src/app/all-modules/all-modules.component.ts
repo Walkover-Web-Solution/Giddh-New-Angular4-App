@@ -99,17 +99,17 @@ export class AllModulesComponent implements OnInit {
      * To navigate specific modules
      *
      * @param {*} route routing string
-     * @param {*} queryParaamsItem query params
+     * @param {*} queryParamsItem query params
      * @param {*} isClickMethod to check is click method exist
      * @memberof AllModulesComponent
      */
-    public navigateTo(route: any, queryParaamsItem: any, isClickMethod: any) {
+    public navigateTo(route: any, queryParamsItem: any, isClickMethod: any) {
         if (route) {
-            if (!queryParaamsItem) {
+            if (!queryParamsItem) {
                 this.route.navigate([route]);
             } else {
                 let navigationExtras: NavigationExtras = {
-                    queryParams: queryParaamsItem
+                    queryParams: queryParamsItem
                 };
                 this.route.navigate([route], navigationExtras);
             }
