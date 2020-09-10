@@ -232,6 +232,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public applicableTaxes: string[] = [];
     public taxRenderData: ITaxList[] = [];
     public sku_and_customfields?: string;
+    public maxQuantity?: number;
 
     constructor() {
         super();
@@ -546,7 +547,8 @@ export class VoucherClass {
     public number?: string;
     public subVoucher?: string;
     public voucherAdjustments?: VoucherAdjustments;
-    public subTotal?: AmountClassMulticurrency
+    public subTotal?: AmountClassMulticurrency;
+    public purchaseOrderDetails?: any;
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();

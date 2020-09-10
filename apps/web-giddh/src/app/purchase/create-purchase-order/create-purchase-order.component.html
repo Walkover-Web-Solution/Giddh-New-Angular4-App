@@ -199,7 +199,7 @@
             </div>
             <div class="customer-purchase-table bg-white pdB2 pdT2">
                 <div class="inner-container">
-                    <div class="row mb-1" *ngIf="shouldShowWarehouse">
+                    <div class="row mb-1" *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1">
                         <!-- region customer name -->
                         <div class="col-sm-2">
                             <label>Warehouse<span class="red-text">*</span></label>

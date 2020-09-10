@@ -513,6 +513,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public autoFillCompanyShipping: boolean = true;
     public companyStatesSource: IOption[] = [];
     public copyPurchaseBill: boolean = false;
+    public poLinkUpdated: boolean = false;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -1734,7 +1735,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else if (this.isDebitNote) {
             this.invoiceDateLabel = 'Debit Note Date';
         } else {
-            this.invoiceNoLabel = !this.isPurchaseInvoice ? 'Invoice #' : 'Purchase Invoice #';
+            this.invoiceNoLabel = !this.isPurchaseInvoice ? 'Invoice #' : 'Purchase Bill #';
             this.invoiceDateLabel = 'Invoice Date';
             this.invoiceDueDateLabel = !this.isPurchaseInvoice ? 'Due Date' : 'Balance Due Date';
         }
@@ -1920,6 +1921,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.linkedPO = [];
         this.linkedPONumbers = [];
         this.purchaseOrders = [];
+        this.purchaseBillCompany = {
+            billingDetails: {
+                address: [],
+                state: {code: '', name: ''},
+                gstNumber: '',
+                stateName: '',
+                stateCode: ''
+            },
+            shippingDetails: {
+                address: [],
+                state: {code: '', name: ''},
+                gstNumber: '',
+                stateName: '',
+                stateCode: ''
+            }
+        };
         this.startLoader(false);
 
         this.assignDates();
@@ -2763,6 +2780,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             taxes.push(...data.body.stock.taxes);
                         }
 
+                        let maxQuantity = 0;
+
+                        if(isLinkedPOItem) {
+                            maxQuantity = selectedAcc.additional.maxQuantity;
+                        }
+
                         // directly assign additional property
                         selectedAcc.additional = {
                             ...selectedAcc.additional,
@@ -2807,6 +2830,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     txn.amount = selectedAcc.amount.amountForAccount;
                                 }
                             }
+
+                            txn.maxQuantity = maxQuantity;
+
                             this.calculateWhenTrxAltered(entry, txn);
                         }
                     }
@@ -4566,6 +4592,27 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             voucherDetails.customerName = result.account.name;
         }
 
+        if (this.isPurchaseInvoice) {
+            voucherClassConversion.purchaseOrderDetails = result.purchaseOrderDetails;
+
+            if(voucherClassConversion.purchaseOrderDetails && voucherClassConversion.purchaseOrderDetails.length > 0) {
+                voucherClassConversion.purchaseOrderDetails.forEach(order => {
+                    this.linkedPO.push(order.uniqueName);
+                    this.selectedPOItems.push(order.uniqueName);
+
+                    if(!this.linkedPONumbers[order.uniqueName]) {
+                        this.purchaseOrders.push({label: order.number, value: order.uniqueName, additional: {amount: order.grandTotal.amountForAccount}});
+                    }
+                    
+                    this.linkedPONumbers[order.uniqueName] = [];
+                    this.linkedPONumbers[order.uniqueName]['voucherNumber'] = order.number;
+                    this.linkedPONumbers[order.uniqueName]['items'] = order.entries;
+                });
+            }
+
+            this.poLinkUpdated = true;
+        }
+
         return voucherClassConversion;
     }
 
@@ -4943,6 +4990,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public handleQuantityBlur(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         if (transaction.quantity !== undefined) {
             transaction.quantity = Number(transaction.quantity);
+
+            if(transaction.maxQuantity !== undefined) {
+                if(transaction.quantity > transaction.maxQuantity) {
+                    transaction.quantity = transaction.maxQuantity;
+                    this._toasty.errorToast("Quantity can't be more than " + transaction.maxQuantity);
+                }
+            }
+
             this.calculateStockEntryAmount(transaction);
             this.calculateWhenTrxAltered(entry, transaction);
         }
@@ -5759,11 +5814,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     item.uniqueName = item.stock.uniqueName;
                     item.value = item.stock.uniqueName;
                     item.additional = item.stock;
+                    item.additional.maxQuantity = item.stock.quantity;
                 } else {
                     item.stock = {};
                     item.uniqueName = item.account.uniqueName;
                     item.value = item.account.uniqueName;
                     item.additional = item.account;
+                    item.additional.maxQuantity = 1;
                 }
 
                 let lastIndex = -1;
