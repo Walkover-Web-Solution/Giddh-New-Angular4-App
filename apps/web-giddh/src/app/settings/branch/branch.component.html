@@ -13,13 +13,13 @@
                         </span>
 
                     </div>
-                <div class="input-group">
+                <!-- <div class="input-group">
                     <div class="form-group">
                         <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" readonly
                             placeholder="Select Date" class="form-control" #dp="bsDaterangepicker"
                             [bsValue]="dateRangePickerValue" (bsValueChange)="setFilterDate($event)" bsDaterangepicker>
                     </div>
-                </div>
+                </div> -->
                 <div class="content-view  mrL2">
                     <div class="branch-views">
                         <span (click)="changeBranchViewType('table');" class="mrR1">
@@ -59,6 +59,7 @@
             <tr>
                 <th>Branch Name</th>
                 <th *ngIf="formFields['taxName']">{{formFields['taxName'].label}}</th>
+                <th>Parent</th>
                 <th>Contact No.</th>
                 <th class="text-right">Total Sales</th>
                 <th class="text-right">Total Expenses</th>
@@ -68,8 +69,9 @@
         </thead>
         <tbody>
             <tr *ngFor="let branch of branches$ | async">
-                <td data-title="Branch Name">{{branch.name}}</td>
+                <td data-title="Branch Name">{{branch.name}} ({{branch.alias}})</td>
                 <td data-title="{{formFields['taxName'].label}}" *ngIf="formFields['taxName']">{{branch?.addresses[0]?.taxNumber}}</td>
+                <td data-title="Parent">{{branch?.parentBranch?.name || '-'}}</td>
                 <td data-title="Contact No.">{{branch.contactNo}}</td>
                 <td data-title="Total Sales" class="text-right"><span
                         *ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">{{branch.companyTotals.sales.amount | giddhCurrency}}</span><span
@@ -114,7 +116,6 @@
 
                                     <a id="button-basic" dropdownToggle type="button"
                                         class="icon-dots-three-vertical dropdown-toggle" aria-controls="dropdown-basic">
-
                                     </a>
                                     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                         aria-labelledby="button-basic">
@@ -152,7 +153,7 @@
                             <div class="col-xl-3 col-lg-4 col-md-6">
                                     <div class="parent-branch pt-1 pb-1">Linked Address:</div>
                                     <div>
-                                            
+
                                                     <div class="linked-add">
                                                         <input id="address1" type="radio" name="address" value="1" class="star-radio">
                                                         <label for="address1">Address Name 2</label>
@@ -161,8 +162,8 @@
                                                         <input id="address2" type="radio" name="address" value="2" class="star-radio">
                                                         <label for="address2">Address Name 1</label>
                                                     </div>
-            
-                                            
+
+
                                     </div>
 
                                     <div>
@@ -183,7 +184,7 @@
                                     </div>
                             </div>
                         </div>
-                    
+
                     <div class="branch-sales-details" [ngClass]="{'branch-sales-collapsed': !isBranchSalesExpanded}">
                         <div class="row">
                             <div class="col-xl-3 col-lg-4 col-md-6">
