@@ -37,7 +37,7 @@
                 <th>Branch Name</th>
                 <th *ngIf="formFields['taxName']">{{formFields['taxName'].label}}</th>
                 <th>Parent</th>
-                <th>Contact No.</th>
+                <!-- <th>Contact No.</th> -->
                 <th class="text-right">Total Sales</th>
                 <th class="text-right">Total Expenses</th>
                 <th class="text-right">Total Taxes</th>
@@ -47,9 +47,9 @@
         <tbody>
             <tr *ngFor="let branch of branches$ | async">
                 <td data-title="Branch Name">{{branch.name}} ({{branch.alias}})</td>
-                <td data-title="{{formFields['taxName'].label}}" *ngIf="formFields['taxName']">{{branch?.addresses[0]?.taxNumber}}</td>
+                <td data-title="{{formFields['taxName'].label}}" *ngIf="formFields['taxName']">{{branch?.addresses[0]?.taxNumber || '-'}}</td>
                 <td data-title="Parent">{{branch?.parentBranch?.name || '-'}}</td>
-                <td data-title="Contact No.">{{branch.contactNo}}</td>
+                <!-- <td data-title="Contact No.">{{branch.contactNo}}</td> -->
                 <td data-title="Total Sales" class="text-right"><span
                         *ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">{{branch.companyTotals.sales.amount | giddhCurrency}}</span><span
                         *ngIf="!(branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount)">0</span>
@@ -63,7 +63,8 @@
                         *ngIf="!(branch && branch.companyTotals && branch.companyTotals.taxes && branch.companyTotals.taxes.amount)">0</span>
                 </td>
                 <td data-title="Action" class="text-right unlink">
-                    <a (click)="removeBranch(branch.uniqueName, branch.name)">Delink</a></td>
+                    <!-- <a (click)="removeBranch(branch.uniqueName, branch.name)">Delink</a></td> -->
+                    <a (click)="updateBranch(branch)">Edit</a></td>
             </tr>
         </tbody>
     </table>
@@ -83,8 +84,8 @@
                                     </a>
                                     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                         aria-labelledby="button-basic">
-                                        <li role="menuitem"><a class="dropdown-item"
-                                                (click)="removeBranch(branch.uniqueName, branch.name)">Delink</a></li>
+                                        <!-- <li role="menuitem"><a class="dropdown-item" (click)="removeBranch(branch.uniqueName, branch.name)">Delink</a></li> -->
+                                        <li role="menuitem"><a class="dropdown-item" (click)="updateBranch(branch)">Edit</a></li>
 
                                     </ul>
                                 </div>
