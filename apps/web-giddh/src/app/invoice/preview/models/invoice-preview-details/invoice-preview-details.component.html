@@ -329,7 +329,7 @@
                                 </ng2-pdfjs-viewer>
                                 <img
                                     *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')"
-                                    class="image-preview" [src]="imagePreviewSource"/>
+                                    class="image-preview" [ngClass]="{'image-collapsed': !isAttachmentExpanded}" [src]="imagePreviewSource"/>
                             </div>
                             <div *ngIf="shouldShowUploadAttachment"
                                 class="upload-excel max500 center-block box mrT2 dashed-bdr">
@@ -352,8 +352,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="expand-file">
-                                <a href="" class="cp"><span><img src="assets/images/expand.svg"></span>Expand</a>
+                            <div class="expand-file" *ngIf="selectedItem.voucherType === 'purchase'">
+                                <a href="javascript:;" *ngIf="!isAttachmentExpanded" class="cp" (click)="isAttachmentExpanded = true;"><span><img src="assets/images/expand.svg"></span>Expand</a>
+                                <a href="javascript:;" *ngIf="isAttachmentExpanded" class="cp" (click)="isAttachmentExpanded = false;"><span><img src="assets/images/expand.svg"></span>Collapse</a>
                             </div>
                         </div>
                     </div>
