@@ -103,7 +103,7 @@ export class AllModulesComponent implements OnInit {
      * @param {*} isClickMethod to check is click method exist
      * @memberof AllModulesComponent
      */
-    public navigateTo(route: any, queryParamsItem: any, isClickMethod: any) {
+    public navigateTo(route: any, queryParamsItem: any, isClickMethod: any): void {
         if (route) {
             if (!queryParamsItem) {
                 this.route.navigate([route]);
