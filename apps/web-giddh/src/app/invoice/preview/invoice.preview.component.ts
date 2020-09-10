@@ -90,6 +90,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
     @Input() public selectedVoucher: VoucherTypeEnum = VoucherTypeEnum.sales;
     @ViewChild(InvoicePaymentModelComponent) public invoicePaymentModelComponent: InvoicePaymentModelComponent;
+    /* Taking input to refresh purchase bill list */
     @Input() public refreshPurchaseBill: boolean = false;
     /* This will emit if purchase bill lists needs to be refreshed */
     @Output() public resetRefreshPurchaseBill: EventEmitter<any> = new EventEmitter();
@@ -299,6 +300,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         //this._invoiceService.getTotalAndBalDue();
     }
 
+    /**
+     * This will open the search modal
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof InvoicePreviewComponent
+     */
     public openModal(template: TemplateRef<any>): void {
         this.modalRef = this.modalService.show(template);
     }

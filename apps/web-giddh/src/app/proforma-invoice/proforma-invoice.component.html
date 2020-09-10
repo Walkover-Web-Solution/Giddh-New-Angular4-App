@@ -466,7 +466,7 @@
                             
                             <div class="row mb-1 delivery-from-field" *ngIf="isPurchaseInvoice">
                                 <div class="col-sm-2">
-                                    <label>Deliver From<span class="red-text">*</span></label>
+                                    <label>Deliver To<span class="red-text">*</span></label>
                                 </div>
                                 <div class="col-sm-9 select-customer-name">
                                     <section class="form-inline">
@@ -544,7 +544,8 @@
                                                                     <div class="col-sm-6 pd" #shippingStateCompany>
                                                                         <sales-sh-select [placeholder]="'State'"
                                                                             [disabled]="autoFillCompanyShipping"
-                                                                            class="select-border-bottom disabled"
+                                                                            class="select-border-bottom"
+                                                                            [ngClass]="{'disabled': autoFillCompanyShipping}"
                                                                             (selected)="fillShippingBillingCompanyDetails($event, false);"
                                                                             [showBottomBorderOnly]="true"
                                                                             [options]="companyStatesSource"
@@ -578,11 +579,11 @@
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
-                                        <sh-select [options]="purchaseOrders" [placeholder]="'Select Order'" [multiple]="true" name="linkedPO" [(ngModel)]="linkedPO" (selected)="getPurchaseOrder($event, true)" [isFilterEnabled]="true" [useInBuiltFilterForIOptionTypeItems]="true">
+                                        <sh-select [options]="purchaseOrders" placeholder="Select Order" [multiple]="true" name="linkedPO" [(ngModel)]="linkedPo" (selected)="getPurchaseOrder($event, true)" [isFilterEnabled]="true" [useInBuiltFilterForIOptionTypeItems]="true">
                                             <ng-template #optionTemplate let-option="option">
                                                 <ng-container>
                                                     <a href="javascript:void(0)" class="list-item d-flex">
-                                                        <span><input type="checkbox" [checked]="linkedPO && linkedPO.includes(option.value)" [value]="option.value"></span>&nbsp;
+                                                        <span><input type="checkbox" [checked]="linkedPo && linkedPo.includes(option.value)" [value]="option.value"></span>&nbsp;
                                                         <span>
                                                             <div class="item">{{ option.label }}</div>
                                                             <div class="item_unq" *ngIf="option.additional?.amount">

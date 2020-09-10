@@ -139,7 +139,7 @@ export class PurchaseRecordService {
      * This will get the PDF
      *
      * @param {*} requestObject
-     * @returns {*}
+     * @returns {any}
      * @memberof PurchaseRecordService
      */
     public getPdf(requestObject: any): any {

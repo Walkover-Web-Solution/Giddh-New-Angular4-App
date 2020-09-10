@@ -645,11 +645,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * @memberof InvoicePreviewDetailsComponent
      */
     public checkIfPipeSymbolRequired(loop: number): boolean {
-        if (loop < (this.purchaseOrderNumbers.length - 1)) {
-            return true;
-        } else {
-            return false;
-        }
+        return loop < (this.purchaseOrderNumbers.length - 1);
     }
 
     /**

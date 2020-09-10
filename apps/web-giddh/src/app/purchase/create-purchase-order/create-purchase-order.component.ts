@@ -2854,11 +2854,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public checkIfPipeSymbolRequired(loop: number): boolean {
-        if (loop < (this.purchaseOrders.length - 1)) {
-            return true;
-        } else {
-            return false;
-        }
+        return loop < (this.purchaseOrders.length - 1);
     }
 
     /**

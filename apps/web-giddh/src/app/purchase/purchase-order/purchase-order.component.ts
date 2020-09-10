@@ -16,16 +16,7 @@ import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-orde
 import { IOption } from '../../theme/ng-select/ng-select';
 import { SettingsUtilityService } from '../../settings/services/settings-utility.service';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
-
-/* Status filters */
-const BULK_UPDATE_FIELDS = [
-    { label: 'Purchase Date', value: 'purchasedate' },
-    { label: 'Expected Delivery Date', value: 'duedate' },
-    { label: 'Warehouse', value: 'warehouse' },
-    { label: 'Expire', value: 'expire' },
-    { label: 'Delete', value: 'delete' },
-    { label: 'Create Purchase Bill', value: 'create_purchase_bill' }
-];
+import { BULK_UPDATE_FIELDS } from '../../shared/helpers/purchaseOrderStatus';
 
 @Component({
     selector: 'purchase-order',
@@ -118,7 +109,14 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     /* This will hold current page url */
     public pageUrl: string = "pages/purchase-management/purchase";
     /* This holds the fields which can be updated in bulk */
-    public bulkUpdateFields: IOption[] = BULK_UPDATE_FIELDS;
+    public bulkUpdateFields: IOption[] = [
+        { label: 'Purchase Date', value: BULK_UPDATE_FIELDS.purchasedate },
+        { label: 'Expected Delivery Date', value: BULK_UPDATE_FIELDS.duedate },
+        { label: 'Warehouse', value: BULK_UPDATE_FIELDS.warehouse },
+        { label: 'Expire', value: BULK_UPDATE_FIELDS.expire },
+        { label: 'Delete', value: BULK_UPDATE_FIELDS.delete },
+        { label: 'Create Purchase Bill', value: BULK_UPDATE_FIELDS.create_purchase_bill }
+    ];
     /* Stores warehouses for a company */
     public warehouses: Array<any>;
     /* Bulk update get params */
@@ -667,21 +665,21 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         let isValid = true;
 
         if (this.bulkUpdateGetParams.action) {
-            if (this.bulkUpdateGetParams.action === 'purchasedate') {
+            if (this.bulkUpdateGetParams.action === BULK_UPDATE_FIELDS.purchasedate) {
                 if (!this.bulkUpdatePostParams.purchaseDate) {
                     isValid = false;
                     this.toaster.errorToast("Please select Purchase date");
                 } else {
                     this.bulkUpdatePostParams.purchaseDate = moment(this.bulkUpdatePostParams.purchaseDate).format(GIDDH_DATE_FORMAT);
                 }
-            } else if (this.bulkUpdateGetParams.action === 'duedate') {
+            } else if (this.bulkUpdateGetParams.action === BULK_UPDATE_FIELDS.duedate) {
                 if (!this.bulkUpdatePostParams.dueDate) {
                     isValid = false;
                     this.toaster.errorToast("Please select Expected delivery date");
                 } else {
                     this.bulkUpdatePostParams.dueDate = moment(this.bulkUpdatePostParams.dueDate).format(GIDDH_DATE_FORMAT);
                 }
-            } else if (this.bulkUpdateGetParams.action === 'warehouse') {
+            } else if (this.bulkUpdateGetParams.action === BULK_UPDATE_FIELDS.warehouse) {
                 if (!this.bulkUpdatePostParams.warehouseUniqueName) {
                     isValid = false;
                     this.toaster.errorToast("Please select Warehouse");

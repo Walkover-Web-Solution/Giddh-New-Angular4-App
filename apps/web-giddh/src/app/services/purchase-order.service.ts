@@ -198,7 +198,7 @@ export class PurchaseOrderService {
      * This will get the PDF
      *
      * @param {*} getRequestObject
-     * @returns {Observable<BaseResponse<any, any>>}
+     * @returns {any}
      * @memberof PurchaseOrderService
      */
     public getPdf(getRequestObject: any): any {
