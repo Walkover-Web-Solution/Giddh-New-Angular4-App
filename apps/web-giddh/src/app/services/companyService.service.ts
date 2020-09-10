@@ -491,7 +491,7 @@ export class CompanyService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, '')));
     }
 
-    public createNewBranch(companyUniqueName: string, requestObject: any) {
+    public createNewBranch(companyUniqueName: string, requestObject: any): Observable<any> {
         const requestPayload = {
             name: requestObject.name,
             uniqueName: requestObject.uniqueName,
@@ -515,6 +515,17 @@ export class CompanyService {
         }
         return this._http.post(this.config.apiUrl + COMPANY_API.CREATE_NEW_BRANCH
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), requestPayload).pipe(
+                catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
+    }
+
+    public updateBranch(requestObject: any): Observable<any> {
+        const contextPath = `${this.config.apiUrl}${COMPANY_API.CREATE_NEW_BRANCH}/${requestObject.branchUniqueName}`;
+        const requestPayload = {
+            name: requestObject.name,
+            alias: requestObject.alias
+        };
+        return this._http.put(contextPath
+            .replace(':companyUniqueName', encodeURIComponent(requestObject.companyUniqueName)), requestPayload).pipe(
                 catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
     }
 }

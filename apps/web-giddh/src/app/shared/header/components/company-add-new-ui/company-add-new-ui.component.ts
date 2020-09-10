@@ -42,6 +42,10 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     @ViewChild('logoutModal', {static: true}) public logoutModal: ModalDirective;
     @ViewChild('companyForm', {static: true}) public companyForm: NgForm;
     @Input() public createBranch: boolean = false;
+    /** True if update mode is enabled */
+    @Input() public isUpdateMode: boolean = false;
+    /** Stores the entity details to be updated */
+    @Input() public entityDetails: any;
 
     public imgPath: string = '';
     public countrySource: IOption[] = [];
@@ -184,6 +188,10 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                 this.company = res;
             }
         });
+        if (this.createBranch && this.isUpdateMode && this.entityDetails) {
+            this.company.name = this.entityDetails.name;
+            this.company.nameAlias = this.entityDetails.alias;
+        }
     }
 
     /**
@@ -198,18 +206,22 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             }
             return;
         } else {
-            let companies = null;
-            this.companies$.pipe(take(1)).subscribe(c => companies = c);
-            this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
-            this.company.isBranch = this.createBranch;
-            this._generalService.createNewCompany = this.company;
-            this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
-            this.closeCompanyModal.emit();
-            this._route.navigate(['welcome']);
-
-            if (this.isProdMode && companies) {
-                if (companies.length === 0) {
-                    this.fireSocketCompanyCreateRequest();
+            if (this.createBranch && this.isUpdateMode) {
+                // Branch update mode
+                this.updateBranch();
+            } else {
+                let companies = null;
+                this.companies$.pipe(take(1)).subscribe(c => companies = c);
+                this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
+                this.company.isBranch = this.createBranch;
+                this._generalService.createNewCompany = this.company;
+                this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
+                this.closeCompanyModal.emit();
+                this._route.navigate(['welcome']);
+                if (this.isProdMode && companies) {
+                    if (companies.length === 0) {
+                        this.fireSocketCompanyCreateRequest();
+                    }
                 }
             }
         }
@@ -434,5 +446,19 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this._generalService.createNewCompany = null;
         this.store.dispatch(this.commonActions.resetCountry());
         this.store.dispatch(this.companyActions.removeCompanyCreateSession());
+    }
+
+    public updateBranch(): void {
+        this._companyService.updateBranch({
+            companyUniqueName: this.activeCompanyDetails.uniqueName,
+            branchUniqueName: this.entityDetails.uniqueName,
+            name: this.company.name,
+            alias: this.company.nameAlias
+        }).subscribe(data => {
+            this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
+            this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
+            this.store.dispatch(this.companyActions.removeCompanyCreateSession());
+            this.closeCompanyModal.emit();
+        });
     }
 }

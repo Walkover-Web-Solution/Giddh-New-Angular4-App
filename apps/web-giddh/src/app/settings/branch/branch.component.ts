@@ -68,6 +68,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public dateRangePickerValue: Date[] = [];
     public isAttachmentExpanded: boolean = false;
 
+    private branchDetails: any;
+
     constructor(
         private store: Store<AppState>,
         private settingsBranchActions: SettingsBranchActions,
@@ -172,10 +174,15 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    public openCreateCompanyModal() {
-        this.loadAddCompanyComponent();
+    public openCreateCompanyModal(isUpdateMode?: boolean): void {
+        this.loadAddCompanyComponent(isUpdateMode);
         this.hideAddBranchModal();
         this.addCompanyModal.show();
+    }
+
+    public updateBranch(branch: any): void {
+        this.branchDetails = branch;
+        this.openCreateCompanyModal(true);
     }
 
     public hideAddCompanyModal() {
@@ -186,7 +193,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.addCompanyModal.hide();
     }
 
-    public loadAddCompanyComponent() {
+    public loadAddCompanyComponent(isUpdateMode?: boolean): void {
         this.store.dispatch(this.commonActions.resetCountry());
 
         let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddNewUiComponent);
@@ -194,8 +201,13 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         viewContainerRef.clear();
         let componentRef = viewContainerRef.createComponent(componentFactory);
         (componentRef.instance as CompanyAddNewUiComponent).createBranch = true;
+        (componentRef.instance as CompanyAddNewUiComponent).isUpdateMode = isUpdateMode;
+        (componentRef.instance as CompanyAddNewUiComponent).entityDetails = this.branchDetails;
         (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.subscribe((a) => {
             this.hideAddCompanyModal();
+            if (isUpdateMode) {
+                this.getAllBranches();
+            }
         });
         (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
             this.hideCompanyModalAndShowAddAndManage();
