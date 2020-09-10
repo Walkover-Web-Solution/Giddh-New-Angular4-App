@@ -28,7 +28,6 @@ export interface CurrentCompanyState {
     isTcsTdsApplicable: boolean;
     isGetAllIntegratedBankInProgress: boolean;
     integratedBankList: IntegratedBankList[];
-    currentOrganizationDetails: Organization;
 }
 
 /**
@@ -63,8 +62,7 @@ const initialState: CurrentCompanyState = {
     isCompanyActionInProgress: false,
     isAccountInfoLoading: false,
     isTcsTdsApplicable: false,
-    isGetAllIntegratedBankInProgress: false,
-    currentOrganizationDetails: null
+    isGetAllIntegratedBankInProgress: false
 };
 
 export function CompanyReducer(state: CurrentCompanyState = initialState, action: CustomActions): CurrentCompanyState {
@@ -234,10 +232,6 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                     isGetAllIntegratedBankInProgress: false
                 });
             }
-        case CompanyActions.SET_COMPANY_BRANCH:
-            return Object.assign({}, state, {
-                currentOrganizationDetails: action.payload
-            });
         default:
             return state;
     }

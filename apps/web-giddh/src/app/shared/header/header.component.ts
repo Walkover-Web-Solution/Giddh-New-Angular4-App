@@ -735,7 +735,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.totalNumberOfcompanies = res;
         });
 
-        this.store.pipe(select(appStore => appStore.company.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+        this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
             if (organization && organization.details && organization.details.branchDetails) {
                 this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
                 this.generalService.currentOrganizationType = organization.type;
@@ -1189,6 +1189,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         };
         this.setOrganziationDetails(OrganizationType.Branch, details);
+        window.location.reload();
     }
 
     public deleteCompany(e: Event) {

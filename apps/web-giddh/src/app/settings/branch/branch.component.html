@@ -2,13 +2,13 @@
     <div class="d-flex date-advance-search row">
         <form class="form-inline input-group-date-range-picker pr col-xs-6 col-sm-8 xs-mb-1">
             <div class="mr-1 d-flex branch-header-content">
-                <div class="input-group">
+                <!-- <div class="input-group">
                     <div class="form-group">
                         <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" readonly
                             placeholder="Select Date" class="form-control" #dp="bsDaterangepicker"
                             [bsValue]="dateRangePickerValue" (bsValueChange)="setFilterDate($event)" bsDaterangepicker>
                     </div>
-                </div>
+                </div> -->
                 <div class="content-view  mrL2">
                     <div class="branch-views">
                         <span (click)="changeBranchViewType('table');" class="mrR1">
@@ -36,6 +36,7 @@
             <tr>
                 <th>Branch Name</th>
                 <th *ngIf="formFields['taxName']">{{formFields['taxName'].label}}</th>
+                <th>Parent</th>
                 <th>Contact No.</th>
                 <th class="text-right">Total Sales</th>
                 <th class="text-right">Total Expenses</th>
@@ -45,8 +46,9 @@
         </thead>
         <tbody>
             <tr *ngFor="let branch of branches$ | async">
-                <td data-title="Branch Name">{{branch.name}}</td>
+                <td data-title="Branch Name">{{branch.name}} ({{branch.alias}})</td>
                 <td data-title="{{formFields['taxName'].label}}" *ngIf="formFields['taxName']">{{branch?.addresses[0]?.taxNumber}}</td>
+                <td data-title="Parent">{{branch?.parentBranch?.name || '-'}}</td>
                 <td data-title="Contact No.">{{branch.contactNo}}</td>
                 <td data-title="Total Sales" class="text-right"><span
                         *ngIf="branch && branch.companyTotals && branch.companyTotals.sales && branch.companyTotals.sales.amount">{{branch.companyTotals.sales.amount | giddhCurrency}}</span><span
@@ -73,12 +75,11 @@
                 <div class="branch-card">
                     <div class="card-basic-details">
                         <div class="clearfix">
-                            <h2 class="pull-left">{{branch.name}}</h2>
+                            <h2 class="pull-left">{{branch.name}} ({{branch.alias}})</h2>
                             <div class="pull-right">
                                 <div class="btn-group" dropdown [autoClose]="true">
                                     <a id="button-basic" dropdownToggle type="button"
                                         class="icon-dots-three-vertical dropdown-toggle" aria-controls="dropdown-basic">
-
                                     </a>
                                     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                         aria-labelledby="button-basic">
@@ -91,11 +92,14 @@
                             </div>
 
                         </div>
-
-                        <div class="clearfix">
+                        <div *ngIf="branch?.parentBranch?.name" class="clearfix">
+                            <span class="mrR1 pull-left">Parent:</span>
+                            <span class="pull-left">{{branch?.parentBranch?.name}}</span>
+                        </div>
+                        <!-- <div class="clearfix">
                             <span class="mrR1 pull-left">Contact:</span>
                             <span class="pull-left">{{branch.contactNo}}</span>
-                        </div>
+                        </div> -->
                         <div class="clearfix" *ngIf="formFields['taxName']">
                             <span class="mrR1 pull-left">{{formFields['taxName'].label}}:</span>
                             <span class="pull-left">{{branch?.addresses[0]?.taxNumber}}</span>

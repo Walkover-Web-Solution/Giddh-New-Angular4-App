@@ -70,6 +70,17 @@ export class CompanyTotals {
     };
 }
 
+export interface ParentBranch {
+    addresses: Addresses[];
+    alias: string;
+    businessNature: string;
+    businessType: string;
+    name: string;
+    parentBranch: ParentBranch;
+    parentBranchUniqueName: string;
+    uniqueName: string;
+}
+
 export class CompanyResponse {
     public canUserSwitch: boolean;
     public companyIdentity: any[];
@@ -105,6 +116,7 @@ export class CompanyResponse {
     public baseCurrencySymbol?: string;
     public companyTotals: CompanyTotals;
     public branches?: Array<any>;
+    public parentBranch?: ParentBranch;
 }
 
 export interface UserEntityRole {
