@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, TemplateRef, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -40,6 +40,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     @ViewChild('searchBox') public searchBox: ElementRef;
     /* Confirm box */
     @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
+    /* This will emit if purchase bill lists needs to be refreshed */
+    @Output() public refreshPurchaseBill: EventEmitter<any> = new EventEmitter();
 
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
@@ -215,6 +217,15 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             this.bulkUpdateGetParams.companyUniqueName = response;
             this.getAllPurchaseOrders(true);
         });
+
+        this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            if (warehouses) {
+                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
+                if (warehouseData) {
+                    this.warehouses = warehouseData.formattedWarehouses;
+                }
+            }
+        });
     }
 
     /**
@@ -229,8 +240,6 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
 
         if (purchaseNumbers.length > 0) {
             this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
-            this.getAllWarehouses();
-
             this.modalRef = this.modalService.show(
                 template,
                 Object.assign({}, { class: 'modal-sm' })
@@ -566,6 +575,10 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 if (res) {
                     if (res.status === 'success') {
 
+                        if(action === "create_purchase_bill") {
+                            this.refreshPurchaseBill.emit(true);
+                        }
+
                         if (this.modalRef) {
                             this.initBulkUpdateFields();
                             this.modalRef.hide();
@@ -643,22 +656,6 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         if (event) {
             this.modalRef.hide();
         }
-    }
-
-    /**
-     * This will get all warehouses
-     *
-     * @memberof PurchaseOrderComponent
-     */
-    public getAllWarehouses(): void {
-        this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
-            if (warehouses) {
-                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
-                if (warehouseData) {
-                    this.warehouses = warehouseData.formattedWarehouses;
-                }
-            }
-        });
     }
 
     /**

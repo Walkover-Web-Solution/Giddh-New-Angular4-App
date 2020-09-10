@@ -11,18 +11,23 @@ import { base64ToBlob } from '../helpers/helperFunctions';
 })
 
 export class PurchaseOrderPreviewModalComponent implements OnInit {
-    /* Taking input all the params */
+    /* Taking input po unique name */
     @Input() public purchaseOrderUniqueName: any;
+    /* Taking input company unique name */
     @Input() public purchaseOrderCompanyUniqueName: any;
+    /* Taking input account unique name */
     @Input() public purchaseOrderAccountUniqueName: any;
     /* Output emitter (boolean) */
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter();
-
+    /* Instance of pdf viewer */
     @ViewChild(PdfJsViewerComponent) public pdfViewer: PdfJsViewerComponent;
-
+    /* This will hold if api request is pending */
     public isLoading: boolean = false;
+    /* This will hold count of pdf pages */
     public pageCount: number = 0;
+    /* This will hold if pdf preview loaded */
     public pdfPreviewLoaded: boolean = false;
+    /* This will hold if pdf preview has error */
     public pdfPreviewHasError: boolean = false;
 
     constructor(public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService) {
@@ -72,6 +77,12 @@ export class PurchaseOrderPreviewModalComponent implements OnInit {
         });
     }
 
+    /**
+     * Callback for pdf pages loaded
+     *
+     * @param {number} count
+     * @memberof PurchaseOrderPreviewModalComponent
+     */
     public pagesLoaded(count: number): void {
         this.pageCount = count;
     }

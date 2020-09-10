@@ -13,7 +13,9 @@ import {
     OnInit,
     SimpleChanges,
     ViewChild,
-    TemplateRef
+    TemplateRef,
+    EventEmitter,
+    Output
 } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
@@ -88,6 +90,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
     @Input() public selectedVoucher: VoucherTypeEnum = VoucherTypeEnum.sales;
     @ViewChild(InvoicePaymentModelComponent) public invoicePaymentModelComponent: InvoicePaymentModelComponent;
+    @Input() public refreshPurchaseBill: boolean = false;
+    /* This will emit if purchase bill lists needs to be refreshed */
+    @Output() public resetRefreshPurchaseBill: EventEmitter<any> = new EventEmitter();
 
     public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
     public bsConfig: Partial<BsDatepickerConfig> = {
@@ -293,9 +298,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.companyName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
         //this._invoiceService.getTotalAndBalDue();
     }
-    openModal(template: TemplateRef<any>) {
+
+    public openModal(template: TemplateRef<any>): void {
         this.modalRef = this.modalService.show(template);
     }
+    
     public ngOnInit() {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
@@ -701,6 +708,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
             this.getVoucher(false);
             this.selectedInvoice = null;
+        }
+
+        if(changes['refreshPurchaseBill'] && (changes['refreshPurchaseBill'].currentValue && changes['refreshPurchaseBill'].currentValue !== changes['refreshPurchaseBill'].previousValue) || changes['refreshPurchaseBill'].firstChange) {
+            this.resetRefreshPurchaseBill.emit(false);
+            this.getVoucher(false);
         }
     }
 

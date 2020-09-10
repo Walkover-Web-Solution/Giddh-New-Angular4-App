@@ -34,6 +34,7 @@ export class RevisionHistoryComponent implements OnInit {
     };
     /* This will hold purchase order versions */
     public purchaseVersions: any = {};
+    /* This will hold if api request is pending */
     public isLoading: boolean = false;
 
     constructor(public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, private generalService: GeneralService, public purchaseRecordService: PurchaseRecordService, private cdRef: ChangeDetectorRef) {
@@ -159,6 +160,12 @@ export class RevisionHistoryComponent implements OnInit {
         }
     }
 
+    /**
+     * This will get the revision history
+     *
+     * @param {boolean} resetPage
+     * @memberof RevisionHistoryComponent
+     */
     public getPurchaseBillVersions(resetPage: boolean): void {
         if (this.purchaseVersionsGetRequest.companyUniqueName && this.purchaseVersionsPostRequest.uniqueName) {
             this.isLoading = true;

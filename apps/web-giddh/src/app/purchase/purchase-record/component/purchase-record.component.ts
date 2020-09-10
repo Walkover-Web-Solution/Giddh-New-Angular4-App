@@ -12,9 +12,12 @@ import { ReplaySubject } from 'rxjs';
 })
 
 export class PurchaseRecordComponent implements OnInit {
+    /* This will hold active tab */
     public activeTab: string = 'order';
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold if we need to refresh purchase bill list */
+    public refreshPurchaseBill: boolean = false;
 
     constructor(private store: Store<AppState>, private generalAction: GeneralActions, public route: ActivatedRoute, public router: Router) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -35,5 +38,15 @@ export class PurchaseRecordComponent implements OnInit {
 
     public onTabChanged(tabName: string): void {
         this.router.navigate(['pages/purchase-management/purchase/', tabName], { replaceUrl: true });
+    }
+
+    /**
+     * This will get output by PO
+     *
+     * @param {boolean} event
+     * @memberof PurchaseRecordComponent
+     */
+    public purchaseOrderOutput(event: boolean): void {
+        this.refreshPurchaseBill = event;
     }
 }
