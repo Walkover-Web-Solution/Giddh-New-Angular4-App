@@ -1,16 +1,17 @@
-<div class="container-fluid pt-2 pb-2">
+<div class="container-fluid pt-2 pb-2" *ngIf="!showLoader">
     <div class="clearfix reports-main">
         <div class="row clearfix">
-            <div *ngFor="let item of list" class="col-md-3 col-sm-3 mb-5 col-xs-6 single-report-list">
+            <div *ngFor="let item of allModulesList" class="col-md-3 col-sm-3 mb-5 col-xs-6 single-report-list">
                 <div>
                     <p>{{item.groupHeading}}</p>
                     <ng-container *ngFor="let routeItem of item.items">
                         <p>
-                            <a href="javascript:void(0)" *ngIf="!routeItem.isAvailable" (click)="navigateTo(routeItem.routerLink, routeItem.queryParams, routeItem.isClick)">{{routeItem.name}} <small *ngIf="!routeItem.routerLink" class="coming-soon-report italic">Coming soon</small></a></p>
+                            <a href="javascript:void(0)" (click)="navigateTo(routeItem.routerLink, routeItem.queryParams, routeItem.isClick)">{{routeItem.name}} <small *ngIf="!routeItem.routerLink" class="coming-soon-report italic">Coming soon</small></a></p>
                     </ng-container>
                 </div>
             </div>
         </div>
+        <!-- Commenting code required to verify testing issues -->
         <!-- <div class="row">
             <div class="col-md-3 col-sm-3 mb-5 col-xs-6">
                 <p>General</p>
@@ -79,6 +80,12 @@
                 <p><a href="javascript:void(0)" [routerLink]="['/pages/onboarding']">Onboarding</a></p>
             </div>
         </div> -->
+    </div>
+</div>
+<div class="no-data mrT2 loader-main" *ngIf="showLoader">
+    <div class="spinner2">
+        <div class="cube1"></div>
+        <div class="cube2"></div>
     </div>
 </div>
 <!--add and manage group account modal -->
