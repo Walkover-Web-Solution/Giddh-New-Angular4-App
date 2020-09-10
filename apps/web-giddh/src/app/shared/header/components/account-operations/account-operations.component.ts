@@ -49,7 +49,7 @@ import { Router } from "@angular/router";
           width: 72px;
       }
 
-      .item_unq ul {
+      .item-unq ul {
           padding-left: 30px;
           list-style: none;
       }

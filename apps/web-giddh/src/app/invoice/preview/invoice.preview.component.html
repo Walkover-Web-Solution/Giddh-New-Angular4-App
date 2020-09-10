@@ -503,7 +503,7 @@
                             <span>{{ item.balanceStatus}}</span>
                         </td>
 
-                        <td *ngIf="selectedVoucher === 'purchase'" class="cp d-flex align-items-center status_mobile pt-0 pb-0">
+                        <td *ngIf="selectedVoucher === 'purchase'" class="cp d-flex align-items-center status-mobile pt-0 pb-0">
                         <span class="d-flex">{{ item.balanceStatus}}</span>
                             <div class="action-icon ml-15" [ngClass]="{'item-selected': hoveredItemForAction === item.uniqueName || item.isSelected}" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected">
                                 <a tooltip="Send Email"

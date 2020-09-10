@@ -326,7 +326,7 @@
                                     class="image-preview" [src]="imagePreviewSource"/>
                             </div>
                             <div *ngIf="shouldShowUploadAttachment"
-                                class="upload-excel max500 center-block box mrT2 dashed-bdr">
+                                class="upload-excel max500 center-block box dashed-bdr">
                                 <input type="file" id="csv-upload-input" placeholder="Upload an EXCEL or CSV file"
                                     droppable="true" class="form-control" [options]="fileUploadOptions" ngFileSelect
                                     [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)"/>
@@ -359,7 +359,7 @@
                             </div>
                             <div class="expand-file" *ngIf="selectedItem.voucherType === 'purchase' && imagePreviewSource">
                                 <a href="javascript:;" *ngIf="!isAttachmentExpanded" class="cp" (click)="isAttachmentExpanded = true;"><span><img src="assets/images/expand.svg"></span>Expand</a>
-                                <a href="javascript:;" *ngIf="isAttachmentExpanded" class="cp" (click)="isAttachmentExpanded = false;"><span><img src="assets/images/expand.svg"></span>Collapse</a>
+                                <a href="javascript:;" *ngIf="isAttachmentExpanded" class="cp" (click)="isAttachmentExpanded = false;"><span><img src="assets/images/expand.svg" class="collapse-icon"></span>Collapse</a>
                             </div>
                         </div>
                     </div>
