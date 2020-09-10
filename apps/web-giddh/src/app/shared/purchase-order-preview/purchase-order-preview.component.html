@@ -15,7 +15,7 @@
                     Purchase Order Preview is not available right now! Please try again..
                 </span>
             </div>
-            <div class="fixed-ng2pdfview pdf-preview h-100" [ngClass]="{'fixed-ng2pdfview-2': pageCount === 2, 'fixed-ng2pdfview': pageCount === 1, 'fixed-ng2pdfview-3': pageCount === 3,'fixed-ng2pdfview-4': pageCount === 4}">
+            <div class="fixed-ng2pdfview pdf-preview preview-1" [ngClass]="{'fixed-ng2pdfview-2': pageCount === 2, 'fixed-ng2pdfview': pageCount === 1, 'fixed-ng2pdfview-3': pageCount === 3,'fixed-ng2pdfview-4': pageCount === 4}">
                 <ng2-pdfjs-viewer pagemode="none" viewerId="MyUniqueID" [hidden]="isLoading" [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="pagesLoaded($event);" [openFile]="false" [viewBookmark]="false" [download]="false"></ng2-pdfjs-viewer>
             </div>
         </div>
