@@ -629,7 +629,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         
         this.modalRef = this.modalService.show(
             template,
-            Object.assign({}, { class: 'modal-sm' })
+            Object.assign({}, { class: 'po-preview-modal modal-lg' })
         );
     }
 

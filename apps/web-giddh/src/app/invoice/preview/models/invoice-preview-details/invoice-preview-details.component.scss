@@ -1099,3 +1099,10 @@ strong {
         top: 121px;
     }
 }
+
+@media (min-width: 992px){
+    .po-preview-modal {
+        width: 1003px !important;
+    }
+}
+
