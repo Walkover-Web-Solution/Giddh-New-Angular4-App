@@ -100,13 +100,17 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public proformaListComponent: ProformaListComponent;
     /** To check is selected account/customer have advance receipts */
     public isAccountHaveAdvanceReceipts: boolean = false;
+    /* This will hold revision history aside popup state */
     public revisionHistoryAsideState: string = 'out';
+    /* This will hold company unique name */
     public companyUniqueName: string = '';
+    /* This will hold PO numbers */
     public purchaseOrderNumbers: any[] = [];
     /* This will hold po unique name for preview */
     public purchaseOrderPreviewUniqueName: string = '';
     /* Send email request params object */
     public sendEmailRequest: any = {};
+    /* This will hold if attachment is expanded */
     public isAttachmentExpanded: boolean = false;
 
     constructor(
@@ -242,6 +246,12 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.invoiceImageSectionViewHeight = this.invoiceDetailWrapperHeight - this.invoiceDetailViewHeight - 90;
     }
 
+    /**
+     * This will toggle aside popup for revision history
+     *
+     * @param {*} [event]
+     * @memberof InvoicePreviewDetailsComponent
+     */
     public toggleActivityHistoryAsidePane(event?: any): void {
         if (event) {
             event.preventDefault();
@@ -285,12 +295,12 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.showEditMode = false;
     }
 
-    public openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template,
-            Object.assign({}, { class: 'preview-lightbox modal-lg' })
-        );
-        $('.modal-backdrop').addClass('preview-lightbox-overlay');
-    }
+    // public openModal(template: TemplateRef<any>) {
+    //     this.modalRef = this.modalService.show(template,
+    //         Object.assign({}, { class: 'preview-lightbox modal-lg' })
+    //     );
+    //     $('.modal-backdrop').addClass('preview-lightbox-overlay');
+    // }
 
     public getVoucherVersions() {
         let request = new ProformaGetAllVersionRequest();

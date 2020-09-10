@@ -10,6 +10,7 @@ import { PurchaseRecordService } from '../../services/purchase-record.service';
 })
 
 export class PurchaseSendEmailModalComponent implements OnInit {
+    /* Taking input module name for send email */
     @Input() public module: string;
     /* Taking input all the params */
     @Input() public sendEmailRequest: any;

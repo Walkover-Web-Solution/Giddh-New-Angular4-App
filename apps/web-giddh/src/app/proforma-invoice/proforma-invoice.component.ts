@@ -494,6 +494,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public noResultsFoundLabel = SearchResultText.NewSearch;
     /* This will hold selected PO */
     public selectedPOItems: any[] = [];
+    /* Object for billing/shipping of company */
     public purchaseBillCompany: any = {
         billingDetails: {
             address: [],
@@ -510,9 +511,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             stateCode: ''
         }
     };
+    /* This will hold autofill state of company billing/shipping */
     public autoFillCompanyShipping: boolean = true;
+    /* This will hold company's country states */
     public companyStatesSource: IOption[] = [];
+    /* This will hold if copy purchase bill is done */
     public copyPurchaseBill: boolean = false;
+    /* This will hold if PO linking is updated */
     public poLinkUpdated: boolean = false;
 
     /**
@@ -5905,6 +5910,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
+    /**
+     * This will autofill billing details into shipping for company
+     *
+     * @memberof ProformaInvoiceComponent
+     */
     public autoFillCompanyShippingDetails(): void {
         if (this.autoFillCompanyShipping) {
             this.purchaseBillCompany.shippingDetails = _.cloneDeep(this.purchaseBillCompany.billingDetails);
@@ -5914,9 +5924,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public fillShippingBillingCompanyDetails($event: any, isBilling): void {
-        let stateName = $event.label;
-        let stateCode = $event.value;
+    /**
+     * This will assign data into state object
+     *
+     * @param {*} event
+     * @param {boolean} isBilling
+     * @memberof ProformaInvoiceComponent
+     */
+    public fillShippingBillingCompanyDetails(event: any, isBilling: boolean): void {
+        let stateName = event.label;
+        let stateCode = event.value;
 
         if (isBilling) {
             // update account details address if it's billing details
@@ -5940,6 +5957,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
+    /**
+     * This will assign state based on GST/TRN
+     *
+     * @param {string} type
+     * @param {SalesShSelectComponent} statesEle
+     * @memberof ProformaInvoiceComponent
+     */
     public getStateCodeCompany(type: string, statesEle: SalesShSelectComponent): void {
         let gstVal = _.cloneDeep(this.purchaseBillCompany[type].gstNumber).toString();
         if (gstVal && gstVal.length >= 2) {

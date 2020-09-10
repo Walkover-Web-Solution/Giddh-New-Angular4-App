@@ -46,6 +46,7 @@ import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { InvoiceService } from '../../services/invoice.service';
+import { PURCHASE_ORDER_STATUS } from '../../shared/helpers/purchaseOrderStatus';
 
 const THEAD_ARR_READONLY = [
     {
@@ -2826,7 +2827,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      */
     public getVendorPurchaseOrders(vendorName: any): void {
         let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, page: 1, from: '', to: '', count: 10, sort: '', sortBy: '' };
-        let purchaseOrderPostRequest = { vendorName: vendorName, statuses: ['open', 'partially-received'] };
+        let purchaseOrderPostRequest = { vendorName: vendorName, statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyReceived, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
 
         if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
             this.purchaseOrders = [];

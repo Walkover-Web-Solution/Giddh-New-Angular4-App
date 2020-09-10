@@ -135,6 +135,13 @@ export class PurchaseRecordService {
         return this._http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
 
+    /**
+     * This will get the PDF
+     *
+     * @param {*} requestObject
+     * @returns {*}
+     * @memberof PurchaseRecordService
+     */
     public getPdf(requestObject: any): any {
         let url: string = this.config.apiUrl + PURCHASE_RECORD_API.GET_PDF;
         url = url.replace(':companyUniqueName', requestObject.companyUniqueName);
