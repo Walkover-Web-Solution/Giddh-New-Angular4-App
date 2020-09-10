@@ -125,4 +125,20 @@ export class PermissionService {
 			return data;
 		}), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
 	}
+
+
+    /**
+     * To get all modules data in which user have access permission
+     *
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PermissionService
+     */
+    public getSharedAllModules(): Observable<BaseResponse<any, any>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.get(this.config.apiUrl + PERMISSION_API.GET_SHARED_ALL_MODULE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
 }
