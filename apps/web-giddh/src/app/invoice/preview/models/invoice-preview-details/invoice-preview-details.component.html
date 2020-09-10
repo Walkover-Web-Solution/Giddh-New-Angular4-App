@@ -316,19 +316,8 @@
                                 <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and PDF (.pdf); to print other formats, download them. </span>
                             </div>
 
-                            <div *ngIf="!shouldShowUploadAttachment" #attachedDocumentPreview
-                                class="fixed-ng2pdfview pdf-preview"
-                                [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
-                                <ng2-pdfjs-viewer pagemode="none"
-                                                *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
-                                                viewerId="MyUniqueID"
-                                                [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
-                                                [downloadFileName]="'invoice.pdf'"
-                                                (onDocumentLoad)="testPagesLoaded($event);" [openFile]="false"
-                                                [viewBookmark]="false" [download]="false">
-                                </ng2-pdfjs-viewer>
-                                <img
-                                    *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')"
+                            <div *ngIf="!shouldShowUploadAttachment">
+                                <img *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')"
                                     class="image-preview" [ngClass]="{'image-collapsed': !isAttachmentExpanded}" [src]="imagePreviewSource"/>
                             </div>
                             <div *ngIf="shouldShowUploadAttachment"
@@ -352,7 +341,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="expand-file" *ngIf="selectedItem.voucherType === 'purchase'">
+                            <div #attachedDocumentPreview
+                                class="fixed-ng2pdfview pdf-preview"
+                                [ngClass]="{'fixed-ng2pdfview-2': pagecount===2, 'fixed-ng2pdfview': pagecount===1, 'fixed-ng2pdfview-3': pagecount===3,'fixed-ng2pdfview-4': pagecount===4}">
+                                <ng2-pdfjs-viewer pagemode="none"
+                                                viewerId="MyUniqueID"
+                                                [hidden]="isVoucherDownloading || isVoucherDownloadError || isFileUploading"
+                                                [downloadFileName]="'invoice.pdf'"
+                                                (onDocumentLoad)="testPagesLoaded($event);" [openFile]="false"
+                                                [viewBookmark]="false" [download]="false">
+                                </ng2-pdfjs-viewer>
+                            </div>
+                            <div class="expand-file" *ngIf="selectedItem.voucherType === 'purchase' && imagePreviewSource">
                                 <a href="javascript:;" *ngIf="!isAttachmentExpanded" class="cp" (click)="isAttachmentExpanded = true;"><span><img src="assets/images/expand.svg"></span>Expand</a>
                                 <a href="javascript:;" *ngIf="isAttachmentExpanded" class="cp" (click)="isAttachmentExpanded = false;"><span><img src="assets/images/expand.svg"></span>Collapse</a>
                             </div>

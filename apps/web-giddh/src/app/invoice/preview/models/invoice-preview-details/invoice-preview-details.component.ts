@@ -107,6 +107,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public purchaseOrderPreviewUniqueName: string = '';
     /* Send email request params object */
     public sendEmailRequest: any = {};
+    public isAttachmentExpanded: boolean = false;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -148,6 +149,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     ngOnInit() {
+        this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
+
         if (this.selectedItem) {
             this.downloadVoucher('base64');
             this.only4ProformaEstimates = [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType);
@@ -156,7 +159,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.getVoucherVersions();
             }
 
-            if(this.selectedItem.voucherType === VoucherTypeEnum.purchase) {
+            if (this.selectedItem.voucherType === VoucherTypeEnum.purchase) {
                 this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account.uniqueName, this.selectedItem.uniqueName).subscribe((res: any) => {
                     if (res && res.body) {
                         this.purchaseOrderNumbers = res.body.purchaseOrderDetails;
@@ -180,8 +183,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         });
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
-
-        this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -379,6 +380,19 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.detectChanges();
             }, (error) => {
                 this.handleDownloadError(error);
+            });
+
+            let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.selectedItem.account.uniqueName, uniqueName: this.selectedItem.uniqueName };
+
+            this.purchaseRecordService.getPdf(getRequest).subscribe(response => {
+                if (response && response.status === "success" && response.body) {
+                    let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
+                    this.attachedDocumentBlob = blob;
+                    this.pdfViewer.pdfSrc = blob;
+                    this.pdfViewer.showSpinner = true;
+                    this.pdfViewer.refresh();
+                    this.detectChanges();
+                }
             });
         } else {
             let request: ProformaDownloadRequest = new ProformaDownloadRequest();
@@ -626,7 +640,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     public openPurchaseOrderPreviewPopup(template: TemplateRef<any>, purchaseOrderUniqueName: any): void {
         this.purchaseOrderPreviewUniqueName = purchaseOrderUniqueName;
-        
+
         this.modalRef = this.modalService.show(
             template,
             Object.assign({}, { class: 'po-preview-modal modal-lg' })

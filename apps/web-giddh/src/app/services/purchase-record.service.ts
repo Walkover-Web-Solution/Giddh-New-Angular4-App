@@ -134,4 +134,14 @@ export class PurchaseRecordService {
 
         return this._http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
+
+    public getPdf(requestObject: any): any {
+        let url: string = this.config.apiUrl + PURCHASE_RECORD_API.GET_PDF;
+        url = url.replace(':companyUniqueName', requestObject.companyUniqueName);
+        url = url.replace(':accountUniqueName', requestObject.accountUniqueName);
+        url = url.replace(':uniqueName', requestObject.uniqueName);
+
+        return this._http.get(url).pipe(
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
+    }
 }

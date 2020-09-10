@@ -244,11 +244,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public selectedPerformAdjustPaymentAction: boolean = false;
     /** To check is selected account/customer have advance receipts */
     public isAccountHaveAdvanceReceipts: boolean = false;
+    /* This will hold if we need to show/hide PO search */
     public showPurchaseOrderSearch: boolean = false;
+    /* Field for search */
     public purchaseOrderNumbersInput: FormControl = new FormControl();
     /* Send email request params object */
     public sendEmailRequest: any = {};
+    /* Company name observable */
     public companyName$: Observable<string>;
+    /* This will hold company unique name */
     public companyUniqueName: string = '';
 
     constructor(

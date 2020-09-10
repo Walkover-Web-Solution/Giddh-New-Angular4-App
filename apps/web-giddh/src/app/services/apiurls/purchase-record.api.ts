@@ -9,4 +9,5 @@ export const PURCHASE_RECORD_API = {
     DELETE: `company/:companyUniqueName/purchase-record?uniqueName=:uniqueName`,
     GET_ALL_VERSIONS: `${PURCHASE_RECORD}purchase-record/versions/all?page=:page&count=:count`,
     EMAIL: `${PURCHASE_RECORD}purchase-record/:uniqueName/mail`,
+    GET_PDF: `${PURCHASE_RECORD}purchase-record/:uniqueName/download?fileType=base64`,
 }

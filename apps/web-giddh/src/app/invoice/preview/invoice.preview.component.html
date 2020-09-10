@@ -435,7 +435,7 @@
                         <!-- Invoice Date -->
                         <td>{{item.voucherDate}}</td>
 
-                        <td>{{item.purchaseOrderNumbers}}</td>
+                        <td *ngIf="(selectedVoucher === 'purchase')">{{item.purchaseOrderNumbers}}</td>
 
                         <!-- Total Amt. -->
                         <td class="text-right"
