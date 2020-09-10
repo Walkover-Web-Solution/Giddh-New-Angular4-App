@@ -338,7 +338,7 @@ export class LoginActions {
                     });
                 } else if (isElectron) {
                     // window.location.href = AppUrl + 'login/'; // some times not navigating in macOS
-                    // after logout white screen issue so reload windows 
+                    // after logout white screen issue so reload windows
                     this._router.navigate(['/login']);
                     window.location.reload();
                 } else {
@@ -1103,13 +1103,11 @@ export class LoginActions {
         } else {
             this._router.navigate([route], parameter);
         }
-        if (isElectron) {
-            window.location.reload();
-        }
-        if (isCordova) {
+
+        if (isCordova || isElectron) {
             setTimeout(() => {
                 window.location.reload();
-            }, 200);
+            }, 500);
         }
     }
 }
