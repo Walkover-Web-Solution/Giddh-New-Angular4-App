@@ -175,7 +175,7 @@
     justify-content: center;
 }
 
-.status_mobile{
+.status-mobile{
     .d-flex{
         padding: 14px 0;
     }
@@ -186,7 +186,7 @@
         margin-left: 0px;
         margin-top: 5px;
     }
-    .status_mobile{
+    .status-mobile{
         display: flex !important;
         justify-content: space-between !important;
     }
@@ -278,7 +278,7 @@
 }
 
 @media (max-width: 445px) {
-    .status_mobile{
+    .status-mobile{
         display: block !important;
     }
 
@@ -296,7 +296,7 @@
 }
 
 @media (max-width:768px) and (min-width:445px){
-    .status_mobile::before{
+    .status-mobile::before{
         display:flex;
         align-items: center;
     }

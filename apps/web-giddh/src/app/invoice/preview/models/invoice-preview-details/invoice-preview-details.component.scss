@@ -11,7 +11,7 @@
     z-index: -1;
 }
 
-.invoce-controll {
+.invoice-control {
     position: relative;
 }
 
@@ -219,9 +219,14 @@
         margin: 0 auto;
         color: #ff0d0d;
     }
-    .image-preview {
-        width: 100%;
+
+    .image-expand{
+        .image-preview {
+            width: 100%;
+            padding: 50px;
+        }
     }
+    
     .preview-not-supported-attachment {
         font-size: 18px;
         margin: 16px;
@@ -447,7 +452,7 @@ label.labeled {
     position: absolute;
     right: 0px;
     font-size: 14px;
-    margin-right:15px;
+    margin: 15px;
     top:0;
     a{
         color: $gray;
@@ -455,6 +460,10 @@ label.labeled {
             margin-right: 5px;
         }
     }
+}
+
+.collapse-icon{
+    transform: rotate(180deg);
 }
 
 @keyframes loading {
@@ -546,6 +555,7 @@ label.labeled {
     position: relative;
     align-items: center;
     justify-content: center;
+    margin: 25px auto !important;
 }
 
 .max500 {

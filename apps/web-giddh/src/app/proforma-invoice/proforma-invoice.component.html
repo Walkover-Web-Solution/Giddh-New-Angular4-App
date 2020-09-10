@@ -131,7 +131,7 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">{{ option.value }}</div>
+                                                                <div class="item-unq">{{ option.value }}</div>
                                                             </a>
                                                         </ng-template>
 
@@ -585,7 +585,7 @@
                                                         <span><input type="checkbox" [checked]="linkedPO && linkedPO.includes(option.value)" [value]="option.value"></span>&nbsp;
                                                         <span>
                                                             <div class="item">{{ option.label }}</div>
-                                                            <div class="item_unq" *ngIf="option.additional?.amount">
+                                                            <div class="item-unq" *ngIf="option.additional?.amount">
                                                                 Amount: {{ option.additional?.amount }}
                                                             </div>
                                                         </span>
@@ -622,10 +622,10 @@
                                                         <a href="javascript:void(0)" class="list-item sh-template">
                                                             <div class="item">{{ option.label }}
                                                             </div>
-                                                            <div class="item_unq">
+                                                            <div class="item-unq">
                                                                 (Dated: {{ option.additional?.voucherDate}})
                                                             </div>
-                                                            <div class="item_unq">
+                                                            <div class="item-unq">
                                                                 (Due:
                                                                 {{ option.additional?.balanceDue?.amountForAccount | giddhCurrency }})
                                                             </div>
@@ -1085,7 +1085,7 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">
+                                                                <div class="item-unq">
                                                                     {{ option.additional?.uniqueName }}</div>
                                                             </a>
                                                         </ng-container>
@@ -1093,7 +1093,7 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">
+                                                                <div class="item-unq">
                                                                     {{ option.additional?.uniqueName }}</div>
                                                                 <div class="item_stock">Stock:
                                                                     {{ option.additional?.stock.uniqueName }}</div>
@@ -1696,7 +1696,7 @@
                                                                                     style="border-bottom: 1px solid #ccc;">
                                                                                     <div class="item">{{ option.label }}
                                                                                     </div>
-                                                                                    <div class="item_unq">
+                                                                                    <div class="item-unq">
                                                                                         {{ option.value }}
                                                                                     </div>
                                                                                 </a>
@@ -1966,7 +1966,7 @@
                                                                     <a href="javascript:void(0)" class="list-item"
                                                                         style="border-bottom: 1px solid #ccc;">
                                                                         <div class="item">{{ option.label }}</div>
-                                                                        <div class="item_unq">
+                                                                        <div class="item-unq">
                                                                             {{ option.additional?.uniqueName }}</div>
                                                                     </a>
                                                                 </ng-container>
@@ -1974,7 +1974,7 @@
                                                                     <a href="javascript:void(0)" class="list-item"
                                                                         style="border-bottom: 1px solid #ccc;">
                                                                         <div class="item">{{ option.label }}</div>
-                                                                        <div class="item_unq">
+                                                                        <div class="item-unq">
                                                                             {{ option.additional?.uniqueName }}</div>
                                                                         <div class="item_stock">Stock:
                                                                             {{ option.additional?.stock.uniqueName }}
@@ -2542,7 +2542,7 @@
                                                                 <a href="javascript:void(0)" class="list-item"
                                                                     style="border-bottom: 1px solid #ccc;">
                                                                     <div class="item">{{ option.label }}</div>
-                                                                    <div class="item_unq">{{ option.value }}</div>
+                                                                    <div class="item-unq">{{ option.value }}</div>
                                                                 </a>
                                                             </ng-template>
                                                         </sh-select>
@@ -2924,7 +2924,7 @@
                             <ng-template #optionTemplate1 let-option="option">
                                 <a href="javascript:void(0)" class="list-item">
                                     <div class="item">AR2019374-3</div>
-                                    <div class="item_unq">
+                                    <div class="item-unq">
                                         <p class="font-12 text-gray mb-0">(Dated: 20/01/2020)</p>
                                         <p class="font-12 text-gray mb-0">(Amount: ₹5,000.00)</p>
                                     </div>
@@ -2958,7 +2958,7 @@
                             <ng-template #optionTemplate1 let-option="option">
                                 <a href="javascript:void(0)" class="list-item">
                                     <div class="item">AR2019374-3</div>
-                                    <div class="item_unq">
+                                    <div class="item-unq">
                                         <p class="font-12 text-gray mb-0">(Dated: 20/01/2020)</p>
                                         <p class="font-12 text-gray mb-0">(Amount: ₹5,000.00)</p>
                                     </div>

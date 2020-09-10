@@ -38,7 +38,7 @@
                                                 <ng-template #optionTemplate let-option="option">
                                                     <a href="javascript:void(0)" class="list-item">
                                                         <div class="item">{{ option.label }}</div>
-                                                        <div class="item_unq">{{ option.value }}</div>
+                                                        <div class="item-unq">{{ option.value }}</div>
                                                     </a>
                                                 </ng-template>
 
@@ -563,14 +563,14 @@
                                             <ng-container *ngIf="!option.additional?.stock">
                                                 <a href="javascript:void(0)" class="list-item">
                                                     <div class="item">{{ option.label }}</div>
-                                                    <div class="item_unq">
+                                                    <div class="item-unq">
                                                         {{ option.additional?.uniqueName }}</div>
                                                 </a>
                                             </ng-container>
                                             <ng-container *ngIf="option.additional?.stock">
                                                 <a href="javascript:void(0)" class="list-item">
                                                     <div class="item">{{ option.label }}</div>
-                                                    <div class="item_unq">
+                                                    <div class="item-unq">
                                                         {{ option.additional?.uniqueName }}</div>
                                                     <div class="item_stock">Stock:
                                                         {{ option.additional?.stock.uniqueName }}</div>
@@ -1142,14 +1142,14 @@
                                                     <ng-container *ngIf="!option.additional?.stock">
                                                         <a href="javascript:void(0)" class="list-item">
                                                             <div class="item">{{ option.label }}</div>
-                                                            <div class="item_unq">
+                                                            <div class="item-unq">
                                                                 {{ option.additional?.uniqueName }}</div>
                                                         </a>
                                                     </ng-container>
                                                     <ng-container *ngIf="option.additional?.stock">
                                                         <a href="javascript:void(0)" class="list-item">
                                                             <div class="item">{{ option.label }}</div>
-                                                            <div class="item_unq">
+                                                            <div class="item-unq">
                                                                 {{ option.additional?.uniqueName }}</div>
                                                             <div class="item_stock">Stock:
                                                                 {{ option.additional?.stock.uniqueName }}
