@@ -7,7 +7,7 @@
     <!-- region gstr1 -->
     <div class="list-style row" *ngIf="selectedGst === 'gstr1'">
 
-        <div class="wrap-GSTR-1-title col-sm-6 col-xs-12 xs-mb-1">
+        <div class="wrap-GSTR-1-title col-lg-6 col-md-12 col-xs-12 xs-mb-1">
             <a href="javascript:void(0);" [routerLink]="['/gstfiling']" class="ember-view">
                 <img src="{{imgPath}}back.svg" class="icon icon-sm text-middle" />
             </a>
@@ -32,14 +32,14 @@
 
 
 
-        <div class="col-sm-6 col-xs-12">
+        <div class="col-lg-6 col-md-12 col-xs-12">
             <ul class="list-inline list-middle download-drop-down">
                 <!-- <li>
             <a href="javscript:void(0)" [routerLink]="['error-sheet']" class="btn grey_clr"><img src="assets/images/gst/error-link.svg" alt=""> Error Sheet</a>
         </li> -->
                 <li>
                     <div class="btn-group" dropdown #dropdown="bs-dropdown">
-                        <button dropdownToggle type="button" class="btn dropdown-toggle btn-pink"><i
+                        <button dropdownToggle type="button" class="btn dropdown-toggle btn-pink mr-0"><i
                                 class="icon-download"></i> Download
                         </button>
                         <ul id="dropdown-menu_gstr1" *dropdownMenu class="dropdown-menu dropdown-menu-right mt-3"

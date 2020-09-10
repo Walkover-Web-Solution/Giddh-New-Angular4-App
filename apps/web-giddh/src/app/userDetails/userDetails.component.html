@@ -5,11 +5,11 @@
         <!-- start auth tab tab -->
         <tab heading="Auth Key" [active]="activeTab == 'auth-key'" (selectTab)="onTabChanged('auth-key')">
             <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'auth-key'">
-                <div class="box clearfix mrT2">
+                <div class="box clearfix mt-1">
                     <h1 class="section-head pdT0">Main Auth-key</h1>
                     <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
                         <div class="form-group row">
-                            <div class="col-12 col-sm-12 col-md-6">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                                 <input id="authKey" class="form-control" name="userAuthKey" [(ngModel)]="userAuthKey" [readonly]="true" />
                             </div>
                         </div>
@@ -24,7 +24,7 @@
         <!-- end of auth tab tab -->
         <tab heading="Mobile Number" [active]="activeTab == 'mobile-number'" (selectTab)="onTabChanged('mobile-number');">
             <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'mobile-number'">
-                <div class="box clearfix mrT2">
+                <div class="box clearfix mt-1">
                     <form class="" name="mobileForm" novalidate>
                         <h1 class="section-head">Add/Edit Mobile Number</h1>
                         <div class="mrT">
@@ -128,14 +128,14 @@
         <!-- start session tab tab -->
         <tab heading="Session" [active]="activeTab == 'session'" (selectTab)="onTabChanged('session')">
             <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'session'">
-                <div class="box clearfix mrT2">
+                <div class="box clearfix mt-1">
                     <div class="max900 d-flex pdB1  activity-title">
                         <h1 class="section-head pdT0">Activity History</h1>
-                        <button class="btn btn-primary " (click)="clearAllSession()">Delete All</button>
+                        <button class="btn btn-primary mr-0" (click)="clearAllSession()">Delete All</button>
                     </div>
                     <p class="grey_clr max900 ">Access and manage your activity history details from anywhere at anytime. This will help you to monitor all your account access.</p>
-                    <div class="max900  mrT1">
-                        <table class="table-bordered basic table">
+                    <div class="max900 mt-15">
+                        <table class="table table-bordered session-table basic on-mobile-view">
                             <thead>
                                 <tr>
                                     <th>IP Address</th>
@@ -148,12 +148,12 @@
                             </thead>
                             <tbody *ngIf="userSessionList.length">
                                 <tr *ngFor="let session of userSessionList; index as sessionIndex">
-                                    <td>{{ session.ipAddress }}</td>
-                                    <td>{{ moment(session.createdAt).format('DD/MM/YYYY') }}</td>
-                                    <td>{{ moment(session.createdAt).format('LTS') }}</td>
-                                    <td>{{moment(session.createdAt).subtract(moment(), 'days')}}</td>
-                                    <td> {{ session.userAgent }}</td>
-                                    <td class="ico-btn text-center">
+                                    <td data-title="IP Address">{{ session.ipAddress }}</td>
+                                    <td data-title="Signin Date">{{ moment(session.createdAt).format('DD/MM/YYYY') }}</td>
+                                    <td data-title="Signin Time">{{ moment(session.createdAt).format('LTS') }}</td>
+                                    <td data-title="Duration (DD/HH/MM/SS)">{{moment(session.createdAt).subtract(moment(), 'days')}}</td>
+                                    <td data-title="Browser Agent"> {{ session.userAgent }}</td>
+                                    <td data-title="Action" class="ico-btn text-center">
                                         <span *ngIf="userSessionId === session.sessionId">Current</span>
                                         <button type="button" class="btn btn-xs" (click)="deleteSession(session.sessionId, sessionIndex)" *ngIf="userSessionId !== session.sessionId">
                                             <i class="icon-trash" aria-hidden="true" tooltip="Delete"></i>

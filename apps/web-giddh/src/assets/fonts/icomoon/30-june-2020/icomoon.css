@@ -26,7 +26,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-advance-search:before {
+.icon-advance-filter:before {
   content: "\e907";
 }
 .icon-calender:before {

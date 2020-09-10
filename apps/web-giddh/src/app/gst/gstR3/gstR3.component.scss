@@ -526,3 +526,22 @@ ul#dropdown-menu {
         padding-left: 5px;
     }
 }
+.gstr-summary-head{
+    padding: 15px;
+    height:65px;
+}
+@media(max-width:991px){
+    .gstr-summary-head{
+        .dropdown{
+            float: right;
+        }
+        .download-authenticate-btn{
+            float: none;
+            margin-top: 8px;
+        }
+        .month-picker {
+            right: 0 !important;
+            left: auto !important;
+        }
+    }
+}

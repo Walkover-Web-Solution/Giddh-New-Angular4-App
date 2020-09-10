@@ -1,0 +1,47 @@
+@import '../../assets/css/color.scss';
+
+.backup-data {
+    padding: 10px 0px;
+    border-bottom: 1px solid $gainsboro;
+    font-weight: 500;
+    color: $black;
+}
+.main-container-import-export {
+    height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    h2{
+        font-size: 36px;
+    }
+}
+.import-card,
+.export-card {
+    padding: 40px 67px;
+    margin: 0 15px;
+    border-radius: 2px;
+    border: 1px solid $gainsboro;
+    background: $alice-blue;
+    width: 50%;
+    text-align: center;
+    transition: 0.5s all ease;
+}
+.import-export-icon {
+    width: 90px;
+    height: 90px;
+    background: $whisper-color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 90px;
+    font-size: 34px;
+    color: $dark-gray;
+    margin: 0 auto 20px;
+}
+@media(max-width:991px){
+    .main-container-import-export {
+     h2{
+         font-size: 22px;
+     }
+    }
+}

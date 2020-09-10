@@ -67,7 +67,7 @@
     </table>
 </div>
 <div *ngIf="(branches$ | async)?.length > 0">
-    <div class="branch-card-view mt-2" *ngIf="branchViewType === 'card'">
+    <div class="branch-card-view mt-3" *ngIf="branchViewType === 'card'">
         <div class="row">
             <div class="col-md-6 col-lg-4 col-sm-12" *ngFor="let branch of branches$ | async">
                 <div class="branch-card">

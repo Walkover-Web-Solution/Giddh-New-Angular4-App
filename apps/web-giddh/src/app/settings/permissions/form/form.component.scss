@@ -25,13 +25,16 @@
 }
 .permissionForm {
     .form-group {
-        width: 188px;
+        width: 100%;
         display: inline-block;
-        margin: 0 10px;
+        margin: 0;
         position: relative;
         .btn-group {
-            width: 188px;
+            width: 100%;
         }
+    }
+    .add-btn{
+        width: auto !important;
     }
 }
 
@@ -102,6 +105,14 @@ i.icon-cross {
     .create-btn {
         float: none !important;
         margin-top: 10px;
+    }
+    .permissionForm {
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .pr-0{
+            padding-right: 15px !important;
+        }
     }
 }
 

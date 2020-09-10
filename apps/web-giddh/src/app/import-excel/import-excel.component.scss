@@ -112,3 +112,12 @@
 .has-error .form-control {
     border-color: red !important;
 }
+@media(max-width:991px){
+    .import_type {
+       flex-wrap: wrap;
+       li{
+            width: 27%;
+            margin: 0 15px 30px;
+       }
+    }
+}

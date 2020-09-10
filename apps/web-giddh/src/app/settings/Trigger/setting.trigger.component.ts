@@ -52,7 +52,8 @@ const taxDuration = [
 
 @Component({
     selector: 'setting-trigger',
-    templateUrl: './setting.trigger.component.html'
+    templateUrl: './setting.trigger.component.html',
+    styleUrls: [`./setting.trigger.component.scss`]
 })
 export class SettingTriggerComponent implements OnInit {
 

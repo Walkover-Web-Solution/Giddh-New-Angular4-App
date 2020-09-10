@@ -3,7 +3,7 @@
 
         <div class="table-responsive table-sgt">
 
-            <table class="table basic table-bordered custom-table">
+            <table class="table basic table-bordered custom-table on-mobile-view">
 
                 <thead>
                     <tr>
@@ -33,10 +33,10 @@
 
                 <tbody>
                     <tr *ngFor="let item of filteredTransactions; let i = index">
-                        <td>{{i + 1}}</td>
-                        <td class="nowrap">{{item.number}}</td>
-                        <td class="nowrap">{{item.type}}</td>
-                        <td>{{item.messages}}</td>
+                        <td data-title="#">{{i + 1}}</td>
+                        <td data-title="Invoice / Voucher Number" class="nowrap">{{item.number}}</td>
+                        <td data-title="Type" class="nowrap">{{item.type}}</td>
+                        <td data-title="Messages">{{item.messages}}</td>
                     </tr>
                 </tbody>
 
