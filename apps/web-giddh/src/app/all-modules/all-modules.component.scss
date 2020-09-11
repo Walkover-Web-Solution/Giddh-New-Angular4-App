@@ -11,3 +11,11 @@
 .coming-soon-report {
   color: $dark-gray !important;
 }
+.single-report-list{
+    min-height: 300px;
+}
+@media(max-width:767px){
+    .single-report-list{
+        min-height: auto;
+    }
+}
