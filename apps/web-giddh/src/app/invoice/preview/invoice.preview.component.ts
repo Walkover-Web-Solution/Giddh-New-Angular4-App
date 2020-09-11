@@ -309,7 +309,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public openModal(template: TemplateRef<any>): void {
         this.modalRef = this.modalService.show(template);
     }
-    
+
     public ngOnInit() {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
@@ -717,7 +717,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.selectedInvoice = null;
         }
 
-        if(changes['refreshPurchaseBill'] && (changes['refreshPurchaseBill'].currentValue && changes['refreshPurchaseBill'].currentValue !== changes['refreshPurchaseBill'].previousValue) || changes['refreshPurchaseBill'].firstChange) {
+        if(changes['refreshPurchaseBill'] && ((changes['refreshPurchaseBill'].currentValue && changes['refreshPurchaseBill'].currentValue !== changes['refreshPurchaseBill'].previousValue) || changes['refreshPurchaseBill'].firstChange)) {
             this.resetRefreshPurchaseBill.emit(false);
             this.getVoucher(false);
         }
