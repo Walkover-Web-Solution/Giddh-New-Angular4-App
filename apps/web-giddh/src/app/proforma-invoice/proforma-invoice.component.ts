@@ -5001,7 +5001,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (transaction.quantity !== undefined) {
             transaction.quantity = Number(transaction.quantity);
 
-            if(transaction.maxQuantity !== undefined) {
+            if(this.isPurchaseInvoice && transaction.maxQuantity !== undefined) {
                 if(transaction.quantity > transaction.maxQuantity) {
                     transaction.quantity = transaction.maxQuantity;
                     this._toasty.errorToast("Quantity can't be more than " + transaction.maxQuantity);
