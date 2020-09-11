@@ -166,13 +166,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.getVoucherVersions();
             }
 
-            if (this.selectedItem.voucherType === VoucherTypeEnum.purchase) {
-                this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account.uniqueName, this.selectedItem.uniqueName).subscribe((res: any) => {
-                    if (res && res.body) {
-                        this.purchaseOrderNumbers = res.body.purchaseOrderDetails;
-                    }
-                });
-            }
+            this.getLinkedPurchaseOrders();
         }
 
         this.store.pipe(select(s => s.proforma.activeVoucherVersions), takeUntil(this.destroyed$)).subscribe((versions => {
@@ -296,6 +290,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             this.getVoucherVersions();
         }
         this.showEditMode = false;
+        this.getLinkedPurchaseOrders();
     }
 
     // public openModal(template: TemplateRef<any>) {
@@ -713,5 +708,21 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             return;
         }
         saveAs(this.attachedDocumentBlob, 'purchaseorder.pdf');
+    }
+
+    /**
+     * This will get the linked purchase orders
+     *
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public getLinkedPurchaseOrders(): void {
+        this.purchaseOrderNumbers = [];
+        if (this.selectedItem.voucherType === VoucherTypeEnum.purchase) {
+            this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account.uniqueName, this.selectedItem.uniqueName).subscribe((res: any) => {
+                if (res && res.body) {
+                    this.purchaseOrderNumbers = res.body.purchaseOrderDetails;
+                }
+            });
+        }
     }
 }

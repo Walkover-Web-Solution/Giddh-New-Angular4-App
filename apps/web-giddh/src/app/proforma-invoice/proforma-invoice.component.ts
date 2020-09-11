@@ -4601,7 +4601,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             voucherDetails.customerName = result.account.name;
         }
 
-        if (this.isPurchaseInvoice) {
+        if (this.isPurchaseInvoice && !this.copyPurchaseBill) {
             voucherClassConversion.purchaseOrderDetails = result.purchaseOrderDetails;
 
             if(voucherClassConversion.purchaseOrderDetails && voucherClassConversion.purchaseOrderDetails.length > 0) {

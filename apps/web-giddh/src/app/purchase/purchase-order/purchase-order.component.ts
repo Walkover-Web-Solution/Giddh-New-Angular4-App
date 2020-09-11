@@ -704,4 +704,16 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         this.bulkUpdateGetParams.action = "";
         this.bulkUpdatePostParams = { purchaseNumbers: [], purchaseDate: '', dueDate: '', warehouseUniqueName: '' };
     }
+
+    /**
+     * This will format number so it becomes positive from negative
+     *
+     * @param {number} dueDays
+     * @returns {number}
+     * @memberof PurchaseOrderComponent
+     */
+    public formatNumber(dueDays: number): number {
+        dueDays = Math.abs(dueDays);
+        return dueDays;
+    }
 }
