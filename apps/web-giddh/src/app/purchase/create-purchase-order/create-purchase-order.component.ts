@@ -2870,7 +2870,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         
         this.modalRef = this.modalService.show(
             template,
-            Object.assign({}, { class: 'modal-sm' })
+            Object.assign({}, { class: 'modal-lg' })
         );
     }
 
