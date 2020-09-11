@@ -220,11 +220,13 @@
         color: #ff0d0d;
     }
 
-    .image-expand{
-        .image-preview {
-            width: 100%;
-            padding: 50px;
-        }
+    .image-collapsed{
+        height: 400px;
+    }
+
+    .img-expand {
+        width: 100%;
+        padding: 50px;
     }
     
     .preview-not-supported-attachment {
@@ -1114,8 +1116,4 @@ strong {
     .po-preview-modal {
         width: 1003px !important;
     }
-}
-
-.image-collapsed {
-    height: 400px;
 }

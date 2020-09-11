@@ -340,7 +340,7 @@
 
                             <div *ngIf="!shouldShowUploadAttachment" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
                                 <img *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')"
-                                    class="image-preview" [src]="imagePreviewSource"/>
+                                    class="image-preview img-expand" [src]="imagePreviewSource"/>
                             </div>
                             <div *ngIf="shouldShowUploadAttachment"
                                 class="upload-excel max500 center-block box dashed-bdr">
