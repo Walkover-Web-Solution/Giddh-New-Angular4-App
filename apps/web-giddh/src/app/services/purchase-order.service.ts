@@ -198,10 +198,10 @@ export class PurchaseOrderService {
      * This will get the PDF
      *
      * @param {*} getRequestObject
-     * @returns {any}
+     * @returns {Observable<BaseResponse<any, any>>}
      * @memberof PurchaseOrderService
      */
-    public getPdf(getRequestObject: any): any {
+    public getPdf(getRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_PDF;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
         url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);

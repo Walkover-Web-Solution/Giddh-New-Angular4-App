@@ -139,10 +139,10 @@ export class PurchaseRecordService {
      * This will get the PDF
      *
      * @param {*} requestObject
-     * @returns {any}
+     * @returns {Observable<BaseResponse<any, any>>}
      * @memberof PurchaseRecordService
      */
-    public getPdf(requestObject: any): any {
+    public getPdf(requestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_RECORD_API.GET_PDF;
         url = url.replace(':companyUniqueName', requestObject.companyUniqueName);
         url = url.replace(':accountUniqueName', requestObject.accountUniqueName);
