@@ -1142,6 +1142,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
                             this.isRcmEntry = (results[0]) ? results[0].subVoucher === SubVoucher.ReverseCharge : false;
                             obj = cloneDeep(convertedRes1) as VoucherClass;
+                            this.assignCompanyBillingShipping(obj.companyDetails);
                         } else {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
                             if (results[0].account.currency) {
@@ -2766,7 +2767,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return res;
     }
 
-    public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false, isLinkedPOItem: boolean = false): any {
+    public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false, isLinkedPoItem: boolean = false): any {
         if ((selectedAcc.value || isBulkItem) && selectedAcc.additional && selectedAcc.additional.uniqueName) {
             let requestObject;
             if (selectedAcc.additional.stock) {
@@ -2787,7 +2788,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                         let maxQuantity = 0;
 
-                        if(isLinkedPOItem) {
+                        if(isLinkedPoItem) {
                             maxQuantity = selectedAcc.additional.maxQuantity;
                         }
 
@@ -2809,7 +2810,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         };
                         txn = this.calculateItemValues(selectedAcc, txn, entry);
 
-                        if(isLinkedPOItem) {
+                        if(isLinkedPoItem) {
                             txn.applicableTaxes = entry.taxList;
                             txn.stockDetails = selectedAcc.stock;
 
@@ -5999,5 +6000,32 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.purchaseBillCompany[type].state.code = null;
         }
         this.checkGstNumValidation(gstVal);
+    }
+
+    /**
+     * This will assign company billing/shipping in deliver to
+     *
+     * @param {*} company
+     * @memberof ProformaInvoiceComponent
+     */
+    public assignCompanyBillingShipping(company: any): void {
+        if(company.billingDetails && company.shippingDetails) {
+            this.purchaseBillCompany = {
+                billingDetails: {
+                    address: company.billingDetails.address,
+                    state: {code: company.billingDetails.stateCode, name: company.billingDetails.stateName},
+                    gstNumber: company.billingDetails.gstNumber,
+                    stateName: company.billingDetails.stateName,
+                    stateCode: company.billingDetails.stateCode
+                },
+                shippingDetails: {
+                    address: company.shippingDetails.address,
+                    state: {code: company.shippingDetails.stateCode, name: company.shippingDetails.stateName},
+                    gstNumber: company.shippingDetails.gstNumber,
+                    stateName: company.shippingDetails.stateName,
+                    stateCode: company.shippingDetails.stateCode
+                }
+            }
+        }
     }
 }
