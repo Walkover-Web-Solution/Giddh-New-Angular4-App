@@ -639,7 +639,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
         ).subscribe(s => {
-            this.invoiceSearchRequest.q = s;
+            this.advanceSearchFilter.purchaseOrderNumber = s;
             this.getVoucher(this.isUniversalDateApplicable);
         });
 
@@ -1029,7 +1029,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this._receiptServices.getAllReceiptBalanceDue(this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected), this.selectedVoucher).subscribe(res => {
             this.parseBalRes(res);
         });
-        // this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi(isUniversalDateSelected), this.prepareModelForInvoiceApi()));
     }
 
     public prepareModelForInvoiceReceiptApi(isUniversalDateSelected): InvoiceReceiptFilter {
@@ -1064,19 +1063,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             model.balanceEqual = true;
         }
 
-        let fromDate = null;
-        let toDate = null;
-        if (this.universalDate && this.universalDate.length && this.isUniversalDateApplicable) {
-            fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-            toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-        }
-
         model.from = o.from;
         model.to = o.to;
         model.count = o.count;
         model.page = o.page;
         if (isUniversalDateSelected || this.showAdvanceSearchIcon) {
-            //model = advanceSearch;
             if (!model.invoiceDate && !model.dueDate) {
                 model.from = this.invoiceSearchRequest.from;
                 model.to = this.invoiceSearchRequest.to;
@@ -1090,6 +1081,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
         if (o.q) {
             model.q = o.q;
+        }
+
+        if (advanceSearch.purchaseOrderNumber) {
+            model.purchaseOrderNumber = advanceSearch.purchaseOrderNumber;
         }
 
         if (advanceSearch && advanceSearch.sortBy) {

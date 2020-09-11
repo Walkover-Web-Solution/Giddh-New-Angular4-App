@@ -798,7 +798,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             if (!this.isUpdateMode && !this.isPendingVoucherType) {
                 this.resetInvoiceForm(this.invoiceForm);
-                if (!this.isMultiCurrencyModule()) {
+                if (!this.isMultiCurrencyModule() && !this.isPurchaseInvoice) {
                     // Hide the warehouse section if the module is other than multi-currency supported modules
                     this.shouldShowWarehouse = false;
                 } else {
@@ -1143,6 +1143,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             this.isRcmEntry = (results[0]) ? results[0].subVoucher === SubVoucher.ReverseCharge : false;
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                             this.assignCompanyBillingShipping(obj.companyDetails);
+                            this.initializeWarehouse(results[0].warehouse);
                         } else {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
                             if (results[0].account.currency) {
@@ -1322,7 +1323,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     } else {
                         this.isCustomerSelected = false;
                     }
-                    if (this.isMultiCurrencyModule()) {
+                    if (this.isMultiCurrencyModule() || this.isPurchaseInvoice) {
                         this.initializeWarehouse();
                     }
                 }
@@ -1810,7 +1811,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isGenDtlCollapsed = false;
         this.isMlngAddrCollapsed = false;
         this.isOthrDtlCollapsed = false;
-        if (this.isMultiCurrencyModule()) {
+        if (this.isMultiCurrencyModule() || this.isPurchaseInvoice) {
             this.initializeWarehouse();
         }
 
@@ -2974,7 +2975,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             transaction.stockDetails = _.omit(o.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
             // Stock item, show the warehouse drop down if it is hidden
-            if (this.isMultiCurrencyModule() && !this.shouldShowWarehouse) {
+            if ((this.isMultiCurrencyModule() || this.isPurchaseInvoice) && !this.shouldShowWarehouse) {
                 this.shouldShowWarehouse = true;
                 this.selectedWarehouse = String(this.defaultWarehouse);
             }
@@ -4195,6 +4196,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     newTrxObj.rate = trx.rate;
                     newTrxObj.stockUnit = trx.stockUnit;
 
+                    if(trx.maxQuantity) {
+                        newTrxObj.maxQuantity = trx.maxQuantity;
+                    }
                 } else {
                     newTrxObj.accountUniqueName = trx.accountUniqueName;
                     newTrxObj.fakeAccForSelect2 = trx.accountUniqueName;
@@ -4349,7 +4353,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 salesEntryClass.taxes.push({uniqueName: t});
             });
             if(this.isPurchaseInvoice) {
-                salesEntryClass.poItemMapping = e.poItemMapping;
+                salesEntryClass.purchaseOrderItemMapping = e.purchaseOrderItemMapping;
             }
             e.transactions.forEach(tr => {
                 let transactionClassMul = new TransactionClassMulticurrency();
@@ -4416,7 +4420,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let salesTransactionItemClass = new SalesTransactionItemClass();
             salesEntryClass.tcsTaxList = [];
             salesEntryClass.tdsTaxList = [];
-
             salesEntryClass.transactions = [];
 
             entry.transactions.forEach(t => {
@@ -4473,6 +4476,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     salesTransactionItemClass.stockDetails.skuCode = t.stock.sku;
                     salesTransactionItemClass.stockUnit = t.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName + '#' + t.stock.uniqueName;
+
+                    if(this.isPurchaseInvoice && entry.purchaseOrderLinkSummaries && entry.purchaseOrderLinkSummaries.length > 0) {
+                        entry.purchaseOrderLinkSummaries.forEach(summary => {
+                            if(summary.unusedQuantity) {
+                                salesTransactionItemClass.maxQuantity = summary.unusedQuantity;
+                            }
+                        });
+                    }
                 }
             });
 
@@ -5852,7 +5863,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.invFormData.entries[lastIndex].transactions[transactionLoop].description = entry.description;
                 this.invFormData.entries[lastIndex].discounts = this.parseDiscountFromResponse(entry);
                 this.invFormData.entries[lastIndex].taxList = entry.taxes.map(tax => tax.uniqueName);
-                this.invFormData.entries[lastIndex].poItemMapping = {uniqueName: poUniqueName, entryUniqueName: entry.uniqueName};
+                this.invFormData.entries[lastIndex].purchaseOrderItemMapping = {uniqueName: poUniqueName, entryUniqueName: entry.uniqueName};
 
                 this.onSelectSalesAccount(item, this.invFormData.entries[lastIndex].transactions[transactionLoop], this.invFormData.entries[lastIndex], false, true);
             

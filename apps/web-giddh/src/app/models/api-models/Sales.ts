@@ -233,7 +233,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public taxRenderData: ITaxList[] = [];
     public sku_and_customfields?: string;
     public maxQuantity?: number;
-    public poItemMapping?: { uniqueName: string; entryUniqueName: any; };
+    public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
 
     constructor() {
         super();
@@ -329,7 +329,7 @@ export class SalesEntryClass {
     public tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum;
     public tcsTaxList?: string[];
     public tdsTaxList?: string[];
-    public poItemMapping?: { uniqueName: string; entryUniqueName: any; };
+    public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
 
     constructor() {
         this.transactions = [new SalesTransactionItemClass()];
@@ -345,7 +345,7 @@ export class SalesEntryClass {
         this.otherTaxType = 'tcs';
         this.otherTaxModal = new SalesOtherTaxesModal();
         this.cessSum = 0;
-        this.poItemMapping = { uniqueName: '', entryUniqueName: '' };
+        this.purchaseOrderItemMapping = { uniqueName: '', entryUniqueName: '' };
     }
 
     public staticDefaultDiscount(): LedgerDiscountClass {
@@ -614,7 +614,7 @@ export class SalesEntryClassMulticurrency {
     public voucherNumber: string;
     public voucherType: string;
     public discounts: DiscountMulticurrency[];
-    public poItemMapping?: { uniqueName: string; entryUniqueName: any; };
+    public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
 
     constructor() {
         this.transactions = [];
@@ -627,7 +627,7 @@ export class SalesEntryClassMulticurrency {
         this.voucherNumber = '';
         this.voucherType = '';
         this.discounts = [];
-        this.poItemMapping = { uniqueName: '', entryUniqueName: '' };
+        this.purchaseOrderItemMapping = { uniqueName: '', entryUniqueName: '' };
     }
 }
 

@@ -122,6 +122,11 @@ export class ReceiptService implements OnInit {
         } else if (request.totalLessThan) {
             advanceSearchRequest.grandTotalOperation = PURCHASE_RECORD_GRAND_TOTAL_OPERATION.LESS_THAN;
         }
+
+        if(request.purchaseOrderNumber) {
+            advanceSearchRequest.purchaseOrderNumber = request.purchaseOrderNumber;
+        }
+
         return advanceSearchRequest;
     }
 
