@@ -297,7 +297,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private location: Location,
         private settingsProfileService: SettingsProfileService
     ) {
-        this.getCurrentCompanyData();
         /* This will get the date range picker configurations */
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
             if (config) {
@@ -470,6 +469,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        this.getCurrentCompanyData();
+        
         this._breakpointObserver.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
