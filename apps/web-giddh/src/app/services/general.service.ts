@@ -540,6 +540,17 @@ export class GeneralService {
     }
 
     /**
+     * This will replace underscore by space in string
+     *
+     * @param {*} type
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getRevisionField(type: any): string {
+        return type.replace(/_/g, " ");
+    }
+    
+    /**
      * Returns the account category
      *
      * @param {*} account Account object

@@ -131,7 +131,7 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">{{ option.value }}</div>
+                                                                <div class="item-unq">{{ option.value }}</div>
                                                             </a>
                                                         </ng-template>
 
@@ -449,7 +449,7 @@
                             </div>
                             <!-- endregion-->
                             <!-- warehouse selection -->
-                            <div class="row mTB1" *ngIf="shouldShowWarehouse">
+                            <div class="row mTB1" *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1">
                                 <div class="col-sm-2">
                                     <label>Warehouse</label>
                                 </div>
@@ -463,124 +463,141 @@
                                 </div>
                             </div>
                             <!-- end warehouse field -->
-
-                            <!--
-                                Delivery from DIV for purchase record page
-                                <div class="row mb-1 delivery-from-field">
+                            
+                            <div class="row mb-1 delivery-from-field" *ngIf="isPurchaseInvoice">
                                 <div class="col-sm-2">
-                                    <label>Deliver From<span class="red-text">*</span></label>
+                                    <label>Deliver To<span class="red-text">*</span></label>
                                 </div>
-
                                 <div class="col-sm-9 select-customer-name">
                                     <section class="form-inline">
-
                                         <div class="wrap-billing-address clearfix">
-
                                             <div class="row">
-
+                                                <!-- region billing address -->
                                                 <div class="col-sm-6 bill-add">
-
                                                     <div class="form-group">
                                                         <label>Billing Address</label>
-
                                                         <div class="billing-address clearfix">
-                                                            <textarea name="billingDetails.address" class="form-control"
-                                                                rows="3" autocomplete="off" autofocus="off"
+                                                            <textarea name="companyBillingDetailsAddress"
+                                                                (keyup)="autoFillCompanyShippingDetails()"
+                                                                [(ngModel)]="purchaseBillCompany.billingDetails.address[0]"
+                                                                class="form-control" rows="3" autocomplete="off" autofocus="off"
                                                                 aria-autocomplete="none"></textarea>
-
                                                             <div>
-                                                                <div class="col-sm-6 pd ">
+                                                                <div class="col-sm-6 pd">
                                                                     <label class="sales-country-label">
-                                                                        India
+                                                                        {{companyCountryName}}
                                                                     </label>
                                                                 </div>
-
-                                                                <div class="col-sm-6 pd" #billingState>
-                                                                    <sh-select [placeholder]="'State'"
-                                                                        class="select-border-bottom">
-                                                                    </sh-select>
+                                                                <div class="col-sm-6 pd" #billingStateCompany>
+                                                                    <sales-sh-select [placeholder]="'State'"
+                                                                        class="select-border-bottom"
+                                                                        (selected)="fillShippingBillingCompanyDetails($event, true); autoFillCompanyShippingDetails()"
+                                                                        [showBottomBorderOnly]="true"
+                                                                        [options]="companyStatesSource"
+                                                                        name="companyBillingDetailsStateCode"
+                                                                        [(ngModel)]="purchaseBillCompany.billingDetails.state.code">
+                                                                    </sales-sh-select>
                                                                 </div>
-
-                                                                <div class="col-sm-12 pd">
-
-                                                                    <input maxLength="15" autocomplete="None"
-                                                                        type="text" name="billingDetails.gstNumber"
+                                                                <div class="col-sm-12 pd"
+                                                                    *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
+                                                                    <input maxlength="15" autocomplete="None" type="text"
+                                                                        name="companyBillingDetailsTax"
+                                                                        [(ngModel)]="purchaseBillCompany.billingDetails.gstNumber"
                                                                         class="form-control input-custom"
-                                                                        placeholder="GSTIN">
-
-
+                                                                        (blur)="autoFillCompanyShippingDetails()"
+                                                                        (change)="getStateCodeCompany('billingDetails', billingStateCompany)"
+                                                                        placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                 </div>
                                                             </div>
-
+        
                                                         </div>
                                                     </div>
-
                                                 </div>
-
+                                                <!-- endregion -->
+        
+                                                <!-- region shipping address -->
                                                 <div class="col-sm-6 bill-add">
-
+        
                                                     <div class="form-group p0 width100">
                                                         <label>
-                                                            <input type="checkbox" autocomplete="None" name=""> Shipping
-                                                            Address
+                                                            <input type="checkbox" autocomplete="None"
+                                                                name="autoFillCompanyShipping"
+                                                                [(ngModel)]="autoFillCompanyShipping"
+                                                                (change)="autoFillCompanyShippingDetails()"> Shipping Address
                                                             Same as Billing Address
                                                         </label>
-
-                                                        <div class="billing-address">
-                                                            <textarea [readonly]="" name="shippingDetails.address"
-                                                                class="form-control" rows="3"
-                                                                autocomplete="off"></textarea>
+                                                        <div
+                                                            [ngClass]="{'billing-address': true, 'disabled': autoFillCompanyShipping}">
+                                                            <textarea name="companyShippingDetailsAddress"
+                                                                [(ngModel)]="purchaseBillCompany.shippingDetails.address[0]"
+                                                                class="form-control" rows="3" autocomplete="off" autofocus="off"
+                                                                aria-autocomplete="none"></textarea>
                                                             <div class="clearfix">
-
                                                                 <div class="form-group">
-
                                                                     <div class="col-sm-6 pd ">
                                                                         <div class="form-group">
-
                                                                             <label class="sales-country-label">
-                                                                                India
+                                                                                {{companyCountryName}}
                                                                             </label>
                                                                         </div>
                                                                     </div>
-
-                                                                    <div class="col-sm-6 pd select-border-bottom">
-                                                                        <sh-select></sh-select>
+                                                                    <div class="col-sm-6 pd" #shippingStateCompany>
+                                                                        <sales-sh-select [placeholder]="'State'"
+                                                                            [disabled]="autoFillCompanyShipping"
+                                                                            class="select-border-bottom"
+                                                                            [ngClass]="{'disabled': autoFillCompanyShipping}"
+                                                                            (selected)="fillShippingBillingCompanyDetails($event, false);"
+                                                                            [showBottomBorderOnly]="true"
+                                                                            [options]="companyStatesSource"
+                                                                            name="companyShippingDetailsStateCode"
+                                                                            [(ngModel)]="purchaseBillCompany.shippingDetails.state.code">
+                                                                        </sales-sh-select>
                                                                     </div>
-
-                                                                    <div class="col-sm-12 pd">
-                                                                        <input [readonly]="" autocomplete="None"
-                                                                            maxLength="15" type="text"
+                                                                    <div class="col-sm-12 pd"
+                                                                        *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
+                                                                        <input maxLength="15" autocomplete="None" type="text"
+                                                                            name="companyShippingDetailsTax"
+                                                                            [(ngModel)]="purchaseBillCompany.shippingDetails.gstNumber"
                                                                             class="form-control input-custom"
-                                                                            placeholder="GSTIN">
-
+                                                                            (change)="getStateCodeCompany('shippingDetails', shippingStateCompany)"
+                                                                            placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                     </div>
-
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <!-- endregion -->
                                             </div>
                                         </div>
                                     </section>
                                 </div>
-
-                            </div> -->
-
-                            <!-- Link purchase order (make it functional)-->
-                            <!-- <div class="row mTB1" hidden>
+                            </div>
+                            <div class="row mTB1" *ngIf="isPurchaseInvoice && (!isUpdateMode || (isUpdateMode && poLinkUpdated))">
                                 <div class="col-sm-2">
                                     <label>Link Purchase Order</label>
                                 </div>
                                 <div class="col-sm-9">
                                     <div class="col-sm-6 pl-0">
-                                        <sh-select></sh-select>
-
+                                        <sh-select [options]="purchaseOrders" placeholder="Select Order" [multiple]="true" name="linkedPO" [(ngModel)]="linkedPo" (selected)="getPurchaseOrder($event, true)" [isFilterEnabled]="true" [useInBuiltFilterForIOptionTypeItems]="true">
+                                            <ng-template #optionTemplate let-option="option">
+                                                <ng-container>
+                                                    <a href="javascript:void(0)" class="list-item d-flex">
+                                                        <span><input type="checkbox" [checked]="linkedPo && linkedPo.includes(option.value)" [value]="option.value"></span>&nbsp;
+                                                        <span>
+                                                            <div class="item">{{ option.label }}</div>
+                                                            <div class="item-unq" *ngIf="option.additional?.amount">
+                                                                Amount: {{ option.additional?.amount }}
+                                                            </div>
+                                                        </span>
+                                                    </a>
+                                                </ng-container>
+                                            </ng-template>
+                                        </sh-select>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                             <!-- end Link purchase order -->
-
 
                             <!-- region invoice no, invoice date, Expiry date -->
                             <div class="row mTB1">
@@ -606,10 +623,10 @@
                                                         <a href="javascript:void(0)" class="list-item sh-template">
                                                             <div class="item">{{ option.label }}
                                                             </div>
-                                                            <div class="item_unq">
+                                                            <div class="item-unq">
                                                                 (Dated: {{ option.additional?.voucherDate}})
                                                             </div>
-                                                            <div class="item_unq">
+                                                            <div class="item-unq">
                                                                 (Due:
                                                                 {{ option.additional?.balanceDue?.amountForAccount | giddhCurrency }})
                                                             </div>
@@ -1069,7 +1086,7 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">
+                                                                <div class="item-unq">
                                                                     {{ option.additional?.uniqueName }}</div>
                                                             </a>
                                                         </ng-container>
@@ -1077,7 +1094,7 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">
+                                                                <div class="item-unq">
                                                                     {{ option.additional?.uniqueName }}</div>
                                                                 <div class="item_stock">Stock:
                                                                     {{ option.additional?.stock.uniqueName }}</div>
@@ -1680,7 +1697,7 @@
                                                                                     style="border-bottom: 1px solid #ccc;">
                                                                                     <div class="item">{{ option.label }}
                                                                                     </div>
-                                                                                    <div class="item_unq">
+                                                                                    <div class="item-unq">
                                                                                         {{ option.value }}
                                                                                     </div>
                                                                                 </a>
@@ -1950,7 +1967,7 @@
                                                                     <a href="javascript:void(0)" class="list-item"
                                                                         style="border-bottom: 1px solid #ccc;">
                                                                         <div class="item">{{ option.label }}</div>
-                                                                        <div class="item_unq">
+                                                                        <div class="item-unq">
                                                                             {{ option.additional?.uniqueName }}</div>
                                                                     </a>
                                                                 </ng-container>
@@ -1958,7 +1975,7 @@
                                                                     <a href="javascript:void(0)" class="list-item"
                                                                         style="border-bottom: 1px solid #ccc;">
                                                                         <div class="item">{{ option.label }}</div>
-                                                                        <div class="item_unq">
+                                                                        <div class="item-unq">
                                                                             {{ option.additional?.uniqueName }}</div>
                                                                         <div class="item_stock">Stock:
                                                                             {{ option.additional?.stock.uniqueName }}
@@ -2526,7 +2543,7 @@
                                                                 <a href="javascript:void(0)" class="list-item"
                                                                     style="border-bottom: 1px solid #ccc;">
                                                                     <div class="item">{{ option.label }}</div>
-                                                                    <div class="item_unq">{{ option.value }}</div>
+                                                                    <div class="item-unq">{{ option.value }}</div>
                                                                 </a>
                                                             </ng-template>
                                                         </sh-select>
@@ -2908,7 +2925,7 @@
                             <ng-template #optionTemplate1 let-option="option">
                                 <a href="javascript:void(0)" class="list-item">
                                     <div class="item">AR2019374-3</div>
-                                    <div class="item_unq">
+                                    <div class="item-unq">
                                         <p class="font-12 text-gray mb-0">(Dated: 20/01/2020)</p>
                                         <p class="font-12 text-gray mb-0">(Amount: ₹5,000.00)</p>
                                     </div>
@@ -2942,7 +2959,7 @@
                             <ng-template #optionTemplate1 let-option="option">
                                 <a href="javascript:void(0)" class="list-item">
                                     <div class="item">AR2019374-3</div>
-                                    <div class="item_unq">
+                                    <div class="item-unq">
                                         <p class="font-12 text-gray mb-0">(Dated: 20/01/2020)</p>
                                         <p class="font-12 text-gray mb-0">(Amount: ₹5,000.00)</p>
                                     </div>

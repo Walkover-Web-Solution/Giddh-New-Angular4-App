@@ -11,12 +11,13 @@
     z-index: -1;
 }
 
-.invoce-controll {
+.invoice-control {
     position: relative;
 }
 
 .invoiceDetail-header {
     padding-top: 25px;
+    padding-bottom: 25px;
 }
 
 .invoice-modal-content {
@@ -218,9 +219,16 @@
         margin: 0 auto;
         color: #ff0d0d;
     }
-    .image-preview {
-        width: 100%;
+
+    .image-collapsed{
+        height: 400px;
     }
+
+    .img-expand {
+        width: 100%;
+        padding: 50px;
+    }
+    
     .preview-not-supported-attachment {
         font-size: 18px;
         margin: 16px;
@@ -442,6 +450,24 @@ label.labeled {
     overflow-y: auto !important;
 }
 
+.expand-file{
+    position: absolute;
+    right: 0px;
+    font-size: 14px;
+    margin: 15px;
+    top:0;
+    a{
+        color: $gray;
+        span {
+            margin-right: 5px;
+        }
+    }
+}
+
+.collapse-icon{
+    transform: rotate(180deg);
+}
+
 @keyframes loading {
     from {
         left: 0px;
@@ -509,6 +535,10 @@ label.labeled {
         .aqua-color {
             color: $deep-sky-blue;
             cursor: pointer;
+            span{
+                color: $very-light-gray;
+                margin:0 10px;
+            }
         }
     }
 }
@@ -527,6 +557,7 @@ label.labeled {
     position: relative;
     align-items: center;
     justify-content: center;
+    margin: 25px auto !important;
 }
 
 .max500 {
@@ -1078,5 +1109,11 @@ strong {
     .invoice-modal-content:after,
     .invoice-modal-content {
         top: 121px;
+    }
+}
+
+@media (min-width: 992px){
+    .po-preview-modal {
+        width: 1003px !important;
     }
 }

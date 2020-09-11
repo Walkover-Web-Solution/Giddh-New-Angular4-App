@@ -38,7 +38,7 @@
                                                 <ng-template #optionTemplate let-option="option">
                                                     <a href="javascript:void(0)" class="list-item">
                                                         <div class="item">{{ option.label }}</div>
-                                                        <div class="item_unq">{{ option.value }}</div>
+                                                        <div class="item-unq">{{ option.value }}</div>
                                                     </a>
                                                 </ng-template>
 
@@ -51,14 +51,6 @@
                                                 </ng-template>
 
                                             </sales-sh-select>
-                                            <!-- endregion -->
-                                            <!-- <div hidden>
-                                                <p><small>Pending Purchase order of selected vendor</small></p>
-                                                <p class="font-14"><a href="javascript(void)">PO84709832 |</a>
-                                                    <a href="javascript(void)"> PO02948023 |</a>
-
-                                                </p>
-                                            </div> -->
                                             <!-- region Unregistered Business / customer details -->
                                             <div class="d-flex aqua-color"
                                                 *ngIf="purchaseOrder.voucherDetails.customerName">
@@ -69,6 +61,10 @@
                                                 </span>
                                             </div>
                                             <!-- endregion -->
+                                            <div *ngIf="purchaseOrders && purchaseOrders.length > 0">
+                                                <p><small>Pending Purchase order of selected vendor</small></p>
+                                                <p class="font-14"><a href="javascript:;" (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order.uniqueName, order.vendor.uniqueName)" *ngFor="let order of purchaseOrders; let i = index;">{{order.voucherNumber}}<span *ngIf="checkIfPipeSymbolRequired(i)">&nbsp;|&nbsp;</span></a></p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -203,7 +199,7 @@
             </div>
             <div class="customer-purchase-table bg-white pdB2 pdT2">
                 <div class="inner-container">
-                    <div class="row mb-1" *ngIf="shouldShowWarehouse">
+                    <div class="row mb-1" *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1">
                         <!-- region customer name -->
                         <div class="col-sm-2">
                             <label>Warehouse<span class="red-text">*</span></label>
@@ -567,14 +563,14 @@
                                             <ng-container *ngIf="!option.additional?.stock">
                                                 <a href="javascript:void(0)" class="list-item">
                                                     <div class="item">{{ option.label }}</div>
-                                                    <div class="item_unq">
+                                                    <div class="item-unq">
                                                         {{ option.additional?.uniqueName }}</div>
                                                 </a>
                                             </ng-container>
                                             <ng-container *ngIf="option.additional?.stock">
                                                 <a href="javascript:void(0)" class="list-item">
                                                     <div class="item">{{ option.label }}</div>
-                                                    <div class="item_unq">
+                                                    <div class="item-unq">
                                                         {{ option.additional?.uniqueName }}</div>
                                                     <div class="item_stock">Stock:
                                                         {{ option.additional?.stock.uniqueName }}</div>
@@ -1146,14 +1142,14 @@
                                                     <ng-container *ngIf="!option.additional?.stock">
                                                         <a href="javascript:void(0)" class="list-item">
                                                             <div class="item">{{ option.label }}</div>
-                                                            <div class="item_unq">
+                                                            <div class="item-unq">
                                                                 {{ option.additional?.uniqueName }}</div>
                                                         </a>
                                                     </ng-container>
                                                     <ng-container *ngIf="option.additional?.stock">
                                                         <a href="javascript:void(0)" class="list-item">
                                                             <div class="item">{{ option.label }}</div>
-                                                            <div class="item_unq">
+                                                            <div class="item-unq">
                                                                 {{ option.additional?.uniqueName }}</div>
                                                             <div class="item_stock">Stock:
                                                                 {{ option.additional?.stock.uniqueName }}
@@ -1681,4 +1677,7 @@
             (applyTaxes)="calculateOtherTaxes($event);toggleOtherTaxesAsidePane(true, null);calculateAffectedThingsFromOtherTaxChanges();">
         </app-aside-menu-other-taxes>
     </div>
+</ng-template>
+<ng-template #purchaseOrderPreviewModal>
+    <purchase-order-preview-modal [purchaseOrderUniqueName]="purchaseOrderPreviewUniqueName" [purchaseOrderAccountUniqueName]="purchaseOrderPreviewAccountUniqueName" [purchaseOrderCompanyUniqueName]="selectedCompany?.uniqueName" (closeModelEvent)="closePurchaseOrderPreviewPopup($event)"></purchase-order-preview-modal>
 </ng-template>

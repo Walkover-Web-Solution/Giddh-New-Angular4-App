@@ -1,3 +1,19 @@
-<div class="mt-1">
-    <app-invoice-preview [selectedVoucher]="'purchase'"></app-invoice-preview>
+<div _ngcontent-xlm-c43="" class="invoice-control">
+    <tabset>
+        <tab heading="Purchase Order" [active]="activeTab == 'order'" (select)="onTabChanged('order')">
+            <div>
+                <purchase-order (refreshPurchaseBill)="purchaseOrderOutput($event)"></purchase-order>
+            </div>
+        </tab>
+        <tab heading="Purchase Bill" [active]="activeTab == 'bill'" (select)="onTabChanged('bill')">
+            <div>
+                <app-invoice-preview [selectedVoucher]="'purchase'" [refreshPurchaseBill]="refreshPurchaseBill" (resetRefreshPurchaseBill)="purchaseOrderOutput($event)"></app-invoice-preview>
+            </div>
+        </tab>
+        <tab heading="Settings" [active]="activeTab == 'settings'" (select)="onTabChanged('settings')">
+            <div>
+                <purchase-setting></purchase-setting>
+            </div>
+        </tab>
+    </tabset>
 </div>

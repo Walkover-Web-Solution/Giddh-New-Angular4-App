@@ -503,6 +503,12 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             }
         }
 
+        if('placeholder' in changes) {
+            if (changes.placeholder && changes.placeholder.currentValue) {
+                this.placeholder = changes.placeholder.currentValue;
+            }
+        }
+        
         if ('options' in changes) {
             if (changes.options && changes.options.currentValue) {
                 this.refreshList();

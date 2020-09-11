@@ -20,13 +20,11 @@ import { PurchaseInvoiceComponent } from './purchase-invoice/purchase.invoice.co
 import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
 import { CreatePurchaseOrderComponent } from './create-purchase-order/create-purchase-order.component';
 import { PurchaseOrderPreviewComponent } from './purchase-order-preview/purchase-order-preview.component'
-import { OrderHistoryComponent } from './order-history/order-history.component'
 import { ReconcileDesignComponent } from './purchase-invoice/reconcileDesign/reconcileDesign.component';
 import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
 import { PurchaseSettingComponent } from './purchase-setting/purchase-setting.component';
 import { PurchaseComponent } from './purchase.component';
 import { PurchaseAdvanceSearchComponent } from './purchase-advance-search/purchase-advance-search.component';
-import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
@@ -37,6 +35,7 @@ import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { DiscountControlModule } from '../theme/discount-control/discount-control.module';
 import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
+import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 
 @NgModule({
     declarations: [
@@ -48,10 +47,8 @@ import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.modu
         AsideMenuPurchaseInvoiceSettingComponent,
         ReconcileDesignComponent,
         PurchaseRecordComponent,
-        OrderHistoryComponent,
         PurchaseSettingComponent,
-        PurchaseAdvanceSearchComponent,
-        PurchaseSendEmailModalComponent
+        PurchaseAdvanceSearchComponent
     ],
     imports: [
         PurchaseRoutingModule,
@@ -77,7 +74,8 @@ import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.modu
         NgxMaskModule.forRoot(),
         TaxControlModule,
         DiscountControlModule,
-        ProformaInvoiceModule
+        ProformaInvoiceModule,
+        PdfJsViewerModule
     ],
     entryComponents: [],
     exports: [

@@ -48,10 +48,6 @@
     border-top: 1px solid $gainsboro;
 }
 
-.basic > tbody > tr:hover td {
-    background: rgba(221, 225, 230, 0.5);
-}
-
 .basic {
     background: $white;
 }
@@ -583,7 +579,7 @@ input {
     border-bottom: 5px solid transparent;
 }
 
-.invoce-controll .nav.nav-tabs {
+.invoice-control .nav.nav-tabs {
     margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
     background-color: #f7f8fd;
@@ -593,11 +589,11 @@ input {
     border-color: $gainsboro !important;
 }
 
-.invoce-controll .invoice-nav.navbar-nav > li > a:hover {
+.invoice-control .invoice-nav.navbar-nav > li > a:hover {
     color: $white;
 }
 
-.invoce-controll .invoice-nav.navbar-nav > li > a.active {
+.invoice-control .invoice-nav.navbar-nav > li > a.active {
     background-color: $white;
 }
 
@@ -610,7 +606,7 @@ input {
     padding-top: 15px;
 }
 
-.invoce-controll .nav > li > a {
+.invoice-control .nav > li > a {
     padding: 8px 0px !important;
     margin-right: 35px !important;
     margin-left: 0 !important;
@@ -619,7 +615,13 @@ input {
     color: #262626 !important;
 }
 
-.invoce-controll .nav-tabs > li.active > a {
+.invoice-control .nav > li > a:hover{
+    border-color: transparent !important;;
+    background-color: transparent !important;;
+}
+
+
+.invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid #01a9f4 !important;
     color: #262626 !important;
 }
@@ -668,6 +670,12 @@ input {
     padding: 2px 5px;
     border-radius: 4px;
     right: 0;
+}
+
+.history-btn{
+    .btn{
+        padding: 5px 10px !important;
+    }
 }
 
 .mt-15 {
@@ -3005,6 +3013,9 @@ li.no-click {
     overflow: hidden;
 }
 
+.preview-1 iframe {
+    height: 1234px !important;
+}
 .mandatory-asterisk {
     font-size: 14px;
     top: 0;
@@ -6118,7 +6129,7 @@ virtual-scroll .scrollable-content .item > a {
 virtual-scroll .scrollable-content .item:hover > a {
     color: $chetwode-blue !important;
 }
-virtual-scroll .scrollable-content .item > a .item_unq,
+virtual-scroll .scrollable-content .item > a .item-unq,
 virtual-scroll .scrollable-content .item > a .item_stock {
     color: $moody-blue;
 }
@@ -8493,14 +8504,12 @@ ul.dropdown-menu p.lead.pd {
 }
 
 .nav-tabs > li.active > a,
-.invoce-controll .nav-tabs > li.active > a {
+.invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid $deep-sky-blue !important;
     padding-bottom: 7px !important;
     font-family: $opensans-semibold;
-}
-
-.invoce-controll .nav-tabs > li > a {
-    border-bottom: 4px solid transparent !important;
+    background-color: inherit;
+    border-width: 0px 0 4px 0 !important;
 }
 
 .dropdown-menu > li > a:hover {
@@ -9711,7 +9720,7 @@ span#HW_badge_cont:nth-child(3) {
     .universal-date label.btn.btn-link {
         display: none;
     }
-    .invoce-controll .nav.nav-tabs {
+    .invoice-control .nav.nav-tabs {
         margin-bottom: 28px;
         padding: 0 0px 0 15px !important;
     }
@@ -9936,7 +9945,7 @@ span#HW_badge_cont:nth-child(3) {
     .custom-tabs.hide-header .top-bar {
         margin-top: 0;
     }
-    .invoce-controll .nav.nav-tabs {
+    .invoice-control .nav.nav-tabs {
         padding: 0 0 0 15px !important;
     }
     #setting-tab setting-integration .tab-container .nav.nav-tabs,

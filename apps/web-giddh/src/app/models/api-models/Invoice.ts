@@ -93,6 +93,7 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
     public to?: string;
     public expireFrom?: string;
     public expireTo?: string;
+    public purchaseOrderNumber?: any;
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {

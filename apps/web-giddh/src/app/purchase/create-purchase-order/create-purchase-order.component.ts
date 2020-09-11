@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy, TemplateRef } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { BsModalRef, BsDatepickerDirective, PopoverDirective, ModalDirective } from 'ngx-bootstrap'
+import { BsModalRef, BsDatepickerDirective, PopoverDirective, ModalDirective, BsModalService } from 'ngx-bootstrap'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { IOption } from '../../theme/ng-select/ng-select';
@@ -46,6 +46,7 @@ import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { InvoiceService } from '../../services/invoice.service';
+import { PURCHASE_ORDER_STATUS } from '../../shared/helpers/purchaseOrderStatus';
 
 const THEAD_ARR_READONLY = [
     {
@@ -127,7 +128,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     /* Tax Control instance */
     @ViewChild(TaxControlComponent) public taxControlComponent: TaxControlComponent;
     /* Modal instance */
-    public modelRef: BsModalRef;
+    public modalRef: BsModalRef;
     /* This will hold if it's multi currency account */
     public isMulticurrencyAccount: boolean = false;
     /* This will hold if it's mobile device*/
@@ -298,10 +299,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public originalExchangeRate: any = 1;
     /* This will hold object for time interval */
     public interval: any;
+    /* This will hold the purchase orders */
+    public purchaseOrders: any[] = [];
+    /* This will hold po unique name for preview */
+    public purchaseOrderPreviewUniqueName: string = '';
+    /* This will hold po account unique name for preview */
+    public purchaseOrderPreviewAccountUniqueName: string = '';
     /** Voucher type */
     public invoiceType: VoucherTypeEnum = VoucherTypeEnum.purchase;
 
-    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService) {
+    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService, private modalService: BsModalService) {
         this.getInvoiceSettings();
         this.store.dispatch(this.generalActions.getFlattenAccount());
         this.flattenAccountListStream$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$));
@@ -772,6 +779,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public getAccountDetails(accountUniqueName: string): void {
+        this.getVendorPurchaseOrders(accountUniqueName);
         this.store.dispatch(this.salesAction.getAccountDetailsForSales(accountUniqueName));
     }
 
@@ -2559,7 +2567,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                         }
                     } else {
                         let selectedTax;
-                        if(usedTaxes.indexOf(tax.uniqueName) === -1) {
+                        if (usedTaxes.indexOf(tax.uniqueName) === -1) {
                             usedTaxes.push(tax.uniqueName);
 
                             if (entryTaxes && entryTaxes.length > 0) {
@@ -2599,7 +2607,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
                     let stock = selectedAcc.stocks.find(stock => stock.uniqueName === transaction.stock.uniqueName);
 
-                    if(stock) {
+                    if (stock) {
                         let description = [];
                         let skuCodeHeading = stock.skuCodeHeading ? stock.skuCodeHeading : 'SKU Code';
 
@@ -2808,6 +2816,73 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             let duePeriod: number;
             duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
             this.purchaseOrder.voucherDetails.dueDate = duePeriod > 0 ? moment().add(duePeriod, 'days').toDate() : moment().toDate();
+        }
+    }
+
+    /**
+     * This will get the list of PO by vendor
+     *
+     * @param {*} vendorName
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public getVendorPurchaseOrders(vendorName: any): void {
+        let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, page: 1, from: '', to: '', count: 10, sort: '', sortBy: '' };
+        let purchaseOrderPostRequest = { vendorName: vendorName, statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyReceived, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
+
+        if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
+            this.purchaseOrders = [];
+
+            this.purchaseOrderService.getAll(purchaseOrderGetRequest, purchaseOrderPostRequest).subscribe((res) => {
+                if (res) {
+                    if (res.status === 'success') {
+                        if (res.body && res.body.items) {
+                            this.purchaseOrders = res.body.items;
+                        }
+                    } else {
+                        this.toaster.errorToast(res.message);
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * This will check if we need to show pipe symbol
+     *
+     * @param {number} loop
+     * @returns {boolean}
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public checkIfPipeSymbolRequired(loop: number): boolean {
+        return loop < (this.purchaseOrders.length - 1);
+    }
+
+    /**
+     * This will open the purchase order preview popup
+     *
+     * @param {TemplateRef<any>} template
+     * @param {*} purchaseOrderUniqueName
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public openPurchaseOrderPreviewPopup(template: TemplateRef<any>, purchaseOrderUniqueName: any, accountUniqueName: any): void {
+        this.purchaseOrderPreviewUniqueName = purchaseOrderUniqueName;
+        this.purchaseOrderPreviewAccountUniqueName = accountUniqueName;
+        
+        this.modalRef = this.modalService.show(
+            template,
+            Object.assign({}, { class: 'modal-lg' })
+        );
+    }
+
+    /**
+     * This will close the purchase order preview popup
+     *
+     * @param {*} event
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public closePurchaseOrderPreviewPopup(event: any): void {
+        if (event) {
+            this.modalRef.hide();
         }
     }
 }

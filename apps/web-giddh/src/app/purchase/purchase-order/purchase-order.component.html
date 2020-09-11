@@ -1,5 +1,5 @@
 <div class="container-fluid" *ngIf="!purchaseOrderUniqueName">
-    <div class="d-flex justify-content-between mt-15 purchase-order-header">
+    <div class="d-flex justify-content-between purchase-order-header">
         <div class="d-flex date-advance-search">
             <form #invoiceForm="ngForm" novalidate class="form-inline">
                 <div class="form-group mrR1 d-flex">
@@ -32,14 +32,14 @@
                     </button>
                     <ul *dropdownMenu class="dropdown-menu fixed-dropdown-plus" role="menu"
                         aria-labelledby="button-basic">
-                        <!-- <li role="menuitem">
+                        <li role="menuitem">
                             <a class="dropdown-item cp" href="javascript:void(0)"
                                 (click)="openModalBulkUpdate(template)">Bulk Update</a>
                         </li>
                         <li role="menuitem">
-                            <a class="dropdown-item cp" href="javascript:void(0)">
+                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('create_purchase_bill')">
                                 Convert to bill</a>
-                        </li> -->
+                        </li>
                         <li role="menuitem">
                             <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('expire')">
                                 Expired</a>
@@ -72,15 +72,15 @@
                     <span class="caret"></span>
                 </button>
                 <ul *dropdownMenu class="dropdown-menu fixed-dropdown-plus" role="menu" aria-labelledby="button-basic">
-                    <!-- <li role="menuitem">
+                    <li role="menuitem">
                         <a class="dropdown-item cp" href="javascript:void(0)"
                             (click)="openModalBulkUpdate(template)">Bulk
                             Update</a>
                     </li>
                     <li role="menuitem">
-                        <a class="dropdown-item cp" href="javascript:void(0)">
+                        <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('create_purchase_bill')">
                             Convert to bill</a>
-                    </li> -->
+                    </li>
                     <li role="menuitem">
                         <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('expire')">
                             Expired</a>
@@ -190,9 +190,6 @@
                             <img *ngIf="item.isSelected" src="assets/images/checked.png"
                                 (click)="toggleItem(item, false)" />
                         </div>
-                        <!-- <div class="download-purchase-order">
-                            <i class="icon-download"></i>
-                        </div> -->
                     </td>
                     <td data-title="Date">
                         {{item.voucherDate}}
@@ -207,17 +204,17 @@
                         {{item.grandTotal?.amountForAccount | giddhCurrency}}
                     </td>
                     <td data-title="Expected Delivery">
-                        <span [ngClass]="{'ontime-delivery': item.dueDays > 0, 'late-delivery': item.dueDays < 0}" *ngIf="item.dueDays && item.dueDays <= 7">{{item.dueDays > 0 ? 'Delivery in ' + item.dueDays + ((item.dueDays === 1) ? ' day ' : ' days') : 'Delayed by ' + item.dueDays + ' days' }}</span>
+                        <span [ngClass]="{'ontime-delivery': item.dueDays > 0, 'late-delivery': item.dueDays < 0}" *ngIf="item.dueDays && item.dueDays <= 7">{{item.dueDays > 0 ? 'Delivery in ' + item.dueDays + ((item.dueDays === 1) ? ' day ' : ' days') : 'Delayed by ' + formatNumber(item.dueDays) + ' days' }}</span>
                         <span *ngIf="item.dueDays && item.dueDays > 7">{{item.dueDate}}</span>
                         <span class="ontime-delivery" *ngIf="item.dueDays === 0">Today</span>
                     </td>
-                    <td data-title="status" class="d-flex align-items-center status_mobile pt-0 pb-0">
+                    <td data-title="status" class="d-flex align-items-center status-mobile pt-0 pb-0">
                         <span class="d-flex">
                             {{item.status}}</span>
                         <div class="action-icon ml-15" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
-                            <!-- <a tooltip="Convert to bill">
+                            <a tooltip="Convert to bill" *ngIf="item.status === 'open'" (click)="bulkUpdate('create_purchase_bill', item.voucherNumber)">
                                 <span class="icon-tick font-12"></span>
-                            </a> -->
+                            </a>
                             <a tooltip="Send Email" (click)="openSendMailModal(item, sendEmailModal)">
                                 <span class="icon-envelope font-12"></span>
                             </a>
@@ -267,21 +264,23 @@
                 <div class="d-flex flex-column">
                     <p class="mb-3">Choose a field from the dropdown and update with new information.</p>
                     <div class="d-flex justify-content-between mb-3 modal-form">
-                        <sh-select class="mr-15"></sh-select>
-                        <div class="select-date">
+                        <sh-select class="mr-15" name="bulkUpdate" [(ngModel)]="bulkUpdateGetParams.action" [options]="bulkUpdateFields" [ItemHeight]="33"></sh-select>
+                        <div class="select-date" *ngIf="bulkUpdateGetParams.action === 'purchasedate' || bulkUpdateGetParams.action === 'duedate' || bulkUpdateGetParams.action === 'warehouse'">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Select date">
-                                <span class="input-group-addon">
+                                <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseDate" [(ngModel)]="bulkUpdatePostParams.purchaseDate" placeholder="Select date" *ngIf="bulkUpdateGetParams.action === 'purchasedate'">
+                                <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="dueDate" [(ngModel)]="bulkUpdatePostParams.dueDate" placeholder="Select date" *ngIf="bulkUpdateGetParams.action === 'duedate'">
+                                <span class="input-group-addon" *ngIf="bulkUpdateGetParams.action === 'purchasedate' || bulkUpdateGetParams.action === 'duedate'">
                                     <span class="icon-calender"></span>
                                 </span>
+                                <sh-select name="warehouse" [placeholder]="'Select Warehouse'" [(ngModel)]="bulkUpdatePostParams.warehouseUniqueName" [options]="warehouses" *ngIf="bulkUpdateGetParams.action === 'warehouse'"></sh-select>
                             </div>
                         </div>
                     </div>
                     <p class="mb-3">Note: All the selected Purchase Orders will be updated with new information and you
                         cannot undo this.</p>
                     <div class="btn-group">
-                        <button class="btn btn-success">Update</button>
-                        <button class="btn btn-cancel">Cancel</button>
+                        <button class="btn btn-success" (click)="validateBulkUpdateFields()">Update</button>
+                        <button class="btn btn-cancel" (click)="modalRef.hide()">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -334,5 +333,5 @@
 </div>
 <purchase-order-preview *ngIf="purchaseOrderUniqueName" [purchaseOrders]="purchaseOrders" [companyUniqueName]="purchaseOrderGetRequest.companyUniqueName" [purchaseOrderUniqueName]="purchaseOrderUniqueName"></purchase-order-preview>
 <ng-template #sendEmailModal>
-    <purchase-send-email-modal [sendEmailRequest]="sendEmailRequest" (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
+    <purchase-send-email-modal [module]="'purchase-order'" [sendEmailRequest]="sendEmailRequest" (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
 </ng-template>

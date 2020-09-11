@@ -235,6 +235,6 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      * @memberof PurchaseSettingComponent
      */
     public getRedirectUrl(): string {
-        return AppUrl + 'pages/purchase-management/purchase-settings';
+        return AppUrl + 'pages/purchase-management/purchase/settings';
     }
 }

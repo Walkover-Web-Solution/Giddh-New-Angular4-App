@@ -2,11 +2,11 @@ import { InvoiceFilterClassForInvoicePreview } from './Invoice';
 import { AmountClassMulticurrency, IInvoiceLinkingRequest } from "./Sales";
 
 export class InvoiceReceiptFilter extends InvoiceFilterClassForInvoicePreview {
-
 	public q: any;
 	public sort: any;
 	public sortBy: any;
 	public isLastInvoicesRequest?: boolean = false;
+    public purchaseOrderNumber?: any;
 }
 
 export interface ReciptDeleteRequest {

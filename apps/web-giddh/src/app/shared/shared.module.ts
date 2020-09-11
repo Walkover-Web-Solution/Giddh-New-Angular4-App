@@ -75,6 +75,10 @@ import { AsideSettingComponent } from './header/components/aside-setting/aside-s
 import { DeleteTemplateConfirmationModelComponent } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
 import { DatepickerWrapperComponent } from './datepicker-wrapper/datepicker.wrapper.component';
 import { LoaderComponent } from '../loader/loader.component';
+import { RevisionHistoryComponent } from './revision-history/revision-history.component';
+import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
+import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
+import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -142,7 +146,10 @@ export function provideConfig() {
         ConfirmationModalComponent,
         DeleteTemplateConfirmationModelComponent,
         DatepickerWrapperComponent,
-        LoaderComponent
+        LoaderComponent,
+        RevisionHistoryComponent,
+        PurchaseOrderPreviewModalComponent,
+        PurchaseSendEmailModalComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -179,7 +186,8 @@ export function provideConfig() {
         CKEditorModule,
         NgxMaskModule,
         CommandKModule,
-        NgxDaterangepickerMd.forRoot()
+        NgxDaterangepickerMd.forRoot(),
+        PdfJsViewerModule
     ],
     exports: [
         CommonModule,
@@ -227,7 +235,10 @@ export function provideConfig() {
         NgxDaterangepickerMd,
         DeleteTemplateConfirmationModelComponent,
         DatepickerWrapperComponent,
-        LoaderComponent
+        LoaderComponent,
+        RevisionHistoryComponent,
+        PurchaseOrderPreviewModalComponent,
+        PurchaseSendEmailModalComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
