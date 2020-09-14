@@ -1458,8 +1458,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 grandTotalAmountForAccount;
 
             if (this.selectedVoucher === VoucherTypeEnum.sales && item.balanceDue) {
-                balanceDueAmountForCompany = Number(item.totalBalance) || 0;
-                balanceDueAmountForAccount = Number(item.totalBalance) || 0;
+                balanceDueAmountForCompany = Number(item.totalBalance.amountForCompany) || 0;
+                balanceDueAmountForAccount = Number(item.totalBalance.amountForAccount) || 0;
             }
             if (MULTI_CURRENCY_MODULES.indexOf(this.selectedVoucher) > -1 &&
                 item.grandTotal) {
@@ -1491,7 +1491,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public onPerformAdjustPaymentAction(item: ReceiptItem): void {
         let customerUniqueName = this.getUpdatedAccountUniquename(item.voucherNumber, item.account.uniqueName);
 
-        this.invFormData.voucherDetails.balanceDue = item.totalBalance;
+        this.invFormData.voucherDetails.balanceDue = item.totalBalance.amountForAccount;
         this.invFormData.voucherDetails.grandTotal = item.grandTotal.amountForAccount;
         this.invFormData.voucherDetails.customerName = item.account.name;
         this.invFormData.voucherDetails.customerUniquename = customerUniqueName;
