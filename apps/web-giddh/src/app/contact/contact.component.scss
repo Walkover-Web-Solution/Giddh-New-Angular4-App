@@ -347,7 +347,7 @@ button.btn.btn-filter span.icon-cross {
     margin-right: 5px;
 }
 
-.form-inline {
+.customer-form-inline{
     display: flex !important;
     justify-content: space-between !important;
 }
@@ -434,6 +434,9 @@ button.btn.btn-filter span.icon-cross {
     .top-aging-table-top{
         margin-bottom: 8px;
     }
+    table.on-mobile-view tbody td:before{
+        left: 30px;
+    }
 }
 
 @media (max-width: 767px) {
@@ -456,6 +459,9 @@ button.btn.btn-filter span.icon-cross {
     }
     .customer-form-inline{
         position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: initial;
         .dis {
             position: absolute;
             left: 0;
@@ -497,7 +503,7 @@ button.btn.btn-filter span.icon-cross {
     .customer-name .icon-ellipse {
         top: 8px;
     }
-    .form-inline {
+    .customer-form-inline{
         flex-direction: column;
     }
     .customer-footer-box {

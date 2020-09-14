@@ -1992,7 +1992,7 @@ fieldset[disabled] .btn-primary:hover {
     padding: 7px 10px;
     border-radius: 2px;
     font-size: 14px;
-    margin-right: 8px;
+    margin-right: 15px;
 }
 
 .btn-group-lg > .btn,
@@ -7547,7 +7547,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     font-weight: 300;
     padding-top: 15px;
     font-size: 18px;
-    margin: 0 220px;
+    margin: 0 auto 20px;
+    padding-bottom: 30px;
 }
 
 .icon.icon-xs {
@@ -7998,7 +7999,7 @@ app-header {
 
 /* my css */
 
-.new-ledger-text-right .inputWrapper .form-control {
+.new-ledger-text-right .input-wrapper .form-control {
     text-align: right !important;
 }
 
@@ -8035,7 +8036,7 @@ app-header {
 .sticky-footer.sticky-footer-sale-amount {
     background: $white;
     padding: 10px;
-    box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 0px 6px rgba(0, 0, 0, 0.16);
     text-align: right !important;
 }
 
@@ -9629,6 +9630,9 @@ span#HW_badge_cont:nth-child(3) {
         height: 90px;
         font-size: 14px;
     }
+        .rightBar {
+        width: 100% !important;
+    }
 }
 
 @media (max-width: 991px) {
@@ -9687,9 +9691,6 @@ span#HW_badge_cont:nth-child(3) {
         max-height: initial !important;
         min-height: initial !important;
     }
-    .rightBar {
-        width: 100% !important;
-    }
     .sticky-footer {
         position: relative;
     }
@@ -9726,6 +9727,14 @@ span#HW_badge_cont:nth-child(3) {
         li{
             white-space: normal;
         }
+    }
+    .tax-engine .nav-band .nav-tabs {
+        white-space: nowrap;
+        padding-top: 15px !important;
+        overflow: hidden;
+        display: inline-block;
+        width: 100%;
+        overflow-x: auto;
     }
 }
 
@@ -9818,7 +9827,7 @@ span#HW_badge_cont:nth-child(3) {
     }
     table.table td.text-center.empty-table {
         padding: 5px 10px 5px 0% !important;
-        text-align: center;
+        text-align: center !important;
         width: 100%;
         margin-bottom: 0;
     }
@@ -10065,6 +10074,9 @@ span#HW_badge_cont:nth-child(3) {
     .page-has-tabs .custom-tabs .top-bar {
         margin-top: 15px;
         padding-top: 0;
+    }
+    .page-has-tabs .custom-tabs .top-bar.customer-top-bar , .page-has-tabs .custom-tabs .top-bar.aging-top-bar{
+          margin-top: 0;
     }
     .custom-tabs.hide-header .top-bar {
         margin-top: 10px;
@@ -10726,4 +10738,7 @@ body.prevent-body-scroll {
 .hidden-md {
     display: none!important;
 }
+}
+.daterangepicker{
+    display: none !important;
 }

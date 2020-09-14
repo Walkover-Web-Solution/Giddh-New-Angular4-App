@@ -86,8 +86,34 @@ stock-list ::ng-deep.in-list a div {
         }
     }
 }
-
-@media (max-width:767px){
+.main-group{
+   .item-group{
+       a{
+           display: flex;
+           align-items: center;
+           flex: 1;
+           color: $nero;
+           i{
+               margin:0 15px;
+               font-size: 9px;
+           }
+       }
+   }
+}
+@media(max-width:1024px){
+    .main-group{
+   .item-group{
+       a{
+           i{
+               margin:0 15px;
+               font-size:14px;
+               padding:5px;
+           }
+       }
+   }
+}
+}
+@media (max-width:768px){
     .stock-grp-list{
         height:74vh;
     }

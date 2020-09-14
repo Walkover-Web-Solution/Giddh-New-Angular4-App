@@ -11,7 +11,7 @@
     </div>
 
     <!-- form -->
-    <div class="col-xs-12 col-sm-8 mrT2">
+    <div class="col-xs-12 col-lg-8 col-md-12 mrT2">
         <div>
             <form class="mrB2" name="manufaturingForm" #manufaturingForm="ngForm">
                 <div class="row">
@@ -81,11 +81,11 @@
 
     <!--  -->
     <ng-container *ngIf="!(isStockWithRateInprogress$ | async)">
-        <div class="col-xs-12 col-sm-12 clearfix" *ngIf="manufacturingDetails.stockUniqueName">
+        <div class="box clearfix" *ngIf="manufacturingDetails.stockUniqueName">
 
-            <div class="box clearfix row">
+            <div class="row">
                 <!-- right column / add more resources -->
-                <div class="col-xs-6 col-sm-6 source bdrR pdL0">
+                <div class="col-md-12 col-lg-6 source resources-table">
                     <h1 class="section-head">Source(Consumption)</h1>
                     <section class="linkstock">
                         <table class="col-xs-12 col-sm-12 linkStockTbl" *ngIf="manufacturingDetails">
@@ -160,7 +160,7 @@
                 <!-- end right column -->
 
                 <!-- left column / total cost table -->
-                <div class="col-xs-5 col-sm-5 mrL2">
+                <div class="col-md-12 col-lg-5">
                     <div class="form_title">
                         <p>Total Cost</p>
                     </div>

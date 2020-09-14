@@ -413,14 +413,14 @@ button.btn.btn-default.ladda-button {
     color: #1c1c1c;
 }
 
-.inputWrapper {
+.input-wrapper {
     display: block !important;
     width: 200px !important;
     position: relative;
     height: 36px !important;
 }
 
-.inputWrapper:before {
+.input-wrapper:before {
     position: absolute;
     content: "";
     display: block;

@@ -27,7 +27,7 @@
     z-index: 99;
     cursor: default;
 }
-.inputWrapper:before {
+.input-wrapper:before {
     position: absolute;
     content: "";
     display: block;
@@ -96,4 +96,10 @@
             height: 36px;
         }
     }
+     .form-inline.financial-selectYear{
+        flex-flow: row nowrap !important;
+     }
+     .download-data-icon{
+        margin: 10px 0 2px;
+     }
 }

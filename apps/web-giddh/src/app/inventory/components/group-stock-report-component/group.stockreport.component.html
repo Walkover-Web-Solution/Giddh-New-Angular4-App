@@ -157,15 +157,12 @@
   </div> -->
     <div class="fb__1-container mrB1">
         <div class="d-flex" style="justify-content: space-between;width: 100%">
-            <div class="d-flex" style="align-items: center">
+            <div class="d-flex wrap-head-report">
                 <h2 class="mr-2 head-report" *ngIf="groupStockReport">
                     <span>{{groupStockReport.stockGroupName}}</span> (Group)</h2>
-
-
                 <div class="advance-icon" tooltip="Advance Search">
                     <span class="icon-advance-filter" (click)="onOpenAdvanceSearch()"></span>
                 </div>
-
                 <!-- <i *ngIf="isFilterCorrect" class="fa fa-refresh ml-1 cp" (click)="resetFilter()"></i> -->
             </div>
             <div class="clear-filter" *ngIf="isFilterCorrect">
@@ -176,10 +173,10 @@
             <div class="clearfix">
 
                 <div class="btn-group" dropdown [autoClose]="true" placement="bottom right">
-                    <button class="btn-link btn icon-btn mr-1" (click)="editGroup()" tooltip="Edit group">
+                    <button class="btn-link icon-btn mr-15" (click)="editGroup()" tooltip="Edit group">
                         <i class="icon-edit-pencil"></i>
                     </button>
-                    <button id="button-alignment" dropdownToggle type="button" class="btn-link mrT cp mr-1 dropdown-toggle icon-btn" aria-controls="dropdown-alignment" tooltip="Download">
+                    <button id="button-alignment" dropdownToggle type="button" class="btn-link mrT cp mr-15 dropdown-toggle icon-btn" aria-controls="dropdown-alignment" tooltip="Download">
                         <i class="icon-download strong"></i>
                     </button>
                     <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download" role="menu" aria-labelledby="button-alignment">
@@ -200,8 +197,8 @@
     </div>
 
     <section>
-        <div class="mobile-card-wrapper table-responsive">
-            <table class="table basic table-border inventory-stock-table on-mobile-view" [ngClass]="{'mB100': groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length>6}">
+        <div class="mobile-card-wrapper">
+            <table class="table basic table-border inventory-stock-table on-mobile-view table-responsive" [ngClass]="{'mB100': groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length>6}">
                 <thead>
                     <tr>
                         <!-- in case of all entity with group -->
@@ -218,7 +215,7 @@
                             <th class="text-center bdrB" width="20%" colspan="2">Closing Stock</th>
                     </tr>
                     <tr class="bdrT">
-                        <th colspan="2" class="bdrR td_in_searchBox max-width-140" (clickOutside)="clickedOutside($event,null, 'product')">
+                        <th colspan="2" class="bdrR td-search-box max-width-140" (clickOutside)="clickedOutside($event,null, 'product')">
                             <div [hidden]="showProductSearch">
                                 <span>Product Name</span>
                                 <i class="icon-search" (click)="showProductSearchBox()"></i>
@@ -230,7 +227,7 @@
                             </div>
                         </th>
                         <!-- in case of all entity with group -->
-                        <th colspan="2" class="bdrR td_in_searchBox max-width-140" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'" (clickOutside)="clickedOutside($event,null, 'source')">
+                        <th colspan="2" class="bdrR td-search-box max-width-140" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'" (clickOutside)="clickedOutside($event,null, 'source')">
                             <div [hidden]="showSourceSearch">
                                 <span>Source</span>
                                 <i class="icon-search" (click)="showSourceSearchBox()"></i>
@@ -467,7 +464,7 @@
                 <div class="inner-content-footer">
                     <div class="row">
 
-                        <div class="col-sm-5 pr-0">
+                        <div class="col-lg-5 col-md-12 pr-0">
                             <div class="row">
                                 <div class="col-xs-4 p0 count-text">
                                     <h4 class="text-light">
@@ -510,7 +507,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-7">
+                        <div class="col-lg-7 col-md-12 opening-value">
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Opening Value</h4>

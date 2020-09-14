@@ -5,32 +5,11 @@
     align-items: flex-start;
     flex-flow: row wrap;
 }
-
-// table {
-//   table-layout: fixed
-// }
-
-/* .table.basic tbody tr td {
-    background-color: #fff;
-}
-
-.table.basic .table tbody tr td {
-    border: none;
-} */
-
 .mh18_img img {
     max-height: 20px;
     cursor: pointer;
 }
 
-/*
-.table.basic>tbody>tr>td>table tbody tr td {
-    padding: 5px 0;
-}
-
-tfoot {
-    background: #fff;
-} */
 .flex-fill {
     flex: 1 1 auto;
 }
@@ -63,7 +42,7 @@ tfoot {
 }
 
 .td-search-box .input-container input {
-    height: 41px;
+    height: 51px;
     width: 100%;
     padding: 11px;
     padding-right: 40px;
@@ -113,6 +92,33 @@ label {
 .ewayBill-date .form-control {
     background: $white !important;
     border: 1px solid $gainsboro ;
+}
+.input-group {
+    position: relative;
+    span{
+        &::before{
+            position: absolute;
+            content: "";
+            display: block;
+            height: 36px;
+            width: 1px;
+            background-color: #d9d9d9;
+            left: 37px!important;
+            z-index: 100;
+            top: 0;
+        }
+         .form-control{
+            background-image: url('../../../../assets/images/calender-icon.svg')!important;
+            background-size: 17px!important;
+            background-position: 9px 8px!important;
+            background-repeat: no-repeat!important;
+            padding-left: 45px!important;
+            position: relative;
+            z-index: 99;
+            cursor: default;
+            width: 100%;
+        }
+    }
 }
 
 // my css

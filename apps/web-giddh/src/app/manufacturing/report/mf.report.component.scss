@@ -20,6 +20,9 @@
 .pdBth4 {
     padding: 0 40px;
 }
+.manufacture-table.giddh-table tbody > tr > td:first-child{
+    white-space: nowrap !important;
+}
 @media(max-width:991px){
     .manufacturing-form .form-group{
         width: 100%;

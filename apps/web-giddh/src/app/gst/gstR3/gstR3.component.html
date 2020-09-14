@@ -47,7 +47,7 @@
                             </ul>
                         </div> -->
                         <div class="btn-group" dropdown #downloadReport="bs-dropdown" [autoClose]="false" (clickOutside)="downloadReport.hide()" [attachOutsideOnClick]="true">
-                            <button dropdownToggle type="button" class="btn dropdown-toggle grey_clr no-btn"> <i
+                            <button dropdownToggle type="button" class="btn dropdown-toggle btn-pink"> <i
                                     class="icon-download"></i> Download</button>
                             <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-triggers-manual" style="min-width: 350px;">
                                 <div class="pdL2 pdR2 pd1">
@@ -69,7 +69,7 @@
 
                         <div *ngIf="showTaxPro">
 
-                            <button class="btn-2 pull-right authenticate-btn" [ngClass]="{'btn-success': gstAuthenticated }"
+                            <button class="btn-2 pull-right btn authenticate-btn" [ngClass]="{'btn-success': gstAuthenticated }"
                                 (click)="returnGstr3B = { via: 'VAYANA' }">{{ gstAuthenticated ? 'Authenticated' : 'Authenticate'}}
                             </button>
 

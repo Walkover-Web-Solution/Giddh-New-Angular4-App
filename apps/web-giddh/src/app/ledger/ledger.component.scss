@@ -222,13 +222,13 @@ input {
     cursor: default;
     top: 1px;
 }
-.inputWrapper {
+.input-wrapper {
     display: block !important;
     width: 100% !important;
     position: relative;
     height: 37px !important;
 }
-.inputWrapper:before {
+.input-wrapper:before {
     position: absolute;
     content: "";
     display: block;

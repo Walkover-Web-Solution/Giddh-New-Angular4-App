@@ -11,13 +11,13 @@
             <form #mfStockSearchRequestForm="ngForm" class="col-xs-12 pl-0 pr-0 mt-2 mb-05 manufacturing-form" (submit)="getReports()"
                 autocomplete="off">
                 <div class="row">
-                    <div class="form-group col-md-2 col-sm-2">
+                    <div class="form-group col-lg-2 col-md-6">
                         <label class="d-block">Final Product</label>
                         <sh-select placeholder="--Select Product--" name="product" #productList="ngModel" required
                             [(ngModel)]="mfStockSearchRequest.product" [options]="stockListDropDown"
                             [ItemHeight]="33" (selected)="setActiveStockGroup($event)"></sh-select>
                     </div>
-                    <div class="form-group col-md-3 col-sm-3 col-xs-12">
+                    <div class="form-group col-lg-3 col-md-6 col-xs-12">
                         <label class="d-block">From - To</label>
                         <div class="input-group">
                             <input name="dateRange" #dp="bsDaterangepicker" placeholder="Date range picker" type="text"
@@ -31,25 +31,25 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-md-2 col-sm-2 col-xs-6">
+                    <div class="form-group col-lg-2 col-md-6 col-xs-6">
                             <label class="d-block">Search By</label>
                             <sh-select placeholder="--Select--" name="searchBy"
                                 [(ngModel)]="mfStockSearchRequest.searchBy" [options]="filtersForSearchBy"
                                 [ItemHeight]="33"></sh-select>
                     </div>
-                    <div class="form-group col-md-2 col-sm-2 col-xs-6">
+                    <div class="form-group col-lg-2 col-md-6 col-xs-6">
                         <label class="d-block">Operation</label>
                         <sh-select placeholder="--Select--" name="searchOperation"
                             [(ngModel)]="mfStockSearchRequest.searchOperation" [options]="filtersForSearchOperation"
                             [ItemHeight]="33"></sh-select>
                     </div>
-                    <div class="form-group col-md-2 col-sm-2 col-xs-6">
+                    <div class="form-group col-lg-2 col-md-6 col-xs-6">
                         <label class="d-block">Value</label>
                         <input type="text" decimalDigitsDirective [DecimalPlaces]="4" class="form-control"
                             placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
                     </div>
-                    <div class="form-group col-md-1">
-                        <label class="d-block d-none-sm">&nbsp;</label>
+                    <div class="form-group col-lg-1 col-md-6">
+                        <label class="d-block d-none-xs">&nbsp;</label>
                         <!-- [disabled]="mfStockSearchRequestForm.invalid" -->
                         <button class="btn btn-success" type="submit">Go</button>
                     </div>
@@ -69,11 +69,11 @@
     <section *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length > 0">
         <div class="" id="mfReportTbl">
             <div class="col-xs-12 col-sm-12">
-                <table class="table basic table-bordered">
+                <table class="table basic table-bordered giddh-table on-mobile-view manufacture-table">
                     <thead>
                         <tr>
                             <th>Date</th>
-                            <th>Vch. No.</th>
+                            <th>Voucher Number</th>
                             <th>Final Product</th>
                             <th>Raw Products</th>
                             <th>Product Inwards</th>
@@ -82,44 +82,21 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)" class="cp">
-                            <td>{{item.date}}</td>
-                            <td>{{item.voucherNumber}}</td>
-                            <td>{{item.stockName}}</td>
-                            <td>{{item.manufacturingQuantity}} {{item.manufacturingUnit}}</td>
-                            <td>
+                            <td data-title="Date">{{item.date}}</td>
+                            <td data-title="Voucher Number">{{item.voucherNumber}}</td>
+                            <td data-title="Final Product">{{item.stockName}}</td>
+                            <td data-title="Raw Products">{{item.manufacturingQuantity}} {{item.manufacturingUnit}}</td>
+                            <td data-title="Product Inwards">
                                 <span *ngFor="let row of item.linkedStocks">
                                     {{row.stockName}}
                                 </span>
                             </td>
-                            <td>
+                            <td data-title="Quantity Outwards">
                                 <span *ngFor="let row of item.linkedStocks">
                                     {{row.manufacturingQuantity}} {{row.manufacturingUnit}}
                                 </span>
                             </td>
                         </tr>
-
-                        <!-- <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)" class="cp">
-                            <td>{{item.date}}</td>
-                            <td>{{item.voucherNumber}}</td>
-                            <td>{{item.stockName}}</td>
-                            <td colspan="3" class="">
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <td width="40%">&nbsp;</td>
-                                            <td width="20%">{{item.manufacturingQuantity}} {{item.manufacturingUnit}}
-                                            </td>
-                                            <td width="40%">&nbsp;</td>
-                                        </tr>
-                                        <tr *ngFor="let row of item.linkedStocks">
-                                            <td>{{row.stockName}}</td>
-                                            <td>&nbsp;</td>
-                                            <td>{{row.manufacturingQuantity}} {{row.manufacturingUnit}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr> -->
                     </tbody>
                 </table>
                 <div *ngIf="reportData?.totalPages > 1" class="paginationWrapper">

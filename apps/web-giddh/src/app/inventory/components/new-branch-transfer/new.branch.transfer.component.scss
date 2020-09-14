@@ -186,13 +186,13 @@ tfoot td .tableSec.form-group {
 .branch-transfer-report .input-group {
     width: 230px;
 }
-.branch-transfer-report .inputWrapper {
+.branch-transfer-report .input-wrapper {
     display: block !important;
     width: 100% !important;
     position: relative;
     height: 36px !important;
 }
-.branch-transfer-report .inputWrapper:before {
+.branch-transfer-report .input-wrapper:before {
     position: absolute;
     content: "";
     display: block;
@@ -415,4 +415,27 @@ tfoot td .tableSec.form-group {
 
 .placeholder-for-table {
     color: $very-light-gray;
+}
+@media(max-width:991px){
+    #table-recipt{
+       width: calc(100% - 30px);
+    }
+}
+@media(max-width:768px){
+    .select-action-button{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        span.icon-dots-three-vertical{
+           height: 13px;
+           margin-left: 10px;
+        }
+    }
+    .branch-transfer-report{
+        ul#dropdown-basic{
+            right: auto !important;
+            left: auto !important;
+            top: 20px !important;
+        }
+    }
 }

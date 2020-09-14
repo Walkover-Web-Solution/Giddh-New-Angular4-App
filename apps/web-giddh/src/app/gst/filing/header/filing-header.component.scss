@@ -24,8 +24,19 @@
         padding-left: 5px;
     }
 }
+.btn-wrapper-filling-header{
+    .btn-primary{
+        border-color: #5b64c9;
+    }
+}
 @media(max-width:991px){
     .list-filter{
         height: auto;
+    }
+    .btn-wrapper-filling-header{
+        float: none;
+        display: flex;
+        padding-top: 12px;
+        justify-content: flex-end;
     }
 }
