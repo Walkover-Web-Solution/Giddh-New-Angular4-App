@@ -1768,6 +1768,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         });
     }
 
+    /**
+     * Initializes acounnt currency details
+     *
+     * @param {AccountResponseV2} item Account details
+     * @memberof ProformaInvoiceComponent
+     */
     public initializeAccountCurrencyDetails(item: AccountResponseV2): void {
         // If currency of item is null or undefined then treat it to be equivalent of company currency
         item.currency = item.currency || this.companyCurrency;
