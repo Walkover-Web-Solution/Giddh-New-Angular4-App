@@ -48,7 +48,7 @@ export interface ReceiptItem {
 	cashInvoice: boolean;
     accountCurrencySymbol?: string;
     invoiceLinkingRequest?: IInvoiceLinkingRequest;
-    totalBalance: number;
+    totalBalance?: AmountClassMulticurrency;
 }
 
 export interface ReciptResponse {
