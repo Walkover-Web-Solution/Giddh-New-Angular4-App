@@ -1793,6 +1793,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
         this.customerCountryName = data.country.countryName;
+        this.initializeAccountCurrencyDetails(data);
         this.showGstAndTrnUsingCountryName(this.customerCountryName);
         this.prepareSearchLists([{
             name: data.name,
@@ -1831,6 +1832,34 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this._cdr.detectChanges();
             }, 500);
         });
+    }
+
+    /**
+     * Initializes acounnt currency details
+     *
+     * @param {AccountResponseV2} item Account details
+     * @memberof ProformaInvoiceComponent
+     */
+    public initializeAccountCurrencyDetails(item: AccountResponseV2): void {
+        // If currency of item is null or undefined then treat it to be equivalent of company currency
+        item.currency = item.currency || this.companyCurrency;
+        this.isMulticurrencyAccount = item.currency !== this.companyCurrency;
+
+        if (this.isMulticurrencyAccount) {
+            this.customerCurrencyCode = item.currency;
+            this.companyCurrencyName = item.currency;
+        } else {
+            this.customerCurrencyCode = this.companyCurrency;
+        }
+
+        if (item && item.currency && item.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
+            this.getCurrencyRate(this.companyCurrency, item.currency,
+                moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
+        }
+
+        if (this.isSalesInvoice && this.isMulticurrencyAccount) {
+            this.bankAccounts$ = observableOf([]);
+        }
     }
 
     /**
@@ -3059,25 +3088,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invFormData.accountDetails.name = '';
             if (item.additional) {
                 this.customerAccount.email = item.additional.email;
-                // If currency of item is null or undefined then treat it to be equivalent of company currency
-                item.additional['currency'] = item.additional.currency || this.companyCurrency;
-                this.isMulticurrencyAccount = item.additional.currency !== this.companyCurrency;
-            }
-
-            if (this.isMulticurrencyAccount) {
-                this.customerCurrencyCode = item.additional.currency;
-                this.companyCurrencyName = item.additional.currency;
-            } else {
-                this.customerCurrencyCode = this.companyCurrency;
-            }
-
-            if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
-                this.getCurrencyRate(this.companyCurrency, item.additional.currency,
-                    moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
-            }
-
-            if (this.isSalesInvoice && this.isMulticurrencyAccount) {
-                this.bankAccounts$ = observableOf([]);
             }
 
             if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
