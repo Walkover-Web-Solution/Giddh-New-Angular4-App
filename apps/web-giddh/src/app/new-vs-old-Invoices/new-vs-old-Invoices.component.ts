@@ -15,7 +15,7 @@ import { take } from 'rxjs/operators';
 @Component({
     selector: 'new-vs-old-invoices',
     templateUrl: './new-vs-old-Invoices.component.html',
-    styleUrls: [`./new-vs-old-Invoices.component`],
+    styleUrls: [`./new-vs-old-Invoices.component.scss`],
 })
 
 export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
