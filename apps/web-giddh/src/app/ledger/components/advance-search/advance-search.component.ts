@@ -87,8 +87,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public ngOnInit() {
-        this.store.dispatch(this.inventoryAction.GetStock());
-        // this.store.dispatch(this.groupWithAccountsAction.getFlattenGroupsWithAccounts());
         this.flattenAccountListStream$.subscribe(data => {
             if (data) {
                 let accounts: IOption[] = [];
@@ -117,16 +115,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             }
         })).pipe(takeUntil(this.destroyed$));
 
-        // Get groups with accounts
-        this._groupService.GetFlattenGroupsAccounts().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
-                let groups: IOption[] = [];
-                data.body.results.map(d => {
-                    groups.push({ label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName });
-                });
-                this.groups$ = observableOf(groups);
-            }
-        });
         this.setAdvanceSearchForm();
         this.setVoucherTypes();
     }
@@ -142,6 +130,27 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 bsDaterangepicker.patchValue(this.selectedDateRangeUi);
             }
         }
+    }
+
+    /**
+     * Calls the API on component load when component is visible
+     *
+     * @memberof AdvanceSearchModelComponent
+     */
+    public loadComponent(): void {
+        this.store.dispatch(this.inventoryAction.GetStock());
+        // this.store.dispatch(this.groupWithAccountsAction.getFlattenGroupsWithAccounts());
+
+        // Get groups with accounts
+        this._groupService.GetFlattenGroupsAccounts().pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data && data.status === 'success' && data.body && data.body.results ) {
+                let groups: IOption[] = [];
+                data.body.results.map(d => {
+                    groups.push({ label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName });
+                });
+                this.groups$ = observableOf(groups);
+            }
+        });
     }
 
     public resetAdvanceSearchModal() {
@@ -233,6 +242,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
     public onCancel() {
         this.closeModelEvent.emit({ advanceSearchData: this.advanceSearchRequest, isClose: true });
+        this.hideGiddhDatepicker();
     }
 
     /**
@@ -459,7 +469,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+        if (this.modalRef) {
+            this.modalRef.hide();
+        }
     }
 
     /**

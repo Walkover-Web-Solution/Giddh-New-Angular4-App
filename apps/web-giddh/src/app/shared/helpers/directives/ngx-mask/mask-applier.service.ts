@@ -38,7 +38,7 @@ export class MaskApplierService {
         this.dropSpecialCharacters = this._config.dropSpecialCharacters;
         this.maskSpecialCharacters = this._config!.specialCharacters;
         this.maskAvailablePatterns = this._config.patterns;
-        this.prefix = this._config.prefix;
+        this.prefix = this._config.prefix || '';
         this.suffix = this._config.suffix;
         this.hiddenInput = this._config.hiddenInput;
         this.showMaskTyped = this._config.showMaskTyped;
@@ -68,6 +68,7 @@ export class MaskApplierService {
         let backspaceShift: boolean = false;
         let shift: number = 1;
         let stepBack: boolean = false;
+        this.prefix = this.prefix || '';
 
         if (inputValue.slice(0, this.prefix.length) === this.prefix) {
             inputValue = inputValue.slice(this.prefix.length, inputValue.length);
