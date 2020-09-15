@@ -522,6 +522,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     /** account's applied tax list */
     public accountAssignedApplicableTaxes: string[] = [];
+    /** account's applied tax list */
+    public tcsTdsTaxesAccount: any[] = [];
+
     /**
      * Returns true, if Purchase Record creation record is broken
      *
@@ -2979,6 +2982,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                 }
             });
+        } else if (!entry.isOtherTaxApplicable && this.tcsTdsTaxesAccount.length) {
+            entry.otherTaxModal.appliedOtherTax = this.tcsTdsTaxesAccount[this.tcsTdsTaxesAccount.length-1];
+            entry.isOtherTaxApplicable = true;
         } else {
             // assign taxes for non stock accounts
             transaction.applicableTaxes = o.applicableTaxes;
@@ -5741,6 +5747,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public checkIfNeedToExcludeTax(data: any): void {
         this.excludeTax = false;
         let isPartyTypeSez = false;
+        this.tcsTdsTaxesAccount = [];
+        let TdsTcsTaxType = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
         if (this.isSalesInvoice || this.isCashInvoice) {
             if (data && data.addresses && data.addresses.length > 0) {
@@ -5757,6 +5765,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
         if (data && data.applicableTaxes) {
             this.accountAssignedApplicableTaxes = data.applicableTaxes;
+            data.applicableTaxes.forEach(item => {
+                let tax = this.companyTaxesList.find(element => element.uniqueName === item.uniqueName);
+                if (TdsTcsTaxType.indexOf(tax.taxType) > -1) {
+                    this.tcsTdsTaxesAccount.push(item);
+                }
+            });
         }
     }
 
