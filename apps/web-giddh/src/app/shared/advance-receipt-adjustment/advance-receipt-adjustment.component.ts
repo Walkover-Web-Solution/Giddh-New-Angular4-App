@@ -456,6 +456,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         });
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
             this.adjustVoucherForm.adjustments.forEach((item, key) => {
+                if (item.balanceDue && this.isVoucherModule) {
+                    item.adjustmentAmount = item.balanceDue;
+                }
                 if (!item.voucherNumber && item.balanceDue.amountForAccount) {
                     isValid = false;
                     form.controls[`voucherName${key}`].markAsTouched();
