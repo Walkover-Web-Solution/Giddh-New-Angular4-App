@@ -25,7 +25,9 @@
 .ledger-panel table tbody tr td a {
     color: #333;
 }
-
+.ledger-panel{
+    z-index: 990;
+}
 .pItem {
     padding: 0 4px;
 }
