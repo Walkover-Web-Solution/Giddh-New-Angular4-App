@@ -2774,7 +2774,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public toggleRecurringAsidePane(toggle?: string): void {
         if (toggle) {
             if (toggle === 'out' && this.asideMenuStateForRecurringEntry !== 'out') {
-                this.router.navigate(['/pages', 'invoice', 'recurring']);
+                this.router.navigate(['/pages/proforma-invoice', 'invoice', 'sales']);
             }
             this.asideMenuStateForRecurringEntry = toggle;
         } else {
