@@ -601,21 +601,10 @@ span.icon-export-icon {
     .invoice-preview {
         padding-bottom: 0px;
     }
-    .desktop-view-btn {
-        display: none;
-    }
     .date-advance-search {
         .add-invoice {
             display: none;
         }
-    }
-    .mobile-search {
-        display: flex;
-        margin-bottom: 0;
-        flex-direction: column-reverse;
-    }
-    .mobile-search .input-container input {
-        font-size: 13px;
     }
     .action-icon {
         display: flex !important;
@@ -626,6 +615,17 @@ span.icon-export-icon {
 }
 
 @media (max-width: 767px) {
+    .desktop-view-btn {
+        display: none;
+    }
+    .mobile-search {
+        display: flex;
+        margin-bottom: 0;
+        flex-direction: column-reverse;
+    }
+    .mobile-search .input-container input {
+        font-size: 13px;
+    }
     .invoice-modal-content:after,
     .invoice-modal-content {
         top: 131px;

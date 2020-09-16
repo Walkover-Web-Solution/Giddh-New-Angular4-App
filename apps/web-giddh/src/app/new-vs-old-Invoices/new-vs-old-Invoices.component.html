@@ -3,7 +3,7 @@
         <div class="form-inline">
 
             <form #carried="ngForm" (ngSubmit)="go(carried)">
-                <div class="pull-left d-flex align-start">
+                <div class="pull-left d-flex align-start select-fields">
                     <div class="form-group mrR1 max500 d-initial">
                         <label>Select Year</label>
                         <sh-select placeholder="Search Year..." [multiple]='false' name="selectedYear" [(ngModel)]="selectedYear" #SelectYear="ngModel" [options]="yearOptions" required>

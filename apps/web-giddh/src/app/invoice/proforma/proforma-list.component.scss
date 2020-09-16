@@ -279,12 +279,19 @@ span.icon-advance-filter {
     height: 34px;
     color: $gray;
 }
+.checkbox-td, .index-no{
+    display: flex;
+    justify-content: center;
+}
 // responsive
 @media (max-width: 768px) {
     .search-icon-block {
         display: flex !important;
     }
-
+    .checkbox-td, .index-no{
+        display: flex;
+        justify-content: flex-start;
+    }
     .mobile-search .input-container input {
         font-size: 13px;
     }

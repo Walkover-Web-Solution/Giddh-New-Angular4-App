@@ -595,6 +595,7 @@
         <ng-container *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && (selectedVoucher === 'sales' || selectedVoucher === 'purchase') && isMobileView">
             <div class="card mobileTable mt-15" *ngFor="let item of voucherData?.items; let i = index">
                 <table class="table basic table-bordered invoice-table" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
+                    <tbody>
                     <tr>
                         <td class="card-header clearfix row mr-0 ml-0">
                             <div class="col-4 p-0">
@@ -749,6 +750,7 @@
                             </div>
                         </td>
                     </tr>
+                    </tbody>
                 </table>
             </div>
         </ng-container>

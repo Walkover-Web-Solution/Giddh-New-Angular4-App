@@ -50,9 +50,29 @@
 .d-initial label {
     justify-content: left;
 }
+.form-inline{
+    form{
+        width: 100%;
+        display: flex;
+        .select-fields{
+            width: 100%;
+        }
+    }
+}
 @media(max-width:991px){
     .div-table {
         display: block;
         width: 100%;
+    }
+    .d-initial{
+       width: 25%;
+    }
+    .h3-heading{
+        margin: 0;
+    }
+    .div-row{
+        .div-cell{
+            font-size: 14px !important;
+        }
     }
 }

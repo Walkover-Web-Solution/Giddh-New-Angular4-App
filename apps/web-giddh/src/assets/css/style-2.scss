@@ -6169,7 +6169,7 @@ virtual-scroll .scrollable-content .item > a .item_unq,
 virtual-scroll .scrollable-content .item > a .item_stock {
     color: $moody-blue;
 }
-.customerInvoiceForm virtual-scroll .scrollable-content .item > a {
+.customer-invoice-form virtual-scroll .scrollable-content .item > a {
     color: $nero;
     padding: 3px 10px;
     display: flex;
@@ -8766,13 +8766,14 @@ button.btn.btn-filter {
     padding-left: 0;
 }
 
-.mangeAccountPopup.fullScreenMy.modal.fade .modal-dialog {
+.manage-account-popup.full-screen-modal.modal.fade .modal-dialog {
     transform: translateY(0) !important;
     margin: 0 auto;
 }
 
-.mangeAccountPopup.fullScreenMy.modal.fade .width100{
+.manage-account-popup.full-screen-modal.modal.fade .width100{
     width:100% !important;
+    max-width: 100% !important;
 }
 
 .translatY8 {
@@ -8832,7 +8833,7 @@ button.btn.btn-filter {
 // .custom-tabs#asidePaneFormTabs .nav.nav-tabs > li {
 //     padding-right: 0;
 // }
-.mangeAccountPopup .modal-dialog.modal-xl {
+.manage-account-popup .modal-dialog.modal-xl {
     margin: 0 auto;
 }
 
@@ -10514,11 +10515,11 @@ span#HW_badge_cont:nth-child(3) {
     .col_wrapper.left-account-opration:nth-child(4) {
         border-top: 1px solid #ddd;
     }
-    .mangeAccountPopup.modal {
+    .manage-account-popup.modal {
         background-color: #f4f5f8;
         opacity: 1;
     }
-    .mangeAccountPopup .modal-content.fullScreenMy {
+    .manage-account-popup .modal-content.full-screen-modal {
         box-shadow: none;
         border: none;
     }

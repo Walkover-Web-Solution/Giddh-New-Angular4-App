@@ -550,7 +550,7 @@ sh-select:focus {
     justify-content: space-between;
 }
 .input-wrapper.ipad-view-datepicker {
-    display: none;
+    display: none !important;
 }
 .no-btn,
 .no-btn:active,
