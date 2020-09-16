@@ -5,7 +5,7 @@ import { LoaderService } from './loader.service';
 import { LoaderState } from './loader';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { Store } from '@ngrx/store';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, NavigationCancel } from '@angular/router';
 
 @Component({
     selector: 'giddh-loader',
@@ -51,6 +51,10 @@ export class LoaderComponent implements OnInit, OnDestroy, OnChanges {
             //     this.navigationEnd$ = of(true);
             // }
             if (a instanceof NavigationEnd) {
+                return this.navigationEnd$ = of(true);
+            }
+
+            if (a instanceof NavigationCancel) {
                 return this.navigationEnd$ = of(true);
             }
         });
