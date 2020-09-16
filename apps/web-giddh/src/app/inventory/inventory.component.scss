@@ -88,3 +88,15 @@
         display: flex;
     }
 }
+
+
+@media (max-width:445px){
+    .inventory-controll{
+        .container-fluid{
+            .branch-filter {
+                margin-right: 0px;
+                width: 100% !important;
+            }
+        } 
+}
+}

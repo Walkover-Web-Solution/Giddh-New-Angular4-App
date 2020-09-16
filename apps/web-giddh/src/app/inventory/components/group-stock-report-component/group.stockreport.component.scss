@@ -429,7 +429,7 @@ button.btn.btn-filter {
     .popover-details {
         display: block;
         position: absolute;
-        top: 116px;
+        top: 100px;
         right: 0;
         margin: 0 15px;
         .btn-group {
@@ -441,6 +441,7 @@ button.btn.btn-filter {
         }
         .bottom-details {
             min-width: 90vw;
+            z-index:99 !important;
         }
     }
 
