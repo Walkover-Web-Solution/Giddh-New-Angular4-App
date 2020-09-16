@@ -1707,12 +1707,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 const transactionUniqueName = transactions[index].particular.uniqueName;
                 let selectedAccountDetails;
                 this.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => {
-                    for (let accountIndex = 0; accountIndex < accounts.length; accountIndex++) {
-                        const account = accounts[accountIndex];
-                        if (account.uniqueName === transactionUniqueName) {
-                            // Found the user selected particular account
-                            selectedAccountDetails = _.cloneDeep(account);
-                            break;
+                    if(accounts) {
+                        for (let accountIndex = 0; accountIndex < accounts.length; accountIndex++) {
+                            const account = accounts[accountIndex];
+                            if (account.uniqueName === transactionUniqueName) {
+                                // Found the user selected particular account
+                                selectedAccountDetails = _.cloneDeep(account);
+                                break;
+                            }
                         }
                     }
                 });
