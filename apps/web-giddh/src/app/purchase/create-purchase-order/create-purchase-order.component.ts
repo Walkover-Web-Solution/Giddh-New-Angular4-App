@@ -456,8 +456,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         });
 
         // create account success then hide aside pane
-        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response && this.accountAsideMenuState === 'in') {
+        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((accountDetails) => {
+            if (accountDetails && this.accountAsideMenuState === 'in') {
                 this.toggleAccountAsidePane();
             }
         });
@@ -468,6 +468,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     await this.getUpdatedStateCodes(accountDetails.country.countryCode, false);
                 }
                 this.updateVendorDetails(accountDetails);
+                this.getVendorPurchaseOrders(accountDetails.uniqueName);
             }
         });
 
@@ -2510,6 +2511,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
                     this.purchaseOrder.voucherDetails.voucherDate = this.purchaseOrderDetails.date;
                     this.purchaseOrder.voucherDetails.dueDate = this.purchaseOrderDetails.dueDate;
+
+                    this.purchaseOrder.number = this.purchaseOrderDetails.number;
                 } else {
                     this.toaster.errorToast(response.message);
                 }

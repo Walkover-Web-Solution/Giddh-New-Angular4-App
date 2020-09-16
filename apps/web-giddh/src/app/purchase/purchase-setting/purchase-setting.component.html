@@ -106,7 +106,17 @@
                                     <div class="col-xs-12 col-sm-9 ">
                                         <div class="form-group clearfix">
                                             <input type="checkbox" class="hide-on-mobile" name="useCustomPONumber" [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber" />
-                                        </div>
+                                            <div class=" d-inline-flex custom-estimation" *ngIf="invoiceSettings.purchaseBillSettings.useCustomPONumber">
+                                                <div class="d-inline-flex pos-rel">
+                                                    <label>Initial No.</label>
+                                                    <input type="text" class="form-control text-right initialnumber" name="initialNumber" [(ngModel)]="invoiceSettings.purchaseBillSettings.initialPONumber">
+                                                </div>
+                                                <div class="d-inline-flex pos-rel">
+                                                    <label style="right:0px;">Prefix</label>
+                                                    <input type="text" class="form-control text-right" name="prefixNumber" [(ngModel)]="invoiceSettings.purchaseBillSettings.poNumberPrefix">
+                                                </div>
+                                            </div>
+                                        </div>    
                                     </div>
                                 </div>
                             </div>

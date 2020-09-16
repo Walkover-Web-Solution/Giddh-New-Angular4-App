@@ -4422,6 +4422,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             salesEntryClass.tdsTaxList = [];
             salesEntryClass.transactions = [];
 
+            if(entry.purchaseOrderItemMapping) {
+                salesEntryClass.purchaseOrderItemMapping = entry.purchaseOrderItemMapping;
+            }
+
             entry.transactions.forEach(t => {
                 salesTransactionItemClass = new SalesTransactionItemClass();
                 salesTransactionItemClass.accountUniqueName = t.account.uniqueName;
@@ -4433,7 +4437,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName;
                 salesTransactionItemClass.description = entry.description;
                 salesTransactionItemClass.date = t.date;
-                salesEntryClass.transactions.push(salesTransactionItemClass);
 
                 entry.taxes.forEach(ta => {
                     let taxTypeArr = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
@@ -4479,12 +4482,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     if(this.isPurchaseInvoice && entry.purchaseOrderLinkSummaries && entry.purchaseOrderLinkSummaries.length > 0) {
                         entry.purchaseOrderLinkSummaries.forEach(summary => {
-                            if(summary.unusedQuantity) {
-                                salesTransactionItemClass.maxQuantity = summary.unusedQuantity;
+                            if(!isNaN(Number(summary.unUsedQuantity))) {
+                                salesTransactionItemClass.maxQuantity = summary.unUsedQuantity + salesTransactionItemClass.quantity;
                             }
                         });
                     }
                 }
+
+                salesEntryClass.transactions.push(salesTransactionItemClass);
             });
 
             if (entry.discounts && entry.discounts.length) {
@@ -5015,7 +5020,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if(this.isPurchaseInvoice && transaction.maxQuantity !== undefined) {
                 if(transaction.quantity > transaction.maxQuantity) {
                     transaction.quantity = transaction.maxQuantity;
-                    this._toasty.errorToast("Quantity can't be more than " + transaction.maxQuantity);
+                    this._toasty.errorToast("Quantity recorded can't be more than quantity ordered (" + transaction.maxQuantity + ")");
                 }
             }
 

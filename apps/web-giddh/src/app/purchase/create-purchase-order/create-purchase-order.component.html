@@ -346,7 +346,7 @@
                             <div class="col-sm-6 pl-0">
                                 <div>
                                 <input type="text" class="form-control" name="purchaseOrderNumber"
-                                    [(ngModel)]="purchaseOrder.number" [disabled]="!invoiceSettings?.purchaseBillSettings?.useCustomPONumber" placeholder="Enter Order #" />
+                                    [(ngModel)]="purchaseOrder.number" [disabled]="!invoiceSettings?.purchaseBillSettings?.useCustomPONumber || isUpdateMode" placeholder="Enter Order #" />
                                 </div>
                             </div>
                             <!-- endregion -->
