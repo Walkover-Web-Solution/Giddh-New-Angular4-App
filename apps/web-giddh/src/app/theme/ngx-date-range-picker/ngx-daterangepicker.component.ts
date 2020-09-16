@@ -14,7 +14,6 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { DatePickerDefaultRangeEnum } from '../../app.constant';
-import { ScrollDispatcher, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 
 const moment = _moment;
@@ -100,8 +99,6 @@ export interface DateRangeClicked {
 })
 
 export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
-    /* This will check if scrolling reached bottom or top */
-    @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
 
     modalRef: BsModalRef;
     chosenLabel: string;
@@ -248,7 +245,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     /* This will hold if initially datepicker has rendered */
     public initialCalendarRender: boolean = true;
 
-    constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private scrollDispatcher: ScrollDispatcher, private settingsFinancialYearActions: SettingsFinancialYearActions) {
+    constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private settingsFinancialYearActions: SettingsFinancialYearActions) {
         this.choosedDate = new EventEmitter();
         this.rangeClicked = new EventEmitter();
         this.datesUpdated = new EventEmitter();
@@ -406,34 +403,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         this.initCalendar();
 
-        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll && this.virtualScroll.measureScrollOffset('top') === 0), takeUntil(this.destroyed$)).subscribe(event => {
-            this.setCalendarToActiveMonth('start');
-            if (!this.isOnScrollActive && this.allowMouseScroll) {
-                this.isOnScrollActive = true;
-                this.scrollTopSubject$.next("top");
-            }
-        });
-
-        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll && this.virtualScroll.measureScrollOffset('bottom') === 0), takeUntil(this.destroyed$)).subscribe(event => {
-            this.setCalendarToActiveMonth('end');
-            if (!this.isOnScrollActive && this.allowMouseScroll) {
-                this.isOnScrollActive = true;
-                this.scrollBottomSubject$.next("bottom");
-            }
-        });
-
-        this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe(event => {
-            if (!this.isOnScrollActive && this.allowMouseScroll) {
-                if (this.currentScrollIndex < this.previousScrollIndex) {
-                    this.isOnScrollActive = true;
-                    this.scrollTopSubject$.next("top");
-                } else {
-                    this.isOnScrollActive = true;
-                    this.scrollBottomSubject$.next("bottom");
-                }
-            }
-        });
-
         document.querySelector(".giddh-datepicker-modal").parentElement.classList.add("giddh-calendar");
     }
 
@@ -444,23 +413,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      */
     public ngAfterViewInit(): void {
         document.querySelector('body').classList.remove('modal-open');
-        setTimeout(() => {
-            try {
-                if (this.initialScrollToIndexTop < this.initialScrollToIndexBottom) {
-                    this.virtualScroll.scrollToIndex(this.initialScrollToIndexTop);
-                    if (this.calendarMonths[this.initialScrollToIndexTop]) {
-                        this.setActiveMonth(this.calendarMonths[this.initialScrollToIndexTop], 'start');
-                    }
-                } else {
-                    this.virtualScroll.scrollToIndex(this.initialScrollToIndexBottom);
-                    if (this.calendarMonths[this.initialScrollToIndexBottom]) {
-                        this.setActiveMonth(this.calendarMonths[this.initialScrollToIndexBottom], 'end');
-                    }
-                }
-            } catch (error) {
-
-            }
-        }, 100);
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -1990,12 +1942,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
 
         this.isOnScrollActive = false;
-
-        if (this.scrollInDirection === "top") {
-            this.virtualScroll.scrollToIndex(this.currentScrollIndex - 1);
-        } else if (this.scrollInDirection === "bottom") {
-            this.virtualScroll.scrollToIndex(this.currentScrollIndex + 1);
-        }
     }
 
     /**
@@ -2005,69 +1951,108 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public addMonthInCalendarMonths(side: string): void {
-        if (side === "start") {
-            if (this.initialCalendarMonths === true) {
-                this.calendarMonths = [];
-                this.renderedCalendarMonths = [];
-            }
+        this.calendarMonths = [];
+        this.calendarMonths.push(this.calendarVariables);
+        this.setActiveMonth(this.calendarMonths[0], "start");
+        // if (side === "start") {
+        //     if (this.initialCalendarMonths === true) {
+        //         this.calendarMonths = [];
+        //         this.renderedCalendarMonths = [];
+        //     } else {
+        //         if(this.calendarMonths[0] && this.calendarMonths[0].start && this.calendarMonths[0].end) {
+        //             this.calendarMonths[0].start = this.calendarMonths[0].end;
+        //             delete this.calendarMonths[0].end;
+        //         }
 
-            if (this.checkMinMaxDate(this.calendarVariables.start)) {
-                if (this.activeMonthHover === false) {
-                    this.activeMonth = this.calendarVariables.start;
-                    this.lastActiveMonthSide = 'start';
-                }
+        //         if(this.calendarMonths[1]) {
+        //             if(this.calendarMonths[1].start) {
+        //                 this.calendarMonths[0].end = this.calendarMonths[1].start;
+        //             } else if(this.calendarMonths[1].end) {
+        //                 this.calendarMonths[0].end = this.calendarMonths[1].end;
+        //             }
+        //             delete this.calendarMonths[1];
+        //         }
 
-                let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) : 0;
-                let startKey = this.calendarVariables.start.month + "-" + this.calendarVariables.start.year;
-                let endKey = this.calendarVariables.end.month + "-" + this.calendarVariables.end.year;
+        //         if(this.renderedCalendarMonths[1]) {
+        //             delete this.renderedCalendarMonths[1];
 
-                if (!this.renderedCalendarMonths.includes(endKey)) {
-                    if (this.isPreviousMonth === true) {
-                        this.renderedCalendarMonths.push(endKey);
+        //             let renderedCalendarMonths = [];
 
-                        this.calendarMonths.unshift({ end: this.calendarVariables.end });
-                    }
-                }
+        //             this.renderedCalendarMonths.forEach(month => {
+        //                 if(month) {
+        //                     renderedCalendarMonths.push(month);
+        //                 }
+        //             });
 
-                if (!this.renderedCalendarMonths.includes(startKey)) {
-                    this.renderedCalendarMonths.push(startKey);
+        //             this.renderedCalendarMonths = renderedCalendarMonths;
+        //         }
 
-                    if (this.isPreviousMonth === true) {
-                        this.calendarMonths.unshift({ start: this.calendarVariables.start });
-                    } else {
-                        if (this.calendarMonths[existingMonthsLength] === undefined) {
-                            this.calendarMonths[existingMonthsLength] = [];
-                        }
+        //         let calendarMonths = [];
 
-                        this.calendarMonths[existingMonthsLength].start = this.calendarVariables.start;
-                    }
-                }
-            }
-        }
+        //         this.calendarMonths.forEach(month => {
+        //             if(month) {
+        //                 calendarMonths.push(month);
+        //             }
+        //         });
 
-        if (side === "end") {
-            if (this.checkMinMaxDate(this.calendarVariables.end)) {
-                if (this.activeMonthHover === false) {
-                    this.activeMonth = this.calendarVariables.end;
-                    this.lastActiveMonthSide = 'end';
-                }
+        //         this.calendarMonths = calendarMonths;
+        //     }
 
-                let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) - 1 : 0;
-                let key = this.calendarVariables.end.month + "-" + this.calendarVariables.end.year;
+        //     if (this.checkMinMaxDate(this.calendarVariables.start)) {
+        //         if (this.activeMonthHover === false) {
+        //             this.activeMonth = this.calendarVariables.start;
+        //             this.lastActiveMonthSide = 'start';
+        //         }
 
-                if (!this.renderedCalendarMonths.includes(key)) {
-                    this.renderedCalendarMonths.push(key);
+        //         let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) : 0;
+        //         let startKey = this.calendarVariables.start.month + "-" + this.calendarVariables.start.year;
+        //         let endKey = this.calendarVariables.end.month + "-" + this.calendarVariables.end.year;
 
-                    if (this.calendarMonths[existingMonthsLength] === undefined) {
-                        this.calendarMonths[existingMonthsLength] = [];
-                    }
+        //         if (!this.renderedCalendarMonths.includes(endKey)) {
+        //             if (this.isPreviousMonth === true) {
+        //                 this.renderedCalendarMonths.push(endKey);
 
-                    this.calendarMonths[existingMonthsLength].end = this.calendarVariables.end;
-                }
-            }
-        }
+        //                 this.calendarMonths.unshift({ end: this.calendarVariables.end });
+        //             }
+        //         }
 
-        this.calendarMonths = [...this.calendarMonths];
+        //         if (!this.renderedCalendarMonths.includes(startKey)) {
+        //             this.renderedCalendarMonths.push(startKey);
+
+        //             if (this.isPreviousMonth === true) {
+        //                 this.calendarMonths.unshift({ start: this.calendarVariables.start });
+        //             } else {
+        //                 if (this.calendarMonths[existingMonthsLength] === undefined) {
+        //                     this.calendarMonths[existingMonthsLength] = [];
+        //                 }
+
+        //                 this.calendarMonths[existingMonthsLength].start = this.calendarVariables.start;
+        //             }
+        //         }
+        //     }
+        // }
+
+        // if (side === "end") {
+        //     if (this.checkMinMaxDate(this.calendarVariables.end)) {
+        //         if (this.activeMonthHover === false) {
+        //             this.activeMonth = this.calendarVariables.end;
+        //             this.lastActiveMonthSide = 'end';
+        //         }
+
+        //         let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) - 1 : 0;
+        //         let key = this.calendarVariables.end.month + "-" + this.calendarVariables.end.year;
+
+        //         if (!this.renderedCalendarMonths.includes(key)) {
+        //             this.renderedCalendarMonths.push(key);
+
+        //             if (this.calendarMonths[existingMonthsLength] === undefined) {
+        //                 this.calendarMonths[existingMonthsLength] = [];
+        //             }
+
+        //             this.calendarMonths[existingMonthsLength].end = this.calendarVariables.end;
+        //         }
+        //     }
+        // }
     }
 
     /**
@@ -2078,18 +2063,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public initCalendar(): void {
         this.renderCalendar(DateType.start);
         this.renderCalendar(DateType.end);
-
-        if (this.initialCalendarRender === true) {
-            this.initialCalendarRender = false;
-            
-            for (let loop = 0; loop <= 4; loop++) {
-                this.onScroll("top");
-            }
-
-            for (let loop = 0; loop <= 8; loop++) {
-                this.onScroll("bottom");
-            }
-        }
     }
 
     /**
@@ -2161,21 +2134,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public openMobileDatepicker(): void {
         this.allowMouseScroll = true;
         this.openMobileDatepickerPopup = true;
-        document.querySelector('body').classList.add('hide-scroll-body');
-
-        setTimeout(() => {
-            if (this.initialScrollToIndexTop < this.initialScrollToIndexBottom) {
-                this.virtualScroll.scrollToIndex(this.initialScrollToIndexTop);
-                if (this.calendarMonths[this.initialScrollToIndexTop]) {
-                    this.setActiveMonth(this.calendarMonths[this.initialScrollToIndexTop], 'start');
-                }
-            } else {
-                this.virtualScroll.scrollToIndex(this.initialScrollToIndexBottom);
-                if (this.calendarMonths[this.initialScrollToIndexBottom]) {
-                    this.setActiveMonth(this.calendarMonths[this.initialScrollToIndexBottom], 'end');
-                }
-            }
-        }, 100);    
+        document.querySelector('body').classList.add('hide-scroll-body'); 
     }
 
     /**
