@@ -23,3 +23,10 @@ footer#footer.sticky-footer {
 #content_wrapper {
     padding-bottom: 80px;
 }
+
+@media (max-width:767px){
+    #content_wrapper {
+        padding-bottom: 0px !important;
+    }
+}
+

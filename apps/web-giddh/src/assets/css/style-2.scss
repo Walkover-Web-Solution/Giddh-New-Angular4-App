@@ -9577,6 +9577,12 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 @media (max-width: 1024px) {
+
+    .users-last-list{
+        .cdk-virtual-scroll-content-wrapper {
+            position: relative;
+        }
+    }
     .all-features-modal {
         width: 90%;
         margin: 0 auto;
@@ -9666,7 +9672,7 @@ span#HW_badge_cont:nth-child(3) {
         width: 100%;
         display: block;
     }
-    .usesr-last-list > li:last-child {
+    .users-last-list > li:last-child {
         height: inherit !important;
     }
     .xs-left {
@@ -9681,7 +9687,7 @@ span#HW_badge_cont:nth-child(3) {
         width: 100%;
         background: $white;
     }
-    .usesr-last-list > li {
+    .users-last-list > li {
         display: inline-block;
     }
     #inventory-sidebar {
@@ -9918,6 +9924,11 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 @media (max-width: 767px) {
+
+    .modal-backdrop + .modal {
+        margin-top: 5px;
+    }
+
     .daterangepicker.ltr .ranges {
         ul{
             width:100%;
@@ -10461,7 +10472,7 @@ span#HW_badge_cont:nth-child(3) {
         width: 100%;
         display: block;
     }
-    .usesr-last-list > li:last-child {
+    .users-last-list > li:last-child {
         height: inherit !important;
     }
     .xs-left {
@@ -10478,7 +10489,7 @@ span#HW_badge_cont:nth-child(3) {
         height: initial !important;
         width: 100% !important;
     }
-    .usesr-last-list > li {
+    .users-last-list > li {
         display: inline-block;
     }
     .col_wrapper:first-child .grp_list {
@@ -10534,7 +10545,7 @@ span#HW_badge_cont:nth-child(3) {
     .new_btn_ul li a {
         display: initial;
     }
-    ul.grp_list.usesr-last-list:first-child {
+    ul.grp_list.users-last-list:first-child {
         min-height: 150px;
     }
 }
