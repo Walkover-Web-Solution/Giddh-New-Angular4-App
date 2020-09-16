@@ -170,9 +170,9 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
         this.searchService.loadDetails(item.additional.uniqueName, requestObject).subscribe(data => {
             if (data && data.body) {
                 // Take taxes of parent group and stock's own taxes
-                const taxes = data.body.taxes || [];
-                if (data.body.stock) {
-                    taxes.push(...data.body.stock.taxes);
+                const taxes = data.body.stock && data.body.stock.taxes ? data.body.stock.taxes : [];
+                if (data.body.taxes) {
+                    taxes.push(...data.body.taxes);
                 }
                 // directly assign additional property
                 item.additional = {

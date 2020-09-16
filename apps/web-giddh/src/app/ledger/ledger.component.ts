@@ -346,10 +346,27 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.searchService.loadDetails(accountUniqueName, requestObject).subscribe(data => {
             if (data && data.body) {
                 // Take taxes of parent group and stock's own taxes
-                const taxes = data.body.taxes || [];
-                if (data.body.stock) {
-                    taxes.push(...data.body.stock.taxes);
+                const taxes = data.body.stock && data.body.stock.taxes ? data.body.stock.taxes : [];
+                const stockTaxesType = taxes.map(taxUniqueName => {
+                    const taxObject = this.companyTaxesList.find(tax => tax.uniqueName === taxUniqueName);
+                    return taxObject.taxType;
+                });
+                if (data.body.taxes) {
+                    // Parent group and account also have applied taxes
+                    if (!this.companyTaxesList) {
+                        this.store.pipe(select(s => s.company.taxes), take(1)).subscribe(res => {
+                            this.companyTaxesList = res || [];
+                        });
+                    }
+                    data.body.taxes.forEach(taxUniqueName => {
+                        // Include only unique taxes of a type from parent which are not there on stock
+                        const groupTaxDetails = this.companyTaxesList.find(companyTax => companyTax.uniqueName === taxUniqueName);
+                        if (!taxes.includes(taxUniqueName) && stockTaxesType.every(taxType => groupTaxDetails.taxType !== taxType)) {
+                            taxes.push(taxUniqueName);
+                        }
+                    });
                 }
+
                 if (txn.taxesVm) {
                     txn.taxesVm.forEach(tax => {
                         tax.isChecked = false;
