@@ -7,7 +7,7 @@ import {
     OnInit,
     SimpleChanges,
 } from '@angular/core';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -47,8 +47,10 @@ export class LoaderComponent implements OnInit, OnDestroy, OnChanges {
         this.router.events.subscribe(a => {
             if (a instanceof NavigationStart) {
                 this.navigationEnd$ = of(false);
-            } else if (a instanceof NavigationEnd) {
+                this.cdref.detectChanges();
+            } else if (a instanceof NavigationEnd || a instanceof RouteConfigLoadEnd) {
                 this.navigationEnd$ = of(true);
+                this.cdref.detectChanges();
             }
         });
     }
