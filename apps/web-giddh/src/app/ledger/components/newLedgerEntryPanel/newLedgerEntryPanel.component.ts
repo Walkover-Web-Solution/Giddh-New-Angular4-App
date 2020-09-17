@@ -968,6 +968,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public removeSelectedInvoice(): void {
         this.forceClear$ = observableOf({ status: true });
+        this.currentTxn.invoiceLinkingRequest = null;
         this.selectedInvoiceForCreditNote = null;
     }
 
