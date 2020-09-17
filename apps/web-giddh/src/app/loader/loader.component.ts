@@ -17,8 +17,6 @@ import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 export class LoaderComponent implements OnInit, OnDestroy, OnChanges {
 
     public showLoader: boolean = false;
-    public accountInProgress$: Observable<boolean> = of(false);
-    public transactionInprogress$: Observable<boolean> = of(false);
     public navigationEnd$: Observable<boolean> = of(true);
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -26,12 +24,8 @@ export class LoaderComponent implements OnInit, OnDestroy, OnChanges {
     constructor(
         private loaderService: LoaderService,
         private cdref: ChangeDetectorRef,
-        private store: Store<AppState>,
         private router: Router
-    ) {
-        this.accountInProgress$ = this.store.select(p => p.ledger.accountInprogress).pipe(takeUntil(this.destroyed$));
-        this.transactionInprogress$ = this.store.select(p => p.ledger.transactionInprogress).pipe(takeUntil(this.destroyed$));
-    }
+    ) { }
 
     public ngOnInit() {
         this.loaderService.loaderState.pipe(takeUntil(this.destroyed$)).subscribe((state: LoaderState) => {
@@ -45,13 +39,9 @@ export class LoaderComponent implements OnInit, OnDestroy, OnChanges {
 
         this.router.events.subscribe(a => {
             if (a instanceof NavigationStart) {
-                return this.navigationEnd$ = of(false);
-            }
-            // if (a instanceof RouteConfigLoadEnd) {
-            //     this.navigationEnd$ = of(true);
-            // }
-            if (a instanceof NavigationEnd) {
-                return this.navigationEnd$ = of(true);
+                this.navigationEnd$ = of(false);
+            } else if (a instanceof NavigationEnd) {
+                this.navigationEnd$ = of(true);
             }
         });
     }
