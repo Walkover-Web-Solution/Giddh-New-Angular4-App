@@ -2,7 +2,7 @@
 
 	<div class="table-responsive">
 
-		<table class="table basic giddh-table table-bordered mt-2 on-mobile-view">
+		<table class="table basic giddh-table table-bordered on-mobile-view">
 			<thead>
 				<tr>
 					<th>#</th>
@@ -53,18 +53,18 @@
 						<span *ngIf="expenses.baseAccountCategory==='BANK'"
 							class="font-12 text-gray icon-atm-card"></span>
 						<span *ngIf="expenses.baseAccountCategory==='CASH'" class="font-12 text-gray icon-cash"></span>
-						{{expenses.baseAccount.name}}
+						{{expenses.baseAccount.name ? expenses.baseAccount.name : '-'}}
 					</td>
 
 					<td data-title="File">
 						<!--                    <a href="javascript:void(0)" class="font-12" *ngIf="!expenses.fileNames">-->
 						<!--                        <i class="icon-file-path middle"></i> attach file</a>-->
-						<i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i> {{expenses.fileNames}}
+						<i *ngIf="expenses.fileNames" class="icon-image middle text-gray"></i> {{expenses.fileNames ? expenses.fileNames : '-'}}
 					</td>
 
-					<td data-title="Reason of Rejection">{{expenses.statusMessage}}</td>
+					<td data-title="Reason of Rejection">{{expenses.statusMessage ? expenses.statusMessage : '-'}}</td>
 
-					<td data-title="Action">
+					<td data-title="Action" class="action-btns">
 						<a (click)="revertActionClicked(expenses)" class="btn-icon">
 							<i class="icon-Revert"></i>
 						</a>

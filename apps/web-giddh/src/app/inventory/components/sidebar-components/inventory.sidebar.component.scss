@@ -54,6 +54,7 @@ ul#dropdown-nested li:hover .dropdown-menu {
 
 .search-sidebar{
     position: relative;
+        padding: 0 15px 15px;
     .form-control{
         width:205px;
         padding-left: 32px !important;
@@ -61,7 +62,7 @@ ul#dropdown-nested li:hover .dropdown-menu {
     }
     .fa-search{
         position: absolute;
-        top: 26px;
+        top: 12px;
         left: 25px;
     }
 }

@@ -57,7 +57,10 @@
     <!-- region main form -->
     <div [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)">
         <form #invoiceForm="ngForm" novalidate autocomplete="off"
-            [ngClass]="{ 'customer-invoice-form' : !invFormData.voucherDetails.customerName, 'cusomerInvoiceFormPurchase': isPurchaseInvoice , 'slaesPrEsti':isSalesInvoice || isProformaInvoice || isEstimateInvoice , 'forMultiCurrency' : isMulticurrencyAccount  } ">
+            [ngClass]="{ 'customer-invoice-form' : !invFormData.voucherDetails.customerName || !isCreditNote || !isDebitNote ,
+            'cusomer-invoice-form-purchase': isPurchaseInvoice || isCreditNote || isDebitNote ,
+            'slaesPrEsti':isSalesInvoice || isProformaInvoice || isEstimateInvoice ,
+            'forMultiCurrency' : isMulticurrencyAccount  } ">
 
             <div class="clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="addAccountFromShortcut()">
 
@@ -67,7 +70,7 @@
 
                         <div class="inner-container">
 
-                            <div class=" show-on-small-screen"
+                            <div class="show-on-small-screen"
                                 *ngIf="isSalesInvoice || isProformaInvoice || isEstimateInvoice">
 
                                 <div class="text-right">

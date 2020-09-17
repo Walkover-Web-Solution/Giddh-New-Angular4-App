@@ -329,6 +329,7 @@ button.btn.btn-filter {
 }
 .table-responsive{
     overflow-x:auto;
+    display:table;
 }
 .icon-btn {
     border: 1px solid $gainsboro;
@@ -389,3 +390,10 @@ button.btn.btn-filter {
         border: 0px solid $white !important;
     }
 }
+
+@media(max-width:1622px){
+    .table-responsive{
+        display:block;
+    }
+}
+

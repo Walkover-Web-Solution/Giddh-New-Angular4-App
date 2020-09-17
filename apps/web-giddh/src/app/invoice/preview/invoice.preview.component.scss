@@ -502,6 +502,7 @@ span.icon-export-icon {
 /* responsive */
 
 @media (max-width: 768px) {
+
     .invoice-name-download {
         a {
             padding-right: 0 !important;
@@ -615,6 +616,9 @@ span.icon-export-icon {
 }
 
 @media (max-width: 767px) {
+    .date-advance-search{
+        margin-top: 0 !important;
+    }
     .desktop-view-btn {
         display: none;
     }

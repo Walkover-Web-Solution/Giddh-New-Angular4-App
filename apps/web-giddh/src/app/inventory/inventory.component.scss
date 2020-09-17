@@ -82,7 +82,13 @@
         width: 100%;
     }
 }
-
+@media(max-width:767px){
+    .inventory-controll ::ng-deep.nav.nav-tabs {
+        position: fixed;
+        width: 100%;
+        top: 100px;
+    }
+}
 @media(max-width:1024px){
     .wrap-top-inventory{
         display: flex;
@@ -91,12 +97,23 @@
 
 
 @media (max-width:445px){
-    .inventory-controll{
-        .container-fluid{
-            .branch-filter {
-                margin-right: 0px;
-                width: 100% !important;
-            }
-        } 
+.inventory-controll .container-fluid {
+    .branch-warehouse-filter {
+        width: 100%;
+        sh-select{
+            min-width: auto;
+        }
+    }
+    .branch-filter {
+        margin-right: 0px;
+        width: 100% !important;
+    }
+    .warehouse-filter{
+        max-width: auto;
+        width: 100%;
+        margin-left:15px;
+    }
 }
 }
+
+

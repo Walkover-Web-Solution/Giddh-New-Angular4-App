@@ -1,13 +1,13 @@
 <div class="row">
-    <account-as-voucher class="col-sm-10 col-xs-10" [currentDate]="currentDate" [saveEntryOnCtrlA]="saveEntryInVoucher" [openDatePicker]="openDatePicker"
+    <account-as-voucher class="col-md-12 col-lg-10 account-wrapper" [currentDate]="currentDate" [saveEntryOnCtrlA]="saveEntryInVoucher" [openDatePicker]="openDatePicker"
         [openCreateAccountPopup]="openCreateAccountPopupInVoucher" [hidden]="gridType !== 'voucher'"></account-as-voucher>
 
-    <account-as-invoice class="col-sm-10 col-xs-10" [currentDate]="currentDate" [saveEntryOnCtrlA]="saveEntryInInvoice" [openDatePicker]="openDatePicker"
+    <account-as-invoice class="col-md-12 col-lg-10 account-wrapper" [currentDate]="currentDate" [saveEntryOnCtrlA]="saveEntryInInvoice" [openDatePicker]="openDatePicker"
         [openCreateAccountPopup]="openCreateAccountPopupInInvoice" [hidden]="gridType !== 'invoice'"></account-as-invoice>
 
     <input type="hidden" [attr.data-gridType]="gridType" id="get-grid-type">
 
-    <div class="sidebar-menu col-xs-2 col-sm-2 pd0">
+    <div class="sidebar-menu col-md-12 col-lg-2 pd0">
         <accounting-sidebar></accounting-sidebar>
     </div>
 </div>

@@ -1,4 +1,4 @@
-<form class="horizontal-form ng-pristine ng-valid ng-valid-required" id="groupDetailForm" name="groupDetailForm"
+<form class="horizontal-form ng-pristine ng-valid ng-valid-required manage-group-account-form" id="groupDetailForm" name="groupDetailForm"
     novalidate [formGroup]="groupDetailForm" (submit)="updateGroup()">
     <div class="container-fluid mrT1">
         <div class="row">
@@ -73,7 +73,7 @@
 
 
 <!--move group-->
-<div class="horizontal-form  form-group mrB1 clearfix" *ngIf="(activeGroup$ | async) && !(activeGroup$ | async)?.fixed">
+<div class="horizontal-form manage-group-account-form form-group mrB1 clearfix" *ngIf="(activeGroup$ | async) && !(activeGroup$ | async)?.fixed">
     <form name="moveGroupForm" class="col-xs-12 col-sm-12" novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
         <label class="d-block">Move to group</label>
         <span>
@@ -97,7 +97,7 @@
 <!--taxes  -->
 
 <!-- Taxes collapse -->
-<div class="clearfix tax-operation horizontal-form" *ngIf="isTaxableGroup$ | async">
+<div class="clearfix tax-operation horizontal-form manage-group-account-form" *ngIf="isTaxableGroup$ | async">
     <div class="col-xs-12 col-sm-12">
         <div class="form-group toggle-btn mrB">
             <label class="cp" (click)="showTaxes = !showTaxes; taxHierarchy()">
