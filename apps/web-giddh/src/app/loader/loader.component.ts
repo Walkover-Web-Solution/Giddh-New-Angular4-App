@@ -1,11 +1,18 @@
-import { takeUntil } from 'rxjs/operators';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { Observable, of, ReplaySubject } from 'rxjs';
-import { LoaderService } from './loader.service';
-import { LoaderState } from './loader';
-import { AppState } from 'apps/web-giddh/src/app/store';
-import { Store } from '@ngrx/store';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+} from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { LoaderState } from './loader';
+import { LoaderService } from './loader.service';
 
 @Component({
     selector: 'giddh-loader',
