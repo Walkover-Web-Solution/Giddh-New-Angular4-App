@@ -744,7 +744,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
         this._buildCells(calendar, side);
 
-        this.addMonthInCalendarMonths(side);
+        this.addMonthInCalendarMonths();
 
         this.checkNavigateMonthsHolders();
     }
@@ -1947,112 +1947,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     /**
      * This functions add the new months in the list of calendar months
      *
-     * @param {string} side
      * @memberof NgxDaterangepickerComponent
      */
-    public addMonthInCalendarMonths(side: string): void {
+    public addMonthInCalendarMonths(): void {
         this.calendarMonths = [];
         this.calendarMonths.push(this.calendarVariables);
         this.setActiveMonth(this.calendarMonths[0], "start");
-        // if (side === "start") {
-        //     if (this.initialCalendarMonths === true) {
-        //         this.calendarMonths = [];
-        //         this.renderedCalendarMonths = [];
-        //     } else {
-        //         if(this.calendarMonths[0] && this.calendarMonths[0].start && this.calendarMonths[0].end) {
-        //             this.calendarMonths[0].start = this.calendarMonths[0].end;
-        //             delete this.calendarMonths[0].end;
-        //         }
-
-        //         if(this.calendarMonths[1]) {
-        //             if(this.calendarMonths[1].start) {
-        //                 this.calendarMonths[0].end = this.calendarMonths[1].start;
-        //             } else if(this.calendarMonths[1].end) {
-        //                 this.calendarMonths[0].end = this.calendarMonths[1].end;
-        //             }
-        //             delete this.calendarMonths[1];
-        //         }
-
-        //         if(this.renderedCalendarMonths[1]) {
-        //             delete this.renderedCalendarMonths[1];
-
-        //             let renderedCalendarMonths = [];
-
-        //             this.renderedCalendarMonths.forEach(month => {
-        //                 if(month) {
-        //                     renderedCalendarMonths.push(month);
-        //                 }
-        //             });
-
-        //             this.renderedCalendarMonths = renderedCalendarMonths;
-        //         }
-
-        //         let calendarMonths = [];
-
-        //         this.calendarMonths.forEach(month => {
-        //             if(month) {
-        //                 calendarMonths.push(month);
-        //             }
-        //         });
-
-        //         this.calendarMonths = calendarMonths;
-        //     }
-
-        //     if (this.checkMinMaxDate(this.calendarVariables.start)) {
-        //         if (this.activeMonthHover === false) {
-        //             this.activeMonth = this.calendarVariables.start;
-        //             this.lastActiveMonthSide = 'start';
-        //         }
-
-        //         let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) : 0;
-        //         let startKey = this.calendarVariables.start.month + "-" + this.calendarVariables.start.year;
-        //         let endKey = this.calendarVariables.end.month + "-" + this.calendarVariables.end.year;
-
-        //         if (!this.renderedCalendarMonths.includes(endKey)) {
-        //             if (this.isPreviousMonth === true) {
-        //                 this.renderedCalendarMonths.push(endKey);
-
-        //                 this.calendarMonths.unshift({ end: this.calendarVariables.end });
-        //             }
-        //         }
-
-        //         if (!this.renderedCalendarMonths.includes(startKey)) {
-        //             this.renderedCalendarMonths.push(startKey);
-
-        //             if (this.isPreviousMonth === true) {
-        //                 this.calendarMonths.unshift({ start: this.calendarVariables.start });
-        //             } else {
-        //                 if (this.calendarMonths[existingMonthsLength] === undefined) {
-        //                     this.calendarMonths[existingMonthsLength] = [];
-        //                 }
-
-        //                 this.calendarMonths[existingMonthsLength].start = this.calendarVariables.start;
-        //             }
-        //         }
-        //     }
-        // }
-
-        // if (side === "end") {
-        //     if (this.checkMinMaxDate(this.calendarVariables.end)) {
-        //         if (this.activeMonthHover === false) {
-        //             this.activeMonth = this.calendarVariables.end;
-        //             this.lastActiveMonthSide = 'end';
-        //         }
-
-        //         let existingMonthsLength = (Math.ceil(Object.keys(this.renderedCalendarMonths).length)) ? Math.ceil(Object.keys(this.renderedCalendarMonths).length) - 1 : 0;
-        //         let key = this.calendarVariables.end.month + "-" + this.calendarVariables.end.year;
-
-        //         if (!this.renderedCalendarMonths.includes(key)) {
-        //             this.renderedCalendarMonths.push(key);
-
-        //             if (this.calendarMonths[existingMonthsLength] === undefined) {
-        //                 this.calendarMonths[existingMonthsLength] = [];
-        //             }
-
-        //             this.calendarMonths[existingMonthsLength].end = this.calendarVariables.end;
-        //         }
-        //     }
-        // }
     }
 
     /**
