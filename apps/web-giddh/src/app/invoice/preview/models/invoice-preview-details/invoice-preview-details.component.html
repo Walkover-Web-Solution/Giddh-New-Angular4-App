@@ -244,7 +244,7 @@
                                                         class="fa fa-trash"></i></a>
                                             </span>
                                         </div>
-                                        <div class="history-btn">
+                                        <div class="history-btn" *ngIf="selectedItem.voucherType === 'purchase'">
                                             <button class="btn btn-primary" (click)="toggleActivityHistoryAsidePane()"><img
                                                     src="../../../assets/images/history-icon.svg"> History</button>
                                         </div>
@@ -338,8 +338,8 @@
                                 <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and PDF (.pdf); to print other formats, download them. </span>
                             </div>
 
-                            <div *ngIf="!shouldShowUploadAttachment" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
-                                <img *ngIf="(selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image')"
+                            <div *ngIf="!shouldShowUploadAttachment && selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image'" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
+                                <img
                                     class="image-preview img-expand" [src]="imagePreviewSource"/>
                             </div>
                             <div *ngIf="shouldShowUploadAttachment"

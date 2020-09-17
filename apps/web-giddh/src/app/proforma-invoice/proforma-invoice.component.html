@@ -229,7 +229,7 @@
 
                                                                 <div>
                                                                     <div class="col-sm-6 pd ">
-                                                                        <label class="salesCountryLabel">
+                                                                        <label class="sales-country-label">
                                                                             {{ customerCountryName }}
                                                                         </label>
                                                                     </div>
@@ -300,7 +300,7 @@
                                                                         <div class="col-sm-6 pd ">
                                                                             <div class="form-group">
 
-                                                                                <label class="salesCountryLabel">
+                                                                                <label class="sales-country-label">
                                                                                     {{ customerCountryName }}
                                                                                 </label>
                                                                             </div>
@@ -457,7 +457,8 @@
                                     <div class="col-sm-6 pl-0">
                                         <sh-select class="multi-select" name="warehouse"
                                             [placeholder]="'Select Warehouse'" [(ngModel)]="selectedWarehouse"
-                                            [options]="warehouses">
+                                            [options]="warehouses"
+                                            (selected)="onSelectWarehouse($event)">
                                         </sh-select>
                                     </div>
                                 </div>
@@ -484,7 +485,7 @@
                                                                 aria-autocomplete="none"></textarea>
                                                             <div>
                                                                 <div class="col-sm-6 pd">
-                                                                    <label class="sales-country-label">
+                                                                    <label class="salesCountryLabel">
                                                                         {{companyCountryName}}
                                                                     </label>
                                                                 </div>
@@ -536,7 +537,7 @@
                                                                 <div class="form-group">
                                                                     <div class="col-sm-6 pd ">
                                                                         <div class="form-group">
-                                                                            <label class="sales-country-label">
+                                                                            <label class="salesCountryLabel">
                                                                                 {{companyCountryName}}
                                                                             </label>
                                                                         </div>
@@ -1548,7 +1549,7 @@
                                             </div>
                                         </div>
                                         <div class="tableRow"
-                                            *ngIf="!isPurchaseInvoice && (calculatedRoundOff > 0 || calculatedRoundOff < 0)">
+                                            *ngIf="(calculatedRoundOff > 0 || calculatedRoundOff < 0)">
 
                                             <div class="tableCell">
                                                 <strong>Round Off</strong>
@@ -2462,7 +2463,7 @@
                                 </div>
                             </div>
                             <div class="tableRow"
-                                *ngIf="!isPurchaseInvoice && (calculatedRoundOff > 0 || calculatedRoundOff < 0)">
+                                *ngIf="(calculatedRoundOff > 0 || calculatedRoundOff < 0)">
 
                                 <div class="tableCell">
                                     <strong>Round Off</strong>

@@ -613,6 +613,7 @@ input {
     padding-bottom: 7px !important;
     font-size: 14px;
     color: #262626 !important;
+    border-width: 0px 0 4px 0 !important;
 }
 
 .invoice-control .nav > li > a:hover{
@@ -8509,7 +8510,6 @@ ul.dropdown-menu p.lead.pd {
     padding-bottom: 7px !important;
     font-family: $opensans-semibold;
     background-color: inherit;
-    border-width: 0px 0 4px 0 !important;
 }
 
 .dropdown-menu > li > a:hover {

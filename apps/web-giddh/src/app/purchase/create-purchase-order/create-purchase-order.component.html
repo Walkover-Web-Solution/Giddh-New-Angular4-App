@@ -346,7 +346,7 @@
                             <div class="col-sm-6 pl-0">
                                 <div>
                                 <input type="text" class="form-control" name="purchaseOrderNumber"
-                                    [(ngModel)]="purchaseOrder.number" [disabled]="!invoiceSettings?.purchaseBillSettings?.useCustomPONumber" placeholder="Enter Order #" />
+                                    [(ngModel)]="purchaseOrder.number" [disabled]="!invoiceSettings?.purchaseBillSettings?.useCustomPONumber || isUpdateMode" placeholder="Enter Order #" />
                                 </div>
                             </div>
                             <!-- endregion -->
@@ -556,6 +556,7 @@
                                         [fixedValue]="(transaction.stockDetails && transaction.stockDetails.name) ? transaction.accountName+' ('+transaction.stockDetails?.name+')' : transaction.accountName"
                                         [forceClearReactive]="forceClear$ | async"
                                         [multiple]="false"
+                                        (noResultsClicked)="onNoResultsClicked(entryIdx)"
                                         [ItemHeight]="67" (onClear)="onClearSalesAccount(transaction)"
                                         [useInBuiltFilterForFlattenAc]="true">
 
@@ -1659,6 +1660,10 @@
     [keyboardShortcut]="{'esc':accountAsideMenuState ==='in'}" *ngIf="accountAsideMenuState === 'in'"
     [selectedAccountUniqueName]="selectedVendorForDetails" (onShortcutPress)="toggleAccountAsidePane()"
     (addEvent)="addNewSidebarAccount($event)" (updateEvent)="updateSidebarAccount($event)"></generic-aside-menu-account>
+
+<aside-menu-product-service *ngIf="asideMenuStateForProductService === 'in'" [class]="asideMenuStateForProductService"
+    [selectedVoucherType]="'purchase'" [@slideInOut]="asideMenuStateForProductService"
+    (closeAsideEvent)="onNoResultsClicked()"></aside-menu-product-service>
 
 <!-- region bulk items -->
 <div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade" role="dialog"

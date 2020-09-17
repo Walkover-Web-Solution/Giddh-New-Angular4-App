@@ -16,6 +16,28 @@
                 font-size: 12px !important;
             }
         }
+
+        .d-inline-flex {
+            display: inline-flex;
+        }
+        
+        .custom-estimation label {
+            position: absolute;
+            top: -24px;
+            right: 15px;
+            font-size: 12px;
+            color: #666666;
+            text-align: right;
+        }
+        
+        .initial-number {
+            width: 70px;
+            margin: 0 15px;
+        }
+
+        .r-0 {
+            right:0px;
+        }
     }
     .input-group {
         width: 100%;
