@@ -12,8 +12,9 @@
                                 (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
                         </span>
                     </div>
-                    <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
-                        <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup(false)"></span>
+                    <div class="advance-icon" tooltip="Advance Search"
+                    (click)="toggleAdvanceSearchPopup(false)">
+                        <span class="icon-advance-filter"></span>
                     </div>
 
                     <div class="search-icon-block" (click)="openModal(template)">
@@ -302,7 +303,7 @@
                             </div>
                         </th>
 
-                        <th width="10%">
+                        <th width="10%" class="mw-th-190">
                             <div class="d-flex">
                                 <div class="flex-fill">Status</div>
                             </div>
