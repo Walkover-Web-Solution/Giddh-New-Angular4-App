@@ -9,20 +9,19 @@
             {{(baseAccount$ | async)?.name}} A/c</h3>
 
         <sh-select id="update-ledger-select-account" *ngIf="openDropDown" class="d-inline-block" [disabled]="false" placeholder="Select Group"
-            filterPlaceholder="Type to filter.." name="accountUniqueName" [(ngModel)]="baseAccountName$"
-            [useInBuiltFilterForFlattenAc]="true" [showClear]="false" [options]="vm.flatternAccountList4BaseAccount"
-            style="width:30%">
+            [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+            [enableDynamicSearch]="true" [notFoundMsg]="noResultsFoundLabel" (onHide)="handleSuggestionHide()"
+            filterPlaceholder="Type to filter.." name="accountUniqueName" [(ngModel)]="baseAccountName$" [showClear]="false"
+            [options]="searchResults" style="width:30%">
             <ng-template #optionTemplate let-option="option">
                 <ng-container *ngIf="!option.additional?.stock">
-                    <a href="javascript:void(0)" (click)="changeBaseAccount(option)"
-                        style="border-bottom: 1px solid #ccc;">
+                    <a href="javascript:void(0)" (click)="changeBaseAccount(option)" style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{option?.label}}</div>
                         <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
                     </a>
                 </ng-container>
                 <ng-container *ngIf="option.additional?.stock">
-                    <a href="javascript:void(0)" (click)="changeBaseAccount(option)"
-                        style="border-bottom: 1px solid #ccc;">
+                    <a href="javascript:void(0)" (click)="changeBaseAccount(option)" style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{option?.label}}</div>
                         <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
                         <div class="item_stock">Stock: {{option.additional?.stock.name}}</div>
@@ -113,8 +112,11 @@
                                                         (dbtSelect.isOpen && dbtSelect.filter))">To</span>
                                                 <sh-select id="{{'debit-select-' + i }}" [notFoundLink]="true"
                                                     (noResultsClicked)="showQuickAccountModal()"
+                                                    [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                    [enableDynamicSearch]="true" [notFoundMsg]="noResultsFoundLabel"
+                                                    (onHide)="handleSuggestionHide()"
                                                     (keydown)="keydownPressed($event)"
-                                                    [options]="vm.flatternAccountList4Select | async" #dbtSelect
+                                                    [options]="searchResults" #dbtSelect
                                                     (click)="addBlankTrx('DEBIT', txn, $event)"
                                                     (selected)="selectAccount($event,txn, dbtSelect)"
                                                     [showClear]="false" [(ngModel)]="txn.particular.uniqueName"
@@ -297,8 +299,11 @@
                                                         (crdSelect.isOpen && crdSelect.filter))">By</span>
                                                 <sh-select id="{{'credit-select-' + i}}" [notFoundLink]="true"
                                                     (noResultsClicked)="showQuickAccountModal()"
+                                                    [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd()" (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                    [enableDynamicSearch]="true" [notFoundMsg]="noResultsFoundLabel"
+                                                    (onHide)="handleSuggestionHide()"
                                                     (keydown)="keydownPressed($event)"
-                                                    [options]="vm.flatternAccountList4Select | async" #crdSelect
+                                                    [options]="searchResults" #crdSelect
                                                     (click)="addBlankTrx('CREDIT', txn, $event)"
                                                     (selected)="selectAccount($event,txn, crdSelect)"
                                                     (onShow)="cbs.hide()" [showClear]="false"
@@ -1141,7 +1146,7 @@
 </div>
 
 <!-- update base account popup -->
-<div bsModal #updateBaseAccount="bs-modal" class="modal fade" role="dialog">
+<!-- <div bsModal #updateBaseAccount="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <base-account #baseAccount [accountUniqueName]="(baseAccount$ | async)?.uniqueName"
@@ -1150,7 +1155,7 @@
                 (updateBaseAccount)="changeBaseAccount($event)"></base-account>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- endregion -->
 
