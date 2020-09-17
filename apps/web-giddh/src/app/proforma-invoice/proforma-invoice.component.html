@@ -229,7 +229,7 @@
 
                                                                 <div>
                                                                     <div class="col-sm-6 pd ">
-                                                                        <label class="salesCountryLabel">
+                                                                        <label class="sales-country-label">
                                                                             {{ customerCountryName }}
                                                                         </label>
                                                                     </div>
@@ -300,7 +300,7 @@
                                                                         <div class="col-sm-6 pd ">
                                                                             <div class="form-group">
 
-                                                                                <label class="salesCountryLabel">
+                                                                                <label class="sales-country-label">
                                                                                     {{ customerCountryName }}
                                                                                 </label>
                                                                             </div>
@@ -1557,7 +1557,7 @@
 
                                             <div class="tableCell figureCell">
                                                 <strong> <span
-                                                        *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
+                                                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
                                                     {{calculatedRoundOff | giddhCurrency}}</strong>
                                             </div>
 
@@ -2471,7 +2471,7 @@
 
                                 <div class="tableCell figureCell">
                                     <strong> <span
-                                            *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
+                                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
                                         {{calculatedRoundOff | giddhCurrency}}</strong>
                                 </div>
 
