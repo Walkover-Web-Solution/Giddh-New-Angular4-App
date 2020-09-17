@@ -457,7 +457,8 @@
                                     <div class="col-sm-6 pl-0">
                                         <sh-select class="multi-select" name="warehouse"
                                             [placeholder]="'Select Warehouse'" [(ngModel)]="selectedWarehouse"
-                                            [options]="warehouses">
+                                            [options]="warehouses"
+                                            (selected)="onSelectWarehouse($event)">
                                         </sh-select>
                                     </div>
                                 </div>
@@ -1548,7 +1549,7 @@
                                             </div>
                                         </div>
                                         <div class="tableRow"
-                                            *ngIf="!isPurchaseInvoice && (calculatedRoundOff > 0 || calculatedRoundOff < 0)">
+                                            *ngIf="(calculatedRoundOff > 0 || calculatedRoundOff < 0)">
 
                                             <div class="tableCell">
                                                 <strong>Round Off</strong>
@@ -1556,7 +1557,7 @@
 
                                             <div class="tableCell figureCell">
                                                 <strong> <span
-                                                        *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
+                                                        *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
                                                     {{calculatedRoundOff | giddhCurrency}}</strong>
                                             </div>
 
@@ -2462,7 +2463,7 @@
                                 </div>
                             </div>
                             <div class="tableRow"
-                                *ngIf="!isPurchaseInvoice && (calculatedRoundOff > 0 || calculatedRoundOff < 0)">
+                                *ngIf="(calculatedRoundOff > 0 || calculatedRoundOff < 0)">
 
                                 <div class="tableCell">
                                     <strong>Round Off</strong>
@@ -2470,7 +2471,7 @@
 
                                 <div class="tableCell figureCell">
                                     <strong> <span
-                                            *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
+                                            *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
                                         {{calculatedRoundOff | giddhCurrency}}</strong>
                                 </div>
 
