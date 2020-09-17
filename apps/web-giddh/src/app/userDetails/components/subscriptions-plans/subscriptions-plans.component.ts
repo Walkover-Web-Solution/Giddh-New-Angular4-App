@@ -13,6 +13,8 @@ import { CompanyActions } from '../../../actions/company.actions';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { DEFAULT_SIGNUP_TRIAL_PLAN, DEFAULT_POPULAR_PLAN } from '../../../app.constant';
+import { SettingsProfileService } from '../../../services/settings.profile.service';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'subscriptions-plans',
@@ -71,7 +73,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     constructor(private modalService: BsModalService, private _generalService: GeneralService,
         private _authenticationService: AuthenticationService, private store: Store<AppState>,
         private _route: Router, private companyActions: CompanyActions,
-        private settingsProfileActions: SettingsProfileActions) {
+        private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService, private toasty: ToasterService) {
 
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.select(profile => profile.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
@@ -174,7 +176,14 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     }
 
     public patchProfile(obj) {
-        this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
+        this.settingsProfileService.PatchProfile(obj).subscribe(response => {
+            if(response && response.status === "error") {
+                this.toasty.errorToast(response.message);
+            } else {
+                this.toasty.successToast('Plan Updated Successfully.');
+                this.backClicked();
+            }
+        });
     }
 
     public choosePlan(plan: CreateCompanyUsersPlan) {

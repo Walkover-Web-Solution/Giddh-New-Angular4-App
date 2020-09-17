@@ -11,7 +11,7 @@ import { Component, OnInit, Output, ViewChild, OnDestroy, EventEmitter } from '@
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { SettingsTagsComponent } from './tags/tags.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -34,7 +34,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @ViewChild('integrationComponent', {static: true}) public integrationComponent: SettingIntegrationComponent;
-    @ViewChild('profileComponent', {static: true}) public profileComponent: SettingProfileComponent;
+    @ViewChild('profileComponent', {static: false}) public profileComponent: SettingProfileComponent;
     @ViewChild('financialYearComp', {static: true}) public financialYearComp: FinancialYearComponent;
     @ViewChild('eBankComp', {static: true}) public eBankComp: SettingLinkedAccountsComponent;
     @ViewChild('permissionComp', {static: true}) public permissionComp: SettingPermissionComponent;
@@ -73,7 +73,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private breakPointObservar: BreakpointObserver
     ) {
         this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
-        this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
+        this.isUpdateCompanyInProgress$ = this.store.pipe(select(state => state.settings.updateProfileInProgress), takeUntil(this.destroyed$));
         this.isCompanyProfileUpdated = false;
     }
 

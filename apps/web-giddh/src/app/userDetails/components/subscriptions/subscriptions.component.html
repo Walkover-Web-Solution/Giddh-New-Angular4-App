@@ -88,7 +88,7 @@
                                                     <a class="dropdown-item" href="javascript:void(0)"
                                                         (click)="isPlanShow=true">Upgrade Plan</a>
                                                 </li>
-                                                <li role="menuitem">
+                                                <li role="menuitem" *ngIf="seletedUserPlans?.planDetails?.uniqueName !== defaultTrialPlan">
                                                     <a class="dropdown-item" href="javascript:void(0)"
                                                         (click)="isPlanShow=true">Downgrade Plan</a>
                                                 </li>
@@ -229,7 +229,7 @@
                                                     <div class="d-flex associated-company-name">
                                                         <p>
                                                             <img src="assets/images/blue-check.svg" class="mr-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">
-                                                            {{company.name}}
+                                                            {{company.name}} ({{company.alias}})
                                                         </p>
                                                         <p class="font-12 mt-05" *ngIf="activeCompany?.uniqueName === company?.uniqueName">(Current Company)</p>
                                                     </div>
