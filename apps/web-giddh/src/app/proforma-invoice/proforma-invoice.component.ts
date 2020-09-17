@@ -5002,7 +5002,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.isUpdateMode = true;
         } else {
             // User denied the permission or closed the popup
-            this._toasty.errorToast('Please change either purchase invoice number or vendor details.', 'Purchase Record');
+            this._toasty.errorToast('Please change either purchase invoice number or vendor details.', 'Purchase Bill');
         }
         if (this.purchaseRecordConfirmationPopup) {
             this.purchaseRecordConfirmationPopup.hide();
@@ -5253,7 +5253,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             if (this.isPurchaseInvoice) {
-                this._toasty.successToast(`Purchase record created successfully`);
+                this._toasty.successToast(`Purchase bill created successfully`);
             } else {
                 this._toasty.successToast(`Entry created successfully with Voucher Number: ${this.voucherNumber}`);
             }
