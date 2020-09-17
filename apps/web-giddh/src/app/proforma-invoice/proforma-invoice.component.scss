@@ -304,6 +304,17 @@ $greyClr: #6d6d6d;
     display:flex !important;
 }
 
+.border-btm{
+    .item{
+        width:50%;
+    }
+
+    .item-unq,.item_stock {
+    font-size:12px;
+    width:25%;
+    }
+}
+
 .fs12 {
     font-size: 12px;
 }
@@ -1045,7 +1056,7 @@ section.newtable {
     line-height: 2.3;
 }
 
-.customerInvoiceTable label.salesCountryLabel {
+.customerInvoiceTable label.sales-country-label {
     min-height: 36px;
 }
 
@@ -1175,7 +1186,7 @@ section.newtable {
     color: #0c8fe6;
 }
 
-.salesCountryLabel {
+.sales-country-label {
     margin-bottom: 0;
     vertical-align: middle;
     line-height: 2.4;
@@ -1453,7 +1464,7 @@ input.form-control.edit-currency {
     font-size: 17px;
 }
 
-label.salesCountryLabel {
+label.sales-country-label {
     padding-bottom: 0;
 }
 

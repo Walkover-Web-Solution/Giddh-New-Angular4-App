@@ -128,8 +128,7 @@
                                                         [disabled]="isUpdateMode && invoiceType !== 'sales' && invoiceType !== 'cash'">
 
                                                         <ng-template #optionTemplate let-option="option">
-                                                            <a href="javascript:void(0)" class="list-item"
-                                                                style="border-bottom: 1px solid #ccc;">
+                                                            <a href="javascript:void(0)" class="list-item">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unq">{{ option.value }}</div>
                                                             </a>
@@ -229,7 +228,7 @@
 
                                                                 <div>
                                                                     <div class="col-sm-6 pd ">
-                                                                        <label class="salesCountryLabel">
+                                                                        <label class="sales-country-label">
                                                                             {{ customerCountryName }}
                                                                         </label>
                                                                     </div>
@@ -300,7 +299,7 @@
                                                                         <div class="col-sm-6 pd ">
                                                                             <div class="form-group">
 
-                                                                                <label class="salesCountryLabel">
+                                                                                <label class="sales-country-label">
                                                                                     {{ customerCountryName }}
                                                                                 </label>
                                                                             </div>
@@ -485,7 +484,7 @@
                                                                 aria-autocomplete="none"></textarea>
                                                             <div>
                                                                 <div class="col-sm-6 pd">
-                                                                    <label class="salesCountryLabel">
+                                                                    <label class="sales-country-label">
                                                                         {{companyCountryName}}
                                                                     </label>
                                                                 </div>
@@ -537,7 +536,7 @@
                                                                 <div class="form-group">
                                                                     <div class="col-sm-6 pd ">
                                                                         <div class="form-group">
-                                                                            <label class="salesCountryLabel">
+                                                                            <label class="sales-country-label">
                                                                                 {{companyCountryName}}
                                                                             </label>
                                                                         </div>
@@ -1084,16 +1083,14 @@
 
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item"
-                                                                style="border-bottom: 1px solid #ccc;">
+                                                            <a href="javascript:void(0)" class="list-item border-btm justify-content-between">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unq">
                                                                     {{ option.additional?.uniqueName }}</div>
                                                             </a>
                                                         </ng-container>
                                                         <ng-container *ngIf="option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item"
-                                                                style="border-bottom: 1px solid #ccc;">
+                                                            <a href="javascript:void(0)" class="list-item border-btm justify-content-between">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unq">
                                                                     {{ option.additional?.uniqueName }}</div>
@@ -1965,16 +1962,14 @@
 
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <ng-container *ngIf="!option.additional?.stock">
-                                                                    <a href="javascript:void(0)" class="list-item"
-                                                                        style="border-bottom: 1px solid #ccc;">
+                                                                    <a href="javascript:void(0)" class="list-item border-btm justify-content-between">
                                                                         <div class="item">{{ option.label }}</div>
                                                                         <div class="item-unq">
                                                                             {{ option.additional?.uniqueName }}</div>
                                                                     </a>
                                                                 </ng-container>
                                                                 <ng-container *ngIf="option.additional?.stock">
-                                                                    <a href="javascript:void(0)" class="list-item"
-                                                                        style="border-bottom: 1px solid #ccc;">
+                                                                    <a href="javascript:void(0)" class="list-item border-btm justify-content-between">
                                                                         <div class="item">{{ option.label }}</div>
                                                                         <div class="item-unq">
                                                                             {{ option.additional?.uniqueName }}</div>
