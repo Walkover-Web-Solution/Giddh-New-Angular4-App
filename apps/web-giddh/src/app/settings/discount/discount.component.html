@@ -4,10 +4,9 @@
 	</div>
 
 	<form #discountForm="ngForm" novalidate (submit)="submit()" class="discount-form-setting-tab">
-		<div class="row ">
+		<div class="row">
 			<div class="form-group col-lg-3 col-md-6 col-xs-12">
 				<div class="discount-type">
-						<label>&nbsp;</label><br>
 						<sh-select [options]="discountTypeList" [isFilterEnabled]="false" name="type"
 							[(ngModel)]="createRequest.type" [placeholder]="'Select Discount Type'" [ItemHeight]="33"></sh-select>
 				</div>

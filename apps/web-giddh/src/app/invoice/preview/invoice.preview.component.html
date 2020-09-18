@@ -61,7 +61,7 @@
                         </ul>
                     </div>
                 </div>
-                <button class="btn btn-default desktop-view-btn mr-1" tooltip="Export" (click)="exportCsvDownload()"
+                <button class="btn btn-default desktop-view-btn mr-15" tooltip="Export" (click)="exportCsvDownload()"
                     [ladda]="exportInvoiceRequestInProcess$ | async"
                     *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported"
                     data-spinner-size="20px">
@@ -72,7 +72,7 @@
                 <!-- Section to create New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
                 <div class="btn-group desktop-view-btn" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
                     <button id="ddl-newinv" dropdownToggle type="button"
-                        class="btn btn-pink dropdown-toggle dropdown-btn-new" aria-controls="dropdown-ddl-newinv">
+                        class="btn btn-sky-blue dropdown-toggle dropdown-btn-new mr-0" aria-controls="dropdown-ddl-newinv">
                         + New Invoice
                         <span class="caret"></span>
                     </button>
@@ -89,17 +89,17 @@
                     </ul>
                 </div>
                 <div *ngIf="selectedVoucher === 'purchase'" class="btn-wrapper">
-                    <button class="btn btn-pink desktop-view-btn" (click)="goToInvoice('purchase')">+
+                    <button class="btn btn-sky-blue desktop-view-btn mr-0" (click)="goToInvoice('purchase')">+
                         New Bill
                     </button>
                 </div>
                 <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-                    <button class="btn btn-pink desktop-view-btn" (click)="goToInvoice('credit note')">+
+                    <button class="btn btn-sky-blue desktop-view-btn mr-0" (click)="goToInvoice('credit note')">+
                         New Cr. Note
                     </button>
                 </div>
                 <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-                    <button class="btn btn-pink desktop-view-btn" (click)="goToInvoice('debit note')">+ New
+                    <button class="btn btn-sky-blue desktop-view-btn mr-0" (click)="goToInvoice('debit note')">+ New
                         Dr. Note
                     </button>
                 </div>
@@ -153,7 +153,7 @@
 
                     <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
                         <button id="ddl-newinv" dropdownToggle type="button"
-                            class="btn btn-pink dropdown-toggle dropdown-btn-new" aria-controls="dropdown-ddl-newinv">
+                            class="btn btn-sky-blue dropdown-toggle dropdown-btn-new" aria-controls="dropdown-ddl-newinv">
                             + New Invoice
                             <span class="caret"></span>
                         </button>
@@ -172,13 +172,13 @@
 
                     </div>
                     <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-                        <button class="btn btn-pink" style="margin: 0 !important;"
+                        <button class="btn btn-sky-blue" style="margin: 0 !important;"
                             (click)="goToInvoice('credit note')">+ New Cr.
                             Note
                         </button>
                     </div>
                     <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-                        <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('debit note')">+
+                        <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('debit note')">+
                             New Dr.
                             Note
                         </button>
@@ -216,7 +216,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-6 mt-2">
-                        <button class="btn btn-pink">Submit</button>
+                        <button class="btn btn-sky-blue">Submit</button>
                     </div>
 
                 </div>

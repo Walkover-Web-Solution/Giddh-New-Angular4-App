@@ -58,7 +58,7 @@
     <div [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)">
         <form #invoiceForm="ngForm" novalidate autocomplete="off"
             [ngClass]="{ 'customer-invoice-form' : !invFormData.voucherDetails.customerName || !isCreditNote || !isDebitNote ,
-            'cusomer-invoice-form-purchase': isPurchaseInvoice || isCreditNote || isDebitNote ,
+            'customer-invoice-form-purchase': isPurchaseInvoice || isCreditNote || isDebitNote ,
             'slaesPrEsti':isSalesInvoice || isProformaInvoice || isEstimateInvoice ,
             'forMultiCurrency' : isMulticurrencyAccount  } ">
 

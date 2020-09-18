@@ -92,6 +92,9 @@
 }
 .recurring-container {
     padding: 0 15px;
+    .form-inline{
+        margin-bottom: 10px !important;
+    }
 }
 .icon-sort-asc,
 .icon-sort-dsc {

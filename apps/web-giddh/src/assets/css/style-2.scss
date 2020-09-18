@@ -871,7 +871,7 @@ ul.sub-list {
     margin-top: 5px;
 }
 
-.user_dropdown>li>a .icon-arrow-down {
+.user-dropdown-header>li>a .icon-arrow-down {
     font-size: 12px;
     float: right;
     padding-top: 4px;
@@ -1062,14 +1062,14 @@ ul.sub-list {
     top: -4px;
 }
 
-.btn-pink {
+.btn-sky-blue {
     background: $deep-sky-blue;
     border: 1px solid $deep-sky-blue;
     color: $white;
 }
 
-.btn-pink:hover,
-.btn-pink:focus {
+.btn-sky-blue:hover,
+.btn-sky-blue:focus {
     background: $deep-sky-blue-hover !important;
     border-color: $deep-sky-blue-hover;
     color: $white;
@@ -1864,6 +1864,7 @@ input:-moz-placeholder {
     margin-right: 15px;
     float: left;
     letter-spacing: -1px;
+    color: $white !important;
 }
 
 .company-name .cText .fyear {
@@ -6736,18 +6737,18 @@ table td[class*=col-]:last-child {
     color: #7f7f7f;
 }
 
-.user_dropdown {
+.user-dropdown-header {
     width: 270px;
     right: 4px;
     padding: 0px;
-    border: 1px solid #cccccc;
+    border: 1px solid $gainsboro;
     left: -15px !important;
 }
 
-.user_dropdown > li > a {
+.user-dropdown-header > li > a {
     font-size: 13px;
     padding: 6px 15px !important;
-    color: #333333;
+    color: $night-rider;
 }
 
 .app_list > ul {
@@ -7214,11 +7215,11 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .cmp:hover,
-.user_dropdown > li a:hover .userName_wrap small {
+.user-dropdown-header > li a:hover .userName_wrap small {
     color: #666;
 }
 
-.user_dropdown > li a:hover {
+.user-dropdown-header > li a:hover {
     color: $chetwode-blue;
     background: #eeeff9;
 }
@@ -10078,7 +10079,7 @@ span#HW_badge_cont:nth-child(3) {
         top: 0;
         display: none;
     }
-    .user_dropdown>li>a .icon-arrow-down {
+    .user-dropdown-header>li>a .icon-arrow-down {
         transform: rotate(90deg);
     }
     #setting-tab .tab-container .nav.nav-tabs {
@@ -10191,7 +10192,7 @@ span#HW_badge_cont:nth-child(3) {
     .cText span.cName {
         color: $white !important;
     }
-    .user_dropdown {
+    .user-dropdown-header {
         left: 0px !important;
     }
     .xs-d-block {

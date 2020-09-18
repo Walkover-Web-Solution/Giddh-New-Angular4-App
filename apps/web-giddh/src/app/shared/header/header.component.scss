@@ -633,8 +633,8 @@ ul.sub-list {
 }
 
 .company-name .ellp {
-   //white-space: inherit;
     font-size: 14px;
+    font-family: 'opensans-semibold';
 }
 
 .overlay-cal {
@@ -668,6 +668,7 @@ ul.sub-list {
 .head-nav {
     background: #f1f1f1;
     border-bottom: 1px solid #e4e4e4;
+    margin-bottom: 5px;
 }
 .ledger-page {
     position: sticky;
@@ -725,6 +726,34 @@ ul.sub-list {
 }
 .desktop-header .hamburger-menu{
     display: flex;
+}
+.unique-name-financial-year{
+    display: flex;
+    align-items: center;
+    .fyear{
+        margin-left: 5px;
+    }
+}
+.company-name{
+    ul.dropdown-menu.user-dropdown-header{
+        left: 0 !important;
+        color: $night-rider;
+    }
+}
+.create-company-btn{
+    border-top: 1px solid $gainsboro;
+}
+.user-dropdown-header:after {
+    position: absolute;
+    content: '';
+    height: 20px;
+    width: 20px;
+    background-color: #e4e4e4;
+    top: -9px;
+    z-index: -1;
+    transform: rotate(45deg);
+    left: 26px;
+    border: 1px solid #d9d9d9;
 }
 /* responsive */
 @media (max-height: 800px) {

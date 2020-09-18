@@ -764,7 +764,7 @@
                         </div>
                     </div>
                 </div>
-                Create or add bank account end -->
+               <!-- Create or add bank account end -->
                 <div *ngIf="openNewRegistration" class="box clearfix mb-2">
                     <h3 class="font-20 bold mb-2">ICICI Bank</h3>
                     <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm)" *ngIf="!(isPaymentAdditionSuccess$ | async)">
@@ -900,7 +900,7 @@
                         </div>
                     </div>
                 </div>
-                <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" style=" margin-right: 5px" class="btn btn-pink mrR1" (click)="openNewRegistartionForm()">Add More ID</button>
+                <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" style=" margin-right: 5px" class="btn btn-sky-blue mrR1" (click)="openNewRegistartionForm()">Add More ID</button>
             </div>
         </tab>
     </tabset>

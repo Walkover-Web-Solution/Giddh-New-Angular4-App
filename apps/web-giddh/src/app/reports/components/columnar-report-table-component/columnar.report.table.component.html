@@ -38,7 +38,7 @@
                         </td>
                         <ng-container *ngFor="let months of columnarReportResponse.data;let inx2 = index;">
                             <!-- months data -->
-                            <td class="text-center" attr.data-title={{monthName[inx2]}}>
+                            <td class="text-center" [attr.data-title]="monthName[inx2]">
                                 <span *ngIf="isCrDrChecked && months?.accountsData[inx]?.monthlyBalance?.amount>0"> {{months?.accountsData[inx]?.monthlyBalance?.type ==='DEBIT'?'-':'' }}</span> {{months.accountsData[inx]?.monthlyBalance?.amount}}
                                 <span *ngIf="!isCrDrChecked && months?.accountsData[inx]?.monthlyBalance?.amount>0">{{months?.accountsData[inx]?.monthlyBalance?.type ==='DEBIT'?'Dr':'Cr' }}</span>
                             </td>

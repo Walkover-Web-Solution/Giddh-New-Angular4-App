@@ -31,7 +31,7 @@
                 line item
                 table.
             </small>
-            <button class="btn pull-left isActive mrT2" (click)="onOpenTemplateModal()">Add New</button>
+            <button class="btn pull-left isActive mt-5" (click)="onOpenTemplateModal()">Add New</button>
         </div>
 
         <ng-container *ngFor="let template of customCreatedTemplates; let i = index">
@@ -40,7 +40,7 @@
                 <div class="template_info text-center">
                     <h3 class="primary_clr ellp">{{template.name}}</h3>
 
-                    <span *ngIf="template.isDefault" class="badge btn-pink mrT2"><i
+                    <span *ngIf="template.isDefault" class="badge btn-sky-blue mrT2"><i
                             class="icon-favorite-selected"></i> Default
                         Template</span>
                     <span *ngIf="!template.isDefault" class="badge btn-success mrT2 cp"
@@ -76,7 +76,7 @@
                     <div class="template_info text-center">
                         <h3 class="primary_clr ellp">{{template.name}}</h3>
 
-                        <span *ngIf="template.isDefaultForVoucher" class="badge btn-pink mrT2"><i
+                        <span *ngIf="template.isDefaultForVoucher" class="badge btn-sky-blue mrT2"><i
                                 class="icon-favorite-selected"></i> Default Template</span>
                         <span *ngIf="!template.isDefaultForVoucher" class="badge btn-success mrT2 cp"
                             (click)="onSetTemplateAsDefault(template,'voucher')"><i
