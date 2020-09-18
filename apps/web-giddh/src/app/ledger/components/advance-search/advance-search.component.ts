@@ -140,11 +140,17 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 this.groups$ = observableOf(groups);
             }
         });
-        this.setAdvanceSearchForm();
+        if(!this.advanceSearchForm) {
+            this.setAdvanceSearchForm();
+        }
         this.setVoucherTypes();
     }
 
     public ngOnChanges(s: SimpleChanges) {
+        if(!this.advanceSearchForm) {
+            this.setAdvanceSearchForm();
+        }
+
         if ('advanceSearchRequest' in s && s.advanceSearchRequest.currentValue && s.advanceSearchRequest.currentValue !== s.advanceSearchRequest.previousValue && s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue) {
             this.fromDate = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT).toDate();
             this.toDate = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT).toDate();
@@ -154,6 +160,28 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
                 bsDaterangepicker.patchValue(this.selectedDateRangeUi);
             }
+        }
+
+        if(this.advanceSearchForm && 'advanceSearchRequest' in s && s.advanceSearchRequest.currentValue && s.advanceSearchRequest.currentValue.dataToSend) {
+            let dataToSend = s.advanceSearchRequest.currentValue.dataToSend;
+
+            setTimeout(() => {
+                if(dataToSend.accountUniqueNames) {
+                    this.advanceSearchForm.get('accountUniqueNames').patchValue(dataToSend.accountUniqueNames);
+                }
+
+                if(dataToSend.groupUniqueNames) {
+                    this.advanceSearchForm.get('groupUniqueNames').patchValue(dataToSend.groupUniqueNames);
+                }
+
+                if(dataToSend.particulars) {
+                    this.advanceSearchForm.get('particulars').patchValue(dataToSend.particulars);
+                }
+
+                if(dataToSend.vouchers) {
+                    this.advanceSearchForm.get('vouchers').patchValue(dataToSend.vouchers);
+                }
+            }, 1000);
         }
     }
 

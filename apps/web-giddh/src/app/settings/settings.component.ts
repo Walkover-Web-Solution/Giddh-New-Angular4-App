@@ -23,7 +23,6 @@ import { WarehouseActions } from './warehouse/action/warehouse.action';
 import { PAGINATION_LIMIT } from '../app.constant';
 import { HttpClient } from "@angular/common/http";
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
 
 @Component({
     templateUrl: './settings.component.html',
@@ -33,13 +32,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('integrationComponent', {static: true}) public integrationComponent: SettingIntegrationComponent;
+    @ViewChild('integrationComponent', {static: false}) public integrationComponent: SettingIntegrationComponent;
     @ViewChild('profileComponent', {static: false}) public profileComponent: SettingProfileComponent;
-    @ViewChild('financialYearComp', {static: true}) public financialYearComp: FinancialYearComponent;
-    @ViewChild('eBankComp', {static: true}) public eBankComp: SettingLinkedAccountsComponent;
-    @ViewChild('permissionComp', {static: true}) public permissionComp: SettingPermissionComponent;
-    @ViewChild('tagComp', {static: true}) public tagComp: SettingsTagsComponent;
-    @ViewChild('bunchComp', {static: true}) public bunchComp: BunchComponent;
+    @ViewChild('financialYearComp', {static: false}) public financialYearComp: FinancialYearComponent;
+    @ViewChild('eBankComp', {static: false}) public eBankComp: SettingLinkedAccountsComponent;
+    @ViewChild('permissionComp', {static: false}) public permissionComp: SettingPermissionComponent;
+    @ViewChild('tagComp', {static: false}) public tagComp: SettingsTagsComponent;
+    @ViewChild('bunchComp', {static: false}) public bunchComp: BunchComponent;
 
     public isUserSuperAdmin: boolean = false;
     public isUpdateCompanyInProgress$: Observable<boolean>;
@@ -67,7 +66,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private _toast: ToasterService,
         private _generalActions: GeneralActions,
         private settingsIntegrationActions: SettingsIntegrationActions,
-        private settingsTagsActions: SettingsTagActions,
         private warehouseActions: WarehouseActions,
         private http: HttpClient,
         private breakPointObservar: BreakpointObserver

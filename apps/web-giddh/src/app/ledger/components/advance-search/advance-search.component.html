@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-sm-7">
                         <div class="form-group">
-                            <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear( 'accountUniqueNames')" (selected)="onDDElementSelect( 'accountUniqueNames', $event)" [isFilterEnabled]="true" [multiple]="true
+                            <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear( 'accountUniqueNames')"  formControlName="accountUniqueNames" [isFilterEnabled]="true" [multiple]="true
                                 " [placeholder]=" 'Select Accounts'"></sh-select>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                     </div>
                     <div class="col-sm-7">
                         <div class="form-group">
-                            <sh-select [options]="groups$ | async" name="groups" (onClear)="onDDClear( 'groupUniqueNames')" (selected)="onDDElementSelect( 'groupUniqueNames', $event)" [isFilterEnabled]="true" [multiple]="true" [placeholder]="
+                            <sh-select [options]="groups$ | async" name="groups" (onClear)="onDDClear( 'groupUniqueNames')" formControlName="groupUniqueNames" [isFilterEnabled]="true" [multiple]="true" [placeholder]="
                                     'Select Groups'"></sh-select>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                             </div>
                             <div class="col-sm-9 col-xs-8 col-xs-9">
                                 <div class="form-group">
-                                    <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear( 'particulars')" (selected)="onDDElementSelect( 'particulars', $event)" [isFilterEnabled]="true" [multiple]="true
+                                    <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear( 'particulars')" formControlName="particulars" [isFilterEnabled]="true" [multiple]="true
                                 " [placeholder]=" 'Select Accounts'"></sh-select>
                                 </div>
                             </div>
@@ -120,7 +120,7 @@
                             </div>
                             <div class="col-sm-9 col-xs-8 col-xs-9">
                                 <div class="form-group">
-                                    <sh-select [options]="voucherTypeList | async" name="particulars" (onClear)="onDDClear( 'vouchers')" (selected)="onDDElementSelect( 'vouchers', $event)" [isFilterEnabled]="true" [multiple]="true
+                                    <sh-select [options]="voucherTypeList | async" name="particulars" (onClear)="onDDClear( 'vouchers')" formControlName="vouchers" [isFilterEnabled]="true" [multiple]="true
                                 " [placeholder]=" 'Select Accounts'"></sh-select>
                                 </div>
                             </div>
