@@ -9646,7 +9646,7 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 @media (max-width: 991px) {
-        .sidebar-menu{
+    .sidebar-menu{
         position: absolute !important;
         width: 100%;
         display: flex;
@@ -9657,21 +9657,16 @@ span#HW_badge_cont:nth-child(3) {
         min-height: auto !important;
         .menu_list {
             li{
-                    display: inline-flex;
-                    a{
-                        padding: 14px 12px !important;
-                    }
+                display: inline-flex;
+                a{
+                    padding: 14px 12px !important;
+                }
             }
         }
     }
     .form-bg {
         width: 100%;
     }
-    /* .col_wrapper:nth-child(1) {
-                      position: relative !important;
-                     height: auto !important;
-                      width: 100% !important;
-                   }*/
     .grp_col {
         float: none !important;
         width: 100% !important;

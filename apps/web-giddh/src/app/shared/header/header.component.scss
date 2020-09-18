@@ -667,7 +667,7 @@ ul.sub-list {
 }
 .head-nav {
     background: #f1f1f1;
-    border-bottom: 1px solid #e4e4e4;
+    border-bottom: 1px solid $whisper-color;
     margin-bottom: 5px;
 }
 .ledger-page {
@@ -753,7 +753,7 @@ ul.sub-list {
     z-index: -1;
     transform: rotate(45deg);
     left: 26px;
-    border: 1px solid #d9d9d9;
+    border: 1px solid $gainsboro;
 }
 /* responsive */
 @media (max-height: 800px) {
