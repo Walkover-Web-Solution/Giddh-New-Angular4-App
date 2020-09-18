@@ -10,7 +10,7 @@ import { LoginActions } from '../../actions/login.action';
 @Component({
     selector: 'mobile-seach-company',
     templateUrl: './mobile-search-company.component.html',
-    styleUrls: ['./mobile-search-company.component.scss']
+    styleUrls: ['./mobile-search-company.component.scss'],
 })
 
 export class MobileSearchCompanyComponent implements OnInit, OnDestroy {
@@ -63,7 +63,7 @@ export class MobileSearchCompanyComponent implements OnInit, OnDestroy {
      * This will filter company by name or name alias
      *
      * @param {string} ev
-     * 
+     *
      * @memberof MobileSearchCompanyComponent
      */
     public filterCompanyList(ev: string): void {
