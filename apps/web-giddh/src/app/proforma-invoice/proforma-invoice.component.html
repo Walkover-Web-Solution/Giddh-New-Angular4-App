@@ -1083,18 +1083,18 @@
 
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item border-btm justify-content-between">
+                                                            <a href="javascript:void(0)" class="list-item border-btm">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unq">
                                                                     {{ option.additional?.uniqueName }}</div>
                                                             </a>
                                                         </ng-container>
                                                         <ng-container *ngIf="option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item border-btm justify-content-between">
+                                                            <a href="javascript:void(0)" class="list-item border-btm">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unq">
                                                                     {{ option.additional?.uniqueName }}</div>
-                                                                <div class="item_stock">Stock:
+                                                                <div class="item-stock">Stock:
                                                                     {{ option.additional?.stock.uniqueName }}</div>
                                                             </a>
                                                         </ng-container>
@@ -1962,18 +1962,18 @@
 
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <ng-container *ngIf="!option.additional?.stock">
-                                                                    <a href="javascript:void(0)" class="list-item border-btm justify-content-between">
+                                                                    <a href="javascript:void(0)" class="list-item border-btm">
                                                                         <div class="item">{{ option.label }}</div>
                                                                         <div class="item-unq">
                                                                             {{ option.additional?.uniqueName }}</div>
                                                                     </a>
                                                                 </ng-container>
                                                                 <ng-container *ngIf="option.additional?.stock">
-                                                                    <a href="javascript:void(0)" class="list-item border-btm justify-content-between">
+                                                                    <a href="javascript:void(0)" class="list-item border-btm">
                                                                         <div class="item">{{ option.label }}</div>
                                                                         <div class="item-unq">
                                                                             {{ option.additional?.uniqueName }}</div>
-                                                                        <div class="item_stock">Stock:
+                                                                        <div class="item-stock">Stock:
                                                                             {{ option.additional?.stock.uniqueName }}
                                                                         </div>
                                                                     </a>

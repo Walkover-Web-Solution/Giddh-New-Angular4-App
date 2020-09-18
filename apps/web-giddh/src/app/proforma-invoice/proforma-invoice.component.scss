@@ -305,14 +305,7 @@ $greyClr: #6d6d6d;
 }
 
 .border-btm{
-    .item{
-        width:50%;
-    }
-
-    .item-unq,.item_stock {
-    font-size:12px;
-    width:25%;
-    }
+    flex-direction: column;
 }
 
 .fs12 {
