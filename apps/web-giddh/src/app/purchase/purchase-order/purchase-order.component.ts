@@ -112,10 +112,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public bulkUpdateFields: IOption[] = [
         { label: 'Order Date', value: BULK_UPDATE_FIELDS.purchasedate },
         { label: 'Expected Delivery Date', value: BULK_UPDATE_FIELDS.duedate },
-        { label: 'Warehouse', value: BULK_UPDATE_FIELDS.warehouse },
-        { label: 'Expire', value: BULK_UPDATE_FIELDS.expire },
-        { label: 'Delete', value: BULK_UPDATE_FIELDS.delete },
-        { label: 'Create Purchase Bill', value: BULK_UPDATE_FIELDS.create_purchase_bill }
+        { label: 'Warehouse', value: BULK_UPDATE_FIELDS.warehouse }
     ];
     /* Stores warehouses for a company */
     public warehouses: Array<any>;

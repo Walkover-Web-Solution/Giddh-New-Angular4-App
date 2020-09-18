@@ -5801,6 +5801,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if(event && event.length > 0) {
             let order = event[event.length - 1];
             if(!this.selectedPoItems.includes(order.value)) {
+                this.startLoader(true);
                 let getRequest = { companyUniqueName: this.selectedCompany.uniqueName, poUniqueName: order.value };
                 this.purchaseOrderService.getPreview(getRequest).subscribe(response => {
                     if (response) {
@@ -5811,12 +5812,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     this.linkedPoNumbers[order.value]['items'] = response.body.entries;
                                     if(addRemove) {
                                         this.addPoItems(response.body.uniqueName, response.body.entries);
+                                    } else {
+                                        this.startLoader(false);
                                     }
                                 } else {
+                                    this.startLoader(false);
                                     this.linkedPoNumbers[order.value]['items'] = [];
                                 }
+                            } else {
+                                this.startLoader(false);
                             }
                         } else {
+                            this.startLoader(false);
                             this._toasty.errorToast(response.message);
                         }
                     }
@@ -5840,6 +5847,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public addPoItems(poUniqueName: string, entries: any): void {
+        this.startLoader(true);
         entries.forEach(entry => {
             let transactionLoop = 0;
             entry.transactions.forEach(item => {
@@ -5883,6 +5891,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 transactionLoop++;
             });
         });
+        this.startLoader(false);
     }
 
     /**
@@ -5892,6 +5901,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public removePoItem(): void {
         if(this.selectedPoItems && this.selectedPoItems.length > 0) {
+            this.startLoader(true);
             let selectedPoItems = [];
             this.selectedPoItems.forEach(order => {
                 if(!this.linkedPo.includes(order)) {
@@ -5947,6 +5957,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             });
 
             this.selectedPoItems = selectedPoItems;
+
+            this.startLoader(false);
         }
     }
 

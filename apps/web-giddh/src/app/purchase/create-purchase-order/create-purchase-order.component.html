@@ -63,7 +63,7 @@
                                             <!-- endregion -->
                                             <div *ngIf="purchaseOrders && purchaseOrders.length > 0">
                                                 <p><small>Pending Purchase order of selected vendor</small></p>
-                                                <p class="font-14"><a href="javascript:;" (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order.uniqueName, order.vendor.uniqueName)" *ngFor="let order of purchaseOrders; let i = index;">{{order.voucherNumber}}<span *ngIf="checkIfPipeSymbolRequired(i)">&nbsp;|&nbsp;</span></a></p>
+                                                <p class="font-14"><a href="javascript:;" (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order.uniqueName, order.accountUniqueName)" *ngFor="let order of purchaseOrders; let i = index;">{{order.number}}<span *ngIf="checkIfPipeSymbolRequired(i)">&nbsp;|&nbsp;</span></a></p>
                                             </div>
                                         </div>
                                     </div>
