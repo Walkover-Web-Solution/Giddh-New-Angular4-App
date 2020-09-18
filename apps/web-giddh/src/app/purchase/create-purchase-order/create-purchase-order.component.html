@@ -36,14 +36,14 @@
                                                 (keyup)="resetVendor($event)" (onClear)="resetVendor(null)">
 
                                                 <ng-template #optionTemplate let-option="option">
-                                                    <a href="javascript:void(0)" class="list-item">
+                                                    <a href="javascript:void(0)" class="list-item flex-column border-none">
                                                         <div class="item">{{ option.label }}</div>
                                                         <div class="item-unq">{{ option.value }}</div>
                                                     </a>
                                                 </ng-template>
 
                                                 <ng-template #notFoundLinkTemplate>
-                                                    <a href="javascript:void(0)" class="list-item pl-05 pr-05 d-flex justify-content-between w-100"
+                                                    <a href="javascript:void(0)" class="list-item pl-05 pr-05 d-flex justify-content-between w-100 border-none"
                                                         [keyboardShortcut]="'alt+c'">
                                                         <div class="item">{{ vendorNotFoundText }}</div>
                                                         <div class="item">Alt+C</div>
@@ -562,14 +562,14 @@
 
                                         <ng-template #optionTemplate let-option="option">
                                             <ng-container *ngIf="!option.additional?.stock">
-                                                <a href="javascript:void(0)" class="list-item">
+                                                <a href="javascript:void(0)" class="list-item flex-column">
                                                     <div class="item">{{ option.label }}</div>
                                                     <div class="item-unq">
                                                         {{ option.additional?.uniqueName }}</div>
                                                 </a>
                                             </ng-container>
                                             <ng-container *ngIf="option.additional?.stock">
-                                                <a href="javascript:void(0)" class="list-item">
+                                                <a href="javascript:void(0)" class="list-item flex-column">
                                                     <div class="item">{{ option.label }}</div>
                                                     <div class="item-unq">
                                                         {{ option.additional?.uniqueName }}</div>
@@ -1141,14 +1141,14 @@
 
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container *ngIf="!option.additional?.stock">
-                                                        <a href="javascript:void(0)" class="list-item">
+                                                        <a href="javascript:void(0)" class="list-item flex-column">
                                                             <div class="item">{{ option.label }}</div>
                                                             <div class="item-unq">
                                                                 {{ option.additional?.uniqueName }}</div>
                                                         </a>
                                                     </ng-container>
                                                     <ng-container *ngIf="option.additional?.stock">
-                                                        <a href="javascript:void(0)" class="list-item">
+                                                        <a href="javascript:void(0)" class="list-item flex-column">
                                                             <div class="item">{{ option.label }}</div>
                                                             <div class="item-unq">
                                                                 {{ option.additional?.uniqueName }}</div>

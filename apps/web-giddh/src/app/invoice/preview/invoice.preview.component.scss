@@ -7,7 +7,7 @@
 }
 
 .mh18_img img {
-    max-height: 20px;
+    max-height: 18px;
     cursor: pointer;
 }
 
@@ -508,12 +508,19 @@ span.icon-export-icon {
 
 .giddh-table{
     border-right: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro !important;
     tbody{
         tr{
             &:hover {
                 background: $solitude;
                 td {
                     background: transparent !important;
+                }
+            }
+
+            &:last-child{
+                td{
+                    border-bottom: none !important;
                 }
             }
     }
@@ -792,7 +799,17 @@ span.icon-export-icon {
 
 
 @media (min-width:768px){
-    .mw-th-190{
-        min-width:190px;
+    .mw-th-260{
+        min-width:260px;
+    }
+    .mw-th-170{
+        min-width:170px;
+    }
+
+    .min-wd-20{
+        min-width:20px;
+        .mh18-img{
+            width:20px;
+        }
     }
 }
