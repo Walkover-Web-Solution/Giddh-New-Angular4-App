@@ -49,7 +49,7 @@
     "subscription" : {
         "wallet_payment_error" : "You cannot make payment",
         "cashback_discount" : "Your cashback amount will be credited in your account withing 48 hours after payment has been done. Your will get a refund of Rs. {{AMOUNT}}",
-        "cashback_message1" : "Your coupon is redeemed but to avail coupon, You need to make a payment of Rs. {{AMOUNT}}", 
+        "cashback_message1" : "Your coupon is redeemed but to avail coupon, You need to make a payment of Rs. {{AMOUNT}}",
         "cashback_message2" : "Your cashback amount will be credited in your account withing 48 hours after payment has been done. Your will get a refund of Rs. {{AMOUNT}}",
         "discount_message1" : "After discount amount cannot be less than 100 Rs. To avail coupon you have to add more money. Currently payable amount is Rs. {{AMOUNT}}",
         "discount_message2" : "Hurray you have availed a discount of Rs. {{DISCOUNT}}. Now payable amount is Rs. {{DIFFERENCE}}",
@@ -87,5 +87,13 @@
         "address" : "Address",
         "delete_company_title" : "Delete Company",
         "delete_company_content" : "Are you sure you want to permanently delete"
+    },
+    "user_detail_list_table": {
+        "ip_address": "IP Address",
+        "signin_date": "Signin Date",
+        "signin_time": "Signin Time",
+        "duration": "Duration",
+        "browser_agent": "Browser Agent",
+        "action": "Action"
     }
 }

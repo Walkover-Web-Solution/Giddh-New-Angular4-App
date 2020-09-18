@@ -1,6 +1,6 @@
 @import "../../assets/css/color.scss";
 
-.inventory-controll ::ng-deep.nav > li > a {
+.inventory-control ::ng-deep.nav > li > a {
     padding: 2px 0px !important;
     margin-right: 35px !important;
     border-bottom: 4px solid transparent !important;
@@ -11,7 +11,7 @@
     font-size: 14px;
 }
 
-.inventory-controll ::ng-deep.nav.nav-tabs {
+.inventory-control ::ng-deep.nav.nav-tabs {
     margin-bottom: 0;
     padding: 0 0px 0 15px !important;
     background-color: #fff;
@@ -20,11 +20,11 @@
     top: -4px;
     background-color: #f7f8fa;
 }
-.inventory-controll ::ng-deep.nav-tabs > li > a:hover {
+.inventory-control ::ng-deep.nav-tabs > li > a:hover {
     border-color: transparent !important;
     color: $deep-sky-blue !important;
 }
-.inventory-controll ::ng-deep.nav-tabs > ::ng-deep li.active > a,
+.inventory-control ::ng-deep.nav-tabs > ::ng-deep li.active > a,
 .nav-tabs > ::ng-deep li.active > a:focus,
 ::ng-deep.nav-tabs > li.active > a:hover {
     color: #1c1c1c !important;
@@ -35,12 +35,12 @@
     border-right: transparent !important;
     border-left: transparent !important;
 }
-.inventory-controll .nav-tabs > li > a:hover {
+.inventory-control .nav-tabs > li > a:hover {
     color: $deep-sky-blue !important;
     border-bottom: 4px solid $deep-sky-blue !important;
 }
 
-//.inventory-controll .invoice-nav.navbar-nav > li > a.active {
+//.inventory-control .invoice-nav.navbar-nav > li > a.active {
 //  background-color: #fff;
 //
 //}
@@ -49,7 +49,7 @@
     min-height: auto;
     margin-bottom: 10px;
 }
-.inventory-controll ::ng-deep.nav > li > a:focus,
+.inventory-control ::ng-deep.nav > li > a:focus,
 ::ng-deep.nav > li > a:hover {
     background-color: unset !important;
 }
@@ -57,11 +57,11 @@
 .rightBar {
     width: calc(100% - 260px);
 }
-.inventory-controll ::ng-deep.nav-tabs > li:nth-child(2) {
+.inventory-control ::ng-deep.nav-tabs > li:nth-child(2) {
     display: none;
 }
 
-.inventory-controll .container-fluid {
+.inventory-control .container-fluid {
     .branch-warehouse-filter {
         width: 100%;
         sh-select{
@@ -83,7 +83,7 @@
     }
 }
 @media(max-width:767px){
-    .inventory-controll ::ng-deep.nav.nav-tabs {
+    .inventory-control ::ng-deep.nav.nav-tabs {
         position: fixed;
         width: 100%;
         top: 100px;
@@ -97,7 +97,7 @@
 
 
 @media (max-width:445px){
-.inventory-controll .container-fluid {
+.inventory-control .container-fluid {
     .branch-warehouse-filter {
         width: 100%;
         sh-select{

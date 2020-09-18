@@ -65,7 +65,7 @@
                                             <a href="javascript:void(0)" class="list-item"
                                                 style="border-bottom: 1px solid #ccc;">
                                                 <div class="item">{{ option.label }}</div>
-                                                <div class="item_unq">{{ option.value }}</div>
+                                                <div class="item-unique">{{ option.value }}</div>
                                             </a>
                                         </ng-template>
                                         <ng-template #notFoundLinkTemplate>
@@ -115,7 +115,7 @@
                                                 <a href="javascript:void(0)" class="list-item"
                                                     style="border-bottom: 1px solid #ccc;">
                                                     <div class="item">{{ option.label }}</div>
-                                                    <div class="item_unq">{{ option.value }}</div>
+                                                    <div class="item-unique">{{ option.value }}</div>
                                                 </a>
                                             </ng-template>
                                         </sales-sh-select>
@@ -137,7 +137,7 @@
                                             <img src="assets/images/new/search_customer_Cash Invoice.svg"
                                                 class="img-responsive search-arrow-image "
                                                 *ngIf="!invFormData.voucherDetails.customerName"
-                                                [ngClass]="{'cashinvoice_tipImg' : isCashInvoice}" />
+                                                [ngClass]="{'cash-invoice-tip-Img' : isCashInvoice}" />
                                         </ng-container>
                                         <div class="row">
                                             <div class="col-xs-6">
@@ -500,7 +500,7 @@
                                                                                 style="border-bottom: 1px solid #ccc;">
                                                                                 <div class="item">{{ option.label }}
                                                                                 </div>
-                                                                                <div class="item_unq">
+                                                                                <div class="item-unique">
                                                                                     {{ option.additional?.uniqueName }}
                                                                                 </div>
                                                                             </a>
@@ -511,7 +511,7 @@
                                                                                 style="border-bottom: 1px solid #ccc;">
                                                                                 <div class="item">{{ option.label }}
                                                                                 </div>
-                                                                                <div class="item_unq">
+                                                                                <div class="item-unique">
                                                                                     {{ option.additional?.uniqueName }}
                                                                                 </div>
                                                                                 <div class="item_stock">Stock:
@@ -949,7 +949,7 @@
                                                                                                 <div class="item">
                                                                                                     {{ option.label }}
                                                                                                 </div>
-                                                                                                <div class="item_unq">
+                                                                                                <div class="item-unique">
                                                                                                     {{ option.value }}
                                                                                                 </div>
                                                                                             </a>
@@ -1300,7 +1300,7 @@
                                         <a href="javascript:void(0)" class="list-item"
                                             style="border-bottom: 1px solid #ccc;">
                                             <div class="item">{{ option.label }}</div>
-                                            <div class="item_unq">{{ option.value }}</div>
+                                            <div class="item-unique">{{ option.value }}</div>
                                         </a>
                                     </ng-template>
                                     <ng-template #notFoundLinkTemplate>
@@ -1339,7 +1339,7 @@
                         <!--                  <ng-template #optionTemplate1 let-option="option">-->
                         <!--                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">-->
                         <!--                      <div class="item">{{ option.label }}</div>-->
-                        <!--                      <div class="item_unq">{{ option.value }}</div>-->
+                        <!--                      <div class="item-unique">{{ option.value }}</div>-->
                         <!--                    </a>-->
                         <!--                  </ng-template>-->
                         <!--                </sh-select>-->
@@ -1383,7 +1383,7 @@
                                         <a href="javascript:void(0)" class="list-item"
                                             style="border-bottom: 1px solid #ccc;">
                                             <div class="item">{{ option.label }}</div>
-                                            <div class="item_unq">{{ option.value }}</div>
+                                            <div class="item-unique">{{ option.value }}</div>
                                         </a>
                                     </ng-template>
                                 </sales-sh-select>

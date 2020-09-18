@@ -380,7 +380,7 @@
                         <sh-select class="pull-left" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" [placeholder]="'Select discounts'" style="width: calc(100% - 93px);"></sh-select>
                     </span>
                     <span class="pull-right">
-                        <button  class="btn btn-primary mrgeBtn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscount()">Apply</button>
+                        <button  class="btn btn-primary marge-btn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscount()">Apply</button>
                     </span>
 
                 </div>
@@ -402,7 +402,7 @@
                                         <a href="javascript:void(0)" class="list-item"
                                             style="border-bottom:1px solid #ccc;">
                                             <div class="item">{{ model.label }}</div>
-                                            <div class="item_unq">
+                                            <div class="item-unique">
                                                 {{ model.value }}
                                             </div>
                                         </a>
@@ -410,7 +410,7 @@
                                 </sh-select>
                             </span>
                             <span class="pull-right">
-                                <button type="submit" class="btn btn-primary mrgeBtn"
+                                <button type="submit" class="btn btn-primary marge-btn"
                                     [disabled]="moveAccountForm.invalid">Move</button>
                             </span>
                         </div>
@@ -431,7 +431,7 @@
                                 style="width: calc(100% - 93px);"></sh-select>
                         </span>
                         <span class="pull-right">
-                            <button type="submit" class="btn btn-primary mrgeBtn"
+                            <button type="submit" class="btn btn-primary marge-btn"
                                 (click)="mergeAccounts()">Merge</button>
                         </span>
                     </div>

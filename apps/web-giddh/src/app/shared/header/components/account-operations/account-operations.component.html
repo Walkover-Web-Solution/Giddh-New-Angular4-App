@@ -35,7 +35,7 @@
 
     <!--add/edit group form-->
     <div class="" *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)" class="w-100">
-        <group-add class="form_box" *ngIf="(showAddNewGroup$ | async)"></group-add>
+        <group-add class="form-box" *ngIf="(showAddNewGroup$ | async)"></group-add>
         <group-update *ngIf="(showEditGroup$ | async)"></group-update>
     </div>
     <!--add/edit group form-->
@@ -79,7 +79,7 @@
             <ng-template #optionTemplate let-model="option">
               <a href="javascript:void(0)" class="list-item" style="border-bottom:1px solid #ccc;">
                 <div class="item">{{ model.label }}</div>
-                <div class="item_unq">
+                <div class="item-unique">
                   {{ model.value }}
                 </div>
 
@@ -117,7 +117,7 @@
                 [placeholder]="'Select Accounts'" style="width: calc(100% - 93px);"></sh-select>
             </span>
                         <span class="pull-right">
-              <button type="submit" class="btn btn-primary mrgeBtn" (click)="mergeAccounts()">Merge</button>
+              <button type="submit" class="btn btn-primary marge-btn" (click)="mergeAccounts()">Merge</button>
             </span>
                     </div>
                     <small class="clearfix">This option is risky and can not be undone</small>
@@ -264,7 +264,7 @@
     <!--&lt;!&ndash;                                      [data]="itemList" [settings]="settings">&ndash;&gt;-->
     <!--&lt;!&ndash;                </angular2-multiselect>&ndash;&gt;-->
     <!--                <span class="input-group-btn pdL2"> <button type="submit"-->
-    <!--                                                            class="btn btn-success mrgeBtn">Save</button></span>-->
+    <!--                                                            class="btn btn-success marge-btn">Save</button></span>-->
     <!--              </div>-->
     <!--            </div>-->
     <!--          </form>-->
