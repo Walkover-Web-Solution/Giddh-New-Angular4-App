@@ -103,7 +103,7 @@
                                     <!-- region customer dropdown -->
                                     <div class="col-sm-7 selectCustomerName">
 
-                                        <div class="clearfix d-flex" style="flex-direction: column">
+                                        <div class="clearfix d-flex flex-column">
                                             <div class="d-flex">
                                                 <!-- region if not cashinvoice show customer dropdown -->
                                                 <ng-container *ngIf="!isCashInvoice">
@@ -128,16 +128,15 @@
                                                         [disabled]="isUpdateMode && invoiceType !== 'sales' && invoiceType !== 'cash'">
 
                                                         <ng-template #optionTemplate let-option="option">
-                                                            <a href="javascript:void(0)" class="list-item">
+                                                            <a href="javascript:void(0)" class="list-item flex-column">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unq">{{ option.value }}</div>
                                                             </a>
                                                         </ng-template>
 
                                                         <ng-template #notFoundLinkTemplate>
-                                                            <a href="javascript:void(0)" class="list-item pl-05 pr-05"
-                                                                [keyboardShortcut]="'alt+c'"
-                                                                style="width:100%; display: flex;justify-content: space-between;">
+                                                            <a href="javascript:void(0)" class="list-item pl-05 pr-05 border-none d-flex justify-content-between w-100"
+                                                                [keyboardShortcut]="'alt+c'">
                                                                 <div class="item">{{ customerNotFoundText }}</div>
                                                                 <div class="item">Alt+C</div>
                                                             </a>
@@ -1083,14 +1082,14 @@
 
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item border-btm">
+                                                            <a href="javascript:void(0)" class="list-item flex-column">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unq">
                                                                     {{ option.additional?.uniqueName }}</div>
                                                             </a>
                                                         </ng-container>
                                                         <ng-container *ngIf="option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item border-btm">
+                                                            <a href="javascript:void(0)" class="list-item flex-column">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unq">
                                                                     {{ option.additional?.uniqueName }}</div>
@@ -1962,14 +1961,14 @@
 
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <ng-container *ngIf="!option.additional?.stock">
-                                                                    <a href="javascript:void(0)" class="list-item border-btm">
+                                                                    <a href="javascript:void(0)" class="list-item flex-column">
                                                                         <div class="item">{{ option.label }}</div>
                                                                         <div class="item-unq">
                                                                             {{ option.additional?.uniqueName }}</div>
                                                                     </a>
                                                                 </ng-container>
                                                                 <ng-container *ngIf="option.additional?.stock">
-                                                                    <a href="javascript:void(0)" class="list-item border-btm">
+                                                                    <a href="javascript:void(0)" class="list-item flex-column">
                                                                         <div class="item">{{ option.label }}</div>
                                                                         <div class="item-unq">
                                                                             {{ option.additional?.uniqueName }}</div>

@@ -304,7 +304,7 @@
     }
 }
 
-@media (max-width:1465px) and (min-width:768px){
+@media (min-width:768px){
     .mw-th-210{
         min-width:210px;
     }
@@ -314,5 +314,9 @@
         .mh18-img{
             width:20px;
         }
+    }
+
+    .min-wd-17{
+        min-width:170px;
     }
 }
