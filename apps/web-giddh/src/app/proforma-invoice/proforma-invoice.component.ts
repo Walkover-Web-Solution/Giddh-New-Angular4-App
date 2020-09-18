@@ -1768,28 +1768,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         });
     }
 
-    public initializeAccountCurrencyDetails(item: AccountResponseV2): void {
-        // If currency of item is null or undefined then treat it to be equivalent of company currency
-        item.currency = item.currency || this.companyCurrency;
-        this.isMulticurrencyAccount = item.currency !== this.companyCurrency;
-
-        if (this.isMulticurrencyAccount) {
-            this.customerCurrencyCode = item.currency;
-            this.companyCurrencyName = item.currency;
-        } else {
-            this.customerCurrencyCode = this.companyCurrency;
-        }
-
-        if (item && item.currency && item.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
-            this.getCurrencyRate(this.companyCurrency, item.currency,
-                moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
-        }
-
-        if (this.isSalesInvoice && this.isMulticurrencyAccount) {
-            this.bankAccounts$ = observableOf([]);
-        }
-    }
-
     /**
      * Initializes acounnt currency details
      *
