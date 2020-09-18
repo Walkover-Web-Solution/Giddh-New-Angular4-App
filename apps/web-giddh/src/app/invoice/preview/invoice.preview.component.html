@@ -409,7 +409,7 @@
                                     (click)="onSelectInvoice(item)">{{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
                             </div>
 
-                            <span *ngIf="item.dueDays !== null">
+                            <span *ngIf="item.dueDays !== null && selectedVoucher !== 'purchase'">
                                 <small class="text-danger" *ngIf="item.dueDays > 0">
                                     Overdue by {{ item.dueDays }} Days
                                 </small>
@@ -505,7 +505,17 @@
                         </td>
 
                         <td *ngIf="selectedVoucher === 'purchase'" class="cp d-flex align-items-center status-mobile pt-0 pb-0">
-                        <span class="d-flex">{{ item.balanceStatus}}</span>
+                            <span class="d-flex">{{ item.balanceStatus}}</span>
+
+                            <span *ngIf="item.dueDays !== null">
+                                <small class="text-danger" *ngIf="item.dueDays > 0">
+                                    Overdue by {{ item.dueDays }} Days
+                                </small>
+                                <small class="text-danger" *ngIf="item.dueDays === 0">
+                                    Overdue by Today
+                                </small>
+                            </span>
+
                             <div class="action-icon ml-15" [ngClass]="{'item-selected': hoveredItemForAction === item.uniqueName || item.isSelected}" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected">
                                 <a tooltip="Send Email"
                                 (click)="openSendMailModal(sendEmailModal, item)">
@@ -636,7 +646,7 @@
                                         {{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
                                     <span class="icon-download"></span>
                                 </div>
-                                <span *ngIf="item.dueDate" class="overDueDate">
+                                <span *ngIf="item.dueDate && selectedVoucher !== 'purchase'" class="overDueDate">
                                     <small class="text-danger" *ngIf="item.dueDays > 0">
                                         Overdue by {{ item.dueDays }} Days
                                     </small>
@@ -691,6 +701,15 @@
                                         <div class="flex-fill selectAction">
                                             <span
                                                 [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>
+
+                                            <span *ngIf="item.dueDate && selectedVoucher === 'purchase'" class="overDueDate">
+                                                <small class="text-danger" *ngIf="item.dueDays > 0">
+                                                    Overdue by {{ item.dueDays }} Days
+                                                </small>
+                                                <small class="text-danger" *ngIf="item.dueDays === 0">
+                                                    Overdue by Today
+                                                </small>
+                                            </span>
                                         </div>
                                         <div class="click-dropdwon" [attachOutsideOnClick]="true"
                                             (clickOutside)="showMoreBtn = false" [exclude]="'.dropdown-menu'">
@@ -717,20 +736,6 @@
 
                                 <div *ngIf="item.balanceStatus === 'cancel'">
                                     <span>{{ item.balanceStatus}}</span>
-                                    <!-- <div class="action-icon ml-15">
-                                        <a tooltip="Convert to bill">
-                                            <span class="icon-tick font-12"></span>
-                                        </a>
-                                        <a tooltip="send Email">
-                                            <span class="icon-envelope font-12"></span>
-                                        </a>
-                                        <a tooltip="Copy">
-                                            <span class="icon-copy-small font-14"></span>
-                                        </a>
-                                        <a tooltip="Delete">
-                                            <i class="icon-trash"></i>
-                                        </a>
-                                    </div> -->
                                 </div>
                             </div>
                         </td>

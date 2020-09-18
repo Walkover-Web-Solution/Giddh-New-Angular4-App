@@ -5923,7 +5923,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                             }
 
                                             let stockUniqueName = (item.stock && item.stock.uniqueName) ? item.stock.uniqueName : "";
-                                            if(item.stock.uniqueName) { 
+                                            if(item.stock && item.stock.uniqueName) { 
                                                 stockUniqueName = stockUniqueName.replace("purchases#", "");
                                             }
 
