@@ -507,10 +507,11 @@ span.icon-export-icon {
 }
 
 .giddh-table{
+    border-right: 1px solid $gainsboro-light;
     tbody{
         tr{
             &:hover {
-                background: #f4f5f8;
+                background: $solitude;
                 td {
                     background: transparent !important;
                 }
@@ -525,6 +526,9 @@ span.icon-export-icon {
             }
             td {
                 background: transparent !important;
+                &:last-child{
+                    border-right:none !important;
+                }
             }
         }
     } 
