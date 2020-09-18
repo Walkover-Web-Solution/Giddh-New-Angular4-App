@@ -87,11 +87,14 @@
     max-height: 20px;
     cursor: pointer;
 }
-.onMobileView {
+.on-mobile-view {
     margin-bottom: 0;
 }
 .recurring-container {
     padding: 0 15px;
+    .form-inline{
+        margin-bottom: 10px !important;
+    }
 }
 .icon-sort-asc,
 .icon-sort-dsc {
@@ -129,7 +132,7 @@
     .justify-content-sm {
         justify-content: left !important;
     }
-    .onMobileView {
+    .on-mobile-view {
         background: transparent;
         border: none;
     }

@@ -1,4 +1,4 @@
-<div id="getGroupModal" class="fullScreenMy getGroupModal manageGroupAcc" #myModel keyboardShortcut="esc"
+<div id="getGroupModal" class="full-screen-modal getGroupModal manageGroupAcc" #myModel keyboardShortcut="esc"
     (onShortcutPress)="closePopupEvent()">
 
     <!-- start header -->
@@ -61,7 +61,7 @@
                 <!-- </perfect-scrollbar> -->
             </div>
             <!-- middle body -->
-            <div class="form_box form-bg hieghtInVH">
+            <div class="form-box form-bg hieghtInVH">
                 <account-operations [columnsRef]="currentColumns"
                     [height]="((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))"
                     [breadcrumbPath]="breadcrumbPath" [breadcrumbUniquePath]="breadcrumbUniquePath" #form>

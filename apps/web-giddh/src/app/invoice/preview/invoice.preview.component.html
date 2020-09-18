@@ -1,13 +1,13 @@
 <ng-container>
     <div class="invoice-container w-100">
         <!-- For desktop screen sizes -->
-        <div class="d-flex date-advance-search" id="dateRangePickerParent">
+        <div class="d-flex date-advance-search mt-15" id="dateRangePickerParent">
             <!-- Invoice filter section -->
             <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
                 class="form-inline input-grp-dateRangePicker pr">
                 <div class="form-group mrR1 d-flex" style="flex: 1 1 auto;">
                     <div class="input-group">
-                        <span class="inputWrapper">
+                        <span class="input-wrapper">
                             <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
                                 (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
                         </span>
@@ -61,7 +61,7 @@
                         </ul>
                     </div>
                 </div>
-                <button class="btn btn-default desktop-view-btn mr-1" tooltip="Export" (click)="exportCsvDownload()"
+                <button class="btn btn-default desktop-view-btn mr-15" tooltip="Export" (click)="exportCsvDownload()"
                     [ladda]="exportInvoiceRequestInProcess$ | async"
                     *ngIf="selectedVoucher === 'sales' && selectedInvoicesList.length && isExported"
                     data-spinner-size="20px">
@@ -72,7 +72,7 @@
                 <!-- Section to create New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
                 <div class="btn-group desktop-view-btn" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
                     <button id="ddl-newinv" dropdownToggle type="button"
-                        class="btn btn-pink dropdown-toggle dropdown-btn-new" aria-controls="dropdown-ddl-newinv">
+                        class="btn btn-sky-blue dropdown-toggle dropdown-btn-new mr-0" aria-controls="dropdown-ddl-newinv">
                         + New Invoice
                         <span class="caret"></span>
                     </button>
@@ -89,17 +89,17 @@
                     </ul>
                 </div>
                 <div *ngIf="selectedVoucher === 'purchase'" class="btn-wrapper">
-                    <button class="btn btn-pink desktop-view-btn" (click)="goToInvoice('purchase')">+
+                    <button class="btn btn-sky-blue desktop-view-btn mr-0" (click)="goToInvoice('purchase')">+
                         New Bill
                     </button>
                 </div>
                 <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-                    <button class="btn btn-pink desktop-view-btn" (click)="goToInvoice('credit note')">+
+                    <button class="btn btn-sky-blue desktop-view-btn mr-0" (click)="goToInvoice('credit note')">+
                         New Cr. Note
                     </button>
                 </div>
                 <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-                    <button class="btn btn-pink desktop-view-btn" (click)="goToInvoice('debit note')">+ New
+                    <button class="btn btn-sky-blue desktop-view-btn mr-0" (click)="goToInvoice('debit note')">+ New
                         Dr. Note
                     </button>
                 </div>
@@ -153,7 +153,7 @@
 
                     <div class="btn-group" dropdown *ngIf="selectedVoucher === 'sales'" [autoClose]="true">
                         <button id="ddl-newinv" dropdownToggle type="button"
-                            class="btn btn-pink dropdown-toggle dropdown-btn-new" aria-controls="dropdown-ddl-newinv">
+                            class="btn btn-sky-blue dropdown-toggle dropdown-btn-new" aria-controls="dropdown-ddl-newinv">
                             + New Invoice
                             <span class="caret"></span>
                         </button>
@@ -172,13 +172,13 @@
 
                     </div>
                     <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
-                        <button class="btn btn-pink" style="margin: 0 !important;"
+                        <button class="btn btn-sky-blue" style="margin: 0 !important;"
                             (click)="goToInvoice('credit note')">+ New Cr.
                             Note
                         </button>
                     </div>
                     <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
-                        <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('debit note')">+
+                        <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('debit note')">+
                             New Dr.
                             Note
                         </button>
@@ -216,7 +216,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-6 mt-2">
-                        <button class="btn btn-pink">Submit</button>
+                        <button class="btn btn-sky-blue">Submit</button>
                     </div>
 
                 </div>
@@ -595,6 +595,7 @@
         <ng-container *ngIf="voucherData && voucherData.items.length > 0 && !(isGetAllRequestInProcess$ | async) && (selectedVoucher === 'sales' || selectedVoucher === 'purchase') && isMobileView">
             <div class="card mobileTable mt-15" *ngFor="let item of voucherData?.items; let i = index">
                 <table class="table basic table-bordered invoice-table" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
+                    <tbody>
                     <tr>
                         <td class="card-header clearfix row mr-0 ml-0">
                             <div class="col-4 p-0">
@@ -749,6 +750,7 @@
                             </div>
                         </td>
                     </tr>
+                    </tbody>
                 </table>
             </div>
         </ng-container>

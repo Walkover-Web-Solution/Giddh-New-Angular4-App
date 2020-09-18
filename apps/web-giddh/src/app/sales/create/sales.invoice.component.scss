@@ -501,7 +501,7 @@ textarea:focus {
     top: 120px;
 }
 
-.cashinvoice_tipImg.search-arrow-image {
+.cash-invoice-tip-Img.search-arrow-image {
     max-width: 215px;
 }
 
@@ -999,11 +999,11 @@ section.staticInvoiceTable {
     border-bottom-color: rgb(214, 214, 214);
 }
 
-.customerInvoiceForm {
+.customer-invoice-form {
     position: relative;
 }
 
-.customerInvoiceForm::before {
+.customer-invoice-form::before {
     position: absolute;
     content: "";
     left: 0;
@@ -1016,7 +1016,7 @@ section.staticInvoiceTable {
     background: #f7f8fa;
 }
 
-.customerInvoiceForm.cusomerInvoiceFormPurchase:before {
+.customer-invoice-form-purchase:before {
     top: 110px;
 }
 

@@ -6,3 +6,15 @@
 .virtual-group-list {
     height: 100%;
 }
+
+
+@media (max-width:1024px){
+    .virtual-group-list {
+        display: table-cell;
+    }
+
+   .new-btn-ul{
+       padding-bottom:20px;
+   }
+
+}

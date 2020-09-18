@@ -69,7 +69,7 @@
     /* max-height: 60vh; */
     overflow-y: scroll;
 }
-#content_wrapper {
+#content-wrapper {
     padding-bottom: 80px !important;
 }
 .tax-engine,

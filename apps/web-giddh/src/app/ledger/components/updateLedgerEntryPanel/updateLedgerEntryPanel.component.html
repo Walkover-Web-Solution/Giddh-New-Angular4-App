@@ -17,14 +17,14 @@
                     <a href="javascript:void(0)" (click)="changeBaseAccount(option)"
                         style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{option?.label}}</div>
-                        <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
+                        <div class="item-unique fs12">{{option.additional?.uniqueName}}</div>
                     </a>
                 </ng-container>
                 <ng-container *ngIf="option.additional?.stock">
                     <a href="javascript:void(0)" (click)="changeBaseAccount(option)"
                         style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{option?.label}}</div>
-                        <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
+                        <div class="item-unique fs12">{{option.additional?.uniqueName}}</div>
                         <div class="item_stock">Stock: {{option.additional?.stock.name}}</div>
                     </a>
                 </ng-container>
@@ -130,7 +130,7 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">
+                                                                <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
                                                                 </div>
                                                             </a>
@@ -140,7 +140,7 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">
+                                                                <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
                                                                 </div>
                                                                 <div class="item_stock">
@@ -311,7 +311,7 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">
+                                                                <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
                                                                 </div>
                                                             </a>
@@ -321,7 +321,7 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">
+                                                                <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
                                                                 </div>
                                                                 <div class="item_stock">
@@ -919,10 +919,10 @@
                                                 <a href="javascript:void(0)" class="list-item sh-template">
                                                     <div class="item">{{ option.label }}
                                                     </div>
-                                                    <div class="item_unq">
+                                                    <div class="item-unique">
                                                         (Dated: {{ option.additional?.voucherDate}})
                                                     </div>
-                                                    <div class="item_unq">
+                                                    <div class="item-unique">
                                                         (Due:
                                                         {{ option.additional?.balanceDue?.amountForAccount | giddhCurrency }})
                                                     </div>

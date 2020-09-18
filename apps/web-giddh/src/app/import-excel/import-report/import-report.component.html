@@ -2,14 +2,14 @@
 
     <div class="d-flex flex-column">
         <div class="text-right">
-            <button class="btn btn-pink mr-0" (click)="importFiles()">Import Files</button>
+            <button class="btn btn-sky-blue mr-0" (click)="importFiles()">Import Files</button>
         </div>
         <div class="mt-15 import-data-table">
             <div class="no-data h-100" *ngIf="!importStatusResponse?.results?.length">
                 <h2>No Import Status Available.</h2>
             </div>
-            <div class="row">
-                <div class="col-xs-6 col-sm-6 mb-2" *ngFor="let item of importStatusResponse.results">
+            <div class="row import-data-row">
+                <div class="col-lg-6 col-md-12 mb-15" *ngFor="let item of importStatusResponse.results">
                     <div class="import-card">
                        <i class="hover-orange"
                             (click)="downloadItem(item)">
@@ -61,11 +61,10 @@
 
                     </div>
                 </div>
-
             </div>
         </div>
 
-        <div style="display: flex; justify-content: center;" [hidden]="importStatusResponse.totalItems <= 0">
+        <div class="pagination-wrap" [hidden]="importStatusResponse.totalItems <= 0">
             <pagination [totalItems]="importStatusResponse.totalItems" [(ngModel)]="importPaginatedRequest.page"
                 [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="importStatusResponse.count"
                 [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>

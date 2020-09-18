@@ -25,7 +25,8 @@ import { GeneralActions } from '../../actions/general/general.actions';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 @Component({
-    templateUrl: './mf.edit.component.html'
+    templateUrl: './mf.edit.component.html',
+    styleUrls: [`./mf.edit.component.scss`]
 })
 
 export class MfEditComponent implements OnInit {

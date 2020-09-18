@@ -35,9 +35,12 @@
 .table-footer th {
     border-top: none !important;
 }
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
     .tb-wrapper {
         width: 100%;
         margin: auto;
+        .table-container{
+            overflow-x: auto;
+        }
     }
 }

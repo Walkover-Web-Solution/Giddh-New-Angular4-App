@@ -141,8 +141,8 @@
     display: none;
 }
 
-.btn.btn-pink:focus,
-.btn.btn-pink:hover {
+.btn.btn-sky-blue:focus,
+.btn.btn-sky-blue:hover {
     color: #fff;
     text-decoration: none;
     outline: none !important;
@@ -170,7 +170,7 @@
 
 .card .basic > tbody > tr > td,
 .card .basic > thead > tr > th {
-    padding: 5px 14px;
+    padding: 5px 14px !important;
     border: none !important;
 }
 
@@ -186,10 +186,10 @@ td.card-header.clearfix {
 
 .card #inovice_td {
     border-bottom: 1px solid #ddd !important;
-    padding-bottom: 20px;
+    padding-bottom: 20px !important;
     background-color: #f9f9f9;
     border-top: 1px solid #ddd !important;
-    padding-top: 10px;
+    padding-top: 10px !important;
 }
 
 .card .overDueDate {
@@ -413,14 +413,14 @@ button.btn.btn-default.ladda-button {
     color: #1c1c1c;
 }
 
-.inputWrapper {
+.input-wrapper {
     display: block !important;
     width: 200px !important;
     position: relative;
     height: 36px !important;
 }
 
-.inputWrapper:before {
+.input-wrapper:before {
     position: absolute;
     content: "";
     display: block;
@@ -502,6 +502,7 @@ span.icon-export-icon {
 /* responsive */
 
 @media (max-width: 768px) {
+
     .invoice-name-download {
         a {
             padding-right: 0 !important;
@@ -601,21 +602,10 @@ span.icon-export-icon {
     .invoice-preview {
         padding-bottom: 0px;
     }
-    .desktop-view-btn {
-        display: none;
-    }
     .date-advance-search {
         .add-invoice {
             display: none;
         }
-    }
-    .mobile-search {
-        display: flex;
-        margin-bottom: 0;
-        flex-direction: column-reverse;
-    }
-    .mobile-search .input-container input {
-        font-size: 13px;
     }
     .action-icon {
         display: flex !important;
@@ -626,6 +616,20 @@ span.icon-export-icon {
 }
 
 @media (max-width: 767px) {
+    .date-advance-search{
+        margin-top: 0 !important;
+    }
+    .desktop-view-btn {
+        display: none;
+    }
+    .mobile-search {
+        display: flex;
+        margin-bottom: 0;
+        flex-direction: column-reverse;
+    }
+    .mobile-search .input-container input {
+        font-size: 13px;
+    }
     .invoice-modal-content:after,
     .invoice-modal-content {
         top: 131px;
@@ -645,9 +649,9 @@ span.icon-export-icon {
     .totalDueSale {
         padding-bottom: 5px;
     }
-    .invoice-table {
-        margin-bottom: 22px;
-    }
+   // .invoice-table {
+      //  margin-bottom: 22px;
+    //}
 }
 
 @media (max-width: 575px) {

@@ -10,113 +10,108 @@
     <!--end loader-->
 
     <!-- result -->
-    <section class="" [hidden]="!(!(searchLoader$ | async) && (search$ | async))">
+    <section [hidden]="!(!(searchLoader$ | async) && (search$ | async))">
         <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV($event)" (searchQuery)="filterData($event)" (openEmailDialog)="openEmailDialog()" (openSmsDialog)="openSmsDialog()">
         </search-filter>
-        <table class="table table-bordered basic mrT1">
-            <thead>
-                <tr>
-                    <th [style.width.px]="25">
-                        <div>
-                            <input type="checkbox" (change)="toggleSelectAll($event)" [checked]="isAllChecked" [(ngModel)]="isAllChecked">
-                        </div>
-                    </th>
-                    <!-- <th>#</th> -->
-                    <th>
-                        <div (click)="sortType = 'name'; sortReverse = !sortReverse">
-                            Name
-                            <span *ngIf="sortType == 'name' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-                            <span *ngIf="sortType == 'name' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-                        </div>
-                    </th>
-                    <th>
-                        <div (click)="sortType = 'uniqueName'; sortReverse = !sortReverse">
-                            UniqueName
-                            <span *ngIf="sortType == 'uniqueName' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-                            <span *ngIf="sortType == 'uniqueName' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-                        </div>
-                    </th>
-                    <th>
-                        <div (click)="sortType = 'parent'; sortReverse = !sortReverse">
-                            Parent
-                            <span *ngIf="sortType == 'parent' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-                            <span *ngIf="sortType == 'parent' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-                        </div>
-                    </th>
-                    <th class="text-right">
-                        <div (click)="sortType = 'openingBalance'; sortReverse = !sortReverse">
-                            Opening Bal.
-                            <span *ngIf="sortType=='openingBalance' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-                            <span *ngIf="sortType=='openingBalance' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-                        </div>
-                    </th>
-                    <th class="text-right">
-                        <div (click)="sortType = 'debitTotal'; sortReverse = !sortReverse">
-                            DR Total
-                            <span *ngIf="sortType == 'debitTotal' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-                            <span *ngIf="sortType == 'debitTotal' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-                        </div>
-                    </th>
-                    <th class="text-right">
-                        <div (click)="sortType = 'creditTotal'; sortReverse = !sortReverse">
-                            CR Total
-                            <span *ngIf="sortType == 'creditTotal' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-                            <span *ngIf="sortType == 'creditTotal' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-                        </div>
-                    </th>
-                    <th class="text-right">
-                        <div (click)="sortType = 'closingBalance'; sortReverse = !sortReverse">
-                            Closing Bal.
-                            <span *ngIf="sortType=='closingBalance' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-                            <span *ngIf="sortType=='closingBalance' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-                        </div>
-                    </th>
+        <div class="table-responsive">
+            <table class="table table-bordered basic giddh-table on-mobile-view">
+                <thead>
+                    <tr>
+                        <th [style.width.px]="25">
+                            <div>
+                                <input type="checkbox" (change)="toggleSelectAll($event)" [checked]="isAllChecked" [(ngModel)]="isAllChecked">
+                            </div>
+                        </th>
+                        <!-- <th>#</th> -->
+                        <th>
+                            <div (click)="sortType = 'name'; sortReverse = !sortReverse">
+                                Name
+                                <span *ngIf="sortType == 'name' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+                                <span *ngIf="sortType == 'name' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                            </div>
+                        </th>
+                        <th>
+                            <div (click)="sortType = 'uniqueName'; sortReverse = !sortReverse">
+                                UniqueName
+                                <span *ngIf="sortType == 'uniqueName' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+                                <span *ngIf="sortType == 'uniqueName' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                            </div>
+                        </th>
+                        <th>
+                            <div (click)="sortType = 'parent'; sortReverse = !sortReverse">
+                                Parent
+                                <span *ngIf="sortType == 'parent' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+                                <span *ngIf="sortType == 'parent' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                            </div>
+                        </th>
+                        <th class="text-right">
+                            <div (click)="sortType = 'openingBalance'; sortReverse = !sortReverse">
+                                Opening Bal.
+                                <span *ngIf="sortType=='openingBalance' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+                                <span *ngIf="sortType=='openingBalance' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                            </div>
+                        </th>
+                        <th class="text-right">
+                            <div (click)="sortType = 'debitTotal'; sortReverse = !sortReverse">
+                                DR Total
+                                <span *ngIf="sortType == 'debitTotal' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+                                <span *ngIf="sortType == 'debitTotal' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                            </div>
+                        </th>
+                        <th class="text-right">
+                            <div (click)="sortType = 'creditTotal'; sortReverse = !sortReverse">
+                                CR Total
+                                <span *ngIf="sortType == 'creditTotal' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+                                <span *ngIf="sortType == 'creditTotal' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                            </div>
+                        </th>
+                        <th class="text-right">
+                            <div (click)="sortType = 'closingBalance'; sortReverse = !sortReverse">
+                                Closing Bal.
+                                <span *ngIf="sortType=='closingBalance' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+                                <span *ngIf="sortType=='closingBalance' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+                            </div>
+                        </th>
 
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of searchResponseFiltered$ | async; let i = index">
-                    <!-- [(ngModel)]="item.isSelected" -->
-                    <td><input type="checkbox" [checked]="selectedItems.indexOf(item.uniqueName) > -1" (change)="toggleSelection($event, item)"></td>
-                    <!-- <td>{{i+1}}</td> -->
-                    <td>{{item.name}}</td>
-                    <td>{{item.uniqueName}}</td>
-                    <td>{{item.parent}}</td>
-                    <td class="alR">
-                        {{item.openingBalance | giddhCurrency }}
-                        <span *ngIf="item.openingBalance > 0">
-                            <span class="text-success" *ngIf="item.openBalanceType === 'DEBIT'">Dr</span>
-                        <span class="text-danger" *ngIf="item.openBalanceType === 'CREDIT'">Cr</span>
-                        </span>
-                    </td>
-                    <td class="alR">{{item.debitTotal | giddhCurrency }}</td>
-                    <td class="alR">{{item.creditTotal | giddhCurrency}}</td>
-                    <td class="alR">
-                        {{item.closingBalance | giddhCurrency }}
-                        <span *ngIf="item.closingBalance > 0">
-                            <span class="text-success" *ngIf="item.closeBalanceType === 'DEBIT'">Dr</span>
-                        <span class="text-danger" *ngIf="item.closeBalanceType === 'CREDIT'">Cr</span>
-                        </span>
-                    </td>
-                </tr>
-                <tr *ngIf="!(searchResponseFiltered$ | async).length">
-                    <td colspan="9" class="text-center empty-table">
-                        <h1>No Record Found !!</h1>
-                    </td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="100%">
-                        <div class="d-flex align-items-center justify-content-center">
-                            <pagination [totalItems]="totalPages" [(ngModel)]="page" [maxSize]="5" class="pagination-sm"
-                                [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
-                                (pageChanged)="pageChanged($event)"></pagination>
-                        </div>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of searchResponseFiltered$ | async; let i = index">
+                        <!-- [(ngModel)]="item.isSelected" -->
+                        <td data-title="Select Item"><input type="checkbox" [checked]="selectedItems.indexOf(item.uniqueName) > -1" (change)="toggleSelection($event, item)"></td>
+                        <!-- <td>{{i+1}}</td> -->
+                        <td data-title="Name">{{item.name}}</td>
+                        <td data-title="Unique Name">{{item.uniqueName}}</td>
+                        <td data-title="Parent">{{item.parent}}</td>
+                        <td data-title="Opening Balance" class="alR">
+                            {{item.openingBalance | giddhCurrency }}
+                            <span *ngIf="item.openingBalance > 0">
+                                <span class="text-success" *ngIf="item.openBalanceType === 'DEBIT'">Dr</span>
+                            <span class="text-danger" *ngIf="item.openBalanceType === 'CREDIT'">Cr</span>
+                            </span>
+                        </td>
+                        <td data-title="DR Total" class="alR">{{item.debitTotal | giddhCurrency }}</td>
+                        <td data-title="CR Total" class="alR">{{item.creditTotal | giddhCurrency}}</td>
+                        <td data-title="Closing Balance" class="alR">
+                            {{item.closingBalance | giddhCurrency }}
+                            <span *ngIf="item.closingBalance > 0">
+                                <span class="text-success" *ngIf="item.closeBalanceType === 'DEBIT'">Dr</span>
+                            <span class="text-danger" *ngIf="item.closeBalanceType === 'CREDIT'">Cr</span>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="!(searchResponseFiltered$ | async).length">
+                        <td colspan="9" class="text-center empty-table">
+                            <h1>No Record Found !!</h1>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex align-items-center justify-content-center">
+            <pagination [totalItems]="totalPages" [(ngModel)]="page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true"
+                [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+        </div>
     </section>
     <!-- end pd div -->
 

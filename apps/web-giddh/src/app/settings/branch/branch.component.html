@@ -1,6 +1,6 @@
 <div class="clearfix" *ngIf="!parentCompanyName && (branches$ | async)?.length > 0">
     <div class="d-flex date-advance-search row">
-        <form class="form-inline input-group-date-range-picker pr col-xs-6 col-sm-8 xs-mb-1">
+        <form class="form-inline input-group-date-range-picker pr col-xs-6 col-sm-8 mb-15">
             <div class="mr-1 d-flex branch-header-content">
                 <div class="input-group">
                     <div class="form-group">
@@ -26,12 +26,12 @@
             </div>
         </form>
         <div class="col-sm-4 col-xs-6">
-            <button class="btn btn-pink pull-right" (click)="openAddBranchModal()"> +New Branch</button>
+            <button class="btn btn-sky-blue pull-right mr-0" (click)="openAddBranchModal()"> + New Branch</button>
         </div>
     </div>
 </div>
 <div *ngIf="(branches$ | async)?.length > 0 && branchViewType === 'table' && !isMobileScreen " class="table-responsive">
-    <table class="table basic mt-2 giddh-table on-mobile-view">
+    <table class="table basic giddh-table on-mobile-view">
         <thead>
             <tr>
                 <th>Branch Name</th>
@@ -67,7 +67,7 @@
     </table>
 </div>
 <div *ngIf="(branches$ | async)?.length > 0">
-    <div class="branch-card-view mt-2" *ngIf="branchViewType === 'card'">
+    <div class="branch-card-view" *ngIf="branchViewType === 'card'">
         <div class="row">
             <div class="col-md-6 col-lg-4 col-sm-12" *ngFor="let branch of branches$ | async">
                 <div class="branch-card">

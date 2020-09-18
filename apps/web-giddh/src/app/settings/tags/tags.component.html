@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <h1 class="section-head">Create Tag</h1>
-                <div class="form-group clearfix col-sm-3 col-xs-12 mt-1">
+                <div class="form-group clearfix col-md-12 col-lg-3 col-xs-12 mt-1">
                     <form (submit)="createTag(newTag)" class="row">
                         <div class="w-100">
                             <div class="form-group">
@@ -22,7 +22,7 @@
                     </form>
                 </div>
                 <hr class="clearfix">
-                <div class="form-group mrT1 clearfix">
+                <div class="form-group mt-15 clearfix">
                     <div>
                         <span class="pull-left searchTag">
                             <input type="text" [(ngModel)]="searchText" (keyup)="filterData(searchText)"
@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="tags-table">
-                        <table class="tags-table basic giddh-table table  onMobileView">
+                        <table class="tags-table basic giddh-table table  on-mobile-view">
                             <thead>
                                 <tr>
                                     <th>Sr. No.</th>
@@ -72,7 +72,7 @@
                                     </td>
                                 </tr>
                             </tbody>
-                            <tbody *ngIf="!(tags$ | async)" class="onMobileView noRecords">
+                            <tbody *ngIf="!(tags$ | async)" class="on-mobile-view no-records">
                                 <tr>
                                     <td colspan="4" class="text-center empty-table">
                                         <h1>No Record Found !!</h1>

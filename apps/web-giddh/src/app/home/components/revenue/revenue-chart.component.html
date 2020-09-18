@@ -1,7 +1,7 @@
 <div id="pie-chart" class="card" *ngIf="!graphExpanded">
     <div class="card-body">
         <div class="row">
-            <div class="col-sm-9">
+            <div class="col-lg-9 col-md-12">
                 <div class="left-column">
                     <div class="panel-heading pl-0 pt-0 clearfix">
                         <div class="panel-heading-inner-content  w-100">
@@ -52,7 +52,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-lg-3 col-md-12">
                 <div class="total-sale-detail" *ngIf="activeGraphType !== undefined">
                     <div class="singleSaleDetail">
                         <p>Total {{activeGraphType['uniqueName']}} (this week)</p>
@@ -79,8 +79,8 @@
 </div>
 <div *ngIf="graphExpanded">
     <div class="total-sales-header">
-        <div class="row">
-            <div class="col-sm-8">
+        <div class="row  total-income-wrap">
+            <div class="col-lg-8 col-md-12">
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="daterang-block">
@@ -106,7 +106,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-lg-4 col-md-12">
                 <div class="page-title">
                     <div class="collapse-close" (click)="showColumnChart()">
                         <span class="icon-collapse-icon" tooltip="Collapse"></span>
@@ -116,7 +116,7 @@
             </div>
         </div>
     </div>
-    <div class="card mrT1" >
+    <div class="card mt-15" >
         <div class="card-body">
             <div class="clearfix topdates">
                 <div class="pull-left about-date">

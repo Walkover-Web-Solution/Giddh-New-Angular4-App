@@ -3,7 +3,7 @@
         <div class="d-flex date-advance-search">
             <div class="d-flex">
                 <div class="input-group">
-                    <span class="inputWrapper">
+                    <span class="input-wrapper">
                         <input class="form-control" placeholder="Filter by Date" [(ngModel)]="datePicker"
                             (bsValueChange)="changeFilterDate($event)" bsDaterangepicker #dpr="bsDaterangepicker"
                             [bsConfig]="bsConfig" />
@@ -20,12 +20,12 @@
                 </div>
             </div>
             <div class="clearfix">
-                <button class="btn btn-pink pull-right mr-0" data-toggle="tooltip" tooltip="Alt+N"
+                <button class="btn btn-sky-blue pull-right mr-0" data-toggle="tooltip" tooltip="Alt+N"
                     (click)="toggleTransferAsidePane()">+ New Transfer</button>
             </div>
         </div>
         <div class="report-table table-responsive">
-            <table class="table basic giddh-table">
+            <table class="table basic giddh-table on-mobile-view">
                 <thead>
                     <tr (clickOutside)="inlineSearch = null">
                         <th width="3%">#</th>
@@ -65,18 +65,18 @@
                 </thead>
                 <tbody *ngIf="branchTransferResponse.items && branchTransferResponse.items.length > 0">
                     <tr *ngFor="let item of branchTransferResponse.items; let i = index;">
-                        <td>{{ (branchTransferGetRequestParams.count * (branchTransferGetRequestParams.page - 1)) + (i+1) }}
+                        <td data-title="#">{{ (branchTransferGetRequestParams.count * (branchTransferGetRequestParams.page - 1)) + (i+1) }}
                         </td>
-                        <td>{{ item.dateOfSupply }}</td>
-                        <td><span *ngIf="item.voucherType === 'deliverynote'">Delivery Challan</span><span
+                        <td data-title="Date">{{ item.dateOfSupply }}</td>
+                        <td data-title="Voucher Type"><span *ngIf="item.voucherType === 'deliverynote'">Delivery Challan</span><span
                                 *ngIf="item.voucherType === 'receiptnote'">Receipt Note</span></td>
-                        <td><a href="javascript:;" (click)="showEditBranchTransferPopup(item)">{{ item.voucherNo }}</a>
+                        <td data-title="Voucher Number"><a href="javascript:;" (click)="showEditBranchTransferPopup(item)">{{ item.voucherNo }}</a>
                         </td>
-                        <td>{{ item.senderReceiver }}</td>
-                        <td>{{ item.warehouseName }}</td>
-                        <td class="text-right">{{activeCompany.baseCurrencySymbol}}
+                        <td data-title="Sender/Receiver">{{ item.senderReceiver }}</td>
+                        <td data-title="Warehouse">{{ item.warehouseName }}</td>
+                        <td data-title="Total Amount" class="text-right">{{activeCompany.baseCurrencySymbol}}
                             {{ item.totalAmount | giddhCurrency }}</td>
-                        <td>
+                        <td data-title="Action">
                             <div class="btn-group" dropdown [autoClose]="true">
                                 <button id="button-basic" dropdownToggle type="button"
                                     class="dropdown-toggle select-action-button" aria-controls="dropdown-basic"><span

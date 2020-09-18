@@ -5,12 +5,12 @@
         <div class="d-flex align-items-center justify-content-center mb-2">
             <label class="mr-05 font-14">As on</label>
             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                <i><img src="assets/images/custom-calender-icon.svg"></i>
+                <i><img src="assets/images/calender-icon.svg"></i>
                 <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                     class="giddh-datepicker date-range-picker" />
             </div>
         </div>
-        <button type="button" class="btn btn-pink" (click)="downloadReport()"
+        <button type="button" class="btn btn-sky-blue" (click)="downloadReport()"
             [disabled]="isLoading || !fromDate || !toDate || !downloadRequest.companyUniqueName">Download
             report</button>
     </div>

@@ -1,7 +1,7 @@
 <div class="box clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="selectedTax = null;toggleTaxAsidePane()">
     <div style="display: flex;justify-content: space-between">
         <h1 class="section-head pdT1" style="margin: 0;padding: 0;line-height: 2;">Added Taxes</h1>
-        <button class="btn btn-pink mrR0" [tooltip]="'Create New Tax'"
+        <button class="btn btn-sky-blue mrR0" [tooltip]="'Create New Tax'"
             (click)="selectedTax = null;toggleTaxAsidePane($event)">
             <i class="icon icon-plus" style="font-size:12px"></i> New Tax
         </button>
@@ -10,7 +10,7 @@
     <div class="col-sm-12 pt-15 tax-table-wrapper">
         <div class="row">
             <div class="table-responsive">
-                <table class="table table-bordered  basic mrB onMobileView">
+                <table class="table table-bordered  basic mrB on-mobile-view">
 
                     <thead>
                         <tr>
@@ -158,7 +158,7 @@
                             </td>
                         </tr>
                     </tbody>
-                    <tbody *ngIf="!availableTaxes.length" class="onMobileView noRecords">
+                    <tbody *ngIf="!availableTaxes.length" class="on-mobile-view no-records">
                         <tr>
                             <td colspan="10" class="text-center empty-table">
                                 <h1>No Record Found !!</h1>

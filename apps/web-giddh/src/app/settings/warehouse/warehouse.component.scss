@@ -112,7 +112,7 @@ span.setAsDefault {
         cursor: not-allowed;
     }
 }
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 991px) {
     .warehouse-card h3 {
         float: none;
         width: 90%;
@@ -120,7 +120,7 @@ span.setAsDefault {
     }
     .warehouse-card .btn-group{
         position: absolute;
-        top: 0;
+        top:4px;
         right: 0;
     }
     .warehouse-card .d-flex {
@@ -129,9 +129,15 @@ span.setAsDefault {
     }
     .warehouse-options {
         text-align: left;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .dropdown-item.warehouse-options {
+           justify-content: flex-start;
     }
 }
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 991px) {
     .warehouse-card {
         min-height: auto;
     }

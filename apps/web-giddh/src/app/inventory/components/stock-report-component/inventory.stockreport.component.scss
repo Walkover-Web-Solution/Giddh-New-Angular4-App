@@ -316,10 +316,12 @@ button.btn.btn-filter {
 .stock-not-found {
     text-transform: none;
 }
-
+.wrap-head-report{
+    align-items: center;
+}
 .head-report{
     font-size: 20px;
-    font-weight: bold; 
+    font-weight: bold;
     text-transform:capitalize;
 }
 .td-mobile-head{
@@ -327,6 +329,7 @@ button.btn.btn-filter {
 }
 .table-responsive{
     overflow-x:auto;
+    display:table;
 }
 .icon-btn {
     border: 1px solid $gainsboro;
@@ -338,9 +341,21 @@ button.btn.btn-filter {
         font-weight: bold;
     }
 }
-
+@media(max-width:1024px){
+    .wrap-head-report{
+       width: 55%;
+       .head-report{
+            font-size: 16px;
+            white-space: normal;
+            word-break: break-all;
+        }
+    }
+    .sticky-footer.sticky-footer-sale-amount{
+        padding-left: 0 !important;
+    }
+}
 @media (max-width:767px){
-    .btn-pink{
+    .btn-sky-blue{
         display:none;
     }
     .advance-icon{
@@ -375,3 +390,10 @@ button.btn.btn-filter {
         border: 0px solid $white !important;
     }
 }
+
+@media(max-width:1622px){
+    .table-responsive{
+        display:block;
+    }
+}
+

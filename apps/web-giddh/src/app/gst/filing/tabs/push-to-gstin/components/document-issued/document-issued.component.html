@@ -12,12 +12,12 @@
 	<div>
 		<div *ngIf="doc_issuesVM && doc_issuesVM.length">
 
-			<table class="table table-striped transactions-table">
+			<table class="table table-striped transactions-table on-mobile-view">
 				<thead>
 					<tr class="text-uppercase">
 						<th width="20px"></th>
-						<th width="80px"> S.No</th>
-						<th width="35%"> Nature of Document</th>
+						<th width="80px">#</th>
+						<th width="35%">Nature of Document</th>
 						<th> Sr. No. From</th>
 						<th> Sr. No. To</th>
 						<th> Total Number</th>
@@ -28,13 +28,13 @@
 				<tbody>
 					<tr *ngFor="let item of doc_issuesVM;">
 						<td></td>
-						<td>{{item.num}}</td>
-						<td> {{item.doc ? item.doc : '-' }} </td>
-						<td>{{item.from ? item.from : '-'}}</td>
-						<td>{{item.to ? item.to : '-'}}</td>
-						<td class="text-center">{{item.totnum ? item.totnum : '-'}}</td>
-						<td class="text-center">{{item.cancel ? item.cancel : '-'}}</td>
-						<td class="text-center">{{item.net_issues ? item.net_issues : '-'}}</td>
+						<td data-title="#">{{item.num}}</td>
+						<td data-title="Nature of Document"> {{item.doc ? item.doc : '-' }} </td>
+						<td data-title="From">{{item.from ? item.from : '-'}}</td>
+						<td data-title="To">{{item.to ? item.to : '-'}}</td>
+						<td data-title="Total Number" class="text-center">{{item.totnum ? item.totnum : '-'}}</td>
+						<td data-title="Total Cancelled" class="text-center">{{item.cancel ? item.cancel : '-'}}</td>
+						<td data-title="Net Issued" class="text-center">{{item.net_issues ? item.net_issues : '-'}}</td>
 					</tr>
 				</tbody>
 			</table>

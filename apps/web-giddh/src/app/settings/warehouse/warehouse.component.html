@@ -9,13 +9,13 @@
     <div *ngIf="warehouses?.length" class="warehouse-card-view">
         <div class="row">
             <div class="mb-15 col-sm-12 text-right mr-0">
-                <button class="btn btn-pink mr-0" (click)="resetOnboardingForm();openCreateWarehouseModal();">
+                <button class="btn btn-sky-blue mr-0" (click)="resetOnboardingForm();openCreateWarehouseModal();">
                     + New Warehouse
                 </button>
             </div>
         </div>
         <div class="row warehouse-box">
-                <div *ngFor="let warehouse of warehouses; index as warehouseIndex" class="col-lg-4 col-md-6 col-sm-12">
+                <div *ngFor="let warehouse of warehouses; index as warehouseIndex" class="col-lg-4 col-md-12 col-sm-12">
                     <div class="warehouse-card">
                         <div class="d-flex">
                             <h3>{{ warehouse.name }}</h3>

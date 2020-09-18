@@ -6,7 +6,7 @@
         <!-- level 1 -->
         <div class="col_wrapper left-account-opration" *ngFor="let col of mc.columns;let i=index"
             [style.height.px]="height" nav-hr-item (ngInit)="onColAdd($event,navigation)">
-            <ul class="new_btn_ul" *ngIf="i !== 0">
+            <ul class="new-btn-ul" *ngIf="i !== 0">
                 <li class="new_btn">
                     <a href="javascript:void(0)" nav-vr-item class="btn-link"
                         *ngIf="!isSearchingGroups || (isSearchingGroups && col.IsCreateNewBtnShowable)"
@@ -14,7 +14,7 @@
                 </li>
             </ul>
             <ng-container *ngIf="col.Items">
-                <ul class="grp_list usesr-last-list">
+                <ul class="grp_list users-last-list">
                     <cdk-virtual-scroll-viewport class="virtual-group-list" [itemSize]="36">
                         <!-- <ng-container *cdkVirtualFor="let item of col.Items"> -->
                             <li *cdkVirtualFor="let item of col.Items" class="list-item sidebarTooltip">

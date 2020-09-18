@@ -57,7 +57,10 @@
     <!-- region main form -->
     <div [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)">
         <form #invoiceForm="ngForm" novalidate autocomplete="off"
-            [ngClass]="{ 'customerInvoiceForm' : !invFormData.voucherDetails.customerName, 'cusomerInvoiceFormPurchase': isPurchaseInvoice , 'slaesPrEsti':isSalesInvoice || isProformaInvoice || isEstimateInvoice , 'forMultiCurrency' : isMulticurrencyAccount  } ">
+            [ngClass]="{ 'customer-invoice-form' : !invFormData.voucherDetails.customerName || !isCreditNote || !isDebitNote ,
+            'customer-invoice-form-purchase': isPurchaseInvoice || isCreditNote || isDebitNote ,
+            'slaesPrEsti':isSalesInvoice || isProformaInvoice || isEstimateInvoice ,
+            'forMultiCurrency' : isMulticurrencyAccount  } ">
 
             <div class="clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="addAccountFromShortcut()">
 
@@ -67,7 +70,7 @@
 
                         <div class="inner-container">
 
-                            <div class=" showforSmall-screen"
+                            <div class="show-on-small-screen"
                                 *ngIf="isSalesInvoice || isProformaInvoice || isEstimateInvoice">
 
                                 <div class="text-right">
@@ -94,14 +97,14 @@
 
                                 <div class="row">
                                     <!-- region customer name -->
-                                    <div class="col-sm-12 col-md-2 col-xs-12">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                         <label>{{!isPurchaseInvoice ? 'Customer' : 'Vendor'}} Name<span
                                                 class="red-text">*</span></label>
                                     </div>
                                     <!-- endregion -->
 
                                     <!-- region customer dropdown -->
-                                    <div class="col-sm-12 col-md-7 col-xs-12 selectCustomerName">
+                                    <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 col-xs-12 selectCustomerName">
 
                                         <div class="clearfix d-flex" style="flex-direction: column">
                                             <div class="d-flex">
@@ -127,7 +130,7 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">{{ option.value }}</div>
+                                                                <div class="item-unique">{{ option.value }}</div>
                                                             </a>
                                                         </ng-template>
 
@@ -188,6 +191,24 @@
                                             </div>
                                             <!-- endregion -->
                                         </div>
+                                        <!-- region search_customer image -->
+                                        <ng-container *ngIf="isSalesInvoice && !isCashInvoice">
+                                            <img src="assets/images/new/search_customer.svg" class="img-responsive search-arrow-image "
+                                                *ngIf="!invFormData.voucherDetails.customerName" />
+                                        </ng-container>
+
+                                        <!-- need to show this image on purchase invoice module -->
+                                        <ng-container *ngIf="isPurchaseInvoice">
+                                            <img src="assets/images/new/search-vendor.svg" class="img-responsive search-arrow-image "
+                                                *ngIf="!invFormData.voucherDetails.customerName" />
+                                        </ng-container>
+
+                                        <ng-container *ngIf="isCashInvoice">
+                                            <img src="assets/images/new/search_customer_Cash Invoice.svg"
+                                                class="img-responsive  cash-invoice-tip-Img search-arrow-image "
+                                                *ngIf="!invFormData.voucherDetails.customerName" />
+                                        </ng-container>
+                                        <!-- endregion -->
 
                                     </div>
                                     <!-- endregion -->
@@ -199,7 +220,7 @@
                             <!-- region customer address section -->
                             <div class="row">
 
-                                <div class="col-sm-12 col-md-9 offset-md-2 ">
+                                <div class="col-sm-12 col-xl-9 offset-lg-3 col-lg-8 col-md-9 offset-xl-2 offset-md-3">
                                     <ng-container>
                                         <section [ngClass]="{' billing-addressWrap' : !invFormData.voucherDetails.customerName }">
 
@@ -207,7 +228,7 @@
 
                                                 <div class="row">
                                                     <!-- region billing address -->
-                                                    <div class="col-sm-12 col-md-6 bill-add">
+                                                    <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
 
                                                         <div class="form-group">
                                                             <label class="pb-0">Billing Address</label>
@@ -266,7 +287,7 @@
                                                     <!-- endregion -->
 
                                                     <!-- region shipping address -->
-                                                    <div class="col-sm-12 col-md-6 bill-add">
+                                                    <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
 
                                                         <div class="form-group p0 width100">
                                                             <label class="pb-0">
@@ -354,7 +375,7 @@
                         </div>
 
                         <!-- region balance due -->
-                        <div class="col-sm-3 col-md-3 balanceDueAbs"
+                        <div class="col-sm-3 col-md-3 balance-due-absolute"
                             *ngIf="isSalesInvoice || isProformaInvoice || isEstimateInvoice">
 
                             <div class="text-right">
@@ -395,12 +416,12 @@
                             <!-- region attention to -->
                             <div class="row">
 
-                                <div class="col-sm-12 col-md-2 col-xs-12">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Attention to</label>
                                 </div>
 
-                                <div class="col-sm-12 col-md-9 col-xs-12">
-                                    <div class=" pl0  col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="pl0 col-sm-12 col-xl-6 col-lg-10 col-md-10">
 
                                         <input type="text" name="accountDetails.attention" placeholder="Attention to"
                                             class="form-control attentionTo"
@@ -413,11 +434,11 @@
 
                             <!-- region email -->
                             <div class="row mTB1">
-                                <div class="col-sm-12 col-md-2 col-xs-12">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Email Id</label>
                                 </div>
-                                <div class="col-sm-12 col-md-9 col-xs-12">
-                                    <div class="col-sm-12 col-md-6 pl-0">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                         <input type="email" placeholder="someone@example.com"
                                             name="accountDetails.email" class="form-control attentionTo"
                                             [(ngModel)]="invFormData.accountDetails.email" />
@@ -430,12 +451,12 @@
                             <!-- region mobile no -->
                             <div class="row mTB1">
 
-                                <div class="col-sm-12 col-md-2 col-xs-12">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Mobile Number</label>
                                 </div>
 
-                                <div class="col-sm-12 col-md-9 col-xs-12">
-                                    <div class="col-sm-12 col-md-6 pl-0">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                         <input digitsOnlyDirective placeholder="9198XXXXXXXX" type="tel"
                                             name="accountDetails.mobileNumber" class="form-control attentionTo"
                                             [(ngModel)]="invFormData.accountDetails.mobileNumber" />
@@ -445,11 +466,11 @@
                             <!-- endregion-->
                             <!-- warehouse selection -->
                             <div class="row mTB1" *ngIf="shouldShowWarehouse">
-                                <div class="col-sm-12 col-md-2 col-xs-12">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Warehouse</label>
                                 </div>
-                                <div class="col-sm-12 col-md-9 col-xs-12">
-                                    <div class="col-sm-12 col-md-6 pl-0">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                         <sh-select class="multi-select" name="warehouse"
                                             [placeholder]="'Select Warehouse'" [(ngModel)]="selectedWarehouse"
                                             [options]="warehouses">
@@ -579,11 +600,11 @@
 
                             <!-- region invoice no, invoice date, Expiry date -->
                             <div class="row mTB1">
-                                <div class="col-sm-12 col-md-2 col-xs-12">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label> {{ invoiceNoLabel }} </label>
                                 </div>
-                                <div class="col-sm-12 col-md-9 col-xs-12">
-                                    <div class="col-sm-12 col-md-6 pl-0">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-6 col-lg-5 col-md-10 pl-0">
                                         <!-- Enabled for CR/DR update flow -->
                                         <div>
                                             <input *ngIf="(!isCreditNote && !isDebitNote)" type="text"
@@ -605,10 +626,10 @@
                                                         <a href="javascript:void(0)" class="list-item sh-template">
                                                             <div class="item">{{ option.label }}
                                                             </div>
-                                                            <div class="item_unq">
+                                                            <div class="item-unique">
                                                                 (Dated: {{ option.additional?.voucherDate}})
                                                             </div>
-                                                            <div class="item_unq">
+                                                            <div class="item-unique">
                                                                 (Due:
                                                                 {{ option.additional?.balanceDue?.amountForAccount | giddhCurrency }})
                                                             </div>
@@ -624,7 +645,7 @@
                                             <span class="remove-invoice-label">Remove</span>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-6 invoice-date-due-date" *ngIf="!isMobileScreen">
+                                    <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 invoice-date-due-date" *ngIf="!isMobileScreen">
                                         <div class="form-inline flex-row flex-nowrap">
                                             <div *ngIf="(isCreditNote || isDebitNote) && selectedInvoice"
                                                 class="cp remove-invoice" (click)="removeSelectedInvoice()">
@@ -673,11 +694,11 @@
                             </div>
 
                             <div class="row mTB1" *ngIf="isMobileScreen">
-                                <div class="col-sm-12 col-md-2 col-xs-12">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>{{ invoiceDateLabel }}</label>
                                 </div>
-                                <div class="col-sm-12 col-md-9 col-xs-12">
-                                    <div class="col-sm-12 col-md-6 pl-0">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                         <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel"
                                             name="voucherDate" class="form-control dateinvoice" bsDatepicker
                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
@@ -696,11 +717,11 @@
 
                             <div class="row mTB1"
                                 *ngIf="isMobileScreen && (isSalesInvoice || isPurchaseInvoice || isProformaInvoice || isEstimateInvoice)">
-                                <div class="col-sm-12 col-md-2 col-xs-12">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>{{ invoiceDueDateLabel }}</label>
                                 </div>
-                                <div class="col-sm-12 col-md-9 col-xs-12">
-                                    <div class="col-sm-12 col-md-6 pl-0">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                         <input type="text" [placeholder]="giddhDateFormat" #dueDate="ngModel"
                                             name="dueDate" class="form-control dateinvoice" bsDatepicker
                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
@@ -716,11 +737,11 @@
                             <!-- reverse charge transction start -->
                             <!-- for purchase record start -->
                             <div class="row mTB1" *ngIf="isPurchaseInvoice">
-                                <div class="col-sm-12 col-md-2 col-xs-12" *ngIf="!isMobileView">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12" *ngIf="!isMobileView">
                                     <label></label>
                                 </div>
-                                <div class="col-sm-12 col-md-9 col-xs-12">
-                                    <div class="col-sm-6 pl-0">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-6 col-xl-6 col-lg-10 col-md-10 pl-0">
                                         <input id="reverse-charge" name="rcmEntry" class="checkbox-custom"
                                             type="checkbox" [ngModel]="isRcmEntry" (click)="toggleRcmCheckbox($event)">
                                         <label #rcmPopup="bs-popover" [popover]="rcmTemplate" container="body"
@@ -741,11 +762,11 @@
                             <!-- for sales invoice start (ngModelChange)="touristSchemeApplicableToggle($event)"-->
                             <ng-container *ngIf="companyCountryCode === 'AE'">
                                 <div class="row mTB1" *ngIf="isSalesInvoice || isCashInvoice">
-                                    <div class="col-sm-12 col-md-2 col-xs-12" *ngIf="!isMobileView">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12" *ngIf="!isMobileView">
                                         <label></label>
                                     </div>
-                                    <div class="col-sm-12 col-md-9 col-xs-12">
-                                        <div class="col-sm-12 col-md-6 pl-0">
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                        <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                             <input id="tourist-scheme" type="checkbox" name="touristSchemeApplicable"
                                                 class="checkbox-custom"
                                                 [(ngModel)]="invFormData.touristSchemeApplicable"
@@ -760,11 +781,11 @@
                                 <!-- endregion -->
                                 <div class="row mTB1 "
                                     *ngIf="(isSalesInvoice || isCashInvoice) && invFormData.touristSchemeApplicable ">
-                                    <div class="col-sm-12 col-md-2 col-xs-12">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                         <label>Passport Number</label>
                                     </div>
-                                    <div class="col-sm-12 col-md-9 col-xs-12 ">
-                                        <div class="col-sm-12 col-md-6 pl-0 ">
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12 ">
+                                        <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0 ">
                                             <input type="text" name="passportNumber" #passportNumber
                                                 placeholder="Passport Number" class="form-control attentionTo"
                                                 (blur)="allowAlphanumericChar(passportNumber)"
@@ -784,26 +805,6 @@
 
                 </div>
             </div>
-
-            <!-- region search_customer image -->
-            <ng-container *ngIf="isSalesInvoice && !isCashInvoice">
-                <img src="assets/images/new/search_customer.svg" class="img-responsive search-arrow-image "
-                    *ngIf="!invFormData.voucherDetails.customerName" />
-            </ng-container>
-
-            <!-- need to show this image on purchase invoice module -->
-            <ng-container *ngIf="isPurchaseInvoice">
-                <img src="assets/images/new/search-vendor.svg" class="img-responsive search-arrow-image "
-                    *ngIf="!invFormData.voucherDetails.customerName" />
-            </ng-container>
-
-            <ng-container *ngIf="isCashInvoice">
-                <img src="assets/images/new/search_customer_Cash Invoice.svg"
-                    class="img-responsive  cashinvoice_tipImg search-arrow-image "
-                    *ngIf="!invFormData.voucherDetails.customerName" />
-            </ng-container>
-            <!-- endregion -->
-
             <!-- region entries table -->
             <ng-container>
 
@@ -1066,7 +1067,7 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">
+                                                                <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}</div>
                                                             </a>
                                                         </ng-container>
@@ -1074,7 +1075,7 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">
+                                                                <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}</div>
                                                                 <div class="item_stock">Stock:
                                                                     {{ option.additional?.stock.uniqueName }}</div>
@@ -1671,7 +1672,7 @@
                                                                                     style="border-bottom: 1px solid #ccc;">
                                                                                     <div class="item">{{ option.label }}
                                                                                     </div>
-                                                                                    <div class="item_unq">
+                                                                                    <div class="item-unique">
                                                                                         {{ option.value }}
                                                                                     </div>
                                                                                 </a>
@@ -1927,7 +1928,7 @@
                                                                     <a href="javascript:void(0)" class="list-item"
                                                                         style="border-bottom: 1px solid #ccc;">
                                                                         <div class="item">{{ option.label }}</div>
-                                                                        <div class="item_unq">
+                                                                        <div class="item-unique">
                                                                             {{ option.additional?.uniqueName }}</div>
                                                                     </a>
                                                                 </ng-container>
@@ -1935,7 +1936,7 @@
                                                                     <a href="javascript:void(0)" class="list-item"
                                                                         style="border-bottom: 1px solid #ccc;">
                                                                         <div class="item">{{ option.label }}</div>
-                                                                        <div class="item_unq">
+                                                                        <div class="item-unique">
                                                                             {{ option.additional?.uniqueName }}</div>
                                                                         <div class="item_stock">Stock:
                                                                             {{ option.additional?.stock.uniqueName }}
@@ -2054,7 +2055,7 @@
 
                                                 <div class="row">
 
-                                                    <div class="col-xs-6 col-sm-6" style="padding-right:0;">
+                                                    <div class="col-xs-6 col-sm-6">
                                                         <label class="card-label text-right">Qty</label>
                                                         <input type="text" [disabled]="!transaction.isStockTxn"
                                                             (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity"
@@ -2463,7 +2464,7 @@
                                                                 <a href="javascript:void(0)" class="list-item"
                                                                     style="border-bottom: 1px solid #ccc;">
                                                                     <div class="item">{{ option.label }}</div>
-                                                                    <div class="item_unq">{{ option.value }}</div>
+                                                                    <div class="item-unique">{{ option.value }}</div>
                                                                 </a>
                                                             </ng-template>
                                                         </sh-select>
@@ -2853,7 +2854,7 @@
                             <ng-template #optionTemplate1 let-option="option">
                                 <a href="javascript:void(0)" class="list-item">
                                     <div class="item">AR2019374-3</div>
-                                    <div class="item_unq">
+                                    <div class="item-unique">
                                         <p class="font-12 text-gray mb-0">(Dated: 20/01/2020)</p>
                                         <p class="font-12 text-gray mb-0">(Amount: ₹5,000.00)</p>
                                     </div>
@@ -2887,7 +2888,7 @@
                             <ng-template #optionTemplate1 let-option="option">
                                 <a href="javascript:void(0)" class="list-item">
                                     <div class="item">AR2019374-3</div>
-                                    <div class="item_unq">
+                                    <div class="item-unique">
                                         <p class="font-12 text-gray mb-0">(Dated: 20/01/2020)</p>
                                         <p class="font-12 text-gray mb-0">(Amount: ₹5,000.00)</p>
                                     </div>

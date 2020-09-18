@@ -27,7 +27,7 @@
                 </div>
                 <div class="d-flex">
                     <button type="button" *ngIf="seletedUserPlans?.additionalCharges >0" (click)="goToBillingDetails();"
-                        class="btn btn-pink">Pay Now</button>
+                        class="btn btn-sky-blue">Pay Now</button>
                     <button type="button" (click)="isPlanShow=true" class="btn btn-green mr-0">Buy New Plan</button>
                 </div>
             </div>
@@ -55,7 +55,7 @@
             </div>
         </div> -->
 
-        <div class="box trial-plan-section mt-1">
+        <div class="box trial-plan-section mt-15">
             <div class="clearfix">
                 <div class="row d-flex sm-d-block">
                     <div class="col-lg-7 col-md-12 col-sm-12">
@@ -214,7 +214,7 @@
                                 </div>
                             </div>
                             <div class="clearfix associated-companies-list" container="body">
-                                <div class="mt-1 mb-1 pl-2 pr-2 pr-1 search-company-here" *ngIf="subscriptions">
+                                <div class="mt-15 mb-1 pl-2 pr-2 pr-1 search-company-here" *ngIf="subscriptions">
                                     <div class="form-group custom-input-search">
                                         <i class="icon-search"></i>
                                         <input type="search" class="form-control" [(ngModel)]="searchString" (ngModelChange)="filterCompanyList($event)" placeholder="Search Company here">

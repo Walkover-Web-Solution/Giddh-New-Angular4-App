@@ -1,52 +1,41 @@
 <div class="box clearfix">
     <h1 class="section-head pdT0">Create New Trigger(Webhook)</h1>
     <div class="row">
-        <form (ngSubmit)="onSubmit(newTriggerObj)" class="col-sm-10 col-xs-12 ">
+        <form (ngSubmit)="onSubmit(newTriggerObj)" class="col-lg-10 col-md-12 col-xs-12 ">
             <div class="row">
-                <div class="form-group col-sm-4 col-xs-12">
+                <div class="form-group col-lg-4 col-md-6 col-xs-12">
                     <label>Name</label><br>
                     <input type="text" placeholder="Name" autocomplete="off" [(ngModel)]="newTriggerObj.name" name="name" class="form-control" />
                 </div>
-                <div class="form-group col-sm-4 col-xs-12">
+                <div class="form-group col-lg-4 col-md-6 col-xs-12">
                     <label>Select Entity Type</label><br>
                     <sh-select (onClear)="onResetEntityType()" (selected)="onEntityTypeSelected($event)" [forceClearReactive]="forceClear$ | async" [options]="entityList" [isFilterEnabled]="false" name="entityType" [(ngModel)]="newTriggerObj.entity" [placeholder]="'Select Entity Type'"
                         [ItemHeight]="33">
                     </sh-select>
                 </div>
-                <div class="form-group col-sm-4 col-xs-12">
+                <div class="form-group col-lg-4 col-md-6 col-xs-12">
                     <label>Select Entity</label><br>
                     <sh-select [disabled]="!newTriggerObj.entity" [forceClearReactive]="forceClearEntityList$ | async" [options]="entityOptions$ | async" name="entityOptions" [(ngModel)]="newTriggerObj.entityUniqueName" [placeholder]="'Select Entity'" [ItemHeight]="33">
                     </sh-select>
                 </div>
-
-            </div>
-            <div class="row">
-                <div class="form-group col-sm-4 col-xs-12">
+                <div class="form-group col-lg-4 col-md-6 col-xs-12">
                     <label>Filter</label><br>
-                    <sh-select [forceClearReactive]="forceClearFilterList$ | async" [options]="filterList" [isFilterEnabled]="true" name="filter" [(ngModel)]="newTriggerObj.filter" [placeholder]="'Select Filter'" [ItemHeight]="33">
+                    <sh-select [forceClearReactive]="forceClearFilterList$ | async" [options]="filterList" [isFilterEnabled]="true"
+                        name="filter" [(ngModel)]="newTriggerObj.filter" [placeholder]="'Select Filter'" [ItemHeight]="33">
                     </sh-select>
                 </div>
-                <div class="form-group col-sm-4 col-xs-12">
+                <div class="form-group col-lg-4 col-md-6 col-xs-12">
                     <label>Scope</label><br>
-                    <sh-select [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" placeholder="Select Scope" name="scope" [(ngModel)]="newTriggerObj.scope" [options]="scopeList" (selected)="onSelectScope($event)">
+                    <sh-select [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" placeholder="Select Scope"
+                        name="scope" [(ngModel)]="newTriggerObj.scope" [options]="scopeList" (selected)="onSelectScope($event)">
                         <option>selected</option>
                     </sh-select>
                 </div>
-                <!-- <div class="form-group col-sm-3 col-xs-12">
-                    <label>Action</label><br>
-                    <sh-select [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" placeholder="Select Action" name="action" [(ngModel)]="newTriggerObj.action" [options]="actionList"></sh-select>
-                </div> -->
-                <!-- <div class="form-group col-sm-3 col-xs-12">
-                    <label>Value</label><br>
-                    <input type="number" [(ngModel)]="newTriggerObj.value" name="value" placeholder="Value" class="form-control" />
-                </div> -->
-                <div class="form-group col-sm-4 col-xs-12">
+                <div class="form-group col-lg-4 col-md-6 col-xs-12">
                     <label>URL</label><br>
                     <input type="text" [(ngModel)]="newTriggerObj.url" name="url" placeholder="URL" class="form-control" />
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-sm-4 col-xs-12">
+                <div class="form-group col-lg-4 col-md-6 col-xs-12">
                     <label>Description</label><br>
                     <textarea class="form-control" [(ngModel)]="newTriggerObj.description" name="description"></textarea>
                 </div>
@@ -63,7 +52,7 @@
         <div class="row">
             <h1 class="section-head pdT1">Added Triggers</h1>
             <div class="table-responsive">
-                <table class="table table-bordered basic mrB onMobileView">
+                <table class="table table-bordered trigger-table basic mrB on-mobile-view">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -73,8 +62,6 @@
                             <th>Scope</th>
                             <th>Filter</th>
                             <th>Action</th>
-                            <!-- value option is hide now bcz there is only single "Entity Type" called "Closing Balance"  -->
-                            <!-- <th>Value</th> -->
                             <th>URL</th>
                             <th>Description</th>
                             <th class="text-center">Action</th>
@@ -133,7 +120,7 @@
                             </td>
                         </tr>
                     </tbody>
-                    <tbody *ngIf="!availableTriggers.length" class="onMobileView noRecords">
+                    <tbody *ngIf="!availableTriggers.length" class="on-mobile-view no-records">
                         <tr>
                             <td colspan="11" class="text-center empty-table">
                                 <h1>No Record Found !! {{availableTriggers}}</h1>

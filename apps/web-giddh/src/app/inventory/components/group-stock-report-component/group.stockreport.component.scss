@@ -205,11 +205,6 @@ tfoot {
 .capitalize {
     text-transform: capitalize;
 }
-
-.table-border {
-    border: 1px solid #c6c6c6;
-}
-
 .bdrN {
     border: none !important;
 }
@@ -266,9 +261,12 @@ tfoot {
             font-size: 14px;
             line-height: 20px;
         }
-        @media only screen and (max-width: 768px) {
+        @media only screen and (max-width: 1024px) {
+            .sticky-footer-sale-amount {
+               padding-right: 0;
+            }
             .flex-col {
-                display: block;
+                display: inline-flex;
                 .operators {
                     text-align: right;
                 }
@@ -326,8 +324,11 @@ td.brNone {
     background: #fff;
 }
 
-.inventory-stock-table .d-flex {
-    align-items: center;
+.inventory-stock-table{
+    display: table;
+    .d-flex {
+        align-items: center;
+    }
 }
 
 .icon-pointer {
@@ -379,9 +380,32 @@ button.btn.btn-filter {
 .td-mobile-head {
     display: none;
 }
+.wrap-head-report{
+    align-items: center;
+}
+@media(max-width:991px){
+    .wrap-head-report{
+       width: 55%;
+       .head-report{
+            font-size: 16px;
+            white-space: normal;
+            word-break: break-all;
 
-@media (max-width:767px) {
-    .btn-pink {
+        }
+    }
+    .sticky-footer.sticky-footer-sale-amount{
+        padding-left: 0 !important;
+        .opening-value{
+            display: flex;
+            margin-top: 5px;
+            margin-left: 10px;
+        }
+    }
+
+}
+
+@media (max-width:768px) {
+    .btn-sky-blue {
         display: none;
     }
     .advance-icon {
@@ -394,6 +418,7 @@ button.btn.btn-filter {
     .btn-link {
         margin-right: 0 !important;
         margin-top: 0 !important;
+        margin-left: 15px;
         span {
             display: none;
         }
@@ -408,28 +433,26 @@ button.btn.btn-filter {
     .popover-details {
         display: block;
         position: absolute;
-        top: 116px;
+        top: 10px;
         right: 0;
         margin: 0 15px;
+        z-index: 999;
         .btn-group {
             margin-left: 0 !important;
             .dropdown-toggle {
                 border-width: 0px !important;
                 background: transparent;
+                color:$white;
             }
         }
         .bottom-details {
             min-width: 90vw;
+            z-index:99 !important;
         }
     }
-    .footer-sticky {
-        display: none;
-    }
+
     .td-mobile-head {
         display: block;
-    }
-    .table-border {
-        border: 0px solid $white !important;
     }
     .more-table {
         text-align: end !important;
@@ -444,9 +467,24 @@ button.btn.btn-filter {
             width: auto;
         }
     }
+
 }
 .input-group-addon{
     border: 1px solid $gainsboro;
     border-left: 0;
     background-color: $whisper-light;
+}
+
+
+@media (max-width: 767px){
+    .footer-sticky{
+        display:none;
+    }
+}
+
+
+@media(max-width:1622px){
+    .inventory-stock-table {
+        display: block;
+    }
 }

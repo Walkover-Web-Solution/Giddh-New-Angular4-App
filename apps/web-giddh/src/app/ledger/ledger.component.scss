@@ -222,13 +222,13 @@ input {
     cursor: default;
     top: 1px;
 }
-.inputWrapper {
+.input-wrapper {
     display: block !important;
     width: 100% !important;
     position: relative;
     height: 37px !important;
 }
-.inputWrapper:before {
+.input-wrapper:before {
     position: absolute;
     content: "";
     display: block;
@@ -550,7 +550,7 @@ sh-select:focus {
     justify-content: space-between;
 }
 .input-wrapper.ipad-view-datepicker {
-    display: none;
+    display: none !important;
 }
 .no-btn,
 .no-btn:active,
@@ -882,6 +882,7 @@ sh-select:focus {
         padding-top: 0;
     }
 }
+  /*comment for now
 @media (min-width: 768px) {
     .ledger-book:before {
         content: " ";
@@ -896,10 +897,12 @@ sh-select:focus {
         left: 0px;
         right: 0;
     }
+
     table.ledger-footer-1:first-child {
         border-right: 1px solid $gainsboro;
     }
 }
+*/
 @media (max-width: 767px) {
     .ledger-head {
         th {

@@ -29,12 +29,12 @@
     border: 2px dashed $gainsboro;
 }
 
-.import_type {
+.import-type {
     display: flex;
     justify-content: center;
 }
 
-.import_type li {
+.import-type li {
     list-style: none;
     width: 320px;
     height: 150px;
@@ -51,11 +51,11 @@
     transition: all 0.3s ease;
 }
 
-.import_type h2 {
+.import-type h2 {
     margin-bottom: 30px;
 }
 
-.import_type li:hover {
+.import-type li:hover {
     transform: scale(1.01);
 }
 
@@ -106,7 +106,15 @@
     border-radius: 4px;
     color: #cccccc;
 }
-
+@media(max-width:991px){
+    .import-type {
+       flex-wrap: wrap;
+       li{
+            width: 27%;
+            margin: 0 15px 30px;
+       }
+    }
+}
 @media (max-width: 767px) {
     .center-block .btn-sm {
         float: none !important;

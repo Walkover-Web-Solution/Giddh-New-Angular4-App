@@ -38,22 +38,10 @@
                                 </div>
                             </a>
 
-                            <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
-
+                            <ul class="dropdown-menu user-dropdown-header" role="menu" *dropdownMenu>
                                 <li>
                                     <a href="javascript:void(0)"
-                                        (click)="analyzeMenus($event, '/pages/settings/taxes', {tab: 'taxes', tabIndex: 0})">Settings</a>
-                                </li>
-                                <li *ngIf="!isMobileSite">
-                                    <!-- [routerLink]="['/settings']" [queryParams]="" -->
-                                    <a href="javascript:void(0)"
-                                        (click)="analyzeMenus($event, '/pages/settings/permission', { tab: 'permission', tabIndex: 5 })">Manage
-                                        Users (Permission)</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)"
-                                        (click)="analyzeMenus($event, '/pages/company-import-export')">Back up
-                                        Data</a>
+                                        (click)="analyzeMenus($event, '/pages/company-import-export')">Import/Export Data (Backup)</a>
                                 </li>
                                 <!-- #dropdown="bs-dropdown" -->
                                 <!--  -->
@@ -61,7 +49,7 @@
                                     [attachOutsideOnClick]="true" (clickOutside)="subdropdown.isOpen = false"
                                     (onShown)="switchCompanyMenuShown()">
                                     <a href="javascript:void(0)" class="clearfix" dropdownToggle>
-                                        Switch company
+                                        Switch Company
                                         <span class="icon-arrow-down"></span>
                                     </a>
 
@@ -81,9 +69,6 @@
                                         </div>
 
                                         <li style="padding:0px;">
-
-
-
                                             <perfect-scrollbar class="" [scrollIndicators]="true">
                                                 <ul class="sub-list"
                                                     *ngIf="companyListForFilter && companyListForFilter.length">
@@ -124,7 +109,7 @@
 
                                         </li>
 
-                                        <li>
+                                        <li class="create-company-btn">
                                             <button href="javascript:void(0)" (click)="createNewCompany()"
                                                 class="btn-link pd0 btn">Create
                                                 Company
@@ -225,7 +210,7 @@
                                     <img src="assets/images/giddh-white-logo.svg" class="giddh-logo">
                                 </div>
                             </a>
-                            <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
+                            <ul class="dropdown-menu user-dropdown-header" role="menu" *dropdownMenu>
                                 <ng-container *ngTemplateOutlet="headDropdownMenu"></ng-container>
                             </ul>
 
@@ -321,7 +306,7 @@
                 </a>
 
 
-                <ul class="dropdown-menu user_dropdown" role="menu" *dropdownMenu>
+                <ul class="dropdown-menu user-dropdown-header" role="menu" *dropdownMenu>
                     <ng-container *ngTemplateOutlet="headDropdownMenu"></ng-container>
                 </ul>
             </li>
@@ -593,9 +578,9 @@
 </div>
 <!--add and manage group account modal -->
 <div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }"
-    class="modal fade fullScreenMy mangeAccountPopup addManageGroupAcc" role="dialog" (onShown)="onShown()">
+    class="modal fade full-screen-modal manage-account-popup addManageGroupAcc" role="dialog" (onShown)="onShown()">
     <div class="modal-dialog modal-xl modal-liq90 mr0 width100" style="height: 100%;">
-        <div class="modal-content fullScreenMy">
+        <div class="modal-content full-screen-modal">
             <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
             </ng-template>
         </div>
@@ -737,7 +722,7 @@
         <div class="clearfix">
             <ul class="list-inline">
                 <li>
-                    <button class="btn btn-pink" (click)="goToSelectPlan();">Buy Plan</button>
+                    <button class="btn btn-sky-blue" (click)="goToSelectPlan();">Buy Plan</button>
                 </li>
                 <li><span class="d-inline-block pr-1">Or</span> <a class="cursor-pointer"
                         (click)="openScheduleCalendlyModel();modelRefCrossLimit.hide();">
@@ -774,25 +759,9 @@
                     </span>
                 </div>
             </div>
-
-
         </div>
-    </li>
-
     <li>
-        <a href="javascript:void(0)"
-            (click)="analyzeMenus($event, '/pages/settings/taxes', {tab: 'taxes', tabIndex: 0})">Settings</a>
-    </li>
-    <li *ngIf="!isMobileSite">
-        <!-- [routerLink]="['/settings']" [queryParams]="" -->
-        <a href="javascript:void(0)"
-            (click)="analyzeMenus($event, '/pages/settings/permission', { tab: 'permission', tabIndex: 5 })">Manage
-            Users (Permission)</a>
-    </li>
-    <li>
-        <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/company-import-export')">Back
-            up
-            Data</a>
+        <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/company-import-export')">Import/Export Data (Backup)</a>
     </li>
     <!-- #dropdown="bs-dropdown" -->
     <!--  -->
@@ -858,7 +827,7 @@
 
             </li>
 
-            <li>
+            <li class="create-company-btn">
                 <button href="javascript:void(0)" (click)="createNewCompany()" class="btn-link btn pd0">Create
                     Company
                 </button>
@@ -883,50 +852,19 @@
             </div>
         </a>
     </li>
-    <li *ngIf="!isMobileSite">
+    <li>
         <a href="javascript:void(0)"
-            (click)="analyzeMenus($event, '/pages/user-details', { tab: 'api', tabIndex: 0 })">API</a>
+            (click)="analyzeMenus($event, '/pages/user-details/auth-key', { tab: 'api', tabIndex: 0 })">User Profile</a>
     </li>
-    <li>
-        <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank">Upcoming</a>
-    </li>
-    <li>
-        <a href="https://giddh.canny.io/feature-requests" target="_blank">Feature Request</a>
-    </li>
-    <li>
-        <a href="https://changelog.giddh.com" target="_blank">Changelog</a>
+    <li *ngIf="!isMobileSite">
+        <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details', { tab: 'api', tabIndex: 0 })">API</a>
     </li>
     <!-- <li>
 <a href="http://faq.giddh.com" target="_blank">Help</a>
 </li> -->
     <li role="separator" class="divider" style="width:100%"></li>
-    <li>
+    <li class="pb-1">
         <a href="javascript:void(0)" (click)="logout()">Logout</a>
-    </li>
-    <li role="separator" class="divider" style="width:100%"></li>
-    <li class="app_list ">
-        <ul>
-            <h6>Downloads</h6>
-            <li>
-                <a href="https://play.google.com/store/apps/details?id=com.app.Giddh&hl=en" target="_blank"
-                    title="android app">
-                    <i class="fa fa-android"></i> Android</a>
-            </li>
-            <li hidden>
-                <a href="https://itunes.apple.com/in/app/giddh-tb/id999743672?mt=8" target="_blank" title="ios app">
-                    <i class="fa fa-apple"></i> IOS</a>
-            </li>
-            <li>
-                <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{apkVersion}}.dmg" target="_blank"
-                    title="macOS app">
-                    <i class="fa fa-apple"></i> MacOS</a>
-            </li>
-            <li>
-                <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{apkVersion}}.exe"
-                    target="_blank" title="windows app">
-                    <i class="fa fa-windows"></i> Windows</a>
-            </li>
-        </ul>
     </li>
 </ng-template>
 

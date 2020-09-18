@@ -40,24 +40,7 @@ import { Router } from "@angular/router";
 @Component({
     selector: 'account-operations',
     templateUrl: './account-operations.component.html',
-    styles: [`
-      .mrgeBtn {
-          padding: 8px 16px;
-      }
-
-      .form_box .btn {
-          width: 72px;
-      }
-
-      .item_unq ul {
-          padding-left: 30px;
-          list-style: none;
-      }
-      .moveTOgroup {
-        padding: 0 15px;
-    }
-
-  `],
+    styleUrls: [`./account-operations.component.scss`]
 })
 export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     public showAddNewAccount$: Observable<boolean>;

@@ -12,7 +12,7 @@
                                     <span class="d-inline-block mr-2">VAT Report for period</span>
 
                                     <div class="advanceSearchByDate date-advance-search">
-                                        <span class="inputWrapper">
+                                        <span class="input-wrapper">
                                             <div class="btn-group dropdown" dropdown [autoClose]="false"
                                                 (isOpenChange)="onOpenChange($event)" #periodDropdown="bs-dropdown"
                                                 (clickOutside)="checkIfDatepickerVisible()" [attachOutsideOnClick]="true">
@@ -90,7 +90,7 @@
                                         <strong>{{report.section}}</strong>
                                     </p>
                                     <div class="table-responsive">
-                                        <table class="table basic table-border-bottom mrT2 onMobileView">
+                                        <table class="table basic table-border-bottom mrT2 on-mobile-view">
                                             <thead>
                                                 <tr>
                                                     <th width="5%"></th>
@@ -153,7 +153,7 @@
                                     </p>
                                     <div class="table-responsive">
                                         <table
-                                            class="table-hide-title table basic table-border-bottom mrT2 onMobileView">
+                                            class="table-hide-title table basic table-border-bottom mrT2 on-mobile-view">
                                             <tbody>
                                                 <tr *ngFor="let reportSections of report.sections; let i = index">
                                                     <td width="5%">{{reportSections.section}}</td>

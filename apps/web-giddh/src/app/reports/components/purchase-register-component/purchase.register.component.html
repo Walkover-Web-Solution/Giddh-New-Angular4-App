@@ -6,7 +6,7 @@
 			<li><a href="javascript:void(0)">Purchase Register</a></li>
 		</ul>
     </div>
-    <div class="select-financial-year">
+    <div class="select-financial-year mb-15">
         <div class="xs-mb-1 inner-button">
             <sh-select [options]="financialOptions" [isFilterEnabled]="true" [placeholder]="activeFinacialYr.uniqueName"
                 name="currentActiveFinacialYear" [(ngModel)]='currentActiveFinacialYear.value' [showClear]="false"
@@ -39,8 +39,6 @@
             </div>
         </div>
     </div>
-
-	<br />
 	<purchase-register-table-component [reportRespone]="reportRespone" [purchaseRegisterTotal]="purchaseRegisterTotal"></purchase-register-table-component>
 	<!-- <div class="clearfix">
     <reports-graph-component></reports-graph-component>

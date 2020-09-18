@@ -6,13 +6,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12 col-sm-3 audit-log-sidebar">
+        <div class="col-12 col-lg-3 col-md-12 audit-log-sidebar">
             <!--sidebar-->
             <audit-logs-sidebar *ngIf="!isNewVersion"></audit-logs-sidebar>
             <audit-logs-form *ngIf="isNewVersion" [fromDate]="fromDate" [toDate]="toDate"></audit-logs-form>
             <!--/sidebar-->
         </div>
-        <div class="col-12 col-sm-9">
+        <div class="col-12 col-lg-9 col-md-12">
             <audit-logs-grid *ngIf="!isNewVersion"></audit-logs-grid>
             <audit-logs-table *ngIf="isNewVersion"></audit-logs-table>
         </div>

@@ -2651,7 +2651,7 @@ background: #f9f9f9;
     .modal-liq90 {
         width: 900px;
     }
-    .mangeAccountPopup .modal-liq90 {
+    .manage-account-popup .modal-liq90 {
         width: 100%;
     }
 }
@@ -3441,6 +3441,7 @@ ul.pills li {
 
 .download-invoice-ledger > i {
     top: 10px;
+    color: $gray;
 }
 
 .ledger-row.ng-enter {
@@ -5243,7 +5244,7 @@ form#groupDetailForm {
         display: none;
     }
 }
-@media only screen and (max-width: 767px) {
+@media(max-width:1024px){
     #inventory-sidebar{
         .parent-Group {
             >.stock-grp-list {
@@ -5253,15 +5254,8 @@ form#groupDetailForm {
             }
         }
     }
-
-    .inventory-controll{
-        .tab-container{
-            .nav-tabs{
-                display:none;
-            }
-        }
-    }
-
+}
+@media only screen and (max-width: 767px) {
     .mobileHeader {
         display: block;
         position: fixed !important;

@@ -93,16 +93,16 @@ tfoot {
     margin-top: 0;
 }
 
-.pending-table .nested_table > tbody tr td {
+.pending-table .nested-table > tbody tr td {
     border: 0 !important;
     padding: 0px !important;
 }
 
-.nested_table > tbody > tr:hover td {
+.nested-table > tbody > tr:hover td {
     background: transparent !important;
 }
 
-.basic > tbody > tr:hover td .nested_table > tbody > tr td {
+.basic > tbody > tr:hover td .nested-table > tbody > tr td {
     background: transparent !important;
 }
 
@@ -254,7 +254,16 @@ span.close-modal.cp.pull-right {
     position: static;
     transform: inherit;
 }
-
+#mobile-nested-table{
+    display: none;
+}
+.nested-table{
+    tr{
+        td{
+            white-space: normal;
+        }
+    }
+}
 // responsive
 @media (max-width: 1023px) {
     .pending-advance-search {
@@ -267,7 +276,42 @@ span.close-modal.cp.pull-right {
     }
 }
 @media (max-width: 768px) {
-    .basic.onMobileView {
+    .pending-table tr td#mobile-nested-table{
+        padding: 0 !important;
+        margin: 0 !important;
+        display: block;
+        tr{
+            box-shadow: none;
+            margin: 0;
+            padding-top: 0;
+                th{
+                display: inline-flex !important;
+                width: 50%;
+                border: none;
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+                padding-left: 15px;
+                &:last-child{
+                    padding-left: 0 !important;
+                }
+            }
+            td{
+                padding: 5px 0 0 0 !important;
+                display: inline-flex;
+                width: 50%;
+                border: none;
+                margin-bottom: 10px;
+                &:first-child{
+                      padding-left: 15px !important;
+                          color: rgba(0, 0, 0, 0.55) !important;
+                }
+            }
+        }
+    }
+    .pending-table tr td.hide-on-mobile{
+        display: none !important;
+    }
+    .basic.on-mobile-view {
         background: transparent;
         border: none;
     }
@@ -277,7 +321,7 @@ span.close-modal.cp.pull-right {
     .justify-content-sm {
         justify-content: left !important;
     }
-    .nested_table tr {
+    .nested-table tr {
         box-shadow: none !important;
         padding: 0 !important;
         border: none !important;
@@ -285,10 +329,10 @@ span.close-modal.cp.pull-right {
         width: 50% !important;
         float: left;
     }
-    .pending-table.onMobileView{
+    .pending-table.on-mobile-view{
         tr{
             td{
-                .table.nested_table{
+                .table.nested-table{
                     tr{
                         td{
                         padding: 8px 0 !important;
@@ -302,22 +346,22 @@ span.close-modal.cp.pull-right {
             }
         }
     }
-    .pending-table.onMobileView tr td .table.nested_table tr:first-child td{
+    .pending-table.on-mobile-view tr td .table.nested-table tr:first-child td{
         border-right: 1px solid $gainsboro !important;
     }
-    .pending-table.onMobileView tr td .table.nested_table tr td:last-child{
+    .pending-table.on-mobile-view tr td .table.nested-table tr td:last-child{
         border-bottom: none !important;
     }
-    .pending-table.onMobileView tr td .table.nested_table tr:first-child td{
+    .pending-table.on-mobile-view tr td .table.nested-table tr:first-child td{
         border-bottom: none !important;
     }
-    .pending-table .nested_table > tbody tr td {
+    .pending-table .nested-table > tbody tr td {
         padding: 0 !important;
     }
     .pending-table tr td {
         padding: 5px 10px 5px 50% !important;
     }
-    .onMobileView tbody .nested_table td {
+    .on-mobile-view tbody .nested-table td {
         min-height: auto !important;
     }
     .form-group button,

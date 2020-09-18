@@ -4,50 +4,43 @@
 	</div>
 
 	<form #discountForm="ngForm" novalidate (submit)="submit()" class="discount-form-setting-tab">
-		<div class="row ">
-			<div class="form-group col-lg-3 col-sm-3 col-md-4 col-xs-12">
+		<div class="row">
+			<div class="form-group col-lg-3 col-md-6 col-xs-12">
 				<div class="discount-type">
-						<label>&nbsp;</label><br>
 						<sh-select [options]="discountTypeList" [isFilterEnabled]="false" name="type"
 							[(ngModel)]="createRequest.type" [placeholder]="'Select Discount Type'" [ItemHeight]="33"></sh-select>
 				</div>
-			</div>
-			<div class="col-lg-9 col-md-8 col-sm-9">
-			<ng-container *ngIf="createRequest.type">
-				<div class="row">
-				<div class="form-group col-lg-3 col-sm-2 col-md-3 col-xs-12">
-					<label>Name</label>
-					<input type="text" [(ngModel)]="createRequest.name" name="name" placeholder="Name"
-						class="form-control" />
-				</div>
+            </div>
+            <div class="form-group col-lg-3 col-md-6 col-xs-12" *ngIf="createRequest.type">
+                <label>Name</label>
+                <input type="text" [(ngModel)]="createRequest.name" name="name" placeholder="Name" class="form-control" />
+            </div>
 
-				<div class="form-group col-lg-3 col-sm-2 col-md-3 col-xs-12">
-					<label>Value</label>
-					<input type="text" [(ngModel)]="createRequest.discountValue" name="value" placeholder="Value"
-						class="form-control" />
-				</div>
+            <div class="form-group col-lg-3 col-md-6 col-xs-12" *ngIf="createRequest.type">
+                <label>Value</label>
+                <input type="text" [(ngModel)]="createRequest.discountValue" name="value" placeholder="Value"
+                    class="form-control" />
+            </div>
 
-				<div class="form-group col-lg-3 col-sm-4 col-md-3 col-xs-12">
-					<label>Linked Accounts</label>
-					<sh-select [isFilterEnabled]="true" [notFoundLink]="true" name="account"
-						[(ngModel)]="createRequest.accountUniqueName" [placeholder]="'Select Discount'"
-						[showNotFoundLinkAsDefault]="true" [options]="accounts$" [ItemHeight]="'max-content'"
-						(noResultsClicked)="toggleAccountAsidePane($event)">
-					</sh-select>
-				</div>
+            <div class="form-group col-lg-3 col-md-6 col-xs-12" *ngIf="createRequest.type">
+                <label>Linked Accounts</label>
+                <sh-select [isFilterEnabled]="true" [notFoundLink]="true" name="account"
+                    [(ngModel)]="createRequest.accountUniqueName" [placeholder]="'Select Discount'"
+                    [showNotFoundLinkAsDefault]="true" [options]="accounts$" [ItemHeight]="'max-content'"
+                    (noResultsClicked)="toggleAccountAsidePane($event)">
+                </sh-select>
+            </div>
 
-				<div class="col-lg-3 col-sm-4 col-md-3 col-xs-12 form-group hide-lable-on-mobile">
-					<label class="d-block">&nbsp;</label>
-					<button type="submit" class="btn btn-success" *ngIf="!(createRequest.discountUniqueName)"
-						[ladda]="isDiscountCreateInProcess$ | async">Add
-					</button>
-					<button type="submit" class="btn btn-success" *ngIf="createRequest.discountUniqueName"
-						[ladda]="isDiscountUpdateInProcess$ | async">Update
-					</button>
-				</div>
-			</div>
-			</ng-container>
-		</div>
+            <div class="col-lg-3 col-md-6 col-xs-12 form-group hide-lable-on-mobile" *ngIf="createRequest.type">
+                <label class="d-block">&nbsp;</label>
+                <button type="submit" class="btn btn-success" *ngIf="!(createRequest.discountUniqueName)"
+                    [ladda]="isDiscountCreateInProcess$ | async">Add
+                </button>
+                <button type="submit" class="btn btn-success" *ngIf="createRequest.discountUniqueName"
+                    [ladda]="isDiscountUpdateInProcess$ | async">Update
+                </button>
+            </div>
+
 		</div>
 	</form>
 
@@ -56,7 +49,7 @@
 
 			<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
 
-				<table class="table table-bordered basic mrB  onMobileView">
+				<table class="table table-bordered basic mrB  on-mobile-view">
 
 					<thead>
 						<tr>
@@ -70,7 +63,7 @@
 						<tr *ngFor="let discount of discountList$ | async; let i = index">
 							<td data-title="#">{{ i + 1 }}</td>
 							<td data-title="Name"> {{ discount.name }}</td>
-							<td data-title="Action">
+							<td data-title="Action" class="icon-btn">
 								<span (click)="edit(discount)" class="btn btn-xs">
 									<i class="icon-edit-pencil"></i>
 								</span>
@@ -81,7 +74,7 @@
 						</tr>
 					</tbody>
 
-					<tbody *ngIf="!(discountList$ | async).length" class="onMobileView noRecords">
+					<tbody *ngIf="!(discountList$ | async).length" class="on-mobile-view no-records">
 						<tr>
 							<td colspan="3" class="text-center empty-table">
 								<h1>No Discount Found !!</h1>

@@ -15,7 +15,7 @@
                         <div class="btn-group" dropdown *ngIf="voucherType === 'sales' && !isMobileView"
                              [autoClose]="true">
                             <button id="button-basic2" dropdownToggle type="button"
-                                class="btn btn-pink dropdown-toggle dropdown-btn-new" aria-controls="dropdown-basic3">
+                                class="btn btn-sky-blue dropdown-toggle dropdown-btn-new" aria-controls="dropdown-basic3">
                                 + New Invoice <span class="caret"></span>
                             </button>
                             <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu dropdown-width-small"
@@ -31,7 +31,7 @@
                             </ul>
                         </div>
 
-                        <button class="btn btn-pink" *ngIf="voucherType !== 'sales' && !isMobileView"
+                        <button class="btn btn-sky-blue" *ngIf="voucherType !== 'sales' && !isMobileView"
                                 (click)="goToInvoice()">+ New
                             {{voucherType | voucherTypeToNamePipe}}</button>
                     </div>
@@ -103,7 +103,7 @@
                                              *ngIf="only4ProformaEstimates">
 
                                             <button id="button-basic" dropdownToggle type="button"
-                                                    class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic">
+                                                    class="btn btn-sky-blue dropdown-toggle" aria-controls="dropdown-basic">
                                                 Change Status
                                                 <span class="caret"></span>
                                             </button>
@@ -146,7 +146,7 @@
                                             </label>
 
                                             <button id="button-basic2" dropdownToggle type="button"
-                                                    class="btn btn-pink dropdown-toggle" aria-controls="dropdown-basic2"
+                                                    class="btn btn-sky-blue dropdown-toggle" aria-controls="dropdown-basic2"
                                                     *ngIf="selectedItem.voucherStatus !== 'cancel'">Change Status <span
                                                 class="caret"></span>
                                             </button>

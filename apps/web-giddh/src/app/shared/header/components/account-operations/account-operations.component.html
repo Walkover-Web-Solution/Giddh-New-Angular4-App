@@ -10,7 +10,7 @@
             </ol>
         </div>
         <div class="pull-right col-sm-4 pdR0 text-right" *ngIf="(showEditGroup$ | async)">
-            <button class="btn btn-share mrR1" (click)="exportGroupLedger()">
+            <button class="btn btn-share export-group-ledger" (click)="exportGroupLedger()">
                 Export
             </button>
             <button class="btn btn-share pull-right" *ngIf="(showEditGroup$ | async)" (click)="showShareGroupModal()">Share
@@ -35,13 +35,13 @@
 
     <!--add/edit group form-->
     <div class="" *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)" class="w-100">
-        <group-add class="form_box" *ngIf="(showAddNewGroup$ | async)"></group-add>
+        <group-add class="form-box" *ngIf="(showAddNewGroup$ | async)"></group-add>
         <group-update *ngIf="(showEditGroup$ | async)"></group-update>
     </div>
     <!--add/edit group form-->
 
     <!--account operation  -->
-    <div *ngIf="(showEditAccount$ | async) || (showAddNewAccount$ | async)" class="pd-2 horizontal-form">
+    <div *ngIf="(showEditAccount$ | async) || (showAddNewAccount$ | async)" class="pd-2 horizontal-form manage-group-account-form">
         <!--account add component-->
 
         <account-add-new-details *ngIf="!(activeAccount$ | async)"
@@ -70,7 +70,7 @@
 
         <!-- move account -->
         <!-- <div class="horizontal-form form-group" *ngIf="(activeAccount$ | async)">
-            <form name="moveAccountForm" class="clearfix moveTOgroup" novalidate (submit)="moveAccount()" [formGroup]="moveAccountForm">
+            <form name="moveAccountForm" class="clearfix move-to-group" novalidate (submit)="moveAccount()" [formGroup]="moveAccountForm">
                 <label class="d-block">Move to group</label>
                 <span>
           <sh-select formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList"
@@ -79,7 +79,7 @@
             <ng-template #optionTemplate let-model="option">
               <a href="javascript:void(0)" class="list-item" style="border-bottom:1px solid #ccc;">
                 <div class="item">{{ model.label }}</div>
-                <div class="item_unq">
+                <div class="item-unique">
                   {{ model.value }}
                 </div>
 
@@ -101,7 +101,7 @@
     <!--merge and taxes and discount-->
     <!-- <div class=" horizontal-form clearfix">
         <div class="">
-            <div class="moveTOgroup form-group" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed"> -->
+            <div class="move-to-group form-group" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed"> -->
     <!--merge and taxes-->
 
 
@@ -117,7 +117,7 @@
                 [placeholder]="'Select Accounts'" style="width: calc(100% - 93px);"></sh-select>
             </span>
                         <span class="pull-right">
-              <button type="submit" class="btn btn-primary mrgeBtn" (click)="mergeAccounts()">Merge</button>
+              <button type="submit" class="btn btn-primary marge-btn" (click)="mergeAccounts()">Merge</button>
             </span>
                     </div>
                     <small class="clearfix">This option is risky and can not be undone</small>
@@ -264,7 +264,7 @@
     <!--&lt;!&ndash;                                      [data]="itemList" [settings]="settings">&ndash;&gt;-->
     <!--&lt;!&ndash;                </angular2-multiselect>&ndash;&gt;-->
     <!--                <span class="input-group-btn pdL2"> <button type="submit"-->
-    <!--                                                            class="btn btn-success mrgeBtn">Save</button></span>-->
+    <!--                                                            class="btn btn-success marge-btn">Save</button></span>-->
     <!--              </div>-->
     <!--            </div>-->
     <!--          </form>-->

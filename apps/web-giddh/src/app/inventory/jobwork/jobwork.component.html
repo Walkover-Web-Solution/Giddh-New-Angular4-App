@@ -7,7 +7,7 @@
         <welcome-jobwork></welcome-jobwork>
     </div>
     <section class="rightBar" *ngIf="!showWelcomePage">
-        <section class="container-fluid clearfix pdT2">
+        <section class="container-fluid clearfix pt-15">
             <section class="h100">
                 <div class="fb__1-container">
                     <div class="d-flex jobWorkContent">
@@ -29,7 +29,7 @@
 
                             <div class="form-group">
                                 <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
-                                    <span class="icon-advance-search" (click)="onOpenAdvanceSearch()"></span>
+                                    <span class="icon-advance-filter" (click)="onOpenAdvanceSearch()"></span>
                                 </div>
 
                             </div>
@@ -60,7 +60,7 @@
                                     </ul>
                                 </div>
 
-                                <button class="btn btn-pink mr-0" data-toggle="tooltip" tooltip="Alt+i"
+                                <button class="btn btn-sky-blue mr-0" data-toggle="tooltip" tooltip="Alt+i"
                                     (click)="toggleTransferAsidePane()">Create
                                     New
                                 </button>

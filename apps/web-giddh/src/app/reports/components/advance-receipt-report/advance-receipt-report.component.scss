@@ -135,22 +135,34 @@
 .entry-date {
     padding-left: 0 !important;
 }
-
+@media(max-width:991px){
+    .total-due-sale{
+        &:nth-child(1),
+        &:nth-child(2){
+            margin-bottom: 8px;
+        }
+        h1{
+            font-size: 16px;
+            margin-top: 5px;
+        }
+    }
+}
+@media(max-width:768px){
+    .entry-date {
+      padding-left: 50% !important;
+    }
+}
 @media only screen and (max-width: 767px) {
     .invoice-footer {
-        h1 {
-            font-size: 20px;
-        }
+        position: relative;
+        margin-top: 10px;
+        margin-left: 0;
     }
     .total-due-sale {
         margin-bottom: 15px;
     }
     .total-due-sale:last-child {
         margin-bottom: 0px;
-    }
-    .invoice-footer {
-        position: relative;
-        margin-top: 10px;
     }
     .entry-date {
         padding: 5px 10px 5px 50% !important;

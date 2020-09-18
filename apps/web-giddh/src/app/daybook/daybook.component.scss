@@ -17,12 +17,12 @@
 .date-range-picker:focus {
     border-color: $gainsboro !important;
 }
-.inputWrapper {
+.input-wrapper {
     position: relative;
     display: block;
     background-color: #fff;
 }
-.inputWrapper:before {
+.input-wrapper:before {
     position: absolute;
     content: "";
     display: block;
@@ -67,7 +67,7 @@
 }
 /*responsive */
 @media (max-width: 768px) {
-    .onMobileView th {
+    .on-mobile-view th {
         display: none !important;
     }
     .hideTD {
