@@ -221,7 +221,7 @@ export class PurchaseOrderService {
     public getAllPendingPo(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL_PENDING;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);
+        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
         url = url.replace(':from', getRequestObject.from);
         url = url.replace(':to', getRequestObject.to);
         url = url.replace(':page', getRequestObject.page);
