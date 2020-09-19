@@ -1491,7 +1491,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
             '';
         const requestObject = {
-            q: query,
+            q: encodeURIComponent(query),
             page,
             withStocks: true,
             stockAccountUniqueName: accountUniqueName

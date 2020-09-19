@@ -5367,7 +5367,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             group = 'bankaccounts, cash';
         }
         const requestObject = {
-            q: query,
+            q: encodeURIComponent(query),
             page,
             group: encodeURIComponent(group)
         };
