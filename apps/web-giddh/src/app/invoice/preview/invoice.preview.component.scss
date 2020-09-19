@@ -7,7 +7,7 @@
 }
 
 .mh18_img img {
-    max-height: 20px;
+    max-height: 17px;
     cursor: pointer;
 }
 
@@ -501,18 +501,26 @@ span.icon-export-icon {
 }
 
 .status-mobile{
-    .d-flex{
+    .balance-status{
         padding: 14px 0;
     }
 }
 
 .giddh-table{
+    border-right: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro !important;
     tbody{
         tr{
             &:hover {
-                background: #f4f5f8;
+                background: $solitude;
                 td {
                     background: transparent !important;
+                }
+            }
+
+            &:last-child{
+                td{
+                    border-bottom: none !important;
                 }
             }
     }
@@ -525,6 +533,9 @@ span.icon-export-icon {
             }
             td {
                 background: transparent !important;
+                &:last-child{
+                    border-right:none !important;
+                }
             }
         }
     } 
@@ -782,5 +793,23 @@ span.icon-export-icon {
     .status-mobile::before{
         display:flex;
         align-items: center;
+    }
+}
+
+
+
+@media (min-width:768px){
+    .mw-th-260{
+        min-width:260px;
+    }
+    .mw-th-170{
+        min-width:170px;
+    }
+
+    .min-wd-20{
+        min-width:20px;
+        .mh18-img{
+            width:20px;
+        }
     }
 }

@@ -267,9 +267,14 @@
     padding: 0 8px;
 }
 
-.list-item {
-    font-size: 14px;
-}
+
+    .list-item {
+        font-size: 14px;
+        border-bottom: 1px solid $very-light-gray;
+        display:flex !important;
+    }
+    
+
 
 .fs12 {
     font-size: 12px;

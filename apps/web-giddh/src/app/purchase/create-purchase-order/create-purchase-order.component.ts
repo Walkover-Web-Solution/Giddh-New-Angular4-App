@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDe
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { BsModalRef, BsDatepickerDirective, PopoverDirective, ModalDirective, BsModalService } from 'ngx-bootstrap'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
+import { Observable, ReplaySubject, of as observableOf, combineLatest } from 'rxjs';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { takeUntil, filter, take, delay } from 'rxjs/operators';
@@ -47,6 +47,7 @@ import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { InvoiceService } from '../../services/invoice.service';
 import { PURCHASE_ORDER_STATUS } from '../../shared/helpers/purchaseOrderStatus';
+import { INameUniqueName } from '../../models/api-models/Inventory';
 
 const THEAD_ARR_READONLY = [
     {
@@ -125,6 +126,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     @ViewChildren('description') public description: QueryList<ElementRef>;
     /* Discount component instance */
     @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
+    /* Discount component instance */
+    @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
     /* Tax Control instance */
     @ViewChild(TaxControlComponent) public taxControlComponent: TaxControlComponent;
     /* Modal instance */
@@ -305,8 +308,12 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public purchaseOrderPreviewUniqueName: string = '';
     /* This will hold po account unique name for preview */
     public purchaseOrderPreviewAccountUniqueName: string = '';
-    /** Voucher type */
+    /* Voucher type */
     public invoiceType: VoucherTypeEnum = VoucherTypeEnum.purchase;
+    /* Index for inner entry */
+    private innerEntryIndex: number;
+    /* Observable for new stock created */
+    public newlyCreatedStockAc$: Observable<INameUniqueName>;
 
     constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService, private modalService: BsModalService) {
         this.getInvoiceSettings();
@@ -322,6 +329,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.createdAccountDetails$ = this.store.pipe(select(state => state.sales.createdAccountDetails), takeUntil(this.destroyed$));
         this.updatedAccountDetails$ = this.store.pipe(select(state => state.sales.updatedAccountDetails), takeUntil(this.destroyed$));
         this.updateAccountSuccess$ = this.store.pipe(select(state => state.sales.updateAccountSuccess), takeUntil(this.destroyed$));
+        this.newlyCreatedStockAc$ = this.store.pipe(select(state => state.sales.newlyCreatedStockAc), takeUntil(this.destroyed$));
         this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
     }
 
@@ -456,8 +464,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         });
 
         // create account success then hide aside pane
-        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response && this.accountAsideMenuState === 'in') {
+        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((accountDetails) => {
+            if (accountDetails && this.accountAsideMenuState === 'in') {
                 this.toggleAccountAsidePane();
             }
         });
@@ -468,6 +476,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     await this.getUpdatedStateCodes(accountDetails.country.countryCode, false);
                 }
                 this.updateVendorDetails(accountDetails);
+                this.getVendorPurchaseOrders(accountDetails.uniqueName);
             }
         });
 
@@ -542,6 +551,19 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
         this.bulkItemsModal.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.showBulkItemModal = false;
+        });
+
+        // listen for newly added stock and assign value
+        combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
+            let stock = resp[0];
+            let acData = resp[1];
+            if (stock && acData) {
+                let result: IOption = _.find(acData, (item: IOption) => item.additional.uniqueName === stock.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === stock.uniqueName);
+                if (result && !_.isUndefined(this.innerEntryIndex)) {
+                    this.purchaseOrder.entries[this.innerEntryIndex].transactions[0].fakeAccForSelect2 = result.value;
+                    this.onSelectSalesAccount(result, this.purchaseOrder.entries[this.innerEntryIndex].transactions[0], this.purchaseOrder.entries[this.innerEntryIndex]);
+                }
+            }
         });
     }
 
@@ -2357,6 +2379,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         if (this.vendorNameDropDown) {
             this.vendorNameDropDown.clear();
         }
+        this.purchaseOrders = [];
         this.isRcmEntry = false;
         this.initializeWarehouse();
         this.fillCompanyAddress("reset");
@@ -2510,6 +2533,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
                     this.purchaseOrder.voucherDetails.voucherDate = this.purchaseOrderDetails.date;
                     this.purchaseOrder.voucherDetails.dueDate = this.purchaseOrderDetails.dueDate;
+
+                    this.purchaseOrder.number = this.purchaseOrderDetails.number;
                 } else {
                     this.toaster.errorToast(response.message);
                 }
@@ -2826,17 +2851,17 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public getVendorPurchaseOrders(vendorName: any): void {
-        let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, page: 1, from: '', to: '', count: 10, sort: '', sortBy: '' };
-        let purchaseOrderPostRequest = { vendorName: vendorName, statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyReceived, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
+        let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, accountUniqueName: vendorName, page: 1, count: 10, sort: '', sortBy: '' };
+        let purchaseOrderPostRequest = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyReceived, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
 
         if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
             this.purchaseOrders = [];
 
-            this.purchaseOrderService.getAll(purchaseOrderGetRequest, purchaseOrderPostRequest).subscribe((res) => {
+            this.purchaseOrderService.getAllPendingPo(purchaseOrderGetRequest, purchaseOrderPostRequest).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
-                        if (res.body && res.body.items) {
-                            this.purchaseOrders = res.body.items;
+                        if (res.body && res.body.length > 0) {
+                            this.purchaseOrders = res.body;
                         }
                     } else {
                         this.toaster.errorToast(res.message);
@@ -2867,7 +2892,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public openPurchaseOrderPreviewPopup(template: TemplateRef<any>, purchaseOrderUniqueName: any, accountUniqueName: any): void {
         this.purchaseOrderPreviewUniqueName = purchaseOrderUniqueName;
         this.purchaseOrderPreviewAccountUniqueName = accountUniqueName;
-        
+
         this.modalRef = this.modalService.show(
             template,
             Object.assign({}, { class: 'modal-lg' })
@@ -2884,5 +2909,19 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         if (event) {
             this.modalRef.hide();
         }
+    }
+
+    /**
+     * This will toggle the create new stock/service aside pan
+     *
+     * @param {number} [index]
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public onNoResultsClicked(index?: number): void {
+        if (!_.isUndefined(index)) {
+            this.innerEntryIndex = index;
+        }
+        this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
     }
 }

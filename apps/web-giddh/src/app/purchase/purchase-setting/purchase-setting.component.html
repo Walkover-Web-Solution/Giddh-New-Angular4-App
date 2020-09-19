@@ -18,8 +18,11 @@
                                                 <div class="relative" [ngClass]="{'input-group': true}">
                                                     <input type="email" class="form-control"
                                                         placeholder="Enter email id" name="email" [(ngModel)]="invoiceSettings.purchaseBillSettings.email" />
-                                                    <span class="verified-icon" *ngIf="invoiceSettings.purchaseBillSettings.emailVerified"><i class="icon-tick" tooltip="Verified"></i></span>
-                                                    <span class="unverified-icon" *ngIf="!invoiceSettings.purchaseBillSettings.emailVerified"><i class="icon-cross" tooltip="Unverified"></i></span>
+                                                    <span class="input-group-addon" *ngIf="!invoiceSettings.purchaseBillSettings.emailVerified"><i
+                                                        class="glyphicon glyphicon-exclamation-sign"
+                                                        tooltip="Unverified"></i></span>
+                                                    <span class="input-group-addon" *ngIf="invoiceSettings.purchaseBillSettings.emailVerified"><i
+                                                        class="glyphicon glyphicon-ok" tooltip="Verified"></i></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -106,7 +109,17 @@
                                     <div class="col-xs-12 col-sm-9 ">
                                         <div class="form-group clearfix">
                                             <input type="checkbox" class="hide-on-mobile" name="useCustomPONumber" [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber" />
-                                        </div>
+                                            <div class=" d-inline-flex custom-estimation" *ngIf="invoiceSettings.purchaseBillSettings.useCustomPONumber">
+                                                <div class="d-inline-flex pos-rel">
+                                                    <label>Initial No.</label>
+                                                    <input type="text" class="form-control text-right initial-number" name="initialNumber" [(ngModel)]="invoiceSettings.purchaseBillSettings.initialPONumber">
+                                                </div>
+                                                <div class="d-inline-flex pos-rel">
+                                                    <label class="r-0">Prefix</label>
+                                                    <input type="text" class="form-control text-right" name="prefixNumber" [(ngModel)]="invoiceSettings.purchaseBillSettings.poNumberPrefix">
+                                                </div>
+                                            </div>
+                                        </div>    
                                     </div>
                                 </div>
                             </div>

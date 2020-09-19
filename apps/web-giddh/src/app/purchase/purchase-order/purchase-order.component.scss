@@ -73,7 +73,7 @@
 }
 
 .mh18-img img {
-    max-height: 20px;
+    max-height: 17px;
     cursor: pointer;
 }
 
@@ -180,6 +180,8 @@
         padding: 14px 0;
     }
 }
+
+
 @media (max-width: 768px) {
     .action-icon {
         display: flex !important;
@@ -299,5 +301,22 @@
     .status-mobile::before{
         display:flex;
         align-items: center;
+    }
+}
+
+@media (min-width:768px){
+    .mw-th-210{
+        min-width:210px;
+    }
+
+    .min-wd-20{
+        min-width:20px;
+        .mh18-img{
+            width:20px;
+        }
+    }
+
+    .min-wd-17{
+        min-width:170px;
     }
 }

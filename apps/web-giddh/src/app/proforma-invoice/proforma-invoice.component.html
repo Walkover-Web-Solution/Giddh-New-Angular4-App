@@ -103,7 +103,7 @@
                                     <!-- region customer dropdown -->
                                     <div class="col-sm-7 selectCustomerName">
 
-                                        <div class="clearfix d-flex" style="flex-direction: column">
+                                        <div class="clearfix d-flex flex-column">
                                             <div class="d-flex">
                                                 <!-- region if not cashinvoice show customer dropdown -->
                                                 <ng-container *ngIf="!isCashInvoice">
@@ -128,17 +128,15 @@
                                                         [disabled]="isUpdateMode && invoiceType !== 'sales' && invoiceType !== 'cash'">
 
                                                         <ng-template #optionTemplate let-option="option">
-                                                            <a href="javascript:void(0)" class="list-item"
-                                                                style="border-bottom: 1px solid #ccc;">
+                                                            <a href="javascript:void(0)" class="list-item flex-column">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unq">{{ option.value }}</div>
                                                             </a>
                                                         </ng-template>
 
                                                         <ng-template #notFoundLinkTemplate>
-                                                            <a href="javascript:void(0)" class="list-item pl-05 pr-05"
-                                                                [keyboardShortcut]="'alt+c'"
-                                                                style="width:100%; display: flex;justify-content: space-between;">
+                                                            <a href="javascript:void(0)" class="list-item pl-05 pr-05 border-none d-flex justify-content-between w-100"
+                                                                [keyboardShortcut]="'alt+c'">
                                                                 <div class="item">{{ customerNotFoundText }}</div>
                                                                 <div class="item">Alt+C</div>
                                                             </a>
@@ -229,7 +227,7 @@
 
                                                                 <div>
                                                                     <div class="col-sm-6 pd ">
-                                                                        <label class="salesCountryLabel">
+                                                                        <label class="sales-country-label">
                                                                             {{ customerCountryName }}
                                                                         </label>
                                                                     </div>
@@ -300,7 +298,7 @@
                                                                         <div class="col-sm-6 pd ">
                                                                             <div class="form-group">
 
-                                                                                <label class="salesCountryLabel">
+                                                                                <label class="sales-country-label">
                                                                                     {{ customerCountryName }}
                                                                                 </label>
                                                                             </div>
@@ -457,7 +455,8 @@
                                     <div class="col-sm-6 pl-0">
                                         <sh-select class="multi-select" name="warehouse"
                                             [placeholder]="'Select Warehouse'" [(ngModel)]="selectedWarehouse"
-                                            [options]="warehouses">
+                                            [options]="warehouses"
+                                            (selected)="onSelectWarehouse($event)">
                                         </sh-select>
                                     </div>
                                 </div>
@@ -1083,20 +1082,18 @@
 
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item"
-                                                                style="border-bottom: 1px solid #ccc;">
+                                                            <a href="javascript:void(0)" class="list-item flex-column">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unq">
                                                                     {{ option.additional?.uniqueName }}</div>
                                                             </a>
                                                         </ng-container>
                                                         <ng-container *ngIf="option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item"
-                                                                style="border-bottom: 1px solid #ccc;">
+                                                            <a href="javascript:void(0)" class="list-item flex-column">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unq">
                                                                     {{ option.additional?.uniqueName }}</div>
-                                                                <div class="item_stock">Stock:
+                                                                <div class="item-stock">Stock:
                                                                     {{ option.additional?.stock.uniqueName }}</div>
                                                             </a>
                                                         </ng-container>
@@ -1548,7 +1545,7 @@
                                             </div>
                                         </div>
                                         <div class="tableRow"
-                                            *ngIf="!isPurchaseInvoice && (calculatedRoundOff > 0 || calculatedRoundOff < 0)">
+                                            *ngIf="(calculatedRoundOff > 0 || calculatedRoundOff < 0)">
 
                                             <div class="tableCell">
                                                 <strong>Round Off</strong>
@@ -1964,20 +1961,18 @@
 
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <ng-container *ngIf="!option.additional?.stock">
-                                                                    <a href="javascript:void(0)" class="list-item"
-                                                                        style="border-bottom: 1px solid #ccc;">
+                                                                    <a href="javascript:void(0)" class="list-item flex-column">
                                                                         <div class="item">{{ option.label }}</div>
                                                                         <div class="item-unq">
                                                                             {{ option.additional?.uniqueName }}</div>
                                                                     </a>
                                                                 </ng-container>
                                                                 <ng-container *ngIf="option.additional?.stock">
-                                                                    <a href="javascript:void(0)" class="list-item"
-                                                                        style="border-bottom: 1px solid #ccc;">
+                                                                    <a href="javascript:void(0)" class="list-item flex-column">
                                                                         <div class="item">{{ option.label }}</div>
                                                                         <div class="item-unq">
                                                                             {{ option.additional?.uniqueName }}</div>
-                                                                        <div class="item_stock">Stock:
+                                                                        <div class="item-stock">Stock:
                                                                             {{ option.additional?.stock.uniqueName }}
                                                                         </div>
                                                                     </a>
@@ -2462,7 +2457,7 @@
                                 </div>
                             </div>
                             <div class="tableRow"
-                                *ngIf="!isPurchaseInvoice && (calculatedRoundOff > 0 || calculatedRoundOff < 0)">
+                                *ngIf="(calculatedRoundOff > 0 || calculatedRoundOff < 0)">
 
                                 <div class="tableCell">
                                     <strong>Round Off</strong>
