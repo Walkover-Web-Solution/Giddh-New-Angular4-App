@@ -192,6 +192,8 @@ export class AccountRequestV2 {
     public mobileCode?: string;
     public accountBankDetails?: AccountBankDetails[];
     public currency?: string;
+    public applicableDiscounts?: any[];
+    public inheritedDiscounts?: any[];
 }
 
 export class AccountResponseV2 {
