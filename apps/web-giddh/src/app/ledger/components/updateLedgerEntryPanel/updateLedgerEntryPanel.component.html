@@ -224,7 +224,7 @@
                                 <td colspan="12" class="col-xs-12 text-right h32">
                                     <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd2"
                                         [tooltip]="vm.ledgerUnderStandingObj.balanceText.cr" [placement]="'top'">
-                                        C/F: CR {{ vm.baseCurrencyDetails.symbol}} {{ vm.compoundTotal | giddhCurrency}}
+                                        C/F: CR {{ vm.baseCurrencyDetails?.symbol}} {{ vm.compoundTotal | giddhCurrency}}
                                     </span>
                                 </td>
 
