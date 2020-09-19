@@ -30,6 +30,7 @@ export class GroupResponse implements ICreateGroup {
 	public updatedBy: IUserInfo;
 	public closingBalanceTriggerAmount: number;
 	public closingBalanceTriggerAmountType: string;
+    public applicableDiscounts?: any[];
 
 }
 
