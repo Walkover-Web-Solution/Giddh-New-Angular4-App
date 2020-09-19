@@ -89,19 +89,16 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public fromDate: any;
     /* Selected to date */
     public toDate: any;
+    public groups: IOption[] = [];
+    public groupUniqueNames: any[] = [];
 
-    constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions,
-        private _accountService: AccountService,
-        private modalService: BsModalService,
-        private generalService: GeneralService) {
+    constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private modalService: BsModalService, private generalService: GeneralService) {
         this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
-        // this.store.dispatch(this.inventoryAction.GetManufacturingStock());
         this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         this.store.dispatch(this.inventoryAction.GetStock());
-        // this.store.dispatch(this.groupWithAccountsAction.getFlattenGroupsWithAccounts());
         this.flattenAccountListStream$.subscribe(data => {
             if (data) {
                 let accounts: IOption[] = [];
@@ -133,16 +130,24 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         // Get groups with accounts
         this._groupService.GetFlattenGroupsAccounts().pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
-                let groups: IOption[] = [];
+                this.groups = [];
                 data.body.results.map(d => {
-                    groups.push({ label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName });
+                    this.groups.push({ label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName });
                 });
-                this.groups$ = observableOf(groups);
+                this.groups$ = observableOf(this.groups);
+
+                setTimeout(() => {
+                    if(this.groupUniqueNames && this.groupUniqueNames.length > 0) {
+                        this.advanceSearchForm.get('groupUniqueNames').patchValue(this.groupUniqueNames);
+                    }
+                }, 200);
             }
         });
+
         if(!this.advanceSearchForm) {
             this.setAdvanceSearchForm();
         }
+
         this.setVoucherTypes();
     }
 
@@ -165,13 +170,19 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         if(this.advanceSearchForm && 'advanceSearchRequest' in s && s.advanceSearchRequest.currentValue && s.advanceSearchRequest.currentValue.dataToSend) {
             let dataToSend = s.advanceSearchRequest.currentValue.dataToSend;
 
+            this.groupUniqueNames = [];
+
             setTimeout(() => {
                 if(dataToSend.accountUniqueNames) {
                     this.advanceSearchForm.get('accountUniqueNames').patchValue(dataToSend.accountUniqueNames);
                 }
 
                 if(dataToSend.groupUniqueNames) {
-                    this.advanceSearchForm.get('groupUniqueNames').patchValue(dataToSend.groupUniqueNames);
+                    if(this.groups && this.groups.length > 0) {
+                        this.advanceSearchForm.get('groupUniqueNames').patchValue(dataToSend.groupUniqueNames);
+                    }
+
+                    this.groupUniqueNames = dataToSend.groupUniqueNames;
                 }
 
                 if(dataToSend.particulars) {
@@ -181,7 +192,11 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 if(dataToSend.vouchers) {
                     this.advanceSearchForm.get('vouchers').patchValue(dataToSend.vouchers);
                 }
-            }, 1000);
+
+                if(dataToSend.inventory) {
+                    this.advanceSearchForm.get('inventory').patchValue(dataToSend.inventory);
+                }
+            }, 500);
         }
     }
 
@@ -203,7 +218,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public setAdvanceSearchForm() {
-        // this.advanceSearchForm.
         this.advanceSearchForm = this.fb.group({
             bsRangeValue: [[]],
             uniqueNames: [[]],

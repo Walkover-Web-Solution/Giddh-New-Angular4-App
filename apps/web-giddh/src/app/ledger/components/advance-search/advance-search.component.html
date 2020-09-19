@@ -1,18 +1,12 @@
 <div id="" class="Advance-Search">
     <div class="modal-header themeBg">
-
         <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
-
         <div class="clear-filter-close">
             <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearchModal()" tooltip="Reset Advance Search">
                 <i aria-hidden="true" class="icon-refrsh"></i> Clear Filter
             </a>
-
             <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
         </div>
-
-
-
     </div>
     <div class="modal-body clearfix" id="export-body">
         <form action="" [formGroup]="advanceSearchForm">
@@ -23,9 +17,6 @@
                     </div>
                     <div class="col-sm-7">
                         <div class="input-group" (click)="showGiddhDatepicker($event)">
-                            <!-- <input autocomplete="off" #dp="bsDaterangepicker" placeholder="Select range" type="text"
-                                class="form-control" (bsValueChange)="onDateRangeSelected($event)" bsDaterangepicker
-                                required formControlName="bsRangeValue" [bsConfig]="bsConfig"> -->
                             <input type="text" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" required placeholder="Select range" class="form-control" />
                             <span class="input-group-addon cursor-pointer">
                                 <i class="icon-calender" aria-hidden="true"></i>
@@ -33,7 +24,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row mb-2">
                     <div class="col-sm-5">
                         <label for="">Merge Accounts</label>
@@ -202,7 +192,7 @@
                                     </div>
                                     <div class="col-sm-9 col-xs-8">
                                         <div class="form-group">
-                                            <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear( 'inventory')" (selected)="onDDElementSelect( 'inventory', $event)" [isFilterEnabled]="true" [multiple]="true
+                                            <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear( 'inventory')" formControlName="inventories" [isFilterEnabled]="true" [multiple]="true
                                 " [placeholder]=" 'Select Accounts'"></sh-select>
                                         </div>
                                     </div>
