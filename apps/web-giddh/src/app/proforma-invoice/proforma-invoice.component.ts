@@ -5916,49 +5916,51 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let selectedPoItems = [];
             this.selectedPoItems.forEach(order => {
                 if(!this.linkedPo.includes(order)) {
-                    let items = this.linkedPoNumbers[order]['items'];
+                    let entries = this.linkedPoNumbers[order]['items'];
 
-                    if(items && items[0] && items[0].transactions && items[0].transactions.length > 0 && this.invFormData.entries && this.invFormData.entries.length > 0) {
-                        items[0].transactions.forEach(item => {
-                            let entryLoop = 0;
-                            let remainingQuantity = (item.stock && item.stock.quantity) ? item.stock.quantity : 1;
+                    if(entries && entries.length > 0 && this.invFormData.entries && this.invFormData.entries.length > 0) {
+                        entries.forEach(entry => {
+                            entry.transactions.forEach(item => {
+                                let entryLoop = 0;
+                                let remainingQuantity = (item.stock && item.stock.quantity) ? item.stock.quantity : 1;
 
-                            this.invFormData.entries.forEach(entry => {
-                                if(entry && entry.transactions && entry.transactions.length > 0 && remainingQuantity > 0) {
-                                    let transactionLoop = 0;
-                                    entry.transactions.forEach(transaction => {
-                                        if(remainingQuantity > 0) {
-                                            let accountUniqueName = transaction.accountUniqueName;
-                                            if(accountUniqueName) {
-                                                accountUniqueName = accountUniqueName.replace("purchases#", "");
-                                            }
+                                this.invFormData.entries.forEach(entry => {
+                                    if(entry && entry.transactions && entry.transactions.length > 0 && remainingQuantity > 0) {
+                                        let transactionLoop = 0;
+                                        entry.transactions.forEach(transaction => {
+                                            if(remainingQuantity > 0) {
+                                                let accountUniqueName = transaction.accountUniqueName;
+                                                if(accountUniqueName) {
+                                                    accountUniqueName = accountUniqueName.replace("purchases#", "");
+                                                }
 
-                                            let stockUniqueName = (item.stock && item.stock.uniqueName) ? item.stock.uniqueName : "";
-                                            if(item.stock.uniqueName) { 
-                                                stockUniqueName = stockUniqueName.replace("purchases#", "");
-                                            }
+                                                let stockUniqueName = (item.stock && item.stock.uniqueName) ? item.stock.uniqueName : "";
+                                                if(item.stock && item.stock.uniqueName) { 
+                                                    stockUniqueName = stockUniqueName.replace("purchases#", "");
+                                                }
 
-                                            if(item.stock && item.stock.uniqueName && accountUniqueName) {
-                                                if(stockUniqueName === accountUniqueName) {
-                                                    if(transaction.quantity > item.stock.quantity) {
-                                                        remainingQuantity -= item.stock.quantity;
-                                                        this.invFormData.entries[entryLoop].transactions[transactionLoop].quantity = transaction.quantity - item.stock.quantity;
-                                                    } else {
-                                                        remainingQuantity -= transaction.quantity;
+                                                if(item.stock && item.stock.uniqueName && accountUniqueName) {
+                                                    if(stockUniqueName === accountUniqueName) {
+                                                        if(transaction.quantity > item.stock.quantity) {
+                                                            remainingQuantity -= item.stock.quantity;
+                                                            this.invFormData.entries[entryLoop].transactions[transactionLoop].quantity = transaction.quantity - item.stock.quantity;
+                                                        } else {
+                                                            remainingQuantity -= transaction.quantity;
+                                                            this.removeTransaction(entryLoop);
+                                                        }
+                                                    }
+                                                } else if(item.account && item.account.uniqueName && accountUniqueName) {
+                                                    if(item.account.uniqueName === accountUniqueName) {
+                                                        remainingQuantity = 0;
                                                         this.removeTransaction(entryLoop);
                                                     }
                                                 }
-                                            } else if(item.account && item.account.uniqueName && accountUniqueName) {
-                                                if(item.account.uniqueName === accountUniqueName) {
-                                                    remainingQuantity = 0;
-                                                    this.removeTransaction(entryLoop);
-                                                }
                                             }
-                                        }
-                                        transactionLoop++;
-                                    });
-                                }
-                                entryLoop++;
+                                            transactionLoop++;
+                                        });
+                                    }
+                                    entryLoop++;
+                                });
                             });
                         });
                     }

@@ -248,6 +248,11 @@ $greyClr: #6d6d6d;
     display: inline-block !important;
 }
 
+
+.w-100{
+    width:100% !important;
+}
+
 // collapse
 .collapse-pane {
     padding: 0 0;
@@ -302,10 +307,6 @@ $greyClr: #6d6d6d;
     font-size: 14px;
     border-bottom: 1px solid $very-light-gray;
     display:flex !important;
-}
-
-.border-btm{
-    flex-direction: column;
 }
 
 .fs12 {
