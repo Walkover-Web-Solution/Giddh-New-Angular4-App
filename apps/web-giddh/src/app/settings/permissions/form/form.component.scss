@@ -101,6 +101,12 @@ i.icon-cross {
     margin-right: -5px;
     margin-left: -5px;
 }
+.ip-range{
+    i{
+        position: relative;
+        right: 2px
+    }
+}
 @media (max-width: 1199px) {
     .create-btn {
         float: none !important;

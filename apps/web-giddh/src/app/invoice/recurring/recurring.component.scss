@@ -121,6 +121,11 @@
     .input-group {
         display: block;
     }
+    .recurring-container {
+        .form-inline{
+            margin-bottom: 0 !important;
+        }
+    }
 }
 @media (max-width: 768px) {
     .form-view .input-group {

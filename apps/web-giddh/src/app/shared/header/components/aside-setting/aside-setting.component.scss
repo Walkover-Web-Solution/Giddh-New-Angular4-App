@@ -143,6 +143,9 @@
         }
     }
 }
+.setting-items ul li:hover a span i{
+    color: $nero !important;
+}
 
 :host.setting-sidebar{
     position: fixed;

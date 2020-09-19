@@ -1,5 +1,4 @@
-<h1 class="page-title" *ngIf="(this.auditLogs$ | async).length > 0"> Audit Logs</h1>
-<br />
+<!-- <h1 class="page-title" *ngIf="(this.auditLogs$ | async).length > 0"> Audit Logs</h1> -->
 <!--  -->
 <section class="audit-log" *ngFor="let log of (this.auditLogs$ | async); let parentIndex = index">
     <h1>{{log.operationType}}

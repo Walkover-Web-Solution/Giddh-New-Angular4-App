@@ -55,20 +55,6 @@
 .basic {
     background: $white;
 }
-
-/*
-.aging-table > thead > tr > th {
-    background: $whisper-color;
-    color: $nero;
-    border: 0;
-    font-family: "" opensans-semibold "";
-    text-transform: capitalize;
-    border-right: 1px solid #cac8c6;
-    border-top: 1px solid #cac8c6;
-    border-bottom: 1px solid #cac8c6;
-}*/
-
-
 @media (max-width: 768px) {
     .on-mobile-view tbody tr {
         box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
@@ -169,9 +155,10 @@
         padding: 5px 10px 5px 53% !important;
     }
 }
-
 /* table css need to removed at last (finish)*/
-
+.modal-header .close{
+    cursor: pointer;
+}
 [class^="icon-"],
 [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
@@ -596,7 +583,7 @@ input {
 .invoce-controll .nav.nav-tabs {
     margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
-    background-color: #f7f8fd;
+    background-color: $alice-blue-light;
     z-index: 9;
     position: relative;
     top: -4px;
@@ -872,10 +859,17 @@ ul.sub-list {
 }
 
 .user-dropdown-header>li>a .icon-arrow-down {
-    font-size: 12px;
+    font-size: 9px;
     float: right;
     padding-top: 4px;
     transform: rotate(270deg);
+    border: 2px solid $gray;
+    padding: 3px;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    color: $gray;
 }
 
 .sub-list li a {
@@ -1969,7 +1963,8 @@ header .navbar {
 .open > .dropdown-toggle.btn-primary,
 .btn-primary:active:focus,
 .btn-primary:active:hover,
-.open > .dropdown-toggle.btn-primary:focus {
+.open > .dropdown-toggle.btn-primary:focus,
+.btn-primary:not(:disabled):not(.disabled):active {
     background: $chetwode-blue;
     color: $white;
     border-color: $chetwode-blue;
@@ -3929,39 +3924,22 @@ a.btn.btn-xs.btn-link.pull-right {
     background: none;
     cursor: pointer;
 }
-
-/* by dude */
-
-/*.modal-backdrop {
-    background-color: #808080;
-}
-
- .modal-backdrop.in {
-    filter: alpha(opacity=80);
-    opacity: .8;
-} */
-
-#shareModal .modal-header {
+#share-modal .modal-header {
     border-bottom: 0;
 }
 .modal-header {
-    border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0 !important;
 }
-/* #shareModalh3 {
-    font-size: 18px;
-    color: $white;
-} */
-
 .emailInput {
     min-width: 200px;
 }
 
-#shareModal .btn {
+#share-modal .btn {
     padding: 7px 16px;
     /* border-radius: 0; */
 }
 
-#shareModal select {
+#share-modal select {
     -webkit-appearance: none;
     -webkit-border-radius: 0px;
     margin-left: 10px;
@@ -3973,8 +3951,8 @@ a.btn.btn-xs.btn-link.pull-right {
     color: #4d4d4d;
 }
 
-#shareModal .input-group .input-group-btn:last-child > .btn {
-    margin-left: 8px;
+#share-modal .input-group .input-group-btn:last-child > .btn {
+    margin-left: 15px;
 }
 
 .input-group-btn.sticky:last-child > .btn {
@@ -4045,7 +4023,6 @@ a.btn.btn-xs.btn-link.pull-right {
 .modal-header {
     position: relative;
     background: $midnight-blue !important;
-    border-radius: 0 !important;
 }
 
 .close-modal {
@@ -4885,7 +4862,7 @@ label {
 
 .manageModal #getGroupModal,
 .manageModal .modal-content,
-.manageModal #shareModal {
+.manageModal #share-modal {
     height: 100%;
 }
 
@@ -5306,47 +5283,47 @@ label {
     font-weight: normal;
 }
 
-#single_role .panel {
+#single-role .panel {
     border-radius: 0;
     margin-bottom: 40px;
 }
 
-#single_role .panel-heading {
+#single-role .panel-heading {
     background: #ccc;
     color: $white;
     border-radius: 0;
 }
 
-#single_role tbody tr td:first-child,
-#single_role thead tr th:first-child {
+#single-role tbody tr td:first-child,
+#single-role thead tr th:first-child {
     border-right: 1px solid #c2cdd3;
 }
 
-#single_role .lead {
-    font-size: 2em;
+#single-role .lead {
+    font-size: 22px;
 }
 
-#single_role thead tr th:first-child {
+#single-role thead tr th:first-child {
     padding-left: 18px;
     text-transform: capitalize;
 }
 
-#single_role .panel-body {
+#single-role .panel-body {
     background: #f1f1f2;
 }
 
-#single_role .panel-body tbody tr:nth-child(1) td {
+#single-role .panel-body tbody tr:nth-child(1) td {
     background: $white;
     border-right: 0;
 }
 
-#single_role .panel-body label {
+#single-role .panel-body label {
     font-size: 14px;
     text-transform: capitalize;
     color: #858585;
 }
 
-#single_role table {
+#single-role table {
     margin-bottom: 0;
 }
 
@@ -6438,8 +6415,8 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     margin-bottom: 0 !important;
 }
 
-.option_box {
-    background: #eee;
+.option-box {
+    background: $lavender;
     border-bottom: 1px solid #ddd;
     margin-bottom: 10px;
 }
@@ -10583,13 +10560,13 @@ span#HW_badge_cont:nth-child(3) {
 @media (min-width:576px){
     .modal-dialog {
         max-width: 100% !important;
+        margin: 10px;
     }
-        #shareModal select {
+        #share-modal select {
         width: auto;
         max-width: 300px;
     }
 }
-
 @media (min-width: 768px) {
     .invoice-modal-content .modal-dialog {
         margin: 70px auto;

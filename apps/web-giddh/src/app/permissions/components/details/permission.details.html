@@ -1,21 +1,18 @@
 <section id="single_role" *ngIf="roleObj">
-
-
-    <div class="pd3 pdT1 pdB1 bdrB clearfix text-center">
+    <div class="px-3 py-3 bdrB clearfix text-center mb-15">
         <span class="lead">{{ newRole.name }}</span>
         <button class="btn btn-md btn-primary pull-left" (click)="goToRoles()">Back</button>
-        <button *ngIf="!newRole.isUpdateCase" class="btn btn-md btn-success pull-right"
+        <button *ngIf="!newRole.isUpdateCase" class="btn btn-md btn-success pull-right mr-0"
             (click)="addNewRole()">Save</button>
-        <button *ngIf="newRole.isUpdateCase" [disabled]="newRole.isFixed" class="btn btn-md btn-success pull-right"
+        <button *ngIf="newRole.isUpdateCase" [disabled]="newRole.isFixed" class="btn btn-md btn-success pull-right mr-0"
             (click)="updateRole()">Update
         </button>
     </div>
-
-    <section class="pd3">
+    <section class="px-3">
         <!--*ngIf="roleObj.isUpdateCase"-->
-        <div class="row mrB2">
+        <div class="row mb-1">
             <div class="col-sm-12 form-inline">
-                <div class="form-group custom-select pos-rel">
+                <div class="form-group custom-select pos-rel mr-15">
                     <select class="form-control" [disabled]="newRole.isFixed" required [(ngModel)]="pageName"
                         name="pageName">
                         <option value="">--Select Pages--</option>

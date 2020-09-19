@@ -903,6 +903,9 @@ sh-select:focus {
     }
 }
 */
+.ledger-row td:nth-child(3) {
+    justify-content: flex-end !important;
+}
 @media (max-width: 767px) {
     .ledger-head {
         th {
