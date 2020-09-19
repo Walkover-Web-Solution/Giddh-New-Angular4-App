@@ -813,15 +813,11 @@ $input-height: 3rem !default;
     .buttons {
         text-align: right;
         margin: 0;
-        padding-right: 15px;
-        position: absolute;
-        bottom: 0;
+        padding-right: 23px;
         background-color: $white;
         padding-top: 9px;
         padding-bottom: 15px;
         z-index: 999 !important;
-        right: 0;
-        width: calc(100% - 218px);
     }
     button {
         &:focus {
@@ -1959,8 +1955,6 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb:hover {
 }
 @media (max-height: 767px) {
     .drops-down-right {
-        height: 470px;
-        overflow: hidden !important;
         .ranges {
             height: auto;
             overflow-y: auto;
