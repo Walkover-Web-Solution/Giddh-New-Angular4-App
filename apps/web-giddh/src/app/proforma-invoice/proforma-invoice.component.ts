@@ -6144,12 +6144,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if(this.isPurchaseInvoice) {
             this.autoFillDeliverToWarehouseAddress(warehouse);
         }
+    }
+
+    /**
      * To get tax list and assign values to local variables
      *
      * @memberof ProformaInvoiceComponent
      */
     public getAllDiscounts(): void {
-        //
         this.store.pipe(select(p => p.company.isGetTaxesSuccess), takeUntil(this.destroyed$)).subscribe(isGetTaxes => {
             if (isGetTaxes) {
                 this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
