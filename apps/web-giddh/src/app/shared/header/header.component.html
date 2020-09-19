@@ -210,10 +210,11 @@
                         <li class="border-none pr-15" [ngClass]="{'notification': !isMobileScreen}">
                             <img src="{{imgPath}}notification.svg">
                         </li>
-                        <li [hidden]="isTodaysDateSelected" class="border-none pl-0">
-                            <button class="btn btn-link" (click)="dateSelectedCallback()">Today</button>
+                        <li class="border-none pl-0">
+                            <button class="btn btn-link" *ngIf="!isTodaysDateSelected" (click)="dateSelectedCallback()">Today</button>
+                            <button class="btn btn-link" *ngIf="isTodaysDateSelected" (click)="showGiddhDatepicker($event)">Today</button>
                         </li>
-                        <li class="not-today cursor-pointer">
+                        <li class="not-today cursor-pointer" [hidden]="isTodaysDateSelected">
                             <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
                             <!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
                             <div class="input-date">
