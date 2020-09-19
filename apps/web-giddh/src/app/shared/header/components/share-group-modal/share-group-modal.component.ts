@@ -12,6 +12,7 @@ import { AppState } from '../../../../store/roots';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { Observable, ReplaySubject } from 'rxjs';
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
+import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
 
 @Component({
 	selector: 'share-group-modal',
@@ -25,6 +26,8 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
 	public activeGroup$: Observable<GroupResponse>;
 	public activeGroupSharedWith$: Observable<ShareRequestForm[]>;
 	public allPermissions$: Observable<GetAllPermissionResponse[]>;
+    /** Email id validation regex pattern */
+    public giddhEmailRegex = GIDDH_EMAIL_REGEX;
 
 	@Output() public closeShareGroupModal: EventEmitter<any> = new EventEmitter();
 
