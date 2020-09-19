@@ -128,7 +128,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
         let group = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
             'operatingcost, indirectexpenses' : 'otherincome, revenuefromoperations';
         const requestObject = {
-            q: query,
+            q: encodeURIComponent(query),
             page,
             withStocks: true,
             group: encodeURIComponent(group)
