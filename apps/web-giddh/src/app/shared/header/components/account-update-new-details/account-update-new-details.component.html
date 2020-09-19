@@ -480,13 +480,11 @@
                         </div>
                         <div *ngFor="let inTax of (activeAccountTaxHierarchy$ | async)?.inheritedTaxes">
                             <ng-template #popTemplate>
-                                <div [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)">
-                                    <div class="popover-content">
-                                        <label>Tax being inherited from:</label>
-                                        <ul>
-                                            <li>{{inTax.name}}</li>
-                                        </ul>
-                                    </div>
+                                <div class="popover-content">
+                                    <label>Tax being inherited from:</label>
+                                    <ul>
+                                        <li>{{inTax.name}}</li>
+                                    </ul>
                                 </div>
                             </ng-template>
                             <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
