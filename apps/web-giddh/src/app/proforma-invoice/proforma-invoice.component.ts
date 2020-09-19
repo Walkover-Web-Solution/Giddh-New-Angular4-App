@@ -83,7 +83,7 @@ import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-sele
 import { EMAIL_REGEX_PATTERN } from '../shared/helpers/universalValidations';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText } from '../app.constant';
+import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
@@ -5761,7 +5761,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.excludeTax = false;
         let isPartyTypeSez = false;
         this.tcsTdsTaxesAccount = [];
-        let tdsTcsTaxType = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
 
         if (this.isSalesInvoice || this.isCashInvoice) {
             if (data && data.addresses && data.addresses.length > 0) {
@@ -5780,7 +5779,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.accountAssignedApplicableTaxes = data.applicableTaxes;
             data.applicableTaxes.forEach(item => {
                 let tax = this.companyTaxesList.find(element => element.uniqueName === item.uniqueName);
-                if (tdsTcsTaxType.indexOf(tax.taxType) > -1) {
+                if (tax && TCS_TDS_TAXES_TYPES.indexOf(tax.taxType) > -1) {
                     this.tcsTdsTaxesAccount.push(item);
                 }
             });
@@ -5955,7 +5954,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
 
                                                 let stockUniqueName = (item.stock && item.stock.uniqueName) ? item.stock.uniqueName : "";
-                                                if(item.stock && item.stock.uniqueName) { 
+                                                if(item.stock && item.stock.uniqueName) {
                                                     stockUniqueName = stockUniqueName.replace("purchases#", "");
                                                 }
 
@@ -6099,7 +6098,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     /**
-     * This will autofill the 
+     * This will autofill the
      *
      * @param {*} companyAddresses
      * @memberof ProformaInvoiceComponent
