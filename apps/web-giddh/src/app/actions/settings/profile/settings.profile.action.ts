@@ -96,7 +96,7 @@ export class SettingsProfileActions {
                     this.store.dispatch(this.companyActions.RefreshCompanies());
 
                     if(data.request && data.request.paymentId) {
-                        this.toasty.successToast('Plan Updated Successfully.');
+                        this.toasty.successToastWithHtml("Welcome onboard!<br>Accounting begins now...");
                     } else {
                         this.toasty.successToast('Profile Updated Successfully.');
                     }

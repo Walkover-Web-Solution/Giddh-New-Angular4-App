@@ -180,7 +180,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             if(response && response.status === "error") {
                 this.toasty.errorToast(response.message);
             } else {
-                this.toasty.successToast('Plan Updated Successfully.');
+                this.toasty.successToastWithHtml("Welcome onboard!<br>Accounting begins now...");
                 this.backClicked();
             }
         });
