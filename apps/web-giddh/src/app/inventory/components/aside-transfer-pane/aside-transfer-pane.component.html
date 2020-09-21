@@ -25,7 +25,7 @@
             </transfer-notes>
         </ng-container>
         <ng-container *ngSwitchCase="'createStock'">
-            <div class="pdT1">
+            <div class="pd-t1">
                 <inventory-add-stock [addStock]="true" (closeAsideEvent)="onCancel()"></inventory-add-stock>
             </div>
         </ng-container>
@@ -34,19 +34,19 @@
         </ng-container>
         <ng-container *ngSwitchDefault>
             <div class="aside-body flexy-child vmiddle asidePanelLedger" vr-item>
-                <div class="pd1 alC">
+                <div class="pd-1 alC">
                     <button type="button" class="btn btn-lg btn-primary" (click)="selectView('inward')">Inward
                         Note</button>
                 </div>
-                <div class="pd1 alC">
+                <div class="pd-1 alC">
                     <button type="button" class="btn btn-lg btn-primary" (click)="selectView('outward')">Outward
                         Note</button>
                 </div>
-                <div class="pd1 alC">
+                <div class="pd-1 alC">
                     <button type="button" class="btn btn-lg btn-primary" (click)="selectView('createStock')">Create
                         Stock</button>
                 </div>
-                <div class="pd1 alC">
+                <div class="pd-1 alC">
                     <button type="button" class="btn btn-lg btn-primary" (click)="selectView('createAccount')">Create
                         Account</button>
                 </div>

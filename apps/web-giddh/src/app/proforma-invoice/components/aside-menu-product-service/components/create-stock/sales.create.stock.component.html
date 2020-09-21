@@ -281,7 +281,7 @@
                                                     (blur)="enableSales.focus()" #purchaseRate />
                                             </div>
                                         </div>
-                                        <div class="pull-right mrT unit_add">
+                                        <div class="pull-right mr-t unit_add">
                                             <button class="btn-link" (click)="addPurchaseUnitRates(i)" *ngIf="l"><i
                                                     class="fa fa-plus add_row"></i></button>
                                             <button class="btn-link" (click)="removePurchaseUnitRates(i)" *ngIf="!l"><i
@@ -339,7 +339,7 @@
                                                     (blur)="isFsStock.focus()" #salesRate />
                                             </div>
                                         </div>
-                                        <div class="pull-right mrT unit_add">
+                                        <div class="pull-right mr-t unit_add">
                                             <button class="btn-link" (click)="addSaleUnitRates(i)" *ngIf="l"><i
                                                     class="fa fa-plus add_row"></i></button>
                                             <button class="btn-link" (click)="removeSaleUnitRates(i)" *ngIf="!l"><i
@@ -352,7 +352,7 @@
                         </div>
 
 
-                        <div class="mrT1 pdL pdR row">
+                        <div class="mr-t1 pdL pdR row">
                             <div class="col-xs-12 col-sm-12">
                                 <div class="checkbox">
                                     <label class="" for="isFsStock">
@@ -365,7 +365,7 @@
                         </div>
 
 
-                        <section class="mrT2 mrB3 col-xs-12 col-sm-12 row" *ngIf="addStockForm.value.isFsStock">
+                        <section class="mr-t2 mrB3 col-xs-12 col-sm-12 row" *ngIf="addStockForm.value.isFsStock">
                             <div class="pdL pdR">
                                 <h1 class="section-head bdrB"><strong>{{addStockForm.controls['name'].value}} (Made
                                         with)</strong></h1>
@@ -444,7 +444,7 @@
                         </section>
 
                         <div class="col-xs-12 col-sm-12 text-left">
-                            <div class="mrT1 pdL pdR row">
+                            <div class="mr-t1 pdL pdR row">
 
                                 <button type="submit" *ngIf="!isUpdatingStockForm"
                                     [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-success"

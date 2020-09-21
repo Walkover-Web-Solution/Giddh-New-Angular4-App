@@ -6,7 +6,7 @@
 
     </div>
     <div class="modal-body noPad clearfix" id="export-body">
-        <form #invoiceForm="ngForm" novalidate class="clearfix mrB2" autocomplete="off" *ngIf="voucherFormDetails">
+        <form #invoiceForm="ngForm" novalidate class="clearfix mr-b2" autocomplete="off" *ngIf="voucherFormDetails">
 
             <div class="bdrB clearfix">
                 <div class="col-xs-6">
@@ -58,7 +58,7 @@
                                     [(ngModel)]="voucherFormDetails.accountDetails.billingDetails.address"></textarea>
                             </div>
                             <div class="form-group">
-                                <div class="mrB2">
+                                <div class="mr-b2">
                                     <label>State</label>
                                     <sh-select [placeholder]="'State'" [options]="statesSource$ | async" #statesBilling
                                         name="billingDetails.stateCode"
@@ -83,7 +83,7 @@
                                     [(ngModel)]="voucherFormDetails.accountDetails.shippingDetails.address"></textarea>
                             </div>
                             <div class="form-group">
-                                <div class="mrB2">
+                                <div class="mr-b2">
                                     <label>State</label>
                                     <sh-select [disabled]="autoFillShipping" #statesShipping [placeholder]="'State'"
                                         [options]="statesSource$ | async" name="shippingDetails.stateCode"
@@ -139,7 +139,7 @@
                 </section>
             </section>
 
-            <section class="clearfix mrB2 whiteBg">
+            <section class="clearfix mr-b2 whiteBg">
                 <table class="table">
                     <thead class="t-h-bg1">
                         <tr *ngIf="customThead">
@@ -192,7 +192,7 @@
                     <tbody>
                         <tr>
                             <td width="50%">
-                                <div class="col-xs-8 pdT1">
+                                <div class="col-xs-8 pd-t1">
                                     <label class="mr-b1">Message</label>
                                     <textarea style="height:140px" class="form-control" name="message2"
                                         [(ngModel)]="voucherFormDetails.templateDetails.other.message2"></textarea>

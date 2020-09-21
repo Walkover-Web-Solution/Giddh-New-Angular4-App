@@ -6,35 +6,35 @@
     <input type="text" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker date-range-picker" />
 </div> -->
 
-<div class="clearfix mrT2">
+<div class="clearfix mr-t2">
     <label>Select Entity <sup class="text-danger">*</sup></label>
     <sh-select [options]="auditLogFormVM.entities" #selectEntity [isFilterEnabled]="true" [placeholder]="'Select Option'" (selected)="selectedEntityType($event)" [(ngModel)]="auditLogFormVM.selectedEntity" [forceClearReactive]="forceClearEntity$ | async"></sh-select>
 </div>
 
-<div class="clearfix mrT2">
+<div class="clearfix mr-t2">
     <label>Select Operation</label>
     <sh-select [options]="auditLogFormVM.filters" [placeholder]="'Select Option'" (click)="prepareOperationFormData(selectEntity)" [(ngModel)]="auditLogFormVM.selectedOperation" [forceClearReactive]="forceClearOperations$ | async"></sh-select>
 </div>
 
-<div class="clearfix mrT2" *ngIf="!auditLogFormVM.selectedEntity || auditLogFormVM.selectedEntity ==='ACCOUNT' || auditLogFormVM.selectedEntity ==='ENTRY' || auditLogFormVM.selectedEntity ==='LEDGER'">
+<div class="clearfix mr-t2" *ngIf="!auditLogFormVM.selectedEntity || auditLogFormVM.selectedEntity ==='ACCOUNT' || auditLogFormVM.selectedEntity ==='ENTRY' || auditLogFormVM.selectedEntity ==='LEDGER'">
     <label>Select Account</label>
     <sh-select [options]="auditLogFormVM.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="generalCustomFilter" [(ngModel)]="auditLogFormVM.selectedAccountUniqueName" [forceClearReactive]="forceClearAccount$ | async"></sh-select>
 </div>
 
-<div class="clearfix mrT2" *ngIf="!auditLogFormVM.selectedEntity || auditLogFormVM.selectedEntity ==='ACCOUNT' || auditLogFormVM.selectedEntity ==='GROUP'">
+<div class="clearfix mr-t2" *ngIf="!auditLogFormVM.selectedEntity || auditLogFormVM.selectedEntity ==='ACCOUNT' || auditLogFormVM.selectedEntity ==='GROUP'">
     <label>Select Group</label>
     <sh-select [options]="auditLogFormVM.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [customFilter]="generalCustomFilter" [(ngModel)]="auditLogFormVM.selectedGroupUniqueName" [forceClearReactive]="forceClearGroup$ | async"></sh-select>
 </div>
 
 
-<div class="clearfix mrT2">
+<div class="clearfix mr-t2">
     <label>Select User</label>
     <sh-select [options]="auditLogFormVM.users$ | async" [customFilter]="customUserFilter" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="auditLogFormVM.selectedUserUniqueName" [forceClearReactive]="forceClearUser$ | async"></sh-select>
 </div>
 
-<button class='btn btn-success pull-left mrT2' [ladda]="auditLogFormVM.getLogsInprocess$ | async" [disabled]="!auditLogFormVM.selectedEntity" (click)='getLogFilters()'>Get Logs
+<button class='btn btn-success pull-left mr-t2' [ladda]="auditLogFormVM.getLogsInprocess$ | async" [disabled]="!auditLogFormVM.selectedEntity" (click)='getLogFilters()'>Get Logs
 </button>
-<button class="btn btn-warning pull-left mrT2 mrL" (click)="resetFilters()">Reset</button>
+<button class="btn btn-warning pull-left mr-t2 mrL" (click)="resetFilters()">Reset</button>
 
 <br />
 

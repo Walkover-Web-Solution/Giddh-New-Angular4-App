@@ -9,7 +9,7 @@
     <ul #taxListUl class="dropdown-menu dropdown-menu-right" *ngIf="showTaxPopup" (click)="$event.stopPropagation()"
         [style.max-height.px]="102" [style.min-height.px]="40">
         <li *ngIf="taxList.length === 0">
-            <p class="pd1 alC">No Taxes Found</p>
+            <p class="pd-1 alC">No Taxes Found</p>
         </li>
         <li *ngFor="let tax of taxList;trackBy: trackByFn; let idx = index">
             <label class="checkbox oh width100 bdrB pdB taxItem" (click)="$event.stopPropagation()">

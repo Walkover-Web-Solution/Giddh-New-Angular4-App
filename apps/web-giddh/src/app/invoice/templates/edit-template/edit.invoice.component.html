@@ -40,10 +40,10 @@
                 <div class="template_info text-center">
                     <h3 class="primary_clr ellp">{{template.name}}</h3>
 
-                    <span *ngIf="template.isDefault" class="badge btn-sky-blue mrT2"><i
+                    <span *ngIf="template.isDefault" class="badge btn-sky-blue mr-t2"><i
                             class="icon-favorite-selected"></i> Default
                         Template</span>
-                    <span *ngIf="!template.isDefault" class="badge btn-success mrT2 cp"
+                    <span *ngIf="!template.isDefault" class="badge btn-success mr-t2 cp"
                         (click)="onSetTemplateAsDefault(template,'invoice')"><i class="icon-favorite-selected"></i>
                         Set as
                         Default</span>
@@ -76,9 +76,9 @@
                     <div class="template_info text-center">
                         <h3 class="primary_clr ellp">{{template.name}}</h3>
 
-                        <span *ngIf="template.isDefaultForVoucher" class="badge btn-sky-blue mrT2"><i
+                        <span *ngIf="template.isDefaultForVoucher" class="badge btn-sky-blue mr-t2"><i
                                 class="icon-favorite-selected"></i> Default Template</span>
-                        <span *ngIf="!template.isDefaultForVoucher" class="badge btn-success mrT2 cp"
+                        <span *ngIf="!template.isDefaultForVoucher" class="badge btn-success mr-t2 cp"
                             (click)="onSetTemplateAsDefault(template,'voucher')"><i
                                 class="icon-favorite-selected"></i> Set as
                             Default</span>
@@ -112,7 +112,7 @@
 <!-- Template modal -->
 <div bsModal #templateModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}" tabindex="-1">
     <div class="modal-dialog full-modal">
-        <!-- modal-liq90 class is removed for now-->
+        <!-- modal-liq-90 class is removed for now-->
         <div class="modal-content" style="border-radius:0px;">
             <invoice-template-modal [templateSections]="currentTemplateSections" [templateId]="templateId"
                 (closeModelEvent)="onCloseTemplateModal()" [editMode]="transactionMode"></invoice-template-modal>
@@ -145,7 +145,7 @@
 <div bsModal #customTemplateConfirmationModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
     tabindex="-1">
     <div class="modal-dialog modal-md">
-        <!-- modal-liq90 class is removed for now-->
+        <!-- modal-liq-90 class is removed for now-->
         <div class="modal-content">
             <delete-template-confirmation-modal [message]='deleteTemplateConfirmationMessage' [flag]="confirmationFlag"
                 (closeModelEvent)="onCloseConfirmationModal($event)"></delete-template-confirmation-modal>
@@ -157,7 +157,7 @@
 <div bsModal #invoiceTemplatePreviewModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
     tabindex="-1">
     <div class="modal-dialog modal-xl">
-        <!-- modal-liq90 class is removed for now-->
+        <!-- modal-liq-90 class is removed for now-->
         <div class="modal-content">
             <invoice-template-preview-modal (closeModelEvent)="onClosePreviewModal()"></invoice-template-preview-modal>
         </div>

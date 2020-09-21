@@ -1,6 +1,6 @@
 <form class="horizontal-form ng-pristine ng-valid ng-valid-required manage-group-account-form" id="groupDetailForm" name="groupDetailForm"
     novalidate [formGroup]="groupDetailForm" (submit)="updateGroup()">
-    <div class="container-fluid mrT1">
+    <div class="container-fluid mr-t1">
         <div class="row">
             <div class="form-group col-xs-12 col-sm-6">
                 <label>Group Name</label>
@@ -60,7 +60,7 @@
                 (click)="showDeleteGroupModal()">Delete
             </button>
 
-            <button class="btn btn-primary mrL1" type="submit" *ngIf="(showEditGroup$ | async)"
+            <button class="btn btn-primary mr-l1" type="submit" *ngIf="(showEditGroup$ | async)"
                 [ladda]="isUpdateGroupInProcess$ | async"
                 [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update
             </button>

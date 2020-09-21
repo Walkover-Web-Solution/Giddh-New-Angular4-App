@@ -4,13 +4,13 @@
         <div class="panel-heading">
             <strong>Ratio Analysis</strong>
             <div class="pull-right dashboard-filter">
-                <i class="icon-refrsh mrL1" (click)="hardRefresh()"></i>
+                <i class="icon-refrsh mr-l1" (click)="hardRefresh()"></i>
             </div>
         </div>
 
         <div class="card-body pos-rel ratioAnalysisPanelBody">
             <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-                <div class="no-data mrT2 loader-main" ng-if="errorMessage == ''">
+                <div class="no-data mr-t2 loader-main" ng-if="errorMessage == ''">
                     <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
                     <div class="spinner2">
                         <div class="cube1"></div>

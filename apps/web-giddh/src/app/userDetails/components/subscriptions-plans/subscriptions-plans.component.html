@@ -331,7 +331,7 @@
         </div>
     </div>
     <div *ngIf="isSwitchPlanInProcess">
-        <div class="no-data mrT2 loader-main">
+        <div class="no-data mr-t2 loader-main">
             <div class="spinner2">
                 <div class="cube1"></div>
                 <div class="cube2"></div>
@@ -393,9 +393,9 @@
                         <p class="font-14">You will get the activation key from resellers.</p>
                         <div class="d-flex">
                             <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
-                                class="form-control mrT1" placeholder="Enter activation key">
+                                class="form-control mr-t1" placeholder="Enter activation key">
                             <div class="activation-btn ml-15">
-                                <button class="btn success-btn mrT1 pl-3 pr-3" [disabled]="!licenceKey.value"
+                                <button class="btn success-btn mr-t1 pl-3 pr-3" [disabled]="!licenceKey.value"
                                     (click)="createCompanyViaActivationKey()">
                                     Activate</button>
                             </div>

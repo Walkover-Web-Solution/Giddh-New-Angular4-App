@@ -54,7 +54,7 @@
                     <button class="btn-link icon-btn mr-1" (click)="editStock()" tooltip="Edit Stock">
                         <i class="icon-edit-pencil"></i>
                     </button>
-                    <button id="button-alignment" dropdownToggle type="button" class="btn-link mrT cp mr-1 dropdown-toggle icon-btn" aria-controls="dropdown-alignment" tooltip="Download">
+                    <button id="button-alignment" dropdownToggle type="button" class="btn-link mr-t cp mr-1 dropdown-toggle icon-btn" aria-controls="dropdown-alignment" tooltip="Download">
                         <i class="icon-download strong"></i>
                     </button>
                     <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download" role="menu" aria-labelledby="button-alignment">
@@ -66,7 +66,7 @@
                 </div>
                 <!-- <div class="btn-group btn-download" dropdown [autoClose]="true" placement="bottom right">
                     <button id="button-alignment" dropdownToggle type="button"
-                        class="btn-link btn mrT cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
+                        class="btn-link btn mr-t cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
                         <i class="icon-download"></i> Download
                     </button>
                     <ul *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download" role="menu"
@@ -322,7 +322,7 @@
                     <tr>
                         <td colspan="10" class="text-center empty-table">
                             <!--loading-->
-                            <div class="no-data mrT2 loader-main">
+                            <div class="no-data mr-t2 loader-main">
                                 <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
                                 <div class="spinner2">
                                     <div class="cube1"></div>
@@ -466,7 +466,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mrT2">
+                    <div class="row mr-t2">
                         <div class="col-sm-4">Select Category</div>
                         <div class="col-sm-4">
                             <div class="select-style middle">
@@ -480,7 +480,7 @@
                             <input *ngIf="stockReportRequest.param==='qty_closing'" readonly type="text" class="form-control" value="Quantity" />
                         </div>
                     </div>
-                    <div class="row mrT2">
+                    <div class="row mr-t2">
                         <div class="col-sm-4">Value</div>
                         <div class="col-sm-4">
                             <div class="select-style middle">
@@ -497,7 +497,7 @@
                         </div>
                     </div>
 
-                    <div class="row mrT4 mrB3">
+                    <div class="row mr-t4 mrB3">
                         <div class="col-xs-12 text-right">
                             <button class="btn btn-success" type="button" [disabled]="!isFilterCorrect || !stockReportRequest.param || !stockReportRequest.expression || !stockReportRequest.val" (click)="advanceSearchAction('search')">Search
                             </button>

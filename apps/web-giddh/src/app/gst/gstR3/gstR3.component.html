@@ -50,7 +50,7 @@
                             <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue"> <i
                                     class="icon-download"></i> Download</button>
                             <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-triggers-manual" style="min-width: 350px;">
-                                <div class="pdL2 pdR2 pd1">
+                                <div class="pdL2 pdR2 pd-1">
                                     <div class="form-group">
                                         <label>Email Id <i class='fa fa-info-circle' tooltip-placement="top"
                                                 tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
@@ -509,7 +509,7 @@
                             <div class="pb-1"><span class="point">3</span> Once you have filed, click on <b class="font-large">Mark as Filed</b> button below. </div>
                         </div> <br> <button class="btn btn-default" data-ember-action="" data-ember-action-825="825">Mark as Filed</button>
                         <div class="btn-group d-inline-block" dropdown>
-                            <button type="button" class="btn btn-default mrR0">File Via</button>
+                            <button type="button" class="btn btn-default mr-0">File Via</button>
                             <button id="button-split" type="button" dropdownToggle class="btn btn-default dropdown-toggle dropdown-toggle-split d-inline-block" aria-controls="dropdown-split">
                     <span class="caret"></span>
                 <span class="sr-only">Split button!</span>
@@ -527,7 +527,7 @@
 
             </div> -->
             <div class="transactions-overview" *ngIf="selectedGstr3BTab==='filing'">
-                <div class="gstr-transactions-summary mrT4 mrB4 text-center">
+                <div class="gstr-transactions-summary mr-t4 mrB4 text-center">
 
                     <div class="gstReturnDate">
                         <img src="assets/images/return-date.svg">
@@ -539,7 +539,7 @@
 
                     </div>
 
-                    <p *ngIf="fileReturnSucces" class="mrT2">
+                    <p *ngIf="fileReturnSucces" class="mr-t2">
                         Gst Return Of {{ currentPeriod?.from }} - {{ currentPeriod.to }} is Filed Successfully
                     </p>
                 </div>

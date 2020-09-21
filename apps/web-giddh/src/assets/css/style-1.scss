@@ -414,7 +414,7 @@ aside-menu-account .container-fluid {
     padding: 5px;
 }
 
-.pd1 {
+.pd-1 {
     padding: 10px;
 }
 
@@ -458,7 +458,7 @@ aside-menu-account .container-fluid {
     padding-right: 0;
 }
 
-.pdT1 {
+.pd-t1 {
     padding-top: 10px;
 }
 
@@ -467,7 +467,7 @@ aside-menu-account .container-fluid {
     padding-top: 20px;
 }
 
-.pdB1 {
+.pd-b1 {
     padding-bottom: 10px;
 }
 
@@ -559,7 +559,7 @@ aside-menu-account .container-fluid {
     margin: 40px;
 }
 
-.mrT {
+.mr-t {
     margin-top: 5px;
 }
 
@@ -575,7 +575,7 @@ aside-menu-account .container-fluid {
     margin-right: 5px;
 }
 
-.mrT1 {
+.mr-t1 {
     margin-top: 10px !important;
 }
 
@@ -587,7 +587,7 @@ aside-menu-account .container-fluid {
     margin-bottom: 15px;
 }
 
-.mrL1 {
+.mr-l1 {
     margin-left: 10px;
 }
 
@@ -599,11 +599,11 @@ aside-menu-account .container-fluid {
     margin-right: 10px;
 }
 
-.mrT2 {
+.mr-t2 {
     margin-top: 20px;
 }
 
-.mrB2 {
+.mr-b2 {
     margin-bottom: 20px;
 }
 
@@ -631,7 +631,7 @@ aside-menu-account .container-fluid {
     margin-right: 30px;
 }
 
-.mrT4 {
+.mr-t4 {
     margin-top: 40px;
 }
 
@@ -736,7 +736,7 @@ aside-menu-account .container-fluid {
     text-transform: uppercase;
 }
 
-.txtLwc {
+.txt-lwc {
     text-transform: lowercase;
 }
 
@@ -744,7 +744,7 @@ aside-menu-account .container-fluid {
     text-transform: capitalize;
 }
 
-.tdUndr {
+.td-undr {
     text-decoration: underline;
 }
 
@@ -914,7 +914,7 @@ position: relative; */
     width: 80%;
 }
 
-.modal-liq90 {
+.modal-liq-90 {
     width: 90%;
 }
 
@@ -2648,10 +2648,10 @@ background: #f9f9f9;
         line-height: 24px;
     }
 
-    .modal-liq90 {
+    .modal-liq-90 {
         width: 900px;
     }
-    .manage-account-popup .modal-liq90 {
+    .manage-account-popup .modal-liq-90 {
         width: 100%;
     }
 }
@@ -3342,7 +3342,7 @@ ul.pills li {
 
 /* company list dropdown styles */
 
-.sub_menu_nav {
+.sub-menu-nav {
     margin-top: 0px;
     width: 100%;
     z-index: 100;
@@ -5112,13 +5112,13 @@ perfect-scrollbar.ps-show-active
     opacity: 0;
 }
 
-.sub_menu_nav li > a {
+.sub-menu-nav li > a {
     padding: 5px 12px;
     color: #333333;
     display: block;
 }
 
-.sub_menu_nav li > a:hover {
+.sub-menu-nav li > a:hover {
     background: #2d9ee0;
 }
 
@@ -5198,7 +5198,7 @@ form#groupDetailForm {
     max-width: 660px;
     width: 100%;
 }
-.mobileHeader {
+.mobile-header {
     display: none;
 }
 #getGroupModal #middleBody {
@@ -5224,14 +5224,14 @@ form#groupDetailForm {
 }
 
 @media (max-width: 768px) {
-    .mobileHeader .upper-layer-header .navbar-nav {
+    .mobile-header .upper-layer-header .navbar-nav {
         float: none;
     }
     .desktop-header {
         display: block;
     }
 
-    .mobileHeader .btn-xs {
+    .mobile-header .btn-xs {
         padding: 3px 8px !important;
     }
     .universal-date {
@@ -5256,7 +5256,7 @@ form#groupDetailForm {
     }
 }
 @media only screen and (max-width: 767px) {
-    .mobileHeader {
+    .mobile-header {
         display: block;
         position: fixed !important;
         top: 0;

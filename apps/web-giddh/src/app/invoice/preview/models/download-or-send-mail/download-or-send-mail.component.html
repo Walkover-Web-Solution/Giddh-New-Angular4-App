@@ -14,7 +14,7 @@
             <textarea class="form-control" #emailList placeholder="Enter email addresses"></textarea>
         </div>
         <div class="pdL2 pdR2">
-            <button type="button" class="btn btn-md btn-success mrB2" (click)="onSendInvoiceOnMail(emailList.value)">Send</button>
+            <button type="button" class="btn btn-md btn-success mr-b2" (click)="onSendInvoiceOnMail(emailList.value)">Send</button>
         </div>
     </div> -->
 
@@ -45,10 +45,10 @@
         </ul>
         <div class="pd2 clearfix">
 
-            <div [hidden]="!emailTabActive" class="mrB2">
+            <div [hidden]="!emailTabActive" class="mr-b2">
                 <textarea class="form-control" #emailList placeholder="Enter email addresses"></textarea>
             </div>
-            <div [hidden]="!smsTabActive" class="mrB2">
+            <div [hidden]="!smsTabActive" class="mr-b2">
                 <textarea class="form-control" #smsList placeholder="Enter mobile no. with countryCode"></textarea>
             </div>
             <div class="clearfix" [hidden]="smsTabActive">
@@ -84,7 +84,7 @@
     <div *ngIf="isErrOccured$ | async">
         <p class="lead alC">Oops! Something went wrong.</p>
     </div>
-    <div class="loader mrT4" *ngIf="!showPdfWrap">
+    <div class="loader mr-t4" *ngIf="!showPdfWrap">
         <span></span>
         <span></span>
         <span></span>

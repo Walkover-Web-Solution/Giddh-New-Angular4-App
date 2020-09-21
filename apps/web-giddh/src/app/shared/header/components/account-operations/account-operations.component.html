@@ -15,7 +15,7 @@
             </button>
             <button class="btn btn-share pull-right" *ngIf="(showEditGroup$ | async)" (click)="showShareGroupModal()">Share
             </button>
-            <div class="primary_clr text-right pull-right mrT1 clearfix"
+            <div class="primary_clr text-right pull-right mr-t1 clearfix"
                 *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
                 Shared with {{ (activeGroupSharedWith$ | async)?.length }} people
             </div>
@@ -25,7 +25,7 @@
             <button class="btn btn-share pull-right" (click)="showShareAccountModal()">
                 Share
             </button>
-            <div class="primary_clr text-right pull-right mrT1 clearfix"
+            <div class="primary_clr text-right pull-right mr-t1 clearfix"
                 *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length">
                 Shared with {{ (activeAccountSharedWith$ | async)?.length }} people
             </div>
@@ -122,7 +122,7 @@
                     </div>
                     <small class="clearfix">This option is risky and can not be undone</small>
 
-                    <ul class="accmerge mrT1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
+                    <ul class="accmerge mr-t1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
                         <li *ngFor="let merged of (activeAccount$ | async)?.mergedAccounts.split(',')">
                             <a href="javascript:void(0);" [ngClass]="{'isActive': setAccountForMove === merged}" (click)="setAccountForMoveFunc(merged)">
                 {{merged}}
@@ -328,7 +328,7 @@
 <!--add new buttons-->
 <div class="inline-table new_form ng-scope" *ngIf="(showNewForm$ | async)">
     <div class="vcenter groups-buttons">
-        <button class="btn isActive mrB2" (click)="showAddGroupForm()">Create Group</button>
+        <button class="btn isActive mr-b2" (click)="showAddGroupForm()">Create Group</button>
         <span class="clearfix"></span>
         <button class="btn isActive" *ngIf="!isRootLevelGroup" (click)="showAddAccountForm()">Create A/c</button>
     </div>

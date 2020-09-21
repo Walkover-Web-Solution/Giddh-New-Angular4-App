@@ -55,7 +55,7 @@
 
             <div *ngIf="isMobileScreen">
 
-                <div class="text-center top-aging-table-top pd1">
+                <div class="text-center top-aging-table-top pd-1">
                     <p (click)="openAgingDropDown()"><strong>Due in Last days </strong></p>
                     <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
                         (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>

@@ -47,7 +47,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-12 mrT1">
+                    <div class="col-xs-12 mr-t1">
                         <button class="btn btn-success" (click)="save(jioGstForm)">Save</button>
                         <button class="btn btn-default" (click)="closeAsidePane($event)">Cancel</button>
                     </div>
@@ -81,7 +81,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-12 mrT1">
+                    <div class="col-xs-12 mr-t1">
                         <button class="btn btn-success" (click)="save(taxProForm)">Save</button>
                         <button class="btn btn-default" (click)="closeAsidePane($event)">Cancel</button>
                     </div>
@@ -133,7 +133,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-xs-12 mrT1">
+                    <div class="col-xs-12 mr-t1">
                         <button class="btn btn-success" (click)="generateReconcileOtp(reconcileForm)"
                             *ngIf="!(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpInProcess$ | async"
                             [disabled]="!reconcileForm.uid">Submit

@@ -19,7 +19,7 @@
 
         <div class="card-body pos-rel {{requestInFlight}}">
             <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-                <div class="no-data mrT2 loader-main">
+                <div class="no-data mr-t2 loader-main">
                     <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
                     <div class="spinner2">
                         <div class="cube1"></div>
@@ -33,7 +33,7 @@
                 <div class="noDataAvailable" *ngIf="!dataFound">
                     <img src="{{imgPath}}noDataChart.svg" alt="no data found">
                 </div>
-                <div class="clearfix mrB2">
+                <div class="clearfix mr-b2">
                     <div class="due">
                         <span class="mr-b1 due-amount">Customer Due</span>
                         <span class="total-amount pull-right vendor-due-text">
@@ -44,7 +44,7 @@
                         <small class="pull-right">{{ ReceivableDurationAmt | giddhCurrency }}</small>
                     </div>
                 </div>
-                <div class="clearfix mrB2">
+                <div class="clearfix mr-b2">
                     <div class="due">
                         <span class="mr-b1 due-amount">Vendor Due</span>
                         <span class="total-amount pull-right customer-due-text"><span>{{amountSettings.baseCurrencySymbol}}</span> {{ totalPayable | giddhCurrency }}</span>

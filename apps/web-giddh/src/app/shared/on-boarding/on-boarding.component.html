@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="form-group clearfix add-companyDetail pdB5">
-            <!--<h3 class="pdB1">Share with</h3>-->
+            <!--<h3 class="pd-b1">Share with</h3>-->
             <div class="add_mailer">
                 <!--create company from-->
                 <form name="form" #companyForm="ngForm" class="clearfix" novalidate="" autocomplete="off">
@@ -78,8 +78,8 @@
                                 </div>
                             </span>
                         </div>
-                        <div class="col-sm-12 mrT1">
-                            <button class="btn btn-sky-blue mrL1" style="margin-left: 0 !important;" type="submit"
+                        <div class="col-sm-12 mr-t1">
+                            <button class="btn btn-sky-blue mr-l1" style="margin-left: 0 !important;" type="submit"
                                 (click)="createCompany(mobileNoEl)" [disabled]="companyForm.invalid"
                                 [ladda]="isCompanyCreationInProcess$ | async">Next
                             </button>

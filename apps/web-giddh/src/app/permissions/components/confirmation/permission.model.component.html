@@ -5,7 +5,7 @@
 	</div>
 	<div class="modal-body pdT5 pdB5 pdL2 pdR2 clearfix" id="export-body">
 		<form name="newRole" novalidate class="" autocomplete="off">
-			<div class="modal_wrap mrB2">
+			<div class="modal_wrap mr-b2">
 				<div class="form-group">
 					<label>New Role</label>
 					<input type="text" name="rolename" class="form-control" [(ngModel)]="newRole.name" />
@@ -21,7 +21,7 @@
                         </span>
 
 					</div>
-					<div class="form-group mrT1">
+					<div class="form-group mr-t1">
 						<select class="form-control" name="somename"
 							[disabled]="newRole.copyoption != 'copy_permission'">
 							<option value="{{role.name}}" *ngFor="let role of allRoles"> {{ role.name }}</option>
