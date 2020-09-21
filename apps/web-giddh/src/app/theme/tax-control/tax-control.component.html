@@ -6,7 +6,7 @@
 
         <div class="multi-select adjust" id="tax-control-multi-select">
 
-            <input #taxInputElement type="text" id="tax-contorl-input" readonly name="sum" *ngIf="!maskInput"
+            <input #taxInputElement type="text" id="tax-control-input" readonly name="sum" *ngIf="!maskInput"
                 class="form-control cursor-pointer text-right taxInput" [(ngModel)]="taxTotalAmount"
                 (focus)="handleInputFocus()" style="padding-right:28px !important;" (blur)="taxInputBlur($event)" />
 
