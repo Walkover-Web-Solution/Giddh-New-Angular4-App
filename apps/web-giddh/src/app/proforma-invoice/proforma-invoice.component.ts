@@ -4286,7 +4286,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             entry.tradeDiscounts.forEach((f) => {
                 discountArray.push({
-                    discountType: f.discount.discountType,
+                    discountType: (f.discount) ? f.discount.discountType : "FIX_AMOUNT",
                     amount: f.discount.discountValue,
                     name: f.discount.name,
                     particular: f.account.uniqueName,
@@ -4854,7 +4854,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     private showGstAndTrnUsingCountryName(name: string) {
-        if (this.selectedCompany.country === name) {
+        if (this.selectedCompany && this.selectedCompany.country === name) {
             if (name === 'India') {
                 this.showGSTINNo = true;
                 this.showTRNNo = false;
