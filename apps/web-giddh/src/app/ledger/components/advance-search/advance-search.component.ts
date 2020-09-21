@@ -89,6 +89,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public fromDate: any;
     /* Selected to date */
     public toDate: any;
+    /* This will hold the groups */
     public groups: IOption[] = [];
     public groupUniqueNames: any[] = [];
 

@@ -75,12 +75,21 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
 
     //////// ControlValueAccessor //////////
 
-    //get accessor
+    /**
+     * This is used to get the inner value of datepicker
+     *
+     * @type {*}
+     * @memberof GiddhDatepickerComponent
+     */
     get value(): any {
         return this.innerValue;
     };
 
-    //set accessor including call the onchange callback
+    /**
+     * set accessor including call the onchange callback
+     *
+     * @memberof GiddhDatepickerComponent
+     */
     set value(value: any) {
         if (value !== this.innerValue) {
             this.innerValue = value;
@@ -88,24 +97,43 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
         }
     }
 
-    //Set touched on blur
+    /**
+     * Used to Set touched on blur
+     *
+     * @memberof GiddhDatepickerComponent
+     */
     public onBlur(): void {
         this.onTouchedCallback();
     }
 
-    //Form ControlValueAccessor interface
+    /**
+     * Form ControlValueAccessor interface
+     *
+     * @param {*} value
+     * @memberof GiddhDatepickerComponent
+     */
     public writeValue(value: any): void {
         if (value && value !== this.innerValue) {
             this.innerValue = value;
         }
     }
 
-    //Form ControlValueAccessor interface
+    /**
+     * Form ControlValueAccessor interface
+     *
+     * @param {*} fn
+     * @memberof GiddhDatepickerComponent
+     */
     public registerOnChange(fn: any): void {
         this.onChangeCallback = fn;
     }
 
-    //Form ControlValueAccessor interface
+    /**
+     * Form ControlValueAccessor interface
+     *
+     * @param {*} fn
+     * @memberof GiddhDatepickerComponent
+     */
     public registerOnTouched(fn: any): void {
         this.onTouchedCallback = fn;
     }

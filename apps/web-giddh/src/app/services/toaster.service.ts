@@ -13,6 +13,13 @@ export class ToasterService {
         this._toaster.success(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
     }
 
+    /**
+     * This function is used to show success message with html
+     *
+     * @param {string} msg
+     * @param {string} [title=APP_DEFAULT_TITLE]
+     * @memberof ToasterService
+     */
     public successToastWithHtml(msg: string, title: string = APP_DEFAULT_TITLE): void {
         this._toaster.success(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS_WITH_HTML));
     }
