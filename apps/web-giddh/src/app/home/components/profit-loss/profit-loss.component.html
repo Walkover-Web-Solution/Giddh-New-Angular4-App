@@ -3,15 +3,7 @@
 
         <div class="panel-heading">
             <strong>Profit & Loss</strong>
-            <!-- <div class="pull-right dashboard-filter">
-                <div class="btn-group" dropdown>
-                    <span id="button-basic" dropdownToggle class="dropdown-toggle month-dropdown"
-                        aria-controls="dropdown-basic">
-                        <datepickeroptions (filterDates)="getFilterDate($event)"></datepickeroptions>
-                    </span>
-                </div>
-            </div> -->
-            <div class=" pull-right dashboard-filter" (click)="showGiddhDatepicker($event)">
+            <div class=" pull-right dashboard-filter">
                 <i class="icon-refrsh  mr-1" (click)="refreshChart()"></i>
                 <div (click)="showGiddhDatepicker($event)">
                     <input type="text" readonly name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"

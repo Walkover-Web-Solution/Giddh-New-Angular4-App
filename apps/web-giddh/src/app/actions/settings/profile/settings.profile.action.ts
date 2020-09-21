@@ -94,13 +94,18 @@ export class SettingsProfileActions {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.store.dispatch(this.companyActions.RefreshCompanies());
-                    this.toasty.successToast('Profile Updated Successfully.');
+
+                    if(data.request && data.request.paymentId) {
+                        this.toasty.successToastWithHtml("Welcome onboard!<br>Accounting begins now...");
+                    } else {
+                        this.toasty.successToast('Profile Updated Successfully.');
+                    }
                 }
                 if (data.request.isMultipleCurrency) {
                     return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);
                 } else {
                     return {
-                        type: ''
+                        type: 'EmptyAction'
                     };
                 }
             })));
