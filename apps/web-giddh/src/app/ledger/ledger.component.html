@@ -617,7 +617,7 @@
 
             <!-- region debit transaction-->
             <div [ngClass]="Shown ? 'active' : ''" hr-item
-                (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();"
+                (ngInit)="initNavigator(navigator,$event.nativeElement); navigator.nextVertical();"
                 class="left-col-new"
                 [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
 
@@ -892,6 +892,7 @@
 
             <!-- region credit transaction-->
             <div [ngClass]="isHide ? 'active' : 'right-col-new'" class="right-col-new" hr-item
+                (ngInit)="initNavigator(navigator,$event.nativeElement); navigator.nextVertical();"
                 [ngClass]="{bdrL: (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
                 <!-- region credit transaction header-->
                 <table class="width100 h-table hidden-xs">
