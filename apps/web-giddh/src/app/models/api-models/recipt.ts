@@ -31,7 +31,8 @@ export interface ReceiptAccount {
 	uniqueName: string;
 	accountType?: any;
 	name: string;
-	currency?: CurrencyClass;
+    currency?: CurrencyClass;
+    customerName?: string;
 }
 
 export interface ReceiptItem {
@@ -49,6 +50,9 @@ export interface ReceiptItem {
     accountCurrencySymbol?: string;
     invoiceLinkingRequest?: IInvoiceLinkingRequest;
     totalBalance?: AmountClassMulticurrency;
+    purchaseOrderNumbers?: number;
+    grandTotalTooltipText?: string;
+    balanceDueTooltipText?: string;
 }
 
 export interface ReciptResponse {

@@ -688,7 +688,7 @@
                                         <br></ng-container>
                                     <div class="d-flex">
                                         <div class="mr-05 custom-select cust select-caret pos-rel">
-                                            <sh-select [options]="amountUpToList" [required]="item.maxBankLimit !=='max'" [fixedValue]="Custom" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);maxLimitOrCustomChanged($event, index, false)"
+                                            <sh-select [options]="amountUpToList" [required]="item.maxBankLimit !=='max'" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);maxLimitOrCustomChanged($event, index, false)"
                                                 name="maxBankLimit{{index}}">
                                             </sh-select>
                                         </div>

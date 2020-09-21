@@ -12,6 +12,7 @@ import {
     OnInit,
     Output,
     SimpleChanges,
+    TemplateRef,
     ViewChild,
 } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -170,7 +171,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     public get shouldShowPrintDocument(): boolean {
         return this.selectedItem.voucherType !== VoucherTypeEnum.purchase ||
-            (this.selectedItem.voucherType === VoucherTypeEnum.purchase && this.pdfPreviewLoaded) || 
+            (this.selectedItem.voucherType === VoucherTypeEnum.purchase && this.pdfPreviewLoaded) ||
             (this.selectedItem.voucherType === VoucherTypeEnum.purchase && this.attachedDocumentType &&
                 (this.attachedDocumentType.type === 'pdf' || this.attachedDocumentType.type === 'image'));
     }

@@ -690,7 +690,7 @@
 
                         <!-- region debit transaction loop over transactions -->
                         <tr vr-item tabindex="-1" class="ledger-row row"
-                            *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;"
+                            *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions; let i = index;"
                             (dblclick)="showUpdateLedgerModal(txn)" (keydown.enter)="showUpdateLedgerModal(txn)"
                             [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
                             tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"

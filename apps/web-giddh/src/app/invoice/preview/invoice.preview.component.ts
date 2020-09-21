@@ -216,13 +216,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         toDates: '',
         dataToSend: {}
     };
+    public isUniversalDateApplicable: boolean = false;
     private exportcsvRequest: any = {
         from: '',
         to: '',
         dataToSend: {}
     };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private isUniversalDateApplicable: boolean = false;
     private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     public baseCurrencySymbol: string = '';
     public baseCurrency: string = '';

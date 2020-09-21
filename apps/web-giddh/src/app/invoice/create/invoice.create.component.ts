@@ -101,6 +101,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
     public tx_total: number = 0;
     public states: any[] = [];
     public isMobileScreen: boolean = true;
+    public hsnDropdownShow: boolean = false;
     @ViewChild('discountComponent', {static: true}) public discountComponent: DiscountListComponent;
     // public methods above
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
