@@ -10,7 +10,7 @@
                 class="form-control cursor-pointer text-right taxInput" [(ngModel)]="taxTotalAmount"
                 (focus)="handleInputFocus()" style="padding-right:28px !important;" (blur)="taxInputBlur($event)" />
 
-            <input #taxInputElement type="text"  id="tax-contorl-input-mask" readonly name="sum" *ngIf="maskInput"
+            <input #taxInputElement type="text"  id="tax-control-input-mask" readonly name="sum" *ngIf="maskInput"
                 class="form-control cursor-pointer text-right taxInput" [(ngModel)]="taxTotalAmount" [mask]="maskInput"
                 [prefix]="prefixInput" [suffix]="suffixInput" (focus)="handleInputFocus()" (blur)="taxInputBlur($event)"
                 style="padding-right:24px !important;" />
