@@ -1,10 +1,10 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { AppState } from '../../../../store';
-import { Observable, ReplaySubject, BehaviorSubject } from 'rxjs';
+import { Observable, ReplaySubject, BehaviorSubject, combineLatest } from 'rxjs';
 import { GroupResponse, GroupsTaxHierarchyResponse, MoveGroupRequest } from '../../../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as _ from '../../../../lodash-optimized';
@@ -44,7 +44,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('tax', {static: true}) public taxControll: TaxControlComponent;
     @ViewChild('autoFocused', {static: true}) public autoFocus: ElementRef;
 
-    public companyTaxDropDown: Observable<IOption[]>;
+    public companyTaxDropDown: Array<IOption>;
     public groupDetailForm: FormGroup;
     public moveGroupForm: FormGroup;
     public taxGroupForm: FormGroup;
@@ -101,46 +101,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy).pipe(takeUntil(this.destroyed$));
         this.isUpdateGroupInProcess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupInProcess).pipe(takeUntil(this.destroyed$));
         this.isUpdateGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupSuccess).pipe(takeUntil(this.destroyed$));
-
-        this.companyTaxDropDown = this.store.select(createSelector([
-            (state: AppState) => state.groupwithaccounts.activeGroupTaxHierarchy,
-            (state: AppState) => state.groupwithaccounts.activeGroup,
-            (state: AppState) => state.company.taxes],
-            (activeGroupTaxHierarchy, activeGroup, taxes) => {
-                let arr: IOption[] = [];
-                if (taxes) {
-                    if (activeGroup) {
-                        let applicableTaxes = activeGroup.applicableTaxes.map(p => p.uniqueName);
-
-                        if (activeGroupTaxHierarchy) {
-
-                            if (activeGroupTaxHierarchy.inheritedTaxes && activeGroupTaxHierarchy.inheritedTaxes.length) {
-                                let inheritedTaxes = _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
-                                let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
-                                // set value in tax group form
-                                this.taxGroupForm.setValue({ taxes: allTaxes });
-                            } else {
-                                this.taxGroupForm.setValue({ taxes: applicableTaxes });
-                            }
-
-                            // prepare drop down options
-                            return _.differenceBy(taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName };
-                            }), _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                                return { label: p.name, value: p.uniqueName };
-                            }), 'value');
-                        } else {
-                            // set value in tax group form
-                            this.taxGroupForm.setValue({ taxes: applicableTaxes });
-
-                            return taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName };
-                            });
-                        }
-                    }
-                }
-                return arr;
-            })).pipe(takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -193,6 +153,58 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         setTimeout(() => {
             this.autoFocus.nativeElement.focus();
         }, 50);
+
+        combineLatest([
+            this.store.pipe(select((state: AppState) => state.groupwithaccounts.activeGroupTaxHierarchy)),
+            this.store.pipe(select((state: AppState) => state.groupwithaccounts.activeGroup)),
+            this.store.pipe(select((state: AppState) => state.company.taxes))
+        ]).pipe(takeUntil(this.destroyed$)).subscribe((result) => {
+            if (result[0] && result[1] && result[2]) {
+                const activeGroupTaxHierarchy = result[0];
+                const activeGroup = result[1];
+                const taxes = result[2];
+                let arr: IOption[] = [];
+                if (taxes) {
+                    if (activeGroup) {
+                        let applicableTaxes = activeGroup.applicableTaxes.map(p => p.uniqueName);
+
+                        if (activeGroupTaxHierarchy) {
+                            // prepare drop down options
+                            this.companyTaxDropDown = _.differenceBy(taxes.map(p => {
+                                return { label: p.name, value: p.uniqueName };
+                            }), _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
+                                return { label: p.name, value: p.uniqueName };
+                            }), 'value');
+
+                            if (activeGroupTaxHierarchy.inheritedTaxes && activeGroupTaxHierarchy.inheritedTaxes.length) {
+                                let inheritedTaxes = _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
+                                let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
+                                // set value in tax group form
+                                setTimeout(() => {
+                                    this.taxGroupForm.setValue({ taxes: allTaxes });
+                                }, 200);
+                            } else {
+                                setTimeout(() => {
+                                    this.taxGroupForm.setValue({ taxes: applicableTaxes });
+                                }, 200);
+                            }
+
+                        } else {
+                            this.companyTaxDropDown = taxes.map(p => {
+                                return { label: p.name, value: p.uniqueName };
+                            });
+                            // set value in tax group form
+                            setTimeout(() => {
+                                this.taxGroupForm.setValue({ taxes: applicableTaxes});
+                            }, 200);
+
+                        }
+                    }
+                } else {
+                    this.companyTaxDropDown = arr;
+                }
+            }
+        });
     }
 
     public ngAfterViewInit() {
@@ -428,24 +440,25 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public async taxHierarchy() {
-        let activeAccount: AccountResponseV2 = null;
-        let activeGroupUniqueName: string = null;
-        this.store.pipe(take(1)).subscribe(s => {
-            if (s.groupwithaccounts) {
-                activeAccount = s.groupwithaccounts.activeAccount;
-                activeGroupUniqueName = s.groupwithaccounts.activeGroupUniqueName;
+        if (this.showTaxes) {
+            let activeAccount: AccountResponseV2 = null;
+            let activeGroupUniqueName: string = null;
+            this.store.pipe(take(1)).subscribe(s => {
+                if (s.groupwithaccounts) {
+                    activeAccount = s.groupwithaccounts.activeAccount;
+                    activeGroupUniqueName = s.groupwithaccounts.activeGroupUniqueName;
+                }
+            });
+            if (activeAccount) {
+                //
+                this.store.dispatch(this.companyActions.getTax());
+                this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
+            } else {
+                this.store.dispatch(this.companyActions.getTax());
+                this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroupUniqueName));
+                this.showEditTaxSection = true;
             }
-        });
-        if (activeAccount) {
-            //
-            this.store.dispatch(this.companyActions.getTax());
-            this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
-        } else {
-            this.store.dispatch(this.companyActions.getTax());
-            this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroupUniqueName));
-            this.showEditTaxSection = true;
         }
-
     }
 
     public applyTax() {

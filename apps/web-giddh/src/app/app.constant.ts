@@ -215,3 +215,9 @@ export enum AdjustedVoucherType {
     AdvanceReceipt = 'advance-receipt',
     Sales = 'sal'
 }
+
+/** Collection of search field default text for empty results */
+export enum SearchResultText {
+    NewSearch = 'Type to search a/c',
+    NotFound = 'No results found'
+}

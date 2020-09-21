@@ -23,7 +23,7 @@
         padding-left: 15px;
         position: relative;
         label {
-            line-height: 2.3;
+            line-height: 1.3;
         }
         .inner-container {
             max-width: 1120px;
@@ -119,9 +119,9 @@
             }
             .invoice-due-date {
                 position: absolute;
-                width: 100%;
+                width: 435px;
                 left: 0;
-                margin-left: 48%;
+                margin-left: 3%;
                 display: flex;
                 align-items: center;
                 input{
@@ -267,9 +267,14 @@
     padding: 0 8px;
 }
 
-.list-item {
-    font-size: 14px;
-}
+
+    .list-item {
+        font-size: 14px;
+        border-bottom: 1px solid $very-light-gray;
+        display:flex !important;
+    }
+    
+
 
 .fs12 {
     font-size: 12px;
@@ -277,6 +282,10 @@
 
 .fs11 {
     font-size: 11px;
+}
+
+.w-100{
+    width:100%;
 }
 
 .table-section {
@@ -1051,6 +1060,16 @@ span.eligible-ITC {
             display: block !important;
         }
     }
+    .height-row{
+        height: 36px;
+    }
+
+    .invoice-due-date{
+        .d-flex{
+            align-items: center;
+        }
+    }
+
 }
 @media (max-width: 990px) {
     .wrap-billing-address .bill-add {
@@ -1286,5 +1305,13 @@ span.eligible-ITC {
     }
     .total-amount-description .table-section .table-row .figure-cell {
         padding-right: 20px !important;
+    }
+}
+
+@media (max-width:1200px){
+    .invoice-due-date {
+        position: relative !important;
+        width: 100% !important;
+        margin-left: 0% !important;
     }
 }

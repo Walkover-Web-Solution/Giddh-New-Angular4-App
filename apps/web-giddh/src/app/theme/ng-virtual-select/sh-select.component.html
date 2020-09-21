@@ -15,28 +15,30 @@
             </ng-container>
 
             <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
-            <input type="text" class="pdL1 form-control" [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0"
+            <input type="text" autocomplete="disabled" class="pdL1 form-control" [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0"
                 (click)="show($event);" [placeholder]="selectedValues?.length > 0 && !showCheckbox ? filter : placeholder"
-                [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
+                [(ngModel)]="filter" (ngModelChange)="handleInputChange($event)">
         </div>
         <!--endregion-->
 
         <!--region single-->
         <!-- removing this ( (blur)="filterInputBlur($event)" ) events because scrolling is not working -->
-        <input type="text" [attr.readonly]="readonlyInput" class="form-control " #inputFilter tabindex="0"
+        <input type="text" autocomplete="disabled" [attr.readonly]="readonlyInput" class="form-control " #inputFilter tabindex="0"
             *ngIf="!multiple" [hidden]="((!isOpen || !isFilterEnabled))" (click)="show($event);"
-            [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)"
+            (focus)="subscribeToQueryChange()"
+            [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="handleInputChange($event)"
             style="padding-right: 14px !important;">
 
         <div (click)="show($event);" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
             <ng-container *ngIf="selectedValues?.length">
                 <div *ngIf="!multiple">
-                    <input type="text" readonly value="{{selectedValues[0].label}}"
+                    <input autocomplete="disabled" type="text" readonly value="{{selectedValues[0].label}}"
                         class="form-control selectedVal cp" />
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">
-                <input [attr.readonly]="readonlyInput" class="form-control focused"
+                <input autocomplete="disabled" [attr.readonly]="readonlyInput" class="form-control focused"
+                    (focus)="subscribeToQueryChange()"
                     (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [disabled]="disabled"
                     [value]="filter" style="padding-right: 13px !important;" />
             </ng-container>
@@ -48,6 +50,7 @@
         (click)="$event.stopPropagation();clear();">&times;</span>
     <sh-select-menu #menuEle [isOpen]="isOpen" [rows]="rows" [selectedValues]="selectedValues"
         [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)"
+        [isPaginationEnabled]="isPaginationEnabled" (scrollEnd)="reachedEnd()"
         (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink"
         [noResultLinkTemplate]="notFoundLinkTemplate" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText"
         [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight"

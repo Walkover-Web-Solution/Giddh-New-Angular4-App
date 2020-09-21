@@ -1153,14 +1153,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                         }
                     });
                     this.sundryCreditorsAccounts = cloneDeep(res.body.results);
-                    this.selectedAccountsList = [];
                     this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(element => {
                         let indexOfItem = this.selectedCheckedContacts.indexOf(element.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
                         } else {
                             element.isSelected = true;
-                            this.selectedAccountsList.push(element);
                         }
                         return element;
                     });

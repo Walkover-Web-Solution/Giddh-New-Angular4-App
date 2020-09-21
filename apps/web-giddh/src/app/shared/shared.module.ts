@@ -81,6 +81,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { GiddhDatepickerComponent } from '../theme/giddh-datepicker/giddh-datepicker.component';
 import { MatNativeDateModule, MAT_DATE_FORMATS, NativeDateAdapter, DateAdapter } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
+import { RevisionHistoryComponent } from './revision-history/revision-history.component';
+import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
+import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
+import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -166,7 +170,10 @@ export class PickDateAdapter extends NativeDateAdapter {
         DatepickerWrapperComponent,
         LoaderComponent,
         ProformaAddBulkItemsComponent,
-        GiddhDatepickerComponent
+        GiddhDatepickerComponent,
+        RevisionHistoryComponent,
+        PurchaseOrderPreviewModalComponent,
+        PurchaseSendEmailModalComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -207,7 +214,8 @@ export class PickDateAdapter extends NativeDateAdapter {
         MatDatepickerModule,
         MatFormFieldModule,
         MatNativeDateModule,
-        MatInputModule
+        MatInputModule,
+        PdfJsViewerModule
     ],
     exports: [
         CommonModule,
@@ -255,7 +263,10 @@ export class PickDateAdapter extends NativeDateAdapter {
         DatepickerWrapperComponent,
         LoaderComponent,
         ProformaAddBulkItemsComponent,
-        GiddhDatepickerComponent
+        GiddhDatepickerComponent,
+        RevisionHistoryComponent,
+        PurchaseOrderPreviewModalComponent,
+        PurchaseSendEmailModalComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

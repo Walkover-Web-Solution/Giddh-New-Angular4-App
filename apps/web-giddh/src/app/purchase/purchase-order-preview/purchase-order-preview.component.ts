@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, Input, OnChanges, SimpleChanges, ViewChild, OnDestroy, AfterViewInit, ElementRef, EventEmitter, Output } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -13,6 +13,9 @@ import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonActions } from '../../actions/common.actions';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
+import { PdfJsViewerComponent } from 'ng2-pdfjs-viewer';
+import { base64ToBlob } from '../../shared/helpers/helperFunctions';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'purchase-order-preview',
@@ -31,10 +34,14 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('searchElement') public searchElement: ElementRef;
     /* Confirm box */
     @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
+    /* Instance of PDF viewer*/
+    @ViewChild(PdfJsViewerComponent) public pdfViewer: PdfJsViewerComponent;
+    /** Attached document preview container instance */
+    @ViewChild('attachedDocumentPreview') attachedDocumentPreview: ElementRef;
     /* Modal instance */
     public modalRef: BsModalRef;
     /* This will hold state of activity history aside pan */
-    public activityHistoryAsideState: string = 'out';
+    public revisionHistoryAsideState: string = 'out';
     /* This will hold purchase order data */
     public purchaseOrder: any = {};
     /* Send email request params object */
@@ -63,6 +70,14 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public shouldShowTrnGstField: boolean = false;
     /* Onboarding params object */
     public onboardingFormRequest: OnboardingFormRequest = { formName: 'onboarding', country: '' };
+    /* This will hold count of pages in pdf */
+    public pageCount: number = 0;
+    /* This will hold if pdf preview loaded */
+    public pdfPreviewLoaded: boolean = false;
+    /* This will hold if pdf preview has error */
+    public pdfPreviewHasError: boolean = false;
+    /** Stores the BLOB of attached document */
+    private attachedDocumentBlob: Blob;
 
     constructor(private store: Store<AppState>, private modalService: BsModalService, public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public router: Router, private commonActions: CommonActions, private invoiceActions: InvoiceActions) {
         this.getInventorySettings();
@@ -164,6 +179,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             return;
         }
 
+        this.pdfPreviewHasError = false;
+        this.pdfPreviewLoaded = false;
         this.isLoading = true;
         let getRequest = { companyUniqueName: this.companyUniqueName, poUniqueName: this.purchaseOrderUniqueName };
         this.purchaseOrderService.getPreview(getRequest).subscribe(response => {
@@ -171,6 +188,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             if (response) {
                 if (response.status === "success") {
                     this.purchaseOrder = response.body;
+
+                    this.getPdf();
 
                     if (this.purchaseOrder && this.purchaseOrder.account && this.purchaseOrder.account.billingDetails.country) {
                         this.showGstAndTrnUsingCountry(this.purchaseOrder.account.billingDetails.country.countryCode, this.purchaseOrder.account.billingDetails.country.countryName);
@@ -181,7 +200,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                     this.toaster.errorToast(response.message);
                 }
             } else {
-                this.router.navigate(['/pages/purchase-management/purchase-orders']);
+                this.router.navigate(['/pages/purchase-management/purchase']);
             }
         });
     }
@@ -196,7 +215,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         if (event) {
             event.preventDefault();
         }
-        this.activityHistoryAsideState = this.activityHistoryAsideState === 'out' ? 'in' : 'out';
+        this.revisionHistoryAsideState = this.revisionHistoryAsideState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
 
@@ -206,7 +225,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public toggleBodyClass(): void {
-        if (this.activityHistoryAsideState === 'in') {
+        if (this.revisionHistoryAsideState === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');
@@ -271,7 +290,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                 if (res.status === 'success') {
                     this.closeConfirmationPopup();
                     this.toaster.successToast(res.body);
-                    this.router.navigate(['/pages/purchase-management/purchase-orders']);
+                    this.router.navigate(['/pages/purchase-management/purchase']);
                 } else {
                     this.closeConfirmationPopup();
                     this.toaster.errorToast(res.message);
@@ -372,5 +391,99 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public getOnboardingForm(countryCode): void {
         this.onboardingFormRequest.country = countryCode;
         this.store.dispatch(this.commonActions.GetOnboardingForm(this.onboardingFormRequest));
+    }
+
+    /**
+     * This will convert the purchase order to bill
+     *
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public convertToBill(): void {
+        let purchaseNumbers = [this.purchaseOrder.number];
+        let bulkUpdateGetParams = { action: "create_purchase_bill", companyUniqueName: this.purchaseOrder.company.uniqueName };
+        let bulkUpdatePostParams = { purchaseNumbers: purchaseNumbers };
+
+        this.purchaseOrderService.bulkUpdate(bulkUpdateGetParams, bulkUpdatePostParams).subscribe((res) => {
+            if (res) {
+                if (res.status === 'success') {
+                    this.toaster.successToast(res.body);
+                } else {
+                    this.toaster.errorToast(res.message);
+                }
+            }
+        });
+    }
+
+    /**
+     * This will get pdf preview
+     *
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public getPdf(): void {
+        let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.purchaseOrder.account.uniqueName, poUniqueName: this.purchaseOrderUniqueName };
+
+        this.purchaseOrderService.getPdf(getRequest).subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
+                this.attachedDocumentBlob = blob;
+                this.pdfViewer.pdfSrc = blob;
+                this.pdfViewer.showSpinner = true;
+                this.pdfViewer.refresh();
+                this.pdfPreviewLoaded = true;
+            } else {
+                this.pdfPreviewHasError = true;
+            }
+        });
+    }
+
+    /**
+     * Callback for pages loaded
+     *
+     * @param {number} count
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public pagesLoaded(count: number): void {
+        this.pageCount = count;
+    }
+
+    /**
+     * This will download the pdf
+     *
+     * @returns {void}
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public downloadFile(): void {
+        if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
+            return;
+        }
+        saveAs(this.attachedDocumentBlob, 'purchaseorder.pdf');
+    }
+
+    /**
+     * This will print the voucher
+     *
+     * @returns {void}
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public printVoucher(): void {
+        if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
+            return;
+        }
+        if (this.pdfViewer && this.pdfViewer.pdfSrc) {
+            this.pdfViewer.startPrint = true;
+            this.pdfViewer.refresh();
+            this.pdfViewer.startPrint = false;
+        } else if (this.attachedDocumentPreview) {
+            const windowWidth = window.innerWidth
+                || document.documentElement.clientWidth
+                || document.body.clientWidth
+                || 0;
+            const left = (windowWidth / 2) - 450;
+            const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
+            printWindow.document.write((this.attachedDocumentPreview.nativeElement as HTMLElement).innerHTML);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+        }
     }
 }

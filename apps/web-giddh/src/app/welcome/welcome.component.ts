@@ -240,6 +240,10 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.isItemUpdateInProgress = this.itemOnBoardingDetails && this.itemOnBoardingDetails.isItemUpdateInProgress;
             });
 
+        this.store.pipe(select(appState => appState.session.isCompanyCreationInProcess), takeUntil(this.destroyed$)).subscribe(data => {
+            this.isCreateCompanyInProgress = data;
+        });
+
         if (this.isItemUpdateInProgress) {
             this.company.name = (this.itemDetails && this.itemDetails.name) ? this.itemDetails.name : '';
             this.company.phoneCode = (this.itemDetails && this.itemDetails.mobileNumber) ? this.getCallingCode(this.itemDetails.mobileNumber) : '';
@@ -249,7 +253,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.company.baseCurrency = (this.itemDetails && this.itemDetails.currencyCode) ? this.itemDetails.currencyCode : '';
             this.prepareWelcomeForm();
         } else {
-            this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
+            this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), take(1)).subscribe(res => {
                 if (res) {
                     this.isbranch = res.isBranch;
                     this.createNewCompany = res;
@@ -338,7 +342,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (this.currentTaxList[tax] !== undefined && this.selectedTaxes.indexOf(tax) === -1) {
                     this.selectedTaxes.push(tax);
 
-                    let matchedIndex = this.currentTaxList[tax];
+                    let matchedIndex = this.taxesList.findIndex(listedTax => listedTax.value === tax);
                     if (matchedIndex > -1) {
                         this.taxesList[matchedIndex].isSelected = true;
                     }
@@ -385,6 +389,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this._generalService.createNewCompany = this.createNewCompanyPreparedObj;
             this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreparedObj));
             setTimeout(() => {
+                this.company.contactNo = this.getFormattedContactNumber(this.company.contactNo);
+                this.createNewCompanyPreparedObj.contactNo = this.company.contactNo ? this.company.contactNo : '';
                 this.createCompany();
             }, 100);
             //this._router.navigate(['select-plan']);
@@ -634,6 +640,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     });
                 }
                 if (res.applicableTaxes) {
+                    this.taxesList = [];
                     Object.keys(res.applicableTaxes).forEach(key => {
                         if (res.applicableTaxes[key]) {
                             this.taxesList.push({

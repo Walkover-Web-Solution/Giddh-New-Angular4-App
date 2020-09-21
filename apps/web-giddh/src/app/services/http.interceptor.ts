@@ -2,13 +2,17 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } fr
 import { Injectable } from '@angular/core';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { Observable, of } from 'rxjs';
+import { LoaderService } from '../loader/loader.service';
 
 @Injectable()
 export class GiddhHttpInterceptor implements HttpInterceptor {
 
     private isOnline: boolean = navigator.onLine;
 
-    constructor(private _toasterService: ToasterService) {
+    constructor(
+        private _toasterService: ToasterService,
+        private loadingService: LoaderService
+    ) {
         window.addEventListener('online', () => {
             this.isOnline = true;
         });
@@ -24,6 +28,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
             setTimeout(() => {
                 this._toasterService.warningToast('Please check your internet connection.', 'Internet disconnected');
             }, 100);
+            this.loadingService.hide();
             if (request.body && request.body.handleNetworkDisconnection) {
                 return of(new HttpResponse({ status: 200, body: { status: 'no-network' } }));
             } else {

@@ -10,10 +10,12 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
+import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
 
 @Component({
     selector: 'share-account-modal',
-    templateUrl: './share-account-modal.component.html'
+    templateUrl: './share-account-modal.component.html',
+    styleUrls: [`./share-account-modal.component.scss`]
 })
 
 export class ShareAccountModalComponent implements OnInit, OnDestroy {
@@ -22,7 +24,8 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     public activeAccount$: Observable<AccountResponseV2>;
     public activeAccountSharedWith$: Observable<ShareRequestForm[]>;
     public allPermissions$: Observable<GetAllPermissionResponse[]>;
-
+    /** Email id validation regex pattern */
+    public giddhEmailRegex = GIDDH_EMAIL_REGEX;
     @Output() public closeShareAccountModal: EventEmitter<any> = new EventEmitter();
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

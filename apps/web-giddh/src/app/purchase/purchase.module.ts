@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { DatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -11,7 +12,10 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 import { InvoiceRoutingModule } from '../invoice/invoice.routing.module';
-import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
+import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
+import {
+    GenericAsideMenuAccountModule,
+} from '../shared/generic-aside-menu-account/generic-aside-menu-account.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -23,8 +27,9 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { CreatePurchaseOrderComponent } from './create-purchase-order/create-purchase-order.component';
-import { OrderHistoryComponent } from './order-history/order-history.component';
-import { PurchaseAdvanceSearchComponent } from './purchase-advance-search/purchase-advance-search.component';
+import {
+    PurchaseAdvanceSearchComponent,
+} from './purchase-advance-search/purchase-advance-search.component';
 import {
     AsideMenuPurchaseInvoiceSettingComponent,
 } from './purchase-invoice/aside-menu/aside-menu-purchase-invoice-setting.component';
@@ -33,7 +38,6 @@ import { ReconcileDesignComponent } from './purchase-invoice/reconcileDesign/rec
 import { PurchaseOrderPreviewComponent } from './purchase-order-preview/purchase-order-preview.component';
 import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
 import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
-import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { PurchaseSettingComponent } from './purchase-setting/purchase-setting.component';
 import { PurchaseComponent } from './purchase.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
@@ -48,10 +52,8 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
         AsideMenuPurchaseInvoiceSettingComponent,
         ReconcileDesignComponent,
         PurchaseRecordComponent,
-        OrderHistoryComponent,
         PurchaseSettingComponent,
-        PurchaseAdvanceSearchComponent,
-        PurchaseSendEmailModalComponent
+        PurchaseAdvanceSearchComponent
     ],
     imports: [
         PurchaseRoutingModule,
@@ -76,7 +78,9 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
         CurrencyModule,
         NgxMaskModule.forRoot(),
         TaxControlModule,
-        DiscountControlModule
+        DiscountControlModule,
+        ProformaInvoiceModule,
+        PdfJsViewerModule
     ],
     entryComponents: [],
     exports: [
