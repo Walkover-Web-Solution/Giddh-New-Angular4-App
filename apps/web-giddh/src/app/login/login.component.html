@@ -25,7 +25,7 @@
                                         *ngIf="loginUsing === 'userName'"
                                         [hidden]="isLoginWithPasswordSuccessNotVerified$ | async">
                                         <div class="clearfix">
-                                            <input class="form-control mrB1" formControlName="uniqueKey" type="text"
+                                            <input class="form-control mr-b1" formControlName="uniqueKey" type="text"
                                                 placeholder="Email Id" autocomplete="new-email" />
                                             <input class="form-control" type="password" formControlName="password"
                                                 placeholder="Password" autocomplete="new-password" />
@@ -42,7 +42,7 @@
                                         id="signupVerifyForm" [formGroup]="signupVerifyForm" autocomplete="off">
                                         <div class="clearfix">
 
-                                            <input class="form-control mrB1" formControlName="verificationCode"
+                                            <input class="form-control mr-b1" formControlName="verificationCode"
                                                 type="text" placeholder="Enter verification code here" required>
                                             <div class="clearfix mrB2">
                                                 <button
@@ -138,7 +138,7 @@
                     <h1 class="brand-heading arvo">Enter your accounting space</h1>
 
                     <div id="box" class="text-uppercase">
-                        <div class="clearfix mrB1">
+                        <div class="clearfix mr-b1">
                             <p class="lead ">Sign In or register</p>
                         </div>
                         <button type="login" class="btn sharp btn-block btn-lg btn-login google" (click)="signInWithProviders('google')">

@@ -225,15 +225,15 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="bdrT clearfix pdT1 mrT1 mrB1 row">
+                        <div class="bdrT clearfix pdT1 mrT1 mr-b1 row">
                             <span class="col-xs-7 col-sm-7"><strong>Total Manufacturing Expense:</strong></span>
                             <span class="col-xs-5 col-sm-5 text-right"><strong>{{ getTotal('otherExpenses', 'amount') | number:'1.0-2' }}</strong></span>
                         </div>
-                        <div class="mrB1 clearfix row">
+                        <div class="mr-b1 clearfix row">
                             <span class="col-xs-7 col-sm-7"><strong>Grand Total:</strong></span>
                             <span class="col-xs-5 col-sm-5 text-right"><strong>{{ (getTotal('otherExpenses', 'amount') + getTotal('linkedStocks', 'amount')) | number:'1.0-2' }}</strong></span>
                         </div>
-                        <div class="mrB1 clearfix row">
+                        <div class="mr-b1 clearfix row">
                             <span class="col-xs-7 col-sm-7"><strong>Cost per {{selectedProductName}}:</strong></span>
                             <span class="col-xs-5 col-sm-5 text-right"><strong>{{ getCostPerProduct() | number:'1.0-2'}}</strong></span>
                         </div>

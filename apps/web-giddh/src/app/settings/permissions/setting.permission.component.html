@@ -1,18 +1,18 @@
 <div class=" pdT1 pdB2">
-	<h3 class="mrB1"><strong>Give Permission to:</strong></h3>
+	<h3 class="mr-b1"><strong>Give Permission to:</strong></h3>
 	<setting-permission-form [userdata]="null" [isLblShow]="false" [isUpdtCase]="false" [isHorizntl]="true"
 		(onSubmitForm)="submitPermissionForm($event)"></setting-permission-form>
 </div>
 
 <div>
-	<h3 class="mrB1"><strong>Users</strong></h3>
+	<h3 class="mr-b1"><strong>Users</strong></h3>
 	<div class="box" *ngIf="currentUser">
 		<div *ngFor="let usrGrp of usersList">
 			<div class="user_list">
 				<div class="row">
 					<div class="col-md-2 col-sm-6 user">
 						<div class="ellp">
-							<div class="ellp"><i class="fa fa-user pdR1"></i>{{usrGrp.name}}</div>
+							<div class="ellp"><i class="fa fa-user pd-r1"></i>{{usrGrp.name}}</div>
 							<small class="mrL2">{{usrGrp.rows[0].emailId}}</small>
 						</div>
 					</div>

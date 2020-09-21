@@ -61,7 +61,7 @@
                             </td>
 
                             <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]" data-title="Applied From">
-                                <div *ngFor="let t of tax.taxDetail; let j = index; let last = last" class="mrB1">
+                                <div *ngFor="let t of tax.taxDetail; let j = index; let last = last" class="mr-b1">
                                     <!-- <input type="text" class="form-control" [(ngModel)]="t.date" name="tax_date_{{i}}_{{j}}"> -->
                                     <div class="input-group">
                                         <input type="text" [ngModel]="moment(t.date).format('DD-MM-YYYY')"
@@ -94,7 +94,7 @@
                             </td>
 
                             <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]">
-                                <div class="input-group mrB1"
+                                <div class="input-group mr-b1"
                                     *ngFor="let t of tax.taxDetail; let j = index; let last = last">
                                     <input type="text" class="form-control" [(ngModel)]="t.taxValue"
                                         name="tax_taxValue_{{i}}_{{j}}">

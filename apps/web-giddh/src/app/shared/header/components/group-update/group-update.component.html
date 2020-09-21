@@ -73,7 +73,7 @@
 
 
 <!--move group-->
-<div class="horizontal-form manage-group-account-form form-group mrB1 clearfix" *ngIf="(activeGroup$ | async) && !(activeGroup$ | async)?.fixed">
+<div class="horizontal-form manage-group-account-form form-group mr-b1 clearfix" *ngIf="(activeGroup$ | async) && !(activeGroup$ | async)?.fixed">
     <form name="moveGroupForm" class="col-xs-12 col-sm-12" novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
         <label class="d-block">Move to group</label>
         <span>

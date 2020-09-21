@@ -15,17 +15,16 @@
                                         {{  (selectedCompany | async)?.nameAlias }} )</span>
                                 </ng-template>
                                 <!-- <span class="icon-dots-three-vertical"></span> -->
-                                <div class="cText">
-                                    <span class="cName ellp pdR1">{{ ((selectedCompany | async)?.name) | slice: 0 : 1}}
+                                <div class="c-text">
+                                    <span class="c-name ellp pd-r1">{{ ((selectedCompany | async)?.name) | slice: 0 : 1}}
                                     </span>
 
                                     <div class="company-name-finance-year" placement="bottom">
-                                        <span class=" ellp pdR1">{{ ((selectedCompany | async)?.name)}}
+                                        <span class=" ellp pd-r1">{{ ((selectedCompany | async)?.name)}}
                                         </span>
 
-                                        <div class="unique-name-financial-year"> <span
-                                                *ngIf="(selectedCompany | async)?.nameAlias"
-                                                style="font-size:12px;color:#01A9F4;">
+                                        <div class="unique-name-financial-year"> <span class="name-year"
+                                                *ngIf="(selectedCompany | async)?.nameAlias">
                                                 ({{ (selectedCompany | async)?.nameAlias }})
                                             </span>
                                             <span
@@ -73,7 +72,7 @@
                                                 <ul class="sub-list"
                                                     *ngIf="companyListForFilter && companyListForFilter.length">
 
-                                                    <li class="cmp posrelative headerTooltip"
+                                                    <li class="cmp posrelative header-tooltip"
                                                         *ngFor="let cmp of companyListForFilter; let i = index"
                                                         [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
                                                         (keydown.enter)="changeCompany(cmp.uniqueName)"
@@ -92,11 +91,11 @@
                                                                     *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span>
                                                             </span>
 
-                                                            <img class="pull-right permission_icon"
+                                                            <img class="pull-right permission-icon"
                                                                 *ngIf="hoveredIndx !== i && cmp.createdBy.email !== (user$ | async)?.email"
                                                                 src="assets/images/users.svg">
 
-                                                            <img class="pull-right permission_icon"
+                                                            <img class="pull-right permission-icon"
                                                                 *ngIf="hoveredIndx === i && cmp.createdBy.email !== (user$ | async)?.email"
                                                                 src="assets/images/users-white.svg">
 
@@ -111,7 +110,7 @@
 
                                         <li class="create-company-btn">
                                             <button href="javascript:void(0)" (click)="createNewCompany()"
-                                                class="btn-link pd0 btn">Create
+                                                class="btn-link pd-0 btn">Create
                                                 Company
                                             </button>
                                         </li>
@@ -119,21 +118,21 @@
                                     </ul>
                                 </li>
 
-                                <li role="separator" class="divider" style="width:100%"></li>
+                                <li role="separator" class="divider width-100"></li>
 
-                                <li class="mrB1" *ngIf="!isMobileSite">
+                                <li class="mr-b1" *ngIf="!isMobileSite">
                                     <a [tooltip]="userEmail" placement="top" href="javascript:void(0)"
                                         (click)="analyzeMenus($event, '/pages/user-details', { tab: 'profile', tabIndex: 1 })"
                                         class="oh">
-                                        <span class="user_circle pull-left" *ngIf="!userAvatar">
+                                        <span class="user-circle pull-left" *ngIf="!userAvatar">
                                             <span>{{userName | uppercase}}</span>
                                         </span>
-                                        <span class="user_circle pull-left" *ngIf="userAvatar"
+                                        <span class="user-circle pull-left" *ngIf="userAvatar"
                                             [style.background]="'transparent'">
                                             <img src="{{userAvatar}}" alt="" />
                                         </span>
-                                        <div class="pull-left userName_wrap ellp">{{ userFullName }}
-                                            <small class="grey_clr">Profile</small>
+                                        <div class="pull-left user-name-wrap ellp">{{ userFullName }}
+                                            <small class="grey-clr">Profile</small>
                                         </div>
                                     </a>
                                 </li>
@@ -153,12 +152,12 @@
                                 <!-- <li>
             <a href="http://faq.giddh.com" target="_blank">Help</a>
             </li> -->
-                                <li role="separator" class="divider" style="width:100%"></li>
+                                <li role="separator" class="divider width-100"></li>
                                 <li>
                                     <a href="javascript:void(0)" (click)="logout()">Logout</a>
                                 </li>
-                                <li role="separator" class="divider" style="width:100%"></li>
-                                <li class="app_list ">
+                                <li role="separator" class="divider width-100"></li>
+                                <li class="app-list ">
                                     <ul>
                                         <h6>Downloads</h6>
                                         <li>
@@ -203,9 +202,9 @@
                                         )</span>
                                 </ng-template>
                                 <!-- <span class="icon-dots-three-vertical"></span> -->
-                                <div class="cText no-padding">
+                                <div class="c-text no-padding">
 
-                                    <span class="cName ellp pdR1 pdL1 alice">{{companyInitials}}</span>
+                                    <span class="c-name ellp pd-r1 pd-l1 alice">{{companyInitials}}</span>
 
                                     <img src="assets/images/giddh-white-logo.svg" class="giddh-logo">
                                 </div>
@@ -223,7 +222,7 @@
                 <div class="col-sm-9">
                     <div class="pull-right right-details">
                         <ul class="nav universal-date mr-15" *ngIf="(selectedCompany | async)">
-                            <li class="border-none pr-15" [ngClass]="{'notification': !isMobileSite}">
+                            <li class="border-none" [ngClass]="{'notification': !isMobileSite}">
                                 <img src="{{imgPath}}notification.svg">
                             </li>
                             <li [hidden]="isTodaysDateSelected" class="border-none pl-0">
@@ -287,11 +286,11 @@
                             )</span>
                     </ng-template>
                     <!-- <span class="icon-dots-three-vertical"></span> -->
-                    <div class="cText d-flex">
-                        <span class="cName ellp pdR1 alice">{{companyInitials}}</span>
+                    <div class="c-text d-flex">
+                        <span class="c-name ellp pd-r1 alice">{{companyInitials}}</span>
 
                         <div class="company-name-finance-year" placement="bottom">
-                            <span class=" ellp pdR1">{{ ((selectedCompany | async)?.name)}}
+                            <span class=" ellp pd-r1">{{ ((selectedCompany | async)?.name)}}
                             </span>
 
                             <div class="unique-name-financial-year"> <span *ngIf="(selectedCompany | async)?.nameAlias"
@@ -328,7 +327,7 @@
                 <!-- Accounts menu -->
                 <ul class="left_fixed_header mrT1" [ngClass]="{'open':sideMenu.isopen}"
                     *ngIf="(selectedCompany | async)">
-                    <h6 class="mrB1">ACCOUNTS
+                    <h6 class="mr-b1">ACCOUNTS
 
                         <img src="{{imgPath}}plus-around-icon.svg" *ngIf="!isMobileSite"
                             (click)="showManageGroupsModal()" tooltip="Create account" class="pull-right"
@@ -356,7 +355,7 @@
                 <!-- Main menu -->
                 <ul class="left_fixed_header mrT4" [ngClass]="{'open':sideMenu.isopen}"
                     *ngIf="(selectedCompany | async)">
-                    <h6 class="mrB1">MENU
+                    <h6 class="mr-b1">MENU
                         <a (click)="navigateToAllModules()">
                             <img src="{{imgPath}}angle-round-icon.svg" class="pull-right" *ngIf="!isMobileSite"
                                 tooltip="Menu" placement="bottom" container="body">
@@ -459,7 +458,7 @@
 <div class="padding-top-fixed-mobile">
     <header class="clearfix header-container mobileHeader">
         <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
-            <div class="container-fluid  mrB1 ">
+            <div class="container-fluid  mr-b1 ">
                 <div class="upper-layer-header">
                     <ul class="nav navbar-nav">
                         <!-- (isOpenChange)="sideBarStateChange($event)" -->
@@ -496,9 +495,9 @@
                                         </button>
                                     </li>
                                     <li class="mrT2 text-center mrB2">
-                                        <!-- <span><a href="tel:02268210057" target="_blank" class="grey_clr">022-68210057</a></span> -->
+                                        <!-- <span><a href="tel:02268210057" target="_blank" class="grey-clr">022-68210057</a></span> -->
                                         <p><a href="mailto:support@giddh.com" target="_blank"
-                                                class="grey_clr">support@giddh.com</a></p>
+                                                class="grey-clr">support@giddh.com</a></p>
                                     </li>
                                     <li class="row text-center">
                                         <button class="btn btn-link tdUndr" (click)="openScheduleCalendlyModel()">Talk
@@ -507,7 +506,7 @@
                                         <span class="text-center"><a href="http://faq.giddh.com/" target="_blank"
                                                 class="btn btn-link tdUndr">FAQs</a></span>
                                     </li>
-                                    <!-- <h3 class="mrT2 mrB2 fs20 text-center grey_clr">FAQs?</h3> -->
+                                    <!-- <h3 class="mrT2 mrB2 fs20 text-center grey-clr">FAQs?</h3> -->
 
                                 </ul>
                             </div>
@@ -579,7 +578,7 @@
 <!--add and manage group account modal -->
 <div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }"
     class="modal fade full-screen-modal manage-account-popup addManageGroupAcc" role="dialog" (onShown)="onShown()">
-    <div class="modal-dialog modal-xl modal-liq90 mr0 width100" style="height: 100%;">
+    <div class="modal-dialog modal-xl modal-liq90 mr0 width100 h-100">
         <div class="modal-content full-screen-modal">
             <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
             </ng-template>
@@ -746,9 +745,9 @@
 <ng-template #headDropdownMenu>
 
     <li>
-        <div class="cText head-nav">
+        <div class="c-text head-nav">
             <div class="company-name-finance-year" placement="bottom">
-                <span class=" ellp pdR1">{{ ((selectedCompany | async)?.name)}}
+                <span class=" ellp pd-r1">{{ ((selectedCompany | async)?.name)}}
                 </span>
 
                 <div class="unique-name-financial-year"> <span *ngIf="(selectedCompany | async)?.nameAlias"
@@ -786,13 +785,13 @@
                 </span>
             </div>
 
-            <li style="padding:0px;">
+            <li class="p-0">
 
                 <perfect-scrollbar class="" [scrollIndicators]="true">
 
                     <ul class="sub-list" *ngIf="companyListForFilter && companyListForFilter.length">
 
-                        <li class="cmp posrelative headerTooltip"
+                        <li class="cmp posrelative header-tooltip"
                             *ngFor="let cmp of companyListForFilter; let i = index"
                             [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
                             (keydown.enter)="changeCompany(cmp.uniqueName)" (click)="changeCompany(cmp.uniqueName)">
@@ -807,11 +806,11 @@
                                 <span container="body" [tooltip]="CompanyBranchname" placement="top">
                                     {{ cmp.name }} <span *ngIf="cmp.nameAlias">({{(cmp.nameAlias)}})</span> </span>
 
-                                <img class="pull-right permission_icon"
+                                <img class="pull-right permission-icon"
                                     *ngIf="hoveredIndx !== i && cmp.createdBy.email !== (user$ | async)?.email"
                                     src="assets/images/users.svg">
 
-                                <img class="pull-right permission_icon"
+                                <img class="pull-right permission-icon"
                                     *ngIf="hoveredIndx === i && cmp.createdBy.email !== (user$ | async)?.email"
                                     src="assets/images/users-white.svg">
 
@@ -836,19 +835,19 @@
         </ul>
     </li>
 
-    <li role="separator" class="divider" style="width:100%"></li>
+    <li role="separator" class="divider width-100"></li>
 
-    <li class="mrB1" *ngIf="!isMobileSite">
+    <li class="mr-b1" *ngIf="!isMobileSite">
         <a [tooltip]="userEmail" placement="top" href="javascript:void(0)"
             (click)="analyzeMenus($event, '/pages/user-details', { tab: 'profile', tabIndex: 1 })" class="oh">
-            <span class="user_circle pull-left" *ngIf="!userAvatar">
+            <span class="user-circle pull-left" *ngIf="!userAvatar">
                 <span>{{userName | uppercase}}</span>
             </span>
-            <span class="user_circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'">
+            <span class="user-circle pull-left" *ngIf="userAvatar" [style.background]="'transparent'">
                 <img src="{{userAvatar}}" alt="" />
             </span>
-            <div class="pull-left userName_wrap ellp">{{ userFullName }}
-                <small class="grey_clr">Profile</small>
+            <div class="pull-left user-name-wrap ellp">{{ userFullName }}
+                <small class="grey-clr">Profile</small>
             </div>
         </a>
     </li>
@@ -862,7 +861,7 @@
     <!-- <li>
 <a href="http://faq.giddh.com" target="_blank">Help</a>
 </li> -->
-    <li role="separator" class="divider" style="width:100%"></li>
+    <li role="separator" class="divider width-100"></li>
     <li class="pb-1">
         <a href="javascript:void(0)" (click)="logout()">Logout</a>
     </li>

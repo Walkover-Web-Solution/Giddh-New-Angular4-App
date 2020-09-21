@@ -240,7 +240,7 @@ body {
     padding-bottom: 10px;
 }
 
-.pdL1 {
+.pd-l1 {
     padding-left: 10px;
 }
 
@@ -248,7 +248,7 @@ body {
     padding-left: 10px !important;
 }
 
-.pdR1 {
+.pd-r1 {
     padding-right: 10px;
 }
 
@@ -348,7 +348,7 @@ body {
     margin-top: 10px;
 }
 
-.mrB1 {
+.mr-b1 {
     margin-bottom: 10px;
 }
 

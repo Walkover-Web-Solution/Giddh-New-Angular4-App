@@ -25,25 +25,25 @@
                         <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
                             <!-- <chart [chart]="currentRatioOption" #currentRatio></chart> -->
                             <highcharts-chart *ngIf="currentRatioChartOptions" [Highcharts]="currentRatioChart" [options]="currentRatioChartOptions"></highcharts-chart>
-                            <h1 class="mrB1">Current Ratio</h1>
+                            <h1 class="mr-b1">Current Ratio</h1>
                             <small>Current Assets /<br /> Current Liabilities</small>
                         </div>
                         <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
                             <!-- <chart [chart]="debtOptions" #debtRatio></chart> -->
                             <highcharts-chart *ngIf="debtOptions" [Highcharts]="debtChart" [options]="debtOptions"></highcharts-chart>
-                            <h1 class="mrB1">Debt Equity Ratio</h1>
+                            <h1 class="mr-b1">Debt Equity Ratio</h1>
                             <small>Current Liab. + <br /> NonCurrent Liab. /<br /> Shareholder's fund</small>
                         </div>
                         <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
                             <!-- <chart [chart]="proprietaryOption" #propreitaryRatio></chart> -->
                             <highcharts-chart *ngIf="proprietaryOption" [Highcharts]="proprietaryChart" [options]="proprietaryOption"></highcharts-chart>
-                            <h1 class="mrB1">Proprietary Ratio</h1>
+                            <h1 class="mr-b1">Proprietary Ratio</h1>
                             <small>Shareholder's fund /<br /> Total Assets</small>
                         </div>
                         <div class="col-md-3 col-sm-12 col-xs-12 text-center ratio-chart-block">
                             <!-- <chart [chart]="fixedAssetOption" #fixedAsset></chart> -->
                             <highcharts-chart *ngIf="fixedAssetOption" [Highcharts]="fixedAssetChart" [options]="fixedAssetOption"></highcharts-chart>
-                            <h1 class="mrB1">Fixed Assets Ratio</h1>
+                            <h1 class="mr-b1">Fixed Assets Ratio</h1>
                             <small>Fixed Assets/<br />NonCurrent Liab. + <br /> Shareholder's fund</small>
                         </div>
                     </div>

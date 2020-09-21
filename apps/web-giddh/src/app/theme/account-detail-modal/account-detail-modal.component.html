@@ -77,10 +77,10 @@
                 </div>
 
                 <div class="modal-body pdL2 pdR2 clearfix" style="padding: 0px !important;">
-                    <h1 class="mrB1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:</h1>
-                    <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject
+                    <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:</h1>
+                    <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject
                         [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
-                    <h1 class="mrB1" style="margin-top:15px;">Type message body:</h1>
+                    <h1 class="mr-b1" style="margin-top:15px;">Type message body:</h1>
                     <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4"
                         style="resize:none;" placeholder="start typing your message here"></textarea>
                     <small class="mrT mrB grey" style="margin-top:15px;display: block">Tip: Click on the tabs below to

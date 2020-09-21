@@ -122,7 +122,7 @@ a {
 
 /*typography*/
 
-/*.bold,.cName,.fw600,.dshUl li .title, .dGryHead, .page-title, .total, .stock-grp-list>li>a, label.boldHead, .table-l tr:last-child, .table-container > section > div.row > div:first-child,.account-card > .balances > span.title, .gTblHead, .gTblFoot, .table.invGenTbl > tfoot > tr > th.bold,.widget-text h1, .widget-text h2,.widget-text h3,.widget-text h4,.widget-text h5,.widget-text h6, .a4-section span.bold,.a4-section span.bold span,.ledger-container table th,.midlight_info,.tcount,.subAccBox li a, .load-more, .company-name, .basic>thead>tr>th {
+/*.bold,.c-name,.fw600,.dshUl li .title, .dGryHead, .page-title, .total, .stock-grp-list>li>a, label.boldHead, .table-l tr:last-child, .table-container > section > div.row > div:first-child,.account-card > .balances > span.title, .gTblHead, .gTblFoot, .table.invGenTbl > tfoot > tr > th.bold,.widget-text h1, .widget-text h2,.widget-text h3,.widget-text h4,.widget-text h5,.widget-text h6, .a4-section span.bold,.a4-section span.bold span,.ledger-container table th,.midlight_info,.tcount,.subAccBox li a, .load-more, .company-name, .basic>thead>tr>th {
 font-family: Roboto-Bold;
 } */
 
@@ -237,11 +237,11 @@ aside-menu-account .container-fluid {
     margin: 15px 0;
 }
 
-/* .cText span {
+/* .c-text span {
   display: block;
 } */
 
-/* .cName {
+/* .c-name {
     line-height: 20px;
     min-width: 130px;
     text-transform: uppercase;
@@ -471,7 +471,7 @@ aside-menu-account .container-fluid {
     padding-bottom: 10px;
 }
 
-.pdL1 {
+.pd-l1 {
     padding-left: 10px !important;
 }
 
@@ -479,7 +479,7 @@ aside-menu-account .container-fluid {
     padding-left: 10px !important;
 }
 
-.pdR1 {
+.pd-r1 {
     padding-right: 10px !important;
 }
 
@@ -579,7 +579,7 @@ aside-menu-account .container-fluid {
     margin-top: 10px !important;
 }
 
-.mrB1 {
+.mr-b1 {
     margin-bottom: 10px !important;
 }
 

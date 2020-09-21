@@ -662,8 +662,8 @@
             <div class="row ledger-bottom">
                 <div class="col-md-6 pt-1">
                     <!-- make it functional (Developer end) -->
-                    <div *ngIf="shouldShowWarehouse" class="row mrB1">
-                        <div class="col-sm-6 pdR1">
+                    <div *ngIf="shouldShowWarehouse" class="row mr-b1">
+                        <div class="col-sm-6 pd-r1">
                             <div class="selectWarehouse">
                                 <label class="font-12">Select Warehouse</label>
                                 <sh-select [(ngModel)]="selectedWarehouse" [placeholder]="'Select Warehouse'"
@@ -674,7 +674,7 @@
 
                         <!-- TODO: Add multiple warehouse feature
                             <ng-template [ngIf]="vm.stockTrxEntry">
-                            <div class="col-sm-3 pdL1 pdR1">
+                            <div class="col-sm-3 pd-l1 pd-r1">
                                 <div class="table-amount text-right ">
                                     <label class="font-12">Quantity</label>
                                     <input type="text" name="" class="form-control text-right"
@@ -683,7 +683,7 @@
                                         (change)="vm.inventoryQuantityChanged($event.target.value)" />
                                 </div>
                             </div>
-                            <div class="col-sm-3 pdL1">
+                            <div class="col-sm-3 pd-l1">
                                 <div class="text-right table-amount">
                                     <label class="font-12">Unit</label>
                                     <select class="form-control text-right no-padding"
@@ -860,7 +860,7 @@
                     <div class="pd1 mrB mrT advanced" style="background: #F1F5F8;" *ngIf="showAdvanced">
                         <table class="xs-table-block">
                             <tr>
-                                <td class="select2-parent pdR1">
+                                <td class="select2-parent pd-r1">
                                     <div class="form-group">
                                         <label class="default_clr">Voucher Type</label>
                                         <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true"
@@ -871,7 +871,7 @@
                                     </div>
                                 </td>
 
-                                <td class="pdR1"
+                                <td class="pd-r1"
                                     *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur' || vm.selectedLedger.voucher.shortCode == 'pay')">
                                     <div class="form-group">
                                         <label class="default_clr">Invoice No.</label>
@@ -880,7 +880,7 @@
                                     </div>
                                 </td>
 
-                                <!-- <td class="pdR1" *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'">
+                                <!-- <td class="pd-r1" *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'">
 
                                     <div class="form-group">
 
@@ -907,7 +907,7 @@
 
                                 </td> -->
 
-                                <td class="pdR1" *ngIf="vm.selectedLedger.voucher.shortCode == 'credit note' || vm.selectedLedger.voucher.shortCode == 'debit note'">
+                                <td class="pd-r1" *ngIf="vm.selectedLedger.voucher.shortCode == 'credit note' || vm.selectedLedger.voucher.shortCode == 'debit note'">
                                     <div class="form-group">
                                         <label class="default_clr">{{vm.selectedLedger.voucher.shortCode == 'debit note' ? 'Voucher' : 'Invoice'}} No.</label>
 
@@ -935,7 +935,7 @@
                                     <span class=“remove-invoice-icon”>×</span>
                                     <span class="remove-invoice-label">Remove</span>
                                 </td>
-                                <td class="pdR1">
+                                <td class="pd-r1">
                                     <div class="form-group">
                                         <label class="default_clr">Voucher No.</label>
                                         <input type="text" placeholder="Voucher no." class="form-control"
@@ -950,7 +950,7 @@
                         <table>
                             <tr>
                                 <td *ngIf="(vm.selectedLedger.voucher.shortCode !== 'jr' && vm.selectedLedger.voucher.shortCode !== 'cntr' && vm.selectedLedger.voucher.shortCode !== 'rcpt'
-                                && vm.selectedLedger.voucher.shortCode !== 'advance-receipt')" class="pdR1 pb-1">
+                                && vm.selectedLedger.voucher.shortCode !== 'advance-receipt')" class="pd-r1 pb-1">
                                     <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdjustVoucherSelected" (change)="handleVoucherAdjustment()">
                                     Adjust {{
                                         vm.selectedLedger.voucher.shortCode === 'sal' ? 'Sales' :
@@ -960,10 +960,10 @@
                                         vm.selectedLedger.voucher.shortCode === 'pay' ? 'Payment' : ''
                                     }}
                                 </td>
-                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'advance-receipt' && isAdvanceReceipt" class="pdR1 pb-1">
+                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'advance-receipt' && isAdvanceReceipt" class="pd-r1 pb-1">
                                     <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdjustAdvanceReceiptSelected" (change)="handleVoucherAdjustment()">Adjust Advance Receipt
                                 </td>
-                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt' && !isAdvanceReceipt" class="pdR1 pb-1">
+                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt' && !isAdvanceReceipt" class="pd-r1 pb-1">
                                     <input type="checkbox" name="advanceReceipt" [(ngModel)]="isAdjustReceiptSelected" (change)="handleVoucherAdjustment()">Adjust Receipt
                                 </td>
                             </tr>
@@ -975,7 +975,7 @@
 
                             <tbody>
                                 <tr>
-                                    <td class="pdR1">
+                                    <td class="pd-r1">
                                         <label class="default_clr">Cheque Number</label>
                                         <input type="text" placeholder="XXXX2619" class="form-control"
                                             [(ngModel)]="vm.selectedLedger.chequeNumber" />
@@ -999,7 +999,7 @@
                             <tbody>
 
                                 <tr>
-                                    <td class="pdR1">
+                                    <td class="pd-r1">
                                         <label class="default_clr">Assign Tag</label>
                                         <sh-select [options]="tags$ | async" [isFilterEnabled]="true"
                                             [placeholder]="'Select Tag'" [showClear]="false" [multiple]="true"
