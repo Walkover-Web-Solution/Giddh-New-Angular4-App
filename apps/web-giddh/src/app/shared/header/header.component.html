@@ -404,7 +404,7 @@
 </div>
 
 <header class="clearfix header-container desktop-header"
-    [ngClass]="{'unvisible': companyList.length===0 , 'menu-open':sideMenu.isopen }">
+    [ngClass]="{'unvisible': companyList.length===0 , 'menu_open':sideMenu.isopen }">
     <nav class="navbar ">
         <div class="container-fluid pd-t1 pd-b1">
             <div class="navbar-header">
@@ -457,7 +457,7 @@
 </header>
 <div class="padding-top-fixed-mobile">
     <header class="clearfix header-container mobile-header">
-        <nav class="navbar " [ngClass]="{'menu-open':sideMenu.isopen}">
+        <nav class="navbar " [ngClass]="{'menu_open':sideMenu.isopen}">
             <div class="container-fluid  mr-b1 ">
                 <div class="upper-layer-header">
                     <ul class="nav navbar-nav">
@@ -556,7 +556,7 @@
     </header>
 </div>
 <div class="plan-wrapper" *ngIf="subscribedPlan !== undefined && subscribedPlan.status === 'expired'"
-    [ngClass]="{'menu-open':sideMenu.isopen}">
+    [ngClass]="{'menu_open':sideMenu.isopen}">
     <div class="white-row plan-issue">
         <p><span class="icon-traingle-info"></span> Your {{subscribedPlan.planDetails.duration}}
             {{subscribedPlan.planDetails.durationUnit}} {{subscribedPlan.planDetails.name}} ended on
@@ -565,7 +565,7 @@
     </div>
 </div>
 <div class="plan-wrapper" *ngIf="subscribedPlan !== undefined && subscribedPlan.additionalCharges"
-    [ngClass]="{'menu-open':sideMenu.isopen}">
+    [ngClass]="{'menu_open':sideMenu.isopen}">
     <div class="white-row plan-issue">
         <p> <span class="icon-traingle-info"></span> You have crossed the transactions limit of your assigned plan
             {{subscribedPlan.planDetails.name}} subscribed on {{subscribedPlan.startedAt}}. To continue your accounting
