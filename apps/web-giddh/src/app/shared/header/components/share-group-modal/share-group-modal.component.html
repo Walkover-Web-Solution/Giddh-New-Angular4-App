@@ -5,7 +5,7 @@
     </div>
     <div class="modal-body" id="SharePop">
         <div class="form-group">
-            <h3 class="pdB1">Share with</h3>
+            <h3 class="pd-b1">Share with</h3>
             <div class="add_mailer">
 
                 <!--share group from-->
@@ -23,7 +23,7 @@
                                     {{permission.name}}
                                 </option>
                             </select>
-                            <button class="btn btn-success mrL1 btnShare" type="submit"
+                            <button class="btn btn-success mr-l1 btnShare" type="submit"
                                 [disabled]="shareGroupForm.invalid" (click)="shareGroup()">Share
                             </button>
                         </div>
@@ -32,7 +32,7 @@
                 </form>
 
                 <!--shared with array-->
-                <div class="col-xs-8 pdT1" *ngIf="(activeGroupSharedWith$ | async)?.length">
+                <div class="col-xs-8 pd-t1" *ngIf="(activeGroupSharedWith$ | async)?.length">
                     <div class="row">
                         <ul class="shared_list">
                             <li *ngFor="let val of (activeGroupSharedWith$ | async); let i = index" class="clearfix">

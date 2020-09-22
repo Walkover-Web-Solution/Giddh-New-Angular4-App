@@ -92,7 +92,9 @@ export function tbPlBsReducer(state = initialState, action: CustomActions): TBPl
 
             let data: ProfitLossData = prepareProfitLossData(_.cloneDeep(action.payload));
             if (data) {
-                data.dates = _.cloneDeep(state.pl.data.dates);
+                if(state && state.pl && state.pl.data) {
+                    data.dates = _.cloneDeep(state.pl.data.dates);
+                }
                 addVisibleFlag(data.incArr);
                 addVisibleFlag(data.expArr);
                 return { ...state, pl: { ...state.pl, showLoader: false, data: { ...state.pl.data, ...data } } };

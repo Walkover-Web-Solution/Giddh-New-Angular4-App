@@ -157,7 +157,7 @@
                                     <div class="form-group">
                                         <span class="text-right">
                                             <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)"
-                                                class="grey_clr btn btn-danger">
+                                                class="grey-clr btn btn-danger">
                                                 <i class="icon-cross"> </i> Remove
                                             </a>
                                         </span>
@@ -180,7 +180,7 @@
                 </ng-container>
 
                 <!-- <div class="row">
-                        <div class="col-sm-12"> <button class="btn btn-primary mrT2" (click)="addAddress = !addAddress">+ Add
+                        <div class="col-sm-12"> <button class="btn btn-primary mr-t2" (click)="addAddress = !addAddress">+ Add
                 Address</button></div>
                     </div> -->
 
@@ -371,7 +371,7 @@
 </form>
 <div class="form" *ngIf="isOtherSelectedTab">
     <div>
-        <!-- <div class="col-xs-12 mrB2 selectBox">
+        <!-- <div class="col-xs-12 mr-b2 selectBox">
             <div class="form-group ">
                 <label>Default discount <span
                         class="primary_clr"></span></label>
@@ -437,7 +437,7 @@
                     </div>
                     <small class="clearfix">This option is risky and can not be undone</small>
 
-                    <ul class="accmerge mrT1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
+                    <ul class="accmerge mr-t1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
                         <li *ngFor="let merged of (activeAccount$ | async)?.mergedAccounts.split(',')">
                             <a href="javascript:void(0);" [ngClass]="{'isActive': setAccountForMove === merged}" (click)="setAccountForMoveFunc(merged)">
                                 {{merged}}

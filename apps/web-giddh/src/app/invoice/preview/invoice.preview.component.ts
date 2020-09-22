@@ -87,7 +87,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('searchBox', {static: true}) public searchBox: ElementRef;
     @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent, static: true }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
     @Input() public selectedVoucher: VoucherTypeEnum = VoucherTypeEnum.sales;
-    @ViewChild(InvoicePaymentModelComponent, {static: true}) public invoicePaymentModelComponent: InvoicePaymentModelComponent;
+    @ViewChild(InvoicePaymentModelComponent, {static: false}) public invoicePaymentModelComponent: InvoicePaymentModelComponent;
 
     public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
     public bsConfig: Partial<BsDatepickerConfig> = {

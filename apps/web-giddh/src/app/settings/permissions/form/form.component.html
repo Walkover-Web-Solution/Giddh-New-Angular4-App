@@ -31,9 +31,9 @@
                                 {{selectedTimeSpan}}
                                 <span class="pull-right"><span class="fa fa-caret-down"></span></span>
                             </button>
-                            <section class="dropdown-menu custom_dropdown mrB1 time-span-dropdown" [ngClass]="{'open': showTimeSpan}">
+                            <section class="dropdown-menu custom_dropdown mr-b1 time-span-dropdown" [ngClass]="{'open': showTimeSpan}">
 
-                                <div class="clearfix pd1 option-box">
+                                <div class="clearfix pd-1 option-box">
 
                                     <span class="pd0 mrR3" (click)="isOpenedInModal ? handleTimeSpanChange('daterange'): ''">
                                         <input id="dateRange" class="radio-custom cp ml0" type="radio" name="periodOptions"
@@ -49,7 +49,7 @@
 
                                 </div>
 
-                                <section class="periods container-fluid mrB1"
+                                <section class="periods container-fluid mr-b1"
                                     *ngIf="permissionForm.get('periodOptions').value === 'daterange'">
                                     <div class="row">
                                         <div class="col-sm-12">
@@ -67,7 +67,7 @@
                                     </div>
                                 </section>
 
-                                <section class="periods container-fluid mrB1"
+                                <section class="periods container-fluid mr-b1"
                                     *ngIf="permissionForm.get('periodOptions').value === 'pastperiod'">
                                     <label>Select Past Period</label>
                                     <div class="row">
@@ -97,7 +97,7 @@
                             </button>
                             <section class="dropdown-menu custom_dropdown ip-addresses-dropdown" role="menu"
                                 [ngClass]="{'open': showIPWrap}">
-                                <div class="clearfix option-box pd1">
+                                <div class="clearfix option-box pd-1">
 
                                     <span (click)="isOpenedInModal ? handleIpAddressChange('cidr_range'): ''" class="pd0 mrR3">
                                         <input id="cidrRange" class="radio-custom cp ml0" type="radio" name="ipOptions"
@@ -115,7 +115,7 @@
 
                                 <section formArrayName="allowedCidrs" class="ip-range container-fluid"
                                     *ngIf="permissionForm.get('ipOptions').value === 'cidr_range'">
-                                    <div class="row mrB1"
+                                    <div class="row mr-b1"
                                         *ngFor="let item of permissionForm.get('allowedCidrs')['controls']; let i = index; let l = last"
                                         [formGroupName]="i">
                                         <div class="col-11">
@@ -133,7 +133,7 @@
 
                                 <section formArrayName="allowedIps" class="ip-range container-fluid"
                                     *ngIf="permissionForm.get('ipOptions').value === 'ip_address'">
-                                    <div class="row mrB1"
+                                    <div class="row mr-b1"
                                         *ngFor="let item of permissionForm.get('allowedIps')['controls']; let i = index; let l = last"
                                         [formGroupName]="i">
                                         <div class="col-11">

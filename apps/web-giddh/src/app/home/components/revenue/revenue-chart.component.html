@@ -10,7 +10,7 @@
                                     aria-controls="dropdown-basic">
                                     <span *ngIf="activeGraphType !== undefined">
                                         <strong>{{activeGraphType['uniqueName']}}</strong> </span> <span
-                                        class="icon-arrow-down mrL1"></span>
+                                        class="icon-arrow-down mr-l1"></span>
                                 </span>
                                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
                                     aria-labelledby="button-basic">
@@ -21,7 +21,7 @@
 
                             <div class="refresh-btn">
                                 <i class="icon-refrsh pull-right  pl-15" (click)="refreshChart()"></i>
-                                <span class="this-week pull-right"><span class="icon-collapse-icon mrL1" tooltip="Expand"
+                                <span class="this-week pull-right"><span class="icon-collapse-icon mr-l1" tooltip="Expand"
                                         (click)="showLineChart()"></span> </span>
                                 <ul class="dashboard-option pull-right">
                                     <li class="secondryDarkbg"> <span></span> Last Week</li>
@@ -33,7 +33,7 @@
                     </div>
                     <div class="panel-body pl-0 pr-0 pos-rel">
                         <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-                            <div class="no-data mrT2 loader-main">
+                            <div class="no-data mr-t2 loader-main">
                                 <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
                                 <div class="spinner2">
                                     <div class="cube1"></div>

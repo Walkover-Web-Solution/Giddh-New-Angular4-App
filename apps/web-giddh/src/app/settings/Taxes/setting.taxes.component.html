@@ -1,7 +1,7 @@
 <div class="box clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="selectedTax = null;toggleTaxAsidePane()">
     <div style="display: flex;justify-content: space-between">
-        <h1 class="section-head pdT1" style="margin: 0;padding: 0;line-height: 2;">Added Taxes</h1>
-        <button class="btn btn-sky-blue mrR0" [tooltip]="'Create New Tax'"
+        <h1 class="section-head pd-t1" style="margin: 0;padding: 0;line-height: 2;">Added Taxes</h1>
+        <button class="btn btn-sky-blue mr-0" [tooltip]="'Create New Tax'"
             (click)="selectedTax = null;toggleTaxAsidePane($event)">
             <i class="icon icon-plus" style="font-size:12px"></i> New Tax
         </button>
@@ -61,7 +61,7 @@
                             </td>
 
                             <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]" data-title="Applied From">
-                                <div *ngFor="let t of tax.taxDetail; let j = index; let last = last" class="mrB1">
+                                <div *ngFor="let t of tax.taxDetail; let j = index; let last = last" class="mr-b1">
                                     <!-- <input type="text" class="form-control" [(ngModel)]="t.date" name="tax_date_{{i}}_{{j}}"> -->
                                     <div class="input-group">
                                         <input type="text" [ngModel]="moment(t.date).format('DD-MM-YYYY')"
@@ -94,7 +94,7 @@
                             </td>
 
                             <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]">
-                                <div class="input-group mrB1"
+                                <div class="input-group mr-b1"
                                     *ngFor="let t of tax.taxDetail; let j = index; let last = last">
                                     <input type="text" class="form-control" [(ngModel)]="t.taxValue"
                                         name="tax_taxValue_{{i}}_{{j}}">
@@ -181,7 +181,7 @@
 <!-- region delete Tax confirmation model -->
 <div bsModal #taxConfirmationModel="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
-        <!-- modal-liq90 class is removed for now-->
+        <!-- modal-liq-90 class is removed for now-->
         <div class="modal-content">
             <delete-tax-confirmation-model [message]="confirmationMessage"
                 (userConfirmationEvent)="userConfirmation($event)">

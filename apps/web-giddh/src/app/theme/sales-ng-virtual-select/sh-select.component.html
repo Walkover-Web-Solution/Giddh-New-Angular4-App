@@ -14,7 +14,7 @@
                 </span>
             </ng-container>
             <!-- (click)="show($event);" -->
-            <input type="text" class="pdL1"
+            <input type="text" class="pd-l1"
                 [ngClass]="{'hasValue':filter?.length, 'bottom-border-only' : showBottomBorderOnly}" #inputFilter
                 tabindex="0" (blur)="filterInputBlur($event)"
                 [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter"

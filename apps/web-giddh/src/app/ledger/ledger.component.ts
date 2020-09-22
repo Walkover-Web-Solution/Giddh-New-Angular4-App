@@ -75,7 +75,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('sharLedger', {static: true}) public sharLedger: ShareLedgerComponent;
     @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
 
-    @ViewChild('advanceSearchComp', {static: true}) public advanceSearchComp: AdvanceSearchModelComponent;
+    @ViewChild('advanceSearchComp', {static: false}) public advanceSearchComp: AdvanceSearchModelComponent;
 
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
     public imgPath: string = '';
@@ -1248,7 +1248,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public resetAdvanceSearch() {
         this.searchText = "";
-        this.advanceSearchComp.resetAdvanceSearchModal();
+        if(this.advanceSearchComp) {
+            this.advanceSearchComp.resetAdvanceSearchModal();
+        }
         this.trxRequest.page = 0;
         this.search("");
         this.getTransactionData();

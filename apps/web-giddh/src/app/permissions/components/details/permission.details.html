@@ -1,5 +1,7 @@
 <section id="single_role" *ngIf="roleObj">
-    <div class="px-3 py-3 bdrB clearfix text-center mb-15">
+
+
+    <div class="pd3 pd-t1 pd-b1 bdrB clearfix text-center mb-15">
         <span class="lead">{{ newRole.name }}</span>
         <button class="btn btn-md btn-primary pull-left" (click)="goToRoles()">Back</button>
         <button *ngIf="!newRole.isUpdateCase" class="btn btn-md btn-success pull-right mr-0"
@@ -10,7 +12,7 @@
     </div>
     <section class="px-3">
         <!--*ngIf="roleObj.isUpdateCase"-->
-        <div class="row mb-1">
+        <div class="row mr-b2">
             <div class="col-sm-12 form-inline">
                 <div class="form-group custom-select pos-rel mr-15">
                     <select class="form-control" [disabled]="newRole.isFixed" required [(ngModel)]="pageName"

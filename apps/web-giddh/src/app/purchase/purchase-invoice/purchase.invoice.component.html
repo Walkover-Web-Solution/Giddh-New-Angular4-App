@@ -1,4 +1,4 @@
-<section id="purchaseInvoice" class="container-fluid mrT2">
+<section id="purchaseInvoice" class="container-fluid mr-t2">
     <form class="">
         <div class="">
             <div class="form-group max250 pull-left mrR1">
@@ -96,7 +96,7 @@
                                     <!-- [(ngModel)]="selectedDateForGSTR1" -->
                                     <!-- <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)" [showWeeks]="false" [minMode]="'month'"></datepicker> -->
                                 </li>
-                                <li class="pd1 clearfix pdT pdB">
+                                <li class="pd-1 clearfix pdT pdB">
                                     <span class="btn-group pull-left">
                                         <button type="button" class="btn btn-xs btn-primary mrR"
                                             (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
@@ -123,7 +123,7 @@
                             <li>
                                 <datepicker [datepickerMode]="'month'" name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="selectedDateForGSTR1" (selectionDone)="showGSTR1DatePicker=!showGSTR1DatePicker;monthChanged($event)" [showWeeks]="false" [minMode]="'month'"></datepicker>
                             </li>
-                            <li class="pd1 clearfix pdT pdB">
+                            <li class="pd-1 clearfix pdT pdB">
                                 <span class="btn-group pull-left">
                                     <button type="button" class="btn btn-xs btn-primary mrR" (click)="setCurrentMonth();showGSTR1DatePicker = false;">Reset</button>
                                     <button type="button" class="btn btn-xs btn-success" click)="showGSTR1DatePicker = false">Done</button>
@@ -144,7 +144,7 @@
     <div class="form-group col-xs-2" [hidden]="!selectedGstrType || selectedGstrType=='GSTR1'">
         <label>Report</label>
         <div class="btn-group btn-block" dropdown>
-            <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle">-- Select Report --<span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
+            <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle">-- Select Report --<span class="select_drop pull-right mr-t1"><i class="fa fa-caret-down"></i></span>
  </button>
             <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
                 <li class="cp" *ngFor="let item of purchaseReportOptions">
@@ -247,7 +247,7 @@
                             <div class="btn-group btn-block" dropdown>
                                 <button dropdownToggle type="button" data-toggle="dropdown"
                                     class="form-control text-left btn-block dropdown-toggle"> Filter <span
-                                        class="select_drop pull-right mrT1"> <i class="fa fa-caret-down"></i> </span>
+                                        class="select_drop pull-right mr-t1"> <i class="fa fa-caret-down"></i> </span>
                                 </button>
                                 <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
                                     <li *ngFor="let item of otherFilters">
@@ -344,14 +344,14 @@
                             *ngIf="(timeCounter != 10 && selectedRowIndex == i && invoice.invoiceNumber) || (timeCounter != 10 && selectedRowIndex == i && !invoice.invoiceNumber)"
                             (click)="onUndoEntryTypeChange(i, invoice)" class="btn btn-link">Undo in
                             {{timeCounter}}s</button>
-                        <div class="btn-group btn-block mrT" dropdown (onShown)="onDDShown()"
+                        <div class="btn-group btn-block mr-t" dropdown (onShown)="onDDShown()"
                             (onHidden)="onDDHidden(invoice.entryUniqueName, invoice.account.uniqueName)"
                             *ngIf="isReverseChargeSelected && invoice.entryType == 'reverse charge' && !invoice.invoiceGenerated && !invoice.invoiceNumber && selectedRowIndex == i"
                             [autoClose]="false">
                             <button dropdownToggle type="button"
                                 class="form-control text-left btn-block dropdown-toggle"
                                 [disabled]="selectedRowIndex != i"> {{dropdownHeading}} <span
-                                    class="select_drop pull-right mrT1"> <i class="fa fa-caret-down"></i> </span>
+                                    class="select_drop pull-right mr-t1"> <i class="fa fa-caret-down"></i> </span>
                             </button>
                             <ul id="pageListDD" *dropdownMenu class="dropdown-menu" role="menu">
                                 <!-- <li>

@@ -12,12 +12,12 @@
 		<div class="clearfix" *ngIf="comingFromDiscountList">
 			<label>Selected Group: Discount</label>
 		</div>
-		<div class="clearfix mrT1">
+		<div class="clearfix mr-t1">
 			<label>Account Name</label>
 			<input class="form-control" required name="account" (blur)="generateUniqueName();" type="text"
 				formControlName="name" placeholder="Enter Account Name">
 		</div>
-		<div class="clearfix mrT1 pdR2 pos-rel">
+		<div class="clearfix mr-t1 pdR2 pos-rel">
 			<label>Account Unique Name</label>
 			<input class="form-control" required name="accUnqName" type="text" formControlName="uniqueName"
 				[control]="newAccountForm.get('uniqueName')" textCaseChangeDirective
@@ -28,14 +28,14 @@
 		</div>
 		<section *ngIf="showGstBox" formArrayName="addresses">
 			<div *ngFor="let gst of newAccountForm.get('addresses')['controls']; let i = index;" [formGroupName]="i">
-				<div class="row mrT1">
+				<div class="row mr-t1">
 					<div class="col-xs-12">
 						<label>GSTIN</label>
 						<input type="text" name="gstNumber" formControlName="gstNumber"
 							(keyup)="getStateCode(gst, states)" maxlength="15" class="form-control">
 					</div>
 				</div>
-				<div class="row mrT1">
+				<div class="row mr-t1">
 					<div class="col-xs-12">
 						<label>State code</label>
 						<sh-select #states [isFilterEnabled]="true" [options]="statesSource$ | async"

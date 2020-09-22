@@ -7,9 +7,9 @@
 			<div id="dropdown-basic1" *dropdownMenu class="dropdown-menu dropdown-menu-left" role="menu"
 				aria-labelledby="button-basic1" [style.width.px]="550" (click)="toggleFilters = false;">
 				<form [formGroup]="searchQueryForm" novalidate name="searchQueryForm" id="searchQueryForm"
-					class="form-inline flex-row flex-wrap pd1">
+					class="form-inline flex-row flex-wrap pd-1">
 					<!-- repeater -->
-					<div class="pos-rel query-list query-list d-flex" [ngClass]="{'mrT2': i !== 0}"
+					<div class="pos-rel query-list query-list d-flex" [ngClass]="{'mr-t2': i !== 0}"
 						formArrayName="searchQuery"
 						*ngFor="let item of searchQueryForm.get('searchQuery')['controls'];let i = index; let l = last;">
 						<div [formGroupName]="i" class="d-flex">
@@ -61,7 +61,7 @@
 					</div>
 					<!--end of clearfix first row -->
 					<!-- end repeater -->
-					<div class="clearfix mrT4">
+					<div class="clearfix mr-t4">
 						<button [disabled]="searchQueryForm.invalid" class="btn btn-success pull-right"
 							(click)="filterData();filterDropdown.hide()">Search
 						</button>
@@ -74,8 +74,8 @@
 							Row
 						</button>
 						<!-- <button type="button" class="btn btn-success" (click)="createCsv.emit()">Download CSV</button> -->
-						<!-- <button type="button" class="btn btn-success mrL1" (click)="openEmailDialog.emit()">Send as Email</button>
-<button type="button" class="btn btn-success mrL1" (click)="openSmsDialog.emit()">Send as Sms</button> -->
+						<!-- <button type="button" class="btn btn-success mr-l1" (click)="openEmailDialog.emit()">Send as Email</button>
+<button type="button" class="btn btn-success mr-l1" (click)="openSmsDialog.emit()">Send as Sms</button> -->
 					</div>
 					<!-- end of second row -->
 				</form>

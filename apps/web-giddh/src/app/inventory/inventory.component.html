@@ -19,7 +19,7 @@
                             <div *ngIf="isMobileScreen && activeView === 'group'" class="mb-15">
                                     <button class="btn btn-sky-blue" [routerLink]="['/pages/inventory/']" (click)="activeView = null">Back</button>
                             </div>
-                            <div *ngIf="activeView" class="d-flex mrB1 branch-warehouse-filter">
+                            <div *ngIf="activeView" class="d-flex mr-b1 branch-warehouse-filter">
                                 <sh-select *ngIf="branches && branches.length > 1" class="multi-select branch-filter sh-select-border"
                                     (ngModelChange)="loadReportByBranch($event)" [options]="branches" [placeholder]="'Select Branch'"
                                     [(ngModel)]="currentBranchAndWarehouseFilterValues.branch"></sh-select>

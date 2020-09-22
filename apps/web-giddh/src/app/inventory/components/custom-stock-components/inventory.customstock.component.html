@@ -67,11 +67,11 @@
                                     [(ngModel)]="customUnitObj.quantityPerUnit" name="quantityPerUnit"
                                     class="form-control" required>
                             </div>
-                            <div class="grey_clr col-xs-12 col-sm-12 mrB2 multiply"
+                            <div class="grey-clr col-xs-12 col-sm-12 mr-b2 multiply"
                                 *ngIf="customUnitObj.name && customUnitObj.quantityPerUnit && !isDivide">1
                                 {{customUnitObj?.name}} = {{customUnitObj?.quantityPerUnit}}
                                 {{customUnitObj?.parentStockUnit?.name}} </div>
-                            <div class="grey_clr col-xs-12 mrB2 division"
+                            <div class="grey-clr col-xs-12 mr-b2 division"
                                 *ngIf="customUnitObj.name && customUnitObj.quantityPerUnit && isDivide">
                                 <span class="mrR">1 {{customUnitObj?.name}}</span> <span class="mrR fs18">=</span>
                                 <div class="text-center">
@@ -102,7 +102,7 @@
 
                     </div>
                 </form>
-                <div class="mrT2 clearfix">
+                <div class="mr-t2 clearfix">
                     <table class="table basic giddh-table mb-0">
                         <thead>
                             <tr>

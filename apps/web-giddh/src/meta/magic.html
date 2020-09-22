@@ -16,12 +16,12 @@
                     <div class="vcenter" style="font-size:26px">{{ledgerData.companyName}}</div>
                 </div>
             </section>
-            <section class="pdB1">
+            <section class="pd-b1">
                 <div id="web-bg" class="container mrT3">
                     <div class="row">
                         <div class="col-sm-12 col-md-3">
                             <div class="row">
-                                <div v-bind:class="{'mrB2': isResponsive}">
+                                <div v-bind:class="{'mr-b2': isResponsive}">
                                     <date-range-picker id="dateRangePicker" :range="dateRange"
                                         v-on:dateRangeChanged="onDateRangeChanged">
                                     </date-range-picker>
@@ -404,12 +404,12 @@
                 v-if="(ledgerData.ledgersTransactions.debitTransactionsCount > 0 || ledgerData.ledgersTransactions.creditTransactionsCount > 0) && !isResponsive">
                 <div class="container">
                     <div class="col-xs-3">
-                        <!--<span class="primary_clr mrB1" style="font-size: 12px">{{cDate.startDate | date:'dd-MMM-yyyy'}} - {{cDate.endDate | date:'dd-MMM-yyyy'}}</span>-->
+                        <!--<span class="primary_clr mr-b1" style="font-size: 12px">{{cDate.startDate | date:'dd-MMM-yyyy'}} - {{cDate.endDate | date:'dd-MMM-yyyy'}}</span>-->
                         <h1>Total Transactions
                             <span class="primary_clr">{{ledgerData.ledgersTransactions.totalItems}}</span>
                         </h1>
-                        <span class="mrT1 mrR2">Dr {{ledgerData.ledgersTransactions.debitTransactionsCount}}</span>
-                        <span class="mrT1 mrR2">Cr {{ledgerData.ledgersTransactions.creditTransactionsCount}}</span>
+                        <span class="mr-t1 mrR2">Dr {{ledgerData.ledgersTransactions.debitTransactionsCount}}</span>
+                        <span class="mr-t1 mrR2">Cr {{ledgerData.ledgersTransactions.creditTransactionsCount}}</span>
                     </div>
                     <div class="col-xs-3">
                         <h1>Opening Balance</h1>
@@ -432,9 +432,9 @@
                             {{legderBalanceData.debitTotal - legderBalanceData.creditTotal | currency}}
                         </h3>
                         <!-- | number:'1.2-2' -->
-                        <h1 class="mrT">Dr Total {{legderBalanceData.debitTotal | currency}}</h1>
+                        <h1 class="mr-t">Dr Total {{legderBalanceData.debitTotal | currency}}</h1>
                         <!-- | number:'1.2-2' -->
-                        <h1 class="mrT">Cr Total {{legderBalanceData.creditTotal | currency}}</h1>
+                        <h1 class="mr-t">Cr Total {{legderBalanceData.creditTotal | currency}}</h1>
                     </div>
                     <div class="col-xs-3">
                         <h1>Closing Balance</h1>
@@ -556,7 +556,7 @@
                                 </div>
                                 <div class="col-sm-12 col-md-6">
                                     <div class="contact_form" v-show="!formSubmitted">
-                                        <h4 class="headerline mrB2">Contact Us</h4>
+                                        <h4 class="headerline mr-b2">Contact Us</h4>
                                         <p class="mb-5">For complete accounting solution for your business</p>
                                         <form novalidate name="contactForm" action="#">
                                             <div class="row">
@@ -619,7 +619,7 @@
 
                 <div class="col-md-5 pull-right col-sm-6 col-xs-12">
                   <div v-show="!formSubmitted">
-                    <h4 class="headerline mrB2">Tell us!</h4>
+                    <h4 class="headerline mr-b2">Tell us!</h4>
                     <form novalidate name="contactForm" action="#">
                       <div class="row">
                         <div class="col-sm-6">
@@ -666,7 +666,7 @@
 
                 </div>
 
-                <div class="col-md-5 col-sm-6 col-xs-12" v-bind:class="{'mrT4': isSmall}">
+                <div class="col-md-5 col-sm-6 col-xs-12" v-bind:class="{'mr-t4': isSmall}">
                   <h4 class="headerline">Contact Us</h4>
 
                   <div class="social">

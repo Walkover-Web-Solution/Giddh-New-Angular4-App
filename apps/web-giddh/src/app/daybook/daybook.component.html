@@ -1,4 +1,4 @@
-<div class="no-data mrT2 loader-main" *ngIf="showLoader">
+<div class="no-data mr-t2 loader-main" *ngIf="showLoader">
     <div class="spinner2">
         <div class="cube1"></div>
         <div class="cube2"></div>
@@ -68,7 +68,7 @@
 
 <div class="container-fluid">
     <div class="box clearfix mt-15">
-        <div class="text-center mrB2 transctionReport">
+        <div class="text-center mr-b2 transctionReport">
             <!-- <h2 class="account_Name fs20 primary_clr">{{companyName | uppercase}}</h2>
       <br /> -->
             <p>Transaction Report</p>
@@ -164,7 +164,7 @@
             </div>
         </div>
 
-        <div class=" mrT2 text-center">
+        <div class=" mr-t2 text-center">
             <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems  |giddhCurrency}}
                 Transactions
                 | {{(daybookData$ | async)?.totalPages  |giddhCurrency}} Pages
