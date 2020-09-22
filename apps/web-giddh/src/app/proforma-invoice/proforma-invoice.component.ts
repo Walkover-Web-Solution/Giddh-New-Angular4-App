@@ -4286,7 +4286,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             entry.tradeDiscounts.forEach((f) => {
                 discountArray.push({
-                    discountType: (f.discount) ? f.discount.discountType : "FIX_AMOUNT",
+                    discountType: f.discount.discountType,
                     amount: f.discount.discountValue,
                     name: f.discount.name,
                     particular: f.account.uniqueName,

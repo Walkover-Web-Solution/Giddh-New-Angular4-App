@@ -82,7 +82,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         if (this.defaultDiscount && this.defaultDiscount.discountType === 'FIX_AMOUNT') {
             this.discountFixedValueModal = this.defaultDiscount.amount;
         } else {
-            this.discountPercentageModal = this.defaultDiscount.amount;
+            this.discountPercentageModal = (this.defaultDiscount) ? this.defaultDiscount.amount : 0;
         }
 
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -94,12 +94,11 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
             this.prepareDiscountList();
 
-            if (this.defaultDiscount.discountType === 'FIX_AMOUNT') {
+            if (this.defaultDiscount && this.defaultDiscount.discountType === 'FIX_AMOUNT') {
                 this.discountFixedValueModal = this.defaultDiscount.amount;
             } else {
-                this.discountPercentageModal = this.defaultDiscount.amount;
+                this.discountPercentageModal = (this.defaultDiscount) ? this.defaultDiscount.amount : 0;
             }
-            // this.change();
 
             if ('totalAmount' in changes && changes.totalAmount.currentValue !== changes.totalAmount.previousValue) {
                 this.change();
