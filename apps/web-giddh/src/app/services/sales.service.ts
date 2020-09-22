@@ -37,7 +37,7 @@ export class SalesService {
         let accountUniqueName = model.invoice.account.uniqueName;
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + SALES_API_V2.GENERATE_SALES.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model).pipe(
+        return this._http.post(this.config.apiUrl + SALES_API_V2.GENERATE_SALES.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
@@ -65,7 +65,7 @@ export class SalesService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.post(url
             .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', accountUniqueName)
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             , model)
             .pipe(
                 map((res) => {
@@ -82,7 +82,7 @@ export class SalesService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.put(this.config.apiUrl + SALES_API_V2.UPDATE_VOUCHER
             .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', accountUniqueName), model)
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
@@ -98,7 +98,7 @@ export class SalesService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.put(this.config.apiUrl + SALES_API_V4.UPDATE_VOUCHER
             .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', accountUniqueName), model)
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
@@ -128,7 +128,7 @@ export class SalesService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.get(this.config.apiUrl + ADVANCE_RECEIPTS_API.GET_ALL_ADVANCE_RECEIPTS
             .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', model.accountUniqueName).replace(':invoiceDate', model.invoiceDate))
+            .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName)).replace(':invoiceDate', model.invoiceDate))
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, AdvanceReceiptRequest> = res;
@@ -171,7 +171,7 @@ export class SalesService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.post(url
             .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', accountUniqueName)
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             , model)
             .pipe(
                 map((res) => {

@@ -1494,7 +1494,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             q: encodeURIComponent(query),
             page,
             withStocks: true,
-            stockAccountUniqueName: accountUniqueName
+            stockAccountUniqueName: encodeURIComponent(accountUniqueName)
         }
         this.searchService.searchAccount(requestObject).subscribe(data => {
             if (data && data.body && data.body.results) {

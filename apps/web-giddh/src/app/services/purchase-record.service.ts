@@ -36,7 +36,7 @@ export class PurchaseRecordService {
         // TODO: Add patch integration once the API is ready
         if (method === 'POST') {
             const contextPath: string =
-                `${this.config.apiUrl}${PURCHASE_RECORD_API.GENERATE.replace(':companyUniqueName', this._generalService.companyUniqueName).replace(':accountUniqueName', accountUniqueName)}`;
+                `${this.config.apiUrl}${PURCHASE_RECORD_API.GENERATE.replace(':companyUniqueName', this._generalService.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
             return this._http.post(contextPath, requestObject).pipe(
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
         } else if (method === 'PATCH') {
@@ -44,7 +44,7 @@ export class PurchaseRecordService {
                 delete requestObject.account;
             }
             const contextPath: string =
-                `${this.config.apiUrl}${PURCHASE_RECORD_API.UPDATE.replace(':companyUniqueName', this._generalService.companyUniqueName).replace(':accountUniqueName', accountUniqueName)}`;
+                `${this.config.apiUrl}${PURCHASE_RECORD_API.UPDATE.replace(':companyUniqueName', this._generalService.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
             return this._http.patch(contextPath, requestObject).pipe(
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
         }
@@ -61,7 +61,7 @@ export class PurchaseRecordService {
         const {accountUniqueName, purchaseRecordUniqueName} = requestObject;
         const contextPath: string =
             `${this.config.apiUrl}${PURCHASE_RECORD_API.DOWNLOAD_ATTACHMENT.replace(':companyUniqueName', this._generalService.companyUniqueName)
-                .replace(':accountUniqueName', accountUniqueName)}`;
+                .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
         return this._http.get(contextPath, {uniqueName: purchaseRecordUniqueName}).pipe(
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
     }
@@ -80,7 +80,7 @@ export class PurchaseRecordService {
         const {accountUniqueName} = requestObject;
         const contextPath: string =
             `${this.config.apiUrl}${PURCHASE_RECORD_API.VALIDATE_RECORD.replace(':companyUniqueName', this._generalService.companyUniqueName)
-                .replace(':accountUniqueName', accountUniqueName)}`;
+                .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
         delete requestObject.accountUniqueName;
         return this._http.get(contextPath, requestObject).pipe(
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
