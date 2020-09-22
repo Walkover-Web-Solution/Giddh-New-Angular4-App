@@ -1,4 +1,4 @@
-<div class="clearfix pt-15 pb-1">
+<div class="clearfix pt-15 pb-15">
     <div class="col-xs-12 col-sm-12">
         <div class="d-inline-block pull-left mr-2 middle ewayBill-date">
             <div class="input-group">
@@ -14,8 +14,7 @@
 <div class="custom-tabs heightVH-100">
     <tabset>
         <tab heading="Basic title" id="tab1">
-
-            <div class="mt-2 clearfix">
+            <div class="clearfix">
                 <div class="col-md-12">
                     <div class="table-responsive">
                         <table class="table basic table-bordered giddh-table on-mobile-view">
@@ -169,7 +168,7 @@
 
         </tab>
         <!-- <tab heading="Consolidated Eway Bill Details">
-        <div class="mt-2 clearfix">
+        <div class="mt-15 clearfix">
             <div class="col-md-12">
                 <div class="table-responsive">
                     <table class="table basic table-bordered">
@@ -304,11 +303,11 @@
         <div class="modal-body pb-4">
 
             <div class="row d-flex e-way-body ">
-                <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                     <label>Mode of Transportation*</label>
                 </div>
 
-                <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+                <div class="col-md-8 col-lg-8 col-sm-12 mt-15">
 
                     <ul class="list-icon-group ">
                         <li>
@@ -336,14 +335,14 @@
 
                 </div>
             </div>
-            <div class="modal-body">
+            <div>
 
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                         <label>Vehicle Type*</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-8 col-sm-12 mt-15 ">
 
                         <!-- <span class="mr-1 ">  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Regular</span>
 <span>  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Over Dimensional Cargo</span> -->
@@ -367,11 +366,11 @@
                 </div>
 
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                         <label class="pt-07">Vehicle No.*</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
 
                         <input type="text" name="vehicleNo" required placeholder="Mention Number "
                             [(ngModel)]="updateEwayVehicleform.vehicleNo" maxlength="15" minlength="7"
@@ -381,10 +380,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                         <label class="pt-07">From Place*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 " id="form-place">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15" id="form-place">
                         <!-- <input type="text" required placeholder="" class="form-control input" /> -->
                         <!-- <input [ngbTypeahead]="dataSource" type="text" autocomplete="off" (keyup)="onChangeCityName()" [(ngModel)]="company.city" name="city" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" required maxlength="50" placeholder="Branch City"
                                 pattern="^[^\s]+(\s+[^\s]+)*$"> -->
@@ -401,10 +400,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                         <label class="pt-07">From State*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
                         <sales-sh-select [placeholder]="'State'" [multiple]="false" [isFilterEnabled]="true"
                             class="select-bdr-bottom" name="fromState" required
                             [(ngModel)]="updateEwayVehicleform.fromState" [options]="statesSource$ | async">
@@ -413,10 +412,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                         <label class="pt-07">Reason*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
                         <!-- <sh-select class="input" [options]="ewayUpdateVehicleReason" required placeholder="select type" [multiple]="false" [isFilterEnabled]="true" name="reasonCode" [(ngModel)]="updateEwayVehicleform.reasonCode"></sh-select> -->
                         <sh-select class=" input " [options]="ewayUpdateVehicleReasonList" required
                             placeholder="select type" [isFilterEnabled]="true" name="reasonCode"
@@ -426,10 +425,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                         <label class="pt-07">Remark*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
                         <textarea name="reasonRem" class="form-control" required
                             [(ngModel)]="updateEwayVehicleform.reasonRem" placeholder="Enter the remarks"></textarea>
 
@@ -437,20 +436,20 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                         <label class="pt-07">Transporter's Doc No.*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
                         <input type="text" placeholder="Enter transporter's doc no." required name="transDocNo"
                             [(ngModel)]="updateEwayVehicleform.transDocNo" class="form-control input" />
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                         <label class="pt-07">Transporter's Doc Date*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
                         <input placeholder="dd/mm/yyyy " name="transDocDate" required type="text " placement="top"
                             [bsConfig]="{dateInputFormat: 'DD/MM/YYYY', adaptivePosition: true}"
                             [(ngModel)]="updateEwayVehicleform.transDocDate" class="form-control " bsDatepicker
@@ -459,10 +458,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
 
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
                         <button type="submit" [disabled]="updateVehicleForm.invalid"
                             [ladda]="updateEwayvehicleProcess$ | async" (click)="updateEwayTransport(updateVehicleForm)"
                             class="btn btn-success mr-2">Save
@@ -489,30 +488,30 @@
 
         <div class="modal-body pb-4">
             <div class="row">
-                <div class="col-md-3 col-lg-3 col-sm-12 mt-2 text-right">
+                <div class="col-md-3 col-lg-3 col-sm-12 mt-15 text-right">
                     <label class="pt-07">Reason *</label>
                 </div>
-                <div class="col-md-8 col-lg-7 col-sm-12 mt-2">
+                <div class="col-md-8 col-lg-7 col-sm-12 mt-15">
                     <sh-select class=" input " [options]="ewayCancelReason" required placeholder="select type"
                         [isFilterEnabled]="true" name="cancelRsnCode" [(ngModel)]="cancelEwayRequest.cancelRsnCode"
                         [ItemHeight]="33"></sh-select>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 col-lg-3 col-sm-12 mt-2 text-right">
+                <div class="col-md-3 col-lg-3 col-sm-12 mt-15 text-right">
                     <label class="pt-07">Remark</label>
                 </div>
-                <div class="col-md-8 col-lg-7 col-sm-12 mt-2">
+                <div class="col-md-8 col-lg-7 col-sm-12 mt-15">
                     <textarea name="cancelRmrk" class="form-control" [(ngModel)]="cancelEwayRequest.cancelRmrk"
                         placeholder="Enter the remarks"></textarea>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-3 col-lg-3 col-sm-12 mt-2 text-right">
+                <div class="col-md-3 col-lg-3 col-sm-12 mt-15 text-right">
 
                 </div>
-                <div class="col-md-8 col-lg-7 col-sm-12 mt-2">
+                <div class="col-md-8 col-lg-7 col-sm-12 mt-15">
                     <button type="submit" (click)="cancelEwayBill(cancelEwayForm)" [disabled]="cancelEwayForm.invalid"
                         [ladda]="cancelEwayInProcess$ | async" class="btn btn-success mr-2">Confirm
                     </button>

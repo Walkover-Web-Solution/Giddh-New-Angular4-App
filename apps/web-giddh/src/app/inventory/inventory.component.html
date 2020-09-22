@@ -9,7 +9,9 @@
                     <inventory-sidebar *ngIf="!isMobileScreen || (isMobileScreen && activeView !== 'group')"></inventory-sidebar>
                     <!--/sidebar-->
 
-                    <section class="rightBar" *ngIf="!isMobileScreen || (isMobileScreen && activeView === 'group')">
+                    <section class="right-bar" *ngIf="!isMobileScreen || (isMobileScreen && activeView === 'group')"
+                    [ngClass]="{'walcome-inventory-page':!activeView}"
+                    >
                         <!-- uiView: inventory-detail -->
                         <section class="container-fluid  clearfix pt-15">
 

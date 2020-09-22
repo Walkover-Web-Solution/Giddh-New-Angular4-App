@@ -6,11 +6,11 @@
                 <div><strong>PART A</strong></div>
 
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
+                    <div class="col-md-3 col-lg-3 col-sm-12 mt-15">
                         <label>Sub Type*</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-8 col-sm-12 mt-15">
                         <sh-select class=" input " #subgrp [options]="SubsupplyTypesList"
                             (selected)="subTypeElementSelected($event)" required placeholder="select type"
                             [isFilterEnabled]="true" name="subSupplyType"
@@ -19,11 +19,11 @@
                     </div>
                 </div>
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
+                    <div class="col-md-3 col-lg-3 col-sm-12 mt-15">
                         <label>Document Type*</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-8 col-sm-12 mt-15">
 
                         <!-- <input type="text " placeholder="Mention Number " class="form-control input " /> -->
                         <sh-select class="input" #doctypes autocomplete="xyz" [options]="TransporterDocType" required
@@ -34,11 +34,11 @@
                     </div>
                 </div>
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
+                    <div class="col-md-3 col-lg-3 col-sm-12 mt-15">
                         <label for="toGstIn">GSTIN of Receiver*</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 d-inline">
+                    <div class="col-md-8 col-lg-8 col-sm-12 mt-15 d-inline">
 
                         <input type="text " disabled="true" name="toGstIn" required minlength="15" maxlength="15"
                             autocomplete="off" placeholder="Enter GSTIN of receiver"
@@ -50,11 +50,11 @@
                 </div>
 
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
+                    <div class="col-md-3 col-lg-3 col-sm-12 mt-15">
                         <label for="toPinCode">PinCode of Receiver*</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-8 col-sm-12 mt-15">
 
                         <input type="number " name="toPinCode" autocomplete="off" maxlength="6" digitsOnlyDirective
                             required [(ngModel)]="generateEwayBillform.toPinCode" placeholder="Enter pincode "
@@ -62,14 +62,14 @@
 
                     </div>
                 </div>
-                <div><strong class="mt-2 d-block ">Transportation Details</strong></div>
+                <div><strong class="mt-15 d-block ">Transportation Details</strong></div>
 
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
+                    <div class="col-md-3 col-lg-3 col-sm-12 mt-15">
                         <label for="transporterName">Transporter</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-8 col-sm-12 mt-15">
 
                         <!-- <input type="text " name="transporterName" [(ngModel)]="generateEwayBillform.transporterName" placeholder="Select Transporter " class="form-control input " /> -->
                         <sh-select class=" input " #trans [showClear]="showClear"
@@ -97,11 +97,11 @@
                 </div>
 
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
+                    <div class="col-md-3 col-lg-3 col-sm-12 mt-15">
                         <label>Distance in KM*</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-8 col-sm-12 mt-15">
 
                         <input type="number" maxLength="4" minlength="4" digitsOnlyDirective required
                             name="transDistance" [(ngModel)]="generateEwayBillform.transDistance"
@@ -114,11 +114,11 @@
                 <div><strong class="mt-3 d-block ">PART B</strong></div>
 
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
+                    <div class="col-md-3 col-lg-3 col-sm-12 mt-15">
                         <label>Mode of Transportation</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-8 col-sm-12 mt-15">
 
                         <ul class="list-icon-group ">
                             <li>
@@ -152,11 +152,11 @@
                 </div>
 
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
+                    <div class="col-md-3 col-lg-3 col-sm-12 mt-15">
                         <label>Vehicle Type</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-8 col-sm-12 mt-15">
 
 
                         <span class="pd0 mrR3">
@@ -178,11 +178,11 @@
                 </div>
 
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
+                    <div class="col-md-3 col-lg-3 col-sm-12 mt-15">
                         <label>Vehicle No.*</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-8 col-sm-12 mt-15">
 
                         <input #name="ngModel" type="text" name="vehicleNo" required
                             [ngClass]="{'hasError': name.invalid && name.touched && name.dirty, 'has-success':name.valid}"
@@ -197,11 +197,11 @@
 
 
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
+                    <div class="col-md-3 col-lg-3 col-sm-12 mt-15">
                         <label for="transDocNo">Transporter’s Doc No.</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-8 col-sm-12 mt-15">
 
                         <input type="text " name="transDocNo" placeholder="Mention Number "
                             [(ngModel)]="generateEwayBillform.transDocNo" maxlength="15" class="form-control input " />
@@ -210,11 +210,11 @@
                 </div>
 
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-3 col-lg-3 col-sm-12 mt-2 ">
+                    <div class="col-md-3 col-lg-3 col-sm-12 mt-15">
                         <label for="transDocDate">Transporter’s Doc Date</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-8 col-sm-12 mt-15">
 
                         <div style="position: relative " class="input ">
                             <input name="transDocDate" placeholder="dd/mm/yyyy " type="text "

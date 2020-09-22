@@ -86,7 +86,6 @@
         }
     }
     .help-aside-body{
-        padding-bottom: 25%;
         .search-field{
             padding: 15px;
             input{
@@ -202,6 +201,13 @@
                     }
                 }
             }
+        }
+    }
+}
+@media(max-height:900px){
+    .aside-pane {
+        .help-aside-body{
+            padding-bottom: 25%;
         }
     }
 }

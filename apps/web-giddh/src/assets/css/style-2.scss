@@ -323,7 +323,9 @@
 .pt-15 {
     padding-top: 15px;
 }
-
+.pb-15{
+    padding-bottom: 15px;
+}
 .pl-05 {
     padding-left: 5px;
 }
@@ -3456,7 +3458,7 @@ footer small a {
 
 /*stock page*/
 
-.rightBar {
+.right-bar {
     float: left;
     width: calc(100% - 320px);
 }
@@ -8750,6 +8752,7 @@ button.btn.btn-filter {
 .manage-account-popup.full-screen-modal.modal.fade .modal-dialog {
     transform: translateY(0) !important;
     margin: 0 auto;
+    padding:0 !important
 }
 
 .manage-account-popup.full-screen-modal.modal.fade .width100{
@@ -8992,6 +8995,7 @@ p.remvBrnchName {
 .inventory-page .receipt-note-modal {
     margin-top: 0;
     border-radius: 0;
+    padding: 0;
 }
 
 .popover.purchase-invoice-rcm,
@@ -9620,7 +9624,7 @@ span#HW_badge_cont:nth-child(3) {
         height: 90px;
         font-size: 14px;
     }
-        .rightBar {
+        .right-bar {
         width: 100% !important;
     }
 }
@@ -10563,7 +10567,8 @@ span#HW_badge_cont:nth-child(3) {
 @media (min-width:576px){
     .modal-dialog {
         max-width: 100% !important;
-        margin: 10px;
+        margin: 10px auto;
+        padding: 0 10px;
     }
         #share-modal select {
         width: auto;
@@ -10580,6 +10585,7 @@ span#HW_badge_cont:nth-child(3) {
     .modal-dialog{
         max-width: 600px !important;
         margin: 30px auto;
+        padding: 0 10px;
     }
     .modal-dialog.modal-xl{
         max-width: 1140px !important;
