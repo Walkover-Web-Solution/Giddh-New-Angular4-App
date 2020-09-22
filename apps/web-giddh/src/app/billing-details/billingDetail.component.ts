@@ -282,7 +282,11 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     public backToSubscriptions() {
-        this._route.navigate(['pages', 'user-details', 'subscription']);
+        this._route.navigate(['/pages', 'user-details', 'subscription'], {
+            queryParams: {
+                showPlans: true
+            }
+        });
     }
 
     public payWithRazor(billingDetail: NgForm) {
@@ -371,13 +375,19 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             this.createNewCompany.subscriptionRequest.userUniqueName = this.activeCompany.subscription ? this.activeCompany.subscription.userDetails.uniqueName : '';
 
             // assign state code to billing details object
-            this.billingDetailsObj.stateCode = this.activeCompany.state;
+            if(this.activeCompany.state) {
+                this.billingDetailsObj.stateCode = this.activeCompany.state;
+            } else {
+                let selectedState = this.activeCompany.addresses.find((address) => address.isDefault);
+                if (selectedState) {
+                    this.billingDetailsObj.stateCode = selectedState.stateCode;
+                }
+            }
         }
 
         this.billingDetailsObj.name = this.createNewCompany.name;
         this.billingDetailsObj.contactNo = this.createNewCompany.contactNo;
         this.billingDetailsObj.email = this.createNewCompany.subscriptionRequest.userUniqueName;
-        // this.billingDetailsObj.stateCode = this.billingDetailsObj.stateCode;
 
         let selectedBusinesstype = this.createNewCompany.businessType;
         if (selectedBusinesstype === 'Registered') {
