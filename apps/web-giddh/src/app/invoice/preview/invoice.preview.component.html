@@ -898,7 +898,7 @@
         <!-- region invoice-preview-details -->
         <div *ngIf="selectedInvoiceForDetails">
             <invoice-preview-details-component [selectedItem]="selectedInvoiceForDetails" [items]="itemsListForDetails"
-                [invoiceSetting]="invoiceSetting" (deleteVoucher)="deleteConfirmedInvoice()"
+                [invoiceSetting]="invoiceSetting" (deleteVoucher)="deleteConfirmedInvoice($event)"
                 (sendEmail)="sendEmail($event)" (closeEvent)="invoicePreviewClosed()"
                 (onOpenAdvanceReceiptModal)="openAdvanceReceiptModal($event)"
                 (processPaymentEvent)="closePerformActionPopup($event)" [voucherType]="selectedVoucher"
