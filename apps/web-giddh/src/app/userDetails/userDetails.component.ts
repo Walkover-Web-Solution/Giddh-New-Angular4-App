@@ -21,6 +21,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { GeneralActions } from '../actions/general/general.actions';
 import { CurrentPage } from '../models/api-models/Common';
 import { API_POSTMAN_DOC_URL } from '../app.constant';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'user-details',
@@ -69,6 +70,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public activeTab: string = '';
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCreateAndSwitchCompanyInProcess: boolean;
+    public asideSettingMenuState: string = 'in';
+    public isMobileScreen: boolean = true;
     public apiPostmanDocUrl: String = API_POSTMAN_DOC_URL;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -83,6 +86,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         private router: Router,
         private _sessionAction: SessionActions,
         public _route: ActivatedRoute,
+        private breakPointObservar: BreakpointObserver,
         private generalActions: GeneralActions) {
         this.contactNo$ = this.store.select(s => {
             if (s.session.user) {
@@ -109,6 +113,18 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit() {
+        this.breakPointObservar.observe([
+            '(max-width:767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+            if (!this.isMobileScreen) {
+                this.asideSettingMenuState = "in";
+                this.toggleBodyClass();
+            } else {
+                this.asideSettingMenuState = "out";
+            }
+        });
+
         if (!this.isCreateAndSwitchCompanyInProcess){
             document.querySelector('body').classList.add('tabs-page');
         } else{
@@ -126,16 +142,18 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if(params && params.tabIndex == "0") {
-                this.activeTab = "auth-key";
-            } else if(params && params.tabIndex == "1") {
-                this.activeTab = "mobile-number";
-            } else if(params && params.tabIndex == "2") {
-                this.activeTab = "session";
-            } else if(params && params.tabIndex == "3") {
-                this.activeTab = "subscription";
+            if(params && params.tabIndex) {
+                if(params && params.tabIndex == "0") {
+                    this.activeTab = "auth-key";
+                } else if(params && params.tabIndex == "1") {
+                    this.activeTab = "mobile-number";
+                } else if(params && params.tabIndex == "2") {
+                    this.activeTab = "session";
+                } else if(params && params.tabIndex == "3") {
+                    this.activeTab = "subscription";
+                }
+                this.router.navigate(['pages/user-details/', this.activeTab], { replaceUrl: true });
             }
-            this.router.navigate(['pages/user-details/', this.activeTab], { replaceUrl: true });
         });
 
         //  this.getSubscriptionList();     // commented due todesign and API get changed
@@ -380,9 +398,38 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
+    /**
+  * This will toggle the settings popup
+  *
+  * @param {*} [event]
+  * @memberof SettingsComponent
+  */
+    public toggleSettingPane(event?): void {
+        this.toggleBodyClass();
+
+        if (this.isMobileScreen && event && this.asideSettingMenuState === 'in') {
+            this.asideSettingMenuState = "out";
+        }
+    }
+
+    /**
+     * This will toggle the fixed class on body
+     *
+     * @memberof SettingsComponent
+     */
+    public toggleBodyClass(): void {
+        if (this.asideSettingMenuState === 'in') {
+            document.querySelector('body').classList.add('setting-sidebar-open');
+        } else {
+            document.querySelector('body').classList.remove('setting-sidebar-open');
+        }
+    }
+
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('setting-sidebar-open');
+        this.asideSettingMenuState = "out";
     }
 
     /**

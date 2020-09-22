@@ -12,7 +12,7 @@
             <form name="form" #welcomeForm="ngForm" novalidate="" class="clearfix welcome-form horizontal-form"
                 autocomplete="off">
                 <div class=" clearfix row">
-                    <div class="col-12 mrB2">
+                    <div class="col-12 mr-b2">
                         <ng-container *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemName">
                             <label for="name" class="m-t-30" *ngIf="!isbranch">Company Name<sup
                                     class="text-danger">*</sup></label>
@@ -33,7 +33,7 @@
                             characters limit:
                             100</span>
                     </div>
-                    <div class="col-6 mrB2 ">
+                    <div class="col-6 mr-b2 ">
                         <span>
                             <label for="country" class="d-block">Country<sup class="text-danger">*</sup></label>
                             <div class="custom-select pos-rel">
@@ -48,7 +48,7 @@
                         </span>
 
                     </div>
-                    <div class="col-6 mrB2 ">
+                    <div class="col-6 mr-b2 ">
                         <label for="">Currency<sup class="text-danger">*</sup></label>
                         <div class="custom-select select-caret pos-rel">
                             <sh-select name="baseCurrency" [options]="currencySource$ | async" required
@@ -57,7 +57,7 @@
                                 [defaultValue]="createNewCompanyPreparedObj.baseCurrency"></sh-select>
                         </div>
                     </div>
-                    <div class="col-12 mrB2">
+                    <div class="col-12 mr-b2">
                         <span>
                             <label for="contactNo" class="d-block">Mobile Number<sup class="text-danger">*</sup></label>
                             <div class="d-flex">
@@ -76,7 +76,7 @@
                         </span>
                     </div>
 
-                    <div class="col-12 mrB2 selectBox" *ngIf="businessTypeList?.length && !isWarehouse">
+                    <div class="col-12 mr-b2 selectBox" *ngIf="businessTypeList?.length && !isWarehouse">
                         <div class="pos-rel">
                             <label for="businessType">Select Business Type</label>
                             <div class="custom-select pos-rel">
@@ -90,7 +90,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 mrB2 selectBox" *ngIf="!isWarehouse">
+                    <div class="col-12 mr-b2 selectBox" *ngIf="!isWarehouse">
                         <div class="pos-rel">
                             <label for="businessNature">Select Business Nature</label>
                             <div class="custom-select  pos-rel">
@@ -104,7 +104,7 @@
                         </div>
                     </div>
                     <ng-container *ngIf="selectedBusinesstype === 'Registered' || isWarehouse">
-                        <div class="col-12 mrB2 selectBox"
+                        <div class="col-12 mr-b2 selectBox"
                             *ngIf="formFields['taxName'] !== undefined && !isWarehouse">
                             <div class="clearfix">
 
@@ -124,7 +124,7 @@
 
                             </div>
                         </div>
-                        <div class="col-12 mrB2 selectBox">
+                        <div class="col-12 mr-b2 selectBox">
                             <div>
                                 <label>State<sup class="text-danger">*</sup></label><br>
                                 <div>
@@ -135,13 +135,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="!(isOnBoardingInProgress && isWarehouse)" class="col-12 mrB2 selectBox">
+                        <div *ngIf="!(isOnBoardingInProgress && isWarehouse)" class="col-12 mr-b2 selectBox">
                             <div class="">
                                 <label for="taxes_dd">Applicable Tax</label>
                                 <div class="btn-group btn-block select-caret invoice-btn" dropdown>
                                     <button dropdownToggle type="button"
                                         class="form-control text-left btn-block dropdown-toggle"> Select Taxes <span
-                                            class="select_drop pull-right mrT1"></span></button>
+                                            class="select_drop pull-right mr-t1"></span></button>
                                     <ul class="dropdown-menu dropdown-menu-2 width100" role="menu">
                                         <li *ngIf="taxesList.length==0">No results found</li>
                                         <li *ngFor="let tax of taxesList">
@@ -163,7 +163,7 @@
                             </div>
                         </div>
                     </ng-container>
-                    <div class="col-12 mrB2 selectBox">
+                    <div class="col-12 mr-b2 selectBox">
                         <!-- Show the section if the company/branch is Registered or onboarding of warehouse is going on -->
                         <div *ngIf="selectedBusinesstype || isWarehouse" class="clearfix">
                             <ng-container
@@ -178,7 +178,7 @@
                             </ng-template>
                             <textarea #address [required]="selectedBusinesstype === 'Registered' || isWarehouse"
                                 (focus)="isWarehouse ? removeAddressFieldError() : ''" placeholder="Address"
-                                class="form-control mrT1 " name="address" id="address"
+                                class="form-control mr-t1 " name="address" id="address"
                                 [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
                         </div>
                     </div>

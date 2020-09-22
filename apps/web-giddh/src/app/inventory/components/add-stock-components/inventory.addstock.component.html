@@ -226,7 +226,7 @@
                                             <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="rate" />
                                         </div>
                                         <div class="pull-right unit_add">
-                                            <button class="btn-link btn mr-0" (click)="addPurchaseUnitRates(i)" *ngIf="l"><i class="fa fa-plus add_row"></i></button>
+                                            <button class="btn-link btn mr-0" (click)="addPurchaseUnitRates(i)" *ngIf="l"><i class="icon-plus add_row"></i></button>
                                             <button class="btn-link btn" (click)="removePurchaseUnitRates(i)" *ngIf="!l"><i
                                                     class="icon-cross dlet"></i></button>
                                         </div>
@@ -269,7 +269,7 @@
                                             <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="rate" />
                                         </div>
                                         <div class="pull-right unit_add">
-                                            <button class="btn-link btn mr-0" (click)="addSaleUnitRates(i)" *ngIf="l"><i class="fa fa-plus add_row"></i></button>
+                                            <button class="btn-link btn mr-0" (click)="addSaleUnitRates(i)" *ngIf="l"><i class="icon-plus add_row"></i></button>
                                             <button class="btn-link btn" (click)="removeSaleUnitRates(i)" *ngIf="!l"><i class="icon-cross dlet"></i></button>
                                         </div>
                                     </div>
@@ -290,7 +290,7 @@
                     </div>
 
 
-                    <section class="mrT2 row mrB3 col-xs-12 col-sm-12" *ngIf="addStockForm.value.isFsStock">
+                    <section class="mr-t2 row mrB3 col-xs-12 col-sm-12" *ngIf="addStockForm.value.isFsStock">
                         <div class="pdL pdR">
                             <h1 class="section-head bdrB"><strong>{{addStockForm.controls['name'].value}} (Made
                                     with)</strong></h1>
@@ -338,7 +338,7 @@
                                             </td>
                                             <td>
                                                 <button class="btn-link btn" (click)="addItemInLinkedStocks(list, i, i)" *ngIf="l" [disabled]="disableStockButton"><i
-                                                        class="fa fa-plus add_row"></i></button>
+                                                        class="icon-plus add_row"></i></button>
                                                 <button class="btn-link btn" (click)="removeItemInLinkedStocks(i)" *ngIf="!l"><i class="icon-cross dlet"></i></button>
                                             </td>
                                         </tr>

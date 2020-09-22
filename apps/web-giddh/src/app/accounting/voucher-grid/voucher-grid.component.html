@@ -3,7 +3,7 @@
         <div>
             <div class="clearfix pdT2">
                 <span class="btn label isActive">{{requestObj.voucherType}}</span>
-                <div class="pull-right text-right mrB1" (clickOutside)="showFromDatePicker = false;">
+                <div class="pull-right text-right mr-b1" (clickOutside)="showFromDatePicker = false;">
                     <input type="text" onReturn #dateField name="entryDate"
                         [(ngModel)]="journalDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY"
                         class="form-control text-right voucher-date-field" (focus)="onDateFieldFocus()" bsDatepicker [bsConfig]="bsConfig" />
@@ -149,7 +149,7 @@
                             <button class="btn btn-default" #resetButton
                                 (keyup)="keyUpOnResetButton($event)" (click)="acceptCancel()">No</button>
                             <br />
-                            <button class="btn btn-link mrT1" (click)="refreshEntry();">Reset</button>
+                            <button class="btn btn-link mr-t1" (click)="refreshEntry();">Reset</button>
 
                         </div>
                     </div>
@@ -163,8 +163,8 @@
     </div>
 
     <div class="sidebar_list form-control" [hidden]="!showLedgerAccountList">
-        <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
-        <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
+        <h3 class="pd-1 bdrB primary_clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
+        <h3 class="pd-1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
         <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList"
             [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)"
             [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'"
@@ -193,13 +193,13 @@
                     <h3 class="modal-title">Cheque details (if any)</h3>
                 </div>
                 <div class="modal-body">
-                    <div class="clearfix mrT1">
+                    <div class="clearfix mr-t1">
                         <label>Cheque Number:</label>
                         <input #chequeNumberInput class="form-control" required formControlName="chequeNumber"
                             name="account" type="text" placeholder="Cheque Number"
                             (keydown)="onCheckNumberFieldKeyDown($event, 'chqNumber')">
                     </div>
-                    <div class="clearfix mrT1">
+                    <div class="clearfix mr-t1">
                         <label>Cheque Clearance Date:</label>
                         <input #chequeClearanceDateInput [textMask]="{mask: dateMask, guide: true}" class="form-control"
                             formControlName="chequeClearanceDate" name="account" type="text"

@@ -1,7 +1,7 @@
 .form-group .pItem.text-right {
     max-width: 100% !important;
 }
-.grp_list li a.list-item {
+.grp-list li a.list-item {
     text-transform: capitalize;
 }
 .horizontal-form {

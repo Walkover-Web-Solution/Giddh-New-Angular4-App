@@ -38,7 +38,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="clearfix pdT1">
+
+                        <div class="clearfix  pd-t1">
+
                             <div class="row">
                                 <div class="col-sm-3 col-xs-12">
                                     <input type="checkbox" class="show-on-mobile" name="sendThroughGmail" [(ngModel)]="invoiceSettings.purchaseBillSettings.sendThroughGmail" [disabled]="!isGmailIntegrated" />
@@ -79,7 +81,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="clearfix pdT1">
+                            <div class="clearfix  pd-t1">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-3">
                                         <input type="checkbox" class="show-on-mobile" name="changePOStatusOnExpiry" [(ngModel)]="invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry" />
@@ -90,7 +92,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="clearfix pdT1">
+                            <div class="clearfix pd-t1">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-3">
                                         <input type="checkbox" class="show-on-mobile" name="sendPOLinkOnSms" [(ngModel)]="invoiceSettings.purchaseBillSettings.sendPOLinkOnSms" />
@@ -102,7 +104,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="clearfix pdT1">
+                            <div class="clearfix pd-t1">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-3">
                                         <label>Custom Purchase Order#</label></div>
@@ -119,7 +121,7 @@
                                                     <input type="text" class="form-control text-right" name="prefixNumber" [(ngModel)]="invoiceSettings.purchaseBillSettings.poNumberPrefix">
                                                 </div>
                                             </div>
-                                        </div>    
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -149,7 +151,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="clearfix pdT1">
+
+                            <div class="clearfix  pd-t1">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-3">
                                         <input type="checkbox" class="show-on-mobile" name="enableNarration" [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration" /> <label>Show narration to ledger</label>

@@ -10,7 +10,7 @@
             <div class="modal_wrap">
                 <p>Note: Please update if any changes made in the ledger before changing base account, unsaved changes
                     will be removed.</p>
-                <div class="mrT2">
+                <div class="mr-t2">
                     <sh-select [disabled]="false" placeholder="Select Account" filterPlaceholder="Search Account"
                         name="accountUniqueName" [(ngModel)]="accountUniqueName" [options]="flattenAccountList" class=""
                         [useInBuiltFilterForFlattenAc]="true">
@@ -22,7 +22,7 @@
                             </a>
                         </ng-template>
                     </sh-select>
-                    <button class="btn btn-success btn-block mrT1" (click)="saveBaseAccount()"
+                    <button class="btn btn-success btn-block mr-t1" (click)="saveBaseAccount()"
                         [disabled]="!accountUniqueName">Change Base Account</button>
                 </div>
             </div>

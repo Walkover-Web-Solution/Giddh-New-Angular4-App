@@ -78,11 +78,11 @@
             <button class="btn-success btn show-columnar-button" [hidden]="emailTypeSelected !== 'columnar'" (click)="showColumnarReport()">Show</button>
             <div class="modal_wrap" [hidden]="emailTypeSelected === 'columnar'">
                 <div class="clearfix"></div>
-                <h3 class="pdT1 pdB1">Or</h3>
+                <h3 class="pd-t1 pd-b1">Or</h3>
                 <div>
                     <h3 class="l8grey pdB size-xs">You can add multiple id's separated comma</h3>
                     <textarea [(ngModel)]="emailData" required name="email" class="form-control" placeholder="Recipient Email Id's"></textarea>
-                    <button ng-disabled="ledgerEmailSendForm.$invalid" class="btn btn-success mrT1" (click)="sendLedgEmail()">Send
+                    <button ng-disabled="ledgerEmailSendForm.$invalid" class="btn btn-success mr-t1" (click)="sendLedgEmail()">Send
                         email
                     </button>
                 </div>

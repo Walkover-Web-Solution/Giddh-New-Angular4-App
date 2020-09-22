@@ -7,7 +7,7 @@
     display: flex;
 }
 
-.pd1 {
+.pd-1 {
     padding: 5px;
 }
 
@@ -361,10 +361,57 @@ button.btn.btn-filter span.icon-cross {
     justify-content: space-between;
 }
 /*responsive*/
+@media(max-width:800px){
+    .customer-form-inline{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: initial;
+        .dis {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .header-left {
+            width: calc(100% - 50px);
+            margin-left: 45px;
+            .form-group {
+                vertical-align: bottom !important;
+                margin-bottom: 5px;
+                max-width: 100%;
+                input {
+                    width: 100%;
+                }
+            }
+        }
+    }
+    .customer-footer-box {
+        padding-bottom: 10px;
+        float: right !important;
+    }
+    .customer-footer-box {
+        padding-top: 0;
+        float: left !important;
+    }
+    .customer-footer-box+.btn-group {
+        float: left !important;
+    }
+    .customer-form-inline{
+        flex-direction: column;
+    }
+    .customer-footer-box {
+        display: flex;
+        .mobile-button-filter {
+            display: flex !important;
+        }
+    }
+    .desktop-button-filter {
+        display: none !important;
+    }
+}
 @media (max-width: 768px) {
     button.btn.btn-filter{
         margin-left: auto;
-        margin-bottom: 10px;
         display: flex;
     }
     .customer-form-inline{
@@ -453,40 +500,7 @@ button.btn.btn-filter span.icon-cross {
     .btn-group.plus-btn button {
         width: 100%;
     }
-    .customer-footer-box {
-        padding-bottom: 10px;
-        float: right !important;
-    }
-    .customer-form-inline{
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: initial;
-        .dis {
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-        .header-left {
-            width: calc(100% - 50px);
-            margin-left: 45px;
-            .form-group {
-                vertical-align: bottom !important;
-                margin-bottom: 5px;
-                max-width: 100%;
-                input {
-                    width: 100%;
-                }
-            }
-        }
-    }
-    .customer-footer-box {
-        padding-top: 0;
-        float: left !important;
-    }
-    .customer-footer-box+.btn-group {
-        float: left !important;
-    }
+
     .customer-right-wrap {
         position: relative;
     }
@@ -503,18 +517,7 @@ button.btn.btn-filter span.icon-cross {
     .customer-name .icon-ellipse {
         top: 8px;
     }
-    .customer-form-inline{
-        flex-direction: column;
-    }
-    .customer-footer-box {
-        display: flex;
-        .mobile-button-filter {
-            display: flex !important;
-        }
-    }
-    .desktop-button-filter {
-        display: none !important;
-    }
+
 }
 
 @media (max-width: 575px) {

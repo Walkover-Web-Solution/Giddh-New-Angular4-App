@@ -54,8 +54,11 @@
     background-color: unset !important;
 }
 
-.rightBar {
+.right-bar {
     width: calc(100% - 260px);
+}
+.right-bar.welcome-inventory-page{
+    width: 100%;
 }
 .inventory-control ::ng-deep.nav-tabs > li:nth-child(2) {
     display: none;

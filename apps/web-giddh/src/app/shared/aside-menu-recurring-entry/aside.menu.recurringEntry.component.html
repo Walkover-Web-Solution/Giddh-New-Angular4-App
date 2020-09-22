@@ -8,14 +8,14 @@
 		<form [formGroup]="form">
 			<div class="row">
 				<div class="col-xs-4 col-sm-4 form-group">
-					<label class="mrB1">Start Date<span class="text-danger">*</span></label>
+					<label class="mr-b1">Start Date<span class="text-danger">*</span></label>
 					<input name="dateRange" formControlName="nextCronDate" type="text" autocomplete="off"
 						class="form-control" bsDatepicker [minDate]="today"
 						[bsConfig]=" {dateInputFormat: 'DD-MM-YYYY'}">
 				</div>
 
 				<div class="col-xs-4 col-sm-4 form-group" *ngIf="!IsNotExpirable">
-					<label class="mrB1">End Date<span class="text-danger">*</span></label>
+					<label class="mr-b1">End Date<span class="text-danger">*</span></label>
 					<input name="dateRange" formControlName="cronEndDate" type="text" autocomplete="off"
 						[minDate]="maxEndDate" class="form-control" bsDatepicker
 						[bsConfig]="{dateInputFormat: 'DD-MM-YYYY'}">
@@ -28,7 +28,7 @@
 			</div>
 
 			<div class="form-group ng-select-wrap liq selectGroup">
-				<label class="mrB1">Interval<span class="text-danger">*</span></label>
+				<label class="mr-b1">Interval<span class="text-danger">*</span></label>
 				<ng-select placeholder="Select Interval" filterPlaceholder="Type to search..."
 					formControlName="duration" name="duration" [options]="intervalOptions" style="width:100%">
 					<ng-template #optionTemplate let-option="option">

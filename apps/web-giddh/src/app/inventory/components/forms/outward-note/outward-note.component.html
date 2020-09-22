@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="col-xs-6 form-group" *ngIf="mode === 'receiver'">
-                    <label class="mrB1">Product Name <sup>*</sup></label>
+                    <label class="mr-b1">Product Name <sup>*</sup></label>
                     <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
                         formControlName="stock" (selected)="stockChanged($event)"></sh-select>
                     <!-- <span *ngIf="stock.invalid">
@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="col-xs-6 form-group" *ngIf="mode === 'product'">
-                    <label class="mrB1">Receiver <sup>*</sup></label>
+                    <label class="mr-b1">Receiver <sup>*</sup></label>
                     <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Receiver'"
                         formControlName="inventoryUser" (selected)="userChanged($event)"></sh-select>
                     <!-- <span *ngIf="inventoryUser.invalid">
@@ -73,7 +73,7 @@
                 <div [formGroupName]="i">
 
                     <div class="col-xs-4 form-group" *ngIf="mode === 'receiver'">
-                        <!-- <label class="mrB1">Receiver</label> -->
+                        <!-- <label class="mr-b1">Receiver</label> -->
                         <sh-select [options]="userListOptions" [multiple]="false" [placeholder]="'Select Receiver'"
                             (selected)="userChanged($event,i)" formControlName="inventoryUser" [ItemHeight]="'33'">
                         </sh-select>
@@ -82,7 +82,7 @@
                     </div>
 
                     <div class="col-xs-4 form-group" *ngIf="mode === 'product'">
-                        <!-- <label class="mrB1">Product Name</label> -->
+                        <!-- <label class="mr-b1">Product Name</label> -->
                         <sh-select [options]="stockListOptions" [multiple]="false" [placeholder]="'Select Product'"
                             (selected)="stockChanged($event,i)" [ItemHeight]="'33'" formControlName="stock"></sh-select>
                         <!-- <span [hidden]="!item.controls['stock'].errors?.required"
@@ -96,7 +96,7 @@
                     </div>
 
                     <div class="col-xs-4 form-group">
-                        <!-- <label class="mrB1">Quantity</label> -->
+                        <!-- <label class="mr-b1">Quantity</label> -->
 
                         <div class="row">
                             <div class="col-xs-10">
@@ -104,10 +104,10 @@
                             </div>
 
 
-                            <div class="pull-right mrT unit_add">
+                            <div class="pull-right mr-t unit_add">
                                 <button class="btn-link" (click)="addTransactionItem(transactions.controls[i])"
                                     *ngIf="last">
-                                    <i class="fa fa-plus add_row"></i>
+                                    <i class="icon-plus add_row"></i>
                                 </button>
                                 <button class="btn-link" (click)="deleteTransactionItem(i)" *ngIf="!last">
                                     <i class="icon-cross dlet"></i>
@@ -124,7 +124,7 @@
                     </div>
                     <!-- <div class="col-lg-2 form-group pdT2">
   <a (click)="addTransactionItem()">
-    <i class="fa fa-plus" *ngIf="first || !last"></i>
+    <i class="icon-plus" *ngIf="first || !last"></i>
   </a>
   <a (click)="deleteTransactionItem(i)">
     <i class="fa fa-close" *ngIf="!first && last"></i>
@@ -145,7 +145,7 @@
 
 
             <div class="row">
-                <div class="col-xs-12 text-left mrT1">
+                <div class="col-xs-12 text-left mr-t1">
                     <button class="btn btn-default" (click)="onCancel.emit($event)">Cancel</button>
                     <button class="btn btn-success" [ladda]="isLoading" [disabled]="form.invalid"
                         (click)="save()">Save</button>

@@ -1667,7 +1667,7 @@ span.eligible-ITC {
 
 @media (max-width: 1024px) {
     .customer-invoice-form::before {
-        top: 180px;
+        top: 130px;
     }
     .customer-invoice-form-purchase::before {
         top: 132px;
@@ -1675,6 +1675,11 @@ span.eligible-ITC {
     .show-on-small-screen {
         padding: 0 15px;
         display: block;
+        p{
+            position: absolute;
+            right: 15px;
+            top: -63px;
+        }
     }
         .balance-due-absolute {
         display: none;

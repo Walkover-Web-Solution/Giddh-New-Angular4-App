@@ -71,12 +71,12 @@
                     <button class="btn btn-group btn-filter desktop-button-filter " *ngIf="selectedAccountsList.length>0" (click)="clearSelectedContacts();">
                             <span class="icon-cross"></span> Clear Selected
                     </button>
-                    <div>
+                    <div class="mt-1">
                         <div class="btn-group  pull-right onDesktopView">
-                            <button *ngIf="activeTab == 'customer'" class="btn btn-sky-blue" style="margin-right: 5px" (click)="openAddAndManage('customer')">
+                            <button *ngIf="activeTab == 'customer'" class="btn btn-sky-blue mr-0" (click)="openAddAndManage('customer')">
                             + New Customer
                         </button>
-                            <button *ngIf="activeTab == 'vendor'" class="btn btn-sky-blue " (click)="openAddAndManage('vendor')">
+                            <button *ngIf="activeTab == 'vendor'" class="btn btn-sky-blue mr-0" (click)="openAddAndManage('vendor')">
                             + New Vendor
                         </button>
                         </div>
@@ -134,7 +134,7 @@
 
             <div class="contact-main customerPage on-mobile-view">
 
-                <div class=" pdB2 mrB1">
+                <div class=" pdB2 mr-b1">
 
                     <div class="">
 
@@ -143,7 +143,7 @@
                             <ng-container *ngTemplateOutlet='mainTable'></ng-container>
                             <!-- </perfect-scrollbar> -->
                         </div>
-                        <div class="no-data mrT2 loader-main" *ngIf="!isMobileScreen && isGetAccountsInProcess">
+                        <div class="no-data mr-t2 loader-main" *ngIf="!isMobileScreen && isGetAccountsInProcess">
                             <div class="spinner2">
                                 <div class="cube1"></div>
                                 <div class="cube2"></div>
@@ -220,22 +220,22 @@
                     <!-- <i class="icon-cross text-right close-modal" aria-hidden="true" ></i> -->
                 </div>
                 <div class="modal-body pdL2 pdR2 clearfix">
-                    <h1 class="mrB1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
-                    <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
-                    <h1 class="mrB1">Type message body:</h1>
+                    <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
+                    <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
+                    <h1 class="mr-b1">Type message body:</h1>
                     <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" placeholder="start typing your message here"></textarea>
-                    <small class="mrT mrB grey">Tip: Click on the tabs below to insert data in your message body.
+                    <small class="mr-t mrB grey">Tip: Click on the tabs below to insert data in your message body.
                         Anything followed by '%s_' represents the position
                         where actual data will be placed.
                     </small>
 
-                    <div class="row mrT2">
+                    <div class="row mr-t2">
                         <ul class="list-inline pills">
                             <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)">{{val.name}}</li>
                         </ul>
                     </div>
-                    <div class="mrT4">
-                        <button class="btn btn-sm btn-success pull-right mrL1" (click)="send('sundrycreditors')">{{messageBody.btn.set}}</button>
+                    <div class="mr-t4">
+                        <button class="btn btn-sm btn-success pull-right mr-l1" (click)="send('sundrycreditors')">{{messageBody.btn.set}}</button>
                     </div>
                 </div>
             </div>
@@ -261,24 +261,24 @@
 
                 <div class="modal-body pdL2 pdR2 clearfix">
 
-                    <h1 class="mrB1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
-                    <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
+                    <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
+                    <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
 
-                    <h1 class="mrB1">Type message body:</h1>
+                    <h1 class="mr-b1">Type message body:</h1>
                     <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" placeholder="start typing your message here"></textarea>
-                    <small class="mrT mrB grey">Tip: Click on the tabs below to insert data in your message body.
+                    <small class="mr-t mrB grey">Tip: Click on the tabs below to insert data in your message body.
                         Anything followed by '%s_' represents the position
                         where actual data will be placed.
                     </small>
 
-                    <div class="row mrT2">
+                    <div class="row mr-t2">
                         <ul class="list-inline pills">
                             <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)">{{val.name}}</li>
                         </ul>
                     </div>
 
-                    <div class="mrT4">
-                        <button class="btn btn-sm btn-success pull-right mrL1" (click)="send('sundrydebtors')">{{messageBody.btn.set}}</button>
+                    <div class="mr-t4">
+                        <button class="btn btn-sm btn-success pull-right mr-l1" (click)="send('sundrydebtors')">{{messageBody.btn.set}}</button>
                     </div>
 
                 </div>
@@ -519,24 +519,24 @@
                                                     </div>
 
                                                     <div class="modal-body pdL2 pdR2 clearfix" style="padding: 0px !important;">
-                                                        <h1 class="mrB1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:
+                                                        <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:
                                                         </h1>
-                                                        <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
-                                                        <h1 class="mrB1" style="margin-top:15px;">Type message body:</h1>
+                                                        <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
+                                                        <h1 class="mr-b1" style="margin-top:15px;">Type message body:</h1>
                                                         <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" placeholder="start typing your message here"></textarea>
-                                                        <small class="mrT mrB grey" style="margin-top:15px;display: block">Tip: Click on the tabs
+                                                        <small class="mr-t mrB grey" style="margin-top:15px;display: block">Tip: Click on the tabs
                                                         below to insert data in your message body. Anything followed by
                                                         '%s_' represents
                                                         the position where actual data will be placed.
                                                     </small>
 
-                                                        <div class="row mrT2" style="border: unset;margin-top: 20px;">
+                                                        <div class="row mr-t2" style="border: unset;margin-top: 20px;">
                                                             <ul class="list-inline pills">
                                                                 <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)" style="padding: 5px 10px !important;">{{val.name}}</li>
                                                             </ul>
                                                         </div>
-                                                        <div class="mrT4">
-                                                            <button class="btn btn-sm btn-success pull-right mrL1" (click)="send('sundrydebtors')">{{messageBody.btn.set}}</button>
+                                                        <div class="mr-t4">
+                                                            <button class="btn btn-sm btn-success pull-right mr-l1" (click)="send('sundrydebtors')">{{messageBody.btn.set}}</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -692,24 +692,24 @@
                                                     </div>
 
                                                     <div class="modal-body pdL2 pdR2 clearfix" style="padding: 0px !important;">
-                                                        <h1 class="mrB1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:
+                                                        <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:
                                                         </h1>
-                                                        <input *ngIf="messageBody.type == 'Email'" class="form-control mrB1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
-                                                        <h1 class="mrB1" style="margin-top:15px;">Type message body:</h1>
+                                                        <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
+                                                        <h1 class="mr-b1" style="margin-top:15px;">Type message body:</h1>
                                                         <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" placeholder="start typing your message here"></textarea>
-                                                        <small class="mrT mrB grey" style="margin-top:15px;display: block">Tip: Click on the tabs
+                                                        <small class="mr-t mrB grey" style="margin-top:15px;display: block">Tip: Click on the tabs
                                                             below to insert data in your message body. Anything followed by
                                                             '%s_' represents
                                                             the position where actual data will be placed.
                                                         </small>
 
-                                                        <div class="row mrT2" style="border: unset;margin-top: 20px;">
+                                                        <div class="row mr-t2" style="border: unset;margin-top: 20px;">
                                                             <ul class="list-inline pills">
                                                                 <li *ngFor="let val of dataVariables" (click)="addValueToMsg(val)" style="padding: 5px 10px !important;">{{val.name}}</li>
                                                             </ul>
                                                         </div>
-                                                        <div class="mrT4">
-                                                            <button class="btn btn-sm btn-success pull-right mrL1" (click)="send('sundrycreditors')">{{messageBody.btn.set}}</button>
+                                                        <div class="mr-t4">
+                                                            <button class="btn btn-sm btn-success pull-right mr-l1" (click)="send('sundrycreditors')">{{messageBody.btn.set}}</button>
                                                         </div>
                                                     </div>
                                                 </div>

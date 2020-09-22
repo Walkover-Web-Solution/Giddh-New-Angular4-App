@@ -1,4 +1,4 @@
-<div class="columnar-report-page mrT2">
+<div class="columnar-report-page mr-t2">
     <div class="container-fluid font-14">
         <div class="row">
             <div class="col-lg-3 col-md-8 col-sm-12 col-xs-12 mb-15">
@@ -51,7 +51,7 @@
     <pagination [totalItems]="columnarReportResponse.totalItems" [(ngModel)]="columnarReportResponse.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" [itemsPerPage]="paginationCount" (pageChanged)="pageChanged($event)"></pagination>
 </div>
 <div *ngIf="isLoading && isShowColumnarReport">
-    <div class="no-data mrT2 loader-main">
+    <div class="no-data mr-t2 loader-main">
         <div class="spinner2">
             <div class="cube1"></div>
             <div class="cube2"></div>

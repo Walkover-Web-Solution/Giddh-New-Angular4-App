@@ -5,14 +5,14 @@
     </div>
     <div class="modal-body" id="SharePop">
         <div class="form-group">
-            <h3 class="pdB1">Share with</h3>
+            <h3 class="pd-b1">Share with</h3>
             <div class="add_mailer">
 
                 <!--share account from-->
                 <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" class="form-inline clearfix" autocomplete="off">
                     <div class="input-group form-group col-xs-12">
                         <input name="userEmail" type="email" [(ngModel)]="email" required placeholder="Email ID" class="form-control" [pattern]="giddhEmailRegex">
-                        <div class="input-group-btn mrL1">
+                        <div class="input-group-btn mr-l1">
                             <select name="selectedPermission" class="form-control selected-permission" [(ngModel)]="selectedPermission" required>
                                 <option value="">-Select permission-</option>
                                 <option [value]="permission.uniqueName"
@@ -20,7 +20,7 @@
                                     {{permission.name}}
                                 </option>
                             </select>
-                            <button class="btn btn-success mrL1 btn-share" type="submit" [disabled]="shareAccountForm.invalid" (click)="shareAccount()">Share
+                            <button class="btn btn-success mr-l1 btn-share" type="submit" [disabled]="shareAccountForm.invalid" (click)="shareAccount()">Share
                             </button>
                         </div>
                         <!-- /btn-account -->
@@ -28,7 +28,7 @@
                 </form>
 
                 <!--shared with array-->
-                <div class="col-xs-12 pdT1" *ngIf="(activeAccountSharedWith$ | async)?.length">
+                <div class="col-xs-12 pd-t1" *ngIf="(activeAccountSharedWith$ | async)?.length">
                     <div class="row">
                         <ul class="shared_list group-shared-list">
                             <li *ngFor="let val of (activeAccountSharedWith$ | async); let i = index">

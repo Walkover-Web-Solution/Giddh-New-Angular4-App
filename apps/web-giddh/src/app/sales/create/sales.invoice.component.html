@@ -1,4 +1,4 @@
-<div class="pdB1 upper-layer   clearfix">
+<div class="pd-b1 upper-layer   clearfix">
     <div class="col-xs-12 clearfix">
         <div class="btn-group" dropdown>
             <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
@@ -24,7 +24,7 @@
 <ng-container *ngIf="isUpdateDataInProcess">
 
     <div class="loaderClass">
-        <div class="no-data mrT2 loader-main">
+        <div class="no-data mr-t2 loader-main">
             <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
             <div class="spinner2">
                 <div class="cube1"></div>
@@ -357,7 +357,7 @@
                         <ng-container>
 
                             <section
-                                class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0 ">
+                                class="staticInvoiceTable salseInvoicetable clearfix mr-b2 whiteBg container-fluid ng-tns-c8-0 ">
                                 <div class="table_width-small ">
                                     <table class="table  table-custom-invoice  basic">
                                         <thead>
@@ -702,7 +702,7 @@
                                                                 class="otherTaxLable" style="font-size:13px;">Other
                                                                 Tax?</label>
                                                         </div>
-                                                        <div *ngIf="entry.isOtherTaxApplicable" class="mrT1">
+                                                        <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1">
 
                                                             <span>
                                                                 <span>
@@ -819,16 +819,16 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="pdT1 pl0 max-600" *ngIf="!isPurchaseInvoice">
-                                                        <label class="mrB1">Message</label>
+                                                    <div class="pd-t1 pl0 max-600" *ngIf="!isPurchaseInvoice">
+                                                        <label class="mr-b1">Message</label>
                                                         <textarea style="height:120px !important" class="form-control"
                                                             name="message2"
                                                             [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                                                     </div>
                                                     <!-- commented due to presently attachfile key is not available in request
         -->
-                                                    <div class="pdT1 pl0 max-600 pos-rel" *ngIf="isPurchaseInvoice">
-                                                        <label class="mrB1"><i
+                                                    <div class="pd-t1 pl0 max-600 pos-rel" *ngIf="isPurchaseInvoice">
+                                                        <label class="mr-b1"><i
                                                                 class="icon-file-path"></i>
                                                             Attachment</label>
                                                         <label class="custom-file-label form-control cp pos-rel"
@@ -919,14 +919,14 @@
         {{ isPurchaseInvoice ? 'Payment' : 'Deposit' }}
         </button> -->
                                                                     <div (click)="clickedInside($event)"
-                                                                        id="deposit-dropdown" class=" form-group pd1">
+                                                                        id="deposit-dropdown" class=" form-group pd-1">
                                                                         <p>Deposit</p>
                                                                         <ul>
 
 
                                                                             <li role="menuitem">
                                                                                 <div class="">
-                                                                            <li role="menuitem" class="mrT1 ">
+                                                                            <li role="menuitem" class="mr-t1 ">
                                                                                 <div class="clearfix paymentMode">
 
                                                                                     <sh-select class="pull-right "
@@ -961,7 +961,7 @@
                                                                                         Mode</label>
                                                                                 </div>
                                                                             </li>
-                                                                            <li class="clearfix mrT1">
+                                                                            <li class="clearfix mr-t1">
                                                                                 <input *ngIf="isSalesInvoice"
                                                                                     type="number"
                                                                                     (blur)="txnChangeOccurred()"
@@ -978,7 +978,7 @@
                                                                                 <label class="pull-right">Amount</label>
                                                                             </li>
                                                                             <li *ngIf="toggleFieldForSales && !isCashInvoice"
-                                                                                class="clearfix mrT1">
+                                                                                class="clearfix mr-t1">
                                                                                 <strong
                                                                                     class="pull-right balanceDueText">{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
                                                                                 <strong class="pull-right">Balance
@@ -1179,7 +1179,7 @@
                                                             <span class="input-group-btn">
                                                                 <button type="button" class="btn btn-default btn-number"
                                                                     data-type="plus" data-field="quant[1]">
-                                                                    <span class="fa fa-plus"></span>
+                                                                    <span class="icon-plus"></span>
                                                                 </button>
                                                             </span>
                                                         </div>
@@ -1206,7 +1206,7 @@
                                                             <span class="input-group-btn">
                                                                 <button type="button" class="btn btn-default btn-number"
                                                                     data-type="plus" data-field="quant[1]">
-                                                                    <span class="fa fa-plus"></span>
+                                                                    <span class="icon-plus"></span>
                                                                 </button>
                                                             </span>
                                                         </div>
@@ -1233,7 +1233,7 @@
                                                             <span class="input-group-btn">
                                                                 <button type="button" class="btn btn-default btn-number"
                                                                     data-type="plus" data-field="quant[1]">
-                                                                    <span class="fa fa-plus"></span>
+                                                                    <span class="icon-plus"></span>
                                                                 </button>
                                                             </span>
                                                         </div>
@@ -1263,7 +1263,7 @@
 
                     </section>
 
-                    <section class="clearfix mrB2 whiteBg container-fluid">
+                    <section class="clearfix mr-b2 whiteBg container-fluid">
                     </section>
 
 

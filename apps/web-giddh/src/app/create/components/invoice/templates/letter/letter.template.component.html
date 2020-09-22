@@ -42,7 +42,7 @@
                                                 <sh-select #stateEl formControlName="stateCode" class="splSales"
                                                     [options]="statesSource$ | async" [width]="139"></sh-select>
                                             </div>
-                                            <div class="mrT2 pull-left width100">
+                                            <div class="mr-t2 pull-left width100">
                                                 <div class="form-group col-xs-8">
                                                     <label>PAN</label>
                                                     <input type="text" class="form-control"
@@ -174,7 +174,7 @@
                                                         class="splSales" [options]="statesSource$ | async"
                                                         [width]="139"></sh-select>
                                                 </div>
-                                                <div class="mrT2">
+                                                <div class="mr-t2">
                                                     <label>GSTIN</label>
                                                     <input formControlName="gstNumber" maxLength="15" type="text"
                                                         class="form-control"
@@ -206,7 +206,7 @@
                                                         #statesShipping class="splSales"
                                                         [options]="statesSource$ | async"></sh-select>
                                                 </div>
-                                                <div class="mrT2">
+                                                <div class="mr-t2">
                                                     <label>GSTIN</label>
                                                     <input formControlName="gstNumber"
                                                         [readonly]="CreateInvoiceForm.controls['userDetails'].get('shippingDetails').controls['autoFillShipping'].value"
@@ -318,8 +318,8 @@
             </section>
         </div>
     </div>
-    <div class="row mrT">
-        <section class="clearfix pd1 pdB2 mrB2 whiteBg">
+    <div class="row mr-t">
+        <section class="clearfix pd-1 pdB2 mr-b2 whiteBg">
             <div class="container">
                 <table class="table" formArrayName="entries">
                     <thead>
@@ -470,8 +470,8 @@ class="salesTax"
                     <tbody>
                         <tr>
                             <td width="50%" formGroupName="other">
-                                <div class="col-xs-8 pdT1">
-                                    <label class="mrB1">Message</label>
+                                <div class="col-xs-8 pd-t1">
+                                    <label class="mr-b1">Message</label>
                                     <textarea style="height:140px" class="form-control"
                                         formControlName="note2"></textarea>
                                 </div>

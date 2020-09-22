@@ -1,4 +1,4 @@
-<div class="no-data mrT2 loader-main" *ngIf="showLoader">
+<div class="no-data mr-t2 loader-main" *ngIf="showLoader">
     <div class="spinner2">
         <div class="cube1"></div>
         <div class="cube2"></div>
@@ -7,7 +7,7 @@
 
 <div *ngIf="!showLoader">
     <!-- region page change menu -->
-    <div class="form-group mrB mrT2 clearfix">
+    <div class="form-group mrB mr-t2 clearfix">
 
         <div class="col-12 col-sm-12 clearfix">
 
@@ -43,7 +43,7 @@
     <!-- region update mode loader-->
     <ng-container *ngIf="isUpdateDataInProcess">
         <div class="loaderClass">
-            <div class="no-data mrT2 loader-main">
+            <div class="no-data mr-t2 loader-main">
                 <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
                 <div class="spinner2">
                     <div class="cube1"></div>
@@ -829,7 +829,7 @@
             <ng-container>
 
                 <!-- region normal view -->
-                <section class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0"
+                <section class="staticInvoiceTable salseInvoicetable clearfix mr-b2 whiteBg container-fluid ng-tns-c8-0"
                     *ngIf="!isMobileScreen">
 
                     <ng-container
@@ -1335,7 +1335,7 @@
                                                         *ngIf="!entry.isOtherTaxApplicable" class="otherTaxLable"
                                                         style="font-size:13px;vertical-align: middle">Other Tax?</label>
                                                 </div>
-                                                <div *ngIf="entry.isOtherTaxApplicable" class="mrT1">
+                                                <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1">
 
                                                     <span>
 
@@ -1465,9 +1465,9 @@
                                         <!-- endregion -->
 
                                         <!-- region note/messages -->
-                                        <div class="pdT1 pl0 max-600" *ngIf="!isPurchaseInvoice">
+                                        <div class="pd-t1 pl0 max-600" *ngIf="!isPurchaseInvoice">
 
-                                            <label class="mrB1">Note</label>
+                                            <label class="mr-b1">Note</label>
                                             <textarea style="height:120px !important" class="form-control"
                                                 name="message2"
                                                 [(ngModel)]="invFormData.templateDetails.other.message2">
@@ -1475,9 +1475,9 @@
                                         </div>
                                         <!-- endregion -->
 
-                                        <div class="pdT1 pl0 max-600 pos-rel" *ngIf="isPurchaseInvoice">
+                                        <div class="pd-t1 pl0 max-600 pos-rel" *ngIf="isPurchaseInvoice">
 
-                                            <label class="mrB1"><i class="icon-file-path"></i>
+                                            <label class="mr-b1"><i class="icon-file-path"></i>
                                                 Attachment</label>
 
                                             <label class="custom-file-label form-control cp pos-rel" for="invoiceFile">
@@ -1614,12 +1614,12 @@
                                                 <div class="btn-group">
 
                                                     <div (click)="clickedInside($event)" id="deposit-dropdown"
-                                                        class="form-group pd1">
+                                                        class="form-group pd-1">
                                                         <p>Deposit</p>
                                                         <ul>
                                                             <ng-container
                                                                 *ngIf="isSalesInvoice && (isAccountHaveAdvanceReceipts || isInvoiceAdjustedWithAdvanceReceipts)">
-                                                                <li role="menuitem" class="mrT1 ">
+                                                                <li role="menuitem" class="mr-t1 ">
                                                                     <div
                                                                         class="clearfix paymentMode deposit-payment-mode">
 
@@ -1674,7 +1674,7 @@
                                                             </ng-container>
 
                                                             <ng-container *ngIf="!isUpdateMode">
-                                                                <li role="menuitem" class="mrT1 ">
+                                                                <li role="menuitem" class="mr-t1 ">
                                                                     <div class="clearfix paymentMode">
 
                                                                         <sh-select class="pull-right "
@@ -1705,7 +1705,7 @@
                                                                     </div>
                                                                 </li>
 
-                                                                <li class="clearfix mrT1 d-flex align-items-center payment-mode-amount" *ngIf="isSalesInvoice">
+                                                                <li class="clearfix mr-t1 d-flex align-items-center payment-mode-amount" *ngIf="isSalesInvoice">
                                                                     <input type="text" (blur)="calculateBalanceDue()"
                                                                         placeholder="Amount" name="dueAmount"
                                                                         class="form-control amountField text-right pull-right max100"
@@ -1716,7 +1716,7 @@
                                                                     <label class="pull-right">Amount</label>
                                                                 </li>
 
-                                                                <li class="clearfix mrT1  d-flex align-items-center payment-mode-amount" *ngIf="isCashInvoice">
+                                                                <li class="clearfix mr-t1  d-flex align-items-center payment-mode-amount" *ngIf="isCashInvoice">
                                                                     <span
                                                                         class="amountField pull-right max100 amountFiledCash">
                                                                         <span
@@ -1725,7 +1725,7 @@
                                                                     <label class="pull-right">Amount</label>
                                                                 </li>
 
-                                                                <li class="clearfix mrT1 bigger-dollar"
+                                                                <li class="clearfix mr-t1 bigger-dollar"
                                                                     *ngIf="isSalesInvoice ">
                                                                     <strong class="pull-right balanceDueText"> <span
                                                                             *ngIf="isMulticurrencyAccount && !isPurchaseInvoice">{{invFormData.accountDetails.currencySymbol}}</span>
@@ -2240,7 +2240,7 @@
                                                             style="font-size:13px;vertical-align: middle">Other
                                                             Tax?</label>
                                                     </div>
-                                                    <div *ngIf="entry.isOtherTaxApplicable" class="mrT1 othertaxes">
+                                                    <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1 othertaxes">
 
                                                         <span>
 
@@ -2364,8 +2364,8 @@
 
                             </div>
 
-                            <div class="pdT1 pl0 max-600" *ngIf="!isPurchaseInvoice">
-                                <label class="mrB1">Message</label>
+                            <div class="pd-t1 pl0 max-600" *ngIf="!isPurchaseInvoice">
+                                <label class="mr-b1">Message</label>
                                 <textarea style="height:120px" class="form-control" name="message2"
                                     [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                             </div>
@@ -2471,13 +2471,13 @@
 
                                     <div class="btn-group">
 
-                                        <div (click)="clickedInside($event)" id="deposit-dropdown" class="form-group pd1">
+                                        <div (click)="clickedInside($event)" id="deposit-dropdown" class="form-group pd-1">
                                             <p>Deposit</p>
                                             <ul>
 
 
 
-                                                <li role="menuitem" class="mrT1 ">
+                                                <li role="menuitem" class="mr-t1 ">
                                                     <div class="clearfix paymentMode deposit-payment-mode">
 
                                                         <sh-select class="pull-right " name="depositAccountUniqueName"
@@ -2498,7 +2498,7 @@
                                                     </div>
                                                 </li>
 
-                                                <li class="clearfix mrT1  d-flex align-items-center payment-mode-amount" *ngIf="isSalesInvoice">
+                                                <li class="clearfix mr-t1  d-flex align-items-center payment-mode-amount" *ngIf="isSalesInvoice">
                                                     <input type="text" (blur)="calculateBalanceDue()" placeholder="Amount"
                                                         name="dueAmount" class="form-control amountField text-right pull-right max100"
                                                         [(ngModel)]="depositAmount" [prefix]="depositCurrSymbol"
@@ -2506,7 +2506,7 @@
                                                     <label class="pull-right pt-1">Amount</label>
                                                 </li>
 
-                                                <li class="clearfix mrT1  d-flex align-items-center payment-mode-amount" *ngIf="isCashInvoice">
+                                                <li class="clearfix mr-t1  d-flex align-items-center payment-mode-amount" *ngIf="isCashInvoice">
                                                     <span class="amountField pull-right max100 amountFiledCash">
                                                         <span
                                                             *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
@@ -2514,7 +2514,7 @@
                                                     <label class="pull-right pt-1">Amount</label>
                                                 </li>
 
-                                                <li class="clearfix mrT1 bigger-dollar" *ngIf="isSalesInvoice ">
+                                                <li class="clearfix mr-t1 bigger-dollar" *ngIf="isSalesInvoice ">
                                                     <strong class="pull-right balanceDueText"> <span
                                                             *ngIf="isMulticurrencyAccount">{{invFormData.accountDetails.currencySymbol}}</span>
                                                         {{invFormData.voucherDetails.balanceDue | giddhCurrency}}

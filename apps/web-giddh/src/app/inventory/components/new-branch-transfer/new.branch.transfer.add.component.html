@@ -30,7 +30,7 @@
             <form #newBranchTransferForm="ngForm" novalidate="">
                 <div class="multiple-products row clearfix pl-15 pr-15">
                     <div class="col-lg-6 col-md-8" *ngIf="branchTransferMode === 'deliverynote'">
-                        <div class="row mrB2">
+                        <div class="row mr-b2">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     {{branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'}} <span class="red-text">*</span>
@@ -41,7 +41,7 @@
                                     [readonly]="!editBranchTransferUniqueName" [disabled]="editBranchTransferUniqueName ? 'disabled' : null" [bsConfig]="bsConfig">
                             </div>
                         </div>
-                        <div *ngIf="transferType === 'senders'" class="row mrB2">
+                        <div *ngIf="transferType === 'senders'" class="row mr-b2">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     Product's Name <span class="red-text">*</span>
@@ -52,7 +52,7 @@
                                     (selected)="selectProduct($event, branchTransfer.products[0])" required></sh-select>
                             </div>
                         </div>
-                        <div *ngIf="transferType === 'senders'" class="row mrB2">
+                        <div *ngIf="transferType === 'senders'" class="row mr-b2">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     SKU Code
@@ -62,7 +62,7 @@
                                 <input name="productSkuCode" class="form-control" maxlength="50" [(ngModel)]="branchTransfer.products[0].skuCode">
                             </div>
                         </div>
-                        <div *ngIf="transferType === 'senders'" class="row mrB2">
+                        <div *ngIf="transferType === 'senders'" class="row mr-b2">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     HSN/SAC Code
@@ -73,7 +73,7 @@
                                 <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="(!inventorySettings?.manageInventory && branchTransfer.products[0].sacNumber)" [(ngModel)]="branchTransfer.products[0].sacNumber">
                             </div>
                         </div>
-                        <div class="row mrB2">
+                        <div class="row mr-b2">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     Sender's Name <span class="red-text">*</span>
@@ -85,7 +85,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mrB2">
+                        <div class="row mr-b2">
                             <div class="col-lg-3 col-md-4">
                                 <label class="nowrap">
                                     Sender's Warehouse <span class="red-text">*</span>
@@ -97,7 +97,7 @@
                                 </sh-select>
                             </div>
                         </div>
-                        <div class="row mrB2" *ngIf="formFields && formFields['taxName']">
+                        <div class="row mr-b2" *ngIf="formFields && formFields['taxName']">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     Sender's {{formFields['taxName'].label}}
@@ -107,7 +107,7 @@
                                 <input type="text" class="form-control" name="sourceTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #senderGstNumberField (change)="checkTaxNumberValidation(senderGstNumberField);" [(ngModel)]="branchTransfer.sources[0].warehouse.taxNumber">
                             </div>
                         </div>
-                        <div class="row mrB2">
+                        <div class="row mr-b2">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     Sender's Address
@@ -117,7 +117,7 @@
                                 <textarea class="form-control" name="sourceAddress" [(ngModel)]="branchTransfer.sources[0].warehouse.address"></textarea>
                             </div>
                         </div>
-                        <div class="row mrB2" *ngIf="transferType !== 'senders'">
+                        <div class="row mr-b2" *ngIf="transferType !== 'senders'">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     Receiver's Name <span class="red-text">*</span>
@@ -128,7 +128,7 @@
                                     required [disabled]="isUpdateMode"></sh-select>
                             </div>
                         </div>
-                        <div class="row mrB2" *ngIf="transferType !== 'senders'">
+                        <div class="row mr-b2" *ngIf="transferType !== 'senders'">
                             <div class="col-lg-3 col-md-4 nowrap">
                                 <label class="nowrap">
                                     Receiver's Warehouse <span class="red-text">*</span>
@@ -139,7 +139,7 @@
                                     (selected)="getWarehouseDetails('destinations', 0); focusSelectDropdown(0);" required></sh-select>
                             </div>
                         </div>
-                        <div class="row mrB2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
+                        <div class="row mr-b2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     Receiver's {{formFields['taxName'].label}}
@@ -149,7 +149,7 @@
                                 <input type="text" class="form-control" name="destinationTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #receiverGstNumberField (change)="checkTaxNumberValidation(receiverGstNumberField);" [(ngModel)]="branchTransfer.destinations[0].warehouse.taxNumber">
                             </div>
                         </div>
-                        <div class="row mrB2" *ngIf="transferType !== 'senders'">
+                        <div class="row mr-b2" *ngIf="transferType !== 'senders'">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     Receiver's Address
@@ -161,7 +161,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-8" *ngIf="branchTransferMode === 'receiptnote'">
-                        <div class="row mrB2">
+                        <div class="row mr-b2">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     {{branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'}} <span class="red-text">*</span>
@@ -172,7 +172,7 @@
                                     [disabled]="editBranchTransferUniqueName ? 'disabled' : null" bsDatepicker>
                             </div>
                         </div>
-                        <div *ngIf="transferType === 'senders'" class="row mrB2">
+                        <div *ngIf="transferType === 'senders'" class="row mr-b2">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     Product's Name <span class="red-text">*</span>
@@ -183,7 +183,7 @@
                                     (selected)="selectProduct($event, branchTransfer.products[0]); focusDestinationWarehouse();" required></sh-select>
                             </div>
                         </div>
-                        <div *ngIf="transferType === 'senders'" class="row mrB2">
+                        <div *ngIf="transferType === 'senders'" class="row mr-b2">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     SKU Code
@@ -193,7 +193,7 @@
                                 <input name="productSkuCode" maxlength="50" class="form-control" [(ngModel)]="branchTransfer.products[0].skuCode">
                             </div>
                         </div>
-                        <div *ngIf="transferType === 'senders'" class="row mrB2">
+                        <div *ngIf="transferType === 'senders'" class="row mr-b2">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     HSN/SAC Code
@@ -204,7 +204,7 @@
                                 <input name="productHsnCode" class="form-control" maxlength="8" *ngIf="(!inventorySettings?.manageInventory && branchTransfer.products[0].sacNumber)" [(ngModel)]="branchTransfer.products[0].sacNumber">
                             </div>
                         </div>
-                        <div class="row mrB2" *ngIf="transferType !== 'senders'">
+                        <div class="row mr-b2" *ngIf="transferType !== 'senders'">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     Sender's Name <span class="red-text">*</span>
@@ -215,7 +215,7 @@
                                     [disabled]="isUpdateMode" (selected)="focusSourceWarehouse()"></sh-select>
                             </div>
                         </div>
-                        <div class="row mrB2" *ngIf="transferType !== 'senders'">
+                        <div class="row mr-b2" *ngIf="transferType !== 'senders'">
                             <div class="col-lg-3 col-md-4">
                                 <label class="nowrap">
                                     Sender's Warehouse <span class="red-text">*</span>
@@ -226,7 +226,7 @@
                                     required></sh-select>
                             </div>
                         </div>
-                        <div class="row mrB2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
+                        <div class="row mr-b2" *ngIf="transferType !== 'senders' && formFields && formFields['taxName']">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     Sender's {{formFields['taxName'].label}}
@@ -236,7 +236,7 @@
                                 <input type="text" class="form-control" name="sourceTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #senderGstNumberField (change)="checkTaxNumberValidation(senderGstNumberField);" [(ngModel)]="branchTransfer.sources[0].warehouse.taxNumber">
                             </div>
                         </div>
-                        <div class="row mrB2" *ngIf="transferType !== 'senders'">
+                        <div class="row mr-b2" *ngIf="transferType !== 'senders'">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     Sender's Address
@@ -246,7 +246,7 @@
                                 <textarea class="form-control" name="sourceAddress" [(ngModel)]="branchTransfer.sources[0].warehouse.address"></textarea>
                             </div>
                         </div>
-                        <div class="row mrB2">
+                        <div class="row mr-b2">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     Receiver's Name <span class="red-text">*</span>
@@ -256,7 +256,7 @@
                                 <input name="destinationName" class="form-control" [(ngModel)]="myCurrentCompany" required disabled>
                             </div>
                         </div>
-                        <div class="row mrB2">
+                        <div class="row mr-b2">
                             <div class="col-lg-3 col-md-4 nowrap">
                                 <label class="nowrap">
                                     Receiver's Warehouse <span class="red-text">*</span>
@@ -267,7 +267,7 @@
                                     (selected)="getWarehouseDetails('destinations', 0); focusSelectDropdown(0);" required></sh-select>
                             </div>
                         </div>
-                        <div class="row mrB2" *ngIf="formFields && formFields['taxName']">
+                        <div class="row mr-b2" *ngIf="formFields && formFields['taxName']">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     Receiver's {{formFields['taxName'].label}}
@@ -277,7 +277,7 @@
                                 <input type="text" class="form-control" name="destinationTaxNumber" placeholder="Enter {{formFields['taxName'].label}}" #receiverGstNumberField (change)="checkTaxNumberValidation(receiverGstNumberField);" [(ngModel)]="branchTransfer.destinations[0].warehouse.taxNumber">
                             </div>
                         </div>
-                        <div class="row mrB2">
+                        <div class="row mr-b2">
                             <div class="col-lg-3 col-md-4">
                                 <label>
                                     Receiver's Address
@@ -507,7 +507,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                        <div class="addNewLine mrT1">
+                        <div class="addNewLine mr-t1">
                             <a class="multipleRecivers" (click)="addReceiver()" *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'"> + Add
                                 Multiple Receivers</a>
                             <a class="multipleRecivers" (click)="addSender()" *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'"> + Add
@@ -518,12 +518,12 @@
                             <tr>
                                 <td colspan="4" class="no-padding">
                                     <div class="transportation-details pt-5">
-                                        <h3 class="mrB1">Transportation Details</h3>
+                                        <h3 class="mr-b1">Transportation Details</h3>
                                         <div class="row">
-                                            <div class="col-sm-6 mrB2">
+                                            <div class="col-sm-6 mr-b2">
                                                 <input type="text" #dispatchDate="bsDatepicker" placeholder="Dispatched Date" class="form-control" name="dispatchedDate" [(ngModel)]="tempDateParams.dispatchedDate" [minDate]="tempDateParams.dateOfSupply" readonly bsDatepicker [bsConfig]="bsConfig" (bsValueChange)="focusTransportCompany()">
                                             </div>
-                                            <div class="col-sm-6 mrB2">
+                                            <div class="col-sm-6 mr-b2">
                                                 <sh-select #transCompany placeholder="Transport Company" name="transporterId" [isFilterEnabled]="true" (keydown)="keydownPressed($event)" [forceClearReactive]="forceClear$ | async" [options]="transporterDropdown$ | async" [(ngModel)]="branchTransfer.transporterDetails.transporterId"
                                                     [notFoundLink]="true" [multiple]="false" [ItemHeight]="33" (selected)="focusTransporterMode()">
                                                     <ng-template #notFoundLinkTemplate>
@@ -534,16 +534,16 @@
                                                     </ng-template>
                                                 </sh-select>
                                             </div>
-                                            <div class="col-sm-6 mrB2">
+                                            <div class="col-sm-6 mr-b2">
                                                 <sh-select #transMode placeholder="Transport Mode" name="transportMode" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="transporterMode" [(ngModel)]="branchTransfer.transporterDetails.transportMode" (selected)="focusVehicleNumber();"></sh-select>
                                             </div>
-                                            <div class="col-sm-6 mrB2">
+                                            <div class="col-sm-6 mr-b2">
                                                 <input #vehicleNumber type="text" placeholder="Vehicle Number" class="form-control" name="vehicleNumber" [(ngModel)]="branchTransfer.transporterDetails.vehicleNumber" maxlength="20">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-12">
-                                                <h3 class="mrB1">Note</h3>
+                                                <h3 class="mr-b1">Note</h3>
                                                 <textarea class="form-control" maxlength="100" rows="5" cols="5" name="note" [(ngModel)]="branchTransfer.note"></textarea>
                                             </div>
                                         </div>

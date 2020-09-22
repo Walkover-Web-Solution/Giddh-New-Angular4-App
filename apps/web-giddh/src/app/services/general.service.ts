@@ -256,8 +256,8 @@ export class GeneralService {
         }];
         const headerText: string = 'Reverse Charge Confirmation';
         const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mrB1 text-light';
-        const footerCssClass: string = 'mrB1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
         return (isRcmSelected) ? {
             headerText,
             headerCssClass,

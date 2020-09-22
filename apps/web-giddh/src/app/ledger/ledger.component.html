@@ -1,5 +1,5 @@
 <div class="btn-group ledger-ellipse" dropdown dropdown placement="left" *ngIf="isMobileScreen">
-    <button id="button-basic" dropdownToggle type="button" class="dropdown-toggle btn" aria-controls="dropdown-basic">
+    <button id="button-basic" dropdownToggle type="button" class="dropdown-toggle btn mr-0" aria-controls="dropdown-basic">
         <i class="icon-dots-three-vertical"></i>
     </button>
     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
@@ -12,9 +12,9 @@
 </div>
 <section class="container ledger-section" [hidden]="isShowLedgerColumnarReportTable">
     <!-- region ledger table-->
-    <div class="ledg-head transactions-page mt-2 pos-rel">
+    <div class="ledg-head transactions-page mt-15 pos-rel">
         <!-- region ledger header -->
-        <div class="clearfix row">
+        <div class="clearfix row mb-15">
             <!-- region currency toggle -->
             <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 search-ledger-wrapper">
                 <div class="d-flex search-ledger-field">
@@ -51,7 +51,7 @@
                                 (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
                             <i class="icon-search1 pos-abs"></i>
                         </span>
-                        <a class="cp mrL1 clear-filter-btn"
+                        <a class="cp mr-l1 clear-filter-btn"
                             *ngIf="(searchText || isAdvanceSearchImplemented) && isMobileScreen" href="javascript:;"
                             (click)="resetAdvanceSearch()" tooltip="Reset Advance Search">
                             <i aria-hidden="true" class="icon-refrsh"></i> Clear Filter
@@ -70,12 +70,12 @@
                             [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                             class="giddh-datepicker date-range-picker" />
                     </span>
-                    <span *ngIf="!isMobileScreen" id="advance-filter" class="advance-icon d-flex advance-search-filter pointer"
+                    <span *ngIf="!isMobileScreen" id="advance-filter" (click)="onOpenAdvanceSearch()" class="advance-icon d-flex advance-search-filter pointer"
                         [tooltip]="'Advance Search'" [placement]="'top'"
                         [ngStyle]="{'margin-left': checkedTrxWhileHovering.length === 0 ? '7px': '0px'}">
-                        <span class="icon-advance-filter" (click)="onOpenAdvanceSearch()"></span>
+                        <span class="icon-advance-filter"></span>
                     </span>
-                    <a class="cp mrL1 clear-filter-btn" id="clear-filter" *ngIf="isAdvanceSearchImplemented && !isMobileScreen"
+                    <a class="cp mr-l1 clear-filter-btn" id="clear-filter" *ngIf="isAdvanceSearchImplemented && !isMobileScreen"
                         href="javascript:;" (click)="resetAdvanceSearch()" tooltip="Reset Advance Search">
                         <i aria-hidden="true" class="icon-refrsh"></i> Clear Filter
                     </a>
@@ -122,7 +122,7 @@
                 <div class="d-flex xs-width-100 ledger-head-top">
 
                     <div *ngIf="isLedgerAccountAllowsMultiCurrency" class="advanc-search-block">
-                        <span class="mr-1 d-inilne-block font-14">{{ baseCurrencyDetails?.code }}</span>
+                        <span class="mr-15 d-inilne-block font-14">{{ baseCurrencyDetails?.code }}</span>
 
                         <div class="toggle d-inline-block currencyToggler" data-key="disabled">
 
@@ -136,7 +136,7 @@
 
                         </div>
 
-                        <span class="ml-1 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
+                        <span class="ml-15 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
                     </div>
 
                     <div class="d-flex">
@@ -157,7 +157,7 @@
         </div>
         <div *ngIf="isLedgerAccountAllowsMultiCurrency && isMobileScreen" class="advanc-search-block
             mt-05">
-            <span class="mr-1 d-inilne-block font-14">{{ baseCurrencyDetails?.code }}</span>
+            <span class="mr-15 d-inilne-block font-14">{{ baseCurrencyDetails?.code }}</span>
 
             <div class="toggle d-inline-block currencyToggler" data-key="disabled">
 
@@ -171,7 +171,7 @@
 
             </div>
 
-            <span class="ml-1 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
+            <span class="ml-15 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
         </div>
         <!-- endregion -->
         <div class="custom-tabs mt-2 mb-2">
@@ -192,8 +192,8 @@
 
         <!-- region bank ledgers-->
         <div class="clearfix"></div>
-        <h1 class="mrT2 primary_clr" *ngIf="isBankTransactionLoading">Loading Transactions...</h1>
-        <section id="eledgerwrap" class="mrT2" *ngIf="lc.showEledger">
+        <h1 class="mr-t2 primary_clr" *ngIf="isBankTransactionLoading">Loading Transactions...</h1>
+        <section id="eledgerwrap" class="mr-t2" *ngIf="lc.showEledger">
             <div class="alert alert-danger ledger-book fade in pr" style="padding-right:15px">
                 <button type="button" class="close">
                     <span style="font-size:12px;font-weight:normal"
@@ -524,7 +524,7 @@
         <!-- endregion -->
         <!-- region account table-->
         <!-- Need to make this code correctly working -->
-        <table class="col-xs-12 ledger-head mrT1 width-100"
+        <table class="col-xs-12 ledger-head mr-t1 width-100"
             *ngIf="!isMobileScreen || (isMobileScreen && visibleTransactionTypeMobile !== 'all')">
             <thead>
                 <tr>
@@ -596,7 +596,7 @@
                 </tbody>
             </table>
             <!-- region pagination -->
-            <div class="text-center mrT2 page-count pa">
+            <div class="text-center mr-t2 page-count pa">
                 <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions,</span>
                 <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
 
@@ -1261,7 +1261,7 @@
             <!-- endregion -->
 
             <!-- region pagination -->
-            <div class="text-center mrT2 page-count pa">
+            <div class="text-center mr-t2 page-count pa">
                 <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions,</span>
                 <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
 
@@ -1283,11 +1283,11 @@
 
 <div class="container" *ngIf="!isShowLedgerColumnarReportTable">
     <div class="row">
-        <div class="col-xs-12 text-right mrT1" [hidden]="!isBankOrCashAccount">
+        <div class="col-xs-12 text-right mr-t1" [hidden]="!isBankOrCashAccount">
             <button [hidden]="!closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm"
                 (click)="getReconciledBack();">Back
             </button>
-            <div *ngIf="closingBalanceBeforeReconcile  showLoader" class="box mrT2 mrB2 clearfix text-center">
+            <div *ngIf="closingBalanceBeforeReconcile  showLoader" class="box mr-t2 mr-b2 clearfix text-center">
                 <div class="col-xs-6 text-right">Balance as per bank
                     <h3 class="fs20 primary_clr">{{reconcileClosingBalanceForBank?.amount}}
                         {{reconcileClosingBalanceForBank?.type}}
@@ -1383,7 +1383,7 @@
 
                         <div class="d-flex debit-credit-amount">
 
-                            <h1 class="mrT font16 greyTextClr d-flex" style="flex-direction: column">Debit
+                            <h1 class="mr-t font16 greyTextClr d-flex" style="flex-direction: column">Debit
                                 <span class="digit-blue mt-1">
                                     {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.debitTotal | giddhCurrency}}
                                 </span>
@@ -1392,7 +1392,7 @@
                                 </span>
                             </h1>
 
-                            <h1 class="mrT font16 greyTextClr d-flex" style="flex-direction: column">Credit
+                            <h1 class="mr-t font16 greyTextClr d-flex" style="flex-direction: column">Credit
                                 <span class="digit-blue mt-1">
                                     {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.creditTotal | giddhCurrency}}
                                 </span>
@@ -1517,7 +1517,7 @@
                 </div>
                 <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
                     <form name="newRole" novalidate class="" autocomplete="off">
-                        <div class="modal_wrap mrB2">
+                        <div class="modal_wrap mr-b2">
                             <h3>Do you want to delete the selected entrie(s)? </h3>
                             <p class="text-gray font-14 mt-05">All their corresponding vouchers and invoices will be
                                 deleted permanently and will no longer be accessible from other modules.</p>
@@ -1551,10 +1551,10 @@
                 </div>
                 <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
                     <form name="newRole" novalidate class="" autocomplete="off">
-                        <div class="modal_wrap mrB2 text-center">
+                        <div class="modal_wrap mr-b2 text-center">
                             <h2>Select voucher generate option</h2>
                         </div>
-                        <div class="row mrT2 ledger-btn">
+                        <div class="row mr-t2 ledger-btn">
                             <div class="col-xs-6 col-sm-6 pr-1 pl-1">
                                 <button type="submit" class="btn btn-block btn-success"
                                     (click)="onSelectInvoiceGenerateOption(false)">

@@ -683,6 +683,9 @@ sh-select:focus {
     }
 }
 @media only screen and (max-width: 991px) {
+    .stat-block {
+        padding-left: 20px;
+    }
     .ledg-head table td[class*="col-"],
     .ledg-head table td .select2-container {
         border-bottom: 0px solid #ccc;
@@ -903,6 +906,9 @@ sh-select:focus {
     }
 }
 */
+.ledger-row td:nth-child(3) {
+    justify-content: flex-end !important;
+}
 @media (max-width: 767px) {
     .ledger-head {
         th {

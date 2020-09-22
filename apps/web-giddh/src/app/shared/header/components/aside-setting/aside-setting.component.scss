@@ -86,7 +86,6 @@
         }
     }
     .help-aside-body{
-        padding-bottom: 25%;
         .search-field{
             padding: 15px;
             input{
@@ -142,6 +141,9 @@
             }
         }
     }
+}
+.setting-items ul li:hover a span i{
+    color: $nero !important;
 }
 
 :host.setting-sidebar{
@@ -199,6 +201,13 @@
                     }
                 }
             }
+        }
+    }
+}
+@media(max-height:900px){
+    .aside-pane {
+        .help-aside-body{
+            padding-bottom: 25%;
         }
     }
 }

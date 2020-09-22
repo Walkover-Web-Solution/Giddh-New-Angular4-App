@@ -8,7 +8,7 @@
     <!-- form -->
     <div class="col-xs-12 col-sm-12">
         <div class="mfStockSearchRequestForm clearfix">
-            <form #mfStockSearchRequestForm="ngForm" class="col-xs-12 pl-0 pr-0 mt-2 mb-05 manufacturing-form" (submit)="getReports()"
+            <form #mfStockSearchRequestForm="ngForm" class="col-xs-12 pl-0 pr-0 mt-15 mb-05 manufacturing-form" (submit)="getReports()"
                 autocomplete="off">
                 <div class="row">
                     <div class="form-group col-lg-2 col-md-6">
@@ -59,7 +59,7 @@
     </div>
     <!-- search form end -->
     <section *ngIf="(isReportLoading$ | async)" class="clearfix mart100 col-xs-12">
-        <p class="lead alC mrT4">Loading...</p>
+        <p class="lead alC mr-t4">Loading...</p>
     </section>
     <div class="no-data mart100 col-xs-12 col-sm-12"
         *ngIf="!(isReportLoading$ | async) && reportData && reportData.results.length === 0">

@@ -20,7 +20,7 @@ import { ChildGroup } from '../../../../models/api-models/Search';
         </div>
       </div>
 
-      <div class="col-4  bdrL group text-right pull-right pd1" *ngIf="groupDetail.level1">&nbsp;</div>
+      <div class="col-4  bdrL group text-right pull-right pd-1" *ngIf="groupDetail.level1">&nbsp;</div>
       <!--    <div class="col-2  bdrL group text-right"> <span>{{groupDetail.forwardedBalance.amount | giddhCurrency}}{{groupDetail.forwardedBalance | recType}} </span></div> -->
     </div>
     <ng-container *ngFor="let account of groupDetail.accounts">

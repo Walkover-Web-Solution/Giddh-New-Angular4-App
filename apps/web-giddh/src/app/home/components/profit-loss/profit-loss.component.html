@@ -14,7 +14,7 @@
 
         <div class="card-body pos-rel">
             <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-                <div class="no-data mrT2 loader-main">
+                <div class="no-data mr-t2 loader-main">
                     <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
                     <div class="spinner2">
                         <div class="cube1"></div>
@@ -30,20 +30,20 @@
                 </div>
                 <div class="clearfix mb-2 total-income">
                     <div>
-                        <span class="mrB1 due-amount">Net Profit/Loss</span>
+                        <span class="mr-b1 due-amount">Net Profit/Loss</span>
                         <span class="total-amount pull-right">
                                 {{netProfitLossType}}<span>{{amountSettings.baseCurrencySymbol}}</span> {{ netProfitLoss | giddhCurrency }}</span>
                     </div>
                 </div>
                 <div class="clearfix mb-2 total-income">
                     <div>
-                        <span class="mrB1 due-amount">Total Income</span>
+                        <span class="mr-b1 due-amount">Total Income</span>
                         <span class="total-amount pull-right total-expenses-text"><span>{{amountSettings.baseCurrencySymbol}}</span> {{ totalIncome | giddhCurrency }} {{totalIncomeType}}</span>
                     </div>
                 </div>
                 <div class="clearfix mb-2 total-income">
                     <div>
-                        <span class="mrB1 due-amount">Total Expenses</span>
+                        <span class="mr-b1 due-amount">Total Expenses</span>
                         <span class="total-amount pull-right total-income-text"><span>{{amountSettings.baseCurrencySymbol}}</span> {{ totalExpense | giddhCurrency }} {{totalExpenseType}}</span>
                     </div>
                 </div>

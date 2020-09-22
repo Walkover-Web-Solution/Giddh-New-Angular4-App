@@ -269,7 +269,7 @@
                 </div>
             </div>
 
-            <div class="clearfix mrT2 relative">
+            <div class="clearfix mr-t2 relative">
                 <div class="transaction-popup mb-1" *ngIf="seletedUserPlans?.additionalCharges >0">
                     <p>You have crossed transactions limit of your </p>
                     <p><strong>Professional Plan subscribed on {{seletedUserPlans?.startedAt}}!</strong></p>
@@ -281,7 +281,7 @@
 
                 <!-- <div class="row">
                 <div class="col-sm-7 transaction-list">
-                    <div class="box clearfix mrT2 no-padding">
+                    <div class="box clearfix mr-t2 no-padding">
                         <div class="table-responsive">
                             <table class="table basic mr0 subscription-table">
                                 <thead>
@@ -307,7 +307,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="mrT2">
+                    <div class="mr-t2">
                         <p><small>* Additional charges on transactions above {{seletedUserPlans?.planDetails?.transactionLimit | number}} @ {{seletedUserPlans?.planDetails?.ratePerExtraTransaction | number}} {{activeCompany?.baseCurrency}} per transaction</small>
                         </p>
                         <p><small>* Each month includes previous month's transactions</small></p>
@@ -316,7 +316,7 @@
 
 
                 <div class="col-sm-5 transaction-list">
-                    <div class="box2 clearfix mrT2">
+                    <div class="box2 clearfix mr-t2">
                         <div class="head-title">
                             <h3>Companies Name + Total Transactions (till today)</h3>
                         </div>
@@ -362,7 +362,7 @@
     </div>
 </ng-container>
 <div *ngIf="isLoading">
-    <div class="no-data mrT2 loader-main">
+    <div class="no-data mr-t2 loader-main">
         <div class="spinner2">
             <div class="cube1"></div>
             <div class="cube2"></div>
@@ -377,7 +377,7 @@
   </button>
 
     <div class="modal-body">
-        <div class="modal-list mrB1">
+        <div class="modal-list mr-b1">
             <ul>
                 <li>
                     <h3 class="">Company Name:</h3> {{ modalRef.content.company.name }}
