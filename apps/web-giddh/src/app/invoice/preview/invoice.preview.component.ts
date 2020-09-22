@@ -886,7 +886,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     invoiceNumber: this.selectedInvoice.voucherNumber,
                     voucherType: this.selectedVoucher
                 };
-                this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, this.selectedInvoice.account.uniqueName));
+
+                let account = (selectedVoucher) ? encodeURIComponent(selectedVoucher.account.uniqueName) : encodeURIComponent(this.selectedInvoice.account.uniqueName);
+
+                this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, account));
             }
 
         }
