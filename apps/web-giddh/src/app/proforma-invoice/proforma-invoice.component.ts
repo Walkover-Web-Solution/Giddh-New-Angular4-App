@@ -4854,7 +4854,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     private showGstAndTrnUsingCountryName(name: string) {
-        if (this.selectedCompany.country === name) {
+        if (this.selectedCompany && this.selectedCompany.country === name) {
             if (name === 'India') {
                 this.showGSTINNo = true;
                 this.showTRNNo = false;
@@ -5894,7 +5894,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     item.uniqueName = item.account.uniqueName;
                     item.value = item.account.uniqueName;
                     item.additional = item.account;
-                    item.additional.maxQuantity = 1;
+                    item.additional.maxQuantity = entry.totalQuantity - entry.usedQuantity;
                 }
 
                 if(item.additional.maxQuantity > 0) {
@@ -5951,7 +5951,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                                     this.invFormData.entries.forEach(entry => {
                                         let entryRemoved = false;
-                                        if(entry && entry.transactions && entry.transactions.length > 0 && remainingQuantity > 0) {
+                                        if(entry && entry.transactions && entry.transactions.length > 0 && remainingQuantity > 0 && entry.purchaseOrderItemMapping && entry.purchaseOrderItemMapping.uniqueName === order) {
                                             let transactionLoop = 0;
                                             entry.transactions.forEach(transaction => {
                                                 if(remainingQuantity > 0) {

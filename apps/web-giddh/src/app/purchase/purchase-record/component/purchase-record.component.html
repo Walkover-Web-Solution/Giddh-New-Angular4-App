@@ -1,12 +1,12 @@
 <div _ngcontent-xlm-c43="" class="invoice-control">
     <tabset>
         <tab heading="Purchase Order" [active]="activeTab == 'order'" (select)="onTabChanged('order')">
-            <div>
+            <div *ngIf="activeTab == 'order'">
                 <purchase-order (refreshPurchaseBill)="purchaseOrderOutput($event)"></purchase-order>
             </div>
         </tab>
         <tab heading="Purchase Bill" [active]="activeTab == 'bill'" (select)="onTabChanged('bill')">
-            <div>
+            <div *ngIf="activeTab == 'bill'">
                 <app-invoice-preview [selectedVoucher]="'purchase'" [refreshPurchaseBill]="refreshPurchaseBill" (resetRefreshPurchaseBill)="purchaseOrderOutput($event)"></app-invoice-preview>
             </div>
         </tab>
