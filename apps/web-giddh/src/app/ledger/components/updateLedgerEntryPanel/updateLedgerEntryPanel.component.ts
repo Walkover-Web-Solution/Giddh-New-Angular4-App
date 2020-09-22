@@ -1766,7 +1766,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             q: encodeURIComponent(query),
             page,
             withStocks: true,
-            accountUniqueName: accountUniqueName
+            accountUniqueName: encodeURIComponent(accountUniqueName)
         }
         this.searchService.searchAccount(requestObject).subscribe(data => {
             if (data && data.body && data.body.results) {
