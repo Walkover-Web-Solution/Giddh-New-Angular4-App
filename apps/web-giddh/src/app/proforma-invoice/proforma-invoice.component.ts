@@ -5951,7 +5951,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                                     this.invFormData.entries.forEach(entry => {
                                         let entryRemoved = false;
-                                        if(entry && entry.transactions && entry.transactions.length > 0 && remainingQuantity > 0 && entry.purchaseOrderItemMapping.uniqueName === order) {
+                                        if(entry && entry.transactions && entry.transactions.length > 0 && remainingQuantity > 0 && entry.purchaseOrderItemMapping && entry.purchaseOrderItemMapping.uniqueName === order) {
                                             let transactionLoop = 0;
                                             entry.transactions.forEach(transaction => {
                                                 if(remainingQuantity > 0) {
