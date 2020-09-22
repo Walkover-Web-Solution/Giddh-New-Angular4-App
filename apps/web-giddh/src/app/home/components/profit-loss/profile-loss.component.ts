@@ -64,18 +64,17 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public netProfitLossType: string = '';
     public plRequest: ProfitLossRequest = { from: '', to: '', refresh: false };
     public amountSettings: any = { baseCurrencySymbol: '' };
-    public isDefault: boolean = true;
     public universalDate$: Observable<any>;
     public dataFound: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe,
+    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe,
         private cdRef: ChangeDetectorRef,
         private modalService: BsModalService,
         private generalService: GeneralService) {
         this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
         this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -100,13 +99,14 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         });
         // listen for universal date
         this.universalDate$.subscribe(dateObj => {
-            if (this.isDefault && dateObj) {
+            if (dateObj) {
                 let dates = [];
                 dates = [moment(dateObj[0]).format(GIDDH_DATE_FORMAT), moment(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
+
                 this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                 this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+
                 this.getFilterDate(dates);
-                this.isDefault = false;
             }
         });
 

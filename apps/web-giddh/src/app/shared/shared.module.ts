@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -76,6 +76,11 @@ import { DeleteTemplateConfirmationModelComponent } from '../invoice/templates/e
 import { DatepickerWrapperComponent } from './datepicker-wrapper/datepicker.wrapper.component';
 import { LoaderComponent } from '../loader/loader.component';
 import { ProformaAddBulkItemsComponent } from '../proforma-invoice/components/proforma-add-bulk-items/proforma-add-bulk-items.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { GiddhDatepickerComponent } from '../theme/giddh-datepicker/giddh-datepicker.component';
+import { MatNativeDateModule, MAT_DATE_FORMATS, NativeDateAdapter, DateAdapter } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -111,6 +116,23 @@ export function provideConfig() {
     return SOCIAL_CONFIG || { id: null, providers: [] };
 }
 
+export const GIDDH_DATEPICKER_FORMAT = {
+    parse: { dateInput: 'dd-MM-yyyy' },
+    display: {
+        dateInput: 'input'
+    }
+};
+
+export class PickDateAdapter extends NativeDateAdapter {
+    format(date: Date, displayFormat: Object): string {
+        if (displayFormat === 'input') {
+            return formatDate(date, 'dd-MM-yyyy', this.locale);
+        } else {
+            return formatDate(date, 'MMM yyyy', this.locale);
+        }
+    }
+}
+
 @NgModule({
     declarations: [
         MfReportComponent,
@@ -143,7 +165,8 @@ export function provideConfig() {
         DeleteTemplateConfirmationModelComponent,
         DatepickerWrapperComponent,
         LoaderComponent,
-        ProformaAddBulkItemsComponent
+        ProformaAddBulkItemsComponent,
+        GiddhDatepickerComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -180,7 +203,11 @@ export function provideConfig() {
         NgxMaskModule,
         CommandKModule,
         NgxDaterangepickerMd.forRoot(),
-        ScrollingModule
+        ScrollingModule,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        MatNativeDateModule,
+        MatInputModule
     ],
     exports: [
         CommonModule,
@@ -227,7 +254,8 @@ export function provideConfig() {
         DeleteTemplateConfirmationModelComponent,
         DatepickerWrapperComponent,
         LoaderComponent,
-        ProformaAddBulkItemsComponent
+        ProformaAddBulkItemsComponent,
+        GiddhDatepickerComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
@@ -247,7 +275,11 @@ export function provideConfig() {
         {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        }
+        },
+        MatDatepickerModule,
+        MatNativeDateModule,
+        { provide: MAT_DATE_FORMATS, useValue: GIDDH_DATEPICKER_FORMAT },
+        { provide: DateAdapter, useClass: PickDateAdapter },
     ]
 })
 export class SharedModule {

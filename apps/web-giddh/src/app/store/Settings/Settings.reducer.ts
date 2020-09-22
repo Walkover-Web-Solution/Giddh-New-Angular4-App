@@ -251,10 +251,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 updateProfileInProgress: true,
                 profileRequest: false
             };
-            // newState.updateProfileSuccess = false;
-            // newState.updateProfileInProgress = true;
-            // newState.profileRequest = false;
-            // return Object.assign({}, state, newState);
         }
         case SETTINGS_PROFILE_ACTIONS.RESET_PATCH_PROFILE: {
             return {
@@ -272,11 +268,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                     updateProfileInProgress: false,
                     profileRequest: true
                 };
-                // newState.profile = _.cloneDeep(response.body);
-                // newState.updateProfileSuccess = true;
-                // newState.updateProfileInProgress = false;
-                // newState.profileRequest = true;
-                // return Object.assign({}, state, newState);
             }
             return Object.assign({}, state, {
                 updateProfileSuccess: false,
@@ -403,8 +394,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             if (response.status === 'success') {
                 newState.financialYears = null;
                 newState.usersWithCompanyPermissions = response.body;
+                return Object.assign({}, state, newState);
             }
-            break;
+            return state;
         }
         case SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT_RESPONSE: {
             let response: BaseResponse<any, string> = action.payload;
