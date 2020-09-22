@@ -836,11 +836,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invoiceConfirmationModel.show();
     }
 
-    public deleteConfirmedInvoice() {
+    public deleteConfirmedInvoice(voucherUniqueName?: any) {
         this.invoiceConfirmationModel.hide();
         if (this.selectedVoucher === VoucherTypeEnum.purchase) {
             const requestObject = {
-                uniqueName: (this.selectedInvoice) ? this.selectedInvoice.uniqueName : (this.selectedInvoiceForDetails) ? this.selectedInvoiceForDetails.uniqueName : ''
+                uniqueName: (voucherUniqueName) ? encodeURIComponent(voucherUniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails.uniqueName) : ''
             };
             this.purchaseRecordService.deletePurchaseRecord(requestObject).subscribe((response) => {
                 this.selectedItems = [];

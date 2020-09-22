@@ -5889,7 +5889,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     item.uniqueName = item.account.uniqueName;
                     item.value = item.account.uniqueName;
                     item.additional = item.account;
-                    item.additional.maxQuantity = 1;
+                    item.additional.maxQuantity = entry.totalQuantity - entry.usedQuantity;
                 }
 
                 if(item.additional.maxQuantity > 0) {
