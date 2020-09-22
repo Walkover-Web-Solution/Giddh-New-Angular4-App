@@ -89,7 +89,7 @@ export class ContactService {
     public addComment(comment, accountUniqueName): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
         let description = comment;
-        return this._http.post(this.config.apiUrl + CONTACT_API.ADD_COMMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', accountUniqueName), { description }).pipe(map((res) => {
+        return this._http.post(this.config.apiUrl + CONTACT_API.ADD_COMMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { description }).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.request = '';
             return data;
@@ -98,7 +98,7 @@ export class ContactService {
 
     public deleteComment(accountUniqueName): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.delete(this.config.apiUrl + CONTACT_API.ADD_COMMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', accountUniqueName)).pipe(map((res) => {
+        return this._http.delete(this.config.apiUrl + CONTACT_API.ADD_COMMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.request = '';
             return data;
