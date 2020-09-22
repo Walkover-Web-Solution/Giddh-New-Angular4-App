@@ -1,3 +1,7 @@
+<div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideSettingMenuState === 'in'">
+    <aside-setting class="setting-sidebar" (closeAsideEvent)="toggleSettingPane($event)"></aside-setting>
+</div>
+
 <div class="setting-page user-detail-page" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
     <!-- start of tab set -->
     <tabset #staticTabs>

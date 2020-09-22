@@ -114,11 +114,36 @@ label {
         }
     }
 }
-
+.list-icon-group{
+    label{
+        padding: 0 10px;
+    }
+}
+.custom-tabs{
+    table{
+        margin-top: 15px;
+    }
+}
 // my css
 
 @media (min-width: 768px) {
     .table-responsive.remove-overflow {
         overflow: inherit;
+    }
+}
+@media(max-width:768px){
+    .dropdown-left{
+        right: auto !important;
+        left: 0 !important;
+    }
+     .modal-body{
+        .text-right{
+            text-align: left !important;
+        }
+     }
+     .custom-tabs{
+        table{
+            margin-top: 0;
+        }
     }
 }

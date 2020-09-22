@@ -12,7 +12,8 @@ import { IPage, IPageStr, NewPermissionObj, NewRoleClass } from '../../permissio
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 
 @Component({
-    templateUrl: './permission.details.html'
+    templateUrl: './permission.details.html',
+    styleUrls: [`./permission.details.scss`]
 })
 
 export class PermissionDetailsComponent implements OnInit, OnDestroy {

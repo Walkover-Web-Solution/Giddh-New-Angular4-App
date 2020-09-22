@@ -112,6 +112,10 @@ span.setAsDefault {
         cursor: not-allowed;
     }
 }
+.dropdown-item.warehouse-options {
+    justify-content: flex-start;
+    text-align: left;
+}
 @media only screen and (max-width: 991px) {
     .warehouse-card h3 {
         float: none;

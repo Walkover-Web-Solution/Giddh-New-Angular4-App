@@ -33,7 +33,7 @@
                             </button>
                             <section class="dropdown-menu custom_dropdown mr-b1 time-span-dropdown" [ngClass]="{'open': showTimeSpan}">
 
-                                <div class="clearfix pd-1 option_box">
+                                <div class="clearfix pd-1 option-box">
 
                                     <span class="pd0 mrR3" (click)="isOpenedInModal ? handleTimeSpanChange('daterange'): ''">
                                         <input id="dateRange" class="radio-custom cp ml0" type="radio" name="periodOptions"
@@ -97,7 +97,7 @@
                             </button>
                             <section class="dropdown-menu custom_dropdown ip-addresses-dropdown" role="menu"
                                 [ngClass]="{'open': showIPWrap}">
-                                <div class="clearfix option_box pd-1">
+                                <div class="clearfix option-box pd-1">
 
                                     <span (click)="isOpenedInModal ? handleIpAddressChange('cidr_range'): ''" class="pd0 mrR3">
                                         <input id="cidrRange" class="radio-custom cp ml0" type="radio" name="ipOptions"
@@ -113,7 +113,7 @@
 
                                 </div>
 
-                                <section formArrayName="allowedCidrs" class="iprange container-fluid"
+                                <section formArrayName="allowedCidrs" class="ip-range container-fluid"
                                     *ngIf="permissionForm.get('ipOptions').value === 'cidr_range'">
                                     <div class="row mr-b1"
                                         *ngFor="let item of permissionForm.get('allowedCidrs')['controls']; let i = index; let l = last"
@@ -126,12 +126,12 @@
                                             <i *ngIf="!l" (click)="delRow('allowedCidrs', i, $event)"
                                                 class="fa fa-trash-o cursor-pointer"></i>
                                             <i *ngIf="l" (click)="addNewRow('allowedCidrs', item, $event)"
-                                                class="fa fa-plus cursor-pointer"></i>
+                                                class="icon-plus cursor-pointer"></i>
                                         </div>
                                     </div>
                                 </section>
 
-                                <section formArrayName="allowedIps" class="iprange container-fluid"
+                                <section formArrayName="allowedIps" class="ip-range container-fluid"
                                     *ngIf="permissionForm.get('ipOptions').value === 'ip_address'">
                                     <div class="row mr-b1"
                                         *ngFor="let item of permissionForm.get('allowedIps')['controls']; let i = index; let l = last"
@@ -144,7 +144,7 @@
                                             <i *ngIf="!l" (click)="delRow('allowedIps', i, $event)"
                                                 class="fa fa-trash-o cursor-pointer"></i>
                                             <i *ngIf="l" (click)="addNewRow('allowedIps', item, $event)"
-                                                class="fa fa-plus cursor-pointer"></i>
+                                                class="icon-plus cursor-pointer"></i>
                                         </div>
                                     </div>
                                 </section>
