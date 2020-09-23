@@ -466,7 +466,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             this.stopDynamicSearch$ = new ReplaySubject(1);
             this.dynamicSearchQueryChanged = new Subject();
             this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
-                if (query && query.length > 1) {
+                if (query) {
                     this.dynamicSearchedQuery.emit(query);
                 }
             });
@@ -508,7 +508,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                 this.placeholder = changes.placeholder.currentValue;
             }
         }
-        
+
         if ('options' in changes) {
             if (changes.options && changes.options.currentValue) {
                 this.refreshList();
