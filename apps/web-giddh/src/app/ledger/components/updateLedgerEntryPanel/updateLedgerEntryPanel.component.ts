@@ -1206,7 +1206,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public onTxnAmountChange(txn: ILedgerTransactionItem) {
-        if (txn.selectedAccount) {
+        if (txn) {
             txn.convertedAmount = this.vm.calculateConversionRate(txn.amount);
             txn.isUpdated = true;
             this.vm.onTxnAmountChange(txn);
