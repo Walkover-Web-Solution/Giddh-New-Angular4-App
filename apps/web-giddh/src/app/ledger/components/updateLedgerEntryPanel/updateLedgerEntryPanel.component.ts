@@ -347,7 +347,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.fileUploadOptions = { concurrency: 0 };
 
         // get flatten_accounts list && get transactions list && get ledger account list
-       observableCombineLatest(this.selectedLedgerStream$, this ._accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$)
+       observableCombineLatest(this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$)
             .subscribe((resp: any[]) => {
                 if (resp[0] && resp[1] && resp[2]) {
                     // insure we have account details, if we are normal ledger mode and not petty cash mode ( special case for others entry in petty cash )
