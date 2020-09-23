@@ -5478,6 +5478,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.excludeTax = false;
         let isPartyTypeSez = false;
         this.tcsTdsTaxesAccount = [];
+        this.accountAssignedApplicableDiscounts = [];
 
         if (this.isSalesInvoice || this.isCashInvoice) {
             if (data && data.addresses && data.addresses.length > 0) {
@@ -5492,9 +5493,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.excludeTax = true;
             }
         }
-        if (data && data.applicableTaxes) {
-            this.accountAssignedApplicableTaxes = data.applicableTaxes;
-            data.applicableTaxes.forEach(item => {
+        if (data && data.otherApplicableTaxes) {
+            this.accountAssignedApplicableTaxes = data.otherApplicableTaxes;
+            data.otherApplicableTaxes.forEach(item => {
                 let tax = this.companyTaxesList.find(element => element.uniqueName === item.uniqueName);
                 if (tax && TCS_TDS_TAXES_TYPES.indexOf(tax.taxType) > -1) {
                     this.tcsTdsTaxesAccount.push(item);
@@ -5508,7 +5509,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.accountAssignedApplicableDiscounts.push(...element.applicableDiscounts)
                 });
             }
-            console.log('this.accountAssignedApplicableDiscounts', this.accountAssignedApplicableDiscounts);
+            console.log('testing a/c discount', this.accountAssignedApplicableDiscounts);
+            console.log('testing a/c tax', this.tcsTdsTaxesAccount);
         }
     }
 }

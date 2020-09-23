@@ -203,6 +203,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isAdjustVoucherSelected: boolean;
     /** Stores the details for adjustment component */
     public adjustVoucherConfiguration: any;
+    /** account other applicable discount list which contains account's discount else immediate group's discount(inherited) */
+    public accountOtherApplicableDiscount: any[] = [];
     /** Adjustment modal */
     @ViewChild('adjustPaymentModal') public adjustPaymentModal: ModalDirective;
 
@@ -265,6 +267,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.currentTxn.advanceReceiptAmount = this.currentTxn.amount;
         this.activeAccount$.subscribe(acc => {
             if (acc) {
+                this.accountOtherApplicableDiscount = [];
                 this.activeAccount = acc;
                 let parentAcc = acc.parentGroups[0].uniqueName;
                 let incomeAccArray = ['revenuefromoperations', 'otherincome'];
@@ -278,6 +281,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
                 if (acc.country && acc.country.countryName) {
                     this.activeAccountCountryName = acc.country.countryName;
+                }
+                if (acc.applicableDiscounts && acc.applicableDiscounts.length) {
+                    this.accountOtherApplicableDiscount = acc.applicableDiscounts;
+                } else if (acc.inheritedDiscounts && acc.inheritedDiscounts.length && !this.accountOtherApplicableDiscount.length) {
+                    acc.inheritedDiscounts.forEach(element => {
+                        this.accountOtherApplicableDiscount.push(...element.applicableDiscounts);
+                    });
                 }
             }
         });
@@ -493,7 +503,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.ratePrecision);
                 }
             }
-
+            /** apply account's discount (default) */
+            if (this.currentTxn.amount && this.currentTxn.discounts && this.currentTxn.discounts.length && this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
+                this.currentTxn.discounts.map(item => {
+                    item.isActive = this.accountOtherApplicableDiscount.some(element => element.uniqueName === item.discountUniqueName);
+                });
+            }
             if (this.discountControl) {
                 this.discountControl.change();
             }
@@ -1331,14 +1346,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private mergeInvolvedAccountsTaxes(firstAccountTaxes: Array<string>, secondAccountTaxes: Array<string>): Array<string> {
         const mergedAccountTaxes = (firstAccountTaxes) ? [...firstAccountTaxes] : [];
         if (secondAccountTaxes) {
-            secondAccountTaxes.forEach((tax: string) => {
+            secondAccountTaxes.reverse().forEach((tax: string) => {
                 if (!mergedAccountTaxes.includes(tax)) {
                     mergedAccountTaxes.push(tax);
                 }
             });
 
         }
-        return mergedAccountTaxes;
+        return mergedAccountTaxes.reverse();
     }
 
     /**
