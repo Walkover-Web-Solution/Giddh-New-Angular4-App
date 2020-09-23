@@ -176,7 +176,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
                 shared: true,
                 useHTML: true,
                 formatter: function () {
-                    return baseCurrencySymbol + " " + cPipe.transform(this.point.y) + '/-';
+                    return (this.point) ? baseCurrencySymbol + " " + cPipe.transform(this.point.y) + '/-' : '';
                 }
             },
             series: [{

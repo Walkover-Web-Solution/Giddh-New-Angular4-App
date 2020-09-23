@@ -5790,20 +5790,29 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public getVendorPurchaseOrders(vendorName: any): void {
-        let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, page: 1, from: this.poFilterDates.from, to: this.poFilterDates.to, count: 100, sort: '', sortBy: '' };
-        let purchaseOrderPostRequest = { vendorName: vendorName, statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyReceived, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
+        let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, accountUniqueName: vendorName, page: 1, count: 100, sort: '', sortBy: '' };
+        let purchaseOrderPostRequest = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyReceived, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
 
         if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
             this.purchaseOrders = [];
             this.linkedPoNumbers = [];
 
-            this.purchaseOrderService.getAll(purchaseOrderGetRequest, purchaseOrderPostRequest).subscribe((res) => {
+            this.purchaseOrderService.getAllPendingPo(purchaseOrderGetRequest, purchaseOrderPostRequest).subscribe((res) => {
                 if (res) {
                     this.purchaseOrders = [];
                     if (res.status === 'success') {
-                        if (res.body && res.body.items && res.body.items.length > 0) {
-                            res.body.items.forEach(item => {
-                                this.purchaseOrders.push({label: item.voucherNumber, value: item.uniqueName, additional: {amount: item.grandTotal.amountForAccount}});
+                        if (res.body && res.body && res.body.length > 0) {
+                            res.body.forEach(item => {
+                                let pending = [];
+
+                                if(item.pendingDetails.stocks) {
+                                    pending.push(item.pendingDetails.stocks + ((item.pendingDetails.stocks === 1) ? " Product" : " Products"));
+                                }
+                                if(item.pendingDetails.services) {
+                                    pending.push(item.pendingDetails.services + ((item.pendingDetails.services === 1) ? " Service" : " Services"));
+                                }
+
+                                this.purchaseOrders.push({label: item.number, value: item.uniqueName, additional: {grandTotal: item.pendingDetails.grandTotal, pending: pending.join(", ")}});
 
                                 this.linkedPoNumbers[item.uniqueName] = [];
                                 this.linkedPoNumbers[item.uniqueName]['voucherNumber'] = item.voucherNumber;
@@ -5830,7 +5839,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if(!this.selectedPoItems.includes(order.value)) {
                 this.startLoader(true);
                 let getRequest = { companyUniqueName: this.selectedCompany.uniqueName, poUniqueName: order.value };
-                this.purchaseOrderService.getPreview(getRequest).subscribe(response => {
+                this.purchaseOrderService.get(getRequest).subscribe(response => {
                     if (response) {
                         if (response.status === "success" && response.body) {
                             if(this.linkedPo.includes(response.body.uniqueName)) {

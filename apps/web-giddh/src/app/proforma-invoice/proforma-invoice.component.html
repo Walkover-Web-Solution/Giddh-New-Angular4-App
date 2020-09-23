@@ -57,10 +57,10 @@
     <!-- region main form -->
     <div [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)">
         <form #invoiceForm="ngForm" novalidate autocomplete="off"
-            [ngClass]="{ 'customer-invoice-form' : !invFormData.voucherDetails.customerName || !isCreditNote || !isDebitNote ,
-            'customer-invoice-form-purchase': isPurchaseInvoice || isCreditNote || isDebitNote ,
-            'slaesPrEsti':isSalesInvoice || isProformaInvoice || isEstimateInvoice ,
-            'forMultiCurrency' : isMulticurrencyAccount  } ">
+            [ngClass]="{ 'customer-invoice-form' : !invFormData.voucherDetails.customerName,
+            'customer-invoice-form-purchase': isPurchaseInvoice || isCreditNote || isDebitNote,
+            'slaesPrEsti': isSalesInvoice || isProformaInvoice || isEstimateInvoice,
+            'forMultiCurrency' : isMulticurrencyAccount} ">
 
             <div class="clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="addAccountFromShortcut()">
 
@@ -605,8 +605,11 @@
                                                         <span><input type="checkbox" [checked]="linkedPo && linkedPo.includes(option.value)" [value]="option.value"></span>&nbsp;
                                                         <span>
                                                             <div class="item">{{ option.label }}</div>
-                                                            <div class="item-unq" *ngIf="option.additional?.amount">
-                                                                Amount: {{ option.additional?.amount }}
+                                                            <div class="item-unq" *ngIf="option.additional?.pending">
+                                                                Pending: {{ option.additional?.pending }}
+                                                            </div>
+                                                            <div class="item-unq" *ngIf="option.additional?.grandTotal">
+                                                                Amount: {{ option.additional?.grandTotal }}
                                                             </div>
                                                         </span>
                                                     </a>
