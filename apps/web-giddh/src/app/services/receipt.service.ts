@@ -309,7 +309,7 @@ export class ReceiptService implements OnInit {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.get(this.config.apiUrl + RECEIPT_API.GET_PURCHASE_RECORD
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':accountUniqueName', accountUniqueName)
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             .replace(':purchaseRecordUniqueNumber', purchaseRecordUniqueName)
         ).pipe(catchError((e) => this.errorHandler.HandleCatch<Voucher, any>(e)));
     }

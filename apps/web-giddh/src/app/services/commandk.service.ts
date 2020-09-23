@@ -18,7 +18,7 @@ export class CommandKService {
         let url = this.config.apiUrl + COMMON_API.COMMAND_K;
         url = url.replace(':companyUniqueName', companyUniqueName);
         url = url.replace(':page', request.page);
-        url = url.replace(':q', request.q);
+        url = url.replace(':q', encodeURIComponent(request.q));
         url = url.replace(':group', request.group);
         url = url.replace(':isMobile', request.isMobile);
         return this._http.get(url).pipe(
