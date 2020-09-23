@@ -183,7 +183,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         this.pdfPreviewLoaded = false;
         this.isLoading = true;
         let getRequest = { companyUniqueName: this.companyUniqueName, poUniqueName: this.purchaseOrderUniqueName };
-        this.purchaseOrderService.getPreview(getRequest).subscribe(response => {
+        this.purchaseOrderService.get(getRequest).subscribe(response => {
             this.isLoading = false;
             if (response) {
                 if (response.status === "success") {

@@ -605,8 +605,11 @@
                                                         <span><input type="checkbox" [checked]="linkedPo && linkedPo.includes(option.value)" [value]="option.value"></span>&nbsp;
                                                         <span>
                                                             <div class="item">{{ option.label }}</div>
-                                                            <div class="item-unq" *ngIf="option.additional?.amount">
-                                                                Amount: {{ option.additional?.amount }}
+                                                            <div class="item-unq" *ngIf="option.additional?.pending">
+                                                                Pending: {{ option.additional?.pending }}
+                                                            </div>
+                                                            <div class="item-unq" *ngIf="option.additional?.grandTotal">
+                                                                Amount: {{ option.additional?.grandTotal }}
                                                             </div>
                                                         </span>
                                                     </a>
