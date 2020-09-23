@@ -303,7 +303,7 @@
                             </div>
                         </th>
 
-                        <th width="10%" class="mw-th-260">
+                        <th width="10%">
                             <div class="d-flex">
                                 <div class="flex-fill">Status</div>
                             </div>
@@ -449,7 +449,7 @@
 
                         <!-- Balance Due -->
 
-                        <td class="text-right" *ngIf="(selectedVoucher !== 'purchase')" [tooltip]="balanceDuePopupTemplate" container="body" containerClass="invoice-preview">
+                        <td *ngIf="(selectedVoucher !== 'purchase')" [tooltip]="balanceDuePopupTemplate" container="body" containerClass="invoice-preview">
                             {{item.accountCurrencySymbol}} {{item?.totalBalance?.amountForAccount | giddhCurrency}}
                         </td>
                         <ng-template #balanceDuePopupTemplate><span [innerHTML]="item.balanceDueTooltipText"></span>
@@ -504,7 +504,7 @@
                             <span>{{ item.balanceStatus}}</span>
                         </td>
 
-                        <td *ngIf="selectedVoucher === 'purchase'" class="cp d-flex status-mobile pt-0 pb-0 flex-column">
+                        <td *ngIf="selectedVoucher === 'purchase'" class="cp d-flex status-mobile pt-0 pb-0 flex-column mw-th-260">
                             <div class="d-flex flex-row align-items-center">
                                     <span class="d-flex balance-status">{{ item.balanceStatus}}</span>
                                     <div class="action-icon ml-15" [ngClass]="{'item-selected': hoveredItemForAction === item.uniqueName || item.isSelected}" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected">
