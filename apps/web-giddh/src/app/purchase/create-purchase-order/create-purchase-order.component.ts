@@ -551,10 +551,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.bulkItemsModal.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.showBulkItemModal = false;
-        });
-
         // listen for newly added stock and assign value
         combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
             let stock = resp[0];

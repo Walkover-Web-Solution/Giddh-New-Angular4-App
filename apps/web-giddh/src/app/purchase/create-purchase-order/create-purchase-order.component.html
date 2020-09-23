@@ -1666,7 +1666,7 @@
     (closeAsideEvent)="onNoResultsClicked()"></aside-menu-product-service>
 
 <!-- region bulk items -->
-<div bsModal #bulkItemsModal="bs-modal" tabindex="-1" class="modal fade" role="dialog"
+<div bsModal #bulkItemsModal="bs-modal" (onHidden)="showBulkItemModal = false" tabindex="-1" class="modal fade" role="dialog"
     [config]="{ animated: true,keyboard: false,backdrop: false,ignoreBackdropClick: true }">
     <ng-container *ngIf="showBulkItemModal">
         <proforma-add-bulk-items-component [invoiceType]="invoiceType" (saveItemsEvent)="addBulkStockItems($event)"
