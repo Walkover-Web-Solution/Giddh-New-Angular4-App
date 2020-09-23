@@ -756,7 +756,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (s) {
                 this._toaster.successToast('Entry created successfully', 'Success');
                 this.lc.showNewLedgerPanel = false;
-
+                this.lc.showBankLedgerPanel = false;
                 this.getTransactionData();
                 // this.getCurrencyRate();
                 this.resetBlankTransaction();
