@@ -4,6 +4,7 @@
         <div class="cube2"></div>
     </div>
 </div>
+
 <form #poForm="ngForm" novalidate autocomplete="off"
     [ngClass]="{'create-purchase-order-form': true, 'customer-purchase-order' : !purchaseOrder.voucherDetails.customerName, 'forMultiCurrency' : isMulticurrencyAccount  } "
     *ngIf="!showLoader">
@@ -16,11 +17,11 @@
                         <div class="clearfix">
                             <div class="row mb-1">
                                 <!-- region customer name -->
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Vendor Name<span class="red-text">*</span></label>
                                 </div>
                                 <!-- region customer dropdown -->
-                                <div class="col-sm-7 select-customer-name">
+                                <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 col-xs-12 select-customer-name">
                                     <div class="clearfix d-flex flex-column">
                                         <div class="d-flex flex-column">
                                             <sales-sh-select #vendorNameDropDown name="vendor" class="select-customer-field"
@@ -71,18 +72,18 @@
                                 <!-- endregion -->
                             </div>
                             <div class="row mb-1 delivery-from-field">
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Deliver From<span class="red-text">*</span></label>
                                 </div>
                                 <!-- region customer dropdown -->
-                                <div class="col-sm-9 select-customer-name">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 select-customer-name">
                                     <section class="form-inline">
 
-                                        <div class="wrap-billing-address clearfix">
+                                        <div class="wrap-billing-address w-100 clearfix">
 
                                             <div class="row">
                                                 <!-- region billing address -->
-                                                <div class="col-sm-6 bill-add">
+                                                <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
 
                                                     <div class="form-group">
                                                         <label>Billing Address</label>
@@ -94,14 +95,14 @@
                                                                 class="form-control" rows="3" autocomplete="off"
                                                                 autofocus="off" aria-autocomplete="none"></textarea>
 
-                                                            <div>
-                                                                <div class="col-sm-6 pd ">
+                                                            <div class="row">
+                                                                <div class="col-sm-12 col-md-6">
                                                                     <label class="sales-country-label">
                                                                         {{vendorCountry}}
                                                                     </label>
                                                                 </div>
 
-                                                                <div class="col-sm-6 pd" #vendorBillingState>
+                                                                <div class="col-sm-12 col-md-6" #vendorBillingState>
                                                                     <sales-sh-select [placeholder]="'State'"
                                                                         class="select-border-bottom"
                                                                         (selected)="fillShippingBillingDetails($event, true, 'vendor'); autoFillShippingDetails('vendor')"
@@ -112,7 +113,7 @@
                                                                     </sales-sh-select>
                                                                 </div>
 
-                                                                <div class="col-sm-12 pd"
+                                                                <div class="col-sm-12"
                                                                     *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
                                                                     <input maxLength="15" autocomplete="None"
                                                                         type="text" name="vendorBillingDetailsTax"
@@ -131,7 +132,7 @@
                                                 <!-- endregion -->
 
                                                 <!-- region shipping address -->
-                                                <div class="col-sm-6 bill-add">
+                                                <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
 
                                                     <div class="form-group p0 width100">
                                                         <label>
@@ -150,15 +151,15 @@
                                                                 class="form-control" rows="3" autocomplete="off"
                                                                 autofocus="off" aria-autocomplete="none"></textarea>
                                                             <div class="clearfix">
-                                                                <div class="form-group">
-                                                                    <div class="col-sm-6 pd ">
+                                                                <div class="form-group row">
+                                                                    <div class="col-sm-12 col-md-6">
                                                                         <div class="form-group">
                                                                             <label class="sales-country-label">
                                                                                 {{vendorCountry}}
                                                                             </label>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-sm-6 pd select-border-bottom"
+                                                                    <div class="col-sm-12 col-md-6 select-border-bottom"
                                                                         #vendorShippingState>
                                                                         <sales-sh-select [placeholder]="'State'"
                                                                             [disabled]="autoFillVendorShipping"
@@ -171,7 +172,7 @@
                                                                             [(ngModel)]="purchaseOrder.account.shippingDetails.state.code">
                                                                         </sales-sh-select>
                                                                     </div>
-                                                                    <div class="col-sm-12 pd"
+                                                                    <div class="col-sm-12"
                                                                         *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
                                                                         <input maxLength="15" autocomplete="None"
                                                                             type="text" name="vendorShippingDetailsTax"
@@ -201,11 +202,11 @@
                 <div class="inner-container">
                     <div class="row mb-1" *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1">
                         <!-- region customer name -->
-                        <div class="col-sm-2">
+                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                             <label>Warehouse<span class="red-text">*</span></label>
                         </div>
                         <!-- region customer dropdown -->
-                        <div class="col-sm-7 select-customer-name">
+                        <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 col-xs-12 select-customer-name">
                             <div class="clearfix d-flex flex-column">
                                 <div class="d-flex flex-column">
                                     <!-- region if not cashinvoice show customer dropdown -->
@@ -219,18 +220,18 @@
                         <!-- endregion -->
                     </div>
                     <div class="row mb-1">
-                        <div class="col-sm-2">
+                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                             <label>Deliver To<span class="red-text">*</span></label>
                         </div>
                         <!-- region customer dropdown -->
-                        <div class="col-sm-9 select-customer-name">
+                        <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12 select-customer-name">
                             <section class="form-inline">
 
-                                <div class="wrap-billing-address clearfix">
+                                <div class="wrap-billing-address w-100 clearfix">
 
                                     <div class="row">
                                         <!-- region billing address -->
-                                        <div class="col-sm-6 bill-add">
+                                        <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
 
                                             <div class="form-group">
                                                 <label>Billing Address</label>
@@ -241,13 +242,13 @@
                                                         [(ngModel)]="purchaseOrder.company.billingDetails.address[0]"
                                                         class="form-control" rows="3" autocomplete="off" autofocus="off"
                                                         aria-autocomplete="none"></textarea>
-                                                    <div>
-                                                        <div class="col-sm-6 pd ">
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-md-6">
                                                             <label class="sales-country-label">
                                                                 {{companyCountryName}}
                                                             </label>
                                                         </div>
-                                                        <div class="col-sm-6 pd" #companyBillingState>
+                                                        <div class="col-sm-12 col-md-6" #companyBillingState>
                                                             <sales-sh-select [placeholder]="'State'"
                                                                 class="select-border-bottom"
                                                                 (selected)="fillShippingBillingDetails($event, true, 'company'); autoFillShippingDetails('company')"
@@ -257,7 +258,7 @@
                                                                 [(ngModel)]="purchaseOrder.company.billingDetails.state.code">
                                                             </sales-sh-select>
                                                         </div>
-                                                        <div class="col-sm-12 pd"
+                                                        <div class="col-sm-12"
                                                             *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
                                                             <input maxlength="15" autocomplete="None" type="text"
                                                                 name="companyBillingDetailsTax"
@@ -275,7 +276,7 @@
                                         <!-- endregion -->
 
                                         <!-- region shipping address -->
-                                        <div class="col-sm-6 bill-add">
+                                        <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
 
                                             <div class="form-group p0 width100">
                                                 <label>
@@ -292,15 +293,15 @@
                                                         class="form-control" rows="3" autocomplete="off" autofocus="off"
                                                         aria-autocomplete="none"></textarea>
                                                     <div class="clearfix">
-                                                        <div class="form-group">
-                                                            <div class="col-sm-6 pd ">
+                                                        <div class="form-group row">
+                                                            <div class="col-sm-12 col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="sales-country-label">
                                                                         {{companyCountryName}}
                                                                     </label>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-sm-6 pd" #companyShippingState>
+                                                            <div class="col-sm-12 col-md-6" #companyShippingState>
                                                                 <sales-sh-select [placeholder]="'State'"
                                                                     [disabled]="autoFillCompanyShipping"
                                                                     class="select-border-bottom disabled"
@@ -311,7 +312,7 @@
                                                                     [(ngModel)]="purchaseOrder.company.shippingDetails.state.code">
                                                                 </sales-sh-select>
                                                             </div>
-                                                            <div class="col-sm-12 pd"
+                                                            <div class="col-sm-12"
                                                                 *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
                                                                 <input maxLength="15" autocomplete="None" type="text"
                                                                     name="companyShippingDetailsTax"
@@ -334,23 +335,23 @@
                     </div>
                     <div class="row mb-1 height-row">
                         <!-- region customer name -->
-                        <div class="col-sm-2">
+                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                             <div>
                                 <label>Order #</label>
                             </div>
                         </div>
                         <!-- region customer dropdown -->
-                        <div class="select-customer-name order-expected-delivery d-flex col-sm-9">
+                        <div class="select-customer-name order-expected-delivery d-flex col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                             <!-- region if not cashinvoice show customer dropdown -->
 
-                            <div class="col-sm-6 pl-0">
+                            <div class="col-sm-12 col-md-12 col-lg-6 pl-0">
                                 <div>
                                 <input type="text" class="form-control" name="purchaseOrderNumber"
                                     [(ngModel)]="purchaseOrder.number" [disabled]="!invoiceSettings?.purchaseBillSettings?.useCustomPONumber || isUpdateMode" placeholder="Enter Order #" />
                                 </div>
                             </div>
                             <!-- endregion -->
-                            <div class="col-sm-6">
+                            <div class="col-sm-6" *ngIf="!isMobileScreen">
                                 <div class="invoice-due-date">
                                 <div class="d-flex">
                                     <label>Order Date<span class="red-text">*</span></label>
@@ -365,6 +366,28 @@
                         </div>
                         </div>
                         <!-- endregion -->
+                    </div>
+                    <div class="row mTB1" *ngIf="isMobileScreen">
+                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                            <label>Order Date</label>
+                        </div>
+                        <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                            <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
+                                <input type="text" class="form-control" placeholder="Select Date" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                    name="purchaseOrderDate" [(ngModel)]="purchaseOrder.voucherDetails.voucherDate" bsDatepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mTB1" *ngIf="isMobileScreen">
+                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                            <label>Expected Delivery</label>
+                        </div>
+                        <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                            <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
+                                <input type="text" class="form-control" placeholder="Select Date" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                    name="purchaseDueDate" [(ngModel)]="purchaseOrder.voucherDetails.dueDate" bsDatepicker>
+                            </div>
+                        </div>
                     </div>
                     <!-- <div class="row mTB1">
                         <div class="col-sm-2" *ngIf="!isMobileScreen">
@@ -806,7 +829,7 @@
                 </ng-container>
             </tbody>
             <!-- region add bulk items -->
-            <div class="p-4 aqua-color add-line-bulk-item">
+            <div class="p-1 aqua-color add-line-bulk-item">
                 <a href="javascript:void 0" (click)="addBlankRow(null)">+ Add New Line</a>
                 <span class="font-14"> | </span>
                 <a (click)="showBulkItemModal = true; bulkItemsModal.show()" href="javascript:void(0)">+ Add
@@ -832,7 +855,7 @@
                                 </div>
                                 <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600 pdL3 mr0">
                                     <div class="row">
-                                        <div class="form-group col-xs-4">
+                                        <div class="form-group col-xs-4 col-sm-4 mb-0">
                                             <input type="text" #shippingDate="ngModel" placeholder="Ship Date"
                                                 bsDatepicker name="shippingDate"
                                                 [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate"
@@ -843,12 +866,12 @@
                                                 Invalid Date
                                             </p>
                                         </div>
-                                        <div class="form-group col-xs-4">
+                                        <div class="form-group col-xs-4 col-sm-4 mb-0">
                                             <input type="text" name="shippedVia"
                                                 [(ngModel)]="purchaseOrder.templateDetails.other.shippedVia"
                                                 class="form-control" [placeholder]="'Ship Via'" />
                                         </div>
-                                        <div class="form-group col-xs-4">
+                                        <div class="form-group col-xs-4 col-sm-4 mb-0">
                                             <input type="text" name="trackingNumber"
                                                 [(ngModel)]="purchaseOrder.templateDetails.other.trackingNumber"
                                                 class="form-control" [placeholder]="'Tracking No.'" />
@@ -980,7 +1003,7 @@
             <ng-container *ngFor="let transaction of entry.transactions;">
                 <div class="card-invoice-table" [hidden]="activeIndex === entryIdx">
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-12">
                             <div class="single-card-row">
                                 <div class="product-name">
                                     <label class="card-label">Product/Service Description</label>
@@ -1015,7 +1038,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-6">
                             <div class="single-card-row">
                                 <div class="qty-unit">
                                     <label class="card-label">Qty/Unit</label>
@@ -1025,7 +1048,7 @@
 
                         </div>
 
-                        <div class="col-xs-6">
+                        <div class="col-6">
                             <div class="single-card-row">
                                 <div class="card-rate">
                                     <label class="card-label">Rate</label>
@@ -1046,7 +1069,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-6">
                             <div class="single-card-row">
                                 <div class="card-amount">
                                     <label class="card-label">Amount</label>
@@ -1062,7 +1085,7 @@
                             </div>
                         </div>
 
-                        <div class="col-xs-6">
+                        <div class="col-6">
                             <div class="single-card-row">
                                 <div class="card-discount">
                                     <label class="card-label">Discount</label>
@@ -1079,7 +1102,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-6">
                             <div class="single-card-row">
                                 <div class="card-tax">
                                     <label class="card-label">Tax</label>
@@ -1095,7 +1118,7 @@
                             </div>
                         </div>
 
-                        <div class="col-xs-6">
+                        <div class="col-6">
                             <div class="single-card-row">
                                 <div class="card-total">
                                     <label class="card-label">Total</label>
@@ -1123,7 +1146,7 @@
                 <!-- region dynamic entry -->
                 <div class="card-invoice-table edit-card-invoice-table" [hidden]="activeIndex !== entryIdx">
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-12">
                             <div class="single-card-row">
                                 <div class="product-name">
                                     <label class="card-label">Product/Service Description</label>
@@ -1229,21 +1252,21 @@
                     </div>
 
                     <div class="row quantity-unit-width-100">
-                        <div class="col-xs-6">
+                        <div class="col-6">
 
                             <div class="single-card-row">
                                 <div class="qty-unit">
 
                                     <div class="row">
 
-                                        <div class="col-xs-6 pr-0">
+                                        <div class="col-6 pr-0">
                                             <label class="card-label text-right">Qty</label>
                                             <input type="text" [disabled]="!transaction.isStockTxn"
                                                 (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity"
                                                 decimalDigitsDirective name="transaction.quantity_{{entryIdx}}"
                                                 class="form-control text-right" [(ngModel)]="transaction.quantity" />
                                         </div>
-                                        <div class="col-xs-6">
+                                        <div class="col-6">
                                             <label class="card-label text-right">Unit</label>
                                             <select class="form-control" [disabled]="!transaction.isStockTxn"
                                                 name="transaction.stockUnit_{{entryIdx}}"
@@ -1263,7 +1286,7 @@
 
                         </div>
 
-                        <div class="col-xs-6">
+                        <div class="col-6">
 
                             <div class="single-card-row">
 
@@ -1293,7 +1316,7 @@
 
                     <div class="row">
 
-                        <div class="col-xs-6">
+                        <div class="col-6">
 
                             <div class="single-card-row">
 
@@ -1317,7 +1340,7 @@
                             </div>
                         </div>
 
-                        <div class="col-xs-6">
+                        <div class="col-6">
 
                             <div class="single-card-row">
 
@@ -1348,7 +1371,7 @@
 
                     <div class="row">
 
-                        <div class="col-xs-6">
+                        <div class="col-6">
 
                             <div class="single-card-row">
                                 <div class="card-tax">
@@ -1376,7 +1399,7 @@
                             </div>
                         </div>
 
-                        <div class="col-xs-6">
+                        <div class="col-6">
                             <div class="single-card-row">
                                 <div class="card-total">
                                     <label class="card-label text-right">Total</label>

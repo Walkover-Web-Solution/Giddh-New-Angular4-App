@@ -342,7 +342,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.breakPointObservar.observe([
-            '(max-width: 768px)'
+            '(max-width: 1024px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });

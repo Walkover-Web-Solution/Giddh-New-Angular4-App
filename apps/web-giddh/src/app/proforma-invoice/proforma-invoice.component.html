@@ -489,10 +489,10 @@
                                 </div>
                                 <div class="col-sm-9 select-customer-name">
                                     <section class="form-inline">
-                                        <div class="wrap-billing-address clearfix">
+                                        <div class="wrap-billing-address w-100 clearfix">
                                             <div class="row">
                                                 <!-- region billing address -->
-                                                <div class="col-sm-6 bill-add">
+                                                <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
                                                     <div class="form-group">
                                                         <label>Billing Address</label>
                                                         <div class="billing-address clearfix">
@@ -502,12 +502,12 @@
                                                                 class="form-control" rows="3" autocomplete="off" autofocus="off"
                                                                 aria-autocomplete="none"></textarea>
                                                             <div>
-                                                                <div class="col-sm-6 pd">
+                                                                <div class="col-sm-12 col-md-6 pd">
                                                                     <label class="sales-country-label">
                                                                         {{companyCountryName}}
                                                                     </label>
                                                                 </div>
-                                                                <div class="col-sm-6 pd" #billingStateCompany>
+                                                                <div class="col-sm-12 col-md-6 pd" #billingStateCompany>
                                                                     <sales-sh-select [placeholder]="'State'"
                                                                         class="select-border-bottom"
                                                                         (selected)="fillShippingBillingCompanyDetails($event, true); autoFillCompanyShippingDetails()"
@@ -535,7 +535,7 @@
                                                 <!-- endregion -->
 
                                                 <!-- region shipping address -->
-                                                <div class="col-sm-6 bill-add">
+                                                <div class="col-sm-12 col-xl-6 col-md-10  bill-add">
 
                                                     <div class="form-group p0 width100">
                                                         <label>
@@ -553,14 +553,14 @@
                                                                 aria-autocomplete="none"></textarea>
                                                             <div class="clearfix">
                                                                 <div class="form-group">
-                                                                    <div class="col-sm-6 pd ">
+                                                                    <div class="col-sm-12 col-md-6 pd ">
                                                                         <div class="form-group">
                                                                             <label class="sales-country-label">
                                                                                 {{companyCountryName}}
                                                                             </label>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-sm-6 pd" #shippingStateCompany>
+                                                                    <div class="col-sm-12 col-md-6 pd" #shippingStateCompany>
                                                                         <sales-sh-select [placeholder]="'State'"
                                                                             [disabled]="autoFillCompanyShipping"
                                                                             class="select-border-bottom"
