@@ -58,7 +58,7 @@
             </div>
         </div>
     </div>
-    <div class="mobile-search">
+    <div class="mobile-search" *ngIf="!isMobileScreen">
         <div class="clear-filter mr-1" *ngIf="showClearFilterButton()">
             <button class="btn btn-default mr-0" (click)="clearFilter()">
                 <span class="icon-cross"></span> Clear Filter

@@ -3901,7 +3901,9 @@ a.btn.btn-xs.btn-link.pull-right {
 .pItem .multi-select input.form-control {
     padding-right: 24px !important;
 }
-
+.card-invoice-table-wrapper .multi-select input.form-control {
+    background-position: 98% !important;
+}
 .multi-select .caret {
     position: absolute;
     top: 50%;
@@ -9638,7 +9640,11 @@ span#HW_badge_cont:nth-child(3) {
     }
 }
 
+
 @media (max-width: 991px) {
+    .setting-tab-data li.nav-item {
+        display: inline-block;
+    }
     .sidebar-menu{
         position: absolute !important;
         width: 100%;
@@ -9864,7 +9870,7 @@ span#HW_badge_cont:nth-child(3) {
         display: none;
     }
     .invoice-control .nav.nav-tabs {
-        margin-bottom: 28px;
+        margin-bottom: 15px;
         padding: 0 0px 0 15px !important;
     }
     overview-summary .transactions-overview {
@@ -10070,7 +10076,8 @@ span#HW_badge_cont:nth-child(3) {
     .user-dropdown-header>li>a .icon-arrow-down {
         transform: rotate(90deg);
     }
-    #setting-tab .tab-container .nav.nav-tabs {
+    #setting-tab .tab-container .nav.nav-tabs , #purchase-tab .purchase-tabset.tab-container
+    > .nav.nav-tabs{
         position: fixed;
         width: 100%;
         top: 90px;

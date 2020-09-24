@@ -1,5 +1,5 @@
-<div _ngcontent-xlm-c43="" class="invoice-control">
-    <tabset>
+<div _ngcontent-xlm-c43="" class="invoice-control" id="purchase-tab">
+    <tabset class="purchase-tabset">
         <tab heading="Purchase Order" [active]="activeTab == 'order'" (selectTab)="onTabChanged('order')">
             <div *ngIf="activeTab == 'order'">
                 <purchase-order (refreshPurchaseBill)="purchaseOrderOutput($event)"></purchase-order>

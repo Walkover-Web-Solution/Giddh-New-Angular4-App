@@ -130,7 +130,7 @@ form{
                 position: absolute;
                 width: 435px;
                 left: 0;
-                margin-left: 3%;
+                margin-left: 0;
                 display: flex;
                 align-items: center;
                 input{
@@ -1071,6 +1071,11 @@ span.eligible-ITC {
     text-transform: capitalize;
     margin-bottom: 20px;
 }
+.bill-add{
+    label{
+        line-height: 2.3;
+    }
+}
 @media(max-width:1199px){
     .bill-add {
         margin-bottom: 15px;
@@ -1095,11 +1100,14 @@ span.eligible-ITC {
                 }
                 .select-customer-name {
                     sh-select,
-                    input[type="text"],
                     .select-customer-field {
-                        flex: 0 0 83.333333%;
-                        max-width: 83.333333%;
+                        flex: 0 0 82.5%;
+                        max-width: 82.5%;
                         width: 100%;
+                    }
+                    input[type="text"]{
+                        flex: 0 0 84.5%;
+                        max-width: 84.5%;
                     }
                 }
             }

@@ -484,10 +484,10 @@
                             <!-- end warehouse field -->
 
                             <div class="row mb-1 delivery-from-field" *ngIf="isPurchaseInvoice">
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Deliver To<span class="red-text">*</span></label>
                                 </div>
-                                <div class="col-sm-9 select-customer-name">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12 select-customer-name">
                                     <section class="form-inline">
                                         <div class="wrap-billing-address w-100 clearfix">
                                             <div class="row">
@@ -501,13 +501,13 @@
                                                                 [(ngModel)]="purchaseBillCompany.billingDetails.address[0]"
                                                                 class="form-control" rows="3" autocomplete="off" autofocus="off"
                                                                 aria-autocomplete="none"></textarea>
-                                                            <div>
-                                                                <div class="col-sm-12 col-md-6 pd">
+                                                            <div class="row">
+                                                                <div class="col-sm-12 col-md-6">
                                                                     <label class="sales-country-label">
                                                                         {{companyCountryName}}
                                                                     </label>
                                                                 </div>
-                                                                <div class="col-sm-12 col-md-6 pd" #billingStateCompany>
+                                                                <div class="col-sm-12 col-md-6" #billingStateCompany>
                                                                     <sales-sh-select [placeholder]="'State'"
                                                                         class="select-border-bottom"
                                                                         (selected)="fillShippingBillingCompanyDetails($event, true); autoFillCompanyShippingDetails()"
@@ -517,7 +517,7 @@
                                                                         [(ngModel)]="purchaseBillCompany.billingDetails.state.code">
                                                                     </sales-sh-select>
                                                                 </div>
-                                                                <div class="col-sm-12 pd"
+                                                                <div class="col-sm-12"
                                                                     *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
                                                                     <input maxlength="15" autocomplete="None" type="text"
                                                                         name="companyBillingDetailsTax"
@@ -552,15 +552,15 @@
                                                                 class="form-control" rows="3" autocomplete="off" autofocus="off"
                                                                 aria-autocomplete="none"></textarea>
                                                             <div class="clearfix">
-                                                                <div class="form-group">
-                                                                    <div class="col-sm-12 col-md-6 pd ">
+                                                                <div class="form-group row deliver-same-address">
+                                                                    <div class="col-sm-12 col-md-6">
                                                                         <div class="form-group">
                                                                             <label class="sales-country-label">
                                                                                 {{companyCountryName}}
                                                                             </label>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-sm-12 col-md-6 pd" #shippingStateCompany>
+                                                                    <div class="col-sm-12 col-md-6" #shippingStateCompany>
                                                                         <sales-sh-select [placeholder]="'State'"
                                                                             [disabled]="autoFillCompanyShipping"
                                                                             class="select-border-bottom"
@@ -572,7 +572,7 @@
                                                                             [(ngModel)]="purchaseBillCompany.shippingDetails.state.code">
                                                                         </sales-sh-select>
                                                                     </div>
-                                                                    <div class="col-sm-12 pd"
+                                                                    <div class="col-sm-12"
                                                                         *ngIf="shouldShowTrnGstField && (showGSTINNo || showTRNNo)">
                                                                         <input maxLength="15" autocomplete="None" type="text"
                                                                             name="companyShippingDetailsTax"
@@ -593,11 +593,11 @@
                                 </div>
                             </div>
                             <div class="row mTB1" *ngIf="isPurchaseInvoice && (!isUpdateMode || (isUpdateMode && poLinkUpdated))">
-                                <div class="col-sm-2">
+                                <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                     <label>Link Purchase Order</label>
                                 </div>
-                                <div class="col-sm-9">
-                                    <div class="col-sm-6 pl-0">
+                                <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-xl-6 col-lg-10 col-md-10 pl-0">
                                         <sh-select [options]="purchaseOrders" placeholder="Select Order" [multiple]="true" name="linkedPO" [(ngModel)]="linkedPo" (selected)="getPurchaseOrder($event, true)" [isFilterEnabled]="true" [useInBuiltFilterForIOptionTypeItems]="true">
                                             <ng-template #optionTemplate let-option="option">
                                                 <ng-container>
@@ -1776,7 +1776,7 @@
 
                 <!-- region mobile view -->
                 <div class="showInMobile" *ngIf="isMobileScreen">
-                    <div class="card-invoiceTable-wrapper"
+                    <div class="card-invoice-table-wrapper"
                         *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
                         <ng-container *ngFor="let transaction of entry.transactions;">
                             <!-- region static entry -->

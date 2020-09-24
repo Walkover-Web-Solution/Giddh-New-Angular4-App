@@ -183,6 +183,9 @@
 
 
 @media (max-width: 768px) {
+    .purchase-order-header{
+         margin-bottom: 15px;
+    }
     .action-icon {
         display: flex !important;
         margin-left: 0px;
@@ -193,9 +196,7 @@
         justify-content: space-between !important;
     }
     .mobile-search {
-        display: flex;
         flex-direction: row;
-        display: flex;
         margin-top: 15px;
     }
     .add-invoice {
@@ -240,6 +241,7 @@
 @media (max-width: 767px) {
     .mobile-search {
         margin-top: 0;
+        display: flex;
     }
 }
 @media (max-width: 575px) {
