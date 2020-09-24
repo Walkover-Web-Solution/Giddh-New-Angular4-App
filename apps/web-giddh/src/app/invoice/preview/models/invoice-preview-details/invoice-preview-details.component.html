@@ -219,21 +219,21 @@
                                             </span>
 
                                             <span *ngIf="selectedItem.voucherType === 'purchase' && pdfPreviewLoaded">
-                                                <a href="javascript:void 0" tooltip="Download" placement="top"
+                                                <a href="javascript:void 0" tooltip="Download PDF" placement="top"
                                                     (click)="downloadPurchaseBillPDF()"><i class="fa fa-file-pdf-o"></i></a>
                                             </span>
 
                                             <span
                                                 *ngIf="selectedItem?.voucherType !== 'purchase' || (selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'pdf')"
                                                 [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
-                                                <a href="javascript:void 0" tooltip="Download" placement="top"
+                                                <a href="javascript:void 0" tooltip="Download PDF" placement="top"
                                                     (click)="downloadPdf()"><i class="fa fa-file-pdf-o"></i></a>
                                             </span>
 
                                             <span
                                                 *ngIf="selectedItem.voucherType === 'purchase' && attachedDocumentType?.type !== 'pdf'"
                                                 [ngClass]="{ 'disabled': isVoucherDownloading || isVoucherDownloadError || isFileUploading || shouldShowUploadAttachment}">
-                                                <a href="javascript:void 0" tooltip="Download" placement="top"
+                                                <a href="javascript:void 0" tooltip="Download attachment" placement="top"
                                                     (click)="downloadFile()"><i class="icon-download"></i></a>
                                             </span>
 
