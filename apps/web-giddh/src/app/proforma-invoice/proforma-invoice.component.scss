@@ -95,6 +95,9 @@ $greyClr: #6d6d6d;
     }
 }
 
+.item-unq{
+    font-size:12px;
+}
 // select box
 .pure-css-select-wrapper {
     position: relative;
@@ -245,6 +248,11 @@ $greyClr: #6d6d6d;
     display: inline-block !important;
 }
 
+
+.w-100{
+    width:100% !important;
+}
+
 // collapse
 .collapse-pane {
     padding: 0 0;
@@ -297,6 +305,8 @@ $greyClr: #6d6d6d;
 
 .list-item {
     font-size: 14px;
+    border-bottom: 1px solid $very-light-gray;
+    display:flex !important;
 }
 
 .fs12 {
@@ -1034,7 +1044,7 @@ section.newtable {
     line-height: 2.3;
 }
 
-.customerInvoiceTable label.salesCountryLabel {
+.customerInvoiceTable label.sales-country-label {
     min-height: 36px;
 }
 
@@ -1055,7 +1065,7 @@ section.newtable {
 .pd {
     padding: 3px 5px;
 }
-.card-invoiceTable-wrapper,
+.card-invoice-table-wrapper,
 .add-btn,
 .otherDetail-card,
 .total-amountDiscription {
@@ -1065,7 +1075,7 @@ section.newtable {
     display: none !important;
 }
 // card css
-.card-invoiceTable-wrapper {
+.card-invoice-table-wrapper {
     max-width: 400px;
     width: 100%;
     background-color: #fff;
@@ -1164,7 +1174,7 @@ section.newtable {
     color: #0c8fe6;
 }
 
-.salesCountryLabel {
+.sales-country-label {
     margin-bottom: 0;
     vertical-align: middle;
     line-height: 2.4;
@@ -1442,7 +1452,7 @@ input.form-control.edit-currency {
     font-size: 17px;
 }
 
-label.salesCountryLabel {
+label.sales-country-label {
     padding-bottom: 0;
 }
 
@@ -1613,6 +1623,7 @@ span.eligible-ITC {
 .payment-mode-amount{
     flex-direction: row-reverse;
 }
+
 /* resposnvie */
 
 @media (min-width: 768px) {
@@ -1623,10 +1634,16 @@ span.eligible-ITC {
     .form-inline .wrap-billing-address .form-group {
         display: block !important;
     }
+    .form-inline .wrap-billing-address .form-group.deliver-same-address{
+        display: flex !important;
+    }
 }
 @media(max-width:1199px){
     .invoice-date-due-date{
         margin-left: 40%;
+    }
+    .form-inline .wrap-billing-address .form-group {
+        padding-right: 12px;
     }
 }
 @media (max-width: 990px) {
@@ -1679,7 +1696,7 @@ span.eligible-ITC {
             margin-bottom: 15px !important;
         }
     }
-    .card-invoiceTable-wrapper,
+    .card-invoice-table-wrapper,
     .add-btn,
     .otherDetail-card,
     .total-amountDiscription {
@@ -1699,7 +1716,7 @@ span.eligible-ITC {
     .staticInvoiceTable.salseInvoicetable {
         display: none;
     }
-    .card-invoiceTable-wrapper,
+    .card-invoice-table-wrapper,
     .otherDetail-card,
     .total-amountDiscription {
         width: 100%;

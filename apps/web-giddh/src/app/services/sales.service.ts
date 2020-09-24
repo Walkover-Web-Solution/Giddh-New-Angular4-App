@@ -200,4 +200,19 @@ export class SalesService {
         ).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error, model)));
     }
 
+    /**
+     * Returns accounts of a particular group and with particular currency
+     *
+     * @param {string} groups Comma delimited string of group names
+     * @param {string} currency Comma delimited string of currencies
+     * @returns {Observable<any>} Observable to carry out further operations
+     * @memberof SalesService
+     */
+    public getAccountsWithCurrency(groups: string, currency: string): Observable<any> {
+        const companyUniqueName = this._generalService.companyUniqueName;
+        const contextPath = `${this.config.apiUrl}${SALES_API_V2.GET_ACCOUNTS_OF_GROUP_WITH_CURRENCY.replace(':companyUniqueName', companyUniqueName)}`
+            .concat(`?group=${groups}&currency=${currency}&count=0`);
+        return this._http.get(contextPath);
+    }
+
 }

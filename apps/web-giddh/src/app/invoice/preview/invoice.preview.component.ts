@@ -13,7 +13,9 @@ import {
     OnInit,
     SimpleChanges,
     ViewChild,
-    TemplateRef
+    TemplateRef,
+    EventEmitter,
+    Output
 } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
@@ -88,6 +90,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent, static: true }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
     @Input() public selectedVoucher: VoucherTypeEnum = VoucherTypeEnum.sales;
     @ViewChild(InvoicePaymentModelComponent, {static: false}) public invoicePaymentModelComponent: InvoicePaymentModelComponent;
+    /* Taking input to refresh purchase bill list */
+    @Input() public refreshPurchaseBill: boolean = false;
+    /* This will emit if purchase bill lists needs to be refreshed */
+    @Output() public resetRefreshPurchaseBill: EventEmitter<any> = new EventEmitter();
 
     public advanceSearchFilter: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
     public bsConfig: Partial<BsDatepickerConfig> = {
@@ -210,13 +216,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         toDates: '',
         dataToSend: {}
     };
+    public isUniversalDateApplicable: boolean = false;
     private exportcsvRequest: any = {
         from: '',
         to: '',
         dataToSend: {}
     };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private isUniversalDateApplicable: boolean = false;
     private flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
     public baseCurrencySymbol: string = '';
     public baseCurrency: string = '';
@@ -244,6 +250,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public selectedPerformAdjustPaymentAction: boolean = false;
     /** To check is selected account/customer have advance receipts */
     public isAccountHaveAdvanceReceipts: boolean = false;
+    /* This will hold if we need to show/hide PO search */
+    public showPurchaseOrderSearch: boolean = false;
+    /* Field for search */
+    public purchaseOrderNumbersInput: FormControl = new FormControl();
+    /* Send email request params object */
+    public sendEmailRequest: any = {};
+    /* Company name observable */
+    public companyName$: Observable<string>;
+    /* This will hold company unique name */
+    public companyUniqueName: string = '';
 
     constructor(
         private store: Store<AppState>,
@@ -280,17 +296,28 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.exportedInvoiceBase64res$ = this.store.select(p => p.invoice.exportInvoicebase64Data).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
         this.voucherDetails$ = this.store.pipe(select(s => s.receipt.voucher), takeUntil(this.destroyed$));
+        this.companyName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
         //this._invoiceService.getTotalAndBalDue();
     }
-    openModal(template: TemplateRef<any>) {
+
+    /**
+     * This will open the search modal
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof InvoicePreviewComponent
+     */
+    public openModal(template: TemplateRef<any>): void {
         this.modalRef = this.modalService.show(template);
     }
+
     public ngOnInit() {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).subscribe(result => {
             this.isMobileView = result.matches;
         });
+
+        this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
 
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = PAGINATION_LIMIT;
@@ -596,9 +623,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         ).subscribe(s => {
             this.invoiceSearchRequest.q = s;
             this.getVoucher(this.isUniversalDateApplicable);
-            // if (s === '') {
-            //   this.showCustomerSearch ? this.showInvoiceNoSearch = false : this.showInvoiceNoSearch = true;
-            // }
         });
 
         this.accountUniqueNameInput.valueChanges.pipe(
@@ -608,9 +632,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         ).subscribe(s => {
             this.invoiceSearchRequest.q = s;
             this.getVoucher(this.isUniversalDateApplicable);
-            // if (s === '') {
-            //   this.showInvoiceNoSearch ? this.showCustomerSearch = false : this.showCustomerSearch = true;
-            // }
+        });
+
+        this.purchaseOrderNumbersInput.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
+        ).subscribe(s => {
+            this.advanceSearchFilter.purchaseOrderNumber = s;
+            this.getVoucher(this.isUniversalDateApplicable);
         });
 
         this.store.pipe(select(s => s.general.sideMenuBarOpen), takeUntil(this.destroyed$))
@@ -685,6 +715,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
             this.getVoucher(false);
             this.selectedInvoice = null;
+        }
+
+        if(changes['refreshPurchaseBill'] && ((changes['refreshPurchaseBill'].currentValue && changes['refreshPurchaseBill'].currentValue !== changes['refreshPurchaseBill'].previousValue) || changes['refreshPurchaseBill'].firstChange)) {
+            this.resetRefreshPurchaseBill.emit(false);
+            this.getVoucher(false);
         }
     }
 
@@ -801,11 +836,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invoiceConfirmationModel.show();
     }
 
-    public deleteConfirmedInvoice() {
+    public deleteConfirmedInvoice(selectedVoucher?: any) {
         this.invoiceConfirmationModel.hide();
         if (this.selectedVoucher === VoucherTypeEnum.purchase) {
             const requestObject = {
-                uniqueName: (this.selectedInvoice) ? this.selectedInvoice.uniqueName : (this.selectedInvoiceForDetails) ? this.selectedInvoiceForDetails.uniqueName : ''
+                uniqueName: (selectedVoucher) ? encodeURIComponent(selectedVoucher.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails.uniqueName) : ''
             };
             this.purchaseRecordService.deletePurchaseRecord(requestObject).subscribe((response) => {
                 this.selectedItems = [];
@@ -848,10 +883,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
             } else {
                 let model = {
-                    invoiceNumber: this.selectedInvoice.voucherNumber,
+                    invoiceNumber: (selectedVoucher) ? selectedVoucher.voucherNumber : this.selectedInvoice.voucherNumber,
                     voucherType: this.selectedVoucher
                 };
-                this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, this.selectedInvoice.account.uniqueName));
+
+                let account = (selectedVoucher) ? encodeURIComponent(selectedVoucher.account.uniqueName) : encodeURIComponent(this.selectedInvoice.account.uniqueName);
+
+                this.store.dispatch(this.invoiceReceiptActions.DeleteInvoiceReceiptRequest(model, account));
             }
 
         }
@@ -994,7 +1032,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this._receiptServices.getAllReceiptBalanceDue(this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected), this.selectedVoucher).subscribe(res => {
             this.parseBalRes(res);
         });
-        // this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi(isUniversalDateSelected), this.prepareModelForInvoiceApi()));
     }
 
     public prepareModelForInvoiceReceiptApi(isUniversalDateSelected): InvoiceReceiptFilter {
@@ -1029,19 +1066,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             model.balanceEqual = true;
         }
 
-        let fromDate = null;
-        let toDate = null;
-        if (this.universalDate && this.universalDate.length && this.isUniversalDateApplicable) {
-            fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-            toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-        }
-
         model.from = o.from;
         model.to = o.to;
         model.count = o.count;
         model.page = o.page;
         if (isUniversalDateSelected || this.showAdvanceSearchIcon) {
-            //model = advanceSearch;
             if (!model.invoiceDate && !model.dueDate) {
                 model.from = this.invoiceSearchRequest.from;
                 model.to = this.invoiceSearchRequest.to;
@@ -1055,6 +1084,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
         if (o.q) {
             model.q = o.q;
+        }
+
+        if (advanceSearch.purchaseOrderNumber) {
+            model.purchaseOrderNumber = advanceSearch.purchaseOrderNumber;
         }
 
         if (advanceSearch && advanceSearch.sortBy) {
@@ -1086,14 +1119,22 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.showInvoiceNoSearch = true;
             this.showCustomerSearch = false;
             this.showProformaSearch = false;
+            this.showPurchaseOrderSearch = false;
         } else if (fieldName === 'ProformaPurchaseOrder') {
             this.showInvoiceNoSearch = false;
             this.showCustomerSearch = false;
             this.showProformaSearch = true;
-        } else {
+            this.showPurchaseOrderSearch = false;
+        } else if(fieldName === 'accountUniqueName') {
             this.showCustomerSearch = true;
             this.showInvoiceNoSearch = false;
             this.showProformaSearch = false;
+            this.showPurchaseOrderSearch = false;
+        } else if(fieldName === 'purchaseOrderNumbers') {
+            this.showCustomerSearch = false;
+            this.showInvoiceNoSearch = false;
+            this.showProformaSearch = false;
+            this.showPurchaseOrderSearch = true;
         }
 
         setTimeout(() => {
@@ -1179,16 +1220,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
         if (fieldName === 'invoiceNumber') {
             if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
-                // this.voucherNumberInput.setValue('');
                 return;
             }
         } else if (fieldName === 'accountUniqueName') {
             if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
                 return;
             }
-            //event.stopPropagation();  // due to this dropdown auto close was not working
         } else if (fieldName === 'ProformaPurchaseOrder') {
             if (this.ProformaPurchaseOrder.value !== null && this.ProformaPurchaseOrder.value !== '') {
+                return;
+            }
+        } else if (fieldName === 'purchaseOrderNumbers') {
+            if (this.purchaseOrderNumbersInput.value !== null && this.purchaseOrderNumbersInput.value !== '') {
                 return;
             }
         }
@@ -1200,6 +1243,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 this.showInvoiceNoSearch = false;
             } else if (fieldName === 'accountUniqueName') {
                 this.showCustomerSearch = false;
+            } else if (fieldName === 'purchaseOrderNumbers') {
+                this.showPurchaseOrderSearch = false;
             }
             // else {
             //   if (fieldName === 'accountUniqueName') {
@@ -1457,9 +1502,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             let balanceDueAmountForCompany, balanceDueAmountForAccount, grandTotalAmountForCompany,
                 grandTotalAmountForAccount;
 
-            if (this.selectedVoucher === VoucherTypeEnum.sales && item.balanceDue) {
-                balanceDueAmountForCompany = Number(item.balanceDue.amountForCompany) || 0;
-                balanceDueAmountForAccount = Number(item.balanceDue.amountForAccount) || 0;
+            if (this.selectedVoucher === VoucherTypeEnum.sales && item && item.totalBalance && item.totalBalance.amountForCompany !== undefined && item.totalBalance.amountForAccount !== undefined) {
+                balanceDueAmountForCompany = Number(item.totalBalance.amountForCompany) || 0;
+                balanceDueAmountForAccount = Number(item.totalBalance.amountForAccount) || 0;
             }
             if (MULTI_CURRENCY_MODULES.indexOf(this.selectedVoucher) > -1 &&
                 item.grandTotal) {
@@ -1491,7 +1536,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public onPerformAdjustPaymentAction(item: ReceiptItem): void {
         let customerUniqueName = this.getUpdatedAccountUniquename(item.voucherNumber, item.account.uniqueName);
 
-        this.invFormData.voucherDetails.balanceDue = item.balanceDue.amountForAccount;
+        if (item && item.totalBalance &&  item.totalBalance.amountForAccount !== undefined) {
+            this.invFormData.voucherDetails.balanceDue = item.totalBalance.amountForAccount;
+        }
         this.invFormData.voucherDetails.grandTotal = item.grandTotal.amountForAccount;
         this.invFormData.voucherDetails.customerName = item.account.name;
         this.invFormData.voucherDetails.customerUniquename = customerUniqueName;
@@ -1640,5 +1687,43 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             });
         }
         return newAccountUniqueName;
+    }
+
+    /**
+     * This will show confirmation modal for delete PB
+     *
+     * @param {*} billUniqueName
+     * @memberof InvoicePreviewComponent
+     */
+    public deletePurchaseBill(billUniqueName: any): void {
+        let allInvoices = _.cloneDeep(this.voucherData.items);
+        this.selectedInvoice = allInvoices.find((inv) => inv.uniqueName === billUniqueName);
+        this.invoiceConfirmationModel.show();
+    }
+
+    /**
+     * This will open the send email modal
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof InvoicePreviewComponent
+     */
+    public openSendMailModal(template: TemplateRef<any>, item: any): void {
+        this.sendEmailRequest.email = item.account.email;
+        this.sendEmailRequest.uniqueName = item.uniqueName;
+        this.sendEmailRequest.accountUniqueName = item.account.uniqueName;
+        this.sendEmailRequest.companyUniqueName = this.companyUniqueName;
+        this.modalRef = this.modalService.show(template);
+    }
+
+    /**
+     * This will close the send email popup
+     *
+     * @param {*} event
+     * @memberof InvoicePreviewComponent
+     */
+    public closeSendMailPopup(event: any): void {
+        if (event) {
+            this.modalRef.hide();
+        }
     }
 }

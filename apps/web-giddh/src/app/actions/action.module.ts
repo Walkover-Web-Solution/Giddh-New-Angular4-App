@@ -54,6 +54,7 @@ import { CommonActions } from './common.actions';
 import { ItemOnBoardingActions } from './item-on-boarding/item-on-boarding.action';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
 import { PurchaseRecordActions } from './purchase-record/purchase-record.action';
+import { PurchaseOrderActions } from './purchase-order/purchase-order.action';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -112,7 +113,8 @@ import { PurchaseRecordActions } from './purchase-record/purchase-record.action'
             CommonActions,
             ItemOnBoardingActions,
             WarehouseActions,
-            PurchaseRecordActions
+            PurchaseRecordActions,
+            PurchaseOrderActions
         ])
     ],
     exports: [EffectsModule]

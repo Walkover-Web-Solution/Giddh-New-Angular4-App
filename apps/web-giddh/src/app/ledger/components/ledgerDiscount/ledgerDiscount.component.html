@@ -3,7 +3,7 @@
 
 	<a id="discount">
 		<div class="multi-select adjust text-right">
-			<input type="text" [prefix]="prefixInput" [suffix]="suffixInput" [mask]="maskInput" name=""
+			<input type="text" [prefix]="prefixInput" id="ledger-discount" [suffix]="suffixInput" [mask]="maskInput" name=""
 				class="form-control cursor-pointer text-right" (focus)="discountMenu = true;hideOtherPopups.emit(true)"
 				[(ngModel)]="discountTotal" readonly />
 			<span class="caret"></span>
@@ -20,7 +20,7 @@
 				<label class="mr-1 align-items-center d-flex" style="width: 50px">Percent</label>
 
 				<div class="pos-rel">
-					<input type="text" class="form-control text-right cursor-pointer" [disabled]="!discountFromPer"
+					<input type="text" id="ledger-discount-percent" class="form-control text-right cursor-pointer" [disabled]="!discountFromPer"
 						decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="discountPercentageModal"
 						(input)="discountFromInput('PERCENTAGE', $event.target.value)"
 						style="width: 100px;padding-right: 20px !important;">

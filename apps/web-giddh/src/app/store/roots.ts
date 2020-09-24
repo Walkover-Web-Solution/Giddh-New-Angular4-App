@@ -37,6 +37,7 @@ import * as fromCommon from './Common/common.reducer';
 import * as fromItemOnBoarding from './item-on-boarding/item-on-boarding.reducer';
 import * as fromWarehouse from '../settings/warehouse/reducer/warehouse.reducer';
 import * as fromPurchaseRecord from '../store/purchase-record/purchase-record.reducer';
+import * as fromPurchaseOrder from '../store/purchase-order/purchase-order.reducer';
 import { ActionReducerMap } from '@ngrx/store';
 
 export interface AppState {
@@ -79,7 +80,8 @@ export interface AppState {
     common: fromCommon.CurrentCommonState,
     itemOnboarding: fromItemOnBoarding.ItemOnBoardingState
     warehouse: fromWarehouse.WarehouseState,
-    purchaseRecord: fromPurchaseRecord.PurchaseRecordState
+    purchaseRecord: fromPurchaseRecord.PurchaseRecordState,
+    purchaseOrder: fromPurchaseOrder.PurchaseOrderState
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -122,5 +124,6 @@ export const reducers: ActionReducerMap<AppState> = {
     common: fromCommon.CommonReducer,
     itemOnboarding: fromItemOnBoarding.itemOnBoardingReducer,
     warehouse: fromWarehouse.warehouseReducer,
-    purchaseRecord: fromPurchaseRecord.purchaseRecordReducer
+    purchaseRecord: fromPurchaseRecord.purchaseRecordReducer,
+    purchaseOrder: fromPurchaseOrder.purchaseOrderReducer
 };

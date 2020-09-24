@@ -1,6 +1,20 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, NgModule, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewChild, } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    NgModule,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    Renderer2,
+    SimpleChanges,
+    ViewChild,
+} from '@angular/core';
+
 import { IOption } from './sh-options.interface';
 
 export interface ChangeEvent {
@@ -68,7 +82,13 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     public start: EventEmitter<ChangeEvent> = new EventEmitter<ChangeEvent>();
     @Output()
     public end: EventEmitter<ChangeEvent> = new EventEmitter<ChangeEvent>();
-    @ViewChild('content', { read: ElementRef, static: true })
+
+    /** True when pagination should be enabled */
+    @Input() isPaginationEnabled: boolean;
+    /** Emits the scroll to bottom event when pagination is required  */
+    @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
+
+    @ViewChild('content', { read: ElementRef })
     public contentElementRef: ElementRef;
     public onScrollListener: any;
     public topPadding: number;
@@ -86,8 +106,25 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
         return viewWidth;
     }
 
+    /**
+     * Scroll handler
+     *
+     * @memberof VirtualScrollComponent
+     */
+    handleScroll(): void {
+        this.refresh();
+        if (this.element && this.element.nativeElement && this.isPaginationEnabled) {
+            // Scrolled to bottom
+            if ((this.element.nativeElement.scrollHeight - this.element.nativeElement.scrollTop) === this.element.nativeElement.clientHeight) {
+                this.scrollEnd.emit();
+            }
+        }
+    }
+
     public ngOnInit() {
-        this.onScrollListener = this.renderer.listen(this.element.nativeElement, 'scroll', this.refresh.bind(this));
+        this.onScrollListener = this.renderer.listen(this.element.nativeElement, 'scroll', () => {
+            this.handleScroll();
+        });
         this.scrollbarWidth = 0; // this.element.nativeElement.offsetWidth - this.element.nativeElement.clientWidth;
         this.scrollbarHeight = 0; // this.element.nativeElement.offsetHeight - this.element.nativeElement.clientHeight;
     }

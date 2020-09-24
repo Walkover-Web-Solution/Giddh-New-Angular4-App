@@ -7,7 +7,7 @@
 }
 
 .mh18_img img {
-    max-height: 20px;
+    max-height: 17px;
     cursor: pointer;
 }
 
@@ -483,6 +483,9 @@ span.icon-export-icon {
                     border-right: none !important;
                 }
             }
+            .item-selected {
+                display: flex !important;
+            }
         }
     }
     &:hover {
@@ -499,10 +502,56 @@ span.icon-export-icon {
 .visible-on-desktop {
     display: inline-flex;
 }
+
+.status-mobile{
+    .balance-status{
+        padding: 14px 0;
+    }
+}
+
+.giddh-table{
+    border-right: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro !important;
+    tbody{
+        tr{
+            &:hover {
+                background: $solitude;
+                td {
+                    background: transparent !important;
+                }
+            }
+
+            &:last-child{
+                td{
+                    border-bottom: none !important;
+                }
+            }
+    }
+}
+
+    > tbody{
+        > tr{
+            &:hover {
+                background: rgba(221, 225, 230, 0.5);
+            }
+            td {
+                background: transparent !important;
+                &:last-child{
+                    border-right:none !important;
+                }
+            }
+        }
+    }
+}
+
 /* responsive */
 
 @media (max-width: 768px) {
 
+    .status-mobile{
+        display: flex !important;
+        justify-content: space-between !important;
+    }
     .invoice-name-download {
         a {
             padding-right: 0 !important;
@@ -662,7 +711,7 @@ span.icon-export-icon {
         font-size: 14px;
         margin-top: 15px;
     }
-    .invoce-controll .nav.nav-tabs {
+    .invoice-control .nav.nav-tabs {
         margin-bottom: 28px;
     }
     #dropdown-ddl-newinv {
@@ -725,5 +774,48 @@ span.icon-export-icon {
 @media (max-width: 320px) {
     .mobile-search .input-container input {
         letter-spacing: -0.99px;
+    }
+}
+
+@media (max-width: 445px) {
+    .status-mobile{
+        display: block !important;
+    }
+
+    .giddh-table {
+        tr {
+            td {
+                .action-icon {
+                    a {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width:768px) and (min-width:445px){
+    .status-mobile::before{
+        display:flex;
+        align-items: center;
+    }
+}
+
+
+
+@media (min-width:768px){
+    .mw-th-260{
+        min-width:260px;
+    }
+    .mw-th-170{
+        min-width:170px;
+    }
+
+    .min-wd-20{
+        min-width:20px;
+        .mh18-img{
+            width:20px;
+        }
     }
 }

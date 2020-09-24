@@ -14,7 +14,7 @@
                 </span>
             </ng-container>
             <!-- (click)="show($event);" -->
-            <input type="text" class="pd-l1"
+            <input autocomplete="disabled" type="text" class="pd-l1"
                 [ngClass]="{'hasValue':filter?.length, 'bottom-border-only' : showBottomBorderOnly}" #inputFilter
                 tabindex="0" (blur)="filterInputBlur($event)"
                 [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter"
@@ -28,10 +28,11 @@
             [hidden]="((!isOpen || !isFilterEnabled))">{{selectedValues[0]?.label}}
         </button>
 
-        <input type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" class="form-control" #inputFilter
+        <input autocomplete="disabled" type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" class="form-control" #inputFilter
             *ngIf="!multiple && !showLabelOnly" [hidden]="((!isOpen || !isFilterEnabled))"
+            (focus)="subscribeToQueryChange()"
             (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter"
-            (ngModelChange)="updateFilter($event)" style="padding-right: 28px !important;">
+            (ngModelChange)="handleInputChange($event)" style="padding-right: 28px !important;">
 
         <!-- (click)="show($event);" -->
         <div *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
@@ -39,13 +40,14 @@
                 <div *ngIf="!multiple">
                     <button class="form-control label-btn text-left"
                         *ngIf="showLabelOnly">{{selectedValues[0]?.label}}</button>
-                    <input type="text" *ngIf="!showLabelOnly" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}"
+                    <input autocomplete="disabled" type="text" *ngIf="!showLabelOnly" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}"
                         (input)="openListIfNotOpened($event)" (click)="selectText($event);" type="text"
                         value="{{selectedValues[0].label}}" class="form-control selectedVal cp" />
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">
-                <input type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" *ngIf="!showLabelOnly"
+                <input autocomplete="disabled" type="text" [ngClass]="{'bottom-border-only' : showBottomBorderOnly}" *ngIf="!showLabelOnly"
+                    (focus)="subscribeToQueryChange()"
                     [tabindex]="tabIndex" class="firstElementToFocus form-control" name="filter2" [(ngModel)]="filter"
                     (input)="openListIfNotOpened($event)" [placeholder]="placeholder" [value]="filter"
                     style="padding-right: 28px !important;" />
@@ -61,6 +63,7 @@
 
     <!-- <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span> -->
     <sh-select-menu #menuEle [showLabelOnly]="showLabelOnly" [isOpen]="isOpen" [rows]="rows"
+        [isPaginationEnabled]="isPaginationEnabled" (scrollEnd)="reachedEnd()"
         [selectedValues]="selectedValues" [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)"
         (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink"
         [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight"

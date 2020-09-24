@@ -7,6 +7,8 @@ import { IOption } from './sh-options.interface';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
 import { concat, includes, startsWith } from 'apps/web-giddh/src/app/lodash-optimized';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
+import { Subject, ReplaySubject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
 
@@ -53,6 +55,19 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Input() public showCheckbox: boolean = false;
     /* This is used to set the value */
     @Input() public fixedValue: string = "";
+
+    /** True when pagination should be enabled */
+    @Input() public isPaginationEnabled: boolean;
+    /** True if the compoonent should be used as dynamic search component instead of static search */
+    @Input() public enableDynamicSearch: boolean;
+    /** Emits the scroll to bottom event when pagination is required  */
+    @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
+    /** Emits dynamic searched query */
+    @Output() public dynamicSearchedQuery: EventEmitter<string> = new EventEmitter();
+    /** Subject to emit current searched value */
+    private dynamicSearchQueryChanged: Subject<string> = new Subject<string>();
+    /** To unsubscribe from the dynamic search query subscription */
+    private stopDynamicSearch$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     @ViewChild('inputFilter', {static: false}) public inputFilter: ElementRef;
     @ViewChild('mainContainer', {static: true}) public mainContainer: ElementRef;
@@ -169,7 +184,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     public getFilteredArrOfIOptionItems(array: IOption[], term: string, action: string) {
         if (action === FLATTEN_SEARCH_TERM) {
             return array.filter((item) => {
-                let mergedAccounts = _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase()));
+                let mergedAccounts = item.additional && item.additional.mergedAccounts ?
+                    _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase())) : '';
                 let stockName = '';
                 let stockUnqName = '';
                 if (item.additional.stock && item.additional.stock.name) {
@@ -182,6 +198,20 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             return array.filter((item: IOption) => {
                 return includes(String(item.label).toLocaleLowerCase(), term) || includes(String(item.value).toLocaleLowerCase(), term);
             });
+        }
+    }
+
+    /**
+     * Input change handler
+     *
+     * @param {string} inputText Current input text
+     * @memberof ShSelectComponent
+     */
+    public handleInputChange(inputText: string): void {
+        if (this.enableDynamicSearch) {
+            this.dynamicSearchQueryChanged.next(inputText);
+        } else {
+            this.updateFilter(inputText);
         }
     }
 
@@ -233,11 +263,11 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         }
         this.clearFilter();
 
-        if (!this.multiple) {
-            if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
-                callChanges = false;
-            }
-        }
+        // if (!this.multiple) {
+        //     if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
+        //         callChanges = false;
+        //     }
+        // }
 
         if (callChanges && !this.multiple) {
             // check last selected value is there
@@ -424,6 +454,26 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         //
     }
 
+    /**
+     * Subscribes to query change for dynamic search
+     *
+     * @memberof ShSelectComponent
+     */
+    public subscribeToQueryChange(): void {
+        if (this.enableDynamicSearch) {
+            this.stopDynamicSearch$.next(true);
+            this.stopDynamicSearch$.complete();
+            this.stopDynamicSearch$ = new ReplaySubject(1);
+            this.dynamicSearchQueryChanged = new Subject();
+            this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
+                if (query && query.length > 1) {
+                    this.dynamicSearchedQuery.emit(query);
+                }
+            });
+        }
+    }
+
+
     public ngAfterViewInit() {
         this.viewInitEvent.emit(true);
     }
@@ -450,6 +500,18 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         if ('fixedValue' in changes) {
             if (changes.fixedValue && changes.fixedValue.currentValue) {
                 this.filter = changes.fixedValue.currentValue;
+            }
+        }
+
+        if('placeholder' in changes) {
+            if (changes.placeholder && changes.placeholder.currentValue) {
+                this.placeholder = changes.placeholder.currentValue;
+            }
+        }
+
+        if ('options' in changes) {
+            if (changes.options && changes.options.currentValue) {
+                this.refreshList();
             }
         }
     }
@@ -507,6 +569,27 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             this.filter = newValue.label;
             this.propagateChange(newValue.value);
             this.selected.emit(newValue);
+        }
+    }
+
+    /**
+     * Scroll to bottom handler
+     *
+     * @memberof ShSelectComponent
+     */
+
+    public reachedEnd(): void {
+        this.scrollEnd.emit();
+    }
+
+    /**
+     * Refreshes the list on new items
+     *
+     * @memberof ShSelectComponent
+     */
+    public refreshList(): void {
+        if (this.menuEle && this.menuEle.virtualScrollElm) {
+            this.menuEle.virtualScrollElm.refresh();
         }
     }
 }

@@ -233,6 +233,8 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public taxRenderData: ITaxList[] = [];
     public sku_and_customfields?: string;
     public requiredTax?: boolean;
+    public maxQuantity?: number;
+    public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
 
     constructor() {
         super();
@@ -328,6 +330,7 @@ export class SalesEntryClass {
     public tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum;
     public tcsTaxList?: string[];
     public tdsTaxList?: string[];
+    public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
 
     constructor() {
         this.transactions = [new SalesTransactionItemClass()];
@@ -343,6 +346,7 @@ export class SalesEntryClass {
         this.otherTaxType = 'tcs';
         this.otherTaxModal = new SalesOtherTaxesModal();
         this.cessSum = 0;
+        this.purchaseOrderItemMapping = { uniqueName: '', entryUniqueName: '' };
     }
 
     public staticDefaultDiscount(): LedgerDiscountClass {
@@ -466,6 +470,8 @@ export interface PurchaseRecordRequest extends GenericRequest {
     attachedFiles?: Array<string>;
     entries?: SalesEntryClass[];
     templateDetails?: TemplateDetailsClass;
+    purchaseOrders?: Array<any>;
+    purchaseBillCompany?: any;
 }
 
 export class VoucherDetailsClass {
@@ -565,6 +571,7 @@ export class VoucherClass {
     public account?: any;
     public attachedFileName?: string;
     public attachedFiles?: Array<string>;
+    public purchaseOrderDetails?: any;
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();
@@ -593,6 +600,7 @@ export class SalesAddBulkStockItems {
     sku?: string = '';
     stockUnitCode?: CodeStockMulticurrency;
     stockUnit?: CodeStockMulticurrency;
+    additional?: any;
 }
 
 export class CodeStockMulticurrency {
@@ -626,6 +634,7 @@ export class SalesEntryClassMulticurrency {
     public voucherNumber: string;
     public voucherType: string;
     public discounts: DiscountMulticurrency[];
+    public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
 
     constructor() {
         this.transactions = [];
@@ -638,6 +647,7 @@ export class SalesEntryClassMulticurrency {
         this.voucherNumber = '';
         this.voucherType = '';
         this.discounts = [];
+        this.purchaseOrderItemMapping = { uniqueName: '', entryUniqueName: '' };
     }
 }
 

@@ -603,7 +603,7 @@
                                                         name="transaction.date_{{entryIdx}}"
                                                         class="form-control text-left" [(ngModel)]="entry.entryDate"
                                                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                        #dp="bsDatepicker" [bsValue]="bsValue" />
+                                                        #dp="bsDatepicker" />
                                                     <span class="edit-icon" (click)="dp.toggle()"
                                                         [attr.aria-expanded]="dp.isOpen">
                                                         <img src="assets/images/edit-pencilicon.svg">
@@ -660,7 +660,7 @@
 
                             <select class="form-control" style=" max-width: 150px;" [disabled]="true"
                                 name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit"
-                                (ngModelChange)="onChangeUnit(transaction, $event);transaction.setAmount(entry)">
+                                (ngModelChange)="transaction.setAmount(entry)">
                                 <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">{{stock.text}}
                                 </option>
                             </select>
@@ -826,66 +826,15 @@
                                 <strong>{{invFormData.voucherDetails.grandTotal |giddhCurrency }}</strong>
                             </div>
                         </div>
-                        <div class="tableRow" *ngIf="toggleFieldForSales && isCustomerSelected && !isPurchaseInvoice">
-                            <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
-                            <div class="tableCell">
-                                <!--
-<div class="btn-group" dropdown #depositDropdown="bs-dropdown" [autoClose]="false">
--->
-                                <div class="btn-group">
-                                    <button id="depositBoxTrigger" type="button" class="btn btn-default dropdown-toggle"
-                                        aria-controls="deposit-dropdown" (click)="dropdownisOpen = dropdownisOpen">
-                                        {{  'Deposit' }}
-                                    </button>
-                                    <ul (click)="clickedInside($event)" id="deposit-dropdown" *ngIf="dropdownisOpen"
-                                        class="dropdown-menu form-group pd-1" role="menu"
-                                        aria-labelledby="button-dropup">
-                                        <span class="caret"></span>
-                                        <li role="menuitem">
-                                            <div class="">
-                                                <label>Amount</label>
-                                                <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount"
-                                                    name="dueAmount" class="form-control max100"
-                                                    [(ngModel)]="dueAmount" />
-                                            </div>
-                                        </li>
-                                        <li role="menuitem" class="mr-t1">
-                                            <div class="">
-                                                <label>Payment Mode</label>
-                                                <sh-select name="depositAccountUniqueName"
-                                                    [options]="bankAccounts$ | async"
-                                                    [(ngModel)]="depositAccountUniqueName"
-                                                    (selected)="onSelectPaymentMode($event)"
-                                                    [placeholder]="'Select Account'" [notFoundLink]="false"
-                                                    [forceClearReactive]="forceClear$ | async" [multiple]="false"
-                                                    [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true"
-                                                    class="text-left">
-                                                    <ng-template #optionTemplate1 let-option="option">
-                                                        <a href="javascript:void(0)" class="list-item"
-                                                            style="border-bottom: 1px solid #ccc;">
-                                                            <div class="item">{{ option.label }}</div>
-                                                            <div class="item-unique">{{ option.value }}</div>
-                                                        </a>
-                                                    </ng-template>
-                                                </sh-select>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="tableCell figureCell" (click)="dropdownisOpen = true">
-                                {{dueAmount |giddhCurrency }}
-                            </div>
-                        </div>
 
-                        <div class="tableRow" *ngIf="toggleFieldForSales">
+                        <!-- <div class="tableRow" *ngIf="toggleFieldForSales">
                             <div class="tableCell">
                                 <strong>Balance Due</strong>
                             </div>
                             <div class="tableCell figureCell">
                                 <strong>{{invFormData.voucherDetails.balanceDue |giddhCurrency }}</strong>
                             </div>
-                        </div>
+                        </div> -->
                     </section>
                 </td>
 
