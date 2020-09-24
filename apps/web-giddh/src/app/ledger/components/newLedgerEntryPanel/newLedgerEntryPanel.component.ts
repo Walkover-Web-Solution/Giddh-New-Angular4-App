@@ -398,6 +398,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                             name: tax.name,
                             uniqueName: tax.uniqueName
                         };
+                        this.blankLedger.isOtherTaxesApplicable = true;
                         break;
                     default:
                         appliedTaxes.push(tax.uniqueName);
@@ -469,6 +470,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public calculateTotal(): void {
         if (this.currentTxn) {
             if (this.currentTxn.amount) {
+                /** apply account's discount (default) */
+                if (this.currentTxn.discounts && this.currentTxn.discounts.length && this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
+                    this.currentTxn.discounts.map(item => {
+                        item.isActive = this.accountOtherApplicableDiscount.some(element => element.uniqueName === item.discountUniqueName);
+                    });
+                }
+
                 if (this.isAdvanceReceipt) {
                     this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
                     this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
@@ -502,12 +510,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.currentTxn.inventory.unit.highPrecisionRate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(this.highPrecisionRate));
                     this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.ratePrecision);
                 }
-            }
-            /** apply account's discount (default) */
-            if (this.currentTxn.amount && this.currentTxn.discounts && this.currentTxn.discounts.length && this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
-                this.currentTxn.discounts.map(item => {
-                    item.isActive = this.accountOtherApplicableDiscount.some(element => element.uniqueName === item.discountUniqueName);
-                });
             }
             if (this.discountControl) {
                 this.discountControl.change();
