@@ -2151,7 +2151,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
         let getRequestObject = {
             companyUniqueName: this.selectedCompany.uniqueName,
-            accountUniqueName: encodeURIComponent(data.accountDetails.uniqueName)
+            accountUniqueName: data.accountDetails.uniqueName
         };
 
         if (type === "create") {
