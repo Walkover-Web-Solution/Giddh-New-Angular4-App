@@ -251,7 +251,7 @@
                                                         v-if="legderBalanceData.forwardedBalance.type === 'DEBIT'">0</span>
                                                 </td>
                                             </tr>
-                                            <tr class="ledger-row bdrB" 
+                                            <tr class="ledger-row bdrB"
                                                 v-if="legderBalanceData.forwardedBalance.type !== 'CREDIT' || (legderBalanceData.forwardedBalance.amount == 0)">
                                                 <td class="" colspan="3">&nbsp;</td>
                                             </tr>
@@ -272,7 +272,7 @@
                                                                     <td class="col-3">{{ledger.entryDate}}</td>
                                                                     <td class="col-6 bdrL">By {{txn.particular.name}}
                                                                     </td>
-                                                                    <td class="col-3 bdrL pos-rel"
+                                                                    <td class="col-3 bdrL pos-rel bdrR"
                                                                         v-bind:class="{'pdR25imp': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
                                                                         align="right">
                                                                         {{txn.amount}}
