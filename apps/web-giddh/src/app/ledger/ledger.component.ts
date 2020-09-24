@@ -756,7 +756,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (s) {
                 this._toaster.successToast('Entry created successfully', 'Success');
                 this.lc.showNewLedgerPanel = false;
-
+                this.lc.showBankLedgerPanel = false;
                 this.getTransactionData();
                 // this.getCurrencyRate();
                 this.resetBlankTransaction();
@@ -1489,10 +1489,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
             '';
         const requestObject = {
-            q: query,
+            q: encodeURIComponent(query),
             page,
             withStocks: true,
-            stockAccountUniqueName: accountUniqueName
+            stockAccountUniqueName: encodeURIComponent(accountUniqueName)
         }
         this.searchService.searchAccount(requestObject).subscribe(data => {
             if (data && data.body && data.body.results) {

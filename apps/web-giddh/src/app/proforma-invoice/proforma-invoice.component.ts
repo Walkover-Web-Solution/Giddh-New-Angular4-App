@@ -519,6 +519,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public copyPurchaseBill: boolean = false;
     /* This will hold if PO linking is updated */
     public poLinkUpdated: boolean = false;
+    /* This will hold if copy purchase bill is done */
+    public copyPurchaseBillInitialized: boolean = false;
 
     /** account's applied tax list */
     public accountAssignedApplicableTaxes: string[] = [];
@@ -2166,7 +2168,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                     }
 
-                    if(this.isPurchaseInvoice && this.selectedPoItems && this.selectedPoItems.length > 0) {
+                    if(this.isPurchaseInvoice) {
                         txn.accountUniqueName = txn.accountUniqueName.indexOf('#') > -1 ? txn.accountUniqueName.slice(0, txn.accountUniqueName.indexOf('#')) : txn.accountUniqueName;
                     }
 
@@ -4425,7 +4427,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             salesEntryClass.transactions = [];
 
             if(entry.purchaseOrderItemMapping) {
-                salesEntryClass.purchaseOrderItemMapping = entry.purchaseOrderItemMapping;
+                if(this.copyPurchaseBill) {
+                    if(this.copyPurchaseBillInitialized) {
+                        salesEntryClass.purchaseOrderItemMapping = entry.purchaseOrderItemMapping;    
+                    }
+                } else {
+                    salesEntryClass.purchaseOrderItemMapping = entry.purchaseOrderItemMapping;
+                }
             }
 
             entry.transactions.forEach(t => {
@@ -4640,6 +4648,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.poLinkUpdated = true;
         }
 
+        this.copyPurchaseBillInitialized = true;
+
         return voucherClassConversion;
     }
 
@@ -4828,7 +4838,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     private showGstAndTrnUsingCountryName(name: string) {
-        if (this.selectedCompany.country === name) {
+        if (this.selectedCompany && this.selectedCompany.country === name) {
             if (name === 'India') {
                 this.showGSTINNo = true;
                 this.showTRNNo = false;
@@ -5619,7 +5629,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             group = 'bankaccounts, cash';
         }
         const requestObject = {
-            q: query,
+            q: encodeURIComponent(query),
             page,
             group: encodeURIComponent(group)
         };
@@ -5793,6 +5803,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             this.purchaseOrderService.getAll(purchaseOrderGetRequest, purchaseOrderPostRequest).subscribe((res) => {
                 if (res) {
+                    this.purchaseOrders = [];
                     if (res.status === 'success') {
                         if (res.body && res.body.items && res.body.items.length > 0) {
                             res.body.items.forEach(item => {
@@ -5870,6 +5881,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.startLoader(true);
         entries.forEach(entry => {
             let transactionLoop = 0;
+
+            if(entry.totalQuantity && entry.usedQuantity && entry.transactions && entry.transactions[0] && entry.transactions[0].stock) {
+                entry.transactions[0].stock.quantity = entry.totalQuantity - entry.usedQuantity;
+            }
+
             entry.transactions.forEach(item => {
                 if(item.stock) {
                     item.stock.uniqueName = "purchases#" + item.stock.uniqueName;
@@ -5882,33 +5898,36 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     item.uniqueName = item.account.uniqueName;
                     item.value = item.account.uniqueName;
                     item.additional = item.account;
-                    item.additional.maxQuantity = 1;
+                    item.additional.maxQuantity = entry.totalQuantity - entry.usedQuantity;
                 }
 
-                let lastIndex = -1;
-                let blankItemIndex = this.invFormData.entries.findIndex(f => !f.transactions[transactionLoop].accountUniqueName);
+                if(item.additional.maxQuantity > 0) {
+                    let lastIndex = -1;
+                    let blankItemIndex = this.invFormData.entries.findIndex(f => !f.transactions[transactionLoop].accountUniqueName);
 
-                if (blankItemIndex > -1) {
-                    lastIndex = blankItemIndex;
-                    this.invFormData.entries[lastIndex] = new SalesEntryClass();
-                } else {
-                    this.invFormData.entries.push(new SalesEntryClass());
-                    lastIndex = this.invFormData.entries.length - 1;
+                    if (blankItemIndex > -1) {
+                        lastIndex = blankItemIndex;
+                        this.invFormData.entries[lastIndex] = new SalesEntryClass();
+                    } else {
+                        this.invFormData.entries.push(new SalesEntryClass());
+                        lastIndex = this.invFormData.entries.length - 1;
+                    }
+
+                    this.activeIndx = lastIndex;
+                    this.invFormData.entries[lastIndex].entryDate = this.universalDate;
+                    this.invFormData.entries[lastIndex].transactions[transactionLoop].accountUniqueName = item.uniqueName;
+                    this.invFormData.entries[lastIndex].transactions[transactionLoop].fakeAccForSelect2 = item.uniqueName;
+                    this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
+                    this.invFormData.entries[lastIndex].transactions[transactionLoop].description = entry.description;
+                    this.invFormData.entries[lastIndex].discounts = this.parseDiscountFromResponse(entry);
+                    this.invFormData.entries[lastIndex].taxList = entry.taxes.map(tax => tax.uniqueName);
+                    this.invFormData.entries[lastIndex].purchaseOrderItemMapping = {uniqueName: poUniqueName, entryUniqueName: entry.uniqueName};
+
+                    this.onSelectSalesAccount(item, this.invFormData.entries[lastIndex].transactions[transactionLoop], this.invFormData.entries[lastIndex], false, true);
+                
+                    transactionLoop++;
                 }
 
-                this.activeIndx = lastIndex;
-                this.invFormData.entries[lastIndex].entryDate = this.universalDate;
-                this.invFormData.entries[lastIndex].transactions[transactionLoop].accountUniqueName = item.uniqueName;
-                this.invFormData.entries[lastIndex].transactions[transactionLoop].fakeAccForSelect2 = item.uniqueName;
-                this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
-                this.invFormData.entries[lastIndex].transactions[transactionLoop].description = entry.description;
-                this.invFormData.entries[lastIndex].discounts = this.parseDiscountFromResponse(entry);
-                this.invFormData.entries[lastIndex].taxList = entry.taxes.map(tax => tax.uniqueName);
-                this.invFormData.entries[lastIndex].purchaseOrderItemMapping = {uniqueName: poUniqueName, entryUniqueName: entry.uniqueName};
-
-                this.onSelectSalesAccount(item, this.invFormData.entries[lastIndex].transactions[transactionLoop], this.invFormData.entries[lastIndex], false, true);
-
-                transactionLoop++;
             });
         });
         this.startLoader(false);
@@ -5922,65 +5941,72 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public removePoItem(): void {
         if(this.selectedPoItems && this.selectedPoItems.length > 0) {
             this.startLoader(true);
-            let selectedPoItems = [];
-            this.selectedPoItems.forEach(order => {
-                if(!this.linkedPo.includes(order)) {
-                    let entries = this.linkedPoNumbers[order]['items'];
+            setTimeout(() => {
+                let selectedPoItems = [];
+                this.selectedPoItems.forEach(order => {
+                    if(!this.linkedPo.includes(order)) {
+                        let entries = this.linkedPoNumbers[order]['items'];
 
-                    if(entries && entries.length > 0 && this.invFormData.entries && this.invFormData.entries.length > 0) {
-                        entries.forEach(entry => {
-                            entry.transactions.forEach(item => {
-                                let entryLoop = 0;
-                                let remainingQuantity = (item.stock && item.stock.quantity) ? item.stock.quantity : 1;
+                        if(entries && entries.length > 0 && this.invFormData.entries && this.invFormData.entries.length > 0) {
+                            entries.forEach(entry => {
+                                entry.transactions.forEach(item => {
+                                    let entryLoop = 0;
+                                    let remainingQuantity = (item.stock && item.stock.quantity !== undefined && item.stock.quantity !== null) ? item.stock.quantity : 1;
 
-                                this.invFormData.entries.forEach(entry => {
-                                    if(entry && entry.transactions && entry.transactions.length > 0 && remainingQuantity > 0) {
-                                        let transactionLoop = 0;
-                                        entry.transactions.forEach(transaction => {
-                                            if(remainingQuantity > 0) {
-                                                let accountUniqueName = transaction.accountUniqueName;
-                                                if(accountUniqueName) {
-                                                    accountUniqueName = accountUniqueName.replace("purchases#", "");
-                                                }
+                                    this.invFormData.entries.forEach(entry => {
+                                        let entryRemoved = false;
+                                        if(entry && entry.transactions && entry.transactions.length > 0 && remainingQuantity > 0 && entry.purchaseOrderItemMapping && entry.purchaseOrderItemMapping.uniqueName === order) {
+                                            let transactionLoop = 0;
+                                            entry.transactions.forEach(transaction => {
+                                                if(remainingQuantity > 0) {
+                                                    let accountUniqueName = transaction.accountUniqueName;
+                                                    if(accountUniqueName) {
+                                                        accountUniqueName = accountUniqueName.replace("purchases#", "");
+                                                    }
 
-                                                let stockUniqueName = (item.stock && item.stock.uniqueName) ? item.stock.uniqueName : "";
-                                                if(item.stock && item.stock.uniqueName) {
-                                                    stockUniqueName = stockUniqueName.replace("purchases#", "");
-                                                }
+                                                    let stockUniqueName = (item.stock && item.stock.uniqueName) ? item.stock.uniqueName : "";
+                                                    if(item.stock && item.stock.uniqueName) { 
+                                                        stockUniqueName = stockUniqueName.replace("purchases#", "");
+                                                    }
 
-                                                if(item.stock && item.stock.uniqueName && accountUniqueName) {
-                                                    if(stockUniqueName === accountUniqueName) {
-                                                        if(transaction.quantity > item.stock.quantity) {
-                                                            remainingQuantity -= item.stock.quantity;
-                                                            this.invFormData.entries[entryLoop].transactions[transactionLoop].quantity = transaction.quantity - item.stock.quantity;
-                                                        } else {
-                                                            remainingQuantity -= transaction.quantity;
+                                                    if(item.stock && item.stock.uniqueName && accountUniqueName) {
+                                                        if(stockUniqueName === accountUniqueName) {
+                                                            if(transaction.quantity > remainingQuantity) {
+                                                                this.invFormData.entries[entryLoop].transactions[transactionLoop].quantity = transaction.quantity - remainingQuantity;
+                                                                remainingQuantity -= remainingQuantity;
+                                                            } else {
+                                                                remainingQuantity -= transaction.quantity;
+                                                                entryRemoved = true;
+                                                                this.removeTransaction(entryLoop);
+                                                            }
+                                                        }
+                                                    } else if(item.account && item.account.uniqueName && accountUniqueName) {
+                                                        if(item.account.uniqueName === accountUniqueName) {
+                                                            remainingQuantity = 0;
+                                                            entryRemoved = true;
                                                             this.removeTransaction(entryLoop);
                                                         }
                                                     }
-                                                } else if(item.account && item.account.uniqueName && accountUniqueName) {
-                                                    if(item.account.uniqueName === accountUniqueName) {
-                                                        remainingQuantity = 0;
-                                                        this.removeTransaction(entryLoop);
-                                                    }
                                                 }
-                                            }
-                                            transactionLoop++;
-                                        });
-                                    }
-                                    entryLoop++;
+                                                transactionLoop++;
+                                            });
+                                        }
+                                        if(!entryRemoved) {
+                                            entryLoop++;
+                                        }
+                                    });
                                 });
                             });
-                        });
+                        }
+                    } else {
+                        selectedPoItems.push(order);
                     }
-                } else {
-                    selectedPoItems.push(order);
-                }
-            });
+                });
 
-            this.selectedPoItems = selectedPoItems;
+                this.selectedPoItems = selectedPoItems;
 
-            this.startLoader(false);
+                this.startLoader(false);
+            }, 100);
         }
     }
 
