@@ -35,13 +35,13 @@
 
                                 <div class="clearfix pd-1 option-box">
 
-                                    <span class="pd0 mrR3" (click)="isOpenedInModal ? handleTimeSpanChange('daterange'): ''">
+                                    <span class="pd0 mr-3" (click)="isOpenedInModal ? handleTimeSpanChange('daterange'): ''">
                                         <input id="dateRange" class="radio-custom cp ml0" type="radio" name="periodOptions"
                                             formControlName="periodOptions" value="daterange">
                                         <label for="dateRange" class="radio-custom-label">Date Range</label>
                                     </span>
 
-                                    <span class="pd0 mrR3" (click)="isOpenedInModal ? handleTimeSpanChange('pastperiod'): ''">
+                                    <span class="pd0 mr-3" (click)="isOpenedInModal ? handleTimeSpanChange('pastperiod'): ''">
                                         <input id="pastPeriod" class="radio-custom cp ml0" type="radio" name="periodOptions"
                                             formControlName="periodOptions" value="pastperiod">
                                         <label for="pastPeriod" class="radio-custom-label">Past Period</label>
@@ -99,13 +99,13 @@
                                 [ngClass]="{'open': showIPWrap}">
                                 <div class="clearfix option-box pd-1">
 
-                                    <span (click)="isOpenedInModal ? handleIpAddressChange('cidr_range'): ''" class="pd0 mrR3">
+                                    <span (click)="isOpenedInModal ? handleIpAddressChange('cidr_range'): ''" class="pd0 mr-3">
                                         <input id="cidrRange" class="radio-custom cp ml0" type="radio" name="ipOptions"
                                             formControlName="ipOptions" value="cidr_range">
                                         <label for="cidrRange" class="radio-custom-label">CIDR Range</label>
                                     </span>
 
-                                    <span (click)="isOpenedInModal ? handleIpAddressChange('ip_address'): ''" class="pd0 mrR3">
+                                    <span (click)="isOpenedInModal ? handleIpAddressChange('ip_address'): ''" class="pd0 mr-3">
                                         <input id="address" class="radio-custom cp ml0" type="radio" name="ipOptions"
                                             formControlName="ipOptions" value="ip_address">
                                         <label for="address" class="radio-custom-label">Address</label>

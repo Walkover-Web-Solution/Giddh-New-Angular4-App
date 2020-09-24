@@ -718,10 +718,6 @@ input {
     margin-top: 15px;
 }
 
-.mrB0 {
-    margin-bottom: 0;
-}
-
 .mb-1 {
     margin-bottom: 10px;
 }
@@ -767,7 +763,7 @@ input {
 }
 
 .mr-3 {
-    margin-right: 30px;
+    margin-right: 30px !important;
 }
 
 .mr-4 {
@@ -776,22 +772,6 @@ input {
 
 .mr-5 {
     margin-right: 50px;
-}
-
-.ml-0 {
-    margin-left: 0px;
-}
-
-.mr-0 {
-    margin-right: 0 !important;
-}
-
-.mt-0 {
-    margin-top: 0px;
-}
-
-.mb-0 {
-    margin-bottom: 0px;
 }
 
 .ml-1 {
@@ -4364,7 +4344,7 @@ select.form-control {
     font-size: 14px;
 }
 
-#getGroupModal.getGroupModal .modal-body {
+#getGroupModal.get-group-modal .modal-body {
     min-height: auto;
     height: auto;
 }
@@ -10557,11 +10537,11 @@ span#HW_badge_cont:nth-child(3) {
         width: 180px !important;
     }
     /* manage group account*/
-    .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-8,
-    .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-4 {
+    .add-manage-group-acc .get-group-modal .breadcrumbs .col-xs-8,
+    .add-manage-group-acc .get-group-modal .breadcrumbs .col-xs-4 {
         width: 100%;
     }
-    .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-4 {
+    .add-manage-group-acc .get-group-modal .breadcrumbs .col-xs-4 {
         margin-top: 5px;
     }
 }

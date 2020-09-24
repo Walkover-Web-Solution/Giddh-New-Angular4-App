@@ -688,8 +688,8 @@ aside-menu-account .container-fluid {
     margin-left: 30px;
 }
 
-.mrR3 {
-    margin-right: 30px;
+.mr-3 {
+    margin-right: 30px !important;
 }
 
 .mr-t4 {
@@ -999,7 +999,7 @@ position: relative; */
     -webkit-overflow-scrolling: touch;
 }
 
-#getGroupModal.getGroupModal #middleBody {
+#getGroupModal.get-group-modal #middleBody {
     height: auto;
 }
 .scroll-btn {
@@ -5240,7 +5240,7 @@ form#groupDetailForm {
 #getGroupModal #middleBody {
     height: 100%;
 }
-#getGroupModal.getGroupModal #middleBody {
+#getGroupModal.get-group-modal #middleBody {
     height: auto;
 }
 .select2-ledger .menu .item {
