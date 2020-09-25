@@ -1432,7 +1432,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      *
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public applyDiscountselement(): void {
+    public applyDiscounts(): void {
         if (this.accountDetails) {
             this.activeAccountName = this.accountDetails.uniqueName;
         } else {
