@@ -89,7 +89,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
 
         this.getCountry();
-        this.getCurrency();
         this.getCallingCodes();
         this.getPartyTypes();
         if (this.flatGroupsOptions === undefined) {
@@ -161,38 +160,19 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         //         this.addAccountForm.get('foreignOpeningBalance').patchValue('0');
         //     }
         // });
-        this.store.select(p => p.session.companyUniqueName).pipe(distinctUntilChanged()).subscribe(a => {
-            if (a) {
+        this.store.pipe(select(appState => appState.session.companyUniqueName), distinctUntilChanged()).subscribe(uniqueName => {
+            if (uniqueName) {
                 this.companiesList$.pipe(take(1)).subscribe(companies => {
-                    this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
+                    this.activeCompany = companies.find(cmp => cmp.uniqueName === uniqueName);
                     if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
                         this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
                     }
+                    this.companyCurrency = _.clone(this.activeCompany.baseCurrency);
+                    this.isMultipleCurrency = _.clone(this.activeCompany.isMultipleCurrency);
                 });
             }
         });
 
-        this.store.select(s => s.session).pipe(takeUntil(this.destroyed$)).subscribe((session) => {
-            let companyUniqueName: string;
-            if (session.companyUniqueName) {
-                companyUniqueName = _.cloneDeep(session.companyUniqueName);
-            }
-            if (session.companies && session.companies.length) {
-                let companies = _.cloneDeep(session.companies);
-                let currentCompany = companies.find((company) => company.uniqueName === companyUniqueName);
-                if (currentCompany) {
-                    // set country
-                    this.setCountryByCompany(currentCompany);
-                    this.companyCurrency = _.clone(currentCompany.baseCurrency);
-                    this.isMultipleCurrency = _.clone(currentCompany.isMultipleCurrency);
-                    // if (this.isMultipleCurrency) {
-                    //     this.addAccountForm.get('currency').enable();
-                    // } else {
-                    //     this.addAccountForm.get('currency').disable();
-                    // }
-                }
-            }
-        });
         this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
 
 
@@ -240,6 +220,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             }
         });
+        this.getCurrency();
     }
     public ngAfterViewInit() {
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
@@ -693,6 +674,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
                 });
                 this.currencySource$ = observableOf(this.currencies);
+                setTimeout(() => {
+                    // Timeout is used as value were not updated in form
+                    this.setCountryByCompany(this.activeCompany);
+                }, 500);
             } else {
                 this.store.dispatch(this.commonActions.GetCurrency());
             }
