@@ -199,10 +199,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
             this._maskService.maskAvailablePatterns = patterns.currentValue;
         }
         if (prefix) {
-            this._maskService.prefix = unSupportedPrefixAndSuffix.map(m => m.symbol).includes(prefix.currentValue) ? '' : prefix.currentValue;
+            this._maskService.prefix = unSupportedPrefixAndSuffix.map(m => m.symbol).includes(prefix.currentValue) ? '' : prefix.currentValue || '';
         }
         if (suffix) {
-            this._maskService.suffix = unSupportedPrefixAndSuffix.map(m => m.symbol).includes(suffix.currentValue) ? '' : suffix.currentValue;
+            this._maskService.suffix = unSupportedPrefixAndSuffix.map(m => m.symbol).includes(suffix.currentValue) ? '' : suffix.currentValue || '';
         }
         if (dropSpecialCharacters) {
             this._maskService.dropSpecialCharacters = dropSpecialCharacters.currentValue;
@@ -345,7 +345,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
         const posStart: number = 0;
         const posEnd: number = 0;
         if (
-            el !== null &&
+            el !== null && this._maskService.prefix &&
             el.selectionStart !== null &&
             el.selectionStart === el.selectionEnd &&
             el.selectionStart > this._maskService.prefix.length &&

@@ -13,7 +13,7 @@ import { APPLY_TAX_API } from './apiurls/applyTax.api';
 import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { ApplyDiscountRequest, AssignDiscountRequestForAccount } from '../models/api-models/ApplyDiscount';
+import { ApplyDiscountRequest, AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
 import { APPLY_DISCOUNT_API } from './apiurls/applyDiscount';
 
 @Injectable()
@@ -51,7 +51,7 @@ export class AccountService implements OnInit {
     public UpdateAccount(model: AccountRequest, accountUniqueName: string): Observable<BaseResponse<AccountResponse, AccountRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.put(this.config.apiUrl + ACCOUNTS_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', accountUniqueName), model).pipe(
+        return this._http.put(this.config.apiUrl + ACCOUNTS_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<AccountResponse, AccountRequest> = res;
                 data.request = model;
@@ -336,6 +336,25 @@ export class AccountService implements OnInit {
                     return data;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e)));
+    }
+
+    /**
+     * To apply discount in accounts
+     *
+     * @param {ApplyDiscountRequestV2} model request model
+     * @returns {Observable<BaseResponse<string, ApplyDiscountRequestV2>>}
+     * @memberof AccountService
+     */
+    public applyDiscounts(model: ApplyDiscountRequestV2): Observable<BaseResponse<string, ApplyDiscountRequestV2>> {
+        this.user = this._generalService.user;
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.post(this.config.apiUrl + APPLY_DISCOUNT_API.APPLY_DISCOUNTS_V2.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<string, ApplyDiscountRequestV2> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, ApplyDiscountRequestV2>(e)));
     }
 
 }
