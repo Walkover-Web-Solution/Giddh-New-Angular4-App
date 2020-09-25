@@ -523,8 +523,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public copyPurchaseBillInitialized: boolean = false;
 
     /** account's applied tax list */
-    public accountAssignedApplicableTaxes: string[] = [];
-    /** account's applied tax list */
     public tcsTdsTaxesAccount: any[] = [];
     /** account's applied discounts list */
     public accountAssignedApplicableDiscounts: any[] = [];
@@ -5770,7 +5768,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         }
         if (data && data.otherApplicableTaxes) {
-            this.accountAssignedApplicableTaxes = data.otherApplicableTaxes;
             data.otherApplicableTaxes.forEach(item => {
                 let tax = this.companyTaxesList.find(element => element.uniqueName === item.uniqueName);
                 if (tax && TCS_TDS_TAXES_TYPES.indexOf(tax.taxType) > -1) {
