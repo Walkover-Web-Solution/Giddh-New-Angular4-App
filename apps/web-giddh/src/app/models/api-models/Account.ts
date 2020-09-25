@@ -53,7 +53,7 @@ export class AccountResponse implements IAccountCreate {
     public currencySymbol?: string;
     public inheritedDiscounts: any[];
     public applicableDiscounts?: any[];
-
+    public category?: string;
 }
 
 /**
