@@ -11,7 +11,7 @@
     z-index: -1;
 }
 
-.invoce-controll {
+.invoice-control {
     position: relative;
 }
 
@@ -34,7 +34,7 @@
 .invoice-sidebar {
     background-color: $white;
     padding: 0;
-    height: calc(100vh - 20px);
+    height: calc(100vh - 60px);
 }
 
 .d-flex {
@@ -975,4 +975,26 @@ table.tax-table.item {
             flex: auto;
         }
     }
+}
+.loader {
+    height: 4px;
+    width: 100%;
+    position: absolute;
+    overflow: hidden;
+    z-index: 9;
+    top: 0px;
+    left: 0px;
+}
+
+.loader:before {
+    display: block;
+    position: absolute;
+    z-index: 1000000;
+    content: "";
+    left: 0px;
+    top: 0px;
+    width: 200px;
+    height: 4px;
+    background-color: #5b64c9;
+    animation: loading 2s linear infinite;
 }

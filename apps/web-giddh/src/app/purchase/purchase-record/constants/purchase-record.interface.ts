@@ -24,6 +24,7 @@ export class PurchaseRecordAdvanceSearch extends CommonPaginatedRequest {
     public dueDate?: string;
     public dueDateOperation?: string;
     public q?: any;
+    public purchaseOrderNumber?: any;
 };
 
 /** Purchase record grand total operation for advance search */

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, TemplateRef, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -6,12 +6,17 @@ import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
 import { PAGINATION_LIMIT } from '../../app.constant';
 import * as moment from 'moment/moment';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-order.action';
+import { IOption } from '../../theme/ng-select/ng-select';
+import { SettingsUtilityService } from '../../settings/services/settings-utility.service';
+import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
+import { BULK_UPDATE_FIELDS } from '../../shared/helpers/purchaseOrderStatus';
 
 @Component({
     selector: 'purchase-order',
@@ -26,6 +31,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     @ViewChild('searchBox') public searchBox: ElementRef;
     /* Confirm box */
     @ViewChild('poConfirmationModel') public poConfirmationModel: ModalDirective;
+    /* This will emit if purchase bill lists needs to be refreshed */
+    @Output() public refreshPurchaseBill: EventEmitter<any> = new EventEmitter();
 
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
@@ -49,7 +56,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public isLoading: boolean = false;
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
-    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold the response object*/
     public purchaseOrders: any = {};
@@ -60,8 +67,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         to: '',
         page: 1,
         count: PAGINATION_LIMIT,
-        sort: '',
-        sortBy: ''
+        sort: 'DESC',
+        sortBy: 'purchaseDate'
     };
     /* This will hold the post params of get all PO api */
     public purchaseOrderPostRequest: any = {
@@ -95,10 +102,31 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public showSelectAllItemCheckbox: boolean = false;
     /* Send email request params object */
     public sendEmailRequest: any = {};
+    /* Observable for filters applied */
+    public purchaseOrderListFilters$: Observable<any>;
+    /* This will hold if we need to overwriter filters */
+    public useStoreFilters: boolean = false;
+    /* This will hold current page url */
+    public pageUrl: string = "pages/purchase-management/purchase";
+    /* This holds the fields which can be updated in bulk */
+    public bulkUpdateFields: IOption[] = [
+        { label: 'Order Date', value: BULK_UPDATE_FIELDS.purchasedate },
+        { label: 'Expected Delivery Date', value: BULK_UPDATE_FIELDS.duedate },
+        { label: 'Warehouse', value: BULK_UPDATE_FIELDS.warehouse }
+    ];
+    /* Stores warehouses for a company */
+    public warehouses: Array<any>;
+    /* Bulk update get params */
+    public bulkUpdateGetParams: any = { companyUniqueName: '', action: '' };
+    /* Bulk update post params */
+    public bulkUpdatePostParams: any = {};
+    /* This will hold giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
-    constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute) {
+    constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
-        this.universalDate$ = this.store.select(state => state.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+        this.purchaseOrderListFilters$ = this.store.pipe(select(state => state.purchaseOrder.listFilters), (takeUntil(this.destroyed$)));
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params && params['purchaseOrderUniqueName']) {
@@ -107,6 +135,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 this.purchaseOrderUniqueName = '';
             }
         });
+
+        this.initBulkUpdateFields();
     }
 
     /**
@@ -121,18 +151,52 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             this.isMobileScreen = result.matches;
         });
 
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
+            if (event instanceof NavigationStart) {
+                this.pageUrl = event.url;
+                if (event.url.includes('/purchase-order/new') || event.url.includes('/purchase-orders/preview') || event.url.includes('/purchase-order/edit') || event.url.includes('/purchase-management/purchase')) {
+                    this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({ getRequest: this.purchaseOrderGetRequest, postRequest: this.purchaseOrderPostRequest }));
+                } else {
+                    this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({}));
+                }
+            }
+        });
+
+        this.purchaseOrderListFilters$.pipe(takeUntil(this.destroyed$)).subscribe(filters => {
+            if (filters && (this.pageUrl.includes('/purchase-orders/preview') || this.pageUrl.includes('/purchase-management/purchase'))) {
+                if (filters.getRequest) {
+                    this.purchaseOrderGetRequest = filters.getRequest;
+                    this.purchaseOrderGetRequest.page = 1;
+                }
+                if (filters.postRequest) {
+                    this.purchaseOrderPostRequest = filters.postRequest;
+                }
+
+                if (filters.getRequest && filters.getRequest.from && filters.getRequest.to) {
+                    this.useStoreFilters = true;
+                }
+            }
+        });
+
         /* Observer to store universal from/to date */
-        this.universalDate$.subscribe(dateObj => {
+        this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
 
-                this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
-                this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                if (!this.useStoreFilters) {
+                    this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
+                    this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
-                this.purchaseOrderGetRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.purchaseOrderGetRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                    this.purchaseOrderGetRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                    this.purchaseOrderGetRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-                this.getAllPurchaseOrders(true);
+                    this.getAllPurchaseOrders(true);
+                } else {
+                    this.selectedDateRange = { startDate: moment(this.purchaseOrderGetRequest.from, GIDDH_DATE_FORMAT), endDate: moment(this.purchaseOrderGetRequest.to, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = moment(this.purchaseOrderGetRequest.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.purchaseOrderGetRequest.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.useStoreFilters = false;
+                    this.getAllPurchaseOrders(true);
+                }
             }
         });
 
@@ -143,9 +207,19 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.activeCompanyUniqueName$.subscribe(response => {
+        this.activeCompanyUniqueName$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.purchaseOrderGetRequest.companyUniqueName = response;
+            this.bulkUpdateGetParams.companyUniqueName = response;
             this.getAllPurchaseOrders(true);
+        });
+
+        this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            if (warehouses) {
+                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
+                if (warehouseData) {
+                    this.warehouses = warehouseData.formattedWarehouses;
+                }
+            }
         });
     }
 
@@ -156,10 +230,18 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof PurchaseOrderComponent
      */
     public openModalBulkUpdate(template: TemplateRef<any>): void {
-        this.modalRef = this.modalService.show(
-            template,
-            Object.assign({}, { class: 'modal-sm' })
-        );
+        let purchaseNumbers = this.getSelectedItems();
+        this.initBulkUpdateFields();
+
+        if (purchaseNumbers.length > 0) {
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
+            this.modalRef = this.modalService.show(
+                template,
+                Object.assign({}, { class: 'modal-sm' })
+            );
+        } else {
+            this.toaster.errorToast("Please select atleast 1 Purchase Order");
+        }
     }
 
     /**
@@ -179,7 +261,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof PurchaseOrderComponent
      */
     public getAllPurchaseOrders(resetPage: boolean): void {
-        if (this.purchaseOrderGetRequest.companyUniqueName && this.purchaseOrderGetRequest.from && this.purchaseOrderGetRequest.to) {
+        if (this.purchaseOrderGetRequest.companyUniqueName && this.purchaseOrderGetRequest.from && this.purchaseOrderGetRequest.to && !this.isLoading) {
             this.isLoading = true;
             this.purchaseOrders = {};
 
@@ -191,6 +273,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 if (res) {
                     this.isLoading = false;
                     if (res.status === 'success') {
+                        this.allItemsSelected = false;
                         this.purchaseOrders = res.body;
                     } else {
                         this.toaster.errorToast(res.message);
@@ -293,9 +376,11 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public clearFilter(): void {
         this.purchaseOrderGetRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
         this.purchaseOrderGetRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
+        this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.purchaseOrderGetRequest.page = 1;
-        this.purchaseOrderGetRequest.sort = '';
-        this.purchaseOrderGetRequest.sortBy = '';
+        this.purchaseOrderGetRequest.sort = 'DESC';
+        this.purchaseOrderGetRequest.sortBy = 'purchaseDate';
 
         this.purchaseOrderPostRequest = {
             purchaseOrderNumber: '',
@@ -364,7 +449,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof PurchaseOrderComponent
      */
     public showClearFilterButton(): boolean {
-        if (this.purchaseOrderPostRequest.purchaseOrderNumber || this.purchaseOrderPostRequest.grandTotal || this.purchaseOrderPostRequest.grandTotalOperation || (this.purchaseOrderPostRequest.statuses && this.purchaseOrderPostRequest.statuses.length > 0) || this.purchaseOrderPostRequest.dueFrom || this.purchaseOrderPostRequest.dueTo || this.purchaseOrderPostRequest.vendorName || this.purchaseOrderGetRequest.sortBy || (this.universalDate && (this.purchaseOrderGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.purchaseOrderGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)))) {
+        if (this.purchaseOrderPostRequest.purchaseOrderNumber || this.purchaseOrderPostRequest.grandTotal || this.purchaseOrderPostRequest.grandTotalOperation || (this.purchaseOrderPostRequest.statuses && this.purchaseOrderPostRequest.statuses.length > 0) || this.purchaseOrderPostRequest.dueFrom || this.purchaseOrderPostRequest.dueTo || this.purchaseOrderPostRequest.vendorName || (this.purchaseOrderGetRequest.sortBy && this.purchaseOrderGetRequest.sortBy !== "purchaseDate") || (this.universalDate && (this.purchaseOrderGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.purchaseOrderGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)))) {
             return true;
         } else {
             return false;
@@ -469,16 +554,31 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @param {*} action
      * @memberof PurchaseOrderComponent
      */
-    public bulkUpdate(action: any): void {
+    public bulkUpdate(action: any, purchaseOrderNumber?: any): void {
         let purchaseNumbers = this.getSelectedItems();
 
-        if (purchaseNumbers.length > 0) {
-            let getRequest = { companyUniqueName: this.purchaseOrderGetRequest.companyUniqueName, action: action };
-            let postRequest = { purchaseNumbers: purchaseNumbers };
+        if (purchaseOrderNumber) {
+            purchaseNumbers.push(purchaseOrderNumber);
+        }
 
-            this.purchaseOrderService.bulkUpdate(getRequest, postRequest).subscribe((res) => {
+        this.bulkUpdateGetParams.action = action;
+
+        if (purchaseNumbers.length > 0) {
+            this.bulkUpdatePostParams.purchaseNumbers = purchaseNumbers;
+
+            this.purchaseOrderService.bulkUpdate(this.bulkUpdateGetParams, this.bulkUpdatePostParams).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
+
+                        if(action === "create_purchase_bill") {
+                            this.refreshPurchaseBill.emit(true);
+                        }
+
+                        if (this.modalRef) {
+                            this.initBulkUpdateFields();
+                            this.modalRef.hide();
+                        }
+
                         this.getAllPurchaseOrders(false);
                         if (action === "delete") {
                             this.closeConfirmationPopup();
@@ -551,5 +651,66 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         if (event) {
             this.modalRef.hide();
         }
+    }
+
+    /**
+     * This will validate bulk update form and will update fields
+     *
+     * @memberof PurchaseOrderComponent
+     */
+    public validateBulkUpdateFields(): void {
+        let isValid = true;
+
+        if (this.bulkUpdateGetParams.action) {
+            if (this.bulkUpdateGetParams.action === BULK_UPDATE_FIELDS.purchasedate) {
+                if (!this.bulkUpdatePostParams.purchaseDate) {
+                    isValid = false;
+                    this.toaster.errorToast("Please select Purchase date");
+                } else {
+                    this.bulkUpdatePostParams.purchaseDate = moment(this.bulkUpdatePostParams.purchaseDate).format(GIDDH_DATE_FORMAT);
+                }
+            } else if (this.bulkUpdateGetParams.action === BULK_UPDATE_FIELDS.duedate) {
+                if (!this.bulkUpdatePostParams.dueDate) {
+                    isValid = false;
+                    this.toaster.errorToast("Please select Expected delivery date");
+                } else {
+                    this.bulkUpdatePostParams.dueDate = moment(this.bulkUpdatePostParams.dueDate).format(GIDDH_DATE_FORMAT);
+                }
+            } else if (this.bulkUpdateGetParams.action === BULK_UPDATE_FIELDS.warehouse) {
+                if (!this.bulkUpdatePostParams.warehouseUniqueName) {
+                    isValid = false;
+                    this.toaster.errorToast("Please select Warehouse");
+                }
+            }
+        } else {
+            isValid = false;
+            this.toaster.errorToast("Please choose a field to update");
+        }
+
+        if (isValid) {
+            this.bulkUpdate(this.bulkUpdateGetParams.action);
+        }
+    }
+
+    /**
+     * This will reset the bulk update fields
+     *
+     * @memberof PurchaseOrderComponent
+     */
+    public initBulkUpdateFields(): void {
+        this.bulkUpdateGetParams.action = "";
+        this.bulkUpdatePostParams = { purchaseNumbers: [], purchaseDate: '', dueDate: '', warehouseUniqueName: '' };
+    }
+
+    /**
+     * This will format number so it becomes positive from negative
+     *
+     * @param {number} dueDays
+     * @returns {number}
+     * @memberof PurchaseOrderComponent
+     */
+    public formatNumber(dueDays: number): number {
+        dueDays = Math.abs(dueDays);
+        return dueDays;
     }
 }

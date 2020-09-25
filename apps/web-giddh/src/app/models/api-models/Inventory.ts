@@ -3,6 +3,7 @@ import { IAccountDetails, IManufacturingDetails, IStockDetail, IStockItem, IStoc
 import { IOption } from '../../theme/ng-select/ng-select';
 
 export interface INameUniqueName {
+    email?: any;
     uniqueName: string;
     name: string;
     isActive?: boolean;

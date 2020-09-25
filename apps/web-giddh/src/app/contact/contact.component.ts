@@ -281,16 +281,16 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             }
             this.dueAmountReportData$ = observableOf(data);
         });
-        this.store.pipe(select(store => {
-            if (!store.session.companies) {
+        this.store.pipe(select(appState => {
+            if (!appState.session.companies) {
                 return;
             }
-            // store.session.companies.forEach(company => {
-            //     if (company.uniqueName === store.session.companyUniqueName) {
+            // appState.session.companies.forEach(company => {
+            //     if (company.uniqueName === appState.session.companyUniqueName) {
             //         this.selectedCompany = company;
             //     }
             // });
-            this.selectedCompany = store.session.companies.find((company) => company.uniqueName === store.session.companyUniqueName);
+            this.selectedCompany = appState.session.companies.find((company) => company.uniqueName === appState.session.companyUniqueName);
         }), takeUntil(this.destroyed$)).subscribe();
         this.store.dispatch(this._companyActions.getAllRegistrations());
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
@@ -881,7 +881,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             let viewContainerRef = this.paginationChild.viewContainerRef;
             viewContainerRef.remove();
 
-            let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+            let componentInstanceView = componentFactory.create(viewContainerRef.injector);
             viewContainerRef.insert(componentInstanceView.hostView);
 
             let componentInstance = componentInstanceView.instance as PaginationComponent;
@@ -1153,14 +1153,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                         }
                     });
                     this.sundryCreditorsAccounts = cloneDeep(res.body.results);
-                    this.selectedAccountsList = [];
                     this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(element => {
                         let indexOfItem = this.selectedCheckedContacts.indexOf(element.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
                         } else {
                             element.isSelected = true;
-                            this.selectedAccountsList.push(element);
                         }
                         return element;
                     });

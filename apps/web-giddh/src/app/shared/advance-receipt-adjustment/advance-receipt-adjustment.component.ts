@@ -36,7 +36,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     public offset: number = 0;
     public companyCurrency: string;
     public baseCurrencySymbol: string;
-    public currencySymbol: string;
+    public currencySymbol: string = '';
     public inputMaskFormat: string = '';
     public isInvalidForm: boolean = false;
     /** Message for toaster when due amount get negative  */
@@ -181,11 +181,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
             this.companyCurrency = profile.baseCurrency || 'INR';
             this.baseCurrencySymbol = profile.baseCurrencySymbol;
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+            if (this.invoiceFormDetails && this.invoiceFormDetails.accountDetails && this.invoiceFormDetails.accountDetails.currencySymbol) {
+                this.currencySymbol = this.invoiceFormDetails.accountDetails.currencySymbol;
+            } else {
+                this.currencySymbol = this.baseCurrencySymbol;
+            }
         });
 
-        if (this.invoiceFormDetails && this.invoiceFormDetails.accountDetails && this.invoiceFormDetails.accountDetails.currencySymbol) {
-            this.currencySymbol = this.invoiceFormDetails.accountDetails.currencySymbol;
-        }
     }
 
     /**
@@ -452,6 +454,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
         });
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
             this.adjustVoucherForm.adjustments.forEach((item, key) => {
+                if (item.balanceDue && this.isVoucherModule) {
+                    item.adjustmentAmount = item.balanceDue;
+                }
                 if (!item.voucherNumber && item.balanceDue.amountForAccount) {
                     isValid = false;
                     form.controls[`voucherName${key}`].markAsTouched();

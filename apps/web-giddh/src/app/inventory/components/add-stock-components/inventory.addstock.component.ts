@@ -843,17 +843,17 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             };
             formObj.parentGroup = stockRequest.uniqueName;
             this.store.dispatch(this.inventoryAction.addNewGroup(stockRequest));
+            this.createGroupSuccess$.subscribe(s => {
+                if (s && formObj.parentGroup) {
+                    this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
+                }
+            });
         } else {
             if (typeof (formObj.parentGroup) === 'object') {
                 formObj.parentGroup = formObj.parentGroup.value;
             }
             this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
         }
-        this.createGroupSuccess$.subscribe(s => {
-            if (s && formObj.parentGroup) {
-                this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
-            }
-        });
 
     }
 
@@ -1235,7 +1235,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
 
     /**
-     * To reset sales information if sales information unchecked  
+     * To reset sales information if sales information unchecked
      *
      * @memberof InventoryAddStockComponent
      */

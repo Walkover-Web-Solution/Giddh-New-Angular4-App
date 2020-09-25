@@ -9,6 +9,8 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { GeneralService } from '../services/general.service';
 import { VAT_SUPPORTED_COUNTRIES } from '../app.constant';
+import { NavigationExtras, Router } from '@angular/router';
+import { PermissionService } from '../services/permission.service';
 
 @Component({
     selector: 'all-modules',
@@ -23,10 +25,11 @@ export class AllModulesComponent implements OnInit {
 
     public activeCompany: any;
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
-    /* This will check if company is allowed to beta test new modules */
-    public isAllowedForBetaTesting: boolean = false;
-
-    constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private generalActions: GeneralActions, private groupWithAccountsAction: GroupWithAccountsAction, private generalService: GeneralService) {
+    /** To show loader if API calling in progress */
+    public showLoader: boolean = false;
+    /** All modules data array with routing shared with user */
+    public allModulesList = [];
+    constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private generalActions: GeneralActions, private groupWithAccountsAction: GroupWithAccountsAction, private generalService: GeneralService, private route: Router, private permissionService: PermissionService) {
 
     }
 
@@ -36,14 +39,16 @@ export class AllModulesComponent implements OnInit {
      * @memberof AllModulesComponent
      */
     public ngOnInit(): void {
-        this.store.pipe(select(state => state.session.companies), take(1)).subscribe(companies => {
-            companies = companies || [];
-            this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+        // commenting for later use if required
+        // this.store.pipe(select(state => state.session.companies), take(1)).subscribe(companies => {
+        //     companies = companies || [];
+        //     this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
 
-            if(this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
-                this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
-            }
-        });
+        //     if(this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
+        //         this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
+        //     }
+        // });
+        this.getSharedAllModules();
     }
 
     /**
@@ -90,5 +95,44 @@ export class AllModulesComponent implements OnInit {
         });
 
         this.manageGroupsAccountsModal.hide();
+    }
+
+    /**
+     * To navigate specific modules
+     *
+     * @param {*} route routing string
+     * @param {*} queryParamsItem query params
+     * @param {*} isClickMethod to check is click method exist
+     * @memberof AllModulesComponent
+     */
+    public navigateTo(route: any, queryParamsItem: any, isClickMethod: any): void {
+        if (route) {
+            if (!queryParamsItem) {
+                this.route.navigate([route]);
+            } else {
+                let navigationExtras: NavigationExtras = {
+                    queryParams: queryParamsItem
+                };
+                this.route.navigate([route], navigationExtras);
+            }
+        }
+        if (isClickMethod === 'showManageGroupsModal') {
+            this.showManageGroupsModal();
+        }
+    }
+
+    /**
+     * To get all shared modules with their routings
+     *
+     * @memberof AllModulesComponent
+     */
+    public getSharedAllModules(): void {
+        this.showLoader = true;
+        this.permissionService.getSharedAllModules().subscribe(response => {
+            if (response && response.status === 'success') {
+                this.allModulesList = response.body;
+            }
+            this.showLoader = false;
+        });
     }
 }

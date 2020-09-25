@@ -12,6 +12,7 @@ import {
     OnInit,
     Output,
     SimpleChanges,
+    TemplateRef,
     ViewChild,
 } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -74,7 +75,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @Input() public voucherDetailAction: string;
     @Input() public showPrinterDialogWhenPageLoad: boolean;
 
-    @Output() public deleteVoucher: EventEmitter<boolean> = new EventEmitter();
+    @Output() public deleteVoucher: EventEmitter<any> = new EventEmitter();
     @Output() public updateVoucherAction: EventEmitter<string> = new EventEmitter();
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
     @Output() public sendEmail: EventEmitter<string | { email: string, invoiceType: string[], invoiceNumber: string }> = new EventEmitter<string | { email: string, invoiceType: string[], invoiceNumber: string }>();
@@ -118,7 +119,22 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public proformaListComponent: ProformaListComponent;
     /** To check is selected account/customer have advance receipts */
     public isAccountHaveAdvanceReceipts: boolean = false;
-    public orderHistoryAsideState: string = 'out';
+    /* This will hold revision history aside popup state */
+    public revisionHistoryAsideState: string = 'out';
+    /* This will hold company unique name */
+    public companyUniqueName: string = '';
+    /* This will hold PO numbers */
+    public purchaseOrderNumbers: any[] = [];
+    /* This will hold po unique name for preview */
+    public purchaseOrderPreviewUniqueName: string = '';
+    /* Send email request params object */
+    public sendEmailRequest: any = {};
+    /* This will hold if attachment is expanded */
+    public isAttachmentExpanded: boolean = false;
+    /* This will hold if pdf preview loaded */
+    public pdfPreviewLoaded: boolean = false;
+    /* This will hold if pdf preview has error */
+    public pdfPreviewHasError: boolean = false;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -155,6 +171,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     public get shouldShowPrintDocument(): boolean {
         return this.selectedItem.voucherType !== VoucherTypeEnum.purchase ||
+            (this.selectedItem.voucherType === VoucherTypeEnum.purchase && this.pdfPreviewLoaded) ||
             (this.selectedItem.voucherType === VoucherTypeEnum.purchase && this.attachedDocumentType &&
                 (this.attachedDocumentType.type === 'pdf' || this.attachedDocumentType.type === 'image'));
     }
@@ -167,6 +184,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             if (this.only4ProformaEstimates) {
                 this.getVoucherVersions();
             }
+
+            this.getLinkedPurchaseOrders();
         }
 
         this.store.pipe(select(s => s.proforma.activeVoucherVersions), takeUntil(this.destroyed$)).subscribe((versions => {
@@ -242,21 +261,21 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.invoiceDetailViewHeight = this.invoiceDetailView.nativeElement.offsetHeight;
         this.invoiceImageSectionViewHeight = this.invoiceDetailWrapperHeight - this.invoiceDetailViewHeight - 90;
     }
-    // public toggleOrderHistoryAsidePane(event?): void {
-    //     if (event) {
-    //         event.preventDefault();
-    //     }
-    //     this.orderHistoryAsideState = this.orderHistoryAsideState === 'out' ? 'in' : 'out';
 
-    //     this.toggleBodyClass();
-    // }
-    // public toggleBodyClass() {
-    //     if (this.orderHistoryAsideState === 'in') {
-    //         document.querySelector('body').classList.add('fixed');
-    //     } else {
-    //         document.querySelector('body').classList.remove('fixed');
-    //     }
-    // }
+    /**
+     * This will toggle aside popup for revision history
+     *
+     * @param {*} [event]
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public toggleActivityHistoryAsidePane(event?: any): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.revisionHistoryAsideState = this.revisionHistoryAsideState === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
+    }
+
     public toggleEditMode() {
         this.store.dispatch(this._generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
         this.showEditMode = !this.showEditMode;
@@ -268,7 +287,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     public toggleBodyClass() {
-        if (!this.showEditMode || this.orderHistoryAsideState === 'in') {
+        if (!this.showEditMode || this.revisionHistoryAsideState === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');
@@ -290,8 +309,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             this.getVoucherVersions();
         }
         this.showEditMode = false;
+        this.getLinkedPurchaseOrders();
     }
-    // openModal(template: TemplateRef<any>) {
+
+    // public openModal(template: TemplateRef<any>) {
     //     this.modalRef = this.modalService.show(template,
     //         Object.assign({}, { class: 'preview-lightbox modal-lg' })
     //     );
@@ -386,6 +407,27 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.detectChanges();
             }, (error) => {
                 this.handleDownloadError(error);
+            });
+
+            this.pdfPreviewHasError = false;
+            this.pdfPreviewLoaded = false;
+
+            this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
+
+            let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.selectedItem.account.uniqueName, uniqueName: this.selectedItem.uniqueName };
+
+            this.purchaseRecordService.getPdf(getRequest).subscribe(response => {
+                if (response && response.status === "success" && response.body) {
+                    let blob: Blob = base64ToBlob(response.body, 'application/pdf', 512);
+                    this.attachedDocumentBlob = blob;
+                    this.pdfViewer.pdfSrc = blob;
+                    this.pdfViewer.showSpinner = true;
+                    this.pdfViewer.refresh();
+                    this.pdfPreviewLoaded = true;
+                    this.detectChanges();
+                } else {
+                    this.pdfPreviewHasError = true;
+                }
             });
         } else {
             let request: ProformaDownloadRequest = new ProformaDownloadRequest();
@@ -604,6 +646,100 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     this.detectChanges();
                 } else {
                     this.isAccountHaveAdvanceReceipts = false;
+                }
+            });
+        }
+    }
+
+    /**
+     * This will check if we need to show pipe symbol
+     *
+     * @param {number} loop
+     * @returns {boolean}
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public checkIfPipeSymbolRequired(loop: number): boolean {
+        return loop < (this.purchaseOrderNumbers.length - 1);
+    }
+
+    /**
+     * This will open the purchase order preview popup
+     *
+     * @param {TemplateRef<any>} template
+     * @param {*} purchaseOrderUniqueName
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public openPurchaseOrderPreviewPopup(template: TemplateRef<any>, purchaseOrderUniqueName: any): void {
+        this.purchaseOrderPreviewUniqueName = purchaseOrderUniqueName;
+
+        this.modalRef = this.modalService.show(
+            template,
+            Object.assign({}, { class: 'po-preview-modal modal-lg' })
+        );
+    }
+
+    /**
+     * This will close the purchase order preview popup
+     *
+     * @param {*} event
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public closePurchaseOrderPreviewPopup(event: any): void {
+        if (event) {
+            this.modalRef.hide();
+        }
+    }
+
+    /**
+     * This will open the send email modal
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public openSendMailModal(template: TemplateRef<any>): void {
+        this.sendEmailRequest.email = this.selectedItem.account.email;
+        this.sendEmailRequest.uniqueName = this.selectedItem.uniqueName;
+        this.sendEmailRequest.accountUniqueName = this.selectedItem.account.uniqueName;
+        this.sendEmailRequest.companyUniqueName = this.companyUniqueName;
+        this.modalRef = this.modalService.show(template);
+    }
+
+    /**
+     * This will close the send email popup
+     *
+     * @param {*} event
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public closeSendMailPopup(event: any): void {
+        if (event) {
+            this.modalRef.hide();
+        }
+    }
+
+    /**
+     * This will download purchase bill PDF
+     *
+     * @returns {void}
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public downloadPurchaseBillPDF(): void {
+        if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
+            return;
+        }
+        saveAs(this.attachedDocumentBlob, 'purchaseorder.pdf');
+    }
+
+    /**
+     * This will get the linked purchase orders
+     *
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public getLinkedPurchaseOrders(): void {
+        this.purchaseOrderNumbers = [];
+        if (this.selectedItem.voucherType === VoucherTypeEnum.purchase) {
+            this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account.uniqueName, this.selectedItem.uniqueName).subscribe((res: any) => {
+                if (res && res.body) {
+                    this.purchaseOrderNumbers = res.body.purchaseOrderDetails;
                 }
             });
         }

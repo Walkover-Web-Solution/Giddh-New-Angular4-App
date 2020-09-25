@@ -37,8 +37,8 @@
                                 </label>
                             </div>
                             <div class="col-lg-4 col-md-6">
-                                <input type="text" placeholder="{{branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'}}" class="form-control" name="dateOfSupply" [(ngModel)]="tempDateParams.dateOfSupply" (bsValueChange)="selectDateOfSupply($event)" required readonly
-                                    bsDatepicker [bsConfig]="bsConfig">
+                                <input type="text" placeholder="{{branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'}}" class="form-control" name="dateOfSupply" [(ngModel)]="tempDateParams.dateOfSupply" (bsValueChange)="selectDateOfSupply($event)" required bsDatepicker
+                                    [readonly]="!editBranchTransferUniqueName" [disabled]="editBranchTransferUniqueName ? 'disabled' : null" [bsConfig]="bsConfig">
                             </div>
                         </div>
                         <div *ngIf="transferType === 'senders'" class="row mr-b2">
@@ -168,8 +168,8 @@
                                 </label>
                             </div>
                             <div class="col-lg-4 col-md-6">
-                                <input type="text" placeholder="{{branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'}}" class="form-control" name="dateOfSupply" [(ngModel)]="tempDateParams.dateOfSupply" (bsValueChange)="selectDateOfSupply($event)" required readonly
-                                    bsDatepicker>
+                                <input type="text" placeholder="{{branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'}}" class="form-control" name="dateOfSupply" [(ngModel)]="tempDateParams.dateOfSupply" (bsValueChange)="selectDateOfSupply($event)" required [readonly]="!editBranchTransferUniqueName"
+                                    [disabled]="editBranchTransferUniqueName ? 'disabled' : null" bsDatepicker>
                             </div>
                         </div>
                         <div *ngIf="transferType === 'senders'" class="row mr-b2">
@@ -655,4 +655,5 @@
     </div>
 </div>
 <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
-<aside-menu-product-service *ngIf="asideMenuState === 'in'" [class]="asideMenuState" [selectedVoucherType]="selectedVoucherType" [@slideInOut]="asideMenuState" (closeAsideEvent)="onProductNoResultsClicked(null)"></aside-menu-product-service>
+<aside-menu-product-service *ngIf="asideMenuState === 'in'" [class]="asideMenuState" [@slideInOut]="asideMenuState" (closeAsideEvent)="onProductNoResultsClicked(null)">
+</aside-menu-product-service>
