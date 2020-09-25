@@ -128,7 +128,7 @@
                                                         [notFoundLinkText]="customerNotFoundText"
                                                         (keyup)="resetCustomerName($event)"
                                                         (onClear)="resetCustomerName(null)"
-                                                        [disabled]="isUpdateMode && invoiceType !== 'sales' && invoiceType !== 'cash'">
+                                                        [disabled]="isUpdateMode && invoiceType !== 'sales' && invoiceType !== 'cash' && invoiceType !== 'purchase'">
 
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a href="javascript:void(0)" class="list-item flex-column">
