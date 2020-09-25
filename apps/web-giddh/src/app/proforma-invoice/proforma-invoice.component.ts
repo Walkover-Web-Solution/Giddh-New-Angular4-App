@@ -83,7 +83,7 @@ import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-sele
 import { EMAIL_REGEX_PATTERN } from '../shared/helpers/universalValidations';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText } from '../app.constant';
+import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
@@ -475,6 +475,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     };
     /** No results found label for dynamic search */
     public noResultsFoundLabel = SearchResultText.NewSearch;
+    /** account's applied tax list */
+    public accountAssignedApplicableTaxes: string[] = [];
+    /** account's applied tax list */
+    public tcsTdsTaxesAccount: any[] = [];
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -2821,6 +2825,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                 }
             });
+        } else if (!entry.isOtherTaxApplicable && this.tcsTdsTaxesAccount.length) {
+            entry.otherTaxModal.appliedOtherTax = this.tcsTdsTaxesAccount[this.tcsTdsTaxesAccount.length-1];
+            entry.isOtherTaxApplicable = true;
         } else {
             // assign taxes for non stock accounts
             transaction.applicableTaxes = o.applicableTaxes;
@@ -5489,6 +5496,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public checkIfNeedToExcludeTax(data: any): void {
         this.excludeTax = false;
         let isPartyTypeSez = false;
+        this.tcsTdsTaxesAccount = [];
 
         if (this.isSalesInvoice || this.isCashInvoice) {
             if (data && data.addresses && data.addresses.length > 0) {
@@ -5503,6 +5511,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.excludeTax = true;
             }
         }
+        if (data && data.applicableTaxes) {
+            this.accountAssignedApplicableTaxes = data.applicableTaxes;
+            data.applicableTaxes.forEach(item => {
+                let tax = this.companyTaxesList.find(element => element.uniqueName === item.uniqueName);
+                if (tax && TCS_TDS_TAXES_TYPES.indexOf(tax.taxType) > -1) {
+                    this.tcsTdsTaxesAccount.push(item);
+                }
+            });
+        }
     }
-
 }
