@@ -817,7 +817,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (this.isTodaysDateSelected) {
                     let today = _.cloneDeep([moment(), moment()]);
                     this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-                    this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 } else {
                     this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                     this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -1845,7 +1845,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             let today = _.cloneDeep([moment(), moment()]);
             // this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
             this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-            this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
             let dates = {
                 fromDate: null,
                 toDate: null,
