@@ -40,7 +40,7 @@ import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
 import { ToasterService } from '../../services/toaster.service';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
-import { VoucherTypeEnum, VoucherClass, GenericRequestForGenerateSCD } from '../../models/api-models/Sales';
+import { VoucherTypeEnum, VoucherClass } from '../../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { saveAs } from 'file-saver';
@@ -54,7 +54,6 @@ import { PurchaseRecordActions } from '../../actions/purchase-record/purchase-re
 import { Location } from '@angular/common';
 import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { SalesService } from '../../services/sales.service';
-import { OrderHistoryComponent } from '../../purchase/order-history/order-history.component';
 const PARENT_GROUP_ARR = ['sundrydebtors', 'bankaccounts', 'revenuefromoperations', 'otherincome', 'cash'];
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
@@ -890,8 +889,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         allItems = [...removedItem, ...allItems];
         this.itemsListForDetails = allItems;
 
-        this.selectedInvoiceForDetails = cloneDeep(allItems[0]);
-        this.toggleBodyClass();
+        setTimeout(() => {
+            this.selectedInvoiceForDetails = cloneDeep(allItems[0]);
+            this.toggleBodyClass();
+        }, 200);
     }
 
     public closeDownloadOrSendMailPopup(userResponse: { action: string }) {

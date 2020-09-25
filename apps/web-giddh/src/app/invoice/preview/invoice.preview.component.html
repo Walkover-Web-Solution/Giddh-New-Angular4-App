@@ -9,11 +9,11 @@
                     <div class="input-group">
                         <span class="input-wrapper">
                             <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
-                                (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
+                                (applyDaterangepicker)="bsValueChange($event)" class="form-control daterange-picker" />
                         </span>
                     </div>
-                    <div class="advance-icon align-items-center"  tooltip="Advance Search">
-                        <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup(false)"></span>
+                    <div class="advance-icon align-items-center"  tooltip="Advance Search" (click)="toggleAdvanceSearchPopup(false)">
+                        <span class="icon-advance-filter"></span>
                     </div>
 
                     <div class="search-icon-block" (click)="openModal(template)">
@@ -398,8 +398,7 @@
 
                         <!-- Invoice No. -->
                         <td>
-                            <div (click)="(selectedVoucher === 'purchase' && !item.voucherNumber) ? onSelectInvoice(item) : ''"
-                                [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}"
+                            <div [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}"
                                 style="position: relative" class="d-flex">
                                 <a href="javascript:void(0);" class="btn-link-2"
                                     (click)="onSelectInvoice(item)">{{item.voucherNumber ?  item.voucherNumber : '-'}}</a>

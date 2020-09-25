@@ -351,6 +351,10 @@ ul.selectActionDropdown {
     display: none;
 }
 
+.advance-icon {
+    cursor: pointer;
+}
+
 .advance-icon:hover {
     background: #eaeaea;
 }
@@ -726,4 +730,7 @@ span.icon-export-icon {
     .mobile-search .input-container input {
         letter-spacing: -0.99px;
     }
+}
+.form-control.daterange-picker {
+    cursor: pointer !important;
 }
