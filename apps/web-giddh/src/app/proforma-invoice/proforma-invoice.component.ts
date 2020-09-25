@@ -1314,6 +1314,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (this.isMultiCurrencyModule() || this.isPurchaseInvoice) {
                         this.initializeWarehouse();
                     }
+                    if (this.isSalesInvoice) {
+                        this.loadBankCashAccounts(tempSelectedAcc.currency);
+                    }
                 }
 
                 // update account success then close sidebar, and update customer details
