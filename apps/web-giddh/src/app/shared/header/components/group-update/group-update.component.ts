@@ -83,8 +83,11 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public isDebtorCreditorGroups: boolean = false;
     /** To check discount box show/hide */
     public showDiscount: boolean = false;
+    /** Company's discount list */
     public discountList: any[] = [];
+    /** Observable of Company's discount list */
     public discountList$: Observable<IDiscountList[]>;
+    /** List of selected discounts for group */
     public selectedDiscounts: any[] = [];
 
 
@@ -552,11 +555,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         if (item) {
             isTaxableGroup = item.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
         }
-        // this.groupWithParentLessDetailsList.forEach(element => {
-        //     if (itemUniqueName === element.uniqueName) {
-        //         isTaxableGroup = element.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
-        //     }
-        // });
         return isTaxableGroup;
     }
 

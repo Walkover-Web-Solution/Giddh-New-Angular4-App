@@ -5509,8 +5509,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.accountAssignedApplicableDiscounts.push(...element.applicableDiscounts)
                 });
             }
-            console.log('testing a/c discount', this.accountAssignedApplicableDiscounts);
-            console.log('testing a/c tax', this.tcsTdsTaxesAccount);
         }
     }
 }
