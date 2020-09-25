@@ -422,7 +422,7 @@
             <div class="col-sm-12 ">
                 <div class="form-group ">
                     <label>Select account to merge with <span
-                            class="primary_clr">{{(activeAccount$ | async)?.name}}</span></label>
+                            class="primary-color">{{(activeAccount$ | async)?.name}}</span></label>
                     <div class="clearfix" #accountSelect2>
                         <span>
                             <sh-select class="pull-left" [options]="accounts$ | async" [isFilterEnabled]="true"
@@ -454,10 +454,10 @@
         <div class="mrB2 selectBox">
             <div class="form-group ">
                 <label>Default Discount <span
-                    class="primary_clr"></span></label>
+                    class="primary-color"></span></label>
                 <div class="clearfix">
                 <span>
-                        <sh-select class="pull-left" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" [placeholder]="'Select discounts'" style="width: calc(100% - 93px);"></sh-select>
+                        <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" placeholder="Select discounts" ></sh-select>
                     </span>
                     <span class="pull-right">
                         <button  class="btn btn-primary mrgeBtn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscounts()">Apply</button>
@@ -498,7 +498,7 @@
                     <div class="form-group">
                         <div class="input-group">
 
-                            <sh-select [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes" style="width: calc(100% - 20px);">
+                            <sh-select [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes" class="calc-width">
                             </sh-select>
                             <span class="input-group-btn ">
                                 <button type="submit" class="btn btn-success">Save</button>
