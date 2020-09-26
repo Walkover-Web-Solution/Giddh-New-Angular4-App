@@ -31,8 +31,9 @@ import { IGroupsWithAccounts } from 'apps/web-giddh/src/app/models/interfaces/gr
 import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import { DbService } from 'apps/web-giddh/src/app/services/db.service';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
-import { AssignDiscountRequestForAccount } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
+import { AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { SettingsDiscountActions } from 'apps/web-giddh/src/app/actions/settings/discount/settings.discount.action';
+import { element } from '@angular/core/src/render3';
 
 @Component({
     selector: 'account-update-new-details',
@@ -130,6 +131,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectedCountryCode: string = '';
     public bankIbanNumberMaxLength: string = '18';
     public bankIbanNumberMinLength: string = '9';
+    /** account applied inherited discounts list */
+    public accountInheritedDiscounts: any[] = [];
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction,
         private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _dbService: DbService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
@@ -200,6 +203,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
                 if (accountDetails.uniqueName) {
+                    this.accountInheritedDiscounts = [];
+                    accountDetails.inheritedDiscounts.forEach(item => {
+                        this.accountInheritedDiscounts.push(...item.applicableDiscounts);
+                    });
                     this._accountService.GetApplyDiscount(accountDetails.uniqueName).subscribe(response => {
                         this.selectedDiscounts = [];
                         this.forceClearDiscount$ = observableOf({ status: true });
@@ -464,7 +471,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         for (const el of groupList) {
             if (el.accounts) {
-                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses')) {
+                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses' || this.isDebtorCreditor)) {
                     result = true;
                     break;
                 }
@@ -819,7 +826,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.accountDetails) {
             this.activeAccountName = this.accountDetails.uniqueName;
         } else {
-            this.activeAccount$.pipe(take(1)).subscribe(a => this.activeAccountName = a.uniqueName);
+            this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState.uniqueName);
         }
         if (!accountRequest.mobileNo) {
             accountRequest.mobileCode = '';
@@ -1365,7 +1372,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public bankDetailsValidator(element, type: string): void {
         if (element.value && type) {
             let trim: string = '';
-            // changes account number validation for country india as well ref card : GIDK-1119 
+            // changes account number validation for country india as well ref card : GIDK-1119
             trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
             let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetail.controls) {
@@ -1434,4 +1441,26 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         return false;
     }
+
+    /**
+     * To apply discount in accounts
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public applyDiscounts(): void {
+        if (this.accountDetails) {
+            this.activeAccountName = this.accountDetails.uniqueName;
+        } else {
+            this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState.uniqueName);
+        }
+        if (this.activeAccountName) {
+            _.uniq(this.selectedDiscounts);
+            let assignDescountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
+            assignDescountObject.uniqueName = this.activeAccountName;
+            assignDescountObject.discounts = this.selectedDiscounts;
+            assignDescountObject.isAccount = true;
+            this.store.dispatch(this.accountsAction.applyAccountDiscountV2([assignDescountObject]));
+        }
+    }
+
 }
