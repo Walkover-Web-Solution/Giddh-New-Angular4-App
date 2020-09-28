@@ -1968,6 +1968,19 @@ header .navbar {
 
 /*btn*/
 
+.btn-pink {
+    background: #01a9f4;
+    border: 1px solid #01a9f4;
+    color: #fff;
+    &:hover{
+        color:#fff;
+    }
+}
+
+.dropdown-toggle.btn-pink {
+    padding: 6px 16px;
+}
+
 .btn-primary {
     background: $white;
     border-color: $chetwode-blue;
@@ -10609,6 +10622,11 @@ span#HW_badge_cont:nth-child(3) {
     .receipt-note-modal {
         max-width: 100% !important;
     }
+
+    .po-preview-modal {
+        max-width: 100% !important;
+        width: 900px !important;
+    }
 }
 @media(min-width:480px) and (max-width:667px) {
     .edit-modal {
@@ -10769,9 +10787,9 @@ body.prevent-body-scroll {
     display: none!important;
 }
 }
-.daterangepicker{
-    display: none !important;
-}
+//.daterangepicker{
+  //  display: none !important;
+//}
 .modal.fade.giddh-calendar.show {
     z-index: 999999;
 }
