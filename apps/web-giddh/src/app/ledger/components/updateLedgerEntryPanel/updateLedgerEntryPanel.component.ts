@@ -90,8 +90,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** fileinput element ref for clear value after remove attachment **/
     @ViewChild('fileInputUpdate', {static: true}) public fileInputElement: ElementRef<any>;
     @ViewChild('deleteEntryModal', {static: true}) public deleteEntryModal: ModalDirective;
-    @ViewChild('discount', {static: true}) public discountComponent: UpdateLedgerDiscountComponent;
-    @ViewChild('tax', {static: true}) public taxControll: TaxControlComponent;
+    @ViewChild('discount', {static: false}) public discountComponent: UpdateLedgerDiscountComponent;
+    @ViewChild('tax', {static: false}) public taxControll: TaxControlComponent;
     @ViewChild('updateBaseAccount', {static: true}) public updateBaseAccount: ModalDirective;
     @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
     /** Advance receipt remove confirmation modal reference */
@@ -100,7 +100,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('adjustPaymentModal', {static: true}) public adjustPaymentModal: ModalDirective;
 
     /** RCM popup instance */
-    @ViewChild('rcmPopup', {static: true}) public rcmPopup: PopoverDirective;
+    @ViewChild('rcmPopup', {static: false}) public rcmPopup: PopoverDirective;
 
     /** Warehouse data for warehouse drop down */
     public warehouses: Array<any>;

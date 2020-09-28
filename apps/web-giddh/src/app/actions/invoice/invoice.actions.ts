@@ -1868,4 +1868,10 @@ export class InvoiceActions {
             type: EWAYBILL_ACTIONS.RESET_ALL_TRANSPORTER_RESPONSE
         };
     }
+
+    public resetRecurringInvoice(): CustomActions {
+        return {
+            type: INVOICE.RECURRING.RESET_RECURRING_INVOICE
+        };
+    }
 }
