@@ -103,42 +103,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 
 	constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _daybookActions: DaybookActions, private _accountService: AccountService) {
 
-		this.advanceSearchForm = this.fb.group({
-			accountUniqueNames: [[]],
-			groupUniqueNames: [[]],
-			isInvoiceGenerated: [false],
-			amountLessThan: [false],
-			includeAmount: [false],
-			amountEqualTo: [false],
-			amountGreaterThan: [false],
-			amount: ['', Validators.required],
-			includeDescription: [false, Validators.required],
-			description: [null, Validators.required],
-			includeTag: [false, Validators.required],
-			includeParticulars: [false, Validators.required],
-			includeVouchers: [false, Validators.required],
-			chequeNumber: ['', Validators.required],
-			dateOnCheque: ['', Validators.required],
-			tags: this.fb.array([]),
-			particulars: [[]],
-			vouchers: [[]],
-			inventory: this.fb.group({
-				includeInventory: true,
-				inventories: [[]],
-				quantity: null,
-				includeQuantity: true,
-				quantityLessThan: false,
-				quantityEqualTo: true,
-				quantityGreaterThan: true,
-				includeItemValue: true,
-				itemValue: null,
-				includeItemLessThan: true,
-				includeItemEqualTo: true,
-				includeItemGreaterThan: false
-			}),
-		});
-
-		this.setVoucherTypes();
+	
+        this.initializeDaybookAdvanceSearchForm()
+        this.setVoucherTypes();
 		this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
 		this.store.dispatch(this.inventoryAction.GetManufacturingStock());
 
@@ -433,5 +400,47 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         this.forceClear$ = observableOf({ status: true });
         this.forceClearParticulars$ = observableOf({ status: true });
         this.forceClearRange$ = observableOf({ status: true });
+    }
+
+    /**
+     * To initialize day book advance search form
+     *
+     * @memberof DaybookAdvanceSearchModelComponent
+     */
+    public initializeDaybookAdvanceSearchForm() {
+        this.advanceSearchForm = this.fb.group({
+            accountUniqueNames: [[]],
+            groupUniqueNames: [[]],
+            isInvoiceGenerated: [false],
+            amountLessThan: [false],
+            includeAmount: [false],
+            amountEqualTo: [false],
+            amountGreaterThan: [false],
+            amount: ['', Validators.required],
+            includeDescription: [false, Validators.required],
+            description: [null, Validators.required],
+            includeTag: [false, Validators.required],
+            includeParticulars: [false, Validators.required],
+            includeVouchers: [false, Validators.required],
+            chequeNumber: ['', Validators.required],
+            dateOnCheque: ['', Validators.required],
+            tags: this.fb.array([]),
+            particulars: [[]],
+            vouchers: [[]],
+            inventory: this.fb.group({
+                includeInventory: true,
+                inventories: [[]],
+                quantity: null,
+                includeQuantity: true,
+                quantityLessThan: false,
+                quantityEqualTo: true,
+                quantityGreaterThan: true,
+                includeItemValue: true,
+                itemValue: null,
+                includeItemLessThan: true,
+                includeItemEqualTo: true,
+                includeItemGreaterThan: false
+            }),
+        });
     }
 }
