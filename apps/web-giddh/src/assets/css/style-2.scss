@@ -1970,11 +1970,11 @@ header .navbar {
 /*btn*/
 
 .btn-pink {
-    background: #01a9f4;
-    border: 1px solid #01a9f4;
-    color: #fff;
+    background: $deep-sky-blue;
+    border: 1px solid $deep-sky-blue;
+    color: $white;
     &:hover{
-        color:#fff;
+        color:$white;
     }
 }
 
