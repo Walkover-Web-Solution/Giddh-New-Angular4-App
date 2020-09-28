@@ -931,7 +931,7 @@ table.tax-table.item {
         top: 10px;
     }
 }
-@media (max-width:1024px) and (min-width:768px){
+@media (max-width:1024px) and (min-width:992px){
     .invoice-search-box{
         flex-direction: column;
         button.btn{
@@ -943,7 +943,7 @@ table.tax-table.item {
         }
     }
 }
-@media(max-width:767px){
+@media(max-width:991px){
     .invoice-modal-content{
         top:0;
         position: static;
@@ -963,6 +963,13 @@ table.tax-table.item {
                 height: auto;
         }
     }
+    .wrap-edit-history-btn{
+        float: left;
+        display: flex;
+    }
+    .invoice-detail-header{
+        padding-left: 30px !important;
+    }
 }
 @media(max-width:575px){
     .invoice-search-box{
@@ -973,6 +980,23 @@ table.tax-table.item {
         }
         input{
             flex: auto;
+        }
+    }
+    .wrap-edit-history-btn{
+        float: none;
+        display: flex;
+        width: 100%;
+        padding-top: 10px;
+    }
+    .edit-change-status{
+        text-align: left;
+        .close-modal{
+            position: absolute !important;
+            top: -42px;
+            right: 30px;
+        }
+        .change-status-dropdown{
+            float: left;
         }
     }
 }
