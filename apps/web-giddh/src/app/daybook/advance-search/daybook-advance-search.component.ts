@@ -104,7 +104,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
 	constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _daybookActions: DaybookActions, private _accountService: AccountService) {
 
 	
-        this.initializeDaybookAdvanceSearchForm()
+        this.initializeDaybookAdvanceSearchForm();
         this.setVoucherTypes();
 		this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
 		this.store.dispatch(this.inventoryAction.GetManufacturingStock());
@@ -407,7 +407,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      *
      * @memberof DaybookAdvanceSearchModelComponent
      */
-    public initializeDaybookAdvanceSearchForm() {
+    public initializeDaybookAdvanceSearchForm(): void {
         this.advanceSearchForm = this.fb.group({
             accountUniqueNames: [[]],
             groupUniqueNames: [[]],
