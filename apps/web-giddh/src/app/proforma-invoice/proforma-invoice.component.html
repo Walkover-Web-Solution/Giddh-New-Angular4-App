@@ -1288,7 +1288,7 @@
 
                                     <td class="pos-rel dropdown-container item-tax" style="height:1px;">
                                         <div class="td-wrapper">
-                                            <div class="text-right" style="flex:1;">
+                                            <div class="text-right" style="flex:1;" (clickOutside)="closeTaxControlPopup()">
                                                 <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
                                                     [taxRenderData]="entry.taxes"
                                                     [totalForTax]="transaction.taxableValue"
