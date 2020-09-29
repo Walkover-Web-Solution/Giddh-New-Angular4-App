@@ -3,6 +3,7 @@ import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
 import {distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
 import {
     AfterViewInit,
+    ChangeDetectorRef,
     Component,
     ElementRef,
     EventEmitter,
@@ -92,20 +93,33 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public bankIbanNumberMaxLength: string = '18';
     public bankIbanNumberMinLength: string = '9';
 
-    constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-                private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
+    constructor(
+        private _fb: FormBuilder,
+        private store: Store<AppState>,
+        private accountsAction: AccountsAction,
+        private _companyService: CompanyService,
+        private _toaster: ToasterService,
+        private companyActions: CompanyActions,
+        private commonActions: CommonActions,
+        private _generalActions: GeneralActions,
+        private changeDetectorRef: ChangeDetectorRef) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
 
         this.getCountry();
         this.getCallingCodes();
         this.getPartyTypes();
+    }
+
+    /**
+     * Initializes the component
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public ngOnInit(): void {
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
-    }
-
-    public ngOnInit() {
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
             this.showBankDetail = false;
@@ -846,6 +860,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             i++;
         }
         this.addAccountForm.controls['addresses'].updateValueAndValidity();
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
