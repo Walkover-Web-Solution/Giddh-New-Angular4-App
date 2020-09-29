@@ -771,7 +771,7 @@
                             </a>
                             <ul>
                                 <li class="company-branch" (click)="switchToBranch(branch.uniqueName, $event)" *ngFor="let branch of cmp?.branches">
-                                    {{branch.name}}
+                                    {{branch.name}} ({{branch.alias}})
                                 </li>
                             </ul>
                             <!-- commented by meghna
