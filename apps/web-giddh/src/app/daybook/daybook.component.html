@@ -107,7 +107,7 @@
                 </thead>
 
                 <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);"
-                    class="daybookTableTbody">
+                    class="daybook-table-tbody">
                     <tr>
                         <td data-title="Date">{{ entry.entryDate }}</td>
                         <td data-title="Particular">{{ entry.particular.name }}</td>
