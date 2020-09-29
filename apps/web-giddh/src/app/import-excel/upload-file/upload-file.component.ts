@@ -84,7 +84,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
      *
      * @memberof UploadFileComponent
      */
-    setTitle(): void {
+    public setTitle(): void {
         if (this.entity === 'group' || this.entity === 'account') {
             this.title = this.entity + 's';
         } else if (this.entity === 'stock') {
