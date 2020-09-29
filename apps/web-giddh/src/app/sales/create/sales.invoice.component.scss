@@ -733,12 +733,12 @@ a.copyInvoice img {
     margin-right: 6px;
 }
 
-.invoiceDateDueDate .form-group,
-.invoiceDateDueDate label {
+.invoice-date-due-date .form-group,
+.invoice-date-due-date label {
     display: inline-block !important;
 }
 
-.invoiceDateDueDate label {
+.invoice-date-due-date label {
     padding-right: 10px;
 }
 
@@ -746,7 +746,7 @@ a.copyInvoice img {
     padding: 0;
 }
 
-// .invoiceDateDueDate{
+// .invoice-date-due-date{
 // position: absolute;
 // left: 406px;
 // top: 0;
@@ -964,10 +964,10 @@ table.table.customerInvoiceTable {
     padding: 8px 15px;
 }
 
-.invoiceDateDueDate input {
+.invoice-date-due-date input {
     width: 160px !important;
 }
-.forPurchase .invoiceDateDueDate input {
+.forPurchase .invoice-date-due-date input {
     width: 172px !important;
 }
 
@@ -979,7 +979,7 @@ section.staticInvoiceTable {
     vertical-align: middle;
 }
 
-//.invoiceDateDueDate {
+//.invoice-date-due-date {
 //  position: absolute;
 //  width: 100%;
 //  left: 0;
@@ -1121,30 +1121,30 @@ section.sales-invoiceBGwhite {
     }
 }
 @media (min-width: 1680px) and (max-width: 1919px) {
-    .forPurchase .invoiceDateDueDate input {
+    .forPurchase .invoice-date-due-date input {
         width: 132px !important;
     }
-    .invoiceDateDueDate input {
+    .invoice-date-due-date input {
         width: 122px !important;
     }
 }
 @media (max-width: 1680px) {
-    .forPurchase .invoiceDateDueDate input {
+    .forPurchase .invoice-date-due-date input {
         width: 135px !important;
     }
-    .invoiceDateDueDate input {
+    .invoice-date-due-date input {
         width: 125px !important;
     }
 }
 
 @media (max-width: 1600px) {
-    .invoiceDateDueDate input {
+    .invoice-date-due-date input {
         width: 110px !important;
     }
-    .forPurchase .invoiceDateDueDate input {
+    .forPurchase .invoice-date-due-date input {
         width: 122px !important;
     }
-    .invoiceDateDueDate input {
+    .invoice-date-due-date input {
         width: 110px !important;
     }
     .otherTaxLable {
@@ -1157,13 +1157,13 @@ section.sales-invoiceBGwhite {
     }
 }
 @media (max-width: 1440px) {
-    .invoiceDateDueDate {
+    .invoice-date-due-date {
         padding-left: 0;
     }
-    .forPurchase .invoiceDateDueDate input {
+    .forPurchase .invoice-date-due-date input {
         width: 168px !important;
     }
-    .invoiceDateDueDate input {
+    .invoice-date-due-date input {
         width: 158px !important;
     }
     .sales-invoice-content .col-md-9 {
@@ -1176,13 +1176,13 @@ section.sales-invoiceBGwhite {
     }
 }
 @media (max-width: 1366px) {
-    .invoiceDateDueDate input {
+    .invoice-date-due-date input {
         width: 150px !important;
     }
-    .forPurchase .invoiceDateDueDate input {
+    .forPurchase .invoice-date-due-date input {
         width: 140px !important;
     }
-    .invoiceDateDueDate .form-group.m-r-15 {
+    .invoice-date-due-date .form-group.m-r-15 {
         margin-right: 0 !important;
     }
     .wrap-otherTax {
@@ -1192,10 +1192,10 @@ section.sales-invoiceBGwhite {
     }
 }
 @media (max-width: 1280px) {
-    .invoiceDateDueDate input {
+    .invoice-date-due-date input {
         width: 130px !important;
     }
-    .forPurchase .invoiceDateDueDate input {
+    .forPurchase .invoice-date-due-date input {
         width: 120px !important;
     }
 }

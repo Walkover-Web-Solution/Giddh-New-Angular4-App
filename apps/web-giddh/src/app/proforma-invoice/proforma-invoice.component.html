@@ -452,9 +452,7 @@
                             </div>
                             <!-- end warehouse field -->
 
-                            <!--
-                                Delivery from DIV for purchase record page
-                                <div class="row mb-1 delivery-from-field">
+                            <div class="row mb-1 delivery-from-field" *ngIf="isPurchaseInvoice">
                                 <div class="col-sm-2">
                                     <label>Deliver From<span class="red-text">*</span></label>
                                 </div>
@@ -504,7 +502,9 @@
                                                     </div>
 
                                                 </div>
+                                                <!-- endregion -->
 
+                                                <!-- region shipping address -->
                                                 <div class="col-sm-6 bill-add">
 
                                                     <div class="form-group p0 width100">
@@ -611,7 +611,7 @@
                                             <span class="remove-invoice-label">Remove</span>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 invoiceDateDueDate">
+                                    <div class="col-sm-6 invoice-date-due-date">
                                         <div class="form-inline">
                                             <div *ngIf="(isCreditNote || isDebitNote) && selectedInvoice" class="cp remove-invoice" (click)="removeSelectedInvoice()">
                                                 <span class="remove-invoice-icon mr-05">×</span>
