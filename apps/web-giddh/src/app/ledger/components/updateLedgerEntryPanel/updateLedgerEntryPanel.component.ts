@@ -539,6 +539,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                     if (this.isPettyCash) {
                         // create missing property for petty cash
+                        this.vm.selectedLedger.transactions.forEach(item => {
+                            item.type = (item.type === 'cr' || item.type === 'CREDIT') ? 'CREDIT' : 'DEBIT';
+                        });
                         this.vm.selectedLedger.transactions.forEach(f => {
                             f.isDiscount = false;
                             f.isTax = false;
@@ -1206,7 +1209,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public onTxnAmountChange(txn: ILedgerTransactionItem) {
-        if (txn.selectedAccount) {
+        if (txn) {
             txn.convertedAmount = this.vm.calculateConversionRate(txn.amount);
             txn.isUpdated = true;
             this.vm.onTxnAmountChange(txn);
