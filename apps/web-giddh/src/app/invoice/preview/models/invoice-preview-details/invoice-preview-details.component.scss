@@ -114,7 +114,6 @@
 
 .invoiceDetail-header .edit-change-status {
     text-align: right;
-    padding-right: 15px;
 }
 
 .invoiceDetail-header .edit-change-status .btn {
@@ -301,7 +300,6 @@
 .invoice-detail {
     background-color: #f7f8fa;
     padding-bottom: 20px;
-    padding-left:15px;
 }
 
 span.close-modal.cp.pull-right {
@@ -1118,7 +1116,22 @@ strong {
         float: left;
     }
 }
-
+@media(max-width:575px){
+    .wrap-edit-history-btn{
+        float: none;
+        display: flex;
+        width: 100%;
+        padding-top: 10px;
+    }
+    .changeStatus-dropdown{
+        float: left;
+    }
+    span.close-modal.cp.pull-right{
+        position: absolute !important;
+        top: -42px;
+        right: 30px;
+    }
+}
 @media (max-width: 375px) {
     .invoice-modal-content:after,
     .invoice-modal-content {
