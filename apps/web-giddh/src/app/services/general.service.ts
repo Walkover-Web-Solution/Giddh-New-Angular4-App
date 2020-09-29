@@ -512,7 +512,6 @@ export class GeneralService {
         } else {
             return false;
         }
-
     }
 
     /**
@@ -583,6 +582,21 @@ export class GeneralService {
             }
         } else {
             return '';
+        }
+    }
+
+    /**
+     * Returns true if key pressed was character/number/special character
+     *
+     * @param {*} event
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public allowCharactersNumbersSpecialCharacters(event: any): boolean {
+        if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 186 && event.keyCode <= 192) || (event.keyCode >= 219 && event.keyCode <= 222)) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
