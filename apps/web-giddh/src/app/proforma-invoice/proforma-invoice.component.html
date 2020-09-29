@@ -462,7 +462,7 @@
                                 </div>
                             </div>
                             <!-- end warehouse field -->
-                            
+
                             <div class="row mb-1 delivery-from-field" *ngIf="isPurchaseInvoice">
                                 <div class="col-sm-2">
                                     <label>Deliver To<span class="red-text">*</span></label>
@@ -508,15 +508,15 @@
                                                                         placeholder="{{showGSTINNo ? 'GSTIN' : 'TRN'}}">
                                                                 </div>
                                                             </div>
-        
+
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <!-- endregion -->
-        
+
                                                 <!-- region shipping address -->
                                                 <div class="col-sm-6 bill-add">
-        
+
                                                     <div class="form-group p0 width100">
                                                         <label>
                                                             <input type="checkbox" autocomplete="None"
@@ -639,7 +639,7 @@
                                             <span class="remove-invoice-label">Remove</span>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 invoiceDateDueDate">
+                                    <div class="col-sm-6 invoice-date-due-date">
                                         <div class="form-inline">
                                             <div *ngIf="(isCreditNote || isDebitNote) && selectedInvoice" class="cp remove-invoice" (click)="removeSelectedInvoice()">
                                                 <span class="remove-invoice-icon mr-05">×</span>
