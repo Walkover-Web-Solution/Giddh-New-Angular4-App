@@ -622,8 +622,8 @@ input {
 }
 
 .invoice-control .nav > li > a:hover{
-    border-color: transparent !important;;
-    background-color: transparent !important;;
+    border-color: transparent !important;
+    background-color: transparent !important;
 }
 
 
@@ -980,7 +980,9 @@ ul.sub-list {
     font-size: 18px;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
-
+.tab-integraton .nav-tabs > li > a:hover{
+    border: 1px solid rgba(26, 35, 126, 0.4) !important;
+}
 .tab-integraton .nav-tabs > li.active a {
     background: $white !important;
     box-shadow: 0 6px 7px #cacaca;

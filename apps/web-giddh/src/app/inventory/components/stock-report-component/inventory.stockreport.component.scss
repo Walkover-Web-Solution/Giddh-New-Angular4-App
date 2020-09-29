@@ -218,7 +218,7 @@ button[aria-expanded="true"] i {
     text-transform: capitalize;
 }
 .table-border {
-    border: 1px solid #c6c6c6;
+    border: 1px solid $gainsboro;
 }
 .bdrN {
     border: none !important;
@@ -339,6 +339,17 @@ button.btn.btn-filter {
     background-color: $white;
     .strong {
         font-weight: bold;
+    }
+}
+.mobile-card-wrapper{
+    table.table{
+        tr{
+            &:last-child{
+                td{
+                    border-bottom: 1px solid $gainsboro;
+                }
+            }
+        }
     }
 }
 @media(max-width:1024px){
