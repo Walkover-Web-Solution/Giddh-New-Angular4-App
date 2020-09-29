@@ -197,8 +197,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('unregisteredBusiness', {static: true}) public unregisteredBusiness: ElementRef;
 
     @ViewChild('invoiceForm', { read: NgForm, static: true }) public invoiceForm: NgForm;
-    @ViewChild('discountComponent', { static: true }) public discountComponent: DiscountListComponent;
-    @ViewChild(TaxControlComponent, { static: false }) public taxControlComponent: TaxControlComponent;
+    @ViewChild('discountComponent', { static: false }) public discountComponent: DiscountListComponent;
+    @ViewChild('taxControlComponent', { static: false }) public taxControlComponent: TaxControlComponent;
     @ViewChild('customerNameDropDown', { static: true }) public customerNameDropDown: ShSelectComponent;
 
     @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
