@@ -465,8 +465,8 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             });
         }
         case INVOICE.RECURRING.RESET_RECURRING_INVOICE_REQUEST: {
-            const s = { ...state, recurringInvoiceData: { ...state.recurringInvoiceData, isRequestInFlight: false, isRequestSuccess: false, isDeleteRequestInFlight: false } };
-            return s;
+            const newState = { ...state, recurringInvoiceData: { ...state.recurringInvoiceData, isRequestInFlight: false, isRequestSuccess: false, isDeleteRequestInFlight: false } };
+            return newState;
         }
         case INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED: {
             let newState = _.cloneDeep(state);
