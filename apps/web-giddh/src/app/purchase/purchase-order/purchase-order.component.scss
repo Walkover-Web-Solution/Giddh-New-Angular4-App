@@ -7,7 +7,7 @@
         display: inline-flex;
         .input-wrapper {
             display: block !important;
-            width: 226px !important;
+            width: 230px !important;
             position: relative;
             height: 36px !important;
             border: 1px solid $gainsboro;
@@ -34,6 +34,7 @@
                 z-index: 99;
                 cursor: default;
                 width: 100%;
+                max-width: 100%;
             }
         }
     }
@@ -242,6 +243,9 @@
     .mobile-search {
         margin-top: 0;
         display: flex;
+    }
+    .purchase-order-header{
+        margin-top: 15px;
     }
 }
 @media (max-width: 575px) {

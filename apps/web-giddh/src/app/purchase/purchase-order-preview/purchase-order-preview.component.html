@@ -1,7 +1,7 @@
 <div class="invoice-modal-content">
     <div>
-        <div>
-            <div class="col-sm-4 col-md-4 col-xs-12 pd0 invoice-sidebar-wrapper">
+        <div class="row">
+            <div class="col-sm-12 col-lg-4 invoice-sidebar-wrapper">
                 <div>
                     <div class="invoice-search-box">
                         <input type="text" placeholder="search" #searchElement>
@@ -14,7 +14,7 @@
                                 [ngClass]="{'activeItem': row.uniqueName === purchaseOrderUniqueName}"
                                 *ngFor="let row of filteredData; let i = index;">
                                 <div class="row" (click)="showPurchaseOrderPreview(row.uniqueName)">
-                                    <div class="col-xs-12 col-sm-7">
+                                    <div class="col-7 col-sm-7">
                                         <div class="invoice-number-date">
                                             <span class="order-number">
                                                 {{row.voucherNumber}}
@@ -27,7 +27,7 @@
                                             <p>{{row.vendor?.name}}</p>
                                         </div>
                                     </div>
-                                    <div class="col-xs-12 col-sm-5">
+                                    <div class="col-5 col-sm-5">
                                         <div class="inovice-amount pull-right">
                                             {{row.grandTotal?.amountForAccount | giddhCurrency}}
                                         </div>
@@ -41,23 +41,23 @@
             </div>
             <!-- endregion -->
 
-            <div class="col-sm-8 col-md-8 col-xs-12  pd0 invoice-detail-wrapper">
+            <div class="col-sm-12 col-lg-8 pd0 invoice-detail-wrapper">
 
                 <div class="scroll-half">
                     <div class="invoice-detail">
 
-                        <div class="invoice-detail-header">
+                        <div class="invoice-detail-header col-md-12">
 
-                            <div class="clearfix">
+                            <div class="row">
 
-                                <div class="col-sm-4 col-xs-12">
+                                <div class="col-lg-4 col-sm-12">
                                     <div class="invoice-number-holder">
                                         <h3 class="invoice-number">{{purchaseOrder?.number}}</h3>
                                         <p class="account-holder-name">{{purchaseOrder?.account?.name}}</p>
                                     </div>
                                 </div>
 
-                                <div class="col-sm-8 col-xs-12 pd0">
+                                <div class="col-lg-8 col-sm-12">
                                     <div class="edit-change-status">
 
                                         <span class="close-modal cp pull-right"
@@ -95,39 +95,40 @@
                                         </div>
                                         <!-- endregion -->
 
+                                        <div class="wrap-edit-history-btn">
+                                            <div class="edit-action-btn-groups pull-right">
+                                                <span>
+                                                    <a href="javascript:;" tooltip="Edit" placement="top"
+                                                        [routerLink]="['/pages/purchase-management/purchase-order/edit/'+purchaseOrderUniqueName]"><i
+                                                            class="fa fa-pencil"></i></a>
+                                                </span>
 
-                                        <div class="edit-action-btn-groups pull-right">
-                                            <span>
-                                                <a href="javascript:;" tooltip="Edit" placement="top"
-                                                    [routerLink]="['/pages/purchase-management/purchase-order/edit/'+purchaseOrderUniqueName]"><i
-                                                        class="fa fa-pencil"></i></a>
-                                            </span>
+                                                <span class="pos-rel">
+                                                    <a href="javascript:;" tooltip="Send Email" placement="top"
+                                                        (click)="openSendMailModal(sendEmailModal)"><i
+                                                            class="fa fa-envelope-o"></i></a>
+                                                </span>
 
-                                            <span class="pos-rel">
-                                                <a href="javascript:;" tooltip="Send Email" placement="top"
-                                                    (click)="openSendMailModal(sendEmailModal)"><i
-                                                        class="fa fa-envelope-o"></i></a>
-                                            </span>
+                                                <span>
+                                                    <a href="javascript:;" tooltip="Print" placement="top"
+                                                        (click)="printVoucher()"><i class="fa fa-print"></i></a>
+                                                </span>
 
-                                            <span>
-                                                <a href="javascript:;" tooltip="Print" placement="top"
-                                                    (click)="printVoucher()"><i class="fa fa-print"></i></a>
-                                            </span>
+                                                <span>
+                                                    <a href="javascript:;" tooltip="Download" placement="top"
+                                                        (click)="downloadFile()"><i class="fa fa-file-pdf-o"></i></a>
+                                                </span>
 
-                                            <span>
-                                                <a href="javascript:;" tooltip="Download" placement="top"
-                                                    (click)="downloadFile()"><i class="fa fa-file-pdf-o"></i></a>
-                                            </span>
+                                                <span>
+                                                    <a href="javascript:;" tooltip="Delete" placement="top"
+                                                        (click)="confirmDelete()"><i class="fa fa-trash"></i></a>
+                                                </span>
+                                            </div>
 
-                                            <span>
-                                                <a href="javascript:;" tooltip="Delete" placement="top"
-                                                    (click)="confirmDelete()"><i class="fa fa-trash"></i></a>
-                                            </span>
-                                        </div>
-
-                                        <div class="history-btn">
-                                            <button class="btn btn-primary" (click)="toggleActivityHistoryAsidePane()">
-                                                <i class="icon-history-icon font-12"></i> History</button>
+                                            <div class="history-btn">
+                                                <button class="btn btn-primary" (click)="toggleActivityHistoryAsidePane()">
+                                                    <i class="icon-history-icon font-12"></i> History</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
