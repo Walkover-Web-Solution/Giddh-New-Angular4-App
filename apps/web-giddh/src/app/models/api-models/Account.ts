@@ -51,6 +51,7 @@ export class AccountResponse implements IAccountCreate {
     public isComposite?: boolean;
     public currency?: string;
     public currencySymbol?: string;
+    public category?: string;
 }
 
 /**
