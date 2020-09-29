@@ -198,7 +198,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     @ViewChild('invoiceForm', { read: NgForm, static: true }) public invoiceForm: NgForm;
     @ViewChild('discountComponent', { static: true }) public discountComponent: DiscountListComponent;
-    @ViewChild(TaxControlComponent, { static: true }) public taxControlComponent: TaxControlComponent;
+    @ViewChild(TaxControlComponent, { static: false }) public taxControlComponent: TaxControlComponent;
     @ViewChild('customerNameDropDown', { static: true }) public customerNameDropDown: ShSelectComponent;
 
     @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
@@ -3290,7 +3290,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             case ActionTypeAfterVoucherGenerateOrUpdate.generateAndRecurring: {
                 this.startLoader(false);
-                this.toggleRecurringAsidePane();
+                this.toggleRecurringAsidePane("in");
                 break;
             }
         }

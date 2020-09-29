@@ -601,9 +601,9 @@
                 <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
 
                 <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
-                    <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
+                    <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
 [boundaryLinks]="true">
-</pagination> -->
+</pagination>
                 </div>
 
             </div>
@@ -1266,10 +1266,9 @@
                 <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
 
                 <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
-                    <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(
-                    $ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
+                    <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
 [boundaryLinks]="true">
-</pagination> -->
+</pagination>
                 </div>
 
             </div>
