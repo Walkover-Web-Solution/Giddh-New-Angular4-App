@@ -1,19 +1,29 @@
-import { Observable, of as observableOf, ReplaySubject, of } from 'rxjs';
+import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
 
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { digitsOnly } from '../../../helpers';
-import { AccountsAction } from '../../../../actions/accounts.actions';
-import { AppState } from '../../../../store';
-import { select, Store } from '@ngrx/store';
-import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
-import { AccountRequestV2 } from '../../../../models/api-models/Account';
-import { CompanyService } from '../../../../services/companyService.service';
-import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
-import { ToasterService } from '../../../../services/toaster.service';
-import { CompanyResponse, States, StatesRequest, StateList } from '../../../../models/api-models/Company';
-import { CompanyActions } from '../../../../actions/company.actions';
+import {distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
+import {
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    ViewChild
+} from '@angular/core';
+import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {digitsOnly} from '../../../helpers';
+import {AccountsAction} from '../../../../actions/accounts.actions';
+import {AppState} from '../../../../store';
+import {select, Store} from '@ngrx/store';
+import {AccountRequestV2} from '../../../../models/api-models/Account';
+import {CompanyService} from '../../../../services/companyService.service';
+import {ToasterService} from '../../../../services/toaster.service';
+import {CompanyResponse, StateList, StatesRequest} from '../../../../models/api-models/Company';
+import {CompanyActions} from '../../../../actions/company.actions';
 import * as _ from '../../../../lodash-optimized';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
@@ -83,20 +93,33 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public bankIbanNumberMaxLength: string = '18';
     public bankIbanNumberMinLength: string = '9';
 
-    constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-        private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
+    constructor(
+        private _fb: FormBuilder,
+        private store: Store<AppState>,
+        private accountsAction: AccountsAction,
+        private _companyService: CompanyService,
+        private _toaster: ToasterService,
+        private companyActions: CompanyActions,
+        private commonActions: CommonActions,
+        private _generalActions: GeneralActions,
+        private changeDetectorRef: ChangeDetectorRef) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
 
         this.getCountry();
         this.getCallingCodes();
         this.getPartyTypes();
+    }
+
+    /**
+     * Initializes the component
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public ngOnInit(): void {
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
-    }
-
-    public ngOnInit() {
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
             this.showBankDetail = false;
@@ -814,6 +837,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             i++;
         }
         this.addAccountForm.controls['addresses'].updateValueAndValidity();
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -826,7 +850,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public bankDetailsValidator(element, type: string): void {
         let trim: string = '';
         if (element.value && type) {
-            // changes account number validation for country india as well ref card : GIDK-1119 
+            // changes account number validation for country india as well ref card : GIDK-1119
             trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
             let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetail.controls) {
