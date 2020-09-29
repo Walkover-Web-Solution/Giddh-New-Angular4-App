@@ -393,7 +393,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         if (changes.currentBranchAndWarehouse && !_.isEqual(changes.currentBranchAndWarehouse.previousValue, changes.currentBranchAndWarehouse.currentValue)) {
             if (this.currentBranchAndWarehouse) {
                 this.GroupStockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouse.warehouse !== 'all-entities') ? this.currentBranchAndWarehouse.warehouse : null;
-                this.GroupStockReportRequest.branchUniqueName = this.currentBranchAndWarehouse.branch;
+                this.GroupStockReportRequest.branchUniqueName = this.currentBranchAndWarehouse.isCompany ? undefined : this.currentBranchAndWarehouse.branch;
                 if (!changes.currentBranchAndWarehouse.firstChange) {
                     // Make a manual service call only when it is not first change
                     this.getGroupReport(true);

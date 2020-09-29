@@ -405,7 +405,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         if (changes.currentBranchAndWarehouse && !_.isEqual(changes.currentBranchAndWarehouse.previousValue, changes.currentBranchAndWarehouse.currentValue)) {
             if (this.currentBranchAndWarehouse) {
                 this.stockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouse.warehouse !== 'all-entities') ? this.currentBranchAndWarehouse.warehouse : null;
-                this.stockReportRequest.branchUniqueName = this.currentBranchAndWarehouse.branch;
+                this.stockReportRequest.branchUniqueName = this.currentBranchAndWarehouse.isCompany ? undefined : this.currentBranchAndWarehouse.branch;
                 if (!changes.currentBranchAndWarehouse.firstChange) {
                     // Make a manual service call only when it is not first change
                     this.getStockReport(true);
