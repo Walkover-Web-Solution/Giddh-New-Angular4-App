@@ -748,25 +748,18 @@ a.copyInvoice img {
     margin-right: 6px;
 }
 
-.invoiceDateDueDate .form-group,
-.invoiceDateDueDate label {
+.invoice-date-due-date .form-group,
+.invoice-date-due-date label {
     display: inline-block !important;
 }
 
-.invoiceDateDueDate label {
+.invoice-date-due-date label {
     padding-right: 10px;
 }
 
 .p-0 {
     padding: 0;
 }
-
-// .invoiceDateDueDate{
-// position: absolute;
-// left: 406px;
-// top: 0;
-// width: 100%;
-// }
 .shipping-address textarea {
     border-bottom: 1px solid #ccc !important;
 }
@@ -970,7 +963,7 @@ table.table.customerInvoiceTable {
     padding: 8px 15px;
 }
 
-.invoiceDateDueDate input {
+.invoice-date-due-date input {
     width: 112px !important;
 }
 
@@ -979,11 +972,13 @@ section.staticInvoiceTable {
     margin-top: -20px;
 }
 
-.invoiceDateDueDate {
+.invoice-date-due-date {
     position: absolute;
     width: 100%;
     left: 0;
     margin-left: 48%;
+    min-width: 485px;
+    max-width: 485px;
 }
 
 .m-l-10 {
@@ -1628,7 +1623,12 @@ span.eligible-ITC {
 }
 
 /* resposnvie */
-
+@media(max-width:1199px){
+    .invoice-date-due-date {
+        min-width: 430px;
+        max-width: 430px;
+    }
+}
 @media (min-width: 768px) {
     .table.customerInvoiceTable .form-group {
         display: block;
@@ -1656,7 +1656,7 @@ span.eligible-ITC {
     .showOnsmall-screen {
         display: block;
     }
-    .invoiceDateDueDate {
+    .invoice-date-due-date {
         display: none;
     }
     .wrapperCustomerTable .col-sm-2 {
@@ -1731,7 +1731,7 @@ span.eligible-ITC {
 }
 
 @media (max-width: 767px) {
-    .invoiceDateDueDate {
+    .invoice-date-due-date {
         position: static;
         width: 100%;
         left: 0;
