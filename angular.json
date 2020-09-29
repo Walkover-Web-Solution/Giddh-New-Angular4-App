@@ -92,6 +92,11 @@
                 "glob": "favicon.ico",
                 "input": "apps/web-giddh/src/",
                 "output": "/"
+              },
+              {
+                "glob": "**/*",
+                "input": "cypress/",
+                "output": "/cypress/"
               }
             ],
             "styles": [
