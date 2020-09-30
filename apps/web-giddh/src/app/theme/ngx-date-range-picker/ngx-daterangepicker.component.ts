@@ -358,7 +358,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
-                this.hide();
+                this.clickCancel();
             }
         });
 
@@ -987,7 +987,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.hide();
     }
 
-    public clickCancel(e): void {
+    public clickCancel(e?: any): void {
         if (this._old && this._old.start) {
             this.startDate = this._old.start;
         }
