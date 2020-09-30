@@ -9584,6 +9584,11 @@ span#HW_badge_cont:nth-child(3) {
 .manage-group-account-form .button-group .btn{
     margin-right: 15px;
 }
+.inventory-page{
+    .daterangepicker{
+        z-index: 9992 !important;
+    }
+}
 /* responsive */
 
 @media (max-width: 1440px) {
