@@ -536,6 +536,10 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             newState.isInvoiceGenerated = true;
             return Object.assign({}, state, newState);
         }
+        case INVOICE.RECURRING.RESET_RECURRING_INVOICE: {
+            const s = { ...state, recurringInvoiceData: { ...state.recurringInvoiceData, isRequestInFlight: false, isRequestSuccess: false } };
+            return s;
+        }
         default: {
             return state;
         }

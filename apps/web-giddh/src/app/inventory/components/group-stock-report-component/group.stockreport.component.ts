@@ -56,9 +56,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     @ViewChild("productName", {static: true}) productName: ElementRef;
     @ViewChild("sourceName", {static: true}) sourceName: ElementRef;
     @ViewChild('advanceSearchForm', {static: true}) formValues;
-    @ViewChild('shCategory', {static: true}) public shCategory: ShSelectComponent;
-    @ViewChild('shCategoryType', {static: true}) public shCategoryType: ShSelectComponent;
-    @ViewChild('shValueCondition', {static: true}) public shValueCondition: ShSelectComponent;
+    @ViewChild('shCategory', {static: false}) public shCategory: ShSelectComponent;
+    @ViewChild('shCategoryType', {static: false}) public shCategoryType: ShSelectComponent;
+    @ViewChild('shValueCondition', {static: false}) public shValueCondition: ShSelectComponent;
     @ViewChild('template', {static: true}) public template: ElementRef;
 
     /** Stores the branch details along with their warehouses */

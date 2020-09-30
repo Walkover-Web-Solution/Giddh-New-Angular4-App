@@ -46,7 +46,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public showAdvanceSearchIcon: boolean = false;
     @ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
     @ViewChild('exportDaybookModal', {static: true}) public exportDaybookModal: ModalDirective;
-    @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent, static: true }) public dateRangePickerCmp: DaterangePickerComponent;
+    @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent, static: false }) public dateRangePickerCmp: DaterangePickerComponent;
     @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
     /** Daybook advance search component reference */
     @ViewChild('daybookAdvanceSearch', {static: true}) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
@@ -166,7 +166,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 ...this.datePickerOptions, startDate: moment(obj.fromDate, GIDDH_DATE_FORMAT).toDate(),
                 endDate: moment(obj.toDate, GIDDH_DATE_FORMAT).toDate()
             };
-            this.dateRangePickerCmp.render();
+            if (this.dateRangePickerCmp) {
+                this.dateRangePickerCmp.render();
+            }
             this.daybookQueryRequest.from = obj.fromDate;
             this.daybookQueryRequest.to = obj.toDate;
             this.daybookQueryRequest.page = 0;
@@ -214,6 +216,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         if (this.daybookAdvanceSearchModelComponent) {
             this.daybookAdvanceSearchModelComponent.advanceSearchForm.reset();
             this.daybookAdvanceSearchModelComponent.resetShselectForceClear();
+            this.daybookAdvanceSearchModelComponent.initializeDaybookAdvanceSearchForm();
         }
     }
 

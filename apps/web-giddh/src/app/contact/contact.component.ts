@@ -143,8 +143,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
     @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
     @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
-    @ViewChild('mailModal', {static: true}) public mailModal: ModalDirective;
-    @ViewChild('messageBox', {static: true}) public messageBox: ElementRef;
+    @ViewChild('mailModal', {static: false}) public mailModal: ModalDirective;
+    @ViewChild('messageBox', {static: false}) public messageBox: ElementRef;
     @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
     @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
 

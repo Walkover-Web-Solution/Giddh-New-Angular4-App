@@ -34,7 +34,7 @@ export class SelectDropdownComponent
 	@Output() public singleFilterKeydown = new EventEmitter<any>();
 	@Output() public noResultClicked = new EventEmitter<null>();
 
-	@ViewChild('filterInput', {static: true}) public filterInput: any;
+	@ViewChild('filterInput', {static: false}) public filterInput: any;
 	@ViewChild('optionsList', {static: true}) public optionsList: any;
 
 	public disabledColor: string = '#fff';

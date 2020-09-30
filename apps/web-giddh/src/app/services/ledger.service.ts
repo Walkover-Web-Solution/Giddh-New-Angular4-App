@@ -357,7 +357,9 @@ export class LedgerService {
                 let data: any = res;
                 return data;
             }), catchError((e) => {
-                this.toaster.errorToast(e.error.message);
+                if(fromCurrency !== undefined && toCurrency !== undefined) {
+                    this.toaster.errorToast(e.error.message);
+                }
                 return this.errorHandler.HandleCatch<any, any>(e)
             }));
     }

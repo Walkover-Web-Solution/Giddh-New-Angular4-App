@@ -506,7 +506,7 @@
                         <td *ngIf="selectedVoucher === 'purchase'" class="cp d-flex status-mobile pt-0 pb-0 flex-column mw-th-260">
                             <div class="d-flex flex-row align-items-center">
                                 <span class="d-flex balance-status">{{ item.balanceStatus}}</span>
-                                <div class="action-icon ml-auto" [ngClass]="{'item-selected': hoveredItemForAction === item.uniqueName || item.isSelected}" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected">
+                                <div class="action-icon ml-15" [ngClass]="{'item-selected': hoveredItemForAction === item.uniqueName || item.isSelected}" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected">
                                     <a tooltip="Send Email"
                                     (click)="openSendMailModal(sendEmailModal, item)">
                                         <span class="icon-envelope font-12"></span>
