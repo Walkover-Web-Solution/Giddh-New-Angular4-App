@@ -5305,14 +5305,6 @@ form#groupDetailForm {
 }
 
 
-.valid-tooltip{
+.valid-tooltip, .tooltip, .tooltip-inner{
     font-size:12px !important;
-    }
-
-    .tooltip{
-        font-size:12px !important;
-    }
-
-    .tooltip-inner{
-        font-size:12px !important;
-    }
+}
