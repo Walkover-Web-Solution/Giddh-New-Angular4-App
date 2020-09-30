@@ -10,11 +10,13 @@ import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.a
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.component';
 import { GeneralService } from "../../../../services/general.service";
+import { TabsModule } from 'ngx-bootstrap';
+
 
 @Component({
 	selector: 'app-manage-groups-accounts',
 	templateUrl: './manage-groups-accounts.component.html',
-	styleUrls: ['./manage-groups-accounts.component.css']
+	styleUrls: ['./manage-groups-accounts.component.scss']
 })
 export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewChecked {
 	@Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);

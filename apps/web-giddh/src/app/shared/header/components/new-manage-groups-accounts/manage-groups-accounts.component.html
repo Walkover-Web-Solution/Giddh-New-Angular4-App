@@ -26,50 +26,99 @@
     <!-- end header -->
 
     <div class="modal-body pd0">
-        <div class="clearfix">
-            <div class="grp_col pd0 " style="max-width:58.333%;"
-                [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}">
-                <!-- <perfect-scrollbar> -->
-                <div class="search-loading" *ngIf="(searchLoad | async)">
-                    <div class="vcenter">
-                        <span class="spinner small"></span> Loading…
-                    </div>
-                </div>
-                <div class="search-loading no-result" *ngIf="!(searchLoad | async) && !(groupList$ | async)?.length">
-                    <div class="vcenter">
-                        <h1>No Result Found</h1>
-                    </div>
-                </div>
-                <div>
-                    <!-- ngIf: showListGroupsNow -->
-                    <perfect-scrollbar #perfectdirective class="scroll-container" fxFlex="auto" [config]="config"
-                        [scrollIndicators]="true">
-                        <div *ngIf="!(searchLoad | async)"
-                            [ngStyle]="{'width':groupsidebar?.mc?.columns?.length * 255 + 'px'}"
-                            class="wrapAccountSidebar">
-                            <groups-account-sidebar (columnsChanged)="currentColumns = $event" #groupsidebar
-                                [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}"
-                                [height]="((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))"
-                                [groups]="(groupList$ | async)" (breadcrumbPathChanged)="breadcrumbPathChanged($event)"
-                                (resetSearchString)="resetGroupSearchString(false)" (ScrollToRight)="ScrollToRight()"
-                                [isSearchingGroups]="!(grpSrch.value === '')"></groups-account-sidebar>
+        <tabset class="custom-tabs master-custom-tabs">
+            <tab heading="Master" id="tab1">
+                <div class="clearfix">
+                    <div class="grp_col pd0 " style="max-width:58.333%;"
+                        [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}">
+                        <!-- <perfect-scrollbar> -->
+                        <div class="search-loading" *ngIf="(searchLoad | async)">
+                            <div class="vcenter">
+                                <span class="spinner small"></span> Loading…
+                            </div>
                         </div>
-                    </perfect-scrollbar>
-                    <!-- end ngIf: showListGroupsNow -->
+                        <div class="search-loading no-result" *ngIf="!(searchLoad | async) && !(groupList$ | async)?.length">
+                            <div class="vcenter">
+                                <h1>No Result Found</h1>
+                            </div>
+                        </div>
+                        <div>
+                            <!-- ngIf: showListGroupsNow -->
+                            <perfect-scrollbar #perfectdirective class="scroll-container" fxFlex="auto" [config]="config"
+                                [scrollIndicators]="true">
+                                <div *ngIf="!(searchLoad | async)" [ngStyle]="{'width':groupsidebar?.mc?.columns?.length * 255 + 'px'}"
+                                    class="wrapAccountSidebar">
+                                    <groups-account-sidebar (columnsChanged)="currentColumns = $event" #groupsidebar
+                                        [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}"
+                                        [height]="((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))"
+                                        [groups]="(groupList$ | async)" (breadcrumbPathChanged)="breadcrumbPathChanged($event)"
+                                        (resetSearchString)="resetGroupSearchString(false)" (ScrollToRight)="ScrollToRight()"
+                                        [isSearchingGroups]="!(grpSrch.value === '')"></groups-account-sidebar>
+                                </div>
+                            </perfect-scrollbar>
+                            <!-- end ngIf: showListGroupsNow -->
+                        </div>
+
+                        <!-- </perfect-scrollbar> -->
+                    </div>
+                    <!-- middle body -->
+                    <div class="form_box form-bg hieghtInVH">
+                        <account-operations [columnsRef]="currentColumns"
+                            [height]="((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))"
+                            [breadcrumbPath]="breadcrumbPath" [breadcrumbUniquePath]="breadcrumbUniquePath" #form>
+                        </account-operations>
+                    </div>
+
+
                 </div>
+            </tab>
+            <tab heading="Custom">
+                <div class="custom-filed-list-wrapper">
+                    <div class="row mb-15">
+                        <div class="col-lg-3">
+                            <label>Name</label>
+                            <input type="tetx" class="form-control" readonly value="Pan Number">
+                        </div>
+                        <div class="col-lg-3">
+                            <label>Type</label>
+                            <input type="tetx" class="form-control" readonly value="Number">
+                        </div>
+                        <div class="col-lg-3">
+                            <label>Length</label>
+                            <input type="tetx" class="form-control" readonly value="18">
+                        </div>
+                        <div class="col-lg-3">
+                            <label class="d-block">&nbsp;</label>
+                            <button class="btn btn-defualt">
+                                <span class="icon-cross"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row mb-15">
+                        <div class="col-lg-3">
+                            <label>Name</label>
+                            <input type="tetx" class="form-control">
+                        </div>
+                        <div class="col-lg-3">
+                            <label>Type</label>
+                            <input type="tetx" class="form-control">
+                        </div>
+                        <div class="col-lg-3">
+                            <label>Length</label>
+                            <input type="tetx" class="form-control">
+                        </div>
+                        <div class="col-lg-3">
+                            <label class="d-block">&nbsp;</label>
+                            <button class="btn btn-primary">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+        </tabset>
 
-                <!-- </perfect-scrollbar> -->
-            </div>
-            <!-- middle body -->
-            <div class="form_box form-bg hieghtInVH">
-                <account-operations [columnsRef]="currentColumns"
-                    [height]="((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))"
-                    [breadcrumbPath]="breadcrumbPath" [breadcrumbUniquePath]="breadcrumbUniquePath" #form>
-                </account-operations>
-            </div>
 
-
-        </div>
 
     </div>
     <!-- end modal body -->
