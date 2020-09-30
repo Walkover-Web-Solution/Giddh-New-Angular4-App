@@ -504,7 +504,7 @@ span.icon-export-icon {
 }
 
 .status-mobile{
-    .d-flex{
+    .balance-status{
         padding: 14px 0;
     }
 }
@@ -775,6 +775,9 @@ span.icon-export-icon {
     .mobile-search .input-container input {
         letter-spacing: -0.99px;
     }
+}
+.form-control.daterange-picker {
+    cursor: pointer !important;
 }
 
 @media (max-width: 445px) {

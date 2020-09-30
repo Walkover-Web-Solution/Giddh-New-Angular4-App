@@ -9,10 +9,10 @@
                     <div class="input-group">
                         <span class="input-wrapper">
                             <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
-                                (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
+                                (applyDaterangepicker)="bsValueChange($event)" class="form-control daterange-picker" />
                         </span>
                     </div>
-                    <div class="advance-icon align-items-center" tooltip="Advance Search"
+                    <div class="advance-icon cursor-pointer align-items-center" tooltip="Advance Search"
                     (click)="toggleAdvanceSearchPopup(false)">
                         <span class="icon-advance-filter"></span>
                     </div>
@@ -402,14 +402,13 @@
 
                         <!-- Invoice No. -->
                         <td>
-                            <div (click)="(selectedVoucher === 'purchase' && !item.voucherNumber) ? onSelectInvoice(item) : ''"
-                                [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}"
+                            <div [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}"
                                 style="position: relative" class="d-flex">
                                 <a href="javascript:void(0);" class="btn-link-2"
                                     (click)="onSelectInvoice(item)">{{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
                             </div>
 
-                            <span *ngIf="item.dueDays !== null && selectedVoucher !== 'purchase'">
+                            <span *ngIf="item.dueDays !== null">
                                 <small class="text-danger" *ngIf="item.dueDays > 0">
                                     Overdue by {{ item.dueDays }} Days
                                 </small>
@@ -504,29 +503,22 @@
                             <span>{{ item.balanceStatus}}</span>
                         </td>
 
-                        <td *ngIf="selectedVoucher === 'purchase'" class="d-flex align-items-center status-mobile pt-0 pb-0 mw-th-260">
-                            
-                                    <span class="d-flex">{{ item.balanceStatus}}</span>
-                                    <div class="action-icon ml-auto" [ngClass]="{'item-selected': hoveredItemForAction === item.uniqueName || item.isSelected}" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected">
-                                            <a tooltip="Send Email"
-                                            (click)="openSendMailModal(sendEmailModal, item)">
-                                                <span class="icon-envelope font-12"></span>
-                                            </a>
-                                            <a tooltip="Copy" [routerLink]="['/pages/proforma-invoice/invoice/purchase/'+item.account.uniqueName+'/'+item.uniqueName+'/copy']">
-                                                <span class="icon-copy-small font-14"></span>
-                                            </a>
-                                            <a tooltip="Delete" (click)="deletePurchaseBill(item.uniqueName);">
-                                                <i class="icon-trash"></i>
-                                            </a>
-                                        </div>
-                                    <!--<span *ngIf="item.dueDays !== null">
-                                            <small class="text-danger" *ngIf="item.dueDays > 0">
-                                                Overdue by {{ item.dueDays }} Days
-                                            </small>
-                                            <small class="text-danger" *ngIf="item.dueDays === 0">
-                                                Overdue by Today
-                                            </small>
-                                        </span>-->
+                        <td *ngIf="selectedVoucher === 'purchase'" class="cp d-flex status-mobile pt-0 pb-0 flex-column mw-th-260">
+                            <div class="d-flex flex-row align-items-center">
+                                <span class="d-flex balance-status">{{ item.balanceStatus}}</span>
+                                <div class="action-icon ml-auto" [ngClass]="{'item-selected': hoveredItemForAction === item.uniqueName || item.isSelected}" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected">
+                                    <a tooltip="Send Email"
+                                    (click)="openSendMailModal(sendEmailModal, item)">
+                                        <span class="icon-envelope font-12"></span>
+                                    </a>
+                                    <a tooltip="Copy" [routerLink]="['/pages/proforma-invoice/invoice/purchase/'+item.account.uniqueName+'/'+item.uniqueName+'/copy']">
+                                        <span class="icon-copy-small font-14"></span>
+                                    </a>
+                                    <a tooltip="Delete" (click)="deletePurchaseBill(item.uniqueName);">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -644,7 +636,7 @@
                                         {{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
                                     <span class="icon-download"></span>
                                 </div>
-                                <span *ngIf="item.dueDate && selectedVoucher !== 'purchase'" class="overDueDate">
+                                <span *ngIf="item.dueDate" class="overDueDate">
                                     <small class="text-danger" *ngIf="item.dueDays > 0">
                                         Overdue by {{ item.dueDays }} Days
                                     </small>
@@ -699,15 +691,6 @@
                                         <div class="flex-fill selectAction">
                                             <span
                                                 [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>
-
-                                            <span *ngIf="item.dueDate && selectedVoucher === 'purchase'" class="overDueDate">
-                                                <small class="text-danger" *ngIf="item.dueDays > 0">
-                                                    Overdue by {{ item.dueDays }} Days
-                                                </small>
-                                                <small class="text-danger" *ngIf="item.dueDays === 0">
-                                                    Overdue by Today
-                                                </small>
-                                            </span>
                                         </div>
                                         <div class="click-dropdwon" [attachOutsideOnClick]="true"
                                             (clickOutside)="showMoreBtn = false" [exclude]="'.dropdown-menu'">
