@@ -352,6 +352,9 @@ button.btn.btn-filter {
         }
     }
 }
+.inventory-branch-dropdown{
+    display: none !important;
+}
 @media(max-width:1024px){
     .wrap-head-report{
        width: 55%;
