@@ -211,7 +211,7 @@
                     <td data-title="status" class="d-flex align-items-center status-mobile pt-0 pb-0">
                         <span class="d-flex">
                             {{item.status}}</span>
-                        <div class="action-icon ml-15" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
+                        <div class="action-icon ml-auto" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
                             <a tooltip="Convert to bill" *ngIf="item.status === 'open'" (click)="bulkUpdate('create_purchase_bill', item.voucherNumber)">
                                 <span class="icon-tick font-12"></span>
                             </a>
