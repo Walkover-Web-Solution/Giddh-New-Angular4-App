@@ -622,8 +622,8 @@ input {
 }
 
 .invoice-control .nav > li > a:hover{
-    border-color: transparent !important;;
-    background-color: transparent !important;;
+    border-color: transparent !important;
+    background-color: transparent !important;
 }
 
 
@@ -980,7 +980,9 @@ ul.sub-list {
     font-size: 18px;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
-
+.tab-integraton .nav-tabs > li > a:hover{
+    border: 1px solid rgba(26, 35, 126, 0.4) !important;
+}
 .tab-integraton .nav-tabs > li.active a {
     background: $white !important;
     box-shadow: 0 6px 7px #cacaca;
@@ -9582,6 +9584,11 @@ span#HW_badge_cont:nth-child(3) {
 .manage-group-account-form .button-group .btn{
     margin-right: 15px;
 }
+.inventory-page{
+    .daterangepicker{
+        z-index: 9992 !important;
+    }
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -10619,7 +10626,7 @@ span#HW_badge_cont:nth-child(3) {
         padding: 0 10px;
     }
     .modal-dialog.modal-xl{
-        max-width: 1140px !important;
+        max-width: 1000px !important;
     }
     .receipt-note-modal {
         max-width: 100% !important;
