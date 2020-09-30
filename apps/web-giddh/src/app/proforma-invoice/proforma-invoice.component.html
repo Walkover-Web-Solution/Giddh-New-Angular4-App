@@ -1069,8 +1069,8 @@
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
                                 <tr [hidden]="activeIndx !== entryIdx" class="entriesTr defaultActive"
                                     (click)="$event.stopPropagation();">
-                                    <td>{{ entryIdx + 1 }}</td>
-                                    <td>
+                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();">{{ entryIdx + 1 }}</td>
+                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();">
 
                                         <div class="productName">
                                             <div class="ng-select-wrap">
@@ -1207,7 +1207,7 @@
                                         </div>
                                     </td>
 
-                                    <td class="text-right stockUnit">
+                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();" class="text-right stockUnit">
                                         <input type="text" [disabled]="!transaction.isStockTxn"
                                             (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity"
                                             decimalDigitsDirective name="transaction.quantity_{{entryIdx}}"
@@ -1224,7 +1224,7 @@
                                         </select>
                                     </td>
 
-                                    <td class="text-right item-rate" style="height: 1px;">
+                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();" class="text-right item-rate" style="height: 1px;">
                                         <div class="td-wrapper">
 
                                             <div style="flex: 1;">
@@ -1246,7 +1246,7 @@
                                         </div>
                                     </td>
 
-                                    <td class="text-right item-amount" style="height:1px;">
+                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();" class="text-right item-amount" style="height:1px;">
                                         <div class="td-wrapper">
                                             <div style="flex: 1;">
                                                 <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction)"
@@ -1265,7 +1265,7 @@
                                         </div>
                                     </td>
 
-                                    <td class="item-discount" style="height:1px;">
+                                    <td (click)="closeTaxControlPopup();" class="item-discount" style="height:1px;">
                                         <div class="td-wrapper">
                                             <div class="text-right" style="flex:1;">
                                                 <discount-control-component #discountComponent [discountMenu]="false"
@@ -1286,10 +1286,10 @@
                                         </div>
                                     </td>
 
-                                    <td class="pos-rel dropdown-container item-tax" style="height:1px;">
+                                    <td (click)="closeTaxControlPopup();" class="pos-rel dropdown-container item-tax" style="height:1px;">
                                         <div class="td-wrapper">
                                             <div class="text-right" style="flex:1;">
-                                                <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
+                                                <tax-control #taxControlComponent [taxes]="companyTaxesList" [date]="entry.entryDate"
                                                     [taxRenderData]="entry.taxes"
                                                     [totalForTax]="transaction.taxableValue"
                                                     [applicableTaxes]="transaction.applicableTaxes"
@@ -1316,7 +1316,7 @@
                                         </div>
                                     </td>
 
-                                    <td class="text-right item-total delete-btn-absolute">
+                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();" class="text-right item-total delete-btn-absolute">
                                         <div class="td-wrapper">
 
                                             <div style="flex:1;">
@@ -2199,7 +2199,7 @@
                                                 <label class="card-label text-right">Tax</label>
 
                                                 <div class="text-right" style="flex:1;">
-                                                    <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
+                                                    <tax-control #taxControlComponent [taxes]="companyTaxesList" [date]="entry.entryDate"
                                                         [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue"
                                                         [applicableTaxes]="transaction.applicableTaxes"
                                                         [exceptTaxTypes]="exceptTaxTypes"

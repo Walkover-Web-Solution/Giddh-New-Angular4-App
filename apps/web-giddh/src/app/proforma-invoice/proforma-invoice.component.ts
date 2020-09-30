@@ -197,8 +197,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('unregisteredBusiness', {static: true}) public unregisteredBusiness: ElementRef;
 
     @ViewChild('invoiceForm', { read: NgForm, static: true }) public invoiceForm: NgForm;
-    @ViewChild('discountComponent', { static: true }) public discountComponent: DiscountListComponent;
-    @ViewChild(TaxControlComponent, { static: false }) public taxControlComponent: TaxControlComponent;
+    @ViewChild('discountComponent', { static: false }) public discountComponent: DiscountListComponent;
+    @ViewChild('taxControlComponent', { static: false }) public taxControlComponent: TaxControlComponent;
     @ViewChild('customerNameDropDown', { static: true }) public customerNameDropDown: ShSelectComponent;
 
     @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
@@ -209,9 +209,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChildren(BsDatepickerDirective) public datePickers: QueryList<BsDatepickerDirective>;
 
     /** RCM popup instance */
-    @ViewChild('rcmPopup', {static: true}) public rcmPopup: PopoverDirective;
+    @ViewChild('rcmPopup', {static: false}) public rcmPopup: PopoverDirective;
     /** Purchase record modal instance */
-    @ViewChild('purchaseRecordConfirmationPopup', {static: true}) public purchaseRecordConfirmationPopup: ModalDirective;
+    @ViewChild('purchaseRecordConfirmationPopup', {static: false}) public purchaseRecordConfirmationPopup: ModalDirective;
     /** Billing state instance */
     @ViewChild('billingState', {static: true}) billingState: ElementRef;
     /** Shipping state instance */
