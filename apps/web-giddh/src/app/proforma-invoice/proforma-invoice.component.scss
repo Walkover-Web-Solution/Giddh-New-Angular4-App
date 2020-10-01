@@ -1626,6 +1626,11 @@ span.eligible-ITC {
 .dropdown-menu-right{
     top: 0 !important;
 }
+#button-dropup {
+    .caret{
+        transform: rotate(180deg);
+    }
+}
 /* resposnvie */
 
 @media (min-width: 768px) {

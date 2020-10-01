@@ -85,6 +85,18 @@ th.next.available span {
     align-items: center;
     margin-left: 4px;
 }
+#date-range-picker-parent .daterangepicker {
+    width: auto !important;
+    max-width: 100%;
+}
+@media(max-width:991px){
+       .drp-calendar.left{
+        clear: left;
+    }
+    .show-ranges .drp-buttons{
+       position: static;
+    }
+}
 @media(max-width:767px){
     .drp-buttons{
         position: static;

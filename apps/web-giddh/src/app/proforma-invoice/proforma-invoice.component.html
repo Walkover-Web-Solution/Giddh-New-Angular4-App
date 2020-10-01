@@ -2663,14 +2663,14 @@
                             <!-- region proforma/estimates -->
                             <span class="d-inline-block v-align-middle" *ngIf="isProformaInvoice || isEstimateInvoice">
 
-                                <div class="btn-group" dropdown [dropup]="true" [isDisabled]="!hasVoucherEntry">
+                                <div class="btn-group" dropdown [dropup]="isDropup" [isDisabled]="!hasVoucherEntry">
 
                                     <button type="button" [disabled]="!hasVoucherEntry"
                                         (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default">Create
                                     </button>
 
-                                    <button id="button-split2" type="button" dropdownToggle
+                                     <!-- <button id="button-split2" type="button" dropdownToggle
                                         class="btn btn-default dropdown-toggle dropdown-toggle-split"
                                         aria-controls="dropdown-split">
                                         <span class="caret"></span>
@@ -2690,7 +2690,25 @@
                                                 (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)">Create
                                                 & Print</a>
                                         </li>
+                                    </ul> -->
+
+                                    <button id="button-dropup" type="button" dropdownToggle
+                                        class="btn btn-default dropdown-toggle dropdown-toggle-split" aria-controls="dropdown-dropup">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul id="dropdown-dropup" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                                        aria-labelledby="button-dropup">
+                                        <li role="menuitem">
+                                            <a class="dropdown-item cp" (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">Create
+                                                & Send</a>
+                                        </li>
+
+                                        <li role="menuitem">
+                                            <a class="dropdown-item cp" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)">Create
+                                                & Print</a>
+                                        </li>
                                     </ul>
+
                                 </div>
                             </span>
                             <!-- endregion -->

@@ -9617,6 +9617,17 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 @media (max-width: 1024px) {
+    bs-datepicker-container{
+            position: absolute !important;
+            left: 15px !important;
+            top: 40px !important;
+            transform: none !important;
+    }
+    .payment-date{
+        bs-datepicker-container{
+            top: 60px !important;
+        }
+    }
     .users-last-list{
         .cdk-virtual-scroll-content-wrapper {
             position: relative;

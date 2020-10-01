@@ -545,7 +545,12 @@ span.icon-export-icon {
 }
 
 /* responsive */
-
+@media(max-width:1024px){
+    .perform-payment {
+        max-width: 100% !important;
+        min-width: 100% !important;
+    }
+}
 @media (max-width: 768px) {
 
     .status-mobile{
@@ -580,10 +585,6 @@ span.icon-export-icon {
         margin-top: 20px;
         border: none;
         background-color: transparent;
-    }
-    .perform-payment {
-        max-width: 100% !important;
-        min-width: 100% !important;
     }
     .date-advance-search .dropdown-menu.show.fixed-dropdown-plus {
         left: auto !important;
@@ -695,7 +696,7 @@ span.icon-export-icon {
     .total-due-sale-wrap {
         display: block !important;
     }
-    .totalDueSale {
+    .total-due-sale {
         padding-bottom: 5px;
     }
    // .invoice-table {
@@ -704,6 +705,9 @@ span.icon-export-icon {
 }
 
 @media (max-width: 575px) {
+    .total-due-sale {
+        padding-left: 0;
+    }
     button.btn.btn-default {
         width: 100%;
         justify-content: center;
