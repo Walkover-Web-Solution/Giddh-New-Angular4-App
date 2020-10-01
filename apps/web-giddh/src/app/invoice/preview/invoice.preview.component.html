@@ -34,7 +34,7 @@
 
 
                 <!-- E-way bill generation and export to excel for a single selected item in invoice sizes -->
-                <div
+                <div class="desktop-view-btn"
                     *ngIf="(selectedVoucher !== 'purchase' && selectedItems.length > 0) || (selectedItems.length === 1 && selectedVoucher === 'purchase')">
                     <div class="btn-group" dropdown #dp="bs-dropdown">
                         <button dropdownToggle type="button"
@@ -112,7 +112,7 @@
             <!-- Invoice E-way bill, export to excel for a single selected item along with
                 New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 d-flex w-100 align-items-center pt-1 pb-1">
                     <div class="more-export-btn d-flex mt-1">
                         <div class="clear-filter visible-on-mobile" *ngIf="showAdvanceSearchIcon"
                             (click)="resetAdvanceSearch()">
@@ -122,8 +122,7 @@
                         </div>
                     </div>
                     <div *ngIf="selectedItems.length === 1">
-                        <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
-                            style="margin-bottom: 10px;display: inline-block !important;">
+                        <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()">
                             <button dropdownToggle type="button"
                                 class="btn mr-15 more-btn-dropdown btn-default dropdown-toggle"
                                 aria-controls="dropdown-basic">
