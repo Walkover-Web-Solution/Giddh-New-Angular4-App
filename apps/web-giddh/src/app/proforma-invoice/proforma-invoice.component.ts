@@ -333,6 +333,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isAddBulkItemInProcess: boolean = false;
     public modalRef: BsModalRef;
     public message: string;
+    public isDropup: boolean = true;
 
     public exceptTaxTypes: string[];
     /** Stores warehouses for a company */

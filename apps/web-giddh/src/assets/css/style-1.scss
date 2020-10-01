@@ -5134,7 +5134,7 @@ perfect-scrollbar.ps-show-active
     margin: 0 !important;
 }
 
-.customItem:hover {
+.customItem:hover , .discount-item:hover {
     background-color: $lavender !important;
     color: #5b64c9 !important;
     &:hover {

@@ -1623,7 +1623,9 @@ span.eligible-ITC {
 .payment-mode-amount{
     flex-direction: row-reverse;
 }
-
+.dropdown-menu-right{
+    top: 0 !important;
+}
 /* resposnvie */
 
 @media (min-width: 768px) {
