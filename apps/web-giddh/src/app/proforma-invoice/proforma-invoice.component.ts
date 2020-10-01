@@ -4518,7 +4518,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 salesTransactionItemClass.maxQuantity = summary.usedQuantity;
                             }
 
-                            this.existingPoEntries[summary.entryUniqueName] = "";
                             this.existingPoEntries[summary.entryUniqueName] = salesTransactionItemClass.maxQuantity;
                         }
                     });
