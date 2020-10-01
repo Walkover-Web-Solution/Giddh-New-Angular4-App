@@ -15,7 +15,7 @@
                 </div>
             </div>
 
-            <a *ngIf="isNewVersion" class="font-12 pl-2 clear-filter" (click)="resetFilter()">
+            <a *ngIf="isNewVersion && showClearFilter" class="font-12 pl-2 clear-filter" (click)="resetFilter()">
                 <span class="icon-refrsh"></span> Clear Filter
             </a>
         </div>
