@@ -522,6 +522,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public poLinkUpdated: boolean = false;
     /* This will hold if copy purchase bill is done */
     public copyPurchaseBillInitialized: boolean = false;
+    /* This will hold the existing PO entries with quantity */
+    public existingPoEntries: any[] = [];
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -4506,14 +4508,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     salesTransactionItemClass.stockDetails.skuCode = t.stock.sku;
                     salesTransactionItemClass.stockUnit = t.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName + '#' + t.stock.uniqueName;
+                }
 
-                    if(this.isPurchaseInvoice && entry.purchaseOrderLinkSummaries && entry.purchaseOrderLinkSummaries.length > 0) {
-                        entry.purchaseOrderLinkSummaries.forEach(summary => {
-                            if(!isNaN(Number(summary.unUsedQuantity))) {
+                if(this.isPurchaseInvoice && entry.purchaseOrderLinkSummaries && entry.purchaseOrderLinkSummaries.length > 0) {
+                    entry.purchaseOrderLinkSummaries.forEach(summary => {
+                        if(!isNaN(Number(summary.unUsedQuantity))) {
+                            if (t.stock) {
                                 salesTransactionItemClass.maxQuantity = summary.unUsedQuantity + salesTransactionItemClass.quantity;
+                            } else {
+                                salesTransactionItemClass.maxQuantity = summary.usedQuantity;
                             }
-                        });
-                    }
+
+                            this.existingPoEntries[summary.entryUniqueName] = salesTransactionItemClass.maxQuantity;
+                        }
+                    });
                 }
 
                 salesEntryClass.transactions.push(salesTransactionItemClass);
@@ -5889,7 +5897,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let transactionLoop = 0;
 
             if(entry.totalQuantity && entry.usedQuantity && entry.transactions && entry.transactions[0] && entry.transactions[0].stock) {
-                entry.transactions[0].stock.quantity = entry.totalQuantity - entry.usedQuantity;
+                if(this.existingPoEntries[entry.uniqueName]) {
+                    entry.transactions[0].stock.quantity = entry.usedQuantity;
+                } else {
+                    entry.transactions[0].stock.quantity = entry.totalQuantity - entry.usedQuantity;
+                }
             }
 
             entry.transactions.forEach(item => {
@@ -5898,13 +5910,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     item.uniqueName = item.stock.uniqueName;
                     item.value = item.stock.uniqueName;
                     item.additional = item.stock;
-                    item.additional.maxQuantity = item.stock.quantity;
+                    if(this.existingPoEntries[entry.uniqueName]) {
+                        item.additional.maxQuantity = this.existingPoEntries[entry.uniqueName];
+                    } else {
+                        item.additional.maxQuantity = item.stock.quantity;
+                    }
                 } else {
                     item.stock = {};
                     item.uniqueName = item.account.uniqueName;
                     item.value = item.account.uniqueName;
                     item.additional = item.account;
-                    item.additional.maxQuantity = entry.totalQuantity - entry.usedQuantity;
+                    if(this.existingPoEntries[entry.uniqueName]) {
+                        item.additional.maxQuantity = this.existingPoEntries[entry.uniqueName];
+                    } else {
+                        item.additional.maxQuantity = entry.totalQuantity - entry.usedQuantity;
+                    }
                 }
 
                 if(item.additional.maxQuantity > 0) {
