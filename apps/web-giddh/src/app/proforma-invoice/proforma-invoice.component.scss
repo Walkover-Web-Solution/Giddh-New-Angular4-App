@@ -978,6 +978,8 @@ section.staticInvoiceTable {
     left: 0;
     top: 0;
     margin-left: 48%;
+    min-width: 485px;
+    max-width: 485px;
 }
 
 .m-l-10 {
@@ -1625,7 +1627,12 @@ span.eligible-ITC {
 }
 
 /* resposnvie */
-
+@media(max-width:1199px){
+    .invoice-date-due-date {
+        min-width: 430px;
+        max-width: 430px;
+    }
+}
 @media (min-width: 768px) {
     .table.customerInvoiceTable .form-group {
         display: block;

@@ -539,7 +539,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                     if (this.isPettyCash) {
                         this.vm.selectedLedger.transactions.forEach(item => {
-                            item.type = item.type === 'cr' ? 'CREDIT' : 'DEBIT';
+                            item.type = (item.type === 'cr' || item.type === 'CREDIT') ? 'CREDIT' : 'DEBIT';
                         });
                         // create missing property for petty cash
                         this.vm.selectedLedger.transactions.forEach(f => {

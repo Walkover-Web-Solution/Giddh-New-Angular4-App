@@ -240,7 +240,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         _.uniq(this.selectedDiscounts);
                     });
                 }
-                console.log('accountInheritedDiscounts', this.accountInheritedDiscounts, this.selectedDiscounts);
 
                 accountDetails.addresses.forEach(address => {
                     address.state = address.state ? address.state : { code: '', stateGstCode: '', name: '' };
@@ -828,7 +827,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.accountDetails) {
             this.activeAccountName = this.accountDetails.uniqueName;
         } else {
-            this.activeAccount$.pipe(take(1)).subscribe(a => this.activeAccountName = a.uniqueName);
+            this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState.uniqueName);
         }
         if (!accountRequest.mobileNo) {
             accountRequest.mobileCode = '';
@@ -1444,16 +1443,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         return false;
     }
 
-/**
- * To apply discount in accounts
- *
- * @memberof AccountUpdateNewDetailsComponent
- */
-public applyDiscounts(): void {
+    /**
+     * To apply discount in accounts
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public applyDiscounts(): void {
         if (this.accountDetails) {
             this.activeAccountName = this.accountDetails.uniqueName;
         } else {
-            this.activeAccount$.pipe(take(1)).subscribe(a => this.activeAccountName = a.uniqueName);
+            this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState.uniqueName);
         }
         if (this.activeAccountName) {
             _.uniq(this.selectedDiscounts);

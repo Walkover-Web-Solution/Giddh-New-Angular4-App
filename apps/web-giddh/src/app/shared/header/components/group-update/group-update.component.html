@@ -137,13 +137,13 @@
 </div>
 
 <div class="horizontal-form mr1" *ngIf="isDebtorCreditorGroups">
-    <div class="mrB2 selectBox">
+    <div class="mb-2 selectBox">
         <div class="form-group ">
             <label>Default Discounts <span
-                        class="primary_clr"></span></label>
+                        class="primary-color"></span></label>
             <div class="clearfix">
                 <span>
-                        <sh-select class="pull-left" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" [placeholder]="'Select discounts'" style="width: calc(100% - 93px);"></sh-select>
+                        <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" placeholder="Select discounts"></sh-select>
                     </span>
                 <span class="pull-right">
                         <button  class="btn btn-primary mrgeBtn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscounts()">Apply</button>
