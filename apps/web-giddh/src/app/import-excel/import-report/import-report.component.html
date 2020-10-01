@@ -64,7 +64,7 @@
             </div>
         </div>
 
-        <div class="pagination-wrap" [hidden]="importStatusResponse.totalItems <= 0">
+        <div class="pagination-wrap" *ngIf="importStatusResponse.totalItems > 10">
             <pagination [totalItems]="importStatusResponse.totalItems" [(ngModel)]="importPaginatedRequest.page"
                 [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="importStatusResponse.count"
                 [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
