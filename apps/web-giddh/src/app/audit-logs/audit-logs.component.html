@@ -15,9 +15,10 @@
                                 class="giddh-datepicker date-range-picker" />
                         </div>
                     </div>
-                    <!--<div class="form-btn-field">
-                            <button class="btn btn-link mr-0 font-12" (click)="resetFilters()">Clear Filter</button>
-                        </div>-->
+
+                        <!--<a (click)="resetFilters()" class="font-12 pl-2 clear-filter">
+                            <span class="icon-refrsh"></span> Clear Filter
+                        </a>-->
         </div>
         <div class="col-12 col-md-12"  [ngClass]="!isNewVersion ? 'col-lg-9' : 'col-lg-12'">
             <audit-logs-grid *ngIf="!isNewVersion"></audit-logs-grid>
