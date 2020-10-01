@@ -615,10 +615,10 @@ input {
     padding: 8px 0px !important;
     margin-right: 35px !important;
     margin-left: 0 !important;
-    padding-bottom: 7px !important;
     font-size: 14px;
     color: #262626 !important;
     border-width: 0px 0 4px 0 !important;
+    height:41px;
 }
 
 .invoice-control .nav > li > a:hover{
@@ -8574,7 +8574,6 @@ ul.dropdown-menu p.lead.pd {
 .nav-tabs > li.active > a,
 .invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid $deep-sky-blue !important;
-    padding-bottom: 7px !important;
     font-family: $opensans-semibold;
     background-color: inherit;
 }

@@ -233,8 +233,8 @@
                 <!--sales-->
                 <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
                     <tr>
-                        <th style="width: 4%" *ngIf="selectedItems.length > 0" class="min-wd-20">
-                            <div class="mh18_img" style="justify-content: center;display: flex">
+                        <th style="width: 4%" *ngIf="selectedItems.length > 0" class="min-wid-check">
+                            <div class="mh18_img d-flex justify-content-start">
                                 <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
                                     (click)="toggleAllItems(true)">
                                 <img src="assets/images/checked.png" *ngIf="allItemsSelected"
@@ -242,8 +242,8 @@
                             </div>
                         </th>
 
-                        <th *ngIf="selectedItems.length === 0" style="width: 4%" class="min-wd-20">
-                            <div class="mh18_img" style="justify-content: center;display: flex">
+                        <th *ngIf="selectedItems.length === 0" style="width: 4%" class="min-wid-check">
+                            <div class="mh18_img d-flex justify-content-start">
                                 #
                             </div>
                         </th>
@@ -314,8 +314,8 @@
                 <!--non sales-->
                 <thead class="t-h-bg1 input-h" *ngIf="selectedVoucher !== 'sales' && selectedVoucher !== 'purchase'">
                     <tr>
-                        <th style="width: 4%" *ngIf="selectedItems.length > 0" class="min-wd-20">
-                            <div class="mh18_img" style="display: flex;justify-content: center">
+                        <th style="width: 4%" *ngIf="selectedItems.length > 0" class="min-wid-check">
+                            <div class="mh18_img d-flex justify-content-start">
                                 <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
                                     (click)="toggleAllItems(true)">
                                 <img src="assets/images/checked.png" *ngIf="allItemsSelected"
@@ -323,8 +323,8 @@
                             </div>
                         </th>
 
-                        <th *ngIf="selectedItems.length === 0" style="width: 4%" class="min-wd-20">
-                            <div class="mh18_img" style="display: flex;justify-content: center">
+                        <th *ngIf="selectedItems.length === 0" style="width: 4%" class="min-wid-check">
+                            <div class="mh18_img d-flex justify-content-start">
                                 #
                             </div>
                         </th>
@@ -386,7 +386,7 @@
 
                         <td class="mh18_img"
                             *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
-                            <div class="mh18_img" style="justify-content: center;display: flex">
+                            <div class="mh18_img d-flex justify-content-start">
                                 <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
                                     (click)="toggleItem(item, true)" />
                                 <img *ngIf="item.isSelected" src="assets/images/checked.png"
@@ -397,7 +397,7 @@
                         <!-- Serial No. -->
                         <td
                             *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedItems.length === 0">
-                            <div style="justify-content: center;display: flex">{{ i + 1}} </div>
+                            <div class="d-flex justify-content-start">{{ i + 1}} </div>
                         </td>
 
                         <!-- Invoice No. -->
@@ -534,7 +534,7 @@
 
                         <td class="mh18_img"
                             *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
-                            <div class="mh18_img" style="justify-content: center;display: flex">
+                            <div class="mh18_img d-flex justify-content-start">
                                 <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
                                     (click)="toggleItem(item, true)" />
                                 <img *ngIf="item.isSelected" src="assets/images/checked.png"
@@ -545,7 +545,7 @@
                         <!-- Serial No. -->
                         <td
                             *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedItems.length === 0">
-                            <div style="justify-content: center;display: flex"> {{ i + 1}}</div>
+                            <div class="d-flex justify-content-start"> {{ i + 1}}</div>
                         </td>
 
                         <!-- CR Note No. / DR Note No. -->

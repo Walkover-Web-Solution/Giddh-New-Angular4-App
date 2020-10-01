@@ -219,7 +219,7 @@
                     <td data-title="Particular" class="hide-on-mobile">
                         <table class="table nested-table particular-nested-table">
                             <tr *ngFor="let transaction of item.transactions">
-                                <td>
+                                <td class="p-0 border-none">
                                     {{transaction.particular.name }}
                                     <span *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}})
                                     </span>
@@ -231,7 +231,7 @@
                     <td data-title="Amount"  class="hide-on-mobile">
                         <table class="table nested-table amount-nested-table">
                             <tr *ngFor="let transaction of item.transactions">
-                                <td class="text-right">
+                                <td class="text-right p-0 border-none">
                                     {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency }}
                                 </td>
                             </tr>

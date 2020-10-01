@@ -147,6 +147,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public toggleRecurringAsidePane(toggle?: string): void {
         if (toggle) {
             this.asideMenuStateForRecurringEntry = toggle;
+            this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices());
         } else {
             this.asideMenuStateForRecurringEntry = this.asideMenuStateForRecurringEntry === 'out' ? 'in' : 'out';
         }

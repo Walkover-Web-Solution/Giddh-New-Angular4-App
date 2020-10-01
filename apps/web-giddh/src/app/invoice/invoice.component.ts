@@ -67,6 +67,8 @@ export class InvoiceComponent implements OnInit, OnDestroy {
                             }, 500);
                         }
                         this.tabChanged(queryParams.tab, null);
+                    } else if(queryParams.tab) {
+                        this.activeTab = queryParams.tab;
                     }
                 } else {
                     this.activeTab = params.voucherType;
