@@ -2593,7 +2593,6 @@
                                 </button>
 
                                 <div class="btn-group" [dropup]="isDropup" dropdown  [isDisabled]="!hasVoucherEntry">
-
                                     <button type="button" [disabled]="!hasVoucherEntry"
                                         (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default generateInvoie">Generate
@@ -2601,36 +2600,6 @@
                                             Cash
                                         </span>
                                     </button>
-
-                                    <!--
-                                        comment for now
-                                        <button id="button-dropup" type="button" dropdownToggle
-                                        class="btn btn-default dropdown-toggle dropdown-toggle-split"
-                                        aria-controls="dropdown-dropup" *ngIf="invoiceType === 'sales'">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Split button!</span>
-                                    </button>
-
-                                    <ul id="dropdown-dropup" *dropdownMenu class="dropdown-menu dropdown-menu-right"
-                                        role="menu" aria-labelledby="button-dropup">
-
-                                        <li role="menuitem">
-                                            <a class="dropdown-item cp"
-                                                (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">Create
-                                                & Send</a>
-                                        </li>
-
-                                        <li role="menuitem">
-                                            <a class="dropdown-item cp"
-                                                (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)">Create
-                                                & Print</a>
-                                        </li>
-
-                                        <li role="menuitem"
-                                            (click)="doAction(4);triggerSubmitInvoiceForm(invoiceForm, false)">
-                                            <a class="dropdown-item cp">Generate & Recurring</a>
-                                        </li>
-                                    </ul> -->
                                 </div>
 
                                 <div class="btn-group" dropdown [dropup]="isDropup">
@@ -2663,34 +2632,29 @@
                             <!-- region proforma/estimates -->
                             <span class="d-inline-block v-align-middle" *ngIf="isProformaInvoice || isEstimateInvoice">
 
-                                <div class="btn-group" dropdown [dropup]="true" [isDisabled]="!hasVoucherEntry">
+                                <div class="btn-group" dropdown [dropup]="isDropup" [isDisabled]="!hasVoucherEntry">
 
                                     <button type="button" [disabled]="!hasVoucherEntry"
                                         (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default">Create
                                     </button>
-
-                                    <button id="button-split2" type="button" dropdownToggle
-                                        class="btn btn-default dropdown-toggle dropdown-toggle-split"
-                                        aria-controls="dropdown-split">
+                                    <button id="button-dropup" type="button" dropdownToggle
+                                        class="btn btn-default dropdown-toggle dropdown-toggle-split" aria-controls="dropdown-dropup">
                                         <span class="caret"></span>
-                                        <span class="sr-only">Split button!</span>
                                     </button>
-
-                                    <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right"
-                                        role="menu" aria-labelledby="button-basic">
+                                    <ul id="dropdown-dropup" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                                        aria-labelledby="button-dropup">
                                         <li role="menuitem">
-                                            <a class="dropdown-item cp"
-                                                (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">Create
+                                            <a class="dropdown-item cp" (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">Create
                                                 & Send</a>
                                         </li>
 
                                         <li role="menuitem">
-                                            <a class="dropdown-item cp"
-                                                (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)">Create
+                                            <a class="dropdown-item cp" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)">Create
                                                 & Print</a>
                                         </li>
                                     </ul>
+
                                 </div>
                             </span>
                             <!-- endregion -->
