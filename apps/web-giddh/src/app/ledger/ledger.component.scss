@@ -605,6 +605,7 @@ sh-select:focus {
 /*responsive*/
 .modal-ledger {
     width: 70%;
+    max-width: 100% !important;
 }
 .ledger-head {
     position: relative;
@@ -625,7 +626,7 @@ sh-select:focus {
 @media only screen and (max-width: 1366px) {
     .modal-ledger {
         width: 100%;
-        margin: 0;
+        margin: 0 auto;
         padding: 15px;
     }
 }

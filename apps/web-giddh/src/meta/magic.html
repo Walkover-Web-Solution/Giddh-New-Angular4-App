@@ -118,10 +118,10 @@
                                             </tr>
                                         </thead>
                                         <tbody class="bdrL">
-                                            <tr class="ledger-row row mr-0 ml-0"
+                                            <tr class="ledger-row bdrB row mr-0 ml-0"
                                                 v-if="legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'DEBIT'">
-                                                <td class="col-3"></td>
-                                                <td class="col-6">To Balance B/F</td>
+                                                <td class="col-3 bdrR"></td>
+                                                <td class="col-6 bdrR">To Balance B/F</td>
                                                 <td class="col-3 text-right">
                                                     <!-- | number: '1.2-2'  -->
                                                     <span v-if="legderBalanceData.forwardedBalance.type === 'DEBIT'"
@@ -161,8 +161,7 @@
                                                                                 v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"
                                                                                 v-on:click="downloadInvoice(ledger.voucherNumber)"
                                                                                 container="body">
-                                                                                <i class="icon-download-circle"
-                                                                                    style="font-size:15px;"></i>
+                                                                                <img src="../assets/images/download-circle-icon.svg" width="15">
                                                                             </span>
                                                                         </template>
 <!--                                                                        <template-->
@@ -184,8 +183,7 @@
                                                                                   v-tooltip="'Download file: '+ledger.attachedFileName"
                                                                                   v-on:click="downloadAttachedFile(ledger.attachedFileUniqueName,ledger.attachedFileName)"
                                                                                   container="body">
-                                                                                <i class="icon-download-circle"
-                                                                                   style="font-size:15px;"></i>
+                                                                                <img src="../assets/images/download-circle-icon.svg" width="15">
                                                                             </span>
                                                                         </template>
                                                                     </td>
@@ -253,7 +251,7 @@
                                             </tr>
                                             <tr class="ledger-row bdrB"
                                                 v-if="legderBalanceData.forwardedBalance.type !== 'CREDIT' || (legderBalanceData.forwardedBalance.amount == 0)">
-                                                <td class="" colspan="3">&nbsp;</td>
+                                                <td class="bdrR" colspan="3">&nbsp;</td>
                                             </tr>
                                             <!-- ng-if="ledger.hasCredit" -->
                                             <!-- ng-class="{compoundEntry: ledger.isCompoundEntry}"
@@ -283,8 +281,7 @@
                                                                                 v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"
                                                                                 v-on:click="downloadInvoice(ledger.voucherNumber)"
                                                                                 container="body">
-                                                                                <i class="icon-download-circle"
-                                                                                    style="font-size:15px;"></i>
+                                                                                <img src="../assets/images/download-circle-icon.svg" width="15">
                                                                             </span>
                                                                         </template>
 <!--                                                                        <template-->
@@ -306,8 +303,7 @@
                                                                                   v-tooltip="'Download file: '+ledger.attachedFileName"
                                                                                   v-on:click="downloadAttachedFile(ledger.attachedFileUniqueName,ledger.attachedFileName)"
                                                                                   container="body">
-                                                                                <i class="icon-download-circle"
-                                                                                   style="font-size:15px;"></i>
+                                                                                <img src="../assets/images/download-circle-icon.svg" width="15">
                                                                             </span>
                                                                         </template>
                                                                     </td>
