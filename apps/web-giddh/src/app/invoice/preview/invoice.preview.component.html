@@ -364,7 +364,7 @@
 
                         <th>
                             <div class="d-flex">
-                                <div class="flex-fill ">Total amount</div>
+                                <div class="flex-fill total-amt">Total amount</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="sortTemplate;context: { column: 'grandTotal'}">
                                     </ng-container>
@@ -572,14 +572,14 @@
 
                         <!-- Total Amount with multicurrency for CR/DR note -->
                         <td *ngIf="(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')"
-                            [tooltip]="grandTotalPopupTemplate" class="text-right">{{item.accountCurrencySymbol}}
+                            [tooltip]="grandTotalPopupTemplate">{{item.accountCurrencySymbol}}
                             {{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
                         <ng-template #grandTotalPopupTemplate><span [innerHTML]="item.grandTotalTooltipText"></span>
                         </ng-template>
 
                         <!-- Total Amount without multicurrency -->
                         <td *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')"
-                            class="text-right">{{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
+                            >{{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
                     </tr>
                 </tbody>
 
