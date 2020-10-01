@@ -127,7 +127,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             }
         })).pipe(takeUntil(this.destroyed$));
 
-        this.setAdvanceSearchForm();
+        if(!this.advanceSearchForm) {
+            this.setAdvanceSearchForm();
+        }
         this.setVoucherTypes();
     }
 
@@ -197,6 +199,12 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     groups.push({ label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName });
                 });
                 this.groups$ = observableOf(groups);
+
+                setTimeout(() => {
+                    if(this.groupUniqueNames && this.groupUniqueNames.length > 0) {
+                        this.advanceSearchForm.get('groupUniqueNames').patchValue(this.groupUniqueNames);
+                    }
+                }, 500);
             }
         });
     }
@@ -256,7 +264,10 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 includeItemGreaterThan: false
             }),
         });
-        this.advanceSearchForm.patchValue(this.advanceSearchRequest.dataToSend);
+
+        if(this.advanceSearchRequest) {
+            this.advanceSearchForm.patchValue(this.advanceSearchRequest.dataToSend);
+        }
     }
 
     public setVoucherTypes() {
