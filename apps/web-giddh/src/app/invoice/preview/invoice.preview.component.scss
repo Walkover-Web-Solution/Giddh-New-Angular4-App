@@ -669,7 +669,7 @@ span.icon-export-icon {
         margin-top: 0 !important;
     }
     .desktop-view-btn {
-        display: none;
+        display: none !important;
     }
     .mobile-search {
         display: flex;
@@ -709,7 +709,6 @@ span.icon-export-icon {
         justify-content: center;
         margin-bottom: 0;
         font-size: 14px;
-        margin-top: 15px;
     }
     .invoice-control .nav.nav-tabs {
         margin-bottom: 28px;
