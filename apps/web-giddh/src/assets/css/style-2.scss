@@ -6520,7 +6520,7 @@ table td[class*=col-]:last-child {
     border-right: 0 !important;
 } */
 
-.total_col td {
+.total-col td {
     border: 0 !important;
 }
 
@@ -6569,7 +6569,7 @@ table td[class*=col-]:last-child {
     color: rgba(0, 0, 0, 0.4);
 }
 
-.total_col td {
+.total-col td {
     border: 0;
 }
 
@@ -9597,7 +9597,7 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
-.total_col bs-tooltip-container.tooltip .tooltip-inner{
+.total-col bs-tooltip-container.tooltip .tooltip-inner{
     min-width: 150px !important;
     width: 150px !important;
     max-width: 150px !important;

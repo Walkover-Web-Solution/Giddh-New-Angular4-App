@@ -51,7 +51,7 @@ input {
 // table td[class*=col-]:last-child {
 //     border-right: 0 !important;
 // }
-.total_col td {
+.total-col td {
     border: 0 !important;
 }
 .ledger-main .form-control {
@@ -131,7 +131,7 @@ input {
         right: 15px;
     }
 }
-.total_col td {
+.total-col td {
     border: 0;
 }
 .ledger-stat span {
@@ -342,10 +342,10 @@ sh-select:focus {
 .ledger-row input[type="checkbox"] {
     margin-right: 15px;
 }
-.ledger-book .ledger-footer-1 .total_col .border-top {
+.ledger-book .ledger-footer-1 .total-col .border-top {
     border-top: 1px solid $gainsboro !important;
 }
-.ledger-book .ledger-footer-1 .total_col .bdrT {
+.ledger-book .ledger-footer-1 .total-col .bdrT {
     border: none;
 }
 
