@@ -47,7 +47,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     @ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
     @ViewChild('exportDaybookModal', {static: true}) public exportDaybookModal: ModalDirective;
     @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent, static: false }) public dateRangePickerCmp: DaterangePickerComponent;
-    @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
+    @ViewChild('paginationChild', {static: false}) public paginationChild: ElementViewContainerRef;
     /** Daybook advance search component reference */
     @ViewChild('daybookAdvanceSearch', {static: true}) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
     public datePickerOptions: any = {

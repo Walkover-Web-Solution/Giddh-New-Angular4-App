@@ -5238,6 +5238,12 @@ form#groupDetailForm {
     .universal-date {
         margin-right: 0;
     }
+
+    bs-datepicker-container {
+        transform: translate(-50%, -50%) !important;
+    }
+
+    
 }
 
 @media only screen and (max-width: 1024px) {

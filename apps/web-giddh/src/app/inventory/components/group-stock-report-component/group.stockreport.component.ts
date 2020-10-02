@@ -647,7 +647,10 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
     //******* Advance search modal *******//
     public resetFilter() {
+        this.showAdvanceSearchModal = true;
+        this.advanceSearchAction('clear');
         this.isFilterCorrect = false;
+        this.showAdvanceSearchModal = false;
         this.GroupStockReportRequest.sort = 'asc';
         this.GroupStockReportRequest.sortBy = null;
         this.GroupStockReportRequest.entity = null;
@@ -662,7 +665,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         if (this.sourceName) {
             this.sourceName.nativeElement.value = null;
         }
-        this.advanceSearchForm.controls['filterAmount'].setValue(null);
         //Reset Date with universal date
         this.universalDate$.subscribe(a => {
             if (a) {
@@ -671,7 +673,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 this.toDate = moment(a[1]).format(this._DDMMYYYY);
             }
         });
-        //Reset Date
 
         this.getGroupReport(true);
     }
@@ -683,8 +684,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
     public advanceSearchAction(type?: string) {
         if (type === 'cancel') {
-            this.showAdvanceSearchModal = false;
             this.clearModal();
+            this.showAdvanceSearchModal = false;
             this.advanceSearchModel.hide(); // change request : to only reset fields
             return;
         } else if (type === 'clear') {

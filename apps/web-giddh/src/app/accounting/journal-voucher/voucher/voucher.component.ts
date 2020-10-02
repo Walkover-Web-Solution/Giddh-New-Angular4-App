@@ -982,11 +982,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public validateTransaction(transactions) {
         let validEntry = this.removeBlankTransaction(transactions);
         let entryIsValid = true;
-        forEach(validEntry, function (obj: any, idx) {
+        validEntry.forEach(obj => {
             if (obj.particular && !obj.amount) {
                 obj.amount = 0;
             } else if (obj && !obj.particular) {
-                this.entryIsValid = false;
+                entryIsValid = false;
                 return false;
             }
         });

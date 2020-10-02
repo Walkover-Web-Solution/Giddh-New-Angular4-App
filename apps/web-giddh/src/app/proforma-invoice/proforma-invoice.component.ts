@@ -199,7 +199,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('invoiceForm', { read: NgForm, static: true }) public invoiceForm: NgForm;
     @ViewChild('discountComponent', { static: false }) public discountComponent: DiscountListComponent;
     @ViewChild('taxControlComponent', { static: false }) public taxControlComponent: TaxControlComponent;
-    @ViewChild('customerNameDropDown', { static: true }) public customerNameDropDown: ShSelectComponent;
+    @ViewChild('customerNameDropDown', { static: false }) public customerNameDropDown: ShSelectComponent;
 
     @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
     @ViewChildren('description') public description: QueryList<ElementRef>;
@@ -1348,7 +1348,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     let tempSelectedAcc: AccountResponseV2;
                     this.updatedAccountDetails$.pipe(take(1)).subscribe(acc => tempSelectedAcc = acc);
+                    if (this.customerNameDropDown) {
+                        this.customerNameDropDown.clear();
+                    }
                     if (tempSelectedAcc) {
+                        this.customerAcList$ = observableOf([{ label: tempSelectedAcc.name, value: tempSelectedAcc.uniqueName, additional: tempSelectedAcc }]);
                         if (tempSelectedAcc.addresses && tempSelectedAcc.addresses.length) {
                             tempSelectedAcc.addresses = [_.find(tempSelectedAcc.addresses, (tax) => tax.isDefault)];
                         }
