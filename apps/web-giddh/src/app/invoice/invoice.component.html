@@ -84,7 +84,7 @@
                                 </div>
                             </tab>
 
-                            <tab heading="Setting" (selectTab)="tabChanged('settings', $event , 'debit note')" [active]="activeTab === 'settings'">
+                            <tab *ngIf="selectedVoucherType !== 'debit note' && selectedVoucherType !== 'credit note'" heading="Setting" (selectTab)="tabChanged('settings', $event , 'debit note')" [active]="activeTab === 'settings'">
                                 <div *ngIf="activeTab === 'settings'">
                                     <app-invoice-setting></app-invoice-setting>
                                 </div>
