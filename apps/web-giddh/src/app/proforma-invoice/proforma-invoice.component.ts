@@ -524,6 +524,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public copyPurchaseBillInitialized: boolean = false;
     /* This will hold the existing PO entries with quantity */
     public existingPoEntries: any[] = [];
+    /* This will hold the transaction amount */
+    public transactionAmount: number = 0;
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -2549,7 +2551,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateBalanceDue();
     }
 
-    public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass) {
+    public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false) {
+        if(fromTransactionField && this.transactionAmount === trx.amount) {
+            this.transactionAmount = 0;
+            return;
+        }
+
         if(trx.amount) {
             let transactionAmount = trx.amount.toString();
 
@@ -2586,6 +2593,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.calculateOtherTaxes(entry.otherTaxModal, entry);
         this.calculateTcsTdsTotal();
         this.calculateBalanceDue();
+
+        this.transactionAmount = 0;
         // /** In case of sales invoice if invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal */
         // if (this.isSalesInvoice && this.totalAdvanceReceiptsAdjustedAmount && this.isUpdateMode) {
         //     if (this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment() < 0) {
@@ -4923,6 +4932,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (Number(transaction.amount) === 0) {
             transaction.amount = undefined;
         }
+        this.transactionAmount = transaction.amount;
     }
 
     public onBlurInvoiceDate(index) {

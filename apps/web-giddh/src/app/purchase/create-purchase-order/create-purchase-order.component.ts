@@ -316,6 +316,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     private innerEntryIndex: number;
     /* Observable for new stock created */
     public newlyCreatedStockAc$: Observable<INameUniqueName>;
+    /* This will hold the transaction amount */
+    public transactionAmount: number = 0;
 
     constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService, private modalService: BsModalService) {
         this.getInvoiceSettings();
@@ -1506,9 +1508,15 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      *
      * @param {SalesEntryClass} entry
      * @param {SalesTransactionItemClass} trx
+     * @param {SalesTransactionItemClass} fromTransactionField
      * @memberof CreatePurchaseOrderComponent
      */
-    public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass): void {
+    public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false): void {
+        if(fromTransactionField && this.transactionAmount === trx.amount) {
+            this.transactionAmount = 0;
+            return;
+        }
+
         trx.amount = Number(trx.amount);
         if (trx.isStockTxn) {
             trx.rate = giddhRoundOff((trx.amount / trx.quantity), this.ratePrecision);
@@ -1519,6 +1527,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.calculateEntryTotal(entry, trx);
         this.calculateOtherTaxes(entry.otherTaxModal, entry);
         this.calculateTcsTdsTotal();
+
+        this.transactionAmount = 0;
     }
 
     /**
@@ -1873,6 +1883,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         if (Number(transaction.amount) === 0) {
             transaction.amount = undefined;
         }
+        this.transactionAmount = transaction.amount;
     }
 
     /**
