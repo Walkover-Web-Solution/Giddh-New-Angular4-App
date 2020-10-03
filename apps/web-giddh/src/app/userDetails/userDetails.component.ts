@@ -138,6 +138,10 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                 if(this.activeTab === "auth-key") {
                     this.setCurrentPageTitle("Api");
                 }
+            } else if (!params['type'] && !this.activeTab) {
+                this.setStateDetails("auth-key");
+                this.activeTab = "auth-key";
+                this.setCurrentPageTitle("Api");
             }
         });
 

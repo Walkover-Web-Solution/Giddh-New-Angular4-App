@@ -1249,7 +1249,7 @@
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();" class="text-right item-amount" style="height:1px;">
                                         <div class="td-wrapper">
                                             <div style="flex: 1;">
-                                                <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction)"
+                                                <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
                                                     (click)="transactionAmountClicked(transaction)" placeholder="Amount"
                                                     name="transaction.amount_{{entryIdx}}"
                                                     class="form-control text-right" [(ngModel)]="transaction.amount"
@@ -2146,7 +2146,7 @@
 
                                                 <label class="card-label text-right">Amount</label>
                                                 <div style="flex: 1;">
-                                                    <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction)"
+                                                    <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
                                                         (click)="transactionAmountClicked(transaction)" placeholder="Amount"
                                                         name="transaction.amount_{{entryIdx}}" class="form-control text-right"
                                                         [(ngModel)]="transaction.amount" decimalDigitsDirective
