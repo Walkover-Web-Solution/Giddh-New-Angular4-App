@@ -1,4 +1,4 @@
-@import "../../../../../assets/css/color.scss";
+invoice-sidebar@import "../../../../../assets/css/color.scss";
 .invoice-modal-content:after {
     position: fixed;
     content: "";
@@ -34,7 +34,7 @@
 .invoice-sidebar {
     background-color: $white;
     padding: 0;
-    height: calc(100vh - 20px);
+    height: calc(100vh - 120px);
 }
 
 .d-flex {
