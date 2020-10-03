@@ -1,23 +1,23 @@
-<section autocomplete="off" class="row">
+<section autocomplete="off">
 	<div>
 		<section class="clearfix">
-			<div class="form-header">
+			<div class="form-header row">
 				<h3 *ngIf="addGroup">Create Group</h3>
 				<h3 *ngIf="!addGroup">Update Group</h3>
 			</div>
 			<button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
 
-			<div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-				<div class="aside-pane-form">
+			<div>
+				<div class="aside-pane-form col-sm-12 col-md-12 col-lg-12 col-xs-12">
 					<form name="updateStockGroup" class="form_body" [formGroup]="addGroupForm" novalidate="">
 						<div class="form_bg clearfix">
 							<div class="row">
-								<div class="form-group col-xs-6">
+								<div class="form-group col-xs-6 col-sm-6">
 									<label>Name <sup>*</sup></label>
 									<input type="text" name="name" (change)="generateUniqueName()" class="form-control"
 										formControlName="name" />
 								</div>
-								<div class="form-group col-xs-6">
+								<div class="form-group col-xs-6 col-sm-6">
 									<label>Unique Name <sup>*</sup></label>
 									<input type="text" name="uniqueName" UniqueNameDirective textCaseChangeDirective
 										[control]="addGroupForm.get('uniqueName')"
@@ -26,20 +26,20 @@
 								</div>
                             </div>
                             <div class="row">
-								<div class="form-group col-xs-6">
+								<div class="form-group col-xs-6 col-sm-6">
 									<label>HSN Code</label>
 									<input type="text" class="form-control" maxlength="10" decimalDigitsDirective
                                         formControlName="hsnNumber" />
 								</div>
-								<div class="form-group col-xs-6">
+								<div class="form-group col-xs-6 col-sm-6">
 									<label>SAC Code</label>
 									<input type="text" class="form-control" maxlength="10" formControlName="sacNumber"
                                         decimalDigitsDirective />
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-xs-6">
-									<div class="pdB1" [hidden]="defaultGrpActive">
+								<div class="col-xs-6 col-sm-6">
+									<div class="pd-b1" [hidden]="defaultGrpActive">
 										<label for="isSelfParentUpdt">
 											<input type="checkbox" formControlName="isSubGroup" id="isSelfParentUpdt"
 												name="parentStockGroup">Is

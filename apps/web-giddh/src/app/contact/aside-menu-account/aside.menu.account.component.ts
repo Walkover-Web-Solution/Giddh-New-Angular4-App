@@ -8,7 +8,7 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { GroupService } from '../../services/group.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { GroupResponse } from '../../models/api-models/Group';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
@@ -30,8 +30,8 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public getUpdateList: EventEmitter<string> = new EventEmitter();
-    @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
-    @ViewChild('addAccountNewComponent') public addAccountNewComponent: AccountAddNewDetailsComponent;
+    @ViewChild('deleteAccountModal', {static: true}) public deleteAccountModal: ModalDirective;
+    @ViewChild('addAccountNewComponent', {static: true}) public addAccountNewComponent: AccountAddNewDetailsComponent;
 
     public flatGroupsOptions: IOption[];
     public isGstEnabledAcc: boolean = true; // true only for groups will not under other

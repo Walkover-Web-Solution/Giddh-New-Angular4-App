@@ -1,0 +1,78 @@
+@import "../../assets/css/color.scss";
+.h-25px {
+    height: 25px;
+}
+
+.pad-8 {
+    padding: 8px;
+}
+
+.div-table {
+    display: table;
+    width: 50%;
+    background-color: $white;
+    padding: 15px 30px;
+}
+
+.h3-heading {
+    text-align: center;
+    margin: 20px 0;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.div-row {
+    display: flex;
+    margin-top: 10px;
+    width: auto;
+}
+
+.head-row {
+    display: flex;
+}
+
+.div-cell {
+    float: left;
+    display: table-column;
+    width: 150px;
+    font-size: 14px;
+}
+
+.align-end {
+    text-align: end;
+}
+.align-center {
+    align-items: center;
+}
+.d-initial {
+    display: initial;
+}
+.d-initial label {
+    justify-content: left;
+}
+.form-inline{
+    form{
+        width: 100%;
+        display: flex;
+        .select-fields{
+            width: 100%;
+        }
+    }
+}
+@media(max-width:991px){
+    .div-table {
+        display: block;
+        width: 100%;
+    }
+    .d-initial{
+       width: 25%;
+    }
+    .h3-heading{
+        margin: 0;
+    }
+    .div-row{
+        .div-cell{
+            font-size: 14px !important;
+        }
+    }
+}

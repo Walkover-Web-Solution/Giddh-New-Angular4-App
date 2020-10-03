@@ -1,21 +1,36 @@
 <div style="min-height:100%;">
-    <div class="inventory-controll">
+    <div class="inventory-control">
         <tabset #inventoryStaticTabs>
 
-            <tab heading="Inventory" (select)="redirectUrlToActiveTab('inventory', $event)"
+            <tab heading="Inventory" (selectTab)="redirectUrlToActiveTab('inventory', $event)"
                 [active]="activeTabIndex === 0">
                 <!--sidebar-->
                 <ng-container *ngIf="activeTabIndex === 0 && activeView !== 'receipt'">
-                    <inventory-sidebar></inventory-sidebar>
+                    <inventory-sidebar *ngIf="!isMobileScreen || (isMobileScreen && activeView !== 'group')"></inventory-sidebar>
                     <!--/sidebar-->
 
-                    <section class="rightBar">
+                    <section class="right-bar" *ngIf="!isMobileScreen || (isMobileScreen && activeView === 'group')"
+                    [ngClass]="{'welcome-inventory-page':!activeView}"
+                    >
                         <!-- uiView: inventory-detail -->
-                        <section class="container-fluid  clearfix pdT2">
-                            <div *ngIf="activeView" class="d-flex mb-1 branch-warehouse-filter">
-                                <sh-select class="multi-select branch-filter sh-select-border" (ngModelChange)="loadReportByBranch($event)" [options]="branches" [placeholder]="'Select Branch'" [ngModel]="currentBranchAndWarehouseFilterValues.branch"></sh-select>
-                                <sh-select class="multi-select sh-select-border warehouse-filter" #warehouseFilter (ngModelChange)="loadReportByWarehouse($event)" [placeholder]="'Select Warehouse'"  [options]="warehouses" [ngModel]="currentBranchAndWarehouseFilterValues.warehouse"></sh-select>
+                        <section class="container-fluid  clearfix pt-15">
+
+                        <div class="wrap-top-inventory">
+                            <div *ngIf="isMobileScreen && activeView === 'group'" class="mb-15">
+                                    <button class="btn btn-sky-blue" [routerLink]="['/pages/inventory/']" (click)="activeView = null">Back</button>
                             </div>
+                            <div *ngIf="activeView" class="d-flex mr-b1 branch-warehouse-filter">
+                                <sh-select *ngIf="branches && branches.length > 1" class="multi-select branch-filter sh-select-border"
+                                    (ngModelChange)="loadReportByBranch($event)" [options]="branches" [placeholder]="'Select Branch'"
+                                    [(ngModel)]="currentBranchAndWarehouseFilterValues.branch"></sh-select>
+                                <sh-select *ngIf="warehouses && warehouses.length > 1" class="multi-select sh-select-border warehouse-filter"
+                                    #warehouseFilter (ngModelChange)="loadReportByWarehouse($event)" [ItemHeight]="41" [options]="warehouses"
+                                    [placeholder]="'Select Warehouse'" [(ngModel)]="currentBranchAndWarehouseFilterValues.warehouse"></sh-select>
+                            </div>
+
+                        </div>
+
+
                             <div *ngIf="activeView === 'stock'">
                                 <invetory-stock-report [currentBranchAndWarehouse]="currentBranchAndWarehouseFilterValues"></invetory-stock-report>
                             </div>
@@ -32,7 +47,7 @@
                 </ng-container>
             </tab>
 
-            <tab heading="Job Work" (select)="redirectUrlToActiveTab('jobwork', $event)"
+            <tab heading="Job Work" (selectTab)="redirectUrlToActiveTab('jobwork', $event)"
                 [active]="activeTabIndex === 1">
 
                 <ng-container *ngIf="activeTabIndex === 1">
@@ -42,7 +57,7 @@
             </tab>
 
 
-            <tab heading="Manufacturing" (select)="redirectUrlToActiveTab('manufacturing', $event)"
+            <tab heading="Manufacturing" (selectTab)="redirectUrlToActiveTab('manufacturing', $event)"
                 [active]="activeTabIndex === 2">
 
                 <ng-container *ngIf="activeTabIndex === 2">
@@ -51,7 +66,7 @@
 
             </tab>
 
-            <tab heading="Report" (select)="redirectUrlToActiveTab('report', $event)" [active]="activeTabIndex === 3">
+            <tab heading="Report" (selectTab)="redirectUrlToActiveTab('report', $event)" [active]="activeTabIndex === 3">
                 <ng-container *ngIf="activeTabIndex === 3">
                     <new-branch-transfer-list></new-branch-transfer-list>
                 </ng-container>

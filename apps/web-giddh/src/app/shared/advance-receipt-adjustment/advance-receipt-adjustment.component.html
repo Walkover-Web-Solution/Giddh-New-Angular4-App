@@ -12,7 +12,7 @@
                 The adjusted amount of the linked invoice's is more than this receipt; update them first.
             </span>
             <div class="row mb-2">
-                <div class="col-md-8 mrT">
+                <div class="col-md-8 mr-t">
                     <div class="form-group">
                         <label>Customer Name </label>
                         <input type="text" class="form-control" name="customerName" [(ngModel)]="adjustPayment.customerName" readonly disabled>
@@ -55,7 +55,7 @@
                                         <ng-template #optionTemplate let-option="option">
                                             <a href="javascript:void(0)" class="list-item">
                                                 <div class="item">{{option.label}}</div>
-                                                <div class="item_unq">
+                                                <div class="item-unique">
                                                     <p class="font-12 text-gray mb-0">(Dated: {{option.additional.voucherDate}})
                                                     </p>
                                                     <p class="font-12 text-gray mb-0">(Amount: {{currencySymbol}}{{option?.additional?.balanceDue?.amountForAccount}})

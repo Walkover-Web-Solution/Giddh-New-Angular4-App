@@ -1,7 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { TabsModule, BsDatepickerModule, BsDropdownModule, DatepickerModule, PaginationComponent, PaginationModule, ModalModule } from 'ngx-bootstrap';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
 import { ClickOutsideModule } from "ng-click-outside";
 import { FormsModule } from "@angular/forms";

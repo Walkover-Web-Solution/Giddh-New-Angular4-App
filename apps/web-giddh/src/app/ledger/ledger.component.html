@@ -1,6 +1,6 @@
 <div class="btn-group ledger-ellipse" dropdown dropdown placement="left" *ngIf="isMobileScreen">
-    <button id="button-basic" dropdownToggle type="button" class="dropdown-toggle btn" aria-controls="dropdown-basic">
-        <i class="fa fa-ellipsis-v"></i>
+    <button id="button-basic" dropdownToggle type="button" class="dropdown-toggle btn mr-0" aria-controls="dropdown-basic">
+        <i class="icon-dots-three-vertical"></i>
     </button>
     <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
         <!-- <li role="menuitem"><a class="dropdown-item" href="javascript:void(0)" (click)="onOpenAdvanceSearch()">Advance Search</a></li> -->
@@ -12,11 +12,11 @@
 </div>
 <section class="container ledger-section" [hidden]="isShowLedgerColumnarReportTable">
     <!-- region ledger table-->
-    <div class="ledg-head transactions-page mt-2 pos-rel">
+    <div class="ledg-head transactions-page mt-15 pos-rel">
         <!-- region ledger header -->
-        <div class="clearfix row">
+        <div class="clearfix row mb-15">
             <!-- region currency toggle -->
-            <div class="col-md-4 col-sm-4 col-xs-12 search-ledger-wrapper">
+            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 search-ledger-wrapper">
                 <div class="d-flex search-ledger-field">
                     <!-- please remove hidden attribute after functionality works -->
                     <div class="select-all-icons" *ngIf="checkedTrxWhileHovering.length > 0 && isMobileScreen">
@@ -51,10 +51,10 @@
                                 (keyup)="search(searchText)" placeholder="Search ledger" #ledgerSearchTerms>
                             <i class="icon-search1 pos-abs"></i>
                         </span>
-                        <a class="cp mrL1 clear-filter-btn"
+                        <a class="cp mr-l1 clear-filter-btn"
                             *ngIf="(searchText || isAdvanceSearchImplemented) && isMobileScreen" href="javascript:;"
                             (click)="resetAdvanceSearch()" tooltip="Reset Advance Search">
-                            <i aria-hidden="true" class="glyphicon glyphicon-refresh"></i> Clear Filter
+                            <i aria-hidden="true" class="icon-refrsh"></i> Clear Filter
                         </a>
                     </div>
 
@@ -70,14 +70,14 @@
                             [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                             class="giddh-datepicker date-range-picker" />
                     </span>
-                    <span *ngIf="!isMobileScreen" id="advance-filter" class="advance-icon d-flex advance-search-filter pointer"
+                    <span *ngIf="!isMobileScreen" id="advance-filter" (click)="onOpenAdvanceSearch()" class="advance-icon d-flex advance-search-filter pointer"
                         [tooltip]="'Advance Search'" [placement]="'top'"
                         [ngStyle]="{'margin-left': checkedTrxWhileHovering.length === 0 ? '7px': '0px'}">
-                        <span class="icon-advance-filter" (click)="onOpenAdvanceSearch()"></span>
+                        <span class="icon-advance-filter"></span>
                     </span>
-                    <a class="cp mrL1 clear-filter-btn" id="clear-filter" *ngIf="isAdvanceSearchImplemented && !isMobileScreen"
+                    <a class="cp mr-l1 clear-filter-btn" id="clear-filter" *ngIf="isAdvanceSearchImplemented && !isMobileScreen"
                         href="javascript:;" (click)="resetAdvanceSearch()" tooltip="Reset Advance Search">
-                        <i aria-hidden="true" class="glyphicon glyphicon-refresh"></i> Clear Filter
+                        <i aria-hidden="true" class="icon-refrsh"></i> Clear Filter
                     </a>
                     <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0 && !isMobileScreen">
 
@@ -100,11 +100,11 @@
                 </div>
             </div>
 
-            <div class="col-md-4 col-sm-4  col-xs-12 text-center col-xs-12 daterngoption" *ngIf="!isMobileScreen">
+            <div class="col-lg-4 col-md-12 col-sm-12  col-xs-12 text-center col-xs-12 daterngoption" *ngIf="!isMobileScreen">
                 <!-- (hideDaterangepicker)="selectedDate($event)"  -->
                 <div class="advanceSearchByDate date-advance-search">
                     <!-- <span class="icon-calender "></span> -->
-                    <span class="inputWrapper">
+                    <span class="input-wrapper">
                         <!-- <input type="text" class="form-control daterange_picker_ledger" daterangepicker
                             [options]="datePickerOptions" (applyDaterangepicker)="selectedDate($event)"
                             name="daterangeInput" /> -->
@@ -118,11 +118,11 @@
                 <!--type="text" ng-model="cDate" options="opts" required="">-->
             </div>
             <!-- endregion -->
-            <div class="col-md-4 col-sm-4 col-xs-12 text-right C-flex-end search-options" *ngIf="!isMobileScreen">
+            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-right C-flex-end search-options" *ngIf="!isMobileScreen">
                 <div class="d-flex xs-width-100 ledger-head-top">
 
                     <div *ngIf="isLedgerAccountAllowsMultiCurrency" class="advanc-search-block">
-                        <span class="mr-1 d-inilne-block font-14">{{ baseCurrencyDetails?.code }}</span>
+                        <span class="mr-15 d-inilne-block font-14">{{ baseCurrencyDetails?.code }}</span>
 
                         <div class="toggle d-inline-block currencyToggler" data-key="disabled">
 
@@ -136,7 +136,7 @@
 
                         </div>
 
-                        <span class="ml-1 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
+                        <span class="ml-15 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
                     </div>
 
                     <div class="d-flex">
@@ -157,7 +157,7 @@
         </div>
         <div *ngIf="isLedgerAccountAllowsMultiCurrency && isMobileScreen" class="advanc-search-block
             mt-05">
-            <span class="mr-1 d-inilne-block font-14">{{ baseCurrencyDetails?.code }}</span>
+            <span class="mr-15 d-inilne-block font-14">{{ baseCurrencyDetails?.code }}</span>
 
             <div class="toggle d-inline-block currencyToggler" data-key="disabled">
 
@@ -171,7 +171,7 @@
 
             </div>
 
-            <span class="ml-1 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
+            <span class="ml-15 d-inline-block font-14">{{ foreignCurrencyDetails?.code }}</span>
         </div>
         <!-- endregion -->
         <div class="custom-tabs mt-2 mb-2">
@@ -192,8 +192,8 @@
 
         <!-- region bank ledgers-->
         <div class="clearfix"></div>
-        <h1 class="mrT2 primary_clr" *ngIf="isBankTransactionLoading">Loading Transactions...</h1>
-        <section id="eledgerwrap" class="mrT2" *ngIf="lc.showEledger">
+        <h1 class="mr-t2 primary_clr" *ngIf="isBankTransactionLoading">Loading Transactions...</h1>
+        <section id="eledgerwrap" class="mr-t2" *ngIf="lc.showEledger">
             <div class="alert alert-danger ledger-book fade in pr" style="padding-right:15px">
                 <button type="button" class="close">
                     <span style="font-size:12px;font-weight:normal"
@@ -263,12 +263,11 @@
                                                     <tbody class="ledger-main">
                                                         <tr class="ledger-row"
                                                             [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
-
                                                             <td class="col-xs-3 col-md-3 col-lg-3">
                                                                 <div class="d-flex align-items-center"
                                                                      >
                                                                     <span class="pl-05">
-                                                                        <input type="checkbox" id="{{'transaction-mapped-select-entry-dr-' + i}" (click)="selectEntryForBulkAction($event, item)" /></span>
+                                                                        <input type="checkbox" id="{{'transaction-mapped-select-entry-dr-' + i}}" (click)="selectEntryForBulkAction($event, item)" /></span>
                                                                     <span class="ml-05">
                                                                         <input class="form-control" [maxlength]="10"
                                                                             autocomplete="off" name="bsdateledger"
@@ -304,7 +303,7 @@
                                                                                     style="border-bottom: 1px solid #ccc;">
                                                                                     <div class="item">{{ option.label }}
                                                                                     </div>
-                                                                                    <div class="item_unq">
+                                                                                    <div class="item-unique">
                                                                                         {{ option.additional?.uniqueName }}
                                                                                     </div>
                                                                                 </a>
@@ -316,10 +315,10 @@
                                                                                     style="border-bottom: 1px solid #ccc;">
                                                                                     <div class="item">{{ option.label }}
                                                                                     </div>
-                                                                                    <div class="item_unq">
+                                                                                    <div class="item-unique">
                                                                                         {{ option.additional?.uniqueName }}
                                                                                     </div>
-                                                                                    <div class="item_stock">Stock:
+                                                                                    <div class="item-stock">Stock:
                                                                                         {{ option.additional?.stock.name }}
                                                                                     </div>
                                                                                 </a>
@@ -427,7 +426,7 @@
                                                                                     style="border-bottom: 1px solid #ccc;">
                                                                                     <div class="item">{{ option.label }}
                                                                                     </div>
-                                                                                    <div class="item_unq">
+                                                                                    <div class="item-unique">
                                                                                         {{ option.additional?.uniqueName }}
                                                                                     </div>
                                                                                     <!-- <span class="list-item" style="visibility: hidden;font-size:11px">&nbsp;</span> -->
@@ -440,10 +439,10 @@
                                                                                     style="border-bottom: 1px solid #ccc;">
                                                                                     <div class="item">{{ option.label }}
                                                                                     </div>
-                                                                                    <div class="item_unq">
+                                                                                    <div class="item-unique">
                                                                                         {{ option.additional?.uniqueName }}
                                                                                     </div>
-                                                                                    <div class="item_stock">Stock:
+                                                                                    <div class="item-stock">Stock:
                                                                                         {{ option.additional?.stock.name }}
                                                                                     </div>
                                                                                 </a>
@@ -525,7 +524,7 @@
         <!-- endregion -->
         <!-- region account table-->
         <!-- Need to make this code correctly working -->
-        <table class="col-xs-12 ledger-head mrT1"
+        <table class="col-xs-12 ledger-head mr-t1 width-100"
             *ngIf="!isMobileScreen || (isMobileScreen && visibleTransactionTypeMobile !== 'all')">
             <thead>
                 <tr>
@@ -545,6 +544,7 @@
         <!-- endregion -->
         <div class="mobile-ledger-view clearfix" *ngIf="isMobileScreen">
             <table *ngIf="allTransactionDates && allTransactionDates.length > 0">
+                <tbody>
                 <tr *ngFor="let transactionDate of allTransactionDates;">
                     <td class="border-none pt-0 pb-0">
                         <table width="100%">
@@ -570,12 +570,12 @@
                                         <span class="download-invoice-ledger d-flex"
                                             *ngIf="transactions.attachedFileUniqueName"
                                             (click)="downloadAttachedFile(transactions.attachedFileUniqueName , $event)">
-                                            <i class="glyphicon glyphicon-download pull-left"></i>
+                                            <i class="icon-download-circle pull-left"></i>
                                         </span>
                                         <span class="download-invoice-ledger d-flex"
                                             *ngIf="transactions.voucherGenerated"
                                             (click)="downloadInvoice(transactions.voucherNumber, transactions.voucherGeneratedType, $event)">
-                                            <i class="glyphicon glyphicon-download pull-left"></i>
+                                            <i class="icon-download-circle pull-left"></i>
                                         </span>
                                     </span>
                                 </td>
@@ -593,16 +593,17 @@
                         </table>
                     </td>
                 </tr>
+                </tbody>
             </table>
             <!-- region pagination -->
-            <div class="text-center mrT2 page-count pa">
+            <div class="text-center mr-t2 page-count pa">
                 <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions,</span>
                 <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
 
                 <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
-                    <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
+                    <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
 [boundaryLinks]="true">
-</pagination> -->
+</pagination>
                 </div>
 
             </div>
@@ -617,14 +618,14 @@
 
             <!-- region debit transaction-->
             <div [ngClass]="Shown ? 'active' : ''" hr-item
-                (ngInit)="initNavigator(navigator,$event.nativeElement);    navigator.nextVertical();"
+                (ngInit)="initNavigator(navigator,$event.nativeElement); navigator.nextVertical();"
                 class="left-col-new"
                 [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
 
                 <!-- region debit transaction header-->
                 <table class="width100 h-table table-head hidden-xs">
                     <thead>
-                        <tr class="t-h-bg1">
+                        <tr class="t-h-bg1 row">
                             <th class="col-xs-3 col-md-3 col-lg-3">
                                 <span class="cp">Date</span>
                             </th>
@@ -639,7 +640,7 @@
                 <table class="width100 h-table">
                     <tbody>
                         <!-- region debit transaction if forwardedBalance -->
-                        <tr class="ledger-row" container="body" vr-item tabindex="-1"
+                        <tr class="ledger-row row" container="body" vr-item tabindex="-1"
                             *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && ledgerTxnBalance?.forwardedBalance?.type === 'DEBIT'">
 
                             <!--<td class="col-xs-1 text-center">-->
@@ -671,7 +672,7 @@
                         <!-- endregion -->
 
                         <!-- region debit transaction if no forwardedBalance -->
-                        <tr class="ledger-row" container="body"
+                        <tr class="ledger-row row" container="body"
                             *ngIf="(ledgerTxnBalance?.forwardedBalance?.type !== 'DEBIT') || (ledgerTxnBalance?.forwardedBalance?.amount == 0)">
 
                             <!--<td class="col-xs-1 text-center"><input type="checkbox" [(ngModel)]="debitSelectAll"-->
@@ -688,8 +689,8 @@
                         <!-- endregion -->
 
                         <!-- region debit transaction loop over transactions -->
-                        <tr vr-item tabindex="-1" class="ledger-row "
-                            *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions; let i = index"
+                        <tr vr-item tabindex="-1" class="ledger-row row"
+                            *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions; let i = index;"
                             (dblclick)="showUpdateLedgerModal(txn)" (keydown.enter)="showUpdateLedgerModal(txn)"
                             [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
                             tooltip="{{txn.description}}" (mouseover)="entryHovered(txn.entryUniqueName)"
@@ -714,7 +715,7 @@
                             </td>
 
                             <td class="col-xs-5 col-md-6 col-lg-6" data-title="Particular">
-                                <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center justify-content-between w-100">
 
                                     <div class="ellp">
                                         To
@@ -725,7 +726,7 @@
                                         style="position: unset;align-items: center"
                                         (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)"
                                         tooltip="Download file : {{txn.attachedFileName}}" [placement]="'right'">
-                                        <i class="glyphicon glyphicon-download pull-left"
+                                        <i class="icon-download-circle pull-left"
                                             style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                                     </span>
                                     <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated"
@@ -733,7 +734,7 @@
                                         (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
                                         tooltip="Download {{txn.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{txn.voucherNumber}}"
                                         [placement]="'right'">
-                                        <i class="glyphicon glyphicon-download pull-left"
+                                        <i class="icon-download-circle pull-left"
                                             style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                                     </span>
                                 </div>
@@ -751,19 +752,19 @@
                 </table>
 
                 <!-- region blank ledger-->
-                <table class="width100 h-table" no-tree (click)="$event.stopPropagation();" id="blankLedgerContainer"
+                <table class="width100 h-table" no-tree (click)="$event.stopPropagation();" id="blank-ledger-container"
                     (clickOutside)="hideNewLedgerEntryPopup($event)">
                     <tbody>
 
                         <tr *ngFor="let txn of lc.blankLedger.transactions; let i = index">
 
-                            <td class="width100" *ngIf="txn.type === 'DEBIT'">
+                            <td class="width100 no-left-border" *ngIf="txn.type === 'DEBIT'">
 
                                 <table class="width100">
                                     <tbody class="ledger-main">
-                                        <tr class="ledger-row" container="body">
+                                        <tr class="ledger-row row" container="body">
 
-                                            <td class="col-xs-3 col-md-3 col-lg-3 no-leftBorder" data-title="Date">
+                                            <td class="col-xs-3 col-md-3 col-lg-3" data-title="Date">
                                                 <div class="d-flex align-items-center">
                                                     <span class="ledger-checkbox" style="float: left">
                                                         <!--<input type="checkbox"/>-->
@@ -776,7 +777,6 @@
                                                         [placeholder]="lc.formatPlaceholder" [outsideClick]="true"
                                                         (ngModelChange)="getInvoiceListsForCreditNote(true)"
                                                         (click)="$event.stopPropagation()" autocomplete="off" />
-
                                                 </div>
                                             </td>
 
@@ -807,7 +807,7 @@
                                                                 <a href="javascript:void(0)" class="list-item"
                                                                     style="border-bottom: 1px solid #ccc;">
                                                                     <div class="item">{{ option.label }}</div>
-                                                                    <div class="item_unq">
+                                                                    <div class="item-unique">
                                                                         {{ option.additional?.uniqueName }}</div>
                                                                 </a>
                                                             </ng-container>
@@ -815,9 +815,9 @@
                                                                 <a href="javascript:void(0)" class="list-item"
                                                                     style="border-bottom: 1px solid #ccc;">
                                                                     <div class="item">{{ option.label }}</div>
-                                                                    <div class="item_unq">
+                                                                    <div class="item-unique">
                                                                         {{ option.additional?.uniqueName }}</div>
-                                                                    <div class="item_stock">Stock:
+                                                                    <div class="item-stock">Stock:
                                                                         {{ option.additional?.stock.name }}</div>
                                                                 </a>
                                                             </ng-container>
@@ -892,11 +892,12 @@
 
             <!-- region credit transaction-->
             <div [ngClass]="isHide ? 'active' : 'right-col-new'" class="right-col-new" hr-item
+                (ngInit)="initNavigator(navigator,$event.nativeElement); navigator.nextVertical();"
                 [ngClass]="{bdrL: (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
                 <!-- region credit transaction header-->
                 <table class="width100 h-table hidden-xs">
                     <thead>
-                        <tr class="t-h-bg1">
+                        <tr class="t-h-bg1 row">
                             <th class="col-xs-3 col-md-3 col-lg-3">
                                 <span class="cp">Date</span>
                             </th>
@@ -911,7 +912,7 @@
                     <tbody>
 
                         <!-- region credit transaction if forwardedBalance -->
-                        <tr class="ledger-row" vr-item tabindex="-1"
+                        <tr class="ledger-row row" vr-item tabindex="-1"
                             *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && ledgerTxnBalance?.forwardedBalance?.type === 'CREDIT'">
 
                             <!--<td class="col-xs-1 text-center">-->
@@ -942,7 +943,7 @@
                         <!-- endregion -->
 
                         <!-- region credit transaction no forwardedBalance -->
-                        <tr class="ledger-row"
+                        <tr class="ledger-row row"
                             *ngIf="ledgerTxnBalance?.forwardedBalance?.type !== 'CREDIT' || (ledgerTxnBalance?.forwardedBalance?.amount == 0)">
 
                             <!--<td class="col-xs-1 text-center"><input type="checkbox" [(ngModel)]="creditSelectAll"-->
@@ -960,7 +961,7 @@
                         <!-- endregion -->
 
                         <!-- region credit transaction loop over transactions -->
-                        <tr class="ledger-row " *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions; let i = index"
+                        <tr class="ledger-row row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions; let i = index"
                             (dblclick)="showUpdateLedgerModal(txn)" vr-item tabindex="-1"
                             (keydown.enter)="showUpdateLedgerModal(txn)"
                             [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked}"
@@ -989,7 +990,7 @@
 
                             <td class="col-xs-5 col-md-6 col-lg-6" data-title="Particular">
 
-                                <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center justify-content-between w-100">
                                     <div class="ellp">
                                         By
                                         {{ txn.inventory ? txn.particular.name + ' (' + txn.inventory.stock.name + ')' : txn.particular.name }}
@@ -999,7 +1000,7 @@
                                         style="position: unset;align-items: center"
                                         (click)="downloadAttachedFile(txn.attachedFileUniqueName , $event)"
                                         tooltip="Download file : {{txn.attachedFileName}}" [placement]="'right'">
-                                        <i class="glyphicon glyphicon-download pull-left"
+                                        <i class="icon-download-circle pull-left"
                                             style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                                     </span>
                                     <span class="download-invoice-ledger d-flex" *ngIf="txn.voucherGenerated"
@@ -1007,7 +1008,7 @@
                                         (click)="downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)"
                                         tooltip="Download {{txn.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{txn.voucherNumber}}"
                                         [placement]="'right'">
-                                        <i class="glyphicon glyphicon-download pull-left"
+                                        <i class="icon-download-circle pull-left"
                                             style="font-size:15px;top: 0 !important;margin-top: 1px !important;"></i>
                                     </span>
                                 </div>
@@ -1036,7 +1037,7 @@
 
                                 <table class="width100 h-table">
                                     <tbody class="ledger-main">
-                                        <tr class="ledger-row" container="body">
+                                        <tr class="ledger-row row" container="body">
 
                                             <!--<td class="col-xs-1 text-center">-->
                                             <!---->
@@ -1085,7 +1086,7 @@
                                                                 <a href="javascript:void(0)" class="list-item"
                                                                     style="border-bottom: 1px solid #ccc;">
                                                                     <div class="item">{{ option.label }}</div>
-                                                                    <div class="item_unq">
+                                                                    <div class="item-unique">
                                                                         {{ option.additional?.uniqueName }}</div>
                                                                 </a>
                                                             </ng-container>
@@ -1093,9 +1094,9 @@
                                                                 <a href="javascript:void(0)" class="list-item"
                                                                     style="border-bottom: 1px solid #ccc;">
                                                                     <div class="item">{{ option.label }}</div>
-                                                                    <div class="item_unq">
+                                                                    <div class="item-unique">
                                                                         {{ option.additional?.uniqueName }}</div>
-                                                                    <div class="item_stock">Stock:
+                                                                    <div class="item-stock">Stock:
                                                                         {{ option.additional?.stock.name }}</div>
                                                                 </a>
                                                             </ng-container>
@@ -1174,7 +1175,7 @@
                 <table class="ledger-footer-1" style="width:50%;left:0;bottom:0;float: left;">
                     <tbody>
 
-                        <tr class="total_col">
+                        <tr class="total-col">
 
                             <td colspan="12" class="col-xs-12 text-right white h32"
                                 style="padding-right:10px !important">
@@ -1194,7 +1195,7 @@
 
                         </tr>
 
-                        <tr class="total_col">
+                        <tr class="total-col">
 
                             <td colspan="12" class="col-xs-12 text-right white h32 border-top"
                                 style="padding-right:10px !important;">
@@ -1220,7 +1221,7 @@
                 <table class=" ledger-footer-1 " style="width:50%;right:0;bottom:0;">
                     <tbody>
 
-                        <tr class="total_col">
+                        <tr class="total-col">
 
                             <td colspan="12" class="col-xs-12 text-right white h32"
                                 style="padding-right:10px !important">
@@ -1236,7 +1237,7 @@
 
                         </tr>
 
-                        <tr class="total_col">
+                        <tr class="total-col">
                             <td colspan="12" class="col-xs-12 text-right white h32 border-top"
                                 style="padding-right:10px !important;">
 
@@ -1260,15 +1261,14 @@
             <!-- endregion -->
 
             <!-- region pagination -->
-            <div class="text-center mrT2 page-count pa">
+            <div class="text-center mr-t2 page-count pa">
                 <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions,</span>
                 <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
 
                 <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
-                    <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(
-                    $ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
+                    <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
 [boundaryLinks]="true">
-</pagination> -->
+</pagination>
                 </div>
 
             </div>
@@ -1281,24 +1281,26 @@
 </section>
 
 <div class="container" *ngIf="!isShowLedgerColumnarReportTable">
-    <div class="row">
-        <div class="col-xs-12 text-right mrT1" [hidden]="!isBankOrCashAccount">
-            <button [hidden]="!closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm"
+    <div>
+        <div class="text-right mr-t1" [hidden]="!isBankOrCashAccount">
+            <button [hidden]="!closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm mr-0"
                 (click)="getReconciledBack();">Back
             </button>
-            <div *ngIf="closingBalanceBeforeReconcile  showLoader" class="box mrT2 mrB2 clearfix text-center">
-                <div class="col-xs-6 text-right">Balance as per bank
-                    <h3 class="fs20 primary_clr">{{reconcileClosingBalanceForBank?.amount}}
-                        {{reconcileClosingBalanceForBank?.type}}
-                    </h3>
-                </div>
-                <div class="col-xs-6 text-left">Pending cheque
-                    <h3 class="fs20 primary_clr">{{closingBalanceBeforeReconcile?.amount}}
-                        {{closingBalanceBeforeReconcile?.type}}
-                    </h3>
+            <div *ngIf="closingBalanceBeforeReconcile  showLoader" class="box balance-detail mr-t2 mr-b2 clearfix text-center">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-12 text-right">Balance as per bank
+                        <h3 class="fs20 primary_clr">{{reconcileClosingBalanceForBank?.amount}}
+                            {{reconcileClosingBalanceForBank?.type}}
+                        </h3>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-12 text-left">Pending cheque
+                        <h3 class="fs20 primary_clr">{{closingBalanceBeforeReconcile?.amount}}
+                            {{closingBalanceBeforeReconcile?.type}}
+                        </h3>
+                    </div>
                 </div>
             </div>
-            <button [hidden]="closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm"
+            <button [hidden]="closingBalanceBeforeReconcile || showLoader" class="btn btn-primary btn-sm mr-0"
                 (click)="getReconciliation();">Reconciliation
             </button>
         </div>
@@ -1382,7 +1384,7 @@
 
                         <div class="d-flex debit-credit-amount">
 
-                            <h1 class="mrT font16 greyTextClr d-flex" style="flex-direction: column">Debit
+                            <h1 class="mr-t font16 greyTextClr d-flex" style="flex-direction: column">Debit
                                 <span class="digit-blue mt-1">
                                     {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.debitTotal | giddhCurrency}}
                                 </span>
@@ -1391,7 +1393,7 @@
                                 </span>
                             </h1>
 
-                            <h1 class="mrT font16 greyTextClr d-flex" style="flex-direction: column">Credit
+                            <h1 class="mr-t font16 greyTextClr d-flex" style="flex-direction: column">Credit
                                 <span class="digit-blue mt-1">
                                     {{ ledgerTxnBalance?.currencySymbol}}{{ledgerTxnBalance?.creditTotal | giddhCurrency}}
                                 </span>
@@ -1450,7 +1452,7 @@
 
 <!-- update ladger entry popup -->
 <div bsModal #updateLedgerModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard: true}" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-ledger">
+    <div class="modal-dialog modal-xl modal-ledger">
         <div class="modal-content">
             <div element-view-container-ref #updateledgercomponent=elementviewcontainerref>
             </div>
@@ -1495,9 +1497,10 @@
 
 <!-- Advance search popup -->
 <div bsModal #advanceSearchModel="bs-modal" tabindex="-1" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg advanceSearchModal">
+    <div class="modal-dialog modal-xl advanceSearchModal">
         <div class="modal-content">
-            <advance-search-model #advanceSearchComp [advanceSearchRequest]="advanceSearchRequest" (closeModelEvent)="closeAdvanceSearchPopup($event)"></advance-search-model>
+            <advance-search-model #advanceSearchComp [advanceSearchRequest]="advanceSearchRequest"
+                (closeModelEvent)="closeAdvanceSearchPopup($event)"></advance-search-model>
         </div>
     </div>
 </div>
@@ -1510,12 +1513,12 @@
             <div id="" class="">
                 <div class="modal-header themeBg pdL2 pdR2 clearfix">
                     <h3 class="modal-title bg" id="modal-title">Confirmation </h3>
-                    <i class="fa fa-times text-right close-modal" aria-hidden="true"
+                    <i class="icon-cross text-right close-modal" aria-hidden="true"
                         (click)="onCancelBulkActionConfirmation()"></i>
                 </div>
                 <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
                     <form name="newRole" novalidate class="" autocomplete="off">
-                        <div class="modal_wrap mrB2">
+                        <div class="modal_wrap mr-b2">
                             <h3>Do you want to delete the selected entrie(s)? </h3>
                             <p class="text-gray font-14 mt-05">All their corresponding vouchers and invoices will be
                                 deleted permanently and will no longer be accessible from other modules.</p>
@@ -1544,22 +1547,22 @@
             <div>
                 <div class="modal-header themeBg pdL2 pdR2 clearfix">
                     <h3 class="modal-title bg" id="modal-title">Confirmation</h3>
-                    <i class="fa fa-times text-right close-modal" aria-hidden="true"
+                    <i class="icon-cross text-right close-modal" aria-hidden="true"
                         (click)="onCancelSelectInvoiceModal()"></i>
                 </div>
                 <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
                     <form name="newRole" novalidate class="" autocomplete="off">
-                        <div class="modal_wrap mrB2 text-center">
+                        <div class="modal_wrap mr-b2 text-center">
                             <h2>Select voucher generate option</h2>
                         </div>
-                        <div class="row mrT2 ledger-btn">
-                            <div class="col-xs-6 pr-1 pl-1">
+                        <div class="row mr-t2 ledger-btn">
+                            <div class="col-xs-6 col-sm-6 pr-1 pl-1">
                                 <button type="submit" class="btn btn-block btn-success"
                                     (click)="onSelectInvoiceGenerateOption(false)">
                                     Generate Multiple
                                 </button>
                             </div>
-                            <div class="col-xs-6 pr-1 pl-1">
+                            <div class="col-xs-6 col-sm-6 pr-1 pl-1">
                                 <button type="submit" class="btn btn-block btn-success"
                                     (click)="onSelectInvoiceGenerateOption(true)">
                                     Generate Compound

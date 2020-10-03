@@ -17,10 +17,10 @@
     <div id="template-header" (click)="onClickSection('header')"
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header">
-            <i class="fa fa-pencil"></i>
+            <i class="icon-edit-pencil"></i>
         </a>
         <header>
-            <table class="mrB1">
+            <table class="mr-b1">
                 <tbody>
                     <tr>
                         <td class="text-left vmiddle">
@@ -58,7 +58,7 @@
             <tbody>
                 <tr>
                     <td>
-                        <h4 class="mrB1" *ngIf="fieldsAndVisibility.header.attentionTo?.display"
+                        <h4 class="mr-b1" *ngIf="fieldsAndVisibility.header.attentionTo?.display"
                             [ngStyle]="{ 'font-size': inputTemplate.fontLarge +'px'}">Hello Mr. Alok Gangrade,</h4>
                         <p>This is a system generated
 
@@ -89,7 +89,7 @@
     <div id="template-table" class="pos-rel" (click)="onClickSection('table')"
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table">
-            <i class="fa fa-pencil"></i>
+            <i class="icon-edit-pencil"></i>
         </a>
         <table class="item product-table" cellspacing="0" cellpadding="0"
             [ngStyle]="{ 'background-color': inputTemplate.tableColor}">
@@ -285,7 +285,7 @@
     <div id="template-footer" class="clearfix pos-rel" (click)="onClickSection('footer')"
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
-            <i class="fa fa-pencil"></i>
+            <i class="icon-edit-pencil"></i>
         </a>
         <table class="subfooter">
             <tbody>

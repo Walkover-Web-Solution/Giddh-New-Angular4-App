@@ -1,3 +1,4 @@
+@import "../../../assets/css/color.scss";
 .input-group-addon {
     position: relative;
     position: relative;
@@ -14,9 +15,43 @@
         top: 8px;
     }
 }
+
+.custom-select{
+    padding:0 !important;
+}
+.form-group{
+    .input-group {
+        .input-group-addon {
+        border-left: 1px solid $very-light-gray !important;
+    }
+    input{
+            border-left: none !important;
+            border-right: none !important;
+        }
+    }
+
+}
 @media(max-width:768px){
     .multicurrency-checkbox{
         display: block !important;
         font-size: 12px;
+    }
+}
+
+@media (min-width:992px) and (max-width:1359px){
+    .profile-form{
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+    .decimal-system{
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+@media (min-width:1360px) and (max-width:1386px){
+    .number-system{
+        flex-flow: column;
+        display: flex;
     }
 }

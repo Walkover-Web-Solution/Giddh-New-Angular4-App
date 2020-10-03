@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy, EventEmitter, Output, ViewChildren } from '@angular/core';
-import { BsModalRef } from 'ngx-bootstrap';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import { IOption } from '../../../../theme/ng-select/option.interface';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { takeUntil } from 'rxjs/operators';
@@ -217,7 +217,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will output/emit the adjusments 
+     * This will output/emit the adjusments
      *
      * @memberof ReceiptEntryModalComponent
      */

@@ -8,64 +8,64 @@ import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
 
 import {
-	AfterViewInit,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	HostListener,
-	OnDestroy,
-	OnInit,
-	ViewChild,
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    HostListener,
     Input,
     OnChanges,
-    SimpleChanges
+    OnDestroy,
+    OnInit,
+    SimpleChanges,
+    ViewChild
 } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, Subscription, combineLatest as observableCombineLatest } from 'rxjs';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { CompanyResponse, BranchFilterRequest } from '../../../models/api-models/Company';
+import { BranchFilterRequest, CompanyResponse } from '../../../models/api-models/Company';
 import { createSelector } from 'reselect';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { InvViewService } from '../../inv.view.service';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
-	selector: 'invetory-stock-report',  // <home></home>
-	templateUrl: './inventory.stockreport.component.html',
-	styleUrls: ['./inventory.stockreport.component.scss'],
-	animations: [
-		trigger('slideInOut', [
-			state('in', style({
-				transform: 'translate3d(0, 0, 0)'
-			})),
-			state('out', style({
-				transform: 'translate3d(100%, 0, 0)'
-			})),
-			transition('in => out', animate('400ms ease-in-out')),
-			transition('out => in', animate('400ms ease-in-out'))
-		]),
-	]
+    selector: 'invetory-stock-report',  // <home></home>
+    templateUrl: './inventory.stockreport.component.html',
+    styleUrls: ['./inventory.stockreport.component.scss'],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestroy, AfterViewInit {
-	@ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
-	@ViewChild('accountName') public accountName: ElementRef;
-	@ViewChild('shCategory') public shCategory: ShSelectComponent;
-	@ViewChild('shCategoryType') public shCategoryType: ShSelectComponent;
-    @ViewChild('shValueCondition') public shValueCondition: ShSelectComponent;
+    @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: ModalDirective;
+    @ViewChild('accountName', { static: true }) public accountName: ElementRef;
+    @ViewChild('shCategory', { static: true }) public shCategory: ShSelectComponent;
+    @ViewChild('shCategoryType', { static: true }) public shCategoryType: ShSelectComponent;
+    @ViewChild('shValueCondition', { static: true }) public shValueCondition: ShSelectComponent;
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;
 
-	public today: Date = new Date();
-	public activeStock$: string;
+    public today: Date = new Date();
+    public activeStock$: string;
     public stockReport$: Observable<StockReportResponse>;
     /** Stores the message when particular stock is not found */
     public stockNotFoundMessage: string;
@@ -241,7 +241,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public selectedCmp: CompanyResponse;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public advanceSearchModalShow: boolean = false;
-    // Observable to check stock updated successfully
     public updateStockSuccess$: Observable<boolean>;
     public activeStockUniqueName$: Observable<string>;
 
@@ -346,7 +345,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             }
         });
 
-        this.selectedCompany$ = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+        this.selectedCompany$ = this.store.select(createSelector([(sessionStore: AppState) => sessionStore.session.companies, (companyStore: AppState) => companyStore.session.companyUniqueName], (companies, uniqueName) => {
             if (!companies) {
                 return;
             }
@@ -415,30 +414,30 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         }
     }
 
-	@HostListener('document:keyup', ['$event'])
-	public handleKeyboardEvent(event: KeyboardEvent) {
-		if (event.altKey && event.which === 73) { // Alt + i
-			event.preventDefault();
-			event.stopPropagation();
-			this.toggleAsidePane();
-		}
-	}
-
-	public initReport() {
-		// this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
-		// this.toDate = moment().format(this._DDMMYYYY);
-		// this.stockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
-		// this.stockReportRequest.to = moment().format(this._DDMMYYYY);
-		// this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
-		// this.datePickerOptions.endDate = moment().toDate();
-		this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
-		this.stockReportRequest.stockUniqueName = this.stockUniqueName;
-		this.stockReportRequest.transactionType = 'all';
-		this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
+    @HostListener('document:keyup', ['$event'])
+    public handleKeyboardEvent(event: KeyboardEvent) {
+        if (event.altKey && event.which === 73) { // Alt + i
+            event.preventDefault();
+            event.stopPropagation();
+            this.toggleAsidePane();
+        }
     }
 
-	public getStockReport(resetPage: boolean) {
-		this.stockReportRequest.from = this.fromDate || null;
+    public initReport() {
+        // this.fromDate = moment().add(-1, 'month').format(this._DDMMYYYY);
+        // this.toDate = moment().format(this._DDMMYYYY);
+        // this.stockReportRequest.from = moment().add(-1, 'month').format(this._DDMMYYYY);
+        // this.stockReportRequest.to = moment().format(this._DDMMYYYY);
+        // this.datePickerOptions.startDate = moment().add(-1, 'month').toDate();
+        // this.datePickerOptions.endDate = moment().toDate();
+        this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
+        this.stockReportRequest.stockUniqueName = this.stockUniqueName;
+        this.stockReportRequest.transactionType = 'all';
+        this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
+    }
+
+    public getStockReport(resetPage: boolean) {
+        this.stockReportRequest.from = this.fromDate || null;
         this.stockReportRequest.to = this.toDate || null;
         this.invViewService.setActiveDate(this.stockReportRequest.from, this.stockReportRequest.to);
         if (resetPage) {

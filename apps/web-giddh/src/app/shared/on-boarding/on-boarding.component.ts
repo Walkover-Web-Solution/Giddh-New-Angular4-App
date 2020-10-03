@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { OnBoardingType } from 'apps/web-giddh/src/app/app.constant';
 import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModels';
-import * as googleLibphonenumber from 'google-libphonenumber';
-import { ModalDirective } from 'ngx-bootstrap';
+import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 
@@ -31,8 +31,8 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 export class OnBoardingComponent implements OnInit, OnDestroy {
     @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
     @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
-    @ViewChild('logoutModal') public logoutModal: ModalDirective;
-    @ViewChild('companyForm') public companyForm: NgForm;
+    @ViewChild('logoutModal', {static: true}) public logoutModal: ModalDirective;
+    @ViewChild('companyForm', {static: true}) public companyForm: NgForm;
     @Input() public createBranch: boolean = false;
 
     /** Stores the on boarding type of any item */
@@ -92,7 +92,6 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
     public isMobileNumberValid: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public isNewUser: boolean = false;
-    public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public selectedCountry: string = '';
 
     constructor(
@@ -271,8 +270,8 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
 
     public checkMobileNo(ele) {
         try {
-            let parsedNumber = this.phoneUtility.parse('+' + this.company.phoneCode + ele.value, this.company.country);
-            if (this.phoneUtility.isValidNumber(parsedNumber)) {
+            let parsedNumber = parsePhoneNumberFromString('+' + this.company.phoneCode + ele.value, this.company.country as CountryCode);
+            if (parsedNumber.isValid()) {
                 ele.classList.remove('error-box');
                 this.isMobileNumberValid = true;
             } else {

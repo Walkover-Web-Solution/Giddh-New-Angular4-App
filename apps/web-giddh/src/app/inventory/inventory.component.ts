@@ -2,7 +2,9 @@ import { InventoryAction } from '../actions/inventory/inventory.actions';
 import { CompanyResponse, StateDetailsRequest, BranchFilterRequest } from '../models/api-models/Company';
 import { GroupStockReportRequest, StockDetailResponse, StockGroupResponse } from '../models/api-models/Inventory';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
-import { BsDropdownConfig, ModalDirective, TabDirective, TabsetComponent } from 'ngx-bootstrap';
+import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
+import {BsDropdownConfig} from 'ngx-bootstrap/dropdown';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
@@ -25,6 +27,7 @@ import { InventoryService } from '../services/inventory.service';
 import { ToasterService } from '../services/toaster.service';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -41,13 +44,13 @@ export const IsyncData = [
     providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
 })
 export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('branchModal') public branchModal: ModalDirective;
-    @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
-    @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
-    @ViewChild('confirmationModal') public confirmationModal: ModalDirective;
-    @ViewChild('inventoryStaticTabs') public inventoryStaticTabs: TabsetComponent;
+    @ViewChild('branchModal', {static: true}) public branchModal: ModalDirective;
+    @ViewChild('addCompanyModal', {static: true}) public addCompanyModal: ModalDirective;
+    @ViewChild('companyadd', {static: true}) public companyadd: ElementViewContainerRef;
+    @ViewChild('confirmationModal', {static: true}) public confirmationModal: ModalDirective;
+    @ViewChild('inventoryStaticTabs', {static: true}) public inventoryStaticTabs: TabsetComponent;
     /** Warehouse filter instance */
-    @ViewChild('warehouseFilter') warehouseFilter: ShSelectComponent;
+    @ViewChild('warehouseFilter', {static: true}) warehouseFilter: ShSelectComponent;
 
     public dataSyncOption = IsyncData;
     public currentBranch: string = null;
@@ -67,7 +70,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public activeTab: string = 'inventory';
     public activeView: string = null;
     public activeTabIndex: number = 0;
-    public currentUrl: string = null;
     public message: any;
     public GroupStockReportRequest: GroupStockReportRequest;
     public firstDefaultActiveGroup: string = null;
@@ -81,6 +83,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     /** List of branches */
     public branches: Array<any> = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold if it's mobile screen or not */
+    public isMobileScreen: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -96,9 +100,18 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         private stockReportActions: StockReportActions,
         private sideBarAction: SidebarAction,
         private settingsUtilityService: SettingsUtilityService,
-        private toastService: ToasterService
+        private toastService: ToasterService,
+        private breakPointObservar: BreakpointObserver
     ) {
-        this.currentUrl = this.router.url;
+        this.breakPointObservar.observe([
+            '(max-width:1024px)'
+        ]).subscribe(result => {
+            if (this.isMobileScreen && !result.matches) {
+                this.setDefaultGroup();
+            }
+            this.isMobileScreen = result.matches;
+        });
+
         this.activeStock$ = this.store.select(p => p.inventory.activeStock).pipe(takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.select(p => p.inventory.activeGroup).pipe(takeUntil(this.destroyed$));
         this.groupsWithStocks$ = this.store.select(s => s.inventory.groupsWithStocks).pipe(takeUntil(this.destroyed$));
@@ -200,7 +213,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngAfterViewInit() {
-        this.setDefaultGroup();
+        if (!this.isMobileScreen) {
+            this.setDefaultGroup();
+        }
     }
 
     public setDefaultGroup() {
@@ -241,7 +256,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         }
         if (currentUrl) {
-            this.router.navigateByUrl(this.currentUrl);
+            this.router.navigateByUrl(currentUrl);
         } else {
             switch (type) {
                 case 'inventory':
@@ -464,7 +479,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     warehouse = warehouseData.formattedWarehouses[0].uniqueName;
                 }
                 const currentWarehouse = warehouseData.formattedWarehouses.find((data) => data.uniqueName === warehouse || data.value === warehouse);
-                if (currentWarehouse) {
+                if (currentWarehouse && this.warehouseFilter) {
                     this.warehouseFilter.filter = currentWarehouse.label;
                 }
                 this.currentBranchAndWarehouseFilterValues = { warehouse, branch: branchDetails.uniqueName };

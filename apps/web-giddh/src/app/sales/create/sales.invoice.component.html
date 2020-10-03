@@ -1,4 +1,4 @@
-<div class="pdB1 upper-layer   clearfix">
+<div class="pd-b1 upper-layer   clearfix">
     <div class="col-xs-12 clearfix">
         <div class="btn-group" dropdown>
             <button id="button1-basic" dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
@@ -24,7 +24,7 @@
 <ng-container *ngIf="isUpdateDataInProcess">
 
     <div class="loaderClass">
-        <div class="no-data mrT2 loader-main">
+        <div class="no-data mr-t2 loader-main">
             <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
             <div class="spinner2">
                 <div class="cube1"></div>
@@ -37,7 +37,7 @@
 
 <div [hidden]="isUpdateMode && isUpdateDataInProcess" [ngClass]="{'animated': showAnimation, 'fadeIn': showAnimation}">
     <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate autocomplete="off"
-        [ngClass]="{ ' customerInvoiceForm ' : !invFormData.voucherDetails.customerName , 'cusomerInvoiceFormPurchase': isPurchaseInvoice } ">
+        [ngClass]="{ ' customer-invoice-form ' : !invFormData.voucherDetails.customerName , 'customer-invoice-form-purchase': isPurchaseInvoice } ">
         <div class="clearfix sales-invoice-content ">
 
             <div class="upper-layer " [ngClass]="{' firstTable' : !invFormData.voucherDetails.customerName }">
@@ -65,7 +65,7 @@
                                             <a href="javascript:void(0)" class="list-item"
                                                 style="border-bottom: 1px solid #ccc;">
                                                 <div class="item">{{ option.label }}</div>
-                                                <div class="item_unq">{{ option.value }}</div>
+                                                <div class="item-unique">{{ option.value }}</div>
                                             </a>
                                         </ng-template>
                                         <ng-template #notFoundLinkTemplate>
@@ -115,7 +115,7 @@
                                                 <a href="javascript:void(0)" class="list-item"
                                                     style="border-bottom: 1px solid #ccc;">
                                                     <div class="item">{{ option.label }}</div>
-                                                    <div class="item_unq">{{ option.value }}</div>
+                                                    <div class="item-unique">{{ option.value }}</div>
                                                 </a>
                                             </ng-template>
                                         </sales-sh-select>
@@ -137,7 +137,7 @@
                                             <img src="assets/images/new/search_customer_Cash Invoice.svg"
                                                 class="img-responsive search-arrow-image "
                                                 *ngIf="!invFormData.voucherDetails.customerName"
-                                                [ngClass]="{'cashinvoice_tipImg' : isCashInvoice}" />
+                                                [ngClass]="{'cash-invoice-tip-Img' : isCashInvoice}" />
                                         </ng-container>
                                         <div class="row">
                                             <div class="col-xs-6">
@@ -153,7 +153,7 @@
                                                             <div class="col-sm-6 pd">
                                                                 <!-- <label>Country</label> -->
 
-                                                                <label class="salesCountryLabel">
+                                                                <label class="sales-country-label">
                                                                     {{ customerCountryName }}
                                                                 </label>
 
@@ -205,7 +205,7 @@
                                                                 <div class="col-sm-6 pd">
                                                                     <div class="form-group">
 
-                                                                        <label class="salesCountryLabel">
+                                                                        <label class="sales-country-label">
                                                                             {{ customerCountryName }}
                                                                         </label>
                                                                     </div>
@@ -357,7 +357,7 @@
                         <ng-container>
 
                             <section
-                                class="staticInvoiceTable salseInvoicetable clearfix mrB2 whiteBg container-fluid ng-tns-c8-0 ">
+                                class="staticInvoiceTable salseInvoicetable clearfix mr-b2 whiteBg container-fluid ng-tns-c8-0 ">
                                 <div class="table_width-small ">
                                     <table class="table  table-custom-invoice  basic">
                                         <thead>
@@ -500,7 +500,7 @@
                                                                                 style="border-bottom: 1px solid #ccc;">
                                                                                 <div class="item">{{ option.label }}
                                                                                 </div>
-                                                                                <div class="item_unq">
+                                                                                <div class="item-unique">
                                                                                     {{ option.additional?.uniqueName }}
                                                                                 </div>
                                                                             </a>
@@ -511,10 +511,10 @@
                                                                                 style="border-bottom: 1px solid #ccc;">
                                                                                 <div class="item">{{ option.label }}
                                                                                 </div>
-                                                                                <div class="item_unq">
+                                                                                <div class="item-unique">
                                                                                     {{ option.additional?.uniqueName }}
                                                                                 </div>
-                                                                                <div class="item_stock">Stock:
+                                                                                <div class="item-stock">Stock:
                                                                                     {{ option.additional?.stock.uniqueName }}
                                                                                 </div>
                                                                             </a>
@@ -702,7 +702,7 @@
                                                                 class="otherTaxLable" style="font-size:13px;">Other
                                                                 Tax?</label>
                                                         </div>
-                                                        <div *ngIf="entry.isOtherTaxApplicable" class="mrT1">
+                                                        <div *ngIf="entry.isOtherTaxApplicable" class="mr-t1">
 
                                                             <span>
                                                                 <span>
@@ -819,17 +819,17 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="pdT1 pl0 max-600" *ngIf="!isPurchaseInvoice">
-                                                        <label class="mrB1">Message</label>
+                                                    <div class="pd-t1 pl0 max-600" *ngIf="!isPurchaseInvoice">
+                                                        <label class="mr-b1">Message</label>
                                                         <textarea style="height:120px !important" class="form-control"
                                                             name="message2"
                                                             [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                                                     </div>
                                                     <!-- commented due to presently attachfile key is not available in request
         -->
-                                                    <div class="pdT1 pl0 max-600 pos-rel" *ngIf="isPurchaseInvoice">
-                                                        <label class="mrB1"><i
-                                                                class="glyphicon glyphicon-paperclip"></i>
+                                                    <div class="pd-t1 pl0 max-600 pos-rel" *ngIf="isPurchaseInvoice">
+                                                        <label class="mr-b1"><i
+                                                                class="icon-file-path"></i>
                                                             Attachment</label>
                                                         <label class="custom-file-label form-control cp pos-rel"
                                                             for="invoiceFile"> <em *ngIf="!selectedFileName">Drag/Drop
@@ -909,7 +909,7 @@
 
                                                         <div class="tableRow" *ngIf="isSalesInvoice || isCashInvoice">
                                                             <!-- (clickOutside)="dropdownisOpen=false;" [attachOutsideOnClick]="true" -->
-                                                            <div class="tableCell depositeSection">
+                                                            <div class="tableCell deposit-section">
                                                                 <!--
         <div class="btn-group" dropdown #depositDropdown="bs-dropdown" [autoClose]="false">
         -->
@@ -919,14 +919,14 @@
         {{ isPurchaseInvoice ? 'Payment' : 'Deposit' }}
         </button> -->
                                                                     <div (click)="clickedInside($event)"
-                                                                        id="deposit-dropdown" class=" form-group pd1">
+                                                                        id="deposit-dropdown" class=" form-group pd-1">
                                                                         <p>Deposit</p>
                                                                         <ul>
 
 
                                                                             <li role="menuitem">
                                                                                 <div class="">
-                                                                            <li role="menuitem" class="mrT1 ">
+                                                                            <li role="menuitem" class="mr-t1 ">
                                                                                 <div class="clearfix paymentMode">
 
                                                                                     <sh-select class="pull-right "
@@ -949,7 +949,7 @@
                                                                                                 <div class="item">
                                                                                                     {{ option.label }}
                                                                                                 </div>
-                                                                                                <div class="item_unq">
+                                                                                                <div class="item-unique">
                                                                                                     {{ option.value }}
                                                                                                 </div>
                                                                                             </a>
@@ -961,7 +961,7 @@
                                                                                         Mode</label>
                                                                                 </div>
                                                                             </li>
-                                                                            <li class="clearfix mrT1">
+                                                                            <li class="clearfix mr-t1">
                                                                                 <input *ngIf="isSalesInvoice"
                                                                                     type="number"
                                                                                     (blur)="txnChangeOccurred()"
@@ -978,7 +978,7 @@
                                                                                 <label class="pull-right">Amount</label>
                                                                             </li>
                                                                             <li *ngIf="toggleFieldForSales && !isCashInvoice"
-                                                                                class="clearfix mrT1">
+                                                                                class="clearfix mr-t1">
                                                                                 <strong
                                                                                     class="pull-right balanceDueText">{{invFormData.voucherDetails.balanceDue | number:'1.2-2'}}</strong>
                                                                                 <strong class="pull-right">Balance
@@ -1179,7 +1179,7 @@
                                                             <span class="input-group-btn">
                                                                 <button type="button" class="btn btn-default btn-number"
                                                                     data-type="plus" data-field="quant[1]">
-                                                                    <span class="fa fa-plus"></span>
+                                                                    <span class="icon-plus"></span>
                                                                 </button>
                                                             </span>
                                                         </div>
@@ -1206,7 +1206,7 @@
                                                             <span class="input-group-btn">
                                                                 <button type="button" class="btn btn-default btn-number"
                                                                     data-type="plus" data-field="quant[1]">
-                                                                    <span class="fa fa-plus"></span>
+                                                                    <span class="icon-plus"></span>
                                                                 </button>
                                                             </span>
                                                         </div>
@@ -1233,7 +1233,7 @@
                                                             <span class="input-group-btn">
                                                                 <button type="button" class="btn btn-default btn-number"
                                                                     data-type="plus" data-field="quant[1]">
-                                                                    <span class="fa fa-plus"></span>
+                                                                    <span class="icon-plus"></span>
                                                                 </button>
                                                             </span>
                                                         </div>
@@ -1263,7 +1263,7 @@
 
                     </section>
 
-                    <section class="clearfix mrB2 whiteBg container-fluid">
+                    <section class="clearfix mr-b2 whiteBg container-fluid">
                     </section>
 
 
@@ -1300,7 +1300,7 @@
                                         <a href="javascript:void(0)" class="list-item"
                                             style="border-bottom: 1px solid #ccc;">
                                             <div class="item">{{ option.label }}</div>
-                                            <div class="item_unq">{{ option.value }}</div>
+                                            <div class="item-unique">{{ option.value }}</div>
                                         </a>
                                     </ng-template>
                                     <ng-template #notFoundLinkTemplate>
@@ -1339,7 +1339,7 @@
                         <!--                  <ng-template #optionTemplate1 let-option="option">-->
                         <!--                    <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">-->
                         <!--                      <div class="item">{{ option.label }}</div>-->
-                        <!--                      <div class="item_unq">{{ option.value }}</div>-->
+                        <!--                      <div class="item-unique">{{ option.value }}</div>-->
                         <!--                    </a>-->
                         <!--                  </ng-template>-->
                         <!--                </sh-select>-->
@@ -1383,7 +1383,7 @@
                                         <a href="javascript:void(0)" class="list-item"
                                             style="border-bottom: 1px solid #ccc;">
                                             <div class="item">{{ option.label }}</div>
-                                            <div class="item_unq">{{ option.value }}</div>
+                                            <div class="item-unique">{{ option.value }}</div>
                                         </a>
                                     </ng-template>
                                 </sales-sh-select>
@@ -1412,7 +1412,7 @@
                                                         <div class="col-sm-6 pd">
                                                             <!-- <label>Country</label> -->
 
-                                                            <label class="salesCountryLabel">
+                                                            <label class="sales-country-label">
                                                                 {{ customerCountryName }}
                                                             </label>
 
@@ -1462,7 +1462,7 @@
                                                             <div class="col-sm-6 pd">
                                                                 <div class="form-group">
 
-                                                                    <label class="salesCountryLabel">
+                                                                    <label class="sales-country-label">
                                                                         {{ customerCountryName }}
                                                                     </label>
                                                                 </div>
@@ -1761,7 +1761,7 @@
                                 <ul class="list-inline">
                                     <li>Template A</li>
                                     <li><input type="radio" id="radio-1" name="creatInvoice">
-                                        <label for="radio-1" class="btn"><i class="glyphicon glyphicon-star"></i>
+                                        <label for="radio-1" class="btn"><i class="icon-favorite-selected"></i>
                                             Template Default</label>
                                     </li>
                                 </ul>
@@ -1776,7 +1776,7 @@
                                 <ul class="list-inline">
                                     <li>Template B</li>
                                     <li><input type="radio" id="radio-2" name="creatInvoice">
-                                        <label for="radio-2" class="btn"><i class="glyphicon glyphicon-star"></i>
+                                        <label for="radio-2" class="btn"><i class="icon-favorite-selected"></i>
                                             Template Default</label>
                                     </li>
                                 </ul>
@@ -1793,7 +1793,7 @@
                                 <ul class="list-inline">
                                     <li>Template C</li>
                                     <li><input type="radio" id="radio-3" name="creatInvoice">
-                                        <label for="radio-3" class="btn"><i class="glyphicon glyphicon-star"></i>
+                                        <label for="radio-3" class="btn"><i class="icon-favorite-selected"></i>
                                             Template Default</label>
                                     </li>
                                 </ul>
@@ -1808,7 +1808,7 @@
                                 <ul class="list-inline">
                                     <li>Template D</li>
                                     <li><input type="radio" id="radio-4" name="creatInvoice">
-                                        <label for="radio-4" class="btn"><i class="glyphicon glyphicon-star"></i>
+                                        <label for="radio-4" class="btn"><i class="icon-favorite-selected"></i>
                                             Template Default</label>
                                     </li>
                                 </ul>

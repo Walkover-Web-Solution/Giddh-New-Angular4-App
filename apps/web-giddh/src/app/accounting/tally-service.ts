@@ -92,7 +92,13 @@ export class TallyModuleService {
                 }
                 if (this.selectedPageInfo.value.page === 'Contra') {
                     if (type === 'by') {
-                        filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+                        if(this.salesAccounts.value) {
+                            filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));
+                        } else if(this.bankAccounts.value) {
+                            filteredAccounts = _.cloneDeep(this.bankAccounts.value.concat(this.taxAccounts.value));
+                        } else {
+                            filteredAccounts = _.cloneDeep(this.taxAccounts.value);
+                        }
                         this.filteredAccounts.next(filteredAccounts);
                     } else if (type === 'to') {
                         filteredAccounts = _.cloneDeep(this.salesAccounts.value.concat(this.bankAccounts.value).concat(this.taxAccounts.value));

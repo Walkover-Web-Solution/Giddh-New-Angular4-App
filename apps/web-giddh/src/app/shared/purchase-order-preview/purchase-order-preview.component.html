@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Purchase Order Preview</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="hideModal()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="row mrB1">
+        <div class="col-sm-12 pdf-viewer">
+            <div class="pos-rel" *ngIf="!pdfPreviewHasError && !pdfPreviewLoaded">
+                <div class="loader"></div>
+            </div>
+            <div class="error" [hidden]="!pdfPreviewHasError">
+                <span>
+                    Purchase Order Preview is not available right now! Please try again..
+                </span>
+            </div>
+            <div class="fixed-ng2pdfview pdf-preview preview-1" [ngClass]="{'fixed-ng2pdfview-2': pageCount === 2, 'fixed-ng2pdfview': pageCount === 1, 'fixed-ng2pdfview-3': pageCount === 3,'fixed-ng2pdfview-4': pageCount === 4}">
+                <ng2-pdfjs-viewer pagemode="none" viewerId="MyUniqueID" [hidden]="isLoading" [downloadFileName]="'invoice.pdf'" (onDocumentLoad)="pagesLoaded($event);" [openFile]="false" [viewBookmark]="false" [download]="false"></ng2-pdfjs-viewer>
+            </div>
+        </div>
+    </div>
+</div>

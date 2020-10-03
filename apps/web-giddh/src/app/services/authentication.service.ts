@@ -333,7 +333,10 @@ export class AuthenticationService {
 
     public saveGmailAuthCode(data) {
         const companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + GMAIL_API.GENERATE_GMAIL_TOKEN.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), data);
+        return this._http.post(this.config.apiUrl + GMAIL_API.GENERATE_GMAIL_TOKEN.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), data).pipe(map((res) => {
+            let data: BaseResponse<string, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
     }
 
     public saveGmailToken(data) {

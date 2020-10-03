@@ -12,7 +12,7 @@ import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
 import { States, StatesRequest } from '../../models/api-models/Company';
 import { LocationService } from '../../services/location.service';
-import { TypeaheadMatch } from 'ngx-bootstrap';
+import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 import { contriesWithCodes } from 'apps/web-giddh/src/app/shared/helpers/countryWithCodes';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { currencyNumberSystems, digitAfterDecimal } from 'apps/web-giddh/src/app/shared/helpers/currencyNumberSystem';

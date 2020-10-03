@@ -256,8 +256,8 @@ export class GeneralService {
         }];
         const headerText: string = 'Reverse Charge Confirmation';
         const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mrB1 text-light';
-        const footerCssClass: string = 'mrB1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
         return (isRcmSelected) ? {
             headerText,
             headerCssClass,
@@ -434,6 +434,9 @@ export class GeneralService {
             yPosition = element.clientY + 20;
         }
 
+        if (window && window.innerHeight - yPosition < 450) { // 450 is approx height of datepicker
+            yPosition -= (window.innerHeight - yPosition) / 2;
+        }
 
         return { x: xPosition, y: yPosition };
     }
@@ -509,7 +512,6 @@ export class GeneralService {
         } else {
             return false;
         }
-
     }
 
     /**
@@ -536,6 +538,17 @@ export class GeneralService {
         return { fromDate: fromDateInMmDdYy, toDate: toDateInMmDdYy }
     }
 
+    /**
+     * This will replace underscore by space in string
+     *
+     * @param {*} type
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getRevisionField(type: any): string {
+        return type.replace(/_/g, " ");
+    }
+    
     /**
      * Returns the account category
      *
@@ -569,6 +582,21 @@ export class GeneralService {
             }
         } else {
             return '';
+        }
+    }
+
+    /**
+     * Returns true if key pressed was character/number/special character
+     *
+     * @param {*} event
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public allowCharactersNumbersSpecialCharacters(event: any): boolean {
+        if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 186 && event.keyCode <= 192) || (event.keyCode >= 219 && event.keyCode <= 222)) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

@@ -5,7 +5,7 @@ import { AppState } from '../../../store/roots';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
@@ -16,7 +16,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 export class LiveAccountsComponent implements OnInit, OnDestroy {
     public bankAccountsError$: Observable<string>;
     @Input() public refresh: boolean = false;
-    @ViewChild('refreshBankAccountModal') public refreshBankAccountModal: ModalDirective;
+    @ViewChild('refreshBankAccountModal', {static: true}) public refreshBankAccountModal: ModalDirective;
     public reconnectBankAccount$: Observable<RefreshBankAccountResponse>;
     public refreshBankAccount$: Observable<RefreshBankAccountResponse>;
     public bankAccounts$: Observable<BankAccountsResponse[]>;

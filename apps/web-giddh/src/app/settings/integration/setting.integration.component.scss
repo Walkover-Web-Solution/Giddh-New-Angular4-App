@@ -52,6 +52,7 @@
     padding: 6px;
     height: 100%;
     background: $white;
+    font-size:14px;
 }
 .tooltip-box {
     position: absolute;
@@ -61,6 +62,11 @@
         color: $gray;
     }
 }
+
+.form-control, .linked-account{
+    width:100% !important;
+}
+/*responsive*/
 @media(max-width:1359px) {
     .xs-pl-15 {
         padding-left: 15px !important;
@@ -69,14 +75,6 @@
         display: none;
     }
 }
-
-@media(max-width:768px) {
-    .empty-label label,
-    .empty-label br {
-        display: none;
-    }
-}
-
 .plus-cross-btn {
     i {
         padding: 5px 0;
@@ -84,12 +82,32 @@
         font-size: 20px;
     }
 }
-
+.edit-save-button{
+    .btn{
+        width: 36px;
+        height: 36px;
+    }
+}
+@media(max-width:1199px){
+    .edit-save-button{
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+        margin-right: 7px;
+    }
+    .button-wrapper{
+        margin-top: 0;
+        margin-bottom: 30px;
+    }
+}
 @media(max-width:767px) {
     #inlnImg {
         margin-top: 0;
     }
-
+    .empty-label label,
+    .empty-label br {
+        display: none;
+    }
     #inlnImg label,
     .inlnImg label {
         margin: 0;
@@ -125,5 +143,17 @@
             margin-right: 0;
             margin-left: 15px;
         }
+    }
+}
+
+
+@media (max-width:1359px) and (min-width:992px){
+    .payment-col{
+        flex: 0 0 33.333333% !important;
+        max-width:33.333333% !important;
+    }
+    .payment-col1{
+        flex: 0 0 25% !important;
+        max-width:25% !important;
     }
 }

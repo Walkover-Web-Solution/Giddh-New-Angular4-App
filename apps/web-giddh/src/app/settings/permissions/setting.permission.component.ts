@@ -7,10 +7,8 @@ import { select, Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs';
-import { ToasterService } from '../../services/toaster.service';
-import { FormBuilder } from '@angular/forms';
 import { ShareRequestForm } from '../../models/api-models/Permission';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
@@ -20,7 +18,7 @@ import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
 })
 export class SettingPermissionComponent implements OnInit, OnDestroy {
 
-    @ViewChild('editUserModal') public editUserModal: ModalDirective;
+    @ViewChild('editUserModal', {static: true}) public editUserModal: ModalDirective;
 
     public sharedWith: object[] = [];
     public usersList: any;
@@ -45,8 +43,6 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         private _permissionActions: PermissionActions,
         private _accountsAction: AccountsAction,
         private store: Store<AppState>,
-        private _fb: FormBuilder,
-        private _toasty: ToasterService,
         private _generalService: GeneralService
     ) {
         this.store.pipe(select(s => s.session.user), take(1)).subscribe(result => {
@@ -58,9 +54,9 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.store.select(s => s.settings.usersWithCompanyPermissions).pipe(takeUntil(this.destroyed$)).subscribe(s => {
-            if (s) {
-                let data = _.cloneDeep(s);
+        this.store.pipe(select(state => state.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                let data = _.cloneDeep(response);
                 let sortedArr = _.groupBy(this.prepareDataForUI(data), 'emailId');
                 let arr = [];
                 forIn(sortedArr, (value) => {

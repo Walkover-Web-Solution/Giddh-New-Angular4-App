@@ -1,6 +1,6 @@
 import {take, takeUntil, distinctUntilChanged} from 'rxjs/operators';
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit, ViewChild} from '@angular/core';
-import {ModalDirective} from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import {VerifyMobileActions} from '../../../../actions/verifyMobile.actions';
 import {LocationService} from '../../../../services/location.service';
 import {CompanyActions} from '../../../../actions/company.actions';
@@ -28,7 +28,7 @@ import {userLoginStateEnum} from '../../../../models/user-login-state';
 import {UserDetails} from 'apps/web-giddh/src/app/models/api-models/loginModels';
 import {NgForm} from '@angular/forms';
 import {CountryRequest} from "../../../../models/api-models/Common";
-import * as googleLibphonenumber from 'google-libphonenumber';
+import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 
 @Component({
     selector: 'company-add-new-ui-component',
@@ -39,8 +39,8 @@ import * as googleLibphonenumber from 'google-libphonenumber';
 export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
     @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
-    @ViewChild('logoutModal') public logoutModal: ModalDirective;
-    @ViewChild('companyForm') public companyForm: NgForm;
+    @ViewChild('logoutModal', {static: true}) public logoutModal: ModalDirective;
+    @ViewChild('companyForm', {static: true}) public companyForm: NgForm;
     @Input() public createBranch: boolean = false;
 
     public imgPath: string = '';
@@ -99,7 +99,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public isNewUser: boolean = false;
-    public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public selectedCountry: string = '';
     /* This will hold if it's production env or not */
     public isProdMode: boolean = false;
@@ -312,8 +311,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
     public checkMobileNo(ele) {
         try {
-            let parsedNumber = this.phoneUtility.parse('+' + this.company.phoneCode + ele.value, this.company.country);
-            if (this.phoneUtility.isValidNumber(parsedNumber)) {
+            let parsedNumber = parsePhoneNumberFromString('+' + this.company.phoneCode + ele.value, this.company.country as CountryCode);
+            if (parsedNumber.isValid()) {
                 ele.classList.remove('error-box');
                 this.isMobileNumberValid = true;
             } else {

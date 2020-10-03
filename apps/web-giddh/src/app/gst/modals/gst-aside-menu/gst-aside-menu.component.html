@@ -24,7 +24,7 @@
                         <div class="form-group" *ngIf="selectedService === 'TAXPRO' || selectedService === 'VAYANA' ">
 
                             <div class="row">
-                                <div class="col-xs-6">
+                                <div class="col-6">
 
                                     <div class="form-group">
 
@@ -48,7 +48,7 @@
 
                             <div class="row">
 
-                                <div class="col-xs-6">
+                                <div class="col-6">
 
                                     <div class="form-group">
                                         <label for="tax_pro_username">Username:</label>
@@ -59,7 +59,7 @@
 
                                 </div>
 
-                                <div class="col-xs-6">
+                                <div class="col-6">
 
                                     <div class="form-group">
                                         <label for="tax_pro_gst_number">GSTIN:</label>
@@ -70,7 +70,7 @@
 
                                 </div>
 
-                                <div class="col-xs-12" *ngIf="otpSentSuccessFully">
+                                <div class="col-12" *ngIf="otpSentSuccessFully">
 
                                     <div class="d-flex">
 
@@ -93,7 +93,7 @@
 
                             <div class="row">
 
-                                <div class="col-xs-12 mrT1">
+                                <div class="col-12 mr-t1">
                                     <button class="btn btn-success"
                                         [ladda]="saveGspSessionInProcess || authorizeGspSessionOtpInProcess"
                                         (click)="save()"
@@ -115,7 +115,7 @@
 
                                     <ng-container *ngIf="!(reconcileOtpSuccess$ | async)">
 
-                                        <div class="col-xs-6">
+                                        <div class="col-6">
 
                                             <div class="form-group">
                                                 <label for="tax_pro_username">Username:</label>
@@ -129,7 +129,7 @@
 
                                     <ng-container *ngIf="(reconcileOtpSuccess$ | async)">
 
-                                        <div class="col-xs-6" *ngIf="(reconcileOtpSuccess$ | async)">
+                                        <div class="col-6" *ngIf="(reconcileOtpSuccess$ | async)">
                                             <div class="form-group">
                                                 <label for="reconcile_otp">OTP:</label>
                                                 <input autocomplete="off" type="text" name="otp" class="form-control"
@@ -141,7 +141,7 @@
 
                                     <ng-container>
 
-                                        <div class="col-xs-6" *ngIf="activeCompanyGstNumber">
+                                        <div class="col-6" *ngIf="activeCompanyGstNumber">
                                             <div class="form-group">
                                                 <label for="reconcile_otp">GSTN:</label>
                                                 <input autocomplete="off" type="text" name="otp" class="form-control"
@@ -155,7 +155,7 @@
 
                                 <ng-container>
 
-                                    <div class="col-xs-12">
+                                    <div class="col-12">
                                         <span>
                                             Gst No - {{ (companyGst$ | async) }} Verified Successfully
                                         </span>
@@ -166,7 +166,7 @@
 
                             <div class="row">
 
-                                <div class="col-xs-12 mrT1">
+                                <div class="col-12 mr-t1">
 
                                     <button class="btn btn-success" (click)="generateReconcileOtp(reconcileForm)"
                                         *ngIf="!(reconcileOtpSuccess$ | async)" [ladda]="reconcileOtpInProcess$ | async"

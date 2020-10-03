@@ -1,6 +1,6 @@
 <div class="modal-header pd2 pdL2 pdR2 clearfix">
 	<h3 class="modal-title bg" id="modal-title">Create New Group</h3>
-	<i class="fa fa-times text-right close-modal" aria-hidden="true" (click)="closeCreateGroupModal()"></i>
+	<i class="icon-cross text-right close-modal" aria-hidden="true" (click)="closeCreateGroupModal()"></i>
 </div>
 <div class="modal-body">
 	<form name="addStockGroupForm" autocomplete="off" [formGroup]="addStockGroupForm" novalidate>
@@ -39,7 +39,7 @@
 		</div>
 
 		<div class="row">
-			<div class="form-group col-xs-12 text-right mrT2">
+			<div class="form-group col-xs-12 text-right mr-t2">
 				<button type="submit" class="btn btn-md btn-success mrR" [ladda]="isAddStockGroupInProcess"
 					(click)="addStockGroupFormSubmit()" [disabled]="addStockGroupForm.invalid">Save
 				</button>

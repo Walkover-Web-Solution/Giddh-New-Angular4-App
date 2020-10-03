@@ -1,3 +1,4 @@
+@import '../../../../assets/css/color.scss';
 .width-160 {
     width: 160px;
 }
@@ -30,7 +31,7 @@
 .btn.dropdown-toggle {
     width: 100%;
     text-align: left;
-    border: 1px solid #c4c0c0;
+    border: 1px solid $gainsboro;
     padding-left: 7px !important;
 }
 .btn.dropdown-toggle .caret {
@@ -67,4 +68,42 @@ ul#dropdown-nested li .caret {
     border-left: 6px solid transparent;
     border-top: 6px dashed;
     color: #a9a9a9;
+}
+
+.list-inline>li {
+    display: inline-block;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+.select-financial-year{
+   display: flex;
+    align-items: center;
+    max-width: 600px;
+    width: 100%;
+    .btn-group{
+        width: auto;
+    }
+    .inner-button{
+        width: 100%;
+        max-width: 300px;
+        margin-right: 15px;
+    }
+}
+@media (max-width: 767px) {
+    .xs-pr-0 {
+        padding-right: 0px !important;
+    }
+}
+@media(max-width:575px){
+    .select-financial-year{
+        flex-direction: column;
+        max-width: 100%;
+        width: 100%;
+        .inner-button{
+            width: 100%;
+            max-width: 100%;
+            margin-right: 0;
+            margin-bottom: 15px;
+        }
+    }
 }

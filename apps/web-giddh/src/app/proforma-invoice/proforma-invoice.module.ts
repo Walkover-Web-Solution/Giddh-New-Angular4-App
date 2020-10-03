@@ -3,7 +3,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
-import { BsDatepickerModule, BsDropdownModule, CollapseModule, ModalModule } from 'ngx-bootstrap';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { NgxUploaderModule } from 'ngx-uploader';
 
 import { SettingsServiceModule } from '../settings/settings-service.module';
@@ -35,7 +38,6 @@ import {
 import {
     SalesAddStockComponent,
 } from './components/aside-menu-product-service/components/create-stock/sales.create.stock.component';
-import { ProformaAddBulkItemsComponent } from './components/proforma-add-bulk-items/proforma-add-bulk-items.component';
 import { ProformaGstTreatmentComponent } from './components/proforma-gst-treatment/proforma-gst-treatment.component';
 import { ProformaLastInvoicesComponent } from './components/proforma-last-invoices/proforma-last-invoices.component';
 import { ProformaPrintInPlaceComponent } from './components/proforma-print-inplace/proforma-print-in-place.component';
@@ -54,7 +56,6 @@ import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjust
         ShSelectModule,
         KeyboardShortutModule,
         SalesShSelectModule,
-        BsDatepickerModule,
         DecimalDigitsModule,
         // SalesModule,
         CollapseModule,
@@ -81,7 +82,6 @@ import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjust
     declarations: [
         ProformaInvoiceRendererComponent,
         ProformaInvoiceComponent,
-        ProformaAddBulkItemsComponent,
         ProformaLastInvoicesComponent,
         ProformaGstTreatmentComponent,
         SalesAddStockComponent,

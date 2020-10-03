@@ -20,7 +20,7 @@
                                 style="margin: 0px;padding-right: 8px">Advance search</a>
                             <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()"
                                 *ngIf="showAdvanceSearchIcon">
-                                <i aria-hidden="true" class="glyphicon glyphicon-refresh" style="color: #333333"
+                                <i aria-hidden="true" class="icon-refrsh" style="color: #333333"
                                     tooltip="Reset Filter"></i>
                             </a>
                         </div>
@@ -75,7 +75,7 @@
             </form>
 
             <!-- grid -->
-            <table class="table basic table-bordered mrT2">
+            <table class="table basic table-bordered mr-t2">
 
                 <thead class="t-h-bg1">
                     <tr>
@@ -216,7 +216,7 @@
 
             </table>
 
-            <div class="no-data mrT2" *ngIf="!receiptData">
+            <div class="no-data mr-t2" *ngIf="!receiptData">
                 <h1>No Entry found!</h1>
                 <!--<h1>Have to do some sales before creating invoice</h1>-->
             </div>
@@ -229,7 +229,7 @@
 
             <!-- Download or Preview Voucher model -->
             <div bsModal #invoiceReceiptVoucherDetailsModel="bs-modal" class="modal fade" role="dialog">
-                <div class="modal-dialog modal-lg">
+                <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <preview-download-receipt-component (closeModelEvent)="hidePreviewDownloadModal()"
                             (openUpdateReceiptModel)="onEditBtnClick()" [activatedInvoice]="type"

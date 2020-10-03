@@ -22,6 +22,9 @@
         },
         "electron-giddh": {
             "tags": []
+        },
+        "giddh-cordova": {
+            "tags": []
         }
     }
 }

@@ -3,7 +3,7 @@ import {PurchaseReportsModel} from "../../../models/api-models/Reports";
 import {Store, select} from "@ngrx/store";
 import {AppState} from "../../../store";
 import {GroupWithAccountsAction} from "../../../actions/groupwithaccounts.actions";
-import {ModalDirective} from "ngx-bootstrap";
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import {Router} from '@angular/router';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { takeUntil } from 'rxjs/operators';
@@ -19,7 +19,7 @@ export class PurchaseRegisterTableComponent implements OnInit, OnDestroy {
     @Input() public reportRespone: PurchaseReportsModel[];
     @Input() public activeFinacialYr: any;
     @Input() purchaseRegisterTotal: any;
-    @ViewChild('mailModal') public mailModal: ModalDirective;
+    @ViewChild('mailModal', {static: true}) public mailModal: ModalDirective;
     public messageBody = {
         header: {
             email: 'Send Email',

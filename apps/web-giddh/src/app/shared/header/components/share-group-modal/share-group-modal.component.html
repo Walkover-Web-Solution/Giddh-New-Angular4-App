@@ -1,11 +1,11 @@
-<div id="shareModal" class="pdB4 shareGrp">
+<div id="share-modal" class="pdB4 shareGrp">
     <div class="modal-header">
         <h3>Share Group</h3>
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
     </div>
     <div class="modal-body" id="SharePop">
         <div class="form-group">
-            <h3 class="pdB1">Share with</h3>
+            <h3 class="pd-b1">Share with</h3>
             <div class="add_mailer">
 
                 <!--share group from-->
@@ -20,7 +20,7 @@
                                     {{permission.name}}
                                 </option>
                             </select>
-                            <button class="btn btn-success mrL1 btn-share" type="submit" [disabled]="shareGroupForm.invalid" (click)="shareGroup()">Share
+                            <button class="btn btn-success mr-l1 btn-share" type="submit" [disabled]="shareGroupForm.invalid" (click)="shareGroup()">Share
                             </button>
                         </div>
                         <!-- /btn-group -->
@@ -28,7 +28,7 @@
                 </form>
 
                 <!--shared with array-->
-                <div class="col-xs-12 pdT1" *ngIf="(activeGroupSharedWith$ | async)?.length">
+                <div class="col-xs-12 pd-t1" *ngIf="(activeGroupSharedWith$ | async)?.length">
                     <div class="row">
                         <ul class="shared_list group-shared-list">
                             <li *ngFor="let val of (activeGroupSharedWith$ | async); let i = index">

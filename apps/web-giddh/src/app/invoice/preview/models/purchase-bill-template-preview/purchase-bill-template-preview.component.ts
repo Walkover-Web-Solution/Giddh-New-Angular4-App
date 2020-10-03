@@ -1,14 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
-import {
-    BsDropdownDirective,
-    BsModalRef,
-    BsModalService,
-    ModalDirective,
-    ModalOptions,
-    TabsetComponent,
-    PopoverDirective
-} from 'ngx-bootstrap'
+import { Component, OnInit } from '@angular/core';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+
 @Component({
     selector: 'purchase-bill-template',
     templateUrl: './purchase-bill-template-preview.component.html',

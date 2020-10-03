@@ -5,7 +5,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { GroupStockReportRequest, GroupStockReportResponse, StockReportRequest, StockReportResponse } from '../../models/api-models/Inventory';
 import { STOCKS_REPORT_ACTIONS } from './inventory.const';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -17,8 +17,9 @@ import { CustomActions } from '../../store/customActions';
 @Injectable()
 export class StockReportActions {
 
-    @Effect() private GetStocksReport$: Observable<Action> = this.action$
-        .ofType(STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT).pipe(
+     public GetStocksReport$: Observable<Action> = createEffect( ()=>this.action$
+        .pipe(
+            ofType(STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT),
             switchMap((action: CustomActions) => {
                 // let activeGroup: StockGroupResponse = null;
                 // let sub = this.store.select(a => a.inventory.activeGroup);
@@ -47,10 +48,11 @@ export class StockReportActions {
                         }
                     }));
 
-            }));
+            })));
 
-    @Effect() private GetGroupStocksReport$: Observable<Action> = this.action$
-        .ofType(STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT).pipe(
+     public GetGroupStocksReport$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT),
             switchMap((action: CustomActions) => {
                 return this._inventoryService.GetGroupStocksReport_V3(action.payload).pipe(
                     map((response) => {
@@ -66,7 +68,7 @@ export class StockReportActions {
                             } : response.body
                         });
                     }));
-            }));
+            })));
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,

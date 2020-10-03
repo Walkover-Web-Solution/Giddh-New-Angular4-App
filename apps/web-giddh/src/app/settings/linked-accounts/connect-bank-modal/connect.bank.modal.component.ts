@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Observable, of, ReplaySubject, Subject, merge } from 'rxjs';
 import { SettingsLinkedAccountsService } from '../../../services/settings.linked.accounts.service';
-import { TypeaheadMatch } from 'ngx-bootstrap';
+import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from 'apps/web-giddh/src/app/store';

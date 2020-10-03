@@ -1,53 +1,47 @@
 <div class="bdrR row view_forms" id="middleBody" style="margin:0" [perfectScrollbar]="config"
     *ngIf="!(showNewForm$ | async)">
     <!--breadcrumbs-->
-    <div class="breadcrumbs container-fluid top-bar bdrB" *ngIf="breadcrumbPath?.length > 0">
-        <div class="col-xs-8">
+    <div class="breadcrumbs container-fluid top-bar bdrB row mr-0 ml-0 h-100" *ngIf="breadcrumbPath?.length > 0">
+        <div class="col-sm-8">
             <ol class="breadcrumb row">
                 <li *ngFor="let value of breadcrumbPath;let last = last;" [ngClass]="{'active': last}">
-                    <a href="javascript:void(0)">{{ value }}
-                    </a>
+                    <a href="javascript:void(0)"> {{ value }}</a>
                 </li>
             </ol>
         </div>
-        <!--share group/account-->
-        <div>
-            <!--group-->
-            <div class="pull-right col-xs-4 pdR0 text-right">
-                <button class="btn btn-share mrR1" *ngIf="(showEditGroup$ | async)" (click)="exportGroupLedger()">
-                    Export
-                </button>
-                <button class="btn btn-share pull-right" *ngIf="(showEditGroup$ | async)"
-                    (click)="showShareGroupModal()">Share
-                </button>
-                <div class="primary_clr text-right pull-right mrT1 clearfix"
-                    *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
-                    Shared with {{ (activeGroupSharedWith$ | async)?.length }} people
-                </div>
-            </div>
-            <!--account-->
-            <div class="pull-right col-xs-4 pdR0">
-                <button class="btn btn-share pull-right" *ngIf="(showEditAccount$ | async)"
-                    (click)="showShareAccountModal()">
-                    Share
-                </button>
-                <div class="primary_clr text-right pull-right mrT1 clearfix"
-                    *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length">
-                    Shared with {{ (activeAccountSharedWith$ | async)?.length }} people
-                </div>
+        <div class="pull-right col-sm-4 pdR0 text-right" *ngIf="(showEditGroup$ | async)">
+            <button class="btn btn-share export-group-ledger" (click)="exportGroupLedger()">
+                Export
+            </button>
+            <button class="btn btn-share pull-right" *ngIf="(showEditGroup$ | async)" (click)="showShareGroupModal()">Share
+            </button>
+            <div class="primary_clr text-right pull-right mr-t1 clearfix"
+                *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
+                Shared with {{ (activeGroupSharedWith$ | async)?.length }} people
             </div>
         </div>
+        <!--account-->
+        <div class="pull-right col-sm-4 pdR0" *ngIf="(showEditAccount$ | async)">
+            <button class="btn btn-share pull-right" (click)="showShareAccountModal()">
+                Share
+            </button>
+            <div class="primary_clr text-right pull-right mr-t1 clearfix"
+                *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length">
+                Shared with {{ (activeAccountSharedWith$ | async)?.length }} people
+            </div>
+        </div>
+        <!--share group/account-->
     </div>
 
     <!--add/edit group form-->
-    <div class="" *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)">
-        <group-add class="form_box" *ngIf="(showAddNewGroup$ | async)"></group-add>
+    <div class="" *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)" class="w-100">
+        <group-add class="form-box" *ngIf="(showAddNewGroup$ | async)"></group-add>
         <group-update *ngIf="(showEditGroup$ | async)"></group-update>
     </div>
     <!--add/edit group form-->
 
     <!--account operation  -->
-    <div *ngIf="(showEditAccount$ | async) || (showAddNewAccount$ | async)" class="pd-2 horizontal-form">
+    <div *ngIf="(showEditAccount$ | async) || (showAddNewAccount$ | async)" class="pd-2 horizontal-form manage-group-account-form">
         <!--account add component-->
 
         <account-add-new-details *ngIf="!(activeAccount$ | async)"
@@ -76,7 +70,7 @@
 
         <!-- move account -->
         <!-- <div class="horizontal-form form-group" *ngIf="(activeAccount$ | async)">
-            <form name="moveAccountForm" class="clearfix moveTOgroup" novalidate (submit)="moveAccount()" [formGroup]="moveAccountForm">
+            <form name="moveAccountForm" class="clearfix move-to-group" novalidate (submit)="moveAccount()" [formGroup]="moveAccountForm">
                 <label class="d-block">Move to group</label>
                 <span>
           <sh-select formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList"
@@ -85,7 +79,7 @@
             <ng-template #optionTemplate let-model="option">
               <a href="javascript:void(0)" class="list-item" style="border-bottom:1px solid #ccc;">
                 <div class="item">{{ model.label }}</div>
-                <div class="item_unq">
+                <div class="item-unique">
                   {{ model.value }}
                 </div>
 
@@ -107,7 +101,7 @@
     <!--merge and taxes and discount-->
     <!-- <div class=" horizontal-form clearfix">
         <div class="">
-            <div class="moveTOgroup form-group" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed"> -->
+            <div class="move-to-group form-group" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed"> -->
     <!--merge and taxes-->
 
 
@@ -123,12 +117,12 @@
                 [placeholder]="'Select Accounts'" style="width: calc(100% - 93px);"></sh-select>
             </span>
                         <span class="pull-right">
-              <button type="submit" class="btn btn-primary mrgeBtn" (click)="mergeAccounts()">Merge</button>
+              <button type="submit" class="btn btn-primary marge-btn" (click)="mergeAccounts()">Merge</button>
             </span>
                     </div>
                     <small class="clearfix">This option is risky and can not be undone</small>
 
-                    <ul class="accmerge mrT1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
+                    <ul class="accmerge mr-t1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
                         <li *ngFor="let merged of (activeAccount$ | async)?.mergedAccounts.split(',')">
                             <a href="javascript:void(0);" [ngClass]="{'isActive': setAccountForMove === merged}" (click)="setAccountForMoveFunc(merged)">
                 {{merged}}
@@ -270,7 +264,7 @@
     <!--&lt;!&ndash;                                      [data]="itemList" [settings]="settings">&ndash;&gt;-->
     <!--&lt;!&ndash;                </angular2-multiselect>&ndash;&gt;-->
     <!--                <span class="input-group-btn pdL2"> <button type="submit"-->
-    <!--                                                            class="btn btn-success mrgeBtn">Save</button></span>-->
+    <!--                                                            class="btn btn-success marge-btn">Save</button></span>-->
     <!--              </div>-->
     <!--            </div>-->
     <!--          </form>-->
@@ -334,7 +328,7 @@
 <!--add new buttons-->
 <div class="inline-table new_form ng-scope" *ngIf="(showNewForm$ | async)">
     <div class="vcenter groups-buttons">
-        <button class="btn isActive mrB2" (click)="showAddGroupForm()">Create Group</button>
+        <button class="btn isActive mr-b2" (click)="showAddGroupForm()">Create Group</button>
         <span class="clearfix"></span>
         <button class="btn isActive" *ngIf="!isRootLevelGroup" (click)="showAddAccountForm()">Create A/c</button>
     </div>
@@ -342,7 +336,7 @@
 
 <!--deleteMergedAccount account modal  -->
 <div bsModal #deleteMergedAccountModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <confirm-modal [title]="'Delete Merged Account'" [body]='deleteMergedAccountModalBody'
                 (cancelCallBack)="hideDeleteMergedAccountModal()" (successCallBack)="deleteMergedAccount()">

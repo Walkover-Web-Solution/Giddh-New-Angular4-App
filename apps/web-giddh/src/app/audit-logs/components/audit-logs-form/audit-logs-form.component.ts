@@ -1,26 +1,25 @@
-import { of as observableOf, ReplaySubject, Observable } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
-import { LogsRequest, AuditLogFilterForm, GetAuditLogsRequest } from '../../../models/api-models/Logs';
-import { UserDetails } from '../../../models/api-models/loginModels';
-import { CompanyResponse } from '../../../models/api-models/Company';
-import { CompanyService } from '../../../services/companyService.service';
-import { GroupService } from '../../../services/group.service';
-import { AccountService } from '../../../services/account.service';
-import { AppState } from '../../../store';
-import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { Store, select } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
-import { AuditLogsSidebarVM } from './Vm';
-import * as _ from '../../../lodash-optimized';
-import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+
+import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
+import { cloneDeep, flatten, map, omit, union } from '../../../lodash-optimized';
+import { UserDetails } from '../../../models/api-models/loginModels';
+import { GetAuditLogsRequest } from '../../../models/api-models/Logs';
+import { IForceClear } from '../../../models/api-models/Sales';
+import { AccountService } from '../../../services/account.service';
+import { CompanyService } from '../../../services/companyService.service';
 import { GeneralService } from '../../../services/general.service';
 import { LogsService } from '../../../services/logs.service';
-import { IForceClear } from '../../../models/api-models/Sales';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { AppState } from '../../../store';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { AuditLogsSidebarVM } from './Vm';
 
 @Component({
     selector: 'audit-logs-form',
@@ -138,10 +137,10 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      */
     public flattenGroup(rawList: any[], parents: any[] = []): any {
         let listOfFlattenGroup;
-        listOfFlattenGroup = _.map(rawList, (listItem) => {
+        listOfFlattenGroup = map(rawList, (listItem) => {
             let newParents;
             let result;
-            newParents = _.union([], parents);
+            newParents = union([], parents);
             newParents.push({
                 name: listItem.name,
                 uniqueName: listItem.uniqueName
@@ -150,13 +149,13 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
             listItem.parentGroups = newParents;
             if (listItem.groups.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
-                result.push(_.omit(listItem, 'groups'));
+                result.push(omit(listItem, 'groups'));
             } else {
-                result = _.omit(listItem, 'groups');
+                result = omit(listItem, 'groups');
             }
             return result;
         });
-        return _.flatten(listOfFlattenGroup);
+        return flatten(listOfFlattenGroup);
     }
 
     /**
@@ -178,7 +177,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      */
     public getLogFilters(): void {
         let getAuditLogsRequest: GetAuditLogsRequest = new GetAuditLogsRequest();
-        getAuditLogsRequest = _.cloneDeep(this.prepareAuditLogFormRequest());
+        getAuditLogsRequest = cloneDeep(this.prepareAuditLogFormRequest());
         this.store.dispatch(this.auditLogsActions.getAuditLogs(getAuditLogsRequest, 1));
     }
 
@@ -271,7 +270,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                 }
             });
             if (selectedEntityObject && selectedEntityObject.length) {
-                this.auditLogFormVM.filters = _.cloneDeep(selectedEntityObject[0].operations)
+                this.auditLogFormVM.filters = cloneDeep(selectedEntityObject[0].operations)
             }
 
         }

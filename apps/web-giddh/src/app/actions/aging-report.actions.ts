@@ -1,7 +1,7 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AppState } from '../store/roots';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
@@ -30,15 +30,15 @@ export class AgingReportActions {
 	public static GET_DUE_DAY_REPORT = 'GET_DUE_DAY_REPORT';
 	public static GET_DUE_DAY_REPORT_RESPONSE = 'GET_DUE_DAY_REPORT_RESPONSE';
 
-	@Effect()
-	public createDueRange$: Observable<Action> = this.action$
-		.ofType(AgingReportActions.CREATE_DUE_DAY_RANGE).pipe(
+	public createDueRange$: Observable<Action> = createEffect(() => this.action$
+		.pipe(
+			ofType(AgingReportActions.CREATE_DUE_DAY_RANGE),
 			switchMap((action: CustomActions) => this._agingReportService.CreateDueDaysRange(action.payload)),
-			map(response => this.CreateDueRangeResponse(response)));
+			map(response => this.CreateDueRangeResponse(response))));
 
-	@Effect()
-	public createDueRangeResponse$: Observable<Action> = this.action$
-		.ofType(AgingReportActions.CREATE_DUE_DAY_RANGE_RESPONSE).pipe(
+	public createDueRangeResponse$: Observable<Action> = createEffect(() => this.action$
+		.pipe(
+			ofType(AgingReportActions.CREATE_DUE_DAY_RANGE_RESPONSE),
 			map((action: CustomActions) => {
 				let response = action.payload as BaseResponse<string, DueRangeRequest>;
 				if (response.status === 'error') {
@@ -49,17 +49,17 @@ export class AgingReportActions {
 				// set newly created company as active company
 				return { type: 'EmptyAction' };
 				// check if new uer has created first company then set newUserLoggedIn false
-			}));
+			})));
 
-	@Effect()
-	public getDueRange$: Observable<Action> = this.action$
-		.ofType(AgingReportActions.GET_DUE_DAY_RANGE).pipe(
+	public getDueRange$: Observable<Action> = createEffect(() => this.action$
+		.pipe(
+			ofType(AgingReportActions.GET_DUE_DAY_RANGE),
 			switchMap((action: CustomActions) => this._agingReportService.GetDueDaysRange()),
-			map(response => this.GetDueRangeResponse(response)));
+			map(response => this.GetDueRangeResponse(response))));
 
-	@Effect()
-	public getDueRangeResponse$: Observable<Action> = this.action$
-		.ofType(AgingReportActions.GET_DUE_DAY_RANGE_RESPONSE).pipe(
+	public getDueRangeResponse$: Observable<Action> = createEffect(() => this.action$
+		.pipe(
+			ofType(AgingReportActions.GET_DUE_DAY_RANGE_RESPONSE),
 			map((action: CustomActions) => {
 				let response = action.payload as BaseResponse<string[], string>;
 				if (response.status === 'error') {
@@ -70,10 +70,11 @@ export class AgingReportActions {
 				// set newly created company as active company
 				return { type: 'EmptyAction' };
 				// check if new uer has created first company then set newUserLoggedIn false
-			}));
+			})));
 
-	@Effect() private getDueReport$: Observable<Action> = this.action$
-		.ofType(AgingReportActions.GET_DUE_DAY_REPORT).pipe(
+	private getDueReport$: Observable<Action> = createEffect(() => this.action$
+		.pipe(
+			ofType(AgingReportActions.GET_DUE_DAY_REPORT),
 			switchMap((action: CustomActions) => {
 				return this._agingReportService.GetDueAmountReport(action.payload.model, action.payload.queryRequest).pipe(
 					map((r) => this.validateResponse<DueAmountReportResponse, DueAmountReportRequest>(r, {
@@ -83,7 +84,7 @@ export class AgingReportActions {
 						type: AgingReportActions.GET_DUE_DAY_REPORT_RESPONSE,
 						payload: null
 					})));
-			}));
+			})));
 
 	constructor(
 		private action$: Actions,

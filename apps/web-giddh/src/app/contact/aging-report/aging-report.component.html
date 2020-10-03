@@ -1,29 +1,29 @@
-<div class="container-fluid">
+    <div class="container-fluid">
 
-    <div class="top-bar clearfix">
+    <div class="top-bar aging-top-bar clearfix">
 
-        <div class="form-inline">
+        <div class="aging-form-inline">
 
             <div class="pull-left d-flex wrap-searching-aging">
 
-                <div class="form-group searchField max250" [ngClass]="{'default-width':isAdvanceSearchApplied}">
+                <div class="form-group search-field max250" [ngClass]="{'default-width':isAdvanceSearchApplied}">
                     <input type="text" placeholder="Name/amount" class="form-control" [(ngModel)]="searchStr"
                         (ngModelChange)="searchStr$.next($event)" style="width:210px" />
 
-                    <span class="inputAddon">
+                    <span class="input-addon">
                         <i class="icon-search"></i>
                     </span>
                 </div>
 
                 <div class="cp advance-clear-filter-icons">
 
-                    <div class="advance-icon" tooltip="Advance Search">
-                        <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup()"></span>
+                    <div class="advance-icon"  (click)="toggleAdvanceSearchPopup()" tooltip="Advance Search">
+                        <span class="icon-advance-filter"></span>
                     </div>
 
                     <span style="line-height: 2.1" class="ml-1" *ngIf="isAdvanceSearchApplied">
                         <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()">
-                            <i aria-hidden="true" class="glyphicon glyphicon-refresh"
+                            <i aria-hidden="true" class="icon-refrsh"
                                 tooltip="Reset Filter"></i>
                         </a>
                     </span>
@@ -34,7 +34,7 @@
 
             <div class="btn-group  pull-right">
 
-                <button class="btn btn-pink" style="margin-right: 5px" (click)="creteNewCustomerEvent.emit(true)">
+                <button class="btn btn-sky-blue" style="margin-right: 5px" (click)="creteNewCustomerEvent.emit(true)">
                     + New Customer
                 </button>
 
@@ -44,7 +44,7 @@
     </div>
 
     <div class="contact-main agingPage ">
-        <div class=" pdB2 mrB1 onMobileView mobilecardwrapper">
+        <div class=" pdB2 mr-b1 on-mobile-view mobile-card-wrapper">
 
 
             <div *ngIf="!isMobileScreen" class="table-responsive">
@@ -55,7 +55,7 @@
 
             <div *ngIf="isMobileScreen">
 
-                <div class="text-center top-aging-table-top pd1">
+                <div class="text-center top-aging-table-top pd-1">
                     <p (click)="openAgingDropDown()"><strong>Due in Last days </strong></p>
                     <aging-dropdown *ngIf="setDueRangeOpen$|async" [options]="agingDropDownoptions"
                         (closeEvent)="closeAgingDropDownop($event)"></aging-dropdown>
@@ -72,7 +72,7 @@
 
 <div class="result-total">
     <div class="container-fluid">
-        <div class="row">
+        <div class="mx-md-n3">
             <div class="customer-right-wrap">
                 <div class="text-right xs-left pl-2 pr-2">
                     <h4 class="mb-1 pr-1">Result Total </h4>

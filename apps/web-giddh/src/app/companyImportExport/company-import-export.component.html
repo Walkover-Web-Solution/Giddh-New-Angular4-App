@@ -1,18 +1,18 @@
 <div class="container-fluid settings-bg">
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-12 col-sm-12">
             <div class="backup-data">
                 {{ (isFirstScreen ? 'Backup' : (mode === 'export' ? 'Export' : 'Import')) + ' Data' }}
             </div>
 
         </div>
-        <div class="col-xs-12" id="setting-tab">
+        <div class="col-xs-12 col-sm-12" id="setting-tab">
 
             <ng-container *ngIf="isFirstScreen">
                 <div class="main-container-import-export">
                     <div>
                         <div>
-                            <h2 class="text-center" style="font-size: 36px;">Import or export your account master data
+                            <h2 class="text-center">Import or export your account master data
                             </h2>
                         </div>
 

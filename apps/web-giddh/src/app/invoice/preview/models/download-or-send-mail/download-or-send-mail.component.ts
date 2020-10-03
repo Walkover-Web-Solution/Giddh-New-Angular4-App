@@ -39,7 +39,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     @Output() public closeModelEvent: EventEmitter<number> = new EventEmitter();
     @Output() public downloadOrSendMailEvent: EventEmitter<object> = new EventEmitter();
     @Output() public downloadInvoiceEvent: EventEmitter<object> = new EventEmitter();
-    @ViewChild('pdfViewer') public pdfViewer;
+    @ViewChild('pdfViewer', {static: true}) public pdfViewer;
 
     public showEmailTextarea: boolean = false;
     public base64StringForModel: any;

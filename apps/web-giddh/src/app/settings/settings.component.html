@@ -5,7 +5,7 @@
 <div class="container-fluid settings-bg setting-data" [keyboardShortcut]="['alt+right', 'alt+left']" [config]="{ignoreHost:true}"
     (onShortcutPress)="selectTabByShortcut($event)">
     <div class="row">
-        <div class="invoce-controll">
+        <div class="invoice-control w-100">
             <div id="setting-tab">
                 <div class="setting-container" *ngIf="activeTab === 'taxes'">
                     <setting-taxes></setting-taxes>
@@ -20,7 +20,7 @@
                 <div class="setting-container" *ngIf="activeTab === 'profile'">
                     <setting-profile #profileComponent></setting-profile>
                     <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)" class="auto_save" style="float: right;">
-                        <i class="glyphicon glyphicon-refresh mrR fs14 rotate"></i>Saving...
+                        <i class="icon-refrsh mrR fs14 rotate"></i>Saving...
                     </span>
                     <span *ngIf="isCompanyProfileUpdated && !(isUpdateCompanyInProgress$ | async)" class="auto_save" style="float: right;">
                         <i class="glyphicon glyphicon-check mrR fs14"></i>Saved

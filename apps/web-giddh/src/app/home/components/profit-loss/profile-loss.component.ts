@@ -1,6 +1,6 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
-import { Options } from 'highcharts';
+import * as Highcharts from 'highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
@@ -18,9 +18,8 @@ import {
     GetIncomeBeforeTaxes
 } from "../../../models/api-models/tb-pl-bs";
 import { TBPlBsActions } from "../../../actions/tl-pl.actions";
-import * as Highcharts from 'highcharts';
 import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 
 @Component({
@@ -31,7 +30,7 @@ import { GeneralService } from '../../../services/general.service';
 
 export class ProfitLossComponent implements OnInit, OnDestroy {
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store modal reference */
@@ -52,11 +51,11 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public toDate: string;
     @Input() public refresh: boolean = false;
     public imgPath: string = '';
-    public options: Options;
     public companies$: Observable<CompanyResponse[]>;
     public activeCompanyUniqueName$: Observable<string>;
     public requestInFlight: boolean = true;
-    public profitLossChart: Options;
+    public profitLossChart: typeof Highcharts = Highcharts;
+    public chartOptions: Highcharts.Options;
     public totalIncome: number = 0;
     public totalIncomeType: string = '';
     public totalExpense: number = 0;
@@ -65,18 +64,17 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public netProfitLossType: string = '';
     public plRequest: ProfitLossRequest = { from: '', to: '', refresh: false };
     public amountSettings: any = { baseCurrencySymbol: '' };
-    public isDefault: boolean = true;
     public universalDate$: Observable<any>;
     public dataFound: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe,
+    constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe,
         private cdRef: ChangeDetectorRef,
         private modalService: BsModalService,
         private generalService: GeneralService) {
         this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
         this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -101,13 +99,14 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         });
         // listen for universal date
         this.universalDate$.subscribe(dateObj => {
-            if (this.isDefault && dateObj) {
+            if (dateObj) {
                 let dates = [];
                 dates = [moment(dateObj[0]).format(GIDDH_DATE_FORMAT), moment(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
+
                 this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                 this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+
                 this.getFilterDate(dates);
-                this.isDefault = false;
             }
         });
 
@@ -173,7 +172,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         let baseCurrencySymbol = this.amountSettings.baseCurrencySymbol;
         let cPipe = this.currencyPipe;
 
-        this.profitLossChart = {
+        this.chartOptions = {
             colors: ['#FED46A', '#4693F1'],
             chart: {
                 type: 'pie',
@@ -222,11 +221,12 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 shared: true,
                 useHTML: true,
                 formatter: function () {
-                    return baseCurrencySymbol + " " + cPipe.transform(this.point.y) + '/-';
+                    return (this.point) ? baseCurrencySymbol + " " + cPipe.transform(this.point.y) + '/-' : '';
                 }
             },
             series: [{
                 name: 'Profit & Loss',
+                type: 'pie',
                 data: [['Total Income', this.totalIncome], ['Total Expenses', this.totalExpense]],
             }],
         };
@@ -275,7 +275,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
     }
 

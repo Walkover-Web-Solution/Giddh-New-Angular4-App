@@ -1,3 +1,4 @@
+@import "../../../assets/css/color.scss";
 :host ::ng-deep .parent-Group {
     padding-left: 0;
 }
@@ -101,7 +102,7 @@
 
 .sidebar-menu {
     min-height: 100vh;
-    background: #262626;
+    background: $nero;
     color: white;
     float: right;
     /* width: 250px; */
@@ -179,4 +180,9 @@ textarea[name="narration"]:focus {
 
 :host ::ng-deep .menu {
     border-left: 0 !important;
+}
+@media(max-width:991px){
+    .account-wrapper{
+        margin-top: 50px;
+    }
 }
