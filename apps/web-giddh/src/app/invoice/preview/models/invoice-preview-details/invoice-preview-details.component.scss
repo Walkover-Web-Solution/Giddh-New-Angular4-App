@@ -38,7 +38,7 @@
 .invoice-sidebar {
     background-color: $white;
     padding: 0;
-    height: calc(100vh - 20px);
+    height: calc(100vh - 120px);
 }
 
 .d-flex {
@@ -531,6 +531,7 @@ label.labeled {
     }
 }
 .linked-purchase-order {
+    padding: 0 15px;
     .purchase-order-number {
         color: $gray;
         .aqua-color {

@@ -6,7 +6,7 @@
                     <p>{{item.groupHeading}}</p>
                     <ng-container *ngFor="let routeItem of item.items">
                         <p>
-                            <a href="javascript:void(0)" (click)="navigateTo(routeItem.routerLink, routeItem.queryParams, routeItem.isClick)">{{routeItem.name}} <small *ngIf="!routeItem.routerLink" class="coming-soon-report italic">Coming soon</small></a></p>
+                            <a href="javascript:void(0)" (click)="navigateTo(routeItem.routerLink, routeItem.queryParams, routeItem.isClick)">{{routeItem.name}} <small *ngIf="!routeItem.routerLink && !routeItem.isClick" class="coming-soon-report italic">Coming soon</small></a></p>
                     </ng-container>
                 </div>
             </div>
