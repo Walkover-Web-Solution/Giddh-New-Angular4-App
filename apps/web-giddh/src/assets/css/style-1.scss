@@ -3222,6 +3222,7 @@ ul.pills li {
     font-size: 100%;
     font-size: 14px;
     border: 1px solid $gainsboro;
+    z-index: 100;
 }
 
 @-webkit-keyframes panel-open {
@@ -5238,12 +5239,6 @@ form#groupDetailForm {
     .universal-date {
         margin-right: 0;
     }
-
-    // bs-datepicker-container {
-    //     transform: translate(-50%, -50%) !important;
-    // }
-
-
 }
 
 @media only screen and (max-width: 1024px) {
