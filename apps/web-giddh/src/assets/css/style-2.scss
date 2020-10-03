@@ -9610,6 +9610,9 @@ span#HW_badge_cont:nth-child(3) {
 .daterangepicker{
     z-index: 9992 !important;
 }
+#rcw-p91-widget-button{
+    z-index: 98;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9993,7 +9996,12 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 @media (max-width: 767px) {
-
+    bs-datepicker-container{
+        position: fixed !important;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
     .modal-backdrop + .modal {
         margin-top: 5px;
     }
