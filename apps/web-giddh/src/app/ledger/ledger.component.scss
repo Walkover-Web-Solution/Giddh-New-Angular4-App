@@ -957,6 +957,12 @@ sh-select:focus {
         width: 100% !important;
         margin-bottom: 5px;
     }
+    .balance-detail{
+        .text-right{
+            text-align: left !important;
+            margin-bottom: 8px;
+        }
+    }
 }
 @media (max-width: 360px) {
     .search-ledger-field {

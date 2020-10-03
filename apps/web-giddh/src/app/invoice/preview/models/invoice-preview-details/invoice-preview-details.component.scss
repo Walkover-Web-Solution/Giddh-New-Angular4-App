@@ -114,7 +114,6 @@
 
 .invoiceDetail-header .edit-change-status {
     text-align: right;
-    padding-right: 15px;
 }
 
 .invoiceDetail-header .edit-change-status .btn {
@@ -231,7 +230,7 @@
         width: 100%;
         padding: 50px;
     }
-    
+
     .preview-not-supported-attachment {
         font-size: 18px;
         margin: 16px;
@@ -301,7 +300,6 @@
 .invoice-detail {
     background-color: #f7f8fa;
     padding-bottom: 20px;
-    padding-left:15px;
 }
 
 span.close-modal.cp.pull-right {
@@ -367,7 +365,7 @@ span.close-modal.cp.pull-right {
     overflow-y: hidden;
 }
 
-.invoice-detailWrapper {
+.invoice-detail-wrapper {
     height: 100vh;
     //overflow-y: auto;
 }
@@ -455,7 +453,7 @@ label.labeled {
 
 .expand-file{
     position: absolute;
-    right: 0px;
+    right: 15px;
     font-size: 14px;
     margin: 15px;
     top:0;
@@ -1012,7 +1010,12 @@ p {
 strong {
     font-weight: bold;
 }
-
+.invoice-preview-sidebar{
+    padding-right: 0;
+}
+.invoice-detail-wrapper{
+    padding-left: 0;
+}
 @media (max-width: 767px) {
     .center-block .btn-sm {
         float: none !important;
@@ -1067,6 +1070,12 @@ strong {
         span.inoviceDate:before {
         background-color: #f0f0f0;
     }
+    .invoice-preview-sidebar{
+        padding-right: 15px;
+    }
+    .invoice-detail-wrapper{
+        padding-left: 15px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1076,7 +1085,7 @@ strong {
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 991px) {
     .invoice-sidebar {
         background-color: $white;
         padding: 0;
@@ -1107,7 +1116,22 @@ strong {
         float: left;
     }
 }
-
+@media(max-width:575px){
+    .wrap-edit-history-btn{
+        float: none;
+        display: flex;
+        width: 100%;
+        padding-top: 10px;
+    }
+    .changeStatus-dropdown{
+        float: left;
+    }
+    span.close-modal.cp.pull-right{
+        position: absolute !important;
+        top: -42px;
+        right: 30px;
+    }
+}
 @media (max-width: 375px) {
     .invoice-modal-content:after,
     .invoice-modal-content {

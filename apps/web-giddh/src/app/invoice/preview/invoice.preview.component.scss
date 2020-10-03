@@ -776,6 +776,9 @@ span.icon-export-icon {
         letter-spacing: -0.99px;
     }
 }
+.form-control.daterange-picker {
+    cursor: pointer !important;
+}
 
 @media (max-width: 445px) {
     .status-mobile{

@@ -52,6 +52,7 @@
     color: $midnight-blue;
     margin-right: 7px;
     background: #fff;
+    cursor: pointer;
 }
 .table > tbody + tbody {
     border-top: none;
@@ -103,4 +104,7 @@
         margin-bottom: 0;
         vertical-align: middle;
     }
+}
+.daybook-table-tbody > tr {
+    cursor: pointer;
 }

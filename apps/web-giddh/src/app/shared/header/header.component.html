@@ -275,7 +275,30 @@
     (clickOutside)="closeSidebarMobile($event)">
 
     <div class="menu-wrapper">
-
+        <!-- switch branch start -->
+        <div class="switch-branch-wrapper">
+            <div class="btn-group" dropdown  placement="bottom right"  [autoClose]="false">
+                <a id="button-basic" dropdownToggle type="button" class="dropdown-toggle"
+                    aria-controls="dropdown-basic">
+                    XYZ Alias Name
+                    <span class="icon-arrow-down"></span>
+            </a>
+                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                    <div class="input-group mb-1" container="body">
+                        <input type="text" class="form-control" placeholder="Search Company here" autocomplete="off" />
+                        <span tooltip="Refresh" class="input-group-addon">
+                            <i class="icon-refrsh cp"></i>
+                        </span>
+                    </div>
+                    <li role="menuitem"><a class="dropdown-item" href="#">Loreum Ipsum</a></li>
+                    <li role="menuitem"><a class="dropdown-item" href="#">Loreum Ipsum</a></li>
+                    <li class="divider dropdown-divider"></li>
+                    <li role="menuitem"><a class="dropdown-item go-to-company" href="#">Go to company</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Switch branch end -->
         <ul class="main-company-name">
             <li *ngIf="isMobileSite" [autoClose]="false" class="company-name pos-rel hidden-lg hidden-md hidden-sm"
                 dropdown #dropdown="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false">
