@@ -34,8 +34,6 @@ import { OnReturnDirective } from './keyboard.directive';
 import { AVShSelectModule } from './ng-virtual-list/virtual-list.module';
 import { TallyModuleService } from './tally-service';
 import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
-import {NgxMaskModule} from "../shared/helpers/directives/ngx-mask";
-import { ReceiptEntryModalComponent } from './journal-voucher/voucher/receipt-entry-modal/receipt-entry-modal.component';
 
 @NgModule({
     declarations: [
