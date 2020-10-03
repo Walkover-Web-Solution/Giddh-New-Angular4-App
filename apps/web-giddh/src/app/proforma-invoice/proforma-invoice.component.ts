@@ -1280,10 +1280,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.accountDetails.currencySymbol = '';
                         }
                         this.invFormData = obj;
-<<<<<<< HEAD
-=======
                         this.checkVoucherEntries();
->>>>>>> 04070ec346ea2e921622c4bc24e3bb37ee453963
                         if (this.isCreditNote) {
                             this.getInvoiceListsForCreditNote();
                         }
