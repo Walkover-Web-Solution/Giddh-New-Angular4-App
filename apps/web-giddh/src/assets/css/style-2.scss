@@ -615,10 +615,10 @@ input {
     padding: 8px 0px !important;
     margin-right: 35px !important;
     margin-left: 0 !important;
-    padding-bottom: 7px !important;
     font-size: 14px;
     color: #262626 !important;
     border-width: 0px 0 4px 0 !important;
+    height:41px;
 }
 
 .invoice-control .nav > li > a:hover{
@@ -6520,7 +6520,7 @@ table td[class*=col-]:last-child {
     border-right: 0 !important;
 } */
 
-.total_col td {
+.total-col td {
     border: 0 !important;
 }
 
@@ -6569,7 +6569,7 @@ table td[class*=col-]:last-child {
     color: rgba(0, 0, 0, 0.4);
 }
 
-.total_col td {
+.total-col td {
     border: 0;
 }
 
@@ -8574,7 +8574,6 @@ ul.dropdown-menu p.lead.pd {
 .nav-tabs > li.active > a,
 .invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid $deep-sky-blue !important;
-    padding-bottom: 7px !important;
     font-family: $opensans-semibold;
     background-color: inherit;
 }
@@ -9589,6 +9588,28 @@ span#HW_badge_cont:nth-child(3) {
         z-index: 9992 !important;
     }
 }
+.new-ledger-text-right ul li {
+    ul{
+        li{
+            display: flex;
+            align-items: center;
+        }
+    }
+}
+.total-col bs-tooltip-container.tooltip .tooltip-inner{
+    min-width: 150px !important;
+    width: 150px !important;
+    max-width: 150px !important;
+}
+.recurring-form{
+    sh-select, input{
+        min-width: 170px;
+        max-width: 170px;
+    }
+}
+.daterangepicker{
+    z-index: 9992 !important;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9598,6 +9619,17 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 @media (max-width: 1024px) {
+    /* bs-datepicker-container{
+            position: absolute !important;
+            left: 15px !important;
+            top: 40px !important;
+            transform: none !important;
+    }
+    .payment-date{
+        bs-datepicker-container{
+            top: 60px !important;
+        }
+    }*/
     .users-last-list{
         .cdk-virtual-scroll-content-wrapper {
             position: relative;
@@ -10692,6 +10724,12 @@ span#HW_badge_cont:nth-child(3) {
             min-height: 452px;
         }
     }
+    .recurring-form{
+        sh-select, input{
+            min-width: 130px;
+            max-width: 130px;
+        }
+    }
 }
 
 /*** iPhone and iOS Form Input Zoom Fixes ***/
@@ -10799,4 +10837,3 @@ body.prevent-body-scroll {
 .modal.fade.giddh-calendar.show {
     z-index: 999999;
 }
-

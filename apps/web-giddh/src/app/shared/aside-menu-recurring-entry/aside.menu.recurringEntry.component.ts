@@ -10,6 +10,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from "../../services/toaster.service";
 import { takeUntil } from 'rxjs/operators';
+import { RecurringVoucherService } from '../../services/recurring-voucher.service';
 
 @Component({
 	selector: 'app-aside-recurring-entry',
@@ -38,7 +39,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 	constructor(private _store: Store<AppState>,
 		private _fb: FormBuilder,
 		private _toaster: ToasterService,
-		private _invoiceActions: InvoiceActions) {
+		private _invoiceActions: InvoiceActions, private recurringVoucherService: RecurringVoucherService) {
 		this.today.setDate(this.today.getDate() + 1);
 		this.form = this._fb.group({
 			voucherNumber: [this.voucherNumber, Validators.required],
@@ -109,8 +110,19 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 	}
 
 	public deleteInvoice() {
-		this.isDeleteLoading = true;
-		this._store.dispatch(this._invoiceActions.deleteRecurringInvoice(this.invoice.uniqueName));
+        this.isDeleteLoading = true;
+        
+        this.recurringVoucherService.deleteRecurringVouchers(this.invoice.uniqueName).subscribe(response => {
+            if(response) {
+                this.isDeleteLoading = null;
+                this.closeAsidePane(null);
+                if(response.status === "success") {
+                    this._toaster.successToast(response.body);
+                } else {
+                    this._toaster.successToast(response.message);
+                }
+            }
+        });
 	}
 
 	public isExpirableChanged({ checked }) {

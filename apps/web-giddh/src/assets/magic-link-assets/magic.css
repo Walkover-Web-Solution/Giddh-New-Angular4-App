@@ -1317,7 +1317,7 @@ div#transaction_table {
     background-color: #fff;
     position: relative;
 }
-.ledger-footer-1.leftfooter .total_col td {
+.ledger-footer-1.leftfooter .total-col td {
     border-right: 0;
 }
 #debit td {

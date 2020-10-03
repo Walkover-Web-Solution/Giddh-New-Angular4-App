@@ -14,7 +14,6 @@
                                         *ngIf="(selectedCompany | async)?.nameAlias"> (
                                         {{  (selectedCompany | async)?.nameAlias }} )</span>
                                 </ng-template>
-                                <!-- <span class="icon-dots-three-vertical"></span> -->
                                 <div class="c-text">
                                     <span class="c-name ellp pd-r1">{{ ((selectedCompany | async)?.name) | slice: 0 : 1}}
                                     </span>
@@ -201,7 +200,6 @@
                                         {{  (selectedCompany | async)?.nameAlias }}
                                         )</span>
                                 </ng-template>
-                                <!-- <span class="icon-dots-three-vertical"></span> -->
                                 <div class="c-text no-padding">
 
                                     <span class="c-name ellp pd-r1 pd-l1 alice">{{companyInitials}}</span>
@@ -230,25 +228,12 @@
                             </li>
                             <li class="not-today cursor-pointer">
                                 <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
-                                <!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
                                 <div class="input-date">
                                     <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
                                         [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                                         class="giddh-datepicker form-control date-range-picker" />
                                 </div>
                             </li>
-                            <!-- <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
-
-                                <span class="icon-calender calender-addone"></span>
-                                <label class="header-date">
-                                    {{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
-                            </li> -->
-                            <!--                        <li [hidden]="!isTodaysDateSelected" class="cp" (click)="showGiddhDatepicker($event)">-->
-                            <!--                            &lt;!&ndash; <label class="btn btn-link"></label> &ndash;&gt;-->
-                            <!--                            <span class="icon-calender calender-addone"></span>-->
-                            <!--                            <label class="header-date">-->
-                            <!--                                {{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>-->
-                            <!--                        </li>-->
                         </ul>
                         <button id="add-manage" type="button" class="btn btn-gray btn-sm"
                             [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
@@ -437,29 +422,15 @@
                             <i class="icon-bar"></i>
                         </button>
 
-                        <h4 class="inline text-capitalize" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
+                        <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
                             <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected"
                                 class="txt-lwc">c</span></h4>
 
-                        <h4 class="inline text-capitalize" *ngIf="!navigationEnd && !navigateToUser">{{oldSelectedPage}}
+                        <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="!navigationEnd && !navigateToUser">{{oldSelectedPage}}
                             <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected"
                                 class="txt-lwc">c</span></h4>
 
                     </li>
-
-                    <!-- books search -->
-                    <!-- <li [attachOutsideOnClick]="true" (clickOutside)="forceCloseSidebar($event)">
-<div class="ledger_search form-inline">
-<div class="form-group">
-<div class="input-group">
-<input [hidden]="userIsCompanyUser" #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)" [formControl]="accountSearchControl" [value]="accountSearchValue">
-<div *ngIf="flyAccounts | async" (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
-    <span (click)="flyAccounts.next(true)" [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
-</div>
-</div>
-</div>
-</div>
-</li> -->
                     <li>
 
                     </li>
@@ -476,7 +447,6 @@
             </div>
         </div>
     </nav>
-    <!-- <accounts-side-bar [isRouter]="true" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar> -->
 </header>
 <div class="padding-top-fixed-mobile">
     <header class="clearfix header-container mobile-header">
@@ -484,11 +454,9 @@
             <div class="container-fluid  mr-b1 ">
                 <div class="upper-layer-header">
                     <ul class="nav navbar-nav">
-                        <!-- (isOpenChange)="sideBarStateChange($event)" -->
                         <li class="hamburger-menu cp pull-left">
                             <button class="btn mr-0" placement="right" (click)="redirectToMobileHome()">
                                 <i class="icon-home-icon"></i>
-
                             </button>
                             <span class="setting-menu-icon" (click)="toggleSidebarPane(true, true)"> <i
                                     class="icon-bar"></i> </span>
@@ -497,11 +465,11 @@
                         </li>
                         <li class="hamburger-menu cp pull-left"
                             (click)="sideBarStateChange(sideMenu.isopen = !sideMenu.isopen)">
-                            <h4 class="inline text-capitalize" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
+                            <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="navigationEnd && !navigateToUser">{{selectedPage}}
                                 <span *ngIf="isLedgerAccSelected">A/</span><span *ngIf="isLedgerAccSelected"
                                     class="txt-lwc">c</span></h4>
 
-                            <h4 class="inline text-capitalize" *ngIf="!navigationEnd && !navigateToUser">
+                            <h4 class="inline text-capitalize" id="giddh-page-heading" *ngIf="!navigationEnd && !navigateToUser">
                                 {{oldSelectedPage}} <span *ngIf="isLedgerAccSelected">A/</span><span
                                     *ngIf="isLedgerAccSelected" class="txt-lwc">c</span></h4>
 
@@ -529,8 +497,6 @@
                                         <span class="text-center"><a href="http://faq.giddh.com/" target="_blank"
                                                 class="btn btn-link td-undr">FAQs</a></span>
                                     </li>
-                                    <!-- <h3 class="mr-t2 mr-b2 fs20 text-center grey-clr">FAQs?</h3> -->
-
                                 </ul>
                             </div>
                         </li>
@@ -544,18 +510,12 @@
                         </li>
                         <li class="daterang-picker not-today cursor-pointer">
                             <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
-                            <!--                            <input type="text" class="" name="daterangeInput" #dateRangePickerCmp daterangepicker [options]="datePickerOptions" (applyDaterangepicker)="setApplicationDate($event)" class="form-control date-range-picker" />-->
                             <div class="input-date">
                                 <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
                                     [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                                     class="giddh-datepicker form-control date-range-picker" />
                             </div>
                         </li>
-                        <!-- <li [hidden]="!isTodaysDateSelected" class="cp" (click)="openDateRangePicker();">
-                            <label class="btn btn-link">&nbsp;</label>
-                            <span class="icon-calender calender-addone "></span>
-                            <label class="header-date">{{moment(datePickerOptions.endDate).format('DD-MM-YYYY')}}</label>
-                        </li> -->
                     </ul>
                     <div class="d-flex align-items-center" *ngIf="(selectedCompany | async)">
                         <span [ngClass]="{'notification': isMobileScreen}">
@@ -642,12 +602,6 @@
 <ng-template #navigationModal>
 
     <div class="modal-body" #mdl>
-        <!-- <universal-data-list (noResultFoundEmitter)="handleNoResultFoundEmitter($event)"
-            (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)" [forceSetAutoFocus]="true"
-            [isFlying]="false" (groupEmitter)="makeGroupEntryInDB($event)"
-            (selectedItemEmitter)="onItemSelected($event)" [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true"
-            [searchBoxPlaceholder]="'Search'" [isMultiple]="false" (closeEmitter)="modelRef.hide()">
-        </universal-data-list> -->
         <command-k (noResultFoundEmitter)="handleNoResultFoundEmitter($event)"
             (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)" (groupEmitter)="makeGroupEntryInDB($event)"
             (selectedItemEmitter)="onItemSelected($event)" [parentEle]="mdl" [isOpen]="true" [setParentWidth]="true"
@@ -662,37 +616,6 @@
     </div>
 
 </ng-template>
-<!-- TODO : It is commented due to we have implement calendly and its under discussion to remove   -->
-<!-- <div bsModal #talkSalesModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="left">Talk to Sales</h3>
-                <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
-            </div>
-
-            <div class="modal-body custom-body mrB3" [style.padding-top.px]="0" [style.padding-bottom.px]="0">
-                <div class="" id="setting-tab">
-                    <tabset #supportTab>
-                        <tab heading="Arrange a Demo">
-                            <div class="argdemo mr-t2">
-                                <p>Choose your preferred time to schedule a demo with an expert. </p>
-                                <button class="btn btn-primary mr-t1" (click)="scheduleNow()">Click Here</button>
-                            </div>
-                        </tab>
-                        <tab heading="Drop us Mail">
-                            <div id="Jkvq" class="talktosale-superform mr-t2"></div>
-                        </tab>
-                    </tabset>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-
-
-<!--  -->
-
 <ng-template #expiredPlanModel>
     <div class="modal-header">
         <h3 class="modal-title pull-left">Ready to upgrade subscription</h3>
@@ -710,7 +633,6 @@
         </div>
         <div class="clearfix">
             <ul class="list-inline upgrade-plan">
-                <!-- [routerLink]="['select-plan']" -->
                 <li>
                     <button class="btn btn-green" *ngIf="currentCompanyPlanAmount" (click)="goToSelectPlan();">Renew
                         Plan</button>
@@ -838,9 +760,6 @@
                                     src="assets/images/users-white.svg">
 
                             </a>
-                            <!-- commented by meghna
-<i class="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="icon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
--->
                         </li>
 
                     </ul>
@@ -881,9 +800,6 @@
     <li *ngIf="!isMobileSite">
         <a href="javascript:void(0)" (click)="analyzeMenus($event, '/pages/user-details', { tab: 'api', tabIndex: 0 })">API</a>
     </li>
-    <!-- <li>
-<a href="http://faq.giddh.com" target="_blank">Help</a>
-</li> -->
     <li role="separator" class="divider width-100"></li>
     <li class="pb-1">
         <a href="javascript:void(0)" (click)="logout()">Logout</a>
@@ -918,7 +834,6 @@
 </ng-template>
 
 <div class="filings-empty-state" *ngIf="isCalendlyModelActivate">
-    <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
     <div class="spinner2">
         <div class="cube1"></div>
         <div class="cube2"></div>

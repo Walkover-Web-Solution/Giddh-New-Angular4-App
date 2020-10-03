@@ -982,11 +982,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public validateTransaction(transactions) {
         let validEntry = this.removeBlankTransaction(transactions);
         let entryIsValid = true;
-        forEach(validEntry, function (obj: any, idx) {
+        validEntry.forEach(obj => {
             if (obj.particular && !obj.amount) {
                 obj.amount = 0;
             } else if (obj && !obj.particular) {
-                this.entryIsValid = false;
+                entryIsValid = false;
                 return false;
             }
         });
@@ -1377,13 +1377,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public createAccountsList(): void {
         if (this.allAccounts) {
             let accList: IOption[] = [];
+            let accountList = [];
             this.allAccounts.forEach((acc: IFlattenAccountsResultItem) => {
-                if (this.activeCompany && acc.currency === this.activeCompany.baseCurrency) {
+                if (accountList.indexOf(acc.uniqueName) === -1 && this.activeCompany && acc.currency === this.activeCompany.baseCurrency) {
                     if (this.requestObj.voucherType === VOUCHERS.CONTRA) {
                         const isContraAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash' || pg.uniqueName === 'currentliabilities'));
                         const isDisallowedAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'sundrycreditors' || pg.uniqueName === 'dutiestaxes'));
                         if (isContraAccount && !isDisallowedAccount) {
                             accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+                            accountList.push(acc.uniqueName);
                         }
                     } else if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
                         let isReceiptAccount;
@@ -1397,9 +1399,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         const isDisallowedAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'dutiestaxes'));
                         if (isReceiptAccount && !isDisallowedAccount) {
                             accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+                            accountList.push(acc.uniqueName);
                         }
                     } else {
                         accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+                        accountList.push(acc.uniqueName);
                     }
                 }
             });
