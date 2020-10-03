@@ -9607,6 +9607,9 @@ span#HW_badge_cont:nth-child(3) {
         max-width: 170px;
     }
 }
+.daterangepicker{
+    z-index: 9992 !important;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9616,7 +9619,7 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 @media (max-width: 1024px) {
-    bs-datepicker-container{
+    /* bs-datepicker-container{
             position: absolute !important;
             left: 15px !important;
             top: 40px !important;
@@ -9626,7 +9629,7 @@ span#HW_badge_cont:nth-child(3) {
         bs-datepicker-container{
             top: 60px !important;
         }
-    }
+    }*/
     .users-last-list{
         .cdk-virtual-scroll-content-wrapper {
             position: relative;
