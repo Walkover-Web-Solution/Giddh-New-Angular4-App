@@ -29,10 +29,6 @@ import { DiscountListComponent } from './discount-list/discountList.component';
 import { SalesAsideMenuAccountComponent } from './sales-aside-menu-account/sales.aside.menu.account.component';
 import { SalesComponent } from './sales.component';
 import { SalesRoutingModule } from './sales.routing.module';
-
-// import { TooltipModule, TypeaheadModule, CollapseModule } from 'ngx-bootstrap';
-// import { PaginationModule  } from 'ngx-bootstrap/pagination';
-// import { TabsModule } from 'ngx-bootstrap/tabs';
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
 @NgModule({
