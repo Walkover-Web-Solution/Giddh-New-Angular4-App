@@ -3222,6 +3222,7 @@ ul.pills li {
     font-size: 100%;
     font-size: 14px;
     border: 1px solid $gainsboro;
+    z-index: 100;
 }
 
 @-webkit-keyframes panel-open {
@@ -5134,7 +5135,7 @@ perfect-scrollbar.ps-show-active
     margin: 0 !important;
 }
 
-.customItem:hover {
+.customItem:hover , .discount-item:hover {
     background-color: $lavender !important;
     color: #5b64c9 !important;
     &:hover {
@@ -5302,4 +5303,9 @@ form#groupDetailForm {
     #setting-tab .nav > li > a:hover {
         color: inherit !important;
     }
+}
+
+
+.valid-tooltip, .tooltip, .tooltip-inner{
+    font-size:12px !important;
 }

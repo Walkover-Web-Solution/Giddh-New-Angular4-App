@@ -138,11 +138,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
 
     @ViewChild('deleteAttachedFileModal', {static: true}) public deleteAttachedFileModal: ModalDirective;
-    @ViewChild('discount', {static: true}) public discountControl: LedgerDiscountComponent;
-    @ViewChild('tax', {static: true}) public taxControll: TaxControlComponent;
+    @ViewChild('discount', {static: false}) public discountControl: LedgerDiscountComponent;
+    @ViewChild('tax', {static: false}) public taxControll: TaxControlComponent;
 
     /** RCM popup instance */
-    @ViewChild('rcmPopup', {static: true}) public rcmPopup: PopoverDirective;
+    @ViewChild('rcmPopup', {static: false}) public rcmPopup: PopoverDirective;
 
     public sourceWarehouse: true;
     public uploadInput: EventEmitter<UploadInput>;

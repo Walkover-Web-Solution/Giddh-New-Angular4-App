@@ -128,7 +128,7 @@
                                                         [notFoundLinkText]="customerNotFoundText"
                                                         (keyup)="resetCustomerName($event)"
                                                         (onClear)="resetCustomerName(null)"
-                                                        [disabled]="isUpdateMode && invoiceType !== 'sales' && invoiceType !== 'cash'">
+                                                        [disabled]="isUpdateMode && invoiceType !== 'sales' && invoiceType !== 'cash' && invoiceType !== 'purchase'">
 
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a href="javascript:void(0)" class="list-item flex-column">
@@ -1069,8 +1069,8 @@
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
                                 <tr [hidden]="activeIndx !== entryIdx" class="entriesTr defaultActive"
                                     (click)="$event.stopPropagation();">
-                                    <td>{{ entryIdx + 1 }}</td>
-                                    <td>
+                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();">{{ entryIdx + 1 }}</td>
+                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();">
 
                                         <div class="productName">
                                             <div class="ng-select-wrap">
@@ -1207,7 +1207,7 @@
                                         </div>
                                     </td>
 
-                                    <td class="text-right stockUnit">
+                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();" class="text-right stockUnit">
                                         <input type="text" [disabled]="!transaction.isStockTxn"
                                             (blur)="handleQuantityBlur(entry, transaction);" placeholder="Quantity"
                                             decimalDigitsDirective name="transaction.quantity_{{entryIdx}}"
@@ -1224,7 +1224,7 @@
                                         </select>
                                     </td>
 
-                                    <td class="text-right item-rate" style="height: 1px;">
+                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();" class="text-right item-rate" style="height: 1px;">
                                         <div class="td-wrapper">
 
                                             <div style="flex: 1;">
@@ -1246,10 +1246,10 @@
                                         </div>
                                     </td>
 
-                                    <td class="text-right item-amount" style="height:1px;">
+                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();" class="text-right item-amount" style="height:1px;">
                                         <div class="td-wrapper">
                                             <div style="flex: 1;">
-                                                <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction)"
+                                                <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
                                                     (click)="transactionAmountClicked(transaction)" placeholder="Amount"
                                                     name="transaction.amount_{{entryIdx}}"
                                                     class="form-control text-right" [(ngModel)]="transaction.amount"
@@ -1265,7 +1265,7 @@
                                         </div>
                                     </td>
 
-                                    <td class="item-discount" style="height:1px;">
+                                    <td (click)="closeTaxControlPopup();" class="item-discount" style="height:1px;">
                                         <div class="td-wrapper">
                                             <div class="text-right" style="flex:1;">
                                                 <discount-control-component #discountComponent [discountMenu]="false"
@@ -1286,10 +1286,10 @@
                                         </div>
                                     </td>
 
-                                    <td class="pos-rel dropdown-container item-tax" style="height:1px;">
+                                    <td (click)="closeTaxControlPopup();" class="pos-rel dropdown-container item-tax" style="height:1px;">
                                         <div class="td-wrapper">
                                             <div class="text-right" style="flex:1;">
-                                                <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
+                                                <tax-control #taxControlComponent [taxes]="companyTaxesList" [date]="entry.entryDate"
                                                     [taxRenderData]="entry.taxes"
                                                     [totalForTax]="transaction.taxableValue"
                                                     [applicableTaxes]="transaction.applicableTaxes"
@@ -1316,7 +1316,7 @@
                                         </div>
                                     </td>
 
-                                    <td class="text-right item-total delete-btn-absolute">
+                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();" class="text-right item-total delete-btn-absolute">
                                         <div class="td-wrapper">
 
                                             <div style="flex:1;">
@@ -2146,7 +2146,7 @@
 
                                                 <label class="card-label text-right">Amount</label>
                                                 <div style="flex: 1;">
-                                                    <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction)"
+                                                    <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
                                                         (click)="transactionAmountClicked(transaction)" placeholder="Amount"
                                                         name="transaction.amount_{{entryIdx}}" class="form-control text-right"
                                                         [(ngModel)]="transaction.amount" decimalDigitsDirective
@@ -2199,7 +2199,7 @@
                                                 <label class="card-label text-right">Tax</label>
 
                                                 <div class="text-right" style="flex:1;">
-                                                    <tax-control [taxes]="companyTaxesList" [date]="entry.entryDate"
+                                                    <tax-control #taxControlComponent [taxes]="companyTaxesList" [date]="entry.entryDate"
                                                         [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue"
                                                         [applicableTaxes]="transaction.applicableTaxes"
                                                         [exceptTaxTypes]="exceptTaxTypes"
@@ -2558,7 +2558,7 @@
             <!-- region submit actions-->
             <section class="clearfix">
 
-                <section id="actionPane" class="text-center">
+                <section id="actionPane" class="text-center" [ngClass]="{'giddh-overlap-block': invFormData.voucherDetails.customerName }">
 
                     <div class="col-12">
 
@@ -2592,8 +2592,7 @@
                                     </span> &amp; Update A/c
                                 </button>
 
-                                <div class="btn-group" dropdown [dropup]="true" [isDisabled]="!hasVoucherEntry">
-
+                                <div class="btn-group" [dropup]="isDropup" dropdown  [isDisabled]="!hasVoucherEntry">
                                     <button type="button" [disabled]="!hasVoucherEntry"
                                         (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default generateInvoie">Generate
@@ -2601,69 +2600,61 @@
                                             Cash
                                         </span>
                                     </button>
+                                </div>
 
-                                    <button id="button-split" type="button" dropdownToggle
-                                        class="btn btn-default dropdown-toggle dropdown-toggle-split"
-                                        aria-controls="dropdown-split" *ngIf="invoiceType === 'sales'">
+                                <div class="btn-group" dropdown [dropup]="isDropup">
+                                    <button id="button-dropup"  *ngIf="invoiceType === 'sales'"
+                                     dropdownToggle type="button" class="btn btn-default dropdown-toggle"
+                                        aria-controls="dropdown-dropup">
                                         <span class="caret"></span>
-                                        <span class="sr-only">Split button!</span>
                                     </button>
-
-                                    <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right"
-                                        role="menu" aria-labelledby="button-basic">
-
+                                    <ul id="dropdown-dropup" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="button-dropup">
                                         <li role="menuitem">
-                                            <a class="dropdown-item cp"
-                                                (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">Create
+                                            <a class="dropdown-item cp" (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">Create
                                                 & Send</a>
                                         </li>
 
                                         <li role="menuitem">
-                                            <a class="dropdown-item cp"
-                                                (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)">Create
+                                            <a class="dropdown-item cp" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)">Create
                                                 & Print</a>
                                         </li>
 
-                                        <li role="menuitem"
-                                            (click)="doAction(4);triggerSubmitInvoiceForm(invoiceForm, false)">
+                                        <li role="menuitem" (click)="doAction(4);triggerSubmitInvoiceForm(invoiceForm, false)">
                                             <a class="dropdown-item cp">Generate & Recurring</a>
                                         </li>
                                     </ul>
                                 </div>
+
+
                             </span>
                             <!-- endregion -->
 
                             <!-- region proforma/estimates -->
                             <span class="d-inline-block v-align-middle" *ngIf="isProformaInvoice || isEstimateInvoice">
 
-                                <div class="btn-group" dropdown [dropup]="true" [isDisabled]="!hasVoucherEntry">
+                                <div class="btn-group" dropdown [dropup]="isDropup" [isDisabled]="!hasVoucherEntry">
 
                                     <button type="button" [disabled]="!hasVoucherEntry"
                                         (click)="doAction(0);triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default">Create
                                     </button>
-
-                                    <button id="button-split2" type="button" dropdownToggle
-                                        class="btn btn-default dropdown-toggle dropdown-toggle-split"
-                                        aria-controls="dropdown-split">
+                                    <button id="button-dropup" type="button" dropdownToggle
+                                        class="btn btn-default dropdown-toggle dropdown-toggle-split" aria-controls="dropdown-dropup">
                                         <span class="caret"></span>
-                                        <span class="sr-only">Split button!</span>
                                     </button>
-
-                                    <ul id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right"
-                                        role="menu" aria-labelledby="button-basic">
+                                    <ul id="dropdown-dropup" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+                                        aria-labelledby="button-dropup">
                                         <li role="menuitem">
-                                            <a class="dropdown-item cp"
-                                                (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">Create
+                                            <a class="dropdown-item cp" (click)="doAction(2);triggerSubmitInvoiceForm(invoiceForm, false)">Create
                                                 & Send</a>
                                         </li>
 
                                         <li role="menuitem">
-                                            <a class="dropdown-item cp"
-                                                (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)">Create
+                                            <a class="dropdown-item cp" (click)="doAction(3);triggerSubmitInvoiceForm(invoiceForm, false)">Create
                                                 & Print</a>
                                         </li>
                                     </ul>
+
                                 </div>
                             </span>
                             <!-- endregion -->

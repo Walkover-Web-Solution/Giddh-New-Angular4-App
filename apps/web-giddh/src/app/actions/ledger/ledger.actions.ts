@@ -218,7 +218,7 @@ export class LedgerActions {
                     this.ResetUpdateLedger();
                     return { type: 'EmptyAction' };
                 } else {
-                    this._toasty.successToast('entry updated successfully');
+                    this._toasty.successToast('Entry updated successfully');
                     if (action && action.payload && action.payload.request && action.payload.request.refreshLedger) {
                         this.store.dispatch(this.refreshLedger(true));
                     }

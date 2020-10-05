@@ -535,9 +535,11 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         let removedItem = allItems.splice(newIndex, 1);
         allItems = [...removedItem, ...allItems];
         this.itemsListForDetails = allItems;
-        this.selectedVoucher = this.parseItemForVm(invoice);
 
-        this.toggleBodyClass();
+        setTimeout(() => {
+            this.selectedVoucher = this.parseItemForVm(invoice);
+            this.toggleBodyClass();
+        }, 200);
     }
 
     public dateRangeChanged(event: any) {

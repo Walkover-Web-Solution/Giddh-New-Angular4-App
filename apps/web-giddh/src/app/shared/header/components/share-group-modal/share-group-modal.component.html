@@ -1,16 +1,16 @@
-<div id="shareModal" class="pdB4 shareGrp">
+<div id="share-modal" class="pdB4 shareGrp">
     <div class="modal-header">
         <h3>Share Group</h3>
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
     </div>
     <div class="modal-body" id="SharePop">
-        <div class="form-group">
+        <div class="form-group mb-0">
             <h3 class="pd-b1">Share with</h3>
             <div class="add_mailer">
 
                 <!--share group from-->
                 <form name="shareGroupForm" #shareGroupForm="ngForm" novalidate="" class="form-inline clearfix" autocomplete="off">
-                    <div class="input-group form-group col-xs-12">
+                    <div class="input-group form-group w-100">
                         <input name="userEmail" type="email" [(ngModel)]="email" required placeholder="Email ID" class="form-control" [pattern]="giddhEmailRegex">
                         <div class="input-group-btn">
                             <select name="selectedPermission" class="form-control selected-permission" [(ngModel)]="selectedPermission" required>
@@ -20,20 +20,21 @@
                                     {{permission.name}}
                                 </option>
                             </select>
-                            <button class="btn btn-success mr-l1 btn-share" type="submit" [disabled]="shareGroupForm.invalid" (click)="shareGroup()">Share
+                            <button class="btn btn-success btn-share ml-0" type="submit" [disabled]="shareGroupForm.invalid" (click)="shareGroup()">Share
                             </button>
                         </div>
                         <!-- /btn-group -->
-                    </div>
+                </div>
                 </form>
 
                 <!--shared with array-->
-                <div class="col-xs-12 pd-t1" *ngIf="(activeGroupSharedWith$ | async)?.length">
-                    <div class="row">
+                
+                <div class="pd-t1" *ngIf="(activeGroupSharedWith$ | async)?.length">
+                    <div>
                         <ul class="shared_list group-shared-list">
                             <li *ngFor="let val of (activeGroupSharedWith$ | async); let i = index">
                                 <div class="user-name-email">
-                                    <i class="fa fa-user pdR1"></i>
+                                    <i class="fa fa-user pd-r1"></i>
                                     <span class="user-email">
                                         <small *ngIf="val.emailId!==val.userName">{{val.userName}}</small>
                                         <small>{{ val.emailId }}</small>
@@ -58,6 +59,7 @@
                         </ul>
                     </div>
                 </div>
+                
             </div>
             <!-- add mailer -->
         </div>

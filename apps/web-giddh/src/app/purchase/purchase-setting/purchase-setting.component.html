@@ -69,8 +69,8 @@
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-3 lh34"><label>Default expiry days</label></div>
                                 <div class="col-sm-12 col-md-12 col-lg-9">
-                                    <div class="default-expiry">
-                                        <div>
+                                    <div class="default-expiry row">
+                                        <div class="col-md-5">
                                             <div class="form-group">
                                                 <div class="expiry-days" [ngClass]="{'input-group': true}">
                                                     <input type="tel" class="form-control" maxlength="3" placeholder="00" decimalDigitsDirective name="poDuePeriod" [(ngModel)]="invoiceSettings.purchaseBillSettings.poDuePeriod" />
@@ -99,7 +99,7 @@
                                         <label>Enable send PO via SMS</label></div>
                                     <div class="col-sm-12 col-md-12 col-lg-9">
                                         <div class="form-group clearfix">
-                                            <input type="checkbox" class="hide-on-mobile" name="sendPOLinkOnSms" [(ngModel)]="invoiceSettings.purchaseBillSettings.sendPOLinkOnSms" />
+                                            <input type="checkbox" class="hide-on-mobile pull-left" name="sendPOLinkOnSms" [(ngModel)]="invoiceSettings.purchaseBillSettings.sendPOLinkOnSms" />
                                             <div class="pull-left sms-textarea" *ngIf="invoiceSettings?.purchaseBillSettings?.sendPOLinkOnSms">
                                                 <textarea [(ngModel)]="invoiceSettings.purchaseBillSettings.poSmsContent" class="pull-left form-control" name="sendPOLinkOnSms" rows="3"></textarea>
                                             </div>

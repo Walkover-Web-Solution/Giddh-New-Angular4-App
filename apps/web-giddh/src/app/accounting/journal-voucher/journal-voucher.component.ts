@@ -65,7 +65,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     //         uniqueName: 'purchases',
     //         gridType: 'voucher'
     //     }
-    // }, 
+    // },
     {
         keyCode: 117, // 'F6',
         key: FUNCTIONAL_KEYS.F6,

@@ -1,6 +1,7 @@
 @charset "utf-8";
 @import "../css/giddh-common.scss";
 @import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "../css/ngx-bs-datepicker.scss";
 
 /* table css need to removed at last  (start)
    Don't touch this table css (If any body work on that contact shalinee..)
@@ -614,15 +615,15 @@ input {
     padding: 8px 0px !important;
     margin-right: 35px !important;
     margin-left: 0 !important;
-    padding-bottom: 7px !important;
     font-size: 14px;
     color: #262626 !important;
     border-width: 0px 0 4px 0 !important;
+    height:41px;
 }
 
 .invoice-control .nav > li > a:hover{
-    border-color: transparent !important;;
-    background-color: transparent !important;;
+    border-color: transparent !important;
+    background-color: transparent !important;
 }
 
 
@@ -979,7 +980,9 @@ ul.sub-list {
     font-size: 18px;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
-
+.tab-integraton .nav-tabs > li > a:hover{
+    border: 1px solid rgba(26, 35, 126, 0.4) !important;
+}
 .tab-integraton .nav-tabs > li.active a {
     background: $white !important;
     box-shadow: 0 6px 7px #cacaca;
@@ -1967,6 +1970,19 @@ header .navbar {
 } */
 
 /*btn*/
+
+.btn-pink {
+    background: $deep-sky-blue;
+    border: 1px solid $deep-sky-blue;
+    color: $white;
+    &:hover{
+        color:$white;
+    }
+}
+
+.dropdown-toggle.btn-pink {
+    padding: 6px 16px;
+}
 
 .btn-primary {
     background: $white;
@@ -4044,6 +4060,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .modal-header {
     position: relative;
     background: $midnight-blue !important;
+    color: $white;
 }
 
 .close-modal {
@@ -6511,7 +6528,7 @@ table td[class*=col-]:last-child {
     border-right: 0 !important;
 } */
 
-.total_col td {
+.total-col td {
     border: 0 !important;
 }
 
@@ -6560,7 +6577,7 @@ table td[class*=col-]:last-child {
     color: rgba(0, 0, 0, 0.4);
 }
 
-.total_col td {
+.total-col td {
     border: 0;
 }
 
@@ -8565,7 +8582,6 @@ ul.dropdown-menu p.lead.pd {
 .nav-tabs > li.active > a,
 .invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid $deep-sky-blue !important;
-    padding-bottom: 7px !important;
     font-family: $opensans-semibold;
     background-color: inherit;
 }
@@ -9575,6 +9591,36 @@ span#HW_badge_cont:nth-child(3) {
 .manage-group-account-form .button-group .btn{
     margin-right: 15px;
 }
+.inventory-page{
+    .daterangepicker{
+        z-index: 9992 !important;
+    }
+}
+.new-ledger-text-right ul li {
+    ul{
+        li{
+            display: flex;
+            align-items: center;
+        }
+    }
+}
+.total-col bs-tooltip-container.tooltip .tooltip-inner{
+    min-width: 150px !important;
+    width: 150px !important;
+    max-width: 150px !important;
+}
+.recurring-form{
+    sh-select, input{
+        min-width: 170px;
+        max-width: 170px;
+    }
+}
+.daterangepicker{
+    z-index: 9992 !important;
+}
+#rcw-p91-widget-button{
+    z-index: 98;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9584,6 +9630,17 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 @media (max-width: 1024px) {
+    /* bs-datepicker-container{
+            position: absolute !important;
+            left: 15px !important;
+            top: 40px !important;
+            transform: none !important;
+    }
+    .payment-date{
+        bs-datepicker-container{
+            top: 60px !important;
+        }
+    }*/
     .users-last-list{
         .cdk-virtual-scroll-content-wrapper {
             position: relative;
@@ -9947,7 +10004,12 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 @media (max-width: 767px) {
-
+    bs-datepicker-container{
+        position: fixed !important;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
     .modal-backdrop + .modal {
         margin-top: 5px;
     }
@@ -10612,10 +10674,15 @@ span#HW_badge_cont:nth-child(3) {
         padding: 0 10px;
     }
     .modal-dialog.modal-xl{
-        max-width: 1140px !important;
+        max-width: 1000px !important;
     }
     .receipt-note-modal {
         max-width: 100% !important;
+    }
+
+    .po-preview-modal {
+        max-width: 100% !important;
+        width: 900px !important;
     }
 }
 @media(min-width:480px) and (max-width:667px) {
@@ -10671,6 +10738,12 @@ span#HW_badge_cont:nth-child(3) {
         .card{
             margin-bottom: 20px;
             min-height: 452px;
+        }
+    }
+    .recurring-form{
+        sh-select, input{
+            min-width: 130px;
+            max-width: 130px;
         }
     }
 }
@@ -10776,9 +10849,6 @@ body.prevent-body-scroll {
 .hidden-md {
     display: none!important;
 }
-}
-.daterangepicker{
-    display: none !important;
 }
 .modal.fade.giddh-calendar.show {
     z-index: 999999;

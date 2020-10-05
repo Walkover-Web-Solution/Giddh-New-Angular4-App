@@ -283,8 +283,25 @@ span.icon-advance-filter {
     display: flex;
     justify-content: center;
 }
+.select-all-proformas-on-mobile-view{
+    display: none;
+}
 // responsive
 @media (max-width: 768px) {
+    .select-all-proformas-on-mobile-view{
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        line-height: 1;
+        font-size: 14px;
+        min-height: 20px;
+        .checkbox-img{
+            img{
+                max-height: 20px;
+                cursor: pointer;
+            }
+        }
+    }
     .search-icon-block {
         display: flex !important;
     }

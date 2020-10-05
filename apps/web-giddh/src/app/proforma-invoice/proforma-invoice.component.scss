@@ -1625,7 +1625,14 @@ span.eligible-ITC {
 .payment-mode-amount{
     flex-direction: row-reverse;
 }
-
+.dropdown-menu-right{
+    top: 0 !important;
+}
+#button-dropup {
+    .caret{
+        transform: rotate(180deg);
+    }
+}
 /* resposnvie */
 @media(max-width:1199px){
     .invoice-date-due-date {

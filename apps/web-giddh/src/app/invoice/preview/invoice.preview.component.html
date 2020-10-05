@@ -9,10 +9,10 @@
                     <div class="input-group">
                         <span class="input-wrapper">
                             <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
-                                (applyDaterangepicker)="bsValueChange($event)" class="form-control" />
+                                (applyDaterangepicker)="bsValueChange($event)" class="form-control daterange-picker" />
                         </span>
                     </div>
-                    <div class="advance-icon align-items-center" tooltip="Advance Search"
+                    <div class="advance-icon cursor-pointer align-items-center" tooltip="Advance Search"
                     (click)="toggleAdvanceSearchPopup(false)">
                         <span class="icon-advance-filter"></span>
                     </div>
@@ -34,7 +34,7 @@
 
 
                 <!-- E-way bill generation and export to excel for a single selected item in invoice sizes -->
-                <div
+                <div class="desktop-view-btn"
                     *ngIf="(selectedVoucher !== 'purchase' && selectedItems.length > 0) || (selectedItems.length === 1 && selectedVoucher === 'purchase')">
                     <div class="btn-group" dropdown #dp="bs-dropdown">
                         <button dropdownToggle type="button"
@@ -112,7 +112,7 @@
             <!-- Invoice E-way bill, export to excel for a single selected item along with
                 New Sales Invoice, Cash Invoice, Credit Note and Debit Note -->
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 d-flex w-100 align-items-center pt-1 pb-1">
                     <div class="more-export-btn d-flex mt-1">
                         <div class="clear-filter visible-on-mobile" *ngIf="showAdvanceSearchIcon"
                             (click)="resetAdvanceSearch()">
@@ -122,8 +122,7 @@
                         </div>
                     </div>
                     <div *ngIf="selectedItems.length === 1">
-                        <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
-                            style="margin-bottom: 10px;display: inline-block !important;">
+                        <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()">
                             <button dropdownToggle type="button"
                                 class="btn mr-15 more-btn-dropdown btn-default dropdown-toggle"
                                 aria-controls="dropdown-basic">
@@ -233,8 +232,8 @@
                 <!--sales-->
                 <thead class="t-h-bg1" *ngIf="selectedVoucher === 'sales' || selectedVoucher === 'purchase'">
                     <tr>
-                        <th style="width: 4%" *ngIf="selectedItems.length > 0" class="min-wd-20">
-                            <div class="mh18_img" style="justify-content: center;display: flex">
+                        <th style="width: 4%" *ngIf="selectedItems.length > 0" class="min-wid-check">
+                            <div class="mh18_img d-flex justify-content-start">
                                 <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
                                     (click)="toggleAllItems(true)">
                                 <img src="assets/images/checked.png" *ngIf="allItemsSelected"
@@ -242,8 +241,8 @@
                             </div>
                         </th>
 
-                        <th *ngIf="selectedItems.length === 0" style="width: 4%" class="min-wd-20">
-                            <div class="mh18_img" style="justify-content: center;display: flex">
+                        <th *ngIf="selectedItems.length === 0" style="width: 4%" class="min-wid-check">
+                            <div class="mh18_img d-flex justify-content-start">
                                 #
                             </div>
                         </th>
@@ -314,8 +313,8 @@
                 <!--non sales-->
                 <thead class="t-h-bg1 input-h" *ngIf="selectedVoucher !== 'sales' && selectedVoucher !== 'purchase'">
                     <tr>
-                        <th style="width: 4%" *ngIf="selectedItems.length > 0" class="min-wd-20">
-                            <div class="mh18_img" style="display: flex;justify-content: center">
+                        <th style="width: 4%" *ngIf="selectedItems.length > 0" class="min-wid-check">
+                            <div class="mh18_img d-flex justify-content-start">
                                 <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
                                     (click)="toggleAllItems(true)">
                                 <img src="assets/images/checked.png" *ngIf="allItemsSelected"
@@ -323,8 +322,8 @@
                             </div>
                         </th>
 
-                        <th *ngIf="selectedItems.length === 0" style="width: 4%" class="min-wd-20">
-                            <div class="mh18_img" style="display: flex;justify-content: center">
+                        <th *ngIf="selectedItems.length === 0" style="width: 4%" class="min-wid-check">
+                            <div class="mh18_img d-flex justify-content-start">
                                 #
                             </div>
                         </th>
@@ -364,8 +363,8 @@
                         </th>
 
                         <th>
-                            <div class="d-flex">
-                                <div class="flex-fill ">Total amount</div>
+                            <div class="d-flex justify-content-end">
+                                <div class="flex-fill total-amt">Total amount</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="sortTemplate;context: { column: 'grandTotal'}">
                                     </ng-container>
@@ -386,7 +385,7 @@
 
                         <td class="mh18_img"
                             *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
-                            <div class="mh18_img" style="justify-content: center;display: flex">
+                            <div class="mh18_img d-flex justify-content-start">
                                 <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
                                     (click)="toggleItem(item, true)" />
                                 <img *ngIf="item.isSelected" src="assets/images/checked.png"
@@ -397,19 +396,18 @@
                         <!-- Serial No. -->
                         <td
                             *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedItems.length === 0">
-                            <div style="justify-content: center;display: flex">{{ i + 1}} </div>
+                            <div class="d-flex justify-content-start">{{ i + 1}} </div>
                         </td>
 
                         <!-- Invoice No. -->
                         <td>
-                            <div (click)="(selectedVoucher === 'purchase' && !item.voucherNumber) ? onSelectInvoice(item) : ''"
-                                [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}"
+                            <div [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}"
                                 style="position: relative" class="d-flex">
                                 <a href="javascript:void(0);" class="btn-link-2"
                                     (click)="onSelectInvoice(item)">{{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
                             </div>
 
-                            <span *ngIf="item.dueDays !== null && selectedVoucher !== 'purchase'">
+                            <span *ngIf="item.dueDays !== null">
                                 <small class="text-danger" *ngIf="item.dueDays > 0">
                                     Overdue by {{ item.dueDays }} Days
                                 </small>
@@ -506,33 +504,20 @@
 
                         <td *ngIf="selectedVoucher === 'purchase'" class="cp d-flex status-mobile pt-0 pb-0 flex-column mw-th-260">
                             <div class="d-flex flex-row align-items-center">
-                                    <span class="d-flex balance-status">{{ item.balanceStatus}}</span>
-                                    <div class="action-icon ml-15" [ngClass]="{'item-selected': hoveredItemForAction === item.uniqueName || item.isSelected}" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected">
-                                            <a tooltip="Send Email"
-                                            (click)="openSendMailModal(sendEmailModal, item)">
-                                                <span class="icon-envelope font-12"></span>
-                                            </a>
-                                            <a tooltip="Copy" [routerLink]="['/pages/proforma-invoice/invoice/purchase/'+item.account.uniqueName+'/'+item.uniqueName+'/copy']">
-                                                <span class="icon-copy-small font-14"></span>
-                                            </a>
-                                            <a tooltip="Delete" (click)="deletePurchaseBill(item.uniqueName);">
-                                                <i class="icon-trash"></i>
-                                            </a>
-                                        </div>
+                                <span class="d-flex balance-status">{{ item.balanceStatus}}</span>
+                                <div class="action-icon ml-auto" [ngClass]="{'item-selected': hoveredItemForAction === item.uniqueName || item.isSelected}" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected">
+                                    <a tooltip="Send Email"
+                                    (click)="openSendMailModal(sendEmailModal, item)">
+                                        <span class="icon-envelope font-12"></span>
+                                    </a>
+                                    <a tooltip="Copy" [routerLink]="['/pages/proforma-invoice/invoice/purchase/'+item.account.uniqueName+'/'+item.uniqueName+'/copy']">
+                                        <span class="icon-copy-small font-14"></span>
+                                    </a>
+                                    <a tooltip="Delete" (click)="deletePurchaseBill(item.uniqueName);">
+                                        <i class="icon-trash"></i>
+                                    </a>
+                                </div>
                             </div>
-
-                            <div>
-                                    <span *ngIf="item.dueDays !== null">
-                                            <small class="text-danger" *ngIf="item.dueDays > 0">
-                                                Overdue by {{ item.dueDays }} Days
-                                            </small>
-                                            <small class="text-danger" *ngIf="item.dueDays === 0">
-                                                Overdue by Today
-                                            </small>
-                                        </span>
-                            </div>
-
-
                         </td>
                     </tr>
                 </tbody>
@@ -548,7 +533,7 @@
 
                         <td class="mh18_img"
                             *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedItems.length > 0">
-                            <div class="mh18_img" style="justify-content: center;display: flex">
+                            <div class="mh18_img d-flex justify-content-start">
                                 <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
                                     (click)="toggleItem(item, true)" />
                                 <img *ngIf="item.isSelected" src="assets/images/checked.png"
@@ -559,7 +544,7 @@
                         <!-- Serial No. -->
                         <td
                             *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedItems.length === 0">
-                            <div style="justify-content: center;display: flex"> {{ i + 1}}</div>
+                            <div class="d-flex justify-content-start"> {{ i + 1}}</div>
                         </td>
 
                         <!-- CR Note No. / DR Note No. -->
@@ -586,15 +571,15 @@
                         <td *ngIf="selectedVoucher === 'credit note' || selectedVoucher === 'debit note'">{{item.invoiceLinkingRequest?.linkedInvoices?.length ? item.invoiceLinkingRequest?.linkedInvoices[0].invoiceNumber : '-'}}</td>
 
                         <!-- Total Amount with multicurrency for CR/DR note -->
-                        <td *ngIf="(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')"
-                            [tooltip]="grandTotalPopupTemplate" class="text-right">{{item.accountCurrencySymbol}}
+                        <td *ngIf="(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" class="text-right"
+                            [tooltip]="grandTotalPopupTemplate">{{item.accountCurrencySymbol}}
                             {{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
                         <ng-template #grandTotalPopupTemplate><span [innerHTML]="item.grandTotalTooltipText"></span>
                         </ng-template>
 
                         <!-- Total Amount without multicurrency -->
-                        <td *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')"
-                            class="text-right">{{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
+                        <td *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note')" class="text-right"
+                            >{{item.grandTotal?.amountForAccount | giddhCurrency}}</td>
                     </tr>
                 </tbody>
 
@@ -650,7 +635,7 @@
                                         {{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
                                     <span class="icon-download"></span>
                                 </div>
-                                <span *ngIf="item.dueDate && selectedVoucher !== 'purchase'" class="overDueDate">
+                                <span *ngIf="item.dueDate" class="overDueDate">
                                     <small class="text-danger" *ngIf="item.dueDays > 0">
                                         Overdue by {{ item.dueDays }} Days
                                     </small>
@@ -705,15 +690,6 @@
                                         <div class="flex-fill selectAction">
                                             <span
                                                 [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>
-
-                                            <span *ngIf="item.dueDate && selectedVoucher === 'purchase'" class="overDueDate">
-                                                <small class="text-danger" *ngIf="item.dueDays > 0">
-                                                    Overdue by {{ item.dueDays }} Days
-                                                </small>
-                                                <small class="text-danger" *ngIf="item.dueDays === 0">
-                                                    Overdue by Today
-                                                </small>
-                                            </span>
                                         </div>
                                         <div class="click-dropdwon" [attachOutsideOnClick]="true"
                                             (clickOutside)="showMoreBtn = false" [exclude]="'.dropdown-menu'">
@@ -874,7 +850,7 @@
         <!--total sale & Total Due-->
         <div class=" mt-5 invoice-footer" *ngIf="!selectedInvoiceForDetails">
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 d-flex total-due-sale-wrap">
-                <div class="col-sm-6 totalDueSale">
+                <div class="col-sm-6 total-due-sale">
                     <h3>
                         Total
                         {{!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note') ? (selectedVoucher === 'purchase') ? ' Purchases:' : ' Sale:' : ':' }}
@@ -884,7 +860,7 @@
                     </h1>
                 </div>
                 <div *ngIf="!(selectedVoucher === 'credit note' || selectedVoucher === 'debit note' || selectedVoucher === 'purchase')"
-                    class="col-sm-6 totalDueSale">
+                    class="col-sm-6 total-due-sale">
                     <h3>Total Due:</h3>
                     <h1>{{baseCurrencySymbol}}{{ totalDue | giddhCurrency }}<span *ngIf="baseCurrency==='INR'">/-</span>
                     </h1>

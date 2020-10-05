@@ -27,7 +27,7 @@
                             </div>
 
                             <div class="col-md-8 col-sm-6 col-6 pr-0">
-                                <input type="text" name="invoiceDateRange" bsDatepicker class="form-control w-100" [(ngModel)]="request.invoiceDate"
+                                <input type="text" name="invoiceDateRange" container="body" bsDatepicker class="form-control w-100" [(ngModel)]="request.invoiceDate"
                                     [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" />
                             </div>
 
@@ -206,10 +206,6 @@
 
                             <div class="col-md-4 col-sm-6 col-6 pr-0">
                                 <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total" type="tel">
-                                <div class="col-sm-4 col-xs-6 pr-0">
-                                    <input class="form-control" placeholder="00" name="total" [(ngModel)]="request.total"
-                                        type="tel">
-                                </div>
                             </div>
                        </div>
                     </div>
@@ -231,7 +227,7 @@
                         <div>
 
                             <div class="pr-0">
-                                <input type="text" name="invoiceDate" daterangepicker class="form-control w-100"  [options]="dateRangePickerOptions"
+                                <input type="text" name="invoiceDate" daterangepicker class="form-control w-100 cursor-pointer"  [options]="dateRangePickerOptions"
                                     (applyDaterangepicker)="dateRangeChanged($event)" />
                             </div>
 
@@ -279,11 +275,11 @@
                     </div>
                     <div class="col-8">
                         <div class="row mr-0 ml-0">
-                            <div class="col-4 pl-0">
-                                <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
+                            <div class="col-5 pl-0">
+                                <sh-select class="select-action" placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
                                     (selected)="dateChanged($event, 'invoice')"></sh-select>
                             </div>
-                            <div class="col-8 pr-0">
+                            <div class="col-7 pr-0">
                                 <input type="text" name="invoiceDate" bsDatepicker class="form-control w-100"
                                     [(ngModel)]="request.invoiceDate" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" />
                             </div>
