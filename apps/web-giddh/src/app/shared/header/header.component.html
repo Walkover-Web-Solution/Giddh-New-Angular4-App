@@ -61,7 +61,7 @@
 
                                             <span tooltip="Refresh" class="input-group-addon" id=""
                                                 (click)="refreshCompanies($event)">
-                                                <i class="icon-refrsh cp"
+                                                <i class="icon-refresh cp"
                                                     [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
                                             </span>
                                         </div>
@@ -665,7 +665,7 @@
                 <input type="text" class="form-control" placeholder="Search Company here" [(ngModel)]="searchCmp" #searchCmpTextBox name="searchCompany" (ngModelChange)="filterCompanyList($event)" autocomplete="off" />
 
                 <span tooltip="Refresh" class="input-group-addon" id="" (click)="refreshCompanies($event)">
-                    <i class="icon-refrsh cp"
+                    <i class="icon-refresh cp"
                         [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
                 </span>
             </div>

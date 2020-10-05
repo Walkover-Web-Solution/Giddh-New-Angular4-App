@@ -24,7 +24,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.icon-refrsh:before {
+.icon-refresh:before {
   content: "\e901";
 }
 .icon-download-circle:before {
