@@ -40,7 +40,7 @@ import { TokenVerifyComponent } from './login/token-verify.component';
 import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mobile-home-sidebar.component';
 import { MobileHomeComponent } from './mobile-home/mobile-home.component';
 import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
-import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.componeny';
+import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component';
 import { NewUserComponent } from './newUser.component';
 import { NoContentComponent } from './no-content/no-content.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
