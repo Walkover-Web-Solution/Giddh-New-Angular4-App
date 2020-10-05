@@ -1072,7 +1072,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     if (res.country.currency) {
                         this.selectedCountryCurrency = res.country.currency.code;
                         this.selectedAccountCallingCode = res.country.callingCode;
-                        this.addAccountForm.get('currency').patchValue(selectedAcountCurrency);
+                        if (selectedAcountCurrency) {
+                            this.addAccountForm.get('currency').patchValue(selectedAcountCurrency);
+                            this.selectedCurrency = selectedAcountCurrency;
+                        } else {
+                            this.addAccountForm.get('currency').patchValue(this.selectedCountryCurrency);
+                            this.selectedCurrency = this.selectedCountryCurrency;
+                        }
                         if (!this.addAccountForm.get('mobileCode').value) {
                             this.addAccountForm.get('mobileCode').patchValue(this.selectedAccountCallingCode);
                         }
@@ -1365,7 +1371,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public bankDetailsValidator(element, type: string): void {
         if (element.value && type) {
             let trim: string = '';
-            // changes account number validation for country india as well ref card : GIDK-1119 
+            // changes account number validation for country india as well ref card : GIDK-1119
             trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
             let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetail.controls) {
