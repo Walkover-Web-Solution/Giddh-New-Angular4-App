@@ -261,6 +261,8 @@ span.close-modal.cp.pull-right {
     tr{
         td{
             white-space: normal;
+            border-left: none !important;
+            border-right: none !important;
         }
     }
 }

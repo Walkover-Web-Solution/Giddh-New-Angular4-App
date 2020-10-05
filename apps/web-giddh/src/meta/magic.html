@@ -118,10 +118,10 @@
                                             </tr>
                                         </thead>
                                         <tbody class="bdrL">
-                                            <tr class="ledger-row row mr-0 ml-0"
+                                            <tr class="ledger-row bdrB row mr-0 ml-0"
                                                 v-if="legderBalanceData.forwardedBalance.amount > 0 && legderBalanceData.forwardedBalance.type === 'DEBIT'">
-                                                <td class="col-3"></td>
-                                                <td class="col-6">To Balance B/F</td>
+                                                <td class="col-3 bdrR"></td>
+                                                <td class="col-6 bdrR">To Balance B/F</td>
                                                 <td class="col-3 text-right">
                                                     <!-- | number: '1.2-2'  -->
                                                     <span v-if="legderBalanceData.forwardedBalance.type === 'DEBIT'"
@@ -161,8 +161,7 @@
                                                                                 v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"
                                                                                 v-on:click="downloadInvoice(ledger.voucherNumber)"
                                                                                 container="body">
-                                                                                <i class="icon-download-circle"
-                                                                                    style="font-size:15px;"></i>
+                                                                                <img src="../assets/images/download-circle-icon.svg" width="15">
                                                                             </span>
                                                                         </template>
 <!--                                                                        <template-->
@@ -184,8 +183,7 @@
                                                                                   v-tooltip="'Download file: '+ledger.attachedFileName"
                                                                                   v-on:click="downloadAttachedFile(ledger.attachedFileUniqueName,ledger.attachedFileName)"
                                                                                   container="body">
-                                                                                <i class="icon-download-circle"
-                                                                                   style="font-size:15px;"></i>
+                                                                                <img src="../assets/images/download-circle-icon.svg" width="15">
                                                                             </span>
                                                                         </template>
                                                                     </td>
@@ -195,7 +193,7 @@
                                                     </table>
                                                 </td>
                                             </tr>
-                                            <tr class="total_col row mr-0 ml-0"
+                                            <tr class="total-col row mr-0 ml-0"
                                                 v-if="legderBalanceData.forwardedBalance.type === 'CREDIT' && isResponsive">
                                                 <td colspan="12" class="col-12 text-right h32">
                                                     <span v-tooltip="'(-) Asset ( ohh no!)'" class="">
@@ -253,7 +251,7 @@
                                             </tr>
                                             <tr class="ledger-row bdrB"
                                                 v-if="legderBalanceData.forwardedBalance.type !== 'CREDIT' || (legderBalanceData.forwardedBalance.amount == 0)">
-                                                <td class="" colspan="3">&nbsp;</td>
+                                                <td class="bdrR" colspan="3">&nbsp;</td>
                                             </tr>
                                             <!-- ng-if="ledger.hasCredit" -->
                                             <!-- ng-class="{compoundEntry: ledger.isCompoundEntry}"
@@ -283,13 +281,13 @@
                                                                                 v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"
                                                                                 v-on:click="downloadInvoice(ledger.voucherNumber)"
                                                                                 container="body">
-                                                                                <i class="icon-download-circle"
-                                                                                    style="font-size:15px;"></i>
+                                                                                <img src="../assets/images/download-circle-icon.svg" width="15">
                                                                             </span>
                                                                         </template>
 <!--                                                                        <template-->
 <!--                                                                            v-if="ledger.voucherGenerated && ledger.voucherNumber">-->
-<!--                                                                            &lt;!&ndash; tooltip="Download Invoice : {{ledger.voucherNumber}}" &ndash;&gt;-->
+<!--                                                                            &lt;!&ndash; tooltip="Download Invoice : {{ledger.voucherNumber}}"
+                                                                                &ndash;&gt;-->
 <!--                                                                            &lt;!&ndash; [placement]="'top'" &ndash;&gt;-->
 <!--                                                                            <span class="download-invoice-ledger"-->
 <!--                                                                                v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"-->
@@ -306,8 +304,7 @@
                                                                                   v-tooltip="'Download file: '+ledger.attachedFileName"
                                                                                   v-on:click="downloadAttachedFile(ledger.attachedFileUniqueName,ledger.attachedFileName)"
                                                                                   container="body">
-                                                                                <i class="icon-download-circle"
-                                                                                   style="font-size:15px;"></i>
+                                                                                <img src="../assets/images/download-circle-icon.svg" width="15">
                                                                             </span>
                                                                         </template>
                                                                     </td>
@@ -348,7 +345,7 @@
                             <div style="width: 100%" v-if="!isResponsive">
                                 <table class="ledger-footer-1" style="width:50%;left:0;bottom:0;float: left;">
                                     <tbody>
-                                        <tr class="total_col row mr-0 ml-0">
+                                        <tr class="total-col row mr-0 ml-0">
                                             <td colspan="12" class="col-12 text-right h32"
                                                 style="padding-right:10px !important">
                                                 <!-- [tooltip]="'(-) Asset ( ohh no!)'" -->
@@ -362,7 +359,7 @@
                                                 </span>
                                             </td>
                                         </tr>
-                                        <tr class="total_col row mr-0 ml-0">
+                                        <tr class="total-col row mr-0 ml-0">
                                             <td colspan="12" class="col-12 text-right h32"
                                                 style="padding-right:10px !important;">
                                                 <!-- | number: '1.2-2'  -->
@@ -374,7 +371,7 @@
                                 </table>
                                 <table class="ledger-footer-1 " style="width:50%;right:0;bottom:0;">
                                     <tbody>
-                                        <tr class="total_col row mr-0 ml-0">
+                                        <tr class="total-col row mr-0 ml-0">
                                             <td colspan="12" class="col-12 text-right h32"
                                                 style="padding-right:10px !important">
                                                 <!-- tooltip="" [placement]="'top'" -->
@@ -388,7 +385,7 @@
                                                 </span>
                                             </td>
                                         </tr>
-                                        <tr class="total_col row mr-0 ml-0">
+                                        <tr class="total-col row mr-0 ml-0">
                                             <td colspan="12" class="col-12 text-right h32"
                                                 style="padding-right:10px !important;">
                                                 <!-- | number: '1.2-2'  -->

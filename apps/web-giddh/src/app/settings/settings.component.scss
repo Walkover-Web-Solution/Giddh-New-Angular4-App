@@ -1,0 +1,144 @@
+@import "../../assets/css/color.scss";
+.setting-container {
+    padding:0 15px 15px;
+    margin-top: 15px;
+}
+
+@media(max-width:767px){
+    .setting-sidebar-wrapper{
+        z-index: 999;
+        width: 100%;
+        height: 100%;
+        display: block;
+        background-color: rgba(0,0,0,0.5);
+        position: absolute;
+        top: 0; 
+    }
+}
+
+///////////////// personal info css ////////////////
+.custom-file{
+    border: 1px dashed gainsboro;
+    border-radius: 2px;
+    background: $white;
+    width: 100px;
+    height: 100px;
+}
+
+.custom-file-input ~ .custom-file-label::after {
+    content: "";
+}
+
+.custom-file-label{
+    border: none;
+    padding: 30px;
+    background: $white;
+    height:100%;
+    &::after{
+        height:0 !important;
+        padding:0 !important;
+    }
+    .icon-plus{
+        font-size:40px;
+        color: $whisper-color;
+    }
+}
+
+.unique-name, .country-name{
+    color: $dark-gray;
+}
+
+.img-size{
+    color: $gray;
+}
+////////////////////////////////////////////
+
+
+
+///////////////// address css ////////////////
+.giddh-table {
+    tr {
+        td {
+            vertical-align: top !important;
+            .action-icon {
+                display: flex;
+                align-items: center;
+                border: 1px solid $gainsboro;
+                a {
+                    width: 34px;
+                    font-size: 18px;
+                    color: $gray;
+                    border-right: 1px solid $gainsboro;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0 5px;
+                    cursor: pointer;
+                    align-items: stretch;
+                    height: 34px;
+                    align-items: center;
+                    background-color: $white;
+                }
+                &:last-child {
+                    border-right: none !important;
+                }
+            }
+        }
+    }
+    &:hover {
+        td {
+            .action-icon {
+                display: flex !important;
+            }
+        }
+    }
+}
+
+@media(max-width:768px){
+    .giddh-table {
+        tr {
+            td {
+                &::before {
+                    left: 15px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 445px) {
+
+    .giddh-table {
+        tr {
+            td {
+                .action-icon {
+                    a {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width:575px){
+    .address-list-top{
+        display:block !important;
+        .btn-sky-blue{
+            float:right;
+            margin-top:5px;
+        }
+    }
+}
+/////////////////////////////////////////////
+
+
+
+////////////// other css /////////////////////
+@media (min-width:1200px) and (max-width:1302px){
+.other-information {
+    flex: 0 0 66.666667% !important;
+    max-width: 66.666667% !important;
+}
+}
+/////////////////////////////////////////////

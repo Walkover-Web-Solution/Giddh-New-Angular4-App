@@ -74,7 +74,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 .trxFakeInput {
     width: 100%;
     height: 38px;
-    background: #f1f1f1;
+    background: transparent;
     border: none !important;
     padding: 5px;
     color: #b5b5b5;
@@ -102,7 +102,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     padding-left: 8px;
 }
 
-.total_col span.bdrT {
+.total-col span.bdrT {
     width: 150px;
     display: inline-block;
     padding: 2px 0;

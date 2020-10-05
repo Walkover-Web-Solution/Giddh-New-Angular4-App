@@ -68,6 +68,10 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
 					this.discountFromVal = false;
 					this.discountFromPer = true;
 				}
+                if (!Number(this.defaultDiscount.discountValue)) {
+                    this.discountFromVal = true;
+                    this.discountFromPer = true;
+                }
 			}
 			this.change();
 		}
@@ -103,19 +107,18 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
 		this.defaultDiscount.discountType = type;
 
 		this.change();
-
-		if (!val) {
-			this.discountFromVal = true;
-			this.discountFromPer = true;
-			return;
-		}
-		if (type === 'PERCENTAGE') {
-			this.discountFromPer = true;
-			this.discountFromVal = false;
-		} else {
-			this.discountFromPer = false;
-			this.discountFromVal = true;
-		}
+        if (type === 'PERCENTAGE') {
+            this.discountFromPer = true;
+            this.discountFromVal = false;
+        } else {
+            this.discountFromPer = false;
+            this.discountFromVal = true;
+        }
+        if (!Number(val)) {
+            this.discountFromVal = true;
+            this.discountFromPer = true;
+            return;
+        }
 	}
 
 	/**

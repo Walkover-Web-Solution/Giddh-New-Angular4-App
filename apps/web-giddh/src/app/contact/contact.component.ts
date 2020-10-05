@@ -425,45 +425,24 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 let queryParams = result[1];
 
                 if (params) {
-                    if (params['type'] === 'customer') {
-                        this.setActiveTab(params['type'], 'sundrydebtors');
-                    } else if (params['type'] === 'vendor') {
-                        this.setActiveTab(params['type'], 'sundrycreditors');
+                    if ((params['type'] && params['type'].indexOf('customer') > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
+                        this.setActiveTab("customer", 'sundrydebtors');
+                    } else if ((params['type'] && params['type'].indexOf('vendor') > -1) || (queryParams && queryParams.tab && queryParams.tab === "vendor")) {
+                        this.setActiveTab("vendor", 'sundrycreditors');
                     } else {
                         this.setActiveTab('aging-report', '');
-                    }
-                    if (queryParams && queryParams.tab) {
-
                     }
                 }
             });
 
-        // this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
-        //   if (val && val.tab && val.tabIndex) {
-        //     let tabIndex = Number(val.tabIndex);
-        //     if (this.staticTabs && this.staticTabs.tabs) {
-        //       if (val.tab === 'aging-report' && tabIndex === 1) {
-        //         this.setActiveTab('aging-report', '');
-        //         this.staticTabs.tabs[tabIndex].active = true;
-        //       } else if (val.tab === 'vendor' && tabIndex === 0) {
-        //         this.setActiveTab('vendor', 'sundrycreditors');
-        //         this.staticTabs.tabs[tabIndex].active = true;
-        //       } else {
-        //         this.setActiveTab('customer', 'sundrydebtors');
-        //         this.staticTabs.tabs[0].active = true;
-        //       }
-        //     }
-        //   }
-        // });
-
-        this.store
-            .pipe(select(p => p.company.isAccountInfoLoading), takeUntil(this.destroyed$))
-            .subscribe(result => {
+        // this.store
+        //     .pipe(select(p => p.company.isAccountInfoLoading), takeUntil(this.destroyed$))
+        //     .subscribe(result => {
                 //ToDo logic to stop loader
                 // if (result && this.taxAsideMenuState === 'in') {
                 //   this.toggleTaxAsidePane();
                 // }
-            });
+            //});
 
         this.store
             .pipe(
@@ -565,7 +544,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             } else {
                 this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
             }
-            this.router.navigate(['pages/contact/', tabName], { replaceUrl: true });
+            this.router.navigate(['/pages/contact/', tabName], { replaceUrl: true });
         }
     }
 

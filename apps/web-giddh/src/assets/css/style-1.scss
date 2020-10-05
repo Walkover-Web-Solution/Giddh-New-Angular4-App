@@ -5134,7 +5134,7 @@ perfect-scrollbar.ps-show-active
     margin: 0 !important;
 }
 
-.customItem:hover {
+.customItem:hover , .discount-item:hover {
     background-color: $lavender !important;
     color: #5b64c9 !important;
     &:hover {
@@ -5238,6 +5238,12 @@ form#groupDetailForm {
     .universal-date {
         margin-right: 0;
     }
+
+    // bs-datepicker-container {
+    //     transform: translate(-50%, -50%) !important;
+    // }
+
+
 }
 
 @media only screen and (max-width: 1024px) {

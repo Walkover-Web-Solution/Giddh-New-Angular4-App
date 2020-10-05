@@ -199,7 +199,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     @ViewChild('invoiceForm', { read: NgForm, static: true }) public invoiceForm: NgForm;
     @ViewChild('discountComponent', { static: false }) public discountComponent: DiscountListComponent;
     @ViewChild('taxControlComponent', { static: false }) public taxControlComponent: TaxControlComponent;
-    @ViewChild('customerNameDropDown', { static: true }) public customerNameDropDown: ShSelectComponent;
+    @ViewChild('customerNameDropDown', { static: false }) public customerNameDropDown: ShSelectComponent;
 
     @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
     @ViewChildren('description') public description: QueryList<ElementRef>;
@@ -333,6 +333,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isAddBulkItemInProcess: boolean = false;
     public modalRef: BsModalRef;
     public message: string;
+    public isDropup: boolean = true;
 
     public exceptTaxTypes: string[];
     /** Stores warehouses for a company */
@@ -521,6 +522,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public poLinkUpdated: boolean = false;
     /* This will hold if copy purchase bill is done */
     public copyPurchaseBillInitialized: boolean = false;
+    /* This will hold the existing PO entries with quantity */
+    public existingPoEntries: any[] = [];
 
     /**
      * Returns true, if Purchase Record creation record is broken
@@ -1345,7 +1348,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     let tempSelectedAcc: AccountResponseV2;
                     this.updatedAccountDetails$.pipe(take(1)).subscribe(acc => tempSelectedAcc = acc);
+                    if (this.customerNameDropDown) {
+                        this.customerNameDropDown.clear();
+                    }
                     if (tempSelectedAcc) {
+                        this.customerAcList$ = observableOf([{ label: tempSelectedAcc.name, value: tempSelectedAcc.uniqueName, additional: tempSelectedAcc }]);
                         if (tempSelectedAcc.addresses && tempSelectedAcc.addresses.length) {
                             tempSelectedAcc.addresses = [_.find(tempSelectedAcc.addresses, (tax) => tax.isDefault)];
                         }
@@ -4505,14 +4512,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     salesTransactionItemClass.stockDetails.skuCode = t.stock.sku;
                     salesTransactionItemClass.stockUnit = t.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName + '#' + t.stock.uniqueName;
+                }
 
-                    if(this.isPurchaseInvoice && entry.purchaseOrderLinkSummaries && entry.purchaseOrderLinkSummaries.length > 0) {
-                        entry.purchaseOrderLinkSummaries.forEach(summary => {
-                            if(!isNaN(Number(summary.unUsedQuantity))) {
+                if(this.isPurchaseInvoice && entry.purchaseOrderLinkSummaries && entry.purchaseOrderLinkSummaries.length > 0) {
+                    entry.purchaseOrderLinkSummaries.forEach(summary => {
+                        if(!isNaN(Number(summary.unUsedQuantity))) {
+                            if (t.stock) {
                                 salesTransactionItemClass.maxQuantity = summary.unUsedQuantity + salesTransactionItemClass.quantity;
+                            } else {
+                                salesTransactionItemClass.maxQuantity = summary.usedQuantity;
                             }
-                        });
-                    }
+
+                            this.existingPoEntries[summary.entryUniqueName] = salesTransactionItemClass.maxQuantity;
+                        }
+                    });
                 }
 
                 salesEntryClass.transactions.push(salesTransactionItemClass);
@@ -5888,7 +5901,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let transactionLoop = 0;
 
             if(entry.totalQuantity && entry.usedQuantity && entry.transactions && entry.transactions[0] && entry.transactions[0].stock) {
-                entry.transactions[0].stock.quantity = entry.totalQuantity - entry.usedQuantity;
+                if(this.existingPoEntries[entry.uniqueName]) {
+                    entry.transactions[0].stock.quantity = entry.usedQuantity;
+                } else {
+                    entry.transactions[0].stock.quantity = entry.totalQuantity - entry.usedQuantity;
+                }
             }
 
             entry.transactions.forEach(item => {
@@ -5897,13 +5914,21 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     item.uniqueName = item.stock.uniqueName;
                     item.value = item.stock.uniqueName;
                     item.additional = item.stock;
-                    item.additional.maxQuantity = item.stock.quantity;
+                    if(this.existingPoEntries[entry.uniqueName]) {
+                        item.additional.maxQuantity = this.existingPoEntries[entry.uniqueName];
+                    } else {
+                        item.additional.maxQuantity = item.stock.quantity;
+                    }
                 } else {
                     item.stock = {};
                     item.uniqueName = item.account.uniqueName;
                     item.value = item.account.uniqueName;
                     item.additional = item.account;
-                    item.additional.maxQuantity = entry.totalQuantity - entry.usedQuantity;
+                    if(this.existingPoEntries[entry.uniqueName]) {
+                        item.additional.maxQuantity = this.existingPoEntries[entry.uniqueName];
+                    } else {
+                        item.additional.maxQuantity = entry.totalQuantity - entry.usedQuantity;
+                    }
                 }
 
                 if(item.additional.maxQuantity > 0) {
