@@ -237,7 +237,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     ) {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
 

@@ -125,7 +125,7 @@ export class InvoiceCreateComponent implements OnInit, OnDestroy {
 
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
 

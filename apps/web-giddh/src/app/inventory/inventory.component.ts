@@ -105,7 +105,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     ) {
         this.breakPointObservar.observe([
             '(max-width:1024px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (this.isMobileScreen && !result.matches) {
                 this.setDefaultGroup();
             }
