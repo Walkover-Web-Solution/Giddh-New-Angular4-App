@@ -27,7 +27,7 @@ import { CurrentPage } from '../models/api-models/Common';
 
 @Component({
     templateUrl: './settings.component.html',
-    styleUrls: ['./settings.component.css']
+    styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
