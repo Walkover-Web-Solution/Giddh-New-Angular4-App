@@ -995,15 +995,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public getCurrency() {
-        this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
                     this.currencies.push({ label: res[key].code, value: res[key].code });
 
                 });
                 this.currencySource$ = observableOf(this.currencies);
-            } else {
-                this.store.dispatch(this.commonActions.GetCurrency());
             }
         });
     }
