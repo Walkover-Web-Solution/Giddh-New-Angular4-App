@@ -708,7 +708,7 @@
                         <td class="text-right item-amount">
                             <div class="td-wrapper">
                                 <div>
-                                    <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction)"
+                                    <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
                                         (click)="transactionAmountClicked(transaction)" placeholder="Amount"
                                         name="transaction.amount_{{entryIdx}}" class="form-control text-right"
                                         [(ngModel)]="transaction.amount" decimalDigitsDirective
@@ -1330,7 +1330,7 @@
 
                                     <label class="card-label text-right">Amount</label>
                                     <div>
-                                        <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction)"
+                                        <input type="tel" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
                                             (click)="transactionAmountClicked(transaction)" placeholder="Amount"
                                             name="transaction.amount_{{entryIdx}}" class="form-control text-right"
                                             [(ngModel)]="transaction.amount" decimalDigitsDirective

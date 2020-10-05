@@ -478,6 +478,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngOnInit() {
         this.getCurrentCompanyData();
+        this.store.dispatch(this.companyActions.RefreshCompanies());
         
         this._breakpointObserver.observe([
             '(max-width: 767px)'
