@@ -23,10 +23,11 @@
     margin-bottom: 20px;
 }
 .warehouse-card {
-    background-color: #ebecee;
+    background-color: $white;
     padding: 15px;
     min-height: 300px;
     margin-bottom: 15px;
+    border: 1px solid $gainsboro;
 }
 .warehouse-options {
     min-width: 180px;
@@ -58,8 +59,6 @@
 .warehouse-card .d-flex {
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #cbcbcb;
-    padding-bottom: 10px;
 }
 
 .warehouse-card h3 {
@@ -68,6 +67,7 @@
     float: left;
     width: 66%;
     word-break: break-all;
+    color: $midnight-blue;
 }
 span.setAsDefault {
     background-color: $gainsboro;
@@ -82,7 +82,8 @@ span.setAsDefault {
 }
 .warehouse-details label {
     font-family: "opensans-semibold";
-    width: 140px;
+    width: 110px;
+    color: $gray;
 }
 .warehouse-details p {
     word-break: break-all;
@@ -90,7 +91,7 @@ span.setAsDefault {
     width: 100%;
 }
 .about-warehaouse {
-    margin: 15px 0;
+    margin: 0 0 15px;
     display: flex;
 }
 .gray-text {
@@ -115,6 +116,34 @@ span.setAsDefault {
 .dropdown-item.warehouse-options {
     justify-content: flex-start;
     text-align: left;
+}
+.search-warehouse-box{
+    max-width: 200px;
+    width: 100%;
+    input{
+        background-image: url('../../../assets/images/searchIcon.svg') !important;
+        background-repeat: no-repeat !important;
+        padding-left: 30px !important;
+        background-position: 7px 9px !important;
+        background-size: 15px !important;
+    }
+}
+.linked-details{
+    label{
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    ul{
+       padding: 0;
+       list-style: none;
+       li{
+           margin-bottom: 12px;
+           color: $nero;
+           i{
+               color: $gray;
+           }
+       }
+    }
 }
 @media only screen and (max-width: 991px) {
     .warehouse-card h3 {
@@ -153,5 +182,78 @@ span.setAsDefault {
             flex: 0 0 50% !important;
             max-width: 50% !important;
         }
+    }
+}
+
+
+// create warehouse css starts
+.create-warehouse-page{
+    .create-warehouse-under{
+        border-bottom: 1px solid $gainsboro;
+        .warehouse-under-company{
+            p{
+                color: $black;
+            }
+            .warehouse-company-name{
+                .label-wrapper{
+                    display: flex;
+                    font-size: 14px;
+                    label{
+                        color: $dark-gray;
+                        min-width: 200px;
+                    }
+                    span{
+                        color: $dark-gray;
+                        display: block;
+                    }
+                }
+
+            }
+        }
+        .warehouse-image{
+            text-align: right;
+            img{
+                width: 100%;
+            }
+        }
+    }
+    .warehouse-form{
+        .warehouse-form-field {
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            color: $nero;
+            margin-bottom: 15px;
+            label{
+                width: 200px;
+            }
+            input,
+            sh-select{
+                width: 100%;
+                max-width: 350px;
+            }
+            input[type="checkbox"]{
+                width: auto;
+                max-width: auto;
+                margin-right: 15px;
+            }
+            .sub-location-input{
+                max-width: 350px;
+                width: 350px;
+                div{
+                    i{
+                        padding: 5px;
+                        cursor: pointer;
+                        &.icon-plus{
+                            color:$light-sea-green;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .footer-btn{
+        background-color: $whisper-color;
+        padding: 15px;
     }
 }

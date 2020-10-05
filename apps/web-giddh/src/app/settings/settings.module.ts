@@ -25,6 +25,7 @@ import { SettingsTagsComponent } from './tags/tags.component';
 import { DeleteTaxConfirmationModelComponent } from './Taxes/confirmation/confirmation.model.component';
 import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
 import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
+import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-warehouse.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
 import { SettingsServiceModule } from './settings-service.module';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
@@ -60,7 +61,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CreateBunchModalComponent,
         BunchAddCompanyModalComponent,
         GetBunchModalComponent,
-        WarehouseComponent
+        WarehouseComponent,
+        CreateWarehouseComponent
     ],
     imports: [
         SharedModule,

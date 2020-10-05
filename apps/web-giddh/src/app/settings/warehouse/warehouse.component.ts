@@ -24,7 +24,7 @@ import { AppState } from '../../store/roots';
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import { WarehouseActions } from './action/warehouse.action';
 import { WarehouseState } from './reducer/warehouse.reducer';
-
+import { IOption } from '../../../theme/ng-select/option.interface';
 /**
  * Warehouse component
  *
@@ -40,6 +40,8 @@ import { WarehouseState } from './reducer/warehouse.reducer';
     providers: [{ provide: BsDropdownConfig, useValue: { autoClose: true } }]
 })
 export class WarehouseComponent implements OnInit, OnDestroy {
+
+
 
     /** Image path relative to app environment */
     public imgPath: string = '';
@@ -94,7 +96,12 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         this.initSubscribers();
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
     }
-
+    public sendOtp: IOption[] = [
+        { label: "Address 1", value: "1234" },
+        { label: "Address 2", value: "1235" },
+        { label: "Address 3", value: "1234" },
+        { label: "Address 4", value: "1235" }
+    ];
     /**
      * Releases all the observables to avoid memory leaks
      *
