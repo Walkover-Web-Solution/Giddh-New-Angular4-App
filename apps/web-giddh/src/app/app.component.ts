@@ -20,6 +20,7 @@ import { LoginActions } from './actions/login.action';
 import { takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
+import { CompanyService } from './services/companyService.service';
 
 /**
  * App Component
@@ -55,7 +56,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private dbServices: DbService,
         private loadingService: LoaderService,
         private companyActions: CompanyActions,
-        private loginAction: LoginActions
+        private loginAction: LoginActions,
+        private companyService: CompanyService
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -149,6 +151,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if(this._generalService.companyUniqueName) {
             this.store.dispatch(this.companyActions.RefreshCompanies());
             this.store.dispatch(this.loginAction.renewSession());
+
+            this.companyService.CurrencyList().subscribe(response => {
+                if (response && response.status === 'success' && response.body) {
+                    this.store.dispatch(this.loginAction.SetCurrencyInStore(response.body));
+                }
+            });
         }
     }
 
