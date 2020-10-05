@@ -18,7 +18,7 @@ import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
 })
 export class SettingPermissionComponent implements OnInit, OnDestroy {
 
-    @ViewChild('editUserModal', {static: true}) public editUserModal: ModalDirective;
+    @ViewChild('editUserModal', {static: false}) public editUserModal: ModalDirective;
 
     public sharedWith: object[] = [];
     public usersList: any;
