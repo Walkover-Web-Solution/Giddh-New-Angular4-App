@@ -73,8 +73,10 @@ export class UploadFileComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            this.entity = data.type;
-            this.setTitle();
+            if (data) {
+                this.entity = data.type;
+                this.setTitle();
+            }
         });
         this.setTitle();
     }

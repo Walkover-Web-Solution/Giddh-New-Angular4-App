@@ -1321,10 +1321,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     //     }
     //     if (this.activeAccountName) {
     //         _.uniq(this.selectedDiscounts);
-    //         let assignDescountObject: AssignDiscountRequestForAccount = new AssignDiscountRequestForAccount();
-    //         assignDescountObject.accountUniqueName = this.activeAccountName;
-    //         assignDescountObject.discountUniqueNames = this.selectedDiscounts;
-    //         this.store.dispatch(this.accountsAction.applyAccountDiscount(assignDescountObject));
+    //         let assignDiscountObject: AssignDiscountRequestForAccount = new AssignDiscountRequestForAccount();
+    //         assignDiscountObject.accountUniqueName = this.activeAccountName;
+    //         assignDiscountObject.discountUniqueNames = this.selectedDiscounts;
+    //         this.store.dispatch(this.accountsAction.applyAccountDiscount(assignDiscountObject));
     //     }
     // }
 
@@ -1462,11 +1462,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         if (this.activeAccountName) {
             _.uniq(this.selectedDiscounts);
-            let assignDescountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
-            assignDescountObject.uniqueName = this.activeAccountName;
-            assignDescountObject.discounts = this.selectedDiscounts;
-            assignDescountObject.isAccount = true;
-            this.store.dispatch(this.accountsAction.applyAccountDiscountV2([assignDescountObject]));
+            let assignDiscountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
+            assignDiscountObject.uniqueName = this.activeAccountName;
+            assignDiscountObject.discounts = this.selectedDiscounts;
+            assignDiscountObject.isAccount = true;
+            this.store.dispatch(this.accountsAction.applyAccountDiscountV2([assignDiscountObject]));
         }
     }
 

@@ -83,6 +83,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public isDebtorCreditorGroups: boolean = false;
     /** To check discount box show/hide */
     public showDiscount: boolean = false;
+    /** Stores list of discount */
     public discountList: any[] = [];
     public discountList$: Observable<IDiscountList[]>;
     public selectedDiscounts: any[] = [];
@@ -571,11 +572,11 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (activeGroupUniqueName) {
             _.uniq(this.selectedDiscounts);
-            let assignDescountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
-            assignDescountObject.uniqueName = this.uniqueName;
-            assignDescountObject.discounts = this.selectedDiscounts;
-            assignDescountObject.isAccount = false;
-            this.store.dispatch(this.accountsAction.applyAccountDiscountV2([assignDescountObject]));
+            let assignDiscountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
+            assignDiscountObject.uniqueName = this.uniqueName;
+            assignDiscountObject.discounts = this.selectedDiscounts;
+            assignDiscountObject.isAccount = false;
+            this.store.dispatch(this.accountsAction.applyAccountDiscountV2([assignDiscountObject]));
         }
     }
 
