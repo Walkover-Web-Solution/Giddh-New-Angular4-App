@@ -119,7 +119,7 @@ export class SettingsLinkedAccountsService {
     public UnlinkBankAccount(accountId: string, accountUniqueName): Observable<BaseResponse<any, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.delete(this.config.apiUrl + EBANKS.UNLINK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountId', accountId).replace(':accountUniqueName', accountUniqueName)).pipe(map((res) => {
+        return this._http.delete(this.config.apiUrl + EBANKS.UNLINK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountId', accountId).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.queryString = { accountId };
             return data;
