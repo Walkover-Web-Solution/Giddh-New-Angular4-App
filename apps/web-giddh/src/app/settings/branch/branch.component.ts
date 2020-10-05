@@ -66,6 +66,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public formFields: any[] = [];
     public universalDate$: Observable<any>;
     public dateRangePickerValue: Date[] = [];
+    public isAttachmentExpanded: boolean = false;
 
     constructor(
         private store: Store<AppState>,

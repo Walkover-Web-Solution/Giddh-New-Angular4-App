@@ -2,6 +2,17 @@
     <div class="d-flex date-advance-search row">
         <form class="form-inline input-group-date-range-picker pr col-xs-6 col-sm-8 mb-15">
             <div class="mr-1 d-flex branch-header-content">
+                    <div class="advance-icon">
+                        <span class="icon-advance-search"></span>
+                    </div>
+
+                    <div class="form-group max250 search-field">
+                            <input type="text" placeholder="Search branch" class="form-control" />
+                            <span class="input-addon">
+                            <i class="icon-search"></i>
+                        </span>
+
+                    </div>
                 <div class="input-group">
                     <div class="form-group">
                         <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" readonly
@@ -26,7 +37,7 @@
             </div>
         </form>
         <div class="col-sm-4 col-xs-6">
-            <button class="btn btn-sky-blue pull-right mr-0" (click)="openAddBranchModal()"> + New Branch</button>
+            <button class="btn btn-sky-blue pull-right mr-0" (click)="openAddBranchModal()">Create Branch</button>
         </div>
     </div>
 </div>
@@ -69,13 +80,26 @@
 <div *ngIf="(branches$ | async)?.length > 0">
     <div class="branch-card-view" *ngIf="branchViewType === 'card'">
         <div class="row">
-            <div class="col-md-6 col-lg-4 col-sm-12" *ngFor="let branch of branches$ | async">
+            <div class="col-12" *ngFor="let branch of branches$ | async">
                 <div class="branch-card">
                     <div class="card-basic-details">
                         <div class="clearfix">
-                            <h2 class="pull-left">{{branch.name}}</h2>
+                            <div class="pull-left d-flex">
+                                    <input type="checkbox">&nbsp;&nbsp;
+                                <div>
+                                    <h2>{{branch.name}}</h2>
+                                </div>
+                                <div>Walkover Web Solutions Name Branch</div>
+                            </div>
                             <div class="pull-right">
-                                <div class="btn-group" dropdown [autoClose]="true">
+                                <div class="btn-group align-items-center" dropdown [autoClose]="true">
+                                        <a href="javascript:;" *ngIf="!isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = true;">Expand</a>
+                                        <a href="javascript:;" *ngIf="isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = false;">Collapse</a>
+
+                                        <div class="ml-15 active-status">
+                                            <span></span>Active
+                                        </div>
+
                                     <a id="button-basic" dropdownToggle type="button"
                                         class="icon-dots-three-vertical dropdown-toggle" aria-controls="dropdown-basic">
 
@@ -93,19 +117,36 @@
                         </div>
 
                         <div class="clearfix">
-                            <span class="mrR1 pull-left">Contact:</span>
-                            <span class="pull-left">{{branch.contactNo}}</span>
-                        </div>
-                        <div class="clearfix" *ngIf="formFields['taxName']">
-                            <span class="mrR1 pull-left">{{formFields['taxName'].label}}:</span>
-                            <span class="pull-left">{{branch?.addresses[0]?.taxNumber}}</span>
+                            <div class="pull-left">
+                                <span class="parent-branch">Parent Entity:</span> Company Alias Name
+                            </div>
                         </div>
                         <div class="clearfix">
-                            <span class="mrR1 pull-left">Address:</span>
-                            <span class="pull-left">{{branch?.addresses[0]?.address}}</span>
+                            <div class="pull-left">
+                                <span class="parent-branch">Contact:</span> {{branch.contactNo}}
+                            </div>
                         </div>
-                    </div>
-                    <div class="branchSalesDetails">
+                        <div class="clearfix" *ngIf="formFields['taxName']">
+                            <div class="pull-left">
+                            <span class="parent-branch">{{formFields['taxName'].label}}:</span> {{branch?.addresses[0]?.taxNumber}}
+                            </div>
+                        </div>
+                        <div class="clearfix row">
+                            <div class="col-md-3">
+                                    <div class="parent-branch">Linked Address:</div>
+                                    <div>
+                                            {{branch?.addresses[0]?.address}}
+                                    </div>
+                            </div>
+                            <div class="col-md-3">
+                                    <div class="parent-branch">Linked Warehouse:</div>
+                                    <div>
+
+                                    </div>
+                            </div>
+                        </div>
+                    
+                    <div class="branch-sales-details" [ngClass]="{'branch-sales-collapsed': !isBranchSalesExpanded}">
                         <div class="clearfix">
                             <span class="pull-left">
                                 <label>Total Sales</label>
