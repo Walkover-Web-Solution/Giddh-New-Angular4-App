@@ -18,7 +18,7 @@ import { StockUnits } from './stock-unit';
 import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
-    selector: 'inventory-custom-stock',  // <home></home>form.component.ts:4:8
+    selector: 'inventory-custom-stock',  // <home></home>
     templateUrl: './inventory.customstock.component.html',
     styleUrls: ['./inventory.customstock.component.scss']
 })

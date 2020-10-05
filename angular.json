@@ -71,7 +71,7 @@
                 "build": {
                     "builder": "@angular-builders/custom-webpack:browser",
                     "options": {
-                        "baseHref": "http://localhost:3000",
+                        "baseHref": "https://beta.giddh.com",
                         "allowedCommonJsDependencies": [
                             "file-saver",
                             "angular2-text-mask",
@@ -449,9 +449,9 @@
                             ],
                             "optimization": false,
                             "outputHashing": "all",
-                            "sourceMap": true,
+                            "sourceMap": false,
                             "extractCss": true,
-                            "namedChunks": true,
+                            "namedChunks": false,
                             "aot": false,
                             "extractLicenses": false,
                             "vendorChunk": false,
