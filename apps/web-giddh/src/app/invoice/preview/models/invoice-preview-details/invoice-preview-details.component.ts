@@ -311,12 +311,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.showEditMode = false;
         this.getLinkedPurchaseOrders();
     }
-    // openModal(template: TemplateRef<any>) {
-    //     this.modalRef = this.modalService.show(template,
-    //         Object.assign({}, { class: 'preview-lightbox modal-lg' })
-    //     );
-    //     $('.modal-backdrop').addClass('preview-lightbox-overlay');
-    // }
 
     // public openModal(template: TemplateRef<any>) {
     //     this.modalRef = this.modalService.show(template,
