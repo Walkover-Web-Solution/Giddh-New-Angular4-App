@@ -19,6 +19,7 @@ import { Configuration } from "./app.constant";
 import { LoginActions } from './actions/login.action';
 import { takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
+import { CompanyActions } from './actions/company.actions';
 
 /**
  * App Component
@@ -52,7 +53,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private sanitizer: DomSanitizer,
         private breakpointObserver: BreakpointObserver,
         private dbServices: DbService,
-        private loadingService: LoaderService
+        private loadingService: LoaderService,
+        private companyActions: CompanyActions,
+        private loginAction: LoginActions
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -142,6 +145,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public ngOnInit() {
         this.sideBarStateChange(true);
         this.subscribeToLazyRouteLoading();
+
+        if(this._generalService.companyUniqueName) {
+            this.store.dispatch(this.companyActions.RefreshCompanies());
+            this.store.dispatch(this.loginAction.renewSession());
+        }
     }
 
     public ngAfterViewInit() {
