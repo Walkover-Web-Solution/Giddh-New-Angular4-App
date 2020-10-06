@@ -9477,6 +9477,9 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
+.delete-modal-overlay{
+    z-index: 9992; /*for delete custom zIndex modal*/
+}
 /* responsive */
 
 @media (max-width: 1440px) {

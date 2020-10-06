@@ -1,6 +1,6 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GroupsAccountSidebarComponent } from '../new-group-account-sidebar/groups-account-sidebar.component';
-import { AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild, TemplateRef } from '@angular/core';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
@@ -11,6 +11,7 @@ import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.component';
 import { GeneralService } from "../../../../services/general.service";
 import { TabsModule } from 'ngx-bootstrap';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 
 @Component({
@@ -33,7 +34,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 	public breadcrumbUniquePath: string[] = [];
 	public myModelRect: any;
 	public searchLoad: Observable<boolean>;
-
+    public modalRef: BsModalRef;
 	public groupList$: Observable<GroupsWithAccountsResponse[]>;
 	public currentColumns: GroupAccountSidebarVM;
 	public psConfig: PerfectScrollbarConfigInterface;
@@ -46,7 +47,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
 	// tslint:disable-next-line:no-empty
 	constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef,
-		private renderer: Renderer2, private _generalService: GeneralService) {
+        private renderer: Renderer2, private _generalService: GeneralService, private modalService: BsModalService) {
 		this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading).pipe(takeUntil(this.destroyed$));
 		this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts).pipe(takeUntil(this.destroyed$));
 		this.groupAndAccountSearchString$ = this.store.select(s => s.groupwithaccounts.groupAndAccountSearchString).pipe(takeUntil(this.destroyed$));
@@ -58,7 +59,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 		this.headerRect = this.header.nativeElement.getBoundingClientRect();
 		this.myModelRect = this.myModel.nativeElement.getBoundingClientRect();
 	}
-
+    openModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template);
+    }
 	// tslint:disable-next-line:no-empty
 	public ngOnInit() {
 		// search groups

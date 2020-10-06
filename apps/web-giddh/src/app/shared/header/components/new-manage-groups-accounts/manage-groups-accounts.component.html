@@ -87,10 +87,13 @@
                             <label>Length</label>
                             <input type="tetx" class="form-control" readonly value="18">
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-12">
+                        <div class="col-lg-3 col-md-3 col-sm-12 edit-close-btn">
                             <label class="d-block">&nbsp;</label>
+                            <button class="btn btn-defualt close-button" (click)="openModal(template)">
+                                <i class="icon-trash"></i>
+                            </button>
                             <button class="btn btn-defualt">
-                                <span class="icon-cross"></span>
+                                <i class="icon-edit"></i>
                             </button>
                         </div>
                     </div>
@@ -123,5 +126,21 @@
     </div>
     <!-- end modal body -->
 
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Are you sure, you want to delete this?</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <p>Deleting this field from here, will remove it from all the accounts.</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success">Yes</button>
+        <button class="btn btn-danger">No</button>
+    </div>
+</ng-template>
 
 </div>
