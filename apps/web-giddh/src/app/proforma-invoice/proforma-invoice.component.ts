@@ -1523,11 +1523,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.searchAccount(requestObject).subscribe(data => {
                     if (data && data.body && data.body.results) {
                         this.prepareSearchLists(data.body.results, 1, SEARCH_TYPE.CUSTOMER);
-                        this.searchResults = [
-                            ...this.searchResults,
-                            ...this.defaultCustomerSuggestions
-                        ];
-                        this.assignSearchResultToList(SEARCH_TYPE.CUSTOMER);
                         this.makeCustomerList();
                         this.focusInCustomerName();
                         const item = data.body.results.find(result => result.uniqueName === this.accountUniqueName);
@@ -5620,7 +5615,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof ProformaInvoiceComponent
      */
-    public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function) {
+    public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function): void {
         if (!this.preventDefaultScrollApiCall &&
             (query || (searchType === SEARCH_TYPE.CUSTOMER && this.defaultCustomerSuggestions && this.defaultCustomerSuggestions.length === 0) ||
                 (searchType === SEARCH_TYPE.ITEM && this.defaultItemSuggestions && this.defaultItemSuggestions.length === 0) || successCallback)) {
@@ -6352,6 +6347,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private loadDefaultSearchSuggestions(): void {
         this.onSearchQueryChanged('', 1, SEARCH_TYPE.CUSTOMER, (response) => {
+            let selectedAccountDetails;
+            if (this.isUpdateMode) {
+                this.selectedAccountDetails$.pipe(take(1)).subscribe(accountDetails => {
+                    selectedAccountDetails = accountDetails;
+                });
+                if (selectedAccountDetails) {
+                    response.unshift({
+                        name: selectedAccountDetails.name,
+                        uniqueName: selectedAccountDetails.uniqueName
+                    });
+                }
+            }
             this.defaultCustomerSuggestions = response.map(result => {
                 return {
                     value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
@@ -6360,6 +6367,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }) || [];
             this.noResultsFoundLabel = SearchResultText.NotFound;
+            this.searchResults = [
+                ...this.defaultCustomerSuggestions
+            ];
+            this.assignSearchResultToList(SEARCH_TYPE.CUSTOMER);
+            this.makeCustomerList();
         });
         this.onSearchQueryChanged('', 1, SEARCH_TYPE.ITEM, (response) => {
             this.defaultItemSuggestions = response.map(result => {
