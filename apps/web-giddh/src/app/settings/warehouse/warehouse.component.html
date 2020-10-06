@@ -1,9 +1,12 @@
+<!-- create warehouse start -->
+<!-- hide branch element by *ngIf="isBranchElemnt" -->
 <div class="create-warehouse-page mb-15">
     <div class="create-warehouse-under mb-15">
         <div class="row">
             <div class="col-lg-10 col-sm-10">
                 <div class="warehouse-under-company">
                     <p class="mb-15">Create Warehouse under:</p>
+                    <p *ngIf="isBranchElemnt">Create Branch under:</p>
                     <div class="warehouse-company-name">
                         <div class="label-wrapper mb-15">
                             <label>Company:</label>
@@ -19,12 +22,37 @@
             <div class="col-lg-2 col-sm-2">
                 <div class="warehouse-image">
                     <img src="../../../assets/images/warehouse-image.svg" alt="warehouse image">
+                    <img *ngIf="isBranchElemnt" src="../../../assets/images/branch-image.svg" alt="Brnach image">
                 </div>
             </div>
         </div>
     </div>
     <div class="warehouse-form">
-        <div class="warehouse-form-field">
+        <!-- branch filed start -->
+        <div *ngIf="isBranchElemnt" class="warehouse-form-field">
+            <label>
+                Alias <span class="red-text">*</span>
+            </label>
+            <input type="text" class="form-control" placeholder="Enter Alias">
+        </div>
+        <div *ngIf="isBranchElemnt" class="warehouse-form-field">
+            <label>
+                Branch Name <span class="red-text">*</span>
+            </label>
+            <input type="text" class="form-control" placeholder="Enter Alias">
+            <span class="ml-2">
+                <input type="checkbox" class="mr-15"> Is it a Sub-Branch ?
+            </span>
+        </div>
+        <div  *ngIf="isBranchElemnt" class="warehouse-form-field">
+            <label>
+                Parent <span class="red-text">*</span>
+            </label>
+            <sh-select [option]="selectParentBranch"></sh-select>
+        </div>
+        <!-- branch filed end -->
+        <!-- warehouse field start -->
+        <div  class="warehouse-form-field">
             <label>
                 Warehouse Name <span class="red-text">*</span>
             </label>
@@ -36,12 +64,28 @@
             </label>
             <input type="text" class="form-control">
         </div>
+            <!-- common for both branch/warehouse -->
         <div class="warehouse-form-field">
             <label>
                 Address/es
             </label>
-            <sh-select [IOption]="address"></sh-select>
+            <sh-select [option]="address"></sh-select>
         </div>
+        <!-- warehouse field end -->
+        <!-- branch filed start -->
+        <div  *ngIf="isBranchElemnt" class="warehouse-form-field">
+            <label>
+                Select Warehouse
+            </label>
+            <sh-select [option]="selectWarehouse"></sh-select>
+        </div>
+        <div *ngIf="isBranchElemnt" class="warehouse-form-field">
+            <label>
+                Time Zone
+            </label>
+            <input type="text" class="form-control" value="(GMT 5:30) India Standard Time (Asia/Calcutta)">
+        </div>
+        <!-- branch field end -->
         <div class="warehouse-form-field">
             <label class="checkbox-label">
                 &nbsp;
@@ -69,10 +113,20 @@
     <div class="footer-btn row">
         <div class="button-group">
             <button class="btn btn-primary mr-15">Clear</button>
-            <button class="btn btn-success">Create Warehouse</button>
+            <button class="btn btn-success" (click)="openCreateAddressAside()">Create Warehouse</button>
+            <!-- create branch button start -->
+            <button *ngIf="isBranchElemnt" class="btn btn-success">Create Branch</button>
+            <!-- create branch button end -->
         </div>
     </div>
 </div>
+<!-- aside pane for create address -->
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+    <create-address [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
+        (closeAsideEvent)="toggleAccountAsidePane($event)" *ngIf="accountAsideMenuState === 'in'"></create-address>
+<!-- aside pane for create address end -->
+
+<!-- create warehouse end -->
 
 <ng-container *ngIf="warehouses">
     <div class="createWarehouse" *ngIf="!warehouses?.length">

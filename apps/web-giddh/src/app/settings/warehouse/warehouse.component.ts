@@ -24,7 +24,7 @@ import { AppState } from '../../store/roots';
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import { WarehouseActions } from './action/warehouse.action';
 import { WarehouseState } from './reducer/warehouse.reducer';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { IOption } from '../../theme/ng-select/option.interface';
 /**
  * Warehouse component
  *
@@ -42,7 +42,7 @@ import { IOption } from '../../../theme/ng-select/option.interface';
 export class WarehouseComponent implements OnInit, OnDestroy {
 
 
-
+    public isBranchElemnt: boolean = false;
     /** Image path relative to app environment */
     public imgPath: string = '';
     /** Stores item on boarding details */
@@ -96,12 +96,44 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         this.initSubscribers();
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
     }
-    public address: IOptions[]=[
+    public address: IOption[]=[
         { label: "Address 1", value: "1234" },
         { label: "Address 2", value: "1235" },
         { label: "Address 3", value: "1234" },
         { label: "Address 4", value: "1235" }
     ];
+
+    public selectWarehouse: IOption[] = [
+        { label: "Address 1", value: "1234" },
+        { label: "Address 2", value: "1235" },
+        { label: "Address 3", value: "1234" },
+        { label: "Address 4", value: "1235" }
+    ];
+    public selectParentBranch: IOption[] = [
+        { label: "Address 1", value: "1234" },
+        { label: "Address 2", value: "1235" },
+        { label: "Address 3", value: "1234" },
+        { label: "Address 4", value: "1235" }
+    ];
+    public openCreateAddressAside() {
+        this.toggleAccountAsidePane();
+    }
+    public accountAsideMenuState: string = 'out';
+    public toggleAccountAsidePane(event?): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+
+        this.toggleBodyClass();
+    }
+    public toggleBodyClass(): void {
+        if (this.accountAsideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
     /**
      * Releases all the observables to avoid memory leaks
      *
