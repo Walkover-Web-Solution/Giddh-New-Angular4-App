@@ -159,14 +159,6 @@ $greyClr: #6d6d6d;
         padding-left: 7px !important;
         overflow-y: auto;
     }
-    textarea.form-control::-webkit-scrollbar {
-        width: 5px;
-    }
-    textarea.form-control::-webkit-scrollbar-thumb {
-        background-color: $gainsboro;
-        outline: 1px solid $gray;
-        border-radius: 20px;
-    }
     label {
         display: block;
         font-weight: 400;

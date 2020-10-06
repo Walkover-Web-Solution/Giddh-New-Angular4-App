@@ -5146,12 +5146,12 @@ label {
 }
 
 .grp_col::-webkit-scrollbar-track {
-    background: #eee;
+    background: $white-smoke;
     margin-left: 255px;
 }
 
 .grp_col::-webkit-scrollbar-thumb {
-    background-color: $gainsboro;
+    background-color: $nobel;
     outline: 1px solid $gray;
     margin-left: 255px;
 }
@@ -10550,4 +10550,18 @@ body.prevent-body-scroll {
 }
 .modal.fade.giddh-calendar.show {
     z-index: 999999;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+*::-webkit-scrollbar-track {
+  background: $white-smoke;
+}
+
+/* Handle */
+*::-webkit-scrollbar-thumb {
+  background:  $nobel;
+  border-radius: 5px;
 }
