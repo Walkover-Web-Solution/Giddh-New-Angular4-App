@@ -234,7 +234,7 @@ export class LoginActions {
             ofType(LoginActions.LoginSuccessBYUrl),
             switchMap((action) => {
                 console.log("Login Init");
-                return observableZip(this._companyService.getStateDetails(''), this._companyService.CompanyList(), this._companyService.CurrencyList());
+                return observableZip(this._companyService.getStateDetails(''), this._companyService.CompanyList());
             }), map((results: any[]) => {
                 console.log("Login Success");
                 /* check if local storage is cleared or not for first time
@@ -252,10 +252,7 @@ export class LoginActions {
                 let cmpUniqueName = '';
                 let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
                 let companies = results[1] as BaseResponse<CompanyResponse[], string>;
-                let currencies = results[2] as BaseResponse<ICurrencyResponse[], string>;
-                if (currencies.body && currencies.status === 'success') {
-                    this.store.dispatch(this.SetCurrencyInStore(currencies.body));
-                }
+
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     this.zone.run(() => {
@@ -288,7 +285,7 @@ export class LoginActions {
             ofType(LoginActions.LoginSuccess),
             switchMap((action) => {
                 console.log("Login Init");
-                return observableZip(this._companyService.getStateDetails(''), this._companyService.CompanyList(), this._companyService.CurrencyList());
+                return observableZip(this._companyService.getStateDetails(''), this._companyService.CompanyList());
             }), map((results: any[]) => {
                 console.log("Login Success");
                 /* check if local storage is cleared or not for first time
@@ -306,10 +303,7 @@ export class LoginActions {
                 let cmpUniqueName = '';
                 let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
                 let companies = results[1] as BaseResponse<CompanyResponse[], string>;
-                let currencies = results[2] as BaseResponse<ICurrencyResponse[], string>;
-                if (currencies.body && currencies.status === 'success') {
-                    this.store.dispatch(this.SetCurrencyInStore(currencies.body));
-                }
+                
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     this.zone.run(() => {

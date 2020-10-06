@@ -71,6 +71,7 @@ import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
+import { CompanyService } from '../../services/companyService.service';
 
 @Component({
     selector: 'app-header',
@@ -300,7 +301,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private generalService: GeneralService,
         private commonActions: CommonActions,
         private location: Location,
-        private settingsProfileService: SettingsProfileService
+        private settingsProfileService: SettingsProfileService,
+        private companyService: CompanyService
     ) {
         /* This will get the date range picker configurations */
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
@@ -716,7 +718,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     });
                 }
             }
-        })
+        });
+
+        this.companyService.CurrencyList().subscribe(response => {
+            if (response && response.status === 'success' && response.body) {
+                this.store.dispatch(this.loginAction.SetCurrencyInStore(response.body));
+            }
+        });
     }
 
     /**
