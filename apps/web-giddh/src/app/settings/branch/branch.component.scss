@@ -5,13 +5,10 @@
 }
 
 .dropdown-menu {
-    padding: 10px;
-    max-height: 130px;
     overflow-y: scroll;
 }
 
 .dropdown-menu li {
-    margin-bottom: 5px;
     font-size: 14px;
 }
 
@@ -83,14 +80,18 @@
     padding: 20px;
 }
 .branch-sales-details {
-    padding: 20px;
     border-top: 1px solid $gainsboro;
+    padding-top: 20px;
+        label {
+            font-family: "opensans-semibold";
+            margin-bottom: 10px;
+            color: $extra-dark-gray;
+        }
+        .total-amount{
+            width:70%;
+        } 
 }
-.branch-sales-details label {
-    font-family: "opensans-semibold";
-    margin-bottom: 10px;
-    color: $extra-dark-gray;
-}
+
 .unlink a {
     color: #5b64c9 !important;
     cursor: pointer;
@@ -162,6 +163,57 @@
 
 .parent-branch{
     color: $gray;
+}
+
+.star-radio {
+    visibility:hidden;
+    font-size:30px;
+    cursor:pointer;
+    top: -3px;
+    position: relative;
+    margin-right: 10px;
+
+    &:before {
+        content: "\2606";
+        position: absolute;
+        visibility:visible;
+    }
+
+    &:checked {
+        &:before {
+            content: "\2605";
+            position: absolute;
+            border-color: $chetwode-blue;
+            color: $chetwode-blue;
+        }
+    }
+}
+
+.btn-group.moreBtn.open.show {
+    display: inline-block !important;
+}
+
+.moreBtn li {
+    padding: 5px;
+    cursor: default;
+}
+
+.moreBtn li:hover {
+    background-color: #eeeff9;
+    color: $jacksons-purple;
+}
+
+.btn-primary.active,
+.btn-primary:active,
+.open>.dropdown-toggle.btn-primary {
+    color: #333;
+    background-color: #e7e7e8;
+    border-color: #e7e7e8;
+    box-shadow: none !important;
+}
+
+.linked-add{
+    margin-bottom:5px;
 }
 
 @media (max-width: 375px) {
