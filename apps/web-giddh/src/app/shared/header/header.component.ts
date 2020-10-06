@@ -570,8 +570,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
             }
         });
-
-        this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+        if (this.generalService.companyUniqueName) {
+            // Avoid API call if new user is onboarded
+            this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+        }
 
         // region creating list for cmd+g modal
         combineLatest(
