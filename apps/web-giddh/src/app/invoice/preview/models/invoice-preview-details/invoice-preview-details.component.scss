@@ -199,6 +199,9 @@
     margin-bottom: 35px;
     z-index: -9;
     height: 100%;
+    .relative {
+        height: 100%;
+    }
     .expand-button {
         position: relative;
         right: 15px;
