@@ -112,7 +112,7 @@
                                                         (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'customer')"
                                                         [notFoundMsg]="noResultsFoundLabel"
                                                         [enableDynamicSearch]="true" (onHide)="resetPreviousSearchResults(true, 'customer')"
-                                                        (selected)="onSelectCustomer($event);" [placeholder]="customerPlaceHolder" [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" (noResultsClicked)="addNewAccount()" [useInBuiltFilterForFlattenAc]="true"
+                                                        (selected)="onSelectCustomer($event);" [placeholder]="customerPlaceHolder" [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" (noResultsClicked)="addNewAccount()"
                                                         [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="customerNotFoundText" (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)" [disabled]="isUpdateMode && invoiceType !== 'sales' && invoiceType !== 'cash'">
 
                                                         <ng-template #optionTemplate let-option="option">
