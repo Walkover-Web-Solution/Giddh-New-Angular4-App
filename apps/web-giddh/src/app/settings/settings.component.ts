@@ -120,7 +120,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 }, 0);
             } else if (this.activeTab === "permission") {
                 setTimeout(() => {
-                    this.permissionComp.getInitialData();
+                    if(this.permissionComp) {
+                        this.permissionComp.getInitialData();
+                    }
                 }, 0);
             } else if (this.activeTab === "tag") {
                 setTimeout(() => {
