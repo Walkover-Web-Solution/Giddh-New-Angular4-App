@@ -484,8 +484,38 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public poFilterDates: any = {from: '', to: ''};
     /** Stores the search results */
     public searchResults: Array<IOption> = [];
-    /** Stores the search results pagination details */
-    public searchResultsPaginationData = {
+    /** Default search suggestion list to be shown for searching customer */
+    public defaultCustomerSuggestions: Array<IOption> = [];
+    /** Default search suggestion list to be shown for searching stock or services */
+    public defaultItemSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
+    /** Stores the search results pagination details for customer */
+    public searchCustomerResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the search results pagination details for stock or service  */
+    public searchItemResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the search results pagination details for bank */
+    public searchBankResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the default search results pagination details for customer */
+    public defaultCustomerResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the default search results pagination details for stock or service */
+    public defaultItemResultsPaginationData = {
         page: 0,
         totalPages: 0,
         query: ''
@@ -820,6 +850,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                 }
             }
+            this.loadDefaultSearchSuggestions();
             this.focusInCustomerName();
             this.getAllLastInvoices();
         });
@@ -1492,6 +1523,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.searchAccount(requestObject).subscribe(data => {
                     if (data && data.body && data.body.results) {
                         this.prepareSearchLists(data.body.results, 1, SEARCH_TYPE.CUSTOMER);
+                        this.searchResults = [
+                            ...this.searchResults,
+                            ...this.defaultCustomerSuggestions
+                        ];
+                        this.assignSearchResultToList(SEARCH_TYPE.CUSTOMER);
                         this.makeCustomerList();
                         this.focusInCustomerName();
                         const item = data.body.results.find(result => result.uniqueName === this.accountUniqueName);
@@ -4430,7 +4466,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if(entry.purchaseOrderItemMapping) {
                 if(this.copyPurchaseBill) {
                     if(this.copyPurchaseBillInitialized) {
-                        salesEntryClass.purchaseOrderItemMapping = entry.purchaseOrderItemMapping;    
+                        salesEntryClass.purchaseOrderItemMapping = entry.purchaseOrderItemMapping;
                     }
                 } else {
                     salesEntryClass.purchaseOrderItemMapping = entry.purchaseOrderItemMapping;
@@ -5532,8 +5568,46 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public handleScrollEnd(searchType: string): void {
-        if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
-            this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1, searchType);
+        const query = searchType === SEARCH_TYPE.CUSTOMER ? this.searchCustomerResultsPaginationData.query :
+            searchType === SEARCH_TYPE.ITEM ? this.searchItemResultsPaginationData.query :
+            searchType === SEARCH_TYPE.BANK ? this.searchBankResultsPaginationData.query : '';
+        const page = searchType === SEARCH_TYPE.CUSTOMER ? this.searchCustomerResultsPaginationData.page :
+            searchType === SEARCH_TYPE.ITEM ? this.searchItemResultsPaginationData.page :
+            searchType === SEARCH_TYPE.BANK ? this.searchBankResultsPaginationData.page : 1;
+        if (
+            (searchType === SEARCH_TYPE.CUSTOMER && this.searchCustomerResultsPaginationData.page < this.searchCustomerResultsPaginationData.totalPages) ||
+            (searchType === SEARCH_TYPE.ITEM && this.searchItemResultsPaginationData.page < this.searchItemResultsPaginationData.totalPages) ||
+            (searchType === SEARCH_TYPE.BANK && this.searchBankResultsPaginationData.page < this.searchBankResultsPaginationData.totalPages)) {
+            this.onSearchQueryChanged(
+                query,
+                page + 1,
+                searchType,
+                (response) => {
+                    if (!query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                                label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                                additional: result
+                            }
+                        }) || [];
+                        if (searchType === SEARCH_TYPE.CUSTOMER) {
+                            this.defaultCustomerSuggestions = this.defaultCustomerSuggestions.concat(...results);
+                            this.defaultCustomerResultsPaginationData.page = this.searchCustomerResultsPaginationData.page;
+                            this.defaultCustomerResultsPaginationData.totalPages = this.searchCustomerResultsPaginationData.totalPages;
+                            this.searchResults = [...this.defaultCustomerSuggestions];
+                            this.assignSearchResultToList(SEARCH_TYPE.CUSTOMER);
+                            this.makeCustomerList();
+                        } else if (searchType === SEARCH_TYPE.ITEM) {
+                            this.defaultItemSuggestions = this.defaultItemSuggestions.concat(...results);
+                            this.defaultItemResultsPaginationData.page = this.searchItemResultsPaginationData.page;
+                            this.defaultItemResultsPaginationData.totalPages = this.searchItemResultsPaginationData.totalPages;
+                            this.searchResults = [...this.defaultItemSuggestions];
+                            this.assignSearchResultToList(SEARCH_TYPE.ITEM);
+                            this.makeCustomerList();
+                        }
+                    }
+            });
         }
     }
 
@@ -5542,21 +5616,60 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      *
      * @param {string} query Search query
      * @param {number} [page=1] Page to request
+     * @param {string} searchType Type of search to make
+     * @param {Function} successCallback Callback to carry out further operation
      * @memberof ProformaInvoiceComponent
      */
-    public onSearchQueryChanged(query: string, page: number = 1, searchType: string) {
-        this.searchResultsPaginationData.query = query;
-        const requestObject = this.getSearchRequestObject(query, page, searchType);
-        this.searchAccount(requestObject).subscribe(data => {
-            if (data && data.body && data.body.results) {
-                this.prepareSearchLists(data.body.results, page, searchType);
-                this.makeCustomerList();
-                this.noResultsFoundLabel = SearchResultText.NotFound;
-                this._cdr.detectChanges();
-                this.searchResultsPaginationData.page = data.body.page;
-                this.searchResultsPaginationData.totalPages = data.body.totalPages;
+    public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function) {
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (searchType === SEARCH_TYPE.CUSTOMER && this.defaultCustomerSuggestions && this.defaultCustomerSuggestions.length === 0) ||
+                (searchType === SEARCH_TYPE.ITEM && this.defaultItemSuggestions && this.defaultItemSuggestions.length === 0) || successCallback)) {
+            if (searchType === SEARCH_TYPE.CUSTOMER) {
+                this.searchCustomerResultsPaginationData.query = query;
+            } else if (searchType === SEARCH_TYPE.ITEM) {
+                this.searchItemResultsPaginationData.query = query;
+            } else if (searchType === SEARCH_TYPE.BANK) {
+                this.searchBankResultsPaginationData.query = query;
             }
-        });
+            const requestObject = this.getSearchRequestObject(query, page, searchType);
+            this.searchAccount(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    this.prepareSearchLists(data.body.results, page, searchType);
+                    this.makeCustomerList();
+                    this.noResultsFoundLabel = SearchResultText.NotFound;
+                    this._cdr.detectChanges();
+                    if (searchType === SEARCH_TYPE.CUSTOMER) {
+                        this.searchCustomerResultsPaginationData.page = data.body.page;
+                        this.searchCustomerResultsPaginationData.totalPages = data.body.totalPages;
+                    } else if (searchType === SEARCH_TYPE.ITEM) {
+                        this.searchItemResultsPaginationData.page = data.body.page;
+                        this.searchItemResultsPaginationData.totalPages = data.body.totalPages;
+                    } else if (searchType === SEARCH_TYPE.BANK) {
+                        this.searchBankResultsPaginationData.page = data.body.page;
+                        this.searchBankResultsPaginationData.totalPages = data.body.totalPages;
+                    }
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            if (searchType === SEARCH_TYPE.CUSTOMER) {
+                this.searchResults = [...this.defaultCustomerSuggestions];
+                this.searchCustomerResultsPaginationData.page = this.defaultCustomerResultsPaginationData.page;
+                this.searchCustomerResultsPaginationData.totalPages = this.defaultCustomerResultsPaginationData.totalPages;
+            } else if (searchType === SEARCH_TYPE.ITEM) {
+                this.searchResults = [...this.defaultItemSuggestions];
+                this.searchItemResultsPaginationData.page = this.defaultItemResultsPaginationData.page;
+                this.searchItemResultsPaginationData.totalPages = this.defaultItemResultsPaginationData.totalPages;
+            }
+            this.assignSearchResultToList(searchType);
+            this.makeCustomerList();
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+            }, 500);
+        }
     }
 
     /**
@@ -5583,24 +5696,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 ...searchResults
             ];
         }
-        if (searchType === SEARCH_TYPE.CUSTOMER) {
-            if (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) {
-                this.sundryCreditorsAcList = this.searchResults;
-            } else {
-                this.sundryDebtorsAcList = this.searchResults;
-            }
-        } else if (searchType === SEARCH_TYPE.ITEM) {
-            if (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) {
-                this.prdSerAcListForCred = this.searchResults;
-            } else {
-                this.prdSerAcListForDeb = this.searchResults;
-            }
-        } else if (searchType === SEARCH_TYPE.BANK) {
-            const searchResultsOfSameCurrency = this.searchResults ? this.searchResults.filter(result =>
-                !result.additional.currency || result.additional.currency === this.customerCurrencyCode || result.additional.currency === this.companyCurrency
-            ) : [];
-            this.bankAccounts$ = observableOf(_.orderBy(searchResultsOfSameCurrency, 'label'));
-        }
+        this.assignSearchResultToList(searchType);
     }
 
     /**
@@ -5616,7 +5712,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let withStocks: boolean;
         let group: string;
         if (searchType === SEARCH_TYPE.CUSTOMER) {
-            this.searchResultsPaginationData.query = query;
+            this.searchCustomerResultsPaginationData.query = query;
             group = (this.invoiceType === VoucherTypeEnum.debitNote) ? 'sundrycreditors' :
                 (this.invoiceType === VoucherTypeEnum.purchase) ?
                     'sundrycreditors, bankaccounts, cash' : 'sundrydebtors';
@@ -5625,7 +5721,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else if (searchType === SEARCH_TYPE.ITEM) {
             group = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
                 'operatingcost, indirectexpenses' : 'otherincome, revenuefromoperations';
-            withStocks = true;
+            withStocks = !!query;
         } else if (searchType === SEARCH_TYPE.BANK) {
             group = 'bankaccounts, cash';
         }
@@ -5654,16 +5750,59 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /**
      * Resets the previous search result
      *
+     * @param {boolean} shouldShowDefaultList True, if default list should be shown
+     * @param {string} searchType Search type made by the user
      * @memberof ProformaInvoiceComponent
      */
-    public resetPreviousSearchResults(): void {
-        this.searchResults = [];
-        this.searchResultsPaginationData = {
-            page: 0,
-            totalPages: 0,
-            query: ''
-        };
-        this.noResultsFoundLabel = SearchResultText.NewSearch;
+    public resetPreviousSearchResults(shouldShowDefaultList: boolean = false, searchType?: string): void {
+        if (shouldShowDefaultList && searchType) {
+            this.searchResults = (searchType === SEARCH_TYPE.CUSTOMER) ? [...this.defaultCustomerSuggestions] :
+                (searchType === SEARCH_TYPE.ITEM) ? [...this.defaultItemSuggestions] : [];
+            if (searchType === SEARCH_TYPE.CUSTOMER) {
+                this.searchCustomerResultsPaginationData = {
+                    page: 0,
+                    totalPages: 0,
+                    query: ''
+                };
+            } else if (searchType === SEARCH_TYPE.ITEM) {
+                this.searchItemResultsPaginationData = {
+                    page: 0,
+                    totalPages: 0,
+                    query: ''
+                };
+            }
+            this.noResultsFoundLabel = SearchResultText.NotFound;
+        } else {
+            this.searchResults = [];
+            this.defaultCustomerSuggestions = [];
+            this.defaultItemSuggestions = [];
+            this.searchCustomerResultsPaginationData = {
+                page: 0,
+                totalPages: 0,
+                query: ''
+            };
+            this.searchItemResultsPaginationData = {
+                page: 0,
+                totalPages: 0,
+                query: ''
+            };
+            this.searchBankResultsPaginationData = {
+                page: 0,
+                totalPages: 0,
+                query: ''
+            };
+            this.defaultCustomerResultsPaginationData = {
+                page: 0,
+                totalPages: 0,
+                query: ''
+            };
+            this.defaultItemResultsPaginationData = {
+                page: 0,
+                totalPages: 0,
+                query: ''
+            };
+            this.noResultsFoundLabel = SearchResultText.NewSearch;
+        }
     }
 
     /**
@@ -5924,7 +6063,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.invFormData.entries[lastIndex].purchaseOrderItemMapping = {uniqueName: poUniqueName, entryUniqueName: entry.uniqueName};
 
                     this.onSelectSalesAccount(item, this.invFormData.entries[lastIndex].transactions[transactionLoop], this.invFormData.entries[lastIndex], false, true);
-                
+
                     transactionLoop++;
                 }
 
@@ -5965,7 +6104,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                                     }
 
                                                     let stockUniqueName = (item.stock && item.stock.uniqueName) ? item.stock.uniqueName : "";
-                                                    if(item.stock && item.stock.uniqueName) { 
+                                                    if(item.stock && item.stock.uniqueName) {
                                                         stockUniqueName = stockUniqueName.replace("purchases#", "");
                                                     }
 
@@ -6203,4 +6342,63 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         });
     }
+
+    /**
+     * Loads the default search suggestion for customer and item when voucher module is loaded and
+     * when voucher is changed
+     *
+     * @private
+     * @memberof LedgerComponent
+     */
+    private loadDefaultSearchSuggestions(): void {
+        this.onSearchQueryChanged('', 1, SEARCH_TYPE.CUSTOMER, (response) => {
+            this.defaultCustomerSuggestions = response.map(result => {
+                return {
+                    value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                    label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                    additional: result
+                }
+            }) || [];
+            this.noResultsFoundLabel = SearchResultText.NotFound;
+        });
+        this.onSearchQueryChanged('', 1, SEARCH_TYPE.ITEM, (response) => {
+            this.defaultItemSuggestions = response.map(result => {
+                return {
+                    value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                    label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                    additional: result
+                }
+            }) || [];
+            this.noResultsFoundLabel = SearchResultText.NotFound;
+        });
+    }
+
+    /**
+     * Assigns the search results based on invoice type and search type
+     *
+     * @private
+     * @param {string} searchType Search type made by the user
+     * @memberof ProformaInvoiceComponent
+     */
+    private assignSearchResultToList(searchType: string): void {
+        if (searchType === SEARCH_TYPE.CUSTOMER) {
+            if (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) {
+                this.sundryCreditorsAcList = this.searchResults;
+            } else {
+                this.sundryDebtorsAcList = this.searchResults;
+            }
+        } else if (searchType === SEARCH_TYPE.ITEM) {
+            if (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) {
+                this.prdSerAcListForCred = this.searchResults;
+            } else {
+                this.prdSerAcListForDeb = this.searchResults;
+            }
+        } else if (searchType === SEARCH_TYPE.BANK) {
+            const searchResultsOfSameCurrency = this.searchResults ? this.searchResults.filter(result =>
+                !result.additional.currency || result.additional.currency === this.customerCurrencyCode || result.additional.currency === this.companyCurrency
+            ) : [];
+            this.bankAccounts$ = observableOf(_.orderBy(searchResultsOfSameCurrency, 'label'));
+        }
+    }
+
 }
