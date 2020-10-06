@@ -57,7 +57,7 @@ export class ExpenseService {
         return this._http.post(this.config.apiUrl + EXPENSE_API.ACTION
             .replace(':companyUniqueName', this.companyUniqueName)
             .replace(':uniqueName', requestObj.uniqueName)
-            .replace(':accountUniqueName', requestObj.accountUniqueName)
+            .replace(':accountUniqueName', encodeURIComponent(requestObj.accountUniqueName))
             .replace(':actionType', requestObj.actionType), model).pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -71,7 +71,7 @@ export class ExpenseService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.get(this.config.apiUrl + EXPENSE_API.GETEntry
             .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', uniqueName)).pipe(
+            .replace(':accountUniqueName', encodeURIComponent(uniqueName))).pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     return data;

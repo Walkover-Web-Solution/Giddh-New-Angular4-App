@@ -25,6 +25,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-company-HO:before {
+  content: "\e97f";
+}
+.icon-warehouse-icon:before {
+  content: "\e980";
+}
 .icon-branch-icon:before {
   content: "\e900";
 }

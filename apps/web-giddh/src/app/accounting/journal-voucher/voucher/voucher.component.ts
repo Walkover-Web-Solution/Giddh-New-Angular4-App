@@ -1379,13 +1379,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             let accList: IOption[] = [];
             let accountList = [];
             this.allAccounts.forEach((acc: IFlattenAccountsResultItem) => {
-                if (accountList.indexOf(acc.uniqueName) === -1 && this.activeCompany && acc.currency === this.activeCompany.baseCurrency) {
+                if (!accountList[acc.uniqueName] && this.activeCompany && acc.currency === this.activeCompany.baseCurrency) {
                     if (this.requestObj.voucherType === VOUCHERS.CONTRA) {
                         const isContraAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash' || pg.uniqueName === 'currentliabilities'));
                         const isDisallowedAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'sundrycreditors' || pg.uniqueName === 'dutiestaxes'));
                         if (isContraAccount && !isDisallowedAccount) {
                             accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
-                            accountList.push(acc.uniqueName);
+                            accountList[acc.uniqueName] = true;
                         }
                     } else if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
                         let isReceiptAccount;
@@ -1399,11 +1399,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         const isDisallowedAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'dutiestaxes'));
                         if (isReceiptAccount && !isDisallowedAccount) {
                             accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
-                            accountList.push(acc.uniqueName);
+                            accountList[acc.uniqueName] = true;
                         }
                     } else {
                         accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
-                        accountList.push(acc.uniqueName);
+                        accountList[acc.uniqueName] = true;
                     }
                 }
             });

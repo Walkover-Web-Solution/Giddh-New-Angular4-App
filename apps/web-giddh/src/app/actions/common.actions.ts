@@ -81,19 +81,6 @@ export class CommonActions {
             payload: value
         };
     }
-    public GetAllCountry(value: CountryRequest): CustomActions {
-        return {
-            type: CommonActions.GET_ALL_COUNTRY,
-            payload: value
-        };
-    }
-
-    public GetAllCountryResponse(value: BaseResponse<CountryResponse, CountryRequest>): CustomActions {
-        return {
-            type: CommonActions.GET_ALL_COUNTRY_RESPONSE,
-            payload: value
-        };
-    }
 
     public GetCurrency(): CustomActions {
         return {
@@ -105,6 +92,20 @@ export class CommonActions {
     public GetCurrencyResponse(value: BaseResponse<CurrencyResponse, any>): CustomActions {
         return {
             type: CommonActions.GET_CURRENCY_RESPONSE,
+            payload: value
+        };
+    }
+
+    public GetAllCountry(value: CountryRequest): CustomActions {
+        return {
+            type: CommonActions.GET_ALL_COUNTRY,
+            payload: value
+        };
+    }
+
+    public GetAllCountryResponse(value: BaseResponse<CountryResponse, CountryRequest>): CustomActions {
+        return {
+            type: CommonActions.GET_ALL_COUNTRY_RESPONSE,
             payload: value
         };
     }

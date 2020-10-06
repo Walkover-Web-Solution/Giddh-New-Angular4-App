@@ -221,3 +221,6 @@ export enum SearchResultText {
     NewSearch = 'Type to search a/c',
     NotFound = 'No results found'
 }
+
+/** Types of tcs and tds taxes */
+export const TCS_TDS_TAXES_TYPES = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];

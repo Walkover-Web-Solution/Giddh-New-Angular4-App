@@ -1661,6 +1661,12 @@ export class InvoiceActions {
         };
     }
 
+    public resetRecurringInvoiceRequest(): CustomActions {
+        return {
+            type: INVOICE.RECURRING.RESET_RECURRING_INVOICE_REQUEST
+        };
+    }
+
     public SendInvoiceOnSms(accountUniqueName: string, dataToSend: { numbers: string[] }, voucherNumber): CustomActions {
         return {
             type: INVOICE_ACTIONS.SEND_SMS,
@@ -1866,12 +1872,6 @@ export class InvoiceActions {
     public resetTransporterListResponse(): CustomActions {
         return {
             type: EWAYBILL_ACTIONS.RESET_ALL_TRANSPORTER_RESPONSE
-        };
-    }
-
-    public resetRecurringInvoice(): CustomActions {
-        return {
-            type: INVOICE.RECURRING.RESET_RECURRING_INVOICE
         };
     }
 }

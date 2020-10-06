@@ -42,6 +42,13 @@
     .user-name-email {
         width: 40%;
         color: $extra-dark-gray;
+        display: flex;
+        white-space: normal;
+        word-break: break-all;
+        i{
+            position: relative;
+            top: 3px;
+        }
         .user-email {
             display: inline-flex;
             flex-direction: column;

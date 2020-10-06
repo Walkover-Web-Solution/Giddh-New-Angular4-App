@@ -16,3 +16,10 @@
 .export-group-ledger{
     margin-right: 15px;
 }
+
+
+@media (min-width: 576px) and (max-width:767px){
+    .modal-share-group{
+        max-width: 500px !important;
+    }
+}
