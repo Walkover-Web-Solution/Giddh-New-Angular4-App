@@ -11,7 +11,7 @@
                         </div>
                         <div class="label-wrapper mb-15">
                             <label>Country & Currency:</label>
-                            <span>India - INR Rupee</span>
+                            <span><img src="../../../assets/images/flags.png"> India - INR Rupee</span>
                         </div>
                     </div>
                 </div>
@@ -40,10 +40,10 @@
             <label>
                 Address/es
             </label>
-            <sh-select [options]="sendOtp"></sh-select>
+            <sh-select [IOption]="address"></sh-select>
         </div>
         <div class="warehouse-form-field">
-            <label>
+            <label class="checkbox-label">
                 &nbsp;
             </label>
             <div class="justify-content-center">
@@ -84,7 +84,7 @@
 
     <div *ngIf="warehouses?.length" class="warehouse-card-view">
         <div class="row">
-            <div class="mb-15 col-sm-12 mr-0 d-flex justify-content-between">
+            <div class="mb-15 col-sm-12 mr-0 d-flex justify-content-between warehouse-header">
                 <div class="search-warehouse-box">
                     <input type="text" class="form-control" placeholder="Search Warehouse">
                 </div>

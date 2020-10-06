@@ -96,7 +96,7 @@ export class WarehouseComponent implements OnInit, OnDestroy {
         this.initSubscribers();
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
     }
-    public sendOtp: IOption[] = [
+    public address: IOptions[]=[
         { label: "Address 1", value: "1234" },
         { label: "Address 2", value: "1235" },
         { label: "Address 3", value: "1234" },
