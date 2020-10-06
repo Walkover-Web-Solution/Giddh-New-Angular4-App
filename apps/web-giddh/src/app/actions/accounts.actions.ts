@@ -69,8 +69,7 @@ export class AccountsAction {
     public static UNMERGE_ACCOUNT = 'AccountUnMerge';
     public static UNMERGE_ACCOUNT_RESPONSE = 'AccountUnMergeResponse';
     public static ASSIGN_DISCOUNT_TO_ACCOUNT = 'ASSIGN_DISCOUNT_TO_ACCOUNT';
-
-
+    public static RESET_SHARE_ENTITY = 'RESET_SHARE_ENTITY';
 
     public ApplyAccountTax$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
@@ -999,5 +998,11 @@ export class AccountsAction {
             type: AccountsAction.UNMERGE_ACCOUNT_RESPONSE,
             payload: value
         };
+    }
+
+    public resetShareEntity(): CustomActions {
+        return {
+            type: AccountsAction.RESET_SHARE_ENTITY
+        }
     }
 }
