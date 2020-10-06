@@ -10,7 +10,7 @@ import * as _ from '../../../../lodash-optimized';
 @Component({
 	selector: 'accounts-side-bar',
 	templateUrl: './accounts-side-bar.component.html',
-	styleUrls: ['./accounts-side-bar.component.css'],
+	styleUrls: ['./accounts-side-bar.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
