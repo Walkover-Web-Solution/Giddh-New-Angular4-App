@@ -527,9 +527,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, OnInit, Aft
             this.stopDynamicSearch$ = new ReplaySubject(1);
             this.dynamicSearchQueryChanged = new Subject();
             this.dynamicSearchQueryChanged.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.stopDynamicSearch$)).subscribe((query: string) => {
-                if (query) {
-                    this.dynamicSearchedQuery.emit(query);
-                }
+                this.dynamicSearchedQuery.emit(query);
             });
         }
     }
