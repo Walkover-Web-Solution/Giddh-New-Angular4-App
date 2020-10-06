@@ -1,6 +1,6 @@
-<form class="horizontal-form ng-pristine ng-valid ng-valid-required" id="groupDetailForm" name="groupDetailForm"
+<form class="horizontal-form ng-pristine ng-valid ng-valid-required manage-group-account-form" id="groupDetailForm" name="groupDetailForm"
     novalidate [formGroup]="groupDetailForm" (submit)="updateGroup()">
-    <div class="container-fluid mrT1">
+    <div class="container-fluid mr-t1">
         <div class="row">
             <div class="form-group col-xs-12 col-sm-6">
                 <label>Group Name</label>
@@ -60,7 +60,7 @@
                 (click)="showDeleteGroupModal()">Delete
             </button>
 
-            <button class="btn btn-primary mrL1" type="submit" *ngIf="(showEditGroup$ | async)"
+            <button class="btn btn-primary mr-l1" type="submit" *ngIf="(showEditGroup$ | async)"
                 [ladda]="isUpdateGroupInProcess$ | async"
                 [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update
             </button>
@@ -73,17 +73,17 @@
 
 
 <!--move group-->
-<div class="horizontal-form  form-group mrB1 clearfix" *ngIf="(activeGroup$ | async) && !(activeGroup$ | async)?.fixed">
-    <form name="moveGroupForm" class="col-xs-12 " novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
+<div class="horizontal-form manage-group-account-form form-group mr-b1 clearfix" *ngIf="(activeGroup$ | async) && !(activeGroup$ | async)?.fixed">
+    <form name="moveGroupForm" class="col-xs-12 col-sm-12" novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
         <label class="d-block">Move to group</label>
         <span>
             <sh-select #moveToGroupDropDown formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList"
-                [isFilterEnabled]="true" class="pull-left" style="width: calc(100% - 92px);">
+                [isFilterEnabled]="true" class="pull-left move-group-form">
                 <!--template for move group typeahead [customFilter]="customMoveGroupFilter"-->
                 <ng-template #optionTemplate let-option="option">
                     <a href="javascript:void(0)" class="list-item" style="border-bottom:1px solid #e0e0e0;">
                         <div class="item">{{ option.label }}</div>
-                        <div class="item_unq">{{ option.value }}</div>
+                        <div class="item-unique">{{ option.value }}</div>
                     </a>
                 </ng-template>
             </sh-select>
@@ -97,8 +97,8 @@
 <!--taxes  -->
 
 <!-- Taxes collapse -->
-<div class="clearfix tax-operation horizontal-form" *ngIf="isTaxableGroup$ | async">
-    <div class="col-xs-12">
+<div class="clearfix tax-operation horizontal-form manage-group-account-form" *ngIf="isTaxableGroup$ | async">
+    <div class="col-xs-12 col-sm-12">
         <div class="form-group toggle-btn mrB">
             <label class="cp" (click)="showTaxes = !showTaxes; taxHierarchy()">
                 <i class="fa cp" aria-hidden="true"
@@ -108,7 +108,7 @@
     </div>
     <!-- taxes container -->
     <ng-container *ngIf="showTaxes">
-        <div class="col-xs-12">
+        <div class="col-xs-12 col-sm-12">
 
             <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
                 <div class="tax-label">
@@ -116,8 +116,8 @@
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <sh-select formControlName="taxes" [placeholder]="'Select Tax'"
-                            [options]="companyTaxDropDown" [multiple]="true" style="width: calc(100% - 12px);">
+                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'"
+                            [options]="companyTaxDropDown | async" [multiple]="true">
                         </sh-select>
                         <span class="input-group-btn pdL2"> <button type="submit"
                                 class="btn btn-success">Save</button></span>

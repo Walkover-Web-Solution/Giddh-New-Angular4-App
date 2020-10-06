@@ -169,7 +169,7 @@ ul.list-unstyled li a {
     padding: 0 15px;
 }
 
-#content_wrapper {
+#content-wrapper {
     padding-bottom: 80px !important;
 }
 
@@ -302,6 +302,12 @@ table th {
     &:hover {
         color: $deep-sky-blue;
     }
+}
+
+.list-inline>li {
+    display: inline-block;
+    padding-right: 5px;
+    padding-left: 5px;
 }
 
 @media (max-width: 1366px) {

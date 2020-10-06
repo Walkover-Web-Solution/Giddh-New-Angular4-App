@@ -21,7 +21,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 })
 
 export class ShSelectModule {
-    public static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders<ShSelectModule> {
         return {
             ngModule: ShSelectModule
         };

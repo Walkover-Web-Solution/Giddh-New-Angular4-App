@@ -1,7 +1,6 @@
-import { Inject, Optional } from '@angular/core';
+import { Inject, Optional, Injectable } from '@angular/core';
 import { GeneralService } from './general.service';
 import { HttpWrapperService } from './httpWrapper.service';
-import { HttpClient } from '@angular/common/http';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { Observable } from 'rxjs';
@@ -9,14 +8,13 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { catchError, map } from 'rxjs/operators';
 import { EstimateGetVersionByVersionNoRequest, ProformaDownloadRequest, ProformaFilter, ProformaGetAllVersionRequest, ProformaGetAllVersionsResponse, ProformaGetRequest, ProformaResponse, ProformaUpdateActionRequest } from '../models/api-models/proforma';
 import { ESTIMATES_API, PROFORMA_API } from './apiurls/proforma.api';
-import { GenericRequestForGenerateSCD, VoucherClass } from '../models/api-models/Sales';
+import { VoucherClass } from '../models/api-models/Sales';
 
+@Injectable()
 export class ProformaService {
 	private companyUniqueName: string;
 
-	constructor(private _generalService: GeneralService, private _http: HttpWrapperService,
-		private _httpClient: HttpClient, private errorHandler: GiddhErrorHandler,
-		@Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+	constructor(private _generalService: GeneralService, private _http: HttpWrapperService, private errorHandler: GiddhErrorHandler, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 		this.companyUniqueName = this._generalService.companyUniqueName;
 	}
 

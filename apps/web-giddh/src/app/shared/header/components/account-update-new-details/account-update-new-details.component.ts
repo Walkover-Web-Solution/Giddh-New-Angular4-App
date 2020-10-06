@@ -1,38 +1,55 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    ViewChild,
+} from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { digitsOnly } from '../../../helpers';
+import { createSelector, select, Store } from '@ngrx/store';
+import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
+import { SettingsDiscountActions } from 'apps/web-giddh/src/app/actions/settings/discount/settings.discount.action';
+import { ApplyTaxRequest } from 'apps/web-giddh/src/app/models/api-models/ApplyTax';
+import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
+import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
+import {
+    IFlattenGroupsAccountsDetail,
+} from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
+import { IGroupsWithAccounts } from 'apps/web-giddh/src/app/models/interfaces/groupsWithAccounts.interface';
+import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
+import { DbService } from 'apps/web-giddh/src/app/services/db.service';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+
 import { AccountsAction } from '../../../../actions/accounts.actions';
-import { AppState } from '../../../../store';
-import { select, Store, createSelector } from '@ngrx/store';
-import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
-import { AccountRequestV2, AccountResponseV2, IAccountAddress, AccountMoveRequest, AccountUnMergeRequest, AccountsTaxHierarchyResponse, AccountMergeRequest } from '../../../../models/api-models/Account';
-import { CompanyService } from '../../../../services/companyService.service';
-import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
-import { ToasterService } from '../../../../services/toaster.service';
-import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
+import { CommonActions } from '../../../../actions/common.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
+import { GeneralActions } from '../../../../actions/general/general.actions';
 import * as _ from '../../../../lodash-optimized';
+import {
+    AccountMergeRequest,
+    AccountMoveRequest,
+    AccountRequestV2,
+    AccountResponseV2,
+    AccountsTaxHierarchyResponse,
+    AccountUnMergeRequest,
+    IAccountAddress,
+} from '../../../../models/api-models/Account';
+import { CountryRequest, OnboardingFormRequest } from '../../../../models/api-models/Common';
+import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
+import { IForceClear } from '../../../../models/api-models/Sales';
+import { ToasterService } from '../../../../services/toaster.service';
+import { AppState } from '../../../../store';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
-import { IForceClear } from "../../../../models/api-models/Sales";
-import { CountryRequest, OnboardingFormRequest } from "../../../../models/api-models/Common";
-import { CommonActions } from '../../../../actions/common.actions';
-import { GeneralActions } from "../../../../actions/general/general.actions";
-import * as googleLibphonenumber from 'google-libphonenumber';
-import { ModalDirective } from 'ngx-bootstrap';
-import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
-import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
-import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
-import { ApplyTaxRequest } from 'apps/web-giddh/src/app/models/api-models/ApplyTax';
-import { IGroupsWithAccounts } from 'apps/web-giddh/src/app/models/interfaces/groupsWithAccounts.interface';
-import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
-import { DbService } from 'apps/web-giddh/src/app/services/db.service';
-import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
-import { AssignDiscountRequestForAccount } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
-import { SettingsDiscountActions } from 'apps/web-giddh/src/app/actions/settings/discount/settings.discount.action';
+import { digitsOnly } from '../../../helpers';
+import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 
 @Component({
     selector: 'account-update-new-details',
@@ -61,11 +78,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @Input() public isDebtorCreditor: boolean = false;
     @Input() public showDeleteButton: boolean = true;
     @Input() public accountDetails: any;
-    @ViewChild('autoFocusUpdate') public autoFocusUpdate: ElementRef;
+    @ViewChild('autoFocusUpdate', {static: true}) public autoFocusUpdate: ElementRef;
     public moveAccountForm: FormGroup;
     public taxGroupForm: FormGroup;
-    @ViewChild('deleteMergedAccountModal') public deleteMergedAccountModal: ModalDirective;
-    @ViewChild('moveMergedAccountModal') public moveMergedAccountModal: ModalDirective;
+    @ViewChild('deleteMergedAccountModal', {static: true}) public deleteMergedAccountModal: ModalDirective;
+    @ViewChild('moveMergedAccountModal', {static: true}) public moveMergedAccountModal: ModalDirective;
 
     public activeCompany: CompanyResponse;
     @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
@@ -101,7 +118,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public accounts$: Observable<IOption[]>;
     public stateGstCode: any[] = [];
-    public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
     public isGstValid$: Observable<boolean> = observableOf(true);
@@ -404,11 +420,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
         this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
         this.accountsAction.mergeAccountResponse$.subscribe(res => {
-            if (this.selectedaccountForMerge.length > 0) {
-                this.selectedaccountForMerge.forEach((element) => {
-                    this.deleteFromLocalDB(element);
-                });
-            }
             this.selectedaccountForMerge = '';
         });
         this.isTaxableAccount$ = this.store.select(createSelector([
@@ -424,16 +435,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 return result;
             }));
     }
-    public deleteFromLocalDB(activeAccUniqueName?: string) {
-        this._dbService.removeItem(this.activeCompany.uniqueName, 'accounts', activeAccUniqueName).then((res) => {
-            if (res) {
-                this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
-            }
-        }, (err: any) => {
-        });
-    }
-
-
     public ngAfterViewInit() {
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
@@ -786,8 +787,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public checkMobileNo(ele) {
         try {
-            let parsedNumber = this.phoneUtility.parse('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value);
-            if (this.phoneUtility.isValidNumber(parsedNumber)) {
+            let parsedNumber = parsePhoneNumberFromString('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value as CountryCode);
+            if (parsedNumber.isValid()) {
                 ele.classList.remove('error-box');
                 this.isMobileNumberValid = true;
             } else {
@@ -1365,7 +1366,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public bankDetailsValidator(element, type: string): void {
         if (element.value && type) {
             let trim: string = '';
-            // changes account number validation for country india as well ref card : GIDK-1119 
+            // changes account number validation for country india as well ref card : GIDK-1119
             trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
             let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetail.controls) {

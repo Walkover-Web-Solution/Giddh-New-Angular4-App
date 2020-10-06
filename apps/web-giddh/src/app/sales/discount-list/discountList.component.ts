@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, On
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IDiscountList, LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 
 @Component({
@@ -75,9 +75,9 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
 	@Input() public isMenuOpen: boolean = false;
 	@Output() public selectedDiscountItems: EventEmitter<any[]> = new EventEmitter();
 	@Output() public selectedDiscountItemsTotal: EventEmitter<number> = new EventEmitter();
-	@ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
-	@ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
-	@ViewChild('disInptEle') public disInptEle: ElementRef;
+	@ViewChild('quickAccountComponent', {static: true}) public quickAccountComponent: ElementViewContainerRef;
+	@ViewChild('quickAccountModal', {static: true}) public quickAccountModal: ModalDirective;
+	@ViewChild('disInptEle', {static: true}) public disInptEle: ElementRef;
 
 	// new code
 	@Input() public discountSum: number;

@@ -16,7 +16,7 @@
                     <div style="display: flex;flex-direction: column" class="selectTaxDropdown">
                         <label>Select Tax<span class="text-danger">*</span></label>
 
-                        <div class="mrB2">
+                        <div class="mr-b2">
                             <sh-select name="selectTax" [placeholder]="'Select Tax'" [options]="taxesOptions"
                                 [(ngModel)]="selectedTaxUniqueName" (selected)="applyTax($event)" (onClear)="onClear()"
                                 [showClear]="true">
@@ -38,7 +38,7 @@
                         <label>Calculation Method<span class="text-danger">*</span></label>
                     </div>
 
-                    <div>
+                    <div class="mb-2">
                         <sh-select [options]="calculationMethodOptions" name="tcsCalculationMethod"
                             [placeholder]="'Select Method'" [disabled]="isDisabledCalMethod"
                             [(ngModel)]="otherTaxesModal.tcsCalculationMethod"></sh-select>

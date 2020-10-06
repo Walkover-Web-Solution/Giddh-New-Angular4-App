@@ -501,7 +501,7 @@ textarea:focus {
     top: 120px;
 }
 
-.cashinvoice_tipImg.search-arrow-image {
+.cash-invoice-tip-Img.search-arrow-image {
     max-width: 215px;
 }
 
@@ -598,7 +598,7 @@ textarea:focus {
 }
 
 // my css
-.sales-invoice-content label.salesCountryLabel {
+.sales-invoice-content label.sales-country-label {
     height: 36px;
 }
 .add-entryAgainst {
@@ -990,7 +990,7 @@ section.staticInvoiceTable {
     margin-left: 10px;
 }
 
-.salesCountryLabel {
+.sales-country-label {
     margin-bottom: 0;
     vertical-align: middle;
     line-height: 2.4;
@@ -999,11 +999,11 @@ section.staticInvoiceTable {
     border-bottom-color: rgb(214, 214, 214);
 }
 
-.customerInvoiceForm {
+.customer-invoice-form {
     position: relative;
 }
 
-.customerInvoiceForm::before {
+.customer-invoice-form::before {
     position: absolute;
     content: "";
     left: 0;
@@ -1016,7 +1016,7 @@ section.staticInvoiceTable {
     background: #f7f8fa;
 }
 
-.customerInvoiceForm.cusomerInvoiceFormPurchase:before {
+.customer-invoice-form-purchase:before {
     top: 110px;
 }
 
@@ -1055,7 +1055,7 @@ section.staticInvoiceTable {
     border-top: none !important;
 }
 
-.depositeSection {
+.deposit-section {
     transform: translateX(140px);
 }
 
@@ -1107,7 +1107,7 @@ section.sales-invoiceBGwhite {
     margin-right: 0;
     white-space: normal;
 }
-.sales-invoice-content label.salesCountryLabel {
+.sales-invoice-content label.sales-country-label {
     height: 36px;
 }
 .hsnCodeDropdown .btn-group {

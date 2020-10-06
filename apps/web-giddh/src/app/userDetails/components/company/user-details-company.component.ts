@@ -3,7 +3,8 @@ import { Store } from '@ngrx/store';
 import { Component, ComponentFactoryResolver, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store/roots';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyResponse } from "../../../models/api-models/Company";
 import { CompanyActions } from "../../../actions/company.actions";
 import { CompanyAddNewUiComponent } from "../../../shared/header/components";
@@ -33,8 +34,8 @@ export class UserDetailsCompanyComponent implements OnInit {
 
 	//Modal reference variables
 	modalRef: BsModalRef;
-	@ViewChild('addCompanyNewModal') public addCompanyNewModal: ModalDirective;
-	@ViewChild('companynewadd') public companynewadd: ElementViewContainerRef;
+	@ViewChild('addCompanyNewModal', {static: true}) public addCompanyNewModal: ModalDirective;
+	@ViewChild('companynewadd', {static: true}) public companynewadd: ElementViewContainerRef;
 
 
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

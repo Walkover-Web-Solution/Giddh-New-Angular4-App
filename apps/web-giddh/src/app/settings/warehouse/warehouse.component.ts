@@ -1,14 +1,13 @@
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import {
-    BsDropdownConfig,
     BsModalRef,
     BsModalService,
-    ModalDirective,
-    ModalOptions,
-    PageChangedEvent,
-    PaginationComponent,
-} from 'ngx-bootstrap';
+    ModalOptions
+} from 'ngx-bootstrap/modal';
+import {BsDropdownConfig} from 'ngx-bootstrap/dropdown';
+import {PaginationComponent, PageChangedEvent} from 'ngx-bootstrap/pagination';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -58,13 +57,13 @@ export class WarehouseComponent implements OnInit, OnDestroy {
     public warehouses: Array<any> = [];
 
     /** View container to carry out on boarding */
-    @ViewChild('onBoardingContainer') public onBoardingContainer: ElementViewContainerRef;
+    @ViewChild('onBoardingContainer', {static: true}) public onBoardingContainer: ElementViewContainerRef;
     /** Warehouse on boarding modal viewchild */
-    @ViewChild('warehouseOnBoardingModal') public warehouseOnBoardingModal: ModalDirective;
+    @ViewChild('warehouseOnBoardingModal', {static: true}) public warehouseOnBoardingModal: ModalDirective;
     /** Welcome component template ref for second step of warehouse on boarding */
-    @ViewChild('welcomeComponent') public welcomeComponentTemplate: TemplateRef<any>;
+    @ViewChild('welcomeComponent', {static: true}) public welcomeComponentTemplate: TemplateRef<any>;
     /** Warehouse pagination instance */
-    @ViewChild('warehousePagination') warehousePagination: PaginationComponent;
+    @ViewChild('warehousePagination', {static: true}) warehousePagination: PaginationComponent;
 
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: Subject<boolean> = new Subject();

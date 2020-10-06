@@ -1,16 +1,16 @@
 <div class="box clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="selectedTax = null;toggleTaxAsidePane()">
     <div style="display: flex;justify-content: space-between">
-        <h1 class="section-head pdT1" style="margin: 0;padding: 0;line-height: 2;">Added Taxes</h1>
-        <button class="btn btn-pink mrR0" [tooltip]="'Create New Tax'"
+        <h1 class="section-head pd-t1" style="margin: 0;padding: 0;line-height: 2;">Added Taxes</h1>
+        <button class="btn btn-sky-blue mr-0" [tooltip]="'Create New Tax'"
             (click)="selectedTax = null;toggleTaxAsidePane($event)">
             <i class="icon icon-plus" style="font-size:12px"></i> New Tax
         </button>
     </div>
 
-    <div class="col-xs-12 pt-15 tax-table-wrapper">
+    <div class="col-sm-12 pt-15 tax-table-wrapper">
         <div class="row">
             <div class="table-responsive">
-                <table class="table table-bordered  basic mrB onMobileView">
+                <table class="table table-bordered  basic mrB on-mobile-view">
 
                     <thead>
                         <tr>
@@ -61,7 +61,7 @@
                             </td>
 
                             <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]" data-title="Applied From">
-                                <div *ngFor="let t of tax.taxDetail; let j = index; let last = last" class="mrB1">
+                                <div *ngFor="let t of tax.taxDetail; let j = index; let last = last" class="mr-b1">
                                     <!-- <input type="text" class="form-control" [(ngModel)]="t.date" name="tax_date_{{i}}_{{j}}"> -->
                                     <div class="input-group">
                                         <input type="text" [ngModel]="moment(t.date).format('DD-MM-YYYY')"
@@ -70,7 +70,7 @@
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default"
                                                 (click)="showDatePickerInTable = !showDatePickerInTable">
-                                                <i class="glyphicon glyphicon-calendar"></i>
+                                                <i class="icon-calender"></i>
                                             </button>
                                         </span>
                                     </div>
@@ -94,7 +94,7 @@
                             </td>
 
                             <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]">
-                                <div class="input-group mrB1"
+                                <div class="input-group mr-b1"
                                     *ngFor="let t of tax.taxDetail; let j = index; let last = last">
                                     <input type="text" class="form-control" [(ngModel)]="t.taxValue"
                                         name="tax_taxValue_{{i}}_{{j}}">
@@ -104,7 +104,7 @@
                                     </span>
                                     <span *ngIf="last" (click)="addMoreDateAndPercentage(i)"
                                         class="input-group-addon cursor-pointer">
-                                        <i class="fa fa-plus cursor-pointer" aria-hidden="true"></i>
+                                        <i class="icon-plus cursor-pointer" aria-hidden="true"></i>
                                     </span>
                                 </div>
                             </td>
@@ -134,7 +134,7 @@
                                 <div class="d-flex">
                                     <button (click)="selectedTax = tax;toggleTaxAsidePane()" type="button"
                                         class="btn btn-xs">
-                                        <i class="fa fa-pencil" aria-hidden="true" tooltip="Edit"></i>
+                                        <i class="icon-edit-pencil" aria-hidden="true" tooltip="Edit"></i>
                                     </button>
 
                                     <button *ngIf="!taxToEdit[i]" type="button" class="btn btn-xs"
@@ -151,14 +151,14 @@
 
                                 <!--              <button *ngIf="taxToEdit[i]" type="button" class="btn btn-xs"-->
                                 <!--                      (click)="reloadTaxList(); taxToEdit[i] = false">-->
-                                <!--                <i class="fa fa-times" aria-hidden="true"-->
+                                <!--                <i class="icon-cross" aria-hidden="true"-->
                                 <!--                   tooltip="Reset"></i>-->
                                 <!--              </button>-->
 
                             </td>
                         </tr>
                     </tbody>
-                    <tbody *ngIf="!availableTaxes.length" class="onMobileView noRecords">
+                    <tbody *ngIf="!availableTaxes.length" class="on-mobile-view no-records">
                         <tr>
                             <td colspan="10" class="text-center empty-table">
                                 <h1>No Record Found !!</h1>
@@ -181,7 +181,7 @@
 <!-- region delete Tax confirmation model -->
 <div bsModal #taxConfirmationModel="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
-        <!-- modal-liq90 class is removed for now-->
+        <!-- modal-liq-90 class is removed for now-->
         <div class="modal-content">
             <delete-tax-confirmation-model [message]="confirmationMessage"
                 (userConfirmationEvent)="userConfirmation($event)">

@@ -2,7 +2,11 @@
 .create-purchase-order-form {
     position: relative;
 }
-
+form{
+    label{
+        justify-content: flex-start !important;
+    }
+}
 .customer-purchase-order::before {
     position: absolute;
     content: "";
@@ -58,11 +62,15 @@
                 }
             }
             .wrap-billing-address {
+                .form-group.row{
+                    display: flex !important;
+                }
                 .billing-address {
                     background: $white;
                     border: 1px solid $gainsboro;
                     padding: 5px;
                     padding-bottom: 10px;
+                    width: 100%;
                     &.disabled {
                         background: $whisper-light;
                     }
@@ -121,7 +129,7 @@
                 position: absolute;
                 width: 435px;
                 left: 0;
-                margin-left: 3%;
+                margin-left: 0;
                 display: flex;
                 align-items: center;
                 input{
@@ -267,9 +275,14 @@
     padding: 0 8px;
 }
 
-.list-item {
-    font-size: 14px;
-}
+
+    .list-item {
+        font-size: 14px;
+        border-bottom: 1px solid $very-light-gray;
+        display:flex !important;
+    }
+
+
 
 .fs12 {
     font-size: 12px;
@@ -835,14 +848,15 @@ strong {
 .item-total input.other-taxes-checkobx[type="checkbox"]:focus:after {
     border-color: $chetwode-blue !important;
 }
-.p-4.aqua-color.add-line-bulk-item {
+.p-1.aqua-color.add-line-bulk-item {
     position: relative;
     height: 33px;
     width: 470% !important;
+    width: max-content;
 }
 .aqua-color {
     a {
-        color: $primary;
+        color: $deep-sky-blue;
         font-size: 12px;
     }
     span {
@@ -874,7 +888,7 @@ span.eligible-ITC {
     align-items: center;
     flex-direction: row-reverse;
 }
-.deposite-section {
+.deposit-section {
     transform: translateX(120px);
     label {
         display: block;
@@ -910,8 +924,14 @@ span.eligible-ITC {
 }
 
 // card css
+.show-in-mobile {
+    background: #fff;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-top: 20px;
+}
 .card-invoice-table-wrapper {
-    max-width: 400px;
+    max-width: 100%;
     width: 100%;
     background-color: $white;
     margin: 20px 0;
@@ -919,6 +939,7 @@ span.eligible-ITC {
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
+    margin-top: 0;
 }
 
 .single-card-row label.card-label {
@@ -1049,6 +1070,65 @@ span.eligible-ITC {
     text-transform: capitalize;
     margin-bottom: 20px;
 }
+.bill-add{
+    label{
+        line-height: 2.3 !important;
+    }
+}
+@media(max-width:1199px){
+    .bill-add {
+        margin-bottom: 15px;
+        label{
+            margin-bottom: 10px;
+        }
+    }
+    .wrapper-customer-table {
+        .customer-purchase-table {
+            .inner-container {
+                .invoice-due-date {
+                left: -40px;
+                margin-left: 3%;
+                display: flex;
+                align-items: flex-start;
+                top: -23px;
+                justify-content: flex-start;
+                .d-flex{
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                }
+                .select-customer-name {
+                    sh-select,
+                    .select-customer-field {
+                        flex: 0 0 82.5%;
+                        max-width: 82.5%;
+                        width: 100%;
+                    }
+                    input[type="text"]{
+                        flex: 0 0 84.5%;
+                        max-width: 84.5%;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+@media (max-width:1024px){
+    .invoice-due-date {
+        position: relative !important;
+        width: 100% !important;
+        margin-left: 0% !important;
+    }
+    .customer-purchase-table.bg-white{
+        margin-bottom: 0;
+    }
+    .hsn-code-dropdown{
+        left: 0;
+        top: 46px;
+    }
+}
 @media (min-width: 768px) {
     .wrapper-customer-table {
         .wrap-billing-address .form-group {
@@ -1069,7 +1149,6 @@ span.eligible-ITC {
 @media (max-width: 990px) {
     .wrap-billing-address .bill-add {
         width: 100%;
-        max-width: 50.01%;
     }
     .wrap-billing-address .bill-add:nth-child(2) {
         margin-top: 20px;
@@ -1081,6 +1160,10 @@ span.eligible-ITC {
     }
 }
 @media (max-width: 767px) {
+.pl-0 {
+    padding-right: 0 !important;
+}
+
     .wrapper-customer-table {
         .customer-purchase-table {
             padding-right: 15px;
@@ -1112,9 +1195,12 @@ span.eligible-ITC {
                 }
                 .select-customer-name {
                     sh-select,
-                    input[type="text"] {
+                    input[type="text"],
+                    .select-customer-field {
                         width: 100%;
                         float: left;
+                        flex: 0 0 100%;
+                        max-width: 100%;
                     }
                     .wrap-billing-address {
                         margin-bottom: 0;
@@ -1157,12 +1243,6 @@ span.eligible-ITC {
         margin-top: 10px;
         border-bottom: none;
         margin-bottom: 0;
-    }
-    .show-in-mobile {
-        background: $white;
-        border-top: 1px solid $gainsboro;
-        padding-right: 15px;
-        padding-left: 15px;
     }
     .static-purchase-table.create-purchase-order-table {
         display: none;
@@ -1252,13 +1332,13 @@ span.eligible-ITC {
     .other-detail-card .form-group.col-xs-4 {
         width: 50%;
     }
-    .deposite-section {
+    .deposit-section {
         transform: translateX(100px);
     }
 }
 
 @media (max-width: 375px) {
-    .deposite-section {
+    .deposit-section {
         transform: translateX(60px);
     }
     .total-amount-description .table-section {
@@ -1295,18 +1375,22 @@ span.eligible-ITC {
 }
 
 @media (max-width: 320px) {
-    .deposite-section {
+    .deposit-section {
         transform: translateX(20px);
     }
     .total-amount-description .table-section .table-row .figure-cell {
         padding-right: 20px !important;
     }
 }
-
-@media (max-width:1200px){
-    .invoice-due-date {
-        position: relative !important;
-        width: 100% !important;
-        margin-left: 0% !important;
+@media (min-width: 576px){
+    .bill-add{
+        .form-inline .form-group {
+            display: flex;
+            flex: 1;
+            flex-flow: row nowrap;
+            align-items: flex-start;
+            margin-bottom: 0;
+            flex-direction: column;
+        }
     }
 }

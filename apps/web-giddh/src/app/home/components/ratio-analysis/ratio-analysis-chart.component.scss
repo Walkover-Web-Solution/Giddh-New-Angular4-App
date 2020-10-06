@@ -5,7 +5,7 @@
 }
 .ratioAnalysisPanelBody h1 {
     font-size: 14px;
-    color: #262626;
+    color: $nero;
 }
 
 .ratioAnalysisPanelBody small {
@@ -30,7 +30,7 @@
                 bottom: 0;
                 height: 1px;
                 width: 90%;
-                
+
         }
         &:last-child{
             &:after{

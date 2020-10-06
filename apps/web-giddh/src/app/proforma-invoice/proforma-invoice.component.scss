@@ -95,6 +95,9 @@ $greyClr: #6d6d6d;
     }
 }
 
+.item-unq{
+    font-size:12px;
+}
 // select box
 .pure-css-select-wrapper {
     position: relative;
@@ -245,6 +248,11 @@ $greyClr: #6d6d6d;
     display: inline-block !important;
 }
 
+
+.w-100{
+    width:100% !important;
+}
+
 // collapse
 .collapse-pane {
     padding: 0 0;
@@ -297,6 +305,8 @@ $greyClr: #6d6d6d;
 
 .list-item {
     font-size: 14px;
+    border-bottom: 1px solid $very-light-gray;
+    display:flex !important;
 }
 
 .fs12 {
@@ -498,9 +508,9 @@ textarea:focus {
 
 .search-arrow-image {
     max-width: 375px;
-    left: 198px;
+    left: 15px !important;
     position: absolute;
-    top: 70px;
+    top: 50px !important;
     z-index: 97;
 }
 
@@ -738,25 +748,18 @@ a.copyInvoice img {
     margin-right: 6px;
 }
 
-.invoiceDateDueDate .form-group,
-.invoiceDateDueDate label {
+.invoice-date-due-date .form-group,
+.invoice-date-due-date label {
     display: inline-block !important;
 }
 
-.invoiceDateDueDate label {
+.invoice-date-due-date label {
     padding-right: 10px;
 }
 
 .p-0 {
     padding: 0;
 }
-
-// .invoiceDateDueDate{
-// position: absolute;
-// left: 406px;
-// top: 0;
-// width: 100%;
-// }
 .shipping-address textarea {
     border-bottom: 1px solid #ccc !important;
 }
@@ -960,7 +963,7 @@ table.table.customerInvoiceTable {
     padding: 8px 15px;
 }
 
-.invoiceDateDueDate input {
+.invoice-date-due-date input {
     width: 112px !important;
 }
 
@@ -969,10 +972,11 @@ section.staticInvoiceTable {
     margin-top: -20px;
 }
 
-.invoiceDateDueDate {
+.invoice-date-due-date {
     position: absolute;
     width: 100%;
     left: 0;
+    top: 0;
     margin-left: 48%;
 }
 
@@ -1040,7 +1044,7 @@ section.newtable {
     line-height: 2.3;
 }
 
-.customerInvoiceTable label.salesCountryLabel {
+.customerInvoiceTable label.sales-country-label {
     min-height: 36px;
 }
 
@@ -1048,7 +1052,7 @@ section.newtable {
     border-top: none;
 }
 
-.cashinvoice_tipImg.search-arrow-image {
+.cash-invoice-tip-Img.search-arrow-image {
     max-width: 215px;
 }
 
@@ -1061,17 +1065,17 @@ section.newtable {
 .pd {
     padding: 3px 5px;
 }
-
-.showOnsmall-screen,
-.card-invoiceTable-wrapper,
+.card-invoice-table-wrapper,
 .add-btn,
 .otherDetail-card,
 .total-amountDiscription {
     display: none;
 }
-
+.custom-file-label::after, .dropdown-toggle::after{
+    display: none !important;
+}
 // card css
-.card-invoiceTable-wrapper {
+.card-invoice-table-wrapper {
     max-width: 400px;
     width: 100%;
     background-color: #fff;
@@ -1170,7 +1174,7 @@ section.newtable {
     color: #0c8fe6;
 }
 
-.salesCountryLabel {
+.sales-country-label {
     margin-bottom: 0;
     vertical-align: middle;
     line-height: 2.4;
@@ -1285,7 +1289,7 @@ section.newtable {
     padding-left: 10px;
 }
 
-.lastEstimateModal {
+.last-estimate-modal {
     min-width: 230px;
     position: absolute;
     top: 30px;
@@ -1313,7 +1317,7 @@ section.newtable {
     font-size: 16px;
 }
 
-.balanceDueAbs {
+.balance-due-absolute {
     position: absolute;
     right: 0;
     top: 0;
@@ -1323,7 +1327,7 @@ section.newtable {
     position: relative;
 }
 
-.p-4.aqua-color.add-line-bulk-item {
+.add-line-bulk-item {
     position: relative;
     height: 33px;
     width: 470% !important;
@@ -1346,11 +1350,11 @@ table.table.table-custom-invoice.basic {
     width: 100%;
 }
 
-.customerInvoiceForm {
+.customer-invoice-form {
     position: relative;
 }
 
-.customerInvoiceForm::before {
+.customer-invoice-form::before {
     position: absolute;
     content: "";
     left: 0;
@@ -1368,7 +1372,7 @@ table.table.table-custom-invoice.basic {
     width: 100% !important;
 }
 
-.depositeSection {
+.deposit-section {
     transform: translateX(140px);
 }
 
@@ -1415,7 +1419,7 @@ table.table.table-custom-invoice.basic {
 .switch-currency {
     font-size: 14px;
     color: #333;
-    max-width: 1025px;
+    max-width: 1000px;
     text-align: right;
     margin-bottom: 10px;
     width: 100%;
@@ -1448,7 +1452,7 @@ input.form-control.edit-currency {
     font-size: 17px;
 }
 
-label.salesCountryLabel {
+label.sales-country-label {
     padding-bottom: 0;
 }
 
@@ -1548,7 +1552,7 @@ strong {
     font-weight: 500;
 }
 
-.showforSmall-screen {
+.show-on-small-screen {
     display: none;
 }
 
@@ -1616,7 +1620,17 @@ span.eligible-ITC {
 .for-mobile-screen {
     display: none;
 }
-
+.payment-mode-amount{
+    flex-direction: row-reverse;
+}
+.dropdown-menu-right{
+    top: 0 !important;
+}
+#button-dropup {
+    .caret{
+        transform: rotate(180deg);
+    }
+}
 /* resposnvie */
 
 @media (min-width: 768px) {
@@ -1627,26 +1641,29 @@ span.eligible-ITC {
     .form-inline .wrap-billing-address .form-group {
         display: block !important;
     }
+    .form-inline .wrap-billing-address .form-group.deliver-same-address{
+        display: flex !important;
+    }
 }
-
+@media(max-width:1199px){
+    .invoice-date-due-date{
+        margin-left: 40%;
+    }
+    .form-inline .wrap-billing-address .form-group {
+        padding-right: 12px;
+    }
+}
 @media (max-width: 990px) {
     .search-arrow-image {
         left: 181px;
     }
     .wrap-billing-address .bill-add {
         width: 100%;
-        max-width: 50.01%;
-    }
-    .wrap-billing-address .bill-add:nth-child(2) {
-        margin-top: 20px;
     }
     .customerInvoiceTable label {
         font-size: 13px;
     }
-    .showOnsmall-screen {
-        display: block;
-    }
-    .invoiceDateDueDate {
+    .invoice-date-due-date {
         display: none;
     }
     .wrapperCustomerTable .col-sm-2 {
@@ -1662,8 +1679,31 @@ span.eligible-ITC {
     }
 }
 
-@media (max-width: 840px) {
-    .card-invoiceTable-wrapper,
+@media (max-width: 1024px) {
+    .customer-invoice-form::before {
+        top: 130px;
+    }
+    .customer-invoice-form-purchase::before {
+        top: 132px;
+    }
+    .show-on-small-screen {
+        padding: 0 15px;
+        display: block;
+        p{
+            position: absolute;
+            right: 15px;
+            top: -63px;
+        }
+    }
+        .balance-due-absolute {
+        display: none;
+    }
+    .collapse-pane{
+        .form-group{
+            margin-bottom: 15px !important;
+        }
+    }
+    .card-invoice-table-wrapper,
     .add-btn,
     .otherDetail-card,
     .total-amountDiscription {
@@ -1683,7 +1723,7 @@ span.eligible-ITC {
     .staticInvoiceTable.salseInvoicetable {
         display: none;
     }
-    .card-invoiceTable-wrapper,
+    .card-invoice-table-wrapper,
     .otherDetail-card,
     .total-amountDiscription {
         width: 100%;
@@ -1721,23 +1761,18 @@ span.eligible-ITC {
 }
 
 @media (max-width: 767px) {
-    .invoiceDateDueDate {
+    .invoice-date-due-date {
         position: static;
         width: 100%;
         left: 0;
         margin-left: -13px;
         margin-top: 10px;
     }
-    .showforSmall-screen {
-        padding: 0 15px;
-        display: block;
-    }
-    .slaesPrEsti.customerInvoiceForm::before {
+
+    .slaesPrEsti.customer-invoice-form::before {
         top: 190px;
     }
-    .balanceDueAbs {
-        display: none;
-    }
+
     .wrapperCustomerTable {
         padding-top: 0;
     }
@@ -1792,6 +1827,10 @@ span.eligible-ITC {
     #actionPane .generateInvoie {
         min-width: 189px;
     }
+    .last-estimate-modal {
+        left: auto;
+        right: 30px;
+    }
 }
 
 @media (max-width: 414px) {
@@ -1808,14 +1847,14 @@ span.eligible-ITC {
     .otherDetail-card .form-group.col-xs-4 {
         width: 50%;
     }
-    .depositeSection {
+    .deposit-section {
         transform: translateX(100px);
     }
 }
 
 @media (max-width: 375px) {
-    .depositeSection {
-        transform: translateX(60px);
+    .deposit-section {
+        transform: translateX(30px);
     }
     .total-amountDiscription .tableSec {
         display: block;
@@ -1851,7 +1890,7 @@ span.eligible-ITC {
 }
 
 @media (max-width: 320px) {
-    .depositeSection {
+    .deposit-section {
         transform: translateX(20px);
     }
     .total-amountDiscription .tableSec .tableRow .figureCell {

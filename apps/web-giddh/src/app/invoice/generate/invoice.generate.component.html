@@ -22,7 +22,7 @@
         </div>
 
 
-        <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline">
+        <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline mb-15">
             <div class="d-flex">
                 <div class="d-flex form-group mobile-width-100">
                     <div class="form-group date-advance-search pending-advance-search" style="flex: 1 1 auto;">
@@ -57,29 +57,29 @@
                     </div>
 
                     <!-- <div class="form-group">
-  <button class="btn btn-pink" style="margin: 0 !important;" *ngIf="selectedVoucher === 'sales'">+ New Invoice
+  <button class="btn btn-sky-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'sales'">+ New Invoice
   </button>
-  <button class="btn btn-pink" style="margin: 0 !important;" *ngIf="selectedVoucher === 'debit note'">+ New DR.
+  <button class="btn btn-sky-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'debit note'">+ New DR.
     Note
   </button>
-  <button class="btn btn-pink" style="margin: 0 !important;" *ngIf="selectedVoucher === 'credit note'">+ New CR.
+  <button class="btn btn-sky-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'credit note'">+ New CR.
     Note
   </button>
 </div> -->
 
                 </div>
 
-
-                <div class="clear-filter align-items-center d-flex justify-content-center" [ngClass]="{'width-100' : selectedLedgerItems.length === 0}" *ngIf="!isUniversalDateApplicable && !isMobileView">
-                    <button class="btn btn-filter" (click)="resetDateSearch()">
-                    <span class="icon-cross"></span> Clear Filter
-                </button>
-
+                <div class="clear-filter align-items-center d-flex justify-content-center"
+                    [ngClass]="{'width-100' : selectedLedgerItems.length === 0}"
+                    *ngIf="!isUniversalDateApplicable && !isMobileView" (click)="resetDateSearch()">
+                    <button class="btn btn-filter">
+                        <span class="icon-cross"></span> Clear Filter
+                    </button>
                 </div>
             </div>
         </form>
 
-        <table class="table basic table-bordered pending-table onMobileView mt-15">
+        <table class="table basic table-bordered pending-table on-mobile-view">
 
             <thead class="t-h-bg1">
                 <tr>
@@ -216,29 +216,48 @@
 
                     <td data-title="Date">{{item.entryDate}}</td>
 
-                    <td data-title="Particular">
-                        <table class="table nested_table">
+                    <td data-title="Particular" class="hide-on-mobile">
+                        <table class="table nested-table particular-nested-table">
                             <tr *ngFor="let transaction of item.transactions">
-                                <td>
-                                    {{transaction.particular.name}}
-                                    <span
-                                        *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}}
-                                        )</span>
+                                <td class="p-0 border-none">
+                                    {{transaction.particular.name }}
+                                    <span *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}})
+                                    </span>
                                 </td>
-
                             </tr>
                         </table>
                     </td>
 
-                    <td data-title="Amount">
-                        <table class="table nested_table">
+                    <td data-title="Amount"  class="hide-on-mobile">
+                        <table class="table nested-table amount-nested-table">
                             <tr *ngFor="let transaction of item.transactions">
-                                <td class="text-right">
-                                    {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency}}
+                                <td class="text-right p-0 border-none">
+                                    {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency }}
                                 </td>
                             </tr>
                         </table>
 
+                    </td>
+                    <td id="mobile-nested-table">
+                        <table>
+                            <tr>
+                                <th>Particular</th>
+                                <th>Amount</th>
+                            </tr>
+                            <tr *ngFor="let transaction of item.transactions">
+
+                                <td>
+                                    {{transaction.particular.name }}
+                                    <span *ngIf="transaction.inventory && transaction.inventory.stock">({{transaction.inventory.stock.name}})
+                                    </span>
+                                </td>
+                                <td class="text-right">
+                                    {{item.accountCurrencySymbol}} {{transaction.amount | giddhCurrency }}
+                                </td>
+
+                            </tr>
+
+                        </table>
                     </td>
                     <!-- <ng-template #amountPopupTemplate><span [innerHTML]="item.totalTooltipText"></span>
                         </ng-template> -->
@@ -246,9 +265,7 @@
                     <td (dblclick)="modalUniqueName = item.uniqueName" class="cp no-dbl-click-select"
                         (clickOutside)="modalUniqueName = ''" data-title="Account">
                         {{item.account.name}}
-
-                        <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component [accountUniqueName]="item.account.uniqueName" [from]="this.ledgerSearchRequest.from" [to]="this.ledgerSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName"
-                            [voucherType]="selectedVoucher">
+                        <div *ngIf="modalUniqueName === item.uniqueName" account-detail-modal-component [accountUniqueName]="item.account.uniqueName" [from]="ledgerSearchRequest.from" [to]="ledgerSearchRequest.to" [isModalOpen]="modalUniqueName === item.uniqueName" [voucherType]="selectedVoucher">
                         </div>
                     </td>
 
@@ -267,7 +284,7 @@
                 <tr>
                     <td colspan="8">
                         <!--loading-->
-                        <div class="no-data mrT2 loader-main">
+                        <div class="no-data mr-t2 loader-main">
                             <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
                             <div class="spinner2">
                                 <div class="cube1"></div>
@@ -316,7 +333,7 @@
 
         <div class="invoice-edit-body ">
             <proforma-invoice-component [accountUniqueName]="selectedAccountUniqueName" [selectedItem]="selectedItem"
-                [invoiceNo]="(voucherType !=='purchase' ) ? selectedItem?.voucherNumber : selectedItem?.uniqueName "
+                [invoiceNo]="(selectedVoucher !=='purchase' ) ? selectedItem?.voucherNumber : selectedItem?.uniqueName "
                 [invoiceType]="selectedVoucher
     " (cancelVoucherUpdate)="closeModel() ">
             </proforma-invoice-component>

@@ -14,6 +14,7 @@
     opacity: 1;
     box-shadow: 0px 2px 6px #ddd;
     padding: 0;
+    min-width: 180px;
 }
 
 .custom_dropdown.open {
@@ -25,13 +26,16 @@
 }
 .permissionForm {
     .form-group {
-        width: 188px;
+        width: 100%;
         display: inline-block;
-        margin: 0 10px;
+        margin: 0;
         position: relative;
         .btn-group {
-            width: 188px;
+            width: 100%;
         }
+    }
+    .add-btn{
+        width: auto !important;
     }
 }
 
@@ -98,10 +102,24 @@ i.icon-cross {
     margin-right: -5px;
     margin-left: -5px;
 }
+.ip-range{
+    i{
+        position: relative;
+        right: 2px
+    }
+}
 @media (max-width: 1199px) {
     .create-btn {
         float: none !important;
         margin-top: 10px;
+    }
+    .permissionForm {
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .pr-0{
+            padding-right: 15px !important;
+        }
     }
 }
 
@@ -110,9 +128,6 @@ i.icon-cross {
         .form-group {
             margin-left: 0;
             margin-top: 5px;
-            .btn-group {
-                width: 188px;
-            }
         }
         .create-btn {
             margin-top: 0px;

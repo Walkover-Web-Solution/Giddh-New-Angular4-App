@@ -10,13 +10,15 @@ import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-selec
 import { QuickAccountComponent } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.component';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
-import { ModalDirective, PaginationComponent, BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import {PaginationComponent} from 'ngx-bootstrap/pagination';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
-import * as uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
@@ -68,13 +70,13 @@ import { SearchService } from '../services/search.service';
     ]
 })
 export class LedgerComponent implements OnInit, OnDestroy {
-    @ViewChild('updateledgercomponent') public updateledgercomponent: ElementViewContainerRef;
-    @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
-    @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
-    @ViewChild('sharLedger') public sharLedger: ShareLedgerComponent;
-    @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+    @ViewChild('updateledgercomponent', {static: true}) public updateledgercomponent: ElementViewContainerRef;
+    @ViewChild('quickAccountComponent', {static: true}) public quickAccountComponent: ElementViewContainerRef;
+    @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
+    @ViewChild('sharLedger', {static: true}) public sharLedger: ShareLedgerComponent;
+    @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
 
-    @ViewChild('advanceSearchComp') public advanceSearchComp: AdvanceSearchModelComponent;
+    @ViewChild('advanceSearchComp', {static: false}) public advanceSearchComp: AdvanceSearchModelComponent;
 
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
     public imgPath: string = '';
@@ -86,17 +88,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public advanceSearchRequest: AdvanceSearchRequest;
     public isLedgerCreateSuccess$: Observable<boolean>;
     public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    @ViewChild('newLedPanel') public newLedgerComponent: NewLedgerEntryPanelComponent;
-    @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;
-    @ViewChild('exportLedgerModal') public exportLedgerModal: ModalDirective;
-    @ViewChild('shareLedgerModal') public shareLedgerModal: ModalDirective;
-    @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
-    @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
-    @ViewChild('bulkActionConfirmationModal') public bulkActionConfirmationModal: ModalDirective;
-    @ViewChild('bulkActionGenerateVoucherModal') public bulkActionGenerateVoucherModal: ModalDirective;
-    @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
+    @ViewChild('newLedPanel', {static: false}) public newLedgerComponent: NewLedgerEntryPanelComponent;
+    @ViewChild('updateLedgerModal', {static: true}) public updateLedgerModal: ModalDirective;
+    @ViewChild('exportLedgerModal', {static: true}) public exportLedgerModal: ModalDirective;
+    @ViewChild('shareLedgerModal', {static: true}) public shareLedgerModal: ModalDirective;
+    @ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
+    @ViewChild('quickAccountModal', {static: true}) public quickAccountModal: ModalDirective;
+    @ViewChild('bulkActionConfirmationModal', {static: true}) public bulkActionConfirmationModal: ModalDirective;
+    @ViewChild('bulkActionGenerateVoucherModal', {static: true}) public bulkActionGenerateVoucherModal: ModalDirective;
+    @ViewChild('ledgerSearchTerms', {static: true}) public ledgerSearchTerms: ElementRef;
     /** datepicker element reference  */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
     public showUpdateLedgerForm: boolean = false;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
@@ -172,7 +174,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Export ledger request object */
     public columnarReportExportRequest: ExportLedgerRequest;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private accountUniquename: any;
+    public accountUniquename: any;
     /** Transactions dates array */
     public allTransactionsList: any[] = [];
     public allTransactionDates: any[] = [];
@@ -1361,7 +1363,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public resetAdvanceSearch() {
         this.searchText = "";
-        this.advanceSearchComp.resetAdvanceSearchModal();
+        if(this.advanceSearchComp) {
+            this.advanceSearchComp.resetAdvanceSearchModal();
+        }
         this.trxRequest.page = 0;
         this.search("");
         this.getTransactionData();
@@ -1491,7 +1495,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
             '';
         const requestObject = {
-            q: query,
+            q: encodeURIComponent(query),
             page,
             withStocks: true,
             stockAccountUniqueName: accountUniqueName
@@ -2094,7 +2098,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
     }
 

@@ -1,5 +1,5 @@
 <div class="col-xs-10">
-    <div class="col-xs-12 bg_wrap">
+    <div class="col-xs-12 col-sm-12 bg_wrap">
         <div class="row">
             <div class="clearfix pdT2">
 
@@ -11,7 +11,7 @@
                         style="width: 128px" />
                 </div>
 
-                <div class="pull-right text-right mrB1">
+                <div class="pull-right text-right mr-b1">
                     <input type="text" onReturn #dateField [textMask]="{mask: dateMask, guide: true}"
                         [(ngModel)]="entryDate" name="entryDate" (blur)="dateEntered();" placeholder="DD-MM-YYYY"
                         class="form-control text-right invoice-date-field" /> {{ displayDay
@@ -80,7 +80,7 @@
 
 
             <!--  purchase as INVOICE -->
-            <div class="clearfix mrT1" [style.min-height.vh]="61">
+            <div class="clearfix mr-t1" [style.min-height.vh]="61">
                 <div class="table-responsive bdrT">
                     <table class="table entry_table">
                         <thead>
@@ -215,7 +215,7 @@
                             <button class="btn btn-default" #resetButton
                                 (keyup)="keyUpOnResetButton($event)">No</button>
                             <br />
-                            <button class="btn btn-link mrT1" (click)="refreshEntry();">Reset</button>
+                            <button class="btn btn-link mr-t1" (click)="refreshEntry();">Reset</button>
                         </div>
                     </div>
                 </div>
@@ -227,8 +227,8 @@
     </div>
 
     <div class="sidebar_list form-control" [hidden]="!showLedgerAccountList">
-        <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
-        <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
+        <h3 class="pd-1 bdrB primary_clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
+        <h3 class="pd-1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
         <!-- (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [dropdownMinHeight]="dropdownMinHeight"-->
         <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList"
             [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)"

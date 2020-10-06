@@ -120,7 +120,7 @@ import { PurchaseOrderActions } from './purchase-order/purchase-order.action';
     exports: [EffectsModule]
 })
 export class ActionModule {
-    public static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders<ActionModule> {
         return {
             ngModule: ActionModule,
             providers: []

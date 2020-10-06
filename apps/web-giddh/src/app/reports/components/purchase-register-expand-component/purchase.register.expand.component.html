@@ -92,7 +92,7 @@
 <ng-container *ngIf="(isGetPurchaseDetailsSuccess$ | async)">
     <div class="clearfix sales-register-table">
         <div class="responsive table-responsive">
-            <table class="table basic giddh-table onMobileView">
+            <table class="table basic giddh-table on-mobile-view">
                 <thead>
                     <tr>
                         <th>
@@ -324,13 +324,13 @@
     </div>
 
     <div class="clearfix sales-register">
-        <div class="col-md-2 col-sm-3 col-xs-12">
+        <div class="col-lg-2 col-md-3 col-xs-12">
             <p>Transaction count</p>
             <p>
                 {{ (purchaseRegisteDetailedResponse$ | async).totalItems }}
             </p>
         </div>
-        <div class="col-md-10 col-sm-9 col-xs-12">
+        <div class="col-lg-10 col-md-9 col-xs-12">
             <div *ngIf="PurchaseRegisteDetailedItems && (purchaseRegisteDetailedResponse$ | async).debitTotal"
                 class="clearfix main-sale-register-box ">
                 <div class="sale-register-box text-right">
@@ -408,15 +408,14 @@
     </div>
 </ng-container>
 
-<div *ngIf="(isGetPurchaseDetailsInProcess$ | async)">
-    <div class="no-data mrT2 loader-main" *ngIf="showLoader">
-        <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
+<!-- <div *ngIf="(isGetPurchaseDetailsInProcess$ | async)">
+    <div class="no-data mr-t2 loader-main" *ngIf="showLoader">
         <div class="spinner2">
             <div class="cube1"></div>
             <div class="cube2"></div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
 

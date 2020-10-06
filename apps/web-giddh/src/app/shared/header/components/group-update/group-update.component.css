@@ -1,7 +1,7 @@
 .form-group .pItem.text-right {
     max-width: 100% !important;
 }
-.grp_list li a.list-item {
+.grp-list li a.list-item {
     text-transform: capitalize;
 }
 .horizontal-form {
@@ -11,6 +11,12 @@
 .form-group .pItem .my-dropdown-menu {
     width: 100% !important;
 }
-.mrgeBtn {
+.marge-btn {
     padding: 8px 16px;
+}
+.move-group-form{
+    width: calc(100% - 92px);
+}
+.all-taxes{
+  width: calc(100% - 95px);
 }

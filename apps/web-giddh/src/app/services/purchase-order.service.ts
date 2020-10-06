@@ -110,7 +110,7 @@ export class PurchaseOrderService {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.EMAIL;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
         url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);
-        url = url.replace(':poUniqueName', getRequestObject.poUniqueName);
+        url = url.replace(':poUniqueName', getRequestObject.uniqueName);
 
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -174,5 +174,61 @@ export class PurchaseOrderService {
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
 
         return this.http.put(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
+
+    /**
+     * This will get all the revisions
+     *
+     * @param {*} getRequestObject
+     * @param {*} postRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseOrderService
+     */
+    public getAllVersions(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL_VERSIONS;
+        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);
+        url = url.replace(':page', getRequestObject.page);
+        url = url.replace(':count', getRequestObject.count);
+
+        return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
+
+    /**
+     * This will get the PDF
+     *
+     * @param {*} getRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseOrderService
+     */
+    public getPdf(getRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_PDF;
+        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);
+        url = url.replace(':poUniqueName', getRequestObject.poUniqueName);
+
+        return this.http.get(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
+
+    /**
+     * This will send the api request to get all pending purchase orders
+     *
+     * @param {*} getRequestObject
+     * @param {*} postRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseOrderService
+     */
+    public getAllPendingPo(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL_PENDING;
+        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+        url = url.replace(':from', getRequestObject.from);
+        url = url.replace(':to', getRequestObject.to);
+        url = url.replace(':page', getRequestObject.page);
+        url = url.replace(':count', getRequestObject.count);
+        url = url.replace(':sort', getRequestObject.sort);
+        url = url.replace(':sortBy', getRequestObject.sortBy);
+
+        return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
 }

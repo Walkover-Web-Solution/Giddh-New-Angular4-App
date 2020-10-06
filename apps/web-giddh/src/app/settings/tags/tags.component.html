@@ -1,11 +1,11 @@
 <div class="box clearfix">
     <form>
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-sm-12">
                 <h1 class="section-head">Create Tag</h1>
-                <div class="form-group clearfix col-sm-3 col-xs-12 mt-1">
+                <div class="form-group clearfix col-md-12 col-lg-3 col-xs-12 mt-1">
                     <form (submit)="createTag(newTag)" class="row">
-                        <div>
+                        <div class="w-100">
                             <div class="form-group">
                                 <input type="text" class="form-control" name="tagName" [(ngModel)]="newTag.name"
                                     placeholder="Tag Name" />
@@ -14,7 +14,7 @@
                                 <textarea class="form-control" name="tagDescription" [(ngModel)]="newTag.description"
                                     placeholder="Tag Description (optional)"></textarea>
                             </div>
-                            <div class="mrT1">
+                            <div class="mr-t1">
                                 <button type="submit" class="btn btn-success btn-sm"
                                     [disabled]="!newTag.name">Create</button>
                             </div>
@@ -22,19 +22,19 @@
                     </form>
                 </div>
                 <hr class="clearfix">
-                <div class="form-group mrT1 clearfix">
+                <div class="form-group mt-15 clearfix">
                     <div>
                         <span class="pull-left searchTag">
                             <input type="text" [(ngModel)]="searchText" (keyup)="filterData(searchText)"
                                 class="form-control" name="search_text" placeholder="Search tag" />
                         </span>
                         <!-- <div>
-                <button class="btn btn-success btn-sm mrL1" (click)="filterData(searchText);">Search</button>
+                <button class="btn btn-success btn-sm mr-l1" (click)="filterData(searchText);">Search</button>
             </div> -->
                     </div>
                 </div>
                 <div class="tags-table">
-                        <table class="tags-table basic giddh-table table  onMobileView">
+                        <table class="tags-table basic giddh-table table  on-mobile-view">
                             <thead>
                                 <tr>
                                     <th>Sr. No.</th>
@@ -58,7 +58,7 @@
                                     </td>
                                     <td class="icon-btn" data-title="Action">
                                         <button *ngIf="updateIndex !== i" (click)="setUpdateIndex(i);" type="button"
-                                            class="btn btn-xs"><i class="fa fa-pencil" aria-hidden="true"
+                                            class="btn btn-xs"><i class="icon-edit-pencil" aria-hidden="true"
                                                 tooltip="Edit"></i></button>
                                         <button *ngIf="updateIndex !== i" (click)="deleteTag(tag, i);" type="button"
                                             class="btn btn-xs"><i class="fa fa-trash" aria-hidden="true"
@@ -67,12 +67,12 @@
                                             class="btn btn-xs"><i class="fa fa-check"
                                                 aria-hidden="true"></i></button>
                                         <button *ngIf="updateIndex === i" (click)="resetUpdateIndex();"
-                                            type="button" class="btn btn-xs"><i class="fa fa-times"
+                                            type="button" class="btn btn-xs"><i class="icon-cross"
                                                 aria-hidden="true"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
-                            <tbody *ngIf="!(tags$ | async)" class="onMobileView noRecords">
+                            <tbody *ngIf="!(tags$ | async)" class="on-mobile-view no-records">
                                 <tr>
                                     <td colspan="4" class="text-center empty-table">
                                         <h1>No Record Found !!</h1>

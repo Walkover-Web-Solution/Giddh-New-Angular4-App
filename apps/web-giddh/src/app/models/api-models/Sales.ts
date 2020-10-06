@@ -232,6 +232,9 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public applicableTaxes: string[] = [];
     public taxRenderData: ITaxList[] = [];
     public sku_and_customfields?: string;
+    public requiredTax?: boolean;
+    public maxQuantity?: number;
+    public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
 
     constructor() {
         super();
@@ -327,6 +330,7 @@ export class SalesEntryClass {
     public tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum;
     public tcsTaxList?: string[];
     public tdsTaxList?: string[];
+    public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
 
     constructor() {
         this.transactions = [new SalesTransactionItemClass()];
@@ -342,6 +346,7 @@ export class SalesEntryClass {
         this.otherTaxType = 'tcs';
         this.otherTaxModal = new SalesOtherTaxesModal();
         this.cessSum = 0;
+        this.purchaseOrderItemMapping = { uniqueName: '', entryUniqueName: '' };
     }
 
     public staticDefaultDiscount(): LedgerDiscountClass {
@@ -441,6 +446,15 @@ export interface GenericRequestForGenerateSCD extends GenericRequest {
     templateDetails?: TemplateDetailsClass
     deposit?: AmountClassMulticurrency;
     roundOffApplicable?: boolean;
+    roundOffTotal?: AmountMulticurrency;
+    warehouse?: any;
+    account?: any;
+    subVoucher?: string;
+    touristSchemeApplicable?: boolean;
+    passportNumber?: string;
+    voucherAdjustments?: VoucherAdjustments;
+    attachedFileName?: string;
+    attachedFiles?: Array<string>;
 }
 
 /**
@@ -456,6 +470,8 @@ export interface PurchaseRecordRequest extends GenericRequest {
     attachedFiles?: Array<string>;
     entries?: SalesEntryClass[];
     templateDetails?: TemplateDetailsClass;
+    purchaseOrders?: Array<any>;
+    purchaseBillCompany?: any;
 }
 
 export class VoucherDetailsClass {
@@ -529,6 +545,11 @@ export class TemplateDetailsClass {
     }
 }
 
+export class AmountMulticurrency {
+    public amountForAccount: number;
+    public amountForCompany: number;
+}
+
 export class VoucherClass {
     public voucherDetails: VoucherDetailsClass;
     public companyDetails: CompanyDetailsClass;
@@ -545,6 +566,12 @@ export class VoucherClass {
     public subVoucher?: string;
     public voucherAdjustments?: VoucherAdjustments;
     public subTotal?: AmountClassMulticurrency
+    public roundOffTotal?: AmountMulticurrency;
+    public warehouse?: any;
+    public account?: any;
+    public attachedFileName?: string;
+    public attachedFiles?: Array<string>;
+    public purchaseOrderDetails?: any;
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();
@@ -607,6 +634,7 @@ export class SalesEntryClassMulticurrency {
     public voucherNumber: string;
     public voucherType: string;
     public discounts: DiscountMulticurrency[];
+    public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
 
     constructor() {
         this.transactions = [];
@@ -619,6 +647,7 @@ export class SalesEntryClassMulticurrency {
         this.voucherNumber = '';
         this.voucherType = '';
         this.discounts = [];
+        this.purchaseOrderItemMapping = { uniqueName: '', entryUniqueName: '' };
     }
 }
 

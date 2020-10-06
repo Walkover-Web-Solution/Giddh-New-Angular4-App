@@ -20,9 +20,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from '../../../../lodash-optimized';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequestV2, AccountResponseV2, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../../../../models/api-models/Account';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { ToasterService } from '../../../../services/toaster.service';
 import { AccountService } from '../../../../services/account.service';
@@ -40,24 +40,7 @@ import { Router } from "@angular/router";
 @Component({
     selector: 'account-operations',
     templateUrl: './account-operations.component.html',
-    styles: [`
-      .mrgeBtn {
-          padding: 8px 16px;
-      }
-
-      .form_box .btn {
-          width: 72px;
-      }
-
-      .item_unq ul {
-          padding-left: 30px;
-          list-style: none;
-      }
-      .moveTOgroup {
-        padding: 0 15px;
-    }
-
-  `],
+    styleUrls: [`./account-operations.component.scss`]
 })
 export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     public showAddNewAccount$: Observable<boolean>;
@@ -75,14 +58,14 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public moveAccountForm: FormGroup;
     public activeGroupSelected$: Observable<string[]>;
     public config: PerfectScrollbarConfigInterface = { suppressScrollX: true, suppressScrollY: false };
-    @ViewChild('shareGroupModal') public shareGroupModal: ModalDirective;
-    @ViewChild('shareAccountModal') public shareAccountModal: ModalDirective;
-    @ViewChild('shareAccountModalComp') public shareAccountModalComp: ShareAccountModalComponent;
-    @ViewChild('shareGroupModalComp') public shareGroupModalComp: ShareGroupModalComponent;
-    @ViewChild('deleteMergedAccountModal') public deleteMergedAccountModal: ModalDirective;
-    @ViewChild('moveMergedAccountModal') public moveMergedAccountModal: ModalDirective;
-    @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
-    @ViewChild('groupExportLedgerModal') public groupExportLedgerModal: ModalDirective;
+    @ViewChild('shareGroupModal', {static: true}) public shareGroupModal: ModalDirective;
+    @ViewChild('shareAccountModal', {static: true}) public shareAccountModal: ModalDirective;
+    @ViewChild('shareAccountModalComp', {static: true}) public shareAccountModalComp: ShareAccountModalComponent;
+    @ViewChild('shareGroupModalComp', {static: true}) public shareGroupModalComp: ShareGroupModalComponent;
+    @ViewChild('deleteMergedAccountModal', {static: true}) public deleteMergedAccountModal: ModalDirective;
+    @ViewChild('moveMergedAccountModal', {static: true}) public moveMergedAccountModal: ModalDirective;
+    @ViewChild('deleteAccountModal', {static: true}) public deleteAccountModal: ModalDirective;
+    @ViewChild('groupExportLedgerModal', {static: true}) public groupExportLedgerModal: ModalDirective;
     @Input() public breadcrumbPath: string[] = [];
     @Input() public breadcrumbUniquePath: string[] = [];
     public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
@@ -146,7 +129,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public flatGroupsOptions: IOption[];
     public isDebtorCreditor: boolean = false;
     public accountDetails: any = '';
-    @ViewChild('discountShSelect') public discountShSelect: ShSelectComponent;
+    @ViewChild('discountShSelect', {static: true}) public discountShSelect: ShSelectComponent;
     public selectedCompany: Observable<CompanyResponse>;
     public activeCompany: any;
     private groupsListBackUp: IOption[];
@@ -451,11 +434,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
 
         this.accountsAction.mergeAccountResponse$.subscribe(res => {
-            if (this.selectedaccountForMerge.length > 0) {
-                this.selectedaccountForMerge.forEach((element) => {
-                    this.deleteFromLocalDB(element);
-                });
-            }
             this.selectedaccountForMerge = '';
         });
     }
@@ -836,25 +814,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.deleteAccountModal.hide();
     }
 
-    public deleteFromLocalDB(activeAccUniqueName?: string) {
-        this._dbService.removeItem(this.activeCompany.uniqueName, 'accounts', activeAccUniqueName).then((res) => {
-            if (res) {
-                this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
-            }
-        }, (err: any) => {
-        });
-    }
-
     public deleteAccount() {
         let activeAccUniqueName = null;
         this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s.uniqueName);
-
         let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath.length - 2];
-        this.deleteFromLocalDB(activeAccUniqueName);
         this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
 
         this.hideDeleteAccountModal();
-        this.router.navigateByUrl('home');
     }
 
     public customMoveGroupFilter(term: string, item: IOption): boolean {

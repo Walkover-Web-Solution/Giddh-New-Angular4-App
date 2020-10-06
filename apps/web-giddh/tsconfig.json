@@ -3,7 +3,8 @@
     "compilerOptions": {
         "types": [
             "jasmine"
-        ]
+        ],
+        "module": "es2020"
     },
     "include": [
         "**/*.ts",

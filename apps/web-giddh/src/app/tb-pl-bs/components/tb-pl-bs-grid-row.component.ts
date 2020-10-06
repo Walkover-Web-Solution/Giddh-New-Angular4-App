@@ -12,21 +12,21 @@ import { take } from 'rxjs/operators';
     styleUrls: ['./tb-pl-bs-grid-row.component.scss'],
     template: `
     <div class="row row-2 tb-pl-bs-grid-row" style="overflow: visible;" [trial-accordion]="groupDetail" [hidden]="!groupDetail.isVisible" *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)">
-      <div class="col-xs-4 group" [ngStyle]="{'padding-left': padding+'px'}" [innerHTML]="groupDetail.groupName | uppercase | highlight:search"></div>
-      <div class="col-xs-2 group text-right">{{ groupDetail.forwardedBalance?.amount | giddhCurrency }} {{groupDetail.forwardedBalance | recType }}
+      <div class="col-4 group" [ngStyle]="{'padding-left': padding+'px'}" [innerHTML]="groupDetail.groupName | uppercase | highlight:search"></div>
+      <div class="col-2 group text-right">{{ groupDetail.forwardedBalance?.amount | giddhCurrency }} {{groupDetail.forwardedBalance | recType }}
       </div>
-      <div class="col-xs-2 group text-right">{{ groupDetail.debitTotal | giddhCurrency }}</div>
-      <div class="col-xs-2 group text-right">{{ groupDetail.creditTotal | giddhCurrency }}</div>
-      <div class="col-xs-2 group text-right">{{ groupDetail.closingBalance?.amount | giddhCurrency }} {{groupDetail.closingBalance | recType }}
+      <div class="col-2 group text-right">{{ groupDetail.debitTotal | giddhCurrency }}</div>
+      <div class="col-2 group text-right">{{ groupDetail.creditTotal | giddhCurrency }}</div>
+      <div class="col-2 group text-right">{{ groupDetail.closingBalance?.amount | giddhCurrency }} {{groupDetail.closingBalance | recType }}
       </div>
     </div>
     <ng-container *ngFor="let account of groupDetail.accounts;trackBy: trackByFn">
       <!-- <section class="row row-2 account " [ngClass]="{'isHidden': !account.isVisible }"> -->
-      <section class="row row-2 account " style="overflow: visible;" *ngIf="account.isVisible || account.isCreated" [hidden]="!account.isVisible"
+      <section class="row-2 account " style="overflow: visible;" *ngIf="account.isVisible || account.isCreated" [hidden]="!account.isVisible"
                (dblclick)="accountInfo(account,$event)" (clickOutside)="hideModal()">
 
         <div class="row" style="height: 35px !important;" *ngIf="account.name && (account.closingBalance?.amount !== 0 || account.openingBalance?.amount !== 0 || account.debitTotal || account.creditTotal)">
-          <div class="col-xs-4 account no-select" [ngStyle]="{'padding-left': (padding+20)+'px'}">
+          <div class="col-4 account no-select" [ngStyle]="{'padding-left': (padding+20)+'px'}">
 
             <div style="padding: 0px;border-right: 0px;" [innerHTML]="account.name | lowercase | highlight:search">
             </div>
@@ -37,11 +37,11 @@ import { take } from 'rxjs/operators';
             </span>
 
           </div>
-          <div class="col-xs-2 account text-right">{{ account.openingBalance?.amount | giddhCurrency }} {{account.openingBalance | recType }}
+          <div class="col-2 account text-right">{{ account.openingBalance?.amount | giddhCurrency }} {{account.openingBalance | recType }}
           </div>
-          <div class="col-xs-2 account text-right">{{ account.debitTotal | giddhCurrency }}</div>
-          <div class="col-xs-2 account text-right">{{ account.creditTotal | giddhCurrency }}</div>
-          <div class="col-xs-2 account text-right">{{ account.closingBalance?.amount | giddhCurrency }} {{account.closingBalance | recType }}
+          <div class="col-2 account text-right">{{ account.debitTotal | giddhCurrency }}</div>
+          <div class="col-2 account text-right">{{ account.creditTotal | giddhCurrency }}</div>
+          <div class="col-2 account text-right">{{ account.closingBalance?.amount | giddhCurrency }} {{account.closingBalance | recType }}
           </div>
         </div>
 

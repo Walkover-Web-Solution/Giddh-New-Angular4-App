@@ -244,11 +244,8 @@
     display: flex;
     flex-wrap: wrap;
     padding-top: 0px;
-    width: 80%;
+    width: 98%;
     margin-top: 10px;
-}
-.see-all-features .col-sm-6.col-md-3 {
-    width: 33.33%;
 }
 .see-all-features .inner-your-account {
     border-color: $midnight-blue;
@@ -265,9 +262,6 @@
     top: 10px;
     font-size: 16px;
     color: $nero;
-}
-.main-row-plans {
-    display: flex;
 }
 .btn-green:focus {
     color: $white;
@@ -381,7 +375,7 @@
 }
 @media only screen and (max-width: 1600px) {
     .transactions-popup {
-        width: 260px;
+        max-width: 220px;
     }
 }
 @media only screen and (max-width: 1280px) {
@@ -414,6 +408,7 @@
     .single-plan-for-company{
         .plans-box{
                 padding-bottom: 15px;
+                height: initial;
             .your-account{
                     margin: 15px 0 0;
                 .plan-list{
@@ -429,6 +424,11 @@
         .overall-plans{
             margin-bottom: 20px;
         }
+    }
+}
+@media only screen and (max-width:991px){
+    .all-plans{
+        padding: 25px 20px !important;
     }
 }
 @media(max-width:768px){
@@ -465,7 +465,7 @@
         width: 100%;
     }
     .transactions-popup {
-        width: 250px;
+        width: 220px;
     }
     .main-row-plans {
         white-space: normal;
@@ -493,6 +493,12 @@
     }
     .select-plan-block{
         margin-bottom: 15px;
+        max-width: 400px;
+        margin: 0 auto 30px;
+        height: auto;
+        .overall-plans{
+            margin-bottom: 0;
+        }
     }
     .welcome-msg{
         margin-top: 15px;
@@ -505,6 +511,9 @@
     }
     .plans-box {
         padding: 10px 15px;
+         p.total-price{
+            margin: 0 0 15px;
+         }
     }
     .your-account {
         margin: 0px;

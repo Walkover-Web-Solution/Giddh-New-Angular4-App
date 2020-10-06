@@ -1,14 +1,16 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
-import { BsDatepickerConfig } from 'ngx-bootstrap';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from "../../services/toaster.service";
+import { takeUntil } from 'rxjs/operators';
+import { RecurringVoucherService } from '../../services/recurring-voucher.service';
 
 @Component({
 	selector: 'app-aside-recurring-entry',
@@ -22,7 +24,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 	public maxEndDate: Date = new Date();
 	public intervalOptions: IOption[];
 	public timeOptions: IOption[];
-	public isLoading: boolean;
+	public isLoading: boolean = false;
 	public isDeleteLoading: boolean;
 	public form: FormGroup;
 	public config: Partial<BsDatepickerConfig> = { dateInputFormat: 'DD-MM-YYYY' };
@@ -37,7 +39,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 	constructor(private _store: Store<AppState>,
 		private _fb: FormBuilder,
 		private _toaster: ToasterService,
-		private _invoiceActions: InvoiceActions) {
+		private _invoiceActions: InvoiceActions, private recurringVoucherService: RecurringVoucherService) {
 		this.today.setDate(this.today.getDate() + 1);
 		this.form = this._fb.group({
 			voucherNumber: [this.voucherNumber, Validators.required],
@@ -74,12 +76,15 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 	}
 
 	public ngOnInit() {
+        this._store.dispatch(this._invoiceActions.resetRecurringInvoice());
+
 		this.intervalOptions = [
-			{ label: 'Weekly', value: 'weekly' },
+            { label: 'Weekly', value: 'weekly' },
+            { label: 'Monthly', value: 'monthly' },
 			{ label: 'Quarterly', value: 'quarterly' },
 			{ label: 'Halfyearly', value: 'halfyearly' },
-			{ label: 'Yearly', value: 'yearly' },
-			{ label: 'Monthly', value: 'monthly' }
+			{ label: 'Yearly', value: 'yearly' }
+
 		];
 
 		this.timeOptions = [
@@ -88,15 +93,15 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 			{ label: '3rd', value: '3' },
 			{ label: '4th', value: '4' },
 			{ label: '5th', value: '5' },
-		];
-		this._store.select(p => p.invoice.recurringInvoiceData)
-			.subscribe(p => {
-				this.isLoading = p.isRequestInFlight;
-				this.isDeleteLoading = p.isDeleteRequestInFlight;
-				if (p.isRequestSuccess) {
-					this.closeAsidePane(null);
-				}
-			});
+        ];
+        
+		this._store.pipe(select(state => state.invoice.recurringInvoiceData), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLoading = response.isRequestInFlight;
+            this.isDeleteLoading = response.isDeleteRequestInFlight;
+            if (response.isRequestSuccess) {
+                this.closeAsidePane(null);
+            }
+        });
 	}
 
 	public closeAsidePane(event: RecurringInvoice) {
@@ -105,8 +110,19 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 	}
 
 	public deleteInvoice() {
-		this.isDeleteLoading = true;
-		this._store.dispatch(this._invoiceActions.deleteRecurringInvoice(this.invoice.uniqueName));
+        this.isDeleteLoading = true;
+        
+        this.recurringVoucherService.deleteRecurringVouchers(this.invoice.uniqueName).subscribe(response => {
+            if(response) {
+                this.isDeleteLoading = null;
+                this.closeAsidePane(null);
+                if(response.status === "success") {
+                    this._toaster.successToast(response.body);
+                } else {
+                    this._toaster.successToast(response.message);
+                }
+            }
+        });
 	}
 
 	public isExpirableChanged({ checked }) {

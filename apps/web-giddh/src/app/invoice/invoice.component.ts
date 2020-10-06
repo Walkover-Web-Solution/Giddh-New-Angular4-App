@@ -6,7 +6,7 @@ import { CompanyActions } from '../actions/company.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, ReplaySubject } from 'rxjs';
-import { TabsetComponent } from 'ngx-bootstrap';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CurrentPage } from '../models/api-models/Common';
@@ -16,7 +16,7 @@ import { GeneralActions } from '../actions/general/general.actions';
     styleUrls:[`./invoice.component.scss`]
 })
 export class InvoiceComponent implements OnInit, OnDestroy {
-    @ViewChild('staticTabs') public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
     
     public tabsDropdown:boolean = false;
     public selectedVoucherType: VoucherTypeEnum;
@@ -67,6 +67,8 @@ export class InvoiceComponent implements OnInit, OnDestroy {
                             }, 500);
                         }
                         this.tabChanged(queryParams.tab, null);
+                    } else if(queryParams.tab) {
+                        this.activeTab = queryParams.tab;
                     }
                 } else {
                     this.activeTab = params.voucherType;

@@ -10,3 +10,6 @@
     line-height: 1.7;
     text-align: center;
 }
+.session-table.basic > tbody > tr td:last-child {
+    border-right: none !important;
+}

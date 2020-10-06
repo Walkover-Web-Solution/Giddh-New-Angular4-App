@@ -24,7 +24,7 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
 	@Input() public expandAll: boolean;
 	@Input() public from: string = '';
 	@Input() public to: string = '';
-	@ViewChild('searchInputEl') public searchInputEl: ElementRef;
+	@ViewChild('searchInputEl', {static: true}) public searchInputEl: ElementRef;
 	public moment = moment;
 	public plSearchControl: FormControl = new FormControl();
 

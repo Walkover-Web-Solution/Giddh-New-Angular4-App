@@ -1,8 +1,7 @@
-<div class="col-xs-10">
-    <div class="col-xs-12 bg_wrap">
-        <div class="row">
+<div>
+    <div class="bg_wrap">
             <div class="clearfix pdT2">
-                <div class="day-date pull-right text-right mrB1" (clickOutside)="showFromDatePicker = false;">
+                <div class="day-date pull-right text-right mr-b1" (clickOutside)="showFromDatePicker = false;">
                     <span>{{ displayDay }},</span>
                     <input size="10" type="text" onReturn #dateField name="entryDate" [(ngModel)]="journalDate"
                         (blur)="dateEntered();" readonly placeholder="DD-MM-YYYY"
@@ -50,17 +49,6 @@
                                         Current Balance: {{transaction.currentBalance | giddhCurrency}}
                                         {{transaction.selectedAccount.type === 'DEBIT' ? 'Dr.' : 'Cr.'}}
                                     </span>
-
-                                    <!-- <div *ngIf="transaction.type === 'to' && transaction.voucherAdjustments && transaction.voucherAdjustments.length > 0">
-                                        <div class="debtor-details pb-1 pt-05" *ngFor="let adjustment of transaction.voucherAdjustments;">
-                                            <span class="mr-15">{{adjustmentTypes[adjustment.type]}}</span>
-                                            <span class="mr-15">{{adjustment.note}}</span>
-                                            <span class="mr-15" *ngIf="adjustment.tax && adjustment.tax.uniqueName">{{adjustment.tax.value | giddhCurrency}} ({{adjustment.tax.percent}}%)</span>
-                                            <span class="mr-15" *ngIf="adjustment.invoice && adjustment.invoice.number">{{adjustment.invoice.number}}; {{adjustment.invoice.date}}; {{adjustment.invoice.amount}}</span>
-                                            <span class="mr-15">{{adjustment.amount | giddhCurrency}}</span>
-                                            <span>cr</span>
-                                        </div>
-                                    </div> -->
                                     <div
                                         *ngIf="transaction.type === 'to' && transaction.voucherAdjustments && transaction.voucherAdjustments.length > 0">
                                         <div class="debtor-details-form pb-1 pt-05"
@@ -203,8 +191,8 @@
                 </div>
             </div>
 
-            <div class="clearfix">
-                <div class="col-xs-4">
+            <div class="clearfix row">
+                <div class="col-xs-4 col-sm-4">
                     <div class="form-group">
                         <label>Narration:</label>
                         <textarea #narrationBox onReturn id="narration" class="form-control" name="narration"
@@ -213,38 +201,37 @@
                     </div>
                 </div>
 
-                <div [hidden]="!showConfirmationBox" class="confirmation_box bdr text-center pd2">
-                    <div class="">
-                        <h1>Accept?</h1>
-                        <div class="pdT2">
-                            <button class="btn btn-primary" #submitButton (keyup)="keyUpOnSubmitButton($event)"
-                                (click)="saveEntry();">Yes</button>
-                            <button class="btn btn-default" #resetButton (keyup)="keyUpOnResetButton($event)"
-                                (click)="acceptCancel()">No</button>
-                            <br />
-                            <button class="btn btn-link mrT1" (click)="refreshEntry();">Reset</button>
+                <div class="col-xs-8 col-sm-8">
+                    <div [hidden]="!showConfirmationBox" class="confirmation_box bdr text-center pd2">
+                        <div class="">
+                            <h1>Accept?</h1>
+                            <div class="pdT2">
+                                <button class="btn btn-primary" #submitButton (keyup)="keyUpOnSubmitButton($event)"
+                                    (click)="saveEntry();">Yes</button>
+                                <button class="btn btn-default" #resetButton
+                                    (keyup)="keyUpOnResetButton($event)" (click)="acceptCancel()">No</button>
+                                <br />
+                                <button class="btn btn-link mr-t1" (click)="refreshEntry();">Reset</button>
 
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="total_box text-right pull-right">
-                    <span><strong>{{totalDebitAmount | giddhCurrency }}</strong></span>
-                    <span><strong>{{totalCreditAmount | giddhCurrency }}</strong></span>
+                    <div class="total_box text-right pull-right">
+                        <span><strong>{{totalDebitAmount | giddhCurrency }}</strong></span>
+                        <span><strong>{{totalCreditAmount | giddhCurrency }}</strong></span>
+                    </div>
                 </div>
             </div>
-        </div>
     </div>
-
     <div class="sidebar_list form-control" [hidden]="!showLedgerAccountList">
-        <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
-        <h3 class="pd1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
+        <h3 class="pd-1 bdrB primary_clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
+        <h3 class="pd-1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
         <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList"
             [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)"
             [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'"
             [notFoundLink]="selectedField === 'account'" (noResultsClicked)="addNewAccount()" [multiple]="false"
             [ItemHeight]="33" (noOptionsFound)="onNoAccountFound($event)"></accounting-virtual-list>
     </div>
-
 </div>
 
 <generic-aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
@@ -264,14 +251,14 @@
                     <h3 class="modal-title">Cheque details (if any)</h3>
                 </div>
                 <div class="modal-body">
-                    <div class="clearfix mrT1">
+                    <div class="clearfix mr-t1">
                         <label>Cheque Number:</label>
                         <input (keydown.enter)="$event.preventDefault()" #chequeNumberInput class="form-control"
                             required formControlName="chequeNumber" name="account" type="text"
                             placeholder="Cheque Number"
                             (keydown)="onCheckNumberFieldKeyDown($event, 'chqNumber', chequeClearanceDateInput)">
                     </div>
-                    <div class="clearfix mrT1 check-clearance-date">
+                    <div class="clearfix mr-t1 check-clearance-date">
                         <label>Cheque Clearance Date:</label>
                         <input (keydown.enter)="$event.preventDefault()" #chequeClearanceInputField
                             #chequeClearanceDateInput="bsDatepicker" readonly bsDatepicker [bsConfig]="bsConfig"

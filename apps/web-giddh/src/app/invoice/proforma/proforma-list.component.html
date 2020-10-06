@@ -6,14 +6,14 @@
                 <div class="form-group mrR1 d-flex">
                     <div class="input-group ">
                         <!-- <span class="icon-calender"></span> -->
-                        <span class="inputWrapper">
+                        <span class="input-wrapper">
                             <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
                                 class="form-control" (applyDaterangepicker)="dateRangeChanged($event)" />
                         </span>
                     </div>
 
                     <div class="advance-icon" style="align-items: center">
-                        <span class="icon-advance-search" (click)="toggleAdvanceSearchPopup()"
+                        <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup()"
                             tooltip="Advance Search"></span>
                         <!-- -->
                     </div>
@@ -61,13 +61,13 @@
             <!-- endregion -->
 
             <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
-                <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
+                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
                     Proforma
                 </button>
             </div>
 
             <div *ngIf="voucherType === 'estimates'" class="btn-wrapper">
-                <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
+                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
                     Estimate
                 </button>
             </div>
@@ -75,7 +75,7 @@
         </div>
     </div>
 
-    <div class="mobile-search mrB1">
+    <div class="mobile-search mr-b1" >
         <div class="row">
             <div class="col-sm-6 col-xs-6 full-width-on-mobile">
                 <div class="input-container">
@@ -93,13 +93,13 @@
         </div>
         <div class="d-flex mt-1">
             <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mr-15">
-                <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
+                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
                     Proforma
                 </button>
             </div>
 
             <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mr-15">
-                <button class="btn btn-pink" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
+                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
                     Estimate
                 </button>
             </div>
@@ -145,14 +145,14 @@
                             name="voucherNumberInput" [formControl]="voucherNumberInput" />
                     </div>
                 </div>
-                <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                <!-- <div class="col-sm-6 col-xs-6 full-width-on-mobile">
                     <div class="input-container">
                         <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox
                             name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
                     </div>
-                </div>
-                <div class="col-sm-6 col-xs-6 mt-2">
-                    <button class="btn btn-pink">Submit</button>
+                </div> -->
+                <div class="col-sm-6 col-xs-6 mt-2 mt-md-0">
+                    <button class="btn btn-sky-blue">Submit</button>
                 </div>
 
             </div>
@@ -160,10 +160,18 @@
         </div>
     </ng-template>
 
+    <!-- select app proforma -->
+    <div class="select-all-proformas-on-mobile-view mt-1">
+        <div class="checkbox-img mr-1">
+            <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
+            <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+        </div>
+        Select All
+    </div>
     <!--  -->
     <div class="clearfix">
         <div class="table-responsive removeResponsive invoice-preview">
-            <table class="table basic table-bordered mt-15 invoice-table onMobileView table-responsive">
+            <table class="table basic table-bordered mt-15 invoice-table on-mobile-view">
                 <thead class="t-h-bg1">
                     <tr>
 
@@ -259,8 +267,8 @@
 
                         <td class="mh18_img" data-title="#"
                             *ngIf="hoveredItemUniqueName === item.uniqueName || item.isSelected || selectedItems.length > 0">
-                            <div class="mh18_img" style="justify-content: center;display: flex"
-                                class="justify-content-sm-start">
+                            <div class="mh18_img"
+                                class="d-flex checkbox-td">
                                 <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
                                     (click)="toggleItem(item, true)" />
                                 <img *ngIf="item.isSelected" src="assets/images/checked.png"
@@ -270,7 +278,7 @@
 
                         <td *ngIf="!item.isSelected && hoveredItemUniqueName !== item.uniqueName && selectedItems.length === 0"
                             data-title="#">
-                            <div style="justify-content: center;display: flex" class="justify-content-sm-start">
+                            <div class="d-flex index-no">
                                 {{ i + 1}} </div>
                         </td>
 
@@ -440,7 +448,7 @@
 
 
         <!--No Entry-->
-        <div class="no-data mrT2" *ngIf="!voucherData && !(isGetAllInProcess$ | async)">
+        <div class="no-data mr-t2" *ngIf="!voucherData && !(isGetAllInProcess$ | async)">
             <h1>No Entry found in sales!</h1>
             <h1>Have to do some sales before creating invoice</h1>
         </div>
@@ -452,7 +460,7 @@
         </div>
 
         <!--loading-->
-        <div class="no-data mrT2 loader-main" *ngIf="(isGetAllInProcess$ | async)">
+        <div class="no-data mr-t2 loader-main" *ngIf="(isGetAllInProcess$ | async)">
             <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
             <div class="spinner2">
                 <div class="cube1"></div>

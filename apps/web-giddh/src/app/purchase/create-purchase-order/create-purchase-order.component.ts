@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy, TemplateRef } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { BsModalRef, BsDatepickerDirective, PopoverDirective, ModalDirective } from 'ngx-bootstrap'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
+import { Observable, ReplaySubject, of as observableOf, combineLatest } from 'rxjs';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { takeUntil, filter, take, delay } from 'rxjs/operators';
@@ -46,6 +45,11 @@ import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { InvoiceService } from '../../services/invoice.service';
+import { PURCHASE_ORDER_STATUS } from '../../shared/helpers/purchaseOrderStatus';
+import { INameUniqueName } from '../../models/api-models/Inventory';
+import { PopoverDirective } from 'ngx-bootstrap/popover';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 
 const THEAD_ARR_READONLY = [
     {
@@ -124,10 +128,12 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     @ViewChildren('description') public description: QueryList<ElementRef>;
     /* Discount component instance */
     @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
+    /* Discount component instance */
+    @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
     /* Tax Control instance */
     @ViewChild(TaxControlComponent) public taxControlComponent: TaxControlComponent;
     /* Modal instance */
-    public modelRef: BsModalRef;
+    public modalRef: BsModalRef;
     /* This will hold if it's multi currency account */
     public isMulticurrencyAccount: boolean = false;
     /* This will hold if it's mobile device*/
@@ -298,10 +304,22 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
     public originalExchangeRate: any = 1;
     /* This will hold object for time interval */
     public interval: any;
-    /** Voucher type */
+    /* This will hold the purchase orders */
+    public purchaseOrders: any[] = [];
+    /* This will hold po unique name for preview */
+    public purchaseOrderPreviewUniqueName: string = '';
+    /* This will hold po account unique name for preview */
+    public purchaseOrderPreviewAccountUniqueName: string = '';
+    /* Voucher type */
     public invoiceType: VoucherTypeEnum = VoucherTypeEnum.purchase;
+    /* Index for inner entry */
+    private innerEntryIndex: number;
+    /* Observable for new stock created */
+    public newlyCreatedStockAc$: Observable<INameUniqueName>;
+    /* This will hold the transaction amount */
+    public transactionAmount: number = 0;
 
-    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService) {
+    constructor(private store: Store<AppState>, private breakPointObservar: BreakpointObserver, private salesAction: SalesActions, private salesService: SalesService, private warehouseActions: WarehouseActions, private settingsUtilityService: SettingsUtilityService, private settingsProfileActions: SettingsProfileActions, private toaster: ToasterService, private commonActions: CommonActions, private settingsDiscountAction: SettingsDiscountActions, private companyActions: CompanyActions, private generalService: GeneralService, public purchaseOrderService: PurchaseOrderService, private loaderService: LoaderService, private route: ActivatedRoute, private router: Router, private generalActions: GeneralActions, private invoiceService: InvoiceService, private modalService: BsModalService) {
         this.getInvoiceSettings();
         this.store.dispatch(this.generalActions.getFlattenAccount());
         this.flattenAccountListStream$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$));
@@ -315,6 +333,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.createdAccountDetails$ = this.store.pipe(select(state => state.sales.createdAccountDetails), takeUntil(this.destroyed$));
         this.updatedAccountDetails$ = this.store.pipe(select(state => state.sales.updatedAccountDetails), takeUntil(this.destroyed$));
         this.updateAccountSuccess$ = this.store.pipe(select(state => state.sales.updateAccountSuccess), takeUntil(this.destroyed$));
+        this.newlyCreatedStockAc$ = this.store.pipe(select(state => state.sales.newlyCreatedStockAc), takeUntil(this.destroyed$));
         this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
     }
 
@@ -325,7 +344,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.breakPointObservar.observe([
-            '(max-width: 768px)'
+            '(max-width: 1024px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
@@ -449,8 +468,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         });
 
         // create account success then hide aside pane
-        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response && this.accountAsideMenuState === 'in') {
+        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((accountDetails) => {
+            if (accountDetails && this.accountAsideMenuState === 'in') {
                 this.toggleAccountAsidePane();
             }
         });
@@ -461,6 +480,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     await this.getUpdatedStateCodes(accountDetails.country.countryCode, false);
                 }
                 this.updateVendorDetails(accountDetails);
+                this.getVendorPurchaseOrders(accountDetails.uniqueName);
             }
         });
 
@@ -533,8 +553,17 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.bulkItemsModal.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.showBulkItemModal = false;
+        // listen for newly added stock and assign value
+        combineLatest(this.newlyCreatedStockAc$, this.salesAccounts$).subscribe((resp: any[]) => {
+            let stock = resp[0];
+            let acData = resp[1];
+            if (stock && acData) {
+                let result: IOption = _.find(acData, (item: IOption) => item.additional.uniqueName === stock.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === stock.uniqueName);
+                if (result && !_.isUndefined(this.innerEntryIndex)) {
+                    this.purchaseOrder.entries[this.innerEntryIndex].transactions[0].fakeAccForSelect2 = result.value;
+                    this.onSelectSalesAccount(result, this.purchaseOrder.entries[this.innerEntryIndex].transactions[0], this.purchaseOrder.entries[this.innerEntryIndex]);
+                }
+            }
         });
     }
 
@@ -772,6 +801,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public getAccountDetails(accountUniqueName: string): void {
+        this.getVendorPurchaseOrders(accountUniqueName);
         this.store.dispatch(this.salesAction.getAccountDetailsForSales(accountUniqueName));
     }
 
@@ -1478,9 +1508,15 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      *
      * @param {SalesEntryClass} entry
      * @param {SalesTransactionItemClass} trx
+     * @param {SalesTransactionItemClass} fromTransactionField
      * @memberof CreatePurchaseOrderComponent
      */
-    public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass): void {
+    public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false): void {
+        if(fromTransactionField && this.transactionAmount === trx.amount) {
+            this.transactionAmount = 0;
+            return;
+        }
+
         trx.amount = Number(trx.amount);
         if (trx.isStockTxn) {
             trx.rate = giddhRoundOff((trx.amount / trx.quantity), this.ratePrecision);
@@ -1491,6 +1527,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.calculateEntryTotal(entry, trx);
         this.calculateOtherTaxes(entry.otherTaxModal, entry);
         this.calculateTcsTdsTotal();
+
+        this.transactionAmount = 0;
     }
 
     /**
@@ -1845,6 +1883,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         if (Number(transaction.amount) === 0) {
             transaction.amount = undefined;
         }
+        this.transactionAmount = transaction.amount;
     }
 
     /**
@@ -2349,6 +2388,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         if (this.vendorNameDropDown) {
             this.vendorNameDropDown.clear();
         }
+        this.purchaseOrders = [];
         this.isRcmEntry = false;
         this.initializeWarehouse();
         this.fillCompanyAddress("reset");
@@ -2502,6 +2542,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
                     this.purchaseOrder.voucherDetails.voucherDate = this.purchaseOrderDetails.date;
                     this.purchaseOrder.voucherDetails.dueDate = this.purchaseOrderDetails.dueDate;
+
+                    this.purchaseOrder.number = this.purchaseOrderDetails.number;
                 } else {
                     this.toaster.errorToast(response.message);
                 }
@@ -2559,7 +2601,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                         }
                     } else {
                         let selectedTax;
-                        if(usedTaxes.indexOf(tax.uniqueName) === -1) {
+                        if (usedTaxes.indexOf(tax.uniqueName) === -1) {
                             usedTaxes.push(tax.uniqueName);
 
                             if (entryTaxes && entryTaxes.length > 0) {
@@ -2599,7 +2641,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
                     let stock = selectedAcc.stocks.find(stock => stock.uniqueName === transaction.stock.uniqueName);
 
-                    if(stock) {
+                    if (stock) {
                         let description = [];
                         let skuCodeHeading = stock.skuCodeHeading ? stock.skuCodeHeading : 'SKU Code';
 
@@ -2809,5 +2851,86 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
             this.purchaseOrder.voucherDetails.dueDate = duePeriod > 0 ? moment().add(duePeriod, 'days').toDate() : moment().toDate();
         }
+    }
+
+    /**
+     * This will get the list of PO by vendor
+     *
+     * @param {*} vendorName
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public getVendorPurchaseOrders(vendorName: any): void {
+        let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, accountUniqueName: vendorName, page: 1, count: 10, sort: '', sortBy: '' };
+        let purchaseOrderPostRequest = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyReceived, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
+
+        if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
+            this.purchaseOrders = [];
+
+            this.purchaseOrderService.getAllPendingPo(purchaseOrderGetRequest, purchaseOrderPostRequest).subscribe((res) => {
+                if (res) {
+                    if (res.status === 'success') {
+                        if (res.body && res.body.length > 0) {
+                            this.purchaseOrders = res.body;
+                        }
+                    } else {
+                        this.toaster.errorToast(res.message);
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * This will check if we need to show pipe symbol
+     *
+     * @param {number} loop
+     * @returns {boolean}
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public checkIfPipeSymbolRequired(loop: number): boolean {
+        return loop < (this.purchaseOrders.length - 1);
+    }
+
+    /**
+     * This will open the purchase order preview popup
+     *
+     * @param {TemplateRef<any>} template
+     * @param {*} purchaseOrderUniqueName
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public openPurchaseOrderPreviewPopup(template: TemplateRef<any>, purchaseOrderUniqueName: any, accountUniqueName: any): void {
+        this.purchaseOrderPreviewUniqueName = purchaseOrderUniqueName;
+        this.purchaseOrderPreviewAccountUniqueName = accountUniqueName;
+
+        this.modalRef = this.modalService.show(
+            template,
+            Object.assign({}, { class: 'modal-xl' })
+        );
+    }
+
+    /**
+     * This will close the purchase order preview popup
+     *
+     * @param {*} event
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public closePurchaseOrderPreviewPopup(event: any): void {
+        if (event) {
+            this.modalRef.hide();
+        }
+    }
+
+    /**
+     * This will toggle the create new stock/service aside pan
+     *
+     * @param {number} [index]
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public onNoResultsClicked(index?: number): void {
+        if (!_.isUndefined(index)) {
+            this.innerEntryIndex = index;
+        }
+        this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
+        this.toggleBodyClass();
     }
 }

@@ -8,7 +8,6 @@ import { PurchaseInvoiceComponent } from './purchase-invoice/purchase.invoice.co
 import { PurchaseRecordComponent } from './purchase-record/component/purchase-record.component';
 import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
 import { CreatePurchaseOrderComponent } from './create-purchase-order/create-purchase-order.component';
-import { PurchaseSettingComponent } from './purchase-setting/purchase-setting.component';
 
 const INVOICE_ROUTES: Routes = [
     {
@@ -20,11 +19,10 @@ const INVOICE_ROUTES: Routes = [
             { path: 'invoice', component: PurchaseInvoiceComponent },
             { path: 'purchase-order/:action', component: CreatePurchaseOrderComponent },
             { path: 'purchase-order/:action/:purchaseOrderUniqueName', component: CreatePurchaseOrderComponent },
-            { path: 'purchase-orders', component: PurchaseOrderComponent },
             { path: 'purchase-orders/preview/:purchaseOrderUniqueName', component: PurchaseOrderComponent },
-            { path: 'purchase-settings', component: PurchaseSettingComponent },
             { path: 'purchase', component: PurchaseRecordComponent },
-            { path: 'purchase/:accountUniqueName/:purchaseRecordUniqueName', component: PurchaseRecordComponent }
+            { path: 'purchase/:accountUniqueName/:purchaseRecordUniqueName', component: PurchaseRecordComponent },
+            { path: 'purchase/:type', component: PurchaseRecordComponent },
         ]
     }
 ];

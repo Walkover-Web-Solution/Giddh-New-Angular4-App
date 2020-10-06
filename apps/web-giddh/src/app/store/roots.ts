@@ -41,7 +41,7 @@ import * as fromPurchaseOrder from '../store/purchase-order/purchase-order.reduc
 import { ActionReducerMap } from '@ngrx/store';
 
 export interface AppState {
-    router: fromRouter.RouterReducerState;
+    //router: fromRouter.RouterReducerState;
     general: fromGeneral.GeneralState;
     home: fromHome.HomeState;
     login: fromLogin.AuthenticationState;
@@ -85,7 +85,7 @@ export interface AppState {
 }
 
 export const reducers: ActionReducerMap<AppState> = {
-    router: fromRouter.routerReducer,
+    //router: fromRouter.routerReducer,
     general: fromGeneral.GeneRalReducer,
     home: fromHome.homeReducer,
     sales: fromSales.salesReducer,

@@ -62,7 +62,6 @@
         }
     }
     .help-aside-body{
-        padding-bottom: 25%;
         .faq-block{
             padding: 15px;
             border-bottom: 1px solid $gainsboro;
@@ -72,12 +71,12 @@
 
                 p{
                     font-size: 14px;
-                    font-family: 'opensans-semibold'; 
+                    font-family: 'opensans-semibold';
                 }
                 small{
                     font-size: 12px;
                 }
-            }       
+            }
     }
     .feature-block{
         padding: 15px;
@@ -147,6 +146,13 @@
     scroll-behavior: smooth;
     position: relative;
     margin-top: 15px;
+}
+@media(max-height:900px){
+    .aside-pane {
+        .help-aside-body{
+            padding-bottom: 25%;
+        }
+    }
 }
 @media (max-width: 768px) {
     :host {

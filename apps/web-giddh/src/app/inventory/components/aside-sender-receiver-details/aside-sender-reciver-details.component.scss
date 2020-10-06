@@ -63,6 +63,14 @@ span.dr-label {
 
 .upper-form {
     margin-bottom: 20px;
+     .input-group{
+        .input-group-addon{
+            border-left: 1px solid $very-light-gray !important;
+        }
+        input{
+            border-left: none !important;
+        }
+    }
 }
 
 form.gstinForm {
@@ -89,6 +97,6 @@ form.gstinForm {
     padding-top: 15px;
 }
 
-.otherForm .btn-pink {
+.otherForm .btn-sky-blue {
     display: block;
 }

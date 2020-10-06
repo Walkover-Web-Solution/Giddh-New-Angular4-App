@@ -1,17 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AppState } from '../../store';
-import { Store, select } from '@ngrx/store';
-import { ToasterService } from '../../services/toaster.service';
-import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import * as moment from 'moment/moment';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
+import { AuthenticationService } from '../../services/authentication.service';
 import { InvoiceService } from '../../services/invoice.service';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
-import { GeneralService } from '../../services/general.service';
-import { AuthenticationService } from '../../services/authentication.service';
-import { ActivatedRoute } from '@angular/router';
+import { ToasterService } from '../../services/toaster.service';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { AppState } from '../../store';
 
 @Component({
     selector: 'purchase-setting',
@@ -235,6 +236,6 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      * @memberof PurchaseSettingComponent
      */
     public getRedirectUrl(): string {
-        return AppUrl + 'pages/purchase-management/purchase-settings';
+        return AppUrl + 'pages/purchase-management/purchase/settings';
     }
 }

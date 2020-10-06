@@ -1,6 +1,6 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
-import { Options } from 'highcharts';
+import * as Highcharts from 'highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
@@ -11,7 +11,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
 import { DashboardService } from '../../../services/dashboard.service';
 import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import * as _ from "../../../lodash-optimized";
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 
 @Component({
@@ -21,7 +21,7 @@ import { GeneralService } from '../../../services/general.service';
 })
 
 export class TotalOverduesChartComponent implements OnInit, OnDestroy {
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store modal reference */
@@ -42,11 +42,11 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public toDate: string;
     @Input() public refresh: boolean = false;
     public imgPath: string = '';
-    public options: Options;
     public companies$: Observable<CompanyResponse[]>;
     public activeCompanyUniqueName$: Observable<string>;
     public requestInFlight: boolean = true;
-    public totaloverDueChart: Options;
+    public totaloverDueChart: typeof Highcharts = Highcharts;
+    public chartOptions: Highcharts.Options;
     public sundryDebtorResponse: any = {};
     public sundryCreditorResponse: any = {};
     public totalRecievable: number = 0;
@@ -127,7 +127,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         let baseCurrencySymbol = this.amountSettings.baseCurrencySymbol;
         let cPipe = this.currencyPipe;
 
-        this.totaloverDueChart = {
+        this.chartOptions = {
             colors: ['#F85C88', '#0CB1AF'],
             chart: {
                 type: 'pie',
@@ -176,11 +176,12 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
                 shared: true,
                 useHTML: true,
                 formatter: function () {
-                    return baseCurrencySymbol + " " + cPipe.transform(this.point.y) + '/-';
+                    return (this.point) ? baseCurrencySymbol + " " + cPipe.transform(this.point.y) + '/-' : '';
                 }
             },
             series: [{
                 name: 'Total Overdues',
+                type: 'pie',
                 data: [['Customer Due', this.totalRecievable], ['Vendor Due', this.totalPayable]],
             }],
         };
@@ -277,7 +278,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
     }
 

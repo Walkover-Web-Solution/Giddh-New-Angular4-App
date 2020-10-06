@@ -16,7 +16,7 @@ import { SearchService } from '../../../services/search.service';
 export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public invoiceType: string;
 
-    @ViewChild('searchElement') public searchElement: ElementRef;
+    @ViewChild('searchElement', {static: true}) public searchElement: ElementRef;
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
     @Output() public saveItemsEvent: EventEmitter<SalesAddBulkStockItems[]> = new EventEmitter();
 
@@ -128,7 +128,7 @@ export class ProformaAddBulkItemsComponent implements OnInit, OnChanges, OnDestr
         let group = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
             'operatingcost, indirectexpenses' : 'otherincome, revenuefromoperations';
         const requestObject = {
-            q: query,
+            q: encodeURIComponent(query),
             page,
             withStocks: true,
             group: encodeURIComponent(group)

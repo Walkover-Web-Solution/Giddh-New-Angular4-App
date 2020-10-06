@@ -35,10 +35,10 @@ const COMPARISON_FILTER = [
 
 export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, OnDestroy {
 
-    @Input() public startDate: any;
-    @Input() public endDate: any;
-    @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
-    @ViewChild('dateRangePickerDir', { read: DaterangePickerComponent }) public dateRangePickerDir: DaterangePickerComponent;
+	@Input() public startDate: any;
+	@Input() public endDate: any;
+	@Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
+	@ViewChild('dateRangePickerDir', { read: DaterangePickerComponent, static: true }) public dateRangePickerDir: DaterangePickerComponent;
 
     public advanceSearchObject: DayBookRequestModel = null;
     public advanceSearchForm: FormGroup;
@@ -94,53 +94,20 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         endDate: moment()
     };
 
-    private moment = moment;
-    private fromDate: string = '';
-    private toDate: string = '';
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Mask format for decimal number and comma separation  */
+	private moment = moment;
+	private fromDate: string = '';
+	private toDate: string = '';
+	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+       /** Mask format for decimal number and comma separation  */
     public inputMaskFormat: string = '';
 
     constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _daybookActions: DaybookActions, private _accountService: AccountService) {
 
-        this.advanceSearchForm = this.fb.group({
-            accountUniqueNames: [[]],
-            groupUniqueNames: [[]],
-            isInvoiceGenerated: [false],
-            amountLessThan: [false],
-            includeAmount: [false],
-            amountEqualTo: [false],
-            amountGreaterThan: [false],
-            amount: ['', Validators.required],
-            includeDescription: [false, Validators.required],
-            description: [null, Validators.required],
-            includeTag: [false, Validators.required],
-            includeParticulars: [false, Validators.required],
-            includeVouchers: [false, Validators.required],
-            chequeNumber: ['', Validators.required],
-            dateOnCheque: ['', Validators.required],
-            tags: this.fb.array([]),
-            particulars: [[]],
-            vouchers: [[]],
-            inventory: this.fb.group({
-                includeInventory: true,
-                inventories: [[]],
-                quantity: null,
-                includeQuantity: true,
-                quantityLessThan: false,
-                quantityEqualTo: true,
-                quantityGreaterThan: true,
-                includeItemValue: true,
-                itemValue: null,
-                includeItemLessThan: true,
-                includeItemEqualTo: true,
-                includeItemGreaterThan: false
-            }),
-        });
-
+	
+        this.initializeDaybookAdvanceSearchForm();
         this.setVoucherTypes();
-        this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
-        this.store.dispatch(this.inventoryAction.GetManufacturingStock());
+		this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
+		this.store.dispatch(this.inventoryAction.GetManufacturingStock());
 
     }
 
@@ -164,26 +131,15 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
             if (data && data.results) {
                 let units = data.results;
 
-                return units.map(unit => {
-                    return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
-                });
-            }
-        })).pipe(takeUntil(this.destroyed$));
-
-        // Get groups with accounts
-        this._groupService.GetFlattenGroupsAccounts().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
-                let groups: IOption[] = [];
-                data.body.results.map(d => {
-                    groups.push({ label: d.groupName, value: d.groupUniqueName });
-                });
-                this.groups$ = observableOf(groups);
-            }
-        });
-        this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+				return units.map(unit => {
+					return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
+				});
+			}
+		})).pipe(takeUntil(this.destroyed$));
+         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
         });
-    }
+	}
 
     public ngOnChanges(changes: SimpleChanges) {
         if ('startDate' in changes && changes.startDate.currentValue !== changes.startDate.previousValue) {
@@ -444,5 +400,47 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         this.forceClear$ = observableOf({ status: true });
         this.forceClearParticulars$ = observableOf({ status: true });
         this.forceClearRange$ = observableOf({ status: true });
+    }
+
+    /**
+     * To initialize day book advance search form
+     *
+     * @memberof DaybookAdvanceSearchModelComponent
+     */
+    public initializeDaybookAdvanceSearchForm(): void {
+        this.advanceSearchForm = this.fb.group({
+            accountUniqueNames: [[]],
+            groupUniqueNames: [[]],
+            isInvoiceGenerated: [false],
+            amountLessThan: [false],
+            includeAmount: [false],
+            amountEqualTo: [false],
+            amountGreaterThan: [false],
+            amount: ['', Validators.required],
+            includeDescription: [false, Validators.required],
+            description: [null, Validators.required],
+            includeTag: [false, Validators.required],
+            includeParticulars: [false, Validators.required],
+            includeVouchers: [false, Validators.required],
+            chequeNumber: ['', Validators.required],
+            dateOnCheque: ['', Validators.required],
+            tags: this.fb.array([]),
+            particulars: [[]],
+            vouchers: [[]],
+            inventory: this.fb.group({
+                includeInventory: true,
+                inventories: [[]],
+                quantity: null,
+                includeQuantity: true,
+                quantityLessThan: false,
+                quantityEqualTo: true,
+                quantityGreaterThan: true,
+                includeItemValue: true,
+                itemValue: null,
+                includeItemLessThan: true,
+                includeItemEqualTo: true,
+                includeItemGreaterThan: false
+            }),
+        });
     }
 }
