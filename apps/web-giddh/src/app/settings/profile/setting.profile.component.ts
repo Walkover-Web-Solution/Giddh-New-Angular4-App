@@ -3,7 +3,8 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
+import { ESCAPE } from '@angular/cdk/keycodes';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
@@ -14,11 +15,12 @@ import { States, StatesRequest } from '../../models/api-models/Company';
 import { LocationService } from '../../services/location.service';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 import { contriesWithCodes } from 'apps/web-giddh/src/app/shared/helpers/countryWithCodes';
-import { animate, style, transition, trigger } from '@angular/animations';
+import { animate, style, transition, trigger, state } from '@angular/animations';
 import { currencyNumberSystems, digitAfterDecimal } from 'apps/web-giddh/src/app/shared/helpers/currencyNumberSystem';
 import { CountryRequest, OnboardingFormRequest } from "../../models/api-models/Common";
 import { GeneralActions } from '../../actions/general/general.actions';
 import { CommonActions } from '../../actions/common.actions';
+import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 
 export interface IGstObj {
     newGstNumber: string;
@@ -39,7 +41,17 @@ export interface IGstObj {
                 animate('.1s ease-out', style({ opacity: '1', marginTop: '20px' })),
             ]),
         ]),
-    ],
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
 
@@ -74,6 +86,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public selectedState: any = '';
     public stateGstCode: any[] = [];
     public formFields: any[] = [];
+    public accountAsideMenuState: string = 'out';
     /** Observer to track get company profile API call in process */
     public getCompanyProfileInProgress$: Observable<boolean>;
 
@@ -646,6 +659,29 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
     }
 
+    public openAddAndManage() {
+        this.toggleAccountAsidePane();
+    }
+
+    public toggleAccountAsidePane(event?): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+
+        this.toggleBodyClass();
+    }
+
+
+    public toggleBodyClass() {
+        if (this.accountAsideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+    
+
     /**
      * This will return the state code/name if available
      *
@@ -660,4 +696,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
         return state;
     }
+
+
 }
