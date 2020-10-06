@@ -352,7 +352,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             .subscribe((resp: any[]) => {
                 if (resp[0] && resp[1] && resp[2]) {
                     // insure we have account details, if we are normal ledger mode and not petty cash mode ( special case for others entry in petty cash )
-                    if (this.isPettyCash && this.accountUniqueName && resp[2].status !== 'success') {
+                    if (this.isPettyCash && this.accountUniqueName && resp[1].status !== 'success') {
                         return;
                     }
 
@@ -538,6 +538,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.makeAdjustmentCalculation();
 
                     if (this.isPettyCash) {
+                        this.vm.selectedLedger.transactions.forEach(item => {
+                            item.type = (item.type === 'cr' || item.type === 'CREDIT') ? 'CREDIT' : 'DEBIT';
+                        });
                         // create missing property for petty cash
                         this.vm.selectedLedger.transactions.forEach(item => {
                             item.type = (item.type === 'cr' || item.type === 'CREDIT') ? 'CREDIT' : 'DEBIT';
@@ -1774,7 +1777,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             q: encodeURIComponent(query),
             page,
             withStocks: true,
-            accountUniqueName: accountUniqueName
+            accountUniqueName: encodeURIComponent(accountUniqueName)
         }
         this.searchService.searchAccount(requestObject).subscribe(data => {
             if (data && data.body && data.body.results) {

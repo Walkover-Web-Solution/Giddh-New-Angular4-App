@@ -36,7 +36,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-	constructor(private _store: Store<AppState>,
+	constructor(private store: Store<AppState>,
 		private _fb: FormBuilder,
 		private _toaster: ToasterService,
 		private _invoiceActions: InvoiceActions, private recurringVoucherService: RecurringVoucherService) {
@@ -76,7 +76,6 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 	}
 
 	public ngOnInit() {
-        this._store.dispatch(this._invoiceActions.resetRecurringInvoice());
 
 		this.intervalOptions = [
             { label: 'Weekly', value: 'weekly' },
@@ -94,12 +93,13 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 			{ label: '4th', value: '4' },
 			{ label: '5th', value: '5' },
         ];
-        
-		this._store.pipe(select(state => state.invoice.recurringInvoiceData), takeUntil(this.destroyed$)).subscribe(response => {
+
+		this.store.pipe(select(state => state.invoice.recurringInvoiceData), takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = response.isRequestInFlight;
             this.isDeleteLoading = response.isDeleteRequestInFlight;
             if (response.isRequestSuccess) {
                 this.closeAsidePane(null);
+                this.store.dispatch(this._invoiceActions.resetRecurringInvoiceRequest());
             }
         });
 	}
@@ -111,7 +111,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 
 	public deleteInvoice() {
         this.isDeleteLoading = true;
-        
+
         this.recurringVoucherService.deleteRecurringVouchers(this.invoice.uniqueName).subscribe(response => {
             if(response) {
                 this.isDeleteLoading = null;
@@ -157,9 +157,9 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 				invoiceModel.voucherType = this.voucherType;
 			}
 			if (this.mode === 'update') {
-				this._store.dispatch(this._invoiceActions.updateRecurringInvoice(invoiceModel));
+				this.store.dispatch(this._invoiceActions.updateRecurringInvoice(invoiceModel));
 			} else {
-				this._store.dispatch(this._invoiceActions.createRecurringInvoice(invoiceModel));
+				this.store.dispatch(this._invoiceActions.createRecurringInvoice(invoiceModel));
 			}
 		} else {
 			this._toaster.errorToast('All * fields should be valid and filled');

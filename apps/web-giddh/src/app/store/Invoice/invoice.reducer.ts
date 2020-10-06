@@ -423,7 +423,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return s;
         }
         case INVOICE.RECURRING.DELETE_RECURRING_INVOICE: {
-            const s = { ...state, recurringInvoiceData: { ...state.recurringInvoiceData, isDeRequestInFlight: true, isRequestSuccess: false } };
+            const s = { ...state, recurringInvoiceData: { ...state.recurringInvoiceData, isDeleteRequestInFlight: true, isRequestSuccess: false } };
             return s;
         }
         case INVOICE.RECURRING.DELETE_RECURRING_INVOICE_RESPONSE: {
@@ -463,6 +463,10 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             return Object.assign({}, state, {
                 isInvoiceGenerated: true
             });
+        }
+        case INVOICE.RECURRING.RESET_RECURRING_INVOICE_REQUEST: {
+            const newState = { ...state, recurringInvoiceData: { ...state.recurringInvoiceData, isRequestInFlight: false, isRequestSuccess: false, isDeleteRequestInFlight: false } };
+            return newState;
         }
         case INVOICE_ACTIONS.DOWNLOAD_INVOICE_EXPORTED: {
             let newState = _.cloneDeep(state);
@@ -535,10 +539,6 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             newState.isBulkInvoiceGenerated = true;
             newState.isInvoiceGenerated = true;
             return Object.assign({}, state, newState);
-        }
-        case INVOICE.RECURRING.RESET_RECURRING_INVOICE: {
-            const s = { ...state, recurringInvoiceData: { ...state.recurringInvoiceData, isRequestInFlight: false, isRequestSuccess: false } };
-            return s;
         }
         default: {
             return state;

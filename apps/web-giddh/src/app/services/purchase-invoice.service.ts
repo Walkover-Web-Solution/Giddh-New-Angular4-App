@@ -149,7 +149,7 @@ export class PurchaseInvoiceService {
             uniqueNames: [model.entryUniqueName],
             taxes: model.taxes
         };
-        return this._http.post(this.config.apiUrl + PURCHASE_INVOICE_API.GENERATE_PURCHASE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', model.account.uniqueName), dataToSend).pipe(map((res) => {
+        return this._http.post(this.config.apiUrl + PURCHASE_INVOICE_API.GENERATE_PURCHASE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(model.account.uniqueName)), dataToSend).pipe(map((res) => {
             let data: BaseResponse<IInvoicePurchaseItem, string> = res;
             data.queryString = {};
             return data;
@@ -218,7 +218,7 @@ export class PurchaseInvoiceService {
             uniqueNames: entryUniqueName,
             taxes: taxUniqueName
         };
-        return this._http.put(this.config.apiUrl + PURCHASE_INVOICE_API.INVOICE_API.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), req).pipe(map((res) => {
+        return this._http.put(this.config.apiUrl + PURCHASE_INVOICE_API.INVOICE_API.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), req).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.queryString = {};
             return data;
@@ -236,7 +236,7 @@ export class PurchaseInvoiceService {
             availItc: model.availItc
         };
 
-        return this._http.patch(this.config.apiUrl + PURCHASE_INVOICE_API.UPDATE_PURCHASE_ENTRY.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':ledgerUniqueName', ledgerUniqname), req).pipe(map((res) => {
+        return this._http.patch(this.config.apiUrl + PURCHASE_INVOICE_API.UPDATE_PURCHASE_ENTRY.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':ledgerUniqueName', ledgerUniqname), req).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.queryString = {};
             return data;
@@ -253,7 +253,7 @@ export class PurchaseInvoiceService {
             sendToGstr2: model.sendToGstr2
         };
 
-        return this._http.patch(this.config.apiUrl + PURCHASE_INVOICE_API.UPDATE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':ledgerUniqueName', ledgerUniqname), req).pipe(map((res) => {
+        return this._http.patch(this.config.apiUrl + PURCHASE_INVOICE_API.UPDATE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':ledgerUniqueName', ledgerUniqname), req).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.queryString = {};
             return data;
