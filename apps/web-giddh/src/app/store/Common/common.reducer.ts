@@ -46,14 +46,6 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
                 });
             }
             return Object.assign({}, state, {});
-        case CommonActions.GET_CURRENCY_RESPONSE:
-            let currencies: BaseResponse<CurrencyResponse[], string> = action.payload;
-            if (currencies.status === 'success') {
-                return Object.assign({}, state, {
-                    currencies: currencies.body
-                });
-            }
-            return Object.assign({}, state, {});
 
         case CommonActions.GET_CALLING_CODES_RESPONSE:
             let callingcodes: BaseResponse<CallingCodesResponse, string> = action.payload;
