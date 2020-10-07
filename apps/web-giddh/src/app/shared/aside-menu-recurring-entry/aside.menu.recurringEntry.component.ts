@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from "../../services/toaster.service";
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
 	selector: 'app-aside-recurring-entry',
@@ -34,7 +35,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-	constructor(private _store: Store<AppState>,
+	constructor(private store: Store<AppState>,
 		private _fb: FormBuilder,
 		private _toaster: ToasterService,
 		private _invoiceActions: InvoiceActions) {
@@ -89,13 +90,14 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 			{ label: '4th', value: '4' },
 			{ label: '5th', value: '5' },
 		];
-		this._store.select(p => p.invoice.recurringInvoiceData)
+		this.store.pipe(select(p => p.invoice.recurringInvoiceData), takeUntil(this.destroyed$))
 			.subscribe(p => {
 				this.isLoading = p.isRequestInFlight;
 				this.isDeleteLoading = p.isDeleteRequestInFlight;
 				if (p.isRequestSuccess) {
 					this.closeAsidePane(null);
-				}
+                    this.store.dispatch(this._invoiceActions.resetRecurringInvoiceRequest());
+                }
 			});
 	}
 
@@ -106,7 +108,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 
 	public deleteInvoice() {
 		this.isDeleteLoading = true;
-		this._store.dispatch(this._invoiceActions.deleteRecurringInvoice(this.invoice.uniqueName));
+		this.store.dispatch(this._invoiceActions.deleteRecurringInvoice(this.invoice.uniqueName));
 	}
 
 	public isExpirableChanged({ checked }) {
@@ -141,9 +143,9 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
 				invoiceModel.voucherType = this.voucherType;
 			}
 			if (this.mode === 'update') {
-				this._store.dispatch(this._invoiceActions.updateRecurringInvoice(invoiceModel));
+				this.store.dispatch(this._invoiceActions.updateRecurringInvoice(invoiceModel));
 			} else {
-				this._store.dispatch(this._invoiceActions.createRecurringInvoice(invoiceModel));
+				this.store.dispatch(this._invoiceActions.createRecurringInvoice(invoiceModel));
 			}
 		} else {
 			this._toaster.errorToast('All * fields should be valid and filled');
