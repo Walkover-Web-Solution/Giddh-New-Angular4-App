@@ -10545,17 +10545,21 @@ body.prevent-body-scroll {
 .modal.fade.giddh-calendar.show {
     z-index: 999999;
 }
-*::-webkit-scrollbar {
+*::-webkit-scrollbar,
+*::-moz-scrollbar {
   width: 10px;
 }
 
 /* Track */
-*::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track,
+*::-moz-scrollbar-track{
   background: $white-smoke;
 }
 
 /* Handle */
-*::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb,
+*::-moz-scrollbar-thumb{
   background:  $nobel;
   border-radius: 5px;
+  min-height: 60px;
 }
