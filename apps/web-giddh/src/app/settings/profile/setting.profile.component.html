@@ -265,7 +265,8 @@
 
 
 <!--Tabs of Company Profile-->
-<!--<tabset #staticTabs>
+<div *ngIf="isNewCompanyProfile">
+<tabset #staticTabs>
     <tab heading="Personal Information">
         <div class="container-fluid">
             <div class="row mr-0 ml-0">
@@ -332,18 +333,18 @@
                             <input type="text" class="form-control">
                         </div>
                     </div>
-                </div>-->
+                </div>
                 <!-- branch profile element start -->
-                <!--<div class="row" *ngIf="isBranchElement">
+                <div class="row" *ngIf="isBranchElement">
                     <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
                         <div class="form-group">
                             <label>Alias</label>
                             <input type="text" class="form-control">
                         </div>
                     </div>
-                </div>-->
+                </div>
                 <!-- branch profile element end -->
-            <!--</div>
+            </div>
         </div>
     </tab>
     <tab heading="Address/GSTIN">
@@ -352,14 +353,14 @@
                 <div class="col-md-12 d-flex justify-content-between mt-1 mb-4 align-items-center address-list-top">
                     <div class="font-14">List of all the addresses created and linked in the company</div>
                     <button type="button" class="btn btn-sky-blue" (click)="openAddAndManage()">+ Add Address</button>
-                </div>-->
+                </div>
                 <!-- branch profile element start -->
-                <!--<div *ngIf="isBranchElement" class="col-md-12 d-flex justify-content-between mt-4 mb-4 align-items-center address-list-top">
+                <div *ngIf="isBranchElement" class="col-md-12 d-flex justify-content-between mt-4 mb-4 align-items-center address-list-top">
                     <div class="font-14">List of all the addresses created</div>
                     <button type="button" class="btn btn-sky-blue" (click)="openAddAndManage()">+ Add Address</button>
-                </div> -->
+                </div>
                 <!-- branch profile element end -->
-                <!--<div class="col-md-12">
+               <div class="col-md-12">
                     <div class="table-responsive">
                             <table class="table basic table-bordered giddh-table on-mobile-view">
                                 <thead>
@@ -432,9 +433,9 @@
                                 </tbody>
                                 </table>
                     </div>
-                </div>-->
+                </div>
                 <!-- branch profile element start -->
-                <!--<div class="branch-profile-address-content col-md-12">
+                <div *ngIf="isBranchElement" class="branch-profile-address-content col-md-12">
                     <div class="single-branch-detail mb-15">
                         <h4><i class="icon-branch-icon"></i>Address Name Dummy</h4>
                         <div class="row">
@@ -455,9 +456,9 @@
                             </div>
                         </div>
                     </div>
-                </div>-->
+                </div>
                 <!-- branch profile element end -->
-                <!--<div class="col-md-12 text-center">
+                <div class="col-md-12 text-center">
                     <pagination></pagination>
                 </div>
                 </div>
@@ -468,9 +469,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="border-bottom font-14">
-                        <p class="pt-15 pb-15"> All the information will save in <strong>Lorem Ipsum Company Name</strong></p>-->
-                        <!-- branch profile element start -->
-                        <!--<div class="other-detail-section">
+                    <p class="pt-15 pb-15"> All the information will save in <strong>Lorem Ipsum Company Name</strong></p>
+                    <!-- branch profile element start -->
+                        <div class="other-detail-section" *ngIf="isBranchElement">
                             <div class="mb-15">
                                 <label>Number System</label> <span>1,00,00,000</span>
                             </div>
@@ -480,9 +481,9 @@
                             <div class="mb-15">
                                 <label>Number System</label> <span>(GMT 5:30) India Standard Time (Asia/Calcutta)</span>
                             </div>
-                        </div>-->
+                        </div>
                         <!-- branch profile element end -->
-                    <!--</div>
+                    </div>
 
                     </div>
 
@@ -531,12 +532,16 @@
             </div>
         </div>
     </tab>
-</tabset>-->
+</tabset>
+
+
 
 
 <!-- Create address part of Address Tab -->
-<!--<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
 <div class="abc " *ngIf="accountAsideMenuState === 'in'">
     <create-address class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)">
 </create-address>
-</div>-->
+</div>
+
+</div>

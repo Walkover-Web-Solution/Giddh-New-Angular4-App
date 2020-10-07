@@ -42,7 +42,7 @@ import { IOption } from '../../theme/ng-select/option.interface';
 export class WarehouseComponent implements OnInit, OnDestroy {
 
 
-    public isBranchElemnt: boolean = false;
+    public isBranchElemnt: boolean = true;
     /** Image path relative to app environment */
     public imgPath: string = '';
     /** Stores item on boarding details */

@@ -22,7 +22,7 @@
             <div class="col-lg-2 col-sm-2">
                 <div class="warehouse-image">
                     <img src="../../../assets/images/warehouse-image.svg" alt="warehouse image">
-                    <img *ngIf="isBranchElemnt" src="../../../assets/images/branch-image.svg" alt="Brnach image">
+                    <img class="branch-image" *ngIf="isBranchElemnt" src="../../../assets/images/branch-image.svg" alt="Brnach image">
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@
             </label>
             <input type="text" class="form-control" placeholder="Enter Alias">
             <span class="ml-2">
-                <input type="checkbox" class="mr-15"> Is it a Sub-Branch ?
+                <input type="checkbox" class="mr-4"> Is it a Sub-Branch ?
             </span>
         </div>
         <div  *ngIf="isBranchElemnt" class="warehouse-form-field">
@@ -94,26 +94,26 @@
                 <input type="checkbox" class="mr-4"><span> Does it has sub-location / Division ?</span>
             </div>
         </div>
-        <div class="warehouse-form-field">
-            <label>
-                Sub - Location
-            </label>
-            <div class="d-flex flex-column sub-location-input">
-                <div class="d-flex align-item-center flex-row mb-15">
-                    <input type="text" class="form-control" placeholder="Enter Name">
-                    <i class="icon-trash"></i>
-                </div>
-                <div class="d-flex align-item-center flex-row mb-15">
-                    <input type="text" class="form-control" placeholder="Enter Name">
-                    <i class="icon-plus"></i>
+            <div class="warehouse-form-field">
+                <label>
+                    Sub - Location
+                </label>
+                <div class="d-flex flex-column sub-location-input">
+                    <div class="d-flex align-item-center flex-row mb-15">
+                        <input type="text" class="form-control" placeholder="Enter Name">
+                        <i class="icon-trash"></i>
+                    </div>
+                    <div class="d-flex align-item-center flex-row mb-15">
+                        <input type="text" class="form-control" placeholder="Enter Name">
+                        <i class="icon-plus"></i>
+                    </div>
                 </div>
             </div>
-        </div>
     </div>
     <div class="footer-btn row">
         <div class="button-group">
             <button class="btn btn-primary mr-15">Clear</button>
-            <button class="btn btn-success" (click)="openCreateAddressAside()">Create Warehouse</button>
+            <button class="btn btn-success">Create Warehouse</button>
             <!-- create branch button start -->
             <button *ngIf="isBranchElemnt" class="btn btn-success">Create Branch</button>
             <!-- create branch button end -->
@@ -163,6 +163,8 @@
                                         <li role="menuitem" (click)="editWarehouse(warehouse)"><a
                                                 class="dropdown-item warehouse-options">Edit</a>
                                         </li>
+                                        <!--
+                                            not in V1, Will use it V2, don't remove code
                                         <li role="menuitem">
                                             <a>Archive</a>
                                         </li>
@@ -172,6 +174,7 @@
                                         <li role="menuitem">
                                             <a>Delete</a>
                                         </li>
+                                    -->
                                     </ul>
                                 </div>
                             </div>
@@ -208,6 +211,8 @@
                                         </ul>
                                     </div>
                                 </div>
+                                <!--
+                                **** hidden warehouse sublocation code for v1 , will use it on v2 dont' remove
                                 <div class="col-sm-6">
                                     <div class="linked-details">
                                         <label>Sub - Location:</label>
@@ -215,7 +220,7 @@
                                             <li><i class="icon-warehouse-icon mr-05"></i>Floor 1, Floor 2, Floor 3</li>
                                         </ul>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
