@@ -54,6 +54,7 @@ export interface IGstObj {
     ]
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
+    public isBranchElement: boolean = false;
 
     public countrySource: IOption[] = [];
     public countrySource$: Observable<IOption[]> = observableOf([]);
@@ -680,7 +681,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             document.querySelector('body').classList.remove('fixed');
         }
     }
-    
+
 
     /**
      * This will return the state code/name if available

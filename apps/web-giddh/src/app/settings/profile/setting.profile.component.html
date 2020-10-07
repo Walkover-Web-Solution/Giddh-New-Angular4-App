@@ -264,7 +264,7 @@
 
 
 <!--Tabs of Company Profile-->
-<!--<tabset #staticTabs>
+<tabset #staticTabs>
     <tab heading="Personal Information">
         <div class="container-fluid">
             <div class="row mr-0 ml-0">
@@ -304,8 +304,16 @@
                                 <div class="font-14">LoremCompanyNameDummy Text</div>
                         </div>
                 </div>
+                <div class="row pb-1 parent-name">
+                    <div class="col-md-3 col-sm-12 col-lg-3 col-xl-2">
+                        <label class="font-14">Parent:</label>
+                    </div>
+                    <div class="col-md-4 col-sm-12 col-lg-4 col-xl-3">
+                        <div class="font-14">Lorem Alias NameDummy Text (Registered)</div>
+                    </div>
+                </div>
                 <div class="row country-name">
-                        <div class="col-md-3 col-sm-12 col-lg-3 col-xl-2 ">
+                        <div class="col-md-3 col-sm-12 col-lg-3 col-xl-2">
                                 <label class="font-14">Country & Currency:</label>
                         </div>
                         <div class="col-md-4 col-sm-12 col-lg-4 col-xl-3">
@@ -313,12 +321,27 @@
                         </div>
                 </div>
                 </div>
-                <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
-                    <div class="form-group">
-                        <label>GST Type</label>
-                        <input type="text" class="form-control">
+
+            </div>
+            <div class="personal-other-deatils">
+                <div class="row">
+                    <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
+                        <div class="form-group">
+                            <label>GST Type</label>
+                            <input type="text" class="form-control">
+                        </div>
                     </div>
                 </div>
+                <!-- branch profile element start -->
+                <div class="row" *ngIf="isBranchElement">
+                    <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
+                        <div class="form-group">
+                            <label>Alias</label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <!-- branch profile element end -->
             </div>
         </div>
     </tab>
@@ -329,6 +352,12 @@
                     <div class="font-14">List of all the addresses created and linked in the company</div>
                     <button type="button" class="btn btn-sky-blue" (click)="openAddAndManage()">+ Add Address</button>
                 </div>
+                <!-- branch profile element start -->
+                <div *ngIf="isBranchElement" class="col-md-12 d-flex justify-content-between mt-4 mb-4 align-items-center address-list-top">
+                    <div class="font-14">List of all the addresses created</div>
+                    <button type="button" class="btn btn-sky-blue" (click)="openAddAndManage()">+ Add Address</button>
+                </div>
+                <!-- branch profile element end -->
                 <div class="col-md-12">
                     <div class="table-responsive">
                             <table class="table basic table-bordered giddh-table on-mobile-view">
@@ -379,7 +408,7 @@
                                                         </div>
                                                 </td>
                                                 <td data-title="State">
-                                                    <div>MP - Madhya Pradesh</div> 
+                                                    <div>MP - Madhya Pradesh</div>
                                                 </td>
                                                 <td data-title="Linked with">
                                                     <div class="d-flex">
@@ -388,7 +417,7 @@
                                                             <span class="pb-1">Alias Branch Name</span>
                                                             <span>Alias Warehouse Name</span>
                                                             </div>
-                                                            
+
                                                             <div class="ml-auto">
                                                                     <div class="action-icon">
                                                                             <a><span class="icon-edit"></span></a>
@@ -398,11 +427,35 @@
                                                         </div>
                                                 </td>
                                     </tr>
-                                
+
                                 </tbody>
                                 </table>
                     </div>
                 </div>
+                <!-- branch profile element start -->
+                <div class="branch-profile-address-content col-md-12">
+                    <div class="single-branch-detail mb-15">
+                        <h4><i class="icon-branch-icon"></i>Address Name Dummy</h4>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Address:</label>
+                                <p>WALKOVER, 405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash Hospital, Indore-452080, MP, GSTIN: 23IDJHFOSD435</p>
+                            </div>
+                            <div class="col-md-4 mb-1">
+                                <label>State:</label>
+                                <p>MP-Madhya Pradesh</p>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="set-default">
+                                    <p class="no-selected mb-1 cursor-pointer" hidden><i class="icon-no-selected mr-05"></i>Set as Default</p>
+                                    <p class="selected-defualt mb-1 cursor-pointer"><i class="icon-favorite-selected mr-05"></i>Set as Default</p>
+                                    <p><i class="icon-unlink mr-05 cursor-pointer"></i>Unlink Address</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- branch profile element end -->
                 <div class="col-md-12 text-center">
                     <pagination></pagination>
                 </div>
@@ -413,11 +466,23 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="border-bottom pt-2 pb-2 font-14">
-                            All the information will save in <strong>Lorem Ipsum Company Name</strong>
+                    <div class="border-bottom font-14">
+                       <p class="pt-15 pb-15"> All the information will save in <strong>Lorem Ipsum Company Name</strong></p>
+                        <div class="other-detail-section">
+                            <div class="mb-15">
+                                <label>Number System</label> <span>1,00,00,000</span>
+                            </div>
+                            <div class="mb-15">
+                                <label>Date Format</label> <span>DD/MM/YYYY (15/09/2020)</span>
+                            </div>
+                            <div class="mb-15">
+                                <label>Number System</label> <span>(GMT 5:30) India Standard Time (Asia/Calcutta)</span>
+                            </div>
                         </div>
                     </div>
-        
+
+                    </div>
+
             </div>
             <div class="row mt-2 pb-2">
             <div class="col-lg-12 col-xl-7 other-information">
@@ -463,12 +528,12 @@
             </div>
         </div>
     </tab>
-</tabset>-->
+</tabset>
 
 
 <!-- Create address part of Address Tab -->
 <!--<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-<div class="abc " *ngIf="accountAsideMenuState === 'in'">
+<div *ngIf="accountAsideMenuState === 'in'">
     <aside-address-account [activeGroupUniqueName]="selectedGroupForCreateAcc"  class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane()">
     </aside-address-account>
 </div>-->
