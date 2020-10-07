@@ -61,10 +61,14 @@
     }
 }
 
-.unique-name, .country-name{
+.unique-name, .country-name , .parent-name{
     color: $dark-gray;
 }
-
+.personal-other-deatils{
+    label{
+        line-height: 2.3;
+    }
+}
 .img-size{
     color: $gray;
 }
@@ -164,8 +168,6 @@
     }
 /////////////////////////////////////////////
 
-    
-
 @media(max-width:768px){
     .multicurrency-checkbox{
         display: block !important;
@@ -188,5 +190,51 @@
     .number-system{
         flex-flow: column;
         display: flex;
+    }
+}
+/*branch address design*/
+.branch-profile-address-content{
+    background-color: $white;
+    border: 1px solid $gainsboro;
+    padding: 15px;
+    .single-branch-detail {
+        font-size: 14px;
+        h4{
+            font-size: 16px;
+            font-family: 'opensans-bold';
+            margin-bottom: 10px;
+            color: $midnight-blue;
+            i{
+                margin-right:10px;
+            }
+        }
+        label{
+            color:$gray;
+            line-height: 2.3;
+        }
+        .set-default{
+            .selected-defualt{
+                i{
+                    color: $chetwode-blue;
+                }
+            }
+            .icon-unlink{
+                color: $gray;
+            }
+        }
+    }
+}
+/*branch other tab design*/
+.other-detail-section{
+    color: $dark-gray;
+    label{
+        min-width: 200px;
+    }
+}
+@media(max-width:575px){
+    .other-detail-section {
+        label{
+            min-width: 100%;
+        }
     }
 }
