@@ -79,7 +79,7 @@ export class SearchService {
         const companyUniqueName = this._generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_DETAIL}`
         .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-        .replace(':accountUniqueName', uniqueName);
+        .replace(':accountUniqueName', encodeURIComponent(uniqueName));
         if (params) {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&'

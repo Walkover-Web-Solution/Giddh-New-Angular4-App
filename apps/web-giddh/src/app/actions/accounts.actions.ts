@@ -16,7 +16,7 @@ import { CustomActions } from '../store/customActions';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { Observable } from 'rxjs';
-import { ApplyDiscountRequest, AssignDiscountRequestForAccount } from '../models/api-models/ApplyDiscount';
+import { ApplyDiscountRequest, AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
 import {IUpdateDbRequest} from "../models/interfaces/ulist.interface";
 
 @Injectable()
@@ -61,14 +61,15 @@ export class AccountsAction {
     public static MERGE_ACCOUNT_RESPONSE = 'AccountMergeResponse';
     public static APPLY_ACCOUNT_DISCOUNT = 'ApplyAccountDiscount';
     public static APPLY_ACCOUNT_DISCOUNT_RESPONSE = 'ApplyAccountDiscountResponse';
+    public static APPLY_ACCOUNT_DISCOUNTS_V2 = 'ApplyAccountDiscountv2';
+    public static APPLY_ACCOUNT_DISCOUNT_RESPONSE_V2 = 'ApplyAccountDiscountResponsesv2';
     // public static DELETE_ACCOUNT_DISCOUNT = 'DeleteAccountDiscount';
     // public static DELETE_ACCOUNT_DISCOUNT_RESPONSE = 'DeleteAccountDiscountResponse';
 
     public static UNMERGE_ACCOUNT = 'AccountUnMerge';
     public static UNMERGE_ACCOUNT_RESPONSE = 'AccountUnMergeResponse';
     public static ASSIGN_DISCOUNT_TO_ACCOUNT = 'ASSIGN_DISCOUNT_TO_ACCOUNT';
-
-
+    public static RESET_SHARE_ENTITY = 'RESET_SHARE_ENTITY';
 
     public ApplyAccountTax$: Observable<Action> = createEffect( ()=> this.action$
         .pipe(
@@ -651,6 +652,26 @@ export class AccountsAction {
                 };
             })));
 
+    @Effect()
+    public ApplyAccountDiscountsV2$: Observable<Action> = this.action$
+        .pipe(ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNTS_V2),
+            switchMap((action: CustomActions) => this._accountService.applyDiscounts(action.payload)),
+            map(response => {
+                return this.applyAccountDiscountResponseV2(response);
+            }));
+
+    @Effect()
+    public ApplyAccountDiscountResponseV2$: Observable<Action> = this.action$
+        .pipe(ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNT_RESPONSE_V2),
+            map((action: CustomActions) => {
+                let data: BaseResponse<string, AssignDiscountRequestForAccount> = action.payload;
+                if (action.payload.status === 'error') {
+                    this._toasty.errorToast(action.payload.message, action.payload.code);
+                } else if(action.payload.status === 'success') {
+                    this._toasty.successToast('Discount Linked Successfully', action.payload.status);
+                }
+                return { type: 'EmptyAction' };
+            }));
     constructor(private action$: Actions,
         private _accountService: AccountService,
         private _toasty: ToasterService,
@@ -917,6 +938,19 @@ export class AccountsAction {
     //         payload: value
     //     };
     // }
+    public applyAccountDiscountV2(value: ApplyDiscountRequestV2[]): CustomActions {
+        return {
+            type: AccountsAction.APPLY_ACCOUNT_DISCOUNTS_V2,
+            payload: value
+        };
+    }
+
+    public applyAccountDiscountResponseV2(value: BaseResponse<string, ApplyDiscountRequestV2>): CustomActions {
+        return {
+            type: AccountsAction.APPLY_ACCOUNT_DISCOUNT_RESPONSE_V2,
+            payload: value
+        };
+    }
 
     public deleteAccount(accountUniqueName: string, groupUniqueName: string): CustomActions {
         return {
@@ -964,5 +998,11 @@ export class AccountsAction {
             type: AccountsAction.UNMERGE_ACCOUNT_RESPONSE,
             payload: value
         };
+    }
+
+    public resetShareEntity(): CustomActions {
+        return {
+            type: AccountsAction.RESET_SHARE_ENTITY
+        }
     }
 }

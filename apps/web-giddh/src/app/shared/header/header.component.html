@@ -220,11 +220,12 @@
                 <div class="col-sm-9">
                     <div class="pull-right right-details">
                         <ul class="nav universal-date mr-15" *ngIf="(selectedCompany | async)">
-                            <li class="border-none" [ngClass]="{'notification': !isMobileSite}">
+                            <li class="border-none pr-15" [ngClass]="{'notification': !isMobileScreen}">
                                 <img src="{{imgPath}}notification.svg">
                             </li>
-                            <li [hidden]="isTodaysDateSelected" class="border-none pl-0">
-                                <button class="btn btn-link" (click)="dateSelectedCallback()">Today</button>
+                            <li class="border-none pl-0">
+                                <button class="btn btn-link" *ngIf="!isTodaysDateSelected" (click)="dateSelectedCallback()">Go back to Today</button>
+                                <button class="btn btn-link" *ngIf="isTodaysDateSelected" (click)="showGiddhDatepicker($event)">Today</button>
                             </li>
                             <li class="not-today cursor-pointer">
                                 <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
@@ -466,8 +467,9 @@
 
                 <div class="lower-layer-header">
                     <ul class="nav universal-date  pull-left" *ngIf="(selectedCompany | async)">
-                        <li [hidden]="isTodaysDateSelected" class="border-none pl-0">
-                            <button class="btn btn-link">Today</button>
+                        <li class="border-none pl-0">
+                            <button class="btn btn-link" *ngIf="!isTodaysDateSelected" (click)="dateSelectedCallback()">Go back to Today</button>
+                            <button class="btn btn-link" *ngIf="isTodaysDateSelected" (click)="showGiddhDatepicker($event)">Today</button>
                         </li>
                         <li class="daterang-picker not-today cursor-pointer">
                             <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>

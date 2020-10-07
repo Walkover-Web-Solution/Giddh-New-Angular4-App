@@ -70,8 +70,8 @@ import { CountryRequest, CurrentPage, OnboardingFormRequest } from '../../models
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
-import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { SettingsProfileService } from '../../services/settings.profile.service';
+import { CompanyService } from '../../services/companyService.service';
 
 @Component({
     selector: 'app-header',
@@ -301,10 +301,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private generalService: GeneralService,
         private commonActions: CommonActions,
         private location: Location,
-        private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private settingsProfileService: SettingsProfileService
+        private settingsProfileService: SettingsProfileService,
+        private companyService: CompanyService
     ) {
-        this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         /* This will get the date range picker configurations */
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
             if (config) {
@@ -479,7 +478,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngOnInit() {
         this.getCurrentCompanyData();
-        this.store.dispatch(this.companyActions.RefreshCompanies());
         
         this._breakpointObserver.observe([
             '(max-width: 767px)'
@@ -514,10 +512,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.userName = u.name[0] + u.name[1];
                     this.userFullName = name;
                 }
-
-                this.store.dispatch(this.loginAction.renewSession());
             }
-
         });
 
         if (this.isSubscribedPlanHaveAdditionalCharges) {
@@ -713,8 +708,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.totalNumberOfcompanies$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.totalNumberOfcompanies = res;
         });
-        this.getPartyTypeForCreateAccount();
-        this.getAllCountries();
 
         this.updateIndexDbSuccess$.subscribe(res => {
             if (res) {
@@ -725,7 +718,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     });
                 }
             }
-        })
+        });
+
+        this.companyService.CurrencyList().subscribe(response => {
+            if (response && response.status === 'success' && response.body) {
+                this.store.dispatch(this.loginAction.SetCurrencyInStore(response.body));
+            }
+        });
     }
 
     /**
@@ -827,7 +826,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (this.isTodaysDateSelected) {
                     let today = cloneDeep([moment(), moment()]);
                     this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-                    this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 } else {
                     this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                     this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -1649,16 +1648,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
-    public getPartyTypeForCreateAccount() {
-        this.store.dispatch(this.commonActions.GetPartyType());
-    }
-
-    public getAllCountries() {
-        let countryRequest = new CountryRequest();
-        countryRequest.formName = '';
-        this.store.dispatch(this.commonActions.GetAllCountry(countryRequest));
-    }
-
     public removeCompanySessionData() {
         this.generalService.createNewCompany = null;
         this.store.dispatch(this.commonActions.resetCountry());
@@ -1851,7 +1840,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             let today = cloneDeep([moment(), moment()]);
             // this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
             this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-            this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
             let dates = {
                 fromDate: null,
                 toDate: null,
