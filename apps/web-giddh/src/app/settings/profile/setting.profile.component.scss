@@ -19,18 +19,21 @@
 .custom-select{
     padding:0 !important;
 }
-.form-group{
-    .input-group {
-        .input-group-addon {
-        border-left: 1px solid $very-light-gray !important;
-    }
-    input{
-            border-left: none !important;
-            border-right: none !important;
-        }
-    }
 
-}
+.profile-form{
+    .form-group{
+        .input-group {
+            .input-group-addon {
+            border-left: 1px solid $very-light-gray !important;
+        }
+        input{
+                border-left: none !important;
+                border-right: none !important;
+            }
+        }
+    
+    }
+} 
 
 
 ///////////////// personal info css ////////////////
@@ -111,6 +114,13 @@
                 display: flex !important;
             }
         }
+    }
+}
+
+.linked-with{
+    i{
+        color: $gray;
+        margin-right:5px;
     }
 }
 
