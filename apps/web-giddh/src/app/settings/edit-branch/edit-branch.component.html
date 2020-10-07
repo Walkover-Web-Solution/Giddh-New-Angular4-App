@@ -1,57 +1,58 @@
-<!-- create address sidebar in address-->
-<!--<form #formDiv class="row" [formGroup]="addStockForm" novalidate="" autocomplete="off">
-
+<div class="aside-pane">
+    <form autocomplete="off">
         <section class="w-100">
             <div>
                 <div class="form-header">
-                    <h3 *ngIf="!isUpdatingStockForm">Create Address</h3>
+                    <h3>Edit Branch</h3>
                 </div>
                 <button id="close" (click)="closeAsidePane()"><i class="icon-cross"></i></button>
-    
+
                 <div class="aside-body">
                     <section class="aside-pane-form clearfix mrBChldLbl">
-                        <div class="font-14">
-                                All the information will save in <strong>Lorem Ipsum Company Name</strong>
-                        </div>
-                        <br>
                         <div class="form_bg clearfix">
                             <div class="row">
                                 <div class="form-group col-12">
-                                    <label>Name <sup>*</sup></label>
+                                    <label>Branch Name</label>
                                     <input type="text" class="form-control" placeholder="Enter">
                                 </div>
                             </div>
-    
-                            <div class="clearfix row">
-                                <div class="form-group col-12">
-                                    <label>Address</label>
-                                    <textarea type="text" name="name" class="form-control" formControlName="name" placeholder="Enter Address"></textarea>
-                                </div>
-                            </div>
+
                             <div class="row">
                                 <div class="col-sm-4 form-group">
-                                    <label>GSTIN</label>
-                                    <input type="text" class="form-control" placeholder="Enter GSTIN">
+                                    <label>Alias <sup>*</sup></label>
+                                    <input type="text" class="form-control">
                                 </div>
                                 <div class="col-sm-8 form-group">
-                                    <label>State <sup>*</sup></label>
+                                    <label>Time Zone</label>
                                     <input type="text" class="form-control">
                                 </div>
                             </div>
-    
-                            <div class="row">
-                                <div class="col-sm-12 form-group">
-                                    <label>Link Entity</label>
-                                    <input type="text" class="form-control">
+
+                            <div class="clearfix row">
+                                <div class="form-group col-12">
+                                    <label>Linked Address/es</label>
+                                    <textarea type="text" name="name" class="form-control" formControlName="name"
+                                        placeholder="Enter Address"></textarea>
                                 </div>
                             </div>
+
+                            <div class="clearfix row">
+                            <div class="form-group mb-0 col-12">
+                                <div class="checkbox">
+                                        <label for="sub-branch">
+                                        <input type="checkbox" formcontrolname="sub-branch" id="sub-branch" name="sub-branch"> 
+                                        Is it a Sub-Branch ?</label>
+                                    </div>
+                                    </div>
                         </div>
-    
-    
+
+                        </div>
+
+
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 text-left">
                                 <div class="mt-5 pdL pdR">
-    
+
                                     <button type="submit" class="btn btn-success">Save
                                     </button>
                                     <button class="btn btn-danger">Cancel
@@ -61,14 +62,10 @@
                         </div>
                     </section>
                 </div>
-    
-    
             </div>
         </section>
-    
         <div class="clearfix"></div>
+    </form>
+</div>
 
-    
-    
-    </form>-->
 

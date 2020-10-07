@@ -1,4 +1,4 @@
-<div class="box clearfix mt-md-1" *ngIf="!(getCompanyProfileInProgress$ | async)">
+<!--<div class="box clearfix mt-md-1" *ngIf="!(getCompanyProfileInProgress$ | async)">
     <div class="row">
         <form (ngSubmit)="updateProfile(companyProfileObj)" class="col-lg-10 col-md-12 profile-form">
             <div class="row">
@@ -6,7 +6,7 @@
                     <label>Company Name</label><br>
                     <input type="text" placeholder="Company name" class="form-control" [(ngModel)]="companyProfileObj.name" name="name" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
                     <!-- (keydown)="keyDownSubject$.next($event)" -->
-                </div>
+               <!-- </div>
                 <div class="form-group col-lg-4 col-md-12 col-sm-12">
                     <label>Unique Name</label><br>
                     <input type="text" placeholder="Unique Name" [readonly]="true" class="form-control" [(ngModel)]="companyProfileObj.uniqueName" name="uniqueName" (keydown)="pushToUpdate($event);keyDownSubject$.next($event)" />
@@ -26,13 +26,13 @@
   <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo" #mobileNumberField
     (blur)="isValidMobileNumber(mobileNumberField)" name="contactNo" />
 </div> -->
-                </div>
+                <!--</div>
                 <div class="col-lg-4 col-md-12 col-sm-12 pd0 d-flex">
                     <div class="form-group col-sm-4 pdR0">
                         <label>Currency</label><br>
                         <div class="custom-select pos-rel">
                             <!--              <sh-select [options]="currencySource$ | async" placeholder="Currency" [isFilterEnabled]="true" name="baseCurrency" [(ngModel)]="companyProfileObj.baseCurrency" [defaultValue]="companyProfileObj.baseCurrency" (selected)="changeEventOfForm('baseCurrency')"></sh-select>-->
-                            <input type="text" placeholder="Currency" class="form-control" disabled [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" />
+                            <!--<input type="text" placeholder="Currency" class="form-control" disabled [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" />
                         </div>
 
                     </div>
@@ -65,7 +65,7 @@
                     </div>
                 </div>
             </div> -->
-                <div class="col-lg-4 col-md-12 col-sm-12">
+                <!--<div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group clearfix">
@@ -109,7 +109,7 @@
                             <label>Country</label><br>
                             <!--              <sh-select placeholder="Select Country" name="country_dd" [(ngModel)]="companyProfileObj.country"-->
                             <!--                [options]="countrySource$ | async" [ItemHeight]="33" (selected)="checkCountry($event)" [defaultValue]="companyProfileObj.countryV2.countryName"></sh-select>-->
-                            <input type="text" placeholder="Country" disabled class="form-control" *ngIf="companyProfileObj.countryV2 !== undefined" [(ngModel)]="companyProfileObj.countryV2.countryName" name="country" />
+                            <!--<input type="text" placeholder="Country" disabled class="form-control" *ngIf="companyProfileObj.countryV2 !== undefined" [(ngModel)]="companyProfileObj.countryV2.countryName" name="country" />
                         </div>
 
                         <div class="form-group select2-parent">
@@ -143,7 +143,7 @@
               </div>
             </div>
           </div> -->
-                </div>
+                <!--</div>
                 <div class="col-lg-4 col-md-12 col-sm-12 ">
                     <div class="row ">
                         <div class="form-group col-sm-12 col-md-12 col-lg-6 decimal-system">
@@ -152,12 +152,12 @@
                                 <sh-select [options]="decimalDigitSource " placeholder="select type " [isFilterEnabled]="true " name="digitafterdecimal " [(ngModel)]="companyProfileObj.balanceDecimalPlaces" (selected)="checkDigitAfterDecimal($event) "></sh-select>
                             </div>
                             <!-- <input type="text " placeholder="Currency " class="form-control " [(ngModel)]="companyProfileObj.baseCurrency " name="baseCurrency " /> -->
-                        </div>
+                        <!--</div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-6 decimal-system number-system">
                             <label>Number System</label><br>
                             <div class="custom-select pos-rel ">
                                 <!-- <sh-select [options]="numberSystemSource " placeholder="Select type " [isFilterEnabled]="true " name="numberSystem " [(ngModel)]="companyProfileObj.balanceDisplayFormat " (selected)="checkNumberSystem($event) "></sh-select> -->
-                                <sh-select #shnumberSystemSource [options]="numberSystemSource " name="numberSystem " [(ngModel)]="companyProfileObj.balanceDisplayFormat " (selected)="checkNumberSystem($event) " [placeholder]=" 'Select type'
+                                <!--<sh-select #shnumberSystemSource [options]="numberSystemSource " name="numberSystem " [(ngModel)]="companyProfileObj.balanceDisplayFormat " (selected)="checkNumberSystem($event) " [placeholder]=" 'Select type'
                                     " [ItemHeight]="41 ">
                                     <ng-template #optionTemplate let-option="option ">
                                         <ng-container>
@@ -169,7 +169,7 @@
                                 </sh-select>
                             </div>
                             <!-- <input type="text " placeholder="Currency " class="form-control " [(ngModel)]="companyProfileObj.baseCurrency " name="baseCurrency " /> -->
-                        </div>
+                        <!--</div>
                     </div>
                     <div class="form-group ">
                         <div *ngIf="companyProfileObj.branchCount>0" class="form-group">
@@ -177,13 +177,13 @@
                             <div class="custom-select pos-rel">
                                 <input type="text" [(ngModel)]="companyProfileObj.nameAlias" placeholder="Branch unique name" name="nameAlias" class="form-control" (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
                             <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
-                        </div>
+                        <!--</div>
                         <div *ngIf="companyProfileObj.branchCount==0" class="form-group">
                             <label>Headquarter Unique Name</label><br>
                             <div class="custom-select pos-rel">
                                 <input type="text" [(ngModel)]="companyProfileObj.nameAlias" placeholder="Headquarter unique name" name="nameAlias" class="form-control" (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
                             <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
-                        </div>
+                        <!--</div>
                     </div>
                 </div>
 
@@ -252,7 +252,7 @@
       </button>
             <button type="button" class="btn btn-primary" (click)="onReset()">Cancel</button>
         </div> -->
-        </form>
+        <!--</form>
     </div>
 </div>
 <div class="no-data mr-t2 loader-main" *ngIf="(getCompanyProfileInProgress$ | async)">
@@ -260,11 +260,11 @@
         <div class="cube1"></div>
         <div class="cube2"></div>
     </div>
-</div>
+</div>-->
 
 
 <!--Tabs of Company Profile-->
-<!--<tabset #staticTabs>
+<tabset #staticTabs>
     <tab heading="Personal Information">
         <div class="container-fluid">
             <div class="row mr-0 ml-0">
@@ -463,13 +463,13 @@
             </div>
         </div>
     </tab>
-</tabset>-->
+</tabset>
 
 
 <!-- Create address part of Address Tab -->
-<!--<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
 <div class="abc " *ngIf="accountAsideMenuState === 'in'">
-    <aside-address-account [activeGroupUniqueName]="selectedGroupForCreateAcc"  class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane()">
-    </aside-address-account>
-</div>-->
+    <create-address class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)">
+</create-address>
+</div>
 

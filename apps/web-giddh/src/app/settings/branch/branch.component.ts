@@ -67,6 +67,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public universalDate$: Observable<any>;
     public dateRangePickerValue: Date[] = [];
     public isAttachmentExpanded: boolean = false;
+    public accountAsideMenuState: string = 'out';
 
     constructor(
         private store: Store<AppState>,
@@ -338,4 +339,27 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.dispatch(this.commonActions.resetCountry());
         this.store.dispatch(this.companyActions.removeCompanyCreateSession());
     }
+
+    public openEditBranch() {
+        this.toggleAccountAsidePane();
+    }
+
+    public toggleAccountAsidePane(event?): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+
+        this.toggleBodyClass();
+    }
+
+
+    public toggleBodyClass() {
+        if (this.accountAsideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+    
 }
