@@ -10564,4 +10564,5 @@ body.prevent-body-scroll {
 *::-webkit-scrollbar-thumb {
   background:  $nobel;
   border-radius: 5px;
+  min-height: 60px;
 }
