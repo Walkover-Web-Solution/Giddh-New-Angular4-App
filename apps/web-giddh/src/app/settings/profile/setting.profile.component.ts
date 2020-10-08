@@ -54,7 +54,7 @@ export interface IGstObj {
     ]
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
-    public isNewCompanyProfile: boolean = true;
+    public isNewCompanyProfile: boolean = false;
     public countrySource: IOption[] = [];
     public countrySource$: Observable<IOption[]> = observableOf([]);
     public currencies: IOption[] = [];

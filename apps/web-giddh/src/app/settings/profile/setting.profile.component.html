@@ -1,4 +1,4 @@
-<div class="box clearfix mt-md-1 d-none" *ngIf="!(getCompanyProfileInProgress$ | async)">
+<div class="box clearfix mt-md-1" *ngIf="!(getCompanyProfileInProgress$ | async)">
     <div class="row">
         <form (ngSubmit)="updateProfile(companyProfileObj)" class="col-lg-10 col-md-12 profile-form">
             <div class="row">
@@ -255,7 +255,7 @@
         </form>
     </div>
 </div>
-<div class="no-data mr-t2 loader-main d-none" *ngIf="(getCompanyProfileInProgress$ | async)">
+<div class="no-data mr-t2 loader-main" *ngIf="(getCompanyProfileInProgress$ | async)">
     <div class="spinner2">
         <div class="cube1"></div>
         <div class="cube2"></div>
