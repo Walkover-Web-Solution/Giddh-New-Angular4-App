@@ -68,7 +68,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public dateRangePickerValue: Date[] = [];
     public isAttachmentExpanded: boolean = false;
     public accountAsideMenuState: string = 'out';
-    
+    public isBranchSalesExpanded: boolean = false;
+
     modalRef: BsModalRef;
 
     private branchDetails: any;
@@ -384,5 +385,5 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     openModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(template);
     }
-    
+
 }
