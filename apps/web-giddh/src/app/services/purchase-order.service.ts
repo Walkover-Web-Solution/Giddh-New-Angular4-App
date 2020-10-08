@@ -46,7 +46,7 @@ export class PurchaseOrderService {
     public create(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.CREATE;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);
+        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
 
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -78,7 +78,7 @@ export class PurchaseOrderService {
     public statusUpdate(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.STATUS_UPDATE;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);
+        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
 
         return this.http.patch(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -109,7 +109,7 @@ export class PurchaseOrderService {
     public sendEmail(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.EMAIL;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);
+        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
         url = url.replace(':poUniqueName', getRequestObject.uniqueName);
 
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
@@ -141,7 +141,7 @@ export class PurchaseOrderService {
     public update(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.UPDATE;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);
+        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
 
         return this.http.put(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -187,7 +187,7 @@ export class PurchaseOrderService {
     public getAllVersions(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL_VERSIONS;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);
+        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
         url = url.replace(':page', getRequestObject.page);
         url = url.replace(':count', getRequestObject.count);
 
@@ -204,7 +204,7 @@ export class PurchaseOrderService {
     public getPdf(getRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_PDF;
         url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':accountUniqueName', getRequestObject.accountUniqueName);
+        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
         url = url.replace(':poUniqueName', getRequestObject.poUniqueName);
 
         return this.http.get(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));

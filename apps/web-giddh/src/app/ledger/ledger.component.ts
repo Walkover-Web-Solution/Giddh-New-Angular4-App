@@ -361,6 +361,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 txn.selectedAccount = {
                     ...e.additional,
                     label: e.label,
+                    category: data.body.category,
                     value: e.value,
                     isHilighted: true,
                     applicableTaxes: taxes,
@@ -758,7 +759,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (s) {
                 this._toaster.successToast('Entry created successfully', 'Success');
                 this.lc.showNewLedgerPanel = false;
-
+                this.lc.showBankLedgerPanel = false;
                 this.getTransactionData();
                 // this.getCurrencyRate();
                 this.resetBlankTransaction();
@@ -1386,16 +1387,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.activeAccount$.pipe(take(1)).subscribe(a => activeAccount = a);
         this.lc.groupsArray$.pipe(take(1)).subscribe(a => groupWithAccountsList = a);
 
-        let parent;
-        let parentGroup: GroupsWithAccountsResponse;
         let showDiscountAndTaxPopup: boolean = false;
 
-        parent = activeAccount.parentGroups[0].uniqueName;
-        parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
-
         // check url account category
-        if (parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'assets') {
-            if (parentGroup.category === 'assets') {
+        if (activeAccount.category === 'income' || activeAccount.category === 'expenses' || activeAccount.category === 'assets') {
+            if (activeAccount.category === 'assets') {
                 showDiscountAndTaxPopup = activeAccount.parentGroups[0].uniqueName.includes('fixedassets');
             } else {
                 showDiscountAndTaxPopup = true;
@@ -1409,10 +1405,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         // check selected account category
         if (txn.selectedAccount) {
-            parent = txn.selectedAccount.parentGroups[0].uniqueName;
-            parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
-            if (parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'assets') {
-                if (parentGroup.category === 'assets') {
+            const category = txn.selectedAccount.category;
+            if (category === 'income' || category === 'expenses' || category === 'assets') {
+                if (category === 'assets') {
                     showDiscountAndTaxPopup = txn.selectedAccount.uNameStr.includes('fixedassets');
                 } else {
                     showDiscountAndTaxPopup = true;
@@ -1498,7 +1493,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             q: encodeURIComponent(query),
             page,
             withStocks: true,
-            stockAccountUniqueName: accountUniqueName
+            stockAccountUniqueName: encodeURIComponent(accountUniqueName)
         }
         this.searchService.searchAccount(requestObject).subscribe(data => {
             if (data && data.body && data.body.results) {

@@ -73,6 +73,21 @@ export class CommonActions {
             payload: value
         };
     }
+
+    public GetCurrency(): CustomActions {
+        return {
+            type: CommonActions.GET_CURRENCY,
+            payload: null
+        };
+    }
+
+    public GetCurrencyResponse(value: BaseResponse<CurrencyResponse, any>): CustomActions {
+        return {
+            type: CommonActions.GET_CURRENCY_RESPONSE,
+            payload: value
+        };
+    }
+
     public GetAllCountry(value: CountryRequest): CustomActions {
         return {
             type: CommonActions.GET_ALL_COUNTRY,

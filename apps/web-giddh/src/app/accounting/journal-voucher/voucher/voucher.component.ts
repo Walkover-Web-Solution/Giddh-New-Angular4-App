@@ -1401,19 +1401,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                             accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
                             accountList[acc.uniqueName] = true;
                         }
-                    } else if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
-                        let isReceiptAccount;
-
-                        if (this.selectedTransactionType === 'to') {
-                            isReceiptAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'currentliabilities' || pg.uniqueName === 'sundrycreditors' || pg.uniqueName === 'sundrydebtors'));
-                        } else {
-                            isReceiptAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash' || pg.uniqueName === 'currentliabilities' || pg.uniqueName === 'sundrycreditors' || pg.uniqueName === 'sundrydebtors'));
-                        }
-
-                        const isDisallowedAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'dutiestaxes'));
-                        if (isReceiptAccount && !isDisallowedAccount) {
-                            accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
-                        }
                     } else {
                         accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
                         accountList[acc.uniqueName] = true;

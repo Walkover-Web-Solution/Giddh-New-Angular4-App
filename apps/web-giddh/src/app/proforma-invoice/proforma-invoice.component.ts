@@ -83,7 +83,7 @@ import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-sele
 import { EMAIL_REGEX_PATTERN } from '../shared/helpers/universalValidations';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText } from '../app.constant';
+import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
@@ -528,6 +528,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /* This will hold the transaction amount */
     public transactionAmount: number = 0;
 
+    /** account's applied tax list */
+    public tcsTdsTaxesAccount: any[] = [];
+    /** account's applied discounts list */
+    public accountAssignedApplicableDiscounts: any[] = [];
     /**
      * Returns true, if Purchase Record creation record is broken
      *
@@ -672,7 +676,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.autoFillShipping = true;
         this.isUpdateMode = false;
-
+        this.getAllDiscounts();
         this.store.select(s => {
             if (!s.session.companies) {
                 return;
@@ -859,31 +863,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.getOnboardingFormInProcess$.subscribe(inProcess => {
             this.startLoader(inProcess);
-        });
-        // get tax list and assign values to local vars
-        this.store.pipe(select(p => p.company.isGetTaxesSuccess), takeUntil(this.destroyed$)).subscribe(isGetTaxes => {
-            if (isGetTaxes) {
-                this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
-                    if (o) {
-                        this.companyTaxesList = o;
-                        this.theadArrReadOnly.forEach((item: IContentCommon) => {
-                            // show tax label
-                            if (item.label === 'Tax') {
-                                item.display = true;
-                            }
-                            return item;
-                        });
-                        this.companyTaxesList.forEach((tax) => {
-                            if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
-                                this.allowedSelectionOfAType.type.push(tax.taxType);
-                            }
-                        });
-                    } else {
-                        this.companyTaxesList = [];
-                        this.allowedSelectionOfAType.type = [];
-                    }
-                });
-            }
         });
 
         // listen for new add account utils
@@ -1339,6 +1318,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     if (this.isMultiCurrencyModule() || this.isPurchaseInvoice) {
                         this.initializeWarehouse();
+                    }
+                    if (this.isSalesInvoice) {
+                        this.loadBankCashAccounts(tempSelectedAcc.currency);
                     }
                 }
 
@@ -2587,6 +2569,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.isUpdateMode && (this.isEstimateInvoice || this.isProformaInvoice)) {
             this.applyRoundOff = true;
         }
+        if (trx.amount && entry && entry.discounts && entry.discounts.length && this.accountAssignedApplicableDiscounts && this.accountAssignedApplicableDiscounts.length) {
+            entry.discounts.map(item => {
+                item.isActive = this.accountAssignedApplicableDiscounts.some(element => element.uniqueName === item.discountUniqueName);
+            });
+        }
 
         this.calculateTotalDiscountOfEntry(entry, trx, false);
         this.calculateEntryTaxSum(entry, trx, false);
@@ -3004,6 +2991,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                 }
             });
+        } else if (!entry.isOtherTaxApplicable && this.tcsTdsTaxesAccount.length) {
+            entry.otherTaxModal.appliedOtherTax = this.tcsTdsTaxesAccount[this.tcsTdsTaxesAccount.length-1];
+            entry.isOtherTaxApplicable = true;
         } else {
             // assign taxes for non stock accounts
             transaction.applicableTaxes = o.applicableTaxes;
@@ -5791,7 +5781,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public checkIfNeedToExcludeTax(data: any): void {
         this.excludeTax = false;
         let isPartyTypeSez = false;
-
+        this.tcsTdsTaxesAccount = [];
+        this.accountAssignedApplicableDiscounts = [];
         if (this.isSalesInvoice || this.isCashInvoice) {
             if (data && data.addresses && data.addresses.length > 0) {
                 data.addresses.forEach(address => {
@@ -5803,6 +5794,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             if ((this.companyCountryName === "India" && data.country.countryName !== "India") || isPartyTypeSez) {
                 this.excludeTax = true;
+            }
+        }
+        if (data && data.otherApplicableTaxes) {
+            data.otherApplicableTaxes.forEach(item => {
+                let tax = this.companyTaxesList.find(element => element.uniqueName === item.uniqueName);
+                if (tax && TCS_TDS_TAXES_TYPES.indexOf(tax.taxType) > -1) {
+                    this.tcsTdsTaxesAccount.push(item);
+                }
+            });
+        }
+        if (data && data.applicableDiscounts && data.applicableDiscounts.length) {
+            this.accountAssignedApplicableDiscounts = [...data.applicableDiscounts];
+            if (data.inheritedDiscounts && data.inheritedDiscounts.length) {
+                data.inheritedDiscounts.forEach(element => {
+                    this.accountAssignedApplicableDiscounts.push(...element.applicableDiscounts)
+                });
             }
         }
     }
@@ -5968,6 +5975,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     transactionLoop++;
                 }
+
             });
         });
         this.startLoader(false);
@@ -5981,7 +5989,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public removePoItem(): void {
         if(this.selectedPoItems && this.selectedPoItems.length > 0) {
             this.startLoader(true);
-
             setTimeout(() => {
                 let selectedPoItems = [];
                 this.selectedPoItems.forEach(order => {
@@ -6211,5 +6218,37 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if(this.isPurchaseInvoice) {
             this.autoFillDeliverToWarehouseAddress(warehouse);
         }
+    }
+
+    /**
+     * To get tax list and assign values to local variables
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public getAllDiscounts(): void {
+        this.store.pipe(select(p => p.company.isGetTaxesSuccess), takeUntil(this.destroyed$)).subscribe(isGetTaxes => {
+            if (isGetTaxes) {
+                this.store.pipe(select(p => p.company.taxes), takeUntil(this.destroyed$)).subscribe((o: TaxResponse[]) => {
+                    if (o) {
+                        this.companyTaxesList = o;
+                        this.theadArrReadOnly.forEach((item: IContentCommon) => {
+                            // show tax label
+                            if (item.label === 'Tax') {
+                                item.display = true;
+                            }
+                            return item;
+                        });
+                        this.companyTaxesList.forEach((tax) => {
+                            if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
+                                this.allowedSelectionOfAType.type.push(tax.taxType);
+                            }
+                        });
+                    } else {
+                        this.companyTaxesList = [];
+                        this.allowedSelectionOfAType.type = [];
+                    }
+                });
+            }
+        });
     }
 }

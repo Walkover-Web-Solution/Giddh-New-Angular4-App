@@ -110,7 +110,7 @@ export class InvoiceService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         // create url
         let url = this.config.apiUrl + INVOICE_API.GENERATE_BULK_INVOICE + '=' + reqObj.combined;
-        return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName).replace(':accountuniquename', model[0].accountUniqueName), model).pipe(
+        return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName).replace(':accountuniquename', encodeURIComponent(model[0].accountUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = res;
                 data.request = model;
@@ -127,7 +127,7 @@ export class InvoiceService {
     public GetGeneratedInvoicePreview(accountUniqueName: string, invoiceNumber: string): Observable<BaseResponse<PreviewInvoiceResponseClass, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + INVOICE_API_2.GENERATED_INVOICE_PREVIEW.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), { invoiceNumber }).pipe(
+        return this._http.post(this.config.apiUrl + INVOICE_API_2.GENERATED_INVOICE_PREVIEW.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { invoiceNumber }).pipe(
             map((res) => {
                 let data: BaseResponse<PreviewInvoiceResponseClass, string> = res;
                 data.request = invoiceNumber;
@@ -143,7 +143,7 @@ export class InvoiceService {
     public UpdateGeneratedInvoice(accountUniqueName: string, model: GenerateInvoiceRequestClass): Observable<BaseResponse<string, GenerateInvoiceRequestClass>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.put(this.config.apiUrl + INVOICE_API_2.UPDATE_GENERATED_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model).pipe(
+        return this._http.put(this.config.apiUrl + INVOICE_API_2.UPDATE_GENERATED_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<string, GenerateInvoiceRequestClass> = res;
                 data.request = model;
@@ -162,7 +162,7 @@ export class InvoiceService {
     public PreviewInvoice(accountUniqueName: string, model: PreviewInvoiceRequest): Observable<BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + INVOICE_API_2.PREVIEW_VOUCHERS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model).pipe(
+        return this._http.post(this.config.apiUrl + INVOICE_API_2.PREVIEW_VOUCHERS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = res;
                 data.request = model;
@@ -177,7 +177,7 @@ export class InvoiceService {
     public GenerateInvoice(accountUniqueName: string, model: GenerateInvoiceRequestClass): Observable<BaseResponse<GenerateInvoiceRequestClass, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + INVOICE_API_2.GENERATE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model).pipe(
+        return this._http.post(this.config.apiUrl + INVOICE_API_2.GENERATE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<GenerateInvoiceRequestClass, string> = res;
                 data.request = '';
@@ -219,7 +219,7 @@ export class InvoiceService {
 
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._httpClient.request('delete', this.config.apiUrl + INVOICE_API_2.DELETE_VOUCHER.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), { body: model, headers: args.headers }).pipe(
+        return this._httpClient.request('delete', this.config.apiUrl + INVOICE_API_2.DELETE_VOUCHER.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { body: model, headers: args.headers }).pipe(
             map((res) => {
                 // let data: BaseResponse<string, string> = res;
                 let data: any = res;
@@ -422,7 +422,7 @@ export class InvoiceService {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.post(this.config.apiUrl + INVOICE_API_2.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', accountUniqueName), dataToSend, { responseType: 'blob' }).pipe(map((res) => {
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), dataToSend, { responseType: 'blob' }).pipe(map((res) => {
                 return res;
             }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
@@ -435,7 +435,7 @@ export class InvoiceService {
     public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], voucherNumber: string[], typeOfInvoice: string[], voucherType?: string }): Observable<BaseResponse<string, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + INVOICE_API_2.SEND_INVOICE_ON_MAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).pipe(map((res) => {
+        return this._http.post(this.config.apiUrl + INVOICE_API_2.SEND_INVOICE_ON_MAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), dataToSend).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             data.queryString = { accountUniqueName, dataToSend };
             return data;
@@ -450,7 +450,7 @@ export class InvoiceService {
     public SendInvoiceOnSms(accountUniqueName: string, dataToSend: { numbers: string[] }, voucherNumber: string): Observable<BaseResponse<string, string>> {
         this.user = this._generalService.user;
         this.companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.post(this.config.apiUrl + INVOICE_API_2.SEND_INVOICE_ON_SMS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':voucherNumber', voucherNumber), dataToSend).pipe(map((res) => {
+        return this._http.post(this.config.apiUrl + INVOICE_API_2.SEND_INVOICE_ON_SMS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':voucherNumber', voucherNumber), dataToSend).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             data.queryString = { accountUniqueName, dataToSend };
             return data;
