@@ -798,11 +798,14 @@ ul.sub-list {
             border: 1px solid #d9d9d9;
             box-shadow: 0 6px 12px rgba(0,0,0,.175);
             min-width: 270px;
+            max-width: 270px;
             padding-top: 0;
             border-top: none;
             li{
                 a{
                     padding: 6px 10px;
+                    white-space: normal;
+                    word-break: break-word;
                     &.dropdown-item.active-branch {
                         color: $chetwode-blue;
                         font-weight: bold;
