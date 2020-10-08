@@ -718,8 +718,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     // Timeout is used as value were not updated in form
                     this.setCountryByCompany(this.activeCompany);
                 }, 500);
-            } else {
-                this.store.dispatch(this.commonActions.GetCurrency());
             }
         });
     }
