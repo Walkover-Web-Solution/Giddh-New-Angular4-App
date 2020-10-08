@@ -1,7 +1,7 @@
 <div class="clearfix" *ngIf="!parentCompanyName && (branches$ | async)?.length > 0">
     <div class="d-flex date-advance-search row">
-        <form class="form-inline input-group-date-range-picker pr col-xs-6 col-sm-8 mb-15">
-            <div class="mr-1 d-flex branch-header-content">
+        <form class="form-inline input-group-date-range-picker pr col-lg-10 col-md-12 mb-15">
+            <div class="mr-1 d-flex branch-header-content flex-row">
                     <div class="btn-group advance-icon" dropdown>
                         <button id="button-basic-icon" dropdownToggle type="button" class="btn dropdown-toggle mr-0 d-flex align-items-center" aria-controls="dropdown-basic-icon">
                                 <span class="icon-advance-search"></span>
@@ -31,14 +31,14 @@
                         </ul>
                     </div>
 
-                    <div class="form-group max250 search-field">
+                    <div class="form-group max250 search-field form-top-fields">
                             <input type="text" placeholder="Search branch" class="form-control" />
                             <span class="input-addon">
                             <i class="icon-search"></i>
                         </span>
 
                     </div>
-                <div class="input-group">
+                <div class="input-group form-top-fields">
                     <div class="form-group">
                         <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" readonly
                             placeholder="Select Date" class="form-control" #dp="bsDaterangepicker"
@@ -61,11 +61,11 @@
                 </div>
             </div>
         </form>
-        <div class="col-sm-4 col-xs-6">
+        <div class="col-lg-2 col-md-12">
             <button class="btn btn-sky-blue pull-right mr-0" (click)="openAddBranchModal()">Create Branch</button>
         </div>
     </div>
-    <div class="row">
+    <div class="row select-branch">
         <div class="col-12 d-flex mb-15 align-items-center">
             <div class="form-group mb-0">
                     <div class="checkbox">
@@ -139,7 +139,7 @@
                                 </div>
                                 <div>Walkover Web Solutions Name Branch</div>
                             </div>
-                            <div class="pull-right">
+                            <div class="pull-right right-card-section">
                                 <div class="btn-group align-items-center" dropdown [autoClose]="true">
                                         <a href="javascript:;" *ngIf="!isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = true;">
                                             <i class="icon-expandIcon"></i> Expand</a>
