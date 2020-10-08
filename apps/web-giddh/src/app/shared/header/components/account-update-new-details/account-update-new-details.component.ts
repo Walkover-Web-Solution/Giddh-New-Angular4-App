@@ -8,7 +8,7 @@ import { AccountsAction } from '../../../../actions/accounts.actions';
 import { AppState } from '../../../../store';
 import { select, Store, createSelector } from '@ngrx/store';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
-import { AccountRequestV2, AccountResponseV2, IAccountAddress, AccountMoveRequest, AccountUnMergeRequest, AccountsTaxHierarchyResponse, AccountMergeRequest } from '../../../../models/api-models/Account';
+import { AccountRequestV2, AccountResponseV2, IAccountAddress, AccountMoveRequest, AccountUnMergeRequest, AccountsTaxHierarchyResponse, AccountMergeRequest, CustomFieldsData } from '../../../../models/api-models/Account';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -34,6 +34,7 @@ import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/Settings
 import { AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { SettingsDiscountActions } from 'apps/web-giddh/src/app/actions/settings/discount/settings.discount.action';
 import { element } from '@angular/core/src/render3';
+import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 
 @Component({
     selector: 'account-update-new-details',
@@ -133,9 +134,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public bankIbanNumberMinLength: string = '9';
     /** account applied inherited discounts list */
     public accountInheritedDiscounts: any[] = [];
+    /** company custom fields list */
+    public companyCustomFields: any[] = [];
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction,
-        private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _dbService: DbService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
+        private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _dbService: DbService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions, private groupService: GroupService) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.discountList$ = this.store.select(s => s.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
@@ -143,7 +146,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
-
+        this.getCompanyCustomField();
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
@@ -260,6 +263,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                 }
 
+                // render custom field data
+                if (accountDetails.customFields && accountDetails.customFields.length > 0) {
+                    accountDetails.customFields.map(a => {
+                        // this.renderCustomFieldDetails(a, accountDetails.addresses.length);
+                    });
+                }
                 // hsn/sac enable disable
                 if (acc.hsnNumber) {
                     this.addAccountForm.get('sacNumber').disable();
@@ -604,7 +613,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 virtualAccountNumber: ['']
             }),
             closingBalanceTriggerAmount: [Validators.compose([digitsOnly])],
-            closingBalanceTriggerAmountType: ['CREDIT']
+            closingBalanceTriggerAmountType: ['CREDIT'],
+            customFields: this._fb.array([]),
         });
     }
 
@@ -1448,4 +1458,59 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
+     /**
+     * API call to get custom field data
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public getCompanyCustomField(): void {
+        this.groupService.getCompanyCustomField().subscribe(response => {
+            if (response && response.status === 'success') {
+                this.companyCustomFields = response.body;
+                this.createDynamicCustomFieldForm(this.companyCustomFields);
+            } else {
+                this._toaster.errorToast(response.message);
+            }
+        });
+    }
+
+      public addBlankCustomFieldForm() {
+        const customField = this.addAccountForm.get('customFields') as FormArray;
+        if (customField.value.length === 0) {
+            customField.push(this.initialCustomFieldDetailsForm(null));
+        }
+    }
+
+    public renderCustomFieldDetails(obj: any, customFieldLength: any) {
+        const customField = this.addAccountForm.get('customFields') as FormArray;
+        if (customField.length < customFieldLength) {
+            customField.push(this.initialCustomFieldDetailsForm(obj));
+        }
+    }
+
+
+    public initialCustomFieldDetailsForm(validator: any, val: CustomFieldsData = null): FormGroup {
+        let custoFields = this._fb.group({
+            uniqueName: [''],
+            value: [''],
+        });
+
+        // if (val) {
+        //     custoFields.patchValue(val);
+        // }
+        return custoFields;
+    }
+
+/**
+ * To create dynamic custom field form
+ *
+ * @param {*} customFieldForm
+ * @memberof AccountUpdateNewDetailsComponent
+ */
+public createDynamicCustomFieldForm(customFieldForm: any) {
+
+                console.log('companyCustomFields$', customFieldForm);
+
+
+    }
 }

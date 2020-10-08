@@ -72,53 +72,102 @@
 
                 </div>
             </tab>
+<!--           new -->
             <tab heading="Custom">
                 <div class="custom-filed-list-wrapper">
-                    <div class="row mb-15">
-                        <div class="col-lg-3 col-md-3 col-sm-12">
-                            <label>Name</label>
-                            <input type="tetx" class="form-control" readonly value="Pan Number">
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-12">
-                            <label>Type</label>
-                            <input type="tetx" class="form-control" readonly value="Number">
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-12">
-                            <label>Length</label>
-                            <input type="tetx" class="form-control" readonly value="18">
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-12 edit-close-btn">
-                            <label class="d-block">&nbsp;</label>
-                            <button class="btn btn-defualt close-button" (click)="openModal(template)">
-                                <i class="icon-trash"></i>
-                            </button>
-                            <button class="btn btn-defualt">
-                                <i class="icon-edit"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row mb-15">
-                        <div class="col-lg-3 col-md-3 col-sm-12">
-                            <label>Name</label>
-                            <input type="tetx" class="form-control">
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-12">
-                            <label>Type</label>
-                            <input type="tetx" class="form-control">
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-12">
-                            <label>Length</label>
-                            <input type="tetx" class="form-control">
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-12">
-                            <label class="d-block">&nbsp;</label>
-                            <button class="btn btn-primary">
-                                Save
-                            </button>
-                        </div>
-                    </div>
+                    <ng-container>
+                        <form [formGroup]="customFieldForm" (ngSubmit)="updateCustomFields(customFieldForm.value)">
+                            <ng-container formArrayName="customField">
+                                <ng-container *ngFor="let item of customFieldForm.get('customField')['controls']; let index=index;let first = first; let last = last">
+                                    <div class="row mb-15" [formGroupName]="index">
+                                        <div class="col-lg-3 col-md-3 col-sm-12">
+                                            <label *ngIf="first">Name</label>
+                                            <input type="text" class="form-control" placeholder="Enter custom field name" formControlName="key" name="key" autocomplete="off" [attr.disabled]="item.get('uniqueName').value && isEnabledIndex!==index ?'': null">
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-12">
+                                            <label *ngIf="first">Type</label>
+                                            <sh-select [options]="dataTypeList" formControlName="dataType" name="dataType" [disabled]="item.get('uniqueName').value && isEnabledIndex!==index">
+                                            </sh-select>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-12">
+                                            <label *ngIf="first">Length</label>
+                                            <input type="number" class="form-control" formControlName="valueLength" name="valueLength" [attr.disabled]="(item.get('uniqueName').value) &&  isEnabledIndex!==index ?'': null" autocomplete="off">
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-12 edit-close-btn">
+                                            <label *ngIf="first" class="d-block">&nbsp;</label>
+                                            <button class="btn btn-defualt close-button" (click)="removeCustomFieldRow(index)">
+                                                <i class="icon-trash"></i>
+                                            </button>
+                                            <button *ngIf="item.get('uniqueName').value" class="btn btn-defualt" (click)="editCustomfield(index)">
+                                                <i class="icon-edit"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-12">
+                                    <a href="javascript:void(0)" (click)="addNewCustomFieldRow()" class="btn btn-link pl-0">+ Add New Row</a>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="updateModeLength">
+                                    <label *ngIf="first" class="d-block">&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary" [disabled]="customFieldForm.invalid">
+                                        Update
+                                    </button>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="!updateModeLength">
+                                    <label *ngIf="first" class="d-block">&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary" [disabled]="customFieldForm.invalid">
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </ng-container>
+                    <!-- <ng-container *ngIf="!isUpdateModeEnabled">
+                        <form [formGroup]="customFieldForm" (ngSubmit)="submitCustomFields(customFieldForm.value)">
+                            <ng-container formArrayName="customField">
+                                <ng-container *ngFor="let item of customFieldForm.get('customField')['controls']; let index=index;let first = first; let last = last">
+                                    <div class="row mb-15" [formGroupName]="index" (clickOutside)="clickOutSide();">
+                                        <div class="col-lg-3 col-md-3 col-sm-12">
+                                            <label *ngIf="first">Name</label>
+                                            <input type="text" class="form-control" formControlName="key" name="key" autocomplete="off">
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-12">
+                                            <label *ngIf="first">Type</label>
+                                            <sh-select [options]="dataTypeList" formControlName="dataType" name="dataType">
+                                            </sh-select>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-12">
+                                            <label *ngIf="first">Length</label>
+                                            <input *ngIf="item.get('dataType').value!='BOOLEAN'" type="number" class="form-control" formControlName="valueLength" name="valueLength" autocomplete="off">
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="last">
+                                            <label *ngIf="first" class="d-block">&nbsp;</label>
+                                            <button type="submit" class="btn btn-primary" [disabled]="customFieldForm.invalid">
+                                            Save
+                                        </button>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3 col-sm-12 edit-close-btn" *ngIf="!last">
+                                            <label *ngIf="first" class="d-block">&nbsp;</label>
+                                            <button class="btn btn-defualt close-button" (click)="removeCustomFieldRow(index)">
+                                            <i class="icon-trash"></i>
+                                        </button>
+                                            <button class="btn btn-defualt" (click)="editCustomfield(index)">
+                                            <i class="icon-edit"></i>
+                                        </button>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                            <div>
+                                <a href="javascript:void(0)" (click)="addNewCustomFieldRow()" class="btn btn-link pl-0">+ Add New Row</a>
+                            </div>
+                        </form>
+                    </ng-container> -->
                 </div>
             </tab>
+
         </tabset>
 
 
