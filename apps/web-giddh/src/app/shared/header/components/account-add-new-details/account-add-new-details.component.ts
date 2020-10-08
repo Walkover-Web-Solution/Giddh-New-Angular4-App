@@ -120,7 +120,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
             if (response) {
-                console.log(response);
+                if (response.parentGroups && response.parentGroups.length) {
+                    let parent = response.parentGroups;
+                    if (parent.length > 1 && parent[1]) {
+                        this.isParentDebtorCreditor(parent[1].uniqueName);
+                    } else if (parent.length === 1) {
+                        this.isParentDebtorCreditor(response.uniqueName);
+                    }
+                }
             }
         });
 
@@ -632,10 +639,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.activeGroupUniqueName = event.value;
             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
 
-            let parent = event.additional;
-            if (parent[1]) {
-                this.isParentDebtorCreditor(parent[1].uniqueName);
-            }
+            // let parent = event.additional;
+            // if (parent[1]) {
+            //     this.isParentDebtorCreditor(parent[1].uniqueName);
+            // }
             this.isGroupSelected.emit(event.value);
             this.toggleStateRequired();
         }
