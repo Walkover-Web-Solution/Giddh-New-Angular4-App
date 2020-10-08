@@ -54,7 +54,7 @@ export interface IGstObj {
     ]
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
-
+    public isNewCompanyProfile: boolean = false;
     public countrySource: IOption[] = [];
     public countrySource$: Observable<IOption[]> = observableOf([]);
     public currencies: IOption[] = [];
@@ -86,7 +86,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public selectedState: any = '';
     public stateGstCode: any[] = [];
     public formFields: any[] = [];
-    public accountAsideMenuState: string = 'out';
+   
     /** Observer to track get company profile API call in process */
     public getCompanyProfileInProgress$: Observable<boolean>;
 
@@ -659,28 +659,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
     }
 
-    public openAddAndManage() {
-        this.toggleAccountAsidePane();
-    }
 
-    public toggleAccountAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
-
-        this.toggleBodyClass();
-    }
-
-
-    public toggleBodyClass() {
-        if (this.accountAsideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
-    }
-    
 
     /**
      * This will return the state code/name if available

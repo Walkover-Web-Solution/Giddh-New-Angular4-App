@@ -28,6 +28,9 @@
 .icon-company-HO:before {
   content: "\e97f";
 }
+.icon-unlink:before {
+  content: "\e98e";
+}
 .icon-warehouse-icon:before {
   content: "\e980";
 }

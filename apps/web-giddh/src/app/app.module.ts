@@ -57,7 +57,6 @@ import { SocialLoginCallbackComponent } from './social-login-callback.component'
 import { reducers } from './store';
 import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
 import { UniversalListModule } from './theme/universal-list/universal.list.module';
-import { AsideAddressComponent } from './settings/aside-address/aside-address.component';
 
 // import { SuccessComponent } from './settings/linked-accounts/success.component';
 /*
@@ -127,7 +126,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MobileHomeSidebarComponent,
         MobileSearchCompanyComponent,
         MobileSearchBranchComponent,
-        AsideAddressComponent
         // SignupComponent
     ],
     /**

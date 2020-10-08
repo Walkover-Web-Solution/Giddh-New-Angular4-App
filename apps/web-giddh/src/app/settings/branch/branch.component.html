@@ -2,8 +2,33 @@
     <div class="d-flex date-advance-search row">
         <form class="form-inline input-group-date-range-picker pr col-xs-6 col-sm-8 mb-15">
             <div class="mr-1 d-flex branch-header-content">
-                    <div class="advance-icon">
-                        <span class="icon-advance-search"></span>
+                    <div class="btn-group advance-icon" dropdown>
+                        <button id="button-basic-icon" dropdownToggle type="button" class="btn dropdown-toggle mr-0 d-flex align-items-center" aria-controls="dropdown-basic-icon">
+                                <span class="icon-advance-search"></span>
+                        </button>
+                        <ul id="dropdown-basic-icon" *dropdownMenu class="dropdown-menu advance-search-list" role="menu" aria-labelledby="button-basic-icon">
+                            <li role="menuitem">
+                                <div class="checkbox search-checkbox">
+                                    <label for="all" class="align-items-start justify-content-start">
+                                    <input type="checkbox" formcontrolname="all" id="all" name="all">
+                                    All</label>
+                                </div>
+                            </li>
+                            <li role="menuitem">
+                                <div class="checkbox search-checkbox">
+                                    <label for="active" class="align-items-start justify-content-start">
+                                    <input type="checkbox" formcontrolname="active" id="active" name="active">
+                                    Active</label>
+                                </div>
+                            </li>
+                            <li role="menuitem">
+                                <div class="checkbox search-checkbox">
+                                    <label for="archived" class="align-items-start justify-content-start">
+                                    <input type="checkbox" formcontrolname="archived" id="archived" name="archived">
+                                    Archived</label>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
 
                     <div class="form-group max250 search-field">
@@ -40,18 +65,29 @@
             <button class="btn btn-sky-blue pull-right mr-0" (click)="openAddBranchModal()">Create Branch</button>
         </div>
     </div>
-    <div class="btn-group moreBtn" dropdown>
-            <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle" aria-controls="dropdown-basic">
-            More
-            <span class="caret"></span>
-        </button>
-            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-                <li role="menuitem" >Move</li>
-                <li role="menuitem" >Archive</li>
-                <li role="menuitem" >Merge</li>
-                <li role="menuitem" >Snakr</li>
-            </ul>
+    <div class="row">
+        <div class="col-12 d-flex mb-15 align-items-center">
+            <div class="form-group mb-0">
+                    <div class="checkbox">
+                            <label for="selectAll">
+                            <input type="checkbox" formcontrolname="selectAll" id="selectAll" name="selectAll">
+                            Select all branches</label>
+                        </div>
+            </div>
+            <div class="btn-group more-btn" dropdown>
+                <button id="button-basic" dropdownToggle type="button" class="btn btn-default dropdown-toggle d-flex align-items-center justify-content-between mr-0" aria-controls="dropdown-basic">
+                More
+                <span class="caret"></span>
+            </button>
+                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                    <li role="menuitem" >Move</li>
+                    <li role="menuitem" >Archive</li>
+                    <li role="menuitem" >Merge</li>
+                    <li role="menuitem" >Delete</li>
+                </ul>
+            </div>
         </div>
+    </div>
 </div>
 <div *ngIf="(branches$ | async)?.length > 0 && branchViewType === 'table' && !isMobileScreen " class="table-responsive">
     <table class="table basic giddh-table on-mobile-view">
@@ -108,11 +144,13 @@
                             </div>
                             <div class="pull-right">
                                 <div class="btn-group align-items-center" dropdown [autoClose]="true">
-                                        <a href="javascript:;" *ngIf="!isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = true;">Expand</a>
-                                        <a href="javascript:;" *ngIf="isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = false;">Collapse</a>
+                                        <a href="javascript:;" *ngIf="!isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = true;">
+                                            <i class="icon-expandIcon"></i> Expand</a>
+                                        <a href="javascript:;" *ngIf="isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = false;">
+                                            <i class="icon-collapse"></i> Collapse</a>
 
                                         <div class="ml-15 active-status">
-                                            <span></span>Active
+                                            <span class="status-bullet d-flex align-items-center">Active</span>
                                         </div>
 
                                     <a id="button-basic" dropdownToggle type="button"
@@ -122,7 +160,8 @@
                                         aria-labelledby="button-basic">
                                         <li role="menuitem"><a class="dropdown-item"
                                                 (click)="removeBranch(branch.uniqueName, branch.name)">Delink</a></li>
-                                                <li role="menuitem"><a class="dropdown-item" (click)="updateBranch(branch)">Edit</a></li>
+                                                <!-- <li role="menuitem"><a class="dropdown-item" (click)="updateBranch(branch)">Edit</a></li> -->
+                                                <li role="menuitem"><a class="dropdown-item" (click)="openEditBranch()">Edit</a></li>
                                                 <li role="menuitem"><a class="dropdown-item">Move</a></li>
                                                 <li role="menuitem"><a class="dropdown-item">Archive</a></li>
                                                 <li role="menuitem"><a class="dropdown-item">Merge</a></li>
@@ -157,11 +196,15 @@
 
                                                     <div class="linked-add">
                                                         <input id="address1" type="radio" name="address" value="1" class="star-radio">
-                                                        <label for="address1">Address Name 2</label>
+                                                        <label for="address1" class="cursor-pointer" popover="405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash Hospital, Indore-452080, MP GSTIN : 23HDOIJSI809"
+                                                        popoverTitle="Address Name 1"
+                                                        placement="right" triggers="mouseenter:mouseleave">Address Name 2</label>
                                                     </div>
                                                     <div class="linked-add">
                                                         <input id="address2" type="radio" name="address" value="2" class="star-radio">
-                                                        <label for="address2">Address Name 1</label>
+                                                        <label for="address2" class="cursor-pointer" popover="405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash Hospital, Indore-452080, MP GSTIN : 23HDOIJSI809"
+                                                        popoverTitle="Address Name 1"
+                                                        placement="right" triggers="mouseenter:mouseleave">Address Name 1</label>
                                                     </div>
 
 
@@ -175,12 +218,12 @@
                                     <div class="parent-branch pt-1 pb-1">Linked Warehouse:</div>
                                     <div>
                                             <div class="linked-add">
-                                                    <input id="address1" type="radio" name="address" value="1" class="star-radio">
-                                                    <label for="address1">Warehouse Name 2</label>
+                                                    <input id="address1" type="radio" name="address" value="1" class="star-radio" tooltip="Set as default">
+                                                    <label for="address1" class="cursor-pointer">Warehouse Name 2</label>
                                                 </div>
                                                 <div class="linked-add">
-                                                    <input id="address2" type="radio" name="address" value="2" class="star-radio">
-                                                    <label for="address2">Warehouse Address 1</label>
+                                                    <input id="address2" type="radio" name="address" value="2" class="star-radio" tooltip="Set as default">
+                                                    <label for="address2" class="cursor-pointer">Warehouse Address 1</label>
                                                 </div>
                                     </div>
                             </div>
@@ -351,4 +394,12 @@
             <!-- modal footer -->
         </div>
     </div>
+</div>
+
+
+<!-- Edit branch -->
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+<div class="abc " *ngIf="accountAsideMenuState === 'in'">
+    <edit-branch class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)">
+</edit-branch>
 </div>
