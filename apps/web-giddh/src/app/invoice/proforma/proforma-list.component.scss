@@ -136,6 +136,9 @@
 }
 .date-advance-search {
     justify-content: space-between;
+    .input-group{
+        width: auto;
+    }
 }
 .mobile-search {
     display: none;
@@ -348,6 +351,7 @@ span.icon-advance-filter {
     }
     .date-advance-search {
         display: block;
+        flex-direction: column;
     }
     .form-group div {
         display: block;

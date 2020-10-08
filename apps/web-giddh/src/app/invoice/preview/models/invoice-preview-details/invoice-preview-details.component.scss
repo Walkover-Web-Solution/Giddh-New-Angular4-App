@@ -18,7 +18,7 @@
     position: relative;
 }
 
-.invoiceDetail-header {
+.invoice-detail-header {
     padding-top: 25px;
     padding-bottom: 25px;
 }
@@ -56,7 +56,7 @@
     color: #0c8fe6;
 }
 
-.invoice-sidebar .invoice-number-date span.inoviceDate {
+.invoice-sidebar .invoice-number-date span.inovice-date {
     color: #666666;
 }
 
@@ -102,35 +102,35 @@
     display: block;
 }
 
-.invoiceDetail-header h3.invoice-num {
+.invoice-detail-header h3.invoice-num {
     font-size: 16px;
     font-weight: 600;
 }
 
-.invoiceDetail-header p.acc-holderName {
+.invoice-detail-header p.acc-holderName {
     font-size: 14px;
     margin-top: 3px;
 }
 
-.invoiceDetail-header .edit-change-status {
+.invoice-detail-header .edit-change-status {
     text-align: right;
 }
 
-.invoiceDetail-header .edit-change-status .btn {
+.invoice-detail-header .edit-change-status .btn {
     margin-right: 10px;
 }
 
-.invoiceDetail-header .edit-change-status .edit-link {
+.invoice-detail-header .edit-change-status .edit-link {
     color: #0c8fe6;
     padding-right: 10px;
     font-size: 16px;
 }
 
-.invoiceDetail-header .edit-change-status .edit-link img {
+.invoice-detail-header .edit-change-status .edit-link img {
     width: 15px;
 }
 
-.invoiceDetail-header .edit-change-status .edit-action-btn-grps {
+.invoice-detail-header .edit-change-status .edit-action-btn-grps {
     display: flex;
     background-color: $white;
     border: 1px solid #cbcbcb;
@@ -349,6 +349,7 @@ span.close-modal.cp.pull-right {
 
 .invoice-search-box button {
     margin-left: 10px;
+    padding: 7px 16px !important;
 }
 
 .invoice-search-box {
@@ -357,7 +358,7 @@ span.close-modal.cp.pull-right {
     justify-content: space-around;
 }
 
-.invoice-sidebarWrapper {
+.invoice-sidebar-wrapper {
     box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -659,13 +660,7 @@ p {
 
 /* Handle */
 #default::-webkit-scrollbar-thumb {
-    background: $gainsboro;
-    border-radius: 20px;
-}
-
-/* Handle on hover */
-#default::-webkit-scrollbar-thumb:hover {
-    background: $gainsboro;
+    background: $nobel;
     border-radius: 20px;
 }
 #default body {
@@ -1029,6 +1024,11 @@ strong {
 }
 
 /*responsive*/
+@media(max-width:1199px){
+    .invoice-search-box input {
+     max-width: 180px;
+    }
+}
 
 @media (max-width: 1024px) {
     .invoice-search-box {
@@ -1036,12 +1036,31 @@ strong {
     }
     .invoice-search-box input {
         width: 100%;
+        max-width: 100%;
     }
-    .invoice-search-box button {
-        margin-left: 0;
-        padding: 5px 16px;
-        vertical-align: top;
-        margin-top: 4px;
+    .invoice-search-box  {
+        .btn-group{
+            display: flex;
+            button{
+                margin-left: 0;
+                padding: 5px 16px;
+                vertical-align: top;
+                margin-top: 10px;
+                text-align: center;
+                justify-content: center;
+                display: flex;
+                align-items: center;
+            }
+        }
+        button{
+            text-align: center;
+            justify-content: center;
+            display: flex;
+            align-items: center;
+            margin-left: 0;
+            width: 100%;
+            margin-top: 10px;
+        }
     }
     .dropdown-toggle.btn-sky-blue {
         padding: 6px 8px;
@@ -1052,12 +1071,20 @@ strong {
 }
 
 @media (max-width: 991px) {
-    .invoice-sidebar .invoice-number-date span.inoviceDate {
+
+    .invoice-modal-content,
+    .invoice-modal-content:after{
+        top: 60px !important;
+    }
+    .invoice-sidebar .invoice-number-date {
+        display: flex;
+    }
+    .invoice-sidebar .invoice-number-date span.inovice-date {
         display: block;
         position: relative;
-        margin-left: -6px;
+        margin-left:0;
     }
-    .invoice-sidebar .invoice-number-date span.inoviceDate:before {
+    .invoice-sidebar .invoice-number-date span.inovice-date:before {
         position: absolute;
         content: "";
         background-color: $white;
@@ -1068,7 +1095,7 @@ strong {
     .invoice-sidebar
         li.activeItem
         .invoice-number-date
-        span.inoviceDate:before {
+        span.inovice-date:before {
         background-color: #f0f0f0;
     }
     .invoice-preview-sidebar{
@@ -1077,15 +1104,21 @@ strong {
     .invoice-detail-wrapper{
         padding-left: 15px;
     }
-}
-
-@media (max-width: 768px) {
-    .invoice-modal-content:after,
-    .invoice-modal-content {
-        top: 121px;
+    .invoice-detail-header{
+        .edit-change-status{
+            display: flex;
+            justify-content: flex-start;
+            flex-direction: row-reverse;
+        }
     }
 }
 
+@media (max-width: 767px) {
+    .invoice-modal-content:after,
+    .invoice-modal-content {
+        top: 90px !important;
+    }
+}
 @media (max-width: 991px) {
     .invoice-sidebar {
         background-color: $white;
@@ -1094,10 +1127,10 @@ strong {
         max-height: 46vmax;
         overflow-y: auto;
     }
-    .invoiceDetail-header .edit-change-status .edit-action-btn-grps {
+    .invoice-detail-header .edit-change-status .edit-action-btn-grps {
         float: left !important;
     }
-    .invoiceDetail-header .edit-change-status {
+    .invoice-detail-header .edit-change-status {
         padding-top: 10px;
     }
     .invoice-modal-content:after,
@@ -1116,7 +1149,13 @@ strong {
         margin-bottom: 40px;
         float: left;
     }
+    .wrap-edit-history-btn{
+         display:flex;
+         align-items: center;
+     }
+
 }
+
 @media(max-width:575px){
     .wrap-edit-history-btn{
         float: none;

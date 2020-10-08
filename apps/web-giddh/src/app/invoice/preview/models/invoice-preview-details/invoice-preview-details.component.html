@@ -7,15 +7,15 @@
             <!-- region sidebar -->
             <div class="col-12 col-md-12 col-lg-4 invoice-preview-sidebar">
 
-                <div class="invoice-sidebarWrapper">
+                <div class="invoice-sidebar-wrapper">
 
                     <div class="invoice-search-box">
                         <input type="text" placeholder="search" #searchElement>
 
-                        <div class="btn-group" dropdown *ngIf="voucherType === 'sales' && !isMobileView"
+                        <div class="btn-group" dropdown *ngIf="voucherType === 'sales'"
                              [autoClose]="true">
                             <button id="button-basic2" dropdownToggle type="button"
-                                class="btn btn-sky-blue dropdown-toggle dropdown-btn-new" aria-controls="dropdown-basic3">
+                                class="btn btn-sky-blue dropdown-toggle dropdown-btn-new mr-0" aria-controls="dropdown-basic3">
                                 + New Invoice <span class="caret"></span>
                             </button>
                             <ul id="dropdown-basic3" *dropdownMenu class="dropdown-menu dropdown-width-small"
@@ -31,7 +31,7 @@
                             </ul>
                         </div>
 
-                        <button class="btn btn-sky-blue mr-0" *ngIf="voucherType !== 'sales' && !isMobileView"
+                        <button class="btn btn-sky-blue mr-0" *ngIf="voucherType !== 'sales'"
                                 (click)="goToInvoice()">+ New
                             {{voucherType | voucherTypeToNamePipe}}</button>
                     </div>
@@ -50,7 +50,7 @@
                                             <span class="inoviceNumber">
                                                 {{item.voucherNumber ? item.voucherNumber : '-'}}
                                             </span>
-                                            <span class="inoviceDate">
+                                            <span class="inovice-date">
                                                 | {{item?.voucherDate}}
                                             </span>
                                         </div>
@@ -80,11 +80,11 @@
                 <div class="scroll-half">
                     <div class="invoice-detail" #invoicedetail>
 
-                        <div class="invoiceDetail-header col-md-12">
+                        <div class="invoice-detail-header col-md-12">
 
                             <div class="row">
 
-                                <div class="col-sm-4 col-12">
+                                <div class="col-md-4 col-12">
                                     <div class="invoice-num-holder">
                                         <h3 class="invoice-num">
                                             {{selectedItem?.voucherNumber ? selectedItem?.voucherNumber : '-'}}</h3>
@@ -92,7 +92,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-8 col-12">
+                                <div class="col-md-8 col-12">
                                     <div class="edit-change-status">
 
                                         <span class="close-modal cp pull-right" (click)="onCancel()">
@@ -259,7 +259,7 @@
 
                             <div class="row">
 
-                                <div class="col-sm-4" *ngIf="(selectedItem.voucherType !== 'credit note' && selectedItem.voucherType !== 'debit note') &&
+                                <div class="col-md-4 col-12" *ngIf="(selectedItem.voucherType !== 'credit note' && selectedItem.voucherType !== 'debit note') &&
                                     (selectedItem.voucherStatus !== 'paid' && selectedItem.voucherStatus !== 'cancel')">
                                     <div class="single-paymentDetail clearfix pr-4">
                                         <div class="payment-icon"><img src="assets/images/dollar-icon.svg"></div>
@@ -272,7 +272,7 @@
                                 </div>
 
 
-                                <div class="col-sm-4">
+                                <div class="col-md-4 col-12">
                                     <div class="single-paymentDetail clearfix">
                                         <div class="payment-icon"><img src="assets/images/send-icon.svg"></div>
                                         <p class="payment-content">You can now email this invoice to your customer or
@@ -287,7 +287,7 @@
 
                         </div>
 
-                        <div class="payment-log" *ngIf="only4ProformaEstimates">
+                        <div class="payment-log col-md-12" *ngIf="only4ProformaEstimates">
                             <div class="payment-log-div">
 
                                 <div style="padding: 10px 0 10px 10px;" *ngIf="moreLogsDisplayed">
@@ -319,7 +319,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="!isMobileView" class="invoice-image-section">
+                    <div class="invoice-image-section">
                         <div class="relative">
                             <div class="pos-rel" *ngIf="isVoucherDownloading || isFileUploading">
                                 <div class="loader"></div>

@@ -443,13 +443,7 @@ p {
 
 /* Handle */
 #default::-webkit-scrollbar-thumb {
-    background: $gainsboro;
-    border-radius: 20px;
-}
-
-/* Handle on hover */
-#default::-webkit-scrollbar-thumb:hover {
-    background: $gainsboro;
+    background: $nobel;
     border-radius: 20px;
 }
 #default body {
@@ -966,6 +960,7 @@ table.tax-table.item {
     .wrap-edit-history-btn{
         float: left;
         display: flex;
+        align-items: center;
     }
     .invoice-detail-header{
         padding-left: 30px !important;
