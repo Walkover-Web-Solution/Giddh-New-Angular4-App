@@ -111,7 +111,7 @@
                                                         [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('customer')"
                                                         (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'customer')"
                                                         [notFoundMsg]="noResultsFoundLabel"
-                                                        [enableDynamicSearch]="true" (onHide)="resetPreviousSearchResults()"
+                                                        [enableDynamicSearch]="true" (onHide)="resetPreviousSearchResults(true, 'customer')"
                                                         (selected)="onSelectCustomer($event);" [placeholder]="customerPlaceHolder" [notFoundLink]="true" [doNotReset]="true" [forceClearReactive]="forceClear$ | async" [isFilterEnabled]="true" (noResultsClicked)="addNewAccount()"
                                                         [multiple]="false" [ItemHeight]="67" [notFoundLinkText]="customerNotFoundText" (keyup)="resetCustomerName($event)" (onClear)="resetCustomerName(null)" [disabled]="isUpdateMode && invoiceType !== 'sales' && invoiceType !== 'cash'">
 
@@ -1914,7 +1914,7 @@
                                                 [isPaginationEnabled]="true" (scrollEnd)="handleScrollEnd('item')"
                                                 (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
                                                 [notFoundMsg]="noResultsFoundLabel"
-                                                [enableDynamicSearch]="true" (onHide)="resetPreviousSearchResults()"
+                                                [enableDynamicSearch]="true" (onHide)="resetPreviousSearchResults(true, 'item')"
                                                 [forceClearReactive]="forceClear$ | async" (noResultsClicked)="onNoResultsClicked(entryIdx)" [multiple]="false" [ItemHeight]="67" (onClear)="onClearSalesAccount(transaction)" [useInBuiltFilterForFlattenAc]="true">
 
                                                 <ng-template #optionTemplate let-option="option">
