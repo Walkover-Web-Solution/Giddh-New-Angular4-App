@@ -79,7 +79,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgxMaskModule.forRoot(),
         DigitsOnlyModule,
         ShSelectModule
-
     ],
     providers: [
         {

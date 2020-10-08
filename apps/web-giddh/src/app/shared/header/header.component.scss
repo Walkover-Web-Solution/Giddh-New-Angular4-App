@@ -602,10 +602,6 @@ span.icon-support.dropdown-toggle {
 ul.sub-list {
     min-height: 50px;
     max-height: 290px;
-    .company-branch {
-        padding-left: 32px;
-        cursor: pointer;
-    }
 }
 
 .upgrade-plan.list-inline > li {
@@ -777,6 +773,8 @@ ul.sub-list {
             width: 100%;
             align-items: center;
             justify-content: space-between;
+            word-break: break-word;
+            white-space: inherit;
             span{
                 font-size: 9px;
                 float: right;
@@ -805,6 +803,10 @@ ul.sub-list {
             li{
                 a{
                     padding: 6px 10px;
+                    &.dropdown-item.active-branch {
+                        color: $chetwode-blue;
+                        font-weight: bold;
+                    }
                 }
             }
             .go-to-company{

@@ -279,8 +279,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /* This will hold if resolution is less than 768 to consider as mobile screen */
     public isMobileScreen: boolean = false;
 
+    /** Stores the details of the current branch */
+    public currentBranch: any;
     /** Observable to store the branches of current company */
-    private currentCompanyBranches$: Observable<any>;
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Search query to search branch */
+    public searchBranchQuery: string;
 
     /**
      *
@@ -487,16 +493,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
-                if (this.selectedCompanyDetails) {
-                    response.forEach(element => {
-                        element.isBranch = true;
-                    });
-                    this.companyList.forEach((company) => {
-                        if (company.uniqueName === this.selectedCompanyDetails.uniqueName) {
-                            company.branches = response;
-                        }
-                        return company;
-                    });
+                this.currentCompanyBranches = response;
+                if (this.generalService.currentBranchUniqueName) {
+                    this.currentBranch = response.find(branch =>
+                        (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
+                } else {
+                    this.currentBranch = '';
                 }
             }
         })
@@ -570,10 +572,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
             }
         });
-        if (this.generalService.companyUniqueName) {
-            // Avoid API call if new user is onboarded
-            this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
-        }
+        this.loadCompanyBranches();
 
         // region creating list for cmd+g modal
         combineLatest(
@@ -762,6 +761,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (organization && organization.details && organization.details.branchDetails) {
                 this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
                 this.generalService.currentOrganizationType = organization.type;
+                if (this.generalService.currentBranchUniqueName) {
+                    this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
+                        if (response) {
+                            this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
+                        }
+                    });
+                }
             } else {
                 this.generalService.currentOrganizationType = OrganizationType.Company;
             }
@@ -1206,6 +1212,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public switchToBranch(branchUniqueName: string, event: any): void {
         event.stopPropagation();
+        this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.currentBranch = response.find(branch => branch.uniqueName === branchUniqueName);
+            }
+        });
         event.preventDefault();
         this.companyDropdown.isOpen = false;
         this.toggleBodyScroll();
@@ -1216,6 +1227,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         };
         this.setOrganziationDetails(OrganizationType.Branch, details);
         window.location.reload();
+    }
+
+    /**
+     * Switches to company view from branch view
+     *
+     * @memberof HeaderComponent
+     */
+    public goToCompany(): void {
+        this.changeCompany(this.selectedCompanyDetails.uniqueName);
     }
 
     public deleteCompany(e: Event) {
@@ -1484,6 +1504,30 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return cmp.name.toLowerCase().includes(ev.toLowerCase()) || cmp.nameAlias.toLowerCase().includes(ev.toLowerCase());
             }
         });
+    }
+
+    /**
+     * Filters the branches based on text provided
+     *
+     * @param {string} branchName Branch name query entered by the user
+     * @memberof HeaderComponent
+     */
+    public filterBranch(branchName: string): void {
+        let branches = [];
+        this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
+            branches = response || [];
+        });
+        if (branchName) {
+            this.currentCompanyBranches = branches.filter(branch => {
+                if (!branch.alias) {
+                    return branch.name.toLowerCase().includes(branchName.toLowerCase());
+                } else {
+                    return branch.name.toLowerCase().includes(branchName.toLowerCase()) || branch.alias.toLowerCase().includes(branchName.toLowerCase());
+                }
+            });
+        } else {
+            this.currentCompanyBranches = branches;
+        }
     }
 
     public closeUserMenu(ev) {
@@ -1948,6 +1992,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.router.navigate(['/pages/all-modules']);
         }
         this.isAllModuleOpen = !this.isAllModuleOpen;
+    }
+
+    /**
+     * Loads company branches
+     *
+     * @memberof HeaderComponent
+     */
+    public loadCompanyBranches(): void {
+        if (this.generalService.companyUniqueName) {
+            // Avoid API call if new user is onboarded
+            this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+        }
     }
 
     /**
