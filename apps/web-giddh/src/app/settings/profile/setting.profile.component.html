@@ -1,4 +1,4 @@
-<div class="box clearfix mt-md-1" *ngIf="!(getCompanyProfileInProgress$ | async)">
+<div class="box clearfix mt-md-1 d-none" *ngIf="!(getCompanyProfileInProgress$ | async)">
     <div class="row">
         <form (ngSubmit)="updateProfile(companyProfileObj)" class="col-lg-10 col-md-12 profile-form">
             <div class="row">
@@ -255,7 +255,7 @@
         </form>
     </div>
 </div>
-<div class="no-data mr-t2 loader-main" *ngIf="(getCompanyProfileInProgress$ | async)">
+<div class="no-data mr-t2 loader-main d-none" *ngIf="(getCompanyProfileInProgress$ | async)">
     <div class="spinner2">
         <div class="cube1"></div>
         <div class="cube2"></div>
@@ -265,283 +265,17 @@
 
 
 <!--Tabs of Company Profile-->
-<div *ngIf="isNewCompanyProfile">
+<div *ngIf="isNewCompanyProfile" class="new-architecture-tabs">
 <tabset #staticTabs>
     <tab heading="Personal Information">
-        <div class="container-fluid">
-            <div class="row mr-0 ml-0">
-                <div class="col-md-12 mt-15">
-                    <div class="d-flex form-group">
-                            <div class="custom-file cp" id="customFile">
-                                <input type="file" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp">
-                                <label class="custom-file-label d-flex align-items-center justify-content-center" for="exampleInputFile">
-                                    <i class="icon-plus"></i>
-                                </label>
-                            </div>
-                        <div class="font-14 pl-2">
-                            <p class="pb-1">This logo will appear on the vouchers (estimates, invoices, etc.) that are created.</p>
-                            <p class="pb-1 img-size">Preferred Image Size: 240px x 240px @ 72 DPI Maximum size of 1MB.</p>
-                            <a href="#">Remove Logo</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12 mt-2 border-bottom pb-15">
-                <div class="row pb-1">
-                        <div class="col-md-3 col-sm-12 col-lg-3 col-xl-2 d-flex align-items-center">
-                                <label class="font-14">Company Name</label>
-                        </div>
-                        <div class="col-md-4 col-sm-12 col-lg-4 col-xl-3">
-                                <div class="form-group mb-0">
-                                    <div class="input-group">
-                                        <input type="text" placeholder="" name="companyName" class="form-control" ng-reflect-name="companyName"/>
-                                    </div>
-                                </div>
-                        </div>
-                </div>
-                <div class="row pb-1 unique-name">
-                        <div class="col-md-3 col-sm-12 col-lg-3 col-xl-2">
-                                <label class="font-14">Unique Name:</label>
-                        </div>
-                        <div class="col-md-4 col-sm-12 col-lg-4 col-xl-3">
-                                <div class="font-14">LoremCompanyNameDummy Text</div>
-                        </div>
-                </div>
-                <div class="row pb-1 parent-name">
-                    <div class="col-md-3 col-sm-12 col-lg-3 col-xl-2">
-                        <label class="font-14">Parent:</label>
-                    </div>
-                    <div class="col-md-4 col-sm-12 col-lg-4 col-xl-3">
-                        <div class="font-14">Lorem Alias NameDummy Text (Registered)</div>
-                    </div>
-                </div>
-                <div class="row country-name">
-                        <div class="col-md-3 col-sm-12 col-lg-3 col-xl-2">
-                                <label class="font-14">Country & Currency:</label>
-                        </div>
-                        <div class="col-md-4 col-sm-12 col-lg-4 col-xl-3">
-                            <div class="font-14">India - INR Rupee</div>
-                        </div>
-                </div>
-                </div>
-
-            </div>
-            <div class="personal-other-deatils">
-                <div class="row">
-                    <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
-                        <div class="form-group">
-                            <label>GST Type</label>
-                            <input type="text" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <!-- branch profile element start -->
-                <div class="row" *ngIf="isBranchElement">
-                    <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
-                        <div class="form-group">
-                            <label>Alias</label>
-                            <input type="text" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <!-- branch profile element end -->
-            </div>
-        </div>
+        <personal-information></personal-information>
     </tab>
     <tab heading="Address/GSTIN">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12 d-flex justify-content-between mt-1 mb-4 align-items-center address-list-top">
-                    <div class="font-14">List of all the addresses created and linked in the company</div>
-                    <button type="button" class="btn btn-sky-blue" (click)="openAddAndManage()">+ Add Address</button>
-                </div>
-                <!-- branch profile element start -->
-                <div *ngIf="isBranchElement" class="col-md-12 d-flex justify-content-between mt-4 mb-4 align-items-center address-list-top">
-                    <div class="font-14">List of all the addresses created</div>
-                    <button type="button" class="btn btn-sky-blue" (click)="openAddAndManage()">+ Add Address</button>
-                </div>
-                <!-- branch profile element end -->
-               <div class="col-md-12">
-                    <div class="table-responsive">
-                            <table class="table basic table-bordered giddh-table on-mobile-view">
-                                <thead>
-                                    <tr>
-                                        <th class="min-wid-check" width="5%">
-                                            <div>#</div>
-                                        </th>
-                                        <th width="15%" class="td-search-box">
-                                                <div>
-                                                    <span>Name</span>
-                                                    <i class="icon-search"></i>
-                                                </div>
-                                        </th>
-                                        <th width="25%" class="td-search-box">
-                                                <div>
-                                                    <span>Address</span>
-                                                    <i class="icon-search"></i>
-                                                </div>
-                                            </th>
-                                            <th width="15%" class="td-search-box">
-                                                    <div>
-                                                            <span>State</span>
-                                                            <i class="icon-search"></i>
-                                                        </div>
-                                            </th>
-                                            <th width="25%" class="td-search-box">
-                                                <div>
-                                                        <span>Linked with</span>
-                                                        <i class="icon-search"></i>
-                                                    </div>
-                                            </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                            <td data-title="#">
-                                                    <div>1.</div>
-                                                </td>
-                                                <td data-title="Name">
-                                                        <div>Walkover web Indore</div>
-                                                </td>
-                                                <td data-title="Address">
-                                                    <div>
-                                                        WALKOVER, <br/>
-                                                        405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash Hospital, Indore-452080, MP <br/>
-                                                        GSTIN : 23DJOIAJSO543
-                                                        </div>
-                                                </td>
-                                                <td data-title="State">
-                                                    <div>MP - Madhya Pradesh</div>
-                                                </td>
-                                                <td data-title="Linked with">
-                                                    <div class="d-flex">
-                                                        <div class="d-flex flex-column linked-with">
-                                                            <span class="pb-1"><i class="icon-company-HO"></i>Alias Company Name</span>
-                                                            <span class="pb-1"><i class="icon-branch-icon"></i>Alias Branch Name</span>
-                                                            <span><i class="icon-warehouse-icon"></i>Alias Warehouse Name</span>
-                                                            </div>
-
-                                                            <div class="ml-auto">
-                                                                    <div class="action-icon">
-                                                                            <a><span class="icon-edit"></span></a>
-                                                                            <a><span class="icon-trash"></span></a>
-                                                                        </div>
-                                                            </div>
-                                                        </div>
-                                                </td>
-                                    </tr>
-
-                                </tbody>
-                                </table>
-                    </div>
-                </div>
-                <!-- branch profile element start -->
-                <div *ngIf="isBranchElement" class="branch-profile-address-content col-md-12">
-                    <div class="single-branch-detail mb-15">
-                        <h4><i class="icon-branch-icon"></i>Address Name Dummy</h4>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label>Address:</label>
-                                <p>WALKOVER, 405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash Hospital, Indore-452080, MP, GSTIN: 23IDJHFOSD435</p>
-                            </div>
-                            <div class="col-md-4 mb-1">
-                                <label>State:</label>
-                                <p>MP-Madhya Pradesh</p>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="set-default">
-                                    <p class="no-selected mb-1 cursor-pointer" hidden><i class="icon-no-selected mr-05"></i>Set as Default</p>
-                                    <p class="selected-defualt mb-1 cursor-pointer"><i class="icon-favorite-selected mr-05"></i>Set as Default</p>
-                                    <p><i class="icon-unlink mr-05 cursor-pointer"></i>Unlink Address</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- branch profile element end -->
-                <div class="col-md-12 text-center">
-                    <pagination></pagination>
-                </div>
-                </div>
-        </div>
+    <address-settings></address-settings>
     </tab>
     <tab heading="Other">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="border-bottom font-14">
-                    <p class="pt-15 pb-15"> All the information will save in <strong>Lorem Ipsum Company Name</strong></p>
-                    <!-- branch profile element start -->
-                        <div class="other-detail-section" *ngIf="isBranchElement">
-                            <div class="mb-15">
-                                <label>Number System</label> <span>1,00,00,000</span>
-                            </div>
-                            <div class="mb-15">
-                                <label>Date Format</label> <span>DD/MM/YYYY (15/09/2020)</span>
-                            </div>
-                            <div class="mb-15">
-                                <label>Number System</label> <span>(GMT 5:30) India Standard Time (Asia/Calcutta)</span>
-                            </div>
-                        </div>
-                        <!-- branch profile element end -->
-                    </div>
-
-                    </div>
-
-            </div>
-            <div class="row mt-2 pb-2">
-            <div class="col-lg-12 col-xl-7 other-information">
-                    <div class="clearfix">
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label>Digits After Decimal</label>
-                                            <input type="text" class="form-control">
-                                        </div>
-                                        <div class="col-6">
-                                                <label>Number System</label>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="row">
-                                        <div class="col-9">
-                                                <label>Date Format</label>
-                                                <input type="text" class="form-control">
-                                        </div>
-                                        <div class="col-3 pl-0">
-                                                <label></label>
-                                                <input type="text" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                </div>
-                                <div class="form-group row">
-                                        <div class="col-md-6">
-                                                    <label>Financial Year Period</label>
-                                                    <input type="text" class="form-control">
-                                            </div>
-                                            <div class="col-md-6">
-                                                    <label>Time Zone</label>
-                                                    <input type="text" class="form-control">
-                                    </div>
-                                </div>
-                    </div>
-            </div>
-            </div>
-        </div>
+    <other-settings></other-settings>
     </tab>
 </tabset>
-
-
-
-
-<!-- Create address part of Address Tab -->
-<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-<div class="abc " *ngIf="accountAsideMenuState === 'in'">
-    <create-address class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)">
-</create-address>
-</div>
 
 </div>

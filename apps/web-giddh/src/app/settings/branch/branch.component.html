@@ -147,7 +147,7 @@
                                             <i class="icon-collapse"></i> Collapse</a>
 
                                         <div class="ml-15 active-status">
-                                            <span></span>Active
+                                            <span class="status-bullet d-flex align-items-center">Active</span>
                                         </div>
 
                                     <a id="button-basic" dropdownToggle type="button"
@@ -159,7 +159,7 @@
                                         <li role="menuitem"><a class="dropdown-item"
                                                 (click)="removeBranch(branch.uniqueName, branch.name)">Delink</a></li>
                                                 <li role="menuitem"><a class="dropdown-item" (click)="openEditBranch()">Edit</a></li>
-                                                <li role="menuitem"><a class="dropdown-item">Move</a></li>
+                                                <li role="menuitem"><a class="dropdown-item" (click)="openModal(template)">Move</a></li>
                                                 <li role="menuitem"><a class="dropdown-item">Archive</a></li>
                                                 <li role="menuitem"><a class="dropdown-item">Merge</a></li>
                                                 <li role="menuitem"><a class="dropdown-item">Delete</a></li>
@@ -193,7 +193,9 @@
                                             
                                                     <div class="linked-add">
                                                         <input id="address1" type="radio" name="address" value="1" class="star-radio">
-                                                        <label for="address1" class="cursor-pointer">Address Name 2</label>
+                                                        <label for="address1" class="cursor-pointer" popover="405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash Hospital, Indore-452080, MP GSTIN : 23HDOIJSI809"
+                                                        popoverTitle="Address Name 1"
+                                                        placement="right" triggers="mouseenter:mouseleave">Address Name 2</label>
                                                     </div>
                                                     <div class="linked-add">
                                                         <input id="address2" type="radio" name="address" value="2" class="star-radio">

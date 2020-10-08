@@ -2,12 +2,12 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { Store, select } from '@ngrx/store';
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, AfterViewInit, TemplateRef } from '@angular/core';
 import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { ModalDirective, BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { CompanyAddNewUiComponent } from '../../shared/header/components';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyResponse, BranchFilterRequest } from '../../models/api-models/Company';
@@ -68,6 +68,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public dateRangePickerValue: Date[] = [];
     public isAttachmentExpanded: boolean = false;
     public accountAsideMenuState: string = 'out';
+    
+    modalRef: BsModalRef;
 
     constructor(
         private store: Store<AppState>,
@@ -77,7 +79,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private settingsProfileActions: SettingsProfileActions,
         private commonActions: CommonActions,
         private _generalService: GeneralService,
-        private _breakPointObservar: BreakpointObserver
+        private _breakPointObservar: BreakpointObserver,
+        private modalService: BsModalService
     ) {
         this.getOnboardingForm();
 
@@ -360,6 +363,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         } else {
             document.querySelector('body').classList.remove('fixed');
         }
+    }
+
+    openModal(template: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(template);
     }
     
 }

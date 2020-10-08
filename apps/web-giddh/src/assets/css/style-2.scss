@@ -9652,6 +9652,23 @@ span#HW_badge_cont:nth-child(3) {
     }
 }
 
+.new-architecture-tabs{
+    .tab-container{
+        .nav-tabs{
+            .nav-item{
+                .nav-link{
+                    font-size: 16px !important;
+                    color: $midnight-blue !important;
+                }
+            }
+            .active{
+                > .nav-link{
+                    color: $midnight-blue !important;
+                }
+            } 
+        }
+    }
+}
 
 /* responsive */
 

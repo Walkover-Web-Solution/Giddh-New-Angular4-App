@@ -108,7 +108,7 @@
 }
 .card-basic-details .dropdown-menu > li > a {
     padding: 5px 10px;
-    cursor: default;
+    cursor: pointer;
 }
 .card-basic-details a#button-basic {
     color: #333;
@@ -169,6 +169,13 @@
     color: $light-green;
 }
 
+.status-bullet{
+    &:before {
+        content: ' \2022';
+        font-size:34px;
+    }
+}
+
 .parent-branch{
     color: $gray;
 }
@@ -196,6 +203,7 @@
         }
     }
 }
+
 
 .btn-group.more-btn.open.show {
     display: inline-block !important;
