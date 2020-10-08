@@ -24,7 +24,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private _toaster: ToasterService,
+        private toasterService: ToasterService,
         private activatedRoute: ActivatedRoute
     ) {
         //
@@ -36,7 +36,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         let isValidFileType = validExts.some(s => type === s);
 
         if (!isValidFileType) {
-            this._toaster.errorToast('Only XLS files are supported for Import');
+            this.toasterService.errorToast('Only XLS files are supported for Import');
             this.selectedFileName = '';
             this.file = null;
             return;

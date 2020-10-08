@@ -1,5 +1,4 @@
-<form class="horizontal-form ng-pristine ng-valid ng-valid-required manage-group-account-form" id="groupDetailForm" name="groupDetailForm"
-    novalidate [formGroup]="groupDetailForm" (submit)="updateGroup()">
+<form class="horizontal-form ng-pristine ng-valid ng-valid-required manage-group-account-form" id="groupDetailForm" name="groupDetailForm" novalidate [formGroup]="groupDetailForm" (submit)="updateGroup()">
     <div class="container-fluid mr-t1">
         <div class="row">
             <div class="form-group col-xs-12 col-sm-6">
@@ -51,9 +50,7 @@
             <button class="btn btn-danger" type="button" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed" (click)="showDeleteGroupModal()">Delete
             </button>
 
-            <button class="btn btn-primary mr-l1" type="submit" *ngIf="(showEditGroup$ | async)"
-                [ladda]="isUpdateGroupInProcess$ | async"
-                [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update
+            <button class="btn btn-primary mr-l1" type="submit" *ngIf="(showEditGroup$ | async)" [ladda]="isUpdateGroupInProcess$ | async" [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update
             </button>
 
         </div>
@@ -107,8 +104,7 @@
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'"
-                            [options]="companyTaxDropDown | async" [multiple]="true">
+                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'" [options]="companyTaxDropDown | async" [multiple]="true">
                         </sh-select>
                         <span class="input-group-btn pdL2"> <button type="submit"
                                 class="btn btn-success">Save</button></span>
@@ -136,7 +132,8 @@
     <!-- taxes container -->
 </div>
 
-<div class="horizontal-form mr1" *ngIf="isDebtorCreditorGroups">
+<!-- hinding discount for isDebtorCreditorGroups due to API deployment in-process -->
+<div class="horizontal-form mr1" *ngIf="false">
     <div class="mb-2 selectBox">
         <div class="form-group ">
             <label>Default Discounts <span

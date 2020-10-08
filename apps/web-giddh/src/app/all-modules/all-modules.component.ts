@@ -29,6 +29,8 @@ export class AllModulesComponent implements OnInit {
     public showLoader: boolean = false;
     /** All modules data array with routing shared with user */
     public allModulesList = [];
+    /* This will check if company is allowed to beta test new modules */
+    public isAllowedForBetaTesting: boolean = false;
     constructor(private componentFactoryResolver: ComponentFactoryResolver, private store: Store<AppState>, private generalActions: GeneralActions, private groupWithAccountsAction: GroupWithAccountsAction, private generalService: GeneralService, private route: Router, private permissionService: PermissionService) {
 
     }
@@ -40,15 +42,16 @@ export class AllModulesComponent implements OnInit {
      */
     public ngOnInit(): void {
         // commenting for later use if required
-        // this.store.pipe(select(state => state.session.companies), take(1)).subscribe(companies => {
-        //     companies = companies || [];
-        //     this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+        this.store.pipe(select(state => state.session.companies), take(1)).subscribe(companies => {
+            companies = companies || [];
+            this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
 
-        //     if(this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
-        //         this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
-        //     }
-        // });
-        this.getSharedAllModules();
+            if(this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
+                this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
+            }
+        });
+        // commenting for later use
+        // this.getSharedAllModules();
     }
 
     /**

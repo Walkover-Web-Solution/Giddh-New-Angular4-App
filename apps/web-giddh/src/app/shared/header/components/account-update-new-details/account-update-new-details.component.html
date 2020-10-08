@@ -450,13 +450,14 @@
         </div>
 
     </div>
-    <div class="form" *ngIf="isDebtorCreditor && isOtherSelectedTab">
+    <!-- commenting/hiding due to API deployment process in going on for prod (use : isDebtorCreditor && isOtherSelectedTab) -->
+    <div class="form" *ngIf="false">
         <div class="mrB2 selectBox">
             <div class="form-group ">
                 <label>Default Discount <span
                     class="primary-color"></span></label>
                 <div class="clearfix">
-                <span>
+                    <span>
                         <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" placeholder="Select discounts" ></sh-select>
                     </span>
                     <span class="pull-right">

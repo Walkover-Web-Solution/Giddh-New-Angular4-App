@@ -220,9 +220,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
                 if (accountDetails.uniqueName) {
                     this.accountInheritedDiscounts = [];
-                    accountDetails.inheritedDiscounts.forEach(item => {
-                        this.accountInheritedDiscounts.push(...item.applicableDiscounts);
-                    });
+                    if (accountDetails && accountDetails.inheritedDiscounts) {
+                        accountDetails.inheritedDiscounts.forEach(item => {
+                            this.accountInheritedDiscounts.push(...item.applicableDiscounts);
+                        });
+                    }
                     this._accountService.GetApplyDiscount(accountDetails.uniqueName).subscribe(response => {
                         this.selectedDiscounts = [];
                         this.forceClearDiscount$ = observableOf({ status: true });
@@ -472,7 +474,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         for (const el of groupList) {
             if (el.accounts) {
-                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses' || this.isDebtorCreditor)) {
+                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses')) {
                     result = true;
                     break;
                 }
@@ -1078,12 +1080,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     if (res.country.currency) {
                         this.selectedCountryCurrency = res.country.currency.code;
                         this.selectedAccountCallingCode = res.country.callingCode;
-                        if(selectedAcountCurrency) {
-                        this.addAccountForm.get('currency').patchValue(selectedAcountCurrency);
-                        this.selectedCurrency = selectedAcountCurrency;
+                        if (selectedAcountCurrency) {
+                            this.addAccountForm.get('currency').patchValue(selectedAcountCurrency);
+                            this.selectedCurrency = selectedAcountCurrency;
                         } else {
-                        this.addAccountForm.get('currency').patchValue(this.selectedCountryCurrency);
-                        this.selectedCurrency = this.selectedCountryCurrency;
+                            this.addAccountForm.get('currency').patchValue(this.selectedCountryCurrency);
+                            this.selectedCurrency = this.selectedCountryCurrency;
                         }
                         if (!this.addAccountForm.get('mobileCode').value) {
                             this.addAccountForm.get('mobileCode').patchValue(this.selectedAccountCallingCode);

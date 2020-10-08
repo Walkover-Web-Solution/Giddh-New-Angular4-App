@@ -652,26 +652,24 @@ export class AccountsAction {
                 };
             })));
 
-    @Effect()
-    public ApplyAccountDiscountsV2$: Observable<Action> = this.action$
+    public ApplyAccountDiscountsV2$: Observable<Action> = createEffect(() => this.action$
         .pipe(ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNTS_V2),
             switchMap((action: CustomActions) => this._accountService.applyDiscounts(action.payload)),
             map(response => {
                 return this.applyAccountDiscountResponseV2(response);
-            }));
+            })));
 
-    @Effect()
-    public ApplyAccountDiscountResponseV2$: Observable<Action> = this.action$
+    public ApplyAccountDiscountResponseV2$: Observable<Action> = createEffect(() => this.action$
         .pipe(ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNT_RESPONSE_V2),
             map((action: CustomActions) => {
                 let data: BaseResponse<string, AssignDiscountRequestForAccount> = action.payload;
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
-                } else if(action.payload.status === 'success') {
+                } else if (action.payload.status === 'success') {
                     this._toasty.successToast('Discount Linked Successfully', action.payload.status);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
     constructor(private action$: Actions,
         private _accountService: AccountService,
         private _toasty: ToasterService,
