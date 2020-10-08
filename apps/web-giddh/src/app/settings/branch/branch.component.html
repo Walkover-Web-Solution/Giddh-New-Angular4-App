@@ -141,8 +141,10 @@
                             </div>
                             <div class="pull-right">
                                 <div class="btn-group align-items-center" dropdown [autoClose]="true">
-                                        <a href="javascript:;" *ngIf="!isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = true;">Expand</a>
-                                        <a href="javascript:;" *ngIf="isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = false;">Collapse</a>
+                                        <a href="javascript:;" *ngIf="!isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = true;">
+                                            <i class="icon-expandIcon"></i> Expand</a>
+                                        <a href="javascript:;" *ngIf="isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = false;">
+                                            <i class="icon-collapse"></i> Collapse</a>
 
                                         <div class="ml-15 active-status">
                                             <span></span>Active

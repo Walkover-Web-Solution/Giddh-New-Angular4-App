@@ -265,6 +265,7 @@
 
 
 <!--Tabs of Company Profile-->
+<div *ngIf="isNewCompanyProfile">
 <tabset #staticTabs>
     <tab heading="Personal Information">
         <div class="container-fluid">
@@ -334,14 +335,14 @@
                     </div>
                 </div>
                 <!-- branch profile element start -->
-                <!--<div class="row" *ngIf="isBranchElement">
+                <div class="row" *ngIf="isBranchElement">
                     <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
                         <div class="form-group">
                             <label>Alias</label>
                             <input type="text" class="form-control">
                         </div>
                     </div>
-                </div>-->
+                </div>
                 <!-- branch profile element end -->
             </div>
         </div>
@@ -349,7 +350,7 @@
     <tab heading="Address/GSTIN">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-12 d-flex justify-content-between mt-4 mb-4 align-items-center address-list-top">
+                <div class="col-md-12 d-flex justify-content-between mt-1 mb-4 align-items-center address-list-top">
                     <div class="font-14">List of all the addresses created and linked in the company</div>
                     <button type="button" class="btn btn-sky-blue" (click)="openAddAndManage()">+ Add Address</button>
                 </div>
@@ -413,10 +414,10 @@
                                                 </td>
                                                 <td data-title="Linked with">
                                                     <div class="d-flex">
-                                                        <div class="d-flex flex-column">
-                                                            <span class="pb-1">Alias Company Name</span>
-                                                            <span class="pb-1">Alias Branch Name</span>
-                                                            <span>Alias Warehouse Name</span>
+                                                        <div class="d-flex flex-column linked-with">
+                                                            <span class="pb-1"><i class="icon-company-HO"></i>Alias Company Name</span>
+                                                            <span class="pb-1"><i class="icon-branch-icon"></i>Alias Branch Name</span>
+                                                            <span><i class="icon-warehouse-icon"></i>Alias Warehouse Name</span>
                                                             </div>
 
                                                             <div class="ml-auto">
@@ -468,7 +469,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="border-bottom font-14">
-                       <p class="pt-15 pb-15"> All the information will save in <strong>Lorem Ipsum Company Name</strong></p>
+                    <p class="pt-15 pb-15"> All the information will save in <strong>Lorem Ipsum Company Name</strong></p>
+                    <!-- branch profile element start -->
                         <div class="other-detail-section" *ngIf="isBranchElement">
                             <div class="mb-15">
                                 <label>Number System</label> <span>1,00,00,000</span>
@@ -480,6 +482,7 @@
                                 <label>Number System</label> <span>(GMT 5:30) India Standard Time (Asia/Calcutta)</span>
                             </div>
                         </div>
+                        <!-- branch profile element end -->
                     </div>
 
                     </div>
@@ -532,10 +535,13 @@
 </tabset>
 
 
+
+
 <!-- Create address part of Address Tab -->
-<!--<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
 <div class="abc " *ngIf="accountAsideMenuState === 'in'">
     <create-address class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)">
 </create-address>
-</div>-->
+</div>
 
+</div>
