@@ -1614,15 +1614,9 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-track {
 
 /* Handle */
 cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
-  background: $dim-gray;
+  background: $nobel;
   border-radius: 10px;
 }
-
-/* Handle on hover */
-cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb:hover {
-  background: $dim-gray;
-}
-
 .calendar-d-flex{
     display: flex;
 }
