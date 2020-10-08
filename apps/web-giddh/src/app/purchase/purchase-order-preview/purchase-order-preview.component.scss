@@ -938,9 +938,12 @@ table.tax-table.item {
     }
 }
 @media(max-width:991px){
+    .invoice-sidebar-wrapper {
+        display: none;
+    }
     .invoice-modal-content{
-        top:0;
-        position: static;
+        top:60px;
+        overflow-y:auto;
         .invoice-sidebar{
             height: 300px;
         }
@@ -964,6 +967,11 @@ table.tax-table.item {
     }
     .invoice-detail-header{
         padding-left: 30px !important;
+    }
+}
+@media(max-width:767px){
+    .invoice-modal-content{
+        top:90px;
     }
 }
 @media(max-width:575px){
@@ -992,6 +1000,17 @@ table.tax-table.item {
         }
         .change-status-dropdown{
             float: left;
+            display: flex !important;
+            width: 100% !important;
+            .btn{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+            }
+        }
+        .wrap-edit-history-btn{
+            justify-content: space-between;
         }
     }
 }
