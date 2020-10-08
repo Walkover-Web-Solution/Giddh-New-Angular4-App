@@ -263,7 +263,7 @@
     <div class="menu-wrapper">
         <!-- switch branch start -->
         <div class="switch-branch-wrapper">
-            <div class="btn-group" dropdown placement="bottom right" [autoClose]="true">
+            <div class="btn-group" dropdown placement="bottom right" #subdropdown="bs-dropdown" [autoClose]="false" (clickOutside)="subdropdown.isOpen = false">
                 <a id="button-basic" dropdownToggle type="button" class="dropdown-toggle"
                     aria-controls="dropdown-basic">
                     <ng-container *ngIf="currentBranch">{{currentBranch?.name}} ({{currentBranch?.alias}})</ng-container>
