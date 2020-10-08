@@ -443,13 +443,7 @@ p {
 
 /* Handle */
 #default::-webkit-scrollbar-thumb {
-    background: $gainsboro;
-    border-radius: 20px;
-}
-
-/* Handle on hover */
-#default::-webkit-scrollbar-thumb:hover {
-    background: $gainsboro;
+    background: $nobel;
     border-radius: 20px;
 }
 #default body {
