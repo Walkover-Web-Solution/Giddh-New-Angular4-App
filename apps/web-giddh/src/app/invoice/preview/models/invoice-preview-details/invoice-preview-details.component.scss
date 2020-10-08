@@ -56,7 +56,7 @@
     color: #0c8fe6;
 }
 
-.invoice-sidebar .invoice-number-date span.inovice-date {
+.invoice-sidebar .invoice-number-date span.invoice-date {
     color: #666666;
 }
 
@@ -1079,12 +1079,12 @@ strong {
     .invoice-sidebar .invoice-number-date {
         display: flex;
     }
-    .invoice-sidebar .invoice-number-date span.inovice-date {
+    .invoice-sidebar .invoice-number-date span.invoice-date {
         display: block;
         position: relative;
         margin-left:0;
     }
-    .invoice-sidebar .invoice-number-date span.inovice-date:before {
+    .invoice-sidebar .invoice-number-date span.invoice-date:before {
         position: absolute;
         content: "";
         background-color: $white;
@@ -1095,7 +1095,7 @@ strong {
     .invoice-sidebar
         li.activeItem
         .invoice-number-date
-        span.inovice-date:before {
+        span.invoice-date:before {
         background-color: #f0f0f0;
     }
     .invoice-preview-sidebar{
@@ -1120,6 +1120,9 @@ strong {
     }
 }
 @media (max-width: 991px) {
+    .invoice-preview-sidebar{
+        display: none;
+    }
     .invoice-sidebar {
         background-color: $white;
         padding: 0;
@@ -1139,7 +1142,6 @@ strong {
     }
     .invoice-modal-content {
         height: 100vh !important;
-        overflow-y: auto !important;
     }
     .single-paymentDetail {
         margin-bottom: 10px;
@@ -1170,6 +1172,14 @@ strong {
         position: absolute !important;
         top: -42px;
         right: 30px;
+    }
+    .invoice-detail-header{
+        .edit-change-status{
+            flex-direction: column;
+            .wrap-edit-history-btn{
+                justify-content: space-between;
+            }
+        }
     }
 }
 @media (max-width: 375px) {
