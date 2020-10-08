@@ -290,6 +290,11 @@ span.icon-advance-filter {
     display: none;
 }
 // responsive
+@media(max-width:991px){
+    .invoice-preview-sidebar{
+        display: none;
+    }
+}
 @media (max-width: 768px) {
     .select-all-proformas-on-mobile-view{
         display: flex;
