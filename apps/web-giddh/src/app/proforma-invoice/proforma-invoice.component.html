@@ -1142,7 +1142,12 @@
                                                                     [disabled]="isUpdateMode"
                                                                     (onShown)="hsnDropdownShow = false;"
                                                                     [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                                    #dp="bsDatepicker" />
+                                                                    #dp="bsDatepicker"
+                                                                    container="body" />
+
+                                                                    <giddh-datepicker name="transaction.date_{{entryIdx}}"
+                                                                    [(ngModel)]="entry.entryDate" ></giddh-datepicker>
+
                                                                 <span class="edit-icon cp" (click)="dp.toggle()"
                                                                     [attr.aria-expanded]="dp.isOpen">
                                                                     <img src="assets/images/edit-pencilicon.svg">
