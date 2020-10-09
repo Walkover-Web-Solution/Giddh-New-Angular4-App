@@ -1115,6 +1115,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             tempObj = cloneDeep((results[0] as GenericRequestForGenerateSCD).voucher);
                         }
 
+                        tempObj.entries.forEach((entry, index) => {
+                            tempObj.entries[index].entryDate = this.universalDate || new Date();
+                        });
+
                         obj.entries = tempObj.entries;
                     } else {
                         if (this.isMultiCurrencyModule()) {
