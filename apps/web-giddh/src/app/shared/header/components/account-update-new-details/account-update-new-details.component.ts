@@ -833,6 +833,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         if (!accountRequest.mobileNo) {
             accountRequest.mobileCode = '';
+        } else {
+            if(!this.isMobileNumberValid) {
+                this._toaster.errorToast('Invalid Contact number');
+                return false;
+            }
         }
         if (this.isHsnSacEnabledAcc) {
             // delete accountRequest['country'];
