@@ -69,7 +69,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public dateChange(event: MatDatepickerInputEvent<Date>): void {
-        let selectedDate = moment(event.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        let selectedDate = moment(event.value, GIDDH_DATE_FORMAT).toDate();
         this.onChangeCallback(selectedDate);
     }
 
