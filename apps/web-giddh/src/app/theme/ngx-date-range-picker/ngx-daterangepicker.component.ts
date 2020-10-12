@@ -774,20 +774,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.startDate.minute(Math.round(this.startDate.minute() / this.timePickerIncrement) * this.timePickerIncrement);
         }
 
-        if (this.minDate && this.startDate.isBefore(this.minDate)) {
-            this.startDate = this.minDate.clone();
-            if (this.timePicker && this.timePickerIncrement) {
-                this.startDate.minute(Math.round(this.startDate.minute() / this.timePickerIncrement) * this.timePickerIncrement);
-            }
-        }
-
-        if (this.maxDate && this.startDate.isAfter(this.maxDate)) {
-            this.startDate = this.maxDate.clone();
-            if (this.timePicker && this.timePickerIncrement) {
-                this.startDate.minute(Math.floor(this.startDate.minute() / this.timePickerIncrement) * this.timePickerIncrement);
-            }
-        }
-
         if(this.startDate.isSameOrBefore(this.endDate)) {
             this.invalidEndDate = "";
         }
@@ -822,14 +808,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         if (this.timePicker && this.timePickerIncrement) {
             this.endDate.minute(Math.round(this.endDate.minute() / this.timePickerIncrement) * this.timePickerIncrement);
-        }
-
-        if (this.maxDate && this.endDate.isAfter(this.maxDate)) {
-            this.endDate = this.maxDate.clone();
-        }
-
-        if (this.dateLimit && this.startDate.clone().add(this.dateLimit).isBefore(this.endDate)) {
-            this.endDate = this.startDate.clone().add(this.dateLimit);
         }
 
         if(this.endDate.isSameOrAfter(this.startDate)) {
@@ -970,7 +948,25 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public clickApply(e?): void {
+        this.invalidStartDate = "";
+        this.invalidEndDate = "";
+
+        if(this.startDate.isAfter(this.maxDate)) {
+            this.invalidStartDate = "Invalid date";
+            return;
+        }
+
         if(this.startDate.isAfter(this.endDate)) {
+            this.invalidEndDate = "Invalid date";
+            return;
+        }
+
+        if(this.startDate.isBefore(this.minDate)) {
+            this.invalidStartDate = "Invalid date";
+            return;
+        }
+
+        if(this.endDate.isAfter(this.maxDate)) {
             this.invalidEndDate = "Invalid date";
             return;
         }
