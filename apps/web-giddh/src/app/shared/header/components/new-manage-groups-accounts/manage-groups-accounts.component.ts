@@ -216,7 +216,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             } else {
                 this.toasterService.errorToast(response.message);
             }
-        this.isGetCustomInProgress = false;
+            this.isGetCustomInProgress = false;
 
         });
     }
@@ -328,7 +328,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         } else {
             row.controls[index].get('valueLength').setValidators([Validators.required])
         }
-         row.controls[index].get('valueLength').setValue(null);
+        row.controls[index].get('valueLength').setValue(null);
     }
 
 }

@@ -268,8 +268,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
                 // render custom field data
                 if (accountDetails.customFields && accountDetails.customFields.length > 0) {
-                    accountDetails.customFields.map(a => {
-                        this.renderCustomFieldDetails(a, accountDetails.customFields.length);
+                    accountDetails.customFields.map(item => {
+                        this.renderCustomFieldDetails(item, accountDetails.customFields.length);
                     });
                 }
                 // hsn/sac enable disable
@@ -1482,7 +1482,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      *
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public addBlankCustomFieldForm() {
+    public addBlankCustomFieldForm(): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
         if (customField.value.length === 0) {
             customField.push(this.initialCustomFieldDetailsForm(null));
@@ -1496,7 +1496,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @param {*} customFieldLength
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public renderCustomFieldDetails(obj: any, customFieldLength: any) {
+    public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
         if (customField.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
@@ -1516,7 +1516,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             uniqueName: [''],
             value: [''],
         });
-
         if (value) {
             custoFields.patchValue(value);
         }
@@ -1529,7 +1528,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @param {*} customFieldForm
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public createDynamicCustomFieldForm(customFieldForm: any) {
+    public createDynamicCustomFieldForm(customFieldForm: any): void {
         customFieldForm.map(item => {
             this.renderCustomFieldDetails(item, customFieldForm.length);
         });
@@ -1538,8 +1537,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /**
      * To set boolean type custom field value
      *
-     * @param {string} isChecked
-     * @param {number} index
+     * @param {string} isChecked to check boolean custom field true or false
+     * @param {number} index index number
      * @memberof AccountUpdateNewDetailsComponent
      */
     public selectedBooleanCustomField(isChecked: string, index: number): void {
