@@ -1234,10 +1234,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof ContactComponent
      */
     public closeBulkPaymentModel(event: any): void {
-        //  if bulk paymemt success then clear all selected contacts lists
-        if (event) {
-            this.clearSelectedContacts();
-        }
         this.isBulkPaymentShow = false;
         this.selectedAccForPayment = null;
         this.bulkPaymentModalRef.hide();
