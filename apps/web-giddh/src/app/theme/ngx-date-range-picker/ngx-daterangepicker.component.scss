@@ -813,15 +813,11 @@ $input-height: 3rem !default;
     .buttons {
         text-align: right;
         margin: 0;
-        padding-right: 15px;
-        position: absolute;
-        bottom: 0;
+        padding-right: 23px;
         background-color: $white;
         padding-top: 9px;
         padding-bottom: 15px;
         z-index: 999 !important;
-        right: 0;
-        width: calc(100% - 218px);
     }
     button {
         &:focus {
@@ -952,6 +948,9 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
 }
 .ranges-perfect-scrollbar {
     border-right: 1px solid $gainsboro;
+}
+.ranges-perfect-scrollbar .ps__rail-x{
+    display: none;
 }
 @media (min-width: 564px) {
     .md-drppicker {
@@ -1344,7 +1343,7 @@ td span {
     position: absolute;
     background-color: $white;
     right: -100%;
-    top: -20px;
+    top: -30px;
     z-index: 9999;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
@@ -1602,7 +1601,7 @@ tr:first-child.in-range-hovered.available {
     }
 }
 cdk-virtual-scroll-viewport{
-    height: 284px;
+    height: 250px;
 }
 cdk-virtual-scroll-viewport::-webkit-scrollbar {
   width: 5px;
@@ -1615,15 +1614,9 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-track {
 
 /* Handle */
 cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
-  background: $dim-gray;
+  background: $nobel;
   border-radius: 10px;
 }
-
-/* Handle on hover */
-cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb:hover {
-  background: $dim-gray;
-}
-
 .calendar-d-flex{
     display: flex;
 }
@@ -1956,8 +1949,6 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb:hover {
 }
 @media (max-height: 767px) {
     .drops-down-right {
-        height: 470px;
-        overflow: hidden !important;
         .ranges {
             height: auto;
             overflow-y: auto;

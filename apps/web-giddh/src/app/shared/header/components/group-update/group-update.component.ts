@@ -1,10 +1,10 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { AppState } from '../../../../store';
-import { Observable, ReplaySubject, BehaviorSubject } from 'rxjs';
+import { Observable, ReplaySubject, BehaviorSubject, combineLatest } from 'rxjs';
 import { GroupResponse, GroupsTaxHierarchyResponse, MoveGroupRequest } from '../../../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as _ from '../../../../lodash-optimized';
@@ -26,6 +26,9 @@ import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.c
 import { LedgerService } from '../../../../services/ledger.service';
 import { StylesCompileDependency } from '@angular/compiler';
 import { style } from '@angular/animations';
+import { SettingsDiscountActions } from 'apps/web-giddh/src/app/actions/settings/discount/settings.discount.action';
+import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
+import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 @Component({
     selector: 'group-update',
     templateUrl: 'group-update.component.html',
@@ -44,7 +47,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('tax', {static: true}) public taxControll: TaxControlComponent;
     @ViewChild('autoFocused', {static: true}) public autoFocus: ElementRef;
 
-    public companyTaxDropDown: Observable<IOption[]>;
+    public companyTaxDropDown: Array<IOption>;
     public groupDetailForm: FormGroup;
     public moveGroupForm: FormGroup;
     public taxGroupForm: FormGroup;
@@ -72,13 +75,25 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public groupsList: IOption[] = [];
     public accountList: any[];
     public showTaxes: boolean = false;
+    // list of groups with less details (parent information)
+    public groupWithParentLessDetailsList:any[] = [];
     @ViewChild('deleteGroupModal', {static: true}) public deleteGroupModal: ModalDirective;
     @ViewChild('moveToGroupDropDown', {static: true}) public moveToGroupDropDown: ShSelectComponent;
+    /** To check is groups belongs to debtor or creditors type  */
+    public isDebtorCreditorGroups: boolean = false;
+    /** To check discount box show/hide */
+    public showDiscount: boolean = false;
+    /** Stores list of discount */
+    public discountList: any[] = [];
+    public discountList$: Observable<IDiscountList[]>;
+    public selectedDiscounts: any[] = [];
+
+
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-        private companyActions: CompanyActions, private accountsAction: AccountsAction, private _generalActions: GeneralActions, private _ledgerService: LedgerService, ) {
+        private companyActions: CompanyActions, private accountsAction: AccountsAction, private _generalActions: GeneralActions, private _ledgerService: LedgerService, private settingsDiscountAction: SettingsDiscountActions ) {
         this.groupList$ = this.store.select(state => state.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).pipe(takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).pipe(takeUntil(this.destroyed$));
@@ -101,46 +116,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy).pipe(takeUntil(this.destroyed$));
         this.isUpdateGroupInProcess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupInProcess).pipe(takeUntil(this.destroyed$));
         this.isUpdateGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupSuccess).pipe(takeUntil(this.destroyed$));
+        this.discountList$ = this.store.pipe(select(state => state.settings.discount.discountList),takeUntil(this.destroyed$));
 
-        this.companyTaxDropDown = this.store.select(createSelector([
-            (state: AppState) => state.groupwithaccounts.activeGroupTaxHierarchy,
-            (state: AppState) => state.groupwithaccounts.activeGroup,
-            (state: AppState) => state.company.taxes],
-            (activeGroupTaxHierarchy, activeGroup, taxes) => {
-                let arr: IOption[] = [];
-                if (taxes) {
-                    if (activeGroup) {
-                        let applicableTaxes = activeGroup.applicableTaxes.map(p => p.uniqueName);
-
-                        if (activeGroupTaxHierarchy) {
-
-                            if (activeGroupTaxHierarchy.inheritedTaxes && activeGroupTaxHierarchy.inheritedTaxes.length) {
-                                let inheritedTaxes = _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
-                                let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
-                                // set value in tax group form
-                                this.taxGroupForm.setValue({ taxes: allTaxes });
-                            } else {
-                                this.taxGroupForm.setValue({ taxes: applicableTaxes });
-                            }
-
-                            // prepare drop down options
-                            return _.differenceBy(taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName };
-                            }), _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                                return { label: p.name, value: p.uniqueName };
-                            }), 'value');
-                        } else {
-                            // set value in tax group form
-                            this.taxGroupForm.setValue({ taxes: applicableTaxes });
-
-                            return taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName };
-                            });
-                        }
-                    }
-                }
-                return arr;
-            })).pipe(takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -159,11 +136,17 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             taxes: ['']
         });
 
-        this.activeGroup$.subscribe((a) => {
-            if (a) {
-                this.uniqueName = a.uniqueName;
-                this.groupDetailForm.patchValue({ name: a.name, uniqueName: a.uniqueName, description: a.description, closingBalanceTriggerAmount: a.closingBalanceTriggerAmount, closingBalanceTriggerAmountType: a.closingBalanceTriggerAmountType });
-                if (a.fixed) {
+        this.activeGroup$.subscribe((activeGroup) => {
+            if (activeGroup) {
+                this.selectedDiscounts = [];
+                this.uniqueName = activeGroup.uniqueName;
+                if (activeGroup.applicableDiscounts && activeGroup.applicableDiscounts.length) {
+                    activeGroup.applicableDiscounts.forEach(element => {
+                        this.selectedDiscounts.push(element.uniqueName)
+                    });
+                }
+                this.groupDetailForm.patchValue({ name: activeGroup.name, uniqueName: activeGroup.uniqueName, description: activeGroup.description, closingBalanceTriggerAmount: activeGroup.closingBalanceTriggerAmount, closingBalanceTriggerAmountType: activeGroup.closingBalanceTriggerAmountType });
+                if (activeGroup.fixed) {
                     this.groupDetailForm.get('name').disable();
                     this.groupDetailForm.get('uniqueName').disable();
                     this.groupDetailForm.get('description').disable();
@@ -180,6 +163,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 let activeGroupUniqueName: string;
                 this.activeGroup$.pipe(take(1)).subscribe(grp => activeGroupUniqueName = grp.uniqueName);
                 let grpsList = this.makeGroupListFlatwithLessDtl(this.flattenGroup(a, []));
+                this.groupWithParentLessDetailsList = _.cloneDeep(grpsList);
                 let flattenGroupsList: IOption[] = [];
 
                 grpsList.forEach(grp => {
@@ -193,6 +177,58 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         setTimeout(() => {
             this.autoFocus.nativeElement.focus();
         }, 50);
+        this.getDiscountList();
+        combineLatest([
+            this.store.pipe(select((state: AppState) => state.groupwithaccounts.activeGroupTaxHierarchy)),
+            this.store.pipe(select((state: AppState) => state.groupwithaccounts.activeGroup)),
+            this.store.pipe(select((state: AppState) => state.company.taxes))
+        ]).pipe(takeUntil(this.destroyed$)).subscribe((result) => {
+            if (result[0] && result[1] && result[2]) {
+                const activeGroupTaxHierarchy = result[0];
+                const activeGroup = result[1];
+                const taxes = result[2];
+                let arr: IOption[] = [];
+                if (taxes) {
+                    if (activeGroup) {
+                        let applicableTaxes = activeGroup.applicableTaxes.map(p => p.uniqueName);
+
+                        if (activeGroupTaxHierarchy) {
+                            // prepare drop down options
+                            this.companyTaxDropDown = _.differenceBy(taxes.map(p => {
+                                return { label: p.name, value: p.uniqueName };
+                            }), _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
+                                return { label: p.name, value: p.uniqueName };
+                            }), 'value');
+
+                            if (activeGroupTaxHierarchy.inheritedTaxes && activeGroupTaxHierarchy.inheritedTaxes.length) {
+                                let inheritedTaxes = _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
+                                let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
+                                // set value in tax group form
+                                setTimeout(() => {
+                                    this.taxGroupForm.setValue({ taxes: allTaxes });
+                                }, 200);
+                            } else {
+                                setTimeout(() => {
+                                    this.taxGroupForm.setValue({ taxes: applicableTaxes });
+                                }, 200);
+                            }
+
+                        } else {
+                            this.companyTaxDropDown = taxes.map(p => {
+                                return { label: p.name, value: p.uniqueName };
+                            });
+                            // set value in tax group form
+                            setTimeout(() => {
+                                this.taxGroupForm.setValue({ taxes: applicableTaxes});
+                            }, 200);
+
+                        }
+                    }
+                } else {
+                    this.companyTaxDropDown = arr;
+                }
+            }
+        });
     }
 
     public ngAfterViewInit() {
@@ -428,24 +464,25 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public async taxHierarchy() {
-        let activeAccount: AccountResponseV2 = null;
-        let activeGroupUniqueName: string = null;
-        this.store.pipe(take(1)).subscribe(s => {
-            if (s.groupwithaccounts) {
-                activeAccount = s.groupwithaccounts.activeAccount;
-                activeGroupUniqueName = s.groupwithaccounts.activeGroupUniqueName;
+        if (this.showTaxes) {
+            let activeAccount: AccountResponseV2 = null;
+            let activeGroupUniqueName: string = null;
+            this.store.pipe(take(1)).subscribe(s => {
+                if (s.groupwithaccounts) {
+                    activeAccount = s.groupwithaccounts.activeAccount;
+                    activeGroupUniqueName = s.groupwithaccounts.activeGroupUniqueName;
+                }
+            });
+            if (activeAccount) {
+                //
+                this.store.dispatch(this.companyActions.getTax());
+                this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
+            } else {
+                this.store.dispatch(this.companyActions.getTax());
+                this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroupUniqueName));
+                this.showEditTaxSection = true;
             }
-        });
-        if (activeAccount) {
-            //
-            this.store.dispatch(this.companyActions.getTax());
-            this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
-        } else {
-            this.store.dispatch(this.companyActions.getTax());
-            this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroupUniqueName));
-            this.showEditTaxSection = true;
         }
-
     }
 
     public applyTax() {
@@ -476,15 +513,18 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public getAccountFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: boolean): boolean {
-        groupList.forEach(el => {
-            if (el && el.accounts) {
-                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses')) {
-                    result = true;
-                    return;
+        groupList.forEach(element => {
+            if (element && element.accounts) {
+                if (element.uniqueName === uniqueName) {
+                    this.isDebtorCreditorGroups = this.isDebtorCreditorGroup(uniqueName);
+                    if (element.category === 'income' || element.category === 'expenses' || this.isDebtorCreditorGroups) {
+                        result = true;
+                        return;
+                    }
                 }
             }
-            if (el && el.groups) {
-                result = this.getAccountFromGroup(el.groups, uniqueName, result);
+            if (element && element.groups) {
+                result = this.getAccountFromGroup(element.groups, uniqueName, result);
             }
         });
         return result;
@@ -501,11 +541,65 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.destroyed$.complete();
     }
 
+    /**
+    * To get sub group belongs to mentioned group (currentliabilities , currentassets)
+    *
+    * @param {*} item
+    * @memberof GroupUpdateComponent
+    */
+    public isDebtorCreditorGroup(itemUniqueName: any): boolean {
+        let isTaxableGroup: boolean = false;
+        const item = this.groupWithParentLessDetailsList.find(element => (itemUniqueName === element.uniqueName));
+        if (item) {
+            isTaxableGroup = item.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
+        }
+        // this.groupWithParentLessDetailsList.forEach(element => {
+        //     if (itemUniqueName === element.uniqueName) {
+        //         isTaxableGroup = element.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
+        //     }
+        // });
+        return isTaxableGroup;
+    }
 
+    /**
+     * To apply discount in accounts
+     *
+     * @memberof GroupUpdateComponent
+     */
+    public applyDiscounts(): void {
+        let activeGroupUniqueName: string;
+        this.activeGroup$.pipe(take(1)).subscribe(grp => activeGroupUniqueName = grp.uniqueName);
 
+        if (activeGroupUniqueName) {
+            _.uniq(this.selectedDiscounts);
+            let assignDiscountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
+            assignDiscountObject.uniqueName = this.uniqueName;
+            assignDiscountObject.discounts = this.selectedDiscounts;
+            assignDiscountObject.isAccount = false;
+            this.store.dispatch(this.accountsAction.applyAccountDiscountV2([assignDiscountObject]));
+        }
+    }
 
-
-
-
+    /**
+     * To get discount list
+     *
+     * @memberof GroupUpdateComponent
+     */
+    public getDiscountList(): void {
+        this.discountList$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.discountList = [];
+                Object.keys(res).forEach(key => {
+                    this.discountList.push({
+                        label: res[key].name,
+                        value: res[key].uniqueName,
+                        isSelected: false
+                    });
+                });
+            } else {
+                this.store.dispatch(this.settingsDiscountAction.GetDiscount());
+            }
+        });
+    }
 
 }

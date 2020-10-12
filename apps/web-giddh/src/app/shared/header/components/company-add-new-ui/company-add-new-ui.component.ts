@@ -171,6 +171,12 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
+                if (res.contactNo.includes('-')) {
+                    const contactNumber = res.contactNo.split('-');
+                    if (contactNumber.length > 1) {
+                        res.contactNo = contactNumber[1];
+                    }
+                }
                 this.company = res;
             }
         });
@@ -381,14 +387,12 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     }
 
     public getCurrency() {
-        this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
                     this.currencies.push({label: res[key].code, value: res[key].code});
                 });
                 this.currencySource$ = observableOf(this.currencies);
-            } else {
-                this.store.dispatch(this.commonActions.GetCurrency());
             }
         });
     }

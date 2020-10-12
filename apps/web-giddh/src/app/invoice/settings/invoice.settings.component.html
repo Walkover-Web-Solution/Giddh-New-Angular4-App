@@ -234,7 +234,7 @@
                             <div class="col-lg-9 col-md-12 col-sm-12 form-group" style="display: flex;align-items: center">
                                 <input type="checkbox" [(ngModel)]="companyEmailSettings.sendThroughGmail" name="sendThroughGmail" [disabled]="!isGmailIntegrated" class="hide-on-mobile" />
 
-                                <span class="ml-1 integrated-email">
+                                <span class="ml-1 integrated-email" *ngIf="!isGmailIntegrated">
                                     <a [href]="gmailAuthCodeUrl$ | async">Integrate Gmail</a>
                                 </span>
                             </div>
@@ -657,9 +657,9 @@
 
                                 <div class="col-sm-12 col-md-9">
                                     <div class="form-group date-pickerInvoice invoice-lock-date  mb-0">
-                                        <!-- <input type="text" class="form-control invoice-lock-date" name="invoiceLockDate" bsDatepicker #dp="bsDatepicker" [(ngModel)]="invoiceSetting.lockDate" [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY'}"> -->
-                                        <!-- <span class="icon-calender " (click)="dp.toggle()"></span> -->
-                                        <giddh-datepicker name="invoiceLockDate" [(ngModel)]="invoiceSetting.lockDate"></giddh-datepicker>
+                                        <input type="text" class="form-control invoice-lock-date" name="invoiceLockDate" bsDatepicker #dp="bsDatepicker" [(ngModel)]="invoiceSetting.lockDate" [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY'}">
+                                        <span class="icon-calender " (click)="dp.toggle()"></span>
+                                        <!-- <giddh-datepicker name="invoiceLockDate" [(ngModel)]="invoiceSetting.lockDate"></giddh-datepicker> -->
                                     </div>
                                 </div>
 

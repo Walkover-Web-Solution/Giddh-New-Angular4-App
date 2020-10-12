@@ -50,6 +50,7 @@ import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interfac
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { digitsOnly } from '../../../helpers';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
+import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 
 @Component({
     selector: 'account-update-new-details',
@@ -146,6 +147,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectedCountryCode: string = '';
     public bankIbanNumberMaxLength: string = '18';
     public bankIbanNumberMinLength: string = '9';
+    /** account applied inherited discounts list */
+    public accountInheritedDiscounts: any[] = [];
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction,
         private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _dbService: DbService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
@@ -216,6 +219,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
                 let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
                 if (accountDetails.uniqueName) {
+                    this.accountInheritedDiscounts = [];
+                    accountDetails.inheritedDiscounts.forEach(item => {
+                        this.accountInheritedDiscounts.push(...item.applicableDiscounts);
+                    });
                     this._accountService.GetApplyDiscount(accountDetails.uniqueName).subscribe(response => {
                         this.selectedDiscounts = [];
                         this.forceClearDiscount$ = observableOf({ status: true });
@@ -465,7 +472,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         for (const el of groupList) {
             if (el.accounts) {
-                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses')) {
+                if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses' || this.isDebtorCreditor)) {
                     result = true;
                     break;
                 }
@@ -820,10 +827,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (this.accountDetails) {
             this.activeAccountName = this.accountDetails.uniqueName;
         } else {
-            this.activeAccount$.pipe(take(1)).subscribe(a => this.activeAccountName = a.uniqueName);
+            this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState.uniqueName);
         }
         if (!accountRequest.mobileNo) {
             accountRequest.mobileCode = '';
+        } else {
+            if(!this.isMobileNumberValid) {
+                this._toaster.errorToast('Invalid Contact number');
+                return false;
+            }
         }
         if (this.isHsnSacEnabledAcc) {
             // delete accountRequest['country'];
@@ -995,15 +1007,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public getCurrency() {
-        this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
                     this.currencies.push({ label: res[key].code, value: res[key].code });
 
                 });
                 this.currencySource$ = observableOf(this.currencies);
-            } else {
-                this.store.dispatch(this.commonActions.GetCurrency());
             }
         });
     }
@@ -1073,7 +1083,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     if (res.country.currency) {
                         this.selectedCountryCurrency = res.country.currency.code;
                         this.selectedAccountCallingCode = res.country.callingCode;
+                        if(selectedAcountCurrency) {
                         this.addAccountForm.get('currency').patchValue(selectedAcountCurrency);
+                        this.selectedCurrency = selectedAcountCurrency;
+                        } else {
+                        this.addAccountForm.get('currency').patchValue(this.selectedCountryCurrency);
+                        this.selectedCurrency = this.selectedCountryCurrency;
+                        }
                         if (!this.addAccountForm.get('mobileCode').value) {
                             this.addAccountForm.get('mobileCode').patchValue(this.selectedAccountCallingCode);
                         }
@@ -1308,10 +1324,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     //     }
     //     if (this.activeAccountName) {
     //         _.uniq(this.selectedDiscounts);
-    //         let assignDescountObject: AssignDiscountRequestForAccount = new AssignDiscountRequestForAccount();
-    //         assignDescountObject.accountUniqueName = this.activeAccountName;
-    //         assignDescountObject.discountUniqueNames = this.selectedDiscounts;
-    //         this.store.dispatch(this.accountsAction.applyAccountDiscount(assignDescountObject));
+    //         let assignDiscountObject: AssignDiscountRequestForAccount = new AssignDiscountRequestForAccount();
+    //         assignDiscountObject.accountUniqueName = this.activeAccountName;
+    //         assignDiscountObject.discountUniqueNames = this.selectedDiscounts;
+    //         this.store.dispatch(this.accountsAction.applyAccountDiscount(assignDiscountObject));
     //     }
     // }
 
@@ -1435,4 +1451,26 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         return false;
     }
+
+    /**
+     * To apply discount in accounts
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public applyDiscounts(): void {
+        if (this.accountDetails) {
+            this.activeAccountName = this.accountDetails.uniqueName;
+        } else {
+            this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState.uniqueName);
+        }
+        if (this.activeAccountName) {
+            _.uniq(this.selectedDiscounts);
+            let assignDiscountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
+            assignDiscountObject.uniqueName = this.activeAccountName;
+            assignDiscountObject.discounts = this.selectedDiscounts;
+            assignDiscountObject.isAccount = true;
+            this.store.dispatch(this.accountsAction.applyAccountDiscountV2([assignDiscountObject]));
+        }
+    }
+
 }

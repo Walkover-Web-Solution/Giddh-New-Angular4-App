@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, Eve
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SearchResultText } from 'apps/web-giddh/src/app/app.constant';
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/shareLedger/shareLedger.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
@@ -50,6 +50,7 @@ import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/n
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { download } from "@giddh-workspaces/utils";
+import { SearchService } from '../services/search.service';
 
 @Component({
     selector: 'ledger',
@@ -173,7 +174,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Export ledger request object */
     public columnarReportExportRequest: ExportLedgerRequest;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private accountUniquename: any;
+    public accountUniquename: any;
     /** Transactions dates array */
     public allTransactionsList: any[] = [];
     public allTransactionDates: any[] = [];
@@ -198,6 +199,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** Stores the search results */
+    public searchResults: Array<IOption> = [];
+    /** Stores the search results pagination details */
+    public searchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** No results found label for dynamic search */
+    public noResultsFoundLabel = SearchResultText.NewSearch;
 
     constructor(
         private store: Store<AppState>,
@@ -216,7 +227,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private warehouseActions: WarehouseActions,
         private _cdRf: ChangeDetectorRef,
         private breakPointObservar: BreakpointObserver,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private searchService: SearchService
     ) {
 
         this.lc = new LedgerVM();
@@ -228,13 +240,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).pipe(takeUntil(this.destroyed$), shareReplay(1));
         this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).pipe(takeUntil(this.destroyed$));
         this.lc.groupsArray$ = this.store.select(p => p.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
-        this.lc.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
+        // this.lc.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
         this.lc.companyProfile$ = this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.select(p => p.session.todaySelected).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.select(p => p.session.applicationDate).pipe(takeUntil(this.destroyed$));
         this.isTransactionRequestInProcess$ = this.store.select(p => p.ledger.transactionInprogress).pipe(takeUntil(this.destroyed$));
         this.ledgerBulkActionSuccess$ = this.store.select(p => p.ledger.ledgerBulkActionSuccess).pipe(takeUntil(this.destroyed$));
-        this.store.dispatch(this._generalActions.getFlattenAccount());
+        // this.store.dispatch(this._generalActions.getFlattenAccount());
         // this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
         this.store.dispatch(this._settingsTagActions.GetALLTags());
@@ -319,104 +331,192 @@ export class LedgerComponent implements OnInit, OnDestroy {
             ];
             return;
         }
-
-        this.lc.flattenAccountList.pipe(take(1)).subscribe(data => {
-            data.map(fa => {
-                // change (e.value[0]) to e.value to use in single select for ledger transaction entry
-                if (fa.value === e.value) {
-                    txn.selectedAccount = fa.additional;
-                    let rate = 0;
-                    let unitCode = '';
-                    let unitName = '';
-                    let stockName = '';
-                    let stockUniqueName = '';
-                    let unitArray = [];
-
-                    //#region unit rates logic
-                    if (fa.additional && fa.additional.stock) {
-                        let defaultUnit = {
-                            stockUnitCode: fa.additional.stock.stockUnit.name,
-                            code: fa.additional.stock.stockUnit.code,
-                            rate: 0,
-                            name: fa.additional.stock.stockUnit.name
-                        };
-                        if (fa.additional.stock.accountStockDetails && fa.additional.stock.accountStockDetails.unitRates) {
-                            let cond = fa.additional.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === fa.additional.stock.stockUnit.code);
-                            if (cond) {
-                                defaultUnit.rate = cond.rate;
-                                rate = defaultUnit.rate;
-                            }
-
-                            unitArray = unitArray.concat(fa.additional.stock.accountStockDetails.unitRates.map(p => {
-                                return {
-                                    stockUnitCode: p.stockUnitCode,
-                                    code: p.stockUnitCode,
-                                    rate: 0,
-                                    name: p.stockUnitName
-                                };
-                            }));
-                            if (unitArray.findIndex(p => p.code === defaultUnit.code) === -1) {
-                                unitArray.push(defaultUnit);
-                            }
-                        } else {
-                            unitArray.push(defaultUnit);
-                        }
-
-                        txn.unitRate = unitArray;
-                        stockName = fa.additional.stock.name;
-                        stockUniqueName = fa.additional.stock.uniqueName;
-                        unitName = fa.additional.stock.stockUnit.name;
-                        unitCode = fa.additional.stock.stockUnit.code;
-                    }
-                    if (stockName && stockUniqueName) {
-                        txn.inventory = {
-                            stock: {
-                                name: stockName,
-                                uniqueName: stockUniqueName
-                            },
-                            quantity: 1,
-                            unit: {
-                                stockUnitCode: unitCode,
-                                code: unitCode,
-                                rate
-                            }
-                        };
-                    }
-                    if (rate > 0 && txn.amount === 0) {
-                        txn.amount = rate;
-                    }
-                    //#endregion
-
-                    // region check multi currency allowed for selected account
-                    // if (fa.additional.currency) {
-                    //   if (!this.isLedgerAccountAllowsMultiCurrency) {
-                    //     // means ledger account and company currencies are same
-                    //     // now check if the selected account currency is different than company currency
-                    //     if (this.lc.activeAccount.currency !== fa.additional.currency) {
-                    //       this.isLedgerAccountAllowsMultiCurrency = true;
-                    //
-                    //       this.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
-                    //       let accCurrency = this.lc.currencies.find(f => f.code === fa.additional.currency);
-                    //       this.baseCurrencyDetails = {code: accCurrency.code, symbol: accCurrency.symbol};
-                    //       this.getCurrencyRate();
-                    //
-                    //       this.selectedCurrency = 0;
-                    //       this.assignPrefixAndSuffixForCurrency();
-                    //     }
-                    //   }
-                    // }
-                    // endregion
-                    return;
+        let requestObject;
+        if (e.additional.stock) {
+            requestObject = {
+                stockUniqueName: e.additional.stock.uniqueName
+            };
+        }
+        const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount.uniqueName) : '';
+        /** If current ledger is of income or expense category then send current ledger unique name else send particular account unique name
+            to fetch the correct stock details as the first preference is always the current ledger account and then particular account
+            This logic is only required in ledger.
+        */
+        const accountUniqueName = e.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
+            this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
+            e.additional.uniqueName;
+        this.searchService.loadDetails(accountUniqueName, requestObject).subscribe(data => {
+            if (data && data.body) {
+                // Take taxes of parent group and stock's own taxes
+                const taxes = data.body.taxes || [];
+                if (data.body.stock) {
+                    taxes.push(...data.body.stock.taxes);
                 }
-            });
+                if (txn.taxesVm) {
+                    txn.taxesVm.forEach(tax => {
+                        tax.isChecked = false;
+                        tax.isDisabled = false;
+                    });
+                }
+                txn.selectedAccount = {
+                    ...e.additional,
+                    label: e.label,
+                    category: data.body.category,
+                    value: e.value,
+                    isHilighted: true,
+                    applicableTaxes: taxes,
+                    currency: data.body.currency,
+                    currencySymbol: data.body.currencySymbol,
+                    email: data.body.emails,
+                    isFixed: data.body.isFixed,
+                    mergedAccounts: data.body.mergedAccounts,
+                    mobileNo: data.body.mobileNo,
+                    nameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.name).join(', ') : '',
+                    stock: data.body.stock,
+                    uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
+                };
+                this.lc.currentBlankTxn = txn;
+                let rate = 0;
+                let unitCode = '';
+                let unitName = '';
+                let stockName = '';
+                let stockUniqueName = '';
+
+                //#region unit rates logic
+                if (txn.selectedAccount && txn.selectedAccount.stock) {
+                    let defaultUnit = {
+                        stockUnitCode: txn.selectedAccount.stock.stockUnitCode,
+                        code: txn.selectedAccount.stock.stockUnitCode,
+                        rate: txn.selectedAccount.stock.rate,
+                        name: txn.selectedAccount.stock.name
+                    };
+                    txn.unitRate = txn.selectedAccount.stock.unitRates.map(unitRate => ({...unitRate, code: unitRate.stockUnitCode}));
+                    stockName = defaultUnit.name;
+                    rate = defaultUnit.rate;
+                    stockUniqueName = txn.selectedAccount.stock.uniqueName;
+                    unitName = defaultUnit.name;
+                    unitCode = defaultUnit.code;
+                }
+                if (stockName && stockUniqueName) {
+                    txn.inventory = {
+                        stock: {
+                            name: stockName,
+                            uniqueName: stockUniqueName
+                        },
+                        quantity: 1,
+                        unit: {
+                            stockUnitCode: unitCode,
+                            code: unitCode,
+                            rate
+                        }
+                    };
+                }
+                if (rate > 0 && txn.amount === 0) {
+                    txn.amount = rate;
+                }
+                // check if selected account category allows to show taxationDiscountBox in newEntry popup
+                txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+                this.handleRcmVisibility(txn);
+                this.handleTaxableAmountVisibility(txn);
+                this.newLedgerComponent.calculatePreAppliedTax();
+                this.newLedgerComponent.calculateTax();
+                this.newLedgerComponent.calculateTotal();
+                setTimeout(() => {
+                    this.newLedgerComponent.detectChanges();
+                }, 200);
+                this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
+            }
         });
-        // check if selected account category allows to show taxationDiscountBox in newEntry popup
-        txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
-        this.handleRcmVisibility(txn);
-        this.handleTaxableAmountVisibility(txn);
-        this.newLedgerComponent.calculateTotal();
-        this.newLedgerComponent.detectChanges();
-        this.selectedTxnAccUniqueName = txn.selectedAccount.uniqueName;
+        // this.lc.flattenAccountList.pipe(take(1)).subscribe(data => {
+        //     data.map(fa => {
+        //         // change (e.value[0]) to e.value to use in single select for ledger transaction entry
+        //         if (fa.value === e.value) {
+        //             txn.selectedAccount = fa.additional;
+        //             let rate = 0;
+        //             let unitCode = '';
+        //             let unitName = '';
+        //             let stockName = '';
+        //             let stockUniqueName = '';
+        //             let unitArray = [];
+
+        //             //#region unit rates logic
+        //             if (fa.additional && fa.additional.stock) {
+        //                 let defaultUnit = {
+        //                     stockUnitCode: fa.additional.stock.stockUnit.name,
+        //                     code: fa.additional.stock.stockUnit.code,
+        //                     rate: 0,
+        //                     name: fa.additional.stock.stockUnit.name
+        //                 };
+        //                 if (fa.additional.stock.accountStockDetails && fa.additional.stock.accountStockDetails.unitRates) {
+        //                     let cond = fa.additional.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === fa.additional.stock.stockUnit.code);
+        //                     if (cond) {
+        //                         defaultUnit.rate = cond.rate;
+        //                         rate = defaultUnit.rate;
+        //                     }
+
+        //                     unitArray = unitArray.concat(fa.additional.stock.accountStockDetails.unitRates.map(p => {
+        //                         return {
+        //                             stockUnitCode: p.stockUnitCode,
+        //                             code: p.stockUnitCode,
+        //                             rate: 0,
+        //                             name: p.stockUnitName
+        //                         };
+        //                     }));
+        //                     if (unitArray.findIndex(p => p.code === defaultUnit.code) === -1) {
+        //                         unitArray.push(defaultUnit);
+        //                     }
+        //                 } else {
+        //                     unitArray.push(defaultUnit);
+        //                 }
+
+        //                 txn.unitRate = unitArray;
+        //                 stockName = fa.additional.stock.name;
+        //                 stockUniqueName = fa.additional.stock.uniqueName;
+        //                 unitName = fa.additional.stock.stockUnit.name;
+        //                 unitCode = fa.additional.stock.stockUnit.code;
+        //             }
+        //             if (stockName && stockUniqueName) {
+        //                 txn.inventory = {
+        //                     stock: {
+        //                         name: stockName,
+        //                         uniqueName: stockUniqueName
+        //                     },
+        //                     quantity: 1,
+        //                     unit: {
+        //                         stockUnitCode: unitCode,
+        //                         code: unitCode,
+        //                         rate
+        //                     }
+        //                 };
+        //             }
+        //             if (rate > 0 && txn.amount === 0) {
+        //                 txn.amount = rate;
+        //             }
+        //             //#endregion
+
+        //             // region check multi currency allowed for selected account
+        //             // if (fa.additional.currency) {
+        //             //   if (!this.isLedgerAccountAllowsMultiCurrency) {
+        //             //     // means ledger account and company currencies are same
+        //             //     // now check if the selected account currency is different than company currency
+        //             //     if (this.lc.activeAccount.currency !== fa.additional.currency) {
+        //             //       this.isLedgerAccountAllowsMultiCurrency = true;
+        //             //
+        //             //       this.foreignCurrencyDetails = {code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol};
+        //             //       let accCurrency = this.lc.currencies.find(f => f.code === fa.additional.currency);
+        //             //       this.baseCurrencyDetails = {code: accCurrency.code, symbol: accCurrency.symbol};
+        //             //       this.getCurrencyRate();
+        //             //
+        //             //       this.selectedCurrency = 0;
+        //             //       this.assignPrefixAndSuffixForCurrency();
+        //             //     }
+        //             //   }
+        //             // }
+        //             // endregion
+        //             return;
+        //         }
+        //     });
+        // });
     }
 
     public hideEledgerWrap() {
@@ -467,7 +567,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (!Array.isArray(resp[0])) {
                 return;
             }
-
+            this.resetPreviousSearchResults();
             this.hideEledgerWrap();
             let dateObj = resp[0];
             let params = resp[1];
@@ -659,11 +759,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (s) {
                 this._toaster.successToast('Entry created successfully', 'Success');
                 this.lc.showNewLedgerPanel = false;
-
+                this.lc.showBankLedgerPanel = false;
                 this.getTransactionData();
                 // this.getCurrencyRate();
                 this.resetBlankTransaction();
-
+                this.resetPreviousSearchResults();
                 // After the success of the entrance call for bank transactions
                 this.lc.activeAccount$.subscribe((data: AccountResponse) => {
                     this._loaderService.show();
@@ -676,10 +776,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
-        observableCombineLatest(this.lc.activeAccount$, this.lc.flattenAccountListStream$, this.lc.companyProfile$).subscribe(data => {
+        observableCombineLatest(this.lc.activeAccount$, this.lc.companyProfile$).subscribe(data => {
 
-            if (data[0] && data[1] && data[2]) {
-                let profile = cloneDeep(data[2]);
+            if (data[0] && data[1]) {
+                let profile = cloneDeep(data[1]);
                 this.lc.activeAccount = data[0];
                 this.profileObj = profile;
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
@@ -687,10 +787,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.needToShowLoader = true;
                 this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
 
-                let stockListFormFlattenAccount: IFlattenAccountsResultItem;
-                if (data[1]) {
-                    stockListFormFlattenAccount = data[1].find((acc) => acc.uniqueName === this.lc.accountUnq);
-                }
+                // let stockListFormFlattenAccount: IFlattenAccountsResultItem;
+                // if (data[1]) {
+                //     stockListFormFlattenAccount = data[1].find((acc) => acc.uniqueName === this.lc.accountUnq);
+                // }
 
                 let accountDetails: AccountResponse = data[0];
                 let parentOfAccount = accountDetails.parentGroups[0];
@@ -739,51 +839,51 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
 
                 // check if account is stockable
-                let isStockableAccount = parentOfAccount ?
-                    (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
-                        parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
-                let accountsArray: IOption[] = [];
-                if (isStockableAccount) {
-                    // stocks from ledger account
-                    data[1].map(acc => {
-                        // normal entry
-                        accountsArray.push({ value: uuidv4(), label: acc.name, additional: acc });
-                        // check if taxable or roundoff account then don't assign stocks
-                        let notRoundOff = acc.uniqueName === 'roundoff';
-                        let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
-                        // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
-                        if (!isTaxAccount && !notRoundOff && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
-                            stockListFormFlattenAccount.stocks.map(as => {
-                                // stock entry
-                                accountsArray.push({
-                                    value: uuidv4(),
-                                    label: `${acc.name}` + ` (${as.name})`,
-                                    additional: Object.assign({}, acc, { stock: as })
-                                });
-                            });
-                        }
-                    });
-                } else {
-                    // stocks from account itself
-                    data[1].map(acc => {
-                        if (acc.stocks) {
-                            // normal entry
-                            accountsArray.push({ value: uuidv4(), label: acc.name, additional: acc });
-                            // stock entry
-                            acc.stocks.map(as => {
-                                accountsArray.push({
-                                    value: uuidv4(),
-                                    // label: acc.name + '(' + as.uniqueName + ')',
-                                    label: `${acc.name}` + ` (${as.name})`,
-                                    additional: Object.assign({}, acc, { stock: as })
-                                });
-                            });
-                        } else {
-                            accountsArray.push({ value: uuidv4(), label: acc.name, additional: acc });
-                        }
-                    });
-                }
-                this.lc.flattenAccountList = observableOf(orderBy(accountsArray, 'label'));
+                // let isStockableAccount = parentOfAccount ?
+                //     (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
+                //         parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
+                // let accountsArray: IOption[] = [];
+                // if (isStockableAccount) {
+                //     // stocks from ledger account
+                //     data[1].map(acc => {
+                //         // normal entry
+                //         accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+                //         // check if taxable or roundoff account then don't assign stocks
+                //         let notRoundOff = acc.uniqueName === 'roundoff';
+                //         let isTaxAccount = acc.uNameStr.indexOf('dutiestaxes') > -1;
+                //         // accountDetails.stocks.map(as => { // As discussed with Gaurav sir, we need to pick stocks form flatten account's response
+                //         if (!isTaxAccount && !notRoundOff && stockListFormFlattenAccount && stockListFormFlattenAccount.stocks) {
+                //             stockListFormFlattenAccount.stocks.map(as => {
+                //                 // stock entry
+                //                 accountsArray.push({
+                //                     value: uuid.v4(),
+                //                     label: `${acc.name}` + ` (${as.name})`,
+                //                     additional: Object.assign({}, acc, { stock: as })
+                //                 });
+                //             });
+                //         }
+                //     });
+                // } else {
+                //     // stocks from account itself
+                //     data[1].map(acc => {
+                //         if (acc.stocks) {
+                //             // normal entry
+                //             accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+                //             // stock entry
+                //             acc.stocks.map(as => {
+                //                 accountsArray.push({
+                //                     value: uuid.v4(),
+                //                     // label: acc.name + '(' + as.uniqueName + ')',
+                //                     label: `${acc.name}` + ` (${as.name})`,
+                //                     additional: Object.assign({}, acc, { stock: as })
+                //                 });
+                //             });
+                //         } else {
+                //             accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+                //         }
+                //     });
+                // }
+                // this.lc.flattenAccountList = observableOf(orderBy(accountsArray, 'label'));
             }
         });
 
@@ -955,15 +1055,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
             from = this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code;
             to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
         }
-        let date = moment().format(GIDDH_DATE_FORMAT);
-        this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
-            let rate = response.body;
-            if (rate) {
-                this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.giddhBalanceDecimalPlaces) };
-            }
-        }, (error => {
-            this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1, exchangeRateForDisplay: 1 };
-        }));
+        if (from && to) {
+            let date = moment().format(GIDDH_DATE_FORMAT);
+            this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
+                let rate = response.body;
+                if (rate) {
+                    this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.giddhBalanceDecimalPlaces) };
+                }
+            }, (error => {
+                this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1, exchangeRateForDisplay: 1 };
+            }));
+        }
     }
 
     public toggleTransactionType(event: any) {
@@ -1061,7 +1163,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (this.isLedgerAccountAllowsMultiCurrency) {
             this.getCurrencyRate('blankLedger');
         }
-        this.hideNewLedgerEntryPopup();
+        this.resetPreviousSearchResults();
+        // this.hideNewLedgerEntryPopup();
     }
 
     public showNewLedgerEntryPopup(trx: TransactionVM) {
@@ -1072,6 +1175,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public onSelectHide() {
         // To Prevent Race condition
         setTimeout(() => this.isSelectOpen = false, 500);
+        this.noResultsFoundLabel = SearchResultText.NewSearch;
     }
 
     public onEnter(se, txn) {
@@ -1158,6 +1262,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.showUpdateLedgerForm = false;
         this.updateLedgerModal.hide();
         this._loaderService.show();
+    }
+
+    /**
+     * Scroll end handler
+     *
+     * @returns null
+     * @memberof LedgerComponent
+     */
+    public handleScrollEnd(): void {
+        if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
+            this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
+        }
     }
 
     public showShareLedgerModal() {
@@ -1271,16 +1387,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.activeAccount$.pipe(take(1)).subscribe(a => activeAccount = a);
         this.lc.groupsArray$.pipe(take(1)).subscribe(a => groupWithAccountsList = a);
 
-        let parent;
-        let parentGroup: GroupsWithAccountsResponse;
         let showDiscountAndTaxPopup: boolean = false;
 
-        parent = activeAccount.parentGroups[0].uniqueName;
-        parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
-
         // check url account category
-        if (parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'assets') {
-            if (parentGroup.category === 'assets') {
+        if (activeAccount.category === 'income' || activeAccount.category === 'expenses' || activeAccount.category === 'assets') {
+            if (activeAccount.category === 'assets') {
                 showDiscountAndTaxPopup = activeAccount.parentGroups[0].uniqueName.includes('fixedassets');
             } else {
                 showDiscountAndTaxPopup = true;
@@ -1294,10 +1405,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         // check selected account category
         if (txn.selectedAccount) {
-            parent = txn.selectedAccount.parentGroups[0].uniqueName;
-            parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
-            if (parentGroup.category === 'income' || parentGroup.category === 'expenses' || parentGroup.category === 'assets') {
-                if (parentGroup.category === 'assets') {
+            const category = txn.selectedAccount.category;
+            if (category === 'income' || category === 'expenses' || category === 'assets') {
+                if (category === 'assets') {
                     showDiscountAndTaxPopup = txn.selectedAccount.uNameStr.includes('fixedassets');
                 } else {
                     showDiscountAndTaxPopup = true;
@@ -1365,6 +1475,65 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * Search query change handler
+     *
+     * @param {string} query Search query
+     * @param {number} [page=1] Page to request
+     * @memberof LedgerComponent
+     */
+    public onSearchQueryChanged(query: string, page: number = 1): void {
+        this.searchResultsPaginationData.query = query;
+        const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount.uniqueName) : '';
+        // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
+        const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
+            this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
+            '';
+        const requestObject = {
+            q: encodeURIComponent(query),
+            page,
+            withStocks: true,
+            stockAccountUniqueName: encodeURIComponent(accountUniqueName)
+        }
+        this.searchService.searchAccount(requestObject).subscribe(data => {
+            if (data && data.body && data.body.results) {
+                const searchResults = data.body.results.map(result => {
+                    return {
+                        value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                        label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                        additional: result
+                    }
+                }) || [];
+                this.noResultsFoundLabel = SearchResultText.NotFound;
+                if (page === 1) {
+                    this.searchResults = searchResults;
+                } else {
+                    this.searchResults = [
+                        ...this.searchResults,
+                        ...searchResults
+                    ];
+                }
+                this.searchResultsPaginationData.page = data.body.page;
+                this.searchResultsPaginationData.totalPages = data.body.totalPages;
+            }
+        });
+    }
+
+    /**
+     * Resets the previous search result
+     *
+     * @memberof LedgerComponent
+     */
+    public resetPreviousSearchResults(): void {
+        this.searchResults = [];
+        this.searchResultsPaginationData = {
+            page: 0,
+            totalPages: 0,
+            query: ''
+        };
+        this.noResultsFoundLabel = SearchResultText.NewSearch;
+    }
+
     public loadPaginationComponent(s) {
         if (!this.paginationChild) {
             return;
@@ -1398,6 +1567,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public onOpenAdvanceSearch(): void {
+        this.advanceSearchComp.loadComponent();
         if (this.advanceSearchRequest && this.advanceSearchRequest.dataToSend && this.selectedDateRange && this.selectedDateRange.startDate && this.selectedDateRange.endDate) {
             this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
                 page: 0,
@@ -1748,31 +1918,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     private handleRcmVisibility(transaction: TransactionVM): void {
-        this.lc.flattenAccountListStream$.pipe(take(1)).subscribe((accounts) => {
-            if (accounts) {
-                let currentLedgerAccountDetails, selectedAccountDetails;
-                const transactionUniqueName = (transaction.selectedAccount) ? transaction.selectedAccount.uniqueName : '';
-                for (let index = 0; index < accounts.length; index++) {
-                    const account = accounts[index];
-                    if (account.uniqueName === this.lc.accountUnq) {
-                        // Found the current ledger details
-                        currentLedgerAccountDetails = _.cloneDeep(account);
-                    }
-                    if (account.uniqueName === transactionUniqueName) {
-                        // Found the user selected particular account
-                        selectedAccountDetails = _.cloneDeep(account);
-                    }
-                    if (currentLedgerAccountDetails && selectedAccountDetails) {
-                        // Accounts found, break the loop
-                        break;
-                    }
-                }
-                const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
-                if (this.lc && this.lc.currentBlankTxn) {
-                    this.lc.currentBlankTxn['shouldShowRcmEntry'] = shouldShowRcmEntry;
-                }
-            }
-        });
+        const currentLedgerAccountDetails = {
+            uniqueName: transaction.selectedAccount ? transaction.selectedAccount.uniqueName : '',
+            parentGroups: transaction.selectedAccount ? transaction.selectedAccount.parentGroups : []
+        };
+        const selectedAccountDetails = {
+            uniqueName: this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '',
+            parentGroups: this.lc.activeAccount.parentGroups ? this.lc.activeAccount.parentGroups : []
+        };
+        const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
+        if (this.lc && this.lc.currentBlankTxn) {
+            this.lc.currentBlankTxn['shouldShowRcmEntry'] = shouldShowRcmEntry;
+        }
     }
 
     /**

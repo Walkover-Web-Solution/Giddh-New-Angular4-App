@@ -154,7 +154,9 @@
                     </div>
                 </div>
                 <div class="col-xl-2 col-md-6 col-sm-4 pr-0">
+
                     <div class="form-group add-btn">
+                        <label class="d-block" *ngIf="isUpdtCase">&nbsp;</label>
                         <button [ladda]="createPermissionInProcess$ | async" [disabled]="permissionForm.invalid" class="btn btn-success">
                             <span *ngIf="!isUpdtCase">Add</span>
                             <span *ngIf="isUpdtCase">Update</span>

@@ -31,16 +31,15 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 	public breadcrumbUniquePath: string[] = [];
 	public myModelRect: any;
 	public searchLoad: Observable<boolean>;
-
 	public groupList$: Observable<GroupsWithAccountsResponse[]>;
 	public currentColumns: GroupAccountSidebarVM;
 	public psConfig: PerfectScrollbarConfigInterface;
 	public groupAndAccountSearchString$: Observable<string>;
 	private groupSearchTerms = new Subject<string>();
-
 	public searchString: any = '';
-
-	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold if keyup for focus in search field is initialized */
+    public keyupInitialized: boolean = false;
 
 	// tslint:disable-next-line:no-empty
 	constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef,
@@ -55,7 +54,22 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 	public resizeEvent(e) {
 		this.headerRect = this.header.nativeElement.getBoundingClientRect();
 		this.myModelRect = this.myModel.nativeElement.getBoundingClientRect();
-	}
+    }
+    
+    /**
+     * This will handle keyup event to put focus in search field on key up
+     *
+     * @param {*} event
+     * @memberof ManageGroupsAccountsComponent
+     */
+    @HostListener('keyup', ['$event'])
+    public onKeyUp(event: any): void {
+        if(!this.keyupInitialized && this._generalService.allowCharactersNumbersSpecialCharacters(event)) {
+            this.groupSrch.nativeElement.focus();
+            this.searchString = event.key;
+            this.keyupInitialized = true;
+        }
+    }
 
 	// tslint:disable-next-line:no-empty
 	public ngOnInit() {
@@ -81,7 +95,15 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 					this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(this.searchString));
 				}
 			}
-		});
+        });
+        
+        this.groupList$.subscribe(response => {
+            if(this.keyupInitialized) {
+                setTimeout(() => {
+                    this.groupSrch.nativeElement.focus();
+                }, 200);
+            }
+        });
 	}
 
 	public ngAfterViewChecked() {
@@ -96,7 +118,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 	}
 
 	public resetGroupSearchString(needToFireRequest: boolean = true) {
-		// this.store.dispatch(this.groupWithAccountsAction.resetGroupAndAccountsSearchString());
 		if (needToFireRequest) {
 			this.groupSearchTerms.next('');
 			this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
@@ -105,7 +126,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 		this.breadcrumbPath = [];
 		this.breadcrumbUniquePath = [];
 		this.renderer.setProperty(this.groupSrch.nativeElement, 'value', '');
-		// this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
 	}
 
 	public closePopupEvent() {
@@ -125,7 +145,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 	}
 
 	public breadcrumbPathChanged(obj) {
-		// breadcrumbUniquePath
 		this.breadcrumbUniquePath = obj.breadcrumbUniqueNamePath;
 		this.breadcrumbPath = obj.breadcrumbPath;
 	}

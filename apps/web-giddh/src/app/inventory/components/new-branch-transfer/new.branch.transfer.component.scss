@@ -245,7 +245,7 @@ tfoot td .tableSec.form-group {
 
 .td-search-box div i {
     margin-top: 3px;
-    color: #8080808c;
+    color: $olive;
     padding-right: 8px;
     cursor: pointer;
 }
@@ -437,5 +437,8 @@ tfoot td .tableSec.form-group {
             left: auto !important;
             top: 20px !important;
         }
+    }
+    .mobile-none{
+        display:none;
     }
 }

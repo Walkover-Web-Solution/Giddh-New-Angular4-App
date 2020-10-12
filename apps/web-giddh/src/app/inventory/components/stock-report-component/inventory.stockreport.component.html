@@ -1,6 +1,6 @@
 <section class="h100">
     <form [formGroup]="entityAndInventoryTypeForm" class="form-inline mr-b1">
-        <div class="pr d-flex mb-2" style="justify-content: space-between" style="display:none;">
+        <div class="pr d-flex mb-2 inventory-branch-dropdown" style="justify-content: space-between">
             <!-- enable branch selection after implimentation from api-->
             <div class="d-flex">
                 <div style="width: 230px;margin-right: 15px;">
@@ -36,7 +36,7 @@
                     <span>
                         {{stockReport.stockName}}</span> (Stock)</h2>
 
-                <div class="advance-icon" (click)="onOpenAdvanceSearch()" tooltip="Advance Search">
+                <div class="advance-icon cursor-pointer" (click)="onOpenAdvanceSearch()" tooltip="Advance Search">
                     <span class="icon-advance-filter"></span>
                 </div>
 
@@ -51,10 +51,10 @@
             <div>
 
                 <div class="btn-group" dropdown [autoClose]="true" placement="bottom right">
-                    <button class="btn-link icon-btn mr-1" (click)="editStock()" tooltip="Edit Stock">
+                    <button class="btn-link icon-btn mr-15" (click)="editStock()" tooltip="Edit Stock">
                         <i class="icon-edit-pencil"></i>
                     </button>
-                    <button id="button-alignment" dropdownToggle type="button" class="btn-link mr-t cp mr-1 dropdown-toggle icon-btn" aria-controls="dropdown-alignment" tooltip="Download">
+                    <button id="button-alignment" dropdownToggle type="button" class="btn-link mr-t cp mr-15 dropdown-toggle icon-btn" aria-controls="dropdown-alignment" tooltip="Download">
                         <i class="icon-download strong"></i>
                     </button>
                     <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown-menu-download" role="menu" aria-labelledby="button-alignment">

@@ -95,6 +95,9 @@ $greyClr: #6d6d6d;
     }
 }
 
+.item-unq{
+    font-size:12px;
+}
 // select box
 .pure-css-select-wrapper {
     position: relative;
@@ -158,14 +161,6 @@ $greyClr: #6d6d6d;
         resize: none;
         padding-left: 7px !important;
         overflow-y: auto;
-    }
-    textarea.form-control::-webkit-scrollbar {
-        width: 5px;
-    }
-    textarea.form-control::-webkit-scrollbar-thumb {
-        background-color: $gainsboro;
-        outline: 1px solid $gray;
-        border-radius: 20px;
     }
     label {
         display: block;
@@ -245,6 +240,11 @@ $greyClr: #6d6d6d;
     display: inline-block !important;
 }
 
+
+.w-100{
+    width:100% !important;
+}
+
 // collapse
 .collapse-pane {
     padding: 0 0;
@@ -297,6 +297,8 @@ $greyClr: #6d6d6d;
 
 .list-item {
     font-size: 14px;
+    border-bottom: 1px solid $very-light-gray;
+    display:flex !important;
 }
 
 .fs12 {
@@ -968,6 +970,8 @@ section.staticInvoiceTable {
     left: 0;
     top: 0;
     margin-left: 48%;
+    min-width: 485px;
+    max-width: 485px;
 }
 
 .m-l-10 {
@@ -1034,7 +1038,7 @@ section.newtable {
     line-height: 2.3;
 }
 
-.customerInvoiceTable label.salesCountryLabel {
+.customerInvoiceTable label.sales-country-label {
     min-height: 36px;
 }
 
@@ -1055,7 +1059,7 @@ section.newtable {
 .pd {
     padding: 3px 5px;
 }
-.card-invoiceTable-wrapper,
+.card-invoice-table-wrapper,
 .add-btn,
 .otherDetail-card,
 .total-amountDiscription {
@@ -1065,7 +1069,7 @@ section.newtable {
     display: none !important;
 }
 // card css
-.card-invoiceTable-wrapper {
+.card-invoice-table-wrapper {
     max-width: 400px;
     width: 100%;
     background-color: #fff;
@@ -1164,7 +1168,7 @@ section.newtable {
     color: #0c8fe6;
 }
 
-.salesCountryLabel {
+.sales-country-label {
     margin-bottom: 0;
     vertical-align: middle;
     line-height: 2.4;
@@ -1442,7 +1446,7 @@ input.form-control.edit-currency {
     font-size: 17px;
 }
 
-label.salesCountryLabel {
+label.sales-country-label {
     padding-bottom: 0;
 }
 
@@ -1613,8 +1617,21 @@ span.eligible-ITC {
 .payment-mode-amount{
     flex-direction: row-reverse;
 }
+.dropdown-menu-right{
+    top: 0 !important;
+}
+#button-dropup {
+    .caret{
+        transform: rotate(180deg);
+    }
+}
 /* resposnvie */
-
+@media(max-width:1199px){
+    .invoice-date-due-date {
+        min-width: 430px;
+        max-width: 430px;
+    }
+}
 @media (min-width: 768px) {
     .table.customerInvoiceTable .form-group {
         display: block;
@@ -1623,10 +1640,16 @@ span.eligible-ITC {
     .form-inline .wrap-billing-address .form-group {
         display: block !important;
     }
+    .form-inline .wrap-billing-address .form-group.deliver-same-address{
+        display: flex !important;
+    }
 }
 @media(max-width:1199px){
     .invoice-date-due-date{
         margin-left: 40%;
+    }
+    .form-inline .wrap-billing-address .form-group {
+        padding-right: 12px;
     }
 }
 @media (max-width: 990px) {
@@ -1679,7 +1702,7 @@ span.eligible-ITC {
             margin-bottom: 15px !important;
         }
     }
-    .card-invoiceTable-wrapper,
+    .card-invoice-table-wrapper,
     .add-btn,
     .otherDetail-card,
     .total-amountDiscription {
@@ -1699,7 +1722,7 @@ span.eligible-ITC {
     .staticInvoiceTable.salseInvoicetable {
         display: none;
     }
-    .card-invoiceTable-wrapper,
+    .card-invoice-table-wrapper,
     .otherDetail-card,
     .total-amountDiscription {
         width: 100%;

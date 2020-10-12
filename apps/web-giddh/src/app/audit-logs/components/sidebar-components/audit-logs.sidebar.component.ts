@@ -4,7 +4,7 @@ import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { of as observableOf, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil, map } from 'rxjs/operators';
 import {map as lodashMap } from '../../../lodash-optimized';
 
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
@@ -56,7 +56,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
 
         /* previously we were getting data from api now we are getting data from general store */
 
-        this.vm.accounts$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$), lodashMap(accounts => {
+        this.vm.accounts$ = this.store.pipe(select(state => state.general.flattenAccounts), takeUntil(this.destroyed$), map(accounts => {
             if(accounts && accounts.length) {
                 return accounts.map(account => {
                     return {

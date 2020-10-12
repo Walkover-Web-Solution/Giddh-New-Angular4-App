@@ -27,7 +27,8 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private authenticationService: AuthenticationService,
         private _loginAction: LoginActions,
-        private connectionService: ConnectionService
+        private connectionService: ConnectionService,
+        private authService: AuthenticationService
     ) {
         this.connectionService.monitor().pipe(takeUntil(this.destroyed$)).subscribe(isConnected => {
             if(!isConnected) {
@@ -47,6 +48,18 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        if(this.generalService.user) {
+            this.authService.ClearSession().subscribe(response => {
+                this.store.dispatch(this._loginAction.socialLogoutAttempt());
+                this.processLogin();
+            });
+        } else {
+            this.store.dispatch(this._loginAction.socialLogoutAttempt());
+            this.processLogin();
+        }
+    }
+
+    public processLogin(): void {
         this.generalService.storeUtmParameters(this.route.snapshot.queryParams);
         if (this.route.snapshot.queryParams['token']) {
             this.token = this.route.snapshot.queryParams['token'];

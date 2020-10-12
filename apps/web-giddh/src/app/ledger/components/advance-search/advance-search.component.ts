@@ -99,7 +99,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public ngOnInit() {
-        this.store.dispatch(this.inventoryAction.GetStock());
         this.flattenAccountListStream$.subscribe(data => {
             if (data) {
                 let accounts: IOption[] = [];
@@ -128,27 +127,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             }
         })).pipe(takeUntil(this.destroyed$));
 
-        // Get groups with accounts
-        this._groupService.GetFlattenGroupsAccounts().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
-                this.groups = [];
-                data.body.results.map(d => {
-                    this.groups.push({ label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName });
-                });
-                this.groups$ = observableOf(this.groups);
-
-                setTimeout(() => {
-                    if(this.groupUniqueNames && this.groupUniqueNames.length > 0) {
-                        this.advanceSearchForm.get('groupUniqueNames').patchValue(this.groupUniqueNames);
-                    }
-                }, 200);
-            }
-        });
-
         if(!this.advanceSearchForm) {
             this.setAdvanceSearchForm();
         }
-
         this.setVoucherTypes();
     }
 
@@ -199,6 +180,33 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 }
             }, 500);
         }
+    }
+
+    /**
+     * Calls the API on component load when component is visible
+     *
+     * @memberof AdvanceSearchModelComponent
+     */
+    public loadComponent(): void {
+        this.store.dispatch(this.inventoryAction.GetStock());
+        // this.store.dispatch(this.groupWithAccountsAction.getFlattenGroupsWithAccounts());
+
+        // Get groups with accounts
+        this._groupService.GetFlattenGroupsAccounts().pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data && data.status === 'success' && data.body && data.body.results ) {
+                let groups: IOption[] = [];
+                data.body.results.map(d => {
+                    groups.push({ label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName });
+                });
+                this.groups$ = observableOf(groups);
+
+                setTimeout(() => {
+                    if(this.groupUniqueNames && this.groupUniqueNames.length > 0) {
+                        this.advanceSearchForm.get('groupUniqueNames').patchValue(this.groupUniqueNames);
+                    }
+                }, 500);
+            }
+        });
     }
 
     public resetAdvanceSearchModal() {
@@ -256,7 +264,10 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 includeItemGreaterThan: false
             }),
         });
-        this.advanceSearchForm.patchValue(this.advanceSearchRequest.dataToSend);
+
+        if(this.advanceSearchRequest) {
+            this.advanceSearchForm.patchValue(this.advanceSearchRequest.dataToSend);
+        }
     }
 
     public setVoucherTypes() {
@@ -289,6 +300,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
     public onCancel() {
         this.closeModelEvent.emit({ advanceSearchData: this.advanceSearchRequest, isClose: true });
+        this.hideGiddhDatepicker();
     }
 
     /**
@@ -521,7 +533,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+        if (this.modalRef) {
+            this.modalRef.hide();
+        }
     }
 
     /**

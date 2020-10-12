@@ -1,5 +1,5 @@
-<div id="getGroupModal" class="full-screen-modal get-group-modal manage-group-acc" #myModel keyboardShortcut="esc"
-    (onShortcutPress)="closePopupEvent()">
+<div id="getGroupModal" class="full-screen-modal getGroupModal manage-group-acc" #myModel keyboardShortcut="esc"
+    (onShortcutPress)="closePopupEvent()" (click)="keyupInitialized = true">
 
     <!-- start header -->
     <div class="modal-header" #header>

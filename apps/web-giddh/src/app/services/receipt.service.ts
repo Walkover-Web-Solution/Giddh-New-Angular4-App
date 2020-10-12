@@ -122,6 +122,11 @@ export class ReceiptService implements OnInit {
         } else if (request.totalLessThan) {
             advanceSearchRequest.grandTotalOperation = PURCHASE_RECORD_GRAND_TOTAL_OPERATION.LESS_THAN;
         }
+
+        if(request.purchaseOrderNumber) {
+            advanceSearchRequest.purchaseOrderNumber = request.purchaseOrderNumber;
+        }
+
         return advanceSearchRequest;
     }
 
@@ -304,7 +309,7 @@ export class ReceiptService implements OnInit {
         this.companyUniqueName = this._generalService.companyUniqueName;
         return this._http.get(this.config.apiUrl + RECEIPT_API.GET_PURCHASE_RECORD
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':accountUniqueName', accountUniqueName)
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             .replace(':purchaseRecordUniqueNumber', purchaseRecordUniqueName)
         ).pipe(catchError((e) => this.errorHandler.HandleCatch<Voucher, any>(e)));
     }

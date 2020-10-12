@@ -12,7 +12,7 @@
                         </span>
                     </div>
 
-                    <div class="advance-icon" style="align-items: center">
+                    <div class="advance-icon cursor-pointer">
                         <span class="icon-advance-filter" (click)="toggleAdvanceSearchPopup()"
                             tooltip="Advance Search"></span>
                         <!-- -->
@@ -75,7 +75,7 @@
         </div>
     </div>
 
-    <div class="mobile-search mr-b1">
+    <div class="mobile-search mr-b1" >
         <div class="row">
             <div class="col-sm-6 col-xs-6 full-width-on-mobile">
                 <div class="input-container">
@@ -160,6 +160,14 @@
         </div>
     </ng-template>
 
+    <!-- select app proforma -->
+    <div class="select-all-proformas-on-mobile-view mt-1">
+        <div class="checkbox-img mr-1">
+            <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
+            <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+        </div>
+        Select All
+    </div>
     <!--  -->
     <div class="clearfix">
         <div class="table-responsive removeResponsive invoice-preview">

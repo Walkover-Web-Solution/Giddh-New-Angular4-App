@@ -1,6 +1,7 @@
 @charset "utf-8";
 @import "../css/giddh-common.scss";
 @import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "../css/ngx-bs-datepicker.scss";
 
 /* table css need to removed at last  (start)
    Don't touch this table css (If any body work on that contact shalinee..)
@@ -47,10 +48,6 @@
     font-family: opensans-semibold;
     font-size: 14px;
     border-top: 1px solid $gainsboro;
-}
-
-.basic > tbody > tr:hover td {
-    background: rgba(221, 225, 230, 0.5);
 }
 
 .basic {
@@ -586,7 +583,7 @@ input {
     border-bottom: 5px solid transparent;
 }
 
-.invoce-controll .nav.nav-tabs {
+.invoice-control .nav.nav-tabs {
     margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
     background-color: $alice-blue-light;
@@ -596,11 +593,11 @@ input {
     border-color: $gainsboro !important;
 }
 
-.invoce-controll .invoice-nav.navbar-nav > li > a:hover {
+.invoice-control .invoice-nav.navbar-nav > li > a:hover {
     color: $white;
 }
 
-.invoce-controll .invoice-nav.navbar-nav > li > a.active {
+.invoice-control .invoice-nav.navbar-nav > li > a.active {
     background-color: $white;
 }
 
@@ -614,16 +611,23 @@ input {
     padding-top: 15px;
 }
 
-.invoce-controll .nav > li > a {
+.invoice-control .nav > li > a {
     padding: 8px 0px !important;
     margin-right: 35px !important;
     margin-left: 0 !important;
-    padding-bottom: 7px !important;
     font-size: 14px;
-    color: $nero !important;
+    color: #262626 !important;
+    border-width: 0px 0 4px 0 !important;
+    height:41px;
 }
 
-.invoce-controll .nav-tabs > li.active > a {
+.invoice-control .nav > li > a:hover{
+    border-color: transparent !important;
+    background-color: transparent !important;
+}
+
+
+.invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid #01a9f4 !important;
     color: $nero !important;
 }
@@ -674,6 +678,12 @@ input {
     right: 0;
 }
 
+.history-btn{
+    .btn{
+        padding: 5px 10px !important;
+    }
+}
+
 .mt-15 {
     margin-top: 15px;
 }
@@ -719,7 +729,7 @@ input {
 }
 
 .mb-1 {
-    margin-bottom: 10px;
+    margin-bottom: 10px !important;
 }
 
 .mb-2 {
@@ -950,7 +960,9 @@ ul.sub-list {
     font-size: 18px;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
-
+.tab-integraton .nav-tabs > li > a:hover{
+    border: 1px solid rgba(26, 35, 126, 0.4) !important;
+}
 .tab-integraton .nav-tabs > li.active a {
     background: $white !important;
     box-shadow: 0 6px 7px #cacaca;
@@ -1938,6 +1950,19 @@ header .navbar {
 } */
 
 /*btn*/
+
+.btn-pink {
+    background: $deep-sky-blue;
+    border: 1px solid $deep-sky-blue;
+    color: $white;
+    &:hover{
+        color:$white;
+    }
+}
+
+.dropdown-toggle.btn-pink {
+    padding: 6px 16px;
+}
 
 .btn-primary {
     background: $white;
@@ -3028,6 +3053,9 @@ li.no-click {
     overflow: hidden;
 }
 
+.preview-1 iframe {
+    height: 1234px !important;
+}
 .mandatory-asterisk {
     font-size: 14px;
     top: 0;
@@ -3869,7 +3897,9 @@ a.btn.btn-xs.btn-link.pull-right {
 .pItem .multi-select input.form-control {
     padding-right: 24px !important;
 }
-
+.card-invoice-table-wrapper .multi-select input.form-control {
+    background-position: 98% !important;
+}
 .multi-select .caret {
     position: absolute;
     top: 50%;
@@ -4010,6 +4040,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .modal-header {
     position: relative;
     background: $midnight-blue !important;
+    color: $white;
 }
 
 .close-modal {
@@ -4524,6 +4555,14 @@ label {
     color: var(--dark-blue01) !important;
 }
 
+.primary-color {
+    color: var(--dark-blue01) !important;
+}
+
+.calc-width {
+    width: calc(100% - 93px) !important;
+}
+
 .view_forms {
     float: left;
     width: 100%;
@@ -5028,7 +5067,7 @@ label {
 }
 
 .grp-col::-webkit-scrollbar-thumb {
-    background-color: $gainsboro;
+    background-color: $nobel;
     outline: 1px solid $gray;
     margin-left: 255px;
 }
@@ -6469,7 +6508,7 @@ table td[class*=col-]:last-child {
     border-right: 0 !important;
 } */
 
-.total_col td {
+.total-col td {
     border: 0 !important;
 }
 
@@ -6518,7 +6557,7 @@ table td[class*=col-]:last-child {
     color: rgba(0, 0, 0, 0.4);
 }
 
-.total_col td {
+.total-col td {
     border: 0;
 }
 
@@ -8521,19 +8560,13 @@ ul.dropdown-menu p.lead.pd {
 }
 
 .nav-tabs > li.active > a,
-.invoce-controll .nav-tabs > li.active > a {
+.invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid $deep-sky-blue !important;
-    padding-bottom: 7px !important;
     font-family: $opensans-semibold;
-    background: transparent;
-    border-color: transparent;
+    background-color: inherit;
 }
 
-.invoce-controll .nav-tabs > li > a {
-    border-bottom: 4px solid transparent !important;
-}
-
-.invoce-controll .nav-tabs > li > a:hover {
+.invoice-control .nav-tabs > li > a:hover {
     border-color: 0px solid transparent !important;
 }
 
@@ -9538,6 +9571,36 @@ span#HW_badge_cont:nth-child(3) {
 .manage-group-account-form .button-group .btn{
     margin-right: 15px;
 }
+.inventory-page{
+    .daterangepicker{
+        z-index: 9992 !important;
+    }
+}
+.new-ledger-text-right ul li {
+    ul{
+        li{
+            display: flex;
+            align-items: center;
+        }
+    }
+}
+.total-col bs-tooltip-container.tooltip .tooltip-inner{
+    min-width: 150px !important;
+    width: 150px !important;
+    max-width: 150px !important;
+}
+.recurring-form{
+    sh-select, input{
+        min-width: 170px;
+        max-width: 170px;
+    }
+}
+.daterangepicker{
+    z-index: 9992 !important;
+}
+#rcw-p91-widget-button{
+    z-index: 98;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9547,6 +9610,17 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 @media (max-width: 1024px) {
+    /* bs-datepicker-container{
+            position: absolute !important;
+            left: 15px !important;
+            top: 40px !important;
+            transform: none !important;
+    }
+    .payment-date{
+        bs-datepicker-container{
+            top: 60px !important;
+        }
+    }*/
     .users-last-list{
         .cdk-virtual-scroll-content-wrapper {
             position: relative;
@@ -9611,7 +9685,11 @@ span#HW_badge_cont:nth-child(3) {
     }
 }
 
+
 @media (max-width: 991px) {
+    .setting-tab-data li.nav-item {
+        display: inline-block;
+    }
     .sidebar-menu{
         position: absolute !important;
         width: 100%;
@@ -9836,8 +9914,8 @@ span#HW_badge_cont:nth-child(3) {
     .universal-date label.btn.btn-link {
         display: none;
     }
-    .invoce-controll .nav.nav-tabs {
-        margin-bottom: 28px;
+    .invoice-control .nav.nav-tabs {
+        margin-bottom: 15px;
         padding: 0 0px 0 15px !important;
     }
     overview-summary .transactions-overview {
@@ -9906,7 +9984,12 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 @media (max-width: 767px) {
-
+    bs-datepicker-container{
+        position: fixed !important;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
     .modal-backdrop + .modal {
         margin-top: 5px;
     }
@@ -10043,7 +10126,8 @@ span#HW_badge_cont:nth-child(3) {
     .user-dropdown-header>li>a .icon-arrow-down {
         transform: rotate(90deg);
     }
-    #setting-tab .tab-container .nav.nav-tabs {
+    #setting-tab .tab-container .nav.nav-tabs , #purchase-tab .purchase-tabset.tab-container
+    > .nav.nav-tabs{
         position: fixed;
         width: 100%;
         top: 90px;
@@ -10075,7 +10159,7 @@ span#HW_badge_cont:nth-child(3) {
     .custom-tabs.hide-header .top-bar {
         margin-top: 10px;
     }
-    .invoce-controll .nav.nav-tabs {
+    .invoice-control .nav.nav-tabs {
         padding: 0 0 0 15px !important;
     }
     #setting-tab setting-integration .tab-container .nav.nav-tabs,
@@ -10570,10 +10654,15 @@ span#HW_badge_cont:nth-child(3) {
         padding: 0 10px;
     }
     .modal-dialog.modal-xl{
-        max-width: 1140px !important;
+        max-width: 1000px !important;
     }
     .receipt-note-modal {
         max-width: 100% !important;
+    }
+
+    .po-preview-modal {
+        max-width: 100% !important;
+        width: 900px !important;
     }
 }
 @media(min-width:480px) and (max-width:667px) {
@@ -10629,6 +10718,12 @@ span#HW_badge_cont:nth-child(3) {
         .card{
             margin-bottom: 20px;
             min-height: 452px;
+        }
+    }
+    .recurring-form{
+        sh-select, input{
+            min-width: 130px;
+            max-width: 130px;
         }
     }
 }
@@ -10735,6 +10830,21 @@ body.prevent-body-scroll {
     display: none!important;
 }
 }
-.daterangepicker{
-    display: none !important;
+.modal.fade.giddh-calendar.show {
+    z-index: 999999;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+*::-webkit-scrollbar-track {
+  background: $white-smoke;
+}
+
+/* Handle */
+*::-webkit-scrollbar-thumb {
+  background:  $nobel;
+  border-radius: 5px;
+  min-height: 60px;
 }

@@ -1,5 +1,5 @@
 <div>
-    <div class="col-xs-12 col-sm-12 bg_wrap">
+    <div class="bg_wrap">
             <div class="clearfix pdT2">
                 <div class="day-date pull-right text-right mr-b1" (clickOutside)="showFromDatePicker = false;">
                     <span>{{ displayDay }},</span>
@@ -49,17 +49,6 @@
                                         Current Balance: {{transaction.currentBalance | giddhCurrency}}
                                         {{transaction.selectedAccount.type === 'DEBIT' ? 'Dr.' : 'Cr.'}}
                                     </span>
-
-                                    <!-- <div *ngIf="transaction.type === 'to' && transaction.voucherAdjustments && transaction.voucherAdjustments.length > 0">
-                                        <div class="debtor-details pb-1 pt-05" *ngFor="let adjustment of transaction.voucherAdjustments;">
-                                            <span class="mr-15">{{adjustmentTypes[adjustment.type]}}</span>
-                                            <span class="mr-15">{{adjustment.note}}</span>
-                                            <span class="mr-15" *ngIf="adjustment.tax && adjustment.tax.uniqueName">{{adjustment.tax.value | giddhCurrency}} ({{adjustment.tax.percent}}%)</span>
-                                            <span class="mr-15" *ngIf="adjustment.invoice && adjustment.invoice.number">{{adjustment.invoice.number}}; {{adjustment.invoice.date}}; {{adjustment.invoice.amount}}</span>
-                                            <span class="mr-15">{{adjustment.amount | giddhCurrency}}</span>
-                                            <span>cr</span>
-                                        </div>
-                                    </div> -->
                                     <div
                                         *ngIf="transaction.type === 'to' && transaction.voucherAdjustments && transaction.voucherAdjustments.length > 0">
                                         <div class="debtor-details-form pb-1 pt-05"

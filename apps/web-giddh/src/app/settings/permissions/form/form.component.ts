@@ -48,6 +48,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public selectedIPRange: string = 'CIDR Range';
     public createPermissionInProcess$: Observable<boolean>;
     public dateRangePickerValue: Date[] = [];
+    /** Default range format */
+    public dateRangeConfig = { rangeInputFormat: GIDDH_DATE_FORMAT };
     /** To open model */
     public opened = false;
     /** To show model */
@@ -78,11 +80,17 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this._accountsAction.resetShareEntity();
+        
         if (this.userdata) {
             if (this.userdata.from && this.userdata.to) {
                 let from: any = moment(this.userdata.from, GIDDH_DATE_FORMAT);
                 let to: any = moment(this.userdata.to, GIDDH_DATE_FORMAT);
-                this.dateRangePickerValue = [from._d, to._d];
+                setTimeout(() => {
+                    // Set timeout is used because ngx datepicker doesn't take the
+                    // format provided in bsConfig if bsValue is set in ngOnInit
+                    this.dateRangePickerValue = [from._d, to._d];
+                }, 0);
             }
             this.initAcForm(this.userdata);
         } else {
@@ -90,7 +98,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         }
         // reset form
         this.createPermissionSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
-            if (value) {
+            if (value && !this.isOpenedInModal) {
                 this.permissionForm.reset();
                 this.initAcForm();
             }

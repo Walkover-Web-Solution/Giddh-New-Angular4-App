@@ -12,7 +12,7 @@
     height: 34px !important;
 }
 
-.rateStock {
+.rate-stock {
     margin-left: 10px;
 }
 
@@ -135,4 +135,17 @@
     height: 600px;
     overflow-y: auto;
     padding-bottom: 60px;
+}
+.add-item-btn{
+        display: flex !important;
+        flex-wrap: nowrap;
+    .btn-number{
+        margin-right: 0;
+    }
+    .minus-btn{
+        border-right: none;
+    }
+    input.form-control.input-number{
+        height: 29px !important;
+    }
 }

@@ -59,7 +59,6 @@ import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
 import { clone, cloneDeep, concat, orderBy, sortBy, map as lodashMap, slice, find } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { CompAidataModel } from '../../models/db';
-import { WindowRef } from '../helpers/window.object';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
@@ -70,7 +69,8 @@ import { CountryRequest, CurrentPage, OnboardingFormRequest } from '../../models
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
-import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
+import { SettingsProfileService } from '../../services/settings.profile.service';
+import { CompanyService } from '../../services/companyService.service';
 
 @Component({
     selector: 'app-header',
@@ -296,16 +296,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _dbService: DbService,
         private modalService: BsModalService,
         private changeDetection: ChangeDetectorRef,
-        private _windowRef: WindowRef,
         private _breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
         private commonActions: CommonActions,
         private location: Location,
-        private settingsFinancialYearActions: SettingsFinancialYearActions,
-        private breakPointObservar: BreakpointObserver
+        private settingsProfileService: SettingsProfileService,
+        private companyService: CompanyService
     ) {
-        this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
-        //this._windowRef.nativeWindow.superformIds = ['Jkvq'];
         /* This will get the date range picker configurations */
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
             if (config) {
@@ -447,7 +444,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.activeCompanyForDb = new CompAidataModel();
                 this.activeCompanyForDb.name = selectedCmp.name;
                 this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
-                this.setSelectedCompanyData(this.selectedCompany);
             }
 
             this.selectedCompanyCountry = selectedCmp.country;
@@ -480,7 +476,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
-        this.breakPointObservar.observe([
+        this.getCurrentCompanyData();
+        
+        this._breakpointObserver.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
@@ -514,10 +512,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.userName = u.name[0] + u.name[1];
                     this.userFullName = name;
                 }
-
-                this.store.dispatch(this.loginAction.renewSession());
             }
-
         });
 
         if (this.isSubscribedPlanHaveAdditionalCharges) {
@@ -713,8 +708,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.totalNumberOfcompanies$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.totalNumberOfcompanies = res;
         });
-        this.getPartyTypeForCreateAccount();
-        this.getAllCountries();
 
         this.updateIndexDbSuccess$.subscribe(res => {
             if (res) {
@@ -725,38 +718,49 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     });
                 }
             }
-        })
+        });
+
+        this.companyService.CurrencyList().subscribe(response => {
+            if (response && response.status === 'success' && response.body) {
+                this.store.dispatch(this.loginAction.SetCurrencyInStore(response.body));
+            }
+        });
     }
 
-    public setSelectedCompanyData(selectedCompany) {
-        if (selectedCompany) {
-            this.selectedCompany.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
-                if (res) {
-                    if (res.countryV2 !== null && res.countryV2 !== undefined) {
-                        this.getStates(res.countryV2.alpha2CountryCode);
-                        this.store.dispatch(this.commonActions.resetOnboardingForm());
-                    }
-                    if (res.subscription) {
-                        this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
-                        if (res.baseCurrency) {
-                            this.companyCountry.baseCurrency = res.baseCurrency;
-                            this.companyCountry.country = res.country;
-                            this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
-                        }
-
-                        this.currentCompanyPlanAmount = res.subscription.planDetails.amount;
-                        this.subscribedPlan = res.subscription;
-                        this.isSubscribedPlanHaveAdditionalCharges = res.subscription.additionalCharges;
-                        this.selectedPlanStatus = res.subscription.status;
-                    }
-                    this.activeCompany = res;
-                    if (this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
-                        this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
-                    }
-                    this.checkIfCompanyTcsTdsApplicable();
+    /**
+     * This will get the current company data
+     *
+     * @memberof HeaderComponent
+     */
+    public getCurrentCompanyData(): void {
+        this.settingsProfileService.GetProfileInfo().subscribe((response: any) => {
+            if (response && response.status === "success" && response.body) {
+                let res = response.body;
+                if (res.countryV2 !== null && res.countryV2 !== undefined) {
+                    this.getStates(res.countryV2.alpha2CountryCode);
+                    this.store.dispatch(this.commonActions.resetOnboardingForm());
                 }
-            });
-        }
+                if (res.subscription) {
+                    this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
+                    if (res.baseCurrency) {
+
+                        this.companyCountry.baseCurrency = res.baseCurrency;
+                        this.companyCountry.country = res.country;
+                        this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
+                    }
+
+                    this.currentCompanyPlanAmount = res.subscription.planDetails.amount;
+                    this.subscribedPlan = res.subscription;
+                    this.isSubscribedPlanHaveAdditionalCharges = res.subscription.additionalCharges;
+                    this.selectedPlanStatus = res.subscription.status;
+                }
+                this.activeCompany = res;
+                if (this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
+                    this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
+                }
+                this.checkIfCompanyTcsTdsApplicable();
+            }
+        });
     }
 
     public ngAfterViewInit() {
@@ -817,7 +821,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (this.isTodaysDateSelected) {
                     let today = cloneDeep([moment(), moment()]);
                     this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-                    this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 } else {
                     this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                     this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -1639,16 +1643,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
-    public getPartyTypeForCreateAccount() {
-        this.store.dispatch(this.commonActions.GetPartyType());
-    }
-
-    public getAllCountries() {
-        let countryRequest = new CountryRequest();
-        countryRequest.formName = '';
-        this.store.dispatch(this.commonActions.GetAllCountry(countryRequest));
-    }
-
     public removeCompanySessionData() {
         this.generalService.createNewCompany = null;
         this.store.dispatch(this.commonActions.resetCountry());
@@ -1841,7 +1835,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             let today = cloneDeep([moment(), moment()]);
             // this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
             this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-            this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
             let dates = {
                 fromDate: null,
                 toDate: null,

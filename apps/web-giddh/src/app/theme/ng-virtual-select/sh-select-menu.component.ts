@@ -23,9 +23,14 @@ export class ShSelectMenuComponent implements OnChanges {
     @Input() public noResultLinkTemplate: TemplateRef<any>;
     @Input() public showCheckbox: boolean = false;
 
+    /** True when pagination should be enabled */
+    @Input() isPaginationEnabled: boolean;
+    /** Emits the scroll to bottom event when pagination is required  */
+    @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
+
     @Output() public noToggleClick: EventEmitter<any> = new EventEmitter<any>();
     @Output() public noResultClicked = new EventEmitter<null>();
-    @ViewChild(VirtualScrollComponent, {static: true}) public virtualScrollElm: VirtualScrollComponent;
+    @ViewChild(VirtualScrollComponent, {static: false}) public virtualScrollElm: VirtualScrollComponent;
     @ViewChild('listContainer', {static: true}) public listContainer: ElementRef;
     public math: any = Math;
     public viewPortItems: IOption[];
@@ -74,6 +79,15 @@ export class ShSelectMenuComponent implements OnChanges {
                 this.noToggleClick.emit(row);
             }
         }
+    }
+
+    /**
+     * Scroll to bottom handler
+     *
+     * @memberof ShSelectMenuComponent
+     */
+    public reachedEnd(): void {
+        this.scrollEnd.emit();
     }
 
 }

@@ -7,6 +7,7 @@ import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import * as moment from 'moment';
+import { find } from '../lodash-optimized';
 
 @Injectable()
 export class GeneralService {
@@ -414,7 +415,7 @@ export class GeneralService {
      * This will calculate the position of element
      *
      * @param {*} elementTarget
-     * @param {*} element 
+     * @param {*} element
      * @returns
      * @memberof DatepickerWrapperComponent
      */
@@ -433,6 +434,9 @@ export class GeneralService {
             yPosition = element.clientY + 20;
         }
 
+        if (window && window.innerHeight - yPosition < 450) { // 450 is approx height of datepicker
+            yPosition -= (window.innerHeight - yPosition) / 2;
+        }
 
         return { x: xPosition, y: yPosition };
     }
@@ -508,7 +512,6 @@ export class GeneralService {
         } else {
             return false;
         }
-
     }
 
     /**
@@ -535,4 +538,65 @@ export class GeneralService {
         return { fromDate: fromDateInMmDdYy, toDate: toDateInMmDdYy }
     }
 
+    /**
+     * This will replace underscore by space in string
+     *
+     * @param {*} type
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getRevisionField(type: any): string {
+        return type.replace(/_/g, " ");
+    }
+    
+    /**
+     * Returns the account category
+     *
+     * @param {*} account Account object
+     * @param {string} accountName Account unique name
+     * @returns {string} Account category
+     * @memberof GeneralService
+     */
+    public getAccountCategory(account: any, accountName: string): string {
+        let parent = account.parentGroups ? account.parentGroups[0] : '';
+        if (parent) {
+            if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent.uniqueName)) {
+                return 'liabilities';
+            } else if (find(['fixedassets'], p => p === parent.uniqueName)) {
+                return 'fixedassets';
+            } else if (find(['noncurrentassets', 'currentassets'], p => p === parent.uniqueName)) {
+                return 'assets';
+            } else if (find(['revenuefromoperations', 'otherincome'], p => p === parent.uniqueName)) {
+                return 'income';
+            } else if (find(['operatingcost', 'indirectexpenses'], p => p === parent.uniqueName)) {
+                if (accountName === 'roundoff') {
+                    return 'roundoff';
+                }
+                let subParent = account.parentGroups[1];
+                if (subParent && subParent.uniqueName === 'discount') {
+                    return 'discount';
+                }
+                return 'expenses';
+            } else {
+                return '';
+            }
+        } else {
+            return '';
+        }
+    }
+
+    /**
+     * Returns true if key pressed was character/number/special character
+     *
+     * @param {*} event
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public allowCharactersNumbersSpecialCharacters(event: any): boolean {
+        if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 65 && event.keyCode <= 90) || (event.keyCode >= 186 && event.keyCode <= 192) || (event.keyCode >= 219 && event.keyCode <= 222)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

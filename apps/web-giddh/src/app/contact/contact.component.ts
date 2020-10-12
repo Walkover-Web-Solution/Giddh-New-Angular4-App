@@ -143,8 +143,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild('filterDropDownList') public filterDropDownList: BsDropdownDirective;
     @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
     @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
-    @ViewChild('mailModal', {static: true}) public mailModal: ModalDirective;
-    @ViewChild('messageBox', {static: true}) public messageBox: ElementRef;
+    @ViewChild('mailModal', {static: false}) public mailModal: ModalDirective;
+    @ViewChild('messageBox', {static: false}) public messageBox: ElementRef;
     @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
     @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
 
@@ -281,16 +281,16 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             }
             this.dueAmountReportData$ = observableOf(data);
         });
-        this.store.pipe(select(store => {
-            if (!store.session.companies) {
+        this.store.pipe(select(appState => {
+            if (!appState.session.companies) {
                 return;
             }
-            // store.session.companies.forEach(company => {
-            //     if (company.uniqueName === store.session.companyUniqueName) {
+            // appState.session.companies.forEach(company => {
+            //     if (company.uniqueName === appState.session.companyUniqueName) {
             //         this.selectedCompany = company;
             //     }
             // });
-            this.selectedCompany = store.session.companies.find((company) => company.uniqueName === store.session.companyUniqueName);
+            this.selectedCompany = appState.session.companies.find((company) => company.uniqueName === appState.session.companyUniqueName);
         }), takeUntil(this.destroyed$)).subscribe();
         this.store.dispatch(this._companyActions.getAllRegistrations());
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
@@ -425,45 +425,24 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 let queryParams = result[1];
 
                 if (params) {
-                    if (params['type'] === 'customer') {
-                        this.setActiveTab(params['type'], 'sundrydebtors');
-                    } else if (params['type'] === 'vendor') {
-                        this.setActiveTab(params['type'], 'sundrycreditors');
+                    if ((params['type'] && params['type'].indexOf('customer') > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
+                        this.setActiveTab("customer", 'sundrydebtors');
+                    } else if ((params['type'] && params['type'].indexOf('vendor') > -1) || (queryParams && queryParams.tab && queryParams.tab === "vendor")) {
+                        this.setActiveTab("vendor", 'sundrycreditors');
                     } else {
                         this.setActiveTab('aging-report', '');
-                    }
-                    if (queryParams && queryParams.tab) {
-
                     }
                 }
             });
 
-        // this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
-        //   if (val && val.tab && val.tabIndex) {
-        //     let tabIndex = Number(val.tabIndex);
-        //     if (this.staticTabs && this.staticTabs.tabs) {
-        //       if (val.tab === 'aging-report' && tabIndex === 1) {
-        //         this.setActiveTab('aging-report', '');
-        //         this.staticTabs.tabs[tabIndex].active = true;
-        //       } else if (val.tab === 'vendor' && tabIndex === 0) {
-        //         this.setActiveTab('vendor', 'sundrycreditors');
-        //         this.staticTabs.tabs[tabIndex].active = true;
-        //       } else {
-        //         this.setActiveTab('customer', 'sundrydebtors');
-        //         this.staticTabs.tabs[0].active = true;
-        //       }
-        //     }
-        //   }
-        // });
-
-        this.store
-            .pipe(select(p => p.company.isAccountInfoLoading), takeUntil(this.destroyed$))
-            .subscribe(result => {
+        // this.store
+        //     .pipe(select(p => p.company.isAccountInfoLoading), takeUntil(this.destroyed$))
+        //     .subscribe(result => {
                 //ToDo logic to stop loader
                 // if (result && this.taxAsideMenuState === 'in') {
                 //   this.toggleTaxAsidePane();
                 // }
-            });
+            //});
 
         this.store
             .pipe(
@@ -565,7 +544,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             } else {
                 this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
             }
-            this.router.navigate(['pages/contact/', tabName], { replaceUrl: true });
+            this.router.navigate(['/pages/contact/', tabName], { replaceUrl: true });
         }
     }
 
@@ -881,7 +860,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             let viewContainerRef = this.paginationChild.viewContainerRef;
             viewContainerRef.remove();
 
-            let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+            let componentInstanceView = componentFactory.create(viewContainerRef.injector);
             viewContainerRef.insert(componentInstanceView.hostView);
 
             let componentInstance = componentInstanceView.instance as PaginationComponent;
@@ -1153,14 +1132,12 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                         }
                     });
                     this.sundryCreditorsAccounts = cloneDeep(res.body.results);
-                    this.selectedAccountsList = [];
                     this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(element => {
                         let indexOfItem = this.selectedCheckedContacts.indexOf(element.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
                         } else {
                             element.isSelected = true;
-                            this.selectedAccountsList.push(element);
                         }
                         return element;
                     });
@@ -1264,7 +1241,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.isBulkPaymentShow = false;
         this.selectedAccForPayment = null;
         this.bulkPaymentModalRef.hide();
-        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr);
+
+        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
     }
 
     /**

@@ -7,7 +7,7 @@
         display: inline-flex;
         .input-wrapper {
             display: block !important;
-            width: 226px !important;
+            width: 230px !important;
             position: relative;
             height: 36px !important;
             border: 1px solid $gainsboro;
@@ -34,6 +34,7 @@
                 z-index: 99;
                 cursor: default;
                 width: 100%;
+                max-width: 100%;
             }
         }
     }
@@ -72,6 +73,11 @@
     }
 }
 
+.mh18-img img {
+    max-height: 17px;
+    cursor: pointer;
+}
+
 .giddh-table {
     tr {
         td {
@@ -81,7 +87,7 @@
                 border: 1px solid $gainsboro;
                 a {
                     width: 30px;
-                    font-size: 20px;
+                    font-size: 18px;
                     color: $gray;
                     border-right: 1px solid $gainsboro;
                     display: flex;
@@ -130,13 +136,18 @@
             .form-control:focus {
                 z-index: 2;
             }
+            input{
+                width: 100% !important;
+                min-width: 100%;
+                flex: 1 auto;
+            }
             .input-group-addon {
                 background-color: transparent;
                 position: absolute;
                 border: none;
                 z-index: 2;
-                right: 13px;
-                top: 5px;
+                right: 0;
+                top: 0;
                 color: $gray;
             }
         }
@@ -144,7 +155,7 @@
     .modal-form {
         sh-select,
         .select-date {
-            width: 50%;
+            width: 100%;
         }
     }
     p {
@@ -169,17 +180,27 @@
     align-items: center;
     justify-content: center;
 }
+
+.status-mobile{
+    .d-flex{
+        padding: 14px 0;
+    }
+}
 @media (max-width: 768px) {
+    .purchase-order-header{
+         margin-bottom: 15px;
+    }
     .action-icon {
         display: flex !important;
-        width: 120px;
-        margin-left: 0;
+        margin-left: 0px;
         margin-top: 5px;
     }
+    .status-mobile{
+        display: flex !important;
+        justify-content: space-between !important;
+    }
     .mobile-search {
-        display: flex;
         flex-direction: row;
-        display: flex;
         margin-top: 15px;
     }
     .add-invoice {
@@ -211,13 +232,23 @@
                 &::before {
                     left: 15px;
                 }
+                .action-icon {
+                    a {
+                        height:24px;
+                    }
+                }
             }
         }
     }
+
 }
 @media (max-width: 767px) {
     .mobile-search {
         margin-top: 0;
+        display: flex;
+    }
+    .purchase-order-header{
+        margin-top: 15px;
     }
 }
 @media (max-width: 575px) {
@@ -255,4 +286,46 @@
 }
 .late-delivery {
     color: $red;
+}
+
+@media (max-width: 445px) {
+    .status-mobile{
+        display: block !important;
+    }
+
+    .giddh-table {
+        tr {
+            td {
+                .action-icon {
+                    a {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width:768px) and (min-width:445px){
+    .status-mobile::before{
+        display:flex;
+        align-items: center;
+    }
+}
+
+@media (min-width:768px){
+    .min-wid-status{
+        min-width:270px;
+    }
+
+    .min-wid-check{
+        min-width:20px;
+        .mh18-img{
+            width:20px;
+        }
+    }
+
+    .min-wid-amt{
+        min-width:170px;
+    }
 }

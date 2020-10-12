@@ -25,15 +25,15 @@
 
                     <span class="input-wrapper"> <input type="text" #dateRangePickerCmp name="daterangeInput"
                             daterangepicker [options]="datePickerOptions"
-                            (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
+                            (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker cursor-pointer" />
                     </span>
 
                 </div>
-                <div class="form-group">
+                <div class="form-group cursor-pointer">
 
 
-                    <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
-                        <span class="icon-advance-filter" (click)="onOpenAdvanceSearch()"></span>
+                    <div class="advance-icon" style="align-items: center" tooltip="Advance Search" (click)="onOpenAdvanceSearch()">
+                        <span class="icon-advance-filter"></span>
                     </div>
 
                     <!-- <button class="btn-link pdL0" (click)="onOpenAdvanceSearch()">Advance Search</button> -->
@@ -107,7 +107,7 @@
                 </thead>
 
                 <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);"
-                    class="daybookTableTbody">
+                    class="daybook-table-tbody">
                     <tr>
                         <td data-title="Date">{{ entry.entryDate }}</td>
                         <td data-title="Particular">{{ entry.particular.name }}</td>

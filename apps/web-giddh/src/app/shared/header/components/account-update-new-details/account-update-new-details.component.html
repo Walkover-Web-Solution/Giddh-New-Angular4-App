@@ -422,7 +422,7 @@
             <div class="col-sm-12 ">
                 <div class="form-group ">
                     <label>Select account to merge with <span
-                            class="primary_clr">{{(activeAccount$ | async)?.name}}</span></label>
+                            class="primary-color">{{(activeAccount$ | async)?.name}}</span></label>
                     <div class="clearfix" #accountSelect2>
                         <span>
                             <sh-select class="pull-left" [options]="accounts$ | async" [isFilterEnabled]="true"
@@ -450,6 +450,42 @@
         </div>
 
     </div>
+    <div class="form" *ngIf="isDebtorCreditor && isOtherSelectedTab">
+        <div class="mrB2 selectBox">
+            <div class="form-group ">
+                <label>Default Discount <span
+                    class="primary-color"></span></label>
+                <div class="clearfix">
+                <span>
+                        <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" placeholder="Select discounts" ></sh-select>
+                    </span>
+                    <span class="pull-right">
+                        <button  class="btn btn-primary mrgeBtn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscounts()">Apply</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="edit-tax-section">
+            <div class="form-group">
+                <div class="tax-label">
+                    <label>All Inherited Discounts</label>
+                </div>
+                <div *ngFor="let item of (activeAccount$ | async)?.inheritedDiscounts">
+                    <ng-template #popTemplate>
+                        <div class="popover-content">
+                            <label>Discount being inherited from:</label>
+                            <ul>
+                                <li>{{item.name}}</li>
+                            </ul>
+                        </div>
+                    </ng-template>
+                    <span class="tax-bullet" *ngFor="let inAppDiscount of item.applicableDiscounts" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppDiscount.name }}
+                </span>
+                </div>
+                <p *ngIf="!(activeAccount$ | async)?.inheritedDiscounts.length">No Inherited Discounts</p>
+            </div>
+        </div>
+    </div>
 
     <!-- taxes container -->
     <ng-container *ngIf="(isTaxableAccount$ | async)">
@@ -462,7 +498,7 @@
                     <div class="form-group">
                         <div class="input-group">
 
-                            <sh-select [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes" style="width: calc(100% - 20px);">
+                            <sh-select [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes" class="calc-width">
                             </sh-select>
                             <span class="input-group-btn ">
                                 <button type="submit" class="btn btn-success">Save</button>
@@ -480,7 +516,7 @@
                         </div>
                         <div *ngFor="let inTax of (activeAccountTaxHierarchy$ | async)?.inheritedTaxes">
                             <ng-template #popTemplate>
-                                <div [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)">
+                                <div>
                                     <div class="popover-content">
                                         <label>Tax being inherited from:</label>
                                         <ul>
