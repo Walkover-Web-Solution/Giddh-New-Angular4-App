@@ -213,6 +213,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         if (this.daybookAdvanceSearchModelComponent) {
             this.daybookAdvanceSearchModelComponent.advanceSearchForm.reset();
             this.daybookAdvanceSearchModelComponent.resetShselectForceClear();
+            this.daybookAdvanceSearchModelComponent.initializeDaybookAdvanceSearchForm();
         }
     }
 

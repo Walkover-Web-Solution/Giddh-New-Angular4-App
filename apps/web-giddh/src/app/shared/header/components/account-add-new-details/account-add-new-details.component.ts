@@ -34,6 +34,7 @@ import {GeneralActions} from "../../../../actions/general/general.actions";
 import {IFlattenGroupsAccountsDetail} from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
 import * as googleLibphonenumber from 'google-libphonenumber';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
+import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 
 @Component({
     selector: 'account-add-new-details',
@@ -95,6 +96,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public bankIbanNumberMinLength: string = '9';
     /** company custom fields list */
     public companyCustomFields: any[] = [];
+    /** Observable for selected active group  */
+    private activeGroup$: Observable<any>;
 
     constructor(
         private _fb: FormBuilder,
@@ -106,9 +109,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
         private changeDetectorRef: ChangeDetectorRef,
-        private groupService: GroupService) {
+        private groupService: GroupService,
+        private groupWithAccountsAction: GroupWithAccountsAction) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
+        this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup),takeUntil(this.destroyed$));
         this.getCountry();
         this.getCallingCodes();
         this.getPartyTypes();
@@ -132,7 +137,20 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.showBankDetail = true;
         }
         this.initializeNewForm();
+        this.activeGroup$.subscribe(response => {
+            if (response) {
+                if (response.parentGroups && response.parentGroups.length) {
+                    let parent = response.parentGroups;
+                    if (parent.length > 1 && parent[1]) {
+                        this.isParentDebtorCreditor(parent[1].uniqueName);
+                    } else if (parent.length === 1) {
+                        this.isParentDebtorCreditor(response.uniqueName);
+                    }
+                }
+            }
+        });
         this.getCompanyCustomField();
+
         this.addAccountForm.get('hsnOrSac').valueChanges.subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
@@ -651,10 +669,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public selectGroup(event: IOption) {
         if (event) {
             this.activeGroupUniqueName = event.value;
-            let parent = event.additional;
-            if (parent[1]) {
-                this.isParentDebtorCreditor(parent[1].uniqueName);
-            }
+            this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
+
+            // let parent = event.additional;
+            // if (parent[1]) {
+            //     this.isParentDebtorCreditor(parent[1].uniqueName);
+            // }
             this.isGroupSelected.emit(event.value);
             this.toggleStateRequired();
         }
