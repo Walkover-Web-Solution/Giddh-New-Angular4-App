@@ -9467,6 +9467,19 @@ span#HW_badge_cont:nth-child(3) {
 .giddh-datepicker-modal {
     z-index: 99999;
 }
+.master-custom-tabs.custom-tabs{
+    .nav-tabs{
+        top: 0;
+        li{
+            a{
+                padding-top: 5px;
+            }
+        }
+    }
+}
+.delete-modal-overlay{
+    z-index: 9992; /*for delete custom zIndex modal*/
+}
 /* responsive */
 
 @media (max-width: 1440px) {

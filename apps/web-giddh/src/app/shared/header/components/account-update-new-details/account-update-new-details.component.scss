@@ -100,3 +100,13 @@ form.gstinForm {
 .wd100 {
     width: 100% !important;
 }
+.name-of-field{
+    display: flex;
+    align-items: center;
+    label{
+        margin-bottom: 0;
+        margin-right: 10px;
+        min-width: 120px;
+        line-height: 2.3;
+    }
+}
