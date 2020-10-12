@@ -1238,11 +1238,10 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         if (event) {
             this.clearSelectedContacts();
         }
+        
         this.isBulkPaymentShow = false;
         this.selectedAccForPayment = null;
         this.bulkPaymentModalRef.hide();
-
-        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
     }
 
     /**
@@ -1342,6 +1341,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.checkboxInfo = {
             selectedPage: 1
         };
-        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr);
+        this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
     }
 }
