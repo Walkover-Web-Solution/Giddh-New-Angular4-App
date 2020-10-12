@@ -91,6 +91,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public asideHelpSupportMenuState: string = 'out';
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideSettingMenuState: string = 'out';
+    public pageHasTabs: boolean = false;
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -273,7 +274,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public updateIndexDbSuccess$: Observable<boolean>;
     /* This will hold if resolution is less than 768 to consider as mobile screen */
     public isMobileScreen: boolean = false;
-    public pageHasTabs: boolean = false;
 
     /**
      *
@@ -496,9 +496,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
 
-        // this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
-        //     this.sideBarStateChange(response);
-        // });
+        this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
+            this.sideBarStateChange(response);
+        });
 
         this.getElectronAppVersion();
         this.store.dispatch(this.companyActions.GetApplicationDate());
