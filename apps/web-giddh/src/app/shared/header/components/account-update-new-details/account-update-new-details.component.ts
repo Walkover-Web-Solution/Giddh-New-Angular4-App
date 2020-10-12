@@ -1501,7 +1501,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (customField.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
-        console.log('renderCustomFieldDetails',customField);
     }
 
 

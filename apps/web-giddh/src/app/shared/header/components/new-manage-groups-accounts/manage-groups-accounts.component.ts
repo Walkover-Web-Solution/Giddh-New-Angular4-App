@@ -284,7 +284,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         if (this.customFieldForm.valid) {
             customRow.push(this.initNewCustomField(null));
         } else {
-            this.toasterService.warningToast('please fill all mendatory field');
+            this.toasterService.warningToast('Please fill all mandatory field');
         }
         return;
     }

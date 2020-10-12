@@ -998,14 +998,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public initialCustomFieldDetailsForm(value: CustomFieldsData = null): FormGroup {
-        let custoFields = this._fb.group({
+        let customFields = this._fb.group({
             uniqueName: [''],
             value: [''],
         });
         if (value) {
-            custoFields.patchValue(value);
+            customFields.patchValue(value);
         }
-        return custoFields;
+        return customFields;
     }
 
     /**

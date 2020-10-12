@@ -368,7 +368,7 @@
 
         <tab *ngIf="isDebtorCreditor" heading="Custom">
             <ng-container formArrayName="customFields">
-                <ng-container *ngFor="let item of companyCustomFields; let index = index;let f = first; let l = last" [formGroupName]="index">
+                <ng-container *ngFor="let item of companyCustomFields; let index = index;let first = first; let last = last" [formGroupName]="index">
                     <ng-container *ngFor="let customFieldsItem of addAccountForm.get('customFields')['controls']; let index = index;">
                         <div class="row mb-15" *ngIf="item.uniqueName === customFieldsItem.get('uniqueName').value">
                             <div class="col-lg-8">
@@ -378,14 +378,20 @@
                                     <input *ngIf="item.dataType==='NUMERIC'" type="text" name="values{{index}}" formControlName="value" class="form-control" [maxLength]="item.valueLength" decimalDigitsDirective>
                                     <div *ngIf="item.dataType==='BOOLEAN'" class="clearfix">
                                         <span class="d-inline-block">
-                                    <input id="yes{{index}}" class="radio-custom cp ml0" type="radio" [checked]="customFieldsItem.get('value').value==='true'"  (change)="selectedBooleanCustomField('true', index)" name="booleanType{{index}}">
-                                    <label for="yes{{index}}" class="radio-custom-label">YES </label>
-                                </span>
+                                            <input id="yes{{index}}" class="radio-custom cp ml0" type="radio"
+                                                [checked]="customFieldsItem.get('value').value==='true'"
+                                                (change)="selectedBooleanCustomField('true', index)"
+                                                name="booleanType{{index}}">
+                                            <label for="yes{{index}}" class="radio-custom-label">YES </label>
+                                        </span>
 
                                         <span class="d-inline-block">
-                                    <input id="no{{index}}" class="radio-custom cp ml0" type="radio"  [checked]="customFieldsItem.get('value').value==='false'"  (change)="selectedBooleanCustomField('false', index)" name="booleanType{{index}}">
-                                    <label for="no{{index}}" class="radio-custom-label">NO</label>
-                                </span>
+                                            <input id="no{{index}}" class="radio-custom cp ml0" type="radio"
+                                                [checked]="customFieldsItem.get('value').value==='false'"
+                                                (change)="selectedBooleanCustomField('false', index)"
+                                                name="booleanType{{index}}">
+                                            <label for="no{{index}}" class="radio-custom-label">NO</label>
+                                        </span>
                                     </div>
                                 </div>
                             </div>

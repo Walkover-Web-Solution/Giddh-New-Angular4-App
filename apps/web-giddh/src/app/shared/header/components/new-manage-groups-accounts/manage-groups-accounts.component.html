@@ -110,47 +110,6 @@
                             </div>
                         </form>
                     </ng-container>
-                    <!-- <ng-container *ngIf="!isUpdateModeEnabled">
-                        <form [formGroup]="customFieldForm" (ngSubmit)="submitCustomFields(customFieldForm.value)">
-                            <ng-container formArrayName="customField">
-                                <ng-container *ngFor="let item of customFieldForm.get('customField')['controls']; let index=index;let first = first; let last = last">
-                                    <div class="row mb-15" [formGroupName]="index" (clickOutside)="clickOutSide();">
-                                        <div class="col-lg-3 col-md-3 col-sm-12">
-                                            <label *ngIf="first">Name</label>
-                                            <input type="text" class="form-control" formControlName="key" name="key" autocomplete="off">
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-12">
-                                            <label *ngIf="first">Type</label>
-                                            <sh-select [options]="dataTypeList" formControlName="dataType" name="dataType">
-                                            </sh-select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-12">
-                                            <label *ngIf="first">Length</label>
-                                            <input *ngIf="item.get('dataType').value!='BOOLEAN'" type="number" class="form-control" formControlName="valueLength" name="valueLength" autocomplete="off">
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="last">
-                                            <label *ngIf="first" class="d-block">&nbsp;</label>
-                                            <button type="submit" class="btn btn-primary" [disabled]="customFieldForm.invalid">
-                                            Save
-                                        </button>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-12 edit-close-btn" *ngIf="!last">
-                                            <label *ngIf="first" class="d-block">&nbsp;</label>
-                                            <button class="btn btn-defualt close-button" (click)="removeCustomFieldRow(index)">
-                                            <i class="icon-trash"></i>
-                                        </button>
-                                            <button class="btn btn-defualt" (click)="editCustomfield(index)">
-                                            <i class="icon-edit"></i>
-                                        </button>
-                                        </div>
-                                    </div>
-                                </ng-container>
-                            </ng-container>
-                            <div>
-                                <a href="javascript:void(0)" (click)="addNewCustomFieldRow()" class="btn btn-link pl-0">+ Add New Row</a>
-                            </div>
-                        </form>
-                    </ng-container> -->
                 </div>
                 <div class="search-loading" *ngIf="isGetCustomInProgress">
                     <div class="vcenter">
