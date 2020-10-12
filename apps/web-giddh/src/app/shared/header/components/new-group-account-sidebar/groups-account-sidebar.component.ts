@@ -5,7 +5,7 @@ import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetecto
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../../store/roots';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { ColumnGroupsAccountVM, GroupAccountSidebarVM, IGroupOrAccount } from './VM';
@@ -37,7 +37,8 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     @Input() public activeGroup: Observable<GroupResponse>;
     public isUpdateGroupSuccess$: Observable<boolean>;
     public isUpdateAccountSuccess$: Observable<boolean>;
-
+    /* Move group observable */
+    public isMoveGroupSuccess$: Observable<boolean>;
     public isDeleteGroupSuccess$: Observable<boolean>;
     /** Active group unique name observable */
     public activeGroupUniqueName$: Observable<string>;
@@ -69,6 +70,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
         this.isUpdateAccountSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).pipe(takeUntil(this.destroyed$));
         this.isDeleteGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isDeleteGroupSuccess).pipe(takeUntil(this.destroyed$));
         this.groupsListBackupStream$ = this.store.select(state => state.general.groupswithaccounts).pipe(takeUntil(this.destroyed$));
+        this.isMoveGroupSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.isMoveGroupSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -82,12 +84,21 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
                     this.currentGroup.uniqueName = activeGroup.uniqueName;
                     if (this.currentGroupIndex === 0) {
                         const currentUpdatedGroup = this.groups.find(group => this.currentGroup.uniqueName === group.uniqueName);
-                        this.currentGroup.groups = currentUpdatedGroup.groups;
+                        if(currentUpdatedGroup) {
+                            this.currentGroup.groups = currentUpdatedGroup.groups;
+                        }
                     }
                 }
                 this.onGroupClick(this.currentGroup, this.currentGroupIndex);
             }
         }
+
+        this.isMoveGroupSuccess$.subscribe(response => {
+            if(response) {
+                this.currentGroupIndex = 0;
+                this.store.dispatch(this.groupWithAccountsAction.moveGroupComplete());
+            }
+        });
     }
 
     public ngAfterViewInit() {
