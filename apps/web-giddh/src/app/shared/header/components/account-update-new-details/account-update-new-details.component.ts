@@ -1501,6 +1501,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (customField.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
+        console.log('renderCustomFieldDetails',customField);
     }
 
 
@@ -1512,14 +1513,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public initialCustomFieldDetailsForm(value: CustomFieldsData = null): FormGroup {
-        let custoFields = this._fb.group({
+        let customFields = this._fb.group({
             uniqueName: [''],
             value: [''],
         });
         if (value) {
-            custoFields.patchValue(value);
+            customFields.patchValue(value);
         }
-        return custoFields;
+        return customFields;
     }
 
     /**
@@ -1529,7 +1530,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public createDynamicCustomFieldForm(customFieldForm: any): void {
-        customFieldForm.map(item => {
+        customFieldForm.forEach(item => {
             this.renderCustomFieldDetails(item, customFieldForm.length);
         });
     }
