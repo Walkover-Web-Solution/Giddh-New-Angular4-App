@@ -236,6 +236,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 for (let i = 0; i <= 10; i++) {
                     this.removeGstDetailsForm(0);
                 }
+                if (!accountDetails.customFields) {
+                    accountDetails.customFields = [];
+                }
 
                 this.addAccountForm.patchValue(accountDetails);
                 if (accountDetails.currency) {
@@ -266,7 +269,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 // render custom field data
                 if (accountDetails.customFields && accountDetails.customFields.length > 0) {
                     accountDetails.customFields.map(a => {
-                        // this.renderCustomFieldDetails(a, accountDetails.addresses.length);
+                        this.renderCustomFieldDetails(a, accountDetails.customFields.length);
                     });
                 }
                 // hsn/sac enable disable
@@ -1474,13 +1477,25 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
     }
 
-      public addBlankCustomFieldForm() {
+    /**
+     * To create blank dynamic custom field row
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public addBlankCustomFieldForm() {
         const customField = this.addAccountForm.get('customFields') as FormArray;
         if (customField.value.length === 0) {
             customField.push(this.initialCustomFieldDetailsForm(null));
         }
     }
 
+    /**
+     * To render custom field form
+     *
+     * @param {*} obj
+     * @param {*} customFieldLength
+     * @memberof AccountUpdateNewDetailsComponent
+     */
     public renderCustomFieldDetails(obj: any, customFieldLength: any) {
         const customField = this.addAccountForm.get('customFields') as FormArray;
         if (customField.length < customFieldLength) {
@@ -1489,28 +1504,46 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
 
-    public initialCustomFieldDetailsForm(validator: any, val: CustomFieldsData = null): FormGroup {
+    /**
+     * To initialize custom field form
+     *
+     * @param {CustomFieldsData} [value=null]
+     * @returns {FormGroup}
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public initialCustomFieldDetailsForm(value: CustomFieldsData = null): FormGroup {
         let custoFields = this._fb.group({
             uniqueName: [''],
             value: [''],
         });
 
-        // if (val) {
-        //     custoFields.patchValue(val);
-        // }
+        if (value) {
+            custoFields.patchValue(value);
+        }
         return custoFields;
     }
 
-/**
- * To create dynamic custom field form
- *
- * @param {*} customFieldForm
- * @memberof AccountUpdateNewDetailsComponent
- */
-public createDynamicCustomFieldForm(customFieldForm: any) {
+    /**
+     * To create dynamic custom field form
+     *
+     * @param {*} customFieldForm
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public createDynamicCustomFieldForm(customFieldForm: any) {
+        customFieldForm.map(item => {
+            this.renderCustomFieldDetails(item, customFieldForm.length);
+        });
+    }
 
-                console.log('companyCustomFields$', customFieldForm);
-
-
+    /**
+     * To set boolean type custom field value
+     *
+     * @param {string} isChecked
+     * @param {number} index
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public selectedBooleanCustomField(isChecked: string, index: number): void {
+        const customField = this.addAccountForm.get('customFields') as FormArray;
+        customField.controls[index].get('value').setValue(isChecked);
     }
 }

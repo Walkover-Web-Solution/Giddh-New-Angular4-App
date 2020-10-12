@@ -49,7 +49,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-     /** Add custom field form reference */
+    /** Add custom field form reference */
     public customFieldForm: FormGroup;
 
     /** List custom row data type  */
@@ -65,9 +65,14 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             { label: "Yes", value: "true" },
             { label: "No", value: "false" },
         ];
-
-        public isEnabledIndex: number = null;
-        public updateModeLength: number = 0;
+    /** To check API call in progress */
+    public isGetCustomInProgress: boolean = true;
+    /** To check API call in progress */
+    public isSaveCustomInProgress: boolean = false;
+    /** To get any custom field in edit mode index */
+    public isEnabledIndex: number = null;
+    /** To get  custom fields length */
+    public updateModeLength: number = 0;
 
 
 	// tslint:disable-next-line:no-empty
@@ -171,24 +176,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 		this.breadcrumbPath = obj.breadcrumbPath;
 	}
 
-     /**
-     * To update custom field data
-     *
-     * @param {*} value
-     * @memberof ManageGroupsAccountsComponent
-     */
-    public updateCustomFields(value: any): void {
-        console.log('update',value);
-
-        // this.groupService.createCompanyCustomField(value.customField).subscribe(response => {
-        //     console.log('API res', response);
-        //     if (response) {
-
-
-        //     }
-        // });
-    }
-
     /**
      * To submit custom field data
      *
@@ -196,10 +183,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      * @memberof ManageGroupsAccountsComponent
      */
     public submitCustomFields(value: any): void {
-        console.log(value);
-
+        this.isSaveCustomInProgress = true;
         this.groupService.createCompanyCustomField(value.customField).subscribe(response => {
-            console.log('API res', response);
             if (response) {
                 if (response.status === 'success') {
                     this.customFieldForm.get('customField').reset();
@@ -209,6 +194,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                 } else {
                     this.toasterService.errorToast(response.message);
                 }
+                this.isEnabledIndex = null;
+                this.isSaveCustomInProgress = false;
 
             }
         });
@@ -220,13 +207,17 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      * @memberof ManageGroupsAccountsComponent
      */
     public getCompanyCustomField(): void {
+        this.isGetCustomInProgress = true;
         this.groupService.getCompanyCustomField().subscribe(response => {
+            this.isEnabledIndex = null;
             if (response && response.status === 'success') {
                 this.renderCustomField(response.body);
                 this.updateModeLength = response.body.length;
             } else {
                 this.toasterService.errorToast(response.message);
             }
+        this.isGetCustomInProgress = false;
+
         });
     }
 
@@ -245,7 +236,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             customRow.push(this.initNewCustomField(item));
         });
         this.removeCustomFieldRow(0);
-        console.log('out put:', this.customFieldForm.get('customField'));
     }
 
     /**
@@ -322,6 +312,23 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         const row = this.customFieldForm.get('customField') as FormArray;
         this.isEnabledIndex = index;
         row.controls[index].get('isEditMode').setValue(false);
+    }
+
+    /**
+     * To add remoive validation according to custom field type
+     *
+     * @param {*} event
+     * @param {number} index
+     * @memberof ManageGroupsAccountsComponent
+     */
+    public customFieldTypeSelected(event: any, index: number) {
+        const row = this.customFieldForm.get('customField') as FormArray;
+        if (event.value === 'BOOLEAN') {
+            row.controls[index].get('valueLength').clearValidators();
+        } else {
+            row.controls[index].get('valueLength').setValidators([Validators.required])
+        }
+         row.controls[index].get('valueLength').setValue(null);
     }
 
 }
