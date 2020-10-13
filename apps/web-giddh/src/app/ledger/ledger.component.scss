@@ -602,6 +602,9 @@ sh-select:focus {
         border-bottom: none;
     }
 }
+.ledger-book.fade:not(.show){
+    opacity: 1 !important;
+}
 /*responsive*/
 .modal-ledger {
     width: 70%;
