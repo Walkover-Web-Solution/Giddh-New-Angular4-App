@@ -9622,6 +9622,9 @@ span#HW_badge_cont:nth-child(3) {
     z-index: 98;
 }
 /*material datepicker css starts*/
+.recurring-form  .mat-form-field{
+    max-width: 170px;
+}
 .mat-form-field{
     min-width: 170px;
     width: 100%;
