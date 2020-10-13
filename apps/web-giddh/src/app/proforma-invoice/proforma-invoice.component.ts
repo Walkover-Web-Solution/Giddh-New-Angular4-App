@@ -1147,7 +1147,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             tempObj = cloneDeep((results[0] as GenericRequestForGenerateSCD).voucher);
                         }
 
+                        tempObj.entries.forEach((entry, index) => {
+                            tempObj.entries[index].entryDate = this.universalDate || new Date();
+                        });
+
                         obj.entries = tempObj.entries;
+
+                        let date = _.cloneDeep(this.universalDate);
+                        obj.voucherDetails.voucherDate = date;
+                        obj.voucherDetails.dueDate = date;
                     } else {
                         if (this.isMultiCurrencyModule()) {
                             // parse normal response to multi currency response
@@ -1168,6 +1176,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj = cloneDeep(convertedRes1) as VoucherClass;
                             this.assignCompanyBillingShipping(obj.companyDetails);
                             this.initializeWarehouse(results[0].warehouse);
+
+                            if(this.copyPurchaseBill) {
+                                if(obj && obj.entries) {
+                                    obj.entries.forEach((entry, index) => {
+                                        obj.entries[index].entryDate = this.universalDate || new Date();
+                                    });
+        
+                                    obj.entries = obj.entries;
+                                }
+
+                                let date = _.cloneDeep(this.universalDate);
+                                obj.voucherDetails.voucherDate = date;
+                                obj.voucherDetails.dueDate = date;
+                            }
                         } else {
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
                             if (results[0].account.currency) {
@@ -1214,7 +1236,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
 
                         //added update mode as causing trouble in multicurrency
-                        if (obj.entries.length) {
+                        if (obj.entries && obj.entries.length) {
                             obj.entries = this.parseEntriesFromResponse(obj.entries);
                         }
 
@@ -6062,10 +6084,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             entry.transactions.forEach(item => {
                 if(item.stock) {
+                    let stockUniqueName = item.stock.uniqueName;
                     item.stock.uniqueName = "purchases#" + item.stock.uniqueName;
                     item.uniqueName = item.stock.uniqueName;
                     item.value = item.stock.uniqueName;
                     item.additional = item.stock;
+                    item.additional.uniqueName = "purchases";
+                    item.additional.stock = {};
+                    item.additional.stock.uniqueName = stockUniqueName;
                     if(this.existingPoEntries[entry.uniqueName]) {
                         item.additional.maxQuantity = this.existingPoEntries[entry.uniqueName];
                     } else {
