@@ -226,10 +226,10 @@
                                 <table class="table">
                                     <thead>
                                         <tr class="dgreyBg">
-                                            <th class="col-xs-3 col-md-3 col-lg-3">Date
+                                            <th class="col-3 col-md-3 col-lg-3">Date
                                             </th>
-                                            <th class="col-xs-5 col-md-6 col-lg-6">Particular</th>
-                                            <th class="col-xs-4 col-md-3 col-lg-3 alR" class="alR">Amount</th>
+                                            <th class="col-5 col-md-6 col-lg-6">Particular</th>
+                                            <th class="col-4 col-md-3 col-lg-3 alR" class="alR">Amount</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -239,10 +239,10 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th class="col-xs-3 col-md-3 col-lg-3">Date
+                                            <th class="col-3 col-md-3 col-lg-3">Date
                                             </th>
-                                            <th class="col-xs-5 col-md-6 col-lg-6">Particular</th>
-                                            <th class="col-xs-4 col-md-3 col-lg-3 alR">Amount</th>
+                                            <th class="col-5 col-md-6 col-lg-6">Particular</th>
+                                            <th class="col-4 col-md-3 col-lg-3 alR">Amount</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -263,7 +263,7 @@
                                                     <tbody class="ledger-main">
                                                         <tr class="ledger-row"
                                                             [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
-                                                            <td class="col-xs-3 col-md-3 col-lg-3">
+                                                            <td class="col-3 col-md-3 col-lg-3">
                                                                 <div class="d-flex align-items-center"
                                                                      >
                                                                     <span class="pl-05">
@@ -278,7 +278,7 @@
                                                                 </div>
                                                             </td>
                                                             <td
-                                                                class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger">
+                                                                class="col-5 col-md-6 col-lg-6 select2-parent select2-ledger">
                                                                 <div *ngIf="txn.type === 'DEBIT'"
                                                                     (click)="showBankLedgerPopup(txn, item);">
                                                                     <sh-select [options]="searchResults"
@@ -332,7 +332,7 @@
                                                                 </div>
                                                             </td>
 
-                                                            <td class="col-xs-4 col-md-3 col-lg-3  pos-rel">
+                                                            <td class="col-4 col-md-3 col-lg-3  pos-rel">
                                                                 <input class="form-control alR" type="text" id="{{'enter-amount-dr-' + i}}"
                                                                     decimalDigitsDirective [DecimalPlaces]="2"
                                                                     [(ngModel)]="txn.amount"
@@ -382,7 +382,7 @@
                                                 <table class="width100">
                                                     <tbody class="ledger-main">
                                                         <tr class="ledger-row">
-                                                            <td class="col-xs-3 col-md-3 col-lg-3">
+                                                            <td class="col-3 col-md-3 col-lg-3">
                                                                 <div class="d-flex align-items-center"
                                                                     >
                                                                     <span class="pl-05">
@@ -401,7 +401,7 @@
                                                                 </div>
                                                             </td>
                                                             <td
-                                                                class="col-xs-5 col-md-6 col-lg-6 select2-parent select2-ledger ">
+                                                                class="col-5 col-md-6 col-lg-6 select2-parent select2-ledger ">
                                                                 <div *ngIf="txn.type === 'CREDIT'"
                                                                     (click)="showBankLedgerPopup(txn, item);">
                                                                     <sh-select [options]="searchResults"
@@ -456,7 +456,7 @@
                                                                 </div>
                                                             </td>
 
-                                                            <td class="col-xs-4 col-md-3 col-lg-3 pos-rel">
+                                                            <td class="col-4 col-md-3 col-lg-3 pos-rel">
                                                                 <input class="form-control alR" type="text"  id="{{'enter-amount-cr-' + i}}"
                                                                     decimalDigitsDirective [DecimalPlaces]="2"
                                                                     [(ngModel)]="txn.amount"
