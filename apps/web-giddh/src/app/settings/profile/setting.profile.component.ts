@@ -2,25 +2,24 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { select, Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
-import { ESCAPE } from '@angular/cdk/keycodes';
-import { Router } from '@angular/router';
+import { createSelector, select, Store } from '@ngrx/store';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { CompanyService } from '../../services/companyService.service';
 import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
-import { States, StatesRequest } from '../../models/api-models/Company';
+import { Organization, States, StatesRequest } from '../../models/api-models/Company';
 import { LocationService } from '../../services/location.service';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
-import { contriesWithCodes } from 'apps/web-giddh/src/app/shared/helpers/countryWithCodes';
 import { animate, style, transition, trigger, state } from '@angular/animations';
 import { currencyNumberSystems, digitAfterDecimal } from 'apps/web-giddh/src/app/shared/helpers/currencyNumberSystem';
 import { CountryRequest, OnboardingFormRequest } from "../../models/api-models/Common";
 import { GeneralActions } from '../../actions/general/general.actions';
 import { CommonActions } from '../../actions/common.actions';
-import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
+import { OrganizationType } from '../../models/user-login-state';
+import { OrganizationProfile } from '../constants/settings.constant';
+import { SettingsProfileService } from '../../services/settings.profile.service';
+import { SettingsUtilityService } from '../services/settings-utility.service';
 
 export interface IGstObj {
     newGstNumber: string;
@@ -34,6 +33,7 @@ export interface IGstObj {
     selector: 'setting-profile',
     templateUrl: './setting.profile.component.html',
     styleUrls: ['../../shared/header/components/company-add/company-add.component.css', './setting.profile.component.scss'],
+    host: {'class': 'settings-profile'},
     animations: [
         trigger('fadeInAndSlide', [
             transition(':enter', [
@@ -59,7 +59,22 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public currencies: IOption[] = [];
     public currencySource$: Observable<IOption[]> = observableOf([]);
     public countryCurrency: any[] = [];
-    public companyProfileObj: any = {};
+    public companyProfileObj: OrganizationProfile | any = {
+        name: '',
+        uniqueName: '',
+        logo: '',
+        alias: '',
+        parent: {},
+        country: {
+            countryName: '',
+            currencyName: '',
+            currencyCode: ''
+        },
+        businessTypes: [],
+        businessType: '',
+        headquarterAlias: '',
+        balanceDisplayFormat: ''
+    };
     public stateStream$: Observable<States[]>;
     public statesSource$: Observable<IOption[]> = observableOf([]);
     public addNewGstEntry: boolean = false;
@@ -88,21 +103,33 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     /** Observer to track get company profile API call in process */
     public getCompanyProfileInProgress$: Observable<boolean>;
-
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
+    /** Stores the current selected tab  */
+    public currentTab: string = 'personal';
+    /** Stores the company addresses */
+    public addresses: Array<any> = [];
+    /** Stores the pagination details of address component */
+    public addressTabPaginationData = {
+        page: 0,
+        totalPages: 0,
+        totalItems: 0,
+        count: 0
+    };
+    /** True, if address API is in progress */
+    public shouldShowAddressLoader: boolean;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    private stateResponse: States[] = null;
-
     constructor(
-        private router: Router,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
-        private _companyService: CompanyService,
         private _toasty: ToasterService,
         private _location: LocationService,
         private _generalActions: GeneralActions,
-        private commonActions: CommonActions
+        private commonActions: CommonActions,
+        private settingsProfileService: SettingsProfileService,
+        private settingsUtilityService: SettingsUtilityService
     ) {
 
         this.getCountry();
@@ -170,10 +197,25 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     this.patchProfile({ addresses: this.companyProfileObj.addresses });
                 }
             });
+        this.store.pipe(select(appStore => appStore.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res && res.businessType) {
+                this.companyProfileObj.businessTypes = res.businessType.map(businessType => ({
+                    label: businessType, value: businessType
+                }));
+            }
+        });
     }
 
     public getInitialProfileData() {
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+        this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), take(1)).subscribe((organization: Organization) => {
+            if (organization.type === OrganizationType.Branch) {
+                this.store.dispatch(this.settingsProfileActions.getBranchInfo());
+                this.currentOrganizationType = OrganizationType.Branch;
+            } else if (organization.type === OrganizationType.Company) {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+                this.currentOrganizationType = OrganizationType.Company;
+            }
+        });
     }
 
     public getInventorySettingData() {
@@ -184,8 +226,21 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.isGstValid = true;
         this.isPANValid = true;
         this.isMobileNumberValid = true;
-        // getting profile info from store
-        // distinctUntilKeyChanged('profileRequest')
+
+        this.store.pipe(select(createSelector([(appState: AppState) => appState.session.companies, (appState: AppState) => appState.session.companyUniqueName], (companies, uniqueName) => {
+            if (!companies) {
+                return;
+            }
+            return companies.find(company => {
+                if (company && company.uniqueName) {
+                    return company.uniqueName === uniqueName;
+                } else {
+                    return false;
+                }
+            });
+        })), takeUntil(this.destroyed$)).subscribe(response => {
+            this.companyProfileObj.name = response.name;
+        });
 
         this.store.select(p => p.settings.inventory).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
@@ -194,48 +249,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o.profileRequest || 1 === 1) {
-                let profileObj = _.cloneDeep(o);
-                if (profileObj.contactNo && profileObj.contactNo.indexOf('-') > -1) {
-                    profileObj.contactNo = profileObj.contactNo.substring(profileObj.contactNo.indexOf('-') + 1);
-                }
-                if (profileObj.addresses && profileObj.addresses.length > 3) {
-                    this.gstDetailsBackup = _.cloneDeep(profileObj.addresses);
-                    this.showAllGST = false;
-                    profileObj.addresses = profileObj.addresses.slice(0, 3);
+        this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                if (this.currentOrganizationType === OrganizationType.Company) {
+                    this.handleCompanyProfileResponse(response);
+                } else if (this.currentOrganizationType === OrganizationType.Branch) {
+                    this.handleBranchProfileResponse(response);
                 }
 
-                if (profileObj.addresses && !profileObj.addresses.length) {
-                    let newGstObj = {
-                        taxNumber: '',
-                        stateCode: '',
-                        stateName: '',
-                        address: '',
-                        isDefault: false
-                    };
-                    profileObj.addresses.push(newGstObj);
-                }
-
-                if (profileObj.countryV2 !== undefined && profileObj.countryV2.alpha2CountryCode !== undefined) {
-                    profileObj.country = profileObj.countryV2.alpha2CountryCode;
-                }
-
-                this.companyProfileObj = profileObj;
-                this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
-
-                if (profileObj && profileObj.country) {
-                    if (profileObj.countryV2 !== undefined && this.states.length === 0) {
-                        this.getStates(profileObj.countryV2.alpha2CountryCode);
-                        this.getOnboardingForm(profileObj.countryV2.alpha2CountryCode);
-                    }
-
-                    let countryName = profileObj.country.toLocaleLowerCase();
-                    if (countryName === 'india') {
-                        this.countryIsIndia = true;
-                    }
-                }
-                this.checkCountry(false);
             }
         });
         this.store.pipe(take(1)).subscribe(s => {
@@ -675,5 +696,106 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         return state;
     }
 
+    public handleSaveProfile(value: any): void {
+        this.patchProfile({ ...value });
+    }
+
+    public handleTabChanged(tabName: string): void {
+        this.currentTab = tabName;
+        if (tabName === 'address') {
+            this.loadAddresses();
+        }
+    }
+
+    public handlePageChanged(event: any) {
+        console.log('Page changed', event);
+        this.loadAddresses({ page: event.page });
+    }
+
+    private handleCompanyProfileResponse(response: any): void {
+        if (response.profileRequest || 1 === 1) {
+            let profileObj = _.cloneDeep(response);
+            if (profileObj.contactNo && profileObj.contactNo.indexOf('-') > -1) {
+                profileObj.contactNo = profileObj.contactNo.substring(profileObj.contactNo.indexOf('-') + 1);
+            }
+            if (profileObj.addresses && profileObj.addresses.length > 3) {
+                this.gstDetailsBackup = _.cloneDeep(profileObj.addresses);
+                this.showAllGST = false;
+                profileObj.addresses = profileObj.addresses.slice(0, 3);
+            }
+
+            if (profileObj.addresses && !profileObj.addresses.length) {
+                let newGstObj = {
+                    taxNumber: '',
+                    stateCode: '',
+                    stateName: '',
+                    address: '',
+                    isDefault: false
+                };
+                profileObj.addresses.push(newGstObj);
+            }
+
+            if (profileObj.countryV2 !== undefined && profileObj.countryV2.alpha2CountryCode !== undefined) {
+                profileObj.country = profileObj.countryV2.alpha2CountryCode;
+            }
+
+            this.companyProfileObj = {
+                ...this.companyProfileObj,
+                name: profileObj.name,
+                headquarterAlias: profileObj.nameAlias,
+                uniqueName: profileObj.uniqueName,
+                country: {
+                    countryName: profileObj.countryV2 ? profileObj.countryV2.countryName : '',
+                    currencyCode: profileObj.countryV2 && profileObj.countryV2.currency ? profileObj.countryV2.currency.code : '',
+                    currencyName: profileObj.countryV2 && profileObj.countryV2.currency ? profileObj.countryV2.currency.symbol : ''
+                },
+                businessType: profileObj.businessType,
+                balanceDecimalPlaces: profileObj.balanceDecimalPlaces,
+                balanceDisplayFormat: profileObj.balanceDisplayFormat
+            };
+            this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
+
+            if (profileObj && profileObj.country) {
+                if (profileObj.countryV2 !== undefined && this.states.length === 0) {
+                    this.getStates(profileObj.countryV2.alpha2CountryCode);
+                    this.getOnboardingForm(profileObj.countryV2.alpha2CountryCode);
+                }
+
+                let countryName = profileObj.country.toLocaleLowerCase();
+                if (countryName === 'india') {
+                    this.countryIsIndia = true;
+                }
+            }
+            this.checkCountry(false);
+        }
+    }
+
+    private handleBranchProfileResponse(response: any): void {
+        if (response) {
+            // this.companyProfileObj = response;
+        }
+    }
+
+    private loadAddresses(params?: any): void {
+        if (this.currentOrganizationType === OrganizationType.Branch) {
+
+        } else if (this.currentOrganizationType === OrganizationType.Company) {
+            this.shouldShowAddressLoader = true;
+            this.settingsProfileService.getCompanyAddresses(params).subscribe((response) => {
+                this.shouldShowAddressLoader = false;
+                if (response && response.body && response.status === 'success') {
+                    this.updateAddressPagination(response.body);
+                    this.addresses = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results);
+                }
+            });
+        }
+    }
+
+    private updateAddressPagination(response: any): void {
+        this.addressTabPaginationData.totalPages = response.totalPages;
+        this.addressTabPaginationData.page = response.page;
+        this.addressTabPaginationData.totalItems = response.totalItems;
+        this.addressTabPaginationData.count = response.count;
+    }
 
 }

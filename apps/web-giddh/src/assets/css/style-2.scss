@@ -600,6 +600,13 @@ input {
 .invoice-control .invoice-nav.navbar-nav > li > a.active {
     background-color: $white;
 }
+.invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
+    .profile-tab-container {
+        .nav.nav-tabs {
+            padding-left: 0 !important;
+        }
+    }
+}
 
 .navbar {
     min-height: auto;
@@ -9652,7 +9659,7 @@ span#HW_badge_cont:nth-child(3) {
     }
 }
 
-.new-architecture-tabs{
+.settings-profile-tabs{
     .tab-container{
         .nav-tabs{
             .nav-item{
@@ -9665,7 +9672,7 @@ span#HW_badge_cont:nth-child(3) {
                 > .nav-link{
                     color: $midnight-blue !important;
                 }
-            } 
+            }
         }
     }
 }

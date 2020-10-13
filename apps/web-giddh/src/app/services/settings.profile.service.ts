@@ -85,4 +85,37 @@ export class SettingsProfileService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
+
+    /**
+     * Retrieves the branch info
+     *
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operations
+     * @memberof SettingsProfileService
+     */
+    public getBranchInfo(): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET_BRANCH_INFO.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)))
+            .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
+
+    /**
+     * Retrieves all the addresses of a company
+     *
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operations
+     * @memberof SettingsProfileService
+     */
+    public getCompanyAddresses(params?: any): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this._generalService.companyUniqueName;
+        let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.GET_COMPANY_ADDRESSES}`
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        if (params) {
+            Object.keys(params).forEach((key, index) => {
+                const delimiter = index === 0 ? '?' : '&'
+                if (params[key]) {
+                    contextPath += `${delimiter}${key}=${params[key]}`
+                }
+            });
+        }
+        return this._http.get(contextPath).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
 }

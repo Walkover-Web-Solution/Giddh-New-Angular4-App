@@ -2,8 +2,8 @@
     <div class="row">
         <div class="col-md-12">
             <div class="border-bottom font-14">
-            <p class="pb-15"> All the information will save in <strong>Lorem Ipsum Company Name</strong></p>
-            <!-- branch profile element start -->
+                <p class="pb-15"> All the information will save in <strong>{{profileData?.name}}</strong></p>
+                <!-- branch profile element start -->
                 <div class="other-detail-section" *ngIf="isBranchElement">
                     <div class="mb-15">
                         <label>Number System</label> <span>1,00,00,000</span>
@@ -18,30 +18,36 @@
                 <!-- branch profile element end -->
             </div>
 
-            </div>
+        </div>
 
     </div>
     <div class="row pb-2">
-    <div class="col-lg-12 col-xl-7 other-information">
+        <div class="col-lg-12 col-xl-7 other-information">
             <div class="clearfix">
-                    <div class="form-group row">
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group">
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
                                     <label>Digits After Decimal</label>
-                                    <input type="text" class="form-control">
-                                    </div>
+                                    <sh-select [options]="decimalDigitSource " placeholder="Select type"
+                                        (selected)="profileUpdated('balanceDecimalPlaces')"
+                                        [isFilterEnabled]="true " name="balanceDecimalPlaces "
+                                        [(ngModel)]="profileData.balanceDecimalPlaces"></sh-select>
                                 </div>
-                                <div class="col-6">
-                                        <div class="form-group">
-                                        <label>Number System</label>
-                                        <input type="text" class="form-control">
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Number System</label>
+                                    <sh-select [options]="numberSystemSource " placeholder="Select type"
+                                        (selected)="profileUpdated('balanceDisplayFormat')"
+                                        [isFilterEnabled]="true " name="balanceDisplayFormat "
+                                        [(ngModel)]="profileData.balanceDisplayFormat"></sh-select>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                    </div>
+                    <!-- <div class="col-md-6">
                             <div class="row">
                                 <div class="col-9">
                                         <div class="form-group">
@@ -71,8 +77,8 @@
                                             <input type="text" class="form-control">
                                             </div>
                             </div>
-                        </div>
+                        </div> -->
+                </div>
             </div>
+        </div>
     </div>
-    </div>
-</div>

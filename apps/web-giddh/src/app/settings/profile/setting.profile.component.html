@@ -202,17 +202,21 @@
 
 
 <!--Tabs of Company Profile-->
-<div *ngIf="!(getCompanyProfileInProgress$ | async)" class="new-architecture-tabs">
-<tabset #staticTabs>
-    <tab heading="Personal Information">
-        <personal-information></personal-information>
-    </tab>
-    <tab heading="Address/GSTIN">
-    <address-settings></address-settings>
-    </tab>
-    <tab heading="Other">
-    <other-settings></other-settings>
-    </tab>
-</tabset>
-
+<div *ngIf="!(getCompanyProfileInProgress$ | async)" class="settings-profile-tabs">
+    <tabset #staticTabs class="profile-tab-container">
+        <tab (selectTab)="handleTabChanged('personal')" heading="Personal Information">
+            <personal-information *ngIf="currentTab === 'personal'" (saveProfile)="handleSaveProfile($event)"
+                [profileData]="companyProfileObj" [organizationType]="currentOrganizationType">
+            </personal-information>
+        </tab>
+        <tab (selectTab)="handleTabChanged('address')" heading="Address/GSTIN">
+            <address-settings *ngIf="currentTab === 'address'" [addresses]="addresses"
+                (pageChanged)="handlePageChanged($event)" [shouldShowLoader]="shouldShowAddressLoader"
+                [paginationConfig]="addressTabPaginationData" [paginationLimit]="20"
+                [organizationType]="currentOrganizationType"></address-settings>
+        </tab>
+        <tab (selectTab)="handleTabChanged('other')" heading="Other">
+            <other-settings (saveProfile)="handleSaveProfile($event)" [profileData]="companyProfileObj" *ngIf="currentTab === 'other'"></other-settings>
+        </tab>
+    </tabset>
 </div>

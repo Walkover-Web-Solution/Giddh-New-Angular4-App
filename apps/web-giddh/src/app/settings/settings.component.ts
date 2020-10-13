@@ -108,16 +108,22 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
             if (this.activeTab === "linked-accounts") {
                 setTimeout(() => {
-                    this.eBankComp.getInitialEbankInfo();
+                    if (this.eBankComp) {
+                        this.eBankComp.getInitialEbankInfo();
+                    }
                 }, 0);
             } else if (this.activeTab === "profile") {
                 setTimeout(() => {
-                    this.profileComponent.getInitialProfileData();
-                    this.profileComponent.getInventorySettingData();
+                    if (this.profileComponent) {
+                        this.profileComponent.getInitialProfileData();
+                        this.profileComponent.getInventorySettingData();
+                    }
                 }, 0);
             } else if (this.activeTab === "financial-year") {
                 setTimeout(() => {
-                    this.financialYearComp.getInitialFinancialYearData();
+                    if (this.financialYearComp) {
+                        this.financialYearComp.getInitialFinancialYearData();
+                    }
                 }, 0);
             } else if (this.activeTab === "permission") {
                 setTimeout(() => {
@@ -127,7 +133,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 }, 0);
             } else if (this.activeTab === "tag") {
                 setTimeout(() => {
-                    this.tagComp.getTags();
+                    if (this.tagComp) {
+                        this.tagComp.getTags();
+                    }
                 }, 0);
             }
         });

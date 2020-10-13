@@ -1,6 +1,6 @@
 @import "../../../assets/css/color.scss";
 
-.custom-file{
+.custom-file {
     border: 1px dashed gainsboro;
     border-radius: 2px;
     background: $white;
@@ -12,29 +12,34 @@
     content: "";
 }
 
-.custom-file-label{
+.custom-file-label {
     border: none;
     padding: 30px;
     background: $white;
-    height:100%;
-    &::after{
-        height:0 !important;
-        padding:0 !important;
+    height: 100%;
+    &::after {
+        height: 0 !important;
+        padding: 0 !important;
     }
-    .icon-plus{
-        font-size:40px;
+    .icon-plus {
+        font-size: 40px;
         color: $whisper-color;
     }
 }
 
-.unique-name, .country-name , .parent-name{
+.unique-name,
+.country-name,
+.parent-name {
     color: $dark-gray;
 }
-.personal-other-deatils{
-    label{
+.personal-other-deatils {
+    label {
         line-height: 2.3;
     }
 }
-.img-size{
+.img-size {
     color: $gray;
+}
+.container-fluid {
+    padding-left: 0;
 }
