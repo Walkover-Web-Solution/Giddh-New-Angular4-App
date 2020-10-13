@@ -224,8 +224,8 @@
             </div>
     </div>
     <div class="sidebar_list form-control" [hidden]="!showLedgerAccountList">
-        <h3 class="pd-1 bdrB primary_clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
-        <h3 class="pd-1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
+        <h3 class="pd-1 bd-rb primary-clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
+        <h3 class="pd-1 bd-rb primary-clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
         <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList"
             [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)"
             [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'"

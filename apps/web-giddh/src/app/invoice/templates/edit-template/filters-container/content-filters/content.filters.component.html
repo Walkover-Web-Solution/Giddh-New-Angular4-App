@@ -515,7 +515,7 @@
     <div id="footerDiv" *ngIf="templateUISectionVisibility.footer">
         <div class="clearfix">
             <h2>Footer</h2>
-            <div class="clearfix bdrB scrollAuto">
+            <div class="clearfix bd-rb scrollAuto">
                 <ng-container *ngIf="customTemplate?.templateType === 'gst_template_a' && voucherType==='sales'">
                     <div *ngIf="isTcsTdsApplicable" class="form-group">
                         <input type="checkbox" name="tcs" checked [(ngModel)]="customTemplate.sections['footer'].data['tcs'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked="true" /> TCS

@@ -20,7 +20,7 @@
             </div>
 
             <!-- invoice num -->
-            <div class="clearfix form-inline mrB">
+            <div class="clearfix form-inline mr-b">
                 <div class="mx-350 form-group" [hidden]="isSalesInvoiceSelected">
                     <!-- decimalDigitsDirective -->
                     <label>{{ invoiceNoHeading }}:</label> <input type="text" placeholder="Invoice no."
@@ -41,7 +41,7 @@
 
 
             <!-- party acc name -->
-            <div class="mx-350 clearfix form-inline mrB">
+            <div class="mx-350 clearfix form-inline mr-b">
                 <div class="form-group">
                     <label>Party A/c Name: <sup>*</sup></label>
                     <!-- #creditor -->
@@ -70,7 +70,7 @@
 
             <!-- operating cost acc only -->
             <!-- No need for purchase ledger, as discussed with alok
-    <div class="mx-300 clearfix form-inline mrB">
+    <div class="mx-300 clearfix form-inline mr-b">
     <div class="form-group">
         <label>Purchase Ledger:<sup>*</sup></label> <input type="text" #debtor placeholder="Purchase account" (focus)="accountType = 'debitor'" [(ngModel)]="debtorAcc.name" (focus)="getFlattenGrpAccounts('purchases', true)" (blur)="showAccountList=false;selectedInput=debtor"
             class="form-control max-height28 appearance_none" style="max-width:200px" />
@@ -151,7 +151,7 @@
                                 <td class>
                                     <input type="text" [value]="stockTotal" readonly disabled
                                         class="form-control text-right" />
-                                    <div class="bdrB"></div>
+                                    <div class="bd-rb"></div>
                                 </td>
                             </tr>
                             <br />
@@ -227,8 +227,8 @@
     </div>
 
     <div class="sidebar_list form-control" [hidden]="!showLedgerAccountList">
-        <h3 class="pd-1 bdrB primary_clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
-        <h3 class="pd-1 bdrB primary_clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
+        <h3 class="pd-1 bd-rb primary-clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
+        <h3 class="pd-1 bd-rb primary-clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
         <!-- (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit(); hide()" [noResultLinkEnabled]="notFoundLink" [notFoundMsg]="notFoundMsg" [notFoundLinkText]="notFoundLinkText" [ItemHeight]="ItemHeight" [NoFoundMsgHeight]="NoFoundMsgHeight" [NoFoundLinkHeight]="NoFoundLinkHeight" [dropdownMinHeight]="dropdownMinHeight"-->
         <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList"
             [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)"

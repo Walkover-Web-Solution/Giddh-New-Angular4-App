@@ -1,4 +1,4 @@
-<div id="getGroupModal" class="full-screen-modal getGroupModal manage-group-acc" #myModel keyboardShortcut="esc"
+<div id="getGroupModal" class="full-screen-modal get-group-modal manage-group-acc" #myModel keyboardShortcut="esc"
     (onShortcutPress)="closePopupEvent()" (click)="keyupInitialized = true">
 
     <!-- start header -->
@@ -7,11 +7,11 @@
             (click)="closePopupEvent()">×</span>
         <!-- <i class="icon-cross text-right close_modal" data-dismiss="modal" (click)="()" aria-label="Close" aria-hidden="true"></i> -->
         <span class="row mr-0 ml-0">
-            <h3 class="modal-title bg pdT">Manage Groups &amp; Accounts</h3>
+            <h3 class="modal-title bg pd-t">Manage Groups &amp; Accounts</h3>
         </span>
-        <div class="pull-right mr-3 searchBarWrapper">
+        <div class="pull-right mr-3 search-bar-wrapper">
             <div class="form-inline">
-                <div class="form-group searchBar">
+                <div class="form-group search-bar">
                     <input type="text" name="grpSrch" #grpSrch id="grpSrch" [(ngModel)]="searchString"
                         (keyup)="searchGroups(grpSrch.value)" class="form-control" placeholder="Search accounts"
                         trial-accordion="search" [style.width.px]="260" />
@@ -25,9 +25,9 @@
     </div>
     <!-- end header -->
 
-    <div class="modal-body pd0">
+    <div class="modal-body p-0">
         <div class="clearfix">
-            <div class="grp-col pd0 " style="max-width:58.333%;"
+            <div class="grp-col pd-0"
                 [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}">
                 <!-- <perfect-scrollbar> -->
                 <div class="search-loading" *ngIf="(searchLoad | async)">
@@ -46,7 +46,7 @@
                         [scrollIndicators]="true">
                         <div *ngIf="!(searchLoad | async)"
                             [ngStyle]="{'width':groupsidebar?.mc?.columns?.length * 255 + 'px'}"
-                            class="wrapAccountSidebar">
+                            class="wrap-account-sidebar">
                             <groups-account-sidebar (columnsChanged)="currentColumns = $event" #groupsidebar
                                 [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}"
                                 [height]="((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))"
@@ -61,7 +61,7 @@
                 <!-- </perfect-scrollbar> -->
             </div>
             <!-- middle body -->
-            <div class="form-box form-bg hieghtInVH">
+            <div class="form-box form-bg height-in-vh">
                 <account-operations [columnsRef]="currentColumns"
                     [height]="((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))"
                     [breadcrumbPath]="breadcrumbPath" [breadcrumbUniquePath]="breadcrumbUniquePath" #form>

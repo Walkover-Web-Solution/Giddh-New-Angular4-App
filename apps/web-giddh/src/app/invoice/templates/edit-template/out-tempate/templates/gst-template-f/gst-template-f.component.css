@@ -254,7 +254,7 @@ body {
     font-weight: bold;
 }
 
-#gold .bdrB {
+#gold .bd-rb {
     border-bottom: 1px solid #666;
     margin-bottom: 6px;
 }
@@ -320,7 +320,7 @@ body {
     text-align: center;
 }
 
-#gold .mrB {
+#gold .mr-b {
     margin-bottom: 10px;
 }
 

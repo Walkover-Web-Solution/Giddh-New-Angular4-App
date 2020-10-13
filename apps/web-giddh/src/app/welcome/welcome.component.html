@@ -76,7 +76,7 @@
                         </span>
                     </div>
 
-                    <div class="col-12 mr-b2 selectBox" *ngIf="businessTypeList?.length && !isWarehouse">
+                    <div class="col-12 mr-b2 select-box" *ngIf="businessTypeList?.length && !isWarehouse">
                         <div class="position-relative">
                             <label for="businessType">Select Business Type</label>
                             <div class="custom-select position-relative">
@@ -90,7 +90,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 mr-b2 selectBox" *ngIf="!isWarehouse">
+                    <div class="col-12 mr-b2 select-box" *ngIf="!isWarehouse">
                         <div class="position-relative">
                             <label for="businessNature">Select Business Nature</label>
                             <div class="custom-select  position-relative">
@@ -104,7 +104,7 @@
                         </div>
                     </div>
                     <ng-container *ngIf="selectedBusinesstype === 'Registered' || isWarehouse">
-                        <div class="col-12 mr-b2 selectBox"
+                        <div class="col-12 mr-b2 select-box"
                             *ngIf="formFields['taxName'] !== undefined && !isWarehouse">
                             <div class="clearfix">
 
@@ -124,7 +124,7 @@
 
                             </div>
                         </div>
-                        <div class="col-12 mr-b2 selectBox">
+                        <div class="col-12 mr-b2 select-box">
                             <div>
                                 <label>State<sup class="text-danger">*</sup></label><br>
                                 <div>
@@ -135,7 +135,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="!(isOnBoardingInProgress && isWarehouse)" class="col-12 mr-b2 selectBox">
+                        <div *ngIf="!(isOnBoardingInProgress && isWarehouse)" class="col-12 mr-b2 select-box">
                             <div class="">
                                 <label for="taxes_dd">Applicable Tax</label>
                                 <div class="btn-group btn-block select-caret invoice-btn" dropdown>
@@ -163,7 +163,7 @@
                             </div>
                         </div>
                     </ng-container>
-                    <div class="col-12 mr-b2 selectBox">
+                    <div class="col-12 mr-b2 select-box">
                         <!-- Show the section if the company/branch is Registered or onboarding of warehouse is going on -->
                         <div *ngIf="selectedBusinesstype || isWarehouse" class="clearfix">
                             <ng-container

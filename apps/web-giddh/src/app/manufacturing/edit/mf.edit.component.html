@@ -4,7 +4,7 @@
   </div>-->
 
     <!-- page Title -->
-    <div class="top-bar col-xs-12 col-sm-12 clearfix bdrB">
+    <div class="top-bar col-xs-12 col-sm-12 clearfix bd-rb">
         <h1 class="section-title d-inline-block"><strong>Manufacture of Product</strong><label *ngIf="isUpdateCase" class="mrL2">No.
                 {{manufacturingDetails.voucherNumber}}</label></h1>
         <button class="btn btn-default pull-right" (click)="goBackToListPage()" type="button">Back</button>
@@ -142,7 +142,7 @@
                                     </td>
                                 </tr>
                             </tbody>
-                            <tfoot class="bdrT pdT2 pdB2 bdrB">
+                            <tfoot class="bdrT pdT2 pdB2 bd-rb">
                                 <tr>
                                     <th colspan="2">Total:</th>
                                     <th class="text-right"> {{ getTotal('linkedStocks', 'quantity') | number:'1.0-4' }}

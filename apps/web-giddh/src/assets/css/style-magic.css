@@ -451,7 +451,7 @@ aside-menu-account .container-fluid {
     padding-right: 0;
 }
 
-.pdR0 {
+.pr-0 {
     padding-right: 0 !important;
 }
 
@@ -495,7 +495,7 @@ aside-menu-account .container-fluid {
     padding: 40px;
 }
 
-.pdT {
+.pd-t {
     padding-top: 5px;
 }
 
@@ -513,10 +513,6 @@ aside-menu-account .container-fluid {
 
 .pdR {
     padding-right: 5px;
-}
-
-.pdR0 {
-    padding-right: 0;
 }
 
 .pd-t1 {
@@ -548,7 +544,7 @@ aside-menu-account .container-fluid {
     padding-bottom: 20px;
 }
 
-.pdL2 {
+.pd-l2 {
     padding-left: 20px;
 }
 
@@ -624,7 +620,7 @@ aside-menu-account .container-fluid {
     margin-top: 5px;
 }
 
-.mrB {
+.mr-b {
     margin-bottom: 5px !important;
 }
 
@@ -676,7 +672,7 @@ aside-menu-account .container-fluid {
     margin-right: 20px;
 }
 
-.mrT3 {
+.mr-t3 {
     margin-top: 30px;
 }
 
@@ -724,7 +720,7 @@ aside-menu-account .container-fluid {
     border-top: 1px solid #ccc;
 }
 
-.bdrB {
+.bd-rb {
     border-bottom: 1px solid #ccc;
 }
 
@@ -732,7 +728,7 @@ aside-menu-account .container-fluid {
     border-left: 1px solid #ccc;
 }
 
-.bdrR {
+.bd-rr {
     border-right: 1px solid #ccc !important;
 }
 

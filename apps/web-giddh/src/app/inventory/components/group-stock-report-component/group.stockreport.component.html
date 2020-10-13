@@ -202,20 +202,20 @@
                 <thead>
                     <tr>
                         <!-- in case of all entity with group -->
-                        <th colspan="4" class="bdrR" width="30%" style="padding: 0 !important;" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
+                        <th colspan="4" class="bd-rr" width="30%" style="padding: 0 !important;" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
                             <!-- in case of all entity with group -->
-                            <th colspan="2" class="bdrR" width="17%" *ngIf="GroupStockReportRequest.branchDetails!='allEntity'">
+                            <th colspan="2" class="bd-rr" width="17%" *ngIf="GroupStockReportRequest.branchDetails!='allEntity'">
                                 <div class="d-flex">
                                     <input type="text" #dateRangePickerCmp name="daterangeInput" daterangepicker [options]="datePickerOptions" class="form-control stock-input" (applyDaterangepicker)="selectedDate($event)" />
                                 </div>
                             </th>
-                            <th class="text-center bdrR bdrB" width="20%" colspan="2">Opening stock</th>
-                            <th class="text-center bdrR bdrB" width="20%" colspan="2">Inwards</th>
-                            <th class="text-center bdrR bdrB" width="20%" colspan="2">Outwards</th>
-                            <th class="text-center bdrB" width="20%" colspan="2">Closing Stock</th>
+                            <th class="text-center bd-rr bd-rb" width="20%" colspan="2">Opening stock</th>
+                            <th class="text-center bd-rr bd-rb" width="20%" colspan="2">Inwards</th>
+                            <th class="text-center bd-rr bd-rb" width="20%" colspan="2">Outwards</th>
+                            <th class="text-center bd-rb" width="20%" colspan="2">Closing Stock</th>
                     </tr>
                     <tr class="bdrT">
-                        <th colspan="2" class="bdrR td-search-box max-width-140" (clickOutside)="clickedOutside($event,null, 'product')">
+                        <th colspan="2" class="bd-rr td-search-box max-width-140" (clickOutside)="clickedOutside($event,null, 'product')">
                             <div [hidden]="showProductSearch">
                                 <span>Product Name</span>
                                 <i class="icon-search" (click)="showProductSearchBox()"></i>
@@ -227,7 +227,7 @@
                             </div>
                         </th>
                         <!-- in case of all entity with group -->
-                        <th colspan="2" class="bdrR td-search-box max-width-140" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'" (clickOutside)="clickedOutside($event,null, 'source')">
+                        <th colspan="2" class="bd-rr td-search-box max-width-140" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'" (clickOutside)="clickedOutside($event,null, 'source')">
                             <div [hidden]="showSourceSearch">
                                 <span>Source</span>
                                 <i class="icon-search" (click)="showSourceSearchBox()"></i>
@@ -367,44 +367,44 @@
                 <tbody *ngIf="groupStockReport && groupStockReport.count > 0">
                     <tr *ngFor="let txn of groupStockReport.stockReport">
                         <ng-container *ngIf="txn.openingBalance || txn.inwards || txn.outwards || txn.closingBalance">
-                            <td class="bdrB bdrR" colspan="2" data-title="Product Name">
+                            <td class="bd-rb bd-rr" colspan="2" data-title="Product Name">
                                 <span class="justify-content-between d-flex align-items-start">
                                 <span>{{txn.stockName}}</span>
                                 <span class="unit-badge pull-right text-light nowrap">{{txn.openingBalance?.stockUnit}}</span>
                                 </span>
                             </td>
                             <!-- in case of all entity with group -->
-                            <td colspan="2" class="bdrB bdrR max-width-140" data-title="Product Name" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
+                            <td colspan="2" class="bd-rb bd-rr max-width-140" data-title="Product Name" *ngIf="GroupStockReportRequest.branchDetails==='allEntity'">
                                 {{txn.stockName}}
                             </td>
                             <!-- in case of all entity with group end -->
                             <td data-title="Opening stock -" class="td-mobile-head"></td>
 
-                            <td class="bdrB bdrR text-right brNone" data-title="Qty">
+                            <td class="bd-rb bd-rr text-right brNone" data-title="Qty">
                                 <span [ngClass]="{'text-danger': txn.openingBalance?.quantity<0 }">{{txn.openingBalance?.quantity | giddhCurrency}}</span>
                             </td>
-                            <td class="bdrB bdrR text-right" data-title="Value">{{txn.openingBalance?.amount | giddhCurrency}}</td>
+                            <td class="bd-rb bd-rr text-right" data-title="Value">{{txn.openingBalance?.amount | giddhCurrency}}</td>
 
                             <td data-title="inwards -" class="td-mobile-head" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)"></td>
 
-                            <td class="bdrB bdrR text-right brNone" data-title="Qty" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">
+                            <td class="bd-rb bd-rr text-right brNone" data-title="Qty" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">
                                 <span [ngClass]="{'text-danger': txn.inwards?.quantity<0 }">{{txn.inwards?.quantity | giddhCurrency}}</span>
                             </td>
-                            <td class="bdrB bdrR text-right" data-title="Value" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">{{txn.inwards?.amount | giddhCurrency}}</td>
+                            <td class="bd-rb bd-rr text-right" data-title="Value" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">{{txn.inwards?.amount | giddhCurrency}}</td>
 
                             <td data-title="Outwards -" class="td-mobile-head" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)"></td>
 
-                            <td class="bdrB bdrR text-right brNone" data-title="Qty" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">
+                            <td class="bd-rb bd-rr text-right brNone" data-title="Qty" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">
                                 {{txn.outwards?.quantity | giddhCurrency}}
                             </td>
-                            <td class="bdrB bdrR text-right" data-title="Value" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">{{txn.outwards?.amount | giddhCurrency}}</td>
+                            <td class="bd-rb bd-rr text-right" data-title="Value" *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)">{{txn.outwards?.amount | giddhCurrency}}</td>
 
                             <td data-title="Closing stock -" class="td-mobile-head"></td>
 
-                            <td class="bdrB bdrR text-right brNone" data-title="Qty">
+                            <td class="bd-rb bd-rr text-right brNone" data-title="Qty">
                                 <span [ngClass]="{'text-danger': txn.closingBalance?.quantity<0 }">{{txn.closingBalance?.quantity | giddhCurrency}}</span>
                             </td>
-                            <td class="bdrB bdrR text-right" data-title="Value">{{txn.closingBalance?.amount | giddhCurrency}}</td>
+                            <td class="bd-rb bd-rr text-right" data-title="Value">{{txn.closingBalance?.amount | giddhCurrency}}</td>
 
                         </ng-container>
 

@@ -1,14 +1,14 @@
-<form name="addAccountForm" class="createAccForm" [formGroup]="addAccountForm">
+<form name="addAccountForm" class="create-acc-form" [formGroup]="addAccountForm">
     <div class="">
         <div class="upper-form">
             <div class="row ">
                 <div class="col-sm-4">
-                    <div class="ng-select-wrap liq selectGroup disable-select-group">
+                    <div class="ng-select-wrap liq select-group disable-select-group">
                         <label>Select Group<span class="red-text">*</span> </label>
                         <ng-select placeholder="Select Group" [disabled]="true" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="flatGroupsOptions" class="wd100">
                             <ng-template #optionTemplate let-option="option">
                                 <div class="account-list-item">{{option?.label}}</div>
-                                <div class="account-list-item fs12">{{option?.value}}</div>
+                                <div class="account-list-item font-12">{{option?.value}}</div>
                             </ng-template>
                         </ng-select>
                     </div>
@@ -93,9 +93,9 @@
 
     <tabset #staticTabs class="custom-tabs " id="asidePaneFormTabs">
         <ng-container>
-            <tab heading="Address" class="gstinAddress" [active]="isDebtorCreditor" [disabled]="!isDebtorCreditor" (selectTab)="tabChanged('address')">
+            <tab heading="Address" class="gstin-address" [active]="isDebtorCreditor" [disabled]="!isDebtorCreditor" (selectTab)="tabChanged('address')">
                 <ng-container>
-                    <div class="gstinForm" formArrayName="addresses">
+                    <div class="gstin-form" formArrayName="addresses">
                         <ng-container *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last" [formGroupName]="i">
                             <div class="row">
                                 <div class="col-sm-12">
@@ -165,9 +165,9 @@
                                 </div>
                             </div>
                             <div class="row" *ngIf="l && (addAccountForm.get('addresses')['controls'].length > 3) && !(moreGstDetailsVisible)">
-                                <a href="javascript:void(0);" class="text-left col-xs-6 cursor-pointer" (click)="showMoreGst()">Show all
+                                <a href="javascript:void(0);" class="text-left col-6 cursor-pointer" (click)="showMoreGst()">Show all
                                     ({{addAccountForm.get('addresses')['controls'].length}})</a>
-                                <a href="javascript:void(0);" class="text-left col-xs-6 cursor-pointer" (click)="showLessGst()">Show
+                                <a href="javascript:void(0);" class="text-left col-6 cursor-pointer" (click)="showLessGst()">Show
                                     Less </a>
                             </div>
                             <div *ngIf="l">
@@ -187,8 +187,8 @@
             </tab>
         </ng-container>
 
-        <tab heading="Contact" class="ContactFromWrap" [active]="!isDebtorCreditor" (selectTab)="tabChanged('contacts')">
-            <div class="contactForm">
+        <tab heading="Contact" class="contact-from-wrap" [active]="!isDebtorCreditor" (selectTab)="tabChanged('contacts')">
+            <div class="contact-form">
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
@@ -239,7 +239,7 @@
                 </div> -->
             </div>
             <!-- <div class="row">
-                <div class="col-sm-12 mrT3">
+                <div class="col-sm-12 mr-t3">
                     <div class="button-group">
                         <button class="btn btn-cancel">Cancel</button>
                         <button class="btn btn-success">Save</button>
@@ -250,7 +250,7 @@
 
 
         <!-- bank details visible when sundry credtiors selected , right now is hide -->
-        <tab heading="Bank Details" class="bankDetialsForm" *ngIf="showBankDetail" (selectTab)="tabChanged('bank')">
+        <tab heading="Bank Details" class="bank-details-form" *ngIf="showBankDetail" (selectTab)="tabChanged('bank')">
             <div *ngIf="showBankDetail">
                 <div formArrayName="accountBankDetails">
                     <div class="row" *ngFor="let bank of addAccountForm.get('accountBankDetails')['controls'];let i = index;let f = first; let l = last" [formGroupName]="i">
@@ -290,9 +290,9 @@
             </div>
         </tab>
 
-        <tab heading="Others " class="otherFormWrap " (selectTab)="tabChanged('others')">
+        <tab heading="Others " class="other-form-wrap " (selectTab)="tabChanged('others')">
 
-            <div class="otherForm ">
+            <div class="other-form ">
                 <div class="row ">
                     <div class="col-sm-6 ">
                         <div class="form-group ">
@@ -356,14 +356,14 @@
         </tab>
     </tabset>
     <div class="row" *ngIf="!isOtherSelectedTab">
-        <div class="col-sm-12 mrT3">
+        <div class="col-sm-12 mr-t3">
             <div class="button-group">
                 <!-- <button class="btn btn-cancel">Cancel</button>
                         <button type="submit" class="btn btn-success" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save</button> -->
                 <button type="button" *ngIf="showDeleteButton" class="btn btn-danger " (click)="deleteClicked.emit(true)">
                     Delete
                 </button>
-                <button (click)="submit()" class="btn btn-primary updateBtnZindex" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid || !(isGstValid$ | async)">Update
+                <button (click)="submit()" class="btn btn-primary update-btn-zindex" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid || !(isGstValid$ | async)">Update
                 </button>
             </div>
         </div>
@@ -371,10 +371,10 @@
 </form>
 <div class="form" *ngIf="isOtherSelectedTab">
     <div>
-        <!-- <div class="col-xs-12 mr-b2 selectBox">
+        <!-- <div class="col-xs-12 mr-b2 select-box">
             <div class="form-group ">
                 <label>Default discount <span
-                        class="primary_clr"></span></label>
+                        class="primary-clr"></span></label>
                 <div class="clearfix">
                     <span>
                         <sh-select class="pull-left" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" [placeholder]="'Select discounts'" style="width: calc(100% - 93px);"></sh-select>
@@ -396,11 +396,10 @@
                             <span>
                                 <sh-select formControlName="moveto" [placeholder]="'Group name'"
                                     [options]="flatGroupsOptions" [customFilter]="customMoveGroupFilter"
-                                    class="pull-left" style="width: calc(100% - 93px); ">
+                                    class="pull-left width-select">
                                     <!--template for move group typeahead-->
                                     <ng-template #optionTemplate let-model="option">
-                                        <a href="javascript:void(0)" class="list-item"
-                                            style="border-bottom:1px solid #ccc;">
+                                        <a href="javascript:void(0)" class="list-item">
                                             <div class="item">{{ model.label }}</div>
                                             <div class="item-unique">
                                                 {{ model.value }}
@@ -425,10 +424,9 @@
                             class="primary-color">{{(activeAccount$ | async)?.name}}</span></label>
                     <div class="clearfix" #accountSelect2>
                         <span>
-                            <sh-select class="pull-left" [options]="accounts$ | async" [isFilterEnabled]="true"
+                            <sh-select class="pull-left width-select" [options]="accounts$ | async" [isFilterEnabled]="true"
                                 (viewInitEvent)="loadAccountData()" [multiple]="true"
-                                [(ngModel)]="selectedaccountForMerge" [placeholder]="'Select Accounts'"
-                                style="width: calc(100% - 93px);"></sh-select>
+                                [(ngModel)]="selectedaccountForMerge" [placeholder]="'Select Accounts'"></sh-select>
                         </span>
                         <span class="pull-right">
                             <button type="submit" class="btn btn-primary marge-btn"
@@ -451,7 +449,7 @@
 
     </div>
     <div class="form" *ngIf="isDebtorCreditor && isOtherSelectedTab">
-        <div class="mrB2 selectBox">
+        <div class="mr-b2 select-box">
             <div class="form-group ">
                 <label>Default Discount <span
                     class="primary-color"></span></label>
@@ -460,7 +458,7 @@
                         <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" placeholder="Select discounts" ></sh-select>
                     </span>
                     <span class="pull-right">
-                        <button  class="btn btn-primary mrgeBtn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscounts()">Apply</button>
+                        <button  class="btn btn-primary marge-btn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscounts()">Apply</button>
                     </span>
                 </div>
             </div>
@@ -536,14 +534,14 @@
         </div>
     </ng-container>
     <div class="row" *ngIf="isOtherSelectedTab">
-        <div class="col-sm-12 mrT3">
+        <div class="col-sm-12 mr-t3">
             <div class="button-group">
                 <!-- <button class="btn btn-cancel">Cancel</button>
                         <button type="submit" class="btn btn-success" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save</button> -->
                 <button type="button" *ngIf="showDeleteButton" class="btn btn-danger " (click)="deleteClicked.emit(true)">
                     Delete
                 </button>
-                <button (click)="submit()" class="btn btn-primary updateBtnZindex" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid || !(isGstValid$ | async)">Update
+                <button (click)="submit()" class="btn btn-primary update-btn-zindex" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid || !(isGstValid$ | async)">Update
                 </button>
             </div>
         </div>

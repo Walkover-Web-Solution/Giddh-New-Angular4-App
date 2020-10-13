@@ -28,7 +28,7 @@
 </div> -->
                 </div>
                 <div class="col-lg-4 col-md-12 col-sm-12 pd0 d-flex">
-                    <div class="form-group col-sm-4 pdR0">
+                    <div class="form-group col-sm-4 pr-0">
                         <label>Currency</label><br>
                         <div class="custom-select position-relative">
                             <!--              <sh-select [options]="currencySource$ | async" placeholder="Currency" [isFilterEnabled]="true" name="baseCurrency" [(ngModel)]="companyProfileObj.baseCurrency" [defaultValue]="companyProfileObj.baseCurrency" (selected)="changeEventOfForm('baseCurrency')"></sh-select>-->
@@ -200,7 +200,7 @@
                         Add
                     </button>
                     <div *ngIf="companyProfileObj.addresses !== undefined && companyProfileObj.addresses.length > 0">
-                        <div *ngFor="let gst of companyProfileObj.addresses; let i = index" class="mr-t1 company_gst" [ngClass]="{'mr-t2': i != gst.length-1, 'bdrB': i != gst.length-1}">
+                        <div *ngFor="let gst of companyProfileObj.addresses; let i = index" class="mr-t1 company_gst" [ngClass]="{'mr-t2': i != gst.length-1, 'bd-rb': i != gst.length-1}">
                             <div class="row">
                                 <div class="col-lg-4 col-md-12 col-sm-12">
                                     <div class="row">

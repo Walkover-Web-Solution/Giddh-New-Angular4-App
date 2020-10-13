@@ -73,7 +73,7 @@ span.dr-label {
     }
 }
 
-form.gstinForm {
+form.gstin-form {
     padding-top: 15px;
 }
 
@@ -91,20 +91,30 @@ form.gstinForm {
     color: #1c1c1c;
 }
 
-.contactForm,
-.otherFormWrap,
-.bankDetialsForm {
+.contact-form,
+.other-form-wrap,
+.bank-details-form {
     padding-top: 15px;
 }
 
-.otherForm .btn-sky-blue {
+.other-form .btn-sky-blue {
     display: block;
 }
 
-.updateBtnZindex {
+.update-btn-zindex {
     z-index: 0;
 }
 
 .wd100 {
     width: 100% !important;
+}
+
+.width-select{
+    width: calc(100% - 93px);
+}
+
+.move-to-group{
+    .list-item{
+        border-bottom:1px solid $very-light-gray;
+    }
 }

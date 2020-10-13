@@ -1,3 +1,5 @@
+@import "../../../../../assets/css/color.scss";
+
 .form-group .pItem.text-right {
     max-width: 100% !important;
 }
@@ -19,4 +21,8 @@
 }
 .all-taxes{
   width: calc(100% - 95px);
+}
+
+.move-group-form .list-item{
+    border-bottom:1px solid $whisper-color;
 }

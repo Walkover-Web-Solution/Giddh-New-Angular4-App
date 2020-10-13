@@ -1,8 +1,13 @@
+
+.modal-body .grp-col{
+    max-width:58.333%;
+}
+
 @media (max-width: 767px) {
     .searchAccount {
         float: none !important;
     }
-    .searchBar .form-control {
+    .search-bar .form-control {
         position: relative;
         top: 0;
     }
@@ -11,7 +16,7 @@
     }
 }
 
-.hieghtInVH {
+.height-in-vh {
     height: calc(100vh - 70px);
 }
 @media (max-width: 575px) {
@@ -19,10 +24,10 @@
         width: 100%;
         margin-bottom: 5px;
     }
-    .manage-group-acc .searchBarWrapper {
+    .manage-group-acc .search-bar-wrapper {
         float: none !important;
     }
-    .form-group.searchBar {
+    .form-group.search-bar {
         margin-bottom: 0;
     }
     .manage-group-acc .modal-header {

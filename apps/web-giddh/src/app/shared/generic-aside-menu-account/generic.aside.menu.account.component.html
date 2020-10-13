@@ -23,7 +23,7 @@
                     [(ngModel)]="activeGroupUniqueName" [options]="flatAccountWGroupsList$ | async" style="width:100%">
                     <ng-template #optionTemplate let-option="option">
                         <div class="account-list-item">{{option?.label}}</div>
-                        <div class="account-list-item fs12">{{option?.value}}</div>
+                        <div class="account-list-item font-12">{{option?.value}}</div>
                     </ng-template>
                 </ng-select>
 

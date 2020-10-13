@@ -1,14 +1,14 @@
-<form name="addAccountForm" class="createAccForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
+<form name="addAccountForm" class="create-acc-form" [formGroup]="addAccountForm" (ngSubmit)="submit()">
     <div class="">
         <div class="upper-form">
             <div class="row ">
                 <div class="col-sm-4">
-                    <div class="ng-select-wrap liq selectGroup">
+                    <div class="ng-select-wrap liq select-group">
                         <label>Select Group<span class="red-text">*</span> </label>
                         <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." (selected)="selectGroup($event)" formControlName="activeGroupUniqueName" [options]="flatGroupsOptions" style="width:100%">
                             <ng-template #optionTemplate let-option="option">
                                 <div class="account-list-item">{{option?.label}}</div>
-                                <div class="account-list-item fs12">{{option?.value}}</div>
+                                <div class="account-list-item font-12">{{option?.value}}</div>
                             </ng-template>
                         </ng-select>
                     </div>
@@ -101,9 +101,9 @@
 
     <tabset #staticTabs class="custom-tabs " id="asidePaneFormTabs">
         <ng-container>
-            <tab heading="Address" [active]="isDebtorCreditor" [disabled]="!isDebtorCreditor" class="gstinAddress">
+            <tab heading="Address" [active]="isDebtorCreditor" [disabled]="!isDebtorCreditor" class="gstin-address">
                 <ng-container>
-                    <div class="gstinForm" formArrayName="addresses">
+                    <div class="gstin-form" formArrayName="addresses">
                         <ng-container *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last" [formGroupName]="i">
                             <div class="row">
                                 <div class="col-sm-12">
@@ -169,9 +169,9 @@
                             </div>
 
                             <div class="row" *ngIf="l && (addAccountForm.get('addresses')['controls'].length > 3) && !(moreGstDetailsVisible)">
-                                <a href="javascript:void(0);" class="text-left col-xs-6 cursor-pointer" (click)="showMoreGst()">Show all
+                                <a href="javascript:void(0);" class="text-left col-6 cursor-pointer" (click)="showMoreGst()">Show all
                                     ({{addAccountForm.get('addresses')['controls'].length}})</a>
-                                <a href="javascript:void(0);" class="text-left col-xs-6 cursor-pointer" (click)="showLessGst()">Show Less </a>
+                                <a href="javascript:void(0);" class="text-left col-6 cursor-pointer" (click)="showLessGst()">Show Less </a>
                             </div>
                             <div class="clearfix" *ngIf="l">
                                 <a class="text-right  btn btn-primary" href="javascript:void(0);" (click)="addGstDetailsForm(gst.get('gstNumber').value)">
@@ -183,8 +183,8 @@
                 </ng-container>
             </tab>
         </ng-container>
-        <tab heading="Contact" [active]="!isDebtorCreditor" class="ContactFromWrap">
-            <div class="contactForm">
+        <tab heading="Contact" [active]="!isDebtorCreditor" class="contact-from-wrap">
+            <div class="contact-form">
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
@@ -235,7 +235,7 @@
                 </div> -->
             </div>
             <!-- <div class="row">
-                <div class="col-sm-12 mrT3">
+                <div class="col-sm-12 mr-t3">
                     <div class="button-group">
                         <button class="btn btn-cancel">Cancel</button>
                         <button class="btn btn-success">Save</button>
@@ -246,7 +246,7 @@
 
 
         <!-- bank details visible when sundry credtiors selected , right now is hide -->
-        <tab heading="Bank Details" class="bankDetialsForm" *ngIf="showBankDetail">
+        <tab heading="Bank Details" class="bank-details-form" *ngIf="showBankDetail">
             <div *ngIf="showBankDetail">
                 <div formArrayName="accountBankDetails">
                     <div class="row" *ngFor="let bank of addAccountForm.get('accountBankDetails')['controls'];let i = index;let f = first; let l = last" [formGroupName]="i">
@@ -287,9 +287,9 @@
 
         </tab>
 
-        <tab heading="Others " class="otherFormWrap ">
+        <tab heading="Others " class="other-form-wrap">
 
-            <div class="otherForm ">
+            <div class="other-form ">
                 <div class="row ">
                     <div class="col-sm-6 ">
                         <div class="form-group ">

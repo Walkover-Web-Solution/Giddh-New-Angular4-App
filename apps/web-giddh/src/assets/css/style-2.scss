@@ -4131,7 +4131,7 @@ input[type=radio]:checked:after {
     cursor: pointer;
 }
 
-.ledger-panel .bdrB {
+.ledger-panel .bd-rb {
     border-bottom: 1px solid #bababa;
 }
 
@@ -4190,7 +4190,7 @@ input[type=radio]:checked:after {
     border-radius: 3px;
 }
 
-.form-group.mrB,
+.form-group.mr-b,
 .mrBChldLbl .form-group label {
     margin-bottom: 5px;
 }
@@ -4377,16 +4377,11 @@ select.form-control {
     height: auto;
 }
 
-.searchBar {
+.search-bar {
     position: relative;
 }
 
-/* .searchBar .form-control {
-    background: #6b6a6a !important;
-    color: $white;
-} */
-
-.searchBar .form-control {
+.search-bar .form-control {
     padding-right: 40px !important;
 }
 
@@ -4410,7 +4405,7 @@ label {
 }
 
 #getGroupModal .bdrL,
-#getGroupModal .bdrR {
+#getGroupModal .bd-rr {
     border-color: #ccc;
 }
 
@@ -4428,7 +4423,7 @@ label {
     color: $white !important;
 }
 
-.ledger-panel .bdrB {
+.ledger-panel .bd-rb {
     border-bottom: 1px solid #bababa;
 }
 
@@ -4548,7 +4543,7 @@ label {
     border-color: $deep-sky-blue-hover;
 }
 
-.primary_clr {
+.primary-clr {
     color: var(--dark-blue01) !important;
 }
 
@@ -4560,7 +4555,7 @@ label {
     width: calc(100% - 93px) !important;
 }
 
-.view_forms {
+.view-forms {
     float: left;
     width: 100%;
     overflow-y: scroll;
@@ -4611,7 +4606,7 @@ label {
 }
 
 #getGroupModal .bdrL,
-#getGroupModal .bdrR {
+#getGroupModal .bd-rr {
     border-color: #ccc;
 }
 
@@ -4629,7 +4624,7 @@ label {
     color: $white !important;
 }
 
-.ledger-panel .bdrB {
+.ledger-panel .bd-rb {
     border-bottom: 1px solid #bababa;
 }
 
@@ -4710,12 +4705,12 @@ label {
     overflow: hidden;
 }
 
-.inline-table.new_form {
+.inline-table.new-form {
     width: 100%;
     text-align: center;
 }
 
-.new_form .btn {
+.new-form .btn {
     padding: 16px !important;
     font-size: 18px;
     min-width: 170px;
@@ -4819,7 +4814,7 @@ label {
     margin-bottom: 30px;
 }
 
-#getGroupModal .searchBar .reset {
+#getGroupModal .search-bar .reset {
     position: absolute;
     right: 2px;
     z-index: 9;
@@ -6074,7 +6069,7 @@ input[type="checkbox"][disabled]:after {
     text-align: center;
 }
 
-.searchBar a {
+.search-bar a {
     right: 7px;
     z-index: 9;
     top: 7px;
@@ -8078,7 +8073,7 @@ app-header {
 }
 
 #middleBody .horizontal-form,
-.view_forms .horizontal-form {
+.view-forms .horizontal-form {
     max-width: 660px;
     width: 100%;
 }
@@ -8175,7 +8170,7 @@ section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
     font-family: "opensans-regular";
 }
 
-.noBrdRdsModal small.mr-t.mrB.grey {
+.noBrdRdsModal small.mr-t.mr-b.grey {
     white-space: normal;
 }
 
@@ -8351,9 +8346,9 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
   padding-right: 0 !important;
 } */
 
-.welcome-container .selectBox .custom-select input.form-control.selectedVal.cp,
-.welcome-container .selectBox input,
-.welcome-container .selectBox textarea {
+.welcome-container .select-box .custom-select input.form-control.selectedVal.cp,
+.welcome-container .select-box input,
+.welcome-container .select-box textarea {
     color: #333;
 }
 
@@ -8876,7 +8871,7 @@ button.ladda-button .ladda-label {
     color: $white;
 }
 
-.ng-select-wrap.liq.selectGroup .below {
+.ng-select-wrap.liq.select-group .below {
     border: 1px solid #ddd;
     height: 36px;
     align-items: center;
@@ -8993,7 +8988,7 @@ p.remvBrnchName {
     margin-bottom: 10px;
 }
 
-.contactForm .mobileNumberWidth input {
+.contact-form .mobileNumberWidth input {
     padding-right: 0 !important;
 }
 
@@ -9031,13 +9026,13 @@ p.remvBrnchName {
     width: 100%;
 }
 
-.createAccForm li.highlighted.selected,
-.createAccForm li.highlighted {
+.create-acc-form li.highlighted.selected,
+.create-acc-form li.highlighted {
     background-color: #eeeff9 !important;
 }
 
-.createAccForm li.highlighted.selected .account-list-item,
-.createAccForm li.highlighted .account-list-item {
+.create-acc-form li.highlighted.selected .account-list-item,
+.create-acc-form li.highlighted .account-list-item {
     color: $chetwode-blue !important;
 }
 
@@ -9896,7 +9891,7 @@ span#HW_badge_cont:nth-child(3) {
         margin-bottom: 0;
     }
     #middleBody .horizontal-form,
-    .view_forms .horizontal-form {
+    .view-forms .horizontal-form {
         max-width: 100%;
         width: 100%;
     }
@@ -10597,8 +10592,8 @@ span#HW_badge_cont:nth-child(3) {
         box-shadow: none;
         border: none;
     }
-    .wrapAccountSidebar,
-    .wrapAccountSidebar .grp-wrapper {
+    .wrap-account-sidebar,
+    .wrap-account-sidebar .grp-wrapper {
         width: 100% !important;
     }
     .add-manage-group-acc {

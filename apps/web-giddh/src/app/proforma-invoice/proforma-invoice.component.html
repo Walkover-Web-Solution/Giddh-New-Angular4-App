@@ -7,7 +7,7 @@
 
 <div *ngIf="!showLoader">
     <!-- region page change menu -->
-    <div class="form-group mrB mr-t2 clearfix">
+    <div class="form-group mr-b mr-t2 clearfix">
 
         <div class="col-12 col-sm-12 clearfix">
 
@@ -930,7 +930,7 @@
 
                                             <div class="row">
 
-                                                <div class="col-6 col-sm-6 pdR0" *ngIf="entry.entryDate">
+                                                <div class="col-6 col-sm-6 pr-0" *ngIf="entry.entryDate">
                                                     <div class="entryDate">
                                                         <label>Entry Date: </label>
                                                         {{entry.entryDate | date: 'dd-MM-yyyy'}}
@@ -1130,7 +1130,7 @@
                                             <!-- region entry date/ hsncode -->
                                             <div class="dateHsnCode">
                                                 <div class="row">
-                                                    <div class="col-6 col-sm-6 pdR0">
+                                                    <div class="col-6 col-sm-6 pr-0">
                                                         <div class="entryDate">
                                                             <label>Entry Date: </label>
                                                             <span *ngIf="!isUpdateMode">
@@ -1800,7 +1800,7 @@
                                             <p class="small text-muted sku_and_customfields" *ngIf="transaction.sku_and_customfields">
                                                 {{transaction.sku_and_customfields}}</p>
 
-                                            <div class="dateHsnCode pdR0">
+                                            <div class="dateHsnCode pr-0">
                                                 <div class="row">
 
                                                     <div class="col-xs-6 col-sm-6" *ngIf="entry.entryDate">
@@ -1995,7 +1995,7 @@
                                                     <div class="dateHsnCode">
 
                                                         <div class="row">
-                                                            <div class="col-xs-6 pdR0">
+                                                            <div class="col-6 pr-0">
                                                                 <div class="entryDate">
                                                                     <label>Entry Date: </label>
 
@@ -2021,7 +2021,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-xs-6 pdL0">
+                                                            <div class="col-6 pdL0">
                                                                 <div class="wrap-hsnBox">
                                                                     <div class="hsnCode text-right"
                                                                         (click)="toggleHsnSacDropDown(transaction)">

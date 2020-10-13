@@ -69,21 +69,21 @@
 
             <div class="noBrdRdsModal" style="padding: 8px 8px 8px 8px;">
 
-                <div class="modal-header themeBg pdL2 pdR2 clearfix" style="padding: 8px 8px 8px 8px;">
+                <div class="modal-header themeBg pd-l2 pdR2 clearfix" style="padding: 8px 8px 8px 8px;">
                     <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close"
                         (click)="mailModal.hide()">×</span>
                     <!-- <i class="icon-cross text-right close-modal" aria-hidden="true" ></i> -->
                 </div>
 
-                <div class="modal-body pdL2 pdR2 clearfix" style="padding: 0px !important;">
+                <div class="modal-body pd-l2 pdR2 clearfix" style="padding: 0px !important;">
                     <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:</h1>
                     <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject
                         [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
                     <h1 class="mr-b1" style="margin-top:15px;">Type message body:</h1>
                     <textarea #messageBox [(ngModel)]="messageBody.msg" class="form-control" rows="4"
                         style="resize:none;" placeholder="start typing your message here"></textarea>
-                    <small class="mr-t mrB grey" style="margin-top:15px;display: block">Tip: Click on the tabs below to
+                    <small class="mr-t mr-b grey" style="margin-top:15px;display: block">Tip: Click on the tabs below to
                         insert data
                         in your message body. Anything
                         followed by '%s_' represents the position where actual data will be placed.

@@ -46,7 +46,7 @@
                             <div class="pull-right">
                                 <div class="btn-group " dropdown placement="bottom right">
                                     <button id="buttonalignment" dropdownToggle type="button"
-                                        class="btn-link mrB cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
+                                        class="btn-link mr-b cp mr-1 dropdown-toggle" aria-controls="dropdown-alignment">
                                         <i class="icon-download"></i> Download
                                     </button>
                                     <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
@@ -75,7 +75,7 @@
                         <table class="table basic table-border m-0">
                             <thead>
                                 <tr>
-                                    <th class="bdrR" width="120">
+                                    <th class="bd-rr" width="120">
                                         <div class="d-flex">
                                             <div class=""> Date</div>
                                             <div class="icon-pointer">
@@ -99,7 +99,7 @@
                                             </div>
                                         </div>
                                     </th>
-                                    <th class="bdrR td-search-box" *ngIf="type ==='person'" width="15%"
+                                    <th class="bd-rr td-search-box" *ngIf="type ==='person'" width="15%"
                                         (clickOutside)="clickedOutside($event,null, 'product')">
                                         <div [hidden]="showProductSearch">
                                             <span>Product Name</span>
@@ -111,7 +111,7 @@
                     <i class="icon-search" (click)="showProductSearch = false;"></i>
                 </div> -->
                                     </th>
-                                    <th class="bdrR bdrB" *ngIf="type ==='stock'" width="15%">
+                                    <th class="bd-rr bd-rb" *ngIf="type ==='stock'" width="15%">
                                         <div class="btn-group btn-group-voucher-type" dropdown placement="bottom right">
                                             <button id="button-alignment" dropdownToggle type="button"
                                                 class="btn-link btn cp p-0 dropdown-toggle c-3 p0"
@@ -129,7 +129,7 @@
                                             </ul>
                                         </div>
                                     </th>
-                                    <th class="bdrR bdrB td-search-box" width="15%"
+                                    <th class="bd-rr bd-rb td-search-box" width="15%"
                                         (clickOutside)="clickedOutside($event,null, 'sender')">
                                         <div [hidden]="showSenderSearch">
                                             <span>Sender's Name</span>
@@ -141,7 +141,7 @@
                                             <!-- <i class="icon-search" (click)="showSenderSearch = false;"></i> -->
                                         </div>
                                     </th>
-                                    <th class="bdrR bdrB td-search-box" width="15%"
+                                    <th class="bd-rr bd-rb td-search-box" width="15%"
                                         (clickOutside)="clickedOutside($event,null, 'receiver')">
                                         <div [hidden]="showReceiverSearch">
                                             <span>Receiver's Name</span>
@@ -153,8 +153,8 @@
                                             <!-- <i class="icon-search" (click)="showReceiverSearch = false;"></i> -->
                                         </div>
                                     </th>
-                                    <th class="bdrR bdrB">Description</th>
-                                    <th class="text-right bdrB" width="140">
+                                    <th class="bd-rr bd-rb">Description</th>
+                                    <th class="text-right bd-rb" width="140">
                                         <div class="d-flex">
                                             <div class="flex-fill mr-1">Trading Qty</div>
                                             <div class="icon-pointer">
@@ -183,16 +183,16 @@
 
                             <tbody *ngIf="inventoryReport && inventoryReport.transactions.length>0">
                                 <tr *ngFor="let txn of inventoryReport.transactions; let idx = index">
-                                    <td class="bdrR">{{txn.date}}</td>
-                                    <td class="bdrR" *ngIf="type ==='person'">{{txn.stock.name}}</td>
-                                    <td class="bdrR" *ngIf="type ==='stock'">
+                                    <td class="bd-rr">{{txn.date}}</td>
+                                    <td class="bd-rr" *ngIf="type ==='person'">{{txn.stock.name}}</td>
+                                    <td class="bd-rr" *ngIf="type ==='stock'">
                                         <!-- in case of stock type -->
                                         <span
                                             class="{{txn.jobWorkTransactionType}}">{{txn.jobWorkTransactionType}}</span>
                                     </td>
-                                    <td class="bdrR">{{txn.sender.name}}</td>
-                                    <td class="bdrR">{{txn.receiver.name}}</td>
-                                    <td class="bdrR" (click)='updateDescriptionIdx = idx'>
+                                    <td class="bd-rr">{{txn.sender.name}}</td>
+                                    <td class="bd-rr">{{txn.receiver.name}}</td>
+                                    <td class="bd-rr" (click)='updateDescriptionIdx = idx'>
                                         <ng-container *ngIf='updateDescriptionIdx != idx'>
                                             <div class="stockDiscription">{{txn.description}}</div>
                                         </ng-container>
@@ -202,7 +202,7 @@
                                                 (blur)='updateDescription(txn)' />
                                         </ng-container>
                                     </td>
-                                    <td class="text-right bdrR">{{txn.quantity}}<span
+                                    <td class="text-right bd-rr">{{txn.quantity}}<span
                                             class="unit-badge">{{txn.stockUnit.code}}</span>
                                     </td>
                                 </tr>

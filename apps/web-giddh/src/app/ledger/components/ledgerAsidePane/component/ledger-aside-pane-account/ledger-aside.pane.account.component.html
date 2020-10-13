@@ -14,7 +14,7 @@
                         <ng-select placeholder="Select Group" filterPlaceholder="Type to search..." name="activeGroupUniqueName" [(ngModel)]="activeGroupUniqueName" [options]="flattenGroupsArray" style="width:100%" (selected)="checkSelectedGroup($event)">
                             <ng-template #optionTemplate let-option="option">
                                 <div class="account-list-item">{{option?.label}}</div>
-                                <div class="account-list-item fs12">{{option?.value}}</div>
+                                <div class="account-list-item font-12">{{option?.value}}</div>
                             </ng-template>
                         </ng-select>
                     </div>

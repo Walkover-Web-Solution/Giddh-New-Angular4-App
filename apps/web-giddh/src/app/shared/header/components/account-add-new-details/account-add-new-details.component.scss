@@ -74,7 +74,7 @@ span.dr-label {
     }
 }
 
-form.gstinForm {
+form.gstin-form {
     padding-top: 15px;
 }
 
@@ -92,13 +92,13 @@ form.gstinForm {
     color: #1c1c1c;
 }
 
-.contactForm,
-.otherFormWrap,
-.bankDetialsForm {
+.contact-form,
+.other-form-wrap,
+.bank-details-form {
     padding-top: 15px;
 }
 
-.otherForm .btn-sky-blue {
+.other-form .btn-sky-blue {
     display: block;
 }
 
@@ -119,7 +119,7 @@ a.btn-remove {
     border: 1px solid $very-light-gray;
 }
 @media (max-width: 767px) {
-    .upper-form .selectGroup {
+    .upper-form .select-group {
         margin-bottom: 15px;
     }
 }

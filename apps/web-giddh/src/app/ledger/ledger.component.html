@@ -192,7 +192,7 @@
 
         <!-- region bank ledgers-->
         <div class="clearfix"></div>
-        <h1 class="mr-t2 primary_clr" *ngIf="isBankTransactionLoading">Loading Transactions...</h1>
+        <h1 class="mr-t2 primary-clr" *ngIf="isBankTransactionLoading">Loading Transactions...</h1>
         <section id="eledgerwrap" class="mr-t2" *ngIf="lc.showEledger">
             <div class="alert alert-danger ledger-book fade in pr" style="padding-right:15px">
                 <button type="button" class="close">
@@ -222,7 +222,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="nopad bdrL bdrR hidden-xs transaction-mapped-head" style="width:50%" colspan="3">
+                            <td class="nopad bdrL bd-rr hidden-xs transaction-mapped-head" style="width:50%" colspan="3">
                                 <table class="table">
                                     <thead>
                                         <tr class="dgreyBg">
@@ -235,7 +235,7 @@
                                 </table>
                             </td>
                             <!-- main left td end here -->
-                            <td class="nopad bdrL bdrR hidden-xs transaction-mapped-head" style="width:50%" colspan="3">
+                            <td class="nopad bdrL bd-rr hidden-xs transaction-mapped-head" style="width:50%" colspan="3">
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -250,7 +250,7 @@
                             <!-- main right td end here -->
                         </tr>
                         <tr class="transaction-table-row">
-                            <td class="nopad bdrL bdrR" colspan="3">
+                            <td class="nopad bdrL bd-rr" colspan="3">
                                 <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
                                 <table class="width100"
                                     (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
@@ -370,7 +370,7 @@
                                 </table>
                                 </ng-container>
                             </td>
-                            <td colspan="3" class="nopad bdrL bdrR">
+                            <td colspan="3" class="nopad bdrL bd-rr">
                                 <ng-container *ngFor="let item of lc.bankTransactionsData; let i = index">
                                 <table class="width100"
                                     (clickOutside)="hideBankLedgerPopup(true)" (click)="$event.stopPropagation()">
@@ -503,7 +503,7 @@
                                     C/F Balance
                                 </div>
                             </td>
-                            <td style="width:14%" class="bdrR alR">
+                            <td style="width:14%" class="bd-rr alR">
                                 <span *ngIf="eLedgType == 'CREDIT'">{{eDrBalAmnt | giddhCurrency}}</span>
                             </td>
                             <td colspan="2" style="width:36%" class="bdrL">
@@ -511,7 +511,7 @@
                                     C/F Balance
                                 </div>
                             </td>
-                            <td style="width:14%" class="bdrR alR">
+                            <td style="width:14%" class="bd-rr alR">
                                 <span *ngIf="eLedgType == 'DEBIT'">{{eCrBalAmnt | giddhCurrency}}</span>
                             </td>
                         </tr>
@@ -620,7 +620,7 @@
             <div [ngClass]="Shown ? 'active' : ''" hr-item
                 (ngInit)="initNavigator(navigator,$event.nativeElement); navigator.nextVertical();"
                 class="left-col-new"
-                [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
+                [ngClass]="{bd-rr: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
 
                 <!-- region debit transaction header-->
                 <table class="width100 h-table table-head hidden-xs">
@@ -1289,12 +1289,12 @@
             <div *ngIf="closingBalanceBeforeReconcile  showLoader" class="box balance-detail mr-t2 mr-b2 clearfix text-center">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-12 text-right">Balance as per bank
-                        <h3 class="fs20 primary_clr">{{reconcileClosingBalanceForBank?.amount}}
+                        <h3 class="fs20 primary-clr">{{reconcileClosingBalanceForBank?.amount}}
                             {{reconcileClosingBalanceForBank?.type}}
                         </h3>
                     </div>
                     <div class="col-md-6 col-sm-6 col-12 text-left">Pending cheque
-                        <h3 class="fs20 primary_clr">{{closingBalanceBeforeReconcile?.amount}}
+                        <h3 class="fs20 primary-clr">{{closingBalanceBeforeReconcile?.amount}}
                             {{closingBalanceBeforeReconcile?.type}}
                         </h3>
                     </div>
@@ -1311,7 +1311,7 @@
 <!-- commented due to API  -->
 <div class="transaction-in-short" *ngIf="!isShowLedgerColumnarReportTable">
     <div class="container">
-        <section class="ledger-stat mrT3"
+        <section class="ledger-stat mr-t3"
             *ngIf="!(showLoader) && (lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
 
             <div class="row">
@@ -1511,12 +1511,12 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div id="" class="">
-                <div class="modal-header themeBg pdL2 pdR2 clearfix">
+                <div class="modal-header themeBg pd-l2 pdR2 clearfix">
                     <h3 class="modal-title bg" id="modal-title">Confirmation </h3>
                     <i class="icon-cross text-right close-modal" aria-hidden="true"
                         (click)="onCancelBulkActionConfirmation()"></i>
                 </div>
-                <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
+                <div class="modal-body pd-l2 pdR2 clearfix" id="export-body">
                     <form name="newRole" novalidate class="" autocomplete="off">
                         <div class="modal_wrap mr-b2">
                             <h3>Do you want to delete the selected entrie(s)? </h3>
@@ -1545,12 +1545,12 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div>
-                <div class="modal-header themeBg pdL2 pdR2 clearfix">
+                <div class="modal-header themeBg pd-l2 pdR2 clearfix">
                     <h3 class="modal-title bg" id="modal-title">Confirmation</h3>
                     <i class="icon-cross text-right close-modal" aria-hidden="true"
                         (click)="onCancelSelectInvoiceModal()"></i>
                 </div>
-                <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
+                <div class="modal-body pd-l2 pdR2 clearfix" id="export-body">
                     <form name="newRole" novalidate class="" autocomplete="off">
                         <div class="modal_wrap mr-b2 text-center">
                             <h2>Select voucher generate option</h2>

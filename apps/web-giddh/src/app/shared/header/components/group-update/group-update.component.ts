@@ -32,7 +32,7 @@ import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models
 @Component({
     selector: 'group-update',
     templateUrl: 'group-update.component.html',
-    styleUrls: ['group-update.component.css']
+    styleUrls: ['group-update.component.scss']
 })
 
 export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {

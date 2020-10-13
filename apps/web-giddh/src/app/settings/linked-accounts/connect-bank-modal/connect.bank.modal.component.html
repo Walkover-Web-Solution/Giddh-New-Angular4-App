@@ -71,7 +71,7 @@
             <button class="btn btn-success btn-sm" type="button" *ngIf="!isRefreshWithCredentials"
                 (click)="refreshAccount(loginForm)" [disabled]="bankSyncInProgress">Update</button>
             <small *ngIf="bankSyncInProgress" class="grey-clr clearfix mr-t2 col-xs-12 row">Status: <span
-                    class="primary_clr">Authenticating..</span>
+                    class="primary-clr">Authenticating..</span>
                 <!-- <p>You can wait or check again in 15-20 min</p> -->
             </small>
         </form>

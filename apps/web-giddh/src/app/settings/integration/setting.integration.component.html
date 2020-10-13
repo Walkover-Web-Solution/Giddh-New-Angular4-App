@@ -316,7 +316,7 @@
                     <ng-container formArrayName="sellers">
                         <ng-container *ngFor="let item of amazonSellerForm.get('sellers')['controls']; let i=index;let f = first; let l = last">
                             <div class="clearfix" [formGroupName]="i">
-                                <!-- <div class="mrR1 pull-left" [ngClass]="{'mrT3': f}">
+                                <!-- <div class="mrR1 pull-left" [ngClass]="{'mr-t3': f}">
                             <input type="checkbox" />
                         </div>  -->
 
@@ -342,7 +342,7 @@
                                         <input class="form-control" type="text" placeholder="Secret key" required autocomplete="off" formControlName="secretKey" [disabled]="i !== amazonEditItemIdx" />
                                     </div>
                                     <div class="pull-left edit-save-button">
-                                        <div class="button-wrapper" [ngClass]="{'mrT3': f}">
+                                        <div class="button-wrapper" [ngClass]="{'mr-t3': f}">
                                             <button type="button" class="btn btn-default" (click)="saveAmazonSeller(item)" *ngIf="l"><i
                                                     class="fa fa-check"></i></button>
                                             <button type="button" class="btn btn-default" (click)="updateAmazonSeller(item)" *ngIf="i === amazonEditItemIdx && !l"><i

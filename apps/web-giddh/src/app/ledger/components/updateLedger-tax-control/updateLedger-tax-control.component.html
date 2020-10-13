@@ -16,7 +16,7 @@
         <ul class="dropdown-menu pd update-ledger-tax-dropdown" [ngStyle]="{'display': showTaxPopup ? 'block': 'none'}"
             (click)="$event.stopPropagation()">
             <li *ngFor="let tax of taxRenderData;trackBy: trackByFn; let i = index">
-                <label class="checkbox oh width100 p0 m0 customItem bdrB" style="padding: 5px;margin-bottom: 5px;"
+                <label class="checkbox oh width100 p0 m0 customItem bd-rb" style="padding: 5px;margin-bottom: 5px;"
                     (click)="$event.stopPropagation()" [ngClass]="{'disabled-label': tax.isDisabled}">
                     <input class="pull-left" id="{{ 'update-ledger-tax-checkbox-' + i }}" type="checkbox" [(ngModel)]="tax.isChecked" [disabled]="tax.isDisabled"
                         (change)="change()" (click)="$event.stopPropagation()" />
