@@ -5949,10 +5949,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             entry.transactions.forEach(item => {
                 if(item.stock) {
+                    let stockUniqueName = item.stock.uniqueName;
                     item.stock.uniqueName = "purchases#" + item.stock.uniqueName;
                     item.uniqueName = item.stock.uniqueName;
                     item.value = item.stock.uniqueName;
                     item.additional = item.stock;
+                    item.additional.uniqueName = "purchases";
+                    item.additional.stock = {};
+                    item.additional.stock.uniqueName = stockUniqueName;
                     if(this.existingPoEntries[entry.uniqueName]) {
                         item.additional.maxQuantity = this.existingPoEntries[entry.uniqueName];
                     } else {
