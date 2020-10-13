@@ -104,18 +104,23 @@ export class SettingsProfileService {
      * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operations
      * @memberof SettingsProfileService
      */
-    public getCompanyAddresses(params?: any): Observable<BaseResponse<any, any>> {
+    public getCompanyAddresses(method: string, params?: any): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this._generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.GET_COMPANY_ADDRESSES}`
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
-        if (params) {
-            Object.keys(params).forEach((key, index) => {
-                const delimiter = index === 0 ? '?' : '&'
-                if (params[key]) {
-                    contextPath += `${delimiter}${key}=${params[key]}`
-                }
-            });
+        if (method === 'GET') {
+            if (params) {
+                Object.keys(params).forEach((key, index) => {
+                    const delimiter = index === 0 ? '?' : '&'
+                    if (params[key]) {
+                        contextPath += `${delimiter}${key}=${params[key]}`
+                    }
+                });
+            }
+            return this._http.get(contextPath).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+        } else if (method === 'POST') {
+            contextPath = contextPath.concat(`?page=${[params.page]}`);
+            return this._http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
         }
-        return this._http.get(contextPath).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 }
