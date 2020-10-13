@@ -300,6 +300,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     /**
      * To remove custom field form row
      *
+     * @param {boolean} isUpdate To check for API call
      * @param {number} index index number
      * @memberof ManageGroupsAccountsComponent
      */
