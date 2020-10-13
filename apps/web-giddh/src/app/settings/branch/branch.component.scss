@@ -5,7 +5,7 @@
 }
 
 .dropdown-menu {
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .dropdown-menu li {
@@ -108,7 +108,7 @@
 }
 .card-basic-details .dropdown-menu > li > a {
     padding: 5px 10px;
-    cursor: default;
+    cursor: pointer;
 }
 .card-basic-details a#button-basic {
     color: #333;
@@ -151,6 +151,14 @@
     border-radius: 2px;
     background: $white;
     margin-right: 15px;
+
+    li{
+        padding-top:5px;
+        &:hover{
+            background-color: $lavender;
+            color: $jacksons-purple;
+        }
+    }
 }
 
 .branch-sales-collapsed{
@@ -161,6 +169,13 @@
     color: $light-green;
 }
 
+.status-bullet{
+    &:before {
+        content: ' \2022';
+        font-size:34px;
+    }
+}
+
 .parent-branch{
     color: $gray;
 }
@@ -168,7 +183,7 @@
 .star-radio {
     visibility:hidden;
     font-size:30px;
-    cursor:pointer;
+    cursor: pointer;
     top: -3px;
     position: relative;
     margin-right: 10px;
@@ -189,26 +204,51 @@
     }
 }
 
-.btn-group.moreBtn.open.show {
+
+.btn-group.more-btn.open.show {
     display: inline-block !important;
 }
 
-.moreBtn li {
-    padding: 5px;
-    cursor: default;
+.icon-advance-search{
+    font-size:18px;
+    color: $gray;
 }
 
-.moreBtn li:hover {
-    background-color: #eeeff9;
-    color: $jacksons-purple;
+.more-btn{
+    margin-left: 20px;
+    .btn-default{
+        min-width:100px;
+    }
+    .dropdown-menu{
+        min-width:100px;
+    }
+    li {
+        padding: 5px;
+        cursor: default;
+        &:hover{
+            background-color: $lavender;
+            color: $jacksons-purple;
+        }
+    }
+} 
+
+.advance-search-list{
+    min-width:123px;
+        .search-checkbox{
+            label{
+                padding-bottom:5px;
+                padding-left:5px;
+            }
+        }
 }
+
 
 .btn-primary.active,
 .btn-primary:active,
 .open>.dropdown-toggle.btn-primary {
-    color: #333;
-    background-color: #e7e7e8;
-    border-color: #e7e7e8;
+    color: $extra-dark-gray;
+    background-color: $lavender-dark;
+    border-color: $lavender-dark;
     box-shadow: none !important;
 }
 

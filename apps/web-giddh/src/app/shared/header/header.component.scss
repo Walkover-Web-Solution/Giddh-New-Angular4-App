@@ -806,6 +806,9 @@ ul.sub-list {
                     padding: 6px 10px;
                     white-space: normal;
                     word-break: break-word;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
                     &.dropdown-item.active-branch {
                         color: $chetwode-blue;
                         font-weight: bold;

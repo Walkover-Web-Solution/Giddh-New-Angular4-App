@@ -600,6 +600,13 @@ input {
 .invoice-control .invoice-nav.navbar-nav > li > a.active {
     background-color: $white;
 }
+.invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
+    .profile-tab-container {
+        .nav.nav-tabs {
+            padding-left: 0 !important;
+        }
+    }
+}
 
 .navbar {
     min-height: auto;
@@ -9627,6 +9634,49 @@ span#HW_badge_cont:nth-child(3) {
 #rcw-p91-widget-button{
     z-index: 98;
 }
+
+.linked-add{
+    .popover{
+        width:268px;
+        font-family: inherit;
+        border-radius: 4px;
+        box-shadow: 0 3px 6px $black-russian;
+        top: 50% !important;
+        .popover-arrow{
+            display:none;
+        }
+        .popover-header {
+            padding: 15px 15px 0 15px;
+            margin-bottom: 0;
+            font-size: 14px;
+            background-color: transparent;
+            border-bottom: none;
+            font-weight: bold;
+        }
+        .popover-body {
+            padding: 0 15px 15px 15px;
+        }
+    }
+}
+
+.settings-profile-tabs{
+    .tab-container{
+        .nav-tabs{
+            .nav-item{
+                .nav-link{
+                    font-size: 16px !important;
+                    color: $midnight-blue !important;
+                }
+            }
+            .active{
+                > .nav-link{
+                    color: $midnight-blue !important;
+                }
+            }
+        }
+    }
+}
+
 /* responsive */
 
 @media (max-width: 1440px) {

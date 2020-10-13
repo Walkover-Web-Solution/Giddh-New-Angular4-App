@@ -50,4 +50,42 @@ export class SettingsUtilityService {
         });
         return { formattedWarehouses, defaultWarehouse };
     }
+
+    public getFormattedCompanyAddresses(response: Array<any>): Array<any> {
+        const formattedCompanyAddresses = [];
+        response.forEach(address => {
+            formattedCompanyAddresses.push({
+                taxType: address.taxType,
+                stateCode: address.stateCode,
+                stateName: address.stateName,
+                taxNumber: address.taxNumber,
+                address: address.address,
+                name: address.name,
+                uniqueName: address.uniqueName,
+                linkedEntities: this.getLinkedEntities(address)
+            });
+        });
+        return formattedCompanyAddresses;
+    }
+
+    private getLinkedEntities(address: any): Array<any> {
+        const linkedEntities = [];
+        if (address.branches && address.branches.length) {
+            address.branches.forEach(branch => {
+                linkedEntities.push({
+                    ...branch,
+                    isBranch: true
+                })
+            });
+        }
+        if (address.warehouses && address.warehouses.length) {
+            address.warehouses.forEach(warehouse => {
+                linkedEntities.push({
+                    ...warehouse,
+                    isWarehouse: true
+                })
+            });
+        }
+        return linkedEntities;
+    }
 }

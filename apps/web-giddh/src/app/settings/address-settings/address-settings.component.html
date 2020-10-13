@@ -1,0 +1,157 @@
+<div class="container-fluid">
+    <div class="row">
+        <div *ngIf="organizationType === 'COMPANY'"
+            class="col-md-12 d-flex justify-content-between mt-1 mb-4 align-items-center address-list-top">
+            <div class="font-14">List of all the addresses created and linked in the company</div>
+            <button type="button" class="btn btn-sky-blue" (click)="openAddAndManage()">+ Add Address</button>
+        </div>
+        <!-- branch profile element start -->
+        <div *ngIf="organizationType === 'BRANCH'"
+            class="col-md-12 d-flex justify-content-between mt-4 mb-4 align-items-center address-list-top">
+            <div class="font-14">List of all the addresses created</div>
+            <button type="button" class="btn btn-sky-blue" (click)="openAddAndManage()">+ Add Address</button>
+        </div>
+        <!-- branch profile element end -->
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table *ngIf="!shouldShowLoader" class="table basic table-bordered giddh-table on-mobile-view">
+                    <thead>
+                        <tr>
+                            <th class="min-wid-check" width="5%">
+                                <div>#</div>
+                            </th>
+                            <th #searchAddressNameInputField width="15%" class="td-search-box"
+                                (clickOutside)="clickedOutside($event, searchAddressNameInputField, 'searchAddressNameInput')">
+                                <div>
+                                    <ng-container
+                                        *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSearchName, title: 'Name', fieldName: 'searchAddressNameInput', formControl: searchAddressNameInput}">
+                                    </ng-container>
+                                </div>
+                            </th>
+                            <th width="25%" class="td-search-box">
+                                <div>
+                                    <span>Address</span>
+                                    <i class="icon-search"></i>
+                                </div>
+                            </th>
+                            <th width="15%" class="td-search-box">
+                                <div>
+                                    <span>State</span>
+                                    <i class="icon-search"></i>
+                                </div>
+                            </th>
+                            <th width="25%" class="td-search-box">
+                                <div>
+                                    <span>Linked with</span>
+                                    <i class="icon-search"></i>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="cursor-pointer" *ngFor="let address of addresses; index as addressIndex">
+                            <td data-title="#">
+                                <div>{{addressIndex + 1}}.</div>
+                            </td>
+                            <td data-title="Name">
+                                <div>{{address.name}}</div>
+                            </td>
+                            <td data-title="Address">
+                                <div>
+                                    {{address.address}}
+                                    <ng-container *ngIf="address.taxType && address.taxNumber">
+                                        <br />
+                                        {{address.taxType}} : {{address.taxNumber}}
+                                    </ng-container>
+                                </div>
+                            </td>
+                            <td data-title="State">
+                                <div>{{address.stateCode}} - {{address.stateName}}</div>
+                            </td>
+                            <td data-title="Linked with">
+                                <div class="d-flex">
+                                    <div class="d-flex flex-column linked-with">
+                                        <span *ngFor="let entity of address.linkedEntities" class="pb-1">
+                                            <i tooltip="HO Branch" *ngIf="entity.isHeadQuarter"
+                                                class="icon-company-HO"></i>
+                                            <i tooltip="Branch" *ngIf="!entity.isHeadQuarter && entity.isBranch"
+                                                class="icon-branch-icon"></i>
+                                            <i tooltip="Warehouse" *ngIf="entity.isWarehouse"
+                                                class="icon-warehouse-icon"></i>
+                                            {{entity.alias}}
+                                        </span>
+                                    </div>
+
+                                    <div class="ml-auto">
+                                        <div class="action-icon">
+                                            <a><span class="icon-edit"></span></a>
+                                            <a><span class="icon-trash"></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="no-data mrT2 loader-main" *ngIf="shouldShowLoader">
+                    <div class="spinner2">
+                        <div class="cube1"></div>
+                        <div class="cube2"></div>
+                    </div>
+                </div>
+                <div class="no-data" *ngIf="addresses.length === 0 && !shouldShowLoader">
+                    <h1>No addresses found within given criteria.</h1>
+                </div>
+            </div>
+        </div>
+        <!-- branch profile element start -->
+        <div *ngIf="isBranchElement" class="branch-profile-address-content col-md-12">
+            <div class="single-branch-detail mb-15">
+                <h4><i class="icon-branch-icon"></i>Address Name Dummy</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Address:</label>
+                        <p>WALKOVER, 405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash Hospital, Indore-452080,
+                            MP, GSTIN: 23IDJHFOSD435</p>
+                    </div>
+                    <div class="col-md-4 mb-1">
+                        <label>State:</label>
+                        <p>MP-Madhya Pradesh</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="set-default">
+                            <p class="no-selected mb-1 cursor-pointer" hidden><i class="icon-no-selected mr-05"></i>Set
+                                as Default</p>
+                            <p class="selected-defualt mb-1 cursor-pointer"><i
+                                    class="icon-favorite-selected mr-05"></i>Set as Default</p>
+                            <p><i class="icon-unlink mr-05 cursor-pointer"></i>Unlink Address</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- branch profile element end -->
+        <div class="col-md-12 text-center">
+            <pagination #warehousePagination *ngIf="paginationConfig?.totalItems > paginationLimit"
+                [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count"
+                [boundaryLinks]="true" [rotate]="true" (pageChanged)="handlePageChange($event)"></pagination>
+        </div>
+    </div>
+</div>
+
+<!-- Create address part of Address Tab -->
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+<div class="abc " *ngIf="accountAsideMenuState === 'in'">
+    <create-address class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState"
+        (closeAsideEvent)="toggleAccountAsidePane($event)">
+    </create-address>
+</div>
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+    <div [hidden]="show">
+        <span> {{ title }}</span>
+        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
+    </div>
+    <div class="input-container" [hidden]="!show">
+        <input type="text" placeholder="Search {{ title }}" class="w100" #searchBox [formControl]="formControl" />
+    </div>
+</ng-template>
