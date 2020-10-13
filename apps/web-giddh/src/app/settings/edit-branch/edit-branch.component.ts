@@ -13,13 +13,13 @@ export class EditBranchComponent implements OnInit {
 
   constructor() { }
 
-  public closeAsidePane(event) {
+  public closeAsidePane() {
       this.ngOnDestroy();
-      this.closeAsideEvent.emit(event);
+    //   this.closeAsideEvent.emit(event);
   }
-  
+
   public ngOnDestroy(): void {
   }
- 
+
 
 }
