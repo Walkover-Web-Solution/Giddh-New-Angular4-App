@@ -43,14 +43,46 @@ input {
 .ledg-head.entry-popup table td.pdR25imp {
     padding-right: 25px !important;
 }
-.ledg-head .ledger-main td[class*="col-"] {
-    padding: 0px !important;
+.transaction-mapped-table{
+    .top-head-table{
+        border-top: none;
+    }
+    thead{
+        th{
+            border-bottom: none;
+        }
+    }
+    .transaction-mapped-head{
+        border-top:none !important
+    }
+    .ledger-main {
+        .ledger-row.row{
+            td, th{
+                border-bottom: 1px solid $gainsboro !important;
+                border-top: none !important;
+            }
+            td[class*="col-"]{
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+        }
+    }
+    .row{
+        margin-left: 0;
+        margin-right: 0 ;
+    }
+    .ledger-head{
+        th{
+            padding-left: 15px;
+        }
+    }
+    tr{
+        td.upper-td {
+            padding: 0 !important;
+            border: none !important;
+        }
+    }
 }
-// table th[class*=col-]:last-child,
-// .ledger-main tr td:last-child,
-// table td[class*=col-]:last-child {
-//     border-right: 0 !important;
-// }
 .total-col td {
     border: 0 !important;
 }
@@ -569,7 +601,11 @@ sh-select:focus {
             border: none;
             padding-top: 10px;
             &:first-child {
-                padding-right: 12px;
+                padding-right: 15px;
+                border-left: 1px solid $gainsboro;
+            }
+            &:last-child{
+                border-right: 1px solid $gainsboro;
             }
         }
     }

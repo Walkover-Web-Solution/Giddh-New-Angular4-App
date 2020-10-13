@@ -202,7 +202,7 @@
 
                 <table class="table ledgerTable transaction-mapped-table" style="margin-bottom:0">
                     <thead>
-                        <th class="nopad" colspan="6">
+                        <th class="nopad top-head-table" colspan="6">
                             <div class="clearfix ldgTheadL">
                                 <h3 class="ledgerHead">
                                     <span>Transactions from mapped account</span>
@@ -225,11 +225,11 @@
                             <td class="nopad bdrL bdrR hidden-xs transaction-mapped-head" style="width:50%" colspan="3">
                                 <table class="table">
                                     <thead>
-                                        <tr class="dgreyBg">
+                                        <tr class="dgreyBg row">
                                             <th class="col-3 col-md-3 col-lg-3">Date
                                             </th>
                                             <th class="col-5 col-md-6 col-lg-6">Particular</th>
-                                            <th class="col-4 col-md-3 col-lg-3 alR" class="alR">Amount</th>
+                                            <th class="col-4 col-md-3 col-lg-3 alR">Amount</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -238,7 +238,7 @@
                             <td class="nopad bdrL bdrR hidden-xs transaction-mapped-head" style="width:50%" colspan="3">
                                 <table class="table">
                                     <thead>
-                                        <tr>
+                                        <tr class="row">
                                             <th class="col-3 col-md-3 col-lg-3">Date
                                             </th>
                                             <th class="col-5 col-md-6 col-lg-6">Particular</th>
@@ -258,10 +258,10 @@
                                     <ng-container *ngFor="let txn of item.transactions;">
                                         <ng-container *ngIf="txn.type === 'DEBIT'">
                                         <tr>
-                                            <td class="width100 pos-rel">
+                                            <td class="width100 pos-rel upper-td">
                                                 <table class="width100">
                                                     <tbody class="ledger-main">
-                                                        <tr class="ledger-row"
+                                                        <tr class="ledger-row row"
                                                             [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
                                                             <td class="col-3 col-md-3 col-lg-3">
                                                                 <div class="d-flex align-items-center"
@@ -279,7 +279,7 @@
                                                             </td>
                                                             <td
                                                                 class="col-5 col-md-6 col-lg-6 select2-parent select2-ledger">
-                                                                <div *ngIf="txn.type === 'DEBIT'"
+                                                                <div class="w-100" *ngIf="txn.type === 'DEBIT'"
                                                                     (click)="showBankLedgerPopup(txn, item);">
                                                                     <sh-select [options]="searchResults"
                                                                         [(ngModel)]="txn.particular"
@@ -378,10 +378,10 @@
                                     <ng-container *ngFor="let txn of item.transactions;" >
                                         <ng-container *ngIf="txn.type === 'CREDIT'">
                                         <tr >
-                                            <td class="width100 pos-rel">
+                                            <td class="width100 pos-rel upper-td">
                                                 <table class="width100">
                                                     <tbody class="ledger-main">
-                                                        <tr class="ledger-row">
+                                                        <tr class="ledger-row row">
                                                             <td class="col-3 col-md-3 col-lg-3">
                                                                 <div class="d-flex align-items-center"
                                                                     >
@@ -402,7 +402,7 @@
                                                             </td>
                                                             <td
                                                                 class="col-5 col-md-6 col-lg-6 select2-parent select2-ledger ">
-                                                                <div *ngIf="txn.type === 'CREDIT'"
+                                                                <div class="w-100" *ngIf="txn.type === 'CREDIT'"
                                                                     (click)="showBankLedgerPopup(txn, item);">
                                                                     <sh-select [options]="searchResults"
                                                                         [(ngModel)]="txn.particular"
