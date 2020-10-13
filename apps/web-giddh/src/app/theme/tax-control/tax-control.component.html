@@ -20,7 +20,7 @@
     <div class="pr">
         <ul class="dropdown-menu pd"
             [ngStyle]="{'display': showTaxPopup ? 'block': 'none'}" (click)="$event.stopPropagation()"
-            [style.max-height.px]="102" [style.min-height.px]="80" style="left: unset;top: 0px;">
+            [style.max-height.px]="102" [style.min-height.px]="70" style="left: unset;top: 0px;">
             <li *ngIf="taxRenderData.length === 0">
                 <p class="lead pd">No Taxes Found</p>
             </li>

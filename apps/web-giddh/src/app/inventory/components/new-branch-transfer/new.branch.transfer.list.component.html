@@ -77,12 +77,12 @@
                         <td data-title="Total Amount" class="text-right">{{activeCompany.baseCurrencySymbol}}
                             {{ item.totalAmount | giddhCurrency }}</td>
                         <td data-title="Action">
-                            <div class="btn-group" dropdown [autoClose]="true">
+                            <div class="btn-group" container="body" dropdown [autoClose]="true">
                                 <button id="button-basic" dropdownToggle type="button"
                                     class="dropdown-toggle select-action-button" aria-controls="dropdown-basic"><span
                                         class="text-light-2">Select Action</span> <span
                                         class="icon-dots-three-vertical"></span></button>
-                                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu action-dropdown" role="menu"
                                     aria-labelledby="button-basic">
                                     <!-- <li role="menuitem">
                                         <a class="dropdown-item" href="javascript:;">Received</a>

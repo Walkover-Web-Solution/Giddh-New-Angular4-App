@@ -753,6 +753,16 @@ ul.sub-list {
     left: 15px;
     border: 1px solid $gainsboro;
 }
+.not-today{
+    .today-date.input-date{
+    width: 140px;
+        input{
+            text-align: left !important;
+            padding-left: 30px !important;
+        }
+    }
+}
+
 /* responsive */
 @media (max-height: 800px) {
     .nav-wrapper {
