@@ -417,6 +417,9 @@
 
                     <th *ngIf="activeTab === 'vendor' && isICICIIntegrated" width="10%">Action</th>
 
+                    <ng-container *ngFor="let item of (companyCustomFields$ | async)">
+                        <th width="10%">{{item.key}}</th>
+                    </ng-container>
                 </tr>
 
             </thead>
@@ -582,6 +585,15 @@
                             </ng-container>
 
                         </td>
+                        <ng-container *ngFor="let item of (companyCustomFields$ | async)">
+                            <!-- <ng-container *ngIf="account.customFields;else cusytomFieldRow "> -->
+                            <td class="word-wrap">
+                                {{'-'}}</td>
+                            <!-- </ng-container>
+                            <ng-template #cusytomFieldRow>
+                                <td>{{ - }}</td>
+                            </ng-template> -->
+                        </ng-container>
 
                     </tr>
                     <!---->
