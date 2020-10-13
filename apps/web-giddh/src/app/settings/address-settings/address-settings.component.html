@@ -28,22 +28,26 @@
                                     </ng-container>
                                 </div>
                             </th>
-                            <th width="25%" class="td-search-box">
+                            <th #searchAddressInputField width="25%" class="td-search-box"
+                                (clickOutside)="clickedOutside($event, searchAddressInputField, 'searchAddressInput')">
                                 <div>
-                                    <span>Address</span>
-                                    <i class="icon-search"></i>
+                                    <ng-container
+                                        *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSearchAddress, title: 'Address', fieldName: 'searchAddressInput', formControl: searchAddressInput}">
+                                    </ng-container>
                                 </div>
                             </th>
-                            <th width="15%" class="td-search-box">
+                            <th #searchStateInputField width="15%" class="td-search-box"
+                                (clickOutside)="clickedOutside($event, searchStateInputField, 'searchStateInput')">
                                 <div>
-                                    <span>State</span>
-                                    <i class="icon-search"></i>
+                                    <ng-container
+                                        *ngTemplateOutlet="searchTemplate;context:{ $implicit: showSearchState, title: 'State', fieldName: 'searchStateInput', formControl: searchStateInput}">
+                                    </ng-container>
                                 </div>
                             </th>
                             <th width="25%" class="td-search-box">
                                 <div>
                                     <span>Linked with</span>
-                                    <i class="icon-search"></i>
+                                    <!-- <i class="icon-search"></i> -->
                                 </div>
                             </th>
                         </tr>
@@ -132,7 +136,7 @@
         </div>
         <!-- branch profile element end -->
         <div class="col-md-12 text-center">
-            <pagination #warehousePagination *ngIf="paginationConfig?.totalItems > paginationLimit"
+            <pagination [(ngModel)]="paginationConfig.page" *ngIf="!shouldShowLoader && paginationConfig?.totalItems > paginationLimit"
                 [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count"
                 [boundaryLinks]="true" [rotate]="true" (pageChanged)="handlePageChange($event)"></pagination>
         </div>

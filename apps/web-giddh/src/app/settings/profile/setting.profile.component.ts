@@ -118,6 +118,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     };
     /** True, if address API is in progress */
     public shouldShowAddressLoader: boolean;
+    /** True, if search filter is applied */
+    public isSearchFilterApplied: boolean;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -703,13 +705,27 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public handleTabChanged(tabName: string): void {
         this.currentTab = tabName;
         if (tabName === 'address') {
-            this.loadAddresses();
+            this.loadAddresses('GET');
         }
     }
 
     public handlePageChanged(event: any) {
-        console.log('Page changed', event);
-        this.loadAddresses({ page: event.page });
+        let method: string;
+        delete event.itemsPerPage;
+        let params = {
+            ...event
+        };
+        if (this.isSearchFilterApplied) {
+            method = 'POST';
+        } else {
+            method = 'GET';
+        }
+        this.loadAddresses(method, params);
+    }
+
+    public handleSearchInAddress(event: any): void {
+        this.isSearchFilterApplied = true;
+        this.loadAddresses('POST', { ...event, page: 1 });
     }
 
     private handleCompanyProfileResponse(response: any): void {
@@ -776,12 +792,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
     }
 
-    private loadAddresses(params?: any): void {
+    private loadAddresses(method: string, params?: any): void {
         if (this.currentOrganizationType === OrganizationType.Branch) {
 
         } else if (this.currentOrganizationType === OrganizationType.Company) {
             this.shouldShowAddressLoader = true;
-            this.settingsProfileService.getCompanyAddresses(params).subscribe((response) => {
+            this.settingsProfileService.getCompanyAddresses(method, params).subscribe((response) => {
                 this.shouldShowAddressLoader = false;
                 if (response && response.body && response.status === 'success') {
                     this.updateAddressPagination(response.body);
