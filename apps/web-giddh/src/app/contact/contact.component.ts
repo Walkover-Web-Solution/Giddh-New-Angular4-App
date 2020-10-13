@@ -50,6 +50,7 @@ import { OnboardingFormRequest } from '../models/api-models/Common';
 import { CommonActions } from '../actions/common.actions';
 import { PAGINATION_LIMIT } from '../app.constant';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
+import { GroupService } from '../services/group.service';
 
 const CustomerType = [
     { label: 'Customer', value: 'customer' },
@@ -248,6 +249,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public isGetAccountsInProcess: boolean = false;
     /* This will hold the current page number */
     public currentPage: number = 1;
+    /** company custom fields list */
+    public companyCustomFields$: Observable<any[]>;
 
     constructor(
         private store: Store<AppState>,
@@ -265,7 +268,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         private _cdRef: ChangeDetectorRef, private _generalService: GeneralService,
         private _route: ActivatedRoute, private _generalAction: GeneralActions,
         private _router: Router, private _breakPointObservar: BreakpointObserver, private modalService: BsModalService,
-        private settingsProfileActions: SettingsProfileActions) {
+        private settingsProfileActions: SettingsProfileActions,  private groupService: GroupService) {
         this.searchLoader$ = this.store.select(p => p.search.searchLoader);
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.select(s => s.groupwithaccounts.createAccountIsSuccess).pipe(takeUntil(this.destroyed$));
@@ -305,6 +308,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }), takeUntil(this.destroyed$)).subscribe();
         this.store.dispatch(this._companyActions.getAllRegistrations());
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+        this.getCompanyCustomField();
     }
 
     /**
@@ -1367,5 +1371,21 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
             selectedPage: 1
         };
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr);
+    }
+
+
+     /**
+     * API call to get custom field data
+     *
+     * @memberof ContactComponent
+     */
+    public getCompanyCustomField(): void {
+        this.groupService.getCompanyCustomField().subscribe(response => {
+            if (response && response.status === 'success') {
+                this.companyCustomFields$ = observableOf(response.body);
+            } else {
+                this._toaster.errorToast(response.message);
+            }
+        });
     }
 }

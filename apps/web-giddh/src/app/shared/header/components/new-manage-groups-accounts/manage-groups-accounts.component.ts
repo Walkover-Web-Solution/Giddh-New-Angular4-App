@@ -73,7 +73,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public isEnabledIndex: number = null;
     /** To get  custom fields length */
     public updateModeLength: number = 0;
-
+    /** Index to delete row in custom field */
+    public selectedRowIndex: number = null;
 
 	// tslint:disable-next-line:no-empty
 	constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef,
@@ -96,8 +97,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      * @param {TemplateRef<any>} template
      * @memberof ManageGroupsAccountsComponent
      */
-    public openModal(template: TemplateRef<any>) {
+    public openModal(template: TemplateRef<any>, index: number) {
         this.modalRef = this.modalService.show(template);
+        this.selectedRowIndex = index;
     }
 
 	// tslint:disable-next-line:no-empty
@@ -179,6 +181,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     /**
      * To submit custom field data
      *
+     * @param {*} type API call operation type
      * @param {*} value
      * @memberof ManageGroupsAccountsComponent
      */
@@ -191,12 +194,15 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                     let customFieldResponse = response.body;
                     this.updateModeLength = customFieldResponse.length;
                     this.renderCustomField(customFieldResponse);
+                    this.toasterService.successToast('Custom field updated successfully');
                 } else {
                     this.toasterService.errorToast(response.message);
                 }
                 this.isEnabledIndex = null;
                 this.isSaveCustomInProgress = false;
-
+                if (this.modalRef) {
+                    this.modalRef.hide()
+                }
             }
         });
     }
@@ -231,11 +237,13 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         let res: any[] = response;
         this.customFieldForm = this.createCustomFieldForm();
         const customRow = this.customFieldForm.get('customField') as FormArray;
-        res.map(item => {
-            item.isEditMode = true;
-            customRow.push(this.initNewCustomField(item));
-        });
-        this.removeCustomFieldRow(0);
+        if (res.length) {
+            res.map(item => {
+                item.isEditMode = true;
+                customRow.push(this.initNewCustomField(item));
+            });
+            this.removeCustomFieldRow(0, false);
+        }
     }
 
     /**
@@ -292,13 +300,17 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     /**
      * To remove custom field form row
      *
+     * @param {boolean} isUpdate To check for API call
      * @param {number} index index number
      * @memberof ManageGroupsAccountsComponent
      */
-    public removeCustomFieldRow(index: number): void {
+    public removeCustomFieldRow(index: number, isUpdate: boolean): void {
         const row = this.customFieldForm.get('customField') as FormArray;
-        if (row.length > 1) {
+        if (row.length > 0) {
             row.removeAt(index);
+        }
+        if (isUpdate) {
+            this.submitCustomFields(this.customFieldForm.value);
         }
     }
 
