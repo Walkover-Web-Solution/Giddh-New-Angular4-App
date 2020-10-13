@@ -3,9 +3,9 @@
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeExportLedgerModal.emit()" aria-label="Close">×</span>
         <h3>Export Ledger</h3>
     </div>
-    <div class="modal-body mrB4" id="export-body">
+    <div class="modal-body mr-b4" id="export-body">
         <form name="addShareEmailForm" novalidate class="" autocomplete="off">
-            <div class="pdB2 clearfix export-type">
+            <div class="pd-b2 clearfix export-type">
                 <label class="w100">Type:</label>
 
                 <div>
@@ -30,7 +30,7 @@
 
 
             </div>
-            <div class="pdB2 clearfix export-type">
+            <div class="pd-b2 clearfix export-type">
                 <label class="w100">Export As:</label>
                 <div>
                     <span class="pd0 mr-3" [hidden]="emailTypeSelected === 'columnar'">
@@ -46,7 +46,7 @@
                     </span>
                 </div>
             </div>
-            <div class="pdB2 clearfix export-type">
+            <div class="pd-b2 clearfix export-type">
                 <label class="w100">Order:</label>
                 <div>
                     <span class="pd0 mr-3">
@@ -62,13 +62,13 @@
                     </span>
                 </div>
             </div>
-            <div class="pdB2 clearfix" [hidden]="emailTypeSelected === 'admin-condensed' || emailTypeSelected === 'columnar'">
+            <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'admin-condensed' || emailTypeSelected === 'columnar'">
                 <label class="w100">Invoice no.:</label>
                 <label class="radio-inline pd0">
                     <input type="checkbox" name="withInvoiceNumber" [(ngModel)]="withInvoiceNumber">
                 </label>
             </div>
-            <div class="pdB2 clearfix" [hidden]="emailTypeSelected !== 'columnar'">
+            <div class="pd-b2 clearfix" [hidden]="emailTypeSelected !== 'columnar'">
                 <label class="w100">Cr/Dr with +/-</label>
                 <label class="radio-inline pd0">
                     <input type="checkbox"  name="balanceTypeAsSign" [(ngModel)]="balanceTypeAsSign">

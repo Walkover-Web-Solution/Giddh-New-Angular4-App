@@ -1,4 +1,4 @@
-<div id="share-modal" class="pdB4 shareGrp">
+<div id="share-modal" class="pd-b4 share-grp">
     <div class="modal-header">
         <h3>Share Account</h3>
         <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
@@ -6,11 +6,11 @@
     <div class="modal-body" id="SharePop">
         <div class="form-group">
             <h3 class="pd-b1">Share with</h3>
-            <div class="add_mailer">
+            <div class="add-mailer">
 
                 <!--share account from-->
                 <form name="shareGroupForm" #shareAccountForm="ngForm" novalidate="" class="form-inline clearfix" autocomplete="off">
-                    <div class="input-group form-group col-xs-12">
+                    <div class="input-group form-group w-100">
                         <input name="userEmail" type="email" [(ngModel)]="email" required placeholder="Email ID" class="form-control" [pattern]="giddhEmailRegex">
                         <div class="input-group-btn mr-l1">
                             <select name="selectedPermission" class="form-control selected-permission" [(ngModel)]="selectedPermission" required>
@@ -20,7 +20,7 @@
                                     {{permission.name}}
                                 </option>
                             </select>
-                            <button class="btn btn-success mr-l1 btn-share" type="submit" [disabled]="shareAccountForm.invalid" (click)="shareAccount()">Share
+                            <button class="btn btn-success btn-share ml-0" type="submit" [disabled]="shareAccountForm.invalid" (click)="shareAccount()">Share
                             </button>
                         </div>
                         <!-- /btn-account -->
@@ -28,12 +28,12 @@
                 </form>
 
                 <!--shared with array-->
-                <div class="col-xs-12 pd-t1" *ngIf="(activeAccountSharedWith$ | async)?.length">
-                    <div class="row">
-                        <ul class="shared_list group-shared-list">
+                <div class="pd-t1" *ngIf="(activeAccountSharedWith$ | async)?.length">
+                    <div>
+                        <ul class="shared-list group-shared-list">
                             <li *ngFor="let val of (activeAccountSharedWith$ | async); let i = index">
                                 <div class="user-name-email">
-                                    <i class="fa fa-user pdR1"></i>
+                                    <i class="fa fa-user pd-r1"></i>
                                     <span class="user-email">
                                         <small *ngIf="val.emailId!==val.userName">{{val.userName}}</small>
                                         <small>{{ val.emailId }}</small>
@@ -46,7 +46,7 @@
                                             *ngFor="let permission of allPermissions$ | async">{{permission.name}}
                                         </option>
                                     </select>
-                                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                                    <span class="select-drop"><i class="fa fa-caret-down"></i></span>
                                 </div>
                                 <span class="delete-icon pull-right">
 

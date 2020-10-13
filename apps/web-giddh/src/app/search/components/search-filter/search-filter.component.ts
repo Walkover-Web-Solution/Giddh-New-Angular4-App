@@ -8,7 +8,7 @@ import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 	selector: 'search-filter',  // <home></home>
 	templateUrl: './search-filter.component.html',
 	styles: [`
-    .custom-select .select_drop {
+    .custom-select .select-drop {
       right: 9px;
     }
   `]

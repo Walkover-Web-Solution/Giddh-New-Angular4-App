@@ -33,7 +33,7 @@
         <h1 class="section-head pdT0">Added Accounts</h1>
         <div class="mt-1">
             <!-- ================= saltedge accounts =================
-      <section *ngFor="let acc of ebankAccounts; let accIdx = index" class="clearfix bank-account" [ngClass]="{'mrB4': accIdx != ebankAccounts.length-1 }">
+      <section *ngFor="let acc of ebankAccounts; let accIdx = index" class="clearfix bank-account" [ngClass]="{'mr-b4': accIdx != ebankAccounts.length-1 }">
           <h3 class="subHead bd-rb">
               <button class="no-btn fs20" tooltip="Delete Bank" placement="top" (click)="onDeleteAddedBank(acc.siteName, acc.accounts[0])"><i class="fa fa-trash-o"></i></button> {{acc.siteName}}
               <button class="btn btn-link mr-l1" tooltip="Refresh" placement="top" (click)="onRefreshToken(acc.accounts[accIdx])"><i class="fa fa-refresh"></i> Refresh</button>
@@ -81,7 +81,7 @@
       ================= saltedge accounts ================= -->
 
             <section *ngFor="let acc of ebankAccounts; let accIdx = index" class="clearfix bank-account"
-                [ngClass]="{'mrB4': accIdx != ebankAccounts.length-1 }">
+                [ngClass]="{'mr-b4': accIdx != ebankAccounts.length-1 }">
                 <h3 class="subHead bd-rb">
                     {{acc.siteName}}
                     <button class="btn btn-link mr-l1" tooltip="Refresh" placement="top"

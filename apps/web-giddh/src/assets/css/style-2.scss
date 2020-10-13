@@ -3980,7 +3980,7 @@ a.btn.btn-xs.btn-link.pull-right {
     color: #666;
 }
 
-.shared_list li {
+.shared-list li {
     list-style: none;
     color: #666;
     font-size: 16px;
@@ -3988,7 +3988,7 @@ a.btn.btn-xs.btn-link.pull-right {
     border-bottom: 1px solid #d6d6d6;
 }
 
-.shared_list select {
+.shared-list select {
     background: none !important;
     border: 0;
     padding: 0 !important;
@@ -3996,7 +3996,7 @@ a.btn.btn-xs.btn-link.pull-right {
     color: #666 !important;
 }
 
-.shared_list select:focus {
+.shared-list select:focus {
     border: 0 !important;
 }
 
@@ -4114,14 +4114,14 @@ input[type=radio]:checked:after {
 
 /*====================== mustafa =====================*/
 
-.select_drop {
+.select-drop {
     position: relative;
     top: 0px;
     right: 2px;
     z-index: 9;
 }
 
-.select_drop i {
+.select-drop i {
     position: absolute;
     right: 4px;
     font-size: 16px;
@@ -4701,7 +4701,7 @@ label {
     bottom: -12px;
 }
 
-.shareGrp {
+.share-grp {
     overflow: hidden;
 }
 
@@ -4918,8 +4918,8 @@ label {
     padding: 0 20px 0 7px !important;
 }
 
-#manufacture .form-theme tbody tr td .select_drop,
-#manufacture .source tbody tr td .select_drop {
+#manufacture .form-theme tbody tr td .select-drop,
+#manufacture .source tbody tr td .select-drop {
     right: 8px;
 }
 
@@ -5004,7 +5004,7 @@ label {
     position: relative;
 }
 
-.shared_list li .delIcon {
+.shared-list li .delIcon {
     height: auto;
 }
 
@@ -5012,7 +5012,7 @@ label {
     padding: 0;
 }
 
-#Addaccount .form-inline .select_drop {
+#Addaccount .form-inline .select-drop {
     top: 15px;
 }
 
@@ -5195,7 +5195,7 @@ label {
             border-radius: 0;
             padding-right: 22px !important;
         }
-        .select_drop {
+        .select-drop {
             position: absolute;
             bottom: 16px;
             top: inherit;
@@ -5292,7 +5292,7 @@ label {
     border-radius: 0;
 }
 
-.dropdown-toggle .select_drop {
+.dropdown-toggle .select-drop {
     right: 0;
 }
 
@@ -6138,11 +6138,11 @@ ng-select > div > div.single > div.clear:hover {
     border-left: 0px;
 }
 
-ng-select .select_drop {
+ng-select .select-drop {
     position: initial;
 }
 
-ng-select .select_drop i {
+ng-select .select-drop i {
     right: 9px;
 }
 
@@ -8422,7 +8422,7 @@ span.red-text {
     height: 48px !important;
 }
 
-.add-companyDetail .add_mailer form {
+.add-companyDetail .add-mailer form {
     padding-bottom: 60px;
 }
 

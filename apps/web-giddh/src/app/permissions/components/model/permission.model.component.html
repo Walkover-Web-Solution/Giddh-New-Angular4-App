@@ -18,12 +18,12 @@
                         <option [ngValue]="true">Fresh Start</option>
                         <option [ngValue]="false">Copy From Other Role</option>
                     </select>
-                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                    <span class="select-drop"><i class="fa fa-caret-down"></i></span>
                 </div>
                 <div class="form-group" *ngIf="newRoleObj.isFresh">
                     <div class="btn-group btn-block" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden()">
                         <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
-                            {{ dropdownHeading}} <span class="select_drop pull-right mr-t1"><i
+                            {{ dropdownHeading}} <span class="select-drop pull-right mr-t1"><i
                                     class="fa fa-caret-down"></i></span>
                         </button>
                         <ul id="pageListDD" *dropdownMenu class="dropdown-menu pd-l1 pd-r1" role="menu">
@@ -50,7 +50,7 @@
                         <option [ngValue]="">Please Select</option>
                         <option *ngFor="let role of allRoles" [ngValue]="role.uniqueName"> {{ role.name }}</option>
                     </select>
-                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                    <span class="select-drop"><i class="fa fa-caret-down"></i></span>
                 </div>
                 <div class="clearfix text-right mr-t4">
                     <button type="submit" class="btn btn-sm btn-success" [disabled]="!isFormValid">Next</button>

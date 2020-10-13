@@ -144,7 +144,7 @@
     <div class="form-group col-xs-2" [hidden]="!selectedGstrType || selectedGstrType=='GSTR1'">
         <label>Report</label>
         <div class="btn-group btn-block" dropdown>
-            <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle">-- Select Report --<span class="select_drop pull-right mr-t1"><i class="fa fa-caret-down"></i></span>
+            <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle">-- Select Report --<span class="select-drop pull-right mr-t1"><i class="fa fa-caret-down"></i></span>
  </button>
             <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
                 <li class="cp" *ngFor="let item of purchaseReportOptions">
@@ -247,7 +247,7 @@
                             <div class="btn-group btn-block" dropdown>
                                 <button dropdownToggle type="button" data-toggle="dropdown"
                                     class="form-control text-left btn-block dropdown-toggle"> Filter <span
-                                        class="select_drop pull-right mr-t1"> <i class="fa fa-caret-down"></i> </span>
+                                        class="select-drop pull-right mr-t1"> <i class="fa fa-caret-down"></i> </span>
                                 </button>
                                 <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
                                     <li *ngFor="let item of otherFilters">
@@ -339,7 +339,7 @@
                                     *ngIf="!(invoice.account.gstIn?.length >0 || ( invoice.igstAmount!='0' || invoice.cgstAmount!='0')) && !invoice.invoiceNumber">
                                     Reverse Charge</option>
                             </select>
-                            <span class="select_drop"> <i class="fa fa-caret-down"></i> </span> </div>
+                            <span class="select-drop"> <i class="fa fa-caret-down"></i> </span> </div>
                         <button
                             *ngIf="(timeCounter != 10 && selectedRowIndex == i && invoice.invoiceNumber) || (timeCounter != 10 && selectedRowIndex == i && !invoice.invoiceNumber)"
                             (click)="onUndoEntryTypeChange(i, invoice)" class="btn btn-link">Undo in
@@ -351,7 +351,7 @@
                             <button dropdownToggle type="button"
                                 class="form-control text-left btn-block dropdown-toggle"
                                 [disabled]="selectedRowIndex != i"> {{dropdownHeading}} <span
-                                    class="select_drop pull-right mr-t1"> <i class="fa fa-caret-down"></i> </span>
+                                    class="select-drop pull-right mr-t1"> <i class="fa fa-caret-down"></i> </span>
                             </button>
                             <ul id="pageListDD" *dropdownMenu class="dropdown-menu" role="menu">
                                 <!-- <li>

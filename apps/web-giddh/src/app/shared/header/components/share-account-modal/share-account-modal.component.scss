@@ -15,16 +15,19 @@
         align-items: center;
         margin-bottom: 10px;
     }
-    .custom-select {
+    .custom-select{
         width: 40%;
+        border: 1px solid $gainsboro !important;
         select.form-control {
-            border: 1px solid $gainsboro !important;
             padding: 7px !important;
             display: block;
             min-width: 200px;
             margin: 0 !important;
             width: 100%;
-            padding-right: 25px !important;
+            padding-right: 0px !important;
+        }
+        .select-drop i {
+            background: $white;
         }
     }
     .delete-icon {
@@ -61,8 +64,10 @@
     }
 }
 
-.selected-permission {
+.selected-permission{
     width: calc(100% - 96px) !important;
+    min-width:200px;
+    margin-right:10px;
 }
 
 .btn-share {
