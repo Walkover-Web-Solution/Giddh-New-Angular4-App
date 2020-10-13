@@ -20,7 +20,7 @@
                     (click)="$event.stopPropagation()" [ngClass]="{'disabled-label': tax.isDisabled}">
                     <input class="pull-left" id="{{ 'update-ledger-tax-checkbox-' + i }}" type="checkbox" [(ngModel)]="tax.isChecked" [disabled]="tax.isDisabled"
                         (change)="change()" (click)="$event.stopPropagation()" />
-                    <span class="pull-left ellp">{{tax.name}}</span>
+                    <span class="pull-left text-ellipsis">{{tax.name}}</span>
                 </label>
             </li>
         </ul>

@@ -112,7 +112,7 @@
                             <td *ngIf="!taxToEdit[i]" data-title="File Date">{{tax.taxFileDate}}</td>
 
                             <td *ngIf="taxToEdit[i]">
-                                <div class="custom-select pos-rel">
+                                <div class="custom-select position-relative">
                                     <sh-select [options]="days" [isFilterEnabled]="false"
                                         [(ngModel)]="availableTaxes[i].taxFileDate" name="tfd{{i}}"
                                         [placeholder]="'Select'" [ItemHeight]="33"></sh-select>
@@ -120,7 +120,7 @@
                             </td>
 
                             <td data-title="Duration">
-                                <div class="custom-select pos-rel">
+                                <div class="custom-select position-relative">
                                     <sh-select [options]="duration" [disabled]="true" [isFilterEnabled]="false"
                                         [(ngModel)]="availableTaxes[i].duration" name="duration{{i}}"
                                         [placeholder]="'Select'" [ItemHeight]="33"></sh-select>

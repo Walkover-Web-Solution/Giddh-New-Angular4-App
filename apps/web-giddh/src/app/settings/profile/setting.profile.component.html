@@ -30,7 +30,7 @@
                 <div class="col-lg-4 col-md-12 col-sm-12 pd0 d-flex">
                     <div class="form-group col-sm-4 pdR0">
                         <label>Currency</label><br>
-                        <div class="custom-select pos-rel">
+                        <div class="custom-select position-relative">
                             <!--              <sh-select [options]="currencySource$ | async" placeholder="Currency" [isFilterEnabled]="true" name="baseCurrency" [(ngModel)]="companyProfileObj.baseCurrency" [defaultValue]="companyProfileObj.baseCurrency" (selected)="changeEventOfForm('baseCurrency')"></sh-select>-->
                             <input type="text" placeholder="Currency" class="form-control" disabled [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" />
                         </div>
@@ -148,14 +148,14 @@
                     <div class="row ">
                         <div class="form-group col-sm-12 col-md-12 col-lg-6 decimal-system">
                             <label>Digits After Decimal</label><br>
-                            <div class="custom-select pos-rel ">
+                            <div class="custom-select position-relative ">
                                 <sh-select [options]="decimalDigitSource " placeholder="select type " [isFilterEnabled]="true " name="digitafterdecimal " [(ngModel)]="companyProfileObj.balanceDecimalPlaces" (selected)="checkDigitAfterDecimal($event) "></sh-select>
                             </div>
                             <!-- <input type="text " placeholder="Currency " class="form-control " [(ngModel)]="companyProfileObj.baseCurrency " name="baseCurrency " /> -->
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-6 decimal-system number-system">
                             <label>Number System</label><br>
-                            <div class="custom-select pos-rel ">
+                            <div class="custom-select position-relative ">
                                 <!-- <sh-select [options]="numberSystemSource " placeholder="Select type " [isFilterEnabled]="true " name="numberSystem " [(ngModel)]="companyProfileObj.balanceDisplayFormat " (selected)="checkNumberSystem($event) "></sh-select> -->
                                 <sh-select #shnumberSystemSource [options]="numberSystemSource " name="numberSystem " [(ngModel)]="companyProfileObj.balanceDisplayFormat " (selected)="checkNumberSystem($event) " [placeholder]=" 'Select type'
                                     " [ItemHeight]="41 ">
@@ -174,13 +174,13 @@
                     <div class="form-group ">
                         <div *ngIf="companyProfileObj.branchCount>0" class="form-group">
                             <label>Branch Unique Name</label><br>
-                            <div class="custom-select pos-rel">
+                            <div class="custom-select position-relative">
                                 <input type="text" [(ngModel)]="companyProfileObj.nameAlias" placeholder="Branch unique name" name="nameAlias" class="form-control" (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
                             <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
                         </div>
                         <div *ngIf="companyProfileObj.branchCount==0" class="form-group">
                             <label>Headquarter Unique Name</label><br>
-                            <div class="custom-select pos-rel">
+                            <div class="custom-select position-relative">
                                 <input type="text" [(ngModel)]="companyProfileObj.nameAlias" placeholder="Headquarter unique name" name="nameAlias" class="form-control" (blur)="nameAlisPush($event)" (keydown)="pushToUpdate($event);" /> </div>
                             <!-- <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" /> -->
                         </div>

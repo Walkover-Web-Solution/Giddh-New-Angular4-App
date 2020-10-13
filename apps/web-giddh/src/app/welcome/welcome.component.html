@@ -36,7 +36,7 @@
                     <div class="col-6 mr-b2 ">
                         <span>
                             <label for="country" class="d-block">Country<sup class="text-danger">*</sup></label>
-                            <div class="custom-select pos-rel">
+                            <div class="custom-select position-relative">
                                 <sh-select id="country" [options]="countrySource$ | async" required
                                     [isFilterEnabled]="true"
                                     [disabled]="(createNewCompanyPreparedObj.country) ? 'disabled' : null"
@@ -50,7 +50,7 @@
                     </div>
                     <div class="col-6 mr-b2 ">
                         <label for="">Currency<sup class="text-danger">*</sup></label>
-                        <div class="custom-select select-caret pos-rel">
+                        <div class="custom-select select-caret position-relative">
                             <sh-select name="baseCurrency" [options]="currencySource$ | async" required
                                 [disabled]="(createNewCompanyPreparedObj.baseCurrency) ? 'disabled' : null"
                                 [isFilterEnabled]="true" [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"
@@ -77,9 +77,9 @@
                     </div>
 
                     <div class="col-12 mr-b2 selectBox" *ngIf="businessTypeList?.length && !isWarehouse">
-                        <div class="pos-rel">
+                        <div class="position-relative">
                             <label for="businessType">Select Business Type</label>
-                            <div class="custom-select pos-rel">
+                            <div class="custom-select position-relative">
                                 <sh-select placeholder="Select Business Type" name="businessType" id="businessType"
                                     (onClear)="onClearBusinessType()" autocomplete="false" [readonlyInput]="true"
                                     [disabled]="(companyProfileObj.businessType && isOnBoardingInProgress) ? 'disabled' : null"
@@ -91,9 +91,9 @@
                         </div>
                     </div>
                     <div class="col-12 mr-b2 selectBox" *ngIf="!isWarehouse">
-                        <div class="pos-rel">
+                        <div class="position-relative">
                             <label for="businessNature">Select Business Nature</label>
-                            <div class="custom-select  pos-rel">
+                            <div class="custom-select  position-relative">
                                 <sh-select placeholder="Select Business Nature" name="businessNature"
                                     [readonlyInput]="true" (onClear)="onClearBusinessNature()" autocomplete="false"
                                     id="businessNature" [(ngModel)]="companyProfileObj.businessNature"

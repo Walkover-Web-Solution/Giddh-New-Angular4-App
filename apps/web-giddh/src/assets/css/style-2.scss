@@ -1845,7 +1845,7 @@ input:-moz-placeholder {
     font-size: 14px;
 }
 
-.company-name .c-text .c-name {
+.company-name .company-text .company-name {
     font-size: 16px;
     text-transform: capitalize;
     display: inline-flex;
@@ -1863,7 +1863,7 @@ input:-moz-placeholder {
     color: $white !important;
 }
 
-.company-name .c-text .fyear {
+.company-name .company-text .fyear {
     font-size: 12px;
 }
 
@@ -1877,9 +1877,6 @@ header .navbar {
     padding: 3px 0;
 }
 
-/* .fyear {
-    font-size: 14px;
-} */
 
 .t-h-bg1 th {
     background: $white;
@@ -2182,7 +2179,7 @@ fieldset[disabled] .btn-primary:hover {
     margin: 20px 0px;
 }
 
-#cmpWrp i {
+#company_wrap i {
     color: #525252;
 }
 
@@ -2348,7 +2345,7 @@ fieldset[disabled] .btn-primary:hover {
     border: 1px solid #ca541e;
 }
 
-#cmpWrp {
+#company_wrap {
     cursor: pointer;
     position: relative;
     padding-right: 25px;
@@ -2358,7 +2355,7 @@ fieldset[disabled] .btn-primary:hover {
     color: $white;
 }
 
-/* #cmpWrp .c-text {
+/* #company_wrap .company-text {
     margin: 5px 0 5px 0px;
     font-size: 9px;
     padding-right: 5px;
@@ -2378,7 +2375,7 @@ fieldset[disabled] .btn-primary:hover {
     color: var(--dark-blue01) !important;
 }
 
-.selected-company a.ellp {
+.selected-company a.text-ellipsis {
     color: $chetwode-blue;
 }
 
@@ -2521,7 +2518,7 @@ input[type="checkbox"]:checked:after {
     -moz-osx-font-smoothing: grayscale;
 }
 
-.pos-rel label {
+.position-relative label {
     font-weight: 400;
 }
 
@@ -10231,10 +10228,10 @@ span#HW_badge_cont:nth-child(3) {
     .radio-custom-label {
         display: inline;
     }
-    #cmpWrp {
+    #company_wrap {
         display: block;
     }
-    .c-text span.c-name {
+    .company-text span.company-name {
         color: $white !important;
     }
     .user-dropdown-header {

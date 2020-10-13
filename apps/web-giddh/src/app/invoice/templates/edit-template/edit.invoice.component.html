@@ -38,7 +38,7 @@
 
             <div class="template-grid" *ngIf="template.type === 'invoice' && voucherType==='sales' ">
                 <div class="template_info text-center">
-                    <h3 class="primary_clr ellp">{{template.name}}</h3>
+                    <h3 class="primary_clr text-ellipsis">{{template.name}}</h3>
 
                     <span *ngIf="template.isDefault" class="badge btn-sky-blue mr-t2"><i
                             class="icon-favorite-selected"></i> Default
@@ -64,7 +64,7 @@
                     </button>
 
                     <div class="template_meta">
-                        <small class="ellp">Created by: {{template.createdBy.name}}</small>
+                        <small class="text-ellipsis">Created by: {{template.createdBy.name}}</small>
                     </div>
 
 
@@ -74,7 +74,7 @@
             <ng-container *ngIf="voucherType === 'credit note' || voucherType === 'debit note'">
                 <div class="template-grid" *ngIf="template.type === 'voucher'">
                     <div class="template_info text-center">
-                        <h3 class="primary_clr ellp">{{template.name}}</h3>
+                        <h3 class="primary_clr text-ellipsis">{{template.name}}</h3>
 
                         <span *ngIf="template.isDefaultForVoucher" class="badge btn-sky-blue mr-t2"><i
                                 class="icon-favorite-selected"></i> Default Template</span>
@@ -99,7 +99,7 @@
                         </button>
 
                         <div class="template_meta">
-                            <small class="ellp">Created by: {{template.createdBy.name}}</small>
+                            <small class="text-ellipsis">Created by: {{template.createdBy.name}}</small>
                         </div>
 
 

@@ -102,7 +102,7 @@
 
                                     <td data-title="Particular" id="{{'debit-id-' + i}}"
                                         [ngClass]="{ 'otherAccountEntry': txn.particular.uniqueName === 'others' }"
-                                        class="col-xs-6 pos-rel select2-parent select2-ledger">
+                                        class="col-xs-6 position-relative select2-parent select2-ledger">
 
 
                                         <ng-template [ngIf]="!txn.isDiscount">
@@ -287,7 +287,7 @@
                                     </td>
 
                                     <td data-title="Particular" id="{{'credit-id-' + i}}"
-                                        class="pos-rel col-xs-6 select2-parent select2-ledger"
+                                        class="position-relative col-xs-6 select2-parent select2-ledger"
                                         [ngClass]="{ otherAccountEntry: txn.particular.uniqueName === 'others' }">
 
                                         <ng-template [ngIf]="!txn?.isDiscount">
@@ -468,7 +468,7 @@
                                   </td>
                                   <td class="text-right" style="width: 115px;">
                                     <label class="font-12">Unit</label>
-                                    <select class="form-control text-right no-padding" [(ngModel)]="vm.stockTrxEntry.inventory.unit.code" (change)="vm.unitChanged($event.target.value)">
+                                    <select class="form-control text-right p-0" [(ngModel)]="vm.stockTrxEntry.inventory.unit.code" (change)="vm.unitChanged($event.target.value)">
                                       <option *ngFor="let item of vm.stockTrxEntry.unitRate" [value]="item.stockUnitCode">
                                         {{item.stockUnitCode}}
                                       </option>
@@ -491,7 +491,7 @@
 
                             <div class="text-right table-amount width-80">
                                 <label class="font-12">Unit</label>
-                                <select id="update-ledger-unit" class="form-control text-right no-padding"
+                                <select id="update-ledger-unit" class="form-control text-right p-0"
                                     [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
                                     (change)="vm.unitChanged($event.target.value)">
                                     <option *ngFor="let item of vm.stockTrxEntry.unitRate" [value]="item.code">
@@ -691,7 +691,7 @@
                             <div class="col-sm-3 pd-l1">
                                 <div class="text-right table-amount">
                                     <label class="font-12">Unit</label>
-                                    <select class="form-control text-right no-padding"
+                                    <select class="form-control text-right p-0"
                                         [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
                                         (change)="vm.unitChanged($event.target.value)">
                                         <option *ngFor="let item of vm.stockTrxEntry.unitRate"

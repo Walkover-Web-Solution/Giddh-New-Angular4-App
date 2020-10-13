@@ -1420,7 +1420,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public closeUserMenu(ev) {
-        // if (ev.target && ev.target.classList && !ev.target.classList.contains('c-name')) {
+        // if (ev.target && ev.target.classList && !ev.target.classList.contains('company-name')) {
         //   this.companyMenu.isopen = false;
         // } else {
         //   this.companyMenu.isopen = true;

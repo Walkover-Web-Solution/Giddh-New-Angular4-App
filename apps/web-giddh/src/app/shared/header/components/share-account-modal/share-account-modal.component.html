@@ -39,7 +39,7 @@
                                         <small>{{ val.emailId }}</small>
                                     </span>
                                 </div>
-                                <div class="custom-select pos-rel">
+                                <div class="custom-select position-relative">
                                     <select name="selectedPermission_{{i}}" class="form-control cp" (change)="updatePermission(val, $event)">
                                         <option [selected]="val.roleUniqueName === permission.uniqueName"
                                             [value]="permission.uniqueName"

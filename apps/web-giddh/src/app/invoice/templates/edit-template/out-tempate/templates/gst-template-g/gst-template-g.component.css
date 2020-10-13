@@ -352,10 +352,6 @@ contenteditable {
     border-top: 1px solid;
 }
 
-#silver .pos-rel {
-    position: relative;
-}
-
 #silver .primary-clr {
     color: #df4927;
 }

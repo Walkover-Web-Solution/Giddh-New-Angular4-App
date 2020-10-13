@@ -103,7 +103,7 @@
                                                             class="fa fa-pencil"></i></a>
                                                 </span>
 
-                                                <span class="pos-rel">
+                                                <span class="position-relative">
                                                     <a href="javascript:;" tooltip="Send Email" placement="top"
                                                         (click)="openSendMailModal(sendEmailModal)"><i
                                                             class="fa fa-envelope-o"></i></a>
@@ -138,7 +138,7 @@
                     </div>
                     <div class="invoice-image-section">
                         <div class="relative">
-                            <div class="pos-rel" *ngIf="!pdfPreviewHasError && !pdfPreviewLoaded">
+                            <div class="position-relative" *ngIf="!pdfPreviewHasError && !pdfPreviewLoaded">
                                 <div class="loader"></div>
                             </div>
                             <div class="error" [hidden]="!pdfPreviewHasError">

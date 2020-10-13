@@ -322,7 +322,7 @@
                                 <td>
                                     <div *ngIf="activeRow === i">
                                         <sh-select name="productName{{i}}" #selectDropdown [notFoundLink]="true" (noResultsClicked)="onProductNoResultsClicked(i)" [isFilterEnabled]="true" [forceClearReactive]="forceClear$ | async" [options]="stockList" [(ngModel)]="product.uniqueName" (selected)="selectProduct($event, product);"></sh-select>
-                                        <div class="pos-rel">
+                                        <div class="position-relative">
                                             <div class="skuCode" (click)="focusSkuNumber();" *ngIf="activeRow == i && product.uniqueName">
                                                 <label class="">SKU Code: </label>
                                                 <span>{{product.skuCode}}
@@ -350,7 +350,7 @@
                                         <div *ngIf="product.description">{{product.description}}</div>
                                         <div *ngIf="(!product?.name && !product?.description && !(product?.hsnNumber || product?.sacNumber) && !product?.skuCode)" class="placeholder-for-table">Enter product details</div>
                                     </div>
-                                    <div class="pos-rel">
+                                    <div class="position-relative">
                                         <div class="hsnCode text-right" (click)="focusHsnNumber();" *ngIf="activeRow == i">
                                             <label>HSN/SAC Code: </label>
                                             <span>{{ (inventorySettings?.manageInventory || !product.sacNumber) ? product.hsnNumber : product.sacNumber}}
@@ -386,7 +386,7 @@
                                         <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{product.stockDetails.rate | giddhCurrency}}</div>
                                     </div>
                                 </td>
-                                <td class="pos-rel">
+                                <td class="position-relative">
                                     <div *ngIf="activeRow === i">
                                         <input type="text" class="form-control text-right" name="productAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="product.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [validation]="false" [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
                                     </div>
@@ -441,7 +441,7 @@
                                         <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{destination.warehouse.stockDetails.rate | giddhCurrency}}</div>
                                     </div>
                                 </td>
-                                <td class="pos-rel">
+                                <td class="position-relative">
                                     <div *ngIf="activeRow === i">
                                         <input type="text" class="form-control text-right" name="destinationAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="destination.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [validation]="false" [mask]="inputMaskFormat"
                                             (blur)="dispatchDate.show(); hideActiveRow();">
@@ -494,7 +494,7 @@
                                         <div class="text-right">{{activeCompany.baseCurrencySymbol}} {{source.warehouse.stockDetails.rate | giddhCurrency}}</div>
                                     </div>
                                 </td>
-                                <td class="pos-rel">
+                                <td class="position-relative">
                                     <div *ngIf="activeRow === i">
                                         <input type="text" class="form-control text-right" name="sourceAmount{{i}}" decimalDigitsDirective readonly [(ngModel)]="source.warehouse.stockDetails.amount" [prefix]="activeCompany.baseCurrencySymbol" [validation]="false" [mask]="inputMaskFormat" (blur)="dispatchDate.show(); hideActiveRow();">
                                     </div>
@@ -516,7 +516,7 @@
                         </div>
                         <tfoot id="tfoot">
                             <tr>
-                                <td colspan="4" class="no-padding">
+                                <td colspan="4" class="p-0">
                                     <div class="transportation-details pt-5">
                                         <h3 class="mr-b1">Transportation Details</h3>
                                         <div class="row">

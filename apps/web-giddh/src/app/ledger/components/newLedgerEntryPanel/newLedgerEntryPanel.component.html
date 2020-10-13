@@ -123,7 +123,7 @@
                         </td>
 
                         <td *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && (companyTaxesList$ | async)?.length"
-                            class="pItem amount pos-rel dropdown-container text-right dropdown-width"
+                            class="pItem amount position-relative dropdown-container text-right dropdown-width"
                             (clickOutside)="hideTax()" (click)="$event.stopPropagation()">
                             <!--tax control component-->
                             <!-- Login Changes by Sagar  -->

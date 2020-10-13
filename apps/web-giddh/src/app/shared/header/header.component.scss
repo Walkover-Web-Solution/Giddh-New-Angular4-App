@@ -140,7 +140,7 @@ a[vr-item]:focus {
     }
 }
 
-.main-company-name > li > a:hover .c-text .c-name,
+.main-company-name > li > a:hover .company-text .company-name,
 .main-company-name > li > a:hover .icon-dots-three-vertical {
     color: #fff;
 }
@@ -149,9 +149,6 @@ a[vr-item]:focus {
     text-transform: capitalize;
     position: relative;
     font-weight: bold;
-}
-.no-padding {
-    padding: 0px !important;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
@@ -417,10 +414,6 @@ a[vr-item]:focus {
     max-width: none !important;
 }
 
-.posrelative {
-    position: relative;
-}
-
 .d-inline-block {
     display: inline-block !important;
 }
@@ -569,22 +562,22 @@ span.icon-support.dropdown-toggle {
     list-style-type: none;
 }
 
-.primary-header .company-name-finance-year {
+.primary-header .company-name-fyear {
     display: inline-block;
     padding-left: 15px;
     width: 90%;
 }
 
-.primary-header .company-name-finance-year span {
+.primary-header .company-name-fyear span {
     display: block;
     vertical-align: middle;
 }
 
-.primary-header .c-text {
+.primary-header .company-text {
     display: flex;
     align-items: center;
 }
-.c-text {
+.company-text {
     padding: 6px 8px 6px 0 !important;
     overflow: hidden;
 }
@@ -608,12 +601,12 @@ ul.sub-list {
     padding-left: 0 !important;
 }
 
-.nav-left-bar .company-name .c-text span {
+.nav-left-bar .company-name .company-text span {
     color: $nero;
     word-break: break-all;
 }
 
-.nav-left-bar .company-name-finance-year {
+.nav-left-bar .company-name-fyear {
     display: inline;
     padding-left: 0;
     /*float: right;
@@ -632,7 +625,7 @@ ul.sub-list {
     padding: 0 0 3px 0;
 }
 
-.company-name .ellp {
+.company-name .text-ellipsis {
     font-size: 14px;
     font-family: 'opensans-semibold';
 }
@@ -914,14 +907,14 @@ ul.sub-list {
         display: inline-flex !important;
         align-items: center;
     }
-    .nav-left-bar .company-name-finance-year {
+    .nav-left-bar .company-name-fyear {
         width: 200px;
         float: left;
     }
-    .c-text {
+    .company-text {
         overflow: hidden;
     }
-    .c-text.head-nav {
+    .company-text.head-nav {
         display: none;
     }
     .universal-date li {

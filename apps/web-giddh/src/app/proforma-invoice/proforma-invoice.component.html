@@ -1286,7 +1286,7 @@
                                         </div>
                                     </td>
 
-                                    <td (click)="closeTaxControlPopup();" class="pos-rel dropdown-container item-tax" style="height:1px;">
+                                    <td (click)="closeTaxControlPopup();" class="position-relative dropdown-container item-tax" style="height:1px;">
                                         <div class="td-wrapper">
                                             <div class="text-right" style="flex:1;">
                                                 <tax-control #taxControlComponent [taxes]="companyTaxesList" [date]="entry.entryDate"
@@ -1478,12 +1478,12 @@
                                         </div>
                                         <!-- endregion -->
 
-                                        <div class="pd-t1 pl0 max-600 pos-rel" *ngIf="isPurchaseInvoice">
+                                        <div class="pd-t1 pl0 max-600 position-relative" *ngIf="isPurchaseInvoice">
 
                                             <label class="mr-b1"><i class="icon-file-path"></i>
                                                 Attachment</label>
 
-                                            <label class="custom-file-label form-control cp pos-rel" for="invoiceFile">
+                                            <label class="custom-file-label form-control cp position-relative" for="invoiceFile">
                                                 <em *ngIf="!selectedFileName && !isFileUploading">Drag/Drop file or
                                                     click here</em>
                                                 <div *ngIf="isFileUploading"

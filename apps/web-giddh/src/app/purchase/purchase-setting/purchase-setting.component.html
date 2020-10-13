@@ -117,11 +117,11 @@
                                         <div class="form-group clearfix">
                                             <input type="checkbox" class="hide-on-mobile" name="useCustomPONumber" [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber" />
                                             <div class=" d-inline-flex custom-estimation" *ngIf="invoiceSettings.purchaseBillSettings.useCustomPONumber">
-                                                <div class="d-inline-flex pos-rel">
+                                                <div class="d-inline-flex position-relative">
                                                     <label>Initial No.</label>
                                                     <input type="text" class="form-control text-right initial-number" name="initialNumber" [(ngModel)]="invoiceSettings.purchaseBillSettings.initialPONumber">
                                                 </div>
-                                                <div class="d-inline-flex pos-rel">
+                                                <div class="d-inline-flex position-relative">
                                                     <label class="r-0">Prefix</label>
                                                     <input type="text" class="form-control text-right" name="prefixNumber" [(ngModel)]="invoiceSettings.purchaseBillSettings.poNumberPrefix">
                                                 </div>

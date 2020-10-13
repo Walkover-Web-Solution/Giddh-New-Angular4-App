@@ -57,7 +57,7 @@
 
 
                                     <!-- login with userName form -->
-                                    <form class="pos-rel" id="signUpWithPwd" [formGroup]="signUpWithPasswdForm"
+                                    <form class="position-relative" id="signUpWithPwd" [formGroup]="signUpWithPasswdForm"
                                         (ngSubmit)="SignupWithPasswd(signUpWithPasswdForm)"
                                         *ngIf="loginUsing === 'userName'"
                                         [hidden]="isSignupWithPasswordSuccess$ | async" autocomplete="off">

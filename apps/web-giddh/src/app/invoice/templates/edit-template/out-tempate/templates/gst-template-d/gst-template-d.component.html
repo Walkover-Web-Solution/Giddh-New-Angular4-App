@@ -86,7 +86,7 @@
             </tbody>
         </table>
     </div>
-    <div id="template-table" class="pos-rel" (click)="onClickSection('table')"
+    <div id="template-table" class="position-relative" (click)="onClickSection('table')"
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table">
             <i class="icon-edit-pencil"></i>
@@ -282,7 +282,7 @@
         </table> -->
     </div>
 
-    <div id="template-footer" class="clearfix pos-rel" (click)="onClickSection('footer')"
+    <div id="template-footer" class="clearfix position-relative" (click)="onClickSection('footer')"
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
             <i class="icon-edit-pencil"></i>

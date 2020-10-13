@@ -327,7 +327,7 @@
                     </td>
                     <td>{{invoice.voucherNo}}</td>
                     <td class="select text-center">
-                        <div *ngIf="timeCounter == 10 || selectedRowIndex != i" class="custom-select pos-rel">
+                        <div *ngIf="timeCounter == 10 || selectedRowIndex != i" class="custom-select position-relative">
                             <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp"
                                 (change)="onChangeEntryType(i, invoice.entryType, invoice.account.uniqueName);"
                                 [disabled]="invoice.invoiceGenerated || invoice.taxes[0] || (selectedRowIndex != i && editMode) || (invoice.invoiceNumber && invoice.invoiceNumber.length) || selectedRowIndex == null ">

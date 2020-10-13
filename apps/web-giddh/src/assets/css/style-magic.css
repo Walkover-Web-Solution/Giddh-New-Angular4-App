@@ -183,7 +183,7 @@ a {
 
 /*typography*/
 
-/*.bold,.c-name,.fw600,.dshUl li .title, .dGryHead, .page-title, .total, .stock-grp-list>li>a, label.boldHead, .table-l tr:last-child, .table-container > section > div.row > div:first-child,.account-card > .balances > span.title, .gTblHead, .gTblFoot, .table.invGenTbl > tfoot > tr > th.bold,.widget-text h1, .widget-text h2,.widget-text h3,.widget-text h4,.widget-text h5,.widget-text h6, .a4-section span.bold,.a4-section span.bold span,.ledger-container table th,.midlight_info,.tcount,.subAccBox li a, .load-more, .company-name, .basic>thead>tr>th {
+/*.bold,.company-name,.fw600,.dshUl li .title, .dGryHead, .page-title, .total, .stock-grp-list>li>a, label.boldHead, .table-l tr:last-child, .table-container > section > div.row > div:first-child,.account-card > .balances > span.title, .gTblHead, .gTblFoot, .table.invGenTbl > tfoot > tr > th.bold,.widget-text h1, .widget-text h2,.widget-text h3,.widget-text h4,.widget-text h5,.widget-text h6, .a4-section span.bold,.a4-section span.bold span,.ledger-container table th,.midlight_info,.tcount,.subAccBox li a, .load-more, .company-name, .basic>thead>tr>th {
 font-family: Roboto-Bold;
 } */
 
@@ -288,21 +288,21 @@ aside-menu-account .container-fluid {
     color: #fff;
 }
 
-#cmpWrp {
+#company_wrap {
     padding-top: 0;
     padding-bottom: 0;
 }
 
-#cmpWrp i {
+#company_wrap i {
     float: left;
     margin: 15px 0;
 }
 
-/* .c-text span {
+/* .company-text span {
   display: block;
 } */
 
-/* .c-name {
+/* .company-name {
     line-height: 20px;
     min-width: 130px;
     text-transform: uppercase;
@@ -793,11 +793,11 @@ aside-menu-account .container-fluid {
     list-style: none;
 }
 
-.txtUpc {
+.text-uppercase {
     text-transform: uppercase;
 }
 
-.txt-lwc {
+.text-lowercase {
     text-transform: lowercase;
 }
 
@@ -821,7 +821,7 @@ aside-menu-account .container-fluid {
     text-align: center;
 }
 
-.ellp {
+.text-ellipsis {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -839,7 +839,7 @@ aside-menu-account .container-fluid {
     font-size: 16px;
 }
 
-.scrClass {
+.scroll-class {
     /* overflow: hidden;
 position: relative; */
 }
@@ -1490,7 +1490,7 @@ li:last-child .angular-ui-tree-handle {
     font-size: 18px;
 }
 
-.ledgerHead .ellp {
+.ledgerHead .text-ellipsis {
     text-transform: capitalize;
     max-width: 200px;
 }
@@ -2531,7 +2531,7 @@ padding: 0;
     overflow: hidden;
 }
 
-.pos-rel {
+.position-relative {
     position: relative !important;
 }
 
@@ -3518,7 +3518,7 @@ ul.pills li {
     border-top: 2px solid #5c534d;
 }
 
-.pos-rel {
+.position-relative {
     position: relative;
 }
 
@@ -3840,7 +3840,7 @@ tr.db-bnk-account > td.reconnectDiv {
     font-size: 18px;
 }
 
-.no-padding {
+.p-0 {
     padding: 0px !important;
 }
 

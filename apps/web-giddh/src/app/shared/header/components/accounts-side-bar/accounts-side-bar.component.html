@@ -29,17 +29,17 @@
                             <div class="title  LIB{{item.UniqueName}}"
                                 (click)="toggleGroup(item,i + _startIndex,$event)"
                                 [ngClass]="{'active' : item.isOpen || item.UniqueName === selectedGroupUname}">
-                                <a class="ellp max250">{{item.Name}} ({{item.UniqueName}})</a>
+                                <a class="text-ellipsis max250">{{item.Name}} ({{item.UniqueName}})</a>
                             </div>
                         </li>
                         <li *ngIf="!item.isGroup" class="inrPrnt cp accountli">
                             <a>
                                 <div class="clearfix" tooltip="{{item.UniqueName}}" container="body">
                                     <strong>
-                                        <span class="ellp max250" (click)="flyAccounts = false" *ngIf="isRouter"
+                                        <span class="text-ellipsis max250" (click)="flyAccounts = false" *ngIf="isRouter"
                                             [routerLink]="['/ledger',item.UniqueName]">{{item.Name}}
                                             ({{item.UniqueName}})</span>
-                                        <span class="ellp max250"
+                                        <span class="text-ellipsis max250"
                                             (mousedown)="flyAccounts = true;onSelectItem.emit(item)" *ngIf="!isRouter"
                                             [innerHTML]="item.Name+' ' + '(' + item.UniqueName + ')'"></span>
                                     </strong>
