@@ -229,7 +229,7 @@
                             </li>
                             <li class="not-today cursor-pointer">
                                 <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
-                                <div class="input-date">
+                                <div class="input-date" [ngClass]="{'today-date': isTodaysDateSelected}">
                                     <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
                                         [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                                         class="giddh-datepicker form-control date-range-picker" />
@@ -474,8 +474,10 @@
                         </li>
                         <li class="daterang-picker not-today cursor-pointer">
                             <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
-                            <div class="input-date">
-                                <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
+                            <div class="input-date" [ngClass]="{'today-date': isTodaysDateSelected}">
+                                <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
+                                    [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker form-control date-range-picker" />
                             </div>
                         </li>
                     </ul>
