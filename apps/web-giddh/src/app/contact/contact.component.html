@@ -331,6 +331,9 @@
                     <td *ngIf="showFieldFilter.gstin && shouldShowTaxFilter"></td>
                     <td *ngIf="showFieldFilter.state"></td>
                     <td *ngIf="showFieldFilter.comment"></td>
+                    <ng-container *ngFor="let item of (companyCustomFields$ | async)">
+                        <td *ngIf="item.key"></td>
+                    </ng-container>
                 </tr>
 
                 <tr>
@@ -585,18 +588,11 @@
                             </ng-container>
 
                         </td>
-                        <ng-container *ngFor="let item of (companyCustomFields$ | async)">
-                            <!-- <ng-container *ngIf="account.customFields;else cusytomFieldRow "> -->
-                            <td class="word-wrap">
-                                {{'-'}}</td>
-                            <!-- </ng-container>
-                            <ng-template #cusytomFieldRow>
-                                <td>{{ - }}</td>
-                            </ng-template> -->
+                        <ng-container *ngFor="let item of account.customFields">
+                            <td class="word-wrap" [attr.data-title]="item.key">
+                                {{item.value}}</td>
                         </ng-container>
-
                     </tr>
-                    <!---->
                     <tr *ngIf="!(sundryDebtorsAccounts).length ">
                         <td colspan="11" class="text-center empty-table ">
                             <h1>No Record Found !!</h1>
@@ -773,6 +769,10 @@
                             <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-succes " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
                             </button>
                         </td>
+                        <ng-container *ngFor="let item of account.customFields">
+                            <td class="word-wrap" [attr.data-title]="item.key">
+                                {{item.value}}</td>
+                        </ng-container>
                     </tr>
                     <tr *ngIf="!(sundryCreditorsAccounts).length ">
                         <td colspan="12 " class="text-center empty-table ">
