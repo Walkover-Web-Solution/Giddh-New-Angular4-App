@@ -135,6 +135,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
             if (val.tab === 'integration' && val.code) {
                 this.saveGmailAuthCode(val.code);
                 this.activeTab = val.tab;
+                this.router.navigate(['pages/settings/integration/email'], { replaceUrl: true });
             }
         });
 

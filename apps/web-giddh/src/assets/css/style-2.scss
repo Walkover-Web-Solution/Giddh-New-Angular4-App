@@ -6687,7 +6687,7 @@ table td[class*=col-]:last-child {
 }
 
 .dropdown-container .dropdown-menu li:last-child label {
-    border-bottom: 0;
+    border-bottom: none !important;
 }
 
 /* ======================================= INVENTORY CSS ===================================== */
@@ -9619,6 +9619,11 @@ span#HW_badge_cont:nth-child(3) {
 #rcw-p91-widget-button{
     z-index: 98;
 }
+
+ul.dropdown-menu.action-dropdown{
+    left: auto;
+    right: -40px !important;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9837,6 +9842,10 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 @media (max-width: 768px) {
+    ul.dropdown-menu.action-dropdown{
+        left: auto;
+        right: 0 !important;
+    }
     #setting-tab .tab-integraton .nav-tabs {
         padding-top: 0 !important;
     }
