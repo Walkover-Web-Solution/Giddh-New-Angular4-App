@@ -1385,7 +1385,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.groupService.getCompanyCustomField().subscribe(response => {
             if (response && response.status === 'success') {
                 this.companyCustomFields$ = observableOf(response.body);
-                this.colspanLength = 11 + response.body.length;
+                if (response.body) {
+                    this.colspanLength = 11 + response.body.length;
+                }
             } else {
                 this._toaster.errorToast(response.message);
             }

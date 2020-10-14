@@ -80,7 +80,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public selectedRowIndex: number = null;
 
 	// tslint:disable-next-line:no-empty
-    constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef,private _breakPointObservar: BreakpointObserver,
+    constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef,private breakPointObservar: BreakpointObserver,
         private renderer: Renderer2, private _generalService: GeneralService, private modalService: BsModalService, private groupService: GroupService, private toasterService: ToasterService) {
 		this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading).pipe(takeUntil(this.destroyed$));
 		this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts).pipe(takeUntil(this.destroyed$));
@@ -108,12 +108,11 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 	// tslint:disable-next-line:no-empty
 	public ngOnInit() {
 
-        this._breakPointObservar.observe([
-            '(max-width:767px)'
-        ]).subscribe(result => {
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
-
         this.customFieldForm = this.createCustomFieldForm();
         this.getCompanyCustomField();
 		// search groups
