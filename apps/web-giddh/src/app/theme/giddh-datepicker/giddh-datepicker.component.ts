@@ -22,7 +22,7 @@ const moment = _moment;
 
 export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, OnChanges {
     /** Taking placeholder as input */
-    @Input() public placeholder: any = "";
+    @Input() public placeholder: any = "Select date";
     /** Taking ngModel as input */
     @Input() public ngModel: any;
     /** Emitting selected date object as output */
