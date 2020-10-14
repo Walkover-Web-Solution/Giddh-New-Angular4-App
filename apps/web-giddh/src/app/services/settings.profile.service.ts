@@ -94,7 +94,10 @@ export class SettingsProfileService {
      */
     public getBranchInfo(): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this._generalService.companyUniqueName;
-        return this._http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET_BRANCH_INFO.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)))
+        const branchUniqueName = this._generalService.currentBranchUniqueName;
+        return this._http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET_BRANCH_INFO
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            .replace(':branchUniqueName', encodeURIComponent(branchUniqueName)))
             .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
@@ -122,5 +125,21 @@ export class SettingsProfileService {
             contextPath = contextPath.concat(`?page=${[params.page]}`);
             return this._http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
         }
+    }
+
+    /**
+     * Updates branch profile information
+     *
+     * @param {*} params Params for update operation
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operations
+     * @memberof SettingsProfileService
+     */
+    public updateBranchInfo(params: any): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this._generalService.companyUniqueName;
+        const branchUniqueName = this._generalService.currentBranchUniqueName;
+        let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.UPDATE_BRANCH_INFO}`
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            .replace(':branchUniqueName', encodeURIComponent(branchUniqueName));
+        return this._http.put(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 }

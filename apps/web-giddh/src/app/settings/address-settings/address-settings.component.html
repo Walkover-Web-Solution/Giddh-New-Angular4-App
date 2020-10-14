@@ -7,12 +7,12 @@
         </div>
         <!-- branch profile element start -->
         <div *ngIf="organizationType === 'BRANCH'"
-            class="col-md-12 d-flex justify-content-between mt-4 mb-4 align-items-center address-list-top">
+            class="col-md-12 d-flex justify-content-between mb-4 align-items-center address-list-top">
             <div class="font-14">List of all the addresses created</div>
             <button type="button" class="btn btn-sky-blue" (click)="openAddAndManage()">+ Add Address</button>
         </div>
         <!-- branch profile element end -->
-        <div class="col-md-12">
+        <div *ngIf="organizationType === 'COMPANY'" class="col-md-12">
             <div class="table-responsive">
                 <table *ngIf="!shouldShowLoader" class="table basic table-bordered giddh-table on-mobile-view">
                     <thead>
@@ -109,18 +109,23 @@
             </div>
         </div>
         <!-- branch profile element start -->
-        <div *ngIf="isBranchElement" class="branch-profile-address-content col-md-12">
-            <div class="single-branch-detail mb-15">
-                <h4><i class="icon-branch-icon"></i>Address Name Dummy</h4>
+        <div *ngIf="organizationType === 'BRANCH'" class="branch-profile-address-content col-md-12">
+            <div *ngFor="let address of addresses; index as addressIndex" class="single-branch-detail mb-15">
+                <h4><i class="icon-branch-icon"></i>{{address?.name}}</h4>
                 <div class="row">
                     <div class="col-md-4">
                         <label>Address:</label>
-                        <p>WALKOVER, 405-406, Capt. C. S. Naidu Arcade, Near Greater Kailash Hospital, Indore-452080,
-                            MP, GSTIN: 23IDJHFOSD435</p>
+                        <p>
+                            {{address.address}}
+                            <ng-container *ngIf="address.taxType && address.taxNumber">
+                                <br />
+                                {{address.taxType}} : {{address.taxNumber}}
+                            </ng-container>
+                        </p>
                     </div>
                     <div class="col-md-4 mb-1">
                         <label>State:</label>
-                        <p>MP-Madhya Pradesh</p>
+                        <p>{{address.stateCode}} - {{address.stateName}}</p>
                     </div>
                     <div class="col-md-4">
                         <div class="set-default">
@@ -128,14 +133,14 @@
                                 as Default</p>
                             <p class="selected-defualt mb-1 cursor-pointer"><i
                                     class="icon-favorite-selected mr-05"></i>Set as Default</p>
-                            <p><i class="icon-unlink mr-05 cursor-pointer"></i>Unlink Address</p>
+                            <p class="cursor-pointer"><i class="icon-unlink mr-05"></i>Unlink Address</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- branch profile element end -->
-        <div class="col-md-12 text-center">
+        <div *ngIf="organizationType === 'COMPANY'" class="col-md-12 text-center">
             <pagination [(ngModel)]="paginationConfig.page" *ngIf="!shouldShowLoader && paginationConfig?.totalItems > paginationLimit"
                 [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count"
                 [boundaryLinks]="true" [rotate]="true" (pageChanged)="handlePageChange($event)"></pagination>
@@ -155,7 +160,7 @@
         <span> {{ title }}</span>
         <i class="icon-search" (click)="toggleSearch(fieldName, searchBox);"></i>
     </div>
-    <div class="input-container" [hidden]="!show">
+    <div class="input-container w-100" [hidden]="!show">
         <input type="text" placeholder="Search {{ title }}" class="w100" #searchBox [formControl]="formControl" />
     </div>
 </ng-template>

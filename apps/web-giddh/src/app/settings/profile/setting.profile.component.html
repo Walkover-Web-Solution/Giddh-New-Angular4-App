@@ -211,13 +211,13 @@
         </tab>
         <tab (selectTab)="handleTabChanged('address')" heading="Address/GSTIN">
             <address-settings *ngIf="currentTab === 'address'" [addresses]="addresses"
-                (searchAddress)="handleSearchInAddress($event)"
-                (pageChanged)="handlePageChanged($event)" [shouldShowLoader]="shouldShowAddressLoader"
-                [paginationConfig]="addressTabPaginationData" [paginationLimit]="20"
-                [organizationType]="currentOrganizationType"></address-settings>
+                (searchAddress)="handleSearchInAddress($event)" (pageChanged)="handlePageChanged($event)"
+                [shouldShowLoader]="shouldShowAddressLoader" [paginationConfig]="addressTabPaginationData"
+                [paginationLimit]="20" [organizationType]="currentOrganizationType"></address-settings>
         </tab>
         <tab (selectTab)="handleTabChanged('other')" heading="Other">
-            <other-settings (saveProfile)="handleSaveProfile($event)" [profileData]="companyProfileObj" *ngIf="currentTab === 'other'"></other-settings>
+            <other-settings [organizationType]="currentOrganizationType" (saveProfile)="handleSaveProfile($event)"
+                [profileData]="companyProfileObj" *ngIf="currentTab === 'other'"></other-settings>
         </tab>
     </tabset>
 </div>

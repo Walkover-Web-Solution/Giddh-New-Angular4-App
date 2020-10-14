@@ -74,6 +74,7 @@ import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { CompanyService } from '../../services/companyService.service';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { SETTINGS_PROFILE_ACTIONS } from '../../actions/settings/profile/settings.profile.const';
 
 @Component({
     selector: 'app-header',
@@ -782,6 +783,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public getCurrentCompanyData(): void {
         this.settingsProfileService.GetProfileInfo().subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
+                this.store.dispatch({
+                    type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
+                    payload: response
+                });
                 let res = response.body;
                 if (res.countryV2 !== null && res.countryV2 !== undefined) {
                     this.getStates(res.countryV2.alpha2CountryCode);
