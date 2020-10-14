@@ -5094,7 +5094,7 @@ label {
 }
 
 .grp-col::-webkit-scrollbar-thumb {
-    background-color: $gainsboro;
+    background-color: $nobel;
     outline: 1px solid $gray;
     margin-left: 255px;
 }
@@ -10908,4 +10908,19 @@ body.prevent-body-scroll {
 }
 .modal.fade.giddh-calendar.show {
     z-index: 999999;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+*::-webkit-scrollbar-track {
+  background: $white-smoke;
+}
+
+/* Handle */
+*::-webkit-scrollbar-thumb {
+  background:  $nobel;
+  border-radius: 5px;
+  min-height: 60px;
 }

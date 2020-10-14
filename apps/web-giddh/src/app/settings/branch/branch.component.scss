@@ -256,6 +256,10 @@
     margin-bottom:5px;
 }
 
+.right-card-section{
+    margin-top:-15px;
+}
+
 @media (max-width: 375px) {
     .grey-clr button.btn.btn-default {
         margin-left: 0;
@@ -315,5 +319,21 @@
             max-width: 50% !important;
         }
     }
+}
+
+
+@media(min-width:1020px) and (max-width:1092px){
+    .form-top-fields{
+        margin-top: -10px;
+        .input-addon{
+            top: 18px;
+        }
+    }
+}
+
+@media(min-width:575px) and (max-width:991px){
+   .select-branch{
+        margin-top: -35px;
+   }
 }
 
