@@ -6689,7 +6689,7 @@ table td[class*=col-]:last-child {
 }
 
 .dropdown-container .dropdown-menu li:last-child label {
-    border-bottom: 0;
+    border-bottom: none !important;
 }
 
 /* ======================================= INVENTORY CSS ===================================== */
@@ -9681,6 +9681,10 @@ input.mat-input-element{
 }
 /*material datepicker css end*/
 
+ul.dropdown-menu.action-dropdown{
+    left: auto;
+    right: -40px !important;
+}
 /* responsive */
 
 @media (max-width: 1440px) {
@@ -9899,6 +9903,10 @@ input.mat-input-element{
 }
 
 @media (max-width: 768px) {
+    ul.dropdown-menu.action-dropdown{
+        left: auto;
+        right: 0 !important;
+    }
     #setting-tab .tab-integraton .nav-tabs {
         padding-top: 0 !important;
     }

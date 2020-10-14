@@ -2206,6 +2206,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     if(this.isPurchaseInvoice) {
                         txn.accountUniqueName = txn.accountUniqueName.indexOf('#') > -1 ? txn.accountUniqueName.slice(0, txn.accountUniqueName.indexOf('#')) : txn.accountUniqueName;
+
+                        if(txn.stockDetails && !txn.stockDetails.uniqueName && txn.stockDetails.stock && txn.stockDetails.stock.uniqueName) {
+                            txn.stockDetails.uniqueName = txn.stockDetails.stock.uniqueName;
+                        }
                     }
 
                     // will get errors of string and if not error then true boolean
@@ -5949,10 +5953,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             entry.transactions.forEach(item => {
                 if(item.stock) {
+                    let stockUniqueName = item.stock.uniqueName;
                     item.stock.uniqueName = "purchases#" + item.stock.uniqueName;
                     item.uniqueName = item.stock.uniqueName;
                     item.value = item.stock.uniqueName;
                     item.additional = item.stock;
+                    item.additional.uniqueName = "purchases";
+                    item.additional.stock = {};
+                    item.additional.stock.uniqueName = stockUniqueName;
                     if(this.existingPoEntries[entry.uniqueName]) {
                         item.additional.maxQuantity = this.existingPoEntries[entry.uniqueName];
                     } else {
