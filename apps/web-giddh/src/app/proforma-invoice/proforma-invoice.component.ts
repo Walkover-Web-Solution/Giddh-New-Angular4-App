@@ -2238,6 +2238,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     if(this.isPurchaseInvoice) {
                         txn.accountUniqueName = txn.accountUniqueName.indexOf('#') > -1 ? txn.accountUniqueName.slice(0, txn.accountUniqueName.indexOf('#')) : txn.accountUniqueName;
+
+                        if(txn.stockDetails && !txn.stockDetails.uniqueName && txn.stockDetails.stock && txn.stockDetails.stock.uniqueName) {
+                            txn.stockDetails.uniqueName = txn.stockDetails.stock.uniqueName;
+                        }
                     }
 
                     // will get errors of string and if not error then true boolean
