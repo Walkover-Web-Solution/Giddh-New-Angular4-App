@@ -1324,7 +1324,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         if(this.advanceSearchComponent) {
             this.advanceSearchComponent.request.invoiceDate = "";
         }
-
         if (window.localStorage) {
             localStorage.removeItem('invoiceSelectedDate');
         }
