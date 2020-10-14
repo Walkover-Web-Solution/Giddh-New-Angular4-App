@@ -236,11 +236,13 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.isGetCustomInProgress = true;
         this.groupService.getCompanyCustomField().subscribe(response => {
             this.isEnabledIndex = null;
-            if (response && response.status === 'success') {
-                this.renderCustomField(response.body);
-                this.updateModeLength = response.body.length;
-            } else {
-                this.toasterService.errorToast(response.message);
+            if (response) {
+                if (response.status === 'success') {
+                    this.renderCustomField(response.body);
+                    this.updateModeLength = response.body.length;
+                } else if(response.message){
+                    this.toasterService.errorToast(response.message);
+                }
             }
             this.isGetCustomInProgress = false;
 
