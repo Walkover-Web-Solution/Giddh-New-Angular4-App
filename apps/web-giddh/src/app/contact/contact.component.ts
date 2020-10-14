@@ -53,10 +53,6 @@ import { ToasterService } from '../services/toaster.service';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../store';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../shared/helpers/defaultDateFormat';
-import { OnboardingFormRequest } from '../models/api-models/Common';
-import { CommonActions } from '../actions/common.actions';
-import { PAGINATION_LIMIT } from '../app.constant';
-import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { GroupService } from '../services/group.service';
 
 const CustomerType = [
