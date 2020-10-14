@@ -9,7 +9,7 @@ footer#footer.absoulte-footer {
     // position: absolute !important;
     float: none;
     left: 0;
-    font-family: "" opensans-semibold "";
+    font-family: "" opensans-semibold !important "";
     bottom: 30px;
 
     padding-left: 0;
@@ -28,7 +28,7 @@ footer#footer.absoulte-footer {
 //     color: #ddd;
 //     display: block;
 //     line-height: 1;
-//     font-family: 'opensans-regular';
+//     font-family: 'opensans-regular !important';
 //     padding-bottom: 10px;
 // }
 // .footer-content span a{

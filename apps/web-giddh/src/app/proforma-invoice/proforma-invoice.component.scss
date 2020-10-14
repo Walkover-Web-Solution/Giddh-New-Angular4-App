@@ -1081,7 +1081,7 @@ section.newtable {
     font-size: 14px !important;
     font-weight: 500;
     display: block;
-    font-family: "opensans-semibold";
+    font-family: "opensans-semibold !important";
 }
 
 .single-card-row {
@@ -1541,7 +1541,7 @@ label.sales-country-label {
 
 b,
 strong {
-    font-family: "opensans-bold";
+    font-family: "opensans-bold !important";
     font-weight: 500;
 }
 

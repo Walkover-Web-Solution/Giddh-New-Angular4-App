@@ -5,7 +5,7 @@
     background-color: #fff;
     border-bottom: 1px solid #c4c4c4;
     font-size: 18px;
-    font-family: "opensans-bold";
+    font-family: "opensans-bold !important";
     padding-top: 10px;
     padding-bottom: 10px;
     align-items: center;
@@ -102,7 +102,7 @@ tfoot td .tableSec.form-group {
 
 .rightTotalAmount h3 {
     font-size: 26px;
-    font-family: opensans-semibold;
+    font-family: opensans-semibold !important;
 }
 .multiple-products-wrapper form {
     padding-bottom: 60px;

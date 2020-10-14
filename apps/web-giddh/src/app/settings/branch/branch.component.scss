@@ -71,7 +71,7 @@
 .card-basic-details h2 {
     font-size: 16px;
     color: #1a237e;
-    font-family: "opensans-bold";
+    font-family: "opensans-bold !important";
     margin-bottom: 12px;
     white-space: normal;
     word-break: break-all;
@@ -86,7 +86,7 @@
     padding: 20px;
 }
 .branchSalesDetails label {
-    font-family: "opensans-semibold";
+    font-family: "opensans-semibold !important";
     margin-bottom: 10px;
 }
 .unlink a {

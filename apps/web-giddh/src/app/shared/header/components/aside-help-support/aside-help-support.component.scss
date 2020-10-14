@@ -56,7 +56,7 @@
         top: 0;
         background-color: inherit;
         h2 {
-            font-family: 'opensans-semibold';
+            font-family: 'opensans-semibold !important';
             font-size: 18px;
             color: $midnight-blue;
         }
@@ -72,12 +72,12 @@
 
                 p{
                     font-size: 14px;
-                    font-family: 'opensans-semibold'; 
+                    font-family: 'opensans-semibold !important';
                 }
                 small{
                     font-size: 12px;
                 }
-            }       
+            }
     }
     .feature-block{
         padding: 15px;
@@ -86,7 +86,7 @@
             list-style: none;
             li{
                 font-size: 14px;
-                font-family: 'opensans-semibold';
+                font-family: 'opensans-semibold !important';
                 margin-bottom: 10px;
                 a{
                     color:$nero;
@@ -102,7 +102,7 @@
         h4{
             padding-bottom: 15px;
             font-size: 14px;
-            font-family: 'opensans-semibold';
+            font-family: 'opensans-semibold !important';
 
         }
         ul{

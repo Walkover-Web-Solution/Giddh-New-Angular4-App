@@ -16,7 +16,7 @@ AUTHOR:   @THEMECHANIC
 VERSION:  1
 */
  @font-face {
-    font-family: "opensans-regular";
+    font-family: "opensans-regular !important";
     src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot");
     src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot?#iefix")
             format("embedded-opentype"),
@@ -32,7 +32,7 @@ VERSION:  1
 }
 
 @font-face {
-    font-family: "opensans-semibold";
+    font-family: "opensans-semibold !important";
     src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot");
     src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot?#iefix")
             format("embedded-opentype"),
@@ -47,7 +47,7 @@ VERSION:  1
     text-rendering: optimizeLegibility;
 }
 @font-face {
-    font-family: "opensans-bold";
+    font-family: "opensans-bold !important";
     src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot");
     src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot?#iefix")
             format("embedded-opentype"),
@@ -62,7 +62,7 @@ VERSION:  1
     text-rendering: optimizeLegibility;
 }
 @font-face {
-    font-family: "opensans-extra-bold";
+    font-family: "opensans-extra-bold !important";
     src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot");
     src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot?#iefix")
             format("embedded-opentype"),
@@ -82,7 +82,7 @@ html,
 body {
     height: 100%;
     background: #f7f8fa;
-    font-family: "opensans-regular";
+    font-family: "opensans-regular !important";
 
     color: #333333;
     -webkit-font-smoothing: antialiased;
@@ -3277,7 +3277,7 @@ ul.pills li {
     -webkit-box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
     -moz-box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
     box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
-    font-family: "opensans-regular";
+    font-family: "opensans-regular !important";
     font-size: 90%;
     /* margin: 3px 6px 6px 6px; */
     border: 1px solid #ccc;
@@ -5015,7 +5015,7 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 strong {
-    font-family: "" opensans-semibold "";
+    font-family: "" opensans-semibold !important "";
     color: rgba(0, 0, 0, 0.8);
 }
 
@@ -5035,7 +5035,7 @@ strong {
 
 b,
 strong {
-    font-family: "opensans-semibold";
+    font-family: "opensans-semibold !important";
     font-weight: 500;
 }
 
@@ -5212,7 +5212,7 @@ perfect-scrollbar.ps-show-active
     background: #e5e5e5;
     color: #262626;
     border: 0;
-    font-family: "" opensans-semibold "";
+    font-family: "" opensans-semibold !important "";
     text-transform: capitalize;
 }
 

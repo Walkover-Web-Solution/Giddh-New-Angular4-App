@@ -22,7 +22,7 @@ html,
 body {
     height: 100%;
     background: #f7f8fa;
-    font-family: "opensans-regular";
+    font-family: "opensans-regular !important";
     color: $nero;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -3217,7 +3217,7 @@ ul.pills li {
     -webkit-box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
     -moz-box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
     box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
-    font-family: "opensans-regular";
+    font-family: "opensans-regular !important";
     font-size: 100%;
     font-size: 14px;
     border: 1px solid $gainsboro;
@@ -4952,7 +4952,7 @@ border-bottom: 1px solid #e0e0e0;
 }
 
 strong {
-    font-family: "" opensans-semibold "";
+    font-family: "" opensans-semibold !important "";
     color: rgba(0, 0, 0, 0.8);
 }
 
@@ -4972,7 +4972,7 @@ strong {
 
 b,
 strong {
-    font-family: "opensans-semibold";
+    font-family: "opensans-semibold !important";
     font-weight: 500;
 }
 
@@ -5154,7 +5154,7 @@ perfect-scrollbar.ps-show-active
     background: #e5e5e5;
     color: #262626;
     border: 0;
-    font-family: "" opensans-semibold "";
+    font-family: "" opensans-semibold !important "";
     text-transform: capitalize;
 }
 
@@ -5238,9 +5238,9 @@ form#groupDetailForm {
             .nav-tabs{
                 display:none;
             }
-        }   
+        }
     }
-    
+
     .mobileHeader {
         display: block;
         position: fixed !important;

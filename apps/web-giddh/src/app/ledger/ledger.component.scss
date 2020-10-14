@@ -106,7 +106,7 @@ input {
 }
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: "" opensans-semibold "";
+    font-family: "" opensans-semibold !important "";
     text-transform: capitalize;
 }
 .ledger-footer-1 {
@@ -171,7 +171,7 @@ input {
     padding: 15px 11px !important;
     font-weight: 400;
     border-bottom: 1px solid $gainsboro;
-    font-family: opensans-semibold;
+    font-family: opensans-semibold !important;
     font-size: 14px;
     border-top: 1px solid $gainsboro;
 }
@@ -509,7 +509,7 @@ sh-select:focus {
             background-color: $white;
             .transction-date {
                 font-size: 16px;
-                font-family: "opensans-semibold";
+                font-family: "opensans-semibold !important";
             }
             td {
                 padding-top: 8px;

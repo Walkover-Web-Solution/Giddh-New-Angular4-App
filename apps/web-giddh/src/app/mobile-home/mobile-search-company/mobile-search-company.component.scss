@@ -78,13 +78,13 @@
                 a{
                     padding: 10px 0;
                     color: $nero;
-                    font-family: 'opensans-semibold';
+                    font-family: 'opensans-semibold !important';
                     display: flex;
                     white-space: normal;
                     word-break: break-word;
                     &:hover{
                         color: $deep-sky-blue;
-                    }   
+                    }
                 }
             }
         }

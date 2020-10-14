@@ -18,7 +18,7 @@
 
     .borderbtm {
         font-size: 16px;
-        font-family: "" opensans-semibold "";
+        font-family: "" opensans-semibold !important "";
         border-bottom: 1px solid #cccccc;
         padding: 7px 0;
         margin-bottom: 10px;
@@ -76,7 +76,7 @@
         background: #c9e6ca;
         box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.16);
         font-size: 16px;
-        font-family: "opensans-regular";
+        font-family: "opensans-regular !important";
     }
 
     p {

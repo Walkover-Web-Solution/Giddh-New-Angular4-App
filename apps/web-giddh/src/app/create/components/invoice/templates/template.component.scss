@@ -201,7 +201,7 @@ h4 {
     h1 {
         font-size: 20px;
         color: #333333;
-        font-family: "opensans-regular";
+        font-family: "opensans-regular !important";
         padding: 0;
         border-bottom: 1px solid #333333;
         display: inline-block;
@@ -211,7 +211,7 @@ h4 {
         color: #e14d26;
         border-bottom: 1px solid #e14d26;
         display: inline-block;
-        font-family: "opensans-regular";
+        font-family: "opensans-regular !important";
         font-size: 20px;
         line-height: 21px;
         padding: 0;

@@ -237,7 +237,7 @@ span.dateWiseSale {
     cursor: pointer;
 }
 .total-sales-tabs a.active-graph {
-    font-family: "opensans-semibold";
+    font-family: "opensans-semibold !important";
 }
 input:read-only {
     border-color: $gainsboro !important;
@@ -295,7 +295,7 @@ input:read-only:focus {
                 right: 0;
                 top: 2px !important;
             }
-        }   
+        }
         .this-week {
             position: absolute;
             right: 30px;

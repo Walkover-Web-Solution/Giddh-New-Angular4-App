@@ -9,7 +9,7 @@
 }
 .createWarehouse h2 {
     font-size: 20px;
-    font-family: "opensans-semibold";
+    font-family: "opensans-semibold !important";
     margin: 10px 0;
 }
 .createWarehouse p {
@@ -64,7 +64,7 @@
 
 .warehouse-card h3 {
     font-size: 16px;
-    font-family: "opensans-semibold";
+    font-family: "opensans-semibold !important";
     float: left;
     width: 66%;
     word-break: break-all;
@@ -81,7 +81,7 @@ span.setAsDefault {
     font-size: 14px;
 }
 .warehouse-details label {
-    font-family: "opensans-semibold";
+    font-family: "opensans-semibold !important";
     width: 140px;
 }
 .warehouse-details p {

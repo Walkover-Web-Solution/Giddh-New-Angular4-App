@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Arvo:400,700|Inconsolata");
 @font-face {
-    font-family: "opensans-regular";
+    font-family: "opensans-regular !important";
     src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot");
     src: url("../fonts/open-sans/open-sans-regular/OpenSans-Regular.eot?#iefix")
             format("embedded-opentype"),
@@ -16,7 +16,7 @@
 }
 
 @font-face {
-    font-family: "opensans-semibold";
+    font-family: "opensans-semibold !important";
     src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot");
     src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot?#iefix")
             format("embedded-opentype"),
@@ -31,7 +31,7 @@
     text-rendering: optimizeLegibility;
 }
 @font-face {
-    font-family: "opensans-bold";
+    font-family: "opensans-bold !important";
     src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot");
     src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot?#iefix")
             format("embedded-opentype"),
@@ -46,7 +46,7 @@
     text-rendering: optimizeLegibility;
 }
 @font-face {
-    font-family: "opensans-extra-bold";
+    font-family: "opensans-extra-bold !important";
     src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot");
     src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot?#iefix")
             format("embedded-opentype"),
@@ -143,7 +143,7 @@ html,
 body {
     height: 100%;
     background: #f7f8fa;
-    font-family: "opensans-regular";
+    font-family: "opensans-regular !important";
 
     color: #333333;
     -webkit-font-smoothing: antialiased;

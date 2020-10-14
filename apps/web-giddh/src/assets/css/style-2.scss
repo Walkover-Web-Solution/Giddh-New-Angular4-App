@@ -43,7 +43,7 @@
     padding: 15px 11px !important;
     font-weight: 400;
     border-bottom: 1px solid $gainsboro;
-    font-family: opensans-semibold;
+    font-family: 'opensans-semibold' !important;
     font-size: 14px;
     border-top: 1px solid $gainsboro;
 }
@@ -57,7 +57,7 @@
     background: #e5e5e5;
     color: #262626;
     border: 0;
-    font-family: "" opensans-semibold "";
+    font-family: "" opensans-semibold !important "";
     text-transform: capitalize;
     border-right: 1px solid #cac8c6;
     border-top: 1px solid #cac8c6;
@@ -841,7 +841,7 @@ input {
 
 .hover-orange:hover {
     color: #bdc3ff !important;
-    /* font-family: ''opensans-semibold''; */
+
 }
 
 .company-list button.btn-link {
@@ -904,11 +904,11 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: $opensans-semibold;
+    font-family: $opensans-semibold !important;
 }
 
 .font-bold {
-    font-family: $opensans-bold;
+    font-family: $opensans-bold !important;
 }
 
 .modal-open {
@@ -932,7 +932,7 @@ ul.sub-list {
 
 .top-heading > h4 {
     font-size: 18px;
-    font-family: "" opensans-semibold "";
+    font-family: 'opensans-semibold '!important;
     line-height: 28px;
     text-transform: capitalize;
 }
@@ -1114,7 +1114,7 @@ ul.sub-list {
 }
 
 .aging-table-top .top-aging-table-top span .date-range-picker {
-    font-family: opensans-semibold;
+    font-family: 'opensans-semibold' !important;
     text-align: left !important;
 }
 
@@ -1464,7 +1464,7 @@ modal-container.modal {
 }
 
 .table-modal thead tr th {
-    font-family: "opensans-regular" !important;
+    font-family: 'opensans-regular' !important;
     /* background: red; */
     font-family: cursive;
     border-right: 1px solid #c6c6c6;
@@ -2842,7 +2842,7 @@ input[type="checkbox"]:checked:after {
 
 .subscription-title {
     font-size: 20px;
-    font-family: $opensans-semibold;
+    font-family: $opensans-semibold !important;
 }
 
 .box2 {
@@ -2853,7 +2853,7 @@ input[type="checkbox"]:checked:after {
     background: #e5e5e5;
     padding: 11px 20px;
     font-size: 14px;
-    font-family: "" opensans-semibold "";
+    font-family: "opensans-semibold" !important ;
     border: 1px solid #ddd;
 }
 
@@ -2909,7 +2909,7 @@ li.no-click {
     display: inline-block;
     min-width: 150px;
     font-size: 18px;
-    font-family: "" opensans-semibold "";
+    font-family:'opensans-semibold' !important ;
 }
 
 .modal-list ul > li {
@@ -5740,7 +5740,7 @@ input[type="checkbox"][disabled] {
 
 .section-head {
     padding-bottom: 10px;
-    font-family: $opensans-semibold;
+    font-family: $opensans-semibold !important;
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -5968,13 +5968,13 @@ input[type="checkbox"][disabled]:after {
 }
 
 .table-container section div .group {
-    font-family: "opensans-regular";
+    font-family: "opensans-regular" !important;
     text-transform: uppercase;
 }
 
 .welcome-header h2 {
     font-size: 26px;
-    font-family: "opensans-regular";
+    font-family: "opensans-regular" !important;
     color: #535353;
 }
 
@@ -6224,7 +6224,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .welcome_header h1 {
     font-size: 30px;
-    font-family: "opensans-regular";
+    font-family: "opensans-regular" !important;
     color: #1a237e;
 }
 
@@ -6293,7 +6293,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .welcome-header h2 {
     font-size: 26px;
-    font-family: "opensans-regular";
+    font-family: "opensans-regular" !important;
     color: #535353;
     position: relative;
 }
@@ -6513,7 +6513,7 @@ table td[class*=col-]:last-child {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: $opensans-semibold;
+    font-family: $opensans-semibold !important;
     text-transform: capitalize;
 }
 
@@ -6651,7 +6651,7 @@ table td[class*=col-]:last-child {
 
 .form-header h3 {
     font-size: 18px;
-    font-family: "opensans-bold";
+    font-family: "opensans-bold" !important;
 }
 
 .form_body {
@@ -6734,7 +6734,7 @@ table td[class*=col-]:last-child {
 
 .app_list > ul h6 {
     margin-bottom: 10px;
-    font-family: $opensans-semibold;
+    font-family: $opensans-semibold !important;
     font-size: 13px;
 }
 
@@ -7203,7 +7203,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: capitalize;
     width: auto;
     color: $midnight-blue;
-    font-family: $opensans-semibold;
+    font-family: $opensans-semibold !important;
     vertical-align: middle;
 }
 
@@ -8132,7 +8132,7 @@ section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
 }
 
 .noBrdRdsModal {
-    font-family: "opensans-regular";
+    font-family: "opensans-regular" !important;
 }
 
 .noBrdRdsModal small.mrT.mrB.grey {
@@ -8516,7 +8516,7 @@ ul.dropdown-menu p.lead.pd {
 .invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid $deep-sky-blue !important;
     padding-bottom: 7px !important;
-    font-family: $opensans-semibold;
+    font-family: $opensans-semibold !important;
     background-color: inherit;
 }
 
@@ -8551,7 +8551,7 @@ ul.dropdown-menu p.lead.pd {
 
 #invoice-setting ul.nav.nav-tabs a {
     border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
-    font-family: "opensans-regular";
+    font-family: "opensans-regular" !important;
     color: #484848 !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
@@ -8646,7 +8646,7 @@ ul.dropdown-menu p.lead.pd {
 
 #tab-integration .nav-tabs > li a.active {
     border: 1px solid $deep-sky-blue !important;
-    font-family: "opensans-regular";
+    font-family: "opensans-regular" !important;
     color: $deep-sky-blue !important;
     border-color: $deep-sky-blue !important;
 }
@@ -10610,4 +10610,8 @@ body.prevent-body-scroll {
   background:  $nobel;
   border-radius: 5px;
   min-height: 60px;
+}
+
+*{
+    font-family: opensane-regular !important;
 }

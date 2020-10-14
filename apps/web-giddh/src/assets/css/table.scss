@@ -17,7 +17,7 @@
         background: #fff;
         padding: 15px 11px;
         border-bottom: 1px solid $gainsboro;
-        font-family: $opensans-semibold;
+        font-family: $opensans-semibold !important;
     }
     thead > tr > th {
         border-top: 1px solid $gainsboro !important;
@@ -45,7 +45,7 @@
         white-space: nowrap !important;
         border-left: none;
         border-right: none;
-        font-family: $opensans-regular;
+        font-family: $opensans-regular !important;
         border-bottom: none !important;
         white-space: nowrap !important;
     }

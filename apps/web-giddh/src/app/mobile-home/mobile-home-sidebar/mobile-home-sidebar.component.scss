@@ -45,7 +45,7 @@
                 a{
                     padding: 10px 15px;
                     color: $nero;
-                    font-family: 'opensans-semibold';
+                    font-family: 'opensans-semibold !important';
                     display: flex;
                     &:hover{
                         background-color: $lavender;

@@ -80,7 +80,7 @@
         background-color: inherit;
         z-index: 1;
         h2 {
-            font-family: 'opensans-semibold';
+            font-family: 'opensans-semibold !important';
             font-size: 18px;
             color: $midnight-blue;
         }
@@ -116,7 +116,7 @@
         padding: 0 ;
         list-style: none;
         font-size: 14px;
-        font-family:'opensans-semibold';
+        font-family:'opensans-semibold !important';
         li{
             padding: 6px 20px;
             margin-bottom:0px;

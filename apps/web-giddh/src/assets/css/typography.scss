@@ -15,7 +15,7 @@
 }
 
 @font-face {
-    font-family: "opensans-semibold";
+    font-family: "opensans-semibold !important";
     src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot");
     src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot?#iefix")
             format("embedded-opentype"),
@@ -30,7 +30,7 @@
     text-rendering: optimizeLegibility;
 }
 @font-face {
-    font-family: "opensans-bold";
+    font-family: "opensans-bold !important";
     src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot");
     src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot?#iefix")
             format("embedded-opentype"),
@@ -45,7 +45,7 @@
     text-rendering: optimizeLegibility;
 }
 @font-face {
-    font-family: "opensans-extra-bold";
+    font-family: "opensans-extra-bold !important";
     src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot");
     src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot?#iefix")
             format("embedded-opentype"),
@@ -61,10 +61,10 @@
 }
 /*table fonts start*/
 
-$opensans-regular: "opensans-regular";
-$opensans-semibold: "opensans-semibold";
-$opensans-bold: "opensans-bold";
-$opensans-extra-bold: "opensans-extra-bold";
+$opensans-regular: "opensans-regular !important";
+$opensans-semibold: "opensans-semibold !important";
+$opensans-bold: "opensans-bold !important";
+$opensans-extra-bold: "opensans-extra-bold !important";
 body {
     font-family: $opensans-regular ;
 }

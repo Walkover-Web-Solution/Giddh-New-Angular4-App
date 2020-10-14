@@ -12,7 +12,7 @@
 </head>
 
 <body
-    [ngStyle]="{'font-size': inputTemplate.fontSize +'px', 'font-family': inputTemplate.font ? inputTemplate.font : 'opensans-regular', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
+    [ngStyle]="{'font-size': inputTemplate.fontSize +'px', 'font-family': inputTemplate.font ? inputTemplate.font : 'opensans-regular !important', 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }">
 
     <div id="template-header" (click)="onClickSection('header')"
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }">

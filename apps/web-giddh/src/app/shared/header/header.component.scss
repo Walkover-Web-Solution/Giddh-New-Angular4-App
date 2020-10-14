@@ -198,7 +198,7 @@ a[vr-item]:focus {
     color: #262626;
     letter-spacing: 0.6px;
     font-weight: normal;
-    font-family: "opensans-semibold";
+    font-family: "opensans-semibold !important";
     padding: 0;
 }
 
@@ -270,7 +270,7 @@ a[vr-item]:focus {
     font-size: 16px;
     padding-left: 15px;
     padding-right: 15px;
-    font-family: "opensans-semibold";
+    font-family: "opensans-semibold !important";
     img {
         width: 18px;
     }
@@ -530,7 +530,7 @@ span.icon-support.dropdown-toggle {
 .showMoreOpt {
     font-size: 14px;
     padding: 0 15px;
-    font-family: "opensans-semibold";
+    font-family: "opensans-semibold !important";
     color: $deep-sky-blue;
 }
 
@@ -682,7 +682,7 @@ ul.sub-list {
 .show-more-module a {
     font-size: 14px;
     color: $deep-sky-blue !important;
-    font-family: "opensans-semibold";
+    font-family: "opensans-semibold !important";
 }
 /*notification css*/
 .white-row {
@@ -693,7 +693,7 @@ ul.sub-list {
     box-shadow: 1px 1px 3px #00000029;
     margin-top: 10px;
     p {
-        font-family: "opensans-semibold";
+        font-family: "opensans-semibold !important";
         font-size: 14px;
     }
     .click-here {
