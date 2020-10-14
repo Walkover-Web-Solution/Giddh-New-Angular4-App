@@ -474,7 +474,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngOnInit() {
         this.getCurrentCompanyData();
-        
+
         this._breakpointObserver.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -814,6 +814,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 // if (from === fromFromStore && to === toFromStore) {
                 //     this.isTodaysDateSelected = true;
                 // }
+                this.isTodaysDateSelected = !dateObj[3];  //entry-setting API date response in case of today fromDate/toDate will be null
                 if (this.isTodaysDateSelected) {
                     let today = _.cloneDeep([moment(), moment()]);
                     this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
@@ -1394,7 +1395,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             // }
             if (!isCtrlClicked) {
                 this.router.navigate([url]); // added link in routerLink
-            }     
+            }
         }
         // save data to db
         item.time = +new Date();
@@ -1893,7 +1894,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isAllModuleOpen = !this.isAllModuleOpen;
     }
 
-    /** 
+    /**
      * This will init the notification on window orientation change
      *
      * @param {*} event
