@@ -37,6 +37,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 	public breadcrumbUniquePath: string[] = [];
 	public myModelRect: any;
 	public searchLoad: Observable<boolean>;
+    /** model reference */
     public modalRef: BsModalRef;
 	public groupList$: Observable<GroupsWithAccountsResponse[]>;
 	public currentColumns: GroupAccountSidebarVM;
@@ -111,7 +112,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      * @param {TemplateRef<any>} template
      * @memberof ManageGroupsAccountsComponent
      */
-    public openModal(template: TemplateRef<any>, index: number) {
+    public openModal(template: TemplateRef<any>, index: number): void {
         this.modalRef = this.modalService.show(template);
         this.selectedRowIndex = index;
     }
