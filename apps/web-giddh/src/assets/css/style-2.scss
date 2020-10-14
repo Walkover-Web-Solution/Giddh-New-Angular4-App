@@ -9593,6 +9593,65 @@ span#HW_badge_cont:nth-child(3) {
 #rcw-p91-widget-button{
     z-index: 98;
 }
+/*material datepicker css starts*/
+.recurring-form  .mat-form-field{
+    max-width: 170px;
+}
+.mat-form-field{
+    min-width: 170px;
+    width: 100%;
+    display: inline-block;
+
+}
+.mat-form-field-appearance-fill .mat-form-field-flex{
+    height: 36px;
+    background-color: $white;
+    padding: 0;
+}
+.mat-form-field-appearance-fill .mat-form-field-underline::before{
+    display: none !important;
+    opacity: 0 !important;
+}
+.mat-form-field-appearance-fill .mat-form-field-infix {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+.mat-form-field-appearance-fill .mat-form-field-flex{
+    border-radius: 2px !important;
+    padding: 0 !important;
+    border: 1px solid $gainsboro !important;
+    display: flex !important;
+    align-items: center !important;
+}
+.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button, .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button{
+    width: 26px;
+    height: 26px;
+    margin-right: 6px
+}
+.mat-form-field-appearance-fill:not(.mat-form-field-disabled) .mat-form-field-flex:hover~.mat-form-field-underline .mat-form-field-ripple{
+    opacity: 0 !important;
+}
+input.mat-input-element{
+    margin-top: 0;
+    padding: 9px 6px;
+}
+.mat-form-field-wrapper{
+    padding-bottom: 0;
+}
+.mat-focused .mat-form-field-flex{
+    border:1px solid $chetwode-blue !important;
+}
+.mat-form-field-underline{
+    display: none !important;
+}
+.cdk-overlay-container, .cdk-global-overlay-wrapper{
+    z-index: 99999;
+}
+.mat-calendar-body-selected{
+    background-color: $midnight-blue;
+}
+/*material datepicker css end*/
 
 ul.dropdown-menu.action-dropdown{
     left: auto;
