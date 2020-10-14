@@ -251,6 +251,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public currentPage: number = 1;
     /** company custom fields list */
     public companyCustomFields$: Observable<any[]>;
+    /** Column span length */
     public colspanLength: number = 11;
 
     constructor(
