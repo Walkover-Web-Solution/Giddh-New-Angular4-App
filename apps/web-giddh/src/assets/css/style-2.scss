@@ -9697,6 +9697,9 @@ input.mat-input-element{
 .cdk-overlay-container, .cdk-global-overlay-wrapper{
     z-index: 99999;
 }
+.mat-calendar-body-selected{
+    background-color: $midnight-blue;
+}
 /*material datepicker css end*/
 
 /* responsive */
