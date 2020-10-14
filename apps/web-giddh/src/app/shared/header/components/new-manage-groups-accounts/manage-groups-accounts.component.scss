@@ -1,3 +1,24 @@
+@import '../../../../../assets/css/color.scss';
+.custom-filed-list-wrapper{
+    padding: 15px;
+    max-width: 1280px;
+    width: 100%;
+    label{
+        line-height: 2.3;
+    }
+    .edit-close-btn{
+        .close-button{
+            margin-right: 15px;
+            i{
+                font-size: 18px;
+            }
+        }
+        i{
+            color: $black !important;
+        }
+    }
+}
+
 @media (max-width: 767px) {
     .searchAccount {
         float: none !important;
