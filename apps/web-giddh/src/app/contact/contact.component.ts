@@ -257,6 +257,8 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     public currentPage: number = 1;
     /** company custom fields list */
     public companyCustomFields$: Observable<any[]>;
+    /** Column span length */
+    public colspanLength: number = 11;
 
     constructor(
         private store: Store<AppState>,
@@ -1108,6 +1110,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
                 this.totalReceipts = (this.activeTab === 'customer' ? res.body.creditTotal : res.body.debitTotal) || 0;
                 this.Totalcontacts = 0;
 
+
                 if (groupUniqueName === 'sundrydebtors') {
                     this.sundryDebtorsAccountsBackup = cloneDeep(res.body);
                     this.Totalcontacts = res.body.totalItems;
@@ -1366,6 +1369,9 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         this.groupService.getCompanyCustomField().subscribe(response => {
             if (response && response.status === 'success') {
                 this.companyCustomFields$ = observableOf(response.body);
+                if (response.body) {
+                    this.colspanLength = 11 + response.body.length;
+                }
             } else {
                 this._toaster.errorToast(response.message);
             }
