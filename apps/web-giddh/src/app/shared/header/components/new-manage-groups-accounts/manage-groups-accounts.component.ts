@@ -16,7 +16,7 @@ import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/ng-select';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
-
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
 	selector: 'app-manage-groups-accounts',
@@ -49,6 +49,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /* This will store if device is mobile or not */
+    public isMobileScreen: boolean = false;
     /** Add custom field form reference */
     public customFieldForm: FormGroup;
 
@@ -77,7 +79,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public selectedRowIndex: number = null;
 
 	// tslint:disable-next-line:no-empty
-	constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef,
+    constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef,private _breakPointObservar: BreakpointObserver,
         private renderer: Renderer2, private _generalService: GeneralService, private modalService: BsModalService, private groupService: GroupService, private toasterService: ToasterService) {
 		this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading).pipe(takeUntil(this.destroyed$));
 		this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts).pipe(takeUntil(this.destroyed$));
@@ -104,6 +106,12 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
 	// tslint:disable-next-line:no-empty
 	public ngOnInit() {
+
+        this._breakPointObservar.observe([
+            '(max-width:767px)'
+        ]).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
 
         this.customFieldForm = this.createCustomFieldForm();
         this.getCompanyCustomField();

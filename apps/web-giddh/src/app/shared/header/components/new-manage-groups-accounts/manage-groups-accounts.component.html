@@ -66,21 +66,21 @@
                             <ng-container formArrayName="customField">
                                 <ng-container *ngFor="let item of customFieldForm.get('customField')['controls']; let index=index;let first = first; let last = last">
                                     <div class="row mb-15" [formGroupName]="index">
-                                        <div class="col-lg-3 col-md-3 col-sm-12">
-                                            <label *ngIf="first">Name</label>
+                                        <div class="col-lg-3 col-sm-3 col-xs-12">
+                                            <label *ngIf="first || isMobileScreen">Name</label>
                                             <input type="text" class="form-control" placeholder="Enter custom field name" formControlName="key" name="key" autocomplete="off" [attr.disabled]="item.get('uniqueName').value && isEnabledIndex!==index ?'': null">
                                         </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-12">
-                                            <label *ngIf="first">Type</label>
+                                        <div class="col-lg-3 col-sm-3 col-xs-12">
+                                            <label *ngIf="first || isMobileScreen">Type</label>
                                             <sh-select [options]="dataTypeList" formControlName="dataType" name="dataType" (selected)="customFieldTypeSelected($event, index)" [disabled]="item.get('uniqueName').value && isEnabledIndex!==index">
                                             </sh-select>
                                         </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-12">
-                                            <label *ngIf="first">Length</label>
+                                        <div class="col-lg-3 col-sm-3 col-xs-12">
+                                            <label *ngIf="first || isMobileScreen">Length</label>
                                             <input type="number" class="form-control" formControlName="valueLength" name="valueLength" [attr.disabled]="(item.get('uniqueName').value &&  isEnabledIndex!==index) || item.get('dataType').value ==='BOOLEAN' ?'': null" autocomplete="off">
                                         </div>
-                                        <div class="col-lg-3 col-md-3 col-sm-12 edit-close-btn">
-                                            <label *ngIf="first" class="d-block">&nbsp;</label>
+                                        <div class="col-lg-3 col-sm-3 col-xs-12 edit-close-btn">
+                                            <label *ngIf="first || isMobileScreen" class="d-block">&nbsp;</label>
                                             <button class="btn btn-defualt close-button" (click)="openModal(template);">
                                                 <i class="icon-trash"></i>
                                             </button>
@@ -92,17 +92,17 @@
                                 </ng-container>
                             </ng-container>
                             <div class="row">
-                                <div class="col-lg-3 col-md-3 col-sm-12">
+                                <div class="col-lg-3 col-sm-3 col-xs-12">
                                     <a href="javascript:void(0)" (click)="addNewCustomFieldRow()" class="btn btn-link pl-0">+ Add New Row</a>
                                 </div>
-                                <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="updateModeLength">
-                                    <label *ngIf="first" class="d-block">&nbsp;</label>
+                                <div class="col-lg-3 col-sm-3 col-xs-12" *ngIf="updateModeLength">
+                                    <label *ngIf="first || isMobileScreen" class="d-block">&nbsp;</label>
                                     <button type="submit" class="btn btn-primary" [disabled]="customFieldForm.invalid" [ladda]="isSaveCustomInProgress" (click)="submitCustomFields(customFieldForm.value)">
                                         Update
                                     </button>
                                 </div>
-                                <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="!updateModeLength">
-                                    <label *ngIf="first" class="d-block">&nbsp;</label>
+                                <div class="col-lg-3 col-sm-3 col-xs-12" *ngIf="!updateModeLength">
+                                    <label *ngIf="first || isMobileScreen" class="d-block">&nbsp;</label>
                                     <button type="submit" class="btn btn-primary" [disabled]="customFieldForm.invalid" [ladda]="isSaveCustomInProgress" (click)="submitCustomFields(customFieldForm.value)">
                                         Save
                                     </button>
