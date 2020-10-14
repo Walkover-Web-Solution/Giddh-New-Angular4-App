@@ -1,7 +1,7 @@
 <div class="clearfix" *ngIf="!parentCompanyName && (branches$ | async)?.length > 0">
     <div class="d-flex date-advance-search row">
-        <form class="form-inline input-group-date-range-picker pr col-xs-6 col-sm-8 mb-15">
-            <div class="mr-1 d-flex branch-header-content">
+        <form class="form-inline input-group-date-range-picker pr col-lg-10 col-md-12 mb-15">
+            <div class="mr-1 d-flex branch-header-content flex-row">
                     <div class="btn-group advance-icon" dropdown>
                         <button id="button-basic-icon" dropdownToggle type="button" class="btn dropdown-toggle mr-0 d-flex align-items-center" aria-controls="dropdown-basic-icon">
                                 <span class="icon-advance-search"></span>
@@ -31,20 +31,20 @@
                         </ul>
                     </div>
 
-                    <div class="form-group max250 search-field">
+                    <div class="form-group max250 search-field form-top-fields">
                             <input type="text" placeholder="Search branch" class="form-control" />
                             <span class="input-addon">
                             <i class="icon-search"></i>
                         </span>
 
                     </div>
-                <!-- <div class="input-group">
+                <div class="input-group form-top-fields">
                     <div class="form-group">
                         <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" readonly
                             placeholder="Select Date" class="form-control" #dp="bsDaterangepicker"
                             [bsValue]="dateRangePickerValue" (bsValueChange)="setFilterDate($event)" bsDaterangepicker>
                     </div>
-                </div> -->
+                </div>
                 <div class="content-view  mrL2">
                     <div class="branch-views">
                         <span (click)="changeBranchViewType('table');" class="mrR1">
@@ -61,11 +61,11 @@
                 </div>
             </div>
         </form>
-        <div class="col-sm-4 col-xs-6">
+        <div class="col-lg-2 col-md-12">
             <button class="btn btn-sky-blue pull-right mr-0" (click)="openAddBranchModal()">Create Branch</button>
         </div>
     </div>
-    <div class="row">
+    <div class="row select-branch">
         <div class="col-12 d-flex mb-15 align-items-center">
             <div class="form-group mb-0">
                     <div class="checkbox">
@@ -142,7 +142,7 @@
                                 </div>
                                 <div>Walkover Web Solutions Name Branch</div>
                             </div>
-                            <div class="pull-right">
+                            <div class="pull-right right-card-section">
                                 <div class="btn-group align-items-center" dropdown [autoClose]="true">
                                         <a href="javascript:;" *ngIf="!isBranchSalesExpanded" class="cp font-14" (click)="isBranchSalesExpanded = true;">
                                             <i class="icon-expandIcon"></i> Expand</a>
@@ -403,3 +403,36 @@
     <edit-branch class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)">
 </edit-branch>
 </div>
+
+
+<!-- Move branch popup -->
+<ng-template #template>
+        <div class="modal-header">
+        <h4 class="modal-title pull-left">Move</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12 font-14 mb-3">
+                        <strong>Alas Branch Name</strong>will be moved permanently
+                </div>
+                <div class="col-6">
+                    <div class="form-group mb-0">
+                        <label>Move From</label>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group mb-0">
+                        <label>Move To</label>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col-12 mt-5">
+                    <button type="submit" class="btn btn-success">Move</button>
+                </div>
+            </div>
+        </div>
+</ng-template>

@@ -43,6 +43,7 @@ export class GroupWithAccountsAction {
     public static SHARED_GROUP_WITH_RESPONSE = 'GroupSharedWithResponse';
     public static MOVE_GROUP = 'GroupMove';
     public static MOVE_GROUP_RESPONSE = 'GroupMoveResponse';
+    public static MOVE_GROUP_COMPLETE = 'GroupMoveComplete';
     public static GET_GROUP_TAX_HIERARCHY = 'GroupTaxHierarchy';
     public static GET_GROUP_TAX_HIERARCHY_RESPONSE = 'GroupTaxHierarchyResponse';
 
@@ -768,5 +769,11 @@ export class GroupWithAccountsAction {
             }
         }
         return null;
+    }
+
+    public moveGroupComplete() {
+        return {
+            type: GroupWithAccountsAction.MOVE_GROUP_COMPLETE
+        };
     }
 }

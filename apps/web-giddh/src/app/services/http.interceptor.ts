@@ -44,12 +44,9 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
     }
 
     private addBranchUnqiueName(request: HttpRequest<any>): HttpRequest<any> {
-        const delemiter = request.urlWithParams.includes('?') ? '&' : '?';
-        if (!request.urlWithParams.includes('branchUniqueName')) {
-            request = request.clone({
-                url: `${request.url}${delemiter}branchUniqueName=${this.generalService.currentBranchUniqueName}`
-            });
-        }
+        request = request.clone({
+            params: request.params.append('branchUniqueName', this.generalService.currentBranchUniqueName)
+        });
         return request;
     }
 }
