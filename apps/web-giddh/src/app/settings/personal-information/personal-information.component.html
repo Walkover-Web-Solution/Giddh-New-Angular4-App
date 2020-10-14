@@ -20,7 +20,8 @@
         <div class="col-md-12 mt-2 border-bottom pb-15">
             <div class="row pb-1">
                 <div class="col-md-3 col-sm-12 col-lg-3 col-xl-2 d-flex align-items-center">
-                    <label class="font-14">Company Name</label>
+                    <label *ngIf="organizationType === 'COMPANY'" class="font-14">Company Name</label>
+                    <label *ngIf="organizationType === 'BRANCH'" class="font-14">Branch Name</label>
                 </div>
                 <div class="col-md-4 col-sm-12 col-lg-4 col-xl-3">
                     <div class="form-group mb-0">
@@ -43,7 +44,7 @@
                     <label class="font-14">Parent:</label>
                 </div>
                 <div class="col-md-4 col-sm-12 col-lg-4 col-xl-3">
-                    <div class="font-14">Lorem Alias NameDummy Text (Registered)</div>
+                    <div class="font-14">{{profileData?.parent?.name}} ({{profileData?.parent?.businessType}})</div>
                 </div>
             </div>
             <div class="row country-name">
@@ -51,14 +52,14 @@
                     <label class="font-14">Country & Currency:</label>
                 </div>
                 <div class="col-md-4 col-sm-12 col-lg-4 col-xl-3">
-                    <div class="font-14">{{profileData.country.countryName}} - {{profileData.country.currencyCode}} {{profileData.country.currencyName}}</div>
+                    <div class="font-14">{{profileData?.country?.countryName}} - {{profileData?.country?.currencyCode}} {{profileData?.country?.currencyName}}</div>
                 </div>
             </div>
         </div>
 
     </div>
     <div class="personal-other-deatils">
-        <div class="row">
+        <div class="row" *ngIf="organizationType === 'COMPANY'">
             <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
                 <div class="form-group">
                     <label>Business Type</label>
@@ -76,7 +77,7 @@
             <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
                 <div class="form-group">
                     <label>Alias</label>
-                    <input [(ngModel)]="profileData.alias" type="text" class="form-control">
+                    <input [(ngModel)]="profileData.alias" (ngModelChange)="profileUpdated('alias')"  type="text" class="form-control">
                 </div>
             </div>
         </div>

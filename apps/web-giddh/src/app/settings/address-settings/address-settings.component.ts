@@ -12,7 +12,6 @@ import { OrganizationType } from '../../models/user-login-state';
     styleUrls: ['./address-settings.component.scss']
 })
 export class AddressSettingsComponent implements OnInit, OnDestroy {
-    public isBranchElement: boolean = false;
     public accountAsideMenuState: string = 'out';
 
     /** Stores the type of the organization (company or profile)  */

@@ -59,6 +59,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public currencies: IOption[] = [];
     public currencySource$: Observable<IOption[]> = observableOf([]);
     public countryCurrency: any[] = [];
+    /** Stores the current company details */
+    public currentCompanyDetails: any;
+    /** Stores the current branch details */
+    public currentBranchDetails: any;
     public companyProfileObj: OrganizationProfile | any = {
         name: '',
         uniqueName: '',
@@ -229,21 +233,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.isPANValid = true;
         this.isMobileNumberValid = true;
 
-        this.store.pipe(select(createSelector([(appState: AppState) => appState.session.companies, (appState: AppState) => appState.session.companyUniqueName], (companies, uniqueName) => {
-            if (!companies) {
-                return;
-            }
-            return companies.find(company => {
-                if (company && company.uniqueName) {
-                    return company.uniqueName === uniqueName;
-                } else {
-                    return false;
-                }
-            });
-        })), takeUntil(this.destroyed$)).subscribe(response => {
-            this.companyProfileObj.name = response.name;
-        });
-
         this.store.select(p => p.settings.inventory).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
                 let inventorySetting = _.cloneDeep(o);
@@ -253,14 +242,32 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
         this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
+                this.currentCompanyDetails = response;
                 if (this.currentOrganizationType === OrganizationType.Company) {
                     this.handleCompanyProfileResponse(response);
                 } else if (this.currentOrganizationType === OrganizationType.Branch) {
-                    this.handleBranchProfileResponse(response);
+                    this.companyProfileObj = {
+                        ...this.companyProfileObj,
+                        country: {
+                            countryName: response.countryV2 ? response.countryV2.countryName : '',
+                            currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
+                            currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
+                        },
+                        balanceDecimalPlaces: response.balanceDecimalPlaces,
+                        balanceDisplayFormat: response.balanceDisplayFormat
+                    }
                 }
-
             }
         });
+        this.store.select(p => p.settings.currentBranch).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.currentBranchDetails = response;
+                if (this.currentOrganizationType === OrganizationType.Branch) {
+                    this.handleBranchProfileResponse(response);
+                }
+            }
+        });
+
         this.store.pipe(take(1)).subscribe(s => {
             if (s.session.user) {
                 this.countryCode = s.session.user.countryCode ? s.session.user.countryCode : '91';
@@ -699,7 +706,18 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public handleSaveProfile(value: any): void {
-        this.patchProfile({ ...value });
+        if (this.currentOrganizationType === OrganizationType.Company) {
+            this.patchProfile({ ...value });
+        } else if (this.currentOrganizationType === OrganizationType.Branch) {
+            this.updateBranchProfile();
+        }
+    }
+
+    public updateBranchProfile(): void {
+        this.currentBranchDetails.name = this.companyProfileObj.name;
+        this.currentBranchDetails.alias = this.companyProfileObj.alias;
+        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(this.currentBranchDetails))
+            .subscribe(response => {});
     }
 
     public handleTabChanged(tabName: string): void {
@@ -787,8 +805,16 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     private handleBranchProfileResponse(response: any): void {
-        if (response) {
-            // this.companyProfileObj = response;
+        if (response && response.name) {
+            console.log('Branch: ' , response)
+            this.companyProfileObj = {
+                ...this.companyProfileObj,
+                name: response.name,
+                parent: response.parentBranch,
+                uniqueName: response.uniqueName,
+                alias: response.alias,
+            };
+            this.addresses = this.settingsUtilityService.getFormattedBranchAddresses(response.addresses);
         }
     }
 

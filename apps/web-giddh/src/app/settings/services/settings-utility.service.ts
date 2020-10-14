@@ -68,6 +68,30 @@ export class SettingsUtilityService {
         return formattedCompanyAddresses;
     }
 
+    public getFormattedBranchAddresses(response: Array<any>): Array<any> {
+        const formattedCompanyAddresses = [];
+        response.forEach(address => {
+            formattedCompanyAddresses.push({
+                stateCode: address.stateCode,
+                stateName: address.stateName,
+                taxNumber: address.taxNumber,
+                address: address.address,
+                isDefault: address.isDefault,
+                name: address.name,
+                uniqueName: address.uniqueName,
+            });
+        });
+        return formattedCompanyAddresses;
+    }
+
+    public getUpdateBranchRequestObject(branchDetails: any): any {
+        return {
+            name: branchDetails.name,
+            alias: branchDetails.alias,
+            linkAddresses: branchDetails.addresses.map(address => ({uniqueName: address.uniqueName, isDefault: address.isDefault}))
+        };
+    }
+
     private getLinkedEntities(address: any): Array<any> {
         const linkedEntities = [];
         if (address.branches && address.branches.length) {

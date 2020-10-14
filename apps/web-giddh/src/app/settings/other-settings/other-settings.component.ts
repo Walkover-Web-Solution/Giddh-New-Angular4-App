@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { currencyNumberSystems, digitAfterDecimal } from 'apps/web-giddh/src/app/shared/helpers/currencyNumberSystem';
 import { ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
+import { OrganizationType } from '../../models/user-login-state';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { OrganizationProfile } from '../constants/settings.constant';
 
@@ -12,11 +13,12 @@ import { OrganizationProfile } from '../constants/settings.constant';
 })
 export class OtherSettingsComponent implements OnInit, OnDestroy {
 
-    public isBranchElement: boolean = false;
     public numberSystemSource: IOption[] = [];
     public decimalDigitSource: IOption[] = [];
     /** Updated data by the user */
     public updatedData: any = {};
+    /** Company number system */
+    public numberSystem: string;
 
     /** Decides when to emit the value for UPDATE operation */
     public saveProfileSubject: Subject<any> = new Subject();
@@ -40,6 +42,8 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
         headquarterAlias: '',
         balanceDisplayFormat: ''
     };
+    /** Stores the type of the organization (company or profile)  */
+    @Input() public organizationType: OrganizationType;
 
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -56,6 +60,10 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
         this.saveProfileSubject.pipe(debounceTime(5000), takeUntil(this.destroyed$)).subscribe(() => {
             this.saveProfile.emit(this.updatedData);
         });
+        const currencySystem = currencyNumberSystems.find(numberSystem => numberSystem.value === this.profileData.balanceDisplayFormat)
+        if (currencySystem) {
+            this.numberSystem = currencySystem.name;
+        }
     }
 
     public ngOnDestroy(): void {
