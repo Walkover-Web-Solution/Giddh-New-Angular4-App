@@ -16,7 +16,8 @@ import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/ng-select';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
-
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
 	selector: 'app-manage-groups-accounts',
@@ -49,6 +50,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /* This will store if device is mobile or not */
+    public isMobileScreen: boolean = false;
     /** Add custom field form reference */
     public customFieldForm: FormGroup;
 
@@ -77,7 +80,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public selectedRowIndex: number = null;
 
 	// tslint:disable-next-line:no-empty
-	constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef,
+    constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private formBuilder: FormBuilder, private cdRef: ChangeDetectorRef,private breakPointObservar: BreakpointObserver,
         private renderer: Renderer2, private _generalService: GeneralService, private modalService: BsModalService, private groupService: GroupService, private toasterService: ToasterService) {
 		this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading).pipe(takeUntil(this.destroyed$));
 		this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts).pipe(takeUntil(this.destroyed$));
@@ -105,6 +108,11 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 	// tslint:disable-next-line:no-empty
 	public ngOnInit() {
 
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
         this.customFieldForm = this.createCustomFieldForm();
         this.getCompanyCustomField();
 		// search groups
@@ -181,11 +189,12 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     /**
      * To submit custom field data
      *
+     * @param {string} operationType To check operation type
      * @param {*} type API call operation type
      * @param {*} value
      * @memberof ManageGroupsAccountsComponent
      */
-    public submitCustomFields(value: any): void {
+    public submitCustomFields(value: any, operationType?: string): void {
         this.isSaveCustomInProgress = true;
         this.groupService.createCompanyCustomField(value.customField).subscribe(response => {
             if (response) {
@@ -194,9 +203,16 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                     let customFieldResponse = response.body;
                     this.updateModeLength = customFieldResponse.length;
                     this.renderCustomField(customFieldResponse);
-                    this.toasterService.successToast('Custom field updated successfully');
+                    if (operationType === 'create') {
+                        this.toasterService.successToast('Custom field created successfully');
+                    } else if (operationType === 'delete') {
+                        this.toasterService.successToast('Custom field deleted successfully');
+                    } else {
+                        this.toasterService.successToast('Custom field updated successfully');
+                    }
                 } else {
                     this.toasterService.errorToast(response.message);
+                    this.getCompanyCustomField();
                 }
                 this.isEnabledIndex = null;
                 this.isSaveCustomInProgress = false;
@@ -305,12 +321,20 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      * @memberof ManageGroupsAccountsComponent
      */
     public removeCustomFieldRow(index: number, isUpdate: boolean): void {
-        const row = this.customFieldForm.get('customField') as FormArray;
-        if (row.length > 0) {
-            row.removeAt(index);
-        }
-        if (isUpdate) {
-            this.submitCustomFields(this.customFieldForm.value);
+        if (!isUpdate) {
+            const row = this.customFieldForm.get('customField') as FormArray;
+            if (row.length > 0) {
+                row.removeAt(index);
+            }
+        } else {
+            const row = cloneDeep(this.customFieldForm.get('customField') as FormArray);
+            if (row.length > 0) {
+                row.removeAt(index);
+            }
+            let requestObject = {
+                customField: row.value
+            }
+            this.submitCustomFields(requestObject, 'delete');
         }
     }
 
