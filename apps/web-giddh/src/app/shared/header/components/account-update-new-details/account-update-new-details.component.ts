@@ -119,7 +119,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public accounts$: Observable<IOption[]>;
     public stateGstCode: any[] = [];
-    public isMobileNumberValid: boolean = false;
+    public isMobileNumberValid: boolean = true;
     public formFields: any[] = [];
     public isGstValid$: Observable<boolean> = observableOf(true);
     public selectedTab: string = 'address';
