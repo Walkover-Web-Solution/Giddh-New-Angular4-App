@@ -1,9 +1,9 @@
 <div class="box clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="selectedTax = null;toggleTaxAsidePane()">
-    <div style="display: flex;justify-content: space-between">
-        <h1 class="section-head pd-t1" style="margin: 0;padding: 0;line-height: 2;">Added Taxes</h1>
+    <div class="d-flex justify-content-between">
+        <h1 class="section-head pd-t1 m-0 pl-0 pb-0 pr-0">Added Taxes</h1>
         <button class="btn btn-sky-blue mr-0" [tooltip]="'Create New Tax'"
             (click)="selectedTax = null;toggleTaxAsidePane($event)">
-            <i class="icon icon-plus" style="font-size:12px"></i> New Tax
+            <i class="icon icon-plus font-12"></i> New Tax
         </button>
     </div>
 
@@ -75,8 +75,7 @@
                                         </span>
                                     </div>
 
-                                    <div *ngIf="showDatePickerInTable && taxToEdit[i]"
-                                        style="position: absolute; z-index:10; min-height:290px;">
+                                    <div *ngIf="showDatePickerInTable && taxToEdit[i]" class="tax-datepicker">
                                         <datepicker name="tableDate{{i}}_{{j}}" [(ngModel)]="t.date"
                                             (selectionDone)="showDatePickerInTable=!showDatePickerInTable"
                                             [showWeeks]="false"></datepicker>

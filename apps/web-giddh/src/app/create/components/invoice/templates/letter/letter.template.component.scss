@@ -297,7 +297,7 @@ $themeClr: #fe5f00;
             width: 380px;
         }
     }
-    &.noMarg {
+    &.no-marg {
         @include marg(A, 0);
     }
     .form-control.voucher-selector {

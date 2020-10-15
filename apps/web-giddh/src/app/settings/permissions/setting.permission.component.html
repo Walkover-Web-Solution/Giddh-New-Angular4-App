@@ -8,12 +8,12 @@
 	<h3 class="mr-b1"><strong>Users</strong></h3>
 	<div class="box" *ngIf="currentUser">
 		<div *ngFor="let usrGrp of usersList">
-			<div class="user_list">
+			<div class="user-list">
 				<div class="row">
 					<div class="col-md-2 col-sm-6 user">
 						<div class="text-ellipsis">
 							<div class="text-ellipsis"><i class="fa fa-user pd-r1"></i>{{usrGrp.name}}</div>
-							<small class="mrL2">{{usrGrp.rows[0].emailId}}</small>
+							<small class="mr-l2">{{usrGrp.rows[0].emailId}}</small>
 						</div>
 					</div>
 					<div class="col-md-10 col-sm-6">

@@ -2839,6 +2839,10 @@ input[type="checkbox"]:checked:after {
     font-size: 16px !important;
 }
 
+.font-18 {
+    font-size: 18px;
+}
+
 .font-20 {
     font-size: 20px;
 }
@@ -4255,7 +4259,7 @@ select.form-control {
     margin-bottom: 0;
 }
 
-.noMarg {
+.no-marg {
     margin: 0 !important;
 }
 
@@ -5826,7 +5830,7 @@ input[type="checkbox"][disabled] {
     right: 0;
 }
 
-.company_gst textarea {
+.company-gst textarea {
     height: 105px;
 }
 
@@ -6423,7 +6427,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     font-size: 14px;
 }
 
-.user_list {
+.user-list {
     padding: 15px 0;
     border-bottom: 1px solid #eee;
     overflow: hidden;
@@ -8310,7 +8314,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     line-height: 1.5;
 }
 
-.company_gst:last-child {
+.company-gst:last-child {
     border-bottom: none;
 }
 
@@ -8752,7 +8756,7 @@ button.btn.btn-filter {
     top: -3px !important;
 }
 
-.welcome_outer #content-wrapper {
+.welcome-outer #content-wrapper {
     padding-left: 0;
 }
 

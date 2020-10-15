@@ -3,7 +3,7 @@
     width: 100%;
 }
 
-.custom_dropdown {
+.custom-dropdown {
     width: 100%;
     border-radius: 0;
     margin: 0px 0;
@@ -17,11 +17,11 @@
     min-width: 180px;
 }
 
-.custom_dropdown.open {
+.custom-dropdown.open {
     transform: translateY(5px);
 }
 
-.lh34 {
+.lh-34 {
     line-height: 34px;
 }
 .permissionForm {
@@ -50,16 +50,16 @@
     background: transparent;
 }
 
-.custom_dropdown > li > a {
+.custom-dropdown > li > a {
     padding: 6px;
 }
 
-.custom_dropdown > li > a:focus,
-.custom_dropdown > li > a:hover {
+.custom-dropdown > li > a:focus,
+.custom-dropdown > li > a:hover {
     background: $gainsboro !important;
 }
 
-.custom_dropdown .caret {
+.custom-dropdown .caret {
     transform: rotate(-90deg);
 }
 .transactions-popup {

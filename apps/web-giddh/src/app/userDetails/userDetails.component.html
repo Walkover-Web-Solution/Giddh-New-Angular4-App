@@ -10,7 +10,7 @@
         <tab heading="Auth Key" [active]="activeTab == 'auth-key'" (selectTab)="onTabChanged('auth-key')">
             <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'auth-key'">
                 <div class="box clearfix mt-1">
-                    <h1 class="section-head pdT0">Main Auth-key</h1>
+                    <h1 class="section-head pt-0">Main Auth-key</h1>
                     <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
                         <div class="form-group row">
                             <div class="col-12 col-sm-12 col-md-12 col-lg-6">
@@ -41,7 +41,7 @@
                             <b>Note: </b>Format should be like 9898989898</p>
                     </form>
 
-                    <div class="clearfix" *ngIf="showVerificationBox" style="padding-top:0;">
+                    <div class="clearfix p-0" *ngIf="showVerificationBox">
                         <hr>
                         <h1 class="mr-t2 max350">
                             <span>Enter verification Code</span>
@@ -134,7 +134,7 @@
             <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'session'">
                 <div class="box clearfix mt-1">
                     <div class="max900 d-flex pd-b1  activity-title">
-                        <h1 class="section-head pdT0">Activity History</h1>
+                        <h1 class="section-head pt-0">Activity History</h1>
                         <button class="btn btn-primary mr-0" (click)="clearAllSession()">Delete All</button>
                     </div>
                     <p class="grey-clr max900 ">Access and manage your activity history details from anywhere at anytime. This will help you to monitor all your account access.</p>

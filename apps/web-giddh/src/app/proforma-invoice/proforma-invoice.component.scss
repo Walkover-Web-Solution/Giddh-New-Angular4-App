@@ -195,7 +195,7 @@ $greyClr: #6d6d6d;
             width: 380px;
         }
     }
-    &.noMarg {
+    &.no-marg {
         @include marg(A, 0);
     }
     .form-control.voucher-selector {

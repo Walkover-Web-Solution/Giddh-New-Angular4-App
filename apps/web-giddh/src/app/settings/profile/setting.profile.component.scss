@@ -31,6 +31,11 @@
     }
 
 }
+
+.number-border{
+    border-bottom: 1px solid $very-light-gray;
+}
+
 @media(max-width:768px){
     .multicurrency-checkbox{
         display: block !important;

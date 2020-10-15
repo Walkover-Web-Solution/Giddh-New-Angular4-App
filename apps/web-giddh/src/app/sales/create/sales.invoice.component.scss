@@ -198,7 +198,7 @@ $greyClr: #6d6d6d;
         }
     }
 
-    &.noMarg {
+    &.no-marg {
         @include marg(A, 0);
     }
 
