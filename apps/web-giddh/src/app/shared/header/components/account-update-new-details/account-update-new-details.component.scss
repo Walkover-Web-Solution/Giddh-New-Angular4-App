@@ -68,7 +68,11 @@ span.dr-label {
             border-left: 1px solid $very-light-gray !important;
         }
         input{
+            border-left: 1px solid $very-light-gray !important;
             border-right: none !important;
+            &:focus{
+                border-left: 1px solid $chetwode-blue !important;
+            }
         }
     }
 }
