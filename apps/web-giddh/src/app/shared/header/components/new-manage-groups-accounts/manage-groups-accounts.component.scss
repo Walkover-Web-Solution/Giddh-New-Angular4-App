@@ -3,7 +3,7 @@
     padding: 15px;
     max-width: 1280px;
     width: 100%;
-    height: 760px;
+    height: 768px;
     overflow-y: auto;
     label{
         line-height: 2.3;
@@ -20,7 +20,12 @@
         }
     }
 }
-
+@media(max-height:768px){
+.custom-filed-list-wrapper{
+        height: 550px;
+        overflow-y: auto;
+    }
+}
 @media (max-width: 767px) {
     .searchAccount {
         float: none !important;
