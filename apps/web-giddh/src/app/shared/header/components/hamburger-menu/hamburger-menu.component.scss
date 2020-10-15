@@ -1,14 +1,18 @@
 .hamburger-menu-icon {
-    width: 40px;
-    height: 40px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    position: relative;
-    z-index: 10;
-    button{
-        margin: 0;
-        padding: 0;
+    padding: 2px 5px;
+    width: 45px;
+    li{
+        display: flex;
+        align-items: center;
+        button{
+            margin: 0;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+        }
     }
 }
 .nav.navbar-nav {

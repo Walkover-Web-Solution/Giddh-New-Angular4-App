@@ -358,7 +358,9 @@
 .border-none {
     border: none !important;
 }
-
+.border-bottom{
+    border-bottom-color: $gainsboro;
+}
 /* end MDB tweaks */
 
 .bg-none {
@@ -1055,7 +1057,14 @@ ul.sub-list {
     border-bottom: 4px solid transparent;
     display: inline-block;
 }
-
+.custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs{
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-left: 50px !important;
+    border-bottom:1px solid $gainsboro;
+}
 .custom-tabs .nav.nav-tabs > li a:hover {
     color: $deep-sky-blue !important;
 }
@@ -10041,7 +10050,6 @@ ul.dropdown-menu.action-dropdown {
         }
         .modal-header {
             padding: 12px 15px !important;
-
             h3,
             h4 {
                 font-size: 16px !important;
@@ -10072,18 +10080,36 @@ ul.dropdown-menu.action-dropdown {
         }
     }
 
-    @media (max-width: 1280px) {
-        .multi-select input.form-control {
-            padding-right: 18px !important;
-        }
-        #dashboard .panel-default > .panel-heading {
-            font-size: 14px;
-        }
-        #dashboard .panel-heading i {
-            margin-left: 10px;
-        }
+@media (max-width: 1280px) {
+    .multi-select input.form-control {
+        padding-right: 18px !important;
     }
-
+    #dashboard .panel-default > .panel-heading {
+        font-size: 14px;
+    }
+    #dashboard .panel-heading i {
+        margin-left: 10px;
+    }
+}
+@media (max-width: 767px) {
+    .hamburger-menu-icon{
+        display: none !important;
+    }
+    .hamburger-menu-icon{
+        display: none !important;
+    }
+    .custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs{
+        padding-left: 15px !important;
+        top: 90px !important;
+        position: fixed !important;
+    }
+    bs-datepicker-container{
+        position: fixed !important;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+}
     @media (max-width: 1199px) {
         .ledger-book .left-col-new .entry-modal {
             width: 100%;
