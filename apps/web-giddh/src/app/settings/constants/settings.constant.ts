@@ -28,3 +28,20 @@ export interface OrganizationProfile {
     balanceDecimalPlaces?: number;
     balanceDisplayFormat?: string;
 }
+
+export enum SettingsAsideFormType {
+    CreateAddress = 'createAddress',
+    EditAddress = 'editAddress',
+    CreateBranch = 'createBranch',
+    EditBranch = 'editBranch'
+}
+
+export interface SettingsAsideConfiguration {
+    type: SettingsAsideFormType;
+    stateList?: Array<any>;
+    tax?: {
+        name: string,
+        validation: Array<any>
+    };
+    linkedEntities?: Array<any>;
+}

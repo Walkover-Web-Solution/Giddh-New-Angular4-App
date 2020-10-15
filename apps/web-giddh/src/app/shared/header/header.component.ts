@@ -393,13 +393,28 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return user.user;
             }
         })).pipe(takeUntil(this.destroyed$));
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+            if (organization && organization.details && organization.details.branchDetails) {
+                this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
+                this.generalService.currentOrganizationType = organization.type;
+                if (this.generalService.currentBranchUniqueName) {
+                    this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
+                        if (response) {
+                            this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
+                        }
+                    });
+                }
+            } else {
+                this.generalService.currentOrganizationType = OrganizationType.Company;
+            }
+        });
 
         this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).pipe(takeUntil(this.destroyed$));
         this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
         this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
         this.updateIndexDbInProcess$ = this.store.pipe(select(p => p.general.updateIndexDbInProcess), takeUntil(this.destroyed$))
         this.updateIndexDbSuccess$ = this.store.pipe(select(p => p.general.updateIndexDbComplete), takeUntil(this.destroyed$))
-        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
 
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
             if (!companies) {
@@ -756,21 +771,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.companyService.CurrencyList().subscribe(response => {
             if (response && response.status === 'success' && response.body) {
                 this.store.dispatch(this.loginAction.SetCurrencyInStore(response.body));
-            }
-        });
-        this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
-            if (organization && organization.details && organization.details.branchDetails) {
-                this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
-                this.generalService.currentOrganizationType = organization.type;
-                if (this.generalService.currentBranchUniqueName) {
-                    this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
-                        if (response) {
-                            this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
-                        }
-                    });
-                }
-            } else {
-                this.generalService.currentOrganizationType = OrganizationType.Company;
             }
         });
     }

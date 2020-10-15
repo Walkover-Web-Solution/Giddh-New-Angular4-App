@@ -1,4 +1,4 @@
-@import '../../../../assets/css/color.scss';
+@import "../../../../assets/css/color.scss";
 :host {
     position: fixed;
     left: auto;
@@ -48,6 +48,31 @@
     margin-top: 15px;
 }
 
+.linked-entities {
+    .list-item {
+        .entity-icon {
+            padding: 4px;
+        }
+        .entity-details {
+            margin-left: 6px;
+            flex: 1;
+            .item {
+                font-weight: bold;
+            }
+        }
+        .default-entity {
+            align-items: center;
+            display: flex;
+            &:hover:after {
+                color: $rich-blue;
+            }
+            .icon-favorite-selected {
+                color: $rich-blue;
+            }
+        }
+    }
+}
+
 @media (max-width: 575px) {
     :host {
         max-width: 370px;
@@ -72,9 +97,6 @@
         max-width: 280px;
     }
 }
-
-
-
 
 .giddh-table {
     tr {
@@ -114,7 +136,7 @@
     }
 }
 
-@media(max-width:768px){
+@media (max-width: 768px) {
     .giddh-table {
         tr {
             td {
@@ -127,7 +149,6 @@
 }
 
 @media (max-width: 445px) {
-
     .giddh-table {
         tr {
             td {
@@ -141,12 +162,12 @@
     }
 }
 
-@media (max-width:575px){
-    .address-list-top{
-        display:block !important;
-        .btn-sky-blue{
-            float:right;
-            margin-top:5px;
+@media (max-width: 575px) {
+    .address-list-top {
+        display: block !important;
+        .btn-sky-blue {
+            float: right;
+            margin-top: 5px;
         }
     }
 }

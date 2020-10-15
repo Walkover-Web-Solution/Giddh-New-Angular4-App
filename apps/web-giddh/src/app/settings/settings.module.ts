@@ -39,6 +39,7 @@ import { EditBranchComponent } from './edit-branch/edit-branch.component';
 import { PersonalInformationComponent } from './personal-information/personal-information.component';
 import { AddressSettingsComponent } from './address-settings/address-settings.component';
 import { OtherSettingsComponent } from './other-settings/other-settings.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -79,6 +80,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         SettingRountingModule,
         AsideMenuCreateTaxModule,
         ContactModule,
+        ReactiveFormsModule,
         CurrencyModule,
         OmitByKeyPipeModule,
         SettingsServiceModule,

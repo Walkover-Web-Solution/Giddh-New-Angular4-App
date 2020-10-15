@@ -1,5 +1,6 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
@@ -9,7 +10,19 @@ import { OrganizationType } from '../../models/user-login-state';
 @Component({
     selector: 'address-settings',
     templateUrl: './address-settings.component.html',
-    styleUrls: ['./address-settings.component.scss']
+    styleUrls: ['./address-settings.component.scss'],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 export class AddressSettingsComponent implements OnInit, OnDestroy {
     public accountAsideMenuState: string = 'out';
@@ -24,6 +37,8 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     @Input() public paginationConfig: any;
     /** True if API is in progress */
     @Input() public shouldShowLoader: boolean;
+    /** Address configuration */
+    @Input() public addressConfiguration: any;
 
     /** Page change event emitter */
     @Output() public pageChanged: EventEmitter<any> = new EventEmitter<any>();
@@ -37,7 +52,6 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     public showSearchName: boolean;
     public showSearchAddress: boolean;
     public showSearchState: boolean;
-
     /** Stores the address search request */
     public addressSearchRequest: any = {
         name: '',
@@ -87,12 +101,13 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         this.toggleAccountAsidePane();
     }
 
-    public toggleAccountAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
+    public toggleAccountAsidePane(): void {
         this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+    }
+
+    public saveAddress(form: any): void {
+        console.log(form);
     }
 
     public toggleBodyClass() {

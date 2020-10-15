@@ -149,10 +149,10 @@
 </div>
 
 <!-- Create address part of Address Tab -->
-<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-<div class="abc " *ngIf="accountAsideMenuState === 'in'">
+<div class="abc" *ngIf="accountAsideMenuState === 'in'">
     <create-address class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState"
-        (closeAsideEvent)="toggleAccountAsidePane($event)">
+        (saveAddress)="saveAddress($event)"
+        (closeAsideEvent)="toggleAccountAsidePane()" [addressConfiguration]="addressConfiguration">
     </create-address>
 </div>
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">

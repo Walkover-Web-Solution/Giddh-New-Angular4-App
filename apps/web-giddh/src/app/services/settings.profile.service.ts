@@ -142,4 +142,11 @@ export class SettingsProfileService {
             .replace(':branchUniqueName', encodeURIComponent(branchUniqueName));
         return this._http.put(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
+
+    public getAllLinkedEntities(): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this._generalService.companyUniqueName;
+        let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.GET_LINKED_ENTITIES}`
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        return this._http.get(contextPath).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
 }
