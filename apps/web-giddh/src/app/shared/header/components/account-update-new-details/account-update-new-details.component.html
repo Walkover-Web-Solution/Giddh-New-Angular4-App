@@ -531,11 +531,12 @@
                         <label>Default Taxes</label>
                     </div>
                     <div class="form-group">
-                        <div class="input-group">
-
-                            <sh-select [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes" class="calc-width">
-                            </sh-select>
-                            <span class="input-group-btn ">
+                        <div class="clearfix">
+                            <span class="calc-width pull-left">
+                                <sh-select  [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes">
+                                </sh-select>
+                            </span>
+                            <span class="pull-right">
                                 <button type="submit" class="btn btn-success">Save</button>
                             </span>
                         </div>
