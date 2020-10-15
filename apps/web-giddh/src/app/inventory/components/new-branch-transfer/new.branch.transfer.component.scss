@@ -415,6 +415,13 @@ tfoot td .tableSec.form-group {
 .placeholder-for-table {
     color: $very-light-gray;
 }
+
+.table-delivery{
+    width:100%;
+    overflow-x:auto;
+}
+
+
 @media(max-width:991px){
     #table-recipt{
        width: calc(100% - 30px);
@@ -439,5 +446,29 @@ tfoot td .tableSec.form-group {
     }
     .mobile-none{
         display:none;
+    }
+    .table-delivery{
+        table{
+            width: 100% !important;
+            tr,td{
+                white-space: nowrap !important;
+            }
+            .min-wid-product{
+                min-width:80px;
+            }
+           .min-wid-rate{
+               min-width:40px;
+           }
+           .min-wid-amt{
+               min-width:40px;
+           }
+           .min-wid-qty{
+               min-width:20px;
+           }
+         }
+
+         .basic > tbody > tr td:last-child, .basic > thead > tr th:last-child {
+            border-right: 1px solid #ddd !important;
+        }
     }
 }
