@@ -3,7 +3,6 @@ import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, Vie
 import * as Highcharts from 'highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
-import { HomeActions } from '../../../actions/home/home.actions';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
@@ -60,11 +59,12 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public dataFound: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public toRequest: any = { from: '', to: '', refresh: false };
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe,
-        private cdRef: ChangeDetectorRef,
-        private modalService: BsModalService,
-        private generalService: GeneralService) {
+    constructor(private store: Store<AppState>, private _dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
         this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
         this.companies$ = this.store.select(p => p.session.companies).pipe(takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
