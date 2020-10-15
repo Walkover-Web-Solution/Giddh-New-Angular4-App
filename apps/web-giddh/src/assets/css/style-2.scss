@@ -363,7 +363,9 @@ body{
 .border-none {
     border: none !important;
 }
-
+.border-bottom{
+    border-bottom-color: $gainsboro;
+}
 /* end MDB tweaks */
 
 .bg-none {
@@ -1067,7 +1069,14 @@ ul.sub-list {
     border-bottom: 4px solid transparent;
     display: inline-block;
 }
-
+.custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs{
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-left: 50px !important;
+    border-bottom:1px solid $gainsboro;
+}
 .custom-tabs .nav.nav-tabs > li a:hover {
     color: $deep-sky-blue !important;
 }
@@ -10132,9 +10141,9 @@ input.mat-input-element{
         background: transparent;
     }
     .tax-engine
-        .transactions-overview
-        .gstr-transactions-summary
-        .transactions-table {
+    .transactions-overview
+    .gstr-transactions-summary
+    .transactions-table {
         border: none;
     }
     .tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
@@ -10190,17 +10199,31 @@ input.mat-input-element{
     #dashboard .panel-heading i {
         margin-left: 10px;
     }
+}
+@media (max-width: 767px) {
+    .hamburger-menu-icon{
+        display: none !important;
+    }
+    .custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs{
+        padding-left: 15px !important;
+        top: 90px !important;
+        position: fixed !important;
+    }
+    bs-datepicker-container{
+        position: fixed !important;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
     .rcm-entry .popover{
         max-width: 550px;
     }
 }
-
 @media (max-width: 1199px) {
-    .ledger-book .left-col-new .entry-modal {
-        width: 100%;
+        .ledger-book .left-col-new .entry-modal {
+            width: 100%;
+        }
     }
-}
-
 @media (max-width: 767px) {
     .settings-profile-tabs {
         .tab-content{

@@ -1,3 +1,4 @@
+<div class="relative">
 <hamburger-menu></hamburger-menu>
 <tabset #staticTabs class="custom-tabs" [ngClass]="{'hide-header': activeTab === 'vendor'}">
     <!-- region Customer/Vendor -->
@@ -209,6 +210,7 @@
     </tab>
     <!-- endregion -->
 </tabset>
+</div>
 
 <!-- region Modal for Mail/SMS for vendore-->
 <div *ngIf="activeTab === 'vendor'" class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">

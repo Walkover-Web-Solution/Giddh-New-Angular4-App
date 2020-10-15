@@ -743,6 +743,11 @@ ul.sub-list {
 .desktop-header .hamburger-menu{
     display: flex;
 }
+.desktop-header{
+    .navbar{
+        display: none;
+    }
+}
 .unique-name-financial-year{
     display: flex;
     align-items: center;
