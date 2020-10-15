@@ -266,6 +266,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
         this.getCurrency();
+
+        this.isStateRequired = this.checkActiveGroupCountry();
     }
 
     public ngAfterViewInit() {
