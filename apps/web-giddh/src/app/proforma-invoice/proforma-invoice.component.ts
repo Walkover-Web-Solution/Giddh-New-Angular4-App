@@ -6502,15 +6502,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let discountArray: LedgerDiscountClass[] = [];
 
         if (entry.discounts) {
-            entry.discounts.forEach((f) => {
+            entry.discounts.forEach((discount) => {
                 discountArray.push({
-                    discountType: f.calculationMethod,
-                    amount: f.discountValue,
-                    name: f.name,
-                    particular: f.uniqueName,
+                    discountType: discount.calculationMethod,
+                    amount: discount.discountValue,
+                    name: discount.name,
+                    particular: discount.uniqueName,
                     isActive: true,
-                    discountValue: f.discountValue,
-                    discountUniqueName: f.uniqueName
+                    discountValue: discount.discountValue,
+                    discountUniqueName: discount.uniqueName
                 });
 
             });
