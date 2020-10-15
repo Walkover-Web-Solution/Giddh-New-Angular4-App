@@ -148,9 +148,9 @@ export class AllModulesComponent implements OnInit, OnDestroy {
      * @param {*} isClickMethod to check is click method exist
      * @memberof AllModulesComponent
      */
-    public navigateTo(routeName: any, route: any, queryParamsItem: any, isClickMethod: any): void {
+    public navigateTo(route: any, queryParamsItem: any, isClickMethod: any): void {
         if (route) {
-            this.analyzeMenus(routeName, queryParamsItem);
+            this.analyzeMenus(route, queryParamsItem);
 
             if (!queryParamsItem) {
                 this.route.navigate([route]);

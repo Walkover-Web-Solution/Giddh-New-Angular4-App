@@ -6130,7 +6130,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.invFormData.entries[lastIndex].transactions[transactionLoop].fakeAccForSelect2 = item.uniqueName;
                     this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
                     this.invFormData.entries[lastIndex].transactions[transactionLoop].description = entry.description;
-                    this.invFormData.entries[lastIndex].discounts = this.parseDiscountFromResponse(entry);
+                    this.invFormData.entries[lastIndex].discounts = this.parsePoDiscountFromResponse(entry);
                     this.invFormData.entries[lastIndex].taxList = entry.taxes.map(tax => tax.uniqueName);
                     this.invFormData.entries[lastIndex].purchaseOrderItemMapping = {uniqueName: poUniqueName, entryUniqueName: entry.uniqueName};
 
@@ -6490,4 +6490,32 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
+    /**
+     * This will parse the discount response from PO and will return discount response required
+     *
+     * @private
+     * @param {SalesEntryClass} entry
+     * @returns {LedgerDiscountClass[]}
+     * @memberof ProformaInvoiceComponent
+     */
+    private parsePoDiscountFromResponse(entry: SalesEntryClass): LedgerDiscountClass[] {
+        let discountArray: LedgerDiscountClass[] = [];
+
+        if (entry.discounts) {
+            entry.discounts.forEach((discount) => {
+                discountArray.push({
+                    discountType: discount.calculationMethod,
+                    amount: discount.discountValue,
+                    name: discount.name,
+                    particular: discount.uniqueName,
+                    isActive: true,
+                    discountValue: discount.discountValue,
+                    discountUniqueName: discount.uniqueName
+                });
+
+            });
+        }
+
+        return discountArray;
+    }
 }
