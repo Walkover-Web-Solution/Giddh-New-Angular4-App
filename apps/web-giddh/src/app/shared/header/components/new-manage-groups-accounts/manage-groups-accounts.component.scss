@@ -1,6 +1,29 @@
+@import '../../../../../assets/css/color.scss';
 
 .modal-body .grp-col{
     max-width:58.333%;
+}
+
+.custom-filed-list-wrapper{
+    padding: 15px;
+    max-width: 1280px;
+    width: 100%;
+    height: 760px;
+    overflow-y: auto;
+    label{
+        line-height: 2.3;
+    }
+    .edit-close-btn{
+        .close-button{
+            margin-right: 15px;
+            i{
+                font-size: 18px;
+            }
+        }
+        i{
+            color: $black !important;
+        }
+    }
 }
 
 @media (max-width: 767px) {
