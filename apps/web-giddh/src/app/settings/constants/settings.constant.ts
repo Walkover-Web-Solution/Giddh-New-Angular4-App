@@ -10,6 +10,7 @@ export enum SettingsIntegrationTab {
 /** Country interface for Organization profile */
 export interface Country {
     countryName: string;
+    countryCode: string;
     currencyName: string;
     currencyCode: string;
 }
@@ -25,7 +26,7 @@ export interface OrganizationProfile {
     country?: Country;
     businessTypes?: Array<any>;
     businessType?: string;
-    headquarterAlias?: string;
+    nameAlias?: string;
     balanceDecimalPlaces?: number;
     balanceDisplayFormat?: string;
 }

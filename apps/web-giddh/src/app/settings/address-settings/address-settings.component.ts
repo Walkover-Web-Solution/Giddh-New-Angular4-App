@@ -38,6 +38,8 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     @Input() public paginationConfig: any;
     /** True if API is in progress */
     @Input() public shouldShowLoader: boolean;
+    /** Tre, if create/update address is in progress */
+    @Input() public isAddressChangeInProgress: boolean;
     /** Address configuration */
     @Input() public addressConfiguration: any;
     /** True, if aside pane needs to be closed */
@@ -52,12 +54,13 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         parent: {},
         country: {
             countryName: '',
+            countryCode: '',
             currencyName: '',
             currencyCode: ''
         },
         businessTypes: [],
         businessType: '',
-        headquarterAlias: '',
+        nameAlias: '',
         balanceDisplayFormat: ''
     };
 

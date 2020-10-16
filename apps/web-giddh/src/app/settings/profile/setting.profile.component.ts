@@ -79,7 +79,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         },
         businessTypes: [],
         businessType: '',
-        headquarterAlias: '',
+        nameAlias: '',
         balanceDisplayFormat: ''
     };
     public stateStream$: Observable<States[]>;
@@ -139,6 +139,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public isSearchFilterApplied: boolean;
     /** True, if address aside pane needs to be closed (after successful CREATE/UDPATE address) */
     public closeAddressSidePane: boolean;
+    /** True, if create/update address is in progress */
+    public isAddressChangeInProgress: boolean;
+
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -267,6 +270,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         ...this.companyProfileObj,
                         country: {
                             countryName: response.countryV2 ? response.countryV2.countryName : '',
+                            countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode.toLowerCase() : '',
                             currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
                             currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                         },
@@ -816,6 +820,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public createNewAddress(addressDetails: any): void {
+        this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
         const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,
@@ -832,17 +837,23 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         };
 
         this.settingsProfileService.createNewAddress(requestObj).subscribe(response => {
-            this.closeAddressSidePane = true;
-            if (this.currentOrganizationType === OrganizationType.Company) {
-                this.loadAddresses('GET');
-            } else if (this.currentOrganizationType === OrganizationType.Branch) {
-                this.store.dispatch(this.settingsProfileActions.getBranchInfo());
+            if (response.status === 'success') {
+                this.closeAddressSidePane = true;
+                if (this.currentOrganizationType === OrganizationType.Company) {
+                    this.loadAddresses('GET');
+                } else if (this.currentOrganizationType === OrganizationType.Branch) {
+                    this.store.dispatch(this.settingsProfileActions.getBranchInfo());
+                }
+                this._toasty.successToast('Address created successfully');
             }
-            this._toasty.successToast('Address created successfully');
+            this.isAddressChangeInProgress = false;
+        }, () => {
+            this.isAddressChangeInProgress = false;
         });
     }
 
     public updateAddress(addressDetails: any): void {
+        this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
         const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,
@@ -859,9 +870,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             linkEntity
         };
         this.settingsProfileService.updateAddress(requestObj).subscribe(response => {
-            this.closeAddressSidePane = true;
-            this.loadAddresses('GET');
-            this._toasty.successToast('Address updated successfully');
+            if (response.status === 'success') {
+                this.closeAddressSidePane = true;
+                this.loadAddresses('GET');
+                this._toasty.successToast('Address updated successfully');
+            }
+            this.isAddressChangeInProgress = false;
+        }, () => {
+            this.isAddressChangeInProgress = false;
         });
     }
 
@@ -940,10 +956,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 ...this.companyProfileObj,
                 name: profileObj.name,
                 companyName: profileObj.name,
-                headquarterAlias: profileObj.nameAlias,
+                nameAlias: profileObj.nameAlias,
                 uniqueName: profileObj.uniqueName,
                 country: {
                     countryName: profileObj.countryV2 ? profileObj.countryV2.countryName : '',
+                    countryCode: profileObj.countryV2 ? profileObj.countryV2.alpha2CountryCode.toLowerCase() : '',
                     currencyCode: profileObj.countryV2 && profileObj.countryV2.currency ? profileObj.countryV2.currency.code : '',
                     currencyName: profileObj.countryV2 && profileObj.countryV2.currency ? profileObj.countryV2.currency.symbol : ''
                 },

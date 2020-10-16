@@ -27,12 +27,13 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
         parent: {},
         country: {
             countryName: '',
+            countryCode: '',
             currencyName: '',
             currencyCode: ''
         },
         businessTypes: [],
         businessType: '',
-        headquarterAlias: ''
+        nameAlias: ''
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;

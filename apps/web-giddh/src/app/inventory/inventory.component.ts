@@ -136,7 +136,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (branches.length) {
                     _.each(branches, (branch) => {
                         if (branch.addresses && branch.addresses.length) {
-                            branch.addresses = [_.find(branch.addresses, (gst) => gst.isDefault)];
+                            branch.addresses = [_.find(branch.addresses, (gst) => gst && gst.isDefault)];
                         }
                     });
                     this.branches$ = observableOf(_.orderBy(branches, 'name'));
