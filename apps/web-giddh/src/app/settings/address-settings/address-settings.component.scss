@@ -87,11 +87,12 @@
 }
 
 
-/* branch profile */ 
+/* branch profile */
 .branch-profile-address-content{
     background-color: $white;
     border: 1px solid $gainsboro;
     padding: 15px;
+    margin-bottom: 15px;
     .single-branch-detail {
         font-size: 14px;
         h4{
