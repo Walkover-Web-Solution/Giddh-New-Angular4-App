@@ -49,6 +49,8 @@ export class EWayBillComponent implements OnInit {
     public dataSourceBackup: any;
 
     public showAdvanceSearchIcon: boolean = false;
+    /** Search results for from place */
+    public searchResults: Array<any> = [];
 
     // searching
     @ViewChild('invoiceSearch', {static: true}) public invoiceSearch: ElementRef;
@@ -272,6 +274,32 @@ export class EWayBillComponent implements OnInit {
     public getAllFilteredInvoice() {
         this.store.dispatch(this.invoiceActions.GetAllEwayfilterRequest(this.preparemodelForFilterEway()));
         this.detectChange();
+    }
+
+    /**
+     * Search query handler for from place field
+     *
+     * @param {string} query Query to search for from place
+     * @memberof EWayBillComponent
+     */
+    public onSearchQueryChanged(query: string): void {
+        this._location.GetCity({
+            QueryString: query,
+            AdministratorLevel: undefined,
+            Country: undefined,
+            OnlyCity: true
+        }).pipe(catchError(e => {
+            this.searchResults = [];
+            return [];
+        })).subscribe(response => {
+            if (response) {
+                this.searchResults = response.map(item => ({
+                    ...item,
+                    label: item.city,
+                    value: item.city
+                }));
+            }
+        });
     }
 
     public onSelectEwayDownload(eway: Result) {
