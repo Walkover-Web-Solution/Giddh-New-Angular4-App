@@ -1,15 +1,29 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
+import { OrganizationProfile, SettingsAsideFormType } from '../constants/settings.constant';
 
 @Component({
     selector: 'address-settings',
     templateUrl: './address-settings.component.html',
-    styleUrls: ['./address-settings.component.scss']
+    styleUrls: ['./address-settings.component.scss'],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 export class AddressSettingsComponent implements OnInit, OnDestroy {
     public accountAsideMenuState: string = 'out';
@@ -24,11 +38,43 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     @Input() public paginationConfig: any;
     /** True if API is in progress */
     @Input() public shouldShowLoader: boolean;
+    /** Address configuration */
+    @Input() public addressConfiguration: any;
+    /** True, if aside pane needs to be closed */
+    @Input() public closeSidePane: boolean;
+    /** Stores the profile data of an organization (company or profile) */
+    @Input() public profileData: OrganizationProfile = {
+        name: '',
+        uniqueName: '',
+        companyName: '',
+        logo: '',
+        alias: '',
+        parent: {},
+        country: {
+            countryName: '',
+            currencyName: '',
+            currencyCode: ''
+        },
+        businessTypes: [],
+        businessType: '',
+        headquarterAlias: '',
+        balanceDisplayFormat: ''
+    };
 
     /** Page change event emitter */
     @Output() public pageChanged: EventEmitter<any> = new EventEmitter<any>();
     /** Search field event emitter */
     @Output() public searchAddress: EventEmitter<any> = new EventEmitter<any>();
+    /** Save new address event emitter */
+    @Output() public saveNewAddress: EventEmitter<any> = new EventEmitter<any>();
+    /** Update address event emitter */
+    @Output() public updatedAddress: EventEmitter<any> = new EventEmitter<any>();
+    /** Delete address event emitter */
+    @Output() public deleteAddress: EventEmitter<any> = new EventEmitter<any>();
+    /** Unlink address event emitter */
+    @Output() public unLinkAddress: EventEmitter<any> = new EventEmitter<any>();
+    /** Set default address event emitter */
+    @Output() public setDefaultAddress: EventEmitter<any> = new EventEmitter<any>();
 
     public searchAddressNameInput: FormControl = new FormControl();
     public searchAddressInput: FormControl = new FormControl();
@@ -37,13 +83,14 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     public showSearchName: boolean;
     public showSearchAddress: boolean;
     public showSearchState: boolean;
-
     /** Stores the address search request */
     public addressSearchRequest: any = {
         name: '',
         address: '',
         state: ''
     };
+    /** Stores the address to be updated */
+    public addressToUpdate: any;
 
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -87,12 +134,20 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         this.toggleAccountAsidePane();
     }
 
-    public toggleAccountAsidePane(event?): void {
-        if (event) {
-            event.preventDefault();
-        }
+    public toggleAccountAsidePane(): void {
         this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+        this.closeSidePane = false;
         this.toggleBodyClass();
+    }
+
+    public saveAddress(form: any): void {
+        console.log(form);
+        this.saveNewAddress.emit(form);
+    }
+
+    public updateAddress(form: any): void {
+        form.formValue['uniqueName'] = this.addressToUpdate.uniqueName;
+        this.updatedAddress.emit(form);
     }
 
     public toggleBodyClass() {
@@ -107,6 +162,24 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         if (event.page !== this.paginationConfig.page) {
             this.pageChanged.emit({...event, ...this.addressSearchRequest});
         }
+    }
+
+    public handleUpdateAddress(address: any): void {
+        this.addressConfiguration.type = SettingsAsideFormType.EditAddress;
+        this.addressToUpdate = address;
+        this.openAddAndManage();
+    }
+
+    handleDeleteAddress(address: any): void {
+        this.deleteAddress.emit(address);
+    }
+
+    handleUnLinkAddress(address: any): void {
+        this.unLinkAddress.emit(address);
+    }
+
+    handleSetDefaultAddress(address: any): void {
+        this.setDefaultAddress.emit(address);
     }
 
     public toggleSearch(fieldName: string, el: any) {

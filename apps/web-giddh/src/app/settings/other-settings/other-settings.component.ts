@@ -29,6 +29,7 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
     @Input() public profileData: OrganizationProfile = {
         name: '',
         uniqueName: '',
+        companyName: '',
         logo: '',
         alias: '',
         parent: {},

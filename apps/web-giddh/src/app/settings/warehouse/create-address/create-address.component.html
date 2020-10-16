@@ -1,5 +1,5 @@
 <div class="aside-pane">
-    <form autocomplete="off">
+    <form [formGroup]="addressForm" novalidate (ngSubmit)="handleFormSubmit()" autocomplete="off">
         <section class="w-100">
             <div>
                 <div class="form-header">
@@ -9,40 +9,90 @@
 
                 <div class="aside-body">
                     <section class="aside-pane-form clearfix mrBChldLbl">
-                        <div class="font-14">
-                            All the information will save in <strong>Lorem Ipsum Company Name</strong>
+                        <div *ngIf="companyName" class="font-14">
+                            All the information will save in <strong>{{companyName}}</strong>
                         </div>
                         <br>
                         <div class="form_bg clearfix">
                             <div class="row">
                                 <div class="form-group col-12">
                                     <label>Name <sup>*</sup></label>
-                                    <input type="text" class="form-control" placeholder="Enter">
+                                    <input type="text" formControlName="name" class="form-control" placeholder="Enter">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div *ngIf="addressConfiguration?.tax?.name" class="col-sm-4 form-group">
+                                    <label>{{addressConfiguration?.tax?.name}}</label>
+                                    <input
+                                        [class.error-box]="addressForm?.get('taxNumber')?.touched && addressForm?.get('taxNumber')?.invalid"
+                                        type="text" (keyup)="getStateCode(states, $event)" class="form-control"
+                                        formControlName="taxNumber"
+                                        [attr.placeholder]="'Enter '+ addressConfiguration?.tax?.name">
+                                </div>
+                                <div class="col-sm-8 form-group">
+                                    <label>State <sup>*</sup></label>
+                                    <sh-select #states [options]="addressConfiguration.stateList" required
+                                        [isFilterEnabled]="true" formControlName="state" style="width:100%"
+                                        [useInBuiltFilterForIOptionTypeItems]="true"
+                                        [forceClearReactive]="forceClear$ | async">
+                                    </sh-select>
                                 </div>
                             </div>
 
                             <div class="clearfix row">
                                 <div class="form-group col-12">
-                                    <label>Address</label>
-                                    <textarea type="text" name="name" class="form-control" formControlName="name"
-                                        placeholder="Enter Address"></textarea>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-4 form-group">
-                                    <label>GSTIN</label>
-                                    <input type="text" class="form-control" placeholder="Enter GSTIN">
-                                </div>
-                                <div class="col-sm-8 form-group">
-                                    <label>State <sup>*</sup></label>
-                                    <input type="text" class="form-control">
+                                    <label>Address<sup
+                                            *ngIf="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value">*</sup></label>
+                                    <textarea type="text" name="name" class="form-control" formControlName="address"
+                                        placeholder="Enter Address"
+                                        [attr.required]="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value"></textarea>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-sm-12 form-group">
+                                <div class="col-sm-12 form-group linked-entities">
                                     <label>Link Entity</label>
-                                    <input type="text" class="form-control">
+                                    <div class="form-group">
+                                        <sh-select [options]="addressConfiguration?.linkedEntities" name="particulars"
+                                            formControlName="linkedEntity"
+                                            (clearSingleItem)="handleFinalSelection($event)" [isFilterEnabled]="true"
+                                            [multiple]="true
+                                            " placeholder="Select Entity">
+                                            <ng-template #optionTemplate let-option="option">
+                                                <ng-container>
+                                                    <a (click)="selectEntity(option)" href="javascript:void(0)"
+                                                        class="list-item d-flex">
+                                                        <span><input type="checkbox"
+                                                                [checked]="addressForm?.get('linkedEntity')?.value?.includes(option.value)"
+                                                                [value]="option.value"></span>&nbsp;
+                                                        <span class="entity-icon">
+                                                            <i class="icon-branch-icon pull-right"
+                                                                *ngIf="option.entity === 'BRANCH'" tooltip="Branch"></i>
+                                                            <!-- <i class="icon-company-HO pull-right" *ngIf="option.entity === 'WAREHOUSE'" tooltip="Warehouse"></i> -->
+                                                            <i class="icon-warehouse-icon pull-right"
+                                                                *ngIf="option.entity === 'WAREHOUSE'"
+                                                                tooltip="Warehouse"></i>
+                                                        </span>
+                                                        <span class="entity-details">
+                                                            <div class="item">{{ option.label || '-' }}</div>
+                                                            <div class="item-unq">
+                                                                {{ option.name || '-' }}
+                                                            </div>
+                                                        </span>
+                                                        <span class="default-entity">
+                                                            <i (click)="setDefault(option, $event)"
+                                                                *ngIf="!option.isDefault"
+                                                                class="icon-no-selected mr-05"></i>
+                                                            <i (click)="setDefault(option, $event)"
+                                                                *ngIf="option.isDefault"
+                                                                class="icon-favorite-selected mr-05"></i>
+                                                        </span>
+                                                    </a>
+                                                </ng-container>
+                                            </ng-template>
+                                        </sh-select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -51,10 +101,9 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 text-left">
                                 <div class="mt-5 pdL pdR">
-
-                                    <button type="submit" class="btn btn-success">Save
+                                    <button [disabled]="addressForm?.invalid" type="submit" class="btn btn-success">Save
                                     </button>
-                                    <button class="btn btn-danger">Cancel
+                                    <button (click)="addressForm?.reset()" class="btn btn-danger">Clear
                                     </button>
                                 </div>
                             </div>
@@ -66,5 +115,3 @@
         <div class="clearfix"></div>
     </form>
 </div>
-
-

@@ -88,8 +88,10 @@
 
                                     <div class="ml-auto">
                                         <div class="action-icon">
-                                            <a><span class="icon-edit"></span></a>
-                                            <a><span class="icon-trash"></span></a>
+                                            <a><span (click)="handleUpdateAddress(address)"
+                                                    class="icon-edit"></span></a>
+                                            <a><span (click)="handleDeleteAddress(address)"
+                                                    class="icon-trash"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -131,9 +133,12 @@
                         <div class="set-default">
                             <p class="no-selected mb-1 cursor-pointer" hidden><i class="icon-no-selected mr-05"></i>Set
                                 as Default</p>
-                            <p class="selected-defualt mb-1 cursor-pointer"><i
-                                    class="icon-favorite-selected mr-05"></i>Set as Default</p>
-                            <p class="cursor-pointer"><i class="icon-unlink mr-05"></i>Unlink Address</p>
+                            <p (click)="handleSetDefaultAddress(address)" class="selected-defualt mb-1 cursor-pointer">
+                                <i *ngIf="address.isDefault" class="icon-favorite-selected mr-05"></i>
+                                <i *ngIf="!address.isDefault" class="icon-no-selected mr-05"></i>
+                                Set as Default</p>
+                            <p (click)="handleUnLinkAddress(address)" class="cursor-pointer">
+                                <i class="icon-unlink mr-05"></i>Unlink Address</p>
                         </div>
                     </div>
                 </div>
@@ -141,7 +146,8 @@
         </div>
         <!-- branch profile element end -->
         <div *ngIf="organizationType === 'COMPANY'" class="col-md-12 text-center">
-            <pagination [(ngModel)]="paginationConfig.page" *ngIf="!shouldShowLoader && paginationConfig?.totalItems > paginationLimit"
+            <pagination [(ngModel)]="paginationConfig.page"
+                *ngIf="!shouldShowLoader && paginationConfig?.totalItems > paginationLimit"
                 [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count"
                 [boundaryLinks]="true" [rotate]="true" (pageChanged)="handlePageChange($event)"></pagination>
         </div>
@@ -149,10 +155,11 @@
 </div>
 
 <!-- Create address part of Address Tab -->
-<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-<div class="abc " *ngIf="accountAsideMenuState === 'in'">
+<div class="abc" *ngIf="accountAsideMenuState === 'in' && !closeSidePane">
     <create-address class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState"
-        (closeAsideEvent)="toggleAccountAsidePane($event)">
+        [companyName]="organizationType === 'BRANCH' ? profileData?.companyName : ''"
+        (saveAddress)="saveAddress($event)" (updateAddress)="updateAddress($event)" [addressToUpdate]="addressToUpdate"
+        (closeAsideEvent)="toggleAccountAsidePane()" [addressConfiguration]="addressConfiguration">
     </create-address>
 </div>
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">

@@ -18,6 +18,7 @@ export interface Country {
 export interface OrganizationProfile {
     name: string;
     uniqueName: string;
+    companyName: string,
     logo?: string;
     alias?: string;
     parent?: any;
@@ -27,4 +28,21 @@ export interface OrganizationProfile {
     headquarterAlias?: string;
     balanceDecimalPlaces?: number;
     balanceDisplayFormat?: string;
+}
+
+export enum SettingsAsideFormType {
+    CreateAddress = 'createAddress',
+    EditAddress = 'editAddress',
+    CreateBranch = 'createBranch',
+    EditBranch = 'editBranch'
+}
+
+export interface SettingsAsideConfiguration {
+    type: SettingsAsideFormType;
+    stateList?: Array<any>;
+    tax?: {
+        name: string,
+        validation: Array<any>
+    };
+    linkedEntities?: Array<any>;
 }

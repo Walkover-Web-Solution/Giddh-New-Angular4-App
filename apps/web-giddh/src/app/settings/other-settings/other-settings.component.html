@@ -2,7 +2,7 @@
     <div *ngIf="organizationType === 'BRANCH'" class="row">
         <div class="col-md-12">
             <div class="border-bottom font-14">
-                <p class="pb-15"> All the information will save in <strong>{{profileData?.name}}</strong></p>
+                <p class="pb-15"> All the information will save in <strong>{{profileData?.companyName}}</strong></p>
                 <!-- branch profile element start -->
                 <div class="other-detail-section">
                     <div class="mb-15">
@@ -17,9 +17,7 @@
                 </div>
                 <!-- branch profile element end -->
             </div>
-
         </div>
-
     </div>
     <div *ngIf="organizationType === 'COMPANY'" class="row pb-2">
         <div class="col-lg-12 col-xl-7 other-information">

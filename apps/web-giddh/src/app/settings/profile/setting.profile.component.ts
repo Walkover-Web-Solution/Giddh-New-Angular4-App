@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { createSelector, select, Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
@@ -17,9 +17,11 @@ import { CountryRequest, OnboardingFormRequest } from "../../models/api-models/C
 import { GeneralActions } from '../../actions/general/general.actions';
 import { CommonActions } from '../../actions/common.actions';
 import { OrganizationType } from '../../models/user-login-state';
-import { OrganizationProfile } from '../constants/settings.constant';
+import { OrganizationProfile, SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { SettingsUtilityService } from '../services/settings-utility.service';
+import { CommonService } from '../../services/common.service';
+import { CompanyService } from '../../services/companyService.service';
 
 export interface IGstObj {
     newGstNumber: string;
@@ -66,6 +68,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public companyProfileObj: OrganizationProfile | any = {
         name: '',
         uniqueName: '',
+        companyName: '',
         logo: '',
         alias: '',
         parent: {},
@@ -120,14 +123,28 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         totalItems: 0,
         count: 0
     };
+    /** Stores the address configuration */
+    public addressConfiguration: SettingsAsideConfiguration = {
+        type: SettingsAsideFormType.CreateAddress,
+        stateList: [],
+        tax: {
+            name: '',
+            validation: []
+        },
+        linkedEntities: []
+    };
     /** True, if address API is in progress */
     public shouldShowAddressLoader: boolean;
     /** True, if search filter is applied */
     public isSearchFilterApplied: boolean;
+    /** True, if address aside pane needs to be closed (after successful CREATE/UDPATE address) */
+    public closeAddressSidePane: boolean;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
+        private commonService: CommonService,
+        private companyService: CompanyService,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
         private _toasty: ToasterService,
@@ -253,6 +270,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                             currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
                             currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                         },
+                        companyName: response.name,
                         balanceDecimalPlaces: response.balanceDecimalPlaces,
                         balanceDisplayFormat: response.balanceDisplayFormat
                     }
@@ -713,10 +731,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
     }
 
-    public updateBranchProfile(): void {
+    public updateBranchProfile(params?: any): void {
         this.currentBranchDetails.name = this.companyProfileObj.name;
         this.currentBranchDetails.alias = this.companyProfileObj.alias;
-        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(this.currentBranchDetails))
+        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(params? params : this.currentBranchDetails))
             .subscribe(response => {});
     }
 
@@ -724,7 +742,58 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.currentTab = tabName;
         if (tabName === 'address') {
             this.loadAddresses('GET');
+            this.loadLinkedEntities();
+            if (this.currentCompanyDetails && this.currentCompanyDetails.countryV2) {
+                this.loadTaxDetails(this.currentCompanyDetails.countryV2.alpha2CountryCode);
+                this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
+            }
         }
+    }
+
+    public loadLinkedEntities(): void {
+        this.settingsProfileService.getAllLinkedEntities().subscribe(response => {
+            if (response && response.body && response.status === 'success') {
+                this.addressConfiguration.linkedEntities = response.body.results.map(result => ({
+                    ...result,
+                    isDefault: false,
+                    label: result.alias,
+                    value: result.uniqueName
+                }));
+            }
+        });
+    }
+
+    public loadStates(countryCode: string): void {
+        this.companyService.getAllStates({country: countryCode}).subscribe(response => {
+            if (response && response.body && response.status === 'success') {
+                const result = response.body;
+                this.addressConfiguration.stateList = [];
+                Object.keys(result.stateList).forEach(key => {
+                    this.addressConfiguration.stateList.push({
+                        label: result.stateList[key].code + ' - ' + result.stateList[key].name,
+                        value: result.stateList[key].code,
+                        code: result.stateList[key].stateGstCode,
+                        stateName: result.stateList[key].name
+                    });
+                });
+            }
+        });
+    }
+
+    public loadTaxDetails(countryCode: string): void {
+        let onboardingFormRequest = new OnboardingFormRequest();
+        onboardingFormRequest.formName = 'onboarding';
+        onboardingFormRequest.country = countryCode;
+        this.commonService.getOnboardingForm(onboardingFormRequest).subscribe((response: any) => {
+            if (response && response.status === 'success') {
+                if (response.body && response.body.fields && response.body.fields.length > 0) {
+                    const taxField = response.body.fields.find(field => field && field.name === 'taxName');
+                    // Tax field found, support for the country taxation
+                    this.addressConfiguration.tax.name = taxField ? taxField.label : '';
+                    this.addressConfiguration.tax.validation = taxField ? taxField.regex : [];
+                }
+            }
+        });
     }
 
     public handlePageChanged(event: any) {
@@ -744,6 +813,100 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public handleSearchInAddress(event: any): void {
         this.isSearchFilterApplied = true;
         this.loadAddresses('POST', { ...event, page: 1 });
+    }
+
+    public createNewAddress(addressDetails: any): void {
+        const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
+        const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+            uniqueName: filteredEntity.uniqueName,
+            isDefault: filteredEntity.isDefault,
+            entity: filteredEntity.entity
+        }));
+        const requestObj = {
+            taxNumber: addressDetails.formValue.taxNumber,
+            stateCode: addressDetails.formValue.state,
+            stateName: chosenState ? chosenState.stateName : '',
+            address: addressDetails.formValue.address,
+            name: addressDetails.formValue.name,
+            linkEntity
+        };
+
+        this.settingsProfileService.createNewAddress(requestObj).subscribe(response => {
+            this.closeAddressSidePane = true;
+            if (this.currentOrganizationType === OrganizationType.Company) {
+                this.loadAddresses('GET');
+            } else if (this.currentOrganizationType === OrganizationType.Branch) {
+                this.store.dispatch(this.settingsProfileActions.getBranchInfo());
+            }
+            this._toasty.successToast('Address created successfully');
+        });
+    }
+
+    public updateAddress(addressDetails: any): void {
+        const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
+        const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+            uniqueName: filteredEntity.uniqueName,
+            isDefault: filteredEntity.isDefault,
+            entity: filteredEntity.entity
+        }));
+        const requestObj = {
+            taxNumber: addressDetails.formValue.taxNumber,
+            stateCode: addressDetails.formValue.state,
+            stateName: chosenState ? chosenState.stateName : '',
+            address: addressDetails.formValue.address,
+            name: addressDetails.formValue.name,
+            uniqueName: addressDetails.formValue.uniqueName,
+            linkEntity
+        };
+        this.settingsProfileService.updateAddress(requestObj).subscribe(response => {
+            this.closeAddressSidePane = true;
+            this.loadAddresses('GET');
+            this._toasty.successToast('Address updated successfully');
+        });
+    }
+
+    public handleDeleteAddress(addressDetails: any): void {
+        this.settingsProfileService.deleteAddress(addressDetails.uniqueName).subscribe(response => {
+            this.loadAddresses('GET');
+            this._toasty.successToast('Address deleted successfully');
+        });
+    }
+
+    public handleAddressUnlinking(addressDetails: any): void {
+        const requestObject = {
+            name: this.currentBranchDetails.name,
+            alias: this.currentBranchDetails.alias,
+            linkAddresses: this.currentBranchDetails.addresses.filter(address => address.uniqueName !== addressDetails.uniqueName)
+        }
+        this.settingsProfileService.updateBranchInfo(requestObject).subscribe(response => {
+            this.store.dispatch(this.settingsProfileActions.getBranchInfo());
+            this._toasty.successToast('Address unlinked successfully');
+        });
+    }
+
+    public handleDefaultAddress(addressDetails: any): void {
+        this.addresses.forEach(add => {
+            if (add.uniqueName !== addressDetails.uniqueName) {
+                add.isDefault = false;
+            }
+        })
+        addressDetails.isDefault = !addressDetails.isDefault;
+        const requestObject = {
+            name: this.currentBranchDetails.name,
+            alias: this.currentBranchDetails.alias,
+            linkAddresses: this.currentBranchDetails.addresses.map(address => {
+                if (address.uniqueName === addressDetails.uniqueName) {
+                    address.isDefault = addressDetails.isDefault;
+                } else {
+                    address.isDefault = false;
+                }
+                return address;
+            })
+        }
+        this.settingsProfileService.updateBranchInfo(requestObject).subscribe(response => {
+            this.store.dispatch(this.settingsProfileActions.getBranchInfo());
+            this._toasty.successToast('Address updated successfully');
+        });
     }
 
     private handleCompanyProfileResponse(response: any): void {
@@ -776,6 +939,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             this.companyProfileObj = {
                 ...this.companyProfileObj,
                 name: profileObj.name,
+                companyName: profileObj.name,
                 headquarterAlias: profileObj.nameAlias,
                 uniqueName: profileObj.uniqueName,
                 country: {
@@ -819,9 +983,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     private loadAddresses(method: string, params?: any): void {
-        if (this.currentOrganizationType === OrganizationType.Branch) {
-
-        } else if (this.currentOrganizationType === OrganizationType.Company) {
+        if (this.currentOrganizationType === OrganizationType.Company) {
             this.shouldShowAddressLoader = true;
             this.settingsProfileService.getCompanyAddresses(method, params).subscribe((response) => {
                 this.shouldShowAddressLoader = false;
