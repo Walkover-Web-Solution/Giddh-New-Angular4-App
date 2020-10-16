@@ -8623,7 +8623,9 @@ ul.dropdown-menu p.lead.pd {
 #invoice-setting ul.nav.nav-tabs {
     margin-bottom: 15px;
     background: transparent;
-    position: inherit;
+    position: inherit !important;
+    padding: 0 0px 0 15px !important;
+    border-bottom: inherit !important;
 }
 
 #invoice-setting ul.nav.nav-tabs a {
@@ -9282,6 +9284,9 @@ input.form-control.focused {
         }
     }
 }
+#setting-tab > .tab-container > .tab-content {
+    padding-top: 12px;
+}
 
 /*datepicker common css*/
 
@@ -9928,7 +9933,7 @@ ul.dropdown-menu.action-dropdown {
         }
     }
 
-    @media (max-width: 768px) {
+  @media (max-width: 768px) {
         ul.dropdown-menu.action-dropdown {
             left: auto;
             right: 0 !important;
@@ -10050,6 +10055,7 @@ ul.dropdown-menu.action-dropdown {
         }
         .modal-header {
             padding: 12px 15px !important;
+
             h3,
             h4 {
                 font-size: 16px !important;
@@ -10079,7 +10085,6 @@ ul.dropdown-menu.action-dropdown {
             margin-top: 0 !important;
         }
     }
-
 @media (max-width: 1280px) {
     .multi-select input.form-control {
         padding-right: 18px !important;
