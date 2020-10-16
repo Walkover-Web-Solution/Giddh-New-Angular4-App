@@ -1,5 +1,5 @@
 <div class="aside-pane">
-    <form [formGroup]="addressForm" novalidate (ngSubmit)="handleFormSubmit($event)" autocomplete="off">
+    <form [formGroup]="addressForm" novalidate (ngSubmit)="handleFormSubmit()" autocomplete="off">
         <section class="w-100">
             <div>
                 <div class="form-header">
@@ -9,8 +9,8 @@
 
                 <div class="aside-body">
                     <section class="aside-pane-form clearfix mrBChldLbl">
-                        <div class="font-14">
-                            All the information will save in <strong>Lorem Ipsum Company Name</strong>
+                        <div *ngIf="companyName" class="font-14">
+                            All the information will save in <strong>{{companyName}}</strong>
                         </div>
                         <br>
                         <div class="form_bg clearfix">
@@ -24,7 +24,9 @@
                             <div class="row">
                                 <div *ngIf="addressConfiguration?.tax?.name" class="col-sm-4 form-group">
                                     <label>{{addressConfiguration?.tax?.name}}</label>
-                                    <input type="text" (keyup)="getStateCode(states, $event)" class="form-control"
+                                    <input
+                                        [class.error-box]="addressForm?.get('taxNumber')?.touched && addressForm?.get('taxNumber')?.invalid"
+                                        type="text" (keyup)="getStateCode(states, $event)" class="form-control"
                                         formControlName="taxNumber"
                                         [attr.placeholder]="'Enter '+ addressConfiguration?.tax?.name">
                                 </div>
@@ -54,12 +56,15 @@
                                     <div class="form-group">
                                         <sh-select [options]="addressConfiguration?.linkedEntities" name="particulars"
                                             formControlName="linkedEntity"
-                                            [isFilterEnabled]="true" [multiple]="true
+                                            (clearSingleItem)="handleFinalSelection($event)" [isFilterEnabled]="true"
+                                            [multiple]="true
                                             " placeholder="Select Entity">
                                             <ng-template #optionTemplate let-option="option">
                                                 <ng-container>
-                                                    <a (click)="selectEntity(option)" href="javascript:void(0)" class="list-item d-flex">
-                                                        <span><input type="checkbox" [checked]="addressForm?.get('linkedEntity')?.value?.includes(option.value)"
+                                                    <a (click)="selectEntity(option)" href="javascript:void(0)"
+                                                        class="list-item d-flex">
+                                                        <span><input type="checkbox"
+                                                                [checked]="addressForm?.get('linkedEntity')?.value?.includes(option.value)"
                                                                 [value]="option.value"></span>&nbsp;
                                                         <span class="entity-icon">
                                                             <i class="icon-branch-icon pull-right"
@@ -76,8 +81,12 @@
                                                             </div>
                                                         </span>
                                                         <span class="default-entity">
-                                                            <i (click)="setDefault(option, $event)" *ngIf="!option.isDefault" class="icon-no-selected mr-05"></i>
-                                                            <i (click)="setDefault(option, $event)" *ngIf="option.isDefault" class="icon-favorite-selected mr-05"></i>
+                                                            <i (click)="setDefault(option, $event)"
+                                                                *ngIf="!option.isDefault"
+                                                                class="icon-no-selected mr-05"></i>
+                                                            <i (click)="setDefault(option, $event)"
+                                                                *ngIf="option.isDefault"
+                                                                class="icon-favorite-selected mr-05"></i>
                                                         </span>
                                                     </a>
                                                 </ng-container>
@@ -92,7 +101,7 @@
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 text-left">
                                 <div class="mt-5 pdL pdR">
-                                    <button type="submit" class="btn btn-success">Save
+                                    <button [disabled]="addressForm?.invalid" type="submit" class="btn btn-success">Save
                                     </button>
                                     <button (click)="addressForm?.reset()" class="btn btn-danger">Clear
                                     </button>

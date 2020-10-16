@@ -6,6 +6,7 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
+import { OrganizationProfile, SettingsAsideFormType } from '../constants/settings.constant';
 
 @Component({
     selector: 'address-settings',
@@ -39,11 +40,41 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     @Input() public shouldShowLoader: boolean;
     /** Address configuration */
     @Input() public addressConfiguration: any;
+    /** True, if aside pane needs to be closed */
+    @Input() public closeSidePane: boolean;
+    /** Stores the profile data of an organization (company or profile) */
+    @Input() public profileData: OrganizationProfile = {
+        name: '',
+        uniqueName: '',
+        companyName: '',
+        logo: '',
+        alias: '',
+        parent: {},
+        country: {
+            countryName: '',
+            currencyName: '',
+            currencyCode: ''
+        },
+        businessTypes: [],
+        businessType: '',
+        headquarterAlias: '',
+        balanceDisplayFormat: ''
+    };
 
     /** Page change event emitter */
     @Output() public pageChanged: EventEmitter<any> = new EventEmitter<any>();
     /** Search field event emitter */
     @Output() public searchAddress: EventEmitter<any> = new EventEmitter<any>();
+    /** Save new address event emitter */
+    @Output() public saveNewAddress: EventEmitter<any> = new EventEmitter<any>();
+    /** Update address event emitter */
+    @Output() public updatedAddress: EventEmitter<any> = new EventEmitter<any>();
+    /** Delete address event emitter */
+    @Output() public deleteAddress: EventEmitter<any> = new EventEmitter<any>();
+    /** Unlink address event emitter */
+    @Output() public unLinkAddress: EventEmitter<any> = new EventEmitter<any>();
+    /** Set default address event emitter */
+    @Output() public setDefaultAddress: EventEmitter<any> = new EventEmitter<any>();
 
     public searchAddressNameInput: FormControl = new FormControl();
     public searchAddressInput: FormControl = new FormControl();
@@ -58,6 +89,8 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         address: '',
         state: ''
     };
+    /** Stores the address to be updated */
+    public addressToUpdate: any;
 
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -103,11 +136,18 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
 
     public toggleAccountAsidePane(): void {
         this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+        this.closeSidePane = false;
         this.toggleBodyClass();
     }
 
     public saveAddress(form: any): void {
         console.log(form);
+        this.saveNewAddress.emit(form);
+    }
+
+    public updateAddress(form: any): void {
+        form.formValue['uniqueName'] = this.addressToUpdate.uniqueName;
+        this.updatedAddress.emit(form);
     }
 
     public toggleBodyClass() {
@@ -122,6 +162,24 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         if (event.page !== this.paginationConfig.page) {
             this.pageChanged.emit({...event, ...this.addressSearchRequest});
         }
+    }
+
+    public handleUpdateAddress(address: any): void {
+        this.addressConfiguration.type = SettingsAsideFormType.EditAddress;
+        this.addressToUpdate = address;
+        this.openAddAndManage();
+    }
+
+    handleDeleteAddress(address: any): void {
+        this.deleteAddress.emit(address);
+    }
+
+    handleUnLinkAddress(address: any): void {
+        this.unLinkAddress.emit(address);
+    }
+
+    handleSetDefaultAddress(address: any): void {
+        this.setDefaultAddress.emit(address);
     }
 
     public toggleSearch(fieldName: string, el: any) {

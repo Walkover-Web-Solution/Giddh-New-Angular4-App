@@ -18,6 +18,7 @@ export interface Country {
 export interface OrganizationProfile {
     name: string;
     uniqueName: string;
+    companyName: string,
     logo?: string;
     alias?: string;
     parent?: any;

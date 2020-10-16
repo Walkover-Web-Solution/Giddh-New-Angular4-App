@@ -68,6 +68,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public companyProfileObj: OrganizationProfile | any = {
         name: '',
         uniqueName: '',
+        companyName: '',
         logo: '',
         alias: '',
         parent: {},
@@ -136,6 +137,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public shouldShowAddressLoader: boolean;
     /** True, if search filter is applied */
     public isSearchFilterApplied: boolean;
+    /** True, if address aside pane needs to be closed (after successful CREATE/UDPATE address) */
+    public closeAddressSidePane: boolean;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -267,6 +270,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                             currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
                             currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                         },
+                        companyName: response.name,
                         balanceDecimalPlaces: response.balanceDecimalPlaces,
                         balanceDisplayFormat: response.balanceDisplayFormat
                     }
@@ -727,10 +731,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
     }
 
-    public updateBranchProfile(): void {
+    public updateBranchProfile(params?: any): void {
         this.currentBranchDetails.name = this.companyProfileObj.name;
         this.currentBranchDetails.alias = this.companyProfileObj.alias;
-        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(this.currentBranchDetails))
+        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(params? params : this.currentBranchDetails))
             .subscribe(response => {});
     }
 
@@ -768,7 +772,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     this.addressConfiguration.stateList.push({
                         label: result.stateList[key].code + ' - ' + result.stateList[key].name,
                         value: result.stateList[key].code,
-                        code: result.stateList[key].stateGstCode
+                        code: result.stateList[key].stateGstCode,
+                        stateName: result.stateList[key].name
                     });
                 });
             }
@@ -810,6 +815,100 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.loadAddresses('POST', { ...event, page: 1 });
     }
 
+    public createNewAddress(addressDetails: any): void {
+        const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
+        const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+            uniqueName: filteredEntity.uniqueName,
+            isDefault: filteredEntity.isDefault,
+            entity: filteredEntity.entity
+        }));
+        const requestObj = {
+            taxNumber: addressDetails.formValue.taxNumber,
+            stateCode: addressDetails.formValue.state,
+            stateName: chosenState ? chosenState.stateName : '',
+            address: addressDetails.formValue.address,
+            name: addressDetails.formValue.name,
+            linkEntity
+        };
+
+        this.settingsProfileService.createNewAddress(requestObj).subscribe(response => {
+            this.closeAddressSidePane = true;
+            if (this.currentOrganizationType === OrganizationType.Company) {
+                this.loadAddresses('GET');
+            } else if (this.currentOrganizationType === OrganizationType.Branch) {
+                this.store.dispatch(this.settingsProfileActions.getBranchInfo());
+            }
+            this._toasty.successToast('Address created successfully');
+        });
+    }
+
+    public updateAddress(addressDetails: any): void {
+        const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
+        const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+            uniqueName: filteredEntity.uniqueName,
+            isDefault: filteredEntity.isDefault,
+            entity: filteredEntity.entity
+        }));
+        const requestObj = {
+            taxNumber: addressDetails.formValue.taxNumber,
+            stateCode: addressDetails.formValue.state,
+            stateName: chosenState ? chosenState.stateName : '',
+            address: addressDetails.formValue.address,
+            name: addressDetails.formValue.name,
+            uniqueName: addressDetails.formValue.uniqueName,
+            linkEntity
+        };
+        this.settingsProfileService.updateAddress(requestObj).subscribe(response => {
+            this.closeAddressSidePane = true;
+            this.loadAddresses('GET');
+            this._toasty.successToast('Address updated successfully');
+        });
+    }
+
+    public handleDeleteAddress(addressDetails: any): void {
+        this.settingsProfileService.deleteAddress(addressDetails.uniqueName).subscribe(response => {
+            this.loadAddresses('GET');
+            this._toasty.successToast('Address deleted successfully');
+        });
+    }
+
+    public handleAddressUnlinking(addressDetails: any): void {
+        const requestObject = {
+            name: this.currentBranchDetails.name,
+            alias: this.currentBranchDetails.alias,
+            linkAddresses: this.currentBranchDetails.addresses.filter(address => address.uniqueName !== addressDetails.uniqueName)
+        }
+        this.settingsProfileService.updateBranchInfo(requestObject).subscribe(response => {
+            this.store.dispatch(this.settingsProfileActions.getBranchInfo());
+            this._toasty.successToast('Address unlinked successfully');
+        });
+    }
+
+    public handleDefaultAddress(addressDetails: any): void {
+        this.addresses.forEach(add => {
+            if (add.uniqueName !== addressDetails.uniqueName) {
+                add.isDefault = false;
+            }
+        })
+        addressDetails.isDefault = !addressDetails.isDefault;
+        const requestObject = {
+            name: this.currentBranchDetails.name,
+            alias: this.currentBranchDetails.alias,
+            linkAddresses: this.currentBranchDetails.addresses.map(address => {
+                if (address.uniqueName === addressDetails.uniqueName) {
+                    address.isDefault = addressDetails.isDefault;
+                } else {
+                    address.isDefault = false;
+                }
+                return address;
+            })
+        }
+        this.settingsProfileService.updateBranchInfo(requestObject).subscribe(response => {
+            this.store.dispatch(this.settingsProfileActions.getBranchInfo());
+            this._toasty.successToast('Address updated successfully');
+        });
+    }
+
     private handleCompanyProfileResponse(response: any): void {
         if (response.profileRequest || 1 === 1) {
             let profileObj = _.cloneDeep(response);
@@ -840,6 +939,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             this.companyProfileObj = {
                 ...this.companyProfileObj,
                 name: profileObj.name,
+                companyName: profileObj.name,
                 headquarterAlias: profileObj.nameAlias,
                 uniqueName: profileObj.uniqueName,
                 country: {

@@ -6,5 +6,8 @@ export const SETTINGS_PROFILE_API = {
     GET_BRANCH_INFO: `${COMMON}/branch/:branchUniqueName`,
     UPDATE_BRANCH_INFO: `${COMMON}/branch/:branchUniqueName`,
     GET_COMPANY_ADDRESSES: `${COMMON}/address/all`,
-    GET_LINKED_ENTITIES: `${COMMON}/sources`
+    GET_LINKED_ENTITIES: `${COMMON}/sources`,
+    CREATE_NEW_ADDRESS: `${COMMON}/address`,
+    UPDATE_ADDRESS: `${COMMON}/address/:addressUniqueName`,
+    DELETE_ADDRESS: `${COMMON}/address/:addressUniqueName`
 };

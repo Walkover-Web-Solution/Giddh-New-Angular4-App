@@ -26,6 +26,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
 
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
     @Output() public saveAddress: EventEmitter<any> = new EventEmitter();
+    @Output() public updateAddress: EventEmitter<any> = new EventEmitter();
 
     public addressForm: FormGroup;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
@@ -34,6 +35,10 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
 
     /** Address configuration */
     @Input() public addressConfiguration: SettingsAsideConfiguration;
+    /** Stores the address to be updated */
+    @Input() public addressToUpdate: any;
+    /** Company name */
+    @Input() public companyName: string;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -42,16 +47,39 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        if (this.addressConfiguration && this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
-            const taxValidatorPatterns = this.addressConfiguration.tax.name ? this.addressConfiguration.tax.validation : [];
-            this.addressForm = this.formBuilder.group({
-                name: ['', Validators.required],
-                taxNumber: ['', (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
-                state: ['', Validators.required],
-                address: [''],
-                linkedEntity: [[]]
-            });
+        if (this.addressConfiguration) {
+            if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
+                const taxValidatorPatterns = this.addressConfiguration.tax.name ? this.addressConfiguration.tax.validation : [];
+                this.addressForm = this.formBuilder.group({
+                    name: ['', Validators.required],
+                    taxNumber: ['', (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
+                    state: ['', Validators.required],
+                    address: [''],
+                    linkedEntity: [[]]
+                });
+            } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress) {
+                if (this.addressToUpdate) {
+                    const taxValidatorPatterns = this.addressConfiguration.tax.name ? this.addressConfiguration.tax.validation : [];
+                    this.addressForm = this.formBuilder.group({
+                        name: [this.addressToUpdate.name, Validators.required],
+                        taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
+                        state: [this.addressToUpdate.stateCode, Validators.required],
+                        address: [this.addressToUpdate.address],
+                        linkedEntity: [this.addressToUpdate.linkedEntities.map(entity => entity.uniqueName)]
+                    });
+                    const linkedEntity = [...this.addressToUpdate.linkedEntities];
+                    while (linkedEntity.length) {
+                        // Update the default entity status in UPDATE mode
+                        const entity = linkedEntity.pop();
+                        const entityIndex = this.addressConfiguration.linkedEntities.find(linkEntity => linkEntity.uniqueName === entity.uniqueName);
+                        if (entityIndex > -1) {
+                            this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
+                        }
+                    }
+                }
+            }
         }
+
         if (this.addressConfiguration.tax.name) {
             const taxField = this.addressForm.get('taxNumber');
             taxField.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
@@ -74,11 +102,18 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    handleFormSubmit(event) {
-        this.saveAddress.emit({
-            formValue: this.addressForm.value,
-            addressDetails: this.addressConfiguration
-        });
+    handleFormSubmit() {
+        if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
+            this.saveAddress.emit({
+                formValue: this.addressForm.value,
+                addressDetails: this.addressConfiguration
+            });
+        } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress) {
+            this.updateAddress.emit({
+                formValue: this.addressForm.value,
+                addressDetails: this.addressConfiguration
+            });
+        }
     }
 
     public getStateCode(statesEle: ShSelectComponent, event: KeyboardEvent) {
@@ -113,9 +148,14 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     }
 
     public setDefault(option: any, event: any): void {
-        if (option.isDefault || option.isHilighted) {
-            event.stopPropagation();
-            event.preventDefault();
+        event.stopPropagation();
+        event.preventDefault();
+        if (!option.isDefault) {
+            this.addressConfiguration.linkedEntities.forEach(entity => {
+                if (entity.value !== option.value) {
+                    entity.isDefault = false;
+                }
+            });
         }
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
@@ -130,5 +170,13 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         if (option.isDefault) {
             option.isDefault = false;
         }
+    }
+
+    handleFinalSelection(selectedEntities: Array<any>): void {
+        this.addressConfiguration.linkedEntities.forEach(entity => {
+            if (!selectedEntities.includes(entity.uniqueName)) {
+                entity.isDefault = false;
+            }
+        });
     }
 }

@@ -21,6 +21,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     @Input() public profileData: OrganizationProfile = {
         name: '',
         uniqueName: '',
+        companyName: '',
         logo: '',
         alias: '',
         parent: {},
