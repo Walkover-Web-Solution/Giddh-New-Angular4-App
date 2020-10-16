@@ -831,6 +831,16 @@ ul.sub-list {
         }
     }
 }
+.not-today{
+    .today-date.input-date{
+    width: 134px;
+        input{
+            text-align: left !important;
+            padding-left: 30px !important;
+        }
+    }
+}
+
 /* responsive */
 @media (max-height: 800px) {
     .nav-wrapper {

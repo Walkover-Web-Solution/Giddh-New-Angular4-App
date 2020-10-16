@@ -271,8 +271,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isAllowedForBetaTesting: boolean = false;
     /* This will hold value if settings sidebar is open through mobile hamburger icon */
     public isMobileSidebar: boolean = false;
-    /** To check all module menu open */
-    public isAllModuleOpen: boolean = false;
 
     /** update IndexDb flags observable **/
     public updateIndexDbInProcess$: Observable<boolean>;
@@ -870,6 +868,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 // if (from === fromFromStore && to === toFromStore) {
                 //     this.isTodaysDateSelected = true;
                 // }
+                this.isTodaysDateSelected = !dateObj[3];  //entry-setting API date response in case of today fromDate/toDate will be null
                 if (this.isTodaysDateSelected) {
                     let today = cloneDeep([moment(), moment()]);
                     this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
@@ -1986,17 +1985,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-     * Toggle all module to previous selected module
+     * Navigate to all module
      *
      * @memberof HeaderComponent
      */
     public navigateToAllModules(): void {
-        if (this.isAllModuleOpen) {
-            this.location.back();
-        } else {
-            this.router.navigate(['/pages/all-modules']);
-        }
-        this.isAllModuleOpen = !this.isAllModuleOpen;
+        this.router.navigate(['/pages/all-modules']);
     }
 
     /**

@@ -583,7 +583,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 }
                 let fromDate: any = data.fromDate ? moment(data.fromDate, GIDDH_DATE_FORMAT) : moment().subtract(30, 'days');
                 let toDate: any = data.toDate ? moment(data.toDate, GIDDH_DATE_FORMAT) : moment();
-                latestState.applicationDate = [fromDate._d, toDate._d, chosenLabel];
+                latestState.applicationDate = [fromDate._d, toDate._d, chosenLabel, !!data.fromDate ];
                 return Object.assign({}, state, latestState);
             }
             return state;

@@ -22,7 +22,7 @@ const moment = _moment;
 
 export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, OnChanges {
     /** Taking placeholder as input */
-    @Input() public placeholder: any = "";
+    @Input() public placeholder: any = "Select date";
     /** Taking ngModel as input */
     @Input() public ngModel: any;
     /** Emitting selected date object as output */
@@ -57,8 +57,12 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if ('ngModel' in changes && changes.ngModel.currentValue) {
-            this.calendarDate = moment(changes.ngModel.currentValue, GIDDH_DATE_FORMAT).toDate();
+        if ('ngModel' in changes) {
+            if(changes.ngModel.currentValue) {
+                this.calendarDate = moment(changes.ngModel.currentValue, GIDDH_DATE_FORMAT).toDate();
+            } else {
+                this.calendarDate = "";
+            }
         }
     }
 
