@@ -155,7 +155,7 @@
                                     <td data-title="IP Address">{{ session.ipAddress }}</td>
                                     <td data-title="Signin Date">{{ moment(session.createdAt).format('DD/MM/YYYY') }}</td>
                                     <td data-title="Signin Time">{{ moment(session.createdAt).format('LTS') }}</td>
-                                    <td data-title="Duration (DD/HH/MM/SS)">{{moment(session.createdAt).subtract(moment(), 'days')}}</td>
+                                    <td data-title="Duration (DD/HH/MM/SS)">{{moment().diff(session.createdAt, 'days')}}/{{moment(session.createdAt).subtract(moment()).format('HH/mm/ss')}}</td>
                                     <td data-title="Browser Agent"> {{ session.userAgent }}</td>
                                     <td data-title="Action" class="ico-btn text-center">
                                         <span *ngIf="userSessionId === session.sessionId">Current</span>
