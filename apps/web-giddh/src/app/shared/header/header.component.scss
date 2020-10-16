@@ -743,6 +743,11 @@ ul.sub-list {
     ul.dropdown-menu.user-dropdown-header{
         left: 0 !important;
         color: $night-rider;
+        .company-name-finance-year{
+            .ellp{
+                white-space: normal;
+            }
+        }
     }
 }
 .create-company-btn{
