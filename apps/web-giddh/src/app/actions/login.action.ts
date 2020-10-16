@@ -303,7 +303,7 @@ export class LoginActions {
                 let cmpUniqueName = '';
                 let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
                 let companies = results[1] as BaseResponse<CompanyResponse[], string>;
-                
+
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     this.zone.run(() => {
@@ -337,7 +337,7 @@ export class LoginActions {
             ofType(LoginActions.LogOut),
             map((action: CustomActions) => {
                 if (PRODUCTION_ENV && !(isElectron || isCordova)) {
-                    window.location.href = 'https://beta.giddh.com/login/';
+                    window.location.href = 'https://stage.giddh.com/login/';
                 } else if (isCordova) {
                     this.zone.run(() => {
                         this._generalService.invokeEvent.next('logoutCordova');
