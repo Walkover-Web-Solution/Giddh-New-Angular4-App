@@ -51,7 +51,8 @@
                 <div class="col-md-3 col-sm-12 col-lg-3 col-xl-2">
                     <label class="font-14">Country & Currency:</label>
                 </div>
-                <div class="col-md-4 col-sm-12 col-lg-4 col-xl-3">
+                <div class="country-info col-md-4 col-sm-12 col-lg-4 col-xl-3">
+                    <img class="country-flag" src="https://www.countryflags.io/{{profileData?.country?.countryCode}}/flat/24.png">
                     <div class="font-14">{{profileData?.country?.countryName}} - {{profileData?.country?.currencyCode}} {{profileData?.country?.currencyName}}</div>
                 </div>
             </div>
@@ -71,16 +72,12 @@
                     </sh-select>
                 </div>
             </div>
-        </div>
-        <!-- branch profile element start -->
-        <div class="row" *ngIf="organizationType === 'BRANCH'">
             <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
                 <div class="form-group">
-                    <label>Alias</label>
-                    <input [(ngModel)]="profileData.alias" (ngModelChange)="profileUpdated('alias')"  type="text" class="form-control">
+                    <label>Headquarter Alias</label>
+                    <input [(ngModel)]="profileData.nameAlias" (ngModelChange)="profileUpdated('nameAlias')"  type="text" class="form-control">
                 </div>
             </div>
         </div>
-        <!-- branch profile element end -->
     </div>
 </div>

@@ -35,12 +35,13 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
         parent: {},
         country: {
             countryName: '',
+            countryCode: '',
             currencyName: '',
             currencyCode: ''
         },
         businessTypes: [],
         businessType: '',
-        headquarterAlias: '',
+        nameAlias: '',
         balanceDisplayFormat: ''
     };
     /** Stores the type of the organization (company or profile)  */

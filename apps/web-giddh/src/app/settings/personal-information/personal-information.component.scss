@@ -31,6 +31,13 @@
 .country-name,
 .parent-name {
     color: $dark-gray;
+    .country-info {
+        display: inherit;
+        .country-flag {
+            display: inline-block;
+            padding-right: 8px;
+        }
+    }
 }
 .personal-other-deatils {
     label {

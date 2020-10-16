@@ -39,6 +39,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     @Input() public addressToUpdate: any;
     /** Company name */
     @Input() public companyName: string;
+    /** True, if any API is in progress */
+    @Input() public showLoader: boolean;
 
     constructor(
         private formBuilder: FormBuilder,
