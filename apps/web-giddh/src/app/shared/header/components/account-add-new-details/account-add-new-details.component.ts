@@ -836,8 +836,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value &&
-            this.isCreditorOrDebtor(this.activeGroupUniqueName)) {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors')) {
             return true;
         } else {
             return false;
@@ -938,7 +937,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             const groupDetails: any = this.flatGroupsOptions.filter((group) => group.value === accountUniqueName).pop();
             if (groupDetails) {
                 return groupDetails.additional.some((parentGroup) => {
-                    const groups = [parentGroup.uniqueName, groupDetails.value]
+                    const groups = [parentGroup.uniqueName, groupDetails.value];
                     return groups.includes('sundrydebtors') || groups.includes('sundrycreditors');
                 });
             }
