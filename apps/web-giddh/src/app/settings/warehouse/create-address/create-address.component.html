@@ -68,8 +68,8 @@
                                                                 [value]="option.value"></span>&nbsp;
                                                         <span class="entity-icon">
                                                             <i class="icon-branch-icon pull-right"
-                                                                *ngIf="option.entity === 'BRANCH'" tooltip="Branch"></i>
-                                                            <!-- <i class="icon-company-HO pull-right" *ngIf="option.entity === 'WAREHOUSE'" tooltip="Warehouse"></i> -->
+                                                                *ngIf="option.entity === 'BRANCH' && !option.isHeadQuarter" tooltip="Branch"></i>
+                                                            <i class="icon-company-HO pull-right" *ngIf="option.entity === 'BRANCH' && option.isHeadQuarter" tooltip="HO Branch"></i>
                                                             <i class="icon-warehouse-icon pull-right"
                                                                 *ngIf="option.entity === 'WAREHOUSE'"
                                                                 tooltip="Warehouse"></i>
