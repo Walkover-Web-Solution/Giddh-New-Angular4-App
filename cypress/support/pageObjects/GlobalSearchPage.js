@@ -1,6 +1,7 @@
 class GlobalSearchPage {
 
     typeGlobalSearch(searchValue) {
+        cy.get('.searchEle').clear()
         cy.get('.searchEle').type(searchValue, {delay:500})
     }
 

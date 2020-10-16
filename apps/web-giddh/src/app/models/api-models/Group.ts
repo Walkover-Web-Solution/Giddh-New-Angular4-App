@@ -31,6 +31,7 @@ export class GroupResponse implements ICreateGroup {
 	public closingBalanceTriggerAmount: number;
 	public closingBalanceTriggerAmountType: string;
     public applicableDiscounts?: any[];
+    public parentGroups?: any;
 
 }
 

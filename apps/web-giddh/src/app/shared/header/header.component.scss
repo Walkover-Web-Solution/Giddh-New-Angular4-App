@@ -743,6 +743,11 @@ ul.sub-list {
     ul.dropdown-menu.user-dropdown-header{
         left: 0 !important;
         color: $night-rider;
+        .company-name-finance-year{
+            .ellp{
+                white-space: normal;
+            }
+        }
     }
 }
 .create-company-btn{
@@ -831,6 +836,16 @@ ul.sub-list {
         }
     }
 }
+.not-today{
+    .today-date.input-date{
+    width: 134px;
+        input{
+            text-align: left !important;
+            padding-left: 30px !important;
+        }
+    }
+}
+
 /* responsive */
 @media (max-height: 800px) {
     .nav-wrapper {

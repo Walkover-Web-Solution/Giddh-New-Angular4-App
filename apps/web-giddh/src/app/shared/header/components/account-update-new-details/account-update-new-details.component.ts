@@ -39,6 +39,7 @@ import {
     AccountResponseV2,
     AccountsTaxHierarchyResponse,
     AccountUnMergeRequest,
+    CustomFieldsData,
     IAccountAddress,
 } from '../../../../models/api-models/Account';
 import { CountryRequest, OnboardingFormRequest } from '../../../../models/api-models/Common';
@@ -51,6 +52,7 @@ import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select
 import { digitsOnly } from '../../../helpers';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
+import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 
 @Component({
     selector: 'account-update-new-details',
@@ -119,7 +121,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public accounts$: Observable<IOption[]>;
     public stateGstCode: any[] = [];
-    public isMobileNumberValid: boolean = false;
+    public isMobileNumberValid: boolean = true;
     public formFields: any[] = [];
     public isGstValid$: Observable<boolean> = observableOf(true);
     public selectedTab: string = 'address';
@@ -149,9 +151,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public bankIbanNumberMinLength: string = '9';
     /** account applied inherited discounts list */
     public accountInheritedDiscounts: any[] = [];
+    /** company custom fields list */
+    public companyCustomFields: any[] = [];
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction, private accountService: AccountService, private groupWithAccountsAction: GroupWithAccountsAction,
-        private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _dbService: DbService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
+        private _settingsDiscountAction: SettingsDiscountActions, private _accountService: AccountService, private _dbService: DbService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions, private groupService: GroupService) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.discountList$ = this.store.select(s => s.settings.discount.discountList).pipe(takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$));
@@ -159,7 +163,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
         this.store.dispatch(this._settingsDiscountAction.GetDiscount());
-
+        this.getCompanyCustomField();
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
@@ -249,6 +253,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 for (let i = 0; i <= 10; i++) {
                     this.removeGstDetailsForm(0);
                 }
+                if (!accountDetails.customFields) {
+                    accountDetails.customFields = [];
+                }
 
                 this.addAccountForm.patchValue(accountDetails);
                 if (accountDetails.currency) {
@@ -276,6 +283,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                 }
 
+                // render custom field data
+                if (accountDetails.customFields && accountDetails.customFields.length > 0) {
+                    accountDetails.customFields.map(item => {
+                        this.renderCustomFieldDetails(item, accountDetails.customFields.length);
+                    });
+                }
                 // hsn/sac enable disable
                 if (acc.hsnNumber) {
                     this.addAccountForm.get('sacNumber').disable();
@@ -620,7 +633,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 virtualAccountNumber: ['']
             }),
             closingBalanceTriggerAmount: [Validators.compose([digitsOnly])],
-            closingBalanceTriggerAmountType: ['CREDIT']
+            closingBalanceTriggerAmountType: ['CREDIT'],
+            customFields: this._fb.array([]),
         });
     }
 
@@ -1473,4 +1487,88 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
+     /**
+     * API call to get custom field data
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public getCompanyCustomField(): void {
+        this.groupService.getCompanyCustomField().subscribe(response => {
+            if (response && response.status === 'success') {
+                this.companyCustomFields = response.body;
+                this.createDynamicCustomFieldForm(this.companyCustomFields);
+            } else {
+                this._toaster.errorToast(response.message);
+            }
+        });
+    }
+
+    /**
+     * To create blank dynamic custom field row
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public addBlankCustomFieldForm(): void {
+        const customField = this.addAccountForm.get('customFields') as FormArray;
+        if (customField.value.length === 0) {
+            customField.push(this.initialCustomFieldDetailsForm(null));
+        }
+    }
+
+    /**
+     * To render custom field form
+     *
+     * @param {*} obj
+     * @param {*} customFieldLength
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
+        const customField = this.addAccountForm.get('customFields') as FormArray;
+        if (customField.length < customFieldLength) {
+            customField.push(this.initialCustomFieldDetailsForm(obj));
+        }
+    }
+
+
+    /**
+     * To initialize custom field form
+     *
+     * @param {CustomFieldsData} [value=null]
+     * @returns {FormGroup}
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public initialCustomFieldDetailsForm(value: CustomFieldsData = null): FormGroup {
+        let customFields = this._fb.group({
+            uniqueName: [''],
+            value: [''],
+        });
+        if (value) {
+            customFields.patchValue(value);
+        }
+        return customFields;
+    }
+
+    /**
+     * To create dynamic custom field form
+     *
+     * @param {*} customFieldForm
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public createDynamicCustomFieldForm(customFieldForm: any): void {
+        customFieldForm.forEach(item => {
+            this.renderCustomFieldDetails(item, customFieldForm.length);
+        });
+    }
+
+    /**
+     * To set boolean type custom field value
+     *
+     * @param {string} isChecked to check boolean custom field true or false
+     * @param {number} index index number
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public selectedBooleanCustomField(isChecked: string, index: number): void {
+        const customField = this.addAccountForm.get('customFields') as FormArray;
+        customField.controls[index].get('value').setValue(isChecked);
+    }
 }
