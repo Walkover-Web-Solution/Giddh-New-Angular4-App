@@ -303,7 +303,7 @@ export class LoginActions {
                 let cmpUniqueName = '';
                 let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
                 let companies = results[1] as BaseResponse<CompanyResponse[], string>;
-                
+
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     this.zone.run(() => {
