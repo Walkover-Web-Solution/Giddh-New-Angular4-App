@@ -1,13 +1,13 @@
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Observable, of, ReplaySubject, Subject, merge } from 'rxjs';
 import { SettingsLinkedAccountsService } from '../../../services/settings.linked.accounts.service';
-import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { Store } from '@ngrx/store';
+import { IForceClear } from '../../../models/api-models/Sales';
 
 @Component({
     selector: 'connect-bank-modal',
@@ -36,7 +36,7 @@ import { Store } from '@ngrx/store';
     `]
 })
 
-export class ConnectBankModalComponent implements OnChanges {
+export class ConnectBankModalComponent implements OnChanges, OnInit {
 
     @Input() public sourceOfIframe: string;
     @Output() public modalCloseEvent: EventEmitter<boolean> = new EventEmitter(false);
@@ -51,7 +51,12 @@ export class ConnectBankModalComponent implements OnChanges {
     public isIframeLoading: boolean = false;
     public dataSource: any;
     public dataSourceBackup: any;
-    public selectedProvider: any = {};
+    /** Stores the search result for providers */
+    public searchResults: Array<any> = [];
+    /** Stores details of selected provider */
+    public selectedProvider: any = {
+        name: ''
+    };
     public step: number = 1;
     public loginForm: FormGroup;
     public bankSyncInProgress: boolean;
@@ -61,6 +66,8 @@ export class ConnectBankModalComponent implements OnChanges {
     public isElectron = isElectron;
     public isCordova = isCordova;
     public base64StringForModel: SafeResourceUrl = '';
+    /** Force clear for drop down */
+    public forceClearReactive$: Observable<IForceClear> = of({ status: false });
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public click$ = new Subject<string>();
@@ -111,6 +118,47 @@ export class ConnectBankModalComponent implements OnChanges {
     }
 
     /**
+     * Loads the default search results on launch
+     *
+     * @memberof ConnectBankModalComponent
+     */
+    public ngOnInit(): void {
+        this.loadResults();
+    }
+
+    /**
+     * Query change handler for providers
+     *
+     * @param {string} query Query searched by user
+     * @memberof ConnectBankModalComponent
+     */
+    public onSearchQueryChanged(query: string): void {
+        this.selectedProvider.name = query;
+        this.loadResults();
+    }
+
+    /**
+     * Loads the search results for searched provider
+     *
+     * @memberof ConnectBankModalComponent
+     */
+    public loadResults(): void {
+        this._settingsLinkedAccountsService.SearchBank(this.selectedProvider.name).pipe(catchError(e => {
+            this.searchResults = [];
+            return [];
+        })).subscribe(response => {
+            if (response.status === 'success') {
+                this.searchResults = response.body.provider.map(result => ({
+                    ...result,
+                    label: result.name,
+                    value: result.id
+                }));
+                this.dataSourceBackup = response;
+            }
+        });
+    }
+
+    /**
      * initLoginForm
      */
     public initLoginForm() {
@@ -156,14 +204,17 @@ export class ConnectBankModalComponent implements OnChanges {
         this.cancelRequest = true;
         this.bankSyncInProgress = false;
         this.isRefreshWithCredentials = true;
+        this.forceClearReactive$ = of({status: true});
     }
 
-    public typeaheadOnSelect(e: TypeaheadMatch): void {
-        setTimeout(() => {
-            if (e.item) {
-                this.selectedProvider = e.item;
-            }
-        }, 20);
+    /**
+     * Handles the selection
+     *
+     * @param {*} event Stores the selected element details
+     * @memberof ConnectBankModalComponent
+     */
+    public typeaheadOnSelect(event: any): void {
+        this.selectedProvider = event;
     }
 
     // initial rowArray controls
