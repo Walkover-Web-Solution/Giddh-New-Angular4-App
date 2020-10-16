@@ -36,6 +36,10 @@
     border-bottom: 1px solid $very-light-gray;
 }
 
+.address-textarea{
+    height: 170px;
+}
+
 @media(max-width:768px){
     .multicurrency-checkbox{
         display: block !important;

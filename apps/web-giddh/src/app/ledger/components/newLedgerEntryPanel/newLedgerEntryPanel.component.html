@@ -49,7 +49,7 @@
 
                         <td class="text-center table-plus" *ngIf="currentTxn?.selectedAccount?.stock">
                             <label class="d-block">&nbsp;</label>
-                            <label class="fs20 pt-04">x</label>
+                            <label class="font-20 pt-04">x</label>
                         </td>
 
                         <td class="pItem text-right price" *ngIf="currentTxn?.selectedAccount?.stock">
@@ -68,7 +68,7 @@
 
                         <td class="text-center equal-2" *ngIf="currentTxn?.selectedAccount?.stock">
                             <label class="d-block">&nbsp;</label>
-                            <label class="fs20">=</label>
+                            <label class="font-20">=</label>
                         </td>
 
                         <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
@@ -93,7 +93,7 @@
                         <td *ngIf="(showTaxationDiscountBox && currentTxn?.selectedAccount) && !shouldShowAdvanceReceiptMandatoryFields"
                             class="text-center table-minus">
                             <label class="d-block">&nbsp;</label>
-                            <label class="fs20">-</label>
+                            <label class="font-20">-</label>
                         </td>
 
                         <!--discount-->
@@ -113,13 +113,13 @@
                         <td class="text-center equal-2"
                             *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && (companyTaxesList$ | async)?.length">
                             <label class="d-block">&nbsp;</label>
-                            <label class="fs20">+</label>
+                            <label class="font-20">+</label>
                         </td>
 
                         <td class="text-center equal-2"
                             *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && !(companyTaxesList$ | async)?.length">
                             <label class="d-block">&nbsp;</label>
-                            <label class="fs20">=</label>
+                            <label class="font-20">=</label>
                         </td>
 
                         <td *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && (companyTaxesList$ | async)?.length"
@@ -152,7 +152,7 @@
                         <td class="text-center equal-2"
                             *ngIf="(currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) && (companyTaxesList$ | async)?.length">
                             <label class="d-block">&nbsp;</label>
-                            <label class="fs20">=</label>
+                            <label class="font-20">=</label>
                         </td>
 
                         <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"

@@ -15,15 +15,20 @@
     font-size: 14px;
 }
 
-.custom-multi-select li {
-    background: #f1f1f1;
-    color: white;
-    margin: 4px;
-    padding: 2px 10px;
-    font-size: 14px;
-    border-radius: 3px;
-    cursor: pointer;
-}
+.custom-multi-select{
+    li {
+        background: $white-smoke;
+        color: $ffffff;
+        margin: 4px;
+        padding: 2px 10px;
+        font-size: 14px;
+        border-radius: 3px;
+        cursor: pointer;
+        a{
+            color: $gray;
+        }
+    }
+} 
 .selectCompanies {
     font-size: 14px;
     margin-bottom: 5px;
@@ -41,7 +46,7 @@
     justify-content: center;
     align-items: center;
     border-right: 1px solid $gainsboro;
-    color: #999999;
+    color: $nobel;
     left: 0;
 }
 .input-group-date-range-picker input.form-control {
@@ -54,7 +59,7 @@
     font-size: 14px;
 }
 .branch-card {
-    background-color: #eeeff1;
+    background-color: $lavender;
     min-height: 365px;
     margin-bottom: 15px;
     font-size: 14px;
@@ -67,11 +72,11 @@
 }
 .card-basic-details .clearfix {
     margin-bottom: 10px;
-    color: #1c1c1c;
+    color: $nero;
 }
 .card-basic-details h2 {
     font-size: 16px;
-    color: #1a237e;
+    color: $midnight-blue;
     font-family: "opensans-bold";
     margin-bottom: 12px;
     white-space: normal;
@@ -91,7 +96,7 @@
     margin-bottom: 10px;
 }
 .unlink a {
-    color: #5b64c9 !important;
+    color: $chetwode-blue !important;
     cursor: pointer;
 }
 
@@ -109,7 +114,7 @@
     cursor: default;
 }
 .card-basic-details a#button-basic {
-    color: #333;
+    color: $extra-dark-gray;
     font-size: 16px;
     width: 32px;
     height: 32px;

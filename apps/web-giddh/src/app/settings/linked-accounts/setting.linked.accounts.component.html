@@ -1,5 +1,5 @@
 <div class="box clearfix">
-    <h1 class="section-head pdT0">Add Bank Account</h1>
+    <h1 class="section-head pt-0">Add Bank Account</h1>
     <div>
         <button (click)="connectBank()" class="btn btn-primary">Connect Bank</button>
     </div>
@@ -8,7 +8,7 @@
         <div class="clearfix mr-t2">
             <small><i class="fa fa-lock"></i> At giddh, the privacy and security of your information are top priorites.
             </small>
-            <img src="https://ssl.comodo.com/images/trusted-site-seal.png" alt="Comodo Trusted Site Seal" width="113" height="59" style="border: 0px;" />
+            <img src="https://ssl.comodo.com/images/trusted-site-seal.png" alt="Comodo Trusted Site Seal" width="113" height="59" class="border-none" />
         </div>
     </div>
     <div [hidden]="true">
@@ -26,12 +26,12 @@
 <div class="box clearfix mr-t2" *ngIf='ebankAccounts && ebankAccounts.length'>
     <div class="">
         <!-- <button class="btn btn-primary btn-sm pull-right" (click)="onRefreshAccounts()">Refresh</button> -->
-        <h1 class="section-head pdT0">Added Accounts</h1>
+        <h1 class="section-head pt-0">Added Accounts</h1>
         <div class="mt-1">
             <!-- ================= saltedge accounts =================
       <section *ngFor="let acc of ebankAccounts; let accIdx = index" class="clearfix bank-account" [ngClass]="{'mr-b4': accIdx != ebankAccounts.length-1 }">
           <h3 class="subHead bd-rb">
-              <button class="no-btn fs20" tooltip="Delete Bank" placement="top" (click)="onDeleteAddedBank(acc.siteName, acc.accounts[0])"><i class="fa fa-trash-o"></i></button> {{acc.siteName}}
+              <button class="no-btn font-20" tooltip="Delete Bank" placement="top" (click)="onDeleteAddedBank(acc.siteName, acc.accounts[0])"><i class="fa fa-trash-o"></i></button> {{acc.siteName}}
               <button class="btn btn-link mr-l1" tooltip="Refresh" placement="top" (click)="onRefreshToken(acc.accounts[accIdx])"><i class="fa fa-refresh"></i> Refresh</button>
           </h3>
           <aside class="body">
@@ -100,7 +100,7 @@
                                 <a href="javascript:void(0)" (click)="card.isDatePickerOpen = !card.isDatePickerOpen">
                                     <input [(ngModel)]="card.transactionDate" name="transactionDate_{{accIdx}}_{{i}}" id="date_{{accIdx}}_{{i}}" />
                                 </a>
-                                <div style="position: absolute; z-index:10; min-height:290px;">
+                                <div class="position-absolute datepicker-account">
                                     <datepicker *ngIf="card.isDatePickerOpen" name="fromDate" [(ngModel)]="card.transactionDate" (selectionDone)="onUpdateDate($event, card)" [showWeeks]="true">
                                     </datepicker>
                                 </div>
@@ -127,7 +127,7 @@
                                 <!-- <button class="btn btn-danger mr-t1" (click)="onDeleteAddedBank(acc.siteName, card)">Delete Account</button> -->
                                 <!-- (click)="onDeleteAddedBank(acc.siteName, acc.yodleeAccounts[0])" -->
                             </div>
-                            <button class="no-btn fs20 pos-abs bank_delete" (click)="onDeleteAddedBank(acc.siteName, card, acc)">
+                            <button class="no-btn font-20 pos-abs bank-delete" (click)="onDeleteAddedBank(acc.siteName, card, acc)">
                                 <i class="fa fa-trash-o text-gray"  tooltip="Delete Bank" placement="top"></i>
                             </button>
                         </ng-container>
@@ -136,7 +136,7 @@
                             <div class="account-number">
                                 <b>Provider Id</b>: {{card.providerAccount.providerAccountId}}
                             </div>
-                            <p class="mr-t2">Status: <span class="text-danger fs14"><i
+                            <p class="mr-t2">Status: <span class="text-danger font-14"><i
                                         class="fa fa-exclamation-circle"></i>
                                     {{acc.status}}</span></p>
                             <p>Reason: {{acc.reason}}</p>
@@ -151,7 +151,7 @@
 
                                 <!-- <button class="btn btn-default" (click)="connectBank(acc.siteId,    card.providerAccount.providerAccountId)">Try Again</button> -->
                             </div>
-                            <button class="no-btn fs20 pos-abs bank_delete" (click)="onDeleteAddedBank(acc.siteName, card, acc)">
+                            <button class="no-btn font-20 pos-abs bank-delete" (click)="onDeleteAddedBank(acc.siteName, card, acc)">
                                 <i class="fa fa-trash-o" tooltip="Delete Bank" placement="top"></i>
                             </button>
                         </ng-container>
@@ -160,7 +160,7 @@
                             <div class="account-number">
                                 <b>Provider Id</b>: {{card.providerAccount.providerAccountId}}
                             </div>
-                            <p class="mr-t2">Status: <span class="text-danger fs14"><i
+                            <p class="mr-t2">Status: <span class="text-danger font-14"><i
                                         class="fa fa-exclamation-circle"></i>
                                     {{acc.status}}</span></p>
                             <p>Reason: {{acc.reason}}</p>

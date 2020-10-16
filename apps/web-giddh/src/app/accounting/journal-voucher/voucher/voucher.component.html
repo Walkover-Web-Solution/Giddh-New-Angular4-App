@@ -1,6 +1,6 @@
 <div>
     <div class="bg_wrap">
-            <div class="clearfix pdT2">
+            <div class="clearfix pd-t2">
                 <div class="day-date pull-right text-right mr-b1" (clickOutside)="showFromDatePicker = false;">
                     <span>{{ displayDay }},</span>
                     <input size="10" type="text" onReturn #dateField name="entryDate" [(ngModel)]="journalDate"
@@ -205,7 +205,7 @@
                     <div [hidden]="!showConfirmationBox" class="confirmation_box bdr text-center pd2">
                         <div class="">
                             <h1>Accept?</h1>
-                            <div class="pdT2">
+                            <div class="pd-t2">
                                 <button class="btn btn-primary" #submitButton (keyup)="keyUpOnSubmitButton($event)"
                                     (click)="saveEntry();">Yes</button>
                                 <button class="btn btn-default" #resetButton

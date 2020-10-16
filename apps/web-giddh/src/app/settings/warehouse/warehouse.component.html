@@ -73,7 +73,7 @@
 
 <!-- Warehouse on boarding modal (Step 1) -->
 <div bsModal #warehouseOnBoardingModal="bs-modal" [config]="{ ignoreBackdropClick: 'true', keyboard: 'true'}"
-    tabindex="-1" class="modal fade openPoup" role="dialog" (onHidden)="onBoardingModalDismiss($event)">
+    tabindex="-1" class="modal fade open-popup" role="dialog" (onHidden)="onBoardingModalDismiss($event)">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <ng-template element-view-container-ref #onBoardingContainer="elementviewcontainerref">

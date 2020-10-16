@@ -519,7 +519,7 @@ aside-menu-account .container-fluid {
     padding-top: 10px;
 }
 
-.pdT2,
+.pd-t2,
 .pdT3 {
     padding-top: 20px;
 }
@@ -1022,7 +1022,7 @@ position: relative; */
     font-size: 13px;
 }
 
-.fs14 {
+.font-14 {
     font-size: 14px;
 }
 
@@ -1030,11 +1030,11 @@ position: relative; */
     font-size: 16px;
 }
 
-.fs18 {
+.font-18 {
     font-size: 18px;
 }
 
-.fs20 {
+.font-20 {
     font-size: 20px;
 }
 

@@ -9,7 +9,7 @@
     [ngClass]="{'create-purchase-order-form': true, 'customer-purchase-order' : !purchaseOrder.voucherDetails.customerName, 'forMultiCurrency' : isMulticurrencyAccount  } "
     *ngIf="!showLoader">
     <div class="clearfix" [keyboardShortcut]="'alt+c'" (onShortcutPress)="addAccountFromShortcut()">
-        <div class="clearfix wrapper-customer-table  pdT2">
+        <div class="clearfix wrapper-customer-table  pd-t2">
             <div class="customer-purchase-table">
                 <div class="inner-container">
                     <div class="inner-container">
@@ -198,7 +198,7 @@
                     </div>
                 </div>
             </div>
-            <div class="customer-purchase-table bg-white pd-b2 pdT2">
+            <div class="customer-purchase-table bg-white pd-b2 pd-t2">
                 <div class="inner-container">
                     <div class="row mb-1" *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1">
                         <!-- region customer name -->

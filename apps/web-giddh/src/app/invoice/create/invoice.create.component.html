@@ -15,7 +15,7 @@
 
     <section class="clearfix mr-b4">
         <section class="form-inline col-xs-12">
-            <div class="pdT2 clearfix">
+            <div class="pd-t2 clearfix">
                 <div class="form-group size_340">
                     <label>Attention to</label>
                     <input type="text" name="attention" class="form-control" [(ngModel)]="invFormData.accountDetails.attentionTo" />
@@ -51,7 +51,7 @@
 
             </div>
 
-            <div class="pdT2 clearfix flex-row">
+            <div class="pd-t2 clearfix flex-row">
                 <div class="flex-row-child">
                     <div class="form-group size_340" *ngIf="templateHeader?.billingAddress?.display">
                         <label>{{templateHeader?.billingAddress?.label}}</label>
@@ -86,7 +86,7 @@
                 </div>
             </div>
 
-            <div class="pdT2 clearfix">
+            <div class="pd-t2 clearfix">
                 <div class="form-group size_175" *ngIf="templateHeader?.shippingDate?.display">
                     <label>{{templateHeader?.shippingDate?.label}}</label>
                     <input type="text" [placeholder]="giddhDateFormat" name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" #shippingDate="ngModel" [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)"
@@ -216,7 +216,7 @@
                     </td>
                     <td>
                         <div class=" text-right">
-                            <p class="fs20 b">
+                            <p class="font-20 b">
                                 <span class="balance-due">Balance Due: </span>
                                 <span class="sp-rupees">Rs
                                     {{invFormData.voucherDetails.grandTotal |giddhCurrency }}</span>

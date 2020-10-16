@@ -525,7 +525,7 @@
                         </ng-template>
 
                         <div class="icon-box" *ngIf="(vm.showNewEntryPanel && vm.stockTrxEntry)">
-                            <label class="fs20">=</label>
+                            <label class="font-20">=</label>
                         </div>
 
                         <div *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields"
@@ -578,7 +578,7 @@
 
                         <div class="text-center icon-box"
                             *ngIf="(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) && !(vm.companyTaxesList$ | async)?.length">
-                            <label class="fs20">=</label>
+                            <label class="font-20">=</label>
                         </div>
 
                         <div class="dropdown-container dropdown-left text-right table-amount"
@@ -609,7 +609,7 @@
 
                         <div class="text-center icon-box"
                             *ngIf="(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) && (vm.companyTaxesList$ | async)?.length">
-                            <label class="fs20">=</label>
+                            <label class="font-20">=</label>
                         </div>
 
                         <div *ngIf="(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields)"

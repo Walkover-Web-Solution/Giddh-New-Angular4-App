@@ -2789,10 +2789,6 @@ input[type="checkbox"]:checked:after {
     padding-bottom: 0;
 }
 
-.pdT0 {
-    padding-top: 0 !important;
-}
-
 .templateInfo {
     position: relative;
     width: 100%;
@@ -5970,6 +5966,11 @@ datepicker-inner .well monthpicker table tbody tr:nth-child(1) td {
     padding-top: 10px;
 }
 
+.datepicker-account{
+    z-index:10; 
+    min-height:290px;
+}
+
 input[type="checkbox"][disabled]:after {
     cursor: not-allowed;
 }
@@ -6433,7 +6434,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     overflow: hidden;
 }
 
-.permission_list .permission:last-child .form-group {
+.permission-list .permission:last-child .form-group {
     margin-bottom: 0 !important;
 }
 
@@ -8410,7 +8411,7 @@ span.red-text {
     background-color: #eee;
 }
 
-.modal.fade.openPoup.in.show {
+.modal.fade.open-popup.in.show {
     overflow-x: hidden;
     overflow-y: auto;
 }
