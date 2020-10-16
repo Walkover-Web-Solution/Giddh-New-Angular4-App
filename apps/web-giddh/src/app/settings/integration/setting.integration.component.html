@@ -26,7 +26,7 @@
                                 <div class="empty-label">
                                     <label>&nbsp;</label>
                                     <br>
-                                    <button type="submit" class="btn btn-success mrR1" [disabled]="smsFormObjCtrl.invalid">Save
+                                    <button type="submit" class="btn btn-success mr-r1" [disabled]="smsFormObjCtrl.invalid">Save
                                     </button>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                     </ng-container>
 
                     <h4 style="align-self: center" *ngIf="(isGmailIntegrated$ | async)" class="text-success">Gmail integrated successfully.</h4>
-                    <button style="margin-left: 20px" *ngIf="(isGmailIntegrated$ | async)" class="btn btn-danger" (click)="removegmailintegration.toggle()">Remove Account
+                    <button *ngIf="(isGmailIntegrated$ | async)" class="btn btn-danger mr-l2" (click)="removegmailintegration.toggle()">Remove Account
                     </button>
                 </div>
             </div>
@@ -89,7 +89,7 @@
 
                             <label>&nbsp;</label>
                             <br>
-                            <button type="submit" class="btn btn-success mrR1" [disabled]="emailform.invalid">Save
+                            <button type="submit" class="btn btn-success mr-r1" [disabled]="emailform.invalid">Save
                             </button>
 
                         </div>
@@ -316,7 +316,7 @@
                     <ng-container formArrayName="sellers">
                         <ng-container *ngFor="let item of amazonSellerForm.get('sellers')['controls']; let i=index;let f = first; let l = last">
                             <div class="clearfix" [formGroupName]="i">
-                                <!-- <div class="mrR1 pull-left" [ngClass]="{'mr-t3': f}">
+                                <!-- <div class="mr-r1 pull-left" [ngClass]="{'mr-t3': f}">
                             <input type="checkbox" />
                         </div>  -->
 
@@ -511,7 +511,7 @@
                                 <div class="form-group">
                                     <div class="empty-label">
                                         <br>
-                                        <button type="submit" [disabled]="!addBankForm.valid || isUpdateInvalid" class="btn btn-success mrR1">Update</button>
+                                        <button type="submit" [disabled]="!addBankForm.valid || isUpdateInvalid" class="btn btn-success mr-r1">Update</button>
                                     </div>
                                 </div>
                             </form>
@@ -620,7 +620,7 @@
                                 <div class="form-group update-btn-wrapper">
                                     <label>&nbsp;</label>
                                     <br>
-                                    <button type="button" class="btn btn-success mrR1" [disabled]="!paymentFormUpdate.form.valid" (click)="updateIciciDetails(regAcc, parentIndex)">Update
+                                    <button type="button" class="btn btn-success mr-r1" [disabled]="!paymentFormUpdate.form.valid" (click)="updateIciciDetails(regAcc, parentIndex)">Update
                                 </button>
                                 </div>
                             </div>
@@ -749,7 +749,7 @@
                         <div class="form-group">
                             <div class="empty-label">
                                 <br>
-                                <button type="submit" class="btn btn-success mrR1" [disabled]="!paymentForm.form.valid">Submit</button>
+                                <button type="submit" class="btn btn-success mr-r1" [disabled]="!paymentForm.form.valid">Submit</button>
                             </div>
                         </div>
                     </form>
@@ -885,7 +885,7 @@
                         <div class="form-group">
                             <div class="empty-label">
                                 <br>
-                                <button type="submit" [disabled]="addBankForm.invalid || isCreateInvalid" class="btn btn-success mrR1">Submit</button>
+                                <button type="submit" [disabled]="addBankForm.invalid || isCreateInvalid" class="btn btn-success mr-r1">Submit</button>
                             </div>
                         </div>
                     </form>
@@ -895,12 +895,12 @@
                             </div>
                         </div>
                         <div class="clearfix">
-                            <div style="color: gray">Once it is done you can link your ICICI account/s and make payment directly through GIDDH.
+                            <div class="payment-text">Once it is done you can link your ICICI account/s and make payment directly through GIDDH.
                             </div>
                         </div>
                     </div>
                 </div>
-                <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" style=" margin-right: 5px" class="btn btn-sky-blue mrR1" (click)="openNewRegistartionForm()">Add More ID</button>
+                <button type="button" *ngIf="!openNewRegistration || (isPaymentAdditionSuccess$ | async)" class="btn btn-sky-blue mr-r1" (click)="openNewRegistartionForm()">Add More ID</button>
             </div>
         </tab>
     </tabset>

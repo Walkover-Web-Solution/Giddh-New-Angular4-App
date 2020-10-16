@@ -1,7 +1,7 @@
 <section id="purchaseInvoice" class="container-fluid mr-t2">
     <form class="">
         <div class="">
-            <div class="form-group max250 pull-left mrR1">
+            <div class="form-group max250 pull-left mr-r1">
                 <label>GSTR Form</label>
                 <div class="btn-group btn-block" dropdown>
                     <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left">
@@ -18,7 +18,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="form-group max250 pull-left mrR1" [hidden]="!selectedGstrType.name">
+            <div class="form-group max250 pull-left mr-r1" [hidden]="!selectedGstrType.name">
                 <ng-container *ngIf="!showSingleDatePicker">
                     <label class="d-block">From - to</label>
                     <div class="btn-group  dropdown" dropdown [autoClose]="false" container="body"
@@ -134,7 +134,7 @@
                     </div> -->
                 </div>
             </div>
-            <div class="form-group max250 pull-left mrR1" *ngIf="selectedGstrType.name === 'GSTR3B'">
+            <div class="form-group max250 pull-left mr-r1" *ngIf="selectedGstrType.name === 'GSTR3B'">
                 <label>Email <i class='fa fa-info-circle' tooltip-placement="top"
                         tooltip="If no email id is provided, email will be by default sent to you/company creator"></i></label>
                 <input type="text" name="userEmail" [(ngModel)]="userEmail" class="form-control" required

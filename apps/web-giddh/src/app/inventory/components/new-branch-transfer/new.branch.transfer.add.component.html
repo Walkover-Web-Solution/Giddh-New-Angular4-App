@@ -605,11 +605,11 @@
                 </div>
                 <div class="form-group mt-3">
                     <div class="clearfix" *ngIf="!transportEditMode">
-                        <button class="btn btn-md btn-success mrR1" [disabled]="generateTransporterForm.invalid" [ladda]="isGenarateTransporterInProcess$ | async" (click)="generateTransporter(generateTransporterForm)" type="submit">Save</button>
+                        <button class="btn btn-md btn-success mr-r1" [disabled]="generateTransporterForm.invalid" [ladda]="isGenarateTransporterInProcess$ | async" (click)="generateTransporter(generateTransporterForm)" type="submit">Save</button>
                         <button class="btn btn-md btn-danger" (click)="clearTransportForm()" type="submit">Clear</button>
                     </div>
                     <div class="clearfix" *ngIf="transportEditMode">
-                        <button class="btn btn-md btn-green mrR1" [ladda]="updateTransporterInProcess$ | async" (click)="updateTransporter(generateTransporterForm)" type="submit">Update</button>
+                        <button class="btn btn-md btn-green mr-r1" [ladda]="updateTransporterInProcess$ | async" (click)="updateTransporter(generateTransporterForm)" type="submit">Update</button>
                         <button class="btn btn-md btn-danger" (click)="clearTransportForm()">Clear</button>
                     </div>
                 </div>

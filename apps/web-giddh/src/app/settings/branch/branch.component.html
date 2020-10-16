@@ -11,7 +11,7 @@
                 </div>
                 <div class="content-view  mr-l2">
                     <div class="branch-views">
-                        <span (click)="changeBranchViewType('table');" class="mrR1">
+                        <span (click)="changeBranchViewType('table');" class="mr-r1">
                             <input id="radio-table" name="signatureType" class="radio-custom" name="radio-view"
                                 type="radio" [checked]="(branchViewType === 'table') ? true : false" checked>
                             <label for="radio-table" class="radio-custom-label">Table View</label>
@@ -93,15 +93,15 @@
                         </div>
 
                         <div class="clearfix">
-                            <span class="mrR1 pull-left">Contact:</span>
+                            <span class="mr-r1 pull-left">Contact:</span>
                             <span class="pull-left">{{branch.contactNo}}</span>
                         </div>
                         <div class="clearfix" *ngIf="formFields['taxName']">
-                            <span class="mrR1 pull-left">{{formFields['taxName'].label}}:</span>
+                            <span class="mr-r1 pull-left">{{formFields['taxName'].label}}:</span>
                             <span class="pull-left">{{branch?.addresses[0]?.taxNumber}}</span>
                         </div>
                         <div class="clearfix">
-                            <span class="mrR1 pull-left">Address:</span>
+                            <span class="mr-r1 pull-left">Address:</span>
                             <span class="pull-left">{{branch?.addresses[0]?.address}}</span>
                         </div>
                     </div>

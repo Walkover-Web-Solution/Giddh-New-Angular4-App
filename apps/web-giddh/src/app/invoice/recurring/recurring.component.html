@@ -87,7 +87,7 @@
         </div>
         <div>
             <div class="recurring-form" *ngIf="!isMobileScreen">
-                <div class="form-group mrR1">
+                <div class="form-group mr-r1">
                     <label class="d-block mr-15">Invoice Type</label>
                     <div class="ng-select-wrap input-group">
                         <sh-select name="invoiceType" [placeholder]="'Select Account'" [(ngModel)]="filter.status"
@@ -101,7 +101,7 @@
                         </sh-select>
                     </div>
                 </div>
-                <div class="form-group mrR1">
+                <div class="form-group mr-r1">
                     <label class="d-block mr-15">Interval</label>
                     <div class="ng-select-wrap input-group">
                         <sh-select name="interval" [placeholder]="'Select Account'" [options]="intervalOptions"
@@ -116,14 +116,14 @@
                     </div>
                 </div>
 
-                <div class="form-group mrR1">
+                <div class="form-group mr-r1">
                     <label class="d-block mr-15">Last Invoice Date</label>
                     <div class="input-group">
                         <giddh-datepicker name="lastInvoiceDate" [(ngModel)]="filter.lastInvoiceDate" [placeholder]="'Select Date'"></giddh-datepicker>
                     </div>
                 </div>
 
-                <div class="form-group mrR1" *ngIf="isMobileScreen">
+                <div class="form-group mr-r1" *ngIf="isMobileScreen">
                     <div class="searchInvoiceNo">
                         <label class="d-block">Search Invoice No.</label>
                         <div class="input-group">
@@ -133,7 +133,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group mrR1" *ngIf="isMobileScreen">
+                <div class="form-group mr-r1" *ngIf="isMobileScreen">
                     <div class="searchCustomerNo">
                         <div class="input-container">
                             <label class="d-block">Search Customer Name</label>
@@ -144,7 +144,7 @@
                     </div>
                 </div>
 
-                <div class="form-group mrR1">
+                <div class="form-group mr-r1">
                     <label class="d-block">&nbsp;</label>
                     <button class="btn btn-success btn-sm">Search</button>
                     <a class="cp" href="javascript: void 0">

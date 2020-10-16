@@ -1,11 +1,11 @@
 <div class="modal-header clearfix">
     <span *ngIf="showPdfWrap">
-        <button type="button" class="btn btn-md btn-info mrR1" *ngIf="showEditButton"
+        <button type="button" class="btn btn-md btn-info mr-r1" *ngIf="showEditButton"
             (click)="goToedit('sales')">Edit</button>
-        <button type="button" class="btn btn-md btn-default mrR1"
+        <button type="button" class="btn btn-md btn-default mr-r1"
             (click)="showMore = ! showMore; showEsign= false;">More <span class="caret"></span></button>
-        <!-- <button type="button" class="btn btn-md btn-default mrR1" (click)="showEmailTextarea = !showEmailTextarea; showMore = false;">Send Email</button> -->
-        <!-- <button type="button" class="btn btn-md btn-default mrR1" (click)="showEsign = !showEsign; showMore = false;">E-Signature</button> -->
+        <!-- <button type="button" class="btn btn-md btn-default mr-r1" (click)="showEmailTextarea = !showEmailTextarea; showMore = false;">Send Email</button> -->
+        <!-- <button type="button" class="btn btn-md btn-default mr-r1" (click)="showEsign = !showEsign; showMore = false;">E-Signature</button> -->
     </span>
     <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel('closed')"></i>
     <!-- drop down for email area -->
