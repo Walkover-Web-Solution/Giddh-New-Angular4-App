@@ -638,13 +638,13 @@
                     </div>
                     <br/>
                 </div>
-                <div *ngIf="openNewRegistration && !(isPaymentAdditionSuccess$ | async)" class="box clearfix">
+                <!-- <div *ngIf="openNewRegistration && !(isPaymentAdditionSuccess$ | async)" class="box clearfix">
                     <h3 class="font-20 bold mb-2">ICICI Bank</h3>
-                    <form #paymentForm="ngForm" (ngSubmit)="onSubmitPaymentform(paymentForm)">
+                    <form #paymentForm="ngForm" (ngSubmit)="onSubmitPaymentform(paymentFormObj)">
                         <div class="row">
                             <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                 <div class="">
-                                    <label>Corporate ID <span class="required">*</span></label>
+                                    <label>Corporate ID<span class="required">*</span></label>
                                     <br>
                                     <input type="text" placeholder="Enter Corporate ID" class="form-control" [(ngModel)]="paymentFormObj.corpId" name="corpId" required autocomplete="off" />
                                 </div>
@@ -687,9 +687,8 @@
                                     <ng-container *ngIf="index===0"> <label>Amount Upto <span class="required">*</span></label>
                                         <br></ng-container>
                                     <div class="d-flex">
-                                        <div class="mr-05 custom-select cust select-caret position-relative">
-                                            <sh-select [options]="amountUpToList" [required]="item.maxBankLimit !=='max'" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);maxLimitOrCustomChanged($event, index, false)"
-                                                name="maxBankLimit{{index}}">
+                                        <div class="mr-05 custom-select cust select-caret pos-rel">
+                                            <sh-select [options]="amountUpToList" [required]="item.maxBankLimit !=='max'" defaultValue="{{item.maxBankLimit}}" [(ngModel)]="item.maxBankLimit" (selected)="selectedMaxOrCustom( index, false);maxLimitOrCustomChanged($event, index, false)" name="maxBankLimit{{index}}">
                                             </sh-select>
                                         </div>
                                         <div class="ml-05">
@@ -763,11 +762,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
-               <!-- Create or add bank account end -->
+                </div> -->
+                <!-- Create or add bank account end -->
                 <div *ngIf="openNewRegistration" class="box clearfix mb-2">
                     <h3 class="font-20 bold mb-2">ICICI Bank</h3>
-                    <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm)" *ngIf="!(isPaymentAdditionSuccess$ | async)">
+                    <form [formGroup]="addBankForm" (ngSubmit)="onSubmitPaymentform(addBankForm.value)" *ngIf="!(isPaymentAdditionSuccess$ | async)">
                         <div class="row">
                             <div class="form-group col-sm-4 col-xl-2 col-md-6 payment-col">
                                 <div class="">

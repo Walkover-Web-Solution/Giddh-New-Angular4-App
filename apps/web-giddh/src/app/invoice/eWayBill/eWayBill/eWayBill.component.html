@@ -395,7 +395,14 @@
                         <ng-template #rt let-r="result" let-t="term">
                             <span>{{ r }}</span>
                         </ng-template> -->
-
+                        <sh-select [options]="searchResults" name="fromPlace" required maxlength="50"
+                            [(ngModel)]="updateEwayVehicleform.fromPlace" autocomplete="off"
+                            (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                            [enableDynamicSearch]="true"
+                            placeholder="Enter city"
+                            [showClear]="false" [multiple]="false"
+                            [ItemHeight]="67">
+                        </sh-select>
                     </div>
                 </div>
 

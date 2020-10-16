@@ -411,12 +411,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public onSubmitPaymentform(fomValue: any): void {
 
-        if (fomValue.valid) {
+        if (fomValue) {
             this.selecetdUpdateIndex = null;
-            let requestObject = _.cloneDeep(fomValue.value)
-            requestObject.userAmountRanges.map(element => {
-                element.maxBankLimit = (element.maxBankLimit === 'max') ? 'true' : 'false';
-            });
+            let requestObject = _.cloneDeep(fomValue);
+            if (requestObject.userAmountRanges) {
+                requestObject.userAmountRanges.map(element => {
+                    element.maxBankLimit = (element.maxBankLimit === 'max') ? 'true' : 'false';
+                });
+            }
             this.isBankUpdateInEdit = null;
             this.updateBankUrnNumber = null;
             this.store.dispatch(this.settingsIntegrationActions.SavePaymentInfo(requestObject));
