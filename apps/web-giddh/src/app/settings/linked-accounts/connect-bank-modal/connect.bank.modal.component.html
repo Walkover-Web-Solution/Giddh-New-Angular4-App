@@ -27,7 +27,7 @@
         <form #formDiv name="loginForm" [formGroup]="loginForm" novalidate="" autocomplete="off"
             (ngSubmit)="onSubmitLoginForm()">
             <div formArrayName="row" class="row">
-                <div class="col-xs-12"
+                <div class="col-12"
                     *ngFor="let item of loginForm.get('row')['controls']; let i=index;let f = first; let l = last">
                     <div [formGroupName]="i" class="form-group">
                         <ng-container formArrayName="field">
