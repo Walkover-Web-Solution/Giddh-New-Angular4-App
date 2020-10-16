@@ -1,36 +1,29 @@
-<div class="clearfix pt-2 pb-2">
-    <div class="col-xs-8">
+<div class="clearfix pt-15 pb-15">
+    <div class="col-xs-12 col-sm-12">
         <div class="d-inline-block pull-left mr-2 middle ewayBill-date">
-            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
-                (applyDaterangepicker)="selectedDate($event)" class="form-control" />
+            <div class="input-group">
+                <span class="input-wrapper">
+                    <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"
+                        (applyDaterangepicker)="selectedDate($event)" class="form-control" />
+                </span>
+            </div>
         </div>
-
-        <!-- <div class="select-style pull-left width-125 d-align-block middle">
-        <select name="">
-            <option value="">Invoices</option>
-            <option value="">Credit Note</option>
-        </select>
-    </div> -->
     </div>
-    <!-- <div class="col-xs-4 text-right">
-      <button type="button"  (click)="redirectInvoice()" class="btn btn-pink">+ New E-way</button>
-  </div> -->
 </div>
 
 <div class="custom-tabs heightVH-100">
     <tabset>
         <tab heading="Basic title" id="tab1">
-
-            <div class="mt-2 clearfix">
+            <div class="clearfix">
                 <div class="col-md-12">
-                    <div class="table-responsive remove-overflow">
-                        <table class="table basic table-bordered">
+                    <div class="table-responsive">
+                        <table class="table basic table-bordered giddh-table on-mobile-view">
                             <thead class="t-h-bg1" (clickOutside)="clickedOutside();">
                                 <tr>
                                     <th style="width:50px">#</th>
                                     <th class="nowrap">
                                         <div class="d-flex">
-                                            <div class="flex-fill">DATE</div>
+                                            <div class="flex-fill">Date</div>
                                             <div class="icon-pointer">
 
                                                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
@@ -44,7 +37,7 @@
                                     <th class="td-search-box nowrap" #searchInvoiceContainer>
 
                                         <div [hidden]="showSearchInvoiceNo">
-                                            <span> INVOICE NO.</span>
+                                            <span> Invoice No.</span>
                                             <i class="icon-search" (click)="toggleSearch('invoiceNumber')"></i>
                                         </div>
 
@@ -52,15 +45,13 @@
                                         <div class="input-container" [hidden]="!showSearchInvoiceNo">
                                             <input type="text" placeholder="Search E-way" class="w100" #invoiceSearch
                                                 [formControl]="voucherNumberInput" />
-
                                         </div>
-
                                     </th>
 
-                                    <th style="width:20%" class="td-search-box nowrap" #searchCustomerContainer>
+                                    <th class="td-search-box nowrap" #searchCustomerContainer>
                                         <!-- clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerUniqueName')" -->
                                         <div [hidden]="showSearchCustomer">
-                                            <span> CUSTOMER NAME</span>
+                                            <span>Customer Name</span>
                                             <i class="icon-search" (click)="toggleSearch('customerUniqueName')"></i>
                                         </div>
 
@@ -74,19 +65,14 @@
 
                                     <th class="nowrap">
                                         <div class="d-flex">
-                                            <div class="flex-fill">CUSTOMER GSTIN</div>
-                                            <!-- <div class="icon-pointer">
-
-                                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortbyApi('customerGstin', 'asc')"></div>
-                                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortbyApi('customerGstin', 'desc')"></div>
-                                            </div> -->
+                                            <div class="flex-fill">Customer GSTIN</div>
                                         </div>
                                     </th>
 
                                     <th class="nowrap">
 
                                         <div class="d-flex">
-                                            <div class="flex-fill">E-WAY BILL#</div>
+                                            <div class="flex-fill">E-way Bill#</div>
                                             <div class="icon-pointer">
 
                                                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
@@ -100,9 +86,8 @@
 
                                     <th class="nowrap">
                                         <div class="d-flex">
-                                            <div class="flex-fill">E-WAY BILL DATE</div>
+                                            <div class="flex-fill">E-way Bill Date</div>
                                             <div class="icon-pointer">
-
                                                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                                                     (click)="sortbyApi('billingDate', 'asc')"></div>
                                                 <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
@@ -114,32 +99,30 @@
                                     <th class="nowrap">
 
                                         <div class="d-flex">
-                                            <div class="flex-fill text-right pr-1">TOTAL</div>
+                                            <div class="flex-fill text-right">Total</div>
                                             <div class="icon-pointer">
-
                                                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                                                     (click)="sortbyApi('totalValue', 'asc')"></div>
                                                 <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
                                                     (click)="sortbyApi('totalValue', 'desc')"></div>
                                             </div>
                                         </div>
-
                                     </th>
-                                    <th class="nowrap"></th>
+                                    <th class="nowrap">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let item of EwaybillLists?.results let i = index">
-                                    <td>{{ i + 1 }}</td>
-                                    <td class="nowrap">{{item?.invoiceDate}}</td>
-                                    <td class="nowrap download-arrow"><a href="#"
+                                    <td data-title="#">{{ i + 1 }}</td>
+                                    <td data-title="Date" class="nowrap">{{item?.invoiceDate}}</td>
+                                    <td data-title="Invoice Number" class="nowrap download-arrow"><a href="#"
                                             class="d-inline-block">{{item?.docNumber}}</a>
                                         <a (click)="onSelectEwayDownload(item)" [tooltip]="'Download E-way Bill'"> <i
                                                 class="icon-download1 cursor-pointer pull-right"></i></a>
                                     </td>
-                                    <td>{{item?.customerName}}</td>
-                                    <td>{{item?.customerGstin}}</td>
-                                    <td>
+                                    <td data-title="Customer Name">{{item?.customerName}}</td>
+                                    <td data-title="Customer GSTIN">{{item?.customerGstin}}</td>
+                                    <td data-title="E-way Bill No.">
                                         <div>
                                             <!-- <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectEwayDownload(item)">{{item?.ewbNo}}</a> -->
                                             {{item?.ewbNo}}
@@ -148,15 +131,11 @@
                                                 class="cp btn-link text-green">MANUALLY GENERATED</small>
                                         </div>
                                     </td>
-                                    <td class="nowrap">{{item?.ewayBillDate}}</td>
-                                    <td class="nowrap text-right pr-1"><i class="fa fa-inr"></i>
+                                    <td data-title="E-way Bill Date" class="nowrap">{{item?.ewayBillDate}}</td>
+                                    <td data-title="Total" class="nowrap text-right pr-1"><i class="fa fa-inr"></i>
                                         {{item?.totalValue | giddhCurrency}}</td>
-                                    <td class="nowrap">
+                                    <td data-title="Action" class="nowrap">
                                         <div class="btn-group pull-left" dropdown>
-                                            <!-- <button type="button" class="btn btn-primary dropdown-toggle"
-            aria-controls="dropdown-basic">
-        Button dropdown <span class="caret"></span>
-    </button> -->
                                             <a href="javascript:void(0)" class="dropdown-toggle" id="button-basic"
                                                 dropdownToggle>Actions <i class="caret"></i></a>
                                             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-left"
@@ -189,7 +168,7 @@
 
         </tab>
         <!-- <tab heading="Consolidated Eway Bill Details">
-        <div class="mt-2 clearfix">
+        <div class="mt-15 clearfix">
             <div class="col-md-12">
                 <div class="table-responsive">
                     <table class="table basic table-bordered">
@@ -324,11 +303,11 @@
         <div class="modal-body pb-4">
 
             <div class="row d-flex e-way-body ">
-                <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                     <label>Mode of Transportation*</label>
                 </div>
 
-                <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+                <div class="col-md-8 col-lg-8 col-sm-12 mt-15">
 
                     <ul class="list-icon-group ">
                         <li>
@@ -356,14 +335,14 @@
 
                 </div>
             </div>
-            <div class="modal-body">
+            <div>
 
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                         <label>Vehicle Type*</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-8 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-8 col-sm-12 mt-15 ">
 
                         <!-- <span class="mr-1 ">  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Regular</span>
 <span>  <input type="radio "class="radio_theme " style="margin-right: 10px "/> Over Dimensional Cargo</span> -->
@@ -387,11 +366,11 @@
                 </div>
 
                 <div class="row d-flex e-way-body ">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                         <label class="pt-07">Vehicle No.*</label>
                     </div>
 
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
 
                         <input type="text" name="vehicleNo" required placeholder="Mention Number "
                             [(ngModel)]="updateEwayVehicleform.vehicleNo" maxlength="15" minlength="7"
@@ -401,28 +380,37 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                         <label class="pt-07">From Place*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 " id="form-place">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15" id="form-place">
                         <!-- <input type="text" required placeholder="" class="form-control input" /> -->
                         <!-- <input [ngbTypeahead]="dataSource" type="text" autocomplete="off" (keyup)="onChangeCityName()" [(ngModel)]="company.city" name="city" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" required maxlength="50" placeholder="Branch City"
                                 pattern="^[^\s]+(\s+[^\s]+)*$"> -->
-                        <input [ngbTypeahead]="dataSource" class="form-control input " placeholder="Enter city"
+
+                        <!-- Commented for now can be replaced with new dynamic search sh-select
+                            <input [ngbTypeahead]="dataSource" class="form-control input " placeholder="Enter city"
                             type="text" autocomplete="off" [(ngModel)]="updateEwayVehicleform.fromPlace"
                             name="fromPlace" [resultTemplate]="rt" required maxlength="50">
                         <ng-template #rt let-r="result" let-t="term">
                             <span>{{ r }}</span>
-                        </ng-template>
-
+                        </ng-template> -->
+                        <sh-select [options]="searchResults" name="fromPlace" required maxlength="50"
+                            [(ngModel)]="updateEwayVehicleform.fromPlace" autocomplete="off"
+                            (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                            [enableDynamicSearch]="true"
+                            placeholder="Enter city"
+                            [showClear]="false" [multiple]="false"
+                            [ItemHeight]="67">
+                        </sh-select>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                         <label class="pt-07">From State*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
                         <sales-sh-select [placeholder]="'State'" [multiple]="false" [isFilterEnabled]="true"
                             class="select-bdr-bottom" name="fromState" required
                             [(ngModel)]="updateEwayVehicleform.fromState" [options]="statesSource$ | async">
@@ -431,10 +419,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                         <label class="pt-07">Reason*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
                         <!-- <sh-select class="input" [options]="ewayUpdateVehicleReason" required placeholder="select type" [multiple]="false" [isFilterEnabled]="true" name="reasonCode" [(ngModel)]="updateEwayVehicleform.reasonCode"></sh-select> -->
                         <sh-select class=" input " [options]="ewayUpdateVehicleReasonList" required
                             placeholder="select type" [isFilterEnabled]="true" name="reasonCode"
@@ -444,10 +432,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                         <label class="pt-07">Remark*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
                         <textarea name="reasonRem" class="form-control" required
                             [(ngModel)]="updateEwayVehicleform.reasonRem" placeholder="Enter the remarks"></textarea>
 
@@ -455,20 +443,20 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                         <label class="pt-07">Transporter's Doc No.*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
                         <input type="text" placeholder="Enter transporter's doc no." required name="transDocNo"
                             [(ngModel)]="updateEwayVehicleform.transDocNo" class="form-control input" />
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
                         <label class="pt-07">Transporter's Doc Date*</label>
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
                         <input placeholder="dd/mm/yyyy " name="transDocDate" required type="text " placement="top"
                             [bsConfig]="{dateInputFormat: 'DD/MM/YYYY', adaptivePosition: true}"
                             [(ngModel)]="updateEwayVehicleform.transDocDate" class="form-control " bsDatepicker
@@ -477,10 +465,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-lg-4 col-sm-12 mt-2 text-right">
+                    <div class="col-md-4 col-lg-4 col-sm-12 mt-15 text-right">
 
                     </div>
-                    <div class="col-md-8 col-lg-6 col-sm-12 mt-2 ">
+                    <div class="col-md-8 col-lg-6 col-sm-12 mt-15 ">
                         <button type="submit" [disabled]="updateVehicleForm.invalid"
                             [ladda]="updateEwayvehicleProcess$ | async" (click)="updateEwayTransport(updateVehicleForm)"
                             class="btn btn-success mr-2">Save
@@ -507,30 +495,30 @@
 
         <div class="modal-body pb-4">
             <div class="row">
-                <div class="col-md-3 col-lg-3 col-sm-12 mt-2 text-right">
+                <div class="col-md-3 col-lg-3 col-sm-12 mt-15 text-right">
                     <label class="pt-07">Reason *</label>
                 </div>
-                <div class="col-md-8 col-lg-7 col-sm-12 mt-2">
+                <div class="col-md-8 col-lg-7 col-sm-12 mt-15">
                     <sh-select class=" input " [options]="ewayCancelReason" required placeholder="select type"
                         [isFilterEnabled]="true" name="cancelRsnCode" [(ngModel)]="cancelEwayRequest.cancelRsnCode"
                         [ItemHeight]="33"></sh-select>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 col-lg-3 col-sm-12 mt-2 text-right">
+                <div class="col-md-3 col-lg-3 col-sm-12 mt-15 text-right">
                     <label class="pt-07">Remark</label>
                 </div>
-                <div class="col-md-8 col-lg-7 col-sm-12 mt-2">
+                <div class="col-md-8 col-lg-7 col-sm-12 mt-15">
                     <textarea name="cancelRmrk" class="form-control" [(ngModel)]="cancelEwayRequest.cancelRmrk"
                         placeholder="Enter the remarks"></textarea>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-3 col-lg-3 col-sm-12 mt-2 text-right">
+                <div class="col-md-3 col-lg-3 col-sm-12 mt-15 text-right">
 
                 </div>
-                <div class="col-md-8 col-lg-7 col-sm-12 mt-2">
+                <div class="col-md-8 col-lg-7 col-sm-12 mt-15">
                     <button type="submit" (click)="cancelEwayBill(cancelEwayForm)" [disabled]="cancelEwayForm.invalid"
                         [ladda]="cancelEwayInProcess$ | async" class="btn btn-success mr-2">Confirm
                     </button>

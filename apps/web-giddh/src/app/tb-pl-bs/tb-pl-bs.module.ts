@@ -31,7 +31,9 @@ import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight
 import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
-import { BsDropdownModule, ModalModule, TooltipModule } from 'ngx-bootstrap';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({

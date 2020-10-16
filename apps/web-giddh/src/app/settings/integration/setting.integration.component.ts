@@ -23,7 +23,8 @@ import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { TabsetComponent, ModalDirective, TabDirective } from "ngx-bootstrap";
+import { TabsetComponent, TabDirective } from "ngx-bootstrap/tabs";
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { CurrentPage } from '../../models/api-models/Common';
@@ -91,10 +92,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isUpdateBankFormValid$: Observable<boolean> = of(false);
 
     @Input() private selectedTabParent: number;
-    @ViewChild('integrationTab') public integrationTab: TabsetComponent;
-    @ViewChild('removegmailintegration') public removegmailintegration: ModalDirective;
-    @ViewChild('paymentForm') paymentForm: NgForm;
-    @ViewChild('paymentFormAccountName') paymentFormAccountName: ShSelectComponent;
+    @ViewChild('integrationTab', {static: true}) public integrationTab: TabsetComponent;
+    @ViewChild('removegmailintegration', {static: true}) public removegmailintegration: ModalDirective;
+    @ViewChild('paymentForm', {static: true}) paymentForm: NgForm;
+    @ViewChild('paymentFormAccountName', {static: true}) paymentFormAccountName: ShSelectComponent;
 
 
     //variable holding account Info
@@ -131,6 +132,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isBankUpdateInEdit: number = null;
     /** Update bank urn number */
     public updateBankUrnNumber: any;
+    /* This will clear the selected linked account */
     public forceClearLinkAccount$: Observable<IForceClear> = observableOf({ status: false });
 
     constructor(
@@ -409,12 +411,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public onSubmitPaymentform(fomValue: any): void {
 
-        if (fomValue.valid) {
+        if (fomValue) {
             this.selecetdUpdateIndex = null;
-            let requestObject = _.cloneDeep(fomValue.value)
-            requestObject.userAmountRanges.map(element => {
-                element.maxBankLimit = (element.maxBankLimit === 'max') ? 'true' : 'false';
-            });
+            let requestObject = _.cloneDeep(fomValue);
+            if (requestObject.userAmountRanges) {
+                requestObject.userAmountRanges.map(element => {
+                    element.maxBankLimit = (element.maxBankLimit === 'max') ? 'true' : 'false';
+                });
+            }
             this.isBankUpdateInEdit = null;
             this.updateBankUrnNumber = null;
             this.store.dispatch(this.settingsIntegrationActions.SavePaymentInfo(requestObject));
@@ -1282,7 +1286,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /** Note We have to use param 'postItem' as this need mapping on sh-select custome filter params
-     * To apply custom sorting on approver list 
+     * To apply custom sorting on approver list
      *
      * @param {IOption} preItem Params to sort selected item
      * @param {IOption} postItem Params to sort selected item

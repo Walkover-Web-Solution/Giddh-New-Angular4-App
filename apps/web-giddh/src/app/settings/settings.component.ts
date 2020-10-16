@@ -8,10 +8,10 @@ import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { Component, OnInit, Output, ViewChild, OnDestroy, EventEmitter } from '@angular/core';
-import { TabsetComponent } from 'ngx-bootstrap';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { SettingsTagsComponent } from './tags/tags.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -30,16 +30,16 @@ import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions
     styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
-    @ViewChild('staticTabs') public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('integrationComponent') public integrationComponent: SettingIntegrationComponent;
-    @ViewChild('profileComponent') public profileComponent: SettingProfileComponent;
-    @ViewChild('financialYearComp') public financialYearComp: FinancialYearComponent;
-    @ViewChild('eBankComp') public eBankComp: SettingLinkedAccountsComponent;
-    @ViewChild('permissionComp') public permissionComp: SettingPermissionComponent;
-    @ViewChild('tagComp') public tagComp: SettingsTagsComponent;
-    @ViewChild('bunchComp') public bunchComp: BunchComponent;
+    @ViewChild('integrationComponent', {static: false}) public integrationComponent: SettingIntegrationComponent;
+    @ViewChild('profileComponent', {static: false}) public profileComponent: SettingProfileComponent;
+    @ViewChild('financialYearComp', {static: false}) public financialYearComp: FinancialYearComponent;
+    @ViewChild('eBankComp', {static: false}) public eBankComp: SettingLinkedAccountsComponent;
+    @ViewChild('permissionComp', {static: false}) public permissionComp: SettingPermissionComponent;
+    @ViewChild('tagComp', {static: false}) public tagComp: SettingsTagsComponent;
+    @ViewChild('bunchComp', {static: false}) public bunchComp: BunchComponent;
 
     public isUserSuperAdmin: boolean = false;
     public isUpdateCompanyInProgress$: Observable<boolean>;
@@ -73,7 +73,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private breakPointObservar: BreakpointObserver
     ) {
         this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
-        this.isUpdateCompanyInProgress$ = this.store.select(s => s.settings.updateProfileInProgress).pipe(takeUntil(this.destroyed$));
+        this.isUpdateCompanyInProgress$ = this.store.pipe(select(state => state.settings.updateProfileInProgress), takeUntil(this.destroyed$));
         this.isCompanyProfileUpdated = false;
     }
 
@@ -122,7 +122,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 }, 0);
             } else if (this.activeTab === "permission") {
                 setTimeout(() => {
-                    this.permissionComp.getInitialData();
+                    if(this.permissionComp) {
+                        this.permissionComp.getInitialData();
+                    }
                 }, 0);
             } else if (this.activeTab === "tag") {
                 setTimeout(() => {
@@ -135,6 +137,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
             if (val.tab === 'integration' && val.code) {
                 this.saveGmailAuthCode(val.code);
                 this.activeTab = val.tab;
+                this.router.navigate(['pages/settings/integration/email'], { replaceUrl: true });
             }
         });
 

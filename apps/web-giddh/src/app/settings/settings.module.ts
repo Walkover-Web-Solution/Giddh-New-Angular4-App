@@ -28,7 +28,7 @@ import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
 import { SettingsServiceModule } from './settings-service.module';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
 import { TextMaskModule } from 'angular2-text-mask';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';

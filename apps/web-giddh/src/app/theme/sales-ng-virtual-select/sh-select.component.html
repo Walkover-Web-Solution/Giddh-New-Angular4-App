@@ -1,7 +1,7 @@
 <div #dd [style.width]="width" class="pr">
     <!-- (click)="show($event)" -->
     <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'"
-        [class.open]="isOpen" (focus)="show($event)" (blur)="hide($event)" (keydown)="keydownUp($event)">
+        [class.open]="isOpen" (click)="show($event)" (focus)="show($event)" (blur)="hide($event)" (keydown)="keydownUp($event)">
 
 
         <!--region multiple-->
@@ -14,7 +14,7 @@
                 </span>
             </ng-container>
             <!-- (click)="show($event);" -->
-            <input autocomplete="disabled" type="text" class="pdL1"
+            <input autocomplete="disabled" type="text" class="pd-l1"
                 [ngClass]="{'hasValue':filter?.length, 'bottom-border-only' : showBottomBorderOnly}" #inputFilter
                 tabindex="0" (blur)="filterInputBlur($event)"
                 [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter"

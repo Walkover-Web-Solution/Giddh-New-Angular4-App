@@ -183,7 +183,7 @@ export class SalesService {
     }
 
     /**
-     * This will download/JSON to show the columnar report
+     * This will get the invoice list where balance is due
      *
      * @param {any} model voucher type & account unique name
      * @param {string} date Date in GIDDH_DATE_FORMAT

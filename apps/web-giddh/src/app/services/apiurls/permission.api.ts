@@ -9,4 +9,5 @@ export const PERMISSION_API = {
     SHARE_COMPANY: 'company/:companyUniqueName/share',
     UN_SHARE_COMPANY: 'company/:companyUniqueName/unshare',
     COMPANY_SHARED_WITH: 'company/:companyUniqueName/shared-with',
+    GET_SHARED_ALL_MODULE: 'company/:companyUniqueName/module_page'
 };

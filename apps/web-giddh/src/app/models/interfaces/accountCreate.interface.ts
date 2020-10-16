@@ -39,5 +39,6 @@ export interface IAccountCreate extends IAccount, IAccountsInfo {
 	yodleeAdded?: boolean;
 	accountType?: string;
 	state?: string;
-	role?: INameUniqueName;
+    role?: INameUniqueName;
+    email?: string;
 }

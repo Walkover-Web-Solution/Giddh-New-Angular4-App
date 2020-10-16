@@ -5,32 +5,11 @@
     align-items: flex-start;
     flex-flow: row wrap;
 }
-
-// table {
-//   table-layout: fixed
-// }
-
-/* .table.basic tbody tr td {
-    background-color: #fff;
-}
-
-.table.basic .table tbody tr td {
-    border: none;
-} */
-
 .mh18_img img {
     max-height: 20px;
     cursor: pointer;
 }
 
-/*
-.table.basic>tbody>tr>td>table tbody tr td {
-    padding: 5px 0;
-}
-
-tfoot {
-    background: #fff;
-} */
 .flex-fill {
     flex: 1 1 auto;
 }
@@ -40,21 +19,15 @@ tfoot {
 }
 
 /*td-in-searchbox_style*/
-
+.td-search-box.nowrap{
+    width: 15%;
+}
 .td-search-box div {
     display: flex;
 }
 
 .td-search-box div span {
-    flex: 1 1 auto;
     padding-left: 8px;
-}
-
-.td-search-box div i {
-    margin-top: 3px;
-    color: #8080808c;
-    padding-right: 8px;
-    cursor: pointer;
 }
 
 .td-search-box {
@@ -63,7 +36,7 @@ tfoot {
 }
 
 .td-search-box .input-container input {
-    height: 41px;
+    height: 51px;
     width: 100%;
     padding: 11px;
     padding-right: 40px;
@@ -111,17 +84,71 @@ label {
     width: 125px;
 }
 .ewayBill-date .form-control {
-    background: #f7f8fa !important;
-    border: 0px;
-    font-weight: bold;
-    border-bottom: 1px dotted;
-    color: #333333;
+    background: $white !important;
+    border: 1px solid $gainsboro ;
 }
-
+.input-group {
+    position: relative;
+    span{
+        &::before{
+            position: absolute;
+            content: "";
+            display: block;
+            height: 36px;
+            width: 1px;
+            background-color: $gainsboro;
+            left: 37px!important;
+            z-index: 100;
+            top: 0;
+        }
+         .form-control{
+            background-image: url('../../../../assets/images/calender-icon.svg')!important;
+            background-size: 17px!important;
+            background-position: 9px 8px!important;
+            background-repeat: no-repeat!important;
+            padding-left: 45px!important;
+            position: relative;
+            z-index: 99;
+            cursor: default;
+            width: 100%;
+        }
+    }
+}
+.list-icon-group{
+    label{
+        padding: 0 10px;
+    }
+}
+.custom-tabs{
+    table{
+        margin-top: 15px;
+    }
+}
+.no-data{
+    padding-bottom: 20px;
+    margin-top: -20px;
+    padding-top: 20px;
+}
 // my css
 
 @media (min-width: 768px) {
     .table-responsive.remove-overflow {
         overflow: inherit;
+    }
+}
+@media(max-width:768px){
+    .dropdown-left{
+        right: auto !important;
+        left: 0 !important;
+    }
+     .modal-body{
+        .text-right{
+            text-align: left !important;
+        }
+     }
+     .custom-tabs{
+        table{
+            margin-top: 0;
+        }
     }
 }

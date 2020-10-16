@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { BsDatepickerConfig } from 'ngx-bootstrap';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
 
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';

@@ -1,6 +1,6 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Options } from 'highcharts';
+import * as Highcharts from 'highcharts';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
@@ -21,7 +21,8 @@ import { GeneralService } from "../../../services/general.service";
 export class RevenueChartComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
     public requestInFlight: boolean = false;
-    public options: Options;
+    public revenueChart: typeof Highcharts = Highcharts;
+    public chartOptions: Highcharts.Options;
     public companies$: Observable<CompanyResponse[]>;
     public activeCompanyUniqueName$: Observable<string>;
     public revenueGraphTypes: any[] = [];
@@ -222,9 +223,9 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     }
 
     public generateChart() {
-        let chartType = this.chartType;
+        let chartType: any = this.chartType;
 
-        this.options = {
+        this.chartOptions = {
             chart: {
                 type: chartType,
                 height: '300px'
@@ -238,10 +239,12 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
             },
             series: [{
                 name: '',
-                data: this.currentData
+                data: this.currentData,
+                type: chartType
             }, {
                 name: '',
-                data: this.previousData
+                data: this.previousData,
+                type: chartType
             }
             ],
             legend: {
@@ -250,7 +253,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
             tooltip: {
                 useHTML: true,
                 formatter: function () {
-                    return this.point.tooltip;
+                    return (this.point as any).tooltip;
                 }
             },
             xAxis: {

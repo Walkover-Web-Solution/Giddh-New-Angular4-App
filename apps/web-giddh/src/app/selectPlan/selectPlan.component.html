@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-sm-3">
                     <div class=" pull-right xs-left">
-                        <a [routerLink]="['/welcome']" class="btn btn-default mrR0 pr-3 pl-3 mb-2">Back</a>
+                        <a [routerLink]="['/welcome']" class="btn btn-default mr-0 pr-3 pl-3 mb-2">Back</a>
                     </div>
                 </div>
             </div>
@@ -90,7 +90,7 @@
 
                                                 <div class="row">
                                                     <div class="col-xs-12">
-                                                        <button class="btn btn-primary mrT1 mrB2"
+                                                        <button class="btn btn-primary mr-t1 mr-b2"
                                                             (click)="createCompany(item);"
                                                             [ladda]="isCompanyCreationInProcess$ | async">Select
                                                             Plan</button>
@@ -163,7 +163,7 @@
 
                                                 <div class="row">
                                                     <div class="col-xs-12">
-                                                        <button class="btn btn-success mrT1 mrB2"
+                                                        <button class="btn btn-success mr-t1 mr-b2"
                                                             (click)="buyPlanClicked(item)">Buy Plan</button>
                                                     </div>
                                                 </div>
@@ -255,7 +255,7 @@
 
                                                 <div class="row">
                                                     <div class="col-xs-12">
-                                                        <button class="btn btn-primary mrT1 mrB2"
+                                                        <button class="btn btn-primary mr-t1 mr-b2"
                                                             [ladda]="isCompanyCreationInProcess$ | async"
                                                             (click)="createCompany(paidItem)">Select Plan</button>
                                                     </div>
@@ -274,17 +274,17 @@
                         <div class="activation-key">
                             <label>Activation Key</label>
                             <input type="text" name="licenceKey" required id="licenceKey" [formControl]="licenceKey"
-                                class="form-control mrT1" placeholder="Enter activation key">
+                                class="form-control mr-t1" placeholder="Enter activation key">
                         </div>
                         <div class="activation-btn">
-                            <button class="btn btn-green mrT1" [disabled]="!licenceKey.value"
+                            <button class="btn btn-green mr-t1" [disabled]="!licenceKey.value"
                                 (click)="createCompanyViaActivationKey()"> Activate</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div *ngIf="isCreateAndSwitchCompanyInProcess">
-                <div class="no-data mrT2 loader-main">
+                <div class="no-data mr-t2 loader-main">
                     <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
                     <div class="spinner2">
                         <div class="cube1"></div>

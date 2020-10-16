@@ -10,7 +10,7 @@
     <div id="template-header" (click)="onClickSection('header')"
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.header, ' ': templateUISectionVisibility.header }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header">
-            <i class="fa fa-pencil"></i>
+            <i class="icon-edit-pencil"></i>
         </a>
         <header>
             <table>
@@ -253,12 +253,12 @@
     <div class="clearfix" id="template-table" class="pos-rel" (click)="onClickSection('table')"
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.table, ' ': templateUISectionVisibility.table }">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table">
-            <i class="fa fa-pencil"></i>
+            <i class="icon-edit-pencil"></i>
         </a>
 
         <!-- <span class="arrow-down "></span> -->
         <article>
-            <table class="item product-table mrB1" cellspacing="0 " cellpadding="0 ">
+            <table class="item product-table mr-b1" cellspacing="0 " cellpadding="0 ">
                 <thead>
                     <tr>
                         <th *ngIf="fieldsAndVisibility.table.date?.display" class="text-left"
@@ -378,7 +378,7 @@
         [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }"
         (click)="onClickSection('footer')">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
-            <i class="fa fa-pencil"></i>
+            <i class="icon-edit-pencil"></i>
         </a>
         <table class="balance ">
             <tr [hidden]="!fieldsAndVisibility.footer.taxableAmount?.display ">
@@ -424,7 +424,7 @@
         <!--
     <div id="template-footer" class="" [ngClass]="{ 'disabled-area': !templateUISectionVisibility.footer, ' ': templateUISectionVisibility.footer }" (click)="onClickSection('footer')">
         <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer">
-            <i class="fa fa-pencil"></i>
+            <i class="icon-edit-pencil"></i>
         </a> -->
         <div class="clearfix"
             [ngStyle]="{ 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px'}">

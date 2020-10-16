@@ -16,7 +16,7 @@ import { AccountService } from '../../services/account.service';
 import { InvoiceService } from '../../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import { InvoiceTemplatesService } from 'apps/web-giddh/src/app/services/invoice.templates.service';
@@ -50,13 +50,13 @@ const COMPARISON_FILTER = [
 })
 export class ReceiptComponent implements OnInit, OnDestroy {
 
-    @ViewChild('invoiceReceiptConfirmationModel') public invoiceReceiptConfirmationModel: ModalDirective;
-    @ViewChild('invoiceReceiptVoucherDetailsModel') public invoiceReceiptVoucherDetailsModel: ModalDirective;
-    @ViewChild('invoiceReceiptVoucherUpdateModel') public invoiceReceiptVoucherUpdateModel: ModalDirective;
-    @ViewChild('advanceSearch') public advanceSearch: ModalDirective;
-    @ViewChild('voucherSearch') public voucherSearch: ElementRef;
-    @ViewChild('accountSearch') public accountSearch: ElementRef;
-    @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
+    @ViewChild('invoiceReceiptConfirmationModel', {static: true}) public invoiceReceiptConfirmationModel: ModalDirective;
+    @ViewChild('invoiceReceiptVoucherDetailsModel', {static: true}) public invoiceReceiptVoucherDetailsModel: ModalDirective;
+    @ViewChild('invoiceReceiptVoucherUpdateModel', {static: true}) public invoiceReceiptVoucherUpdateModel: ModalDirective;
+    @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
+    @ViewChild('voucherSearch', {static: true}) public voucherSearch: ElementRef;
+    @ViewChild('accountSearch', {static: true}) public accountSearch: ElementRef;
+    @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent, static: true }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
 
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,

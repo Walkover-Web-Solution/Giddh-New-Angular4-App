@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -21,14 +21,14 @@ import { GeneralActions } from '../../../actions/general/general.actions';
     styleUrls: [`./eWayBill.create.component.scss`]
 })
 export class EWayBillCreateComponent implements OnInit, OnDestroy {
-    @ViewChild('eWayBillCredentials') public eWayBillCredentials: ModalDirective;
-    @ViewChild('generateInvForm') public generateEwayBillForm: NgForm;
-    @ViewChild('generateTransporterForm') public generateNewTransporterForm: NgForm;
-    @ViewChild('invoiceRemoveConfirmationModel') public invoiceRemoveConfirmationModel: ModalDirective;
-    @ViewChild('subgrp') public subgrp: any;
-    @ViewChild('doctypes') public doctype: any;
+    @ViewChild('eWayBillCredentials', {static: true}) public eWayBillCredentials: ModalDirective;
+    @ViewChild('generateInvForm', {static: true}) public generateEwayBillForm: NgForm;
+    @ViewChild('generateTransporterForm', {static: true}) public generateNewTransporterForm: NgForm;
+    @ViewChild('invoiceRemoveConfirmationModel', {static: true}) public invoiceRemoveConfirmationModel: ModalDirective;
+    @ViewChild('subgrp', {static: true}) public subgrp: any;
+    @ViewChild('doctypes', {static: true}) public doctype: any;
 
-    @ViewChild('trans') public transport: any;
+    @ViewChild('trans', {static: true}) public transport: any;
 
     public invoiceNumber: string = '';
     public invoiceBillingGstinNo: string = '';

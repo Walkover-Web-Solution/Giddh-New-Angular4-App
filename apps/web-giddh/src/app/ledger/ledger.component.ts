@@ -10,13 +10,15 @@ import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-selec
 import { QuickAccountComponent } from 'apps/web-giddh/src/app/theme/quick-account-component/quickAccount.component';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
-import { ModalDirective, PaginationComponent, BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import {PaginationComponent} from 'ngx-bootstrap/pagination';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
-import * as uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
@@ -68,13 +70,13 @@ import { SearchService } from '../services/search.service';
     ]
 })
 export class LedgerComponent implements OnInit, OnDestroy {
-    @ViewChild('updateledgercomponent') public updateledgercomponent: ElementViewContainerRef;
-    @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
-    @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
-    @ViewChild('sharLedger') public sharLedger: ShareLedgerComponent;
-    @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+    @ViewChild('updateledgercomponent', {static: true}) public updateledgercomponent: ElementViewContainerRef;
+    @ViewChild('quickAccountComponent', {static: true}) public quickAccountComponent: ElementViewContainerRef;
+    @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
+    @ViewChild('sharLedger', {static: true}) public sharLedger: ShareLedgerComponent;
+    @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
 
-    @ViewChild('advanceSearchComp') public advanceSearchComp: AdvanceSearchModelComponent;
+    @ViewChild('advanceSearchComp', {static: false}) public advanceSearchComp: AdvanceSearchModelComponent;
 
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
     public imgPath: string = '';
@@ -86,17 +88,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public advanceSearchRequest: AdvanceSearchRequest;
     public isLedgerCreateSuccess$: Observable<boolean>;
     public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
-    @ViewChild('newLedPanel') public newLedgerComponent: NewLedgerEntryPanelComponent;
-    @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;
-    @ViewChild('exportLedgerModal') public exportLedgerModal: ModalDirective;
-    @ViewChild('shareLedgerModal') public shareLedgerModal: ModalDirective;
-    @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
-    @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
-    @ViewChild('bulkActionConfirmationModal') public bulkActionConfirmationModal: ModalDirective;
-    @ViewChild('bulkActionGenerateVoucherModal') public bulkActionGenerateVoucherModal: ModalDirective;
-    @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
+    @ViewChild('newLedPanel', {static: false}) public newLedgerComponent: NewLedgerEntryPanelComponent;
+    @ViewChild('updateLedgerModal', {static: true}) public updateLedgerModal: ModalDirective;
+    @ViewChild('exportLedgerModal', {static: true}) public exportLedgerModal: ModalDirective;
+    @ViewChild('shareLedgerModal', {static: true}) public shareLedgerModal: ModalDirective;
+    @ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
+    @ViewChild('quickAccountModal', {static: true}) public quickAccountModal: ModalDirective;
+    @ViewChild('bulkActionConfirmationModal', {static: true}) public bulkActionConfirmationModal: ModalDirective;
+    @ViewChild('bulkActionGenerateVoucherModal', {static: true}) public bulkActionGenerateVoucherModal: ModalDirective;
+    @ViewChild('ledgerSearchTerms', {static: true}) public ledgerSearchTerms: ElementRef;
     /** datepicker element reference  */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
     public showUpdateLedgerForm: boolean = false;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
@@ -172,7 +174,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Export ledger request object */
     public columnarReportExportRequest: ExportLedgerRequest;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private accountUniquename: any;
+    public accountUniquename: any;
     /** Transactions dates array */
     public allTransactionsList: any[] = [];
     public allTransactionDates: any[] = [];
@@ -199,8 +201,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** Stores the search results */
     public searchResults: Array<IOption> = [];
+    /** Default search suggestion list to be shown for search */
+    public defaultSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public preventDefaultScrollApiCall: boolean = false;
     /** Stores the search results pagination details */
     public searchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the default search results pagination details (required only for passing
+     * default search pagination details to Update ledger component) */
+    public defaultResultsPaginationData = {
         page: 0,
         totalPages: 0,
         query: ''
@@ -779,6 +792,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (data[0] && data[1]) {
                 let profile = cloneDeep(data[1]);
                 this.lc.activeAccount = data[0];
+                this.loadDefaultSearchSuggestions();
                 this.profileObj = profile;
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 this.entryUniqueNamesForBulkAction = [];
@@ -1053,15 +1067,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
             from = this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code;
             to = this.selectedCurrency === 0 ? this.foreignCurrencyDetails.code : this.baseCurrencyDetails.code;
         }
-        let date = moment().format(GIDDH_DATE_FORMAT);
-        this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
-            let rate = response.body;
-            if (rate) {
-                this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.giddhBalanceDecimalPlaces) };
-            }
-        }, (error => {
-            this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1, exchangeRateForDisplay: 1 };
-        }));
+        if (from && to) {
+            let date = moment().format(GIDDH_DATE_FORMAT);
+            this._ledgerService.GetCurrencyRateNewApi(from, to, date).subscribe(response => {
+                let rate = response.body;
+                if (rate) {
+                    this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate, exchangeRateForDisplay: giddhRoundOff(rate, this.giddhBalanceDecimalPlaces) };
+                }
+            }, (error => {
+                this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1, exchangeRateForDisplay: 1 };
+            }));
+        }
     }
 
     public toggleTransactionType(event: any) {
@@ -1268,7 +1284,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public handleScrollEnd(): void {
         if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
-            this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
+            this.onSearchQueryChanged(
+                this.searchResultsPaginationData.query,
+                this.searchResultsPaginationData.page + 1,
+                this.searchResultsPaginationData.query ? true : false,
+                (response) => {
+                    if (!this.searchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                                label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                                additional: result
+                            }
+                        }) || [];
+                        this.defaultSuggestions = this.defaultSuggestions.concat(...results);
+                        this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
+                        this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
+                    }
+            });
         }
     }
 
@@ -1360,7 +1393,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public resetAdvanceSearch() {
         this.searchText = "";
-        this.advanceSearchComp.resetAdvanceSearchModal();
+        if(this.advanceSearchComp) {
+            this.advanceSearchComp.resetAdvanceSearchModal();
+        }
         this.trxRequest.page = 0;
         this.search("");
         this.getTransactionData();
@@ -1426,7 +1461,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
         componentInstance.tcsOrTds = this.tcsOrTds;
         this.updateLedgerComponentInstance = componentInstance;
-
+        this.updateLedgerComponentInstance.defaultSuggestions = [...this.defaultSuggestions];
+        this.updateLedgerComponentInstance.searchResultsPaginationData.page = this.defaultResultsPaginationData.page;
+        this.updateLedgerComponentInstance.searchResultsPaginationData.totalPages = this.defaultResultsPaginationData.totalPages;
         componentInstance.toggleOtherTaxesAsideMenu.subscribe(res => {
             this.toggleOtherTaxesAsidePane(res);
         });
@@ -1474,43 +1511,60 @@ export class LedgerComponent implements OnInit, OnDestroy {
      *
      * @param {string} query Search query
      * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
      * @memberof LedgerComponent
      */
-    public onSearchQueryChanged(query: string, page: number = 1): void {
+    public onSearchQueryChanged(query: string, page: number = 1, withStocks: boolean = true, successCallback?: Function): void {
         this.searchResultsPaginationData.query = query;
-        const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount.uniqueName) : '';
-        // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
-        const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
-            this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
-            '';
-        const requestObject = {
-            q: encodeURIComponent(query),
-            page,
-            withStocks: true,
-            stockAccountUniqueName: encodeURIComponent(accountUniqueName)
-        }
-        this.searchService.searchAccount(requestObject).subscribe(data => {
-            if (data && data.body && data.body.results) {
-                const searchResults = data.body.results.map(result => {
-                    return {
-                        value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
-                        label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
-                        additional: result
-                    }
-                }) || [];
-                this.noResultsFoundLabel = SearchResultText.NotFound;
-                if (page === 1) {
-                    this.searchResults = searchResults;
-                } else {
-                    this.searchResults = [
-                        ...this.searchResults,
-                        ...searchResults
-                    ];
-                }
-                this.searchResultsPaginationData.page = data.body.page;
-                this.searchResultsPaginationData.totalPages = data.body.totalPages;
+        if (!this.preventDefaultScrollApiCall &&
+            (query || (this.defaultSuggestions && this.defaultSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount.uniqueName) : '';
+            // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
+            const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
+                this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
+                '';
+            const requestObject = {
+                q: encodeURIComponent(query),
+                page,
+                withStocks,
+                stockAccountUniqueName: encodeURIComponent(accountUniqueName) || undefined
             }
-        });
+            this.searchService.searchAccount(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                            label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                            additional: result
+                        }
+                    }) || [];
+                    this.noResultsFoundLabel = SearchResultText.NotFound;
+                    if (page === 1) {
+                        this.searchResults = searchResults;
+                    } else {
+                        this.searchResults = [
+                            ...this.searchResults,
+                            ...searchResults
+                        ];
+                    }
+                    this.searchResultsPaginationData.page = data.body.page;
+                    this.searchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.searchResults = [...this.defaultSuggestions];
+            this.searchResultsPaginationData.page = this.defaultResultsPaginationData.page;
+            this.searchResultsPaginationData.totalPages = this.defaultResultsPaginationData.totalPages;
+            this.preventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.preventDefaultScrollApiCall = false;
+            }, 500);
+        }
     }
 
     /**
@@ -1519,7 +1573,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public resetPreviousSearchResults(): void {
-        this.searchResults = [];
+        this.searchResults = [...this.defaultSuggestions];
         this.searchResultsPaginationData = {
             page: 0,
             totalPages: 0,
@@ -2087,7 +2141,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
     }
 
@@ -2121,5 +2175,28 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
             this.selectedDate(value);
         }
+    }
+
+    /**
+     * Loads the default search suggestion when ledger module is loaded and
+     * when ledger is changed
+     *
+     * @private
+     * @memberof LedgerComponent
+     */
+    private loadDefaultSearchSuggestions(): void {
+        this.onSearchQueryChanged('', 1, false, (response) => {
+            this.defaultSuggestions = response.map(result => {
+                return {
+                    value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                    label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                    additional: result
+                }
+            }) || [];
+            this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
+            this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
+            this.searchResults = [...this.defaultSuggestions];
+            this.noResultsFoundLabel = SearchResultText.NotFound;
+        });
     }
 }

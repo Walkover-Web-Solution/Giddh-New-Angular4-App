@@ -4,7 +4,7 @@ import { AfterViewInit, Component, Input } from '@angular/core';
 	selector: 'layout-main',
 	templateUrl: './layout.component.html',
 	styles: [`
-  #content_wrapper {
+  #content-wrapper {
     min-height: calc(100vh - 120px);
     height: 100%;
     padding-bottom: 80px;

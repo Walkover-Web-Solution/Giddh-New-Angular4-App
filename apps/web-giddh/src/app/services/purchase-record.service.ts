@@ -99,4 +99,56 @@ export class PurchaseRecordService {
         return this._http.delete(contextPath).pipe(
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
     }
+
+    /**
+     * This will get all the revisions
+     *
+     * @param {*} getRequestObject
+     * @param {*} postRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseRecordService
+     */
+    public getAllVersions(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_RECORD_API.GET_ALL_VERSIONS;
+        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+        url = url.replace(':page', getRequestObject.page);
+        url = url.replace(':count', getRequestObject.count);
+
+        return this._http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
+
+    /**
+     * This will send email
+     *
+     * @param {*} getRequestObject
+     * @param {*} postRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseRecordService
+     */
+    public sendEmail(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_RECORD_API.EMAIL;
+        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+        url = url.replace(':uniqueName', getRequestObject.uniqueName);
+
+        return this._http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
+
+    /**
+     * This will get the PDF
+     *
+     * @param {*} requestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof PurchaseRecordService
+     */
+    public getPdf(requestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_RECORD_API.GET_PDF;
+        url = url.replace(':companyUniqueName', requestObject.companyUniqueName);
+        url = url.replace(':accountUniqueName', encodeURIComponent(requestObject.accountUniqueName));
+        url = url.replace(':uniqueName', requestObject.uniqueName);
+
+        return this._http.get(url).pipe(
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
+    }
 }

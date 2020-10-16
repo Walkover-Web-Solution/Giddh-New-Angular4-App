@@ -7,16 +7,19 @@ import { CompanyActions } from '../actions/company.actions';
 import { ReplaySubject, Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as moment from 'moment';
 import { GeneralService } from '../services/general.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { CurrentPage } from '../models/api-models/Common';
+import { AuditLogsSidebarComponent } from './components/sidebar-components/audit-logs.sidebar.component';
+import { AuditLogsFormComponent } from './components/audit-logs-form/audit-logs-form.component';
+import { GetAuditLogsRequest } from '../models/api-models/Logs';
 
 @Component({
     selector: 'audit-logs',
     templateUrl: './audit-logs.component.html',
-    styleUrls: ['audit-logs.component.scss']
+    styleUrls: [`./audit-logs.component.scss`],
 })
 export class AuditLogsComponent implements OnInit, OnDestroy {
     /** To check module for new version  */
@@ -48,10 +51,19 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** Audit log form component reference */
+    @ViewChild('auditLogFormComponent', { static: false }) public auditLogFormComponent: AuditLogsFormComponent;
+    /** Audit log request */
+    public auditLogsRequest$: Observable<GetAuditLogsRequest>;
+    /** To show clear filter */
+    public showClearFilter: boolean = false;
+
+
 
     constructor(private store: Store<AppState>, private companyActions: CompanyActions, private route: ActivatedRoute, private generalActions: GeneralActions,
     private generalService: GeneralService, private modalService: BsModalService, private router: Router) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+        this.auditLogsRequest$ = this.store.pipe(select(state => state.auditlog.auditLogsRequest), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -88,6 +100,12 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
             if (config) {
                 this.datePickerOptions = config;
+            }
+        });
+
+        this.auditLogsRequest$.subscribe(response => {
+            if (response && response.entity) {
+                this.showClearFilter = true;
             }
         });
 
@@ -156,5 +174,17 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
         currentPageObj.name = title;
         currentPageObj.url = this.router.url;
         this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
+    }
+
+    /**
+     * To reset applied filter
+     *
+     * @memberof AuditLogsComponent
+     */
+    public resetFilter(): void {
+        if (this.isNewVersion && this.auditLogFormComponent) {
+            this.auditLogFormComponent.resetFilters();
+            this.showClearFilter = false;
+        } 
     }
 }

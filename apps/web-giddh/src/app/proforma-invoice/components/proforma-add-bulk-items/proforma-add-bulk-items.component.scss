@@ -125,14 +125,27 @@
 }
 
 .temapletFooter {
-    position: fixed;
-    bottom: 15px;
-    width: 100%;
-    max-width: 418px;
+    position: absolute;
+    bottom: 0;
+    width: calc(100% - 30px);
+    max-width: 100%;
 }
 
 .rightSideWrapper {
     height: 600px;
     overflow-y: auto;
     padding-bottom: 60px;
+}
+.add-item-btn{
+        display: flex !important;
+        flex-wrap: nowrap;
+    .btn-number{
+        margin-right: 0;
+    }
+    .minus-btn{
+        border-right: none;
+    }
+    input.form-control.input-number{
+        height: 29px !important;
+    }
 }

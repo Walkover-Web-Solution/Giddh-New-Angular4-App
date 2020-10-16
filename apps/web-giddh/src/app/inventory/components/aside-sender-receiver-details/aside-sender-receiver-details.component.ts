@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, ViewChild, Input, ElementRef, OnInit, OnChanges, OnDestroy } from '@angular/core';
-import { TabsetComponent } from 'ngx-bootstrap';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { FormBuilder, FormGroup, AbstractControl, FormArray, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -21,7 +21,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { CountryRequest, OnboardingFormRequest } from '../../../models/api-models/Common';
 import { digitsOnly } from '../../../shared/helpers';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import * as googleLibphonenumber from 'google-libphonenumber';
+import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 
 @Component({
     selector: 'aside-sender-receiver-details-pane',
@@ -91,7 +91,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     @Input() public isDebtorCreditor: boolean = true;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
-    @ViewChild('autoFocus') public autoFocus: ElementRef;
+    @ViewChild('autoFocus', {static: true}) public autoFocus: ElementRef;
 
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public showOtherDetails: boolean = false;
@@ -119,7 +119,6 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     public countryPhoneCode: IOption[] = [];
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public stateGstCode: any[] = [];
-    public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
     public isGstValid: boolean;
@@ -127,7 +126,7 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
 
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 
-    @ViewChild('staticTabs') public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
         private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
@@ -468,8 +467,8 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     }
     public checkMobileNo(ele) {
         try {
-            let parsedNumber = this.phoneUtility.parse('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value);
-            if (this.phoneUtility.isValidNumber(parsedNumber)) {
+            let parsedNumber = parsePhoneNumberFromString('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value as CountryCode);
+            if (parsedNumber.isValid()) {
                 ele.classList.remove('error-box');
                 this.isMobileNumberValid = true;
             } else {
@@ -617,15 +616,13 @@ export class AsideSenderReceiverDetailsPaneComponent implements OnInit, OnChange
     }
 
     public getCurrency() {
-        this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
                     this.currencies.push({ label: res[key].code, value: res[key].code });
 
                 });
                 this.currencySource$ = observableOf(this.currencies);
-            } else {
-                this.store.dispatch(this.commonActions.GetCurrency());
             }
         });
     }

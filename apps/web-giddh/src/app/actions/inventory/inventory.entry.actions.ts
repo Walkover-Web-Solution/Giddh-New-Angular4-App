@@ -2,7 +2,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { InventoryService } from '../../services/inventory.service';
 import { Router } from '@angular/router';
@@ -15,15 +15,17 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class InventoryEntryActions {
 
-	@Effect()
-	public addNewEntry$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY).pipe(
+
+	public addNewEntry$: Observable<Action> = createEffect( ()=>this.action$
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY),
 			switchMap((action: CustomActions) => this._inventoryService.CreateInventoryEntry(action.payload.entry, action.payload.reciever)),
-			map(response => this.addNewEntryResponse(response)));
+			map(response => this.addNewEntryResponse(response))));
 
-	@Effect()
-	public addNewEntryResponse$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY_RESPONSE).pipe(
+
+	public addNewEntryResponse$: Observable<Action> = createEffect( ()=>this.action$
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<InventoryEntry, InventoryEntry> = response.payload;
 				if (data.status === 'error') {
@@ -33,18 +35,20 @@ export class InventoryEntryActions {
 					this._toasty.successToast('Entry Created Successfully');
 				}
 				return { type: 'EmptyAction' };
-			}));
+			})));
 
 
-	@Effect()
-	public addNewTransferEntry$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY).pipe(
+
+	public addNewTransferEntry$: Observable<Action> =createEffect( ()=> this.action$
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY),
 			switchMap((action: CustomActions) => this._inventoryService.CreateInventoryTransferEntry(action.payload.entry, action.payload.reciever)),
-			map(response => this.addNewEntryResponse(response)));
+			map(response => this.addNewEntryResponse(response))));
 
-	@Effect()
-	public addNewTransferEntryResponse$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY_RESPONSE).pipe(
+
+	public addNewTransferEntryResponse$: Observable<Action> =createEffect( ()=> this.action$
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<InventoryEntry, InventoryEntry> = response.payload;
 				if (data.status === 'error') {
@@ -54,17 +58,19 @@ export class InventoryEntryActions {
 					this._toasty.successToast('Entry Created Successfully');
 				}
 				return { type: 'EmptyAction' };
-			}));
+			})));
 
-	@Effect()
-	public updateEntry$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.UPDATE_ENTRY).pipe(
+
+	public updateEntry$: Observable<Action> =createEffect( ()=> this.action$
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.UPDATE_ENTRY),
 			switchMap((action: CustomActions) => this._inventoryService.UpdateInventoryEntry(action.payload.entry, action.payload.inventoryUserUniqueName, action.payload.inventoryEntryUniqueName)),
-			map(response => this.updateEntryResponse(response)));
+			map(response => this.updateEntryResponse(response))));
 
-	@Effect()
-	public updateEntryResponse$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.UPDATE_ENTRY_RESPONSE).pipe(
+
+	public updateEntryResponse$: Observable<Action> =createEffect( ()=> this.action$
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.UPDATE_ENTRY_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<InventoryEntry, InventoryEntry> = response.payload;
 				if (data.status === 'error') {
@@ -74,17 +80,19 @@ export class InventoryEntryActions {
 					this._toasty.successToast('Entry Updated Successfully');
 				}
 				return { type: 'EmptyAction' };
-			}));
+			})));
 
-	@Effect()
-	public deleteEntry$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.DELETE_ENTRY).pipe(
+
+	public deleteEntry$: Observable<Action> =createEffect( ()=> this.action$
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.DELETE_ENTRY),
 			switchMap((action: CustomActions) => this._inventoryService.DeleteInventoryEntry(action.payload.inventoryUserUniqueName, action.payload.inventoryEntryUniqueName)),
-			map(response => this.deleteEntryResponse(response)));
+			map(response => this.deleteEntryResponse(response))));
 
-	@Effect()
-	public deleteEntryResponse$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.DELETE_ENTRY_RESPONSE).pipe(
+
+	public deleteEntryResponse$: Observable<Action> =createEffect( ()=> this.action$
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.DELETE_ENTRY_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<string, string> = response.payload;
 				if (data.status === 'error') {
@@ -94,17 +102,19 @@ export class InventoryEntryActions {
 					this._toasty.successToast('Entry Deleted Successfully');
 				}
 				return { type: 'EmptyAction' };
-			}));
+			})));
 
-	@Effect()
-	public getEntry$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.GET_ENTRY).pipe(
+
+	public getEntry$: Observable<Action> =createEffect( ()=> this.action$
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.GET_ENTRY),
 			switchMap((action: CustomActions) => this._inventoryService.GetInventoryEntry(action.payload.inventoryUserUniqueName, action.payload.inventoryEntryUniqueName)),
-			map(response => this.getEntryResponse(response)));
+			map(response => this.getEntryResponse(response))));
 
-	@Effect()
-	public getEntryResponse$: Observable<Action> = this.action$
-		.ofType(INVENTORY_ENTRY_ACTIONS.GET_ENTRY_RESPONSE).pipe(
+
+	public getEntryResponse$: Observable<Action> =createEffect( ()=> this.action$
+		.pipe(
+            ofType(INVENTORY_ENTRY_ACTIONS.GET_ENTRY_RESPONSE),
 			map((response: CustomActions) => {
 				let data: BaseResponse<InventoryEntry, string> = response.payload;
 				if (data.status === 'error') {
@@ -114,9 +124,10 @@ export class InventoryEntryActions {
 					// this._toasty.successToast('User Updated Successfully');
 				}
 				return { type: 'EmptyAction' };
-			}));
+			})));
 
-	constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
+	constructor(
+	    private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
 		private _toasty: ToasterService, private router: Router) {
 	}
 

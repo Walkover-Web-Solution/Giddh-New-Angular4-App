@@ -1,10 +1,10 @@
 @import "../../../assets/css/color.scss";
-.import_type {
+.import-type {
     display: flex;
     justify-content: center;
 }
 
-.import_type li {
+.import-type li {
     list-style: none;
     width: 20%;
     //height: 275px;
@@ -23,7 +23,7 @@
     justify-content: center;
 }
 
-.import_type h2 {
+.import-type h2 {
     margin-bottom: 20px;
     margin-top: 20px;
     font-size: 14px;
@@ -38,10 +38,10 @@
     border-color: red !important;
 }
 
-.import_type img {
+.import-type img {
     max-width: 90px;
 }
-.import_type > li > a {
+.import-type > li > a {
     display: block;
     padding: 30px 40px;
     width: 100%;
@@ -53,14 +53,23 @@
         color: $primary !important;
     }
 }
+@media(max-width:991px){
+    .import-type {
+       flex-wrap: wrap;
+       li{
+            width: 27%;
+            margin: 0 15px 30px;
+       }
+    }
+}
 
 @media (max-width: 767px) {
-    .import_type {
+    .import-type {
         display: block;
         justify-content: center;
         text-align: center;
     }
-    .import_type li {
+    .import-type li {
         width: 30.33%;
         margin: 10px;
         float: left;
@@ -68,7 +77,7 @@
 }
 
 @media (max-width: 575px) {
-    .import_type li {
+    .import-type li {
         width: 100%;
         margin: 10px auto;
         float: none;

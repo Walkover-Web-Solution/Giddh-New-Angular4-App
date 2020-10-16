@@ -93,6 +93,7 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
     public to?: string;
     public expireFrom?: string;
     public expireTo?: string;
+    public purchaseOrderNumber?: any;
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {
@@ -120,6 +121,7 @@ export interface ILedgersInvoiceResult {
     companyCurrencySymbol?: string;
     voucherType?: string;
     totalForCompany?: ITotalItem;
+    totalTooltipText?: string;
 }
 
 export interface IBulkInvoiceGenerationFalingError {

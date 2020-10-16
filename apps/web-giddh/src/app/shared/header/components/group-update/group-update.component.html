@@ -1,17 +1,13 @@
-<form class="horizontal-form ng-pristine ng-valid ng-valid-required" id="groupDetailForm" name="groupDetailForm"
-    novalidate [formGroup]="groupDetailForm" (submit)="updateGroup()">
-    <div class="container-fluid mrT1">
+<form class="horizontal-form ng-pristine ng-valid ng-valid-required manage-group-account-form" id="groupDetailForm" name="groupDetailForm" novalidate [formGroup]="groupDetailForm" (submit)="updateGroup()">
+    <div class="container-fluid mr-t1">
         <div class="row">
             <div class="form-group col-xs-12 col-sm-6">
                 <label>Group Name</label>
-                <input type="text" class="form-control" #autoFocused placeholder="Enter Group Name"
-                    formControlName="name">
+                <input type="text" class="form-control" #autoFocused placeholder="Enter Group Name" formControlName="name">
             </div>
             <div class="form-group col-xs-12 col-sm-6">
                 <label>Unique Name</label>
-                <input type="text" class="form-control" [control]="groupDetailForm.get('uniqueName')"
-                    textCaseChangeDirective UniqueNameDirective placeholder="Enter Unique Name"
-                    formControlName="uniqueName">
+                <input type="text" class="form-control" [control]="groupDetailForm.get('uniqueName')" textCaseChangeDirective UniqueNameDirective placeholder="Enter Unique Name" formControlName="uniqueName">
             </div>
         </div>
 
@@ -30,17 +26,14 @@
             <div class="form-group col-xs-12 col-sm-6" *ngIf="!((activeGroup$ | async)?.fixed)">
                 <label for="" class="some">Balance for Trigger</label>
                 <div class="" [ngClass]="{'input-group': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}">
-                    <input type="number" min="0" class="form-control text-right"
-                        formControlName="closingBalanceTriggerAmount" placeholder="00.00" />
+                    <input type="number" min="0" class="form-control text-right" formControlName="closingBalanceTriggerAmount" placeholder="00.00" />
                     <div class="input-group-addon" (click)="closingBalanceTypeChanged('DEBIT')" [ngClass]="
             {'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
-            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}"
-                        *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0">DR.
+            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}" *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0">DR.
                     </div>
                     <div class="input-group-addon" (click)="closingBalanceTypeChanged('CREDIT')" [ngClass]="
             {'active-toggle-btn': groupDetailForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
-            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}"
-                        *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0">CR.
+            'cp': groupDetailForm.get('closingBalanceTriggerAmount').value > 0}" *ngIf="groupDetailForm.get('closingBalanceTriggerAmount').value > 0">CR.
                     </div>
                 </div>
             </div>
@@ -49,20 +42,15 @@
 
         <div class="form-group clearfix">
             <label>Description</label>
-            <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description"
-                formControlName="description"></textarea>
+            <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description" formControlName="description"></textarea>
         </div>
 
         <div class="form-group text-right">
 
-            <button class="btn btn-danger" type="button"
-                *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
-                (click)="showDeleteGroupModal()">Delete
+            <button class="btn btn-danger" type="button" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed" (click)="showDeleteGroupModal()">Delete
             </button>
 
-            <button class="btn btn-primary mrL1" type="submit" *ngIf="(showEditGroup$ | async)"
-                [ladda]="isUpdateGroupInProcess$ | async"
-                [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update
+            <button class="btn btn-primary mr-l1" type="submit" *ngIf="(showEditGroup$ | async)" [ladda]="isUpdateGroupInProcess$ | async" [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update
             </button>
 
         </div>
@@ -73,17 +61,17 @@
 
 
 <!--move group-->
-<div class="horizontal-form  form-group mrB1 clearfix" *ngIf="(activeGroup$ | async) && !(activeGroup$ | async)?.fixed">
-    <form name="moveGroupForm" class="col-xs-12 " novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
+<div class="horizontal-form manage-group-account-form form-group mr-b1 clearfix" *ngIf="(activeGroup$ | async) && !(activeGroup$ | async)?.fixed">
+    <form name="moveGroupForm" class="col-xs-12 col-sm-12" novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
         <label class="d-block">Move to group</label>
         <span>
             <sh-select #moveToGroupDropDown formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList"
-                [isFilterEnabled]="true" class="pull-left" style="width: calc(100% - 92px);">
+                [isFilterEnabled]="true" class="pull-left move-group-form">
                 <!--template for move group typeahead [customFilter]="customMoveGroupFilter"-->
                 <ng-template #optionTemplate let-option="option">
                     <a href="javascript:void(0)" class="list-item" style="border-bottom:1px solid #e0e0e0;">
                         <div class="item">{{ option.label }}</div>
-                        <div class="item_unq">{{ option.value }}</div>
+                        <div class="item-unique">{{ option.value }}</div>
                     </a>
                 </ng-template>
             </sh-select>
@@ -97,8 +85,8 @@
 <!--taxes  -->
 
 <!-- Taxes collapse -->
-<div class="clearfix tax-operation horizontal-form" *ngIf="isTaxableGroup$ | async">
-    <div class="col-xs-12">
+<div class="clearfix tax-operation horizontal-form manage-group-account-form" *ngIf="isTaxableGroup$ | async">
+    <div class="col-xs-12 col-sm-12">
         <div class="form-group toggle-btn mrB">
             <label class="cp" (click)="showTaxes = !showTaxes; taxHierarchy()">
                 <i class="fa cp" aria-hidden="true"
@@ -108,7 +96,7 @@
     </div>
     <!-- taxes container -->
     <ng-container *ngIf="showTaxes">
-        <div class="col-xs-12">
+        <div class="col-xs-12 col-sm-12">
 
             <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
                 <div class="tax-label">
@@ -116,8 +104,7 @@
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <sh-select formControlName="taxes" [placeholder]="'Select Tax'"
-                            [options]="companyTaxDropDown" [multiple]="true" style="width: calc(100% - 12px);">
+                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'" [options]="companyTaxDropDown | async" [multiple]="true">
                         </sh-select>
                         <span class="input-group-btn pdL2"> <button type="submit"
                                 class="btn btn-success">Save</button></span>
@@ -132,10 +119,9 @@
                     </div>
                     <div *ngFor="let inTax of (activeGroupTaxHierarchy$ | async)?.inheritedTaxes">
                         <ng-template #popTemplate>
-                            <div [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)"></div>
+                            <div *ngIf="taxPopOverTemplate" [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)"></div>
                         </ng-template>
-                        <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate"
-                            placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
+                        <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
                         </span>
                     </div>
                     <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes.length">No Inherited Taxes</p>
@@ -145,13 +131,50 @@
     </ng-container>
     <!-- taxes container -->
 </div>
+
+<!-- hinding discount for isDebtorCreditorGroups due to API deployment in-process -->
+<div class="horizontal-form mr1" *ngIf="false">
+    <div class="mb-2 selectBox">
+        <div class="form-group ">
+            <label>Default Discounts <span
+                        class="primary-color"></span></label>
+            <div class="clearfix">
+                <span>
+                        <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" placeholder="Select discounts"></sh-select>
+                    </span>
+                <span class="pull-right">
+                        <button  class="btn btn-primary mrgeBtn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscounts()">Apply</button>
+                    </span>
+
+            </div>
+        </div>
+    </div>
+    <div class="edit-tax-section">
+        <div class="form-group">
+            <div class="tax-label">
+                <label>All Inherited Discounts</label>
+            </div>
+            <div *ngFor="let item of (activeGroup$ | async)?.inheritedDiscounts">
+                <ng-template #popTemplate>
+                    <div class="popover-content">
+                        <label>Discount being inherited from:</label>
+                        <ul>
+                            <li>{{item.name}}</li>
+                        </ul>
+                    </div>
+                </ng-template>
+                <span class="tax-bullet" *ngFor="let inAppDiscount of item.applicableDiscounts" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppDiscount.name }}
+                </span>
+            </div>
+            <p *ngIf="!(activeGroup$ | async)?.inheritedDiscounts?.length">No Inherited Discounts</p>
+        </div>
+    </div>
+</div>
 <!--delete Group modal  -->
 <div bsModal #deleteGroupModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <confirm-modal [title]="'Delete Group'"
-                [body]="'Are you sure you want to delete this group? All child groups will also be deleted.'"
-                (cancelCallBack)="hideDeleteGroupModal()" (successCallBack)="deleteGroup()">
+            <confirm-modal [title]="'Delete Group'" [body]="'Are you sure you want to delete this group? All child groups will also be deleted.'" (cancelCallBack)="hideDeleteGroupModal()" (successCallBack)="deleteGroup()">
             </confirm-modal>
         </div>
     </div>

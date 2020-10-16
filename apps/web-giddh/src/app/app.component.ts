@@ -19,6 +19,7 @@ import { Configuration } from "./app.constant";
 import { LoginActions } from './actions/login.action';
 import { takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
+import { CompanyActions } from './actions/company.actions';
 
 /**
  * App Component
@@ -52,7 +53,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private sanitizer: DomSanitizer,
         private breakpointObserver: BreakpointObserver,
         private dbServices: DbService,
-        private loadingService: LoaderService
+        private loadingService: LoaderService,
+        private companyActions: CompanyActions,
+        private loginAction: LoginActions
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -74,7 +77,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (!(this._generalService.user && this._generalService.sessionId)) {
             if (!window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
                 if (PRODUCTION_ENV && !(isElectron || this.isCordova)) {
-                    window.location.href = 'https://giddh.com/login/';
+                    window.location.href = 'https://beta.giddh.com/login/';
                 } else if (this.isCordova) {
                     this._generalService.invokeEvent.next('logoutCordova');
                     this.router.navigate(['login']);
@@ -142,6 +145,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public ngOnInit() {
         this.sideBarStateChange(true);
         this.subscribeToLazyRouteLoading();
+
+        if(this._generalService.companyUniqueName) {
+            this.store.dispatch(this.companyActions.RefreshCompanies());
+            this.store.dispatch(this.loginAction.renewSession());
+        }
     }
 
     public ngAfterViewInit() {

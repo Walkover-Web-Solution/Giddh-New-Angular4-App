@@ -751,15 +751,11 @@ $input-height: 3rem !default;
     .buttons {
         text-align: right;
         margin: 0;
-        padding-right: 15px;
-        position: absolute;
-        bottom: 0;
+        padding-right: 23px;
         background-color: $white;
         padding-top: 9px;
         padding-bottom: 15px;
         z-index: 999 !important;
-        right: 0;
-        width: calc(100% - 218px);
     }
     button {
         &:focus {
@@ -865,7 +861,9 @@ $input-height: 3rem !default;
 .ranges-perfect-scrollbar {
     border-right: 1px solid $gainsboro;
 }
-
+.ranges-perfect-scrollbar .ps__rail-x{
+    display: none;
+}
 @media (min-width: 564px) {
     .md-drppicker {
         width: auto;
@@ -1087,6 +1085,7 @@ td span {
     height: 26px;
     line-height: 2;
     display: block;
+    margin-left: 3px;
 }
 /* new calendar */
 
@@ -1216,7 +1215,7 @@ td span {
     position: absolute;
     background-color: $white;
     right: -100%;
-    top: 0;
+    top: -30px;
     z-index: 9999;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
@@ -1469,7 +1468,7 @@ tr:first-child.in-range-hovered.available {
     }
 }
 cdk-virtual-scroll-viewport{
-    height: 284px;
+    height: 250px;
 }
 cdk-virtual-scroll-viewport::-webkit-scrollbar {
   width: 5px;
@@ -1482,17 +1481,29 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-track {
 
 /* Handle */
 cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
-  background:  $nobel;
+  background: $nobel;
   border-radius: 10px;
 }
 .calendar-d-flex{
     display: flex;
+}
+.calendar.left .table-condensed , .calendar.right .table-condensed{
+    min-height: 170px;
+    max-height: 200px;
+}
+.calendar.left .table-condensed.sticky-header , .calendar.right .table-condensed.sticky-header{
+     height: auto;
+    min-height: auto;
+    max-height: auto;
 }
 @media (min-height: 767px) {
     .ranges-perfect-scrollbar {
         overflow: initial !important;
         .ps {
             overflow: initial !important;
+        }
+        .ps__thumb-x, .ps__rail-x{
+            display: none !important;
         }
     }
 }
@@ -1804,8 +1815,6 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
 }
 @media (max-height: 767px) {
     .drops-down-right {
-        height: 470px;
-        overflow: hidden !important;
         .ranges {
             height: auto;
             overflow-y: auto;

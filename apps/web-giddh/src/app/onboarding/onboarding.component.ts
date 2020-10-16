@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { WindowRef } from '../shared/helpers/window.object';
-import { ModalDirective, TabsetComponent } from 'ngx-bootstrap';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../services/general.service';
 import { take, takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
@@ -20,8 +21,8 @@ import { GeneralActions } from '../actions/general/general.actions';
 })
 
 export class OnboardingComponent implements OnInit, AfterViewInit {
-    @ViewChild('talkSalesModal') public talkSalesModal: ModalDirective;
-    @ViewChild('supportTab') public supportTab: TabsetComponent;
+    @ViewChild('talkSalesModal', {static: true}) public talkSalesModal: ModalDirective;
+    @ViewChild('supportTab', {static: true}) public supportTab: TabsetComponent;
     public sideMenu: { isopen: boolean } = { isopen: true };
     public loadAPI: Promise<any>;
     public CompanySettingsObj: any = {};

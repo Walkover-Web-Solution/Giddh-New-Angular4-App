@@ -8,4 +8,5 @@ export const SETTINGS_FINANCIAL_YEAR_API = {
     ADD_FINANCIAL_YEAR: COMMON + 'financial-year', // POST
     UPDATE_FY_PERIOD: COMMON + 'financial-year', // PUT,
     ADD_FUTURE_FINANCIAL_YEAR: COMMON + 'future-financial-year', // POST
+    GET_FINANCIAL_YEAR_LIMITS: COMMON + 'financial-year-limits'
 };

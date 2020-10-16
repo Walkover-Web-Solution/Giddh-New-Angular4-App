@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
-import { BsDatepickerConfig } from 'ngx-bootstrap';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import * as moment from 'moment';

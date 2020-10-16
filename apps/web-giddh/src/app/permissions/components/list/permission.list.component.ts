@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GroupWithAccountsAction } from '../../../actions/groupwithaccounts.actions';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyActions } from '../../../actions/company.actions';
@@ -20,9 +20,9 @@ import { GeneralService } from '../../../services/general.service';
 })
 export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy {
 
-    @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
-    @ViewChild('permissionModel') public permissionModel: ModalDirective;
-    @ViewChild('permissionConfirmationModel') public permissionConfirmationModel: ModalDirective;
+    @ViewChild(ElementViewContainerRef, {static: true}) public elementViewContainerRef: ElementViewContainerRef;
+    @ViewChild('permissionModel', {static: true}) public permissionModel: ModalDirective;
+    @ViewChild('permissionConfirmationModel', {static: true}) public permissionConfirmationModel: ModalDirective;
 
     public localState: any;
     public allRoles: IRoleCommonResponseAndRequest[] = [];

@@ -10,14 +10,14 @@
         <form name="invoiceActionForm" novalidate #f="ngForm" (ngSubmit)="onConfirmation(paymentActionFormObj)">
 
             <div class="row">
-                <div class="col-xs-6 form-group">
+                <div class="col-6 form-group payment-date">
                     <label>Payment Date <sup>*</sup></label>
 
                     <input type="text" name="invoiceDateRange" bsDatepicker class="form-control" style="width: 100%"
                         [(ngModel)]="paymentActionFormObj.paymentDate" [bsConfig]="{dateInputFormat:'DD-MM-YYYY'}" />
                 </div>
 
-                <div class="col-xs-6 form-group">
+                <div class="col-6 form-group">
                     <label>Amount <sup>*</sup></label>
                     <input type="text" class="form-control" decimalDigitsDirective
                         [(ngModel)]="paymentActionFormObj.amount" placeholder="Enter Amount" name="amount" #amountField
@@ -28,7 +28,7 @@
 
             <div class="row">
 
-                <div class="col-xs-6 form-group">
+                <div class="col-6 form-group">
 
                     <label>Payment Mode <sup>*</sup></label>
 
@@ -40,7 +40,7 @@
                         <ng-template #optionTemplate1 let-option="option">
                             <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
                                 <div class="item">{{ option.label }}</div>
-                                <div class="item_unq">{{ option.value }}</div>
+                                <div class="item-unique">{{ option.value }}</div>
                             </a>
                         </ng-template>
 
@@ -48,7 +48,7 @@
 
                 </div>
 
-                <div class="col-xs-6 form-group">
+                <div class="col-6 form-group">
 
                     <label>Tag</label>
 
@@ -61,13 +61,13 @@
 
             <div class="row" *ngIf="isBankSelected">
 
-                <div class="col-xs-6 form-group">
+                <div class="col-6 form-group">
                     <label>Cheque No.(if payment by Cheque)</label>
                     <input type="text" class="form-control" placeholder="XXXX1231" decimalDigitsDirective
                         [(ngModel)]="paymentActionFormObj.chequeNumber" name="chequeNumber" />
                 </div>
 
-                <div class="col-xs-6 form-group">
+                <div class="col-6 form-group">
                     <label>Cheque Clearance Date</label>
                     <input type="text" [textMask]="{mask: dateMask, guide: true}" class="form-control"
                         [(ngModel)]="paymentActionFormObj.chequeClearanceDate" name="chequeClearance"
@@ -128,7 +128,7 @@
             </div>
             <div class="row">
 
-                <div class="col-xs-12 form-group">
+                <div class="col-12 form-group">
                     <label>Description</label>
                     <textarea type="text" class="form-control" placeholder="Description"
                         [(ngModel)]="paymentActionFormObj.description" name="description"></textarea>

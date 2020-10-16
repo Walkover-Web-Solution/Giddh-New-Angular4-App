@@ -9,7 +9,7 @@ import {
     OnInit,
     Output,
     SimpleChanges,
-    ViewChild,
+    ViewChild
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
@@ -17,22 +17,24 @@ import { Configuration, SubVoucher, RATE_FIELD_PRECISION, SearchResultText } fro
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as moment from 'moment/moment';
-import { BsDatepickerDirective, ModalDirective, PopoverDirective } from 'ngx-bootstrap';
+import { BsDatepickerDirective } from "ngx-bootstrap/datepicker";
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { PopoverDirective } from "ngx-bootstrap/popover";
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { SettingsTagActions } from '../../../actions/settings/tag/settings.tag.actions';
-import { CONFIRMATION_ACTIONS, ConfirmationModalConfiguration } from '../../../common/confirmation-modal/confirmation-modal.interface';
+import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../../common/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
 import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
 import { AccountResponse } from '../../../models/api-models/Account';
+import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { PettyCashResonse } from '../../../models/api-models/Expences';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, VoucherTypeEnum, IForceClear } from '../../../models/api-models/Sales';
+import { IForceClear, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
@@ -44,14 +46,13 @@ import { ToasterService } from '../../../services/toaster.service';
 import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
 import { base64ToBlob, giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../store';
+import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
+import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { UpdateLedgerVm } from './updateLedger.vm';
-import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
-import { CurrentCompanyState } from '../../../store/Company/company.reducer';
-import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../../../models/api-models/AdvanceReceiptsAdjust';
 import { SearchService } from '../../../services/search.service';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
@@ -85,21 +86,21 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() pettyCashBaseAccountTypeString: string;
     @Input() pettyCashBaseAccountUniqueName: string;
 
-    @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
+    @ViewChild('deleteAttachedFileModal', {static: true}) public deleteAttachedFileModal: ModalDirective;
     /** fileinput element ref for clear value after remove attachment **/
-    @ViewChild('fileInputUpdate') public fileInputElement: ElementRef<any>;
-    @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
-    @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
-    @ViewChild('tax') public taxControll: TaxControlComponent;
-    @ViewChild('updateBaseAccount') public updateBaseAccount: ModalDirective;
-    @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+    @ViewChild('fileInputUpdate', {static: true}) public fileInputElement: ElementRef<any>;
+    @ViewChild('deleteEntryModal', {static: true}) public deleteEntryModal: ModalDirective;
+    @ViewChild('discount', {static: false}) public discountComponent: UpdateLedgerDiscountComponent;
+    @ViewChild('tax', {static: false}) public taxControll: TaxControlComponent;
+    @ViewChild('updateBaseAccount', {static: true}) public updateBaseAccount: ModalDirective;
+    @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
     /** Advance receipt remove confirmation modal reference */
-    @ViewChild('advanceReceiptRemoveConfirmationModal') public advanceReceiptRemoveConfirmationModal: ModalDirective;
+    @ViewChild('advanceReceiptRemoveConfirmationModal', {static: true}) public advanceReceiptRemoveConfirmationModal: ModalDirective;
     /** Adjustment modal */
-    @ViewChild('adjustPaymentModal') public adjustPaymentModal: ModalDirective;
+    @ViewChild('adjustPaymentModal', {static: true}) public adjustPaymentModal: ModalDirective;
 
     /** RCM popup instance */
-    @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
+    @ViewChild('rcmPopup', {static: false}) public rcmPopup: PopoverDirective;
 
     /** Warehouse data for warehouse drop down */
     public warehouses: Array<any>;
@@ -210,8 +211,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public adjustVoucherConfiguration: any;
     /** Stores the search results */
     public searchResults: Array<IOption> = [];
+    /** Default search suggestion list to be shown for search */
+    public defaultSuggestions: Array<IOption> = [];
     /** Stores the search results pagination details */
     public searchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Stores the default search results pagination details (required only for passing
+     * default search pagination details to Update ledger component) */
+    public defaultResultsPaginationData = {
         page: 0,
         totalPages: 0,
         query: ''
@@ -347,7 +357,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.fileUploadOptions = { concurrency: 0 };
 
         // get flatten_accounts list && get transactions list && get ledger account list
-       observableCombineLatest(this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$)
+        observableCombineLatest([this.selectedLedgerStream$, this._accountService.GetAccountDetailsV2(this.accountUniqueName), this.companyProfile$])
             .subscribe((resp: any[]) => {
                 if (resp[0] && resp[1] && resp[2]) {
                     // insure we have account details, if we are normal ledger mode and not petty cash mode ( special case for others entry in petty cash )
@@ -379,6 +389,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     // so it means it's other account entry of petty cash
                     // so for that we have to add a dummy account in flatten account array
                     if (this.isPettyCash) {
+                        this.loadDefaultSearchSuggestions();
                         if (resp[0].othersCategory) {
                             // check we already have others account in flatten account, then don't do anything
                             const isThereOthersAcc = this.vm.flatternAccountList.some(d => d.uniqueName === 'others');
@@ -510,7 +521,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                     //#region transaction assignment process
                     this.vm.selectedLedger = resp[0];
-
                     if (this.vm.selectedLedger && (this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.creditNote ||
                         this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.debitNote)) {
                         this.getInvoiceListsForCreditNote();
@@ -542,6 +552,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             item.type = (item.type === 'cr' || item.type === 'CREDIT') ? 'CREDIT' : 'DEBIT';
                         });
                         // create missing property for petty cash
+                        this.vm.selectedLedger.transactions.forEach(item => {
+                            item.type = (item.type === 'cr' || item.type === 'CREDIT') ? 'CREDIT' : 'DEBIT';
+                        });
                         this.vm.selectedLedger.transactions.forEach(f => {
                             f.isDiscount = false;
                             f.isTax = false;
@@ -684,6 +697,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         }
                     });
                     // this.vm.flatternAccountList4Select = observableOf(orderBy(initialAccounts, 'label'));
+                    initialAccounts.push(...this.defaultSuggestions);
                     this.searchResults = orderBy(initialAccounts, 'label');
                     this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
 
@@ -1327,7 +1341,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (requestObj.voucherType !== VoucherTypeEnum.creditNote && requestObj.voucherType !== VoucherTypeEnum.debitNote) {
             requestObj.invoiceLinkingRequest = null;
         }
-
         if ((this.isAdvanceReceipt && !this.isAdjustAdvanceReceiptSelected) || (this.vm.selectedLedger.voucher.shortCode === 'rcpt' && !this.isAdjustReceiptSelected) || !this.isAdjustVoucherSelected) {
             // Clear the voucher adjustments if the adjust advance receipt or adjust receipt is not selected
             this.vm.selectedLedger.voucherAdjustments = undefined;
@@ -1753,7 +1766,24 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public handleScrollEnd(): void {
         if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
-            this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
+            this.onSearchQueryChanged(
+                this.searchResultsPaginationData.query,
+                this.searchResultsPaginationData.page + 1,
+                this.searchResultsPaginationData.query ? true : false,
+                (response) => {
+                    if (!this.searchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                                label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                                additional: result
+                            }
+                        }) || [];
+                        this.defaultSuggestions = this.defaultSuggestions.concat(...results);
+                        this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
+                        this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
+                    }
+            });
         }
     }
 
@@ -1762,43 +1792,52 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      *
      * @param {string} query Search query
      * @param {number} [page=1] Page to request
+     * @param {boolean} withStocks True, if search should include stocks in results
+     * @param {Function} successCallback Callback to carry out further operation
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public onSearchQueryChanged(query: string, page: number = 1): void {
-        this.searchResultsPaginationData.query = query;
-        const currentLedgerCategory = this.activeAccount ? this.generalService.getAccountCategory(this.activeAccount, this.activeAccount.uniqueName) : '';
-        // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
-        const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
-            this.activeAccount ? this.activeAccount.uniqueName : '' :
-            '';
-        const requestObject = {
-            q: encodeURIComponent(query),
-            page,
-            withStocks: true,
-            accountUniqueName: encodeURIComponent(accountUniqueName)
-        }
-        this.searchService.searchAccount(requestObject).subscribe(data => {
-            if (data && data.body && data.body.results) {
-                const searchResults = data.body.results.map(result => {
-                    return {
-                        value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
-                        label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
-                        additional: result
-                    }
-                }) || [];
-                this.noResultsFoundLabel = SearchResultText.NotFound;
-                if (page === 1) {
-                    this.searchResults = searchResults;
-                } else {
-                    this.searchResults = [
-                        ...this.searchResults,
-                        ...searchResults
-                    ];
-                }
-                this.searchResultsPaginationData.page = data.body.page;
-                this.searchResultsPaginationData.totalPages = data.body.totalPages;
+    public onSearchQueryChanged(query: string, page: number = 1, withStocks: boolean = true, successCallback?: Function): void {
+        if (query || (this.defaultSuggestions && this.defaultSuggestions.length === 0) || successCallback) {
+            this.searchResultsPaginationData.query = query;
+            const currentLedgerCategory = this.activeAccount ? this.generalService.getAccountCategory(this.activeAccount, this.activeAccount.uniqueName) : '';
+            // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
+            const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
+                this.activeAccount ? this.activeAccount.uniqueName : '' :
+                '';
+            const requestObject = {
+                q: encodeURIComponent(query),
+                page,
+                withStocks,
+                accountUniqueName: encodeURIComponent(accountUniqueName)
             }
-        });
+            this.searchService.searchAccount(requestObject).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                            label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                            additional: result
+                        }
+                    }) || [];
+                    this.noResultsFoundLabel = SearchResultText.NotFound;
+                    if (page === 1) {
+                        this.searchResults = searchResults;
+                    } else {
+                        this.searchResults = [
+                            ...this.searchResults,
+                            ...searchResults
+                        ];
+                    }
+                    this.searchResultsPaginationData.page = data.body.page;
+                    this.searchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    }
+                }
+            });
+        } else {
+            this.searchResults = [...this.defaultSuggestions];
+        }
     }
 
     /**
@@ -1807,7 +1846,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public resetPreviousSearchResults(): void {
-        this.searchResults = [];
+        this.searchResults = [...this.defaultSuggestions];
         this.searchResultsPaginationData = {
             page: 0,
             totalPages: 0,
@@ -2149,5 +2188,27 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.isAdjustReceiptSelected = true;
             }
         }
+    }
+
+    /**
+     * Loads the default search suggestion when petty cash is opened
+     *
+     * @private
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private loadDefaultSearchSuggestions(): void {
+        this.onSearchQueryChanged('', 1, false, (response) => {
+            this.defaultSuggestions = response.map(result => {
+                return {
+                    value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
+                    label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
+                    additional: result
+                }
+            }) || [];
+            this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
+            this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
+            this.searchResults = [...this.defaultSuggestions];
+            this.noResultsFoundLabel = SearchResultText.NotFound;
+        });
     }
 }

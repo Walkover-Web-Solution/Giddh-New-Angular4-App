@@ -4,7 +4,7 @@ import { AppState } from "../store";
 import { Router } from "@angular/router";
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ModalDirective } from "ngx-bootstrap";
+import { ModalDirective } from "ngx-bootstrap/modal";
 import { Configuration } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
@@ -25,7 +25,7 @@ import {
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
-import { DOCUMENT } from "@angular/platform-browser";
+import { DOCUMENT } from "@angular/common";
 import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
 import { userLoginStateEnum } from "../models/user-login-state";
@@ -41,10 +41,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
     public isLoginWithMobileSubmited$: Observable<boolean>;
-    @ViewChild("emailVerifyModal") public emailVerifyModal: ModalDirective;
+    @ViewChild("emailVerifyModal", { static: true }) public emailVerifyModal: ModalDirective;
     public isLoginWithEmailSubmited$: Observable<boolean>;
-    @ViewChild("mobileVerifyModal") public mobileVerifyModal: ModalDirective;
-    @ViewChild("twoWayAuthModal") public twoWayAuthModal: ModalDirective;
+    @ViewChild("mobileVerifyModal", { static: true }) public mobileVerifyModal: ModalDirective;
+    @ViewChild("twoWayAuthModal", { static: true }) public twoWayAuthModal: ModalDirective;
     // @ViewChild('forgotPasswordModal') public forgotPasswordModal: ModalDirective;
 
     public isSubmited: boolean = false;
@@ -168,11 +168,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
-
-        this.emailVerifyModal.config = { backdrop: "static" };
-        this.twoWayAuthModal.config = { backdrop: "static" };
-        this.mobileVerifyModal.config = { backdrop: "static" };
-
         this.getElectronAppVersion();
         this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
@@ -266,11 +261,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.twoWayAuthModal.onHidden.subscribe(e => {
-            if (e && e.dismissReason === "esc") {
-                return this.resetTwoWayAuthModal();
-            }
-        });
         this.isLoginWithPasswordSuccessNotVerified$.subscribe(res => {
             if (res) {
                 //
@@ -283,12 +273,18 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
     }
 
-    public showEmailModal() {
-        this.emailVerifyModal.show();
-        this.emailVerifyModal.onShow.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.isSubmited = false;
-        });
+    public onHiddenAuthModal(event: any): void {
+        if (event && event.dismissReason === "esc") {
+            return this.resetTwoWayAuthModal();
+        }
     }
+
+    // public showEmailModal() {
+    //     this.emailVerifyModal.show();
+    //     this.emailVerifyModal.onShow.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+    //         this.isSubmited = false;
+    //     });
+    // }
 
     public LoginWithEmail(email: string) {
         let data = new SignupwithEmaillModel();

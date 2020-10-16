@@ -1,25 +1,38 @@
+import {
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    QueryList,
+    SimpleChanges,
+    ViewChild,
+    ViewChildren,
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { select, Store } from '@ngrx/store';
+import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
+import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
+import * as moment from 'moment';
+import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-
 import { takeUntil } from 'rxjs/operators';
 
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
-import { GroupService } from '../../../services/group.service';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ILedgerAdvanceSearchRequest } from '../../../models/api-models/Ledger';
-import { AppState } from '../../../store';
-import { Store, select } from '@ngrx/store';
-import { IOption } from '../../../theme/ng-select/option.interface';
-import { AccountService } from '../../../services/account.service';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren, ElementRef } from '@angular/core';
-import * as moment from 'moment';
-import { createSelector } from 'reselect';
-import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import { AdvanceSearchModel, AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
-import { BsDaterangepickerConfig, BsDaterangepickerDirective, BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { AccountService } from '../../../services/account.service';
 import { GeneralService } from '../../../services/general.service';
+import { GroupService } from '../../../services/group.service';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { AppState } from '../../../store';
+import { IOption } from '../../../theme/ng-select/option.interface';
 
 const COMPARISON_FILTER = [
     { label: 'Greater Than', value: 'greaterThan' },
@@ -57,7 +70,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     private moment = moment;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** datepickerTemplate element reference  */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store modal reference */
@@ -76,13 +89,12 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public fromDate: any;
     /* Selected to date */
     public toDate: any;
+    /* This will hold the groups */
+    public groups: IOption[] = [];
+    public groupUniqueNames: any[] = [];
 
-    constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions,
-        private _accountService: AccountService,
-        private modalService: BsModalService,
-        private generalService: GeneralService) {
+    constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private modalService: BsModalService, private generalService: GeneralService) {
         this.comparisonFilterDropDown$ = observableOf(COMPARISON_FILTER);
-        // this.store.dispatch(this.inventoryAction.GetManufacturingStock());
         this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).pipe(takeUntil(this.destroyed$));
     }
 
@@ -115,11 +127,17 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             }
         })).pipe(takeUntil(this.destroyed$));
 
-        this.setAdvanceSearchForm();
+        if(!this.advanceSearchForm) {
+            this.setAdvanceSearchForm();
+        }
         this.setVoucherTypes();
     }
 
     public ngOnChanges(s: SimpleChanges) {
+        if(!this.advanceSearchForm) {
+            this.setAdvanceSearchForm();
+        }
+
         if ('advanceSearchRequest' in s && s.advanceSearchRequest.currentValue && s.advanceSearchRequest.currentValue !== s.advanceSearchRequest.previousValue && s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue) {
             this.fromDate = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT).toDate();
             this.toDate = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT).toDate();
@@ -129,6 +147,38 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
                 bsDaterangepicker.patchValue(this.selectedDateRangeUi);
             }
+        }
+
+        if(this.advanceSearchForm && 'advanceSearchRequest' in s && s.advanceSearchRequest.currentValue && s.advanceSearchRequest.currentValue.dataToSend) {
+            let dataToSend = s.advanceSearchRequest.currentValue.dataToSend;
+
+            this.groupUniqueNames = [];
+
+            setTimeout(() => {
+                if(dataToSend.accountUniqueNames) {
+                    this.advanceSearchForm.get('accountUniqueNames').patchValue(dataToSend.accountUniqueNames);
+                }
+
+                if(dataToSend.groupUniqueNames) {
+                    if(this.groups && this.groups.length > 0) {
+                        this.advanceSearchForm.get('groupUniqueNames').patchValue(dataToSend.groupUniqueNames);
+                    }
+
+                    this.groupUniqueNames = dataToSend.groupUniqueNames;
+                }
+
+                if(dataToSend.particulars) {
+                    this.advanceSearchForm.get('particulars').patchValue(dataToSend.particulars);
+                }
+
+                if(dataToSend.vouchers) {
+                    this.advanceSearchForm.get('vouchers').patchValue(dataToSend.vouchers);
+                }
+
+                if(dataToSend.inventory) {
+                    this.advanceSearchForm.get('inventory').patchValue(dataToSend.inventory);
+                }
+            }, 500);
         }
     }
 
@@ -149,6 +199,12 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     groups.push({ label: `${d.groupName} (${d.groupUniqueName})`, value: d.groupUniqueName });
                 });
                 this.groups$ = observableOf(groups);
+
+                setTimeout(() => {
+                    if(this.groupUniqueNames && this.groupUniqueNames.length > 0) {
+                        this.advanceSearchForm.get('groupUniqueNames').patchValue(this.groupUniqueNames);
+                    }
+                }, 500);
             }
         });
     }
@@ -171,7 +227,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public setAdvanceSearchForm() {
-        // this.advanceSearchForm.
         this.advanceSearchForm = this.fb.group({
             bsRangeValue: [[]],
             uniqueNames: [[]],
@@ -209,7 +264,10 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 includeItemGreaterThan: false
             }),
         });
-        this.advanceSearchForm.patchValue(this.advanceSearchRequest.dataToSend);
+
+        if(this.advanceSearchRequest) {
+            this.advanceSearchForm.patchValue(this.advanceSearchRequest.dataToSend);
+        }
     }
 
     public setVoucherTypes() {
@@ -459,8 +517,14 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
+
+        this.modalService.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            setTimeout(() => {
+                document.querySelector('body').classList.add('modal-open');
+            }, 500);
+        });
     }
 
     /**
@@ -495,7 +559,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 this.toDate = moment(value.endDate, GIDDH_DATE_FORMAT).toDate();
                 let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
                 bsDaterangepicker.patchValue([this.fromDate, this.toDate]);
-
             }
         }
     }

@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { ToasterService } from '../../../../services/toaster.service';
 import { SettingsBunchService } from '../../../../services/settings.bunch.service';
 import { ReplaySubject } from 'rxjs';
-import { BsDropdownDirective } from 'ngx-bootstrap';
+import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 
 @Component({
     selector: 'add-bunch-company',
@@ -20,7 +20,7 @@ export class BunchAddCompanyModalComponent implements OnChanges, OnDestroy {
     @Output() public closeModalEvent: EventEmitter<boolean> = new EventEmitter(false);
     @Output() public saveDataEvent: EventEmitter<any> = new EventEmitter(null);
 
-    @ViewChild('companyListDropdown') public companyListDropdown: BsDropdownDirective;
+    @ViewChild('companyListDropdown', {static: true}) public companyListDropdown: BsDropdownDirective;
 
     public isAllCompanySelected: boolean = false;
 

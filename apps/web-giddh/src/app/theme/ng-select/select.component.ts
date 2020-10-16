@@ -53,9 +53,9 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     @Output() public noResultsClicked = new EventEmitter<null>();
     @Output() public viewInitEvent = new EventEmitter<any>();
 
-    @ViewChild('selection') public selectionSpan: ElementRef;
-    @ViewChild('dropdown') public dropdown: SelectDropdownComponent;
-    @ViewChild('filterInput') public filterInput: ElementRef;
+    @ViewChild('selection', {static: true}) public selectionSpan: ElementRef;
+    @ViewChild('dropdown', {static: true}) public dropdown: SelectDropdownComponent;
+    @ViewChild('filterInput', {static: true}) public filterInput: ElementRef;
 
     @ContentChild('optionTemplate') public optionTemplate: TemplateRef<any>;
 

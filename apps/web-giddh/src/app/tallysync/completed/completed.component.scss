@@ -60,20 +60,8 @@
         color: #63b214;
     }
 }
-
-.form {
-    .company {
-        width: 205px;
-        padding-right: 0px;
-    }
-
-    .date {
-        width: 115px;
-        padding-right: 0px;
-    }
-
-    .interval {
-        width: 180px;
-        padding-right: 0px;
+@media(max-width:991px){
+    .empty-label{
+        display: none !important;
     }
 }

@@ -1,4 +1,4 @@
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewChecked,
     AfterViewInit,
@@ -16,46 +16,61 @@ import {
     SimpleChanges,
     ViewChild,
 } from '@angular/core';
+import { isAndroidCordova, isIOSCordova } from '@giddh-workspaces/utils';
+import { FileChooser } from '@ionic-native/file-chooser/ngx';
+import { IOSFilePicker } from '@ionic-native/file-picker/ngx';
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION } from 'apps/web-giddh/src/app/app.constant';
+import {
+    Configuration,
+    HIGH_RATE_FIELD_PRECISION,
+    RATE_FIELD_PRECISION,
+    SubVoucher,
+} from 'apps/web-giddh/src/app/app.constant';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
-import { BsDatepickerDirective, ModalDirective, PopoverDirective } from 'ngx-bootstrap';
+import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
-import { ConfirmationModalConfiguration, CONFIRMATION_ACTIONS } from '../../../common/confirmation-modal/confirmation-modal.interface';
+import {
+    CONFIRMATION_ACTIONS,
+    ConfirmationModalConfiguration,
+} from '../../../common/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
-import { forEach, sumBy, cloneDeep } from '../../../lodash-optimized';
+import { cloneDeep, forEach, sumBy } from '../../../lodash-optimized';
+import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
-import { ReconcileRequest, ReconcileResponse, TransactionsResponse } from '../../../models/api-models/Ledger';
-import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, IForceClear, VoucherTypeEnum } from '../../../models/api-models/Sales';
+import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
+import {
+    IForceClear,
+    SalesOtherTaxesCalculationMethodEnum,
+    SalesOtherTaxesModal,
+    VoucherTypeEnum,
+} from '../../../models/api-models/Sales';
 import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
+import { GeneralService } from '../../../services/general.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../store';
+import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
-import { BlankLedgerVM, TransactionVM, AVAILABLE_ITC_LIST } from '../../ledger.vm';
+import { AVAILABLE_ITC_LIST, BlankLedgerVM, TransactionVM } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
-import { GeneralService } from '../../../services/general.service';
-import { isAndroidCordova, isIOSCordova } from "@giddh-workspaces/utils";
-import { IOSFilePicker } from "@ionic-native/file-picker/ngx";
-import { FileTransfer } from "@ionic-native/file-transfer/ngx";
-import { FileChooser } from "@ionic-native/file-chooser/ngx";
-import { CurrentCompanyState } from '../../../store/Company/company.reducer';
-import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -100,7 +115,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public selectedSuffixForCurrency: string;
     @Input() public inputMaskFormat: string = '';
     @Input() public giddhBalanceDecimalPlaces: number = 2;
-    @ViewChild('webFileInput') public webFileInput: ElementRef;
+    @ViewChild('webFileInput', {static: true}) public webFileInput: ElementRef;
     /** True, if RCM taxable amount needs to be displayed in create new ledger component as per criteria */
     @Input() public shouldShowRcmTaxableAmount: boolean = false;
     /** True, if ITC section needs to be displayed in create new ledger component as per criteria  */
@@ -118,16 +133,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public clickUnpaidInvoiceList: EventEmitter<any> = new EventEmitter();
     /** Emit event for getting invoice list for credit note linking */
     @Output() public getInvoiceListsForCreditNote: EventEmitter<any> = new EventEmitter();
-    @ViewChild('entryContent') public entryContent: ElementRef;
-    @ViewChild('sh') public sh: ShSelectComponent;
-    @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+    @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
+    @ViewChild('sh', { static: true }) public sh: ShSelectComponent;
+    @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
 
-    @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
-    @ViewChild('discount') public discountControl: LedgerDiscountComponent;
-    @ViewChild('tax') public taxControll: TaxControlComponent;
+    @ViewChild('deleteAttachedFileModal', {static: true}) public deleteAttachedFileModal: ModalDirective;
+    @ViewChild('discount', {static: false}) public discountControl: LedgerDiscountComponent;
+    @ViewChild('tax', {static: false}) public taxControll: TaxControlComponent;
 
     /** RCM popup instance */
-    @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
+    @ViewChild('rcmPopup', {static: false}) public rcmPopup: PopoverDirective;
 
     public sourceWarehouse: true;
     public uploadInput: EventEmitter<UploadInput>;
@@ -142,7 +157,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isFileUploading: boolean = false;
     public isLedgerCreateInProcess$: Observable<boolean>;
     // bank map eledger related
-    @ViewChild('confirmBankTxnMapModal') public confirmBankTxnMapModal: ModalDirective;
+    @ViewChild('confirmBankTxnMapModal', {static: true}) public confirmBankTxnMapModal: ModalDirective;
     public matchingEntriesData: ReconcileResponse[] = [];
     public showMatchingEntries: boolean = false;
     public mapBodyContent: string;
@@ -203,8 +218,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isAdjustVoucherSelected: boolean;
     /** Stores the details for adjustment component */
     public adjustVoucherConfiguration: any;
+    /** account other applicable discount list which contains account's discount else immediate group's discount(inherited) */
+    public accountOtherApplicableDiscount: any[] = [];
     /** Adjustment modal */
-    @ViewChild('adjustPaymentModal') public adjustPaymentModal: ModalDirective;
+    @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: ModalDirective;
 
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -265,6 +282,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.currentTxn.advanceReceiptAmount = this.currentTxn.amount;
         this.activeAccount$.subscribe(acc => {
             if (acc) {
+                this.accountOtherApplicableDiscount = [];
                 this.activeAccount = acc;
                 let parentAcc = acc.parentGroups[0].uniqueName;
                 let incomeAccArray = ['revenuefromoperations', 'otherincome'];
@@ -278,6 +296,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
                 if (acc.country && acc.country.countryName) {
                     this.activeAccountCountryName = acc.country.countryName;
+                }
+                if (acc.applicableDiscounts && acc.applicableDiscounts.length) {
+                    this.accountOtherApplicableDiscount = acc.applicableDiscounts;
+                } else if (acc.inheritedDiscounts && acc.inheritedDiscounts.length && !this.accountOtherApplicableDiscount.length) {
+                    acc.inheritedDiscounts.forEach(element => {
+                        this.accountOtherApplicableDiscount.push(...element.applicableDiscounts);
+                    });
                 }
             }
         });
@@ -388,6 +413,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                             name: tax.name,
                             uniqueName: tax.uniqueName
                         };
+                        this.blankLedger.isOtherTaxesApplicable = true;
                         break;
                     default:
                         appliedTaxes.push(tax.uniqueName);
@@ -459,6 +485,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public calculateTotal(): void {
         if (this.currentTxn) {
             if (this.currentTxn.amount) {
+                /** apply account's discount (default) */
+                if (this.currentTxn.discounts && this.currentTxn.discounts.length && this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
+                    this.currentTxn.discounts.map(item => {
+                        item.isActive = this.accountOtherApplicableDiscount.some(element => element.uniqueName === item.discountUniqueName);
+                    });
+                }
+
                 if (this.isAdvanceReceipt) {
                     this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
                     this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
@@ -493,7 +526,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.highPrecisionRate, this.ratePrecision);
                 }
             }
-
             if (this.discountControl) {
                 this.discountControl.change();
             }
@@ -1331,14 +1363,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private mergeInvolvedAccountsTaxes(firstAccountTaxes: Array<string>, secondAccountTaxes: Array<string>): Array<string> {
         const mergedAccountTaxes = (firstAccountTaxes) ? [...firstAccountTaxes] : [];
         if (secondAccountTaxes) {
-            secondAccountTaxes.forEach((tax: string) => {
+            secondAccountTaxes.reverse().forEach((tax: string) => {
                 if (!mergedAccountTaxes.includes(tax)) {
                     mergedAccountTaxes.push(tax);
                 }
             });
 
         }
-        return mergedAccountTaxes;
+        return mergedAccountTaxes.reverse();
     }
 
     /**

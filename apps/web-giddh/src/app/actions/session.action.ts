@@ -2,7 +2,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Action, Store } from '@ngrx/store';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable, ReplaySubject } from 'rxjs';
 import { CompanyActions } from './company.actions';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,56 +28,53 @@ export class SessionActions {
     public static DELETE_ALL_SESSION_REQUEST = 'DELETE_ALL_SESSION_REQUEST';
     public static DELETE_ALL_SESSION_RESPONSE = 'DELETE_ALL_SESSION_RESPONSE';
 
-    @Effect()
-    public getAllSession$: Observable<Action> = this.actions$
-        .ofType(SessionActions.GET_ALL_SESSION_REQUEST).pipe(
+    public getAllSession$: Observable<Action> = createEffect(() => this.actions$
+        .pipe(
+            ofType(SessionActions.GET_ALL_SESSION_REQUEST),
             switchMap((action: CustomActions) => this.auth.GetUserSession()),
-            map(response => this.getAllSessionResponse(response)));
+            map(response => this.getAllSessionResponse(response))));
 
-    @Effect()
-    public getAllSessionResponse$: Observable<Action> = this.actions$
-        .ofType(SessionActions.GET_ALL_SESSION_RESPONSE).pipe(
+    public getAllSessionResponse$: Observable<Action> = createEffect(() => this.actions$
+        .pipe(
+            ofType(SessionActions.GET_ALL_SESSION_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status !== 'success') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
-                    // this._toaster.successToast('action.payload.me');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public deleteSession$: Observable<Action> = this.actions$
-        .ofType(SessionActions.DELETE_SESSION_REQUEST).pipe(
+    public deleteSession$: Observable<Action> = createEffect(() => this.actions$
+        .pipe(
+            ofType(SessionActions.DELETE_SESSION_REQUEST),
             switchMap((action: CustomActions) => this.auth.DeleteSession(action.payload)),
-            map(response => this.deleteSessionResponse(response)));
+            map(response => this.deleteSessionResponse(response))));
 
-    @Effect()
-    public deleteSessionResponse$: Observable<Action> = this.actions$
-        .ofType(SessionActions.DELETE_SESSION_RESPONSE).pipe(
+    public deleteSessionResponse$: Observable<Action> = createEffect(() => this.actions$
+        .pipe(
+            ofType(SessionActions.DELETE_SESSION_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status !== 'success') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
-                    // this._toaster.successToast('action.payload.me');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public deleteAllSession$: Observable<Action> = this.actions$
-        .ofType(SessionActions.DELETE_ALL_SESSION_REQUEST).pipe(
+    public deleteAllSession$: Observable<Action> = createEffect(() => this.actions$
+        .pipe(
+            ofType(SessionActions.DELETE_ALL_SESSION_REQUEST),
             switchMap((action: CustomActions) => this.auth.DeleteAllSession()),
-            map(response => this.deleteAllSessionResponse(response)));
+            map(response => this.deleteAllSessionResponse(response))));
 
-    @Effect()
-    public deleteAllSessionResponse$: Observable<Action> = this.actions$
-        .ofType(SessionActions.DELETE_ALL_SESSION_RESPONSE).pipe(
+    public deleteAllSessionResponse$: Observable<Action> = createEffect(() => this.actions$
+        .pipe(
+            ofType(SessionActions.DELETE_ALL_SESSION_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status !== 'success') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
-                    // this._toaster.successToast('action.payload.me');
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

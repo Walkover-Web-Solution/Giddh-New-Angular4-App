@@ -1,5 +1,4 @@
 import { SETTINGS_PERMISSION_ACTIONS } from '../../actions/settings/permissions/settings.permissions.const';
-import { LinkedAccountsState, SettingsState } from './Settings.reducer';
 import * as _ from '../../lodash-optimized';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SETTINGS_INTEGRATION_ACTIONS } from '../../actions/settings/settings.integration.const';
@@ -107,6 +106,7 @@ export interface SettingsState {
     isPaymentUpdationSuccess: boolean;
     taxes: Taxes;
     branchRemoved: boolean;
+    financialYearLimits: any;
 }
 
 export const initialState: SettingsState = {
@@ -132,7 +132,8 @@ export const initialState: SettingsState = {
     taxes: null,
     branchRemoved: false,
     // Get profile API call in process
-    getProfileInProgress: false
+    getProfileInProgress: false,
+    financialYearLimits: null
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
@@ -250,10 +251,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 updateProfileInProgress: true,
                 profileRequest: false
             };
-            // newState.updateProfileSuccess = false;
-            // newState.updateProfileInProgress = true;
-            // newState.profileRequest = false;
-            // return Object.assign({}, state, newState);
         }
         case SETTINGS_PROFILE_ACTIONS.RESET_PATCH_PROFILE: {
             return {
@@ -271,11 +268,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                     updateProfileInProgress: false,
                     profileRequest: true
                 };
-                // newState.profile = _.cloneDeep(response.body);
-                // newState.updateProfileSuccess = true;
-                // newState.updateProfileInProgress = false;
-                // newState.profileRequest = true;
-                // return Object.assign({}, state, newState);
             }
             return Object.assign({}, state, {
                 updateProfileSuccess: false,
@@ -402,7 +394,9 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             if (response.status === 'success') {
                 newState.financialYears = null;
                 newState.usersWithCompanyPermissions = response.body;
+                return Object.assign({}, state, newState);
             }
+            return state;
         }
         case SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT_RESPONSE: {
             let response: BaseResponse<any, string> = action.payload;
@@ -714,6 +708,16 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
 
         case SETTINGS_BRANCH_ACTIONS.RESET_REMOVED_BRANCH_RESPONSE: {
             return Object.assign({}, state, { branchRemoved: false });
+        }
+
+        case SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_FINANCIAL_YEAR_LIMITS_RESPONSE: {
+            let financialYearLimits: BaseResponse<any, any> = action.payload;
+            if (financialYearLimits.status === 'success') {
+                return Object.assign({}, state, {
+                    financialYearLimits: financialYearLimits.body
+                });
+            }
+            return Object.assign({}, state, {});
         }
 
         //  endregion discount reducer

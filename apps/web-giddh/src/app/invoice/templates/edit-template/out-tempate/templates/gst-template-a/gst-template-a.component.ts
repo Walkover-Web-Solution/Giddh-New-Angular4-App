@@ -9,7 +9,7 @@ import { InvoiceUiDataService } from '../../../../services/invoice.ui.data.servi
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
 import { AppState } from 'apps/web-giddh/src/app/store';
-import * as _ from 'lodash';
+import * as _ from '../../../../../../lodash-optimized';
 import { SettingsProfileActions } from '../../../../../../actions/settings/profile/settings.profile.action';
 
 @Component({

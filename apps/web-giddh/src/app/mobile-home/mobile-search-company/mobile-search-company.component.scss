@@ -71,6 +71,8 @@
         }
     }
     .all-company-list{
+        overflow-y: auto;
+        max-height: calc(100vh - 245px);
         ul{
             list-style: none;
             li{

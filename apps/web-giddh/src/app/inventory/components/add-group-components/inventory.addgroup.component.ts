@@ -14,7 +14,7 @@ import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/gr
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { IForceClear } from '../../../models/api-models/Sales';
-import * as _ from 'lodash';
+import { isObject, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
     selector: 'inventory-add-group',  // <home></home>
@@ -238,22 +238,13 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         let val: string = this.addGroupForm.controls['name'].value;
         val = uniqueNameInvalidStringReplace(val);
 
-        // if val then check for uniqueName is available or not
-        if (val) {
-            this.store.dispatch(this.sideBarAction.GetGroupUniqueName(val));
+        /** unique name availability is check on server now
+        if unique name is not available then server will assign number suffix **/
 
-            this.isGroupNameAvailable$.subscribe(a => {
-                if (a !== null && a !== undefined) {
-                    if (a) {
-                        this.addGroupForm.patchValue({ uniqueName: val });
-                    } else {
-                        let num = 1;
-                        this.addGroupForm.patchValue({ uniqueName: val + num });
-                    }
-                }
-            });
+        if (val) {
+            this.addGroupForm.patchValue({uniqueName: val});
         } else {
-            this.addGroupForm.patchValue({ uniqueName: '' });
+            this.addGroupForm.patchValue({uniqueName: ''});
         }
     }
 
@@ -268,8 +259,8 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         if (!stockRequest.isSubGroup) {
             stockRequest.isSubGroup = false;
         }
-        if (_.isObject(stockRequest.parentStockGroupUniqueName)) {
-            let uniqName: any = _.cloneDeep(stockRequest.parentStockGroupUniqueName);
+        if (isObject(stockRequest.parentStockGroupUniqueName)) {
+            let uniqName: any = cloneDeep(stockRequest.parentStockGroupUniqueName);
             stockRequest.parentStockGroupUniqueName = uniqName.value;
         }
         this.store.dispatch(this.inventoryActions.addNewGroup(stockRequest));
@@ -287,8 +278,8 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         if (this.addGroupForm.value.isSubGroup) {
             stockRequest.parentStockGroupUniqueName = this.selectedGroup.value;
         }
-        if (_.isObject(stockRequest.parentStockGroupUniqueName)) {
-            let uniqName: any = _.cloneDeep(stockRequest.parentStockGroupUniqueName);
+        if (isObject(stockRequest.parentStockGroupUniqueName)) {
+            let uniqName: any = cloneDeep(stockRequest.parentStockGroupUniqueName);
             stockRequest.parentStockGroupUniqueName = uniqName.value;
         }
         this.store.dispatch(this.inventoryActions.updateGroup(stockRequest, activeGroup.uniqueName));

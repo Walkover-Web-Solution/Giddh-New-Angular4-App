@@ -19,12 +19,13 @@ import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ElementViewChildModule } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { DecimalDigitsModule } from 'apps/web-giddh/src/app/shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { BsDropdownModule, CollapseModule, TabsModule } from 'ngx-bootstrap';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TextMaskModule } from 'angular2-text-mask';
 import { Daterangepicker } from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { TallySyncService } from "../services/tally-sync.service";
 
@@ -67,8 +68,7 @@ const _ROUTES: Routes = [
         BsDropdownModule,
         SalesShSelectModule,
         TextMaskModule,
-        Daterangepicker,
-        NgbTypeaheadModule
+        Daterangepicker
     ],
     exports: [
         RouterModule,
