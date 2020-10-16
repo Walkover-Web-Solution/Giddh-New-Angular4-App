@@ -8660,7 +8660,9 @@ ul.dropdown-menu p.lead.pd {
 #invoice-setting ul.nav.nav-tabs {
     margin-bottom: 15px;
     background: transparent;
-    position: inherit;
+    position: inherit !important;
+    padding: 0 0px 0 15px !important;
+    border-bottom: inherit !important;
 }
 
 #invoice-setting ul.nav.nav-tabs a {
@@ -9319,6 +9321,9 @@ input.checkbox-custom[type="checkbox"] {
             margin-bottom: 40px;
         }
     }
+}
+#setting-tab > .tab-container > .tab-content {
+    padding-top: 12px;
 }
 
 /*datepicker common css*/
@@ -10034,7 +10039,7 @@ input.mat-input-element{
 }
 
 @media (max-width: 768px) {
-    ul.dropdown-menu.action-dropdown{
+    ul.dropdown-menu.action-dropdown {
         left: auto;
         right: 0 !important;
     }
@@ -10155,10 +10160,12 @@ input.mat-input-element{
     }
     .modal-header {
         padding: 12px 15px !important;
+
         h3,
         h4 {
             font-size: 16px !important;
         }
+
         .close {
             top: 0;
             font-size: 26px;
@@ -10176,29 +10183,28 @@ input.mat-input-element{
     .setting-data, .setting-sidebar-open .white-row {
         padding-left: 15px !important;
     }
-    .aging-table{
+    .aging-table {
         background: transparent !important;
     }
     .invoice-preview table{
-        margin-top: 0 !important;
+    margin-top: 0 !important;
     }
 }
-
 @media (max-width: 1280px) {
-    .linked-add{
-        .popover{
-            width: 150px;
-        }
+.linked-add{
+    .popover{
+        width: 150px;
     }
-    .multi-select input.form-control {
-        padding-right: 18px !important;
-    }
-    #dashboard .panel-default > .panel-heading {
-        font-size: 14px;
-    }
-    #dashboard .panel-heading i {
-        margin-left: 10px;
-    }
+}
+.multi-select input.form-control {
+    padding-right: 18px !important;
+}
+#dashboard .panel-default > .panel-heading {
+    font-size: 14px;
+}
+#dashboard .panel-heading i {
+    margin-left: 10px;
+}
 }
 @media (max-width: 767px) {
     .hamburger-menu-icon{
