@@ -35,7 +35,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ClickOutsideModule } from 'ng-click-outside';
-
 @NgModule({
     declarations: [
         TbPlBsComponent,
