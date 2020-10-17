@@ -59,7 +59,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('productSkuCode', {static: true}) public productSkuCode;
     @ViewChild('productHsnNumber', {static: true}) public productHsnNumber;
     @ViewChild('generateTransporterForm', {static: true}) public generateNewTransporterForm: NgForm;
-    @ViewChild('selectDropdown', {static: true}) public selectDropdown: ShSelectComponent;
+    @ViewChild('selectDropdown', {static: false}) public selectDropdown: ShSelectComponent;
     @ViewChild('sourceWarehouse', {static: false}) public sourceWarehouse: ShSelectComponent;
     @ViewChild('destinationWarehouse', {static: false}) public destinationWarehouse: ShSelectComponent;
     @ViewChild('productDescription', {static: true}) public productDescription;
@@ -71,7 +71,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('sourceQuantity', {static: true}) public sourceQuantity;
     @ViewChild('defaultSource', {static: false}) public defaultSource: ShSelectComponent;
     @ViewChild('defaultProduct', {static: true}) public defaultProduct: ShSelectComponent;
-    @ViewChild('destinationName', {static: true}) public destinationName: ShSelectComponent;
+    @ViewChild('destinationName', {static: false}) public destinationName: ShSelectComponent;
     @ViewChild('destinationQuantity', {static: true}) public destinationQuantity;
     @ViewChild('senderGstNumberField', {static: true}) public senderGstNumberField: HTMLInputElement;
     @ViewChild('receiverGstNumberField', {static: true}) public receiverGstNumberField: HTMLInputElement;

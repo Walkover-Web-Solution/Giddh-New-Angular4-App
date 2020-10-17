@@ -3,7 +3,7 @@
         <section class="w-100">
             <div>
                 <div class="form-header">
-                    <h3 *ngIf="addressConfiguration.type === 'createAddress'">Create Address</h3>
+                    <h3 *ngIf="addressConfiguration.type === 'createAddress' || addressConfiguration.type === 'createBranchAddress'">Create Address</h3>
                     <h3 *ngIf="addressConfiguration.type === 'editAddress'">Update Address</h3>
                     <h3 *ngIf="addressConfiguration.type === 'createBranch'">Create Branch</h3>
                     <h3 *ngIf="addressConfiguration.type === 'editBranch'">Edit Branch</h3>
@@ -53,7 +53,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div *ngIf="addressConfiguration.type !== 'createBranchAddress'" class="row">
                                 <div class="col-sm-12 form-group linked-entities">
                                     <label>Link Entity</label>
                                     <div class="form-group">
@@ -105,7 +105,7 @@
                             <div class="col-xs-12 col-sm-12 text-left">
                                 <div class="mt-5 pl-05 pr-05">
                                     <button [ladda]="showLoader" [disabled]="addressForm?.invalid" type="submit" class="btn btn-success">
-                                        <ng-container *ngIf="addressConfiguration.type === 'createAddress'">Save</ng-container>
+                                        <ng-container *ngIf="addressConfiguration.type === 'createAddress' || addressConfiguration.type === 'createBranchAddress'">Save</ng-container>
                                         <ng-container *ngIf="addressConfiguration.type === 'editAddress'">Update</ng-container>
                                     </button>
                                     <button (click)="addressForm?.reset()" class="btn btn-danger">Clear

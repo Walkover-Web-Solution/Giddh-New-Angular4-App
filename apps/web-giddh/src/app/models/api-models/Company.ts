@@ -119,6 +119,7 @@ export class CompanyResponse {
     public companyTotals: CompanyTotals;
     public branches?: Array<any>;
     public parentBranch?: ParentBranch;
+    public warehouseResource?: Array<any>;
 }
 
 export interface UserEntityRole {
