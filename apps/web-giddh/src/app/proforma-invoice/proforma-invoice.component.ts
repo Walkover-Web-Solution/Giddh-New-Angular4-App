@@ -4763,7 +4763,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.isUpdateMode = true;
         } else {
             // User denied the permission or closed the popup
-            this._toasty.errorToast('Please change either purchase invoice number or vendor details.', 'Purchase Record');
+            this._toasty.errorToast('Please change either purchase invoice number or vendor details.', 'New Purchase Bill');
         }
         if (this.purchaseRecordConfirmationPopup) {
             this.purchaseRecordConfirmationPopup.hide();

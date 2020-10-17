@@ -25,7 +25,7 @@ export class ProformaInvoiceUtilityService {
             text: 'No',
             cssClass: 'btn btn-danger'
         }];
-        const headerText: string = 'Purchase Record Confirmation';
+        const headerText: string = 'Purchase Bill Confirmation';
         const headerCssClass: string = 'd-inline-block mr-1 purchase-record-confirm-header';
         const messageCssClass: string = 'mrB1';
         const footerCssClass: string = 'mrB1 text-light';
