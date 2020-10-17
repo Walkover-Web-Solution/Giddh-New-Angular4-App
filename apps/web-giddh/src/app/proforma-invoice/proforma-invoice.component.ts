@@ -5116,7 +5116,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (transaction.quantity !== undefined) {
             transaction.quantity = Number(transaction.quantity);
 
-            if(this.isPurchaseInvoice && transaction.maxQuantity !== undefined) {
+            if(this.isPurchaseInvoice && transaction.maxQuantity !== undefined && !this.copyPurchaseBill) {
                 if(transaction.quantity > transaction.maxQuantity) {
                     transaction.quantity = transaction.maxQuantity;
                     this._toasty.errorToast("Quantity recorded can't be more than quantity ordered (" + transaction.maxQuantity + ")");
@@ -5171,7 +5171,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
 
-                if (this.isPurchaseInvoice && warehouseData && warehouseData.defaultWarehouse) {
+                if (this.isPurchaseInvoice && warehouseData && warehouseData.defaultWarehouse && !this.isUpdateMode) {
                     this.autoFillDeliverToWarehouseAddress(warehouseData.defaultWarehouse);
                 }
 
@@ -6322,6 +6322,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     stateCode: company.shippingDetails.stateCode
                 }
             }
+
+            this.autoFillCompanyShipping = isEqual(this.purchaseBillCompany.billingDetails, this.purchaseBillCompany.shippingDetails);
         }
     }
 

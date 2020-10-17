@@ -50,6 +50,7 @@ export class ContactService {
         this.companyUniqueName = this._generalService.companyUniqueName;
         let url = this.config.apiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/account-balances?page=:page' +
             '&count=:count&refresh=:refresh&q=:query&sortBy=:sortBy&sort=:order&from=:fromDate&to=:toDate';
+        query = (query) ? query : '';    
 
         url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
