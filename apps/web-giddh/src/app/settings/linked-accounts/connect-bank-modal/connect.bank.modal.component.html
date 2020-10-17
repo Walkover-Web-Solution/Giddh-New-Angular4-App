@@ -17,6 +17,17 @@
                             src="{{r.favicon}}" /></span>
                     {{ r.name }} <label *ngIf="r.countryISOCode">({{r.countryISOCode}})</label></span>
             </ng-template> -->
+            <sh-select [options]="searchResults"
+                [(ngModel)]="selectedProvider.name"
+                [isPaginationEnabled]="true"
+                [forceClearReactive]="forceClearReactive$ | async"
+                (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                [enableDynamicSearch]="true"
+                (selected)="typeaheadOnSelect($event)"
+                placeholder="Search Provider"
+                [showClear]="false" [multiple]="false"
+                [ItemHeight]="67">
+            </sh-select>
         </div>
         <button class="btn btn-success btn-sm" (click)="onSelectProvider()"
             [disabled]="!selectedProvider.id">Next</button>
@@ -27,7 +38,7 @@
         <form #formDiv name="loginForm" [formGroup]="loginForm" novalidate="" autocomplete="off"
             (ngSubmit)="onSubmitLoginForm()">
             <div formArrayName="row" class="row">
-                <div class="col-xs-12"
+                <div class="col-12"
                     *ngFor="let item of loginForm.get('row')['controls']; let i=index;let f = first; let l = last">
                     <div [formGroupName]="i" class="form-group">
                         <ng-container formArrayName="field">
