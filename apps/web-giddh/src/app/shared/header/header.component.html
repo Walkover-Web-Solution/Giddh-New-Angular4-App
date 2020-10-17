@@ -220,7 +220,7 @@
                 <div class="col-sm-9">
                     <div class="pull-right right-details">
                         <ul class="nav universal-date mr-15" *ngIf="(selectedCompany | async)">
-                            <li class="border-none pr-15" [ngClass]="{'notification': !isMobileScreen}">
+                            <li class="border-none pr-15" [ngClass]="{'notification': !isMobileScreen, 'mr-0':isTodaysDateSelected}">
                                 <img src="{{imgPath}}notification.svg">
                             </li>
                             <li class="border-none pl-0">
