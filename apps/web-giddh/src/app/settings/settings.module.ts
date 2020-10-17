@@ -26,7 +26,6 @@ import { DeleteTaxConfirmationModelComponent } from './Taxes/confirmation/confir
 import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
 import { SettingTriggerComponent } from './Trigger/setting.trigger.component';
 import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-warehouse.component';
-import { CreateAddressComponent } from './warehouse/create-address/create-address.component';
 import { WarehouseComponent } from './warehouse/warehouse.component';
 import { SettingsServiceModule } from './settings-service.module';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
@@ -40,6 +39,7 @@ import { PersonalInformationComponent } from './personal-information/personal-in
 import { AddressSettingsComponent } from './address-settings/address-settings.component';
 import { OtherSettingsComponent } from './other-settings/other-settings.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CreateAddressComponent } from './create-address/create-address.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {

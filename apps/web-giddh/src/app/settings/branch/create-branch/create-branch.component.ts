@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 @Component({
-    selector: 'create-warehouse',
-    templateUrl: './create-warehouse.component.html',
-    styleUrls: ['./create-warehouse.component.scss'],
+    selector: 'create-branch',
+    templateUrl: './create-branch.component.html',
+    styleUrls: ['./create-branch.component.scss'],
 })
 
 export class CreateWarehouseComponent implements OnInit {
+
     public accountAsideMenuState: string = 'out';
 
     public ngOnInit(): void {

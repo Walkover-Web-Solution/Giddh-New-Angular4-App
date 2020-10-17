@@ -1,11 +1,13 @@
-import { Component, OnInit, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { IForceClear } from '../../../models/api-models/Sales';
-import { ToasterService } from '../../../services/toaster.service';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
-import { SettingsAsideConfiguration, SettingsAsideFormType } from '../../constants/settings.constant';
+
+import { SettingsAsideFormType } from '../constants/settings.constant';
+import { IForceClear } from '../../models/api-models/Sales';
+import { ToasterService } from '../../services/toaster.service';
+import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
+import { SettingsAsideConfiguration } from '../constants/settings.constant';
 
 function validateFieldWithPatterns(patterns: Array<string>) {
     return (field: FormControl): { [key: string]: any } => {

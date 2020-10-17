@@ -1,0 +1,92 @@
+<div class="create-warehouse-page mb-15">
+    <div class="create-warehouse-under mb-15">
+        <div class="row">
+            <div class="col-lg-10 col-sm-10">
+                <div class="warehouse-under-company">
+                    <p>Create Branch under:</p>
+                    <div class="warehouse-company-name">
+                        <div class="label-wrapper mb-15">
+                            <label>Company:</label>
+                            <span>Lorem Ipsum Company Name Dummy Text (Unregistered)</span>
+                        </div>
+                        <div class="label-wrapper mb-15">
+                            <label>Country & Currency:</label>
+                            <span><img src="../../../assets/images/flags.png"> India - INR Rupee</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-sm-2">
+                <div class="warehouse-image">
+                    <img class="branch-image" src="../../../assets/images/branch-image.svg" alt="Branch image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="warehouse-form">
+        <div class="warehouse-form-field">
+            <label>
+                Alias <span class="red-text">*</span>
+            </label>
+            <input type="text" class="form-control" placeholder="Enter Alias">
+        </div>
+        <div class="warehouse-form-field">
+            <label>
+                Branch Name <span class="red-text">*</span>
+            </label>
+            <input type="text" class="form-control" placeholder="Enter Alias">
+            <!-- <span class="ml-2">
+                <input type="checkbox" class="mr-4"> Is it a Sub-Branch ?
+            </span> -->
+        </div>
+        <!-- <div class="warehouse-form-field">
+            <label>
+                Parent <span class="red-text">*</span>
+            </label>
+            <sh-select [options]="selectParentBranch"></sh-select>
+        </div> -->
+        <!-- <div class="warehouse-form-field">
+            <label>
+                Select Warehouse
+            </label>
+            <sh-select [options]="selectWarehouse"></sh-select>
+        </div>
+        <div class="warehouse-form-field">
+            <label>
+                Time Zone
+            </label>
+            <input type="text" class="form-control" value="(GMT 5:30) India Standard Time (Asia/Calcutta)">
+        </div> -->
+        <!-- <div class="warehouse-form-field">
+            <label class="checkbox-label">
+                &nbsp;
+            </label>
+            <div class="justify-content-center">
+                <input type="checkbox" class="mr-4"><span> Does it has sub-location / Division ?</span>
+            </div>
+        </div>
+        <div class="warehouse-form-field">
+            <label>
+                Sub - Location
+            </label>
+            <div class="d-flex flex-column sub-location-input">
+                <div class="d-flex align-item-center flex-row mb-15">
+                    <input type="text" class="form-control" placeholder="Enter Name">
+                    <i class="icon-trash"></i>
+                </div>
+                <div class="d-flex align-item-center flex-row mb-15">
+                    <input type="text" class="form-control" placeholder="Enter Name">
+                    <i class="icon-plus"></i>
+                </div>
+            </div>
+        </div> -->
+    </div>
+    <div class="footer-btn row">
+        <div class="button-group">
+            <button class="btn btn-primary mr-15">Clear</button>
+            <button *ngIf="isBranchElemnt" class="btn btn-success">Create Branch</button>
+        </div>
+    </div>
+</div>
+<create-address [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
+    (closeAsideEvent)="toggleAccountAsidePane($event)" *ngIf="accountAsideMenuState === 'in'"></create-address>

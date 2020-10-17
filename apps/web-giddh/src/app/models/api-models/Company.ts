@@ -53,6 +53,8 @@ export class Addresses {
     public isDefault: boolean;
     public stateName: string;
     public taxNumber: string;
+    public name?: string;
+    public taxType?: string;
 }
 
 export class CompanyTotals {

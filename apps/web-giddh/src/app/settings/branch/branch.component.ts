@@ -19,6 +19,7 @@ import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { GeneralService } from "../../services/general.service";
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { SettingsProfileService } from '../../services/settings.profile.service';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -36,10 +37,10 @@ export const IsyncData = [
 })
 
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
-    @ViewChild('branchModal', {static: true}) public branchModal: ModalDirective;
-    @ViewChild('addCompanyModal', {static: true}) public addCompanyModal: ModalDirective;
-    @ViewChild('companyadd', {static: true}) public companyadd: ElementViewContainerRef;
-    @ViewChild('confirmationModal', {static: true}) public confirmationModal: ModalDirective;
+    @ViewChild('branchModal', {static: false}) public branchModal: ModalDirective;
+    @ViewChild('addCompanyModal', {static: false}) public addCompanyModal: ModalDirective;
+    @ViewChild('companyadd', {static: false}) public companyadd: ElementViewContainerRef;
+    @ViewChild('confirmationModal', {static: false}) public confirmationModal: ModalDirective;
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
         dateInputFormat: 'DD-MM-YYYY',
@@ -80,6 +81,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private componentFactoryResolver: ComponentFactoryResolver,
         private companyActions: CompanyActions,
         private settingsProfileActions: SettingsProfileActions,
+        private settingsProfileService: SettingsProfileService,
         private commonActions: CommonActions,
         private _generalService: GeneralService,
         private _breakPointObservar: BreakpointObserver,
@@ -111,11 +113,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
             if (branches) {
                 if (branches.length) {
-                    _.each(branches, (branch) => {
-                        if (branch.addresses && branch.addresses.length) {
-                            branch.addresses = [_.find(branch.addresses, (gst) => gst.isDefault)];
-                        }
-                    });
                     this.branches$ = observableOf(_.orderBy(branches, 'name'));
                 } else if (branches.length === 0) {
                     this.branches$ = observableOf(null);
@@ -386,4 +383,23 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.modalRef = this.modalService.show(template);
     }
 
+    public setDefault(address: any, branch: any): void {
+        address.isDefault = !address.isDefault;
+        branch.addresses.forEach(branchAddress => {
+            if (branchAddress.uniqueName === address.uniqueName) {
+                branchAddress.isDefault = address.isDefault;
+            } else {
+                branchAddress.isDefault = false;
+            }
+        });
+        const requestObject = {
+            name: branch.name,
+            alias: branch.alias,
+            linkAddresses: branch.addresses,
+            branchUniqueName: branch.uniqueName
+        }
+        this.settingsProfileService.updateBranchInfo(requestObject).subscribe(response => {
+            this.store.dispatch(this.settingsBranchActions.GetALLBranches({from: '', to: ''}));
+        });
+    }
 }
