@@ -427,6 +427,9 @@ a[vr-item]:focus {
 .notification {
     padding: 0 !important;
     margin-right: 10px !important;
+    &.mr-0{
+        margin-right: 0 !important;
+    }
 }
 .universal-date li {
     display: inline-block;
