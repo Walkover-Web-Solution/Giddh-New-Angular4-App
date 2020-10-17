@@ -163,11 +163,11 @@ export class CreateBranchComponent implements OnInit {
         const requestObj = {
             name: this.branchForm.value.name,
             alias: this.branchForm.value.alias,
-            linkAddresses: this.addresses.map(address => ({
-                uniqueName: address.uniqueName,
-                isDefault: address.isDefault
+            linkAddresses: this.addresses.filter(address => this.branchForm.value.address.includes(address.uniqueName)).map(filteredAddress => ({
+                uniqueName: filteredAddress.uniqueName,
+                isDefault: filteredAddress.isDefault
             }))
-        }
+        };
         this.settingsProfileService.createNewBranch(requestObj).subscribe(response => {
             if (response && response.status === 'success') {
                 this.toastService.successToast('Branch created successfully');

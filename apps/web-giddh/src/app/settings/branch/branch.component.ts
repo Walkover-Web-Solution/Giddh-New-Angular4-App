@@ -405,12 +405,17 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             });
         }
-        const requestObject = {
+        const requestObject: any = {
             name: branch.name,
             alias: branch.alias,
             linkAddresses: branch.addresses,
             branchUniqueName: branch.uniqueName,
-            warehouseResource: branch.warehouseResource
+        }
+        if (entityType === 'warehouse') {
+            requestObject.defaultWarehouse = {
+                name: entity.name,
+                uniqueName: entity.uniqueName
+            };
         }
         this.settingsProfileService.updateBranchInfo(requestObject).subscribe(response => {
             this.store.dispatch(this.settingsBranchActions.GetALLBranches({from: '', to: ''}));
