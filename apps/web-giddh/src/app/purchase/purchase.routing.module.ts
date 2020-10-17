@@ -24,7 +24,10 @@ const INVOICE_ROUTES: Routes = [
             { path: 'purchase-orders/preview/:purchaseOrderUniqueName', component: PurchaseOrderComponent },
             { path: 'purchase-settings', component: PurchaseSettingComponent },
             { path: 'purchase', component: PurchaseRecordComponent },
-            { path: 'purchase/:accountUniqueName/:purchaseRecordUniqueName', component: PurchaseRecordComponent }
+            { path: 'purchase/:accountUniqueName/:purchaseRecordUniqueName', component: PurchaseRecordComponent },
+            { path: 'purchase/bill', redirectTo: 'purchase', pathMatch: 'full' },
+            { path: 'purchase/order', redirectTo: 'purchase-orders', pathMatch: 'full' },
+            { path: 'purchase/settings', redirectTo: 'purchase-settings', pathMatch: 'full' }
         ]
     }
 ];
