@@ -1,1 +1,61 @@
-create warehouse code
+<!-- create warehouse start -->
+<!-- hide branch element by *ngIf="isBranchElemnt" -->
+<div class="create-warehouse-page mb-15">
+    <div class="create-warehouse-under mb-15">
+        <div class="row">
+            <div class="col-lg-10 col-sm-10">
+                <div class="warehouse-under-company">
+                    <p class="mb-15">Create Warehouse under:</p>
+                    <div class="warehouse-company-name">
+                        <div class="label-wrapper mb-15">
+                            <label>Company:</label>
+                            <span>Lorem Ipsum Company Name Dummy Text (Unregistered)</span>
+                        </div>
+                        <div class="label-wrapper mb-15">
+                            <label>Country & Currency:</label>
+                            <span><img src="../../../assets/images/flags.png"> India - INR Rupee</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-sm-2">
+                <div class="warehouse-image">
+                    <img src="../../../assets/images/warehouse-image.svg" alt="warehouse image">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="warehouse-form">
+        <div class="warehouse-form-field">
+            <label>
+                Warehouse Name <span class="red-text">*</span>
+            </label>
+            <input type="text" class="form-control">
+        </div>
+        <div class="warehouse-form-field">
+            <label>
+                Link Entity
+            </label>
+            <input type="text" class="form-control">
+        </div>
+        <div class="warehouse-form-field">
+            <label>
+                Address/es
+            </label>
+            <!-- <sh-select [options]="address"></sh-select> -->
+        </div>
+    </div>
+    <div class="footer-btn row">
+        <div class="button-group">
+            <button class="btn btn-primary mr-15">Clear</button>
+            <button class="btn btn-success">Create Warehouse</button>
+        </div>
+    </div>
+</div>
+<!-- aside pane for create address -->
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+<create-address [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
+    (closeAsideEvent)="toggleAccountAsidePane($event)" *ngIf="accountAsideMenuState === 'in'"></create-address>
+<!-- aside pane for create address end -->
+
+<!-- create warehouse end -->
