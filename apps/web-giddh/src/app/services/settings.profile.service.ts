@@ -173,4 +173,11 @@ export class SettingsProfileService {
             .replace(':addressUniqueName', encodeURIComponent(addressUniqueName));
         return this._http.delete(contextPath).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
+
+    public createNewBranch(params: any): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this._generalService.companyUniqueName;
+        let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.CREATE_BRANCH}`
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        return this._http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
 }

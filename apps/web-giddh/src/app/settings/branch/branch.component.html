@@ -10,21 +10,21 @@
                             <li role="menuitem">
                                 <div class="checkbox search-checkbox">
                                     <label for="all" class="align-items-start justify-content-start">
-                                    <input type="checkbox" formcontrolname="all" id="all" name="all">
+                                    <input type="checkbox" formControlName="all" id="all" name="all">
                                     All</label>
                                 </div>
                             </li>
                             <li role="menuitem">
                                 <div class="checkbox search-checkbox">
                                     <label for="active" class="align-items-start justify-content-start">
-                                    <input type="checkbox" formcontrolname="active" id="active" name="active">
+                                    <input type="checkbox" formControlName="active" id="active" name="active">
                                     Active</label>
                                 </div>
                             </li>
                             <li role="menuitem">
                                 <div class="checkbox search-checkbox">
                                     <label for="archived" class="align-items-start justify-content-start">
-                                    <input type="checkbox" formcontrolname="archived" id="archived" name="archived">
+                                    <input type="checkbox" formControlName="archived" id="archived" name="archived">
                                     Archived</label>
                                 </div>
                             </li>
@@ -67,10 +67,10 @@
     </div>
     <!-- <div class="row select-branch">
         <div class="col-12 d-flex mb-15 align-items-center">
-            <!-- <div class="form-group mb-0">
+                <div class="form-group mb-0">
                     <div class="checkbox">
                             <label for="selectAll">
-                            <input type="checkbox" formcontrolname="selectAll" id="selectAll" name="selectAll">
+                            <input type="checkbox" formControlName="selectAll" id="selectAll" name="selectAll">
                             Select all branches</label>
                         </div>
             </div> -->
@@ -200,9 +200,9 @@
                                 <div>
                                     <div *ngFor="let address of branch?.addresses" class="linked-add">
                                         <ng-container *ngIf="address">
-                                            <i (click)="setDefault(address, branch)" *ngIf="!address?.isDefault"
+                                            <i (click)="setDefault(address, branch, 'address')" *ngIf="!address?.isDefault"
                                                 class="icon-no-selected mr-05"></i>
-                                            <i (click)="setDefault(address, branch)" *ngIf="address?.isDefault"
+                                            <i (click)="setDefault(address, branch, 'address')" *ngIf="address?.isDefault"
                                                 class="icon-favorite-selected mr-05"></i>
                                             <label class="cursor-pointer"
                                                 popover="{{address?.address}} {{address?.stateCode}} {{address?.taxType}} {{ address?.taxType? ':' : ''}} {{address?.taxNumber}}"
@@ -215,13 +215,17 @@
                             <div class="col-xl-3 col-lg-4 col-md-6">
                                 <div class="parent-branch pt-1 pb-1">Linked Warehouse:</div>
                                 <div>
-                                    <div class="linked-add">
-                                        <i class="icon-no-selected mr-05"></i>
-                                        <label for="address1" class="cursor-pointer">Warehouse Name 2</label>
-                                    </div>
-                                    <div class="linked-add">
-                                        <i class="icon-no-selected mr-05"></i>
-                                        <label for="address2" class="cursor-pointer">Warehouse Address 1</label>
+                                    <div *ngFor="let warehouse of branch?.warehouseResource" class="linked-add">
+                                        <ng-container *ngIf="warehouse">
+                                            <i (click)="setDefault(warehouse, branch, 'warehouse')" *ngIf="!warehouse?.isDefault"
+                                                class="icon-no-selected mr-05"></i>
+                                            <i (click)="setDefault(warehouse, branch, 'warehouse')" *ngIf="warehouse?.isDefault"
+                                                class="icon-favorite-selected mr-05"></i>
+                                            <label class="cursor-pointer"
+                                                popover="{{warehouse?.address}}"
+                                                popoverTitle="{{warehouse?.name}}" placement="right"
+                                                triggers="mouseenter:mouseleave">{{warehouse?.name}}</label>
+                                        </ng-container>
                                     </div>
                                 </div>
                             </div>

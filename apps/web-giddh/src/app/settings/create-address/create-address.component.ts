@@ -52,7 +52,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         if (this.addressConfiguration) {
-            if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
+            if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateBranchAddress) {
                 const taxValidatorPatterns = this.addressConfiguration.tax.name ? this.addressConfiguration.tax.validation : [];
                 this.addressForm = this.formBuilder.group({
                     name: ['', Validators.required],
@@ -84,7 +84,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             }
         }
 
-        if (this.addressConfiguration.tax.name) {
+        if (this.addressConfiguration.tax && this.addressConfiguration.tax.name) {
             const taxField = this.addressForm.get('taxNumber');
             taxField.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
                 if (taxField.valid) {

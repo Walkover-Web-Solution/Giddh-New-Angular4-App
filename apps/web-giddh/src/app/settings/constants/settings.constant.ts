@@ -34,7 +34,7 @@ export interface OrganizationProfile {
 export enum SettingsAsideFormType {
     CreateAddress = 'createAddress',
     EditAddress = 'editAddress',
-    CreateBranch = 'createBranch',
+    CreateBranchAddress = 'createBranchAddress',
     EditBranch = 'editBranch'
 }
 

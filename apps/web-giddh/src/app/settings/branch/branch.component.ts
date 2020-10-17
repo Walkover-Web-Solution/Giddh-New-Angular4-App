@@ -20,6 +20,7 @@ import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { GeneralService } from "../../services/general.service";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { SettingsProfileService } from '../../services/settings.profile.service';
+import { Router } from '@angular/router';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -76,6 +77,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     private branchDetails: any;
 
     constructor(
+        private router: Router,
         private store: Store<AppState>,
         private settingsBranchActions: SettingsBranchActions,
         private componentFactoryResolver: ComponentFactoryResolver,
@@ -217,8 +219,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public openAddBranchModal() {
-        this.removeCompanySessionData();
-        this.openCreateCompanyModal();
+        // this.removeCompanySessionData();
+        // this.openCreateCompanyModal();
+        this.router.navigate(['pages/settings/create-branch']);
     }
 
     public onHide() {
@@ -383,20 +386,31 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.modalRef = this.modalService.show(template);
     }
 
-    public setDefault(address: any, branch: any): void {
-        address.isDefault = !address.isDefault;
-        branch.addresses.forEach(branchAddress => {
-            if (branchAddress.uniqueName === address.uniqueName) {
-                branchAddress.isDefault = address.isDefault;
-            } else {
-                branchAddress.isDefault = false;
-            }
-        });
+    public setDefault(entity: any, branch: any, entityType: string): void {
+        entity.isDefault = !entity.isDefault;
+        if (entityType === 'address') {
+            branch.addresses.forEach(branchAddress => {
+                if (branchAddress.uniqueName === entity.uniqueName) {
+                    branchAddress.isDefault = entity.isDefault;
+                } else {
+                    branchAddress.isDefault = false;
+                }
+            });
+        } else if (entityType === 'warehouse') {
+            branch.warehouseResource.forEach(warehouse => {
+                if (warehouse.uniqueName === entity.uniqueName) {
+                    warehouse.isDefault = entity.isDefault;
+                } else {
+                    warehouse.isDefault = false;
+                }
+            });
+        }
         const requestObject = {
             name: branch.name,
             alias: branch.alias,
             linkAddresses: branch.addresses,
-            branchUniqueName: branch.uniqueName
+            branchUniqueName: branch.uniqueName,
+            warehouseResource: branch.warehouseResource
         }
         this.settingsProfileService.updateBranchInfo(requestObject).subscribe(response => {
             this.store.dispatch(this.settingsBranchActions.GetALLBranches({from: '', to: ''}));
