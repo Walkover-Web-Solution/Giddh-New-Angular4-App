@@ -5,7 +5,6 @@
                 <div class="form-header">
                     <h3 *ngIf="addressConfiguration.type === 'createAddress' || addressConfiguration.type === 'createBranchAddress'">Create Address</h3>
                     <h3 *ngIf="addressConfiguration.type === 'editAddress'">Update Address</h3>
-                    <h3 *ngIf="addressConfiguration.type === 'createBranch'">Create Branch</h3>
                     <h3 *ngIf="addressConfiguration.type === 'editBranch'">Edit Branch</h3>
                 </div>
                 <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
