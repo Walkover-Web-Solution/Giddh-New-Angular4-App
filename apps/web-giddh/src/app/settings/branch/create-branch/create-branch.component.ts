@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -65,11 +66,17 @@ export class CreateBranchComponent implements OnInit {
         private companyService: CompanyService,
         private formBuilder: FormBuilder,
         private generalActions: GeneralActions,
+        private router: Router,
         private store: Store<AppState>,
         private settingsProfileService: SettingsProfileService,
         private settingsUtilityService: SettingsUtilityService,
         private toastService: ToasterService
     ) {
+        this.branchForm = this.formBuilder.group({
+            alias: ['', Validators.required],
+            name: ['', Validators.required],
+            address: ['']
+        });
         this.store.select(appState => appState.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.name) {
                 this.companyDetails = {
@@ -82,6 +89,7 @@ export class CreateBranchComponent implements OnInit {
                         currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                     }
                 }
+                this.branchForm.get('name').patchValue(this.companyDetails.country.name);
                 if (!this.addressConfiguration.stateList.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
@@ -92,11 +100,6 @@ export class CreateBranchComponent implements OnInit {
 
     public ngOnInit(): void {
         this.loadAddresses('GET');
-        this.branchForm = this.formBuilder.group({
-            alias: ['', Validators.required],
-            name: ['', Validators.required],
-            address: ['']
-        });
         this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/branch'));
     }
 
@@ -172,6 +175,7 @@ export class CreateBranchComponent implements OnInit {
             if (response && response.status === 'success') {
                 this.toastService.successToast('Branch created successfully');
                 this.branchForm.reset();
+                this.router.navigate(['/pages/settings/branch']);
             }
         });
     }
@@ -255,9 +259,9 @@ export class CreateBranchComponent implements OnInit {
                     label: result.alias,
                     value: result.uniqueName
                 }));
-            }
-            if (successCallback) {
-                successCallback();
+                if (successCallback) {
+                    successCallback();
+                }
             }
         });
     }
