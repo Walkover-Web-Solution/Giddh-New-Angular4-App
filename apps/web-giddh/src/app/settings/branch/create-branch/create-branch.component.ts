@@ -253,7 +253,7 @@ export class CreateBranchComponent implements OnInit {
     public loadLinkedEntities(successCallback: Function): void {
         this.settingsProfileService.getAllLinkedEntities().subscribe(response => {
             if (response && response.body && response.status === 'success') {
-                this.addressConfiguration.linkedEntities = response.body.results.map(result => ({
+                this.addressConfiguration.linkedEntities = response.body.map(result => ({
                     ...result,
                     isDefault: false,
                     label: result.alias,

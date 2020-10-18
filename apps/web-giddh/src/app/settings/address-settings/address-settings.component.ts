@@ -107,25 +107,47 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
         ).subscribe(addressName => {
-            this.addressSearchRequest.name = addressName;
-            this.searchAddress.emit(this.addressSearchRequest);
+            if (!this.searchAddressNameInput.pristine) {
+                this.addressSearchRequest.name = addressName;
+                this.searchAddress.emit(this.addressSearchRequest);
+            }
         });
         this.searchAddressInput.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
         ).subscribe(address => {
-            this.addressSearchRequest.address = address;
-            this.searchAddress.emit(this.addressSearchRequest);
+            if (!this.searchAddressInput.pristine) {
+                this.addressSearchRequest.address = address;
+                this.searchAddress.emit(this.addressSearchRequest);
+            }
         });
         this.searchStateInput.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
-        ).subscribe(state => {
-            this.addressSearchRequest.state = state;
-            this.searchAddress.emit(this.addressSearchRequest);
+        ).subscribe(stateName => {
+            if (!this.searchStateInput.pristine) {
+                this.addressSearchRequest.state = stateName;
+                this.searchAddress.emit(this.addressSearchRequest);
+            }
         });
+    }
+
+    public resetFilter(): void {
+        this.addressSearchRequest = {
+            name: '',
+            address: '',
+            state: ''
+        };
+        this.searchStateInput.reset();
+        this.showSearchState = false;
+        this.searchAddressInput.reset();
+        this.showSearchAddress = false;
+        this.searchAddressNameInput.reset();
+        this.showSearchName = false;
+
+        this.searchAddress.emit(this.addressSearchRequest);
     }
 
     public ngOnDestroy(): void {
@@ -163,7 +185,7 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
 
     public handlePageChange(event: any): void {
         if (event.page !== this.paginationConfig.page) {
-            this.pageChanged.emit({...event, ...this.addressSearchRequest});
+            this.pageChanged.emit({ ...event, ...this.addressSearchRequest });
         }
     }
 

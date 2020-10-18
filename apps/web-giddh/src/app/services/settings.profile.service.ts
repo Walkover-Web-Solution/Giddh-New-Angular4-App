@@ -180,4 +180,11 @@ export class SettingsProfileService {
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         return this._http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
+
+    public createNewWarehouse(params: any): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this._generalService.companyUniqueName;
+        let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.CREATE_NEW_WAREHOUSE}`
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        return this._http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
 }

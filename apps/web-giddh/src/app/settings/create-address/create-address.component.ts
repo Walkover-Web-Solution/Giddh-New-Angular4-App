@@ -39,8 +39,10 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     @Input() public addressConfiguration: SettingsAsideConfiguration;
     /** Stores the address to be updated */
     @Input() public addressToUpdate: any;
-    /** Stores the address to be updated */
+    /** Stores the branch to be updated */
     @Input() public branchToUpdate: any;
+    /** Stores the address to be updated */
+    @Input() public warehouseToUpdate: any;
     /** Company name */
     @Input() public companyName: string;
     /** True, if any API is in progress */

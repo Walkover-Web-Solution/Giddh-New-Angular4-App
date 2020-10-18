@@ -35,7 +35,8 @@ export enum SettingsAsideFormType {
     CreateAddress = 'createAddress',
     EditAddress = 'editAddress',
     CreateBranchAddress = 'createBranchAddress',
-    EditBranch = 'editBranch'
+    EditBranch = 'editBranch',
+    EditWarehouse = 'editWarehouse',
 }
 
 export interface SettingsAsideConfiguration {
