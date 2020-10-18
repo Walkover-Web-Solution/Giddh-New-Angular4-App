@@ -36,6 +36,10 @@ export class SettingsBranchService {
         url = url.replace(':from', from);
         url = url.replace(':to', to);
 
+        if (request.query !== undefined) {
+            url = url.concat(`?q=${request.query}`);
+        }
+
         return this._http.get(url).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.queryString = {};

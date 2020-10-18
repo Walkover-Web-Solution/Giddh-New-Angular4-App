@@ -3,14 +3,17 @@
         <section class="w-100">
             <div>
                 <div class="form-header">
-                    <h3 *ngIf="addressConfiguration.type === 'createAddress' || addressConfiguration.type === 'createBranchAddress'">Create Address</h3>
+                    <h3
+                        *ngIf="addressConfiguration.type === 'createAddress' || addressConfiguration.type === 'createBranchAddress'">
+                        Create Address</h3>
                     <h3 *ngIf="addressConfiguration.type === 'editAddress'">Update Address</h3>
                     <h3 *ngIf="addressConfiguration.type === 'editBranch'">Edit Branch</h3>
                 </div>
                 <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
 
                 <div class="aside-body">
-                    <section class="aside-pane-form clearfix mrBChldLbl">
+                    <section *ngIf="addressConfiguration.type !== 'editBranch'"
+                        class="aside-pane-form clearfix mrBChldLbl">
                         <div *ngIf="companyName" class="font-14">
                             All the information will save in <strong>{{companyName}}</strong>
                         </div>
@@ -19,7 +22,7 @@
                             <div class="row">
                                 <div class="form-group col-12">
                                     <label>Name <sup>*</sup></label>
-                                    <input type="text" formControlName="name" class="form-control" placeholder="Enter">
+                                    <input type="text" formControlName="name" class="form-control" placeholder="Enter name">
                                 </div>
                             </div>
 
@@ -56,7 +59,7 @@
                                 <div class="col-sm-12 form-group linked-entities">
                                     <label>Link Entity</label>
                                     <div class="form-group">
-                                        <sh-select [options]="addressConfiguration?.linkedEntities" name="particulars"
+                                        <sh-select [options]="addressConfiguration?.linkedEntities" name="linkedEntities"
                                             formControlName="linkedEntity"
                                             (clearSingleItem)="handleFinalSelection($event)" [isFilterEnabled]="true"
                                             [multiple]="true
@@ -70,8 +73,11 @@
                                                                 [value]="option.value"></span>&nbsp;
                                                         <span class="entity-icon">
                                                             <i class="icon-branch-icon pull-right"
-                                                                *ngIf="option.entity === 'BRANCH' && !option.isHeadQuarter" tooltip="Branch"></i>
-                                                            <i class="icon-company-HO pull-right" *ngIf="option.entity === 'BRANCH' && option.isHeadQuarter" tooltip="HO Branch"></i>
+                                                                *ngIf="option.entity === 'BRANCH' && !option.isHeadQuarter"
+                                                                tooltip="Branch"></i>
+                                                            <i class="icon-company-HO pull-right"
+                                                                *ngIf="option.entity === 'BRANCH' && option.isHeadQuarter"
+                                                                tooltip="HO Branch"></i>
                                                             <i class="icon-warehouse-icon pull-right"
                                                                 *ngIf="option.entity === 'WAREHOUSE'"
                                                                 tooltip="Warehouse"></i>
@@ -98,21 +104,88 @@
                                 </div>
                             </div>
                         </div>
+                    </section>
 
+                    <section *ngIf="addressConfiguration.type === 'editBranch'"
+                        class="aside-pane-form clearfix mrBChldLbl">
+                        <div class="form_bg clearfix">
+                            <div class="row">
+                                <div class="form-group col-12">
+                                    <label>Branch Name <sup>*</sup></label>
+                                    <input type="text" formControlName="name" class="form-control" placeholder="Enter">
+                                </div>
+                            </div>
 
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 text-left">
-                                <div class="mt-5 pl-05 pr-05">
-                                    <button [ladda]="showLoader" [disabled]="addressForm?.invalid" type="submit" class="btn btn-success">
-                                        <ng-container *ngIf="addressConfiguration.type === 'createAddress' || addressConfiguration.type === 'createBranchAddress'">Save</ng-container>
-                                        <ng-container *ngIf="addressConfiguration.type === 'editAddress'">Update</ng-container>
-                                    </button>
-                                    <button (click)="addressForm?.reset()" class="btn btn-danger">Clear
-                                    </button>
+                            <div class="row">
+                                <div class="col-sm-8 form-group">
+                                    <label>Alias <sup>*</sup></label>
+                                    <input type="text" formControlName="alias" class="form-control" placeholder="Enter alias">
+                                </div>
+                            </div>
+
+                            <div class="clearfix row">
+                                <div class="form-group col-12 linked-entities">
+                                    <label>Linked Address/es</label>
+                                    <div class="form-group">
+                                        <sh-select [options]="addressConfiguration?.linkedEntities" name="linkedEntities"
+                                            formControlName="linkedEntity"
+                                            (clearSingleItem)="handleFinalSelection($event)" [isFilterEnabled]="true"
+                                            [multiple]="true" placeholder="Select Entity">
+                                            <ng-template #optionTemplate let-option="option">
+                                                <ng-container>
+                                                    <a (click)="selectEntity(option)" href="javascript:void(0)"
+                                                        class="list-item d-flex">
+                                                        <span><input type="checkbox"
+                                                                [checked]="addressForm?.get('linkedEntity')?.value?.includes(option.value)"
+                                                                [value]="option.value"></span>&nbsp;
+                                                        <span class="entity-details">
+                                                            <div class="item">{{ option.label || '-' }}</div>
+                                                            <div class="item-unq">
+                                                                {{ option.address || '-' }}
+                                                                <p *ngIf="option.taxType && option.taxNumber">{{ option.taxType }} :
+                                                                    {{ option.taxNumber }}</p>
+                                                            </div>
+                                                        </span>
+                                                        <span class="default-entity">
+                                                            <i (click)="setDefault(option, $event)"
+                                                                *ngIf="!option.isDefault"
+                                                                class="icon-no-selected mr-05"></i>
+                                                            <i (click)="setDefault(option, $event)"
+                                                                *ngIf="option.isDefault"
+                                                                class="icon-favorite-selected mr-05"></i>
+                                                        </span>
+                                                    </a>
+                                                </ng-container>
+                                            </ng-template>
+                                        </sh-select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <br />
+                        <div *ngIf="companyName" class="font-14">
+                            <!-- Headquarter name -->
+                            This is a branch of <strong>{{companyName}}</strong>
+                        </div>
                     </section>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 text-left">
+                            <div class="mt-5 pl-05 pr-05">
+                                <button [ladda]="showLoader" [disabled]="addressForm?.invalid" type="submit"
+                                    class="btn btn-success">
+                                    <ng-container
+                                        *ngIf="addressConfiguration.type === 'createAddress' || addressConfiguration.type === 'createBranchAddress'">
+                                        Save</ng-container>
+                                    <ng-container
+                                        *ngIf="addressConfiguration.type === 'editAddress' || addressConfiguration.type === 'editBranch'">
+                                        Update</ng-container>
+                                </button>
+                                <button (click)="addressForm?.reset()" class="btn btn-danger">Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

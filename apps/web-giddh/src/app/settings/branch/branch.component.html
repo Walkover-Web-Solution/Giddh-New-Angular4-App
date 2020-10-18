@@ -1,8 +1,8 @@
-<div class="clearfix" *ngIf="!parentCompanyName && (branches$ | async)?.length > 0">
+<div class="clearfix">
     <div class="mb-1 d-flex date-advance-search row">
         <form class="form-inline input-group-date-range-picker pr col-lg-10 col-md-12 mb-15">
-            <!-- <div class="mr-1 d-flex branch-header-content flex-row">
-                    <div class="btn-group advance-icon" dropdown>
+            <div class="mr-1 d-flex branch-header-content flex-row">
+                    <!-- <div class="btn-group advance-icon" dropdown>
                         <button id="button-basic-icon" dropdownToggle type="button" class="btn dropdown-toggle mr-0 d-flex align-items-center" aria-controls="dropdown-basic-icon">
                                 <span class="icon-advance-search"></span>
                         </button>
@@ -29,16 +29,15 @@
                                 </div>
                             </li>
                         </ul>
-                    </div>
+                    </div> -->
 
                     <div class="form-group max250 search-field form-top-fields">
-                            <input type="text" placeholder="Search branch" class="form-control" />
+                            <input type="text" #branchSearch placeholder="Search branch" class="form-control" />
                             <span class="input-addon">
                             <i class="icon-search"></i>
                         </span>
-
                     </div>
-                <div class="input-group form-top-fields">
+                <!-- <div class="input-group form-top-fields">
                     <div class="form-group">
                         <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" readonly
                             placeholder="Select Date" class="form-control" #dp="bsDaterangepicker"
@@ -58,8 +57,8 @@
                             <label for="radio-card" class="radio-custom-label">Card View</label>
                         </span>
                     </div>
-                </div>
-            </div> -->
+                </div> -->
+            </div>
         </form>
         <div class="col-lg-2 col-md-12">
             <button class="btn btn-sky-blue pull-right mr-0" (click)="openAddBranchModal()">Create Branch</button>
@@ -88,6 +87,12 @@
             </div>
         </div>
     </div> -->
+</div>
+<div *ngIf="(branches$ | async)?.length === 0" class="no-data mr-t2 loader-main">
+    <div class="spinner2">
+        <div class="cube1"></div>
+        <div class="cube2"></div>
+    </div>
 </div>
 <div *ngIf="(branches$ | async)?.length > 0 && branchViewType === 'table' && !isMobileScreen " class="table-responsive">
     <table class="table basic giddh-table on-mobile-view">
@@ -201,9 +206,9 @@
                                     <div *ngFor="let address of branch?.addresses" class="linked-add">
                                         <ng-container *ngIf="address">
                                             <i (click)="setDefault(address, branch, 'address')" *ngIf="!address?.isDefault"
-                                                class="icon-no-selected mr-05"></i>
+                                                class="cursor-pointer icon-no-selected mr-05"></i>
                                             <i (click)="setDefault(address, branch, 'address')" *ngIf="address?.isDefault"
-                                                class="icon-favorite-selected mr-05"></i>
+                                                class="cursor-pointer icon-favorite-selected mr-05"></i>
                                             <label class="cursor-pointer"
                                                 popover="{{address?.address}} {{address?.stateCode}} {{address?.taxType}} {{ address?.taxType? ':' : ''}} {{address?.taxNumber}}"
                                                 popoverTitle="{{address?.name}}" placement="right"
@@ -218,9 +223,9 @@
                                     <div *ngFor="let warehouse of branch?.warehouseResource" class="linked-add">
                                         <ng-container *ngIf="warehouse">
                                             <i (click)="setDefault(warehouse, branch, 'warehouse')" *ngIf="!warehouse?.isDefault"
-                                                class="icon-no-selected mr-05"></i>
+                                                class="cursor-pointer icon-no-selected mr-05"></i>
                                             <i (click)="setDefault(warehouse, branch, 'warehouse')" *ngIf="warehouse?.isDefault"
-                                                class="icon-favorite-selected mr-05"></i>
+                                                class="cursor-pointer icon-favorite-selected mr-05"></i>
                                             <label class="cursor-pointer"
                                                 popover="{{warehouse?.address}}"
                                                 popoverTitle="{{warehouse?.name}}" placement="right"
@@ -403,11 +408,12 @@
 
 
     <!-- Edit branch -->
-    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-    <div class="abc " *ngIf="accountAsideMenuState === 'in'">
-        <edit-branch class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState"
-            (closeAsideEvent)="toggleAccountAsidePane($event)">
-        </edit-branch>
+    <div *ngIf="closeAddressSidePane === 'in'">
+        <create-address [class]="closeAddressSidePane" [@slideInOut]="closeAddressSidePane"
+            [branchToUpdate]="branchToUpdate" [showLoader]="isAddressChangeInProgress"
+            (updateAddress)="updateBranchInfo($event)" [addressConfiguration]="addressConfiguration"
+            (closeAsideEvent)="toggleAsidePane($event)">
+        </create-address>
     </div>
 
 

@@ -53,9 +53,6 @@
     </div>
 </div>
 <!-- aside pane for create address -->
-<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
 <create-address [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
     (closeAsideEvent)="toggleAccountAsidePane($event)" *ngIf="accountAsideMenuState === 'in'"></create-address>
 <!-- aside pane for create address end -->
-
-<!-- create warehouse end -->

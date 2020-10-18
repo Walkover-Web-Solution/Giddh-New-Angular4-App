@@ -157,7 +157,7 @@
 </div>
 
 <!-- Create address part of Address Tab -->
-<div class="abc" *ngIf="accountAsideMenuState === 'in' && !closeSidePane">
+<div *ngIf="accountAsideMenuState === 'in' && !closeSidePane">
     <create-address class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState"
         [companyName]="organizationType === 'BRANCH' ? profileData?.companyName : ''" [showLoader]="isAddressChangeInProgress"
         (saveAddress)="saveAddress($event)" (updateAddress)="updateAddress($event)" [addressToUpdate]="addressToUpdate"

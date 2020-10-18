@@ -1,8 +1,8 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { fromEvent, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { Store, select } from '@ngrx/store';
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, AfterViewInit, TemplateRef } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, AfterViewInit, TemplateRef, ElementRef } from '@angular/core';
 import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
@@ -21,6 +21,10 @@ import { GeneralService } from "../../services/general.service";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { Router } from '@angular/router';
+import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
+import { ToasterService } from '../../services/toaster.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { SettingsUtilityService } from '../services/settings-utility.service';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -34,7 +38,19 @@ export const IsyncData = [
     selector: 'setting-branch',
     templateUrl: './branch.component.html',
     styleUrls: ['./branch.component.scss'],
-    providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
+    providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -69,10 +85,22 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public universalDate$: Observable<any>;
     public dateRangePickerValue: Date[] = [];
     public isAttachmentExpanded: boolean = false;
-    public accountAsideMenuState: string = 'out';
+    public closeAddressSidePane: string = 'out';
     public isBranchSalesExpanded: boolean = false;
+    public isAddressChangeInProgress: boolean = false;
+
+    /** Branch search field instance */
+    @ViewChild('branchSearch', {static: true}) public branchSearch: ElementRef;
 
     modalRef: BsModalRef;
+
+    /** Stores the address configuration */
+    public addressConfiguration: SettingsAsideConfiguration = {
+        type: SettingsAsideFormType.EditBranch,
+        linkedEntities: []
+    };
+    /** Branch details to update */
+    public branchToUpdate: any;
 
     private branchDetails: any;
 
@@ -87,7 +115,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private commonActions: CommonActions,
         private _generalService: GeneralService,
         private _breakPointObservar: BreakpointObserver,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private settingsUtilityService: SettingsUtilityService,
+        private toasterService: ToasterService
     ) {
         this.getOnboardingForm();
 
@@ -164,6 +194,11 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.getAllBranches();
             }
         });
+
+        fromEvent(this.branchSearch.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((event: any) => {
+            this.store.dispatch(this.settingsBranchActions.GetALLBranches({from: '', to: '', query: encodeURIComponent(event.target.value)}));
+        });
+
         this._breakPointObservar.observe([
             '(max-width:768px)'
         ]).subscribe(result => {
@@ -186,7 +221,16 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public updateBranch(branch: any): void {
         this.branchDetails = branch;
-        this.openCreateCompanyModal(true);
+
+        this.loadAddresses('GET', () => {
+            this.branchToUpdate = {
+                name: branch.name,
+                alias: branch.alias,
+                linkedEntities: branch.addresses
+            };
+            this.toggleAsidePane();
+        });
+        // this.openCreateCompanyModal(true);
     }
 
     public hideAddCompanyModal() {
@@ -361,21 +405,21 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public openEditBranch() {
-        this.toggleAccountAsidePane();
+        this.toggleAsidePane();
     }
 
-    public toggleAccountAsidePane(event?): void {
+    public toggleAsidePane(event?): void {
         if (event) {
             event.preventDefault();
         }
-        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+        this.closeAddressSidePane = this.closeAddressSidePane === 'out' ? 'in' : 'out';
 
         this.toggleBodyClass();
     }
 
 
     public toggleBodyClass() {
-        if (this.accountAsideMenuState === 'in') {
+        if (this.closeAddressSidePane === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');
@@ -384,6 +428,30 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     openModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(template);
+    }
+
+    public updateBranchInfo(addressDetails: any): void {
+        this.isAddressChangeInProgress = true;
+        const linkAddresses = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+            uniqueName: filteredEntity.uniqueName,
+            isDefault: filteredEntity.isDefault,
+        }));
+        const requestObj = {
+            name: addressDetails.formValue.name,
+            alias: addressDetails.formValue.alias,
+            branchUniqueName: this.branchDetails.uniqueName,
+            linkAddresses
+        };
+        this.settingsProfileService.updateBranchInfo(requestObj).subscribe(response => {
+            if (response.status === 'success') {
+                this.closeAddressSidePane = 'out';
+                this.store.dispatch(this.settingsBranchActions.GetALLBranches({from: '', to: ''}));
+                this.toasterService.successToast('Branch updated successfully');
+            }
+            this.isAddressChangeInProgress = false;
+        }, () => {
+            this.isAddressChangeInProgress = false;
+        });
     }
 
     public setDefault(entity: any, branch: any, entityType: string): void {
@@ -417,8 +485,25 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 uniqueName: entity.uniqueName
             };
         }
-        this.settingsProfileService.updateBranchInfo(requestObject).subscribe(response => {
+        this.settingsProfileService.updateBranchInfo(requestObject).subscribe(() => {
             this.store.dispatch(this.settingsBranchActions.GetALLBranches({from: '', to: ''}));
+        });
+    }
+
+    private loadAddresses(method: string, successCallback: Function): void {
+        this.settingsProfileService.getCompanyAddresses(method).subscribe((response) => {
+            if (response && response.body && response.status === 'success') {
+                this.addressConfiguration.linkedEntities = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
+                    {
+                        ...address,
+                        isDefault: false,
+                        label: address.name,
+                        value: address.uniqueName
+                    }));
+                if (successCallback) {
+                    successCallback();
+                }
+            }
         });
     }
 }

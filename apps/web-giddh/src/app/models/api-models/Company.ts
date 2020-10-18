@@ -372,6 +372,7 @@ export class StateList {
 export class BranchFilterRequest {
     from: string;
     to: string;
+    query?: string;
 }
 
 export interface OrganizationDetails {
