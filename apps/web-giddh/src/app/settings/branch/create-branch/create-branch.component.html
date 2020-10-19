@@ -130,14 +130,13 @@
                     </div>
                 </div> -->
             </div>
-
+            <div class="footer-btn row">
+                <div class="button-group">
+                    <button type="reset" class="btn btn-primary mr-15">Clear</button>
+                    <button type="submit" [disabled]="branchForm?.invalid" class="btn btn-success">Create Branch</button>
+                </div>
+            </div>
         </form>
-    </div>
-    <div class="footer-btn row">
-        <div class="button-group">
-            <button type="reset" class="btn btn-primary mr-15">Clear</button>
-            <button type="submit" [disabled]="branchForm?.invalid" class="btn btn-success">Create Branch</button>
-        </div>
     </div>
 </div>
 <div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'" (click)="toggleAddressAsidePane($event)"></div>
