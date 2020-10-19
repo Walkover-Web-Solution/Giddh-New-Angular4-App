@@ -88,13 +88,13 @@
                     <sales-sh-select [options]="addresses" formControlName="address" name="particulars"
                         [ItemHeight]="67" [notFoundLink]="true" (clearSingleItem)="handleFinalSelection($event)"
                         [isFilterEnabled]="true" [multiple]="true" placeholder="Select Entity"
-                        (noResultsClicked)="addNewAddress()">
+                        (noResultsClicked)="handleShortcutPress()">
                         <ng-template #optionTemplate let-option="option">
                             <ng-container>
                                 <a (click)="selectAddress(option)" href="javascript:void(0)" class="list-item d-flex">
                                     <span><input type="checkbox"
-                                        [checked]="warehouseForm?.get('linkedEntity')?.value?.includes(option.value)"
-                                        [value]="option.value"></span>&nbsp;
+                                            [checked]="warehouseForm?.get('linkedEntity')?.value?.includes(option.value)"
+                                            [value]="option.value"></span>&nbsp;
                                     <span class="entity-details">
                                         <div class="item">{{ option.label || '-' }}</div>
                                         <div class="item-unq">
@@ -104,11 +104,9 @@
                                         </div>
                                     </span>
                                     <span class="default-entity">
-                                        <i (click)="setDefault(option, $event)"
-                                            *ngIf="!option.isDefault"
+                                        <i (click)="setDefault(option, $event)" *ngIf="!option.isDefault"
                                             class="icon-no-selected mr-05"></i>
-                                        <i (click)="setDefault(option, $event)"
-                                            *ngIf="option.isDefault"
+                                        <i (click)="setDefault(option, $event)" *ngIf="option.isDefault"
                                             class="icon-favorite-selected mr-05"></i>
                                     </span>
                                 </a>
@@ -137,6 +135,7 @@
 </div>
 <!-- aside pane for create address -->
 <create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState"
-    [companyName]="companyDetails?.name" (closeAsideEvent)="toggleAddressAsidePane($event)"
-    *ngIf="addressAsideMenuState === 'in'"></create-address>
+    [addressConfiguration]="addressConfiguration" [companyName]="companyDetails?.name"
+    (saveAddress)="createNewAddress($event)" [showLoader]="isAddressChangeInProgress"
+    (closeAsideEvent)="toggleAddressAsidePane($event)" *ngIf="addressAsideMenuState === 'in'"></create-address>
 <!-- aside pane for create address end -->
