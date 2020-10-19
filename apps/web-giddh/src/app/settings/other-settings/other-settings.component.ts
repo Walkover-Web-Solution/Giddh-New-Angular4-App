@@ -13,7 +13,9 @@ import { OrganizationProfile } from '../constants/settings.constant';
 })
 export class OtherSettingsComponent implements OnInit, OnDestroy {
 
+    /** Stores the company number system */
     public numberSystemSource: IOption[] = [];
+    /** Stores the company decimal system */
     public decimalDigitSource: IOption[] = [];
     /** Updated data by the user */
     public updatedData: any = {};
@@ -52,7 +54,12 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
 
     constructor() { }
 
-    ngOnInit(): void {
+    /**
+     * Initializes the component
+     *
+     * @memberof OtherSettingsComponent
+     */
+    public ngOnInit(): void {
         currencyNumberSystems.map(c => {
             this.numberSystemSource.push({ value: c.value, label: `${c.name}`, additional: c });
         });
@@ -68,12 +75,23 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Unsubscribes from the listeners
+     *
+     * @memberof OtherSettingsComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
-    profileUpdated(keyName: string): void {
+    /**
+     * Handles profile update operation
+     *
+     * @param {string} keyName Key updated
+     * @memberof OtherSettingsComponent
+     */
+    public profileUpdated(keyName: string): void {
         this.updatedData[keyName] = this.profileData[keyName];
         this.saveProfileSubject.next();
     }

@@ -75,6 +75,7 @@ import { SettingsProfileService } from '../../services/settings.profile.service'
 import { CompanyService } from '../../services/companyService.service';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SETTINGS_PROFILE_ACTIONS } from '../../actions/settings/profile/settings.profile.const';
+import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 
 @Component({
     selector: 'app-header',
@@ -314,6 +315,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private commonActions: CommonActions,
         private location: Location,
         private settingsProfileService: SettingsProfileService,
+        private settingsProfileAction: SettingsProfileActions,
         private companyService: CompanyService,
         private settingsBranchAction: SettingsBranchActions
     ) {
@@ -781,10 +783,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public getCurrentCompanyData(): void {
         this.settingsProfileService.GetProfileInfo().subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
-                this.store.dispatch({
-                    type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
-                    payload: response
-                });
+                this.store.dispatch(this.settingsProfileAction.handleCompanyProfileResponse(response));
                 let res = response.body;
                 if (res.countryV2 !== null && res.countryV2 !== undefined) {
                     this.getStates(res.countryV2.alpha2CountryCode);
@@ -1203,7 +1202,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 uniqueName: ''
             }
         };
-        this.setOrganziationDetails(OrganizationType.Company, details);
+        this.setOrganizationDetails(OrganizationType.Company, details);
         this.toggleBodyScroll();
         this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName));
     }
@@ -1229,7 +1228,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 uniqueName: branchUniqueName
             }
         };
-        this.setOrganziationDetails(OrganizationType.Branch, details);
+        this.setOrganizationDetails(OrganizationType.Branch, details);
         window.location.reload();
     }
 
@@ -2039,7 +2038,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @param {OrganizationDetails} branchDetails Branch details of an organization
      * @memberof HeaderComponent
      */
-    private setOrganziationDetails(type: OrganizationType, branchDetails: OrganizationDetails): void {
+    private setOrganizationDetails(type: OrganizationType, branchDetails: OrganizationDetails): void {
         const organization: Organization = {
             type, // Mode to which user is switched to
             uniqueName: this.selectedCompanyDetails ? this.selectedCompanyDetails.uniqueName : '',

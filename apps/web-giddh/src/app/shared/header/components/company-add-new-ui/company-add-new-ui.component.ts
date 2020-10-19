@@ -423,8 +423,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                     this.company.baseCurrency = this.activeCompanyDetails ?
                         this.activeCompanyDetails.baseCurrency : '';
                 }
-            } else {
-                this.store.dispatch(this.commonActions.GetCurrency());
             }
         });
     }
@@ -448,6 +446,11 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.companyActions.removeCompanyCreateSession());
     }
 
+    /**
+     * Updates branch
+     *
+     * @memberof CompanyAddNewUiComponent
+     */
     public updateBranch(): void {
         this._companyService.updateBranch({
             companyUniqueName: this.activeCompanyDetails.uniqueName,
@@ -455,7 +458,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             name: this.company.name,
             alias: this.company.nameAlias
         }).subscribe(data => {
-            this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
             this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
             this.store.dispatch(this.companyActions.removeCompanyCreateSession());
             this.closeCompanyModal.emit();

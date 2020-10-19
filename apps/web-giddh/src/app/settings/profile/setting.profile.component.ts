@@ -65,6 +65,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public currentCompanyDetails: any;
     /** Stores the current branch details */
     public currentBranchDetails: any;
+    /** Stores the company profile details */
     public companyProfileObj: OrganizationProfile | any = {
         name: '',
         uniqueName: '',
@@ -260,7 +261,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.store.select(appState => appState.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.currentCompanyDetails = response;
                 if (this.currentOrganizationType === OrganizationType.Company) {
@@ -281,7 +282,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        this.store.select(p => p.settings.currentBranch).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.store.select(appState => appState.settings.currentBranch).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.currentBranchDetails = response;
                 if (this.currentOrganizationType === OrganizationType.Branch) {
@@ -727,6 +728,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         return state;
     }
 
+    /**
+     * Handles save profile operation
+     *
+     * @param {*} value Value to be updated
+     * @memberof SettingProfileComponent
+     */
     public handleSaveProfile(value: any): void {
         if (this.currentOrganizationType === OrganizationType.Company) {
             this.patchProfile({ ...value });
@@ -735,6 +742,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Update branch profile handler
+     *
+     * @param {*} [params] Request payload for API
+     * @memberof SettingProfileComponent
+     */
     public updateBranchProfile(params?: any): void {
         this.currentBranchDetails.name = this.companyProfileObj.name;
         this.currentBranchDetails.alias = this.companyProfileObj.alias;
@@ -742,6 +755,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             .subscribe(response => {});
     }
 
+    /**
+     * Handles tab changes
+     *
+     * @param {string} tabName Current tab name
+     * @memberof SettingProfileComponent
+     */
     public handleTabChanged(tabName: string): void {
         this.currentTab = tabName;
         if (tabName === 'address') {
@@ -754,10 +773,15 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Loads all the entities of an company
+     *
+     * @memberof SettingProfileComponent
+     */
     public loadLinkedEntities(): void {
         this.settingsProfileService.getAllLinkedEntities().subscribe(response => {
             if (response && response.body && response.status === 'success') {
-                this.addressConfiguration.linkedEntities = response.body.results.map(result => ({
+                this.addressConfiguration.linkedEntities = response.body.map(result => ({
                     ...result,
                     isDefault: false,
                     label: result.alias,
@@ -767,6 +791,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Loads all the states of a country
+     *
+     * @param {string} countryCode Country code
+     * @memberof SettingProfileComponent
+     */
     public loadStates(countryCode: string): void {
         this.companyService.getAllStates({country: countryCode}).subscribe(response => {
             if (response && response.body && response.status === 'success') {
@@ -784,6 +814,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Loads the tax details of a country (tax name, tax validation, etc.)
+     *
+     * @param {string} countryCode Country code
+     * @memberof SettingProfileComponent
+     */
     public loadTaxDetails(countryCode: string): void {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
@@ -800,7 +836,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
     }
 
-    public handlePageChanged(event: any) {
+    /**
+     * Page change handler
+     *
+     * @param {*} event Page change event
+     * @memberof SettingProfileComponent
+     */
+    public handlePageChanged(event: any): void {
         let method: string;
         delete event.itemsPerPage;
         let params = {
@@ -814,11 +856,23 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.loadAddresses(method, params);
     }
 
+    /**
+     * Handle search operation within address
+     *
+     * @param {*} event Search event
+     * @memberof SettingProfileComponent
+     */
     public handleSearchInAddress(event: any): void {
         this.isSearchFilterApplied = true;
         this.loadAddresses('POST', { ...event, page: 1 });
     }
 
+    /**
+     * Creates new address
+     *
+     * @param {*} addressDetails Address details
+     * @memberof SettingProfileComponent
+     */
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
@@ -852,6 +906,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Update address
+     *
+     * @param {*} addressDetails Address details
+     * @memberof SettingProfileComponent
+     */
     public updateAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
@@ -881,6 +941,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Deletes addresss
+     *
+     * @param {*} addressDetails Address to be deleted
+     * @memberof SettingProfileComponent
+     */
     public handleDeleteAddress(addressDetails: any): void {
         this.settingsProfileService.deleteAddress(addressDetails.uniqueName).subscribe(response => {
             this.loadAddresses('GET');
@@ -888,6 +954,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handles address unlinking
+     *
+     * @param {*} addressDetails Address details
+     * @memberof SettingProfileComponent
+     */
     public handleAddressUnlinking(addressDetails: any): void {
         const requestObject = {
             name: this.currentBranchDetails.name,
@@ -900,6 +972,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handle default address
+     *
+     * @param {*} addressDetails Address details
+     * @memberof SettingProfileComponent
+     */
     public handleDefaultAddress(addressDetails: any): void {
         this.addresses.forEach(add => {
             if (add.uniqueName !== addressDetails.uniqueName) {
@@ -925,6 +1003,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handle company profile response
+     *
+     * @private
+     * @param {*} response Company profile details
+     * @memberof SettingProfileComponent
+     */
     private handleCompanyProfileResponse(response: any): void {
         if (response.profileRequest || 1 === 1) {
             let profileObj = _.cloneDeep(response);
@@ -985,6 +1070,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handle branch profile response
+     *
+     * @private
+     * @param {*} response Branch profile data
+     * @memberof SettingProfileComponent
+     */
     private handleBranchProfileResponse(response: any): void {
         if (response && response.name) {
             console.log('Branch: ' , response)
@@ -999,6 +1091,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Loads all the addresses of a company
+     *
+     * @private
+     * @param {string} method Method name to make API call ('GET' for fetching and 'POST' for searching)
+     * @param {*} [params] Request payload
+     * @memberof SettingProfileComponent
+     */
     private loadAddresses(method: string, params?: any): void {
         if (this.currentOrganizationType === OrganizationType.Company) {
             this.shouldShowAddressLoader = true;
@@ -1012,6 +1112,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Updates address pagination when response is received
+     *
+     * @private
+     * @param {*} response Response received
+     * @memberof SettingProfileComponent
+     */
     private updateAddressPagination(response: any): void {
         this.addressTabPaginationData.totalPages = response.totalPages;
         this.addressTabPaginationData.page = response.page;

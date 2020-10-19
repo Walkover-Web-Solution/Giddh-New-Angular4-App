@@ -51,6 +51,13 @@ export class SettingsUtilityService {
         return { formattedWarehouses, defaultWarehouse };
     }
 
+    /**
+     * Returns the formatted company addresses
+     *
+     * @param {Array<any>} response Response received from API
+     * @returns {Array<any>} Formatted address
+     * @memberof SettingsUtilityService
+     */
     public getFormattedCompanyAddresses(response: Array<any>): Array<any> {
         const formattedCompanyAddresses = [];
         response.forEach(address => {
@@ -68,6 +75,13 @@ export class SettingsUtilityService {
         return formattedCompanyAddresses;
     }
 
+    /**
+     * Returns the formatted branch addresses
+     *
+     * @param {Array<any>} response API response
+     * @returns {Array<any>} Formatted address
+     * @memberof SettingsUtilityService
+     */
     public getFormattedBranchAddresses(response: Array<any>): Array<any> {
         const formattedCompanyAddresses = [];
         response.forEach(address => {
@@ -84,6 +98,13 @@ export class SettingsUtilityService {
         return formattedCompanyAddresses;
     }
 
+    /**
+     * Retuns update branch request object
+     *
+     * @param {*} branchDetails Branch details
+     * @returns {*} Update branch request object
+     * @memberof SettingsUtilityService
+     */
     public getUpdateBranchRequestObject(branchDetails: any): any {
         return {
             name: branchDetails.name,
@@ -92,6 +113,14 @@ export class SettingsUtilityService {
         };
     }
 
+    /**
+     * Returns the formatted linked entities
+     *
+     * @private
+     * @param {*} address Address
+     * @returns {Array<any>} Formatted linked entities
+     * @memberof SettingsUtilityService
+     */
     private getLinkedEntities(address: any): Array<any> {
         const linkedEntities = [];
         if (address.branches && address.branches.length) {

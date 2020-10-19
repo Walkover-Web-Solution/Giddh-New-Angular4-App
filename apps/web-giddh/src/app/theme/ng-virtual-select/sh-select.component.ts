@@ -77,7 +77,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onShow: EventEmitter<any[]> = new EventEmitter<any[]>();
     @Output() public onClear: EventEmitter<any> = new EventEmitter<any>(); // emits last cleared value
-    @Output() public clearSingleItem: EventEmitter<any> = new EventEmitter<any>(); // emits last cleared value
+    /** Emits rest of the values when single selection is cleared */
+    @Output() public clearSingleItem: EventEmitter<any> = new EventEmitter<any>();
 
     @Output() public selected = new EventEmitter<any>();
     @Output() public previousChange = new EventEmitter<any>(); // emits when selected option changes, only applicable in single select for now
@@ -342,6 +343,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                     }
                 }
                 // this.selectHighlightedOption();
+
             } else if (key === this.KEYS.UP) {
                 if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
                     let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();

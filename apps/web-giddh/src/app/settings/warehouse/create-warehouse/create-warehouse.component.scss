@@ -11,10 +11,6 @@
                 .label-wrapper{
                     display: flex;
                     font-size: 14px;
-                    img{
-                        width: 30px;
-                        height: 20px;
-                    }
                     label{
                         color: $dark-gray;
                         min-width: 200px;
@@ -48,9 +44,33 @@
                 min-width: 200px;
             }
             input,
-            sh-select{
+            .form-group{
                 width: 100%;
                 max-width: 350px;
+            }
+            .address-dropdown {
+                .list-item {
+                    .entity-icon {
+                        padding: 4px;
+                    }
+                    .entity-details {
+                        margin-left: 6px;
+                        flex: 1;
+                        .item {
+                            font-weight: bold;
+                        }
+                    }
+                    .default-entity {
+                        align-items: center;
+                        display: flex;
+                        &:hover:after {
+                            color: $rich-blue;
+                        }
+                        .icon-favorite-selected {
+                            color: $rich-blue;
+                        }
+                    }
+                }
             }
             input[type="checkbox"]{
                 width: auto;
@@ -75,6 +95,30 @@
     .footer-btn{
         background-color: $whisper-color;
         padding: 15px;
+    }
+}
+.linked-entities {
+    .list-item {
+        .entity-icon {
+            padding: 4px;
+        }
+        .entity-details {
+            margin-left: 6px;
+            flex: 1;
+            .item {
+                font-weight: bold;
+            }
+        }
+        .default-entity {
+            align-items: center;
+            display: flex;
+            &:hover:after {
+                color: $rich-blue;
+            }
+            .icon-favorite-selected {
+                color: $rich-blue;
+            }
+        }
     }
 }
 @media(max-width:1023px){

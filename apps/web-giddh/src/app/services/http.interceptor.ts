@@ -26,7 +26,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         if (this.generalService.currentOrganizationType === OrganizationType.Branch && request && request.urlWithParams) {
-            request = this.addBranchUnqiueName(request);
+            request = this.addBranchUniqueName(request);
         }
         if (this.isOnline) {
             return next.handle(request);
@@ -43,7 +43,15 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
         }
     }
 
-    private addBranchUnqiueName(request: HttpRequest<any>): HttpRequest<any> {
+    /**
+     * Adds branch unique name to every API call if branch is switched
+     *
+     * @private
+     * @param {HttpRequest<any>} request Current request
+     * @returns {HttpRequest<any>} Http request to carry out API call
+     * @memberof GiddhHttpInterceptor
+     */
+    private addBranchUniqueName(request: HttpRequest<any>): HttpRequest<any> {
         request = request.clone({
             params: request.params.append('branchUniqueName', this.generalService.currentBranchUniqueName)
         });

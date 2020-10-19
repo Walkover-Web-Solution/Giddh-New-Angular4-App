@@ -687,6 +687,13 @@ export class CompanyActions {
         };
     }
 
+    /**
+     * Set the branch detail for a company
+     *
+     * @param {Organization} organizationDetails Details of the organization (branch)
+     * @returns {CustomActions} Action to be dispatche
+     * @memberof CompanyActions
+     */
     public setCompanyBranch(organizationDetails: Organization): CustomActions {
         return {
             type: CompanyActions.SET_COMPANY_BRANCH,

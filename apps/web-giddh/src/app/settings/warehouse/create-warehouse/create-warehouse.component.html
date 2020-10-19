@@ -1,58 +1,130 @@
 <!-- create warehouse start -->
 <!-- hide branch element by *ngIf="isBranchElemnt" -->
-<div class="create-warehouse-page mb-15">
+<div class="pl-15 create-warehouse-page mb-15">
     <div class="create-warehouse-under mb-15">
         <div class="row">
             <div class="col-lg-10 col-sm-10">
                 <div class="warehouse-under-company">
-                    <p class="mb-15">Create Warehouse under:</p>
+                    <p class="mt-15 mb-15">Create Warehouse under:</p>
                     <div class="warehouse-company-name">
                         <div class="label-wrapper mb-15">
                             <label>Company:</label>
-                            <span>Lorem Ipsum Company Name Dummy Text (Unregistered)</span>
+                            <span>{{companyDetails?.name}} ({{companyDetails?.businessType}})</span>
                         </div>
                         <div class="label-wrapper mb-15">
                             <label>Country & Currency:</label>
-                            <span><img src="../../../assets/images/flags.png"> India - INR Rupee</span>
+                            <span><img
+                                    src="https://www.countryflags.io/{{companyDetails?.country?.countryCode}}/flat/24.png">
+                                {{companyDetails?.country?.countryName}} - {{companyDetails?.country?.currencyCode}}
+                                {{companyDetails?.country?.currencyName}}</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-2 col-sm-2">
-                <div class="warehouse-image">
-                    <img src="../../../assets/images/warehouse-image.svg" alt="warehouse image">
+                <div class="warehouse-image ">
+                    <img class="warehouse-image m-15" src="../../../assets/images/warehouse-image.svg"
+                        alt="Warehouse image">
                 </div>
             </div>
         </div>
     </div>
-    <div class="warehouse-form">
-        <div class="warehouse-form-field">
-            <label>
-                Warehouse Name <span class="red-text">*</span>
-            </label>
-            <input type="text" class="form-control">
+    <form [formGroup]="warehouseForm" novalidate (ngSubmit)="handleFormSubmit()">
+        <div class="warehouse-form">
+            <div class="warehouse-form-field">
+                <label>
+                    Warehouse Name <span class="red-text">*</span>
+                </label>
+                <input type="text" required formControlName="name" class="form-control">
+            </div>
+            <div class="warehouse-form-field">
+                <label>
+                    Link Entity
+                </label>
+                <div class="form-group linked-entities">
+                    <sh-select [options]="addressConfiguration?.linkedEntities" name="linkedEntities"
+                        formControlName="linkedEntity" (clearSingleItem)="handleFinalSelection($event)"
+                        [isFilterEnabled]="true" [multiple]="true
+                        " placeholder="Select Entity">
+                        <ng-template #optionTemplate let-option="option">
+                            <ng-container>
+                                <a (click)="selectEntity(option)" href="javascript:void(0)" class="list-item d-flex">
+                                    <span><input type="checkbox"
+                                            [checked]="warehouseForm?.get('linkedEntity')?.value?.includes(option.value)"
+                                            [value]="option.value"></span>&nbsp;
+                                    <span class="entity-icon">
+                                        <i class="icon-branch-icon pull-right"
+                                            *ngIf="option.entity === 'BRANCH' && !option.isHeadQuarter"
+                                            tooltip="Branch"></i>
+                                        <i class="icon-company-HO pull-right"
+                                            *ngIf="option.entity === 'BRANCH' && option.isHeadQuarter"
+                                            tooltip="HO Branch"></i>
+                                        <i class="icon-warehouse-icon pull-right" *ngIf="option.entity === 'WAREHOUSE'"
+                                            tooltip="Warehouse"></i>
+                                    </span>
+                                    <span class="entity-details">
+                                        <div class="item">{{ option.label || '-' }}</div>
+                                        <div class="item-unq">
+                                            {{ option.name || '-' }}
+                                        </div>
+                                    </span>
+                                    <span class="default-entity">
+                                        <i (click)="setDefault(option, $event)" *ngIf="!option.isDefault"
+                                            class="icon-no-selected mr-05"></i>
+                                        <i (click)="setDefault(option, $event)" *ngIf="option.isDefault"
+                                            class="icon-favorite-selected mr-05"></i>
+                                    </span>
+                                </a>
+                            </ng-container>
+                        </ng-template>
+                    </sh-select>
+                </div>
+            </div>
+            <div class="warehouse-form-field">
+                <label>
+                    Address/es
+                </label>
+                <div class="address-dropdown form-group">
+                    <sales-sh-select [options]="addresses" formControlName="address" name="particulars"
+                        [ItemHeight]="67" [notFoundLink]="true" (clearSingleItem)="handleFinalSelection($event)"
+                        [isFilterEnabled]="true" [multiple]="false" placeholder="Select Entity"
+                        (noResultsClicked)="addNewAddress()">
+                        <ng-template #optionTemplate let-option="option">
+                            <ng-container>
+                                <a (click)="selectAddress(option)" href="javascript:void(0)" class="list-item d-flex">
+                                    <span class="entity-details">
+                                        <div class="item">{{ option.label || '-' }}</div>
+                                        <div class="item-unq">
+                                            {{ option.address || '-' }}
+                                            <p *ngIf="option.taxType && option.taxNumber">{{ option.taxType }} :
+                                                {{ option.taxNumber }}</p>
+                                        </div>
+                                    </span>
+                                </a>
+                            </ng-container>
+                        </ng-template>
+                        <ng-template #notFoundLinkTemplate>
+                            <a href="javascript:void(0)" [keyboardShortcut]="'alt+c'"
+                                (onShortcutPress)="handleShortcutPress()"
+                                class="list-item pl-05 pr-05 border-none d-flex justify-content-between w-100"
+                                [keyboardShortcut]="'alt+c'">
+                                <div class="item">+Add Address</div>
+                                <div class="item">Alt+C</div>
+                            </a>
+                        </ng-template>
+                    </sales-sh-select>
+                </div>
+            </div>
         </div>
-        <div class="warehouse-form-field">
-            <label>
-                Link Entity
-            </label>
-            <input type="text" class="form-control">
+        <div class="footer-btn row">
+            <div class="button-group">
+                <button type="reset" class="btn btn-primary mr-15">Clear</button>
+                <button type="submit" class="btn btn-success">Create Warehouse</button>
+            </div>
         </div>
-        <div class="warehouse-form-field">
-            <label>
-                Address/es
-            </label>
-            <!-- <sh-select [options]="address"></sh-select> -->
-        </div>
-    </div>
-    <div class="footer-btn row">
-        <div class="button-group">
-            <button class="btn btn-primary mr-15">Clear</button>
-            <button class="btn btn-success">Create Warehouse</button>
-        </div>
-    </div>
+    </form>
 </div>
 <!-- aside pane for create address -->
-<create-address [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
-    (closeAsideEvent)="toggleAccountAsidePane($event)" *ngIf="accountAsideMenuState === 'in'"></create-address>
+<create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState"
+    (closeAsideEvent)="toggleAddressAsidePane($event)" *ngIf="addressAsideMenuState === 'in'"></create-address>
 <!-- aside pane for create address end -->

@@ -31,13 +31,16 @@ export interface OrganizationProfile {
     balanceDisplayFormat?: string;
 }
 
+/** Form type in setting aside component */
 export enum SettingsAsideFormType {
     CreateAddress = 'createAddress',
     EditAddress = 'editAddress',
     CreateBranchAddress = 'createBranchAddress',
-    EditBranch = 'editBranch'
+    EditBranch = 'editBranch',
+    EditWarehouse = 'editWarehouse',
 }
 
+/** Aside configuration for settings */
 export interface SettingsAsideConfiguration {
     type: SettingsAsideFormType;
     stateList?: Array<any>;

@@ -143,6 +143,12 @@ export class SettingsProfileService {
         return this._http.put(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
+    /**
+     * Fetches all the linked entities
+     *
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operation
+     * @memberof SettingsProfileService
+     */
     public getAllLinkedEntities(): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this._generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.GET_LINKED_ENTITIES}`
@@ -150,6 +156,13 @@ export class SettingsProfileService {
         return this._http.get(contextPath).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
+    /**
+     * Creates new address
+     *
+     * @param {*} params
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operation
+     * @memberof SettingsProfileService
+     */
     public createNewAddress(params: any): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this._generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.CREATE_NEW_ADDRESS}`
@@ -157,6 +170,13 @@ export class SettingsProfileService {
         return this._http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
+    /**
+     * Updates the address
+     *
+     * @param {*} params
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operation
+     * @memberof SettingsProfileService
+     */
     public updateAddress(params: any): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this._generalService.companyUniqueName;
         const addressUniqueName = params.uniqueName;
@@ -166,6 +186,13 @@ export class SettingsProfileService {
         return this._http.put(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
+    /**
+     * Deletes the address
+     *
+     * @param {string} addressUniqueName
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operation
+     * @memberof SettingsProfileService
+     */
     public deleteAddress(addressUniqueName: string): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this._generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.DELETE_ADDRESS}`
@@ -174,9 +201,30 @@ export class SettingsProfileService {
         return this._http.delete(contextPath).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
+    /**
+     * Creates new branch
+     *
+     * @param {*} params
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operation
+     * @memberof SettingsProfileService
+     */
     public createNewBranch(params: any): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this._generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.CREATE_BRANCH}`
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        return this._http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
+
+    /**
+     * Creates new warehouse
+     *
+     * @param {*} params
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operation
+     * @memberof SettingsProfileService
+     */
+    public createNewWarehouse(params: any): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this._generalService.companyUniqueName;
+        let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.CREATE_NEW_WAREHOUSE}`
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         return this._http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }

@@ -98,11 +98,15 @@
             }
         }
     }
-    .footer-btn{
-        background-color: $whisper-color;
-        padding: 15px;
-    }
 }
+.footer-btn{
+    background-color: $whisper-color;
+    padding: 15px;
+}
+.address-dropdown sales-sh-select::ng-deep .menu{
+    max-height: inherit !important;
+}
+
 @media(max-width:1023px){
     .create-branch-page{
     .create-branch-under{

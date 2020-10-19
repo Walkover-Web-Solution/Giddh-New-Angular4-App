@@ -45,18 +45,34 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
 
     constructor() {}
 
-    ngOnInit(): void {
+    /**
+     * Initializes the component
+     *
+     * @memberof PersonalInformationComponent
+     */
+    public ngOnInit(): void {
         this.saveProfileSubject.pipe(debounceTime(5000), takeUntil(this.destroyed$)).subscribe(() => {
             this.saveProfile.emit(this.updatedData);
         });
     }
 
+    /**
+     * Unsubscribes from listeners
+     *
+     * @memberof PersonalInformationComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
-    profileUpdated(keyName: string): void {
+    /**
+     * Handles profile update operation
+     *
+     * @param {string} keyName Key to be updated
+     * @memberof PersonalInformationComponent
+     */
+    public profileUpdated(keyName: string): void {
         this.updatedData[keyName] = this.profileData[keyName];
         this.saveProfileSubject.next();
     }

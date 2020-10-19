@@ -7,7 +7,7 @@ import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { ModalDirective, BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { ModalDirective, BsModalService } from 'ngx-bootstrap/modal';
 import { CompanyAddNewUiComponent } from '../../shared/header/components';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyResponse, BranchFilterRequest } from '../../models/api-models/Company';
@@ -84,15 +84,13 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public formFields: any[] = [];
     public universalDate$: Observable<any>;
     public dateRangePickerValue: Date[] = [];
-    public isAttachmentExpanded: boolean = false;
+    /** Holds the state of aside menu */
     public closeAddressSidePane: string = 'out';
-    public isBranchSalesExpanded: boolean = false;
-    public isAddressChangeInProgress: boolean = false;
+    /** True if branch update is in progress, used to show ladda loader in aside menu */
+    public isBranchChangeInProgress: boolean = false;
 
     /** Branch search field instance */
     @ViewChild('branchSearch', {static: true}) public branchSearch: ElementRef;
-
-    modalRef: BsModalRef;
 
     /** Stores the address configuration */
     public addressConfiguration: SettingsAsideConfiguration = {
@@ -101,7 +99,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     };
     /** Branch details to update */
     public branchToUpdate: any;
-
+    /** Stores the selected branch details */
     private branchDetails: any;
 
     constructor(
@@ -219,6 +217,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.addCompanyModal.show();
     }
 
+    /**
+     * Handles update branch operation
+     *
+     * @param {*} branch Branch to be updated
+     * @memberof BranchComponent
+     */
     public updateBranch(branch: any): void {
         this.branchDetails = branch;
 
@@ -401,13 +405,23 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.dispatch(this.commonActions.resetCountry());
         this.store.dispatch(this.companyActions.removeCompanyCreateSession());
         this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
-        this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
     }
 
-    public openEditBranch() {
+    /**
+     * Opens the side menu for edit branch
+     *
+     * @memberof BranchComponent
+     */
+    public openEditBranch(): void {
         this.toggleAsidePane();
     }
 
+    /**
+     * Toggles aside menu for branch update
+     *
+     * @param {*} [event]
+     * @memberof BranchComponent
+     */
     public toggleAsidePane(event?): void {
         if (event) {
             event.preventDefault();
@@ -417,8 +431,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.toggleBodyClass();
     }
 
-
-    public toggleBodyClass() {
+    /**
+     * Toggles fixed body class when aside menu is udpated
+     *
+     * @memberof BranchComponent
+     */
+    public toggleBodyClass(): void {
         if (this.closeAddressSidePane === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
@@ -426,19 +444,21 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    openModal(template: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(template);
-    }
-
-    public updateBranchInfo(addressDetails: any): void {
-        this.isAddressChangeInProgress = true;
-        const linkAddresses = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+    /**
+     * Updates the branch information
+     *
+     * @param {*} branchDetails Updated branch information
+     * @memberof BranchComponent
+     */
+    public updateBranchInfo(branchDetails: any): void {
+        this.isBranchChangeInProgress = true;
+        const linkAddresses = branchDetails.addressDetails.linkedEntities.filter(entity => (branchDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,
             isDefault: filteredEntity.isDefault,
         }));
         const requestObj = {
-            name: addressDetails.formValue.name,
-            alias: addressDetails.formValue.alias,
+            name: branchDetails.formValue.name,
+            alias: branchDetails.formValue.alias,
             branchUniqueName: this.branchDetails.uniqueName,
             linkAddresses
         };
@@ -448,12 +468,20 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.store.dispatch(this.settingsBranchActions.GetALLBranches({from: '', to: ''}));
                 this.toasterService.successToast('Branch updated successfully');
             }
-            this.isAddressChangeInProgress = false;
+            this.isBranchChangeInProgress = false;
         }, () => {
-            this.isAddressChangeInProgress = false;
+            this.isBranchChangeInProgress = false;
         });
     }
 
+    /**
+     * Set default action handler
+     *
+     * @param {*} entity Entity to be set has default
+     * @param {*} branch Selected Branch for operation
+     * @param {string} entityType Entity type ('address' or 'warehouse)
+     * @memberof BranchComponent
+     */
     public setDefault(entity: any, branch: any, entityType: string): void {
         entity.isDefault = !entity.isDefault;
         if (entityType === 'address') {
@@ -490,6 +518,14 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         });
     }
 
+    /**
+     * Loads the addresses
+     *
+     * @private
+     * @param {string} method Method by which API is called ('GET' for fetching and 'POST' for searching among addresses)
+     * @param {Function} successCallback Callback to carry out futher operations
+     * @memberof BranchComponent
+     */
     private loadAddresses(method: string, successCallback: Function): void {
         this.settingsProfileService.getCompanyAddresses(method).subscribe((response) => {
             if (response && response.body && response.status === 'success') {
