@@ -739,7 +739,7 @@
                                 </div>
                             </td>
 
-                            <td class="col-xs-4 col-md-3 col-lg-3 position-relative text-right" data-title="Amount">
+                            <td  [ngClass]="{'multicurrency-amount':isLedgerAccountAllowsMultiCurrency}"  class="col-xs-4 col-md-3 col-lg-3 position-relative text-right" data-title="Amount">
                                 {{ txn.currencySymbol }}{{ txn.amount | giddhCurrency }}
 
                                 <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
@@ -1013,7 +1013,7 @@
                                 </div>
                             </td>
 
-                            <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 position-relative text-right">
+                            <td  [ngClass]="{'multicurrency-amount':isLedgerAccountAllowsMultiCurrency}"  data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 position-relative text-right">
                                 {{ txn.currencySymbol }} {{txn.amount | giddhCurrency}}
                                 <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ txn.convertedCurrencySymbol }}{{ txn.convertedAmount | giddhCurrency}}
