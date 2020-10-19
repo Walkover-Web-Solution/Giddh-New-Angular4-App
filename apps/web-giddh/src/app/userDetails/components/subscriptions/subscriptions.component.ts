@@ -30,6 +30,8 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
 
     /* This will have active tab value */
     @Input() public activeTab: string = '';
+    @Input() public localeData: any = {};
+    @Input() public commonLocaleData: any = {};
 
     public subscriptions: SubscriptionsUser[] = [];
     public allSubscriptions: SubscriptionsUser[] = [];
@@ -159,7 +161,9 @@ export class SubscriptionsComponent implements OnInit, OnChanges, AfterViewInit,
      * @memberof SubscriptionsComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        this.activeTab = changes.activeTab.currentValue;
+        if(changes && changes.activeTab) {
+            this.activeTab = changes.activeTab.currentValue;
+        }
     }
 
     public goToBillingDetails() {
