@@ -27,7 +27,7 @@ import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, Sa
 import { TaxResponse } from '../../models/api-models/Company';
 import { IContentCommon } from '../../models/api-models/Invoice';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
-import { cloneDeep } from '../../lodash-optimized';
+import { cloneDeep, isEqual } from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
 import { TaxControlComponent } from '../../theme/tax-control/tax-control.component';
@@ -649,6 +649,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                     }
                 });
             }
+
+            this.autoFillVendorShipping = isEqual(this.purchaseOrder.account.billingDetails, this.purchaseOrder.account.shippingDetails);
         }
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
     }
@@ -1003,6 +1005,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public onSelectWarehouse(warehouse: any): void {
+        this.autoFillCompanyShipping = false;
         this.autoFillWarehouseAddress(warehouse);
     }
 
@@ -2539,6 +2542,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
 
                     this.purchaseOrder.company.shippingDetails.state.code = this.purchaseOrderDetails.company.shippingDetails.stateCode;
                     this.purchaseOrder.company.shippingDetails.state.name = this.purchaseOrderDetails.company.shippingDetails.stateName;
+
+                    this.autoFillCompanyShipping = isEqual(this.purchaseOrder.company.billingDetails, this.purchaseOrder.company.shippingDetails);
 
                     this.purchaseOrder.voucherDetails.voucherDate = this.purchaseOrderDetails.date;
                     this.purchaseOrder.voucherDetails.dueDate = this.purchaseOrderDetails.dueDate;
