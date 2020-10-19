@@ -140,7 +140,7 @@
         </div>
     </div>
 </div>
-<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'" (click)="toggleAccountAsidePane($event)"></div>
+<div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'" (click)="toggleAddressAsidePane($event)"></div>
 <create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState"
     [showLoader]="isAddressChangeInProgress" (saveAddress)="createNewAddress($event)"
     [addressConfiguration]="addressConfiguration" (closeAsideEvent)="toggleAddressAsidePane($event)"
