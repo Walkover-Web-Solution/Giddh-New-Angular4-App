@@ -271,9 +271,14 @@ span.close-modal.cp.pull-right {
     }
 }
 
-.filter-width{
-    width: 85% !important;
+.width-auto{
+    width:auto;
 }
+
+.filter-width{
+    width: 85%;
+}
+
 // responsive
 @media (max-width: 1023px) {
     .pending-advance-search {
