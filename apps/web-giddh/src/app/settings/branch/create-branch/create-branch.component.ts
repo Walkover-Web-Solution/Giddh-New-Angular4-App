@@ -33,8 +33,9 @@ import { SettingsUtilityService } from '../../services/settings-utility.service'
 })
 
 export class CreateBranchComponent implements OnInit {
-
-    public accountAsideMenuState: string = 'out';
+    /** Aside menu pane status */
+    public addressAsideMenuState: string = 'out';
+    /** Stores the current company details */
     public companyDetails: any = {
         name: '',
         businessType: '',
@@ -55,10 +56,13 @@ export class CreateBranchComponent implements OnInit {
         },
         linkedEntities: []
     };
+    /** Branch form */
     public branchForm: FormGroup;
+    /** Stores all the addresses within a company */
     public addresses: Array<any>;
+    /** True, if new address is in progress in the side menu */
     public isAddressChangeInProgress: boolean = false;
-
+    /** Unsubscribes from all the listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
@@ -98,37 +102,69 @@ export class CreateBranchComponent implements OnInit {
         });
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof CreateBranchComponent
+     */
     public ngOnInit(): void {
         this.loadAddresses('GET');
         this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/branch'));
     }
 
+    /**
+     * Toggles the aside menu
+     *
+     * @memberof CreateBranchComponent
+     */
     public toggleAsidePane(): void {
-        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+        this.addressAsideMenuState = this.addressAsideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
 
-    public openCreateAddressAside() {
-        this.toggleAccountAsidePane();
+    /**
+     * Opens the create address side menu
+     *
+     * @memberof CreateBranchComponent
+     */
+    public openCreateAddressAside(): void {
+        this.toggleAddressAsidePane();
     }
 
-    public toggleAccountAsidePane(event?): void {
+    /**
+     * Toggles the side menu pane
+     *
+     * @param {*} [event] Toggle Event
+     * @memberof CreateBranchComponent
+     */
+    public toggleAddressAsidePane(event?: any): void {
         if (event) {
             event.preventDefault();
         }
-        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+        this.addressAsideMenuState = this.addressAsideMenuState === 'out' ? 'in' : 'out';
 
         this.toggleBodyClass();
     }
 
+    /**
+     * Adds fixed body class when aside menu is opened
+     *
+     * @memberof CreateBranchComponent
+     */
     public toggleBodyClass(): void {
-        if (this.accountAsideMenuState === 'in') {
+        if (this.addressAsideMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');
         }
     }
 
+    /**
+     * Handles the final multiple selection
+     *
+     * @param {Array<any>} selectedAddresses Selected address unique name
+     * @memberof CreateBranchComponent
+     */
     public handleFinalSelection(selectedAddresses: Array<any>): void {
         this.addresses.forEach(address => {
             if (!selectedAddresses.includes(address.uniqueName)) {
@@ -137,12 +173,25 @@ export class CreateBranchComponent implements OnInit {
         });
     }
 
+    /**
+     * Handles the address selecion operation
+     *
+     * @param {*} option Address option selected
+     * @memberof CreateBranchComponent
+     */
     public selectAddress(option: any): void {
         if (option.isDefault) {
             option.isDefault = false;
         }
     }
 
+    /**
+     * Handles the set default operation
+     *
+     * @param {*} option Address selected
+     * @param {*} event Selection event
+     * @memberof CreateBranchComponent
+     */
     public setDefault(option: any, event: any): void {
         event.stopPropagation();
         event.preventDefault();
@@ -162,6 +211,11 @@ export class CreateBranchComponent implements OnInit {
         }
     }
 
+    /**
+     * Form submit handler
+     *
+     * @memberof CreateBranchComponent
+     */
     public handleFormSubmit(): void {
         const requestObj = {
             name: this.branchForm.value.name,
@@ -180,10 +234,21 @@ export class CreateBranchComponent implements OnInit {
         });
     }
 
-    public addNewAddress() {
-        this.accountAsideMenuState = 'in';
+    /**
+     * Add new address
+     *
+     * @memberof CreateBranchComponent
+     */
+    public addNewAddress(): void {
+        this.addressAsideMenuState = 'in';
     }
 
+    /**
+     * Loads the default list of states
+     *
+     * @param {string} countryCode Country code
+     * @memberof CreateBranchComponent
+     */
     public loadStates(countryCode: string): void {
         this.companyService.getAllStates({ country: countryCode }).subscribe(response => {
             if (response && response.body && response.status === 'success') {
@@ -201,6 +266,12 @@ export class CreateBranchComponent implements OnInit {
         });
     }
 
+    /**
+     * Creates new address with provided address details
+     *
+     * @param {*} addressDetails Address details
+     * @memberof CreateBranchComponent
+     */
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
@@ -220,7 +291,7 @@ export class CreateBranchComponent implements OnInit {
 
         this.settingsProfileService.createNewAddress(requestObj).subscribe((response: any) => {
             if (response.status === 'success' && response.body) {
-                this.toggleAccountAsidePane();
+                this.toggleAddressAsidePane();
                 this.addresses.push({
                     ...response.body,
                     label: response.body.name,
@@ -234,6 +305,12 @@ export class CreateBranchComponent implements OnInit {
         });
     }
 
+    /**
+     * Loads the Tax details (such as tax type, tax validations, etc.)
+     *
+     * @param {string} countryCode Country code
+     * @memberof CreateBranchComponent
+     */
     public loadTaxDetails(countryCode: string): void {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
@@ -250,6 +327,12 @@ export class CreateBranchComponent implements OnInit {
         });
     }
 
+    /**
+     * Loads all the company linked entities
+     *
+     * @param {Function} successCallback Success callback to carry out further operations
+     * @memberof CreateBranchComponent
+     */
     public loadLinkedEntities(successCallback: Function): void {
         this.settingsProfileService.getAllLinkedEntities().subscribe(response => {
             if (response && response.body && response.status === 'success') {
@@ -266,8 +349,13 @@ export class CreateBranchComponent implements OnInit {
         });
     }
 
+    /**
+     * Handles the Alt+C shortcut
+     *
+     * @memberof CreateBranchComponent
+     */
     public handleShortcutPress(): void {
-        if (this.accountAsideMenuState === 'out') {
+        if (this.addressAsideMenuState === 'out') {
             this.loadLinkedEntities(() => {
                 this.toggleAsidePane();
             });
@@ -276,6 +364,14 @@ export class CreateBranchComponent implements OnInit {
         }
     }
 
+    /**
+     * Loads all the addresses within a company
+     *
+     * @private
+     * @param {string} method Method to call the API ('GET' for fetching all the address and 'POST' for searching among address)
+     * @param {*} [params] Request payload
+     * @memberof CreateBranchComponent
+     */
     private loadAddresses(method: string, params?: any): void {
         this.settingsProfileService.getCompanyAddresses(method, params).subscribe((response) => {
             if (response && response.body && response.status === 'success') {

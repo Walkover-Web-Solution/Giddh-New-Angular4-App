@@ -43,6 +43,14 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
         }
     }
 
+    /**
+     * Adds branch unique name to every API call if branch is switched
+     *
+     * @private
+     * @param {HttpRequest<any>} request Current request
+     * @returns {HttpRequest<any>} Http request to carry out API call
+     * @memberof GiddhHttpInterceptor
+     */
     private addBranchUnqiueName(request: HttpRequest<any>): HttpRequest<any> {
         request = request.clone({
             params: request.params.append('branchUniqueName', this.generalService.currentBranchUniqueName)

@@ -226,10 +226,30 @@ export class SettingsProfileActions {
         };
     }
 
+    /**
+     * Returns action for fetching branch info
+     *
+     * @returns {CustomActions} Action for fetching branch info
+     * @memberof SettingsProfileActions
+     */
     public getBranchInfo(): CustomActions {
         return {
             type: SETTINGS_PROFILE_ACTIONS.GET_BRANCH_INFO
         };
+    }
+
+    /**
+     * Handles company response
+     *
+     * @param {*} response Response
+     * @returns {CustomActions}
+     * @memberof SettingsProfileActions
+     */
+    public handleCompanyProfileResponse(response: any): CustomActions {
+        return {
+            type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
+            payload: response
+        }
     }
 
 }

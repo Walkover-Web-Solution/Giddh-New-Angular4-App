@@ -410,15 +410,15 @@
     <!-- Edit branch -->
     <div *ngIf="closeAddressSidePane === 'in'">
         <create-address [class]="closeAddressSidePane" [@slideInOut]="closeAddressSidePane"
-            [branchToUpdate]="branchToUpdate" [showLoader]="isAddressChangeInProgress"
+            [branchToUpdate]="branchToUpdate" [showLoader]="isBranchChangeInProgress"
             (updateAddress)="updateBranchInfo($event)" [addressConfiguration]="addressConfiguration"
             (closeAsideEvent)="toggleAsidePane($event)">
         </create-address>
     </div>
 
 
-    <!-- Move branch popup -->
-    <ng-template #template>
+    <!-- Move branch popup for v2 -->
+    <!-- <ng-template #template>
         <div class="modal-header">
             <h4 class="modal-title pull-left">Move</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
@@ -447,4 +447,4 @@
                 </div>
             </div>
         </div>
-    </ng-template>
+    </ng-template> -->

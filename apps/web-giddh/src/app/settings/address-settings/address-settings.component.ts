@@ -79,12 +79,18 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     /** Set default address event emitter */
     @Output() public setDefaultAddress: EventEmitter<any> = new EventEmitter<any>();
 
+    /** Search address name input field form control */
     public searchAddressNameInput: FormControl = new FormControl();
+    /** Search address input field form control */
     public searchAddressInput: FormControl = new FormControl();
+    /** Search state input field form control */
     public searchStateInput: FormControl = new FormControl();
 
+    /** True, if search name input field is to be shown */
     public showSearchName: boolean;
+    /** True, if search address input field is to be shown */
     public showSearchAddress: boolean;
+    /** True, if search state input field is to be shown */
     public showSearchState: boolean;
     /** Stores the address search request */
     public addressSearchRequest: any = {
@@ -101,7 +107,7 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     /** @ignore */
     constructor() { }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.searchAddressNameInput.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -134,6 +140,11 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Resets the filter
+     *
+     * @memberof AddressSettingsComponent
+     */
     public resetFilter(): void {
         this.addressSearchRequest = {
             name: '',
@@ -150,32 +161,63 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         this.searchAddress.emit(this.addressSearchRequest);
     }
 
+    /**
+     * Unsubscribe from all the listeners
+     *
+     * @memberof AddressSettingsComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
-    public openAddAndManage() {
+    /**
+     * Opens the side menu pane
+     *
+     * @memberof AddressSettingsComponent
+     */
+    public openAddAndManage(): void {
         this.toggleAccountAsidePane();
     }
 
+    /**
+     * Toggles the aside menu
+     *
+     * @memberof AddressSettingsComponent
+     */
     public toggleAccountAsidePane(): void {
         this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
         this.closeSidePane = false;
         this.toggleBodyClass();
     }
 
+    /**
+     * Saves address
+     *
+     * @param {*} form Form value containinig details
+     * @memberof AddressSettingsComponent
+     */
     public saveAddress(form: any): void {
-        console.log(form);
         this.saveNewAddress.emit(form);
     }
 
+    /**
+     * Updates address
+     *
+     * @param {*} form Form value containing details
+     * @memberof AddressSettingsComponent
+     */
     public updateAddress(form: any): void {
         form.formValue['uniqueName'] = this.addressToUpdate.uniqueName;
         this.updatedAddress.emit(form);
     }
 
-    public toggleBodyClass() {
+    /**
+     * Adds fixed class to body when aside menu is opened
+     *
+     * @memberof AddressSettingsComponent
+     */
+    public toggleBodyClass(): void {
         if (this.accountAsideMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
@@ -183,31 +225,68 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Pagination change handler
+     *
+     * @param {*} event Pagination event
+     * @memberof AddressSettingsComponent
+     */
     public handlePageChange(event: any): void {
         if (event.page !== this.paginationConfig.page) {
             this.pageChanged.emit({ ...event, ...this.addressSearchRequest });
         }
     }
 
+    /**
+     * Update address handller
+     *
+     * @param {*} address Address to be updatedd
+     * @memberof AddressSettingsComponent
+     */
     public handleUpdateAddress(address: any): void {
         this.addressConfiguration.type = SettingsAsideFormType.EditAddress;
         this.addressToUpdate = address;
         this.openAddAndManage();
     }
 
-    handleDeleteAddress(address: any): void {
+    /**
+     * Delete address handler
+     *
+     * @param {*} address Address to be deleted
+     * @memberof AddressSettingsComponent
+     */
+    public handleDeleteAddress(address: any): void {
         this.deleteAddress.emit(address);
     }
 
-    handleUnLinkAddress(address: any): void {
+    /**
+     * Unlink address handler
+     *
+     * @param {*} address Address to be unlinked
+     * @memberof AddressSettingsComponent
+     */
+    public handleUnLinkAddress(address: any): void {
         this.unLinkAddress.emit(address);
     }
 
-    handleSetDefaultAddress(address: any): void {
+    /**
+     * Set Default address handler
+     *
+     * @param {*} address Address to be set as default
+     * @memberof AddressSettingsComponent
+     */
+    public handleSetDefaultAddress(address: any): void {
         this.setDefaultAddress.emit(address);
     }
 
-    public toggleSearch(fieldName: string, el: any) {
+    /**
+     * Search field toggler
+     *
+     * @param {string} fieldName Field to be shown/hidden
+     * @param {*} el Field instance
+     * @memberof AddressSettingsComponent
+     */
+    public toggleSearch(fieldName: string, el: any): void {
         if (fieldName === 'searchAddressNameInput') {
             this.showSearchName = true;
             this.showSearchAddress = false;
@@ -226,7 +305,16 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         }, 200);
     }
 
-    public clickedOutside(event: Event, el: HTMLElement, fieldName: string) {
+    /**
+     * Click outside handler
+     *
+     * @param {Event} event Click outside event
+     * @param {HTMLElement} el Element instance
+     * @param {string} fieldName Field name
+     * @returns
+     * @memberof AddressSettingsComponent
+     */
+    public clickedOutside(event: Event, el: HTMLElement, fieldName: string): void {
         if (fieldName === 'searchAddressNameInput') {
             if (this.searchAddressNameInput.value !== null && this.searchAddressNameInput.value !== '') {
                 return;
@@ -253,9 +341,17 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         }
     }
 
-    public childOf(c, p) {
-        while ((c = c.parentNode) && c !== p) {
+    /**
+     * Checks if an element belongs to a parent
+     *
+     * @param {*} child Child element
+     * @param {*} parent Parent element
+     * @returns {boolean} Boolean value
+     * @memberof AddressSettingsComponent
+     */
+    public childOf(child, parent): boolean {
+        while ((child = child.parentNode) && child !== parent) {
         }
-        return !!c;
+        return !!child;
     }
 }
