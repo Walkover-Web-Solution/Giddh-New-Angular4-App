@@ -163,6 +163,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('fixed');
     }
 
     /**
