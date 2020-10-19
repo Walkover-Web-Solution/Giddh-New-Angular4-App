@@ -1,4 +1,5 @@
-<div class="container-fluid" *ngIf="!purchaseOrderUniqueName">
+<hamburger-menu [pageHeading]="'Purchase Order'"></hamburger-menu>
+<div class="container-fluid pt-15" *ngIf="!purchaseOrderUniqueName">
     <div class="d-flex justify-content-between purchase-order-header">
         <div class="d-flex date-advance-search">
             <form #invoiceForm="ngForm" novalidate class="form-inline">
