@@ -67,7 +67,7 @@ export class CreateWarehouseComponent implements OnInit {
         this.warehouseForm = this.formBuilder.group({
             name: ['', Validators.required],
             address: [''],
-            linkedEntity: [[]]
+            // linkedEntity: [[]]
         });
         this.store.select(appState => appState.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.name) {
@@ -192,11 +192,11 @@ export class CreateWarehouseComponent implements OnInit {
      * @memberof CreateWarehouseComponent
      */
     public handleFormSubmit(): void {
-        const linkEntity = this.addressConfiguration.linkedEntities.filter(entity => (this.warehouseForm.value.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
-            uniqueName: filteredEntity.uniqueName,
-            isDefault: filteredEntity.isDefault,
-            entity: filteredEntity.entity
-        }));
+        // const linkEntity = this.addressConfiguration.linkedEntities.filter(entity => (this.warehouseForm.value.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+        //     uniqueName: filteredEntity.uniqueName,
+        //     isDefault: filteredEntity.isDefault,
+        //     entity: filteredEntity.entity
+        // }));
         const requestObj = {
             name: this.warehouseForm.value.name,
             address: this.warehouseForm.value.alias,
@@ -204,7 +204,7 @@ export class CreateWarehouseComponent implements OnInit {
                 uniqueName: filteredAddress.uniqueName,
                 isDefault: filteredAddress.isDefault
             })),
-            linkEntity
+            // linkEntity
         };
         this.settingsProfileService.createNewWarehouse(requestObj).subscribe(response => {
             if (response && response.status === 'success') {
