@@ -228,4 +228,20 @@ export class SettingsProfileService {
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         return this._http.post(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
+
+    /**
+     * Updates warehouse information
+     *
+     * @param {*} params Params for update operation
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operations
+     * @memberof SettingsProfileService
+     */
+    public updatWarehouseInfo(params: any): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this._generalService.companyUniqueName;
+        const warehouseUniqueName = params.warehouseUniqueName;
+        let contextPath = `${this.config.apiUrl}${SETTINGS_PROFILE_API.EDIT_WAREHOUSE}`
+            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            .replace(':warehouseUniqueName', encodeURIComponent(warehouseUniqueName));
+        return this._http.put(contextPath, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
 }

@@ -26,8 +26,11 @@ function validateFieldWithPatterns(patterns: Array<string>) {
 })
 export class CreateAddressComponent implements OnInit, OnDestroy {
 
+    /** Emits when aside menu is closed */
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
+    /** Emits when save operation is performed */
     @Output() public saveAddress: EventEmitter<any> = new EventEmitter();
+    /** Emits when update operation is performed */
     @Output() public updateAddress: EventEmitter<any> = new EventEmitter();
 
     /** Address form */
@@ -110,6 +113,22 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         }
                     }
                 }
+            } else if (this.addressConfiguration.type === SettingsAsideFormType.EditWarehouse) {
+                if (this.warehouseToUpdate) {
+                    this.addressForm = this.formBuilder.group({
+                        name: [this.warehouseToUpdate.name, Validators.required],
+                        linkedEntity: [this.warehouseToUpdate.linkedEntities.map(entity => entity.uniqueName)]
+                    });
+                    const linkedEntity = [...this.warehouseToUpdate.linkedEntities];
+                    while (linkedEntity.length) {
+                        // Update the default entity status in UPDATE mode
+                        const entity = linkedEntity.pop();
+                        const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity.uniqueName === entity.uniqueName);
+                        if (entityIndex > -1) {
+                            this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
+                        }
+                    }
+                }
             }
         }
 
@@ -157,7 +176,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 formValue: this.addressForm.value,
                 addressDetails: this.addressConfiguration
             });
-        } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress || this.addressConfiguration.type === SettingsAsideFormType.EditBranch) {
+        } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress || this.addressConfiguration.type === SettingsAsideFormType.EditBranch ||
+            this.addressConfiguration.type === SettingsAsideFormType.EditWarehouse) {
             this.updateAddress.emit({
                 formValue: this.addressForm.value,
                 addressDetails: this.addressConfiguration

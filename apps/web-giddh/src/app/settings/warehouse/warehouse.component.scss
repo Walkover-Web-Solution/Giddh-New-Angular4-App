@@ -110,6 +110,9 @@ span.setAsDefault {
     font-family: "opensans-semibold";
     width: 70px;
     color: $gray;
+    &.cursor-pointer {
+        width: auto;
+    }
 }
 .warehouse-details p {
     word-break: break-all;
@@ -119,6 +122,10 @@ span.setAsDefault {
 .about-warehaouse {
     margin: 0 0 15px;
     display: flex;
+    flex-direction: column;
+    .icon-favorite-selected {
+        color: $rich-blue;
+    }
 }
 .gray-text {
     color: #8f9091;

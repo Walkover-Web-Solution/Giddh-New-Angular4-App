@@ -22,6 +22,7 @@ import { SettingsProfileService } from '../../services/settings.profile.service'
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import { CommonService } from '../../services/common.service';
 import { CompanyService } from '../../services/companyService.service';
+import { GeneralService } from '../../services/general.service';
 
 export interface IGstObj {
     newGstNumber: string;
@@ -154,6 +155,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         private _toasty: ToasterService,
         private _location: LocationService,
         private _generalActions: GeneralActions,
+        private generalService: GeneralService,
         private commonActions: CommonActions,
         private settingsProfileService: SettingsProfileService,
         private settingsUtilityService: SettingsUtilityService
@@ -876,11 +878,18 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
-        const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+        let linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
         }));
+        if (this.currentOrganizationType === OrganizationType.Branch) {
+            linkEntity.push({
+                uniqueName: this.generalService.currentBranchUniqueName,
+                isDefault: false,
+                entity: 'BRANCH'
+            });
+        }
         const requestObj = {
             taxNumber: addressDetails.formValue.taxNumber,
             stateCode: addressDetails.formValue.state,

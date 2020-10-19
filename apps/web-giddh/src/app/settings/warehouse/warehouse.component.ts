@@ -260,7 +260,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         this.loadAddresses('GET', () => {
             this.warehouseToUpdate = {
                 name: warehouse.name,
-                alias: warehouse.alias,
+                // address: warehouse.address,
                 linkedEntities: warehouse.addresses
             };
             this.toggleAsidePane();
@@ -358,11 +358,10 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         }));
         const requestObj = {
             name: warehouseDetails.formValue.name,
-            alias: warehouseDetails.formValue.alias,
-            branchUniqueName: this.selectedWarehouse.uniqueName,
+            warehouseUniqueName: this.selectedWarehouse.uniqueName,
             linkAddresses
         };
-        this.settingsProfileService.updateBranchInfo(requestObj).subscribe(response => {
+        this.settingsProfileService.updatWarehouseInfo(requestObj).subscribe(response => {
             if (response.status === 'success') {
                 this.asideEditWarehousePane = 'out';
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
@@ -371,6 +370,32 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isWarehouseUpdateInProgress = false;
         }, () => {
             this.isWarehouseUpdateInProgress = false;
+        });
+    }
+
+    /**
+     * Set default action handler
+     *
+     * @param {*} entity Entity to be set has default
+     * @param {*} warehouse Selected warehouse for operation
+     * @memberof WarehouseComponent
+     */
+    public setDefault(entity: any, warehouse: any): void {
+        entity.isDefault = !entity.isDefault;
+        warehouse.addresses.forEach(branchAddress => {
+            if (branchAddress.uniqueName === entity.uniqueName) {
+                branchAddress.isDefault = entity.isDefault;
+            } else {
+                branchAddress.isDefault = false;
+            }
+        });
+        const requestObject: any = {
+            name: warehouse.name,
+            linkAddresses: warehouse.addresses,
+            warehouseUniqueName: warehouse.uniqueName,
+        }
+        this.settingsProfileService.updatWarehouseInfo(requestObject).subscribe(() => {
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
         });
     }
 

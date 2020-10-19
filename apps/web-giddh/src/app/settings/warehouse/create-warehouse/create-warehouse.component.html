@@ -37,7 +37,7 @@
                 </label>
                 <input type="text" required formControlName="name" class="form-control">
             </div>
-            <div class="warehouse-form-field">
+            <!-- <div class="warehouse-form-field">
                 <label>
                     Link Entity
                 </label>
@@ -79,7 +79,7 @@
                         </ng-template>
                     </sh-select>
                 </div>
-            </div>
+            </div> -->
             <div class="warehouse-form-field">
                 <label>
                     Address/es
@@ -126,5 +126,6 @@
 </div>
 <!-- aside pane for create address -->
 <create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState"
-    (closeAsideEvent)="toggleAddressAsidePane($event)" *ngIf="addressAsideMenuState === 'in'"></create-address>
+    [companyName]="companyDetails?.name" (closeAsideEvent)="toggleAddressAsidePane($event)"
+    *ngIf="addressAsideMenuState === 'in'"></create-address>
 <!-- aside pane for create address end -->

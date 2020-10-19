@@ -76,8 +76,23 @@
                                 </div>
                             -->
                         <div class="clearfix about-warehaouse">
-                            <label>Address:</label>
-                            <p>{{ warehouse.address }}</p>
+                            <!-- <div class="col-xl-3 col-lg-4 col-md-6"> -->
+                                <div class="parent-branch pt-1 pb-1">Linked Address:</div>
+                                <div>
+                                    <div *ngFor="let address of warehouse?.addresses" class="linked-add">
+                                        <ng-container *ngIf="address">
+                                            <i (click)="setDefault(address, warehouse)" *ngIf="!address?.isDefault"
+                                                class="cursor-pointer icon-no-selected mr-05"></i>
+                                            <i (click)="setDefault(address, warehouse)" *ngIf="address?.isDefault"
+                                                class="cursor-pointer icon-favorite-selected mr-05"></i>
+                                            <label class="cursor-pointer"
+                                                popover="{{address?.address}} {{address?.stateCode}} {{address?.taxType}} {{ address?.taxType? ':' : ''}} {{address?.taxNumber}}"
+                                                popoverTitle="{{address?.name}}" placement="right"
+                                                triggers="mouseenter:mouseleave">{{address?.name}}</label>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            <!-- </div> -->
                         </div>
                         <!--<div class="row">
                             <div class="col-sm-6">
@@ -98,11 +113,11 @@
                                     </ul>
                                 </div>
                             </div> -->
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     <div class="warehouse-pagination">
         <pagination #warehousePagination *ngIf="warehouses?.length && paginationConfig?.totalItems > paginationLimit"
             [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count"
