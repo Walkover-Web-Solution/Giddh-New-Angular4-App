@@ -761,8 +761,7 @@
     <script>
         document.getElementById("app").style.display = 'none';
 
-        // currently we are using app/ directory only in stage env not in any other env
-        var folderPath = window.location.hostname === 'stage.giddh.com' ? 'app/' : '';
+        var folderPath = '';
 
         var jquery = document.createElement('script');
         jquery.src = '../' + folderPath + 'assets/js/jquery-1.11.3.min.js';

@@ -401,10 +401,9 @@
 
                         <!-- Invoice No. -->
                         <td>
-                            <div [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}"
+                            <div (click)="onSelectInvoice(item)" [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}"
                                 style="position: relative" class="d-flex">
-                                <a href="javascript:void(0);" class="btn-link-2"
-                                    (click)="onSelectInvoice(item)">{{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
+                                <a href="javascript:void(0);" class="btn-link-2">{{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
                             </div>
 
                             <span *ngIf="item.dueDays !== null">
@@ -502,10 +501,11 @@
                             <span>{{ item.balanceStatus}}</span>
                         </td>
 
-                        <td *ngIf="selectedVoucher === 'purchase'" class="cp d-flex status-mobile pt-0 pb-0 flex-column mw-th-260">
+                        <td *ngIf="selectedVoucher === 'purchase'" class="cp d-flex status-mobile flex-column mw-th-260">
                             <div class="d-flex flex-row align-items-center">
                                 <span class="d-flex balance-status">{{ item.balanceStatus}}</span>
-                                <div class="action-icon ml-auto" [ngClass]="{'item-selected': hoveredItemForAction === item.uniqueName || item.isSelected}" *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected">
+                                <!-- *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected" -->
+                                <div class="action-icon ml-auto" [ngClass]="{'item-selected': hoveredItemForAction === item.uniqueName || item.isSelected}" >
                                     <a tooltip="Send Email"
                                     (click)="openSendMailModal(sendEmailModal, item)">
                                         <span class="icon-envelope font-12"></span>

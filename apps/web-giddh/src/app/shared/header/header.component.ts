@@ -265,8 +265,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isAllowedForBetaTesting: boolean = false;
     /* This will hold value if settings sidebar is open through mobile hamburger icon */
     public isMobileSidebar: boolean = false;
-    /** To check all module menu open */
-    public isAllModuleOpen: boolean = false;
 
     /** update IndexDb flags observable **/
     public updateIndexDbInProcess$: Observable<boolean>;
@@ -1871,17 +1869,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-     * Toggle all module to previous selected module
+     * Navigate to all module
      *
      * @memberof HeaderComponent
      */
     public navigateToAllModules(): void {
-        if (this.isAllModuleOpen) {
-            this.location.back();
-        } else {
-            this.router.navigate(['/pages/all-modules']);
-        }
-        this.isAllModuleOpen = !this.isAllModuleOpen;
+        this.router.navigate(['/pages/all-modules']);
     }
 
     /**

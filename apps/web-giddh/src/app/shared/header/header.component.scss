@@ -427,6 +427,9 @@ a[vr-item]:focus {
 .notification {
     padding: 0 !important;
     margin-right: 10px !important;
+    &.mr-0{
+        margin-right: 0 !important;
+    }
 }
 .universal-date li {
     display: inline-block;
@@ -762,7 +765,7 @@ ul.sub-list {
 }
 .not-today{
     .today-date.input-date{
-    width: 140px;
+    width: 134px;
         input{
             text-align: left !important;
             padding-left: 30px !important;

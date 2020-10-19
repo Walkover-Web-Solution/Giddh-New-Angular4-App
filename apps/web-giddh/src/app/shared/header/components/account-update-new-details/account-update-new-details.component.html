@@ -354,6 +354,41 @@
             </div>
 
         </tab>
+        <tab *ngIf="isDebtorCreditor" heading="Custom" (select)="tabChanged('custom')">
+            <ng-container formArrayName="customFields">
+                <ng-container *ngFor="let item of companyCustomFields; let index = index;let first = first; let last = last" [formGroupName]="index">
+                    <ng-container *ngFor="let customFieldsItem of addAccountForm.get('customFields')['controls']; let index = index;">
+                        <div class="row mb-15" *ngIf="item.uniqueName === customFieldsItem.get('uniqueName').value">
+                            <div class="col-lg-8">
+                                <div class="name-of-field">
+                                    <label>{{item.key}} </label>
+                                    <input *ngIf="item.dataType==='STRING'" type="text" name="values{{index}}" formControlName="value" class="form-control" [maxLength]="item.valueLength">
+                                    <input *ngIf="item.dataType==='NUMERIC'" type="text" name="values{{index}}" formControlName="value" class="form-control" [maxLength]="item.valueLength" decimalDigitsDirective>
+                                    <div *ngIf="item.dataType==='BOOLEAN'" class="clearfix">
+                                        <span class="d-inline-block">
+                                            <input id="yes{{index}}" class="radio-custom cp ml0" type="radio"
+                                                [checked]="customFieldsItem.get('value').value==='true'"
+                                                (change)="selectedBooleanCustomField('true', index)"
+                                                name="booleanType{{index}}">
+                                            <label for="yes{{index}}" class="radio-custom-label">YES </label>
+                                        </span>
+
+                                        <span class="d-inline-block">
+                                            <input id="no{{index}}" class="radio-custom cp ml0" type="radio"
+                                                [checked]="customFieldsItem.get('value').value==='false'"
+                                                (change)="selectedBooleanCustomField('false', index)"
+                                                name="booleanType{{index}}">
+                                            <label for="no{{index}}" class="radio-custom-label">NO</label>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+        </tab>
+
     </tabset>
     <div class="row" *ngIf="!isOtherSelectedTab">
         <div class="col-sm-12 mrT3">
@@ -456,7 +491,7 @@
                 <label>Default Discount <span
                     class="primary-color"></span></label>
                 <div class="clearfix">
-                <span>
+                    <span>
                         <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" placeholder="Select discounts" ></sh-select>
                     </span>
                     <span class="pull-right">
@@ -496,11 +531,12 @@
                         <label>Default Taxes</label>
                     </div>
                     <div class="form-group">
-                        <div class="input-group">
-
-                            <sh-select [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes" class="calc-width">
-                            </sh-select>
-                            <span class="input-group-btn ">
+                        <div class="clearfix">
+                            <span class="calc-width pull-left">
+                                <sh-select  [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes">
+                                </sh-select>
+                            </span>
+                            <span class="pull-right">
                                 <button type="submit" class="btn btn-success">Save</button>
                             </span>
                         </div>
