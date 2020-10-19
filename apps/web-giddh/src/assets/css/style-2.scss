@@ -9621,6 +9621,12 @@ span#HW_badge_cont:nth-child(3) {
 #rcw-p91-widget-button{
     z-index: 98;
 }
+
+ul.dropdown-menu.action-dropdown {
+    left: auto;
+    right: -40px !important;
+}
+
 /*material datepicker css starts*/
 .recurring-form  .mat-form-field{
     max-width: 170px;
@@ -9680,10 +9686,6 @@ input.mat-input-element{
     background-color: $midnight-blue;
 }
 /*material datepicker css end*/
-
-ul.dropdown-menu.action-dropdown {
-    left: auto;
-    right: -40px !important;
 
     .master-custom-tabs.custom-tabs {
         .nav-tabs {
@@ -10974,4 +10976,3 @@ ul.dropdown-menu.action-dropdown {
         border-radius: 5px;
         min-height: 60px;
     }
-}
