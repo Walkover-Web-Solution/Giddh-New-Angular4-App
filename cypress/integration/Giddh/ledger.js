@@ -47,18 +47,18 @@ describe('This is Ledger Test', function() {
             })
         })
     });
-    //
-    // // it('Ledger entry with Inventory ', function () {
-    // //     cy.globalSearch('.navbar_header > .nav > .hamburger-menu > .inline', 'uitest', 'uitest A/c').then(()=>{
-    // //         cy.createLedger('Sales',':nth-child(2) > .list-item > .item', '177.80')
-    // //     })
-    // // });
-    //
-    // it('Ledger entry with Inventory & Taxes', function () {
-    //     cy.globalSearch('.navbar-header > .nav > .hamburger-menu > .inline', 'uitest', 'uitest A/c').then(()=>{
-    //         cy.abc('Sales','.hilighted > .list-item > .item', '100.50')
-    //     })
-    // });
+
+    it('Ledger entry with Inventory ', function () {
+        cy.globalSearch('//h4[@id=\'giddh-page-heading\']', 'uitest', 'uitest A/c').then(()=>{
+            cy.createLedger('Sales',':nth-child(2) > .list-item > .item', '177.80')
+        })
+    });
+
+    it('Ledger entry with Inventory & Taxes', function () {
+        cy.globalSearch('//h4[@id=\'giddh-page-heading\']', 'uitest', 'uitest A/c').then(()=>{
+            cy.createLedgerWithTaxes('Sales','.hilighted > .list-item > .item', '100.50')
+        })
+    });
 
 
 })
