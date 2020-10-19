@@ -194,7 +194,11 @@ button.btn.btn-filter {
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
-    padding: 7px 10px !important;
+    padding: 8px 10px !important;
+}
+
+button.btn.btn-filter span.icon-cross {
+    margin-right: 5px;
 }
 
 .pending-table-description {
@@ -265,6 +269,10 @@ span.close-modal.cp.pull-right {
             border-right: none !important;
         }
     }
+}
+
+.filter-width{
+    width: 85% !important;
 }
 // responsive
 @media (max-width: 1023px) {
@@ -451,6 +459,13 @@ span.close-modal.cp.pull-right {
             margin-top: 10px !important;
             width: 100% !important;
         }
+    }
+
+    button.btn.btn-filter {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 5px;
+        font-size: 14px;
     }
 }
 
