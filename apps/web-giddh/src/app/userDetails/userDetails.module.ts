@@ -26,6 +26,7 @@ import { MoveCompanyComponent } from './components/move-company/move-company.com
 import { AllFeaturesComponent } from './components/all-features/all-features.component';
 import { AddCompanyComponent } from './components/add-company/add-company.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { TranslateDirective } from '../theme/translate/translate.directive';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -45,7 +46,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DeactivateCompanyComponent,
         MoveCompanyComponent,
         AllFeaturesComponent,
-        AddCompanyComponent
+        AddCompanyComponent,
+        TranslateDirective
     ],
     exports: [],
     imports: [
