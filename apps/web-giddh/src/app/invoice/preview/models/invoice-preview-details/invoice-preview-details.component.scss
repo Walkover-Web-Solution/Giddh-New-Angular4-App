@@ -225,15 +225,17 @@
         color: #ff0d0d;
     }
 
-    .image-collapsed{
-        height: 400px;
+    .img-expand-collapse{
+        padding: 50px 50px 0 50px;
     }
+    .image-collapsed {
+        max-height: 130px;
+        overflow: hidden;
 
-    .img-expand {
-        width: 100%;
-        padding: 50px;
+        img{
+            height:auto;
+        }
     }
-
     .preview-not-supported-attachment {
         font-size: 18px;
         margin: 16px;
@@ -243,6 +245,7 @@
         // margin: 15px 200px;
         // border: 2px dashed #d9d9d9;
         // padding: 10px;
+        margin-top: 50px;
     }
 }
 
