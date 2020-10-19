@@ -374,7 +374,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public setCurrentPageTitle(title) {
+    /**
+     * Sets the current page title
+     *
+     * @param {string} title Title of the page
+     * @memberof SettingsComponent
+     */
+    public setCurrentPageTitle(title: string): void {
         let currentPageObj = new CurrentPage();
         currentPageObj.name = "Settings > " + title;
         currentPageObj.url = this.router.url;

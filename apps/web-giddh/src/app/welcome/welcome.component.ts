@@ -1019,9 +1019,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
+    /**
+     * Creates new branch
+     *
+     * @memberof WelcomeComponent
+     */
     public createBranch(): void {
         this._companyService.createNewBranch(this.activeCompany.uniqueName, this.createNewCompanyPreObj).subscribe(data => {
-            this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
             this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
             this.store.dispatch(this.companyActions.removeCompanyCreateSession());
             this._router.navigate(['pages/settings/branch']);

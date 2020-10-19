@@ -491,6 +491,14 @@ export class CompanyService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, '')));
     }
 
+    /**
+     * Creates a new branch
+     *
+     * @param {string} companyUniqueName Company unique name under which a branch is created
+     * @param {*} requestObject Request payload for branch createion
+     * @returns {Observable<any>} Observable to carry out further operation
+     * @memberof CompanyService
+     */
     public createNewBranch(companyUniqueName: string, requestObject: any): Observable<any> {
         const requestPayload = {
             name: requestObject.name,
@@ -518,6 +526,13 @@ export class CompanyService {
                 catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));
     }
 
+    /**
+     * Updates the branch
+     *
+     * @param {*} requestObject Request payload for API
+     * @returns {Observable<any>} Observable to carry out further operation
+     * @memberof CompanyService
+     */
     public updateBranch(requestObject: any): Observable<any> {
         const contextPath = `${this.config.apiUrl}${COMPANY_API.CREATE_NEW_BRANCH}/${requestObject.branchUniqueName}`;
         const requestPayload = {

@@ -125,6 +125,6 @@
     </form>
 </div>
 <!-- aside pane for create address -->
-<create-address [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
-    (closeAsideEvent)="toggleAccountAsidePane($event)" *ngIf="accountAsideMenuState === 'in'"></create-address>
+<create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState"
+    (closeAsideEvent)="toggleAddressAsidePane($event)" *ngIf="addressAsideMenuState === 'in'"></create-address>
 <!-- aside pane for create address end -->

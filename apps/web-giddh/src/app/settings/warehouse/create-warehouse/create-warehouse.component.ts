@@ -22,8 +22,9 @@ import { SettingsUtilityService } from '../../services/settings-utility.service'
 
 export class CreateWarehouseComponent implements OnInit {
 
-    public accountAsideMenuState: string = 'out';
-
+    /** Address aside menu state */
+    public addressAsideMenuState: string = 'out';
+    /** Stores the comapny details */
     public companyDetails: any = {
         name: '',
         businessType: '',
@@ -44,10 +45,13 @@ export class CreateWarehouseComponent implements OnInit {
         },
         linkedEntities: []
     };
+    /** Warehouse form */
     public warehouseForm: FormGroup;
+    /** Stores the addresses */
     public addresses: Array<any>;
+    /** True, if address change is in progress */
     public isAddressChangeInProgress: boolean = false;
-
+    /** Unsubscribe from listener */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
@@ -86,6 +90,11 @@ export class CreateWarehouseComponent implements OnInit {
         });
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof CreateWarehouseComponent
+     */
     public ngOnInit(): void {
         this.loadLinkedEntities();
         this.loadAddresses('GET');
@@ -115,11 +124,22 @@ export class CreateWarehouseComponent implements OnInit {
         });
     }
 
+    /**
+     * Toggles aside component
+     *
+     * @memberof CreateWarehouseComponent
+     */
     public toggleAsidePane(): void {
-        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+        this.addressAsideMenuState = this.addressAsideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
     }
 
+    /**
+     * Handles final selection of addresses
+     *
+     * @param {Array<any>} selectedAddresses Selected address unique names
+     * @memberof CreateWarehouseComponent
+     */
     public handleFinalSelection(selectedAddresses: Array<any>): void {
         this.addresses.forEach(address => {
             if (!selectedAddresses.includes(address.uniqueName)) {
@@ -128,12 +148,25 @@ export class CreateWarehouseComponent implements OnInit {
         });
     }
 
+    /**
+     * Address selection handler
+     *
+     * @param {*} option Address selected
+     * @memberof CreateWarehouseComponent
+     */
     public selectAddress(option: any): void {
         if (option.isDefault) {
             option.isDefault = false;
         }
     }
 
+    /**
+     * Sets default handler
+     *
+     * @param {*} option Selected option
+     * @param {*} event Event
+     * @memberof CreateWarehouseComponent
+     */
     public setDefault(option: any, event: any): void {
         event.stopPropagation();
         event.preventDefault();
@@ -153,6 +186,11 @@ export class CreateWarehouseComponent implements OnInit {
         }
     }
 
+    /**
+     * Handles form submit
+     *
+     * @memberof CreateWarehouseComponent
+     */
     public handleFormSubmit(): void {
         const linkEntity = this.addressConfiguration.linkedEntities.filter(entity => (this.warehouseForm.value.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,
@@ -177,10 +215,21 @@ export class CreateWarehouseComponent implements OnInit {
         });
     }
 
-    public addNewAddress() {
-        this.accountAsideMenuState = 'in';
+    /**
+     * Displays the add address side pane
+     *
+     * @memberof CreateWarehouseComponent
+     */
+    public addNewAddress(): void {
+        this.addressAsideMenuState = 'in';
     }
 
+    /**
+     * Loads the default states by country
+     *
+     * @param {string} countryCode Country code
+     * @memberof CreateWarehouseComponent
+     */
     public loadStates(countryCode: string): void {
         this.companyService.getAllStates({ country: countryCode }).subscribe(response => {
             if (response && response.body && response.status === 'success') {
@@ -198,6 +247,12 @@ export class CreateWarehouseComponent implements OnInit {
         });
     }
 
+    /**
+     * Creates new address
+     *
+     * @param {*} addressDetails Address details
+     * @memberof CreateWarehouseComponent
+     */
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
@@ -217,7 +272,7 @@ export class CreateWarehouseComponent implements OnInit {
 
         this.settingsProfileService.createNewAddress(requestObj).subscribe((response: any) => {
             if (response.status === 'success' && response.body) {
-                this.toggleAccountAsidePane();
+                this.toggleAddressAsidePane();
                 this.addresses.push({
                     ...response.body,
                     label: response.body.name,
@@ -231,6 +286,12 @@ export class CreateWarehouseComponent implements OnInit {
         });
     }
 
+    /**
+     * Loads the tax details of a country (tax name, tax validation, etc.)
+     *
+     * @param {string} countryCode Country code
+     * @memberof CreateWarehouseComponent
+     */
     public loadTaxDetails(countryCode: string): void {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
@@ -247,6 +308,12 @@ export class CreateWarehouseComponent implements OnInit {
         });
     }
 
+    /**
+     * Loads all the entities within a company
+     *
+     * @param {Function} [successCallback] Callback to carry out further operations
+     * @memberof CreateWarehouseComponent
+     */
     public loadLinkedEntities(successCallback?: Function): void {
         this.settingsProfileService.getAllLinkedEntities().subscribe(response => {
             if (response && response.body && response.status === 'success') {
@@ -263,8 +330,13 @@ export class CreateWarehouseComponent implements OnInit {
         });
     }
 
+    /**
+     * Shortcut (Alt+C) handler
+     *
+     * @memberof CreateWarehouseComponent
+     */
     public handleShortcutPress(): void {
-        if (this.accountAsideMenuState === 'out') {
+        if (this.addressAsideMenuState === 'out') {
             this.loadLinkedEntities(() => {
                 this.toggleAsidePane();
             });
@@ -273,6 +345,14 @@ export class CreateWarehouseComponent implements OnInit {
         }
     }
 
+    /**
+     * Loads the addresses
+     *
+     * @private
+     * @param {string} method API call method ('GET' for fetching and 'POST' for searching)
+     * @param {*} [params] Request payload
+     * @memberof CreateWarehouseComponent
+     */
     private loadAddresses(method: string, params?: any): void {
         this.settingsProfileService.getCompanyAddresses(method, params).subscribe((response) => {
             if (response && response.body && response.status === 'success') {
@@ -287,27 +367,49 @@ export class CreateWarehouseComponent implements OnInit {
         });
     }
 
-    public openCreateAddressAside() {
-        this.toggleAccountAsidePane();
+    /**
+     * Opens create address aside menu
+     *
+     * @memberof CreateWarehouseComponent
+     */
+    public openCreateAddressAside(): void {
+        this.toggleAddressAsidePane();
     }
 
-    public toggleAccountAsidePane(event?): void {
+    /**
+     * Toggles address aside pane
+     *
+     * @param {*} [event] Toggle event
+     * @memberof CreateWarehouseComponent
+     */
+    public toggleAddressAsidePane(event?: any): void {
         if (event) {
             event.preventDefault();
         }
-        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+        this.addressAsideMenuState = this.addressAsideMenuState === 'out' ? 'in' : 'out';
 
         this.toggleBodyClass();
     }
 
+    /**
+     * Toggles the fixed body class
+     *
+     * @memberof CreateWarehouseComponent
+     */
     public toggleBodyClass(): void {
-        if (this.accountAsideMenuState === 'in') {
+        if (this.addressAsideMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
             document.querySelector('body').classList.remove('fixed');
         }
     }
 
+    /**
+     * Select entity handler
+     *
+     * @param {*} option Option selected
+     * @memberof CreateWarehouseComponent
+     */
     public selectEntity(option: any): void {
         if (option.isDefault) {
             option.isDefault = false;

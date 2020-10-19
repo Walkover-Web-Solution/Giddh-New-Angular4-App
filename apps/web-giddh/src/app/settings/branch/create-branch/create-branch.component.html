@@ -136,7 +136,7 @@
         </div>
     </form>
 </div>
-<create-address [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState"
+<create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState"
     [showLoader]="isAddressChangeInProgress" (saveAddress)="createNewAddress($event)"
-    [addressConfiguration]="addressConfiguration" (closeAsideEvent)="toggleAccountAsidePane($event)"
-    *ngIf="accountAsideMenuState === 'in'"></create-address>
+    [addressConfiguration]="addressConfiguration" (closeAsideEvent)="toggleAddressAsidePane($event)"
+    *ngIf="addressAsideMenuState === 'in'"></create-address>

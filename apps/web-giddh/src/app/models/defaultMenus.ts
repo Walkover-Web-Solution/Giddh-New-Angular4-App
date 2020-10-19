@@ -48,7 +48,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Settings > Discount', uniqueName: '/pages/settings/discount', additional: { tab: 'discount', tabIndex: 9 } },
     { type: 'MENU', name: 'Settings > Warehouse', uniqueName: '/pages/settings/warehouse', additional: { tab: 'warehouse', tabIndex: 10 } },
     { type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 } },
-    { type: 'MENU', name: 'Settings > Warehouse > Create Warehouse', uniqueName: '/pages/settings/warehouse/create-warehouse' },
+    { type: 'MENU', name: 'Create Warehouse', uniqueName: '/pages/settings/warehouse/create-warehouse' },
 
     // { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact' },
     // {type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out'},
@@ -165,7 +165,7 @@ export let NAVIGATION_ITEM_LIST_RESPONSIVE: IUlist[] = [
     { type: 'MENU', name: 'Settings > Tag', uniqueName: '/pages/settings/tag', additional: { tab: 'tag', tabIndex: 7 } },
     { type: 'MENU', name: 'Settings > Trigger', uniqueName: '/pages/settings/trigger', additional: { tab: 'trigger', tabIndex: 8 } },
     { type: 'MENU', name: 'Settings > Warehouse', uniqueName: '/pages/settings/warehouse', additional: { tab: 'warehouse', tabIndex: 10 } },
-    { type: 'MENU', name: 'Settings > Warehouse > Create Warehouse', uniqueName: '/pages/settings/warehouse/create-warehouse' },
+    { type: 'MENU', name: 'Create Warehouse', uniqueName: '/pages/settings/warehouse/create-warehouse' },
     { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: { tab: 'customer', tabIndex: 0 } },
     { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: { tab: 'vendor', tabIndex: 0 } },
     { type: 'MENU', name: 'Aging Report', uniqueName: '/pages/contact/aging-report', additional: { tab: 'aging-report', tabIndex: 1 } },

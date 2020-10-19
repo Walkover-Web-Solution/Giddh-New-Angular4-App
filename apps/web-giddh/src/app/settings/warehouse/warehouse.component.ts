@@ -317,7 +317,13 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
     }
 
-    public toggleAsidePane(event?): void {
+    /**
+     * Toggle aside pane
+     *
+     * @param {*} [event] Event
+     * @memberof WarehouseComponent
+     */
+    public toggleAsidePane(event?: any): void {
         if (event) {
             event.preventDefault();
         }
@@ -325,7 +331,12 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         this.toggleBodyClass();
     }
 
-    public toggleBodyClass() {
+    /**
+     * Toggles fixed body class
+     *
+     * @memberof WarehouseComponent
+     */
+    public toggleBodyClass(): void {
         if (this.asideEditWarehousePane === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
@@ -333,6 +344,12 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
+    /**
+     * Updates warehouse info
+     *
+     * @param {*} warehouseDetails Warehouse details
+     * @memberof WarehouseComponent
+     */
     public updateWarehouseInfo(warehouseDetails: any): void {
         this.isWarehouseUpdateInProgress = true;
         const linkAddresses = warehouseDetails.addressDetails.linkedEntities.filter(entity => (warehouseDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
@@ -527,6 +544,14 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
+    /**
+     * Loads all the addresses
+     *
+     * @private
+     * @param {string} method API call method ('GET' for fetching and 'POST' for searching)
+     * @param {Function} successCallback Callback to carry out further operations
+     * @memberof WarehouseComponent
+     */
     private loadAddresses(method: string, successCallback: Function): void {
         this.settingsProfileService.getCompanyAddresses(method).subscribe((response) => {
             if (response && response.body && response.status === 'success') {

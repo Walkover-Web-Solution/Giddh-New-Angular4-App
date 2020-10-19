@@ -30,9 +30,12 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     @Output() public saveAddress: EventEmitter<any> = new EventEmitter();
     @Output() public updateAddress: EventEmitter<any> = new EventEmitter();
 
+    /** Address form */
     public addressForm: FormGroup;
+    /** Force clears the sh-select dropdown */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
 
+    /** Unsubscribes from the subscribers */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     /** Address configuration */
@@ -54,6 +57,11 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     ) {
     }
 
+    /**
+     * Initializes component
+     *
+     * @memberof CreateAddressComponent
+     */
     public ngOnInit(): void {
         if (this.addressConfiguration) {
             if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateBranchAddress) {
@@ -118,16 +126,32 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         }
     }
 
-    public closeAsidePane(event) {
+    /**
+     * Closes the aside menu pane
+     *
+     * @param {*} event
+     * @memberof CreateAddressComponent
+     */
+    public closeAsidePane(event): void {
         this.closeAsideEvent.emit(event);
     }
 
+    /**
+     * Unsubscribe from all listeners
+     *
+     * @memberof CreateAddressComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
-    handleFormSubmit() {
+    /**
+     * Submit form handler
+     *
+     * @memberof CreateAddressComponent
+     */
+    public handleFormSubmit(): void {
         if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             this.saveAddress.emit({
                 formValue: this.addressForm.value,
@@ -141,7 +165,15 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         }
     }
 
-    public getStateCode(statesEle: ShSelectComponent, event: KeyboardEvent) {
+    /**
+     * Sets the state based on GST number provided
+     *
+     * @param {ShSelectComponent} statesEle State sh select component
+     * @param {KeyboardEvent} event Keyboard Event
+     * @returns {void}
+     * @memberof CreateAddressComponent
+     */
+    public getStateCode(statesEle: ShSelectComponent, event: KeyboardEvent): void {
         const keyAvoid = ['Tab', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
         if (keyAvoid.findIndex(key => key === event.key) > -1) {
             return;
@@ -172,6 +204,13 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handles the default address operation
+     *
+     * @param {*} option Address option selected
+     * @param {*} event Event
+     * @memberof CreateAddressComponent
+     */
     public setDefault(option: any, event: any): void {
         event.stopPropagation();
         event.preventDefault();
@@ -191,13 +230,25 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Selects entity
+     *
+     * @param {*} option Selected entity
+     * @memberof CreateAddressComponent
+     */
     public selectEntity(option: any): void {
         if (option.isDefault) {
             option.isDefault = false;
         }
     }
 
-    handleFinalSelection(selectedEntities: Array<any>): void {
+    /**
+     * Handles the final selected entity
+     *
+     * @param {Array<any>} selectedEntities Unique names of selection
+     * @memberof CreateAddressComponent
+     */
+    public handleFinalSelection(selectedEntities: Array<any>): void {
         this.addressConfiguration.linkedEntities.forEach(entity => {
             if (!selectedEntities.includes(entity.uniqueName)) {
                 entity.isDefault = false;
