@@ -59,7 +59,7 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
      *
      * @memberof OtherSettingsComponent
      */
-    ngOnInit(): void {
+    public ngOnInit(): void {
         currencyNumberSystems.map(c => {
             this.numberSystemSource.push({ value: c.value, label: `${c.name}`, additional: c });
         });

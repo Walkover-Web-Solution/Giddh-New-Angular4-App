@@ -50,7 +50,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      *
      * @memberof PersonalInformationComponent
      */
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.saveProfileSubject.pipe(debounceTime(5000), takeUntil(this.destroyed$)).subscribe(() => {
             this.saveProfile.emit(this.updatedData);
         });
