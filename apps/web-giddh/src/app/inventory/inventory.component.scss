@@ -19,6 +19,13 @@
     position: relative;
     top: -4px;
     background-color: #f7f8fa;
+
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 0px 0 50px !important;
+    border-bottom:1px solid $gainsboro;
 }
 .inventory-control ::ng-deep.nav-tabs > li > a:hover {
     border-color: transparent !important;

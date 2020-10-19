@@ -1069,12 +1069,12 @@ ul.sub-list {
     border-bottom: 4px solid transparent;
     display: inline-block;
 }
-.custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs{
+.custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs, .setting-page ul.nav.nav-tabs{
     position: absolute !important;
     top: 0;
     left: 0;
     width: 100%;
-    padding-left: 50px !important;
+    padding: 10px 0px 0 43px !important;
     border-bottom:1px solid $gainsboro;
 }
 .custom-tabs .nav.nav-tabs > li a:hover {
@@ -8720,7 +8720,15 @@ ul.dropdown-menu p.lead.pd {
     position: relative;
     top: -2px;
 }
-
+.custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs,
+.setting-page ul.nav.nav-tabs, .inventory-control .nav.nav-tabs{
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 0px 0 50px !important;
+    border-bottom:1px solid $gainsboro;
+}
 .setting-page .nav > li > a {
     padding: 2px 0px;
     margin-right: 25px;
@@ -8738,7 +8746,7 @@ ul.dropdown-menu p.lead.pd {
     border-bottom: 0px;
     padding-left: 0 !important;
     background-color: transparent;
-    position: static;
+    position: static !important;
     padding-top: 0 !important;
 }
 
