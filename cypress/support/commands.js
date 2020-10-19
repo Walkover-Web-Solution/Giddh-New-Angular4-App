@@ -126,10 +126,10 @@ Cypress.Commands.add("createLedgerWithTaxes", (accountName, accountElementPath, 
     })
 })
 
-Cypress.Commands.add("getAllLedger", () => {
+Cypress.Commands.add("getAllLedger", (accountUniqueName) => {
     cy.request({
         method: 'GET',
-        url: Cypress.env('apiBaseURI')+ Cypress.env('getLedgerAPI'),
+        url: Cypress.env('apiBaseURI')+ "/accounts/"+ accountUniqueName +"/giddh-ledger",
         'content-type': 'application/json; charset=utf-8',
         headers: {
             'Auth-Key': Cypress.env('authKey')
