@@ -1008,7 +1008,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
         this.autoFillWarehouseAddress(warehouse);
         this.autoFillCompanyShipping = false;
 
-        if((this.purchaseOrder.company.billingDetails.address && this.purchaseOrder.company.billingDetails.address[0]) === (this.purchaseOrder.company.shippingDetails.address && this.purchaseOrder.company.shippingDetails.address[0]) && this.purchaseOrder.company.billingDetails.stateCode === this.purchaseOrder.company.shippingDetails.stateCode && this.purchaseOrder.company.billingDetails.gstNumber === this.purchaseOrder.company.shippingDetails.gstNumber) {
+        if(this.purchaseOrder.company && this.purchaseOrder.company.billingDetails && this.purchaseOrder.company.shippingDetails && (this.purchaseOrder.company.billingDetails.address && this.purchaseOrder.company.billingDetails.address[0]) === (this.purchaseOrder.company.shippingDetails.address && this.purchaseOrder.company.shippingDetails.address[0]) && this.purchaseOrder.company.billingDetails.stateCode === this.purchaseOrder.company.shippingDetails.stateCode && this.purchaseOrder.company.billingDetails.gstNumber === this.purchaseOrder.company.shippingDetails.gstNumber) {
             this.autoFillCompanyShipping = true;
         }
     }
