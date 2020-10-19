@@ -67,7 +67,7 @@ Cypress.Commands.add("loginWithEmail", (email, password) => {
         .should('include','assets/images/giddh-white-logo.svg')
     // headerPage.clickGiddhLogoIcon().find('img').should('have.attr', 'src').should('include','assets/images/giddh-white-logo.svg')
     // headerPage.clickGiddhLogoIcon().click()
-    //  expect(headerPage.clickGiddhLogoIcon()).to.deep.equal({src : 'assets/images/giddh-white-logo.svg'})
+    // expect(headerPage.clickGiddhLogoIcon()).to.deep.equal({src : 'assets/images/giddh-white-logo.svg'})
 
 })
 
@@ -82,8 +82,8 @@ Cypress.Commands.add("globalSearch", (elementPath, searchValue, expectedText) =>
             globalSearchPage.selectFirstValueAfterSearch().then(($btn) => {
                 $btn.click();
                 cy.wait(5000)
-                cy.get(elementPath, {timeout: 50000}).should('be.visible')
-                cy.get(elementPath, {timeout: 50000}).then((elementText) => {
+                cy.xpath(elementPath, {timeout: 50000}).should('be.visible')
+                cy.xpath(elementPath, {timeout: 50000}).then((elementText) => {
                     cy.wait(5000).then(() =>{
                         const text = elementText.text();
                         //  expect(text).to.eq(expectedText)
@@ -100,7 +100,8 @@ Cypress.Commands.add("globalSearch", (elementPath, searchValue, expectedText) =>
 
 Cypress.Commands.add("createLedger", (accountName, accountElementPath, amount)=>{
     ledgerPage.clickAccount().click()
-    ledgerPage.inputAccount().type(accountName)
+    ledgerPage.inputAccount().type(accountName, {delay:300})
+    cy.wait(2000)
     //cy.contains(accountElementPath).click();
     //ledgerPage.selectSalesAccount().click({force : true})
     cy.get(accountElementPath).click({force : true})
@@ -110,20 +111,22 @@ Cypress.Commands.add("createLedger", (accountName, accountElementPath, amount)=>
     })
 })
 
-// Cypress.Commands.add("deleteLedger", (url, authKey, ledgerUniqueName) => {
-//     cy.request({
-//         method: 'DELETE',
-//         url: url+ ledgerUniqueName, // baseUrl is prepended to url
-//         'content-type': 'application/json; charset=utf-8',
-//         headers: {
-//             'Auth-Key': authKey
-//         },
-//     }).then((resp) =>{
-//         expect(resp.status).to.eq(200)
-//     })
-// })
+Cypress.Commands.add("createLedgerWithTaxes", (accountName, accountElementPath, amount)=>{
+    cy.log("This is for testing")
+    ledgerPage.clickAccount().click()
+    ledgerPage.inputAccount().type(accountName, {delay:300})
+    cy.wait(2000)
+    //cy.contains(accountElementPath).click();
+    //ledgerPage.selectSalesAccount().click({force : true})
+    cy.get(accountElementPath).click({force : true})
+    ledgerPage.selectTax()
+    ledgerPage.enterAmount().clear().type(amount)
+    ledgerPage.saveButton().click().then(()=>{
+        cy.xpath('//div[@id=\'toast-container\']', {timeout: 5000}).should('be.visible')
+    })
+})
 
-Cypress.Commands.add("getLedger", () => {
+Cypress.Commands.add("getAllLedger", () => {
     cy.request({
         method: 'GET',
         url: Cypress.env('apiBaseURI')+ Cypress.env('getLedgerAPI'),
@@ -131,9 +134,8 @@ Cypress.Commands.add("getLedger", () => {
         headers: {
             'Auth-Key': Cypress.env('authKey')
         }
-    }).as('getLedgerAPI')
-
-   return  cy.get('@getLedgerAPI')
+    }).as('getAllLedgerAPI')
+    return  cy.get('@getAllLedgerAPI')
 })
 
 Cypress.Commands.add("deleteLedger", (accountUniqueName, entryUniqueID) => {
@@ -147,4 +149,17 @@ Cypress.Commands.add("deleteLedger", (accountUniqueName, entryUniqueID) => {
     }).as('deleteLedgerAPI')
 
     return  cy.get('@deleteLedgerAPI')
+})
+
+Cypress.Commands.add("getLedger", (accountUniqueName, entryUniqueID) => {
+    cy.request({
+        method: 'GET',
+        url: Cypress.env('apiBaseURI')+ "/accounts/"+ accountUniqueName + "/ledgers/"+ entryUniqueID,
+        'content-type': 'application/json; charset=utf-8',
+        headers: {
+            'Auth-Key': Cypress.env('authKey')
+        }
+    }).as('getLedgerAPI')
+
+    return  cy.get('@getLedgerAPI')
 })

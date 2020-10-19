@@ -1,13 +1,14 @@
 @import "../../assets/css/color.scss";
-
 .form-control,
 input {
     color: $nero;
 }
+
 .notfound-option {
     display: flex;
     justify-content: space-between;
 }
+
 .ledg-head table td[class*="col-"],
 .ledg-head table td .select2-container {
     padding: 8px 10px !important;
@@ -20,6 +21,7 @@ input {
     display: flex;
     align-items: center;
 }
+
 .ledg-head table td.pdR25imp {
     padding-right: 25px !important;
 }
@@ -40,63 +42,71 @@ input {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
 .ledg-head.entry-popup table td.pdR25imp {
     padding-right: 25px !important;
 }
-.transaction-mapped-table{
-    .top-head-table{
+
+.transaction-mapped-table {
+    .top-head-table {
         border-top: none;
     }
-    thead{
-        th{
+    thead {
+        th {
             border-bottom: none;
         }
     }
-    .transaction-mapped-head{
-        border-top:none !important
+    .transaction-mapped-head {
+        border-top: none !important
     }
     .ledger-main {
-        .ledger-row.row{
-            td, th{
+        .ledger-row.row {
+            td,
+            th {
                 border-bottom: 1px solid $gainsboro !important;
                 border-top: none !important;
             }
-            td[class*="col-"]{
+            td[class*="col-"] {
                 padding-left: 0 !important;
                 padding-right: 0 !important;
             }
         }
     }
-    .row{
+    .row {
         margin-left: 0;
-        margin-right: 0 ;
+        margin-right: 0;
     }
-    .ledger-head{
-        th{
+    .ledger-head {
+        th {
             padding-left: 15px;
         }
     }
-    tr{
+    tr {
         td.upper-td {
             padding: 0 !important;
             border: none !important;
         }
     }
 }
+
 .total-col td {
     border: 0 !important;
 }
+
 .ledger-main .form-control {
     border: 0;
 }
+
 .t-h-bg1 th {
     border-left: 0;
 }
+
 .ledg-head input[type="search"] {
     min-width: auto;
     padding-left: 27px !important;
     border-radius: 20px !important;
 }
+
 .ledg-head {
     .single-search-box {
         position: relative;
@@ -107,6 +117,7 @@ input {
         }
     }
 }
+
 .ledger-head-top i.icon-search.pos-abs {
     background-color: #5b64c9;
     color: #fff;
@@ -120,6 +131,7 @@ input {
     right: 0 !important;
     border-radius: 2px;
 }
+
 .ledger-stat {
     padding: 10px 15px 0;
     background: #fff;
@@ -128,47 +140,56 @@ input {
     margin: 0px 0 0;
     box-shadow: 0px 2px 6px #0000001a;
 }
+
 .ledger-stat .row {
     display: flex;
     flex-wrap: wrap;
 }
+
 .icomoon_ico {
     margin-left: 0;
     margin-right: 8px;
 }
+
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
     font-family: "" opensans-semibold "";
     text-transform: capitalize;
 }
+
 .ledger-footer-1 {
     position: absolute;
     bottom: 0;
 }
+
 .ledger-head th {
     color: $jacksons-purple;
     padding-left: 0;
     padding-top: 5px;
     padding-bottom: 10px;
-    &.first-child{
-        span{
+    &.first-child {
+        span {
             position: relative;
             right: 15px;
         }
     }
 }
-.ledger-head th:first-child{
-    span{
+
+.ledger-head th:first-child {
+    span {
         position: relative;
         right: 15px;
     }
 }
+
 .total-col td {
     border: 0;
 }
+
 .ledger-stat span {
     display: inline-block;
 }
+
 .page-count {
     overflow: hidden;
     width: 100% !important;
@@ -179,35 +200,43 @@ input {
     font-size: 12px;
     z-index: 0;
 }
+
 #pagination {
     margin: 0 auto;
     overflow: hidden;
     width: 100%;
     text-align: center;
 }
-.pagination > .active > a {
+
+.pagination>.active>a {
     background: #d35f29 !important;
     color: #fff !important;
     border-color: #bd501d !important;
 }
-.pagination > li > a:hover {
+
+.pagination>li>a:hover {
     color: #d35f29;
 }
+
 .ledger-panel label {
     font-weight: 400;
 }
+
 .upload_div {
     float: left;
     text-decoration: underline;
     margin: 0px 5px;
     border: 1px solid #ccc;
 }
+
 .upload_div label {
     padding: 6px;
 }
+
 .pdR25imp {
     padding-right: 25px !important;
 }
+
 .t-h-bg1 th {
     background: #fff;
     color: #000000;
@@ -219,6 +248,7 @@ input {
     font-size: 14px;
     border-top: 1px solid $gainsboro;
 }
+
 .ledger-main .form-control,
 .ledger-main input {
     color: $nero;
@@ -234,6 +264,7 @@ input {
     background: #fff;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
 }
+
 .Width600 {
     position: absolute;
     width: 600px;
@@ -254,12 +285,14 @@ input {
     cursor: default;
     top: 1px;
 }
+
 .input-wrapper {
     display: block !important;
     width: 100% !important;
     position: relative;
     height: 37px !important;
 }
+
 .input-wrapper:before {
     position: absolute;
     content: "";
@@ -277,22 +310,27 @@ input {
     display: flex;
     justify-content: flex-end;
 }
+
 .d-flex {
     display: flex;
 }
+
 .d-none {
     display: none;
 }
+
 .dateStep {
     padding: 0 !important;
     font-size: 13px;
-    height: 41px;
+    height: 48px;
     line-height: 1;
 }
+
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
 }
+
 ::-webkit-calendar-picker-indicator {
     display: none;
 }
@@ -300,38 +338,47 @@ input[type="date"]::-webkit-outer-spin-button {
 .focusUnset.ledger-main .form-control:focus {
     border: unset !important;
 }
+
 tr[vr-item]:focus {
     background-color: #f7f8fa;
     outline: 0;
 }
+
 sh-select:focus {
     outline: 1px #d35f29 solid;
 }
+
 .notfound-option.active {
     background: #efeff1 !important;
     padding: 2px 5px !important;
 }
+
 .amnt-total {
     font-size: 12px;
     color: #999999;
     padding-left: 5px;
 }
+
 .ledger-book .left-col-new,
 .ledger-book .right-col-new {
     background: #fff;
     padding: 0 15px 350px;
 }
+
 .left-col-new table.width100.h-table tbody tr td:last-child,
 .left-col-new table.width100.h-table thead tr th:last-child {
     border-right: 0px !important;
 }
+
 .left-col-new table.width100.h-table tbody tr td:first-child,
 .left-col-new table.width100.h-table thead tr th:first-child {
     border-left: 1px solid $gainsboro !important;
 }
+
 .custom-tabs {
     display: none;
 }
+
 .ledg-head .icomoon_ico {
     color: $gray;
     width: 36px;
@@ -344,11 +391,13 @@ sh-select:focus {
     background-color: #fff;
     border-radius: 50%;
 }
+
 .advanc-search-block input {
     background: $solitude !important;
     height: 28px;
     border-color: $solitude !important;
 }
+
 .advanc-search-block input::placeholder {
     color: #666666;
 }
@@ -358,9 +407,11 @@ sh-select:focus {
     height: initial;
     width: 100%;
 }
+
 .ledger-section {
     display: flex;
 }
+
 .advanc-search-block .icon-search {
     right: 0;
     top: 0;
@@ -368,15 +419,19 @@ sh-select:focus {
     padding: 6px 9px;
     color: #fff;
 }
-.left-col-new table.width100.h-table#blank-ledger-container .no-left-border{
+
+.left-col-new table.width100.h-table#blank-ledger-container .no-left-border {
     border-left: none !important;
 }
+
 .ledger-row input[type="checkbox"] {
     margin-right: 15px;
 }
+
 .ledger-book .ledger-footer-1 .total-col .border-top {
     border-top: 1px solid $gainsboro !important;
 }
+
 .ledger-book .ledger-footer-1 .total-col .bdrT {
     border: none;
 }
@@ -387,6 +442,7 @@ sh-select:focus {
     border-radius: 20px;
     position: relative;
 }
+
 .advanceSearchByDate:before {
     position: absolute;
     content: "";
@@ -396,6 +452,7 @@ sh-select:focus {
     left: -33%;
     top: 17px;
 }
+
 .advanceSearchByDate:after {
     position: absolute;
     content: "";
@@ -409,14 +466,17 @@ sh-select:focus {
 .ledger-head {
     margin-top: 25px;
 }
+
 .ledger-stat h1 {
     color: $nero;
     font-size: 14px;
     margin-bottom: 10px;
 }
+
 .digit-blue {
     color: $midnight-blue;
 }
+
 .greyTextClr {
     color: #666 !important;
     font-size: 14px;
@@ -425,25 +485,31 @@ sh-select:focus {
 .ledger-stat h3 {
     font-size: 14px;
 }
+
 .stat-block {
     border-right: 1px solid $gainsboro;
     padding-left: 30px;
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
 .stat-block:first-child {
     border-bottom: 8px solid $midnight-express;
 }
+
 .stat-block:nth-child(2) {
     border-bottom: 8px solid $jacksons-purple;
 }
+
 .stat-block:nth-child(3) {
     border-bottom: 8px solid $chetwode-blue;
 }
+
 .stat-block:last-child {
     border-right: none;
     border-bottom: 8px solid $portage;
 }
+
 .advance-search-filter {
     justify-content: center;
     align-items: center;
@@ -462,17 +528,21 @@ sh-select:focus {
     align-items: center;
     margin-right: 10px;
 }
+
 .modal-ledger {
     width: 100%;
     max-width: 1350px;
 }
+
 .justify-content-between {
     justify-content: space-between;
 }
+
 .d-flex.search-ledger-field {
     align-items: center;
     margin-right: 0;
 }
+
 .clear-filter-btn {
     color: $midnight-blue;
     font-size: 14px;
@@ -481,9 +551,11 @@ sh-select:focus {
     padding: 0 15px;
     background-color: $white;
 }
+
 .clear-filter-btn i {
     font-size: 12px;
 }
+
 .search-ledger-field {
     .btn-danger,
     .btn-success,
@@ -495,9 +567,11 @@ sh-select:focus {
         border-radius: 50%;
     }
 }
+
 .transaction-in-short {
     margin-bottom: 80px;
 }
+
 .ledger-account-label {
     align-items: center;
     flex: auto;
@@ -508,9 +582,11 @@ sh-select:focus {
         width: 100%;
     }
 }
+
 .ledger-main .ledger-row:hover {
     background-color: transparent;
 }
+
 .date-range-picker {
     background-color: $white !important;
     text-decoration-line: none;
@@ -533,6 +609,7 @@ sh-select:focus {
         border-color: $chetwode-blue;
     }
 }
+
 .ipad-view-datepicker {
     .date-range-picker {
         border: 1px solid $gainsboro;
@@ -540,7 +617,10 @@ sh-select:focus {
         width: 203px !important;
     }
 }
+
+
 /*mobile ledger view css*/
+
 .mobile-ledger-view {
     margin: 0 -15px;
     table {
@@ -581,9 +661,11 @@ sh-select:focus {
 .debit-credit-amount {
     justify-content: space-between;
 }
+
 .input-wrapper.ipad-view-datepicker {
     display: none !important;
 }
+
 .no-btn,
 .no-btn:active,
 .no-btn:focus {
@@ -592,6 +674,7 @@ sh-select:focus {
     outline: none !important;
     padding-left: 0;
 }
+
 .transaction-mapped-table {
     font-size: 14px;
     .transaction-mapped {
@@ -604,7 +687,7 @@ sh-select:focus {
                 padding-right: 15px;
                 border-left: 1px solid $gainsboro;
             }
-            &:last-child{
+            &:last-child {
                 border-right: 1px solid $gainsboro;
             }
         }
@@ -638,17 +721,37 @@ sh-select:focus {
         border-bottom: none;
     }
 }
-.ledger-book.fade:not(.show){
+
+.ledger-book.fade:not(.show) {
     opacity: 1 !important;
 }
+
+.multicurrency-amount {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end !important;
+    justify-content: flex-end;
+    text-align: right;
+    white-space: normal;
+}
+
+.ledg-head table .ledger-main .ledger-row:last-child td[class*="col-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+
 /*responsive*/
+
 .modal-ledger {
     width: 70%;
     max-width: 100% !important;
 }
+
 .ledger-head {
     position: relative;
 }
+
 .ledger-head {
     position: sticky;
     top: 60px;
@@ -656,6 +759,7 @@ sh-select:focus {
     background-color: $alice-blue-light;
     padding-left: 5px;
 }
+
 @media only screen and (max-width: 1540px) {
     .modal-ledger {
         width: 85%;
@@ -676,20 +780,23 @@ sh-select:focus {
         max-width: 1280px;
     }
 }
-@media(max-width:1190px){
-    .date-advance-search{
-        &:before, &:after{
+
+@media(max-width:1190px) {
+    .date-advance-search {
+        &:before,
+        &:after {
             display: none;
         }
     }
 }
+
 @media only screen and (max-width: 1024px) {
     .container {
         width: 100%;
         max-width: 100%;
     }
-
 }
+
 @media (max-width: 991px) {
     .daterngoption {
         margin-bottom: 10px;
@@ -710,7 +817,6 @@ sh-select:focus {
             }
         }
     }
-
     .advanc-search-block {
         padding: 0;
     }
@@ -722,6 +828,7 @@ sh-select:focus {
         flex-direction: column;
     }
 }
+
 @media only screen and (max-width: 991px) {
     .stat-block {
         padding-left: 20px;
@@ -921,11 +1028,13 @@ sh-select:focus {
     .hidden-xs {
         display: none !important;
     }
-    .ledger-head th{
+    .ledger-head th {
         padding-top: 0;
     }
 }
-  /*comment for now
+
+
+/*comment for now
 @media (min-width: 768px) {
     .ledger-book:before {
         content: " ";
@@ -946,9 +1055,11 @@ sh-select:focus {
     }
 }
 */
+
 .ledger-row td:nth-child(3) {
     justify-content: flex-end !important;
 }
+
 @media (max-width: 767px) {
     .ledger-head {
         th {
@@ -989,6 +1100,7 @@ sh-select:focus {
         }
     }
 }
+
 @media (max-width: 575px) {
     .stat-block {
         padding-left: 15px;
@@ -997,13 +1109,14 @@ sh-select:focus {
         width: 100% !important;
         margin-bottom: 5px;
     }
-    .balance-detail{
-        .text-right{
+    .balance-detail {
+        .text-right {
             text-align: left !important;
             margin-bottom: 8px;
         }
     }
 }
+
 @media (max-width: 360px) {
     .search-ledger-field {
         min-width: 200px;

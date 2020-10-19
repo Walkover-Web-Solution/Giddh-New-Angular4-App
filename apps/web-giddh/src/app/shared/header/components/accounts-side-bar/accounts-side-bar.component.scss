@@ -16,20 +16,23 @@
     /* padding-top: 0; */
 }
 
+
 /* width */
 
 .acntAccordion::-webkit-scrollbar {
     width: 10px;
 }
 
+
 /* Track */
 
 .acntAccordion::-webkit-scrollbar-track {
-    background:  $white-smoke;
+    background: $white-smoke;
 }
+
 
 /* Handle */
 
 .acntAccordion::-webkit-scrollbar-thumb {
-    background:  $nobel;
+    background: $nobel;
 }
