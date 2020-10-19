@@ -39,8 +39,9 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     public fixedAssetOption: Highcharts.Options;
     public rationResponse$: Observable<any>;
     public ratioObj: any = {};
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
 
     constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
         this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));

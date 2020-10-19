@@ -9,6 +9,8 @@ import { takeUntil } from 'rxjs/operators';
 export class TranslateDirective implements OnInit, OnDestroy {
     /* Taking input the file name */
     @Input() file: string;
+    /* This will make sure if required common data */
+    @Input() requireCommonData: boolean = true;
 
     /* This will emit local JSON data */
     @Output() public localeData: EventEmitter<any> = new EventEmitter();
@@ -57,8 +59,10 @@ export class TranslateDirective implements OnInit, OnDestroy {
             });
         }
 
-        this.localeService.commonData.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            this.commonLocaleData.emit(response);
-        });
+        if(this.requireCommonData) {
+            this.localeService.commonData.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                this.commonLocaleData.emit(response);
+            });
+        }
     }
 }

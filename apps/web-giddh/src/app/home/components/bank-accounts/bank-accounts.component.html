@@ -1,31 +1,31 @@
-<div id="live">
+<div id="live" appTranslate [file]="'home/bank-accounts'" [requireCommonData]="false" (localeData)="localeData = $event">
     <div class="card">
         <div class="panel-heading clearfix">
-            <strong>Bank Accounts</strong>
+            <strong>{{localeData?.chart_title}}</strong>
         </div>
-        <div class="card-body pos-rel">
+        <div class="card-body pos-rel" *ngIf="localeData">
             <div class="banke-detailsBlock">
                 <perfect-scrollbar [scrollIndicators]="true" *ngIf="bankAccounts.length > 0">
                     <div class="wrap-single-bank-detail">
                         <div class="single-bank-detatil" *ngFor="let bankaccount of bankAccounts;">
                             <p class="bank-name "> {{bankaccount.name}} </p>
                             <p class="bankBalnc">
-                                <span>In Giddh </span>
+                                <span>{{localeData?.in_giddh}}</span>
                                 <span>{{activeCompany.baseCurrencySymbol}}
                                     {{bankaccount.closingBalance.amount | giddhCurrency}}
-                                    <span *ngIf="bankaccount.closingBalance.type == 'CREDIT'">Cr.</span>
-                                    <span *ngIf="bankaccount.closingBalance.type == 'DEBIT'">Dr.</span></span>
+                                    <span *ngIf="bankaccount.closingBalance.type == 'CREDIT'">{{localeData?.cr_heading}}</span>
+                                    <span *ngIf="bankaccount.closingBalance.type == 'DEBIT'">{{localeData?.dr_heading}}</span></span>
                             </p>
                         </div>
                     </div>
                 </perfect-scrollbar>
                 <div class="addBankDetails" *ngIf="bankAccounts.length === 0">
-                    <p>Yet to add Bank Details</p>
-                    <a class="connectBnk" [routerLink]="['/pages/settings/linked-accounts']">Connect Bank</a>
+                    <p>{{localeData?.no_banks_found}}</p>
+                    <a class="connectBnk" [routerLink]="['/pages/settings/linked-accounts']">{{localeData?.connect_bank}}</a>
                 </div>
             </div>
             <a class="connectBnk" *ngIf="bankAccounts.length > 0"
-                [routerLink]="['/pages/settings/linked-accounts']">Connect Bank</a>
+                [routerLink]="['/pages/settings/linked-accounts']">{{localeData?.connect_bank}}</a>
         </div>
     </div>
 </div>

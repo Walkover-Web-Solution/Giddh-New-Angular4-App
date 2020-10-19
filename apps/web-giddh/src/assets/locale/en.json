@@ -67,6 +67,8 @@
     "app_confirm": "Confirm",
     "app_collapse_all": "Collapse All",
     "app_expand_all": "Expand All",
+    "app_collapse": "Collapse",
+    "app_expand": "Expand",
     "app_export": "Export",
     "app_pages": "Pages",
     "app_go": "Go",

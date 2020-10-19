@@ -25,6 +25,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public companies$: Observable<CompanyResponse[]>;
     public activeCompanyUniqueName$: Observable<string>;
     public activeCompany: any = {};
+    /* This will hold local JSON data */
+    public localeData: any = {};
 
     constructor(private store: Store<AppState>, private _contactService: ContactService) {
         this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).pipe(takeUntil(this.destroyed$));
