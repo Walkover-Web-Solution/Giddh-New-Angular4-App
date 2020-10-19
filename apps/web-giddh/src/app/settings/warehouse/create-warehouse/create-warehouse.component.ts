@@ -212,7 +212,6 @@ export class CreateWarehouseComponent implements OnInit {
         // }));
         const requestObj = {
             name: this.warehouseForm.value.name,
-            address: this.warehouseForm.value.alias,
             linkAddresses: this.addresses.filter(address => this.warehouseForm.value.address.includes(address.uniqueName)).map(filteredAddress => ({
                 uniqueName: filteredAddress.uniqueName,
                 isDefault: filteredAddress.isDefault
