@@ -300,7 +300,7 @@
 
 <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
 <div class="abc vendorPayNow" *ngIf="paymentAsideMenuState === 'in'">
-    <payment-aside class="account-aside-menu-state transinherit" [selectedAccForPayment]="selectedAccForPayment" (closeAsideEvent)="togglePaymentPane($event)">
+    <payment-aside class="account-aside-menu-state transinherit" [selectedAccForPayment]="selectedAccForPayment">
     </payment-aside>
 </div>
 
