@@ -336,7 +336,7 @@
                             <span class="text-warning">Supported format for preview: Images (.jpg, .jpeg, .png) and PDF (.pdf); to print other formats, download them. </span>
                         </div>
 
-                            <div *ngIf="!shouldShowUploadAttachment && selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image'" [ngClass]="{'image-collapsed': !isAttachmentExpanded}">
+                            <div *ngIf="!shouldShowUploadAttachment && selectedItem.voucherType === 'purchase' && attachedDocumentType?.type === 'image'" [ngClass]="{'image-collapsed': !isAttachmentExpanded}" style="padding: 50px 50px 0 50px;">
                                 <img
                                     class="image-preview img-expand" [src]="imagePreviewSource"/>
                             </div>
