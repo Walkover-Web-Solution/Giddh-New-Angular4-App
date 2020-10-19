@@ -27,6 +27,7 @@
             text-align: right;
             img{
                 width: 100%;
+                max-width: 200px;
             }
             img.branch-image{
                 max-width: 140px;
@@ -92,10 +93,11 @@
             }
         }
     }
-    .footer-btn{
+
+}
+.footer-btn{
         background-color: $whisper-color;
         padding: 15px;
-    }
 }
 .linked-entities {
     .list-item {
@@ -120,6 +122,9 @@
             }
         }
     }
+}
+.address-dropdown sales-sh-select::ng-deep .menu{
+    max-height: inherit !important;
 }
 @media(max-width:1023px){
     .create-warehouse-page{
