@@ -24,7 +24,7 @@
                 <table class="table basic table-bordered giddh-table on-mobile-view">
                     <thead>
                         <tr>
-                            <th class="min-wid-check" width="5%">
+                            <th class="min-wid-check" width="2%">
                                 <div>#</div>
                             </th>
                             <th #searchAddressNameInputField width="15%" class="td-search-box"
@@ -69,9 +69,8 @@
                             </td>
                             <td data-title="Address">
                                 <div>
-                                    {{address.address}}
+                                    <p class="address-row">{{address.address}}</p>
                                     <ng-container *ngIf="address.taxType && address.taxNumber">
-                                        <br />
                                         {{address.taxType}} : {{address.taxNumber}}
                                     </ng-container>
                                 </div>
@@ -168,6 +167,7 @@
 
 <!-- Create address part of Address Tab -->
 <div *ngIf="accountAsideMenuState === 'in' && !closeSidePane">
+    <div class="aside-overlay" (click)="toggleAccountAsidePane()"></div>
     <create-address class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState"
         [companyName]="organizationType === 'BRANCH' ? profileData?.companyName : ''"
         [showLoader]="isAddressChangeInProgress" (saveAddress)="saveAddress($event)"

@@ -27,6 +27,12 @@
                     border-right: none !important;
                 }
             }
+            p.address-row{
+                margin-bottom: 0;
+                max-width: 400px;
+                white-space: normal;
+                word-break: break-word;
+            }
         }
     }
     &:hover {
