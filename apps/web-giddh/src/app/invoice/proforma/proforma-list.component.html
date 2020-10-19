@@ -1,7 +1,7 @@
 <div class="proforma-container">
 
     <div class="d-flex date-advance-search">
-        <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker pr">
+        <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker position-relative">
             <div class="d-flex">
                 <div class="form-group mr-r1 d-flex">
                     <div class="input-group ">
@@ -36,10 +36,9 @@
         <div class="d-flex btn-wrapper">
 
             <!-- region more items -->
-            <div *ngIf="selectedItems.length === 1" style="height: 30px;">
+            <div *ngIf="selectedItems.length === 1" class="btn-wrapper-more">
 
-                <div class="btn-group" dropdown #dp="bs-dropdown"
-                    style="margin-bottom: 10px;display: inline-block !important;">
+                <div class="btn-group d-inline-block mr-b1" dropdown #dp="bs-dropdown">
 
                     <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                         aria-controls="dropdown-basic">
@@ -61,13 +60,13 @@
             <!-- endregion -->
 
             <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
-                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
+                <button class="btn btn-sky-blue m-0" (click)="goToInvoice('proformas')">+ New
                     Proforma
                 </button>
             </div>
 
             <div *ngIf="voucherType === 'estimates'" class="btn-wrapper">
-                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
+                <button class="btn btn-sky-blue m-0" (click)="goToInvoice('estimates')">+ New
                     Estimate
                 </button>
             </div>
@@ -93,20 +92,19 @@
         </div>
         <div class="d-flex mt-1">
             <div *ngIf="voucherType === 'proformas'" class="btn-wrapper mr-15">
-                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
+                <button class="btn btn-sky-blue m-0" (click)="goToInvoice('proformas')">+ New
                     Proforma
                 </button>
             </div>
 
             <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mr-15">
-                <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('estimates')">+ New
+                <button class="btn btn-sky-blue m-0" (click)="goToInvoice('estimates')">+ New
                     Estimate
                 </button>
             </div>
-            <div *ngIf="selectedItems.length === 1" style="height: 30px;">
+            <div *ngIf="selectedItems.length === 1" class="btn-wrapper-more">
 
-                <div class="btn-group" dropdown #dp="bs-dropdown"
-                    style="margin-bottom: 10px;display: inline-block !important;">
+                <div class="btn-group d-inline-block mr-b1" dropdown #dp="bs-dropdown">
 
                     <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                         aria-controls="dropdown-basic">

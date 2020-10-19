@@ -428,7 +428,7 @@
         <!--map bank transactions-->
         <div class="row">
 
-            <div class="col-7 form-group pr" *ngIf="isBankTransaction">
+            <div class="col-7 form-group position-relative" *ngIf="isBankTransaction">
                 <a href="javascript:void(0)" (click)="getReconciledEntries()">Map Transaction
                     <span *ngIf="showMatchingEntries">with</span>
                 </a>

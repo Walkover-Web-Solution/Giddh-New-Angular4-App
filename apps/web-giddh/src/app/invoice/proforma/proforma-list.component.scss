@@ -289,6 +289,10 @@ span.icon-advance-filter {
 .select-all-proformas-on-mobile-view{
     display: none;
 }
+
+.btn-wrapper-more{
+    height: 30px;
+}
 // responsive
 @media(max-width:991px){
     .invoice-preview-sidebar{

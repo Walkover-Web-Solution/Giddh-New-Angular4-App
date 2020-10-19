@@ -4,16 +4,16 @@
         <span aria-hidden="true" class="close" data-dismiss="modal"
             (click)="removeCompanySessionData(); closeModal();">×</span>
     </div>
-    <div class="modal-body pd0" id="SharePop">
-        <div class="welcome_wrapper">
+    <div class="modal-body p-0" id="SharePop">
+        <div class="welcome-wrapper">
             <div class="giddh-logo-welcome">
                 <img src="{{imgPath}}assets/images/giddh-big-logo.svg">
             </div>
-            <div class="welcome_header">
+            <div class="welcome-header">
                 <h1>Welcome {{ this.logedInuser.name}}!</h1>
             </div>
         </div>
-        <div class="form-group clearfix add-companyDetail pdB5">
+        <div class="form-group clearfix add-company-detail pd-b5">
             <!--<h3 class="pd-b1">Share with</h3>-->
             <div class="add-mailer">
                 <!--create company from-->
@@ -21,13 +21,13 @@
                     <div class="company-form-body row">
 
                         <div class="col-sm-12 m-t-50">
-                            <div class="input-group form-group dblock m-b-30">
+                            <div class="input-group form-group d-block m-b-30">
                                 <p>Enter your {{onBoardingType?.toLowerCase()}} name to start hassle free accounting
                                     with
                                     Giddh.</p>
                             </div>
                         </div>
-                        <div class="col-sm-12 mrB3">
+                        <div class="col-sm-12 mr-b3">
                             <label for="name" class="m-t-40">{{onBoardingType}} Name<sup>*</sup></label>
                             <input name="name" id="name" #itemName type="text" required placeholder="Name"
                                 (input)="handleOnBoardingNameChange($event?.target?.value)" [(ngModel)]="company.name"
@@ -39,7 +39,7 @@
                         </div>
 
                         <div class="row mr-0 ml-0">
-                                <div class="col-sm-6 mrB3 ">
+                                <div class="col-sm-6 mr-b3 ">
                                         <span>
                                             <label for="country" class="d-block">Country<sup>*</sup></label>
                                             <sh-select id="country"
@@ -51,7 +51,7 @@
                                             </sh-select>
                                         </span>
                                     </div>
-                                    <div class="col-sm-6 mrB3 ">
+                                    <div class="col-sm-6 mr-b3 ">
                                         <label>Currency <sup>*</sup></label>
                                         <div class="custom-select select-caret position-relative">
                                             <sh-select name="baseCurrency" [options]="currencySource$ | async" required
@@ -62,12 +62,12 @@
                                     </div>
                         </div>
 
-                        <div class="col-sm-12 mrB3">
+                        <div class="col-sm-12 mr-b3">
                             <span>
                                 <label for="contactNo" class="d-block">Mobile Number<sup>*</sup></label>
                                 <div class="d-flex welcome-select ">
                                     <sh-select class="pull-left select-caret" required
-                                        style="width: 85px;margin-right: 28px;" name="phoneCode" [placeholder]="+91"
+                                        name="phoneCode" [placeholder]="+91"
                                         [options]="countryPhoneCode" [(ngModel)]="company.phoneCode"
                                         [defaultValue]="company.phoneCode">
                                     </sh-select>
@@ -79,7 +79,7 @@
                             </span>
                         </div>
                         <div class="col-sm-12 mr-t1">
-                            <button class="btn btn-sky-blue mr-l1" style="margin-left: 0 !important;" type="submit"
+                            <button class="btn btn-sky-blue ml-0" type="submit"
                                 (click)="createCompany(mobileNoEl)" [disabled]="companyForm.invalid"
                                 [ladda]="isCompanyCreationInProcess$ | async">Next
                             </button>

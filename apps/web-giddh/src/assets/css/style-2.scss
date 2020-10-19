@@ -4051,7 +4051,7 @@ a.btn.btn-xs.btn-link.pull-right {
     cursor: pointer;
 }
 
-.pdB5 {
+.pd-b5 {
     padding-bottom: 50px;
 }
 
@@ -6244,20 +6244,20 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 /**new modal design**/
 
-.welcome_header {
+.welcome-header {
     background: $white url("../images/Welcome.png") no-repeat center center;
     text-align: center;
     padding: 0px 0 30px;
     position: relative;
 }
 
-.welcome_header h1 {
+.welcome-header h1 {
     font-size: 30px;
     font-family: "opensans-regular";
     color: #1a237e;
 }
 
-.welcome_header:after {
+.welcome-header:after {
     position: absolute !important;
     width: 98%;
     background: #b3b3b3;
@@ -8427,7 +8427,7 @@ span.red-text {
     height: 48px !important;
 }
 
-.add-companyDetail .add-mailer form {
+.add-company-detail .add-mailer form {
     padding-bottom: 60px;
 }
 
@@ -10541,10 +10541,10 @@ ul.dropdown-menu.action-dropdown {
             margin-top: 10px;
             margin-bottom: 5px;
         }
-        .welcome_header h1 {
+        .welcome-header h1 {
             font-size: 25px !important;
         }
-        .welcome_header:after {
+        .welcome-header:after {
             bottom: 0;
         }
         #setting-tab-wrapper .tab-integraton .nav-tabs {

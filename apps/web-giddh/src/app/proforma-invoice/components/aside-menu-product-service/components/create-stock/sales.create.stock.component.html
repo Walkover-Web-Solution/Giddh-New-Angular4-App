@@ -231,7 +231,7 @@
 
                             </ng-container>
                         </div>
-                        <div class="pdL pdR pd-t row">
+                        <div class="pd-l pdR pd-t row">
                             <div class="col-6 col-sm-6">
                                 <div class="checkbox">
                                     <label class="" for="enablePurchase">
@@ -351,7 +351,7 @@
                         </div>
 
 
-                        <div class="mr-t1 pdL pdR row">
+                        <div class="mr-t1 pd-l pdR row">
                             <div class="col-12 col-sm-12">
                                 <div class="checkbox">
                                     <label class="" for="isFsStock">
@@ -364,8 +364,8 @@
                         </div>
 
 
-                        <section class="mr-t2 mrB3 col-12 col-sm-12 row" *ngIf="addStockForm.value.isFsStock">
-                            <div class="pdL pdR">
+                        <section class="mr-t2 mr-b3 col-12 col-sm-12 row" *ngIf="addStockForm.value.isFsStock">
+                            <div class="pd-l pdR">
                                 <h1 class="section-head bd-rb"><strong>{{addStockForm.controls['name'].value}} (Made
                                         with)</strong></h1>
                                 <table class="noHover  width100">
@@ -443,7 +443,7 @@
                         </section>
 
                         <div class="col-12 col-sm-12 text-left">
-                            <div class="mr-t1 pdL pdR row">
+                            <div class="mr-t1 pd-l pdR row">
 
                                 <button type="submit" *ngIf="!isUpdatingStockForm"
                                     [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-success"

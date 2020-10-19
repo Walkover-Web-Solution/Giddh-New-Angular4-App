@@ -3,7 +3,7 @@
         <div class="item-group" [ngClass]="{'active': grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName) && !(activeStockUniqueName$ | async)}">
             <a (click)="OpenGroup(grp, $event)" class="d-flex">
                 <a class="text-black inventory-group-name">{{grp.name}}</a>
-                <i (click)="OpenGroup(grp, $event)"  class="icon-arrow-down pr" [ngClass]="{'open': grp.isOpen}"></i>
+                <i (click)="OpenGroup(grp, $event)"  class="icon-arrow-down position-relative" [ngClass]="{'open': grp.isOpen}"></i>
             </a>
             <!-- *ngIf="grp.isOpen && (activeGroup && activeGroup.uniqueName === grp.uniqueName) && (activeStockUniqueName$ | async)" -->
             <span class="pull-right">

@@ -97,7 +97,7 @@
     background: #ccc;
     color: #333;
 }
-.welcome-container p.welcome_title {
+.welcome-container p.welcome-title {
     font-size: 14px;
     color: #9b9b9b;
     margin-top: 25px;
@@ -128,14 +128,28 @@ fieldset[disabled] {
     border-radius: 3px;
     cursor: pointer;
 }
-span.sameAsHead {
+span.same-as-head {
     font-size: 14px;
     position: relative;
     top: 8px;
     display: flex;
 }
-.gstinWidth {
+.gstin-width {
     width: 50%;
     margin-right: 10px;
     float: left;
+}
+
+.select-caret-contact{
+    width: 90px !important;
+    margin-right: 16px !important;
+}
+
+
+.custom-multi-select{
+    color: $gray;
+}
+
+.min-height-100{
+    min-height:100px;
 }

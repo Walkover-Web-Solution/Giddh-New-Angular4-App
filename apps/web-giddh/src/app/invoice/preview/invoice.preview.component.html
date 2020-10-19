@@ -4,7 +4,7 @@
         <div class="d-flex date-advance-search" id="dateRangePickerParent">
             <!-- Invoice filter section -->
             <form #invoiceForm="ngForm" (ngSubmit)="getVoucherByFilters(invoiceForm)" novalidate
-                class="form-inline input-grp-dateRangePicker pr">
+                class="form-inline input-grp-dateRangePicker position-relative">
                 <div class="form-group mr-r1 d-flex" style="flex: 1 1 auto;">
                     <div class="input-group">
                         <span class="input-wrapper">
@@ -364,7 +364,7 @@
 
                         <th>
                             <div class="d-flex justify-content-end">
-                                <div class="flex-fill total-amt">Total amount</div>
+                                <div class="flex-fill total-amount">Total amount</div>
                                 <div class="icon-pointer">
                                     <ng-container *ngTemplateOutlet="sortTemplate;context: { column: 'grandTotal'}">
                                     </ng-container>

@@ -1,4 +1,4 @@
-<div class="pr" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true" (clickOutside)="toggleTaxPopup(false)">
+<div class="position-relative" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true" (clickOutside)="toggleTaxPopup(false)">
     <a id="tax" (click)="toggleTaxPopup(true)" class="clearfix">
         <div class="multi-select adjust">
             <input type="number" id="sales-tax-box" (blur)="taxInputBlur($event)" (focus)="toggleTaxPopup(true)" readonly name="sum"

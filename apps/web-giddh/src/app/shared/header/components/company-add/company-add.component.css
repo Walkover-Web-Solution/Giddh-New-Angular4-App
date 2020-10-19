@@ -88,7 +88,7 @@
     display: block;
 }
 
-.add-companyDetail p {
+.add-company-detail p {
     max-width: 300px;
     margin: 0 auto !important;
     display: block;
@@ -99,6 +99,6 @@
 #share-modal .btn.btn-sky-blue {
     width: 100%;
 }
-.add-companyDetail {
+.add-company-detail {
     background-color: #f7f8fa;
 }

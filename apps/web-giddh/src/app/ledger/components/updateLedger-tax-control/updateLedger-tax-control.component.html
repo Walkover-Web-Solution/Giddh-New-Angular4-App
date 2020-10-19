@@ -1,4 +1,4 @@
-<span class="pr c-dropdown" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true"
+<span class="position-relative c-dropdown" [ngClass]="{'open': showTaxPopup}" [attachOutsideOnClick]="true"
     (clickOutside)="toggleTaxPopup(false)">
     <label *ngIf="showHeading">{{ customHeading ? customHeading : 'Tax' }} <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label>
 
@@ -12,7 +12,7 @@
     </a>
 
 
-    <div class="pr">
+    <div class="position-relative">
         <ul class="dropdown-menu pd update-ledger-tax-dropdown" [ngStyle]="{'display': showTaxPopup ? 'block': 'none'}"
             (click)="$event.stopPropagation()">
             <li *ngFor="let tax of taxRenderData;trackBy: trackByFn; let i = index">

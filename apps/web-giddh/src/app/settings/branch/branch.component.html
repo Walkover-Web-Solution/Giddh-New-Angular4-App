@@ -1,6 +1,6 @@
 <div class="clearfix" *ngIf="!parentCompanyName && (branches$ | async)?.length > 0">
     <div class="d-flex date-advance-search row">
-        <form class="form-inline input-group-date-range-picker pr col-xs-6 col-sm-8 mb-15">
+        <form class="form-inline input-group-date-range-picker position-relative col-xs-6 col-sm-8 mb-15">
             <div class="mr-1 d-flex branch-header-content">
                 <div class="input-group">
                     <div class="form-group">
@@ -208,7 +208,7 @@
                     <ul class="list-inline custom-multi-select">
                         <li *ngFor="let cmp of selectedCompaniesName">
                             <a>
-                                {{cmp.name}} <span *ngIf="cmp.nameAlias"> ({{cmp.nameAlias}})</span><span class="pdL"
+                                {{cmp.name}} <span *ngIf="cmp.nameAlias"> ({{cmp.nameAlias}})</span><span class="pd-l"
                                     (click)="checkUncheckMe(cmp,$event)">×</span>
                             </a>
                         </li>

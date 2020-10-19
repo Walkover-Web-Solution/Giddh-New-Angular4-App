@@ -29,26 +29,26 @@ label .required {
     display: block;
 }
 
-.welcome_wrapper {
+.welcome-wrapper {
     padding: 25px 0;
 }
 
-.welcome_header:after {
+.welcome-header:after {
     display: none;
 }
 
-.add-companyDetail {
+.add-company-detail {
     background-color: #f7f8fa;
     margin-bottom: 0 !important;
 }
 
-.welcome_header h1 {
+.welcome-header h1 {
     font-size: 30px;
     font-family: "opensans-regular";
     color: $midnight-blue;
 }
 
-.add-companyDetail p {
+.add-company-detail p {
     max-width: 300px;
     margin: 0 auto !important;
     display: block;
@@ -66,8 +66,15 @@ label .required {
     float: right;
 }
 
-.add-companyDetail {
+.add-company-detail {
     background-color: #f7f8fa;
+}
+
+.welcome-select{
+    .select-caret{
+        width: 85px;
+        margin-right: 28px;
+    }
 }
 
 @media (min-width: 768px) {
@@ -82,10 +89,10 @@ label .required {
         margin: 30px auto;
         display: block;
     }
-    .welcome_header h1 {
+    .welcome-header h1 {
         font-size: 20px !important;
     }
-    .welcome_wrapper {
+    .welcome-wrapper {
         padding: 15px 0;
     }
 }
