@@ -261,7 +261,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             this.warehouseToUpdate = {
                 name: warehouse.name,
                 // address: warehouse.address,
-                linkedEntities: warehouse.addresses
+                linkedEntities: warehouse.addresses || []
             };
             this.toggleAsidePane();
         });
@@ -328,6 +328,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             event.preventDefault();
         }
         this.asideEditWarehousePane = this.asideEditWarehousePane === 'out' ? 'in' : 'out';
+        this.isWarehouseUpdateInProgress = false;
         this.toggleBodyClass();
     }
 

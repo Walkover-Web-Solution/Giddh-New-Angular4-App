@@ -427,7 +427,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             event.preventDefault();
         }
         this.closeAddressSidePane = this.closeAddressSidePane === 'out' ? 'in' : 'out';
-
+        this.isBranchChangeInProgress = false;
         this.toggleBodyClass();
     }
 

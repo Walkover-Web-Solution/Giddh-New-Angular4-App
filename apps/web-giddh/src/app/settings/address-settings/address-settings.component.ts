@@ -188,6 +188,10 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     public toggleAccountAsidePane(): void {
         this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
         this.closeSidePane = false;
+        this.isAddressChangeInProgress = false;
+        if (this.accountAsideMenuState === 'out') {
+            this.addressConfiguration.type = SettingsAsideFormType.CreateAddress;
+        }
         this.toggleBodyClass();
     }
 
