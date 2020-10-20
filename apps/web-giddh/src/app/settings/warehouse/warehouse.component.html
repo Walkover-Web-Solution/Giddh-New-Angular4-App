@@ -135,11 +135,12 @@
         </div>
     </div>
 </div>
-<div *ngIf="asideEditWarehousePane === 'in'">
+<div>
+    <div class="aside-overlay" *ngIf="asideEditWarehousePane === 'in'" (click)="toggleAddressAsidePane($event)"></div>
     <create-address [class]="asideEditWarehousePane" [@slideInOut]="asideEditWarehousePane"
         [warehouseToUpdate]="warehouseToUpdate" [showLoader]="isWarehouseUpdateInProgress"
         (updateAddress)="updateWarehouseInfo($event)" [addressConfiguration]="addressConfiguration"
-        (closeAsideEvent)="toggleAsidePane($event)">
+        (closeAsideEvent)="toggleAsidePane($event)" *ngIf="asideEditWarehousePane === 'in'" >
     </create-address>
 </div>
 <!-- Welcome component (Step 2) -->
