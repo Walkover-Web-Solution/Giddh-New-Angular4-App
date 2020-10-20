@@ -149,7 +149,7 @@
     font-size: 14px;
 }
 .btn-group.open.show {
-    display: inline-block !important;
+    display: inline-flex !important;
 }
 .dropdown-menu.dropdown-menu-download {
     min-width: 110px;
@@ -166,10 +166,17 @@
 .btn-group-voucher-type {
     width: 100%;
     color: $nero !important;
+    white-space: nowrap;
+    min-width: 140px;
+    max-width: 140px;
+    &.show{
+        display: inline-flex !important;
+    }
     button {
         text-align: left;
         width: 100%;
         color: $nero;
+         margin-right: 0;
         &:focus,
         &:hover {
             text-decoration: none;
