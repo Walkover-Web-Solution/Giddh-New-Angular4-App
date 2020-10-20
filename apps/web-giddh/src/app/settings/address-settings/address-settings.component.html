@@ -88,7 +88,7 @@
                                                 class="icon-branch-icon"></i>
                                             <i tooltip="Warehouse" *ngIf="entity.isWarehouse"
                                                 class="icon-warehouse-icon"></i>
-                                            {{entity.alias}}
+                                            {{entity.alias || entity.name}}
                                         </span>
                                     </div>
 
