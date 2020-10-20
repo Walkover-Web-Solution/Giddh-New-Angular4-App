@@ -230,7 +230,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             this.branchToUpdate = {
                 name: branch.name,
                 alias: branch.alias,
-                linkedEntities: branch.addresses
+                linkedEntities: branch.addresses || []
             };
             this.toggleAsidePane();
         });
