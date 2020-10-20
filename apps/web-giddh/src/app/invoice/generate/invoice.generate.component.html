@@ -69,12 +69,14 @@
 
                 </div>
 
-                <div class="clear-filter align-items-center d-flex justify-content-center"
-                    [ngClass]="{'width-100' : selectedLedgerItems.length === 0}"
+                <div class="align-items-center d-flex justify-content-center filter-width">
+                    <div class="clear-filter"
+                    [ngClass]="{'width-auto' : selectedLedgerItems.length === 0}"
                     *ngIf="!isUniversalDateApplicable && !isMobileView" (click)="resetDateSearch()">
-                    <button class="btn btn-filter">
+                    <button class="btn btn-filter mr-0">
                         <span class="icon-cross"></span> Clear Filter
                     </button>
+                </div>
                 </div>
             </div>
         </form>
