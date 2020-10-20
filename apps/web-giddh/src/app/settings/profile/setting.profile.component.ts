@@ -3,7 +3,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import * as _ from '../../lodash-optimized';
@@ -150,6 +150,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     constructor(
         private commonService: CommonService,
         private companyService: CompanyService,
+        private changeDetectorRef: ChangeDetectorRef,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
         private _toasty: ToasterService,
@@ -1088,7 +1089,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     private handleBranchProfileResponse(response: any): void {
         if (response && response.name) {
-            console.log('Branch: ' , response)
             this.companyProfileObj = {
                 ...this.companyProfileObj,
                 name: response.name,
@@ -1097,6 +1097,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 alias: response.alias,
             };
             this.addresses = this.settingsUtilityService.getFormattedBranchAddresses(response.addresses);
+            this.changeDetectorRef.detectChanges();
         }
     }
 
