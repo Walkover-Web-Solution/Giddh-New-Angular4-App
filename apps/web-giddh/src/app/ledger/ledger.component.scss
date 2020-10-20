@@ -286,7 +286,7 @@ input {
 .dateStep {
     padding: 0 !important;
     font-size: 13px;
-    height: 41px;
+    height: 48px;
     line-height: 1;
 }
 input[type="date"]::-webkit-inner-spin-button,
@@ -640,6 +640,18 @@ sh-select:focus {
 }
 .ledger-book.fade:not(.show){
     opacity: 1 !important;
+}
+.multicurrency-amount {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end !important;
+    justify-content: flex-end;
+    text-align: right;
+    white-space: normal;
+}
+.ledg-head table .ledger-main .ledger-row:last-child td[class*="col-"]{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 /*responsive*/
 .modal-ledger {

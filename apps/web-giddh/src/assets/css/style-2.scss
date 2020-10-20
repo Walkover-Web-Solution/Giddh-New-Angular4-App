@@ -971,7 +971,7 @@ ul.sub-list {
 
 .tab-integraton .nav-tabs > li > a {
     width: 120px;
-    height: 120px;
+    height: 120px !important;
     background: $white;
     display: flex;
     flex-direction: column;
@@ -1064,6 +1064,12 @@ ul.sub-list {
     width: 100%;
     padding: 10px 0px 0 43px !important;
     border-bottom:1px solid $gainsboro;
+    li{
+        a{
+            padding: 0 !important;
+            height: 36px;
+        }
+    }
 }
 .custom-tabs .nav.nav-tabs > li a:hover {
     color: $deep-sky-blue !important;
@@ -9028,7 +9034,7 @@ p.remvBrnchName {
     padding: 0 0px 0 0 !important;
     background-color: transparent;
     z-index: 9;
-    position: relative;
+    position: relative !important;
     top: -4px;
     margin-bottom: 10px;
 }
@@ -9293,7 +9299,7 @@ input.form-control.focused {
     }
 }
 #setting-tab > .tab-container > .tab-content {
-    padding-top: 12px;
+    padding-top: 15px;
 }
 
 /*datepicker common css*/
@@ -9641,6 +9647,12 @@ span#HW_badge_cont:nth-child(3) {
 #rcw-p91-widget-button{
     z-index: 98;
 }
+
+ul.dropdown-menu.action-dropdown {
+    left: auto;
+    right: -40px !important;
+}
+
 /*material datepicker css starts*/
 .recurring-form  .mat-form-field{
     max-width: 170px;
@@ -9700,10 +9712,6 @@ input.mat-input-element{
     background-color: $midnight-blue;
 }
 /*material datepicker css end*/
-
-ul.dropdown-menu.action-dropdown {
-    left: auto;
-    right: -40px !important;
 
     .master-custom-tabs.custom-tabs {
         .nav-tabs {
@@ -9784,7 +9792,7 @@ ul.dropdown-menu.action-dropdown {
         }
         #setting-tab .tab-integraton .nav-tabs > li > a {
             width: 90px;
-            height: 90px;
+            height: 90px !important;
             font-size: 14px;
         }
         .groups-buttons {
@@ -9951,7 +9959,7 @@ ul.dropdown-menu.action-dropdown {
         }
         #setting-tab .tab-integraton .nav-tabs > li > a {
             width: 70px;
-            height: 70px;
+            height: 70px !important;
         }
         .tab-integraton .nav-tabs > li > a > span {
             font-size: 22px;
@@ -10122,6 +10130,15 @@ ul.dropdown-menu.action-dropdown {
         top: 50% !important;
         transform: translate(-50%, -50%) !important;
     }
+    .custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs, .setting-page ul.nav.nav-tabs{
+        padding: 7px 0px 0 15px !important;
+        li{
+            a{
+                padding: 0 !important;
+                height: 30px;
+            }
+        }
+    }
 }
     @media (max-width: 1199px) {
         .ledger-book .left-col-new .entry-modal {
@@ -10275,10 +10292,11 @@ ul.dropdown-menu.action-dropdown {
             transform: rotate(90deg);
         }
         #setting-tab .tab-container .nav.nav-tabs, #purchase-tab .purchase-tabset.tab-container
-        > .nav.nav-tabs {
-            position: fixed;
+        > .nav.nav-tabs ,
+        .custom-tabs .nav.nav-tabs, .invoice-control .nav.nav-tabs, .setting-page ul.nav.nav-tabs, .inventory-control .nav.nav-tabs{
+            position: fixed !important;
             width: 100%;
-            top: 90px;
+            top: 90px !important;
         }
         #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
             top: 88px;
@@ -10418,10 +10436,6 @@ ul.dropdown-menu.action-dropdown {
         .panel-block .card-body {
             min-height: auto;
         }
-        // .tabs-page .padding-top-fixed-mobile {
-        //     padding-top: 126px;
-        // }
-
         .page-has-tabs .padding-top-fixed-mobile,
         .on-user-page .padding-top-fixed-mobile {
             padding-top: 130px !important;
@@ -11011,4 +11025,3 @@ ul.dropdown-menu.action-dropdown {
         border-radius: 5px;
         min-height: 60px;
     }
-}

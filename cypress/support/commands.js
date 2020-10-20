@@ -100,7 +100,8 @@ Cypress.Commands.add("globalSearch", (elementPath, searchValue, expectedText) =>
 
 Cypress.Commands.add("createLedger", (accountName, accountElementPath, amount)=>{
     ledgerPage.clickAccount().click()
-    ledgerPage.inputAccount().type(accountName)
+    ledgerPage.inputAccount().type(accountName, {delay:300})
+    cy.wait(2000)
     //cy.contains(accountElementPath).click();
     //ledgerPage.selectSalesAccount().click({force : true})
     cy.get(accountElementPath).click({force : true})
@@ -110,10 +111,11 @@ Cypress.Commands.add("createLedger", (accountName, accountElementPath, amount)=>
     })
 })
 
-Cypress.Commands.add("abc", (accountName, accountElementPath, amount)=>{
+Cypress.Commands.add("createLedgerWithTaxes", (accountName, accountElementPath, amount)=>{
     cy.log("This is for testing")
     ledgerPage.clickAccount().click()
-    ledgerPage.inputAccount().type(accountName)
+    ledgerPage.inputAccount().type(accountName, {delay:300})
+    cy.wait(2000)
     //cy.contains(accountElementPath).click();
     //ledgerPage.selectSalesAccount().click({force : true})
     cy.get(accountElementPath).click({force : true})
@@ -124,10 +126,10 @@ Cypress.Commands.add("abc", (accountName, accountElementPath, amount)=>{
     })
 })
 
-Cypress.Commands.add("getAllLedger", () => {
+Cypress.Commands.add("getAllLedger", (accountUniqueName) => {
     cy.request({
         method: 'GET',
-        url: Cypress.env('apiBaseURI')+ Cypress.env('getLedgerAPI'),
+        url: Cypress.env('apiBaseURI')+ "/accounts/"+ accountUniqueName +"/giddh-ledger",
         'content-type': 'application/json; charset=utf-8',
         headers: {
             'Auth-Key': Cypress.env('authKey')

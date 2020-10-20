@@ -9,6 +9,7 @@
     border-right: transparent !important;
     border-left: transparent !important;
     font-size: 14px;
+    height: 36px;
 }
 
 .inventory-control ::ng-deep.nav.nav-tabs {
@@ -94,9 +95,10 @@
 }
 @media(max-width:767px){
     .inventory-control ::ng-deep.nav.nav-tabs {
-        position: fixed;
+        position: fixed !important;
         width: 100%;
-        top: 100px;
+        top: 95px !important;
+        padding: 0 15px !important;
     }
 }
 @media(max-width:1024px){
