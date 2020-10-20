@@ -427,4 +427,13 @@ export class CreateWarehouseComponent implements OnInit {
             option.isDefault = false;
         }
     }
+    /**
+     * Unsubscribe from all listeners
+     *
+     * @memberof CreateAddressComponent
+     */
+    public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('fixed');
+    }
+
 }
