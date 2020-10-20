@@ -142,7 +142,7 @@ export class CreateBranchComponent implements OnInit {
             event.preventDefault();
         }
         this.addressAsideMenuState = this.addressAsideMenuState === 'out' ? 'in' : 'out';
-
+        this.isAddressChangeInProgress = false;
         this.toggleBodyClass();
     }
 

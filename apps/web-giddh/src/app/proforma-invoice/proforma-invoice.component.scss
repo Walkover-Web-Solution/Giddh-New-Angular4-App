@@ -1593,6 +1593,11 @@ span.eligible-ITC {
         padding-bottom: 0;
     }
 }
+.linking-dropdown {
+    .linking-item {
+        flex-direction: column;
+    }
+}
 .remove-invoice {
     display: inline-flex;
     align-items: center;
