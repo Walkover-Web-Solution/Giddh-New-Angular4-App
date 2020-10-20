@@ -44,7 +44,8 @@
                     <label class="font-14">Parent:</label>
                 </div>
                 <div class="col-md-4 col-sm-12 col-lg-4 col-xl-3">
-                    <div class="font-14">{{profileData?.parent?.name}} ({{profileData?.parent?.businessType}})</div>
+                    <div *ngIf="profileData?.parent?.name" class="font-14">{{profileData?.parent?.name}} ({{profileData?.parent?.businessType}})</div>
+                    <div *ngIf="!profileData?.parent?.name" class="font-14">{{profileData?.companyName}}</div>
                 </div>
             </div>
             <div class="row country-name">
@@ -76,6 +77,14 @@
                 <div class="form-group">
                     <label>Headquarter Alias</label>
                     <input [(ngModel)]="profileData.nameAlias" (ngModelChange)="profileUpdated('nameAlias')"  type="text" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="organizationType === 'BRANCH'">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
+                <div class="form-group">
+                    <label>Alias</label>
+                    <input [(ngModel)]="profileData.alias" (ngModelChange)="profileUpdated('alias')"  type="text" class="form-control">
                 </div>
             </div>
         </div>
