@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
@@ -26,7 +27,8 @@ import { OrganizationProfile, SettingsAsideFormType } from '../constants/setting
     ]
 })
 export class AddressSettingsComponent implements OnInit, OnDestroy {
-    public accountAsideMenuState: string = 'out';
+    /** Stores the confirmation modal instance */
+    @ViewChild('deleteAddressConfirmationModal', {static: true}) public deleteAddressConfirmationModal: ModalDirective;
 
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
@@ -88,7 +90,8 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     public searchAddressInput: FormControl = new FormControl();
     /** Search state input field form control */
     public searchStateInput: FormControl = new FormControl();
-
+    /** Stores the current state of side menu */
+    public accountAsideMenuState: string = 'out';
     /** True, if search name input field is to be shown */
     public showSearchName: boolean;
     /** True, if search address input field is to be shown */
@@ -103,6 +106,8 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     };
     /** Stores the address to be updated */
     public addressToUpdate: any;
+    /** Selected address */
+    public selectedAddress: any;
 
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -365,5 +370,39 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         while ((child = child.parentNode) && child !== parent) {
         }
         return !!child;
+    }
+
+    /**
+     * Displays the confirmation modal for taking any action
+     *
+     * @param {*} address Selected address
+     * @memberof AddressSettingsComponent
+     */
+    public showConfirmationModal(address: any): void {
+        this.selectedAddress = address;
+        this.deleteAddressConfirmationModal.show();
+    }
+
+    /**
+     * Handles the confirmation of the operation
+     *
+     * @memberof AddressSettingsComponent
+     */
+    public onConfirmation(): void {
+        if (this.organizationType === OrganizationType.Branch) {
+            this.handleUnLinkAddress(this.selectedAddress);
+        } else {
+            this.handleDeleteAddress(this.selectedAddress);
+        }
+        this.deleteAddressConfirmationModal.hide();
+    }
+
+    /**
+     * Handles the cancel operation
+     *
+     * @memberof AddressSettingsComponent
+     */
+    public onCancel(): void {
+        this.deleteAddressConfirmationModal.hide();
     }
 }

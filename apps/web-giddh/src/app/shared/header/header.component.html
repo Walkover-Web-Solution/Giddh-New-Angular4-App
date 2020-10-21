@@ -252,7 +252,7 @@
                     <li class="divider dropdown-divider"></li>
                     <li *ngIf="currentBranch" (click)="goToCompany()" role="menuitem"><a class="dropdown-item go-to-company"
                             href="javascript:void(0);">Go to company</a>
-                    <li *ngIf="!currentBranch" role="menuitem"><a class="dropdown-item go-to-company"
+                    <li *ngIf="!currentBranch" (click)="subdropdown.isOpen = false" [routerLink]="['/pages/settings/create-branch']" role="menuitem"><a class="dropdown-item go-to-company"
                             href="javascript:void(0);">Create Branch</a>
                     </li>
                 </ul>
@@ -304,7 +304,7 @@
             <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="false">
 
                 <!-- Accounts menu -->
-                <ul class="left-fixed-header mr-t1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+                <ul class="left-fixed-header mr-t1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async) && shouldShowAccounts">
                     <h6 class="mr-b1">ACCOUNTS
 
                         <img src="{{imgPath}}plus-around-icon.svg" *ngIf="!isMobileSite" (click)="showManageGroupsModal()" tooltip="Create account" class="pull-right" placement="bottom" container="body">
@@ -327,7 +327,7 @@
                 </ul>
 
                 <!-- Main menu -->
-                <ul class="left-fixed-header mr-t4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+                <ul class="left-fixed-header" [ngClass]="{'open':sideMenu.isopen, 'mr-t4': shouldShowAccounts, 'mr-t1': !shouldShowAccounts}" *ngIf="(selectedCompany | async)">
                     <h6 class="mr-b1">MENU
                         <a (click)="navigateToAllModules()">
                             <img src="{{imgPath}}angle-round-icon.svg" class="pull-right" *ngIf="!isMobileSite" tooltip="Menu" placement="bottom" container="body">
