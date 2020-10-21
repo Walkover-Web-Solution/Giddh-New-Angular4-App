@@ -142,8 +142,9 @@
     </div>
 </div>
 <div>
-    <div class="aside-overlay" *ngIf="asideEditWarehousePane === 'in'" (click)="toggleAddressAsidePane($event)"></div>
+    <div class="aside-overlay" *ngIf="asideEditWarehousePane === 'in'" (click)="toggleAsidePane($event)"></div>
     <create-address [class]="asideEditWarehousePane" [@slideInOut]="asideEditWarehousePane"
+        [currentOrganizationUniqueName]="currentOrganizationUniqueName"
         [warehouseToUpdate]="warehouseToUpdate" [showLoader]="isWarehouseUpdateInProgress"
         (updateAddress)="updateWarehouseInfo($event)" [addressConfiguration]="addressConfiguration"
         (closeAsideEvent)="toggleAsidePane($event)" *ngIf="asideEditWarehousePane === 'in'" >

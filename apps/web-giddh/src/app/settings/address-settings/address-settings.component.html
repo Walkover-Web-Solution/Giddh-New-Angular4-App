@@ -170,6 +170,7 @@
     <div class="aside-overlay" (click)="toggleAccountAsidePane()"></div>
     <create-address class="account-aside-menu-state  transinherit" [@slideInOut]="accountAsideMenuState"
         [companyName]="organizationType === 'BRANCH' ? profileData?.companyName : ''"
+        [currentOrganizationUniqueName]="currentOrganizationUniqueName"
         [showLoader]="isAddressChangeInProgress" (saveAddress)="saveAddress($event)"
         (updateAddress)="updateAddress($event)" [addressToUpdate]="addressToUpdate"
         (closeAsideEvent)="toggleAccountAsidePane()" [addressConfiguration]="addressConfiguration">

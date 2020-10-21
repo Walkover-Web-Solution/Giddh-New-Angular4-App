@@ -27,6 +27,7 @@ export interface OrganizationProfile {
     businessTypes?: Array<any>;
     businessType?: string;
     nameAlias?: string;
+    headQuarterAlias?: string;
     balanceDecimalPlaces?: number;
     balanceDisplayFormat?: string;
 }

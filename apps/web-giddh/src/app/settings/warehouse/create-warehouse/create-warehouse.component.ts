@@ -9,6 +9,7 @@ import { takeUntil } from 'rxjs/operators';
 import { OnboardingFormRequest } from '../../../models/api-models/Common';
 import { CommonService } from '../../../services/common.service';
 import { CompanyService } from '../../../services/companyService.service';
+import { GeneralService } from '../../../services/general.service';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
@@ -64,6 +65,9 @@ export class CreateWarehouseComponent implements OnInit {
     public addresses: Array<any>;
     /** True, if address change is in progress */
     public isAddressChangeInProgress: boolean = false;
+    /** Stores the current organization uniqueName */
+    public currentOrganizationUniqueName: string;
+
     /** Unsubscribe from listener */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -71,6 +75,7 @@ export class CreateWarehouseComponent implements OnInit {
         private commonService: CommonService,
         private companyService: CompanyService,
         private formBuilder: FormBuilder,
+        private generalService: GeneralService,
         private router: Router,
         private store: Store<AppState>,
         private settingsProfileService: SettingsProfileService,
@@ -109,6 +114,7 @@ export class CreateWarehouseComponent implements OnInit {
      * @memberof CreateWarehouseComponent
      */
     public ngOnInit(): void {
+        this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.loadLinkedEntities();
         this.loadAddresses('GET');
         this.warehouseForm = this.formBuilder.group({

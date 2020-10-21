@@ -86,6 +86,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public isWarehouseUpdateInProgress: boolean;
     /** Warehouse details to update */
     public warehouseToUpdate: any;
+    /** Stores the current organization uniqueName */
+    public currentOrganizationUniqueName: string;
 
 
     /** View container to carry out on boarding */
@@ -133,6 +135,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public ngOnInit(): void {
         this.imgPath = (isElectron ||isCordova)  ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();
     }
 

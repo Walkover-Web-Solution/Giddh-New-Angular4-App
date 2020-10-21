@@ -9,6 +9,7 @@ import { GeneralActions } from '../../../actions/general/general.actions';
 import { OnboardingFormRequest } from '../../../models/api-models/Common';
 import { CommonService } from '../../../services/common.service';
 import { CompanyService } from '../../../services/companyService.service';
+import { GeneralService } from '../../../services/general.service';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
@@ -62,6 +63,9 @@ export class CreateBranchComponent implements OnInit {
     public addresses: Array<any>;
     /** True, if new address is in progress in the side menu */
     public isAddressChangeInProgress: boolean = false;
+    /** Stores the current organization uniqueName */
+    public currentOrganizationUniqueName: string;
+
     /** Unsubscribes from all the listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -70,6 +74,7 @@ export class CreateBranchComponent implements OnInit {
         private companyService: CompanyService,
         private formBuilder: FormBuilder,
         private generalActions: GeneralActions,
+        private generalService: GeneralService,
         private router: Router,
         private store: Store<AppState>,
         private settingsProfileService: SettingsProfileService,
@@ -93,7 +98,7 @@ export class CreateBranchComponent implements OnInit {
                         currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                     }
                 }
-                this.branchForm.get('name').patchValue(this.companyDetails.country.name);
+                this.branchForm.get('name').patchValue(this.companyDetails.name);
                 if (!this.addressConfiguration.stateList.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
@@ -108,6 +113,7 @@ export class CreateBranchComponent implements OnInit {
      * @memberof CreateBranchComponent
      */
     public ngOnInit(): void {
+        this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.loadAddresses('GET');
         this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/branch'));
     }

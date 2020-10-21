@@ -2,7 +2,7 @@
     <div class="mb-1 d-flex date-advance-search row">
         <form class="form-inline input-group-date-range-picker pr col-lg-10 col-md-12 mb-15">
             <div class="mr-1 d-flex branch-header-content flex-row">
-                    <!-- <div class="btn-group advance-icon" dropdown>
+                <!-- <div class="btn-group advance-icon" dropdown>
                         <button id="button-basic-icon" dropdownToggle type="button" class="btn dropdown-toggle mr-0 d-flex align-items-center" aria-controls="dropdown-basic-icon">
                                 <span class="icon-advance-search"></span>
                         </button>
@@ -30,13 +30,15 @@
                             </li>
                         </ul>
                     </div> -->
-
-                    <div class="form-group max250 search-field form-top-fields">
-                            <input type="text" #branchSearch placeholder="Search branch" class="form-control" />
-                            <span class="input-addon">
-                            <i class="icon-search"></i>
-                        </span>
+                <div class="search-field form-top-fields">
+                    <div class="search-branch-box">
+                        <input type="text" name="searchBranch" [(ngModel)]="searchBranchQuery" #branchSearch placeholder="Search branch" class="form-control" />
                     </div>
+                    <a class="cp mr-l1 clear-filter-btn" *ngIf="searchBranchQuery" href="javascript:;"
+                        (click)="resetFilter()" tooltip="Reset Search">
+                        <i aria-hidden="true" class="icon-refrsh"></i> Clear Filter
+                    </a>
+                </div>
                 <!-- <div class="input-group form-top-fields">
                     <div class="form-group">
                         <span class="icon-calender" (click)="dp.toggle()"></span> <input type="text" readonly
@@ -88,11 +90,14 @@
         </div>
     </div> -->
 </div>
-<div *ngIf="(branches$ | async)?.length === 0" class="no-data mr-t2 loader-main">
-    <div class="spinner2">
-        <div class="cube1"></div>
-        <div class="cube2"></div>
+<div *ngIf="(branches$ | async)?.length === 0 && !showLoader" class="no-data mr-t2 loader-main">
+    <div class="no-data">
+        <h1>No branch found within given criteria.</h1>
     </div>
+</div>
+<div *ngIf="showLoader" class="spinner2">
+    <div class="cube1"></div>
+    <div class="cube2"></div>
 </div>
 <div *ngIf="(branches$ | async)?.length > 0 && branchViewType === 'table' && !isMobileScreen " class="table-responsive">
     <table class="table basic giddh-table on-mobile-view">
@@ -134,7 +139,7 @@
         </tbody>
     </table>
 </div>
-<div *ngIf="(branches$ | async)?.length > 0">
+<div *ngIf="(branches$ | async)?.length > 0 && !showLoader">
     <div class="branch-card-view" *ngIf="branchViewType === 'card'">
         <div class="row">
             <div class="col-12" *ngFor="let branch of branches$ | async">
@@ -143,8 +148,10 @@
                         <div class="clearfix">
                             <div class="pull-left d-flex">
                                 <!-- <input type="checkbox">&nbsp;&nbsp; -->
-                                <i class="cursor-pointer icon-branch-icon" *ngIf="branch.parentBranch" tooltip="Branch"></i>
-                                <i class="cursor-pointer icon-company-HO" *ngIf="!branch.parentBranch" tooltip="HO Branch"></i>
+                                <i class="cursor-pointer icon-branch-icon" *ngIf="branch.parentBranch"
+                                    tooltip="Branch"></i>
+                                <i class="cursor-pointer icon-company-HO" *ngIf="!branch.parentBranch"
+                                    tooltip="HO Branch"></i>
                                 <div>
                                     <h2>{{branch.alias}}</h2>
                                 </div>
@@ -205,14 +212,14 @@
                                 <div>
                                     <div *ngFor="let address of branch?.addresses" class="linked-add">
                                         <ng-container *ngIf="address">
-                                            <i (click)="setDefault(address, branch, 'address')" *ngIf="!address?.isDefault"
+                                            <i (click)="setDefault(address, branch, 'address')"
+                                                *ngIf="!address?.isDefault"
                                                 class="cursor-pointer icon-no-selected mr-05"></i>
-                                            <i (click)="setDefault(address, branch, 'address')" *ngIf="address?.isDefault"
+                                            <i (click)="setDefault(address, branch, 'address')"
+                                                *ngIf="address?.isDefault"
                                                 class="cursor-pointer icon-favorite-selected mr-05"></i>
-                                            <label class="cursor-pointer"
-                                                [popover]="popTemplate"
-                                                popoverTitle="{{address?.name}}" placement="right"
-                                                popover
+                                            <label class="cursor-pointer" [popover]="popTemplate"
+                                                popoverTitle="{{address?.name}}" placement="right" popover
                                                 triggers="mouseenter:mouseleave">{{address?.name}}</label>
                                             <ng-template #popTemplate>
                                                 {{address?.address}} {{address?.stateCode}}
@@ -229,14 +236,13 @@
                                 <div>
                                     <div *ngFor="let warehouse of branch?.warehouseResource" class="linked-add">
                                         <ng-container *ngIf="warehouse">
-                                            <i (click)="setDefault(warehouse, branch, 'warehouse')" *ngIf="!warehouse?.isDefault"
+                                            <i (click)="setDefault(warehouse, branch, 'warehouse')"
+                                                *ngIf="!warehouse?.isDefault"
                                                 class="cursor-pointer icon-no-selected mr-05"></i>
-                                            <i (click)="setDefault(warehouse, branch, 'warehouse')" *ngIf="warehouse?.isDefault"
+                                            <i (click)="setDefault(warehouse, branch, 'warehouse')"
+                                                *ngIf="warehouse?.isDefault"
                                                 class="cursor-pointer icon-favorite-selected mr-05"></i>
-                                            <label class="cursor-pointer"
-                                                popover="{{warehouse?.address}}"
-                                                popoverTitle="{{warehouse?.name}}" placement="right"
-                                                triggers="mouseenter:mouseleave">{{warehouse?.name}}</label>
+                                            <label class="cursor-pointer">{{warehouse?.name}}</label>
                                         </ng-container>
                                     </div>
                                 </div>
@@ -416,7 +422,9 @@
 
     <!-- Edit branch -->
     <div *ngIf="closeAddressSidePane === 'in'">
+        <div class="aside-overlay" (click)="toggleAsidePane()"></div>
         <create-address [class]="closeAddressSidePane" [@slideInOut]="closeAddressSidePane"
+            [companyName]="currentBranch"
             [branchToUpdate]="branchToUpdate" [showLoader]="isBranchChangeInProgress"
             (updateAddress)="updateBranchInfo($event)" [addressConfiguration]="addressConfiguration"
             (closeAsideEvent)="toggleAsidePane($event)">
