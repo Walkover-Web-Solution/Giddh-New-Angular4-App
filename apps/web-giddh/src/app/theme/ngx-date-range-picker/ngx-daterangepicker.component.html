@@ -58,18 +58,11 @@
                             to today
                         </button>
                     </li>
-                    <li>
-                        <button><input type="tel" (change)="uptoYesterday($event,$event.target.value)"
-                                (keyup)="uptoInputKeyUp($event)"> days
-                            up to yesterday
-                        </button>
-                    </li>
                 </ul>
             </div>
             <!-- days up to today/ yesterday input -->
             <!-- buttons -->
-            <div class="buttons bottom-botton"
-            *ngIf="!autoApply && ( !ranges?.length || (showCalInRanges && !singleDatePicker))">
+            <div class="buttons bottom-botton">
                 <div class="buttons-input">
                     <!-- clear button -->
                     <button *ngIf="showClearButton" class="btn btn-default clear" type="button" (click)="clear()"
@@ -223,54 +216,6 @@
 
                     <!-- month selection -->
                 </div>
-                <perfect-scrollbar fxFlex="auto" class="hide-horizontal-scroll" [scrollIndicators]="true"
-                    [config]="{suppressScrollX: false, suppressScrollY: false}">
-                    <div class="d-container" [style.max-height.px]="280" *ngIf="showMonthPicker">
-                        <div *ngFor="let year of allowedYears; let i = index;">
-                            <h2>
-                                {{ minDate.clone().add(i, 'year').format(" YYYY")}}
-                            </h2>
-                            <div class="dropdown-containt">
-                                <div class="d-month" *ngIf="checkValidMonthYear(minDate.clone().add(i, 'year').year(), 00)" (click)="setMonth(minDate.clone().add(i, 'year').year(),00)">
-                                    Jan
-                                </div>
-                                <div class="d-month" *ngIf="checkValidMonthYear(minDate.clone().add(i, 'year').year(), 01)" (click)="setMonth(minDate.clone().add(i, 'year').year(),01)">
-                                    Feb
-                                </div>
-                                <div class="d-month" *ngIf="checkValidMonthYear(minDate.clone().add(i, 'year').year(), 02)" (click)="setMonth(minDate.clone().add(i, 'year').year(),02)">
-                                    Mar
-                                </div>
-                                <div class="d-month" *ngIf="checkValidMonthYear(minDate.clone().add(i, 'year').year(), 03)" (click)="setMonth(minDate.clone().add(i, 'year').year(),03)">
-                                    Apr
-                                </div>
-                                <div class="d-month" *ngIf="checkValidMonthYear(minDate.clone().add(i, 'year').year(), 04)" (click)="setMonth(minDate.clone().add(i, 'year').year(),04)">
-                                    May
-                                </div>
-                                <div class="d-month" *ngIf="checkValidMonthYear(minDate.clone().add(i, 'year').year(), 05)" (click)="setMonth(minDate.clone().add(i, 'year').year(),05)">
-                                    June
-                                </div>
-                                <div class="d-month" *ngIf="checkValidMonthYear(minDate.clone().add(i, 'year').year(), 06)" (click)="setMonth(minDate.clone().add(i, 'year').year(),06)">
-                                    July
-                                </div>
-                                <div class="d-month" *ngIf="checkValidMonthYear(minDate.clone().add(i, 'year').year(), 07)" (click)="setMonth(minDate.clone().add(i, 'year').year(),07)">
-                                    Aug
-                                </div>
-                                <div class="d-month" *ngIf="checkValidMonthYear(minDate.clone().add(i, 'year').year(), 08)" (click)="setMonth(minDate.clone().add(i, 'year').year(),08)">
-                                    Sept
-                                </div>
-                                <div class="d-month" *ngIf="checkValidMonthYear(minDate.clone().add(i, 'year').year(), 09)" (click)="setMonth(minDate.clone().add(i, 'year').year(),09)">
-                                    Oct
-                                </div>
-                                <div class="d-month" *ngIf="checkValidMonthYear(minDate.clone().add(i, 'year').year(), 10)" (click)="setMonth(minDate.clone().add(i, 'year').year(),10)">
-                                    Nov
-                                </div>
-                                <div class="d-month" *ngIf="checkValidMonthYear(minDate.clone().add(i, 'year').year(), 11)" (click)="setMonth(minDate.clone().add(i, 'year').year(),11)">
-                                    Dec
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </perfect-scrollbar>
                 <!-- start date calendar container -->
                 <div (touchmove)="mouseUp($event)">
                     <div *ngFor="let calendarMonth of calendarMonths; let i = index;">

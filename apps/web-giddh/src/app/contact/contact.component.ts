@@ -32,7 +32,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
-import { PAGINATION_LIMIT } from '../app.constant';
+import { PAGINATION_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 import { OnboardingFormRequest } from '../models/api-models/Common';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import {
@@ -156,7 +156,7 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     //     this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     // }
 
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public universalDate$: Observable<any>;
     public messageBody = {
         header: {
@@ -336,23 +336,6 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnInit() {
-
-        // get default datepicker options from store
-        this.store.pipe(select(p => p.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(a => {
-            if (a) {
-                this.datePickerOptions = a;
-                if (this.universalDate) {
-                    this.datePickerOptions = {
-                        ...this.datePickerOptions, startDate: moment(this.universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-                        endDate: moment(this.universalDate[1], GIDDH_DATE_FORMAT).toDate()
-                    };
-
-                    this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                    this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-                }
-            }
-        });
-
         // localStorage supported
         if (window.localStorage) {
             let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === 'vendor' ? 'vendor' : 'customer']));
