@@ -232,10 +232,14 @@ export class CreateBranchComponent implements OnInit {
             }))
         };
         this.settingsProfileService.createNewBranch(requestObj).subscribe(response => {
-            if (response && response.status === 'success') {
-                this.toastService.successToast('Branch created successfully');
-                this.branchForm.reset();
-                this.router.navigate(['/pages/settings/branch']);
+            if (response) {
+                if (response.status === 'success') {
+                    this.toastService.successToast('Branch created successfully');
+                    this.branchForm.reset();
+                    this.router.navigate(['/pages/settings/branch']);
+                } else {
+                    this.toastService.errorToast(response.message);
+                }
             }
         });
     }
