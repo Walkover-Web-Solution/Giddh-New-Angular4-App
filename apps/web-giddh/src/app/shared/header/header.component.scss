@@ -148,7 +148,7 @@ a[vr-item]:focus {
 .left-fixed-header > li {
     text-transform: capitalize;
     position: relative;
-    font-weight: bold;
+    font-family: 'opensans-semibold';
 }
 .no-padding {
     padding: 0px !important;
@@ -437,12 +437,15 @@ a[vr-item]:focus {
     border: 1px solid $white;
     border-radius: 20px;
     padding: 0 10px;
-    img {
+    i {
         vertical-align: bottom;
         display: inline-block;
         position: relative;
         left: 16px;
         padding: 0 20px;
+        color: $white;
+        font-size: 20px;
+
     }
 }
 
@@ -819,6 +822,15 @@ ul.sub-list {
 @media (max-width: 767px) {
     .notification {
         margin-right: 0 !important;
+        i{
+            vertical-align: bottom;
+            display: inline-block;
+            position: relative;
+            left: 20px;
+            padding: 0 20px;
+            color: $white;
+            font-size: 22px;
+        }
     }
     .universal-date .btn-link {
         border-bottom: none;
