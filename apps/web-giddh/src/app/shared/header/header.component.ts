@@ -66,7 +66,7 @@ import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from 
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { CountryRequest, CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { VAT_SUPPORTED_COUNTRIES, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -126,56 +126,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         { name: 'DUTCH', value: 'nl' }
     ];
     public activeFinancialYear: ActiveFinancialYear;
-    // public datePickerOptions: any = {
-    //     hideOnEsc: true,
-    //     opens: 'left',
-    //     locale: {
-    //         applyClass: 'btn-green',
-    //         applyLabel: 'Go',
-    //         fromLabel: 'From',
-    //         format: 'D-MMM-YY',
-    //         toLabel: 'To',
-    //         cancelLabel: 'Cancel',
-    //         customRangeLabel: 'Custom range'
-    //     },
-    //     ranges: {
-    //         'This Month to Date': [
-    //             moment().startOf('month'),
-    //             moment()
-    //         ],
-    //         'This Quarter to Date': [
-    //             moment().quarter(moment().quarter()).startOf('quarter'),
-    //             moment()
-    //         ],
-    //         'This Financial Year to Date': [
-    //             moment().startOf('year').subtract(9, 'year'),
-    //             moment()
-    //         ],
-    //         'This Year to Date': [
-    //             moment().startOf('year'),
-    //             moment()
-    //         ],
-    //         'Last Month': [
-    //             moment().subtract(1, 'month').startOf('month'),
-    //             moment().subtract(1, 'month').endOf('month')
-    //         ],
-    //         'Last Quarter': [
-    //             moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-    //             moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-    //         ],
-    //         'Last Financial Year': [
-    //             moment().startOf('year').subtract(10, 'year'),
-    //             moment().endOf('year').subtract(10, 'year')
-    //         ],
-    //         'Last Year': [
-    //             moment().subtract(1, 'year').startOf('year'),
-    //             moment().subtract(1, 'year').endOf('year')
-    //         ]
-    //     },
-    //     startDate: moment().subtract(30, 'days'),
-    //     endDate: moment()
-    // };
-
     public sideMenu: { isopen: boolean } = { isopen: false };
     public companyMenu: { isopen: boolean } = { isopen: false };
     public isCompanyRefreshInProcess$: Observable<boolean>;
@@ -252,7 +202,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -301,23 +251,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private settingsProfileService: SettingsProfileService,
         private companyService: CompanyService
     ) {
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                let configDatePicker = cloneDeep(config);
-                if (configDatePicker && configDatePicker.ranges) {
-                    let modifiedRanges = [];
-                    configDatePicker.ranges.forEach(item => {
-                        if (item.name !== 'Today' && item.name !== 'Yesterday') {
-                            modifiedRanges.push(item);
-                        }
-                    });
-                    configDatePicker.ranges = modifiedRanges;
-                }
-                this.datePickerOptions = configDatePicker;
-            }
-        });
-
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
 
@@ -427,17 +360,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 } else {
                     this.seletedCompanywithBranch = selectedCmp.name;
                 }
-                //commenting due to new date picker option
-                // if (this.activeFinancialYear) {
-                //     this.datePickerOptions.ranges['This Financial Year to Date'] = [
-                //         moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
-                //         moment()
-                //     ];
-                //     this.datePickerOptions.ranges['Last Financial Year'] = [
-                //         moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
-                //         moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
-                //     ];
-                // }
 
                 this.activeCompanyForDb = new CompAidataModel();
                 this.activeCompanyForDb.name = selectedCmp.name;
@@ -803,19 +725,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // Get universal date
         this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj && dateObj.length) {
-                //  Commented may be use later for new datepicker
-                // if (!this.isDateRangeSelected) {
-                // this.datePickerOptions.startDate = moment(dateObj[0]);
-                // this.datePickerOptions.endDate = moment(dateObj[1]);
-                // this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]), chosenLabel: dateObj[2]};
-                // const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-                // const to: any = moment().format(GIDDH_DATE_FORMAT);
-                // const fromFromStore = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                // const toFromStore = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
-
-                // if (from === fromFromStore && to === toFromStore) {
-                //     this.isTodaysDateSelected = true;
-                // }
                 this.isTodaysDateSelected = !dateObj[3];  //entry-setting API date response in case of today fromDate/toDate will be null
                 if (this.isTodaysDateSelected) {
                     let today = cloneDeep([moment(), moment()]);
@@ -1282,43 +1191,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         this.flyAccounts.next(false);
     }
-
-    // public setApplicationDate(ev) {
-    //     let data = ev ? cloneDeep(ev) : null;
-    //     if (data && data.picker) {
-    //         let dates = {
-    //             fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
-    //             toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT),
-    //             chosenLabel: data.picker.chosenLabel
-    //         };
-    //         if (data.picker.chosenLabel === 'This Financial Year to Date') {
-    //           data.picker.startDate = moment(clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
-    //           dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-    //         }
-    //         if (data.picker.chosenLabel === 'Last Financial Year') {
-    //           data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year');
-    //           data.picker.endDate = moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year');
-    //           dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-    //           dates.toDate = moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT);
-    //         }
-    //         this.isTodaysDateSelected = false;
-    //         this.store.dispatch(this.companyActions.SetApplicationDate(dates));
-    //     } else {
-    //         this.isTodaysDateSelected = true;
-    //         let today = cloneDeep([moment(), moment()]);
-    //         // this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
-    //         this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-    //         this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-    //         let dates = {
-    //             fromDate: null,
-    //             toDate: null,
-    //             duration: null,
-    //             period: null,
-    //             noOfTransactions: null
-    //         };
-    //         this.store.dispatch(this.companyActions.SetApplicationDate(dates));
-    //     }
-    // }
 
     public openDateRangePicker() {
         this.isTodaysDateSelected = false;
@@ -1832,7 +1704,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         } else {
             this.isTodaysDateSelected = true;
             let today = cloneDeep([moment(), moment()]);
-            // this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
+            
             this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
             this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
             let dates = {

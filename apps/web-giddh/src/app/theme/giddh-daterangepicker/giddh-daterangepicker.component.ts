@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectionStrategy, OnDestroy, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectionStrategy, OnDestroy, Inject, ChangeDetectorRef, ViewChild } from '@angular/core';
 import * as _moment from 'moment';
-import { MatDatepickerInputEvent, MatCalendar } from '@angular/material/datepicker';
+import { MatDatepickerInputEvent, MatCalendar, MatDatepicker } from '@angular/material/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ReplaySubject } from 'rxjs';
 import { DateAdapter, MAT_DATE_FORMATS, MatDateFormats } from '@angular/material/core';
@@ -9,7 +9,6 @@ import { GeneralService } from '../../services/general.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, DatePickerDefaultRangeEnum } from '../../app.constant';
-import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 
 const moment = _moment;
@@ -21,7 +20,7 @@ const moment = _moment;
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class GiddhDaterangepickerComponent implements OnInit, OnChanges {
+export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestroy {
     public giddhDaterangepickerSidebar = GiddhDaterangepickerSidebarComponent;
 
     /** Emitting selected date object as output */
@@ -31,6 +30,8 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges {
     /** Taking end date */
     @Input() public inputEndDate: any = '';
 
+    @ViewChild('picker', {static: true}) picker: MatDatepicker<Date>;
+
     public startDate: any = '';
     public endDate: any = '';
     public minDate: any;
@@ -39,7 +40,7 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges {
     /** Subject to unsubscribe from all listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private generalService: GeneralService, private store: Store<AppState>, private settingsFinancialYearActions: SettingsFinancialYearActions) {
+    constructor(private generalService: GeneralService, private store: Store<AppState>, private settingsFinancialYearActions: SettingsFinancialYearActions, private cdr: ChangeDetectorRef) {
 
     }
 
@@ -60,9 +61,11 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges {
 
         this.generalService.selectedRange.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if(response && response.value) {
-                console.log(response);
                 this.startDate = response.value[0];
                 this.endDate = response.value[1];
+
+                this.dateSelected.emit({name: response.name, startDate: this.startDate, endDate: this.endDate});
+                this.picker.close();
             }
         });
 
@@ -98,16 +101,30 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges {
         }
     }
 
+    public ngOnDestroy(): void {
+        this.destroyed$.next();
+        this.destroyed$.complete();
+    }
+
     /**
      * Callback for date range change
      *
      * @param {MatDatepickerInputEvent<Date>} event
      * @memberof GiddhDaterangepickerComponent
      */
-    public dateChange(event: MatDatepickerInputEvent<Date>): void {
-        console.log(event);
-        //let selectedDate = moment(event.value, GIDDH_DATE_FORMAT).toDate();
+    public dateChange(type: string, event: MatDatepickerInputEvent<Date>): void {
+        if(type === "start") {
+            this.startDate = moment(event.value, GIDDH_DATE_FORMAT).toDate();
+        }
+        if(type === "end") {
+            this.endDate = moment(event.value, GIDDH_DATE_FORMAT).toDate();
+        }
+    }
 
+    public openDatepicker(): void {
+        if(this.picker) {
+            this.picker.open();
+        }
     }
 }
 
@@ -183,9 +200,9 @@ export class GiddhDaterangepickerSidebarComponent<D> implements OnInit, OnDestro
         this.store.pipe(select(state => state.settings.financialYears), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let financialYears = response.financialYears;
-
                 let currentFinancialYear;
                 let allFinancialYears = [];
+                this.financialYears = [];
 
                 if (financialYears[0].financialYearStarts) {
                     let minDate = new Date(financialYears[0].financialYearStarts.split("-").reverse().join("-"));
