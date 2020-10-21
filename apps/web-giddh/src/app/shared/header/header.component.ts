@@ -287,6 +287,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public currentCompanyBranches: Array<any>;
     /** Search query to search branch */
     public searchBranchQuery: string;
+    /** Current organization type */
+    public currentOrganizationType: OrganizationType;
+
+    /**
+     * Returns whether the account section needs to be displayed or not
+     *
+     * @readonly
+     * @type {boolean} True, if either branch is switched or company is switched and only HO is there (single branch)
+     * @memberof HeaderComponent
+     */
+    public get shouldShowAccounts(): boolean {
+        return this.currentOrganizationType === OrganizationType.Branch ||
+            (this.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches && this.currentCompanyBranches.length === 1);
+    }
 
     /**
      *
@@ -398,6 +412,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (organization && organization.details && organization.details.branchDetails) {
                 this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
                 this.generalService.currentOrganizationType = organization.type;
+                this.currentOrganizationType = organization.type;
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
                         if (response) {
@@ -407,6 +422,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             } else {
                 this.generalService.currentOrganizationType = OrganizationType.Company;
+                this.currentOrganizationType = OrganizationType.Company;
             }
         });
 

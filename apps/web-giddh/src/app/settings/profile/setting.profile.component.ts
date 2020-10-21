@@ -923,6 +923,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this._toasty.successToast('Address created successfully');
             }
             this.isAddressChangeInProgress = false;
+            this.changeDetectorRef.detectChanges();
         }, () => {
             this.isAddressChangeInProgress = false;
         });

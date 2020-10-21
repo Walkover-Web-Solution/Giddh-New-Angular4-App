@@ -96,7 +96,7 @@
                                         <div class="action-icon">
                                             <a><span (click)="handleUpdateAddress(address)"
                                                     class="icon-edit"></span></a>
-                                            <a><span (click)="handleDeleteAddress(address)"
+                                            <a><span (click)="showConfirmationModal(address)"
                                                     class="icon-trash"></span></a>
                                         </div>
                                     </div>
@@ -147,7 +147,7 @@
                                     <i *ngIf="address.isDefault" class="icon-favorite-selected mr-05"></i>
                                     <i *ngIf="!address.isDefault" class="icon-no-selected mr-05"></i>
                                     Set as Default</p>
-                                <p (click)="handleUnLinkAddress(address)" class="cursor-pointer">
+                                <p (click)="showConfirmationModal(address)" class="cursor-pointer">
                                     <i class="icon-unlink mr-05"></i>Unlink Address</p>
                             </div>
                         </div>
@@ -170,9 +170,8 @@
     <div class="aside-overlay" (click)="toggleAccountAsidePane()"></div>
     <create-address class="account-aside-menu-state  transinherit" [@slideInOut]="accountAsideMenuState"
         [companyName]="organizationType === 'BRANCH' ? profileData?.companyName : ''"
-        [currentOrganizationUniqueName]="currentOrganizationUniqueName"
-        [showLoader]="isAddressChangeInProgress" (saveAddress)="saveAddress($event)"
-        (updateAddress)="updateAddress($event)" [addressToUpdate]="addressToUpdate"
+        [currentOrganizationUniqueName]="currentOrganizationUniqueName" [showLoader]="isAddressChangeInProgress"
+        (saveAddress)="saveAddress($event)" (updateAddress)="updateAddress($event)" [addressToUpdate]="addressToUpdate"
         (closeAsideEvent)="toggleAccountAsidePane()" [addressConfiguration]="addressConfiguration">
     </create-address>
 </div>
@@ -185,3 +184,27 @@
         <input type="text" placeholder="Search {{ title }}" class="w100" #searchBox [formControl]="formControl" />
     </div>
 </ng-template>
+<div bsModal #deleteAddressConfirmationModal="bs-modal" class="modal fade" role="dialog" [config]="{keyboard:true}"
+    tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div>
+                <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix">
+                    <h3 class="modal-title bg" id="modal-title">Confirmation </h3>
+                    <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel()"></i>
+                </div>
+                <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
+                    <form name="newRole" novalidate class="" autocomplete="off">
+                        <div class="modal_wrap mr-b2">
+                            <h3>Are you sure you want to continue?</h3>
+                        </div>
+                        <div class="d-flex" style="justify-content: flex-start">
+                            <button type="submit" class="btn btn-md btn-success mrR1" (click)="onConfirmation()">Yes</button>
+                            <button type="submit" class="btn btn-md btn-cancel" (click)="onCancel()">No</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
