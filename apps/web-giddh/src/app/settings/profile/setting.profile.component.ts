@@ -759,7 +759,15 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.currentBranchDetails.name = this.companyProfileObj.name;
         this.currentBranchDetails.alias = this.companyProfileObj.alias;
         this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(params? params : this.currentBranchDetails))
-            .subscribe(response => {});
+            .subscribe(response => {
+                if (response) {
+                    if (response.status === 'success') {
+                        this._toasty.successToast('Profile Updated Successfully.');
+                    } else {
+                        this._toasty.errorToast(response.message);
+                    }
+                }
+            });
     }
 
     /**
@@ -888,13 +896,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
         }));
-        if (this.currentOrganizationType === OrganizationType.Branch) {
-            linkEntity.push({
-                uniqueName: this.generalService.currentBranchUniqueName,
-                isDefault: false,
-                entity: 'BRANCH'
-            });
-        }
+        // if (this.currentOrganizationType === OrganizationType.Branch) {
+        //     linkEntity.push({
+        //         uniqueName: this.generalService.currentBranchUniqueName,
+        //         isDefault: false,
+        //         entity: 'BRANCH'
+        //     });
+        // }
         const requestObj = {
             taxNumber: addressDetails.formValue.taxNumber,
             stateCode: addressDetails.formValue.state,
