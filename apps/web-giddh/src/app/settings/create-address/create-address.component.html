@@ -14,7 +14,8 @@
 
                 <div class="aside-body">
                     <div class="aside-pane-form">
-                        <section *ngIf="addressConfiguration.type !== 'editBranch' && addressConfiguration.type !== 'editWarehouse'"
+                        <section
+                            *ngIf="addressConfiguration.type !== 'editBranch' && addressConfiguration.type !== 'editWarehouse'"
                             class="clearfix mrBChldLbl">
                             <div *ngIf="companyName" class="font-14">
                                 All the information will save in <strong>{{companyName}}</strong>
@@ -24,7 +25,16 @@
                                 <div class="row">
                                     <div class="form-group col-12">
                                         <label>Name <sup>*</sup></label>
-                                        <input type="text" formControlName="name" class="form-control" placeholder="Enter name">
+                                        <input
+                                            [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
+                                            type="text" formControlName="name" class="form-control"
+                                            placeholder="Enter name">
+                                        <span class="danger" *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength">
+                                            Max. 100 characters allowed
+                                        </span>
+                                        <span class="danger" *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.required">
+                                            Field is required
+                                        </span>
                                     </div>
                                 </div>
 
@@ -61,10 +71,10 @@
                                     <div class="col-sm-12 form-group linked-entities">
                                         <label>Link Entity</label>
                                         <div class="form-group">
-                                            <sh-select [options]="addressConfiguration?.linkedEntities" name="linkedEntities"
-                                                formControlName="linkedEntity"
-                                                (clearSingleItem)="handleFinalSelection($event)" [isFilterEnabled]="true"
-                                                [multiple]="true
+                                            <sh-select [options]="addressConfiguration?.linkedEntities"
+                                                name="linkedEntities" formControlName="linkedEntity"
+                                                (clearSingleItem)="handleFinalSelection($event)"
+                                                [isFilterEnabled]="true" [multiple]="true
                                                 " placeholder="Select Entity">
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
@@ -108,20 +118,21 @@
                             </div>
                         </section>
 
-                        <section *ngIf="addressConfiguration.type === 'editBranch'"
-                            class="clearfix mrBChldLbl">
+                        <section *ngIf="addressConfiguration.type === 'editBranch'" class="clearfix mrBChldLbl">
                             <div class="form_bg clearfix">
                                 <div class="row">
                                     <div class="form-group col-12">
                                         <label>Branch Name <sup>*</sup></label>
-                                        <input type="text" formControlName="name" class="form-control" placeholder="Enter">
+                                        <input type="text" formControlName="name" class="form-control"
+                                            placeholder="Enter">
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-sm-8 form-group">
                                         <label>Alias <sup>*</sup></label>
-                                        <input type="text" formControlName="alias" class="form-control" placeholder="Enter alias">
+                                        <input type="text" formControlName="alias" class="form-control"
+                                            placeholder="Enter alias">
                                     </div>
                                 </div>
 
@@ -129,10 +140,10 @@
                                     <div class="form-group col-12 linked-entities">
                                         <label>Linked Address/es</label>
                                         <div class="form-group">
-                                            <sh-select [options]="addressConfiguration?.linkedEntities" name="linkedEntities"
-                                                formControlName="linkedEntity"
-                                                (clearSingleItem)="handleFinalSelection($event)" [isFilterEnabled]="true"
-                                                [multiple]="true" placeholder="Select Entity">
+                                            <sh-select [options]="addressConfiguration?.linkedEntities"
+                                                name="linkedEntities" formControlName="linkedEntity"
+                                                (clearSingleItem)="handleFinalSelection($event)"
+                                                [isFilterEnabled]="true" [multiple]="true" placeholder="Select Entity">
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
                                                         <a (click)="selectEntity(option)" href="javascript:void(0)"
@@ -144,7 +155,8 @@
                                                                 <div class="item">{{ option.label || '-' }}</div>
                                                                 <div class="item-unq">
                                                                     {{ option.address || '-' }}
-                                                                    <p *ngIf="option.taxType && option.taxNumber">{{ option.taxType }} :
+                                                                    <p *ngIf="option.taxType && option.taxNumber">
+                                                                        {{ option.taxType }} :
                                                                         {{ option.taxNumber }}</p>
                                                                 </div>
                                                             </span>
@@ -171,13 +183,13 @@
                             </div>
                         </section>
 
-                        <section *ngIf="addressConfiguration.type === 'editWarehouse'"
-                            class="clearfix mrBChldLbl">
+                        <section *ngIf="addressConfiguration.type === 'editWarehouse'" class="clearfix mrBChldLbl">
                             <div class="form_bg clearfix">
                                 <div class="row">
                                     <div class="form-group col-12">
                                         <label>Name <sup>*</sup></label>
-                                        <input type="text" formControlName="name" class="form-control" placeholder="Enter name" required>
+                                        <input type="text" formControlName="name" class="form-control"
+                                            placeholder="Enter name" required>
                                     </div>
                                 </div>
 
@@ -185,10 +197,11 @@
                                     <div class="form-group col-12 linked-entities">
                                         <label>Address/es</label>
                                         <div class="form-group">
-                                            <sh-select [options]="addressConfiguration?.linkedEntities" name="linkedEntities"
-                                                formControlName="linkedEntity"
-                                                (clearSingleItem)="handleFinalSelection($event)" [isFilterEnabled]="true"
-                                                [multiple]="true" placeholder="Select Address/es">
+                                            <sh-select [options]="addressConfiguration?.linkedEntities"
+                                                name="linkedEntities" formControlName="linkedEntity"
+                                                (clearSingleItem)="handleFinalSelection($event)"
+                                                [isFilterEnabled]="true" [multiple]="true"
+                                                placeholder="Select Address/es">
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
                                                         <a (click)="selectEntity(option)" href="javascript:void(0)"
@@ -200,7 +213,8 @@
                                                                 <div class="item">{{ option.label || '-' }}</div>
                                                                 <div class="item-unq">
                                                                     {{ option.address || '-' }}
-                                                                    <p *ngIf="option.taxType && option.taxNumber">{{ option.taxType }} :
+                                                                    <p *ngIf="option.taxType && option.taxNumber">
+                                                                        {{ option.taxType }} :
                                                                         {{ option.taxNumber }}</p>
                                                                 </div>
                                                             </span>

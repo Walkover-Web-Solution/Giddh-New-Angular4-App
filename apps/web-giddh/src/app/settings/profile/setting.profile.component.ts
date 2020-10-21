@@ -82,6 +82,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         businessTypes: [],
         businessType: '',
         nameAlias: '',
+        headQuarterAlias: '',
         balanceDisplayFormat: ''
     };
     public stateStream$: Observable<States[]>;
@@ -143,7 +144,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public closeAddressSidePane: boolean;
     /** True, if create/update address is in progress */
     public isAddressChangeInProgress: boolean;
-
+    /** Stores the current organization uniqueName */
+    public currentOrganizationUniqueName: string;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -257,6 +259,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.isPANValid = true;
         this.isMobileNumberValid = true;
 
+        this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
+
         this.store.select(p => p.settings.inventory).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
                 let inventorySetting = _.cloneDeep(o);
@@ -285,7 +289,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        this.store.select(appState => appState.settings.currentBranch).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.store.pipe(select(appState => appState.settings.currentBranch), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.currentBranchDetails = response;
                 if (this.currentOrganizationType === OrganizationType.Branch) {
@@ -1051,7 +1055,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 ...this.companyProfileObj,
                 name: profileObj.name,
                 companyName: profileObj.name,
-                nameAlias: profileObj.nameAlias,
+                headQuarterAlias: profileObj.headQuarterAlias,
                 uniqueName: profileObj.uniqueName,
                 country: {
                     countryName: profileObj.countryV2 ? profileObj.countryV2.countryName : '',

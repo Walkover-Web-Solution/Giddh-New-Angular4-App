@@ -1,29 +1,30 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import * as moment from 'moment/moment';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
+import { BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { createSelector } from 'reselect';
 import { fromEvent, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { createSelector } from 'reselect';
-import { Store, select } from '@ngrx/store';
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, AfterViewInit, TemplateRef, ElementRef } from '@angular/core';
-import { AppState } from '../../store/roots';
-import * as _ from '../../lodash-optimized';
-import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { ModalDirective, BsModalService } from 'ngx-bootstrap/modal';
-import { CompanyAddNewUiComponent } from '../../shared/header/components';
-import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { CompanyResponse, BranchFilterRequest } from '../../models/api-models/Company';
-import { CompanyActions } from '../../actions/company.actions';
+
 import { CommonActions } from '../../actions/common.actions';
+import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import * as moment from 'moment/moment';
-import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
-import { GeneralService } from "../../services/general.service";
-import { BreakpointObserver } from '@angular/cdk/layout';
+import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
+import * as _ from '../../lodash-optimized';
+import { BranchFilterRequest, CompanyResponse } from '../../models/api-models/Company';
+import { GeneralService } from '../../services/general.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
-import { Router } from '@angular/router';
-import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { ToasterService } from '../../services/toaster.service';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { CompanyAddNewUiComponent } from '../../shared/header/components';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { AppState } from '../../store/roots';
+import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { SettingsUtilityService } from '../services/settings-utility.service';
 
 export const IsyncData = [
@@ -88,6 +89,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public closeAddressSidePane: string = 'out';
     /** True if branch update is in progress, used to show ladda loader in aside menu */
     public isBranchChangeInProgress: boolean = false;
+    /** Stores all the branches */
+    public unFilteredBranchList: Array<any>;
+    /** Stores the branch searcch query */
+    public searchBranchQuery: string;
 
     /** Branch search field instance */
     @ViewChild('branchSearch', {static: true}) public branchSearch: ElementRef;
@@ -99,6 +104,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     };
     /** Branch details to update */
     public branchToUpdate: any;
+    /** True, if loader is to be displayed */
+    public showLoader: boolean;
+
     /** Stores the selected branch details */
     private branchDetails: any;
 
@@ -143,10 +151,13 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
             if (branches) {
                 if (branches.length) {
-                    this.branches$ = observableOf(_.orderBy(branches, 'name'));
+                    this.unFilteredBranchList = _.orderBy(branches, 'name');
+                    this.branches$ = observableOf(this.unFilteredBranchList);
                 } else if (branches.length === 0) {
+                    this.unFilteredBranchList = [];
                     this.branches$ = observableOf(null);
                 }
+                this.showLoader = false;
             }
             if (companies && companies.length && branches) {
                 let companiesWithSuperAdminRole = [];
@@ -194,7 +205,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         fromEvent(this.branchSearch.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((event: any) => {
-            this.store.dispatch(this.settingsBranchActions.GetALLBranches({from: '', to: '', query: encodeURIComponent(event.target.value)}));
+            this.handleBranchSearch(event.target.value);
         });
 
         this._breakPointObservar.observe([
@@ -203,6 +214,20 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             this.isMobileScreen = result.matches;
             this.changeBranchViewType('card')
         });
+    }
+
+    /**
+     * Performs local search among branches
+     *
+     * @param {string} query Searched query
+     * @memberof BranchComponent
+     */
+    public handleBranchSearch(query: string): void {
+        let branches = [...this.unFilteredBranchList];
+        if (query) {
+            branches = this.unFilteredBranchList.filter(branch => (branch.name === query || branch.alias === query));
+        }
+        this.branches$ = observableOf(branches);
     }
 
     public ngAfterViewInit() {
@@ -351,6 +376,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         branchFilterRequest.to = this.filters['to'];
 
         if (branchFilterRequest.from && branchFilterRequest.to) {
+            this.showLoader = true;
             this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
             this.store.dispatch(this.settingsBranchActions.GetParentCompany());
@@ -516,6 +542,16 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.settingsProfileService.updateBranchInfo(requestObject).subscribe(() => {
             this.store.dispatch(this.settingsBranchActions.GetALLBranches({from: '', to: ''}));
         });
+    }
+
+    /**
+     * Resets the branch filter
+     *
+     * @memberof BranchComponent
+     */
+    public resetFilter(): void {
+        this.searchBranchQuery = '';
+        this.handleBranchSearch(this.searchBranchQuery);
     }
 
     /**

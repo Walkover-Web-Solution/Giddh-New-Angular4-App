@@ -135,6 +135,7 @@
 <div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'" (click)="toggleAddressAsidePane($event)"></div>
 <create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState"
     [addressConfiguration]="addressConfiguration" [companyName]="companyDetails?.name"
+    [currentOrganizationUniqueName]="currentOrganizationUniqueName"
     (saveAddress)="createNewAddress($event)" [showLoader]="isAddressChangeInProgress"
     (closeAsideEvent)="toggleAddressAsidePane($event)" *ngIf="addressAsideMenuState === 'in'"></create-address>
 <!-- aside pane for create address end -->

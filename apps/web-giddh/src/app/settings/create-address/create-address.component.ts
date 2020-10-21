@@ -53,6 +53,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     @Input() public companyName: string;
     /** True, if any API is in progress */
     @Input() public showLoader: boolean;
+    /** Stores the current organization uniqueName
+     * (required for checking the entity same as the organization in create-address link-entity field) */
+    @Input() public currentOrganizationUniqueName: string;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -70,17 +73,22 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateBranchAddress) {
                 const taxValidatorPatterns = this.addressConfiguration.tax.name ? this.addressConfiguration.tax.validation : [];
                 this.addressForm = this.formBuilder.group({
-                    name: ['', Validators.required],
+                    name: ['', [Validators.required, Validators.maxLength(100)]],
                     taxNumber: ['', (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
                     state: ['', Validators.required],
                     address: [''],
                     linkedEntity: [[]]
                 });
+                if (this.currentOrganizationUniqueName && this.addressConfiguration && this.addressConfiguration.linkedEntities
+                    && this.addressConfiguration.linkedEntities.some(entity => entity.uniqueName === this.currentOrganizationUniqueName)) {
+                        // This will by default show the current organization unique name as selected linked entity
+                        this.addressForm.get('linkedEntity').patchValue([`${this.currentOrganizationUniqueName}`]);
+                }
             } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress) {
                 if (this.addressToUpdate) {
                     const taxValidatorPatterns = this.addressConfiguration.tax.name ? this.addressConfiguration.tax.validation : [];
                     this.addressForm = this.formBuilder.group({
-                        name: [this.addressToUpdate.name, Validators.required],
+                        name: [this.addressToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                         taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
                         state: [this.addressToUpdate.stateCode, Validators.required],
                         address: [this.addressToUpdate.address],

@@ -212,6 +212,7 @@
         <tab (selectTab)="handleTabChanged('address')" heading="Address/GSTIN">
             <address-settings *ngIf="currentTab === 'address'" [addresses]="addresses"
                 [isAddressChangeInProgress]="isAddressChangeInProgress" [closeSidePane]="closeAddressSidePane"
+                [currentOrganizationUniqueName]="currentOrganizationUniqueName"
                 (searchAddress)="handleSearchInAddress($event)" (pageChanged)="handlePageChanged($event)"
                 [addressConfiguration]="addressConfiguration" (saveNewAddress)="createNewAddress($event)"
                 (updatedAddress)="updateAddress($event)" (deleteAddress)="handleDeleteAddress($event)"

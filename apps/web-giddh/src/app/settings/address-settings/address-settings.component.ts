@@ -63,6 +63,9 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         nameAlias: '',
         balanceDisplayFormat: ''
     };
+    /** Stores the current organization uniqueName
+     * (required for checking the entity same as the organization in create-address link-entity field) */
+    @Input() public currentOrganizationUniqueName: string;
 
     /** Page change event emitter */
     @Output() public pageChanged: EventEmitter<any> = new EventEmitter<any>();
@@ -107,6 +110,11 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     /** @ignore */
     constructor() { }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof AddressSettingsComponent
+     */
     public ngOnInit(): void {
         this.searchAddressNameInput.valueChanges.pipe(
             debounceTime(700),

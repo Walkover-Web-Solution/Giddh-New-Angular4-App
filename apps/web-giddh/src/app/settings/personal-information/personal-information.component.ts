@@ -33,7 +33,8 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
         },
         businessTypes: [],
         businessType: '',
-        nameAlias: ''
+        nameAlias: '',
+        headQuarterAlias: ''
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
