@@ -19,12 +19,17 @@
   font-variant: normal;
   text-transform: none;
   line-height: 1;
+  stroke-width: thin;
+  -webkit-text-stroke-width: thin;
 
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-notification:before {
+  content: "\e98f";
+}
 .icon-company-HO:before {
   content: "\e97f";
 }
