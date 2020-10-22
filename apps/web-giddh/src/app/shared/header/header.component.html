@@ -275,9 +275,7 @@
                             <span class=" ellp pd-r1">{{ ((selectedCompany | async)?.name)}}
                             </span>
 
-                            <div class="unique-name-financial-year"> <span *ngIf="(selectedCompany | async)?.nameAlias" class="branch-unique-name">
-                                    ({{ (selectedCompany | async)?.nameAlias }})
-                                </span>
+                            <div class="unique-name-financial-year">
                                 <span class="fyear">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}
                                 </span>
                             </div>
@@ -395,8 +393,7 @@
                 </div>
 
                 <div class="pull-right">
-
-
+                    <button *ngIf="shouldShowBackButton" (click)="navigateToPreviousRoute()" class="btn btn-primary mr-15">Back</button>
                 </div>
             </div>
         </div>
@@ -622,9 +619,7 @@
                 <span class=" ellp pd-r1">{{ ((selectedCompany | async)?.name)}}
                 </span>
 
-                <div class="unique-name-financial-year"> <span *ngIf="(selectedCompany | async)?.nameAlias" class="branch-unique-name">
-                        ({{ (selectedCompany | async)?.nameAlias }})
-                    </span>
+                <div class="unique-name-financial-year">
                     <span class="fyear">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}
                     </span>
                 </div>

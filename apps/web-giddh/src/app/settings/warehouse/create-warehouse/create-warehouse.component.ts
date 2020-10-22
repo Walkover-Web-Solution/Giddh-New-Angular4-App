@@ -225,10 +225,14 @@ export class CreateWarehouseComponent implements OnInit {
             // linkEntity
         };
         this.settingsProfileService.createNewWarehouse(requestObj).subscribe(response => {
-            if (response && response.status === 'success') {
-                this.toastService.successToast('Warehouse created successfully');
-                this.warehouseForm.reset();
-                this.router.navigate(['/pages/settings/warehouse']);
+            if (response) {
+                if (response.status === 'success') {
+                    this.toastService.successToast('Warehouse created successfully');
+                    this.warehouseForm.reset();
+                    this.router.navigate(['/pages/settings/warehouse']);
+                } else {
+                    this.toastService.errorToast(response.message);
+                }
             }
         });
     }
