@@ -9319,7 +9319,7 @@ ngx-daterangepicker-material {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
     z-index: 1;
     width: 100% !important;
-    max-width: 462px !important;
+    max-width: 520px !important;
 }
 
 .edit-modal {
@@ -11016,3 +11016,15 @@ body.prevent-body-scroll {
     min-height: 60px;
 }
 
+    /* Handle */
+    *::-webkit-scrollbar-thumb {
+        background: $nobel;
+        border-radius: 5px;
+        min-height: 60px;
+    }
+    .icon-info{
+        position: relative;
+    }
+.icon-info:before {
+  content: "\e900";
+}
