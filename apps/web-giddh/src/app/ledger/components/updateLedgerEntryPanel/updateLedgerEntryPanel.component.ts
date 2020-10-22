@@ -53,6 +53,7 @@ import { AVAILABLE_ITC_LIST } from '../../ledger.vm';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { VoucherAdjustments, AdjustAdvancePaymentModal } from '../../../models/api-models/AdvanceReceiptsAdjust';
 import { SearchService } from '../../../services/search.service';
+import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -247,7 +248,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private settingsUtilityService: SettingsUtilityService,
         private store: Store<AppState>,
         private searchService: SearchService,
-        private _toasty: ToasterService
+        private _toasty: ToasterService,
+        private warehouseActions: WarehouseActions
     ) {
 
         this.vm = new UpdateLedgerVm();
@@ -291,10 +293,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
 
         this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
-            if (warehouses) {
+            if (warehouses && warehouses.length > 0) {
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+            } else {
+                this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
             }
         });
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
@@ -911,7 +915,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private prepareMultiCurrencyObject(accountDetails: any) {
         if (this.isPettyCash) {
             // In case of petty cash account unique name will be received
-            this.multiCurrencyAccDetails = cloneDeep(this.vm.flatternAccountList.find(f => f.uniqueName === accountDetails));
+            this.multiCurrencyAccDetails = cloneDeep(this.vm.flatternAccountList.find(f => f.uniqueName === accountDetails.uniqueName));
         } else {
             // In other cases account will be received
             this.multiCurrencyAccDetails = {
