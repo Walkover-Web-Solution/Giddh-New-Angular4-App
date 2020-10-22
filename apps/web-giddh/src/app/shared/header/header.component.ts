@@ -277,6 +277,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public updateIndexDbSuccess$: Observable<boolean>;
     /* This will hold if resolution is less than 768 to consider as mobile screen */
     public isMobileScreen: boolean = false;
+    /* This will hold current page url */
+    public currentPageUrl: string = '';
 
     /** Stores the details of the current branch */
     public currentBranch: any;
@@ -334,7 +336,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
         private commonActions: CommonActions,
-        private location: Location,
         private settingsProfileService: SettingsProfileService,
         private settingsProfileAction: SettingsProfileActions,
         private companyService: CompanyService,
@@ -370,9 +371,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
+                if(this.router.url.includes("/pages/settings") && !this.generalService.getSessionStorage("previousPage")) {
+                    this.generalService.setSessionStorage("previousPage", this.currentPageUrl);
+                }
+
+                if(!this.router.url.includes("/pages/settings") && this.generalService.getSessionStorage("previousPage")) {
+                    this.generalService.removeSessionStorage("previousPage");
+                }
                 this.addClassInBodyIfPageHasTabs();
             }
             if (event instanceof NavigationEnd) {
+                if(!this.router.url.includes("/pages/settings")) {
+                    this.currentPageUrl = this.router.url;
+                }
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
 

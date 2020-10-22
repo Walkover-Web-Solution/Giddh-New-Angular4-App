@@ -2,6 +2,8 @@ import { Component, EventEmitter, OnInit, Output, ViewChild, ElementRef } from '
 import { settingsPageTabs } from "../../../helpers/pageTabs";
 import { Location } from '@angular/common';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { Router } from '@angular/router';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { select, Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
@@ -25,10 +27,7 @@ export class AsideSettingComponent implements OnInit {
     public filteredSettingsPageTabs: any[] = [];
     public isMobileScreen: boolean = true;
 
-    constructor(
-        private location: Location,
-        private breakPointObservar: BreakpointObserver,
-        private store: Store<AppState>) {
+    constructor(private location: Location, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>) {
 
     }
 
@@ -110,7 +109,11 @@ export class AsideSettingComponent implements OnInit {
      * @memberof AsideSettingComponent
      */
     public goToPreviousPage(): void {
-        this.location.back();
+        if(this.generalService.getSessionStorage("previousPage")) {
+            this.router.navigateByUrl(this.generalService.getSessionStorage("previousPage"));
+        } else {
+            this.location.back();
+        }
     }
 
     /**
