@@ -443,7 +443,7 @@ a[vr-item]:focus {
         position: relative;
         left: 16px;
         padding: 0 20px;
-        color: #fff;
+        color:$white;
         font-size: 20px;
 
     }
@@ -828,7 +828,7 @@ ul.sub-list {
             position: relative;
             left: 20px;
             padding: 0 20px;
-            color: #fff;
+            color: $white;
             font-size: 22px;
         }
     }
