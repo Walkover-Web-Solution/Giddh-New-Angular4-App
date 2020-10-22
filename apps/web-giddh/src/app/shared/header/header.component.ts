@@ -67,14 +67,13 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from '../../models/defaultMenus';
 import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
-import { CountryRequest, CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
+import { ROUTES_WITH_HEADER_BACK_BUTTON, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { CompanyService } from '../../services/companyService.service';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { SETTINGS_PROFILE_ACTIONS } from '../../actions/settings/profile/settings.profile.const';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 
 @Component({
@@ -303,8 +302,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
+     * Returns whether the back button in header should be displayed or not
      *
+     * @readonly
+     * @type {boolean}
+     * @memberof HeaderComponent
      */
+    public get shouldShowBackButton(): boolean {
+        return this.router.url && (ROUTES_WITH_HEADER_BACK_BUTTON.includes(this.router.url));
+    }
+
     // tslint:disable-next-line:no-empty
     constructor(
         private commonService: CommonService,
@@ -2044,6 +2051,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if(window['Headway'] !== undefined) {
             window['Headway'].init();
         }
+    }
+
+    public navigateToPreviousRoute(): void {
+        this.location.back();
     }
 
     /**

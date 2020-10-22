@@ -225,7 +225,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public handleBranchSearch(query: string): void {
         let branches = [...this.unFilteredBranchList];
         if (query) {
-            branches = this.unFilteredBranchList.filter(branch => (branch.name === query || branch.alias === query));
+            const lowercaseQuery = query.toLowerCase();
+            branches = this.unFilteredBranchList.filter(branch => (branch.name && branch.name.toLowerCase().includes(lowercaseQuery)) || (branch.alias && branch.alias.toLowerCase().includes(lowercaseQuery)));
         }
         this.branches$ = observableOf(branches);
     }
