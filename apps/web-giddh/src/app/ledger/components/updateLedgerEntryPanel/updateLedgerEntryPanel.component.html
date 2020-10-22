@@ -401,7 +401,7 @@
                                     <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
                                         <span class="primary_clr pd2"
                                             [tooltip]="vm.ledgerUnderStandingObj.balanceText.dr" [placement]="'top'">
-                                            {{ vm.baseCurrencyDetails?.symbol }}
+                                            {{ vm?.baseCurrencyDetails?.symbol }}
                                             {{ vm.compoundTotal | giddhCurrency}}</span>
                                     </span>
                                 </td>
