@@ -1181,7 +1181,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     obj.entries.forEach((entry, index) => {
                                         obj.entries[index].entryDate = this.universalDate || new Date();
                                     });
-        
+
                                     obj.entries = obj.entries;
                                 }
 
@@ -1751,6 +1751,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     _.uniqBy(this.invoiceList, 'value');
                     this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
+                    this._cdr.detectChanges();
                 }
             });
         }

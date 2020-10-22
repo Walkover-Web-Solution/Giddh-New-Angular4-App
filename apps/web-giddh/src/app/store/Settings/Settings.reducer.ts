@@ -86,6 +86,7 @@ const taxesInitialState: Taxes = {
 export interface SettingsState {
     integration: IntegrationPage;
     profile: any;
+    currentBranch: any;
     inventory: any;
     updateProfileSuccess: boolean;
     updateProfileInProgress: boolean;
@@ -112,6 +113,7 @@ export interface SettingsState {
 export const initialState: SettingsState = {
     integration: new IntegrationPageClass(),
     profile: {},
+    currentBranch: {},
     inventory: {},
     profileRequest: false,
     updateProfileSuccess: false,
@@ -230,6 +232,14 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                 return Object.assign({}, state, newState);
             }
             return { ...state, updateProfileInProgress: true, getProfileInProgress: false };
+        }
+        case SETTINGS_PROFILE_ACTIONS.GET_BRANCH_INFO_RESPONSE: {
+            let response: BaseResponse<any, any> = action.payload;
+            if (response.status === 'success') {
+                newState.currentBranch = response.body;
+                return Object.assign({}, state, newState);
+            }
+            return state;
         }
         case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE: {
             let response: BaseResponse<CompanyResponse, string> = action.payload;

@@ -228,3 +228,9 @@ export enum SearchResultText {
 
 /** Types of tcs and tds taxes */
 export const TCS_TDS_TAXES_TYPES = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
+
+/** Routes for which header should display back button */
+export const ROUTES_WITH_HEADER_BACK_BUTTON = [
+    '/pages/settings/create-warehouse',
+    '/pages/settings/create-branch'
+];
