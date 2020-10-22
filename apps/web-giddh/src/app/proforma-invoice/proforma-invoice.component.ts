@@ -1796,6 +1796,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invoiceDateLabel = 'Credit Note Date';
         } else if (this.isDebitNote) {
             this.invoiceDateLabel = 'Debit Note Date';
+        } else if (this.isPurchaseInvoice) {
+            this.invoiceDateLabel = 'Bill Date';
         } else {
             this.invoiceNoLabel = !this.isPurchaseInvoice ? 'Invoice #' : 'Purchase Bill #';
             this.invoiceDateLabel = 'Invoice Date';
@@ -2905,7 +2907,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             mergedAccounts: data.body.mergedAccounts,
                             mobileNo: data.body.mobileNo,
                             nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.name).join(', ') : '',
-                            stock: data.body.stock,
+                            stock: (isLinkedPoItem && selectedAcc.stock) ? selectedAcc.stock : data.body.stock,
                             uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                         };
                         txn = this.calculateItemValues(selectedAcc, txn, entry);
