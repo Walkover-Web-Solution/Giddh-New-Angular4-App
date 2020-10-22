@@ -292,11 +292,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
 
-        this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
-            if (warehouses && warehouses.length > 0) {
+        this.store.pipe(select(appState => appState.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            if (warehouses) {
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
                 this.warehouses = warehouseData.formattedWarehouses;
-                this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+                this.defaultWarehouse = (warehouseData.defaultWareßhouse) ? warehouseData.defaultWarehouse.uniqueName : '';
             } else {
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
             }
