@@ -2053,6 +2053,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
+    /**
+     * Navigates to previous page
+     *
+     * @memberof HeaderComponent
+     */
     public navigateToPreviousRoute(): void {
         this.location.back();
     }
