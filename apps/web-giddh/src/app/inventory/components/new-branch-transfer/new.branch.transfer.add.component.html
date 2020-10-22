@@ -331,10 +331,10 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <div class="hsnCodeDropdown skuNumberDropdown" *ngIf="skuNumberPopupShow && activeRow == i">
+                                            <div class="hsn-code-dropdown skuNumberDropdown" *ngIf="skuNumberPopupShow && activeRow == i">
                                                 <label>SKU Code:</label>
                                                 <input type="text" maxlength="50" placeholder="SKU Code" name="productSkuCode{{i}}" #productSkuCode [(ngModel)]="skuNumber" />
-                                                <div class="btngroup m-t-10">
+                                                <div class="btn-group m-t-10">
                                                     <button class="btn btn-sm btn-success" type="button" (click)="saveSkuNumberPopup(product)">Save</button>
                                                     <button class="btn btn-sm btn-primary" type="button" (click)="hideSkuNumberPopup()">Cancel</button>
                                                 </div>
@@ -351,7 +351,7 @@
                                         <div *ngIf="(!product?.name && !product?.description && !(product?.hsnNumber || product?.sacNumber) && !product?.skuCode)" class="placeholder-for-table">Enter product details</div>
                                     </div>
                                     <div class="position-relative">
-                                        <div class="hsnCode text-right" (click)="focusHsnNumber();" *ngIf="activeRow == i">
+                                        <div class="hsn-code text-right" (click)="focusHsnNumber();" *ngIf="activeRow == i">
                                             <label>HSN/SAC Code: </label>
                                             <span>{{ (inventorySettings?.manageInventory || !product.sacNumber) ? product.hsnNumber : product.sacNumber}}
                                                 <span class="edit-icon cp">
@@ -359,10 +359,10 @@
                                                 </span>
                                             </span>
                                         </div>
-                                        <div class="hsnCodeDropdown" *ngIf="hsnPopupShow && activeRow == i">
+                                        <div class="hsn-code-dropdown" *ngIf="hsnPopupShow && activeRow == i">
                                             <label>HSN/SAC Code</label>
                                             <input type="text" maxlength="8" placeholder="HSN/SAC Code" name="productHsnNumber{{i}}" #productHsnNumber [(ngModel)]="hsnNumber" />
-                                            <div class="btngroup m-t-10">
+                                            <div class="btn-group m-t-10">
                                                 <button class="btn btn-sm btn-success" type="button" (click)="saveHsnNumberPopup(product)">Save</button>
                                                 <button class="btn btn-sm btn-primary" type="button" (click)="hideHsnNumberPopup()">Cancel</button>
                                             </div>
@@ -550,12 +550,12 @@
                                     </div>
                                 </td>
                                 <td colspan="4">
-                                    <section class="tableSec form-group">
-                                        <div class="tableRow ">
-                                            <div class="tableCell bigger-dollar">
+                                    <section class="table-sec form-group">
+                                        <div class="table-row ">
+                                            <div class="table-cell bigger-dollar">
                                                 <strong>Total</strong>
                                             </div>
-                                            <div class="tableCell figureCell">
+                                            <div class="table-cell figure-cell">
                                                 {{activeCompany.baseCurrencySymbol}} {{overallTotal | giddhCurrency}}
                                             </div>
                                         </div>
@@ -621,18 +621,18 @@
                     <tr>
                         <th width="45%">Name
                             <div class="icon-pointer pull-right">
-                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'transporterName')" [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'asc'}">
+                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'transporterName')" [ngClass]="{'active-text-color': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'asc'}">
                                 </div>
-                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'transporterName')" [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'desc'}">
+                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'transporterName')" [ngClass]="{'active-text-color': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'desc'}">
                                 </div>
                             </div>
                         </th>
                         <th width="45%">
                             Transporter ID
                             <div class="icon-pointer pull-right">
-                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'transporterId')" [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'asc'}">
+                                <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs" (click)="sortButtonClicked('asc', 'transporterId')" [ngClass]="{'active-text-color': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'asc'}">
                                 </div>
-                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'transporterId')" [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'desc'}">
+                                <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs" (click)="sortButtonClicked('desc', 'transporterId')" [ngClass]="{'active-text-color': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'desc'}">
                                 </div>
                             </div>
                         </th>
@@ -649,7 +649,7 @@
                 </tr>
             </table>
         </div>
-        <div class="alC mt-4 mb-4" *ngIf="transporterListDetails">
+        <div class="text-center mt-4 mb-4" *ngIf="transporterListDetails">
             <pagination [totalItems]="transporterListDetails.totalPages" [(ngModel)]="transporterListDetails.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
         </div>
     </div>

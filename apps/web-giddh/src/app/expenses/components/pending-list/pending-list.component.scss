@@ -22,7 +22,7 @@
 
 .icon-pointer {
     cursor: pointer;
-    .activeTextColor {
+    .active-text-color {
         color: $wild-blue-yonder !important;
     }
 }
@@ -33,7 +33,7 @@
     float: left;
     margin-left: 6px;
 }
-.icon-sort-asc.activeTextColor {
+.icon-sort-asc.active-text-color {
     color: $wild-blue-yonder !important;
 }
 .td-search-box {

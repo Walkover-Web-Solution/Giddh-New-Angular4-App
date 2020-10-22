@@ -64,7 +64,7 @@
             <tfoot>
                 <tr>
                     <td colspan="100%">
-                        <div class="alC" *ngIf="inventoryReport?.totalPages > 1">
+                        <div class="text-center" *ngIf="inventoryReport?.totalPages > 1">
                             <pagination [maxSize]="5" [totalItems]="inventoryReport.totalItems" [itemsPerPage]="10"
                                 (pageChanged)="applyFilters($event.page)" class="pagination-sm" [boundaryLinks]="true"
                                 [rotate]="false"></pagination>

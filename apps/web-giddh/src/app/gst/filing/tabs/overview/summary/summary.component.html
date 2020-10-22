@@ -71,7 +71,7 @@
                     <ng-container *ngFor="let item of gstrOverviewData.summary">
                         <tr (click)="viewTransactions(item)" class="row-hover" [ngClass]="{'cp-none': item.gstReturnType === 'hsnsac' ||  item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'}">
                             <!-- <td></td> -->
-                            <td [ngSwitch]="true" data-title="Discription">
+                            <td [ngSwitch]="true" data-title="description">
                                 <ng-container *ngSwitchCase="item.gstReturnType === 'b2b' || item.gstReturnType === 'b2bur'">
                                     <img src="{{imgPath}}b2b.svg" class="icon text-bottom" />
                                 </ng-container>

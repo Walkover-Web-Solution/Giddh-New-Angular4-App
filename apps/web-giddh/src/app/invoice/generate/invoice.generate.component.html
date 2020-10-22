@@ -1,8 +1,7 @@
 <ng-container *ngIf="!showEditMode">
-    <div class="invoice-genrate-container">
-        <div style="height: 44px;" *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'">
-            <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
-                style="margin-bottom: 10px;display: inline-block !important;">
+    <div class="invoice-generate-container">
+        <div class="btn-dropdown-dr-cr" *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'">
+            <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()">
                 <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                     aria-controls="dropdown-basic">
                     {{ selectedVoucher | titlecase}}
@@ -25,8 +24,8 @@
         <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline mb-15">
             <div class="d-flex w-100">
                 <div class="d-flex form-group mobile-width-100">
-                    <div class="form-group date-advance-search pending-advance-search" style="flex: 1 1 auto;">
-                        <div class="input-group" id="dp-parent" style="margin-right:8px; margin-bottom:0;">
+                    <div class="form-group date-advance-search pending-advance-search">
+                        <div class="input-group mb-0" id="dp-parent">
                             <!-- <span class="icon-calender"></span> -->
                             <span class="input-wrapper">
                                 <input type="text" name="dateRangeGenerate" id="dateRangeGenerate" daterangepicker
@@ -83,11 +82,11 @@
 
         <table class="table basic table-bordered pending-table on-mobile-view">
 
-            <thead class="t-h-bg1">
+            <thead class="thead-background1">
                 <tr>
-                    <th style="width:4%" *ngIf="selectedLedgerItems.length > 0">
+                    <th width="4%" *ngIf="selectedLedgerItems.length > 0">
 
-                        <div class="mh18_img" style="justify-content: center;display: flex">
+                        <div class="check-image d-flex justify-content-center">
                             <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
                                 (click)="toggleAllItems(true)">
                             <img src="assets/images/checked.png" *ngIf="allItemsSelected"
@@ -96,12 +95,12 @@
                     </th>
 
                     <th *ngIf="selectedLedgerItems.length === 0" width="4%">
-                        <div class="mh18_img" style="justify-content: center;display: flex">
+                        <div class="check-image d-flex justify-content-center">
                             #
                         </div>
                     </th>
 
-                    <th style="width:12%">
+                    <th width="12%">
                         <div class="d-flex">
                             <div class="flex-fill"> Date</div>
                             <!-- <div class="icon-pointer">
@@ -113,7 +112,7 @@
 
                     </th>
 
-                    <th style="width:20%" class="td-search-box" #searchParticularContainer
+                    <th width="20%" class="td-search-box" #searchParticularContainer
                         (clickOutside)="clickedOutside($event, searchParticularContainer, 'particular')">
 
                         <div [hidden]="showParticularSearch">
@@ -129,7 +128,7 @@
                         </div>
                     </th>
 
-                    <th style="width:13%">
+                    <th width="13%">
                         <div class="d-flex">
                             <div class="flex-fill text-right"> Amount</div>
                             <!-- <div class="icon-pointer">
@@ -140,7 +139,7 @@
                         </div>
                     </th>
 
-                    <th style="width:20%" class="td-search-box" #searchAccountContainer
+                    <th width="20%" class="td-search-box" #searchAccountContainer
                         (clickOutside)="clickedOutside($event, searchAccountContainer, 'accountUniqueName')">
 
                         <div [hidden]="showAccountSearch">
@@ -157,7 +156,7 @@
 
                     </th>
 
-                    <th style="width:13%">
+                    <th width="13%">
                         <div class="d-flex">
                             <div class="flex-fill text-right"> Total</div>
                             <!-- <div class="icon-pointer">
@@ -168,7 +167,7 @@
                         </div>
                     </th>
 
-                    <th style="width:20%" class="td-search-box" #searchDescContainer
+                    <th width="20%" class="td-search-box" #searchDescContainer
                         (clickOutside)="clickedOutside($event, searchDescContainer, 'description')">
 
                         <div [hidden]="showDescSearch">
@@ -195,9 +194,9 @@
                 <tr *ngFor="let item of ledgersData?.results; let i = index;"
                     [ngClass]="{'danger': item.hasGenerationErr}" (mouseover)="hoveredItemForAction = item.uniqueName">
 
-                    <td class="mh18_img" data-title="#"
+                    <td class="check-image" data-title="#"
                         *ngIf="hoveredItemForAction === item.uniqueName || item.isSelected || selectedLedgerItems.length > 0">
-                        <div class="mh18_img justify-content-sm" style="justify-content: center;display: flex"
+                        <div class="check-image d-flex justify-content-center"
                             data-title="#">
                             <img *ngIf="!item.isSelected" src="assets/images/unchecked.png"
                                 (click)="toggleItem(item, true)" />
@@ -211,7 +210,7 @@
 
                     <td *ngIf="!item.isSelected && hoveredItemForAction !== item.uniqueName && selectedLedgerItems.length === 0"
                         data-title="#">
-                        <div style="justify-content: center;display: flex" class="justify-content-sm">
+                        <div class=" d-flex justify-content-center">
                             {{ i + 1}}
                         </div>
                     </td>
@@ -299,8 +298,8 @@
         </table>
     </div>
 
-    <div *ngIf="ledgersData?.totalItems > 20" class="paginationWrapper">
-        <div class="alC">
+    <div *ngIf="ledgersData?.totalItems > 20" class="pagination-wrapper">
+        <div class="text-center">
             <pagination [totalItems]="ledgersData.totalItems" [(ngModel)]="ledgersData.page" [maxSize]="5"
                 class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="20" [rotate]="false"
                 (pageChanged)="pageChanged($event)"></pagination>

@@ -359,11 +359,11 @@
                             <div class="icon-pointer pull-right">
                                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                                     (click)="sortButtonClicked('asc', 'transporterName')"
-                                    [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'asc'}">
+                                    [ngClass]="{'active-text-color': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'asc'}">
                                 </div>
                                 <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
                                     (click)="sortButtonClicked('desc', 'transporterName')"
-                                    [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'desc'}">
+                                    [ngClass]="{'active-text-color': transporterFilterRequest.sortBy === 'transporterName' && transporterFilterRequest.sort === 'desc'}">
                                 </div>
                             </div>
                         </th>
@@ -372,11 +372,11 @@
                             <div class="icon-pointer pull-right">
                                 <div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
                                     (click)="sortButtonClicked('asc', 'transporterId')"
-                                    [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'asc'}">
+                                    [ngClass]="{'active-text-color': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'asc'}">
                                 </div>
                                 <div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
                                     (click)="sortButtonClicked('desc', 'transporterId')"
-                                    [ngClass]="{'activeTextColor': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'desc'}">
+                                    [ngClass]="{'active-text-color': transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'desc'}">
                                 </div>
                             </div>
                         </th>
@@ -393,7 +393,7 @@
                 </tr>
             </table>
         </div>
-        <div class="alC mt-4 mb-4" *ngIf="transporterListDetails">
+        <div class="text-center mt-4 mb-4" *ngIf="transporterListDetails">
             <pagination [totalItems]="transporterListDetails.totalPages" [(ngModel)]="transporterListDetails.page"
                 [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false"
                 (pageChanged)="pageChanged($event)"></pagination>

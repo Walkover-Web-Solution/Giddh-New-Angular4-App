@@ -1,7 +1,7 @@
 <div class="reverse-table-report">
     <div class="container-fluid">
 
-        <div class="mt-15 mb-15 input-grp-dateRangePicker d-flex">
+        <div class="mt-15 mb-15 input-grp-date-range-picker d-flex">
             <!-- Invoice filter section -->
             <div class="mr-r1 d-flex">
                 <div class="input-group">
@@ -31,7 +31,7 @@
 
         <div class="invoice-preview  table-responsive">
             <table class="table basic giddh-table on-mobile-view">
-                <thead class="t-h-bg1">
+                <thead class="thead-background1">
                     <tr>
                         <th>#</th>
                         <th #receiptNumberParent width="13%" class="bd-rr bd-rb td-search-box">
@@ -166,7 +166,7 @@
             </table>
         </div>
 
-        <div *ngIf="pageConfiguration.totalItems > paginationLimit" class="paginationWrapper">
+        <div *ngIf="pageConfiguration.totalItems > paginationLimit" class="pagination-wrapper">
             <pagination [totalItems]="pageConfiguration.totalItems" [(ngModel)]="pageConfiguration.currentPage"
                 [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="paginationLimit"
                 [rotate]="false" previousText="&#9668;" nextText="&#9658;" (pageChanged)="onPageChanged($event)">
@@ -232,11 +232,11 @@
 <!-- region sort icon template -->
 <ng-template #sortTemplate let-column="column">
     <div class="icon-sort-asc" *ngIf="searchQueryParams.sortBy !== column" (click)="handleSorting('asc', column)"
-        [ngClass]="{'activeTextColor': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'}"></div>
+        [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'}"></div>
     <div class="icon-sort-asc" *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'"
         (click)="handleSorting('desc', column)"
-        [ngClass]="{'activeTextColor': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'}"></div>
+        [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'}"></div>
     <div class="icon-sort-dsc" *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'"
         (click)="handleSorting('asc', column)"
-        [ngClass]="{'activeTextColor': searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'}"></div>
+        [ngClass]="{'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'}"></div>
 </ng-template>

@@ -621,16 +621,12 @@ section.static-purchase-table {
     margin-left: 48%;
 }
 
-.m-l-10 {
-    margin-left: 10px;
-}
-
 // redesign in DIV formate css
 // .customer-purchase-table:nth-child(2) {
 //   padding-top: 10px;
 //   padding-bottom: 10px;
 // }
-.mTB1 {
+.mt-b1 {
     margin-top: 10px;
 }
 
@@ -652,7 +648,7 @@ section.static-purchase-table {
 // .customer-purchase-table section.form-inline {
 //   padding-top: 60px;
 // }
-.customer-purchase-table section.billing-addressWrap {
+.customer-purchase-table section.billing-address-wrap {
     padding-top: 60px;
 }
 
@@ -799,7 +795,7 @@ table.table.table-custom-invoice.basic {
     height: 105% !important;
 }
 
-.set-active.isOtherTax td:last-child .td-wrapper .differ-currency {
+.set-active.is-other-tax td:last-child .td-wrapper .differ-currency {
     margin-bottom: 14px;
 }
 
@@ -842,11 +838,11 @@ strong {
     text-align: right;
 }
 
-.proformaSalesTime ul {
+.proforma-sales-time ul {
     top: 30px !important;
 }
 
-.item-total input.other-taxes-checkobx[type="checkbox"]:focus:after {
+.item-total input.other-taxes-checkbox[type="checkbox"]:focus:after {
     border-color: $chetwode-blue !important;
 }
 .p-1.aqua-color.add-line-bulk-item {
@@ -1043,7 +1039,7 @@ span.eligible-ITC {
     border-bottom-color: rgb(214, 214, 214);
 }
 
-.loaderClass {
+.loader-class {
     height: calc(100% - 150px);
     display: flex;
     justify-content: center;
@@ -1359,7 +1355,7 @@ span.eligible-ITC {
         padding-right: 0 !important;
         text-align: right;
     }
-    .balanceDueText {
+    .balance-due-text {
         text-align: right;
     }
     #actionPane .update-mode {

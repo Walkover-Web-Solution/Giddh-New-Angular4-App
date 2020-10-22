@@ -6,7 +6,7 @@
     flex-flow: row wrap;
 }
 
-.mh18_img img {
+.check-image img {
     max-height: 17px;
     cursor: pointer;
 }
@@ -151,6 +151,12 @@
     outline: none !important;
 }
 
+.input-grp-date-range-picker{
+    .form-group{
+        flex: 1 1 auto;
+    }
+}
+
 /* my css */
 
 .card {
@@ -187,7 +193,7 @@ td.card-header.clearfix {
     padding-right: 10px;
 }
 
-.card #inovice_td {
+.card #invoice_td {
     border-bottom: 1px solid #ddd !important;
     padding-bottom: 20px !important;
     background-color: #f9f9f9;
@@ -195,14 +201,14 @@ td.card-header.clearfix {
     padding-top: 10px !important;
 }
 
-.card .overDueDate {
+.card .over-due-date {
     position: absolute;
     font-size: 12px;
     bottom: -15px;
     right: 0;
 }
 
-.card .invoiceNumberA {
+.card .invoice-number-a {
     display: inline-block;
     padding-right: 20px;
 }
@@ -212,7 +218,7 @@ td.card-header.clearfix {
     text-align: right;
 }
 
-.card #inovice_td img {
+.card #invoice_td img {
     right: 0px !important;
     top: 5px;
     left: auto !important;
@@ -233,11 +239,11 @@ td.card-header.clearfix {
     padding: 0;
 }
 
-.mobileTable {
+.mobile-table {
     display: none;
 }
 
-.paginationWrapper {
+.pagination-wrapper {
     background-color: transparent;
     padding: 20px 0;
     margin-bottom: 0;
@@ -265,7 +271,7 @@ td.card-header.clearfix {
     margin-left: 6px;
 }
 
-.icon-pointer .activeTextColor {
+.icon-pointer .active-text-color {
     color: $deep-sky-blue;
 }
 
@@ -279,18 +285,18 @@ button.btn.btn-orange.ladda-button {
     overflow: inherit;
 }
 
-ul.selectActionDropdown {
+ul.select-action-dropdown {
     list-style: none;
 }
 
-.selectActionDropdown a {
+.select-action-dropdown a {
     color: #333;
     font-size: 14px;
     padding: 5px 10px;
     display: block;
 }
 
-.selectActionDropdown a:hover {
+.select-action-dropdown a:hover {
     color: $chetwode-blue !important;
     background: #eeeff9 !important;
 }
@@ -577,10 +583,10 @@ span.icon-export-icon {
     .search-icon-block {
         display: flex;
     }
-    .card-header .mh18_img {
+    .card-header .check-image {
         margin-right: 5px;
     }
-    .mobileTable {
+    .mobile-table {
         display: block;
     }
     .desktop-table {
@@ -590,7 +596,7 @@ span.icon-export-icon {
         display: block;
         text-align: center;
     }
-    .paginationWrapper {
+    .pagination-wrapper {
         margin-top: 20px;
         border: none;
         background-color: transparent;
@@ -652,10 +658,10 @@ span.icon-export-icon {
     .date-advance-search .dropdown-menu > li > a {
         padding: 8px 10px;
     }
-    .paginationWrapper {
+    .pagination-wrapper {
         top: 0px;
     }
-    .input-grp-dateRangePicker .form-group {
+    .input-grp-date-range-picker .form-group {
         margin-bottom: 2px;
     }
     .invoice-preview {
@@ -773,7 +779,7 @@ span.icon-export-icon {
 }
 
 @media (max-width: 360px) {
-    .input-grp-dateRangePicker .btn {
+    .input-grp-date-range-picker .btn {
         padding-left: 0;
         padding-top: 10px;
         padding-bottom: 0;
@@ -820,10 +826,10 @@ span.icon-export-icon {
 
 
 @media (min-width:768px){
-    .mw-th-260{
+    .min-wid-status{
         min-width:260px;
     }
-    .mw-th-170{
+    .min-wid-amount{
         min-width:170px;
     }
 

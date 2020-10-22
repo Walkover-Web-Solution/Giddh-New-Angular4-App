@@ -119,7 +119,7 @@
 
     <section class="clearfix mr-b2 whiteBg">
         <table class="table">
-            <thead class="t-h-bg1">
+            <thead class="thead-background1">
                 <tr>
                     <th [hidden]="!customThead['sNo']?.display">{{ customThead['sNo']?.label }}</th>
                     <th [hidden]="!customThead['date']?.display">{{ customThead['date']?.label }}</th>
@@ -201,8 +201,8 @@
 <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm()" novalidate class="clearfix mr-b2"
     *ngIf="invoiceDataFound && templateHeader" autocomplete="off">
     <div class="clearfix ">
-        <div class="clearfix wrapperCustomerTable ">
-            <table class="table customerInvoiceTable">
+        <div class="clearfix wrapper-customer-table ">
+            <table class="table customer-invoice-table">
                 <tr>
                     <td width="150px">
                         <label>Customers Name </label>
@@ -334,7 +334,7 @@
 
 
             </table>
-            <table class="innerTable table  customerInvoiceTable bg-white">
+            <table class="innerTable table  customer-invoice-table bg-white">
                 <tr>
                     <td>
                         <label>Attention to</label>
@@ -395,7 +395,7 @@
                                     <label>Invoice Date</label>
 
                                     <input type="text" [placeholder]="giddhDateFormat" #voucherDate="ngModel"
-                                        class="form-control dateinvoice" bsDatepicker
+                                        class="form-control date-invoice" bsDatepicker
                                         [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="invoiceDate"
                                         [(ngModel)]="invFormData.voucherDetails.voucherDate" />
                                     <!-- <p class="text-danger" *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)">Invalid Date
@@ -405,7 +405,7 @@
 
 
                                 </div>
-                                <div class="form-group m-l-10 m-r-15">
+                                <div class="form-group mr-l1 m-r-15">
                                     <label>{{templateHeader?.dueDate?.label}}</label>
                                     <input type="text" [placeholder]="giddhDateFormat" name="dueDate"
                                         [(ngModel)]="invFormData.voucherDetails.dueDate" [minDate]="maxDueDate"
@@ -473,13 +473,13 @@
 
 
         </section> -->
-    <section class="staticInvoiceTable salseInvoicetable clearfix mr-b2 whiteBg container-fluid ng-tns-c8-0 ">
+    <section class="static-invoice-table sales-invoice-table clearfix mr-b2 whiteBg container-fluid ng-tns-c8-0 ">
         <!-- <table class="table  table-custom-invoice  basic">
                 <tr>
                     <td colspan="2"> -->
 
         <table class="table  table-custom-invoice  basic cursor-pointer">
-            <thead class="t-h-bg1" (click)="setActiveIndxs(1000)">
+            <thead class="thead-background1" (click)="setActiveIndxs(1000)">
                 <tr>
                     <th *ngFor="let item of tthead" attr.data-field="{{item.label}}" [hidden]="!item.display">
                         {{item.label}}
@@ -493,21 +493,21 @@
                         <td>{{ entryIdx + 1 }}</td>
                         <!-- {{ getSerialNos(entryIndex, transIndex) }} -->
                         <td>
-                            <div class="productName">
-                                <label *ngIf="!transaction.accountName" class="selectAccountLabel">Click to Select
+                            <div class="product-name">
+                                <label *ngIf="!transaction.accountName" class="select-account-label">Click to Select
                                     Account </label>{{transaction.accountName}}
                                 <span
                                     *ngIf="transaction.stockDetails?.uniqueName">({{transaction.stockDetails?.name}})</span>
 
                             </div>
-                            <div class="skuNumber">
+                            <div class="sku-number">
                                 <label>SKU:</label>Number
                             </div>
-                            <div class="discription">
+                            <div class="description">
                                 {{transaction.description}}
 
                             </div>
-                            <div class="dateHsnCode">
+                            <div class="date-hsn-code">
                                 <div class="row">
                                     <div class="col-xs-6">
                                         <div class="entryDate">
@@ -522,7 +522,7 @@
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
-                                        <div class="hsnCode text-right">
+                                        <div class="hsn-code text-right">
                                             <label>HSN Code:</label>
                                             <span>
                                                 {{transaction?.hsnNumber}}
@@ -575,7 +575,7 @@
                     <tr [hidden]="activeIndx !== entryIdx" class="row-active">
                         <td>{{ entryIdx + 1 }}</td>
                         <td>
-                            <div class="productName">
+                            <div class="product-name">
                                 <div class="ng-select-wrap">
                                     <input type="text" [(ngModel)]="transaction.accountName" [disabled]="true"
                                         name="transaction.accountName" [placeholder]="'Select A/c'" />
@@ -584,16 +584,16 @@
 
                             </div>
                             <div class="">
-                                <div class="skuNumber">
+                                <div class="sku-number">
                                     <label>SKU:</label>Number
                                 </div>
-                                <div class="discription">
+                                <div class="description">
                                     <textarea type="text" placeholder="Add Description"
                                         name="transaction.description_{{entryIdx}}" class="form-control"
                                         [(ngModel)]="transaction.description"></textarea>
 
                                 </div>
-                                <div class="dateHsnCode">
+                                <div class="date-hsn-code">
                                     <div class="row">
                                         <div class="col-xs-6">
                                             <div class="entryDate">
@@ -615,8 +615,8 @@
                                             </div>
                                         </div>
                                         <div class="col-xs-6">
-                                            <div class="wrap-hsnBox">
-                                                <div class="hsnCode text-right"
+                                            <div class="wrap-hsn-box">
+                                                <div class="hsn-code text-right"
                                                     (click)="hsnDropdownShow=!hsnDropdownShow">
                                                     <label>HSN Code:</label>
                                                     <span>
@@ -624,7 +624,7 @@
                               name="transaction.hsnNumber_{{entryIdx}}" class="form-control text-right"
                               [(ngModel)]="transaction.hsnNumber"/> -->
                                                         {{transaction?.hsnNumber }} <span *ngIf="!transaction.hsnNumber"
-                                                            class="updateText">Update</span>
+                                                            class="update-text">Update</span>
                                                         <span class="edit-icon">
                                                             <img src="assets/images/edit-pencilicon.svg">
                                                         </span>
@@ -633,7 +633,7 @@
                                                 </div>
 
 
-                                                <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
+                                                <div class="hsn-code-dropdown" *ngIf="hsnDropdownShow">
                                                     <label>HSN Code</label>
                                                     <input type="text" maxLength="10" placeholder="HSN Number"
                                                         name="transaction.hsnNumber_{{entryIdx}}" class=""
@@ -732,7 +732,7 @@
                                 </div>
                                 <div class="ico-head">Other Details</div>
                             </div>
-                            <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600 pdL3 mr0">
+                            <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600 pd-l3 mr0">
                                 <div class="row">
                                     <div class="form-group col-xs-4">
                                         <!-- <label>Ship Date</label> -->
@@ -796,42 +796,42 @@
                 <td class="text-danger text-center" style="display:none;">Note:To edit current invoice amount or rate <a
                         class="cursor-pointer" (click)="goToLeger();">Click here</a></td>
                 <td>
-                    <section class="tableSec form-group">
-                        <div class="tableRow">
-                            <div class="tableCell">Total Amount</div>
-                            <div class="tableCell figureCell">{{invFormData.voucherDetails.subTotal |giddhCurrency }}
+                    <section class="table-sec form-group">
+                        <div class="table-row">
+                            <div class="table-cell">Total Amount</div>
+                            <div class="table-cell figure-cell">{{invFormData.voucherDetails.subTotal |giddhCurrency }}
                             </div>
                         </div>
-                        <div class="tableRow">
-                            <div class="tableCell">Discount</div>
-                            <div class="tableCell figureCell">
+                        <div class="table-row">
+                            <div class="table-cell">Discount</div>
+                            <div class="table-cell figure-cell">
                                 -{{invFormData.voucherDetails.totalDiscount |giddhCurrency }}</div>
                         </div>
-                        <div class="tableRow">
-                            <div class="tableCell">Taxable Value</div>
-                            <div class="tableCell figureCell">
+                        <div class="table-row">
+                            <div class="table-cell">Taxable Value</div>
+                            <div class="table-cell figure-cell">
                                 {{invFormData.voucherDetails.totalTaxableValue |giddhCurrency }}
                             </div>
                         </div>
-                        <div class="tableRow">
-                            <div class="tableCell">Tax</div>
-                            <div class="tableCell figureCell">
+                        <div class="table-row">
+                            <div class="table-cell">Tax</div>
+                            <div class="table-cell figure-cell">
                                 {{invFormData.voucherDetails.gstTaxesTotal |giddhCurrency }}</div>
                         </div>
-                        <div class="tableRow">
-                            <div class="tableCell">
+                        <div class="table-row">
+                            <div class="table-cell">
                                 <strong>Total</strong>
                             </div>
-                            <div class="tableCell figureCell">
+                            <div class="table-cell figure-cell">
                                 <strong>{{invFormData.voucherDetails.grandTotal |giddhCurrency }}</strong>
                             </div>
                         </div>
 
-                        <!-- <div class="tableRow" *ngIf="toggleFieldForSales">
-                            <div class="tableCell">
+                        <!-- <div class="table-row" *ngIf="toggleFieldForSales">
+                            <div class="table-cell">
                                 <strong>Balance Due</strong>
                             </div>
-                            <div class="tableCell figureCell">
+                            <div class="table-cell figure-cell">
                                 <strong>{{invFormData.voucherDetails.balanceDue |giddhCurrency }}</strong>
                             </div>
                         </div> -->

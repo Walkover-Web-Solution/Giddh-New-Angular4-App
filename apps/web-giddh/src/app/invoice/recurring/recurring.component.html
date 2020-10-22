@@ -1,7 +1,7 @@
 <div class="recurring-container">
 
 
-    <form #recurringForm="ngForm" novalidate class="form-inline input-grp-dateRangePicker position-relative" (ngSubmit)="submit()">
+    <form #recurringForm="ngForm" novalidate class="form-inline input-grp-date-range-picker position-relative" (ngSubmit)="submit()">
 
         <div class="d-flex search-icon-block mb-15"  *ngIf="isMobileScreen">
             <div (click)="openModal(template)">
@@ -207,11 +207,11 @@
     <div class="table-responsive">
         <table class="table basic giddh-table table-bordered on-mobile-view">
 
-            <thead class="t-h-bg1">
+            <thead class="thead-background1">
                 <tr>
 
                     <th style="width:4%" *ngIf="selectedItems.length > 0">
-                        <div class="mh18_img" style="justify-content: center;display: flex">
+                        <div class="check-image" style="justify-content: center;display: flex">
                             <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
                                 (click)="toggleAllItems(true)">
                             <img src="assets/images/checked.png" *ngIf="allItemsSelected"
@@ -220,7 +220,7 @@
                     </th>
 
                     <th *ngIf="selectedItems.length === 0" width="4%">
-                        <div class="mh18_img" style="justify-content: center;display: flex">
+                        <div class="check-image" style="justify-content: center;display: flex">
                             #
                         </div>
                     </th>
@@ -318,7 +318,7 @@
 
                     <td *ngIf="hoveredItemForAction === col.uniqueName || col.isSelected || selectedItems.length > 0"
                         data-title="#">
-                        <div class="mh18_img justify-content-sm" style="justify-content: center;display: flex">
+                        <div class="check-image justify-content-sm" style="justify-content: center;display: flex">
                             <img *ngIf="!col?.isSelected" src="assets/images/unchecked.png"
                                 (click)="toggleItem(col, true)" />
                             <img *ngIf="col?.isSelected" src="assets/images/checked.png"
@@ -348,8 +348,8 @@
         </table>
     </div>
 
-    <div class="paginationWrapper" *ngIf="(recurringData$ | async)?.totalItems > 20">
-        <div class="alC">
+    <div class="pagination-wrapper" *ngIf="(recurringData$ | async)?.totalItems > 20">
+        <div class="text-center">
             <pagination [maxSize]="5" [totalItems]="(recurringData$ | async)?.totalItems" [itemsPerPage]="20"
                 (pageChanged)="pageChanged($event)" class="pagination-sm" [boundaryLinks]="true" [rotate]="false">
             </pagination>
@@ -386,15 +386,15 @@
 <ng-template #sortTemplate let-column="column">
 
     <div class="icon-sort-asc " *ngIf="filter.sortBy !== column" (click)="sortButtonClicked('asc', column)"
-        [ngClass]="{'activeTextColor': filter.sortBy === column && filter.sort === 'asc'}"></div>
+        [ngClass]="{'active-text-color': filter.sortBy === column && filter.sort === 'asc'}"></div>
 
     <div class="icon-sort-asc " *ngIf="filter.sortBy === column && filter.sort === 'asc'"
         (click)="sortButtonClicked('desc', column)"
-        [ngClass]="{'activeTextColor': filter.sortBy === column && filter.sort === 'asc'}"></div>
+        [ngClass]="{'active-text-color': filter.sortBy === column && filter.sort === 'asc'}"></div>
 
     <div class="icon-sort-dsc " *ngIf="filter.sortBy === column && filter.sort === 'desc'"
         (click)="sortButtonClicked('asc', column)"
-        [ngClass]="{'activeTextColor': filter.sortBy === column && filter.sort === 'desc'}"></div>
+        [ngClass]="{'active-text-color': filter.sortBy === column && filter.sort === 'desc'}"></div>
 
 </ng-template>
 <!-- endregion -->

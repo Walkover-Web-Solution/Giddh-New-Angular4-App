@@ -122,12 +122,12 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="noBrdRdsModal">
-                <div class="modal-header themeBg pd-l2 pdR2 clearfix">
+                <div class="modal-header themeBg pd-l2 pd-r2 clearfix">
                     <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>
                     <!-- <i class="icon-cross text-right close-modal" aria-hidden="true" ></i> -->
                 </div>
-                <div class="modal-body pd-l2 pdR2 clearfix">
+                <div class="modal-body pd-l2 pd-r2 clearfix">
                     <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'">Enter Subject:</h1>
                     <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />
                     <h1 class="mr-b1">Type message body:</h1>

@@ -341,19 +341,19 @@
 }
 
 .bt-1 {
-    border-top: 1px solid #ccc;
+    border-top: 1px solid $very-light-gray;
 }
 
 .br-1 {
-    border-right: 1px solid #ccc;
+    border-right: 1px solid $very-light-gray;
 }
 
 .bb-1 {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $very-light-gray;
 }
 
 .bl-1 {
-    border-left: 1px solid #ccc;
+    border-left: 1px solid $very-light-gray;
 }
 
 .border-none {
@@ -1151,7 +1151,7 @@ ul.sub-list {
     position: absolute;
     left: 0;
     right: 0;
-    border: 1px solid #ccc;
+    border: 1px solid $very-light-gray;
     padding: 20px;
     box-shadow: 0 0 19px rgba(0, 0, 0, 0.2);
     top: 75px;
@@ -1537,7 +1537,7 @@ modal-container.modal {
     padding-bottom: 10px;
 }
 
-.paymentMode sh-select {
+.payment-mode sh-select {
     float: right;
     width: 129px;
     margin-left: 20px;
@@ -1561,7 +1561,7 @@ modal-container.modal {
 }
 
 .price-input {
-    border: 1px solid #ccc;
+    border: 1px solid $very-light-gray;
     font-size: 14px;
     background: $white;
     padding: 1px 2px;
@@ -1878,7 +1878,7 @@ header .navbar {
 }
 
 
-.t-h-bg1 th {
+.thead-background1 th {
     background: $white;
     color: #4d4d4d;
     padding: 11px !important;
@@ -2482,7 +2482,7 @@ input[type="checkbox"]:after {
     position: absolute;
     top: 0;
     left: 0;
-    border: 1px solid #cccccc;
+    border: 1px solid $very-light-gray;
     width: 18px;
     height: 18px;
     background: $white;
@@ -2869,7 +2869,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .text-light {
-    color: #cccccc;
+    color: $very-light-gray;
 }
 
 .text-light-2 {
@@ -2977,7 +2977,7 @@ li.no-click {
 .company-box h3 {
     font-weight: bold;
     margin-bottom: 7px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $very-light-gray;
     padding-bottom: 15px;
 }
 
@@ -3207,7 +3207,7 @@ li.no-click {
 .daterangepicker.dropdown-menu {
     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
     color: #616161;
-    border: 1px solid #ccc;
+    border: 1px solid $very-light-gray;
     z-index: 9999 !important;
 }
 
@@ -3336,7 +3336,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .datePickr .dropdown-menu {
     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
     color: #616161;
-    border: 1px solid #ccc;
+    border: 1px solid $very-light-gray;
 }
 
 .datePickr .dropdown-menu table {
@@ -3963,8 +3963,8 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 #select_view {
-    background: #ccc !important;
-    border-color: #ccc !important;
+    background: $very-light-gray !important;
+    border-color: $very-light-gray !important;
     color: #4d4d4d;
 }
 
@@ -4010,7 +4010,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .dashed {
     border-style: dashed;
-    border-color: #ccc;
+    border-color: $very-light-gray;
 }
 
 .input-group button {
@@ -4302,7 +4302,7 @@ select.form-control {
     text-align: left;
     background-color: $white;
     background-clip: padding-box;
-    border: 1px solid #ccc;
+    border: 1px solid $very-light-gray;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
@@ -4359,7 +4359,7 @@ select.form-control {
 .col-wrapper {
     width: 255px;
     float: left;
-    border-right: 1px solid #ccc;
+    border-right: 1px solid $very-light-gray;
     min-height: 100%;
     height: 100%;
     position: relative;
@@ -4406,7 +4406,7 @@ label {
 
 #getGroupModal .bdrL,
 #getGroupModal .bd-rr {
-    border-color: #ccc;
+    border-color: $very-light-gray;
 }
 
 #getGroupModal .detailed label {
@@ -4607,7 +4607,7 @@ label {
 
 #getGroupModal .bdrL,
 #getGroupModal .bd-rr {
-    border-color: #ccc;
+    border-color: $very-light-gray;
 }
 
 #getGroupModal .detailed label {
@@ -4769,7 +4769,7 @@ label {
 }
 
 /*#getGroupModal small {
-    color: #ccc;
+    color: $very-light-gray;
 }*/
 
 .breadcrumb {
@@ -5307,7 +5307,7 @@ label {
 }
 
 #single-role .panel-heading {
-    background: #ccc;
+    background: $very-light-gray;
     color: $white;
     border-radius: 0;
 }
@@ -5387,7 +5387,7 @@ label {
     right: -2px; */
     top: 0;
     right: 0;
-    border: 1px solid #ccc;
+    border: 1px solid $very-light-gray;
     border-radius: 50%;
 }
 
@@ -6181,7 +6181,7 @@ virtual-scroll .scrollable-content .item > a .item_stock {
     border-bottom: 0px !important;
 }
 
-.customerInvoiceTable virtual-scroll .scrollable-content .item > a {
+.customer-invoice-table virtual-scroll .scrollable-content .item > a {
     white-space: initial;
 }
 
@@ -6387,7 +6387,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     position: relative;
     transition: all 0.3s ease;
     width: 100%;
-    border: 1px solid #cccccc;
+    border: 1px solid $very-light-gray;
     border-radius: 2px;
     color: #666;
     padding: 0 7px;
@@ -6409,7 +6409,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .square-switch input[type="checkbox"] ~ label::after {
     content: " ";
-    background: #ccc;
+    background: $very-light-gray;
     position: absolute;
     height: 34px;
     width: 28px;
@@ -6461,8 +6461,8 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .ledg-head table td[class*="col-"],
 .ledg-head table td .select2-container {
     padding: 8px !important;
-    border-bottom: 1px solid #ccc;
-    border-right: 1px solid #ccc;
+    border-bottom: 1px solid $very-light-gray;
+    border-right: 1px solid $very-light-gray;
     font-size: 13px;
     color: #4d4d4d;
     text-overflow: ellipsis;
@@ -6481,8 +6481,8 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .ledg-head.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
-    border-bottom: 1px solid #ccc;
-    border-right: 1px solid #ccc;
+    border-bottom: 1px solid $very-light-gray;
+    border-right: 1px solid $very-light-gray;
     font-size: 13px;
     color: #4d4d4d;
     text-overflow: ellipsis;
@@ -6513,7 +6513,7 @@ table td[class*=col-]:last-child {
     border: 0;
 }
 
-.t-h-bg1 th {
+.thead-background1 th {
     border-left: 0;
 }
 
@@ -6588,7 +6588,7 @@ table td[class*=col-]:last-child {
     padding-right: 25px !important;
 }
 
-.t-h-bg1 th {
+.thead-background1 th {
     background: #eaebed;
     color: #4d4d4d;
     border-right: 1px solid #c4c6c7;
@@ -6598,7 +6598,7 @@ table td[class*=col-]:last-child {
 }
 
 .ledger-book {
-    border: 1px solid #ccc;
+    border: 1px solid $very-light-gray;
     clear: both;
     /* // overflow: hidden; */
     position: relative;
@@ -6637,7 +6637,7 @@ table td[class*=col-]:last-child {
 //     bottom: 0;
 //     width: 1px;
 //     height: 100%;
-//     background: #ccc;
+//     background: $very-light-gray;
 //     right: 1px;
 //     margin: 0 auto;
 // }
@@ -7025,7 +7025,7 @@ panel.sFthanks.fieldset {
 }
 
 .tbpl-dropdown > li {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $very-light-gray;
 }
 
 .tbpl-dropdown > li:last-child {
@@ -7069,7 +7069,7 @@ panel.sFthanks.fieldset {
 
 .unit_action .btn {
     margin-right: 0;
-    border: 1px solid #ccc;
+    border: 1px solid $very-light-gray;
     opacity: 0.5;
 }
 
@@ -8022,7 +8022,7 @@ app-header {
     background-color: transparent;
     border: none;
     display: block;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $very-light-gray;
     width: 100%;
     text-align: left;
     padding: 6px;
@@ -8206,7 +8206,7 @@ div#getGroupModal {
     line-height: 2;
 }
 
-.mailbox .modal-dialog.semdMailModal {
+.mailbox .modal-dialog.send-mail-modal {
     width: 100%;
     max-width: 695px;
     margin: 20px auto;
@@ -8301,7 +8301,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     padding-right: 0;
 }
 
-.paginationWrapper {
+.pagination-wrapper {
     padding: 20px 0;
     text-align: center;
     display: flex;
@@ -8423,7 +8423,7 @@ span.red-text {
     font-size: 14px;
 }
 
-.selectCustomerName .scrollable-content > .item {
+.select-customer-name .scrollable-content > .item {
     height: 48px !important;
 }
 
@@ -9844,7 +9844,7 @@ input.mat-input-element{
         }
         .stock-lists {
             position: absolute;
-            box-shadow: 0 3px 6px #ccc;
+            box-shadow: 0 3px 6px $very-light-gray;
             background: $white;
             min-width: 200px;
             display: inline-block;
@@ -9888,10 +9888,10 @@ input.mat-input-element{
     }
 
     @media (max-width: 840px) {
-        .card-invoiceTable
+        .card-invoice-table
         #tax-control-multi-select.multi-select
         input.form-control[readonly],
-        .card-invoiceTable .multi-select input.form-control {
+        .card-invoice-table .multi-select input.form-control {
             background-position: 98% !important;
         }
         .single-card-row .my-dropdown-menu.pd {
@@ -9946,7 +9946,7 @@ input.mat-input-element{
             text-align: left;
             margin-bottom: 10px;
         }
-        .paginationWrapper {
+        .pagination-wrapper {
             margin-top: 20px;
             border: none;
             background-color: transparent;
@@ -10418,7 +10418,7 @@ input.mat-input-element{
         .hide-scroll-body:last-child .modal {
             z-index: 9993;
         }
-        .page-has-tabs .invoice-genrate-container,
+        .page-has-tabs .invoice-generate-container,
         .page-has-tabs .invoice-container,
         .page-has-tabs .proforma-container,
         .page-has-tabs .proforma-container {
@@ -10661,7 +10661,7 @@ input.mat-input-element{
             background-color: $white;
         }
         .breadcrumbs {
-            border-top: 1px solid #ccc;
+            border-top: 1px solid $very-light-gray;
         }
         #getGroupModal #middleBody {
             height: 100%;

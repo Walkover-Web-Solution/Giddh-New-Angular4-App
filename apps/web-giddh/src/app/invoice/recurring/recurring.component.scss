@@ -65,7 +65,7 @@
     display: flex;
 }
 
-.activeTextColor {
+.active-text-color {
     color: $deep-sky-blue !important;
 }
 
@@ -84,7 +84,7 @@
     color: $deep-sky-blue;
 }
 
-.mh18_img img {
+.check-image img {
     max-height: 20px;
     cursor: pointer;
 }
@@ -142,17 +142,17 @@
         background: transparent;
         border: none;
     }
-    .input-grp-dateRangePicker.form-inline .form-group {
+    .input-grp-date-range-picker.form-inline .form-group {
         display: inline-block;
         width: 49%;
         margin-bottom: 5px;
     }
-    .input-grp-dateRangePicker .form-group .input-group,
-    .input-grp-dateRangePicker .form-group button {
+    .input-grp-date-range-picker .form-group .input-group,
+    .input-grp-date-range-picker .form-group button {
         width: 100%;
         display: block;
     }
-    .input-grp-dateRangePicker.form-inline .form-group:nth-child(2n) {
+    .input-grp-date-range-picker.form-inline .form-group:nth-child(2n) {
         margin-right: 0 !important;
     }
     .search-invoice-filed {
@@ -165,14 +165,14 @@
     }
 }
 @media (max-width: 530px) {
-    .input-grp-dateRangePicker.form-inline .form-group {
+    .input-grp-date-range-picker.form-inline .form-group {
         display: inline-block;
         width: 48.5%;
         margin-bottom: 5px;
     }
 }
 @media (max-width: 375px) {
-    .input-grp-dateRangePicker.form-inline .form-group {
+    .input-grp-date-range-picker.form-inline .form-group {
         display: inline-block;
         width: 48.2%;
         margin-bottom: 5px;

@@ -425,7 +425,7 @@
 
     <div class="icon-sort-asc" *ngIf="getDetailedsalesRequestFilter.sortBy !== col" (click)="sortbyApi('asc', col)"
         [ngClass]="{
-            activeTextColor:
+            active-text-color:
                 getDetailedsalesRequestFilter.sortBy === col &&
                 getDetailedsalesRequestFilter.sort === 'asc'
         }"></div>
@@ -434,7 +434,7 @@
             getDetailedsalesRequestFilter.sortBy === col &&
             getDetailedsalesRequestFilter.sort === 'asc'
         " (click)="sortbyApi('desc', col)" [ngClass]="{
-            activeTextColor:
+            active-text-color:
                 getDetailedsalesRequestFilter.sortBy === col &&
                 getDetailedsalesRequestFilter.sort === 'asc'
         }"></div>
@@ -443,7 +443,7 @@
             getDetailedsalesRequestFilter.sortBy === col &&
             getDetailedsalesRequestFilter.sort === 'desc'
         " (click)="sortbyApi('asc', col)" [ngClass]="{
-            activeTextColor:
+            active-text-color:
                 getDetailedsalesRequestFilter.sortBy === col &&
                 getDetailedsalesRequestFilter.sort === 'desc'
         }"></div>

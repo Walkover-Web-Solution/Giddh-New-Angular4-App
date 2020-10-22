@@ -7,7 +7,7 @@
     flex-flow: row wrap;
 }
 
-.mh18_img img {
+.check-image img {
     max-height: 20px;
     cursor: pointer;
 }
@@ -131,7 +131,7 @@
     margin-left: 6px;
 }
 
-.icon-pointer .activeTextColor {
+.icon-pointer .active-text-color {
     color: $deep-sky-blue;
 }
 .date-advance-search {
@@ -144,16 +144,16 @@
     display: none;
     margin-bottom: 15px;
 }
-ul.selectActionDropdown {
+ul.select-action-dropdown {
     list-style: none;
 }
-.selectActionDropdown a {
+.select-action-dropdown a {
     color: #333;
     font-size: 14px;
     padding: 5px 10px;
     display: block;
 }
-.selectActionDropdown a:hover {
+.select-action-dropdown a:hover {
     color: $chetwode-blue !important;
     background: #eeeff9 !important;
 }
@@ -248,7 +248,7 @@ button.btn.btn-filter {
 button.btn.btn-filter span.icon-cross {
     margin-right: 5px;
 }
-.icon-ellipse.selectAction a {
+.icon-ellipse.select-action a {
     color: #333;
 }
 .invoice-table th .d-flex {
@@ -328,7 +328,7 @@ span.icon-advance-filter {
         width: 100%;
         margin-top: 10px !important;
     }
-    .input-grp-dateRangePicker .form-group {
+    .input-grp-date-range-picker .form-group {
         margin-bottom: 10px;
     }
     .full-width-on-mobile {
@@ -365,7 +365,7 @@ span.icon-advance-filter {
     .form-group div {
         display: block;
     }
-    .input-grp-dateRangePicker .btn {
+    .input-grp-date-range-picker .btn {
         padding-left: 0;
         padding-top: 10px;
         padding-bottom: 0;

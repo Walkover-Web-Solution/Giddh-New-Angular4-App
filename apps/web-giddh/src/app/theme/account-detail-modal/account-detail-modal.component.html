@@ -69,14 +69,14 @@
 
             <div class="noBrdRdsModal" style="padding: 8px 8px 8px 8px;">
 
-                <div class="modal-header themeBg pd-l2 pdR2 clearfix" style="padding: 8px 8px 8px 8px;">
+                <div class="modal-header themeBg pd-l2 pd-r2 clearfix" style="padding: 8px 8px 8px 8px;">
                     <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close"
                         (click)="mailModal.hide()">×</span>
                     <!-- <i class="icon-cross text-right close-modal" aria-hidden="true" ></i> -->
                 </div>
 
-                <div class="modal-body pd-l2 pdR2 clearfix" style="padding: 0px !important;">
+                <div class="modal-body pd-l2 pd-r2 clearfix" style="padding: 0px !important;">
                     <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'" style="margin-top:15px;">Enter Subject:</h1>
                     <input *ngIf="messageBody.type == 'Email'" class="form-control mr-b1" #subject
                         [(ngModel)]="messageBody.subject" type="text" placeholder="Enter subject here" />

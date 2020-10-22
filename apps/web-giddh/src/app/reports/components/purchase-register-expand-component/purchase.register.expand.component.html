@@ -422,7 +422,7 @@
 
     <div class="icon-sort-asc" *ngIf="getDetailedPurchaseRequestFilter.sortBy !== col" (click)="sortbyApi('asc', col)"
         [ngClass]="{
-            activeTextColor:
+            active-text-color:
                 getDetailedPurchaseRequestFilter.sortBy === col &&
                 getDetailedPurchaseRequestFilter.sort === 'asc'
         }"></div>
@@ -431,7 +431,7 @@
             getDetailedPurchaseRequestFilter.sortBy === col &&
             getDetailedPurchaseRequestFilter.sort === 'asc'
         " (click)="sortbyApi('desc', col)" [ngClass]="{
-            activeTextColor:
+            active-text-color:
                 getDetailedPurchaseRequestFilter.sortBy === col &&
                 getDetailedPurchaseRequestFilter.sort === 'asc'
         }"></div>
@@ -440,7 +440,7 @@
             getDetailedPurchaseRequestFilter.sortBy === col &&
             getDetailedPurchaseRequestFilter.sort === 'desc'
         " (click)="sortbyApi('asc', col)" [ngClass]="{
-            activeTextColor:
+            active-text-color:
                 getDetailedPurchaseRequestFilter.sortBy === col &&
                 getDetailedPurchaseRequestFilter.sort === 'desc'
         }"></div>

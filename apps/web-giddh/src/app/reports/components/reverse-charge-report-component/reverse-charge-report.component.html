@@ -1,7 +1,7 @@
 <div class="reverse-table-report">
     <div class="container-fluid">
 
-        <div class="mt-15 input-grp-dateRangePicker d-flex">
+        <div class="mt-15 input-grp-date-range-picker d-flex">
             <div class="input-group">
                 <div class="form-group">
                     <span class="icon-calender" (click)="dp.toggle()"></span>
@@ -18,11 +18,11 @@
         </div>
         <div class="invoice-preview  table-responsive">
             <table class="table basic giddh-table on-mobile-view">
-                <thead class="t-h-bg1">
+                <thead class="thead-background1">
                     <tr (clickOutside)="inlineSearch = null">
                         <th class="text-center" width="4%">#</th>
                         <th (click)="sortReverseChargeList('entryDate')">Entry Date <span
-                                [ngClass]="{'sortingIcon icon-pointer': true, 'activeTextColor' : reverseChargeReportGetRequest.sortBy === 'entryDate', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'entryDate' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'entryDate'), 'icon-sort-dsc': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'entryDate')}"></span>
+                                [ngClass]="{'sortingIcon icon-pointer': true, 'active-text-color' : reverseChargeReportGetRequest.sortBy === 'entryDate', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'entryDate' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'entryDate'), 'icon-sort-dsc': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'entryDate')}"></span>
                         </th>
                         <th width="13%" class="bd-rr bd-rb td-search-box">
                             <div [hidden]="inlineSearch == 'suppliersName'">
@@ -69,7 +69,7 @@
                         </th>
                         <th class="td-search-box" (click)="sortReverseChargeList('supplierInvoiceDate')">Supplier's
                             Invoice Date <span
-                                [ngClass]="{'sortingIcon icon-pointer': true, 'activeTextColor' : reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'supplierInvoiceDate' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate'), 'icon-sort-dsc': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate')}"></span>
+                                [ngClass]="{'sortingIcon icon-pointer': true, 'active-text-color' : reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'supplierInvoiceDate' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate'), 'icon-sort-dsc': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'supplierInvoiceDate')}"></span>
                         </th>
                         <th width="13%" class="bd-rr bd-rb td-search-box">
                             <div [hidden]="inlineSearch == 'supplierCountry'">
@@ -83,11 +83,11 @@
                             </div>
                         </th>
                         <th (click)="sortReverseChargeList('taxableValue')">Taxable Value <span
-                                [ngClass]="{'sortingIcon icon-pointer': true, 'activeTextColor' : reverseChargeReportGetRequest.sortBy === 'taxableValue', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'taxableValue' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'taxableValue'), 'icon-sort-dsc': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'taxableValue')}"></span>
+                                [ngClass]="{'sortingIcon icon-pointer': true, 'active-text-color' : reverseChargeReportGetRequest.sortBy === 'taxableValue', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'taxableValue' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'taxableValue'), 'icon-sort-dsc': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'taxableValue')}"></span>
                         </th>
                         <th>Tax Rate</th>
                         <th (click)="sortReverseChargeList('taxAmount')">Tax Amount <span
-                                [ngClass]="{'sortingIcon icon-pointer': true, 'activeTextColor' : reverseChargeReportGetRequest.sortBy === 'taxAmount', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'taxAmount' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'taxAmount'), 'icon-sort-dsc': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'taxAmount')}"></span>
+                                [ngClass]="{'sortingIcon icon-pointer': true, 'active-text-color' : reverseChargeReportGetRequest.sortBy === 'taxAmount', 'icon-sort-asc': !reverseChargeReportGetRequest.sort || reverseChargeReportGetRequest.sortBy !== 'taxAmount' || (reverseChargeReportGetRequest.sort === 'asc' && reverseChargeReportGetRequest.sortBy === 'taxAmount'), 'icon-sort-dsc': (reverseChargeReportGetRequest.sort === 'desc' && reverseChargeReportGetRequest.sortBy === 'taxAmount')}"></span>
                         </th>
                     </tr>
                 </thead>
@@ -120,7 +120,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="paginationWrapper" *ngIf="reverseChargeReportResults.totalPages > 1">
+        <div class="pagination-wrapper" *ngIf="reverseChargeReportResults.totalPages > 1">
             <pagination [totalItems]="reverseChargeReportResults.totalPages"
                 [(ngModel)]="reverseChargeReportResults.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true"
                 [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>

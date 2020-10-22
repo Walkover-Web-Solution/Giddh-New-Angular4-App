@@ -83,18 +83,18 @@
                                                 <div class="icon-sort-asc text-right "
                                                     *ngIf="filter.sortBy !== 'entry_date'"
                                                     (click)="sortButtonClicked('asc', 'entry_date')"
-                                                    [ngClass]="{'activeTextColor': filter.sortBy === 'entry_date' && filter.sort === 'asc'}">
+                                                    [ngClass]="{'active-text-color': filter.sortBy === 'entry_date' && filter.sort === 'asc'}">
                                                 </div>
                                                 <!-- after sort click -->
                                                 <div class="icon-sort-dsc text-right"
                                                     *ngIf="filter.sortBy === 'entry_date' && filter.sort === 'desc'"
                                                     (click)="sortButtonClicked('asc', 'entry_date')"
-                                                    [ngClass]="{'activeTextColor': filter.sortBy === 'entry_date' && filter.sort === 'desc'}">
+                                                    [ngClass]="{'active-text-color': filter.sortBy === 'entry_date' && filter.sort === 'desc'}">
                                                 </div>
                                                 <div class="icon-sort-asc text-right "
                                                     *ngIf="filter.sortBy === 'entry_date' && filter.sort === 'asc'"
                                                     (click)="sortButtonClicked('desc', 'entry_date')"
-                                                    [ngClass]="{'activeTextColor': filter.sortBy === 'entry_date' && filter.sort === 'asc'}">
+                                                    [ngClass]="{'active-text-color': filter.sortBy === 'entry_date' && filter.sort === 'asc'}">
                                                 </div>
                                             </div>
                                         </div>
@@ -162,18 +162,18 @@
                                                 <div class="icon-sort-asc text-right "
                                                     *ngIf="filter.sortBy !== 'QUANTITY'"
                                                     (click)="sortButtonClicked('asc', 'QUANTITY')"
-                                                    [ngClass]="{'activeTextColor': filter.sortBy === 'QUANTITY' && filter.sort === 'asc'}">
+                                                    [ngClass]="{'active-text-color': filter.sortBy === 'QUANTITY' && filter.sort === 'asc'}">
                                                 </div>
                                                 <!-- after sort click -->
                                                 <div class="icon-sort-dsc text-right"
                                                     *ngIf="filter.sortBy === 'QUANTITY' && filter.sort === 'desc'"
                                                     (click)="sortButtonClicked('asc', 'QUANTITY')"
-                                                    [ngClass]="{'activeTextColor': filter.sortBy === 'QUANTITY' && filter.sort === 'desc'}">
+                                                    [ngClass]="{'active-text-color': filter.sortBy === 'QUANTITY' && filter.sort === 'desc'}">
                                                 </div>
                                                 <div class="icon-sort-asc text-right "
                                                     *ngIf="filter.sortBy === 'QUANTITY' && filter.sort === 'asc'"
                                                     (click)="sortButtonClicked('desc', 'QUANTITY')"
-                                                    [ngClass]="{'activeTextColor': filter.sortBy === 'QUANTITY' && filter.sort === 'asc'}">
+                                                    [ngClass]="{'active-text-color': filter.sortBy === 'QUANTITY' && filter.sort === 'asc'}">
                                                 </div>
                                             </div>
                                         </div>
@@ -229,7 +229,7 @@
                             <tfoot *ngIf="inventoryReport?.totalPages > 1">
                                 <tr>
                                     <td colspan="7">
-                                        <div class="alC">
+                                        <div class="text-center">
                                             <pagination [maxSize]="6" [totalItems]="inventoryReport.totalItems"
                                                 [(ngModel)]="inventoryReport.page" [itemsPerPage]="6"
                                                 (pageChanged)="applyFilters($event.page)" class="pagination-sm"

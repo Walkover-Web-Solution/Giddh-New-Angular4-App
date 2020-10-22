@@ -72,7 +72,7 @@
                     <table class="width100 card-table">
 
                         <thead class="hidden-xs">
-                            <tr class="t-h-bg1">
+                            <tr class="thead-background1">
 
                                 <th class="col-xs-2" style="border-top:none">
                                     <span class="cursor-pointer">
@@ -262,7 +262,7 @@
                     <!-- region credit transaction header -->
                     <table class="width100 card-table">
                         <thead class="xs-hidden">
-                            <tr class="t-h-bg1">
+                            <tr class="thead-background1">
                                 <th class="col-xs-2" style="border-top:none">
                                     <span class="cursor-pointer">
                                         Date
@@ -433,7 +433,7 @@
         <!-- region new entry -->
         <div class="entrypanel width100 pt-2">
             <!-- reverse charge transction start -->
-            <div *ngIf="shouldShowRcmEntry" class="pd-b1 mTB1">
+            <div *ngIf="shouldShowRcmEntry" class="pd-b1 mt-b1">
                 <input id="tourist-scheme-1" class="checkbox-custom" type="checkbox" [ngModel]="isRcmEntry"
                     (click)="toggleRcmCheckbox($event)">
                 <label for="tourist-scheme-1" class="checkbox-custom-label" #rcmPopup="bs-popover"
@@ -936,7 +936,7 @@
                                         </sh-select>
                                     </div>
                                 </td>
-                                <td *ngIf="(vm.selectedLedger.voucher.shortCode === 'credit note' || vm.selectedLedger.voucher.shortCode === 'debit note') && selectedInvoice" class="cp remove-invoice pdR2 hidden-xs" (click)="removeSelectedInvoice()">
+                                <td *ngIf="(vm.selectedLedger.voucher.shortCode === 'credit note' || vm.selectedLedger.voucher.shortCode === 'debit note') && selectedInvoice" class="cp remove-invoice pd-r2 hidden-xs" (click)="removeSelectedInvoice()">
                                     <span class=“remove-invoice-icon”>×</span>
                                     <span class="remove-invoice-label">Remove</span>
                                 </td>
