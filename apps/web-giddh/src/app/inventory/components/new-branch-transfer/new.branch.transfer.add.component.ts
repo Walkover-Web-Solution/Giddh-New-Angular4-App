@@ -900,26 +900,28 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         const isBranch = this._generalService.currentOrganizationType === OrganizationType.Branch;
         let branches;
         let branchName;
+        let selectedBranch;
+        let hoBranch;
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
             branches = response;
         });
         if (isBranch) {
             // Find the current branch details
-            const selectedBranch = branches.find(branch => branch.uniqueName === this._generalService.currentBranchUniqueName);
-            branchName = selectedBranch ? selectedBranch.name : '';
+            selectedBranch = branches.find(branch => branch.uniqueName === this._generalService.currentBranchUniqueName);
+            branchName = selectedBranch ? selectedBranch.  selectedBranch.name : '';
         } else {
             // Company session find the HO branch
-            const hoBranch = branches.find(branch => !branch.parentBranchUniqueName);
+            hoBranch = branches.find(branch => !branch.parentBranchUniqueName);
             branchName = hoBranch ? hoBranch.name : '';
         }
         if (!this.editBranchTransferUniqueName) {
-            this.myCurrentCompany = isBranch ? branchName : this.activeCompany.name;
+            this.myCurrentCompany = isBranch ? branchName : hoBranch.name;
             if (this.branchTransferMode === "deliverynote") {
-                this.branchTransfer.sources[0].uniqueName = this.activeCompany.uniqueName;
-                this.branchTransfer.sources[0].name = this.activeCompany.name;
+                this.branchTransfer.sources[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch.uniqueName;
+                this.branchTransfer.sources[0].name = selectedBranch ? selectedBranch.name : hoBranch.name;
             } else if (this.branchTransferMode === "receiptnote") {
-                this.branchTransfer.destinations[0].uniqueName = this.activeCompany.uniqueName;
-                this.branchTransfer.destinations[0].name = this.activeCompany.name;
+                this.branchTransfer.destinations[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch.uniqueName;
+                this.branchTransfer.destinations[0].name = selectedBranch ? selectedBranch.name : hoBranch.name;
             }
         }
     }
