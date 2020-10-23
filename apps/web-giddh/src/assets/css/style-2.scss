@@ -156,6 +156,11 @@
         padding: 5px 10px 5px 53% !important;
     }
 }
+body{
+    font-family: "opensans-regular";
+    font-display: block;
+    -webkit-font-smoothing: auto;
+}
 /* table css need to removed at last (finish)*/
 .modal-header .close{
     cursor: pointer;
@@ -444,7 +449,6 @@ input {
     line-height: 15px;
     font-size: 12px;
     color: $white;
-    font-family: Trebuchet, Arial, sans-serif;
     font-weight: bold;
     box-sizing: border-box;
     background: #f1f1f1;
@@ -922,11 +926,11 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
 }
 
 .font-bold {
-    font-family: $opensans-bold;
+    font-family: 'opensans-bold';
 }
 
 .modal-open {
@@ -956,7 +960,7 @@ ul.sub-list {
 
 .top-heading > h4 {
     font-size: 18px;
-    font-family: "" opensans-semibold "";
+    font-family: "opensans-semibold";
     line-height: 28px;
     text-transform: capitalize;
 }
@@ -1213,7 +1217,7 @@ ul.sub-list {
 
 .unbold {
     font-weight: normal !important;
-    font-family: $opensans-regular !important;
+    font-family: 'opensans-regular' !important;
 }
 
 .top-aging-table-top .date-range-picker {
@@ -2910,7 +2914,7 @@ input[type="checkbox"]:checked:after {
 
 .subscription-title {
     font-size: 20px;
-    font-family: $opensans-semibold;
+     font-family: 'opensans-semibold';
 }
 
 .box2 {
@@ -5803,7 +5807,7 @@ input[type="checkbox"][disabled] {
 
 .section-head {
     padding-bottom: 10px;
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -6576,7 +6580,7 @@ table td[class*=col-]:last-child {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     text-transform: capitalize;
 }
 
@@ -6798,7 +6802,7 @@ table td[class*=col-]:last-child {
 
 .app-list > ul h6 {
     margin-bottom: 10px;
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     font-size: 13px;
 }
 
@@ -7278,7 +7282,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: capitalize;
     width: auto;
     color: $midnight-blue;
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     vertical-align: middle;
 }
 
@@ -8595,7 +8599,7 @@ ul.dropdown-menu p.lead.pd {
 .nav-tabs > li.active > a,
 .invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid $deep-sky-blue !important;
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     background-color: inherit;
 }
 

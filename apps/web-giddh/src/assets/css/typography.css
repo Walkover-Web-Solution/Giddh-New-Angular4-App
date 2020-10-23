@@ -61,10 +61,10 @@
 }
 /*table fonts start*/
 
-$opensans-regular: "opensans-regular";
-$opensans-semibold: "opensans-semibold";
-$opensans-bold: "opensans-bold";
-$opensans-extra-bold: "opensans-extra-bold";
-body {
-    font-family: $opensans-regular ;
+/* // $opensans-regular: "opensans-regular";
+// $opensans-semibold: "opensans-semibold";
+// $opensans-bold: "opensans-bold";
+// $opensans-extra-bold: "opensans-extra-bold"; */
+html, body{
+    font-family: 'opensans-regular';
 }
