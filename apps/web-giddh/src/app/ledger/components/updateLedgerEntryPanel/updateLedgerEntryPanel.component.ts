@@ -383,6 +383,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     // so it means it's other account entry of petty cash
                     // so for that we have to add a dummy account in flatten account array
                     if (this.isPettyCash) {
+                        // this.loadDefaultSearchSuggestions();
                         if (resp[0].othersCategory) {
                             // check we already have others account in flatten account, then don't do anything
                             const isThereOthersAcc = this.vm.flatternAccountList.some(d => d.uniqueName === 'others');
