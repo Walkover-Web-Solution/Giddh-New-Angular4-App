@@ -96,7 +96,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
 
     { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase' },
     { type: 'MENU', name: 'Reports > Receipt (Beta)', uniqueName: '/pages/reports/receipt' },
-    { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' },
+    // { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' },
     { type: 'MENU', name: 'Purchase Management > Purchase Order', uniqueName: '/pages/purchase-management/purchase/order' },
     { type: 'MENU', name: 'Purchase Management > Purchase Bill', uniqueName: '/pages/purchase-management/purchase/bill' },
     { type: 'MENU', name: 'New Purchase Order', uniqueName: '/pages/purchase-management/purchase-order/new' },
@@ -185,7 +185,7 @@ export let NAVIGATION_ITEM_LIST_RESPONSIVE: IUlist[] = [
     { type: 'MENU', name: 'New Purchase Bill ', uniqueName: '/pages/proforma-invoice/invoice/purchase' },
     { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase' },
     { type: 'MENU', name: 'Reports > Receipt (Beta)', uniqueName: '/pages/reports/receipt' },
-    { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' }
+    // { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' }
 ];
 export let NAVIGATION_ITEM_LIST: IUlist[] = [];
 

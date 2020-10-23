@@ -30,6 +30,8 @@ export interface OrganizationProfile {
     headQuarterAlias?: string;
     balanceDecimalPlaces?: number;
     balanceDisplayFormat?: string;
+    taxType: string;
+    isMultipleCurrency?: boolean;
 }
 
 /** Form type in setting aside component */

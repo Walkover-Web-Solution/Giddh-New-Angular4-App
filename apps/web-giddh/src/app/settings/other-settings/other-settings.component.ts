@@ -44,7 +44,8 @@ export class OtherSettingsComponent implements OnInit, OnDestroy {
         businessTypes: [],
         businessType: '',
         nameAlias: '',
-        balanceDisplayFormat: ''
+        balanceDisplayFormat: '',
+        taxType: ''
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;

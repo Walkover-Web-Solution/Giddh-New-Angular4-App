@@ -83,7 +83,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         businessType: '',
         nameAlias: '',
         headQuarterAlias: '',
-        balanceDisplayFormat: ''
+        balanceDisplayFormat: '',
+        taxType: ''
     };
     public stateStream$: Observable<States[]>;
     public statesSource$: Observable<IOption[]> = observableOf([]);
@@ -1074,7 +1075,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 },
                 businessType: profileObj.businessType,
                 balanceDecimalPlaces: profileObj.balanceDecimalPlaces,
-                balanceDisplayFormat: profileObj.balanceDisplayFormat
+                balanceDisplayFormat: profileObj.balanceDisplayFormat,
+                isMultipleCurrency: profileObj.isMultipleCurrency
             };
             this.companyProfileObj.balanceDecimalPlaces = String(profileObj.balanceDecimalPlaces);
 
@@ -1108,6 +1110,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 parent: response.parentBranch,
                 uniqueName: response.uniqueName,
                 alias: response.alias,
+                taxType: response.taxType
             };
             this.addresses = this.settingsUtilityService.getFormattedBranchAddresses(response.addresses);
             this.changeDetectorRef.detectChanges();
