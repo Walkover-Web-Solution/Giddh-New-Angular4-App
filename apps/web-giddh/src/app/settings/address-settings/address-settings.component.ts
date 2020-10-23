@@ -63,7 +63,8 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         businessTypes: [],
         businessType: '',
         nameAlias: '',
-        balanceDisplayFormat: ''
+        balanceDisplayFormat: '',
+        taxType: ''
     };
     /** Stores the current organization uniqueName
      * (required for checking the entity same as the organization in create-address link-entity field) */

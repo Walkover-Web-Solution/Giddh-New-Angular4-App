@@ -128,7 +128,7 @@
                             <p>
                                 {{address.address}}
                                 <ng-container *ngIf="address.taxType && address.taxNumber">
-                                    <br />
+                                    <br *ngIf="address.address" />
                                     {{address.taxType}} : {{address.taxNumber}}
                                 </ng-container>
                             </p>

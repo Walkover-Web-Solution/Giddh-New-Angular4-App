@@ -209,7 +209,7 @@
                 [profileData]="companyProfileObj" [organizationType]="currentOrganizationType">
             </personal-information>
         </tab>
-        <tab (selectTab)="handleTabChanged('address')" heading="Address/GSTIN">
+        <tab (selectTab)="handleTabChanged('address')" heading="{{companyProfileObj?.taxType ? ('Address/' + companyProfileObj?.taxType) : 'Address/es' }}">
             <address-settings *ngIf="currentTab === 'address'" [addresses]="addresses"
                 [isAddressChangeInProgress]="isAddressChangeInProgress" [closeSidePane]="closeAddressSidePane"
                 [currentOrganizationUniqueName]="currentOrganizationUniqueName"
