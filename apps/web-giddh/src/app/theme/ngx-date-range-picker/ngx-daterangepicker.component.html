@@ -92,7 +92,7 @@
                         <h5 class="modal-inside-heading">Custom</h5>
                         <p>{{inlineStartDate.format("MMM DD YYYY")}} - {{inlineEndDate.format("MMM DD YYYY")}}</p>
                         <span (click)="modalRef.hide()">
-                            <i class="icon-calender"></i>
+                            <span class="fa fa-search"></span>
                         </span>
                     </div>
                     <div class="start-end-date">
@@ -128,10 +128,10 @@
                         <div class="wrap-selected-date">
                             <div class="relative" [ngClass]="{'focusedDate' : ActiveDate ===0}">
                                 <span class="mr-2">
-                                    <img src="../../../assets/images/calender.svg"> &nbsp; From &nbsp;
+                                    <img src="../../../assets/images/calender-icon.svg"> &nbsp; From &nbsp;
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
                                 </span>
-                                <i class="icon-calender"></i>
+                                <span class="fa fa-search"></span>
                                 <input [ngClass]="{'invalid-date-input':invalidStartDate}" placeholder="start date"
                                     #startDateElement [value]="startDateString" (blur)="isOnScrollActive = false; initialCalendarMonths = true; setStartDate($event.target.value)"
                                     (focus)="ActiveDate =0" [class]="ActiveDate ===0 ?ActiveSelectedDateClass :''">
@@ -139,7 +139,7 @@
                                 <span *ngIf="invalidStartDate" class="invalid-date error-msg">{{invalidStartDate}}</span>
                             </div>
                             <div class="relative" [ngClass]="{'focusedDate' : ActiveDate ===1}">
-                                <span class="mr-2"><img src="../../../assets/images/calender.svg"> &nbsp; To &nbsp;
+                                <span class="mr-2"><img src="../../../assets/images/calender-icon.svg"> &nbsp; To &nbsp;
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
                                 </span>
                                 <input [ngClass]="{'invalid-date-input':invalidEndDate}" placeholder="end date"
