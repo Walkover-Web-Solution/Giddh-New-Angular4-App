@@ -235,7 +235,7 @@ export const ROUTES_WITH_HEADER_BACK_BUTTON = [
     '/pages/settings/create-branch'
 ];
 
-/** Routes for which  */
+/** Routes which are restricted when branch is switched  */
 export const RESTRICTED_BRANCH_ROUTES = [
     '/pages/settings/branch',
     '/pages/settings/create-branch',
