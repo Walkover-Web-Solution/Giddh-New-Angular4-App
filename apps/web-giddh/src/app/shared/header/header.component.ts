@@ -49,7 +49,7 @@ import {
 } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationCancel, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
@@ -68,7 +68,7 @@ import { DEFAULT_AC, DEFAULT_GROUPS, DEFAULT_MENUS, NAVIGATION_ITEM_LIST } from 
 import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { ROUTES_WITH_HEADER_BACK_BUTTON, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { RESTRICTED_BRANCH_ROUTES, ROUTES_WITH_HEADER_BACK_BUTTON, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -277,6 +277,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public updateIndexDbSuccess$: Observable<boolean>;
     /* This will hold if resolution is less than 768 to consider as mobile screen */
     public isMobileScreen: boolean = false;
+    /* This will hold current page url */
+    public currentPageUrl: string = '';
 
     /** Stores the details of the current branch */
     public currentBranch: any;
@@ -334,11 +336,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
         private commonActions: CommonActions,
-        private location: Location,
         private settingsProfileService: SettingsProfileService,
         private settingsProfileAction: SettingsProfileActions,
         private companyService: CompanyService,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        public location: Location
     ) {
         /* This will get the date range picker configurations */
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
@@ -370,9 +372,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
+                if(this.router.url.includes("/pages/settings") && !this.generalService.getSessionStorage("previousPage")) {
+                    this.generalService.setSessionStorage("previousPage", this.currentPageUrl);
+                }
+
+                if(!this.router.url.includes("/pages/settings") && this.generalService.getSessionStorage("previousPage")) {
+                    this.generalService.removeSessionStorage("previousPage");
+                }
                 this.addClassInBodyIfPageHasTabs();
             }
             if (event instanceof NavigationEnd) {
+                if(!this.router.url.includes("/pages/settings")) {
+                    this.currentPageUrl = this.router.url;
+                }
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
 
@@ -708,6 +720,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             .subscribe(a => {
                 if (a instanceof NavigationStart) {
                     this.navigationEnd = false;
+                }
+                if (a instanceof NavigationCancel) {
+                    this.navigationEnd = true;
+                    let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
+                        return item.uniqueName.toLocaleLowerCase() === a.url.toLowerCase();
+                    });
+                    if (menuItem) {
+                        this._dbService.removeItem(this.generalService.companyUniqueName, 'menus', menuItem.uniqueName).then((dbResult) => {
+                            this.findListFromDb(dbResult);
+                            this._generalActions.updateUiFromDb();
+                        });
+                    }
                 }
                 if (a instanceof NavigationEnd || a instanceof RouteConfigLoadEnd) {
                     this.navigationEnd = true;
@@ -1153,10 +1177,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             // slice menus
             if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 10);
+                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 15) : slice(this.menuItemsFromIndexDB, 0, 10);
                 this.accountItemsFromIndexDB = slice(dbResult.aidata.accounts, 0, 7);
             } else {
-                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 8);
+                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 12) : slice(this.menuItemsFromIndexDB, 0, 8);
                 this.accountItemsFromIndexDB = slice(dbResult.aidata.accounts, 0, 5);
             }
 
@@ -1175,7 +1199,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             // slice default menus and account on small screen
             if (!(window.innerWidth > 1440 && window.innerHeight > 717)) {
-                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 8);
+                this.menuItemsFromIndexDB = this.currentOrganizationType === OrganizationType.Company ? slice(this.menuItemsFromIndexDB, 0, 10) : slice(this.menuItemsFromIndexDB, 0, 8);
                 this.accountItemsFromIndexDB = slice(this.accountItemsFromIndexDB, 0, 5);
             }
         }
@@ -1252,7 +1276,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         };
         this.setOrganizationDetails(OrganizationType.Branch, details);
-        window.location.reload();
+        if (!RESTRICTED_BRANCH_ROUTES.includes(this.router.url)) {
+            window.location.reload();
+        } else {
+            window.location.href = '/pages/home';
+        }
     }
 
     /**
@@ -1683,7 +1711,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
             let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
-            this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen).then((res) => {
+            this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen, this.currentOrganizationType === OrganizationType.Company).then((res) => {
                 if (res) {
                     this.findListFromDb(res);
                 }
