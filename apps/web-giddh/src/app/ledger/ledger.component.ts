@@ -821,6 +821,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp.uniqueName === 'bankaccounts');
                 if (accountDetails.currency && profile.baseCurrency) {
                     this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile.baseCurrency;
+                } else {
+                    this.isLedgerAccountAllowsMultiCurrency = false;
                 }
                 this.foreignCurrencyDetails = { code: profile.baseCurrency, symbol: profile.baseCurrencySymbol };
                 if (this.isLedgerAccountAllowsMultiCurrency) {
