@@ -89,6 +89,7 @@ export class SettingsUtilityService {
                 stateCode: address.stateCode,
                 stateName: address.stateName,
                 taxNumber: address.taxNumber,
+                taxType: address.taxType,
                 address: address.address,
                 isDefault: address.isDefault,
                 name: address.name,
