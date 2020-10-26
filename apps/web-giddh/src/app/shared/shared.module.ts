@@ -85,7 +85,7 @@ import { RevisionHistoryComponent } from './revision-history/revision-history.co
 import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
 import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
 import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
-import { GiddhDaterangepickerComponent, GiddhDaterangepickerSidebarComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
+import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -175,8 +175,7 @@ export class PickDateAdapter extends NativeDateAdapter {
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        GiddhDaterangepickerComponent,
-        GiddhDaterangepickerSidebarComponent
+        GiddhDaterangepickerComponent
     ],
     imports: [
         KeyboardShortutModule,
