@@ -10,6 +10,7 @@ import { CompanyResponse } from "../../../models/api-models/Company";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 
 @Component({
     selector: 'cr-dr-list',
@@ -34,7 +35,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     public universalDate$: Observable<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public moment = moment;
     public toDate: string;
     public fromDate: string;
@@ -63,21 +64,9 @@ export class CrDrComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                this.datePickerOptions = config;
-            }
-        });
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                // this.datePickerOptions = {
-                //     ...this.datePickerOptions, startDate: moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-                //     endDate: moment(universalDate[1], GIDDH_DATE_FORMAT).toDate(),
-                //     chosenLabel: universalDate[2]
-                // };
                 this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                 this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -123,12 +112,6 @@ export class CrDrComponent implements OnInit, OnDestroy {
 
                     this.apiFromDate = this.apiFromDate.split("-").reverse().join("-");
                     this.apiToDate = this.apiToDate.split("-").reverse().join("-");
-
-                    // this.datePickerOptions = {
-                    //     ...this.datePickerOptions, startDate: moment(this.apiFromDate, GIDDH_DATE_FORMAT).toDate(),
-                    //     endDate: moment(this.apiToDate, GIDDH_DATE_FORMAT).toDate(),
-                    //     chosenLabel: "Custom range"
-                    // };
 
                     this.selectedDateRange = { startDate: moment(this.apiFromDate), endDate: moment(this.apiToDate) };
                     this.selectedDateRangeUi = moment(this.apiFromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.apiToDate).format(GIDDH_NEW_DATE_FORMAT_UI);
