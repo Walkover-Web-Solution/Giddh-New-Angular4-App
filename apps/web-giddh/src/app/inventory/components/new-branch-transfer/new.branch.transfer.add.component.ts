@@ -908,7 +908,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         if (isBranch) {
             // Find the current branch details
             selectedBranch = branches.find(branch => branch.uniqueName === this._generalService.currentBranchUniqueName);
-            branchName = selectedBranch ? selectedBranch.  selectedBranch.name : '';
+            branchName = selectedBranch ? selectedBranch.name : '';
         } else {
             // Company session find the HO branch
             hoBranch = branches.find(branch => !branch.parentBranchUniqueName);
