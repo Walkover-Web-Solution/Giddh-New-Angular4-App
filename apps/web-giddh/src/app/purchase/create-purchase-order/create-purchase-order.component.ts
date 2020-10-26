@@ -1005,6 +1005,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof CreatePurchaseOrderComponent
      */
     public onSelectWarehouse(warehouse: any): void {
+        this.autoFillCompanyShipping = false;
         this.autoFillWarehouseAddress(warehouse);
         this.autoFillCompanyShipping = false;
 

@@ -1487,7 +1487,7 @@
 
 <!--quick account popup -->
 <div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-sm" style="width: 298px">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
         </div>
@@ -1594,7 +1594,7 @@
         <div class="modal-body">
             <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
                 [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true"
-                [ranges]="datePickerRanges.ranges" [selectedRangeLabel]="selectedRangeLabel"
+                [ranges]="datePickerRanges" [selectedRangeLabel]="selectedRangeLabel"
                 [showCustomRangeLabel]="true" [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true"
                 [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)"
                 (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"

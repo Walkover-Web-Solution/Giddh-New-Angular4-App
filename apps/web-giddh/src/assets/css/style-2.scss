@@ -1567,7 +1567,14 @@ modal-container.modal {
     padding-left: 10px;
     padding-bottom: 10px;
 }
-
+.voucher-type.dropdown-menu {
+    li{
+        label{
+            padding-left: 0;
+            padding-bottom: 0;
+        }
+    }
+}
 .paymentMode sh-select {
     float: right;
     width: 129px;
@@ -9203,6 +9210,7 @@ input:placeholder-shown {
 .select2-parent.select2-ledger .update-ledger-account sh-select .header input {
     padding-left: 3px !important;
     font-size: 13px !important;
+    padding-right:27px !important;
 }
 
 .select2-parent.select2-ledger
@@ -9305,7 +9313,7 @@ ngx-daterangepicker-material {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
     z-index: 1;
     width: 100% !important;
-    max-width: 462px !important;
+    max-width: 540px !important;
 }
 
 .edit-modal {
@@ -9680,7 +9688,11 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
-
+.customer-form-inline{
+    .tooltip-inner{
+        white-space: nowrap;
+    }
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
@@ -11036,3 +11048,9 @@ input.mat-input-element{
         border-radius: 5px;
         min-height: 60px;
     }
+    .icon-info{
+        position: relative;
+    }
+.icon-info:before {
+  content: "\e900";
+}
