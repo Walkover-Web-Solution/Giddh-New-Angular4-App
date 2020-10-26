@@ -35,7 +35,7 @@
                     </li>
                     <li class="menu-li select-financial-year">
                         <button type="button" class="btn-angle-down" (click)="dropdownShow = !dropdownShow"
-                            [ngClass]="{'active': checkIfFinancialYearSelected(financialYears)}">Select Financial Year
+                            [ngClass]="{'active': checkIfFinancialYearSelected(financialYears) || dropdownShow}">Select Financial Year
                             <span class="available prev angle-down"></span>
                         </button>
                         <ul class="sub-ranges-cal menu-drawer financial-year-dropdown"
@@ -132,7 +132,7 @@
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
                                 </span>
                                 <span class="fa fa-search"></span>
-                                <input [ngClass]="{'invalid-date-input':invalidStartDate}" placeholder="start date"
+                                <input [ngClass]="{'invalid-date-input':invalidStartDate, 'w-100': true}" placeholder="start date"
                                     #startDateElement [value]="startDateString" (blur)="isOnScrollActive = false; initialCalendarMonths = true; setStartDate($event.target.value)"
                                     (focus)="ActiveDate =0" [class]="ActiveDate ===0 ?ActiveSelectedDateClass :''">
 
@@ -142,7 +142,7 @@
                                 <span class="mr-2"><img src="../../../assets/images/calender-icon.svg"> &nbsp; To &nbsp;
                                 <i class="fa fa-calendar" aria-hidden="true"></i>
                                 </span>
-                                <input [ngClass]="{'invalid-date-input':invalidEndDate}" placeholder="end date"
+                                <input [ngClass]="{'invalid-date-input':invalidEndDate, 'w-100': true}" placeholder="end date"
                                     #endDateElement [value]="endDateString" (blur)="isOnScrollActive = false; initialCalendarMonths = true; setEndDate($event.target.value)"
                                     (focus)="ActiveDate =1" [class]="ActiveDate ===1 ?ActiveSelectedDateClass :''">
                                 <span *ngIf="invalidEndDate" class="invalid-date error-msg">{{invalidEndDate}}</span>
