@@ -232,7 +232,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         private inventoryAction: InventoryAction,
         private settingsBranchActions: SettingsBranchActions,
         private invViewService: InvViewService,
-        private cdr: ChangeDetectorRef,
         private breakPointObservar: BreakpointObserver
     ) {
         this.breakPointObservar.observe([
@@ -308,7 +307,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                     this.groupStockReport = res;
                     this.groupNotFoundMessage = '';
                 }
-                this.cdr.detectChanges();
             }
         });
 
@@ -824,7 +822,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     }
 
     /**
-     * To open edit model 
+     * To open edit model
      *
      * @memberof InventoryGroupStockReportComponent
      */
