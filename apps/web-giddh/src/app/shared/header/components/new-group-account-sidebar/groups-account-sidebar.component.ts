@@ -167,6 +167,11 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
         });
     }
 
+    /**
+     * This will get the active group details
+     *
+     * @memberof GroupsAccountSidebarComponent
+     */
     public getGroupDetails(): void {
         let activeGroup;
         this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
