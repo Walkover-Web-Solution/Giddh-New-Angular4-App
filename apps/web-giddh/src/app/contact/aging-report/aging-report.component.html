@@ -9,13 +9,13 @@
                         <i class="icon-search"></i>
                     </span>
                 </div>
-                <div class="cp advance-clear-filter-icons">
+                <div class="cp advance-clear-filter-icons d-flex">
                     <div class="advance-icon" (click)="toggleAdvanceSearchPopup()" tooltip="Advance Search">
                         <span class="icon-advance-filter"></span>
                     </div>
-                    <span style="line-height: 2.1" class="ml-1" *ngIf="isAdvanceSearchApplied">
+                    <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
                         <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()">
-                            <i aria-hidden="true" class="icon-refresh" tooltip="Reset Filter"></i>
+                            <i aria-hidden="true" class="icon-refrsh" tooltip="Reset Filter"></i>
                         </a>
                     </span>
                 </div>
@@ -43,8 +43,8 @@
     </div>
 </div>
 <div class="result-total">
-    <div class="container-fluid">
-        <div class="mx-md-n3">
+    <div>
+        <div>
             <div class="customer-right-wrap">
                 <div class="text-right xs-left pl-2 pr-2">
                     <h4 class="mb-1 pr-1">Result Total </h4>

@@ -84,6 +84,16 @@ tr.aging-table-top td {
 .aging-table-top + tr > th {
     border-bottom: none !important;
 }
+.refresh-btn{
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $white;
+    border: 1px solid $gainsboro;
+    margin-left: 10px !important;
+}
 // responsive
 @media (min-width: 769px) {
     .on-mobile-view > .top-aging-table-top {
@@ -206,11 +216,11 @@ tr.aging-table-top td {
 }
 @media (max-width: 575px) {
     .wrap-searching-aging .max250 {
-        max-width: calc(100% - 30px);
+        max-width: 250px;
         width: 100%;
     }
     .wrap-searching-aging .max250.default-width {
-        max-width: calc(100% - 90px);
+        max-width: 250px;
         width: 100%;
     }
     .wrap-searching-aging .max250 input {
@@ -219,6 +229,7 @@ tr.aging-table-top td {
     .wrap-searching-aging {
         float: none !important;
         justify-content: space-between;
+        margin-bottom: 15px;
     }
     .btn-group.plus-btn {
         float: none;

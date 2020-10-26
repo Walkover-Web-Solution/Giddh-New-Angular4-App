@@ -1567,7 +1567,14 @@ modal-container.modal {
     padding-left: 10px;
     padding-bottom: 10px;
 }
-
+.voucher-type.dropdown-menu {
+    li{
+        label{
+            padding-left: 0;
+            padding-bottom: 0;
+        }
+    }
+}
 .paymentMode sh-select {
     float: right;
     width: 129px;
@@ -9203,6 +9210,7 @@ input:placeholder-shown {
 .select2-parent.select2-ledger .update-ledger-account sh-select .header input {
     padding-left: 3px !important;
     font-size: 13px !important;
+    padding-right:27px !important;
 }
 
 .select2-parent.select2-ledger
@@ -9680,7 +9688,11 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
-
+.customer-form-inline{
+    .tooltip-inner{
+        white-space: nowrap;
+    }
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
