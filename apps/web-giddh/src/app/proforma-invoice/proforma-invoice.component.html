@@ -2300,11 +2300,11 @@
 
                     </div>
 
-                    <div class="add-btn" (click)="addBlankRow(null)">
-                        <button class="btn btn-sm btn-success">Add More</button>
+                    <div class="add-btn">
+                        <button class="btn btn-sm btn-success" (click)="addBlankRow(null)">Add More</button>
                     </div>
 
-                    <div class="otherDetail-card">
+                    <div class="other-detail-card">
                         <div>
                             <div class="collapse-pane clearfix">
                                 <div class="collapse-pane-heading" (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
@@ -2367,7 +2367,7 @@
                             </div>
 
                             <div class="pd-t1 pl0 max-600" *ngIf="!isPurchaseInvoice">
-                                <label class="mr-b1">Message</label>
+                                <label class="mr-b1">Note</label>
                                 <textarea style="height:120px" class="form-control" name="message2"
                                     [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                             </div>

@@ -1061,7 +1061,7 @@ section.newtable {
 }
 .card-invoice-table-wrapper,
 .add-btn,
-.otherDetail-card,
+.other-detail-card,
 .total-amountDiscription {
     display: none;
 }
@@ -1133,7 +1133,7 @@ section.newtable {
     padding-right: 5px;
 }
 
-.otherDetail-card {
+.other-detail-card {
     max-width: 400px;
     margin: 20px 0;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
@@ -1142,12 +1142,12 @@ section.newtable {
     border-radius: 3px;
 }
 
-.otherDetail-card .collapse-pane .col-xs-4 {
+.other-detail-card .collapse-pane .col-xs-4 {
     padding-left: 10px;
     padding-right: 10px;
 }
 
-.otherDetail-card .collapse-pane-heading {
+.other-detail-card .collapse-pane-heading {
     padding-bottom: 20px;
 }
 
@@ -1625,6 +1625,11 @@ span.eligible-ITC {
         transform: rotate(180deg);
     }
 }
+.other-detail-card {
+    textarea{
+        min-height: 100px;
+    }
+}
 /* resposnvie */
 @media(max-width:1199px){
     .invoice-date-due-date {
@@ -1704,7 +1709,7 @@ span.eligible-ITC {
     }
     .card-invoice-table-wrapper,
     .add-btn,
-    .otherDetail-card,
+    .other-detail-card,
     .total-amountDiscription {
         display: block;
     }
@@ -1723,7 +1728,7 @@ span.eligible-ITC {
         display: none;
     }
     .card-invoice-table-wrapper,
-    .otherDetail-card,
+    .other-detail-card,
     .total-amountDiscription {
         width: 100%;
         max-width: 100%;
@@ -1757,6 +1762,7 @@ span.eligible-ITC {
         right: 0;
         float: none;
     }
+
 }
 
 @media (max-width: 767px) {
@@ -1843,7 +1849,7 @@ span.eligible-ITC {
         padding-right: 10px !important;
         margin-bottom: 10px;
     }
-    .otherDetail-card .form-group.col-xs-4 {
+    .other-detail-card .form-group.col-xs-4 {
         width: 50%;
     }
     .deposit-section {
