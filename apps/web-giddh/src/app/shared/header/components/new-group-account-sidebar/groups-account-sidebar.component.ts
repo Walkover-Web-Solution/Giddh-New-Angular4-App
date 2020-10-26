@@ -59,6 +59,7 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     public currentGroup: any;
     public currentGroupIndex: number = 0;
     public isGroupMoved: boolean = false;
+    /* This will hold if group is deleted */
     public isGroupDeleted: boolean = false;
 
     // tslint:disable-next-line:no-empty
