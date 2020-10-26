@@ -10,9 +10,10 @@
     [selectedRangeLabel]="selectedRangeLabel"
     [showClearButton]="false"
     [showCancel]="true"
-    [showDropdowns]="true"
+    [showDropdowns]="false"
     [locale]="{applyLabel: 'Done'}"
     (rangeClicked)="selectedRange($event)"
     (datesUpdated)="selectedDate($event)"
     [keepCalendarOpeningWithRange]="true"
+    [singleDatePicker]="true"
     [showRangeLabelOnInput]="false"></ngx-daterangepicker-material>

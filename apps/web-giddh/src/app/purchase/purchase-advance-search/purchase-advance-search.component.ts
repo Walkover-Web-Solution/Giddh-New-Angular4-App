@@ -10,6 +10,7 @@ import { ReplaySubject } from 'rxjs';
 import { GeneralService } from '../../services/general.service';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { purchaseOrderStatus } from "../../shared/helpers/purchaseOrderStatus";
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 
 /* Amount comparision filters */
 const AMOUNT_COMPARISON_FILTER = [
@@ -49,7 +50,7 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Moment object */
     public moment = moment;
     /* Selected range label */
@@ -91,13 +92,6 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
-        });
-
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                this.datePickerOptions = config;
-            }
         });
 
         if(this.purchaseOrderPostRequest && this.purchaseOrderPostRequest.dueFrom && this.purchaseOrderPostRequest.dueTo) {
