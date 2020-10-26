@@ -242,6 +242,7 @@ $input-height: 3rem !default;
 
             span {
                 pointer-events: none;
+                font-size: 16px;
             }
         }
          /* new calendar */
@@ -1427,7 +1428,7 @@ td span {
 .calender-container {
     display: flex;
     flex-direction: column;
-    max-width: 320px;
+    max-width: 340px;
     .calender-container-wrapper {
         flex: 1 1 auto;
         // overflow: auto;
