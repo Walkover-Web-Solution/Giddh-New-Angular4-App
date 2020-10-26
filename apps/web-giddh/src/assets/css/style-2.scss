@@ -1563,7 +1563,14 @@ modal-container.modal {
     padding-left: 10px;
     padding-bottom: 10px;
 }
-
+.voucher-type.dropdown-menu {
+    li{
+        label{
+            padding-left: 0;
+            padding-bottom: 0;
+        }
+    }
+}
 .paymentMode sh-select {
     float: right;
     width: 129px;
@@ -9209,6 +9216,7 @@ input.checkbox-custom[type="checkbox"] {
 .select2-parent.select2-ledger .update-ledger-account sh-select .header input {
     padding-left: 3px !important;
     font-size: 13px !important;
+    padding-right:27px !important;
 }
 
 .select2-parent.select2-ledger
@@ -9642,7 +9650,55 @@ span#HW_badge_cont:nth-child(3) {
     z-index: 98;
 }
 
-ul.dropdown-menu.action-dropdown{
+
+.linked-add{
+    .popover{
+        width:268px;
+        font-family: inherit;
+        border-radius: 4px;
+        box-shadow: 0 3px 6px $black-russian;
+        top: 20% !important;
+        .popover-arrow{
+            display:none;
+        }
+        .popover-header {
+            padding: 15px 15px 0 15px;
+            margin-bottom: 0;
+            font-size: 14px;
+            background-color: transparent;
+            border-bottom: none;
+            font-weight: bold;
+        }
+        .popover-body {
+            padding: 0 15px 15px 15px;
+        }
+    }
+}
+
+.settings-profile-tabs{
+    .tab-container{
+        .nav-tabs{
+            .nav-item{
+                .nav-link{
+                    font-size: 16px !important;
+                    color: $midnight-blue !important;
+                }
+            }
+            .active{
+                > .nav-link{
+                    color: $midnight-blue !important;
+                }
+            }
+        }
+    }
+}
+.customer-form-inline{
+    .tooltip-inner{
+        white-space: nowrap;
+    }
+}
+/* responsive */
+ul.dropdown-menu.action-dropdown {
     left: auto;
     right: -40px !important;
 }

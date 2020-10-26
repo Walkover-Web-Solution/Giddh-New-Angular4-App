@@ -173,8 +173,10 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 }
 
 .download-invoice-ledger>i {
-    top: 15px;
+    top: 18px;
     position: relative;
+    background-color: $white;
+    padding-left: 5px;
 }
 
 .checkbox-custom-label strong {
@@ -280,7 +282,9 @@ span.eligible-ITC {
         font-family: 'opensans-regular';
     }
 }
-
+.left-col-new .row, .right-col-new .row , .ledger-head .row{
+    margin: 0;
+}
 /* responsive */
 
 @media only screen and (max-width: 1359px) {
