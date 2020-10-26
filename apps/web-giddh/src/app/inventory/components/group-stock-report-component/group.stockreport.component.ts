@@ -448,16 +448,18 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public getAllBranch() {
         this.store.select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
             if (entities) {
+                let newEntities = [];
                 if (entities.length) {
+                    newEntities = [...entities];
                     if (this.selectedCmp && entities.findIndex(p => p.uniqueName === this.selectedCmp.uniqueName) === -1) {
                         this.selectedCmp['label'] = this.selectedCmp.name;
-                        entities.push(this.selectedCmp);
+                        newEntities.push(this.selectedCmp);
                     }
-                    entities.forEach(element => {
+                    newEntities.forEach(element => {
                         element['label'] = element.name;
                     });
-                    this.entities$ = observableOf(_.orderBy(entities, 'name'));
-                } else if (entities.length === 0) {
+                    this.entities$ = observableOf(_.orderBy(newEntities, 'name'));
+                } else if (newEntities.length === 0) {
                     this.entities$ = observableOf(null);
                 }
             }
@@ -824,7 +826,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     }
 
     /**
-     * To open edit model 
+     * To open edit model
      *
      * @memberof InventoryGroupStockReportComponent
      */
