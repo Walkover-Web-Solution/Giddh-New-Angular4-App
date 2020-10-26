@@ -425,6 +425,17 @@
             margin-bottom: 20px;
         }
     }
+    .plan-footer {
+        .success-btn {
+            padding: 6px 15px;
+            margin: 10px auto;
+            display: flex;
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+    }
 }
 @media only screen and (max-width:991px){
     .all-plans{
