@@ -163,6 +163,42 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
     }
 ];
 
+export const GIDDH_DATE_RANGE_PICKER_RANGES = [
+    {
+        name: DatePickerDefaultRangeEnum.ThisMonth, value: [moment().startOf('month'), moment().endOf('month')]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.LastMonth, value: [
+            moment().subtract(1, 'month').startOf('month'),
+            moment().subtract(1, 'month').endOf('month')
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.ThisQuarterToDate, value: [
+            moment().quarter(moment().quarter()).startOf('quarter'),
+            moment()
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate, value: [
+            moment().startOf('year').subtract(9, 'year'),
+            moment()
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.LastQuarter, value: [
+            moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+            moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.AllTime, value: [
+            moment().startOf('year').subtract(10, 'year'),
+            moment()
+        ]
+    }
+];
+
 /** File attachment types supported by Giddh */
 export const FILE_ATTACHMENT_TYPE = {
     IMAGE: ['jpg', 'jpeg', 'gif', 'png'],
