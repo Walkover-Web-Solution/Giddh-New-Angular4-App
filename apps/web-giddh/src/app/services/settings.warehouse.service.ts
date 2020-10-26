@@ -62,6 +62,9 @@ export class SettingsWarehouseService {
         if (Number.isInteger(params.count)) {
             contextPath = contextPath.concat(`&count=${params.count}`);
         }
+        if (params.query) {
+            contextPath = contextPath.concat(`&q=${params.query}`);
+        }
         return this.http.get(contextPath).pipe(
             map((response) => {
                 let data: BaseResponse<any, any> = response;

@@ -537,7 +537,7 @@
                                                 <!-- region shipping address -->
                                                 <div class="col-sm-12 col-xl-6 col-md-10  bill-add">
 
-                                                    <div class="form-group p0 width100">
+                                                    <div class="form-group p-0 width100">
                                                         <label>
                                                             <input type="checkbox" autocomplete="None"
                                                                 name="autoFillCompanyShipping"
@@ -639,14 +639,14 @@
 
                                             <ng-container *ngIf="isCreditNote || isDebitNote">
                                                 <sh-select [options]="invoiceList" placeholder="Select Accounts"
-                                                    [forceClearReactive]="invoiceForceClearReactive$ | async"
-                                                    [notFoundLink]="false" [(ngModel)]="selectedInvoice"
-                                                    [ngModelOptions]="{standalone: true}"
+                                                    [forceClearReactive]="invoiceForceClearReactive$ | async" class="linking-dropdown"
+                                                    [notFoundLink]="false" [(ngModel)]="selectedInvoice" name="invoiceLinking"
                                                     (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"
                                                     [ItemHeight]="67" [showClear]="false">
-                                                    <ng-template *ngIf="invoiceList?.length" #optionTemplate
+                                                    <ng-template #optionTemplate
                                                         let-option="option">
-                                                        <a href="javascript:void(0)" class="list-item sh-template">
+                                                        <a *ngIf="option" href="javascript:void(0)" class="linking-item list-item
+                                                         sh-template">
                                                             <div class="item">{{ option.label }}
                                                             </div>
                                                             <div class="item-unique">

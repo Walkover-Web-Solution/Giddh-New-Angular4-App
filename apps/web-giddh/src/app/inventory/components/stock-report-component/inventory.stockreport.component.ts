@@ -405,7 +405,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         if (changes.currentBranchAndWarehouse && !_.isEqual(changes.currentBranchAndWarehouse.previousValue, changes.currentBranchAndWarehouse.currentValue)) {
             if (this.currentBranchAndWarehouse) {
                 this.stockReportRequest.warehouseUniqueName = (this.currentBranchAndWarehouse.warehouse !== 'all-entities') ? this.currentBranchAndWarehouse.warehouse : null;
-                this.stockReportRequest.branchUniqueName = this.currentBranchAndWarehouse.branch;
+                this.stockReportRequest.branchUniqueName = this.currentBranchAndWarehouse.isCompany ? undefined : this.currentBranchAndWarehouse.branch;
                 if (!changes.currentBranchAndWarehouse.firstChange) {
                     // Make a manual service call only when it is not first change
                     this.getStockReport(true);
@@ -463,16 +463,16 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         // tslint:disable-next-line:no-shadowed-variable
         this.store.select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
             if (entities) {
-                if (entities.results.length) {
-                    if (this.selectedCmp && entities.results.findIndex(p => p.uniqueName === this.selectedCmp.uniqueName) === -1) {
+                if (entities.length) {
+                    if (this.selectedCmp && entities.findIndex(p => p.uniqueName === this.selectedCmp.uniqueName) === -1) {
                         this.selectedCmp['label'] = this.selectedCmp.name;
-                        entities.results.push(this.selectedCmp);
+                        entities.push(this.selectedCmp);
                     }
-                    entities.results.forEach(element => {
+                    entities.forEach(element => {
                         element['label'] = element.name;
                     });
-                    this.entities$ = observableOf(_.orderBy(entities.results, 'name'));
-                } else if (entities.results.length === 0) {
+                    this.entities$ = observableOf(_.orderBy(entities, 'name'));
+                } else if (entities.length === 0) {
                     this.entities$ = observableOf(null);
                 }
             }

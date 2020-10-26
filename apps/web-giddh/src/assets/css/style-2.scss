@@ -156,6 +156,11 @@
         padding: 5px 10px 5px 53% !important;
     }
 }
+body{
+    font-family: "opensans-regular";
+    font-display: block;
+    -webkit-font-smoothing: auto;
+}
 /* table css need to removed at last (finish)*/
 .modal-header .close{
     cursor: pointer;
@@ -444,7 +449,6 @@ input {
     line-height: 15px;
     font-size: 12px;
     color: $white;
-    font-family: Trebuchet, Arial, sans-serif;
     font-weight: bold;
     box-sizing: border-box;
     background: #f1f1f1;
@@ -599,6 +603,13 @@ input {
 
 .invoice-control .invoice-nav.navbar-nav > li > a.active {
     background-color: $white;
+}
+.invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
+    .profile-tab-container {
+        .nav.nav-tabs {
+            padding-left: 0 !important;
+        }
+    }
 }
 
 .navbar {
@@ -922,11 +933,11 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
 }
 
 .font-bold {
-    font-family: $opensans-bold;
+    font-family: 'opensans-bold';
 }
 
 .modal-open {
@@ -956,7 +967,7 @@ ul.sub-list {
 
 .top-heading > h4 {
     font-size: 18px;
-    font-family: "" opensans-semibold "";
+    font-family: "opensans-semibold";
     line-height: 28px;
     text-transform: capitalize;
 }
@@ -1212,7 +1223,7 @@ ul.sub-list {
 
 .unbold {
     font-weight: normal !important;
-    font-family: $opensans-regular !important;
+    font-family: 'opensans-regular' !important;
 }
 
 .top-aging-table-top .date-range-picker {
@@ -2901,7 +2912,7 @@ input[type="checkbox"]:checked:after {
 
 .subscription-title {
     font-size: 20px;
-    font-family: $opensans-semibold;
+     font-family: 'opensans-semibold';
 }
 
 .box2 {
@@ -5791,7 +5802,7 @@ input[type="checkbox"][disabled] {
 
 .section-head {
     padding-bottom: 10px;
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -6563,7 +6574,7 @@ table td[class*=col-]:last-child {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     text-transform: capitalize;
 }
 
@@ -6785,7 +6796,7 @@ table td[class*=col-]:last-child {
 
 .app-list > ul h6 {
     margin-bottom: 10px;
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     font-size: 13px;
 }
 
@@ -7265,7 +7276,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: capitalize;
     width: auto;
     color: $midnight-blue;
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     vertical-align: middle;
 }
 
@@ -8116,7 +8127,7 @@ app-header {
     border-radius: 0;
 }
 
-.accountAsideMenuState2 #close {
+.account-aside-menu-state #close {
     display: block;
     position: fixed;
     right: 472px;
@@ -8247,7 +8258,7 @@ div#getGroupModal {
     animation-fill-mode: both;
 }
 
-.accountAsideMenuState2 .horizontal-form {
+.account-aside-menu-state .horizontal-form {
     padding-bottom: 110px;
 }
 
@@ -8582,7 +8593,7 @@ ul.dropdown-menu p.lead.pd {
 .nav-tabs > li.active > a,
 .invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid $deep-sky-blue !important;
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     background-color: inherit;
 }
 
@@ -8887,7 +8898,7 @@ button.ladda-button .ladda-label {
     transition: none !important;
 }
 
-.accountAsideMenuState2 #close {
+.account-aside-menu-state #close {
     display: block;
     position: absolute;
     right: 10px;
@@ -9618,10 +9629,59 @@ span#HW_badge_cont:nth-child(3) {
 .daterangepicker{
     z-index: 9992 !important;
 }
+.sub-branch-option .bs-tooltip-top{
+    left: -25px !important;
+}
+.sub-branch-option .bs-tooltip-top .arrow::before{
+    right: -22px;
+}
 #rcw-p91-widget-button{
     z-index: 98;
 }
 
+.linked-add{
+    .popover{
+        width:268px;
+        font-family: inherit;
+        border-radius: 4px;
+        box-shadow: 0 3px 6px $black-russian;
+        top: 20% !important;
+        .popover-arrow{
+            display:none;
+        }
+        .popover-header {
+            padding: 15px 15px 0 15px;
+            margin-bottom: 0;
+            font-size: 14px;
+            background-color: transparent;
+            border-bottom: none;
+            font-weight: bold;
+        }
+        .popover-body {
+            padding: 0 15px 15px 15px;
+        }
+    }
+}
+
+.settings-profile-tabs{
+    .tab-container{
+        .nav-tabs{
+            .nav-item{
+                .nav-link{
+                    font-size: 16px !important;
+                    color: $midnight-blue !important;
+                }
+            }
+            .active{
+                > .nav-link{
+                    color: $midnight-blue !important;
+                }
+            }
+        }
+    }
+}
+
+/* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
     right: -40px !important;

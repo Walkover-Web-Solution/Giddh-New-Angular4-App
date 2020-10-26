@@ -11,9 +11,6 @@
     padding: 15px;
     bottom: 0;
 }
-.w-58pr {
-    width: 58%;
-}
 
 input.green-checkbox[type="checkbox"]:after {
     left: -3px !important;
@@ -40,5 +37,28 @@ input.green-checkbox[type="checkbox"]:checked:after {
     margin: 15px 0;
     .inner-row {
         margin: 15px -13px !important;
+    }
+}
+
+
+.select-field-width{
+    width: 100% !important;
+}
+
+@media (max-width: 1140px){
+    .left-bar-width {
+        width: 80%;
+    }
+}
+
+@media (max-width: 1024px){
+    .right-bar {
+        width: 310px !important;
+    }
+}
+
+@media (max-width: 767px){
+    .select-field-width{
+        width: 70% !important;
     }
 }
