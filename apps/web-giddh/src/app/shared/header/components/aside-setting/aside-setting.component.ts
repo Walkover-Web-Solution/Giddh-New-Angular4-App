@@ -48,10 +48,12 @@ export class AsideSettingComponent implements OnInit {
             let loop = 0;
             let organizationIndex = 0;
             this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), take(1)).subscribe((organization: Organization) => {
-                if (organization.type === OrganizationType.Branch) {
-                    organizationIndex = 1;
-                } else if (organization.type === OrganizationType.Company) {
-                    organizationIndex = 0;
+                if(organization) {
+                    if (organization.type === OrganizationType.Branch) {
+                        organizationIndex = 1;
+                    } else if (organization.type === OrganizationType.Company) {
+                        organizationIndex = 0;
+                    }
                 }
                 Object.keys(settingsPageTabs[organizationIndex]).forEach(key => {
                     this.settingsPageTabs[loop] = [];
