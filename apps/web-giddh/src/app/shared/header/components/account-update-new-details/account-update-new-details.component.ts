@@ -1578,7 +1578,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public selecteDiscountChanged(event: any) {
-        console.log(event);
+
         if (event) {
             this.applyDiscounts();
         }
