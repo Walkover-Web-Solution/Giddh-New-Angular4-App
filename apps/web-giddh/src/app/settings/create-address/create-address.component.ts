@@ -107,8 +107,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             } else if (this.addressConfiguration.type === SettingsAsideFormType.EditBranch) {
                 if (this.branchToUpdate) {
                     this.addressForm = this.formBuilder.group({
-                        name: [this.branchToUpdate.name, Validators.required],
-                        alias: [this.branchToUpdate.alias, Validators.required],
+                        name: [this.branchToUpdate.name, [Validators.required, Validators.maxLength(100)]],
+                        alias: [this.branchToUpdate.alias, [Validators.required, Validators.maxLength(50)]],
                         linkedEntity: [this.branchToUpdate.linkedEntities.map(entity => entity.uniqueName)]
                     });
                     const linkedEntity = [...this.branchToUpdate.linkedEntities];
@@ -124,7 +124,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             } else if (this.addressConfiguration.type === SettingsAsideFormType.EditWarehouse) {
                 if (this.warehouseToUpdate) {
                     this.addressForm = this.formBuilder.group({
-                        name: [this.warehouseToUpdate.name, Validators.required],
+                        name: [this.warehouseToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                         linkedEntity: [this.warehouseToUpdate.linkedEntities.map(entity => entity.uniqueName)]
                     });
                     const linkedEntity = [...this.warehouseToUpdate.linkedEntities];

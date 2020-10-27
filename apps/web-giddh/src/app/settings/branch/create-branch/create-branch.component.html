@@ -1,4 +1,3 @@
-
 <div class="container-fluid">
     <div class="create-branch-page mb-15">
         <div class="create-branch-under mb-15">
@@ -34,13 +33,23 @@
                     <label>
                         Alias <span class="red-text">*</span>
                     </label>
-                    <input type="text" class="form-control" formControlName="alias" placeholder="Enter Alias">
+                    <input [class.error-box]="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.invalid"
+                        type="text" class="form-control" formControlName="alias" placeholder="Enter Alias">
+                    <span class="danger pl-1"
+                        *ngIf="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.errors?.maxlength">
+                        Max. 50 characters allowed
+                    </span>
                 </div>
                 <div class="branch-form-field">
                     <label>
                         Branch Name <span class="red-text">*</span>
                     </label>
-                    <input type="text" class="form-control" formControlName="name" placeholder="Enter Name">
+                    <input [class.error-box]="branchForm?.get('name')?.touched && branchForm?.get('name')?.invalid"
+                        type="text" class="form-control" formControlName="name" placeholder="Enter Name">
+                    <span class="danger pl-1"
+                        *ngIf="branchForm?.get('name')?.touched && branchForm?.get('name')?.errors?.maxlength">
+                        Max. 100 characters allowed
+                    </span>
                     <!-- <span class="ml-2">
                     <input type="checkbox" class="mr-4"> Is it a Sub-Branch ?
                 </span> -->
@@ -50,19 +59,21 @@
                         Address/es
                     </label>
                     <div class="address-dropdown form-group">
-                        <sales-sh-select [options]="addresses" formControlName="address" name="particulars" [ItemHeight]="67"
-                            [notFoundLink]="true" (clearSingleItem)="handleFinalSelection($event)" [isFilterEnabled]="true"
-                            [multiple]="true" placeholder="Select Entity" (noResultsClicked)="handleShortcutPress()">
+                        <sales-sh-select [options]="addresses" formControlName="address" name="particulars"
+                            [ItemHeight]="67" [notFoundLink]="true" (clearSingleItem)="handleFinalSelection($event)"
+                            [isFilterEnabled]="true" [multiple]="true" placeholder="Select Entity"
+                            class="linked-add create" (noResultsClicked)="handleShortcutPress()">
                             <ng-template #optionTemplate let-option="option">
                                 <ng-container>
-                                    <a (click)="selectAddress(option)" href="javascript:void(0)" class="list-item d-flex">
+                                    <a popover="{{ option?.address }}" placement="right" popover
+                                        triggers="mouseenter:mouseleave" (click)="selectAddress(option)"
+                                        href="javascript:void(0)" class="list-item d-flex">
                                         <span><input type="checkbox"
                                                 [checked]="branchForm?.get('address')?.value?.includes(option.value)"
                                                 [value]="option.value"></span>&nbsp;
                                         <span class="entity-details">
                                             <div class="item">{{ option.label || '-' }}</div>
                                             <div class="item-unq">
-                                                {{ option.address || '-' }}
                                                 <p *ngIf="option.taxType && option.taxNumber">{{ option.taxType }} :
                                                     {{ option.taxNumber }}</p>
                                             </div>
@@ -133,7 +144,8 @@
             <div class="footer-btn row">
                 <div class="button-group">
                     <button type="reset" class="btn btn-primary mr-15">Clear</button>
-                    <button type="submit" [disabled]="branchForm?.invalid" class="btn btn-success">Create Branch</button>
+                    <button type="submit" [disabled]="branchForm?.invalid" class="btn btn-success">Create
+                        Branch</button>
                 </div>
             </div>
         </form>
@@ -141,7 +153,6 @@
 </div>
 <div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'" (click)="toggleAddressAsidePane($event)"></div>
 <create-address [class]="addressAsideMenuState" [@slideInOut]="addressAsideMenuState"
-    [currentOrganizationUniqueName]="currentOrganizationUniqueName"
-    [showLoader]="isAddressChangeInProgress" (saveAddress)="createNewAddress($event)"
-    [addressConfiguration]="addressConfiguration" (closeAsideEvent)="toggleAddressAsidePane($event)"
-    *ngIf="addressAsideMenuState === 'in'"></create-address>
+    [currentOrganizationUniqueName]="currentOrganizationUniqueName" [showLoader]="isAddressChangeInProgress"
+    (saveAddress)="createNewAddress($event)" [addressConfiguration]="addressConfiguration"
+    (closeAsideEvent)="toggleAddressAsidePane($event)" *ngIf="addressAsideMenuState === 'in'"></create-address>

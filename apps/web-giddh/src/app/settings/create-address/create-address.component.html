@@ -29,10 +29,12 @@
                                             [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
                                             type="text" formControlName="name" class="form-control"
                                             placeholder="Enter name">
-                                        <span class="danger" *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength">
+                                        <span class="danger"
+                                            *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength">
                                             Max. 100 characters allowed
                                         </span>
-                                        <span class="danger" *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.required">
+                                        <span class="danger"
+                                            *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.required">
                                             Field is required
                                         </span>
                                     </div>
@@ -123,30 +125,43 @@
                                 <div class="row">
                                     <div class="form-group col-12">
                                         <label>Branch Name <sup>*</sup></label>
-                                        <input type="text" formControlName="name" class="form-control"
-                                            placeholder="Enter">
+                                        <input
+                                            [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
+                                            type="text" formControlName="name" class="form-control" placeholder="Enter">
+                                        <span class="danger"
+                                            *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength">
+                                            Max. 100 characters allowed
+                                        </span>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-sm-8 form-group">
                                         <label>Alias <sup>*</sup></label>
-                                        <input type="text" formControlName="alias" class="form-control"
+                                        <input
+                                            [class.error-box]="addressForm?.get('alias')?.touched && addressForm?.get('alias')?.invalid"
+                                            type="text" formControlName="alias" class="form-control"
                                             placeholder="Enter alias">
+                                        <span class="danger"
+                                            *ngIf="addressForm?.get('alias')?.touched && addressForm?.get('alias')?.errors?.maxlength">
+                                            Max. 50 characters allowed
+                                        </span>
                                     </div>
                                 </div>
 
                                 <div class="clearfix row">
-                                    <div class="form-group col-12 linked-entities">
+                                    <div class="form-group col-12 linked-entities linked-add create">
                                         <label>Linked Address/es</label>
                                         <div class="form-group">
                                             <sh-select [options]="addressConfiguration?.linkedEntities"
                                                 name="linkedEntities" formControlName="linkedEntity"
-                                                (clearSingleItem)="handleFinalSelection($event)"
+                                                (clearSingleItem)="handleFinalSelection($event)" [ItemHeight]="67"
                                                 [isFilterEnabled]="true" [multiple]="true" placeholder="Select Entity">
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
-                                                        <a (click)="selectEntity(option)" href="javascript:void(0)"
+                                                        <a popover="{{ option?.address }}" placement="top" popover
+                                                            triggers="mouseenter:mouseleave"
+                                                            (click)="selectEntity(option)" href="javascript:void(0)"
                                                             class="list-item d-flex">
                                                             <span><input type="checkbox"
                                                                     [checked]="addressForm?.get('linkedEntity')?.value?.includes(option.value)"
@@ -154,7 +169,6 @@
                                                             <span class="entity-details">
                                                                 <div class="item">{{ option.label || '-' }}</div>
                                                                 <div class="item-unq">
-                                                                    {{ option.address || '-' }}
                                                                     <p *ngIf="option.taxType && option.taxNumber">
                                                                         {{ option.taxType }} :
                                                                         {{ option.taxNumber }}</p>
@@ -188,23 +202,31 @@
                                 <div class="row">
                                     <div class="form-group col-12">
                                         <label>Name <sup>*</sup></label>
-                                        <input type="text" formControlName="name" class="form-control"
+                                        <input
+                                            [class.error-box]="addressForm?.get('name')?.touched && addressForm?.get('name')?.invalid"
+                                            type="text" formControlName="name" class="form-control"
                                             placeholder="Enter name" required>
+                                        <span class="danger"
+                                            *ngIf="addressForm?.get('name')?.touched && addressForm?.get('name')?.errors?.maxlength">
+                                            Max. 100 characters allowed
+                                        </span>
                                     </div>
                                 </div>
 
                                 <div class="clearfix row">
-                                    <div class="form-group col-12 linked-entities">
+                                    <div class="form-group col-12 linked-entities linked-add create">
                                         <label>Address/es</label>
                                         <div class="form-group">
                                             <sh-select [options]="addressConfiguration?.linkedEntities"
                                                 name="linkedEntities" formControlName="linkedEntity"
                                                 (clearSingleItem)="handleFinalSelection($event)"
-                                                [isFilterEnabled]="true" [multiple]="true"
+                                                [isFilterEnabled]="true" [multiple]="true" [ItemHeight]="67"
                                                 placeholder="Select Address/es">
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
-                                                        <a (click)="selectEntity(option)" href="javascript:void(0)"
+                                                        <a popover="{{ option?.address }}" placement="top" popover
+                                                            triggers="mouseenter:mouseleave"
+                                                            (click)="selectEntity(option)" href="javascript:void(0)"
                                                             class="list-item d-flex">
                                                             <span><input type="checkbox"
                                                                     [checked]="addressForm?.get('linkedEntity')?.value?.includes(option.value)"
@@ -212,7 +234,6 @@
                                                             <span class="entity-details">
                                                                 <div class="item">{{ option.label || '-' }}</div>
                                                                 <div class="item-unq">
-                                                                    {{ option.address || '-' }}
                                                                     <p *ngIf="option.taxType && option.taxNumber">
                                                                         {{ option.taxType }} :
                                                                         {{ option.taxNumber }}</p>
