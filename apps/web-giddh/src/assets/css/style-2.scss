@@ -7,6 +7,7 @@
    Don't touch this table css (If any body work on that contact shalinee..)
 */
 
+
 .basic > tbody > tr > td,
 .basic > tbody > tr > th,
 .basic > tfoot > tr > td,
@@ -10016,6 +10017,7 @@ input.mat-input-element{
         #setting-tab .tab-integraton .nav-tabs > li {
             width: 70px;
             margin-bottom: 15px;
+            margin-top: 15px;
         }
         .aging-table tr td:first-child,
         .aging-table tr th:first-child,
@@ -10582,6 +10584,11 @@ input.mat-input-element{
                     padding: 3px 4px;
                 }
             }
+        }
+
+        .mat-form-field{
+            min-width: auto;
+        
         }
         .custom-tabs .top-bar {
             padding-top: 10px;

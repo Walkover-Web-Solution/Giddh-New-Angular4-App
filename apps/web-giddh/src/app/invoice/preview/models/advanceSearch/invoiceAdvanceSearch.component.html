@@ -21,7 +21,7 @@
                     <div class="col-md-8 col-sm-12">
                         <div class="row mr-0 ml-0">
 
-                            <div class="col-md-4 col-sm-6 col-6 pl-0">
+                            <div class="col-md-4 col-sm-6 col-6 pl-0 pr-0">
                                 <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
                                     (selected)="dateChanged($event, 'invoice')"></sh-select>
                             </div>
@@ -45,7 +45,7 @@
 
                         <div class="total-amount row mr-0 ml-0">
 
-                            <div class="col-md-8 col-sm-6 col-6 pl-0">
+                            <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
                                 <sh-select placeholder="Select" name="entryTotalBy" [options]="filtersForEntryTotal"
                                     [ItemHeight]="33" (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
@@ -72,7 +72,7 @@
 
                         <div class="row mr-0 ml-0">
 
-                            <div class="col-md-4 col-sm-6 col-6 pl-0">
+                            <div class="col-md-4 col-sm-6 col-6 pl-0 pr-0">
                                 <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
                                     (selected)="dateChanged($event, 'due')"></sh-select>
                             </div>
@@ -96,7 +96,7 @@
 
                         <div class="due-amount row mr-0 ml-0">
 
-                            <div class="col-md-8 col-sm-6 col-6 pl-0">
+                            <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
                                 <sh-select placeholder="Select" name="entryTotalBy" [options]="filtersForEntryTotal"
                                     [ItemHeight]="33" (selected)="dueTotalRangeChanged($event)"></sh-select>
                             </div>
@@ -121,7 +121,7 @@
 
                         <div class="status-description row mr-0 ml-0">
 
-                            <div class="col-md-8 col-sm-12 pl-0">
+                            <div class="col-md-8 col-sm-12 pl-0 pr-0 pl-0">
                                 <sh-select placeholder="Select Action" [multiple]="true"
                                     [options]="statusDropdownOptions" name="balanceStatus"
                                     [(ngModel)]="request.balanceStatus" [ItemHeight]="33"></sh-select>
@@ -144,7 +144,7 @@
 
                         <div class="status-description row mr-0 ml-0">
 
-                            <div class="col-md-8 col-sm-12 pl-0">
+                            <div class="col-md-8 col-sm-12 pl-0 pr-0">
                                 <textarea class="form-control" name="description"
                                     [(ngModel)]="request.description"></textarea>
                             </div>
@@ -172,7 +172,7 @@
 
                         <div class="row mr-0 ml-0">
 
-                            <div class="col-sm-4 col-md-4 pl-0">
+                            <div class="col-sm-4 col-md-4 pl-0 pr-0">
                                 <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
                                     (selected)="dateChanged($event, 'invoice')"></sh-select>
                             </div>
@@ -198,7 +198,7 @@
 
                         <div class="total-amount row mr-0 ml-0">
 
-                            <div class="col-md-8 col-sm-6 col-6 pl-0">
+                            <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
                                 <sh-select placeholder="Select Range" [options]="filtersForEntryTotal" [ItemHeight]="33"
                                     (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
@@ -246,7 +246,7 @@
 
                         <div class="total-amount row mr-0 ml-0">
 
-                            <div class="col-md-8 col-sm-6 col-6 pl-0">
+                            <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
                                 <sh-select placeholder="Select Range" name="amountFieldSelector"
                                     [options]="filtersForAmount" [(ngModel)]="request.amountFieldSelector"
                                     [ItemHeight]="33" (selected)="amountRangeChanged($event)">
@@ -274,7 +274,7 @@
                     </div>
                     <div class="col-8">
                         <div class="row mr-0 ml-0">
-                            <div class="col-5 pl-0">
+                            <div class="col-5 pl-0 pr-0">
                                 <sh-select class="select-action" placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
                                     (selected)="dateChanged($event, 'invoice')"></sh-select>
                             </div>
@@ -291,7 +291,7 @@
                     </div>
                     <div class="col-8">
                         <div class="status-description row mr-0 ml-0">
-                            <div class="col-md-8 col-sm-12 pl-0">
+                            <div class="col-md-8 col-sm-12 pl-0 pr-0">
                                 <sh-select placeholder="Select Range" [options]="filtersForEntryTotal" [ItemHeight]="33"
                                     (selected)="invoiceTotalRangeChanged($event)"></sh-select>
                             </div>
@@ -307,7 +307,7 @@
                     </div>
                     <div class="col-md-8 col-sm-12">
                         <div class="status-description row mr-0 ml-0">
-                            <div class="col-4 pl-0">
+                            <div class="col-4 pl-0 pr-0">
                                 <sh-select placeholder="Select Action" [options]="dateOptions" [ItemHeight]="33"
                                     (selected)="dateChanged($event, 'due')"></sh-select>
                             </div>
