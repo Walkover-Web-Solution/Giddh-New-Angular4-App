@@ -115,7 +115,7 @@ export class SettingsProfileService {
             if (params) {
                 Object.keys(params).forEach((key, index) => {
                     const delimiter = index === 0 ? '?' : '&'
-                    if (params[key]) {
+                    if (params[key] !== undefined) {
                         contextPath += `${delimiter}${key}=${params[key]}`
                     }
                 });

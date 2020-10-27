@@ -114,7 +114,7 @@ export class CreateBranchComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
-        this.loadAddresses('GET');
+        this.loadAddresses('GET', { count: 0 });
         this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/branch'));
     }
 
