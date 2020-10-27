@@ -16,6 +16,7 @@ import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Co
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as moment from 'moment/moment';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { ContactAdvanceSearchComponent } from '../advanceSearch/contactAdvanceSearch.component';
 
 @Component({
     selector: 'aging-report',
@@ -58,6 +59,7 @@ export class AgingReportComponent implements OnInit {
     @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
     @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
     @ViewChild('filterDropDownList', {static: true}) public filterDropDownList: BsDropdownDirective;
+    @ViewChild('agingReportAdvanceSearch', { read: ContactAdvanceSearchComponent, static: true }) public agingReportAdvanceSearch: ContactAdvanceSearchComponent;
     @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -183,6 +185,10 @@ export class AgingReportComponent implements OnInit {
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
         this.getDueReport();
+
+        if(this.agingReportAdvanceSearch) {
+            this.agingReportAdvanceSearch.reset();
+        }
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
