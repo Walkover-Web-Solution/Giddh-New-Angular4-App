@@ -153,29 +153,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 this.isCompanyProfileUpdated = true;
             }
         });
-
-        this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if (params['type'] && this.activeTab !== params['type']) {
-                this.setStateDetails(params['type']);
-                this.activeTab = params['type'];
-                if(this.activeTab === "personal-information") {
-                    this.setCurrentPageTitle("Api");
-                }
-            }
-        });
-
-        this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if(params && params.tabIndex) {
-                if(params && params.tabIndex == "0") {
-                    this.activeTab = "personal-information";
-                } else if(params && params.tabIndex == "1") {
-                    this.activeTab = "address-gstin";
-                } else if(params && params.tabIndex == "2") {
-                    this.activeTab = "other";
-                }
-                this.router.navigate(['pages/settings/', this.activeTab], { replaceUrl: true });
-            }
-        });
     }
 
     /**

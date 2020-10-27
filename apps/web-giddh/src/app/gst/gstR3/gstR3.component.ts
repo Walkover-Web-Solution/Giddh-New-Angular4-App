@@ -59,21 +59,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         this.gstr3BOverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDataFetchedSuccessfully, takeUntil(this.destroyed$)));
         this.gstr3BOverviewData$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDate), takeUntil(this.destroyed$));
         this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
-        this.store.pipe(select(createSelector([((s: AppState) => s.session.companies), ((s: AppState) => s.session.companyUniqueName)],
-            (companies, uniqueName) => {
-                return companies.find(d => d.uniqueName === uniqueName);
-            }))
-        ).subscribe(activeCompany => {
-            if (activeCompany) {
-                if (activeCompany.addresses && activeCompany.addresses.length) {
-                    let defaultGst = activeCompany.addresses.find(a => a.isDefault);
-                    if (defaultGst) {
-                        this.activeCompanyGstNumber = defaultGst.taxNumber;
-                    } else {
-                        this.activeCompanyGstNumber = activeCompany.addresses[0].taxNumber;
-                    }
-                    this.store.dispatch(this._gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
-                }
+        this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.activeCompanyGstNumber !== response) {
+                this.activeCompanyGstNumber = response;
             }
         });
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
