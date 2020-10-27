@@ -72,7 +72,7 @@ import { SearchService } from '../services/search.service';
 export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('updateledgercomponent', {static: true}) public updateledgercomponent: ElementViewContainerRef;
     @ViewChild('quickAccountComponent', {static: true}) public quickAccountComponent: ElementViewContainerRef;
-    @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
+    @ViewChild('paginationChild', {static: false}) public paginationChild: ElementViewContainerRef;
     @ViewChild('sharLedger', {static: true}) public sharLedger: ShareLedgerComponent;
     @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
 
