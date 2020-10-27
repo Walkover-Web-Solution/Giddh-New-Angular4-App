@@ -107,7 +107,7 @@
                         </td>
                     </tr>
                 </tbody>
-                <tbody *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
+                <tbody class="on-mobile-view no-records" *ngIf="!branchTransferResponse.items || branchTransferResponse.items.length === 0">
                     <tr>
                         <td *ngIf="!isLoading" colspan="8" align="center">No records found.</td>
                         <td *ngIf="isLoading" colspan="8">
