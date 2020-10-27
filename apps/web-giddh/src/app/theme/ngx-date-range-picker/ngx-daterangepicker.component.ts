@@ -946,22 +946,22 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.invalidStartDate = "";
         this.invalidEndDate = "";
 
-        if(this.startDate.isAfter(this.maxDate)) {
+        if(this.startDate.isAfter(this.maxDate, 'day')) {
             this.invalidStartDate = "Invalid date";
             return;
         }
 
-        if(this.startDate.isAfter(this.endDate)) {
+        if(this.startDate.isAfter(this.endDate, 'day')) {
             this.invalidEndDate = "Invalid date";
             return;
         }
 
-        if(this.startDate.isBefore(this.minDate)) {
+        if(this.startDate.isBefore(this.minDate, 'day')) {
             this.invalidStartDate = "Invalid date";
             return;
         }
 
-        if(this.endDate.isAfter(this.maxDate)) {
+        if(this.endDate.isAfter(this.maxDate, 'day')) {
             this.invalidEndDate = "Invalid date";
             return;
         }

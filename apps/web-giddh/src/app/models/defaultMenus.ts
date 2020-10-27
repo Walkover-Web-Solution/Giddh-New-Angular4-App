@@ -185,7 +185,8 @@ export let NAVIGATION_ITEM_LIST_RESPONSIVE: IUlist[] = [
     { type: 'MENU', name: 'New Purchase Bill ', uniqueName: '/pages/proforma-invoice/invoice/purchase' },
     { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase' },
     { type: 'MENU', name: 'Reports > Receipt (Beta)', uniqueName: '/pages/reports/receipt' },
-    // { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' }
+    { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' },
+    { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' }
 ];
 export let NAVIGATION_ITEM_LIST: IUlist[] = [];
 
