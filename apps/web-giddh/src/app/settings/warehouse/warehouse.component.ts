@@ -371,6 +371,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.asideEditWarehousePane = 'out';
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
                 this.toasterService.successToast('Warehouse updated successfully');
+            } else {
+                this.toasterService.errorToast(response.message);
             }
             this.isWarehouseUpdateInProgress = false;
         }, () => {
