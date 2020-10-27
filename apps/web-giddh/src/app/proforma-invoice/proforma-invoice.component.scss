@@ -1660,6 +1660,7 @@ span.eligible-ITC {
 @media (max-width: 990px) {
     .search-arrow-image {
         left: 181px;
+        max-width: 280px;
     }
     .wrap-billing-address .bill-add {
         width: 100%;
@@ -1775,7 +1776,7 @@ span.eligible-ITC {
     }
 
     .slaesPrEsti.customer-invoice-form::before {
-        top: 190px;
+        top: 135px;
     }
 
     .wrapperCustomerTable {
