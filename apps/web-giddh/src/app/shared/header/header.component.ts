@@ -272,6 +272,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public updateIndexDbSuccess$: Observable<boolean>;
     /* This will hold if resolution is less than 768 to consider as mobile screen */
     public isMobileScreen: boolean = false;
+    /* This will hold current page url */
+    public currentPageUrl: string = '';
 
     /**
      *
@@ -298,9 +300,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
         private commonActions: CommonActions,
-        private location: Location,
         private settingsProfileService: SettingsProfileService,
-        private companyService: CompanyService
+        private companyService: CompanyService,
+        public location: Location
     ) {
         /* This will get the date range picker configurations */
         this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
@@ -332,9 +334,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
+                if((this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details")) && !this.generalService.getSessionStorage("previousPage")) {
+                    this.generalService.setSessionStorage("previousPage", this.currentPageUrl);
+                }
+
+                if(!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details") && this.generalService.getSessionStorage("previousPage")) {
+                    this.generalService.removeSessionStorage("previousPage");
+                }
                 this.addClassInBodyIfPageHasTabs();
             }
             if (event instanceof NavigationEnd) {
+                if(!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details")) {
+                    this.currentPageUrl = this.router.url;
+                }
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
 

@@ -599,4 +599,38 @@ export class GeneralService {
             return false;
         }
     }
+
+    /**
+     * Stores data in session storage
+     *
+     * @param {string} name
+     * @param {*} value
+     * @returns {void}
+     * @memberof GeneralService
+     */
+    public setSessionStorage(name: string, value: any): void {
+        sessionStorage.setItem(name, value);
+    }
+
+    /**
+     * Returns data from session storage
+     *
+     * @param {string} name
+     * @returns {any}
+     * @memberof GeneralService
+     */
+    public getSessionStorage(name: string): any {
+        return sessionStorage.getItem(name);
+    }
+
+    /**
+     * Removes data from session storage
+     *
+     * @param {string} name
+     * @returns {void}
+     * @memberof GeneralService
+     */
+    public removeSessionStorage(name: string): void {
+        sessionStorage.removeItem(name);
+    }
 }
