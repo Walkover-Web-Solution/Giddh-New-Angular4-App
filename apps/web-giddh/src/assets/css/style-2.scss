@@ -10148,6 +10148,9 @@ input.mat-input-element{
 }
 
 @media (max-width: 767px) {
+    #inventory-sidebar{
+            padding: 15px 0;
+    }
     bs-datepicker-container{
         position: fixed !important;
         left: 50% !important;
@@ -10791,8 +10794,10 @@ input.mat-input-element{
     .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-4 {
         margin-top: 5px;
     }
+    .HW_frame_cont.HW_visible.HW_bottom{
+        max-width: 300px;
+    }
 }
-
 @media (min-width:576px){
     .modal-dialog {
         max-width: 100% !important;
@@ -11000,16 +11005,14 @@ body.prevent-body-scroll {
 }
 *::-webkit-scrollbar {
   width: 10px;
+  height: 5px;
 }
-
-/* Track */
 *::-webkit-scrollbar-track {
-  background: $white-smoke;
+    background: $white-smoke;
+}
+*::-webkit-scrollbar-thumb {
+    background: $nobel;
+    border-radius: 5px;
+    min-height: 60px;
 }
 
-/* Handle */
-*::-webkit-scrollbar-thumb {
-  background:  $nobel;
-  border-radius: 5px;
-  min-height: 60px;
-}
