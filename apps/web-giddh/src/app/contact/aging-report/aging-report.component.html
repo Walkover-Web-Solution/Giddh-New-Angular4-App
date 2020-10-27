@@ -71,7 +71,7 @@
 <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <app-contact-advance-search-component [request]="commonRequest" [advanceSearch4]="'agingReport'"
+            <app-contact-advance-search-component #agingReportAdvanceSearch [request]="commonRequest" [advanceSearch4]="'agingReport'"
                 (applyAdvanceSearchEvent)="applyAdvanceSearch($event)" (closeModelEvent)="toggleAdvanceSearchPopup()">
             </app-contact-advance-search-component>
         </div>
