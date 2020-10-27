@@ -355,6 +355,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     public updateWarehouseInfo(warehouseDetails: any): void {
+        warehouseDetails.formValue.linkedEntity = warehouseDetails.formValue.linkedEntity || [];
         this.isWarehouseUpdateInProgress = true;
         const linkAddresses = warehouseDetails.addressDetails.linkedEntities.filter(entity => (warehouseDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,

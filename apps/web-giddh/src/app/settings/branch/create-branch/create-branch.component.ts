@@ -82,8 +82,8 @@ export class CreateBranchComponent implements OnInit {
         private toastService: ToasterService
     ) {
         this.branchForm = this.formBuilder.group({
-            alias: ['', Validators.required],
-            name: ['', Validators.required],
+            alias: ['', [Validators.required, Validators.maxLength(50)]],
+            name: ['', [Validators.required, Validators.maxLength(100)]],
             address: ['']
         });
         this.store.select(appState => appState.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe(response => {
