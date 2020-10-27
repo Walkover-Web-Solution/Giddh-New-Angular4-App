@@ -953,7 +953,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     position: absolute;
     top: 34px;
     left: 0;
-    color: $red;
+    color: $red !important;
 }
 .mb-3 {
     margin-bottom: 30px;
@@ -1334,7 +1334,7 @@ td span {
     background-color: transparent !important;
 }
 .activatedDate.in-range.in-range-start span {
-    color: $nero !important;
+    color: $nero;
 }
 .activatedDate:hover {
     span {
@@ -1355,15 +1355,16 @@ td span {
 }
 
 .sub-ranges-cal {
-    position: absolute;
+    position: static;
     background-color: $white;
-    right: -100%;
-    top: -30px;
+    right: 0;
+    top: 0;
     z-index: 9999;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     box-shadow: 0 6px 1;
-
+    border-bottom: none;
+    border-left: none;
     li {
         &:hover {
             background-color: $lavender !important;
@@ -1375,7 +1376,7 @@ td span {
 }
 
 .financial-year-dropdown {
-    height: 120px;
+    max-height: 170px;
     overflow-y: auto;
 }
 .menu-li {
@@ -1522,8 +1523,8 @@ td span {
                         }
                     }
                     .invalid-date-input {
-                        border-bottom-color: $red !important;
-                        box-shadow: 0 1px 0 0 $red !important;
+                        border-bottom-color: transparent !important;
+                        box-shadow: none !important;
                     }
                 }
             }

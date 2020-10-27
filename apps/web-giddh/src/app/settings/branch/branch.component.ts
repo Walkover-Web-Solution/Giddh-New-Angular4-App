@@ -495,6 +495,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.closeAddressSidePane = 'out';
                 this.store.dispatch(this.settingsBranchActions.GetALLBranches({from: '', to: ''}));
                 this.toasterService.successToast('Branch updated successfully');
+            } else {
+                this.toasterService.errorToast(response.message);
             }
             this.isBranchChangeInProgress = false;
         }, () => {

@@ -187,3 +187,24 @@
     background-color: $white;
     border:1px solid $chetwode-blue;
 }
+@media(max-width:767px){
+    .role{
+        ul{
+            padding: 15px 0;
+            li {
+                display: block;
+                float: left;
+                width: 50%;
+            }
+        }
+    }
+    .role-head{
+            min-height: 110px;
+        }
+}
+@media(max-width:360px){
+  .role ul li {
+        width: 100%;
+        float: none;
+    }
+}
