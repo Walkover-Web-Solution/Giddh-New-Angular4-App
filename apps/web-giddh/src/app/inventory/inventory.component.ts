@@ -375,7 +375,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof InventoryGroupStockReportComponent
      */
     public loadReportByWarehouse(selectedWarehouse: string): void {
-        this.currentBranchAndWarehouseFilterValues = { ...this.currentBranchAndWarehouseFilterValues, warehouse: selectedWarehouse };
+        if (this.branches && this.branches.length <= 2) {
+            this.currentBranchAndWarehouseFilterValues = { ...this.currentBranchAndWarehouseFilterValues, warehouse: selectedWarehouse, isCompany: true };
+        } else {
+            this.currentBranchAndWarehouseFilterValues = { ...this.currentBranchAndWarehouseFilterValues, warehouse: selectedWarehouse };
+        }
     }
     /**
      * Loads the report by selected branch
