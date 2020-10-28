@@ -677,7 +677,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             if (isNaN(parseFloat(product.stockDetails.amount))) {
                 product.stockDetails.amount = 0;
             } else {
-                product.stockDetails.amount = this._generalService.convertExponentialToNumber(parseFloat(product.stockDetails.amount).toFixed(2));
+                product.stockDetails.amount = Number(this._generalService.convertExponentialToNumber(parseFloat(product.stockDetails.amount).toFixed(2)));
             }
         } else {
             if (isNaN(parseFloat(product.stockDetails.rate))) {
@@ -707,7 +707,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     overallTotal = 0;
                 }
 
-                this.overallTotal += this._generalService.convertExponentialToNumber(overallTotal);
+                this.overallTotal += Number(this._generalService.convertExponentialToNumber((overallTotal)));
             });
         } else if (this.transferType !== 'products' && this.branchTransferMode === 'deliverynote') {
             this.branchTransfer.destinations.forEach(product => {
@@ -721,7 +721,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     overallTotal = 0;
                 }
 
-                this.overallTotal += this._generalService.convertExponentialToNumber(overallTotal);
+                this.overallTotal += Number(this._generalService.convertExponentialToNumber(overallTotal));
             });
         } else if (this.transferType !== 'products' && this.branchTransferMode === 'receiptnote') {
             this.branchTransfer.sources.forEach(product => {
@@ -735,7 +735,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     overallTotal = 0;
                 }
 
-                this.overallTotal += this._generalService.convertExponentialToNumber(overallTotal);
+                this.overallTotal += Number(this._generalService.convertExponentialToNumber(overallTotal));
             });
         }
     }
