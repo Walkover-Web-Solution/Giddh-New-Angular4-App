@@ -34,7 +34,15 @@
         </div>
 
         <div class="d-flex btn-wrapper">
-
+            <!-- select app proforma -->
+            <div class="select-all-proformas-on-mobile-view mt-1 mr-15" *ngIf="selectedItems.length > 0">
+                <div class="checkbox-img mr-1">
+                    <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
+                    <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
+                </div>
+                Select All
+            </div>
+            <!--  -->
             <!-- region more items -->
             <div *ngIf="selectedItems.length === 1" style="height: 30px;">
 
@@ -59,7 +67,6 @@
                 </div>
             </div>
             <!-- endregion -->
-
             <div *ngIf="voucherType === 'proformas'" class="btn-wrapper">
                 <button class="btn btn-sky-blue" style="margin: 0 !important;" (click)="goToInvoice('proformas')">+ New
                     Proforma
@@ -104,7 +111,6 @@
                 </button>
             </div>
             <div *ngIf="selectedItems.length === 1" style="height: 30px;">
-
                 <div class="btn-group" dropdown #dp="bs-dropdown"
                     style="margin-bottom: 10px;display: inline-block !important;">
 
@@ -124,8 +130,8 @@
                     </ul>
 
                 </div>
-            </div>
 
+            </div>
         </div>
 
     </div>
@@ -159,16 +165,7 @@
 
         </div>
     </ng-template>
-
     <!-- select app proforma -->
-    <div class="select-all-proformas-on-mobile-view mt-1">
-        <div class="checkbox-img mr-1">
-            <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected" (click)="toggleAllItems(true)">
-            <img src="assets/images/checked.png" *ngIf="allItemsSelected" (click)="toggleAllItems(false)">
-        </div>
-        Select All
-    </div>
-    <!--  -->
     <div class="clearfix">
         <div class="table-responsive removeResponsive invoice-preview">
             <table class="table basic table-bordered mt-15 invoice-table on-mobile-view">
