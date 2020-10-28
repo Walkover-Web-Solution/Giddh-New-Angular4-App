@@ -538,7 +538,11 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
        * @param {*} value
        * @memberof AdvanceSearchModelComponent
        */
-    public dateSelectedCallback(value: any): void {
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {

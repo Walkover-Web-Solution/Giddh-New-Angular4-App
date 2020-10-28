@@ -116,9 +116,9 @@ export class CreateWarehouseComponent implements OnInit {
     public ngOnInit(): void {
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.loadLinkedEntities();
-        this.loadAddresses('GET');
+        this.loadAddresses('GET', { count: 0 });
         this.warehouseForm = this.formBuilder.group({
-            name: ['', Validators.required],
+            name: ['', [Validators.required, Validators.maxLength(100)]],
             linkedEntity: [[]],
             address: ['']
         });

@@ -103,7 +103,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public companyTaxDropDown$: Observable<IOption[]>;
     public moreGstDetailsVisible: boolean = false;
     public gstDetailsLength: number = 3;
-    public isMultipleCurrency: boolean = false;
     public companyCurrency: string;
     public isIndia: boolean = false;
     public companyCountry: string = '';
@@ -187,7 +186,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         this.companyCountry = currentCompany.countryV2.alpha2CountryCode;
                     }
                     this.companyCurrency = _.clone(currentCompany.baseCurrency);
-                    this.isMultipleCurrency = _.clone(currentCompany.isMultipleCurrency);
                 }
             }
         });

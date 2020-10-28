@@ -15,6 +15,8 @@ import { saveAs } from "file-saver";
 import { StateDetailsRequest } from "../models/api-models/Company";
 import { CompanyActions } from "../actions/company.actions";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
+import { IOption } from '../theme/ng-select/ng-select';
+import { GstReconcileService } from '../services/GstReconcile.service';
 
 @Component({
     selector: 'app-vat-report',
@@ -35,7 +37,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public fromDate: string = '';
     public toDate: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public allowVatReportAccess: boolean = false;
     @ViewChild('monthWise', {static: true}) public monthWise: BsDropdownDirective;
     @ViewChild('periodDropdown', {static: true}) public periodDropdown;
     public isMonthSelected: boolean = true;
@@ -44,16 +45,39 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public showCalendar: boolean = false;
     public datepickerVisibility: any = 'hidden';
 
-    constructor(private store: Store<AppState>, private vatService: VatService, private _generalService: GeneralService, private _toasty: ToasterService, private cdRef: ChangeDetectorRef, private companyActions: CompanyActions, private _route: Router) {
+    /** Stores the tax details of a company */
+    public taxes: IOption[] = [];
+    /** Tax number */
+    public taxNumber: string;
+    /** True, if API is in progress */
+    public isTaxApiInProgress: boolean;
+
+    constructor(
+        private gstReconcileService: GstReconcileService,
+        private store: Store<AppState>,
+        private vatService: VatService,
+        private _generalService: GeneralService,
+        private _toasty: ToasterService,
+        private cdRef: ChangeDetectorRef,
+        private companyActions: CompanyActions,
+        private _route: Router
+    ) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), (takeUntil(this.destroyed$)));
     }
 
     public ngOnInit() {
+        this.loadTaxDetails();
         this.currentPeriod = {
             from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
             to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
         };
-
+        this.taxNumber = window.history.state.taxNumber || '';
+        if (window.history.state.from && window.history.state.to) {
+            this.currentPeriod = {
+                from: window.history.state.from,
+                to: window.history.state.to
+            };
+        }
         this.selectedMonth = moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
         this.fromDate = this.currentPeriod.from;
         this.toDate = this.currentPeriod.to;
@@ -66,17 +90,14 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 res.forEach(cmp => {
                     if (cmp.uniqueName === activeCompanyName) {
                         this.activeCompany = cmp;
-
-                        if (this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
-                            this.activeCompany.addresses = [_.find(this.activeCompany.addresses, (tax) => tax.isDefault)];
-                            this.saveLastState(activeCompanyName);
-                            this.allowVatReportAccess = true;
-                            this.getVatReport();
-                        }
+                        this.saveLastState(activeCompanyName);
                     }
                 });
             });
         });
+        if (this.taxNumber) {
+            this.getVatReport();
+        }
     }
 
     public ngOnDestroy() {
@@ -85,11 +106,11 @@ export class VatReportComponent implements OnInit, OnDestroy {
     }
 
     public getVatReport() {
-        if (this.activeCompany.addresses && this.activeCompany.addresses.length > 0) {
+        if (this.taxNumber) {
             let vatReportRequest = new VatReportRequest();
             vatReportRequest.from = this.fromDate;
             vatReportRequest.to = this.toDate;
-            vatReportRequest.taxNumber = this.activeCompany.addresses[0].taxNumber;
+            vatReportRequest.taxNumber = this.taxNumber;
 
             this.vatReport = [];
 
@@ -110,7 +131,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         let vatReportRequest = new VatReportRequest();
         vatReportRequest.from = this.fromDate;
         vatReportRequest.to = this.toDate;
-        vatReportRequest.taxNumber = this.activeCompany.addresses[0].taxNumber;
+        vatReportRequest.taxNumber = this.taxNumber;
 
         this.vatService.downloadVatReport(vatReportRequest).subscribe((res) => {
             if (res.status === "success") {
@@ -190,7 +211,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             if(this.datepickerVisibility === "hidden") {
                 this.hidePeriodDropdown();
             }
-        }, 500);    
+        }, 500);
     }
 
     /**
@@ -211,6 +232,25 @@ export class VatReportComponent implements OnInit, OnDestroy {
      * @memberof VatReportComponent
      */
     public viewVatReportTransactions(section) {
-        this._route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to } });
+        this._route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to, taxNumber: this.taxNumber } });
+    }
+
+    /**
+     * Loads the tax details of a company
+     *
+     * @private
+     * @memberof GstComponent
+     */
+    private loadTaxDetails(): void {
+        this.isTaxApiInProgress = true;
+        this.gstReconcileService.getTaxDetails().subscribe(response => {
+            if (response && response.body) {
+                this.taxes = response.body.map(tax => ({
+                    label: tax,
+                    value: tax
+                }));
+            }
+            this.isTaxApiInProgress = false;
+        });
     }
 }
