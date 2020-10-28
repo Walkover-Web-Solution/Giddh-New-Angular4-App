@@ -597,7 +597,6 @@ table.table.customer-purchase-table {
 
 .wrapper-customer-table {
     overflow-x: hidden !important;
-    min-height: 680px;
 }
 
 .customer-purchase-table td {
@@ -610,7 +609,7 @@ table.table.customer-purchase-table {
 
 section.static-purchase-table {
     padding-top: 20px;
-    margin-top: -40px;
+    margin-top: -20px;
 }
 
 .invoice-due-date {
