@@ -9670,6 +9670,11 @@ span#HW_badge_cont:nth-child(3) {
             padding: 0 15px 15px 15px;
         }
     }
+    &.create .popover {
+        .popover-body {
+            padding: 8px 15px;
+        }
+    }
 }
 
 .settings-profile-tabs{

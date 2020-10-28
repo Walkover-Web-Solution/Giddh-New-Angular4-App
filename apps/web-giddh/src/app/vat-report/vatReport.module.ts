@@ -15,6 +15,7 @@ import { VatReportComponent } from './vatReport.component';
 import { VatReportTransactionsComponent } from './transactions/vatReportTransactions.component';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { InvoiceModule } from '../invoice/invoice.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
 @NgModule({
     declarations: [
@@ -39,7 +40,8 @@ import { InvoiceModule } from '../invoice/invoice.module';
         PaginationModule,
         ModalModule,
         ElementViewChildModule,
-        InvoiceModule
+        InvoiceModule,
+        ShSelectModule
     ],
     exports: [
         VatReportRoutingModule

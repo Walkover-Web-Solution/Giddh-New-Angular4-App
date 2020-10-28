@@ -84,6 +84,12 @@
     top: 0;
     pointer-events: none;
 }
+.tax-heading {
+    max-width: 10%;
+}
+.tax-dropdown {
+    max-width: 30%;
+}
 @media(max-width:575px){
     .month-picker {
         position: absolute;
