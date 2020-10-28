@@ -489,3 +489,10 @@ button.btn.btn-filter {
         display: block;
     }
 }
+
+
+@media (orientation: landscape){
+    .bottom-button-display{
+        margin-bottom: 70px;
+    }
+} 
