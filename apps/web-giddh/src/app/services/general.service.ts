@@ -57,7 +57,6 @@ export class GeneralService {
             moment().subtract(1, 'year').endOf('year')
         ]
     };
-    public _selectedRange: Subject<any> = new Subject();
 
     get user(): UserDetails {
         return this._user;
@@ -107,14 +106,6 @@ export class GeneralService {
 
     set createNewCompany(newCompanyRequest: CompanyCreateRequest) {
         this._createNewCompany = newCompanyRequest;
-    }
-
-    public selectRange(dates: any) { 
-        this._selectedRange.next(dates);
-    }
-
-    get selectedRange(): any {
-        return this._selectedRange.asObservable();
     }
 
     public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
