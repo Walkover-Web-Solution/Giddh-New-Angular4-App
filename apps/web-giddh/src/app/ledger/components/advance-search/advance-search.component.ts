@@ -33,6 +33,7 @@ import { GroupService } from '../../../services/group.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-select/option.interface';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 
 const COMPARISON_FILTER = [
     { label: 'Greater Than', value: 'greaterThan' },
@@ -80,7 +81,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
     /* Selected range label */
@@ -106,13 +107,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     accounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
                 });
                 this.accounts$ = observableOf(accounts);
-            }
-        });
-
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                this.datePickerOptions = config;
             }
         });
 

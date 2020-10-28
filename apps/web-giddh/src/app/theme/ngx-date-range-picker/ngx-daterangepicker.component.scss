@@ -165,8 +165,11 @@ $input-height: 3rem !default;
         }
     }
     .calendar {
-        max-width: $md-drppicker-width - ($md-drppicker-calendar-margin * 2);
-        margin: $md-drppicker-calendar-margin;
+        max-width: 100%;
+        padding: 4px 0px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
         &.single {
             .calendar-table {
                 border: none;
@@ -178,6 +181,7 @@ $input-height: 3rem !default;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
                 Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
             font: 400 14px system-ui;
+            margin-bottom: 0 !important;
         }
         th,
         td {
@@ -201,6 +205,7 @@ $input-height: 3rem !default;
 
             span {
                 pointer-events: none;
+                font-size: 16px;
             }
         }
         /* new calendar */
@@ -305,6 +310,7 @@ $input-height: 3rem !default;
         cursor: pointer;
         height: 2em;
         width: 2em;
+        padding: 0 3px !important;
         font-style: initial;
 
         &.available {
@@ -357,6 +363,7 @@ $input-height: 3rem !default;
         }
     }
     td, .td-div {
+        color: $midnight-blue;
         margin: 0em 0;
         &.off {
             &,
@@ -368,13 +375,15 @@ $input-height: 3rem !default;
                 color: $md-drppicker-unselected-color;
             }
         }
-        &.in-range-start {
+        &.in-range-start.activatedDate.in-range, &.in-range-end.activatedDate.in-range{
+            color: $white !important;
+        }
+        &.in-range-start , &.in-range-end{
             span {
-                background-color: $primary !important;
-                border-radius: 50%;
+                background-color: $midnight-blue !important;
                 border-radius: 50%;
                 color: $white !important;
-                border-color: $primary;
+                border-color: $midnight-blue;
             }
             &:hover {
                 span {
@@ -396,7 +405,7 @@ $input-height: 3rem !default;
         }
         &.in-range::before {
             content: "";
-            background-color: $portage !important;
+            background-color: $quartz !important;
             width: 100%;
             height: 100%;
             left: 0px;
@@ -406,7 +415,7 @@ $input-height: 3rem !default;
         }
         &.in-range.end-date::before {
             content: "";
-            background-color: $portage !important;
+            background-color: $quartz !important;
             width: 84%;
             height: 100%;
             left: 0px;
@@ -417,7 +426,7 @@ $input-height: 3rem !default;
         }
         &.start-date::before {
             content: "";
-            background-color: $portage !important;
+            background-color:  $quartz !important;
             width: 100%;
             height: 100%;
             left: 0;
@@ -437,7 +446,7 @@ $input-height: 3rem !default;
             display: inline-block;
         }
         &.in-range-start::before {
-            left: 0px;
+            left: 4px;
         }
         &.in-range-end::before {
             left: 0;
@@ -627,8 +636,10 @@ $input-height: 3rem !default;
         margin: 0;
         display: flex;
         flex-direction: column;
+        border-left: 1px solid $gainsboro;
+        background-color: $white-smoke;
+        height: 490px !important;
         .range-container {
-            flex: 1 1 auto;
             ul {
                 list-style: none;
                 margin: 0 auto;
@@ -638,8 +649,9 @@ $input-height: 3rem !default;
                 flex-direction: column;
                 li {
                     position: relative;
+                    border-bottom: 1px solid $gainsboro;
                     button {
-                        padding: 8px 10px;
+                        padding: 10px 10px;
                         width: 100%;
                         background: none;
                         border: none;
@@ -676,7 +688,9 @@ $input-height: 3rem !default;
                         }
                         &.active {
                             background-color: $whisper-color !important;
-                            border-left: 3px solid $speech-blue !important;
+                            border-left: 3px solid $midnight-blue !important;
+                            font-family: 'opensans-semibold';
+                            color: $midnight-blue;
                         }
                         &[disabled] {
                             opacity: 0.3;
@@ -685,9 +699,12 @@ $input-height: 3rem !default;
                             background: transparent;
                         }
                     }
+                    &:last-child{
+                      border-bottom: none;
+                    }
                 }
                 li:hover {
-                    background-color: $white-smoke;
+                    background-color: $fog;
                 }
             }
             ul.range-list {
@@ -749,12 +766,12 @@ $input-height: 3rem !default;
     }
     /* button */
     .buttons {
-        text-align: right;
+        text-align: center;
         margin: 0;
-        padding-right: 23px;
+        padding-right: 0;
         background-color: $white;
-        padding-top: 9px;
-        padding-bottom: 15px;
+        padding-top: 20px;
+        padding-bottom: 20px;
         z-index: 999 !important;
     }
     button {
@@ -833,11 +850,33 @@ $input-height: 3rem !default;
     width: 80%;
     display: none;
 }
-
 .md-drppicker td.in-range.in-range-start.in-range-end span {
     background-color: $portage !important;
     border-radius: 50%;
-    color: $nero;
+    color: $nero !important;
+    border-color: $gray;
+}
+td.in-range.in-range-start.in-range-hovered.in-range-end::before {
+    border: none !important;
+}
+
+/* new calendar */
+.md-drppicker .td-div.in-range.in-range-start::before {
+    border-radius: 50% 0 0 50% !important;
+}
+.md-drppicker .td-div.in-range.in-range-end::before {
+    border-radius: 0 50% 50% 0 !important;
+}
+.md-drppicker .td-div.in-range.in-range-start.in-range-end::before {
+    border-radius: 50% !important;
+    text-align: center;
+    width: 80%;
+    display: none;
+}
+.md-drppicker .td-div.in-range.in-range-start.in-range-end span {
+    background-color: $quartz !important;
+    border-radius: 50%;
+    color: $nero !important;
     border-color: $gray;
 }
 .td-div.in-range.in-range-start.in-range-hovered.in-range-end::before {
@@ -850,7 +889,7 @@ $input-height: 3rem !default;
     position: absolute;
     top: 34px;
     left: 0;
-    color: $red;
+    color: $red !important;
 }
 .mb-3 {
     margin-bottom: 30px;
@@ -873,8 +912,10 @@ $input-height: 3rem !default;
             }
         }
         &.ltr {
-            direction: ltr;
+            direction: unset;
             text-align: left;
+            display: flex;
+            flex-direction: row-reverse;
             .calendar {
                 &.left {
                     clear: left;
@@ -1067,7 +1108,7 @@ td span {
     border-radius: 100%;
     width: 26px;
     height: 26px;
-    line-height: 2;
+    line-height: 1.8;
     display: block;
 }
 
@@ -1083,7 +1124,7 @@ td span {
     border-radius: 100%;
     width: 26px;
     height: 26px;
-    line-height: 2;
+    line-height: 1.8;
     display: block;
     margin-left: 3px;
 }
@@ -1212,14 +1253,16 @@ td span {
 }
 
 .sub-ranges-cal {
-    position: absolute;
+    position: static;
     background-color: $white;
-    right: -100%;
-    top: -30px;
+    right: 0;
+    top: 0;
     z-index: 9999;
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     box-shadow: 0 6px 1;
+    border-bottom: none;
+    border-left: none;
     li {
         &:hover {
             background-color: $lavender !important;
@@ -1231,12 +1274,23 @@ td span {
 }
 
 .financial-year-dropdown {
-    height: 120px;
+    max-height: 170px;
     overflow-y: auto;
 }
 
 .menu-li {
     cursor: pointer;
+    &.select-financial-year{
+        .btn-angle-down{
+            padding-left: 30px !important;
+            .prev.angle-down{
+                position: absolute;
+                left: 7px;
+                top: 8px;
+                transform: rotate(0) !important;
+            }
+        }
+    }
 }
 
 .menu-li:hover .menu-drawer {
@@ -1260,9 +1314,10 @@ td span {
 }
 .md-drppicker .calendar .th-div,
 .md-drppicker .calendar .td-div {
-    height: 28px;
+    height: 30px;
     border: none;
     border-top: 1px solid transparent;
+    margin-bottom: 8px;
 }
 .md-drppicker .calendar .td-div.hide-date {
     visibility: hidden;
@@ -1274,7 +1329,7 @@ td span {
 .calender-container {
     display: flex;
     flex-direction: column;
-    max-width: 260px;
+    max-width: 340px;
     .calender-container-wrapper {
         flex: 1 1 auto;
         // overflow: auto;
@@ -1282,7 +1337,6 @@ td span {
             display: flex;
             flex-direction: column;
             .upper-part {
-                border-bottom: 1px solid $white-smoke;
                 position: sticky;
                 top: 0;
                 z-index: 1;
@@ -1297,39 +1351,81 @@ td span {
                 }
                 .calendar-table {
                     padding-top: 10px;
+                    padding-bottom: 0;
+                    .th-div{
+                        span{
+                            height: 28px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                    }
+                }
+                .month-field{
+                    .available{
+                        width: 30px !important;
+                        height: 30px;
+                        background-color: $gainsboro !important;
+                        border-radius: 50px;
+                        padding: 0 15px;
+                    }
                 }
             }
             .select-date-range {
                 display: flex;
                 justify-content: space-between;
-                padding: 10px 10px 0;
-                input {
-                    width: 100px;
-                    height: auto;
-                    font-size: 12px;
-                    padding: 6px 0;
-                    border: none;
-                    border-bottom: 1px solid $gainsboro;
-                    &:focus {
-                        outline: none;
-                        box-shadow: none;
-                    }
-                }
-                span {
+                padding: 10px 10px 15px;
+                .wrap-selected-date{
                     display: flex;
-                    align-items: flex-start;
-                }
-                .activeSelectedDate {
-                    border-bottom-color: $primary !important;
-                    box-shadow: 0 1px 0 0 $primary !important;
-                    &.invalid-date-input {
-                        border-bottom-color: $red !important;
-                        box-shadow: 0 1px 0 0 $red !important;
+                    justify-content: space-between;
+                    width: 100%;
+                    padding-top: 15px;
+                    .relative{
+                        width: 50%;
+                        display: flex;
+                        padding-bottom: 6px;
+                        border-bottom: 3px solid $quartz;
+                        input {
+                            width: 98px;
+                            height: auto;
+                            font-size: 14px;
+                            padding: 0;
+                            border: none;
+                            border-bottom: none;
+                            &.activeSelectedDate{
+                                border-bottom: none;
+                            }
+                            &:focus {
+                                outline: none;
+                                box-shadow: none;
+                            }
+                        }
+                        span {
+                            display: flex;
+                            align-items: flex-start;
+                            align-items: center;
+                            color: $gray;
+                        }
+                        &.focused-date{
+                            border-bottom-color: $midnight-blue;
+                            input{
+                                color: $midnight-blue;
+                            }
+                        }
                     }
-                }
-                .invalid-date-input {
-                    border-bottom-color: $red !important;
-                    box-shadow: 0 1px 0 0 $red !important;
+
+                    .activeSelectedDate {
+                        border-bottom-color: $primary !important;
+                        box-shadow: none !important;
+                        &.invalid-date-input {
+                            border-bottom-color: $red !important;
+                            box-shadow: none !important;
+                        }
+                    }
+                    .invalid-date-input {
+                        border-bottom-color: transparent !important;
+                        box-shadow: none !important;
+                    }
                 }
             }
         }
@@ -1339,14 +1435,14 @@ td span {
 .month-field {
     display: flex;
     justify-content: space-between;
-    padding: 16px 10px 2px;
+    padding: 16px 30px 2px;
     .month-dropdown {
         display: flex;
         flex-direction: row;
-        width: 180px;
-        justify-content: flex-start;
+        width: 240px;
+        justify-content: center;
         align-items: center;
-        font-size: 13px;
+        font-size: 16px;
         .prev.available {
             display: inline-flex;
             transform: rotate(270deg);
@@ -1362,7 +1458,6 @@ td span {
 }
 
 .prev-next-btn {
-    width: 100px;
     display: flex;
     justify-content: space-around;
 }
@@ -1429,8 +1524,8 @@ td span {
                 border-bottom: 1px solid $gainsboro;
                 background-color: transparent;
                 &:focus {
-                    border-bottom-color: $primary !important;
-                    box-shadow: 0 1px 0 0 $primary !important;
+                    border-bottom-color: $midnight-blue !important;
+                    box-shadow: 0 1px 0 0 $midnight-blue !important;
                     outline: none;
                 }
             }
@@ -1507,8 +1602,13 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
         }
     }
 }
-
-/*media query*/
+.td-div:first-child:before {
+    border-radius: 50px 0 0 50px;
+}
+.td-div:last-child:before {
+    border-radius: 0 50px 50px 0;
+}
+/*responsive*/
 @media (max-width: 767px) {
     .md-drppicker {
         flex-direction: column;
@@ -1516,6 +1616,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
         .ranges {
             width: 100% !important;
             border-right: none;
+            height: 100vh !important;
             .range-container {
                 .date-range-close {
                     padding: 10px 12px;
@@ -1552,7 +1653,6 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                     top: 0;
                     position: static;
                     border: none;
-                    border-bottom: 1px solid $gainsboro;
                     border-radius: 0;
                     li:last-child {
                         button {
@@ -1608,6 +1708,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                         top: 88px;
                         background-color: $white !important;
                         z-index: 99;
+                        padding-top: 15px;
                         .sticky-header {
                             max-width: 360px;
                             margin: 0 auto;

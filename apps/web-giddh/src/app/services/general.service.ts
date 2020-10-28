@@ -58,7 +58,6 @@ export class GeneralService {
         ]
     };
 
-
     get user(): UserDetails {
         return this._user;
     }

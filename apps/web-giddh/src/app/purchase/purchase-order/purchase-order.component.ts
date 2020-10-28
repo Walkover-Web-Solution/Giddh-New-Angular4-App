@@ -8,7 +8,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil, filter } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
-import { PAGINATION_LIMIT } from '../../app.constant';
+import { PAGINATION_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import * as moment from 'moment/moment';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
@@ -43,7 +43,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Moment object */
     public moment = moment;
     /* Selected range label */
@@ -197,13 +197,6 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                     this.useStoreFilters = false;
                     this.getAllPurchaseOrders(true);
                 }
-            }
-        });
-
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                this.datePickerOptions = config;
             }
         });
 
