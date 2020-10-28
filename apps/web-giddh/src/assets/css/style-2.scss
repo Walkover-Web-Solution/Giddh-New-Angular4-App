@@ -10434,6 +10434,9 @@ input.mat-input-element{
     body.hide-scroll-body {
         overflow-y: hidden !important;
     }
+    body.hide-scroll-body.on-setting-page {
+            overflow-y: auto !important;
+    }
     .panel-block .card-body {
         min-height: auto;
     }
@@ -10560,6 +10563,24 @@ input.mat-input-element{
                 font-size: 11px;
                 padding: 3px 4px;
             }
+        }
+        .mat-form-field{
+            min-width: auto;
+
+        }
+        .custom-tabs .top-bar {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        #content-wrapper {
+            overflow-x: hidden;
+        }
+        #companyList {
+            background: $white;
+            padding-bottom: 4px;
+            left: 0px;
+            top: 30px;
+            padding-top: 0;
         }
     }
     .custom-tabs .top-bar {
@@ -11022,9 +11043,3 @@ body.prevent-body-scroll {
         border-radius: 5px;
         min-height: 60px;
     }
-    .icon-info{
-        position: relative;
-    }
-.icon-info:before {
-  content: "\e900";
-}
