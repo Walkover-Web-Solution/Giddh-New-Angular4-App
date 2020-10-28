@@ -329,7 +329,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public selectedGrpUniqueNameForAddEditAccountModal: string = '';
     public actionAfterGenerateORUpdate: ActionTypeAfterVoucherGenerateOrUpdate = ActionTypeAfterVoucherGenerateOrUpdate.generate;
     public companyCurrency: string;
-    public isMultiCurrencyAllowed: boolean = false;
     public fetchedConvertedRate: number = 0;
     public isAddBulkItemInProcess: boolean = false;
     public modalRef: BsModalRef;
@@ -1602,7 +1601,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.depositCurrSymbol = this.baseCurrencySymbol;
             this.companyCurrencyName = profile.baseCurrency;
 
-            this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile.countryCode) {
                 this.companyCountryCode = profile.countryCode;
@@ -1619,7 +1617,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.showGstAndTrnUsingCountryName('');
 
             this.companyCurrency = 'INR';
-            this.isMultiCurrencyAllowed = false;
         }
     }
 
@@ -1910,7 +1907,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.customerCurrencyCode = this.companyCurrency;
         }
 
-        if (item && item.currency && item.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
+        if (item && item.currency && item.currency !== this.companyCurrency) {
             this.getCurrencyRate(this.companyCurrency, item.currency,
                 moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
         }
