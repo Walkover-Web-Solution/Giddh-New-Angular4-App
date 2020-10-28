@@ -306,4 +306,9 @@
         max-width: 280px;
     }
 }
-
+@media(max-height:700px){
+    .help-aside-body{
+        height: 100%;
+        overflow-y: scroll;
+    }
+}
