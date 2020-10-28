@@ -232,10 +232,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public currentScrollIndex: number = 0;
     /* This will hold the scroll direction of cdk scrollbar */
     public scrollInDirection: string = "";
-    /* This will hold that how many elements were scrolled in top initially in cdk scrollbar */
-    public initialScrollToIndexTop: number = 0;
-    /* This will hold that how many elements were scrolled in bottom initially in cdk scrollbar */
-    public initialScrollToIndexBottom: number = 0;
     /* This will hold if financial years were updated by api */
     public financialYearUpdated: boolean = false;
     /* This will hold if mouse scroll or touch scroll is allowed or not */
@@ -259,7 +255,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     this.minDate = moment(moment(response.startDate, GIDDH_DATE_FORMAT).toDate());
                     this.maxDate = moment(moment(response.endDate, GIDDH_DATE_FORMAT).toDate());
                     this.financialYearUpdated = true;
-                    this.getAllYearsBetweenDates();
                 }
             }
         });
@@ -951,22 +946,22 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.invalidStartDate = "";
         this.invalidEndDate = "";
 
-        if(this.startDate.isAfter(this.maxDate)) {
+        if(this.startDate.isAfter(this.maxDate, 'day')) {
             this.invalidStartDate = "Invalid date";
             return;
         }
 
-        if(this.startDate.isAfter(this.endDate)) {
+        if(this.startDate.isAfter(this.endDate, 'day')) {
             this.invalidEndDate = "Invalid date";
             return;
         }
 
-        if(this.startDate.isBefore(this.minDate)) {
+        if(this.startDate.isBefore(this.minDate, 'day')) {
             this.invalidStartDate = "Invalid date";
             return;
         }
 
-        if(this.endDate.isAfter(this.maxDate)) {
+        if(this.endDate.isAfter(this.maxDate, 'day')) {
             this.invalidEndDate = "Invalid date";
             return;
         }
@@ -1143,7 +1138,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 this.endCalendar.month.subtract(1, 'month');
             }
         } else {
-            this.endCalendar.month.subtract(1, 'month');
+            this.startCalendar.month.subtract(1, 'month');
         }
         this.updateCalendars();
     }
@@ -1359,13 +1354,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             }
         }
 
-        if (this.singleDatePicker) {
-            this.setEndDate(this.startDate);
-            this.updateElement();
-            if (this.autoApply) {
-                this.clickApply();
-            }
-        }
+        // if (this.singleDatePicker) {
+        //     this.setEndDate(this.startDate);
+        //     this.updateElement();
+        //     if (this.autoApply) {
+        //         this.clickApply();
+        //     }
+        // }
 
         this.updateView();
 
@@ -1938,7 +1933,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             } else {
                 if (this.maxDate && this.maxDate.isAfter(this.calendarVariables.end.calendar.lastDay)) {
                     this.initialCalendarMonths = false;
-                    this.initialScrollToIndexBottom++;
                     this.goToNextMonth();
                 }
             }
@@ -1946,14 +1940,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         if (direction === "top") {
             if (this.singleDatePicker) {
-                if (this.minDate && this.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
+                if ((this.minDate && this.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) && (!this.linkedCalendars || this.singleDatePicker)) {
                     this.initialCalendarMonths = false;
                     this.goToPrevMonth();
                 }
             } else {
                 if (this.minDate && this.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
                     this.initialCalendarMonths = false;
-                    this.initialScrollToIndexTop++;
                     this.goToPrevMonth();
                 }
             }

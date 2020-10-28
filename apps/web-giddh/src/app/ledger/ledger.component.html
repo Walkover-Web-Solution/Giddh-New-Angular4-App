@@ -597,13 +597,13 @@
             </table>
             <!-- region pagination -->
             <div class="text-center mr-t2 page-count pa">
-                <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions,</span>
+                <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions, </span>
                 <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
 
                 <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
-                    <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
+                    <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
 [boundaryLinks]="true">
-</pagination>
+</pagination> -->
                 </div>
 
             </div>
@@ -1262,13 +1262,12 @@
 
             <!-- region pagination -->
             <div class="text-center mr-t2 page-count pa">
-                <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions,</span>
+                <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions, </span>
                 <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
-
                 <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
-                    <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
+                    <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
 [boundaryLinks]="true">
-</pagination>
+</pagination> -->
                 </div>
 
             </div>
@@ -1594,7 +1593,7 @@
         <div class="modal-body">
             <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
                 [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true"
-                [ranges]="datePickerRanges.ranges" [selectedRangeLabel]="selectedRangeLabel"
+                [ranges]="datePickerRanges" [selectedRangeLabel]="selectedRangeLabel"
                 [showCustomRangeLabel]="true" [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true"
                 [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)"
                 (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
