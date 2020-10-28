@@ -1289,7 +1289,7 @@
                                     <td (click)="closeDiscountPopup();" class="pos-rel dropdown-container item-tax" style="height:1px;">
                                         <div class="td-wrapper">
                                             <div class="text-right" style="flex:1;">
-                                                <tax-control #taxControlComponent [showTaxPopup]="false" [taxes]="companyTaxesList" [date]="entry.entryDate"
+                                                <tax-control #taxControlComponent [taxes]="companyTaxesList" [date]="entry.entryDate"
                                                     [taxRenderData]="entry.taxes"
                                                     [totalForTax]="transaction.taxableValue"
                                                     [applicableTaxes]="transaction.applicableTaxes"
@@ -2199,7 +2199,7 @@
                                                 <label class="card-label text-right">Tax</label>
 
                                                 <div class="text-right" style="flex:1;">
-                                                    <tax-control #taxControlComponent [showTaxPopup]="false" [taxes]="companyTaxesList" [date]="entry.entryDate"
+                                                    <tax-control #taxControlComponent [taxes]="companyTaxesList" [date]="entry.entryDate"
                                                         [taxRenderData]="entry.taxes" [totalForTax]="transaction.taxableValue"
                                                         [applicableTaxes]="transaction.applicableTaxes"
                                                         [exceptTaxTypes]="exceptTaxTypes"
