@@ -146,7 +146,11 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
      * @param {*} value
      * @memberof CashFlowStatementComponent
      */
-    public dateSelectedCallback(value: any): void {
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {
