@@ -322,7 +322,6 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     public selectedSalesAccLabel: string = '';
     public selectedEntry: SalesEntryClass = new SalesEntryClass();
     public companyCurrency: string;
-    public isMultiCurrencyAllowed: boolean = false;
     public fetchedConvertedRate: number = 0;
 
     public modalRef: BsModalRef;
@@ -388,11 +387,9 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
                 this.companyCurrency = profile.baseCurrency || 'INR';
-                this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
                 this.customerCountryName = profile.country;
             } else {
                 this.companyCurrency = 'INR';
-                this.isMultiCurrencyAllowed = false;
                 this.customerCountryName = 'INDIA';
             }
         });
@@ -1521,7 +1518,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
             this.isCustomerSelected = true;
             this.invFormData.accountDetails.name = '';
 
-            if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
+            if (item.additional && item.additional.currency && item.additional.currency !== this.companyCurrency) {
                 this._ledgerService.GetCurrencyRate(this.companyCurrency, item.additional.currency)
                     .pipe(
                         catchError(err => {
