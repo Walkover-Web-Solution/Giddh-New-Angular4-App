@@ -864,7 +864,11 @@ export class ContactComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    public selectedDate(value: any) {
+    public selectedDate(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {

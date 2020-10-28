@@ -1850,6 +1850,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof ProfitLossComponent
      */
     public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {
