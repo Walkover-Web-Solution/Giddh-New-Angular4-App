@@ -7,5 +7,5 @@
     "trn_number" : "TRN Number",
     "place_supply" : "Place of Supply",
     "no_records_found" : "No records found",
-    "no_trn_available" : "To see the VAT report for this company, please provide a TRN in its profile section."
+    "no_trn_available" : "To see the VAT report for this company, please provide a TRN to address in its profile section."
 }

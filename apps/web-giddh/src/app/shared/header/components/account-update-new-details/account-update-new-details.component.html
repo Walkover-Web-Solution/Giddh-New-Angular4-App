@@ -50,7 +50,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" *ngIf="isMultipleCurrency && addAccountForm.get('country').value.countryCode !== companyCountry">
+            <div class="row" *ngIf="addAccountForm.get('country').value.countryCode !== companyCountry">
                 <div class="form-group col-xs-12 col-sm-4">
                     <label for="">Foreign Opening Balance</label>
                     <div class="" [ngClass]="{'input-group': addAccountForm.get('foreignOpeningBalance').value > 0}">
