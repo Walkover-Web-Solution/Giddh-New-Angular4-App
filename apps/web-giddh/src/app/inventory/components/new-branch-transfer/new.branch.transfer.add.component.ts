@@ -125,6 +125,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public allowAutoFocusInField: boolean = false;
     public inventorySettings: any;
 
+    /** True if current organization is branch */
+    public isBranch: boolean;
+
     constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
         this.getInventorySettings();
@@ -158,10 +161,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.allowAutoFocusInField = true;
             this.focusDefaultSource();
         }
+        this.isBranch = this._generalService.currentOrganizationType === OrganizationType.Branch;
     }
 
     public ngOnChanges(changes: SimpleChanges) {
-        if (changes.branchTransferMode && changes.branchTransferMode.firstChange) {
+        if (changes.branchTransferMode && changes.branchTransferMode.firstChange && this.branches && this.branches.length) {
             this.assignCurrentCompany();
         }
     }
@@ -501,6 +505,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         this.getBranchTransfer();
                     }
                 }
+                setTimeout(() => {
+                    this.assignCurrentCompany();
+                }, 500);
             }
         });
     }
@@ -677,7 +684,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             if (isNaN(parseFloat(product.stockDetails.amount))) {
                 product.stockDetails.amount = 0;
             } else {
-                product.stockDetails.amount = this._generalService.convertExponentialToNumber(parseFloat(product.stockDetails.amount).toFixed(2));
+                product.stockDetails.amount = Number(this._generalService.convertExponentialToNumber(parseFloat(product.stockDetails.amount).toFixed(2)));
             }
         } else {
             if (isNaN(parseFloat(product.stockDetails.rate))) {
@@ -707,7 +714,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     overallTotal = 0;
                 }
 
-                this.overallTotal += this._generalService.convertExponentialToNumber(overallTotal);
+                this.overallTotal += Number(this._generalService.convertExponentialToNumber((overallTotal)));
             });
         } else if (this.transferType !== 'products' && this.branchTransferMode === 'deliverynote') {
             this.branchTransfer.destinations.forEach(product => {
@@ -721,7 +728,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     overallTotal = 0;
                 }
 
-                this.overallTotal += this._generalService.convertExponentialToNumber(overallTotal);
+                this.overallTotal += Number(this._generalService.convertExponentialToNumber(overallTotal));
             });
         } else if (this.transferType !== 'products' && this.branchTransferMode === 'receiptnote') {
             this.branchTransfer.sources.forEach(product => {
@@ -735,7 +742,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     overallTotal = 0;
                 }
 
-                this.overallTotal += this._generalService.convertExponentialToNumber(overallTotal);
+                this.overallTotal += Number(this._generalService.convertExponentialToNumber(overallTotal));
             });
         }
     }
@@ -899,7 +906,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public assignCurrentCompany(): void {
-        const isBranch = this._generalService.currentOrganizationType === OrganizationType.Branch;
         let branches;
         let branchName;
         let selectedBranch;
@@ -907,7 +913,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
             branches = response;
         });
-        if (isBranch) {
+        if (this.isBranch) {
             // Find the current branch details
             selectedBranch = branches.find(branch => branch.uniqueName === this._generalService.currentBranchUniqueName);
             branchName = selectedBranch ? selectedBranch.name : '';
@@ -917,7 +923,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             branchName = hoBranch ? hoBranch.name : '';
         }
         if (!this.editBranchTransferUniqueName) {
-            this.myCurrentCompany = isBranch ? branchName : hoBranch.name;
+            this.myCurrentCompany = this.isBranch ? branchName : hoBranch.name;
             if (this.branchTransferMode === "deliverynote") {
                 this.branchTransfer.sources[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch.uniqueName;
                 this.branchTransfer.sources[0].name = selectedBranch ? selectedBranch.name : hoBranch.name;
