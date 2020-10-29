@@ -594,7 +594,7 @@
 </ng-template>
 
 <ng-template #rcmEntryCheckbox>
-    <div *ngIf="currentTxn?.shouldShowRcmEntry" class="rcm-entry pd-b1 mTB1">
+    <div *ngIf="currentTxn?.shouldShowRcmEntry" class="rcm-entry pd-b1 mt-1">
         <input id="tourist-scheme-1" class="checkbox-custom" type="checkbox" [ngModel]="isRcmEntry"
             (click)="toggleRcmCheckbox($event)">
         <label for="tourist-scheme-1" class="checkbox-custom-label" #rcmPopup="bs-popover" [popover]="rcmTemplate"
