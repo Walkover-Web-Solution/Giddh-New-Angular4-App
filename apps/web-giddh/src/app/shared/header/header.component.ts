@@ -474,7 +474,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentBranch = '';
                 }
             }
-        })
+        });
     }
 
     public ngOnInit() {
@@ -1306,7 +1306,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         if (event) {
             document.querySelector('body').classList.add('hide-scroll-body')
-        } else {
+        }
+        else {
             document.querySelector('body').classList.remove('hide-scroll-body')
         }
         this.menuStateChange.emit(event);
@@ -1807,7 +1808,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
-            } else {
+            }
+            else {
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
@@ -1850,6 +1852,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof ProfitLossComponent
      */
     public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {
