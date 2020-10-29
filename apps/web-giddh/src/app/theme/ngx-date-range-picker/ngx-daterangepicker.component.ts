@@ -401,6 +401,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.initCalendar();
 
         document.querySelector(".giddh-datepicker-modal").parentElement.classList.add("giddh-calendar");
+
+
     }
 
     /**
@@ -453,7 +455,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.viewOnlyEndDate = this.inlineEndDate.format(GIDDH_DATE_FORMAT);
 
         this.modalRef = this.modalService.show(template,
-            Object.assign({}, { class: 'edit-modal modal-small' })
+            Object.assign({}, { class: 'edit-modal modal-small' }),
+
         );
     }
 
@@ -797,7 +800,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if (typeof endDate === 'object') {
             this.endDate = moment(endDate);
         }
-        
+
         if (!this.timePicker) {
             this.endDate = this.endDate.add(1, 'd').startOf('day').subtract(1, 'second');
         }

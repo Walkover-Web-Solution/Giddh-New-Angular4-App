@@ -92,7 +92,7 @@
                         <h5 class="modal-inside-heading">Custom</h5>
                         <p>{{inlineStartDate.format("MMM DD YYYY")}} - {{inlineEndDate.format("MMM DD YYYY")}}</p>
                         <span (click)="modalRef.hide()">
-                            <span class="fa fa-search"></span>
+                            <span class="fa fa-calendar"></span>
                         </span>
                     </div>
                     <div class="start-end-date">
@@ -206,7 +206,7 @@
                             <div class="calendar-table">
                                 <div class="table-condensed">
                                     <div class="d-flex justify-content-between" hidden>
-                                        <div class="th-div month drp-animate">
+                                        <div class="th-div month drp-animate" hidden>
                                             <ng-container *ngIf="showDropdowns && calendarMonth.start.dropdowns">
                                                 <div>
                                                     {{this.locale.monthNames[calendarMonth?.start?.calendar[1][1].month()]}}

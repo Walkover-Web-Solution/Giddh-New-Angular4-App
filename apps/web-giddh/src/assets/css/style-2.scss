@@ -1463,7 +1463,10 @@ ul.sub-list {
 modal-container.modal.fade.show {
     opacity: 1;
 }
+.modal.fade.giddh-calendar.show + modal-container.modal.fade.show {
 
+    z-index: 999999 !important;
+}
 modal-container.modal {
     .warehouse-welcome-modal {
         margin: 0;
@@ -9314,7 +9317,7 @@ ngx-daterangepicker-material {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
     z-index: 1;
     width: 100% !important;
-    max-width: 540px !important;
+    max-width: 544px !important;
 }
 
 .edit-modal {
@@ -10836,6 +10839,11 @@ input.mat-input-element{
         .HW_frame_cont.HW_visible.HW_bottom{
             max-width: 300px;
         }
+        .edit-modal{
+            .modal-content{
+                max-width: 300px;
+                }
+            }
     }
 
     @media (min-width: 576px) {
@@ -10875,7 +10883,7 @@ input.mat-input-element{
     }
     @media(min-width: 480px) and (max-width: 667px) {
         .edit-modal {
-            margin: 20px auto;
+            margin: 0 auto;
             padding-top: 0;
 
             .edit-date-modal {
