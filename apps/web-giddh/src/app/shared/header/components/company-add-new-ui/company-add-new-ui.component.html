@@ -1,7 +1,7 @@
 <div id="share-modal" class=" share-grp ">
 	<div class="modal-header">
 		<h3 *ngIf="!createBranch">Create New Company</h3>
-		<h3 *ngIf="createBranch">Create New Branch</h3>
+		<h3 *ngIf="createBranch">{{isUpdateMode ? 'Update' : 'Create New'}} Branch</h3>
 		<span aria-hidden="true" class="close" data-dismiss="modal"
 			(click)="removeCompanySessionData(); closeModal();">×</span>
 	</div>
@@ -25,12 +25,13 @@
 							<div class="input-group form-group dblock m-b-30">
 								<p *ngIf="!createBranch">Enter your company name to start hassle free accounting with
 									Giddh.</p>
-								<p *ngIf="createBranch">Enter your branch name to start hassle free accounting with
+								<p *ngIf="createBranch && !isUpdateMode">Enter your branch name to start hassle free accounting with
 									Giddh.</p>
+								<p *ngIf="createBranch && isUpdateMode">Update your branch name & alias</p>
 							</div>
 						</div>
 						<div class="col-xs-12 col-sm-12 mr-b3">
-							<label for="name" class="m-t-40">Company Name<sup>*</sup></label>
+							<label for="name" class="m-t-40">{{createBranch ? 'Branch' : 'Company'}} Name<sup>*</sup></label>
 							<input name="name" id="name" type="text" required placeholder="Name"
 								[(ngModel)]="company.name" class="form-control" (blur)="makeMeCaptialize(company.name)">
 							<!-- /btn-account -->
@@ -39,7 +40,7 @@
 						<div class="col-xs-6 col-sm-6 mr-b3 ">
 							<span>
 								<label for="country" class="d-block">Country<sup>*</sup></label>
-								<sh-select id="country" [options]="countrySource$ | async" [isFilterEnabled]="true"
+								<sh-select [disabled]="createBranch ? 'disabled' : null"  id="country" [options]="countrySource$ | async" [isFilterEnabled]="true"
 									name="country" [(ngModel)]="company.country" class="pull-left select-caret"
 									[required]='true' (selected)="selectCountry($event)"
 									[defaultValue]="selectedCountry" style="width: 100%">
@@ -49,12 +50,12 @@
 						<div class="col-xs-6 col-sm-6 mr-b3 ">
 							<label for="">Currency <sup>*</sup></label>
 							<div class="custom-select select-caret position-relative">
-								<sh-select name="baseCurrency" [options]="currencySource$ | async" required
+								<sh-select [disabled]="createBranch ? 'disabled' : null" name="baseCurrency" [options]="currencySource$ | async" required
 									[isFilterEnabled]="true" [(ngModel)]="company.baseCurrency"
 									[defaultValue]="company.baseCurrency"></sh-select>
 							</div>
 						</div>
-						<div class="col-xs-12 col-sm-12 mr-b3">
+						<div *ngIf="!createBranch" class="col-xs-12 col-sm-12 mr-b3">
 							<span>
 								<label for="contactNo" class="d-block">Mobile Number<sup>*</sup></label>
 								<div class="d-flex welcome-select ">
@@ -69,11 +70,22 @@
 										name="contactNo" #mobileNoEl />
 								</div>
 							</span>
-						</div>
+                        </div>
+                        <div *ngIf="createBranch" class="col-xs-12 mrB3">
+							<span>
+								<label for="aliasName" class="d-block">Alias<sup>*</sup></label>
+								<div class="d-flex welcome-select ">
+									<input type="text" class="form-control mrR1" required
+										id="alias-name" autocomplete="off"
+										[(ngModel)]="company.nameAlias"
+										name="aliasName" />
+								</div>
+							</span>
+                        </div>
 						<div class="col-xs-12 col-sm-12 mr-t1">
 							<button class="btn btn-sky-blue mr-l1" style="margin-left: 0 !important;" type="submit"
-								(click)="createCompany(mobileNoEl)" [disabled]="companyForm.invalid"
-								[ladda]="isCompanyCreationInProcess$ | async">Next
+								(click)="createCompany(null)" [disabled]="companyForm.invalid"
+								[ladda]="isCompanyCreationInProcess$ | async">{{isUpdateMode ? 'Update' : 'Next'}}
 							</button>
 						</div>
 					</div>

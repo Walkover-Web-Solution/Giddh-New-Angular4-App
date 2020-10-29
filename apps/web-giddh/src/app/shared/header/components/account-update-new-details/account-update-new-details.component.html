@@ -50,7 +50,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" *ngIf="isMultipleCurrency && addAccountForm.get('country').value.countryCode !== companyCountry">
+            <div class="row" *ngIf="addAccountForm.get('country').value.countryCode !== companyCountry">
                 <div class="form-group col-xs-12 col-sm-4">
                     <label for="">Foreign Opening Balance</label>
                     <div class="" [ngClass]="{'input-group': addAccountForm.get('foreignOpeningBalance').value > 0}">
@@ -490,11 +490,11 @@
                     class="primary-color"></span></label>
                 <div class="clearfix">
                     <span>
-                        <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" placeholder="Select discounts" ></sh-select>
+                        <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts"  (ngModelChange)="selecteDiscountChanged($event)" placeholder="Select discounts" ></sh-select>
                     </span>
-                    <span class="pull-right">
-                        <button  class="btn btn-primary marge-btn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscounts()">Apply</button>
-                    </span>
+                    <!-- <span class="pull-right">
+                        <button  class="btn btn-primary marge-btn" (click)="applyDiscounts()">Apply</button>
+                    </span> -->
                 </div>
             </div>
         </div>
@@ -531,7 +531,7 @@
                     <div class="form-group">
                         <div class="clearfix">
                             <span class="calc-width pull-left">
-                                <sh-select  [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes">
+                                <sh-select  [options]="companyTaxDropDown$ | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes">
                                 </sh-select>
                             </span>
                             <span class="pull-right">

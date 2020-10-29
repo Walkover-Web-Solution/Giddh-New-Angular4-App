@@ -867,7 +867,6 @@ sh-select:focus {
     }
     .search-ledger-field {
         margin-right: 0 !important;
-        justify-content: space-between;
         .ledger-datepicker {
             width: 36px;
             height: 36px;
@@ -877,7 +876,7 @@ sh-select:focus {
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            display: none;
+            //display: none;
         }
     }
     .ledger-ellipse {
@@ -1033,6 +1032,15 @@ sh-select:focus {
     .ledg-head {
         .single-search-box {
             margin-right: 5px;
+        }
+    }
+}
+
+
+@media (min-width:768px) and (max-width: 991px){
+    .ledger-datepicker{
+        img{
+            padding-top: 5px;
         }
     }
 }

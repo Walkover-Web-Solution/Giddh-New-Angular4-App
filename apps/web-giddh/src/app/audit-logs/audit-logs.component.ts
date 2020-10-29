@@ -15,6 +15,7 @@ import { CurrentPage } from '../models/api-models/Common';
 import { AuditLogsSidebarComponent } from './components/sidebar-components/audit-logs.sidebar.component';
 import { AuditLogsFormComponent } from './components/audit-logs-form/audit-logs-form.component';
 import { GetAuditLogsRequest } from '../models/api-models/Logs';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 
 @Component({
     selector: 'audit-logs',
@@ -38,7 +39,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Moment object */
     public moment = moment;
     /* Selected from date */
@@ -96,12 +97,6 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
                 this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
         });
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                this.datePickerOptions = config;
-            }
-        });
 
         this.auditLogsRequest$.subscribe(response => {
             if (response && response.entity) {
@@ -148,7 +143,11 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
      * @param {*} value
      * @memberof AuditLogsFormComponent
      */
-    public dateSelectedCallback(value: any): void {
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {

@@ -1,7 +1,7 @@
 <h1 class="page-title" *ngIf="(logs$ | async).length > 0"> Audit Logs</h1>
 <br />
 <section class="audit-log" *ngFor="let log of (logs$ | async); let i = index">
-    <h1>{{log.operationType}}
+    <h1 class="audit-log-heading">{{log.operationType}}
         <span *ngIf="log && log.accountName && log.accountName != null"> - {{log.accountName}}
             ({{log.accountUniqueName}})</span>
     </h1>

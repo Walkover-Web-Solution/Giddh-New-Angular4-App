@@ -42,6 +42,10 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     @ViewChild('logoutModal', {static: true}) public logoutModal: ModalDirective;
     @ViewChild('companyForm', {static: true}) public companyForm: NgForm;
     @Input() public createBranch: boolean = false;
+    /** True if update mode is enabled */
+    @Input() public isUpdateMode: boolean = false;
+    /** Stores the entity details to be updated */
+    @Input() public entityDetails: any;
 
     public imgPath: string = '';
     public countrySource: IOption[] = [];
@@ -102,6 +106,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     public selectedCountry: string = '';
     /* This will hold if it's production env or not */
     public isProdMode: boolean = false;
+    /** Stores active company details */
+    public activeCompanyDetails: any;
 
     constructor(private socialAuthService: AuthService,
                 private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
@@ -111,7 +117,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.getCountry();
-        this.getCurrency();
         this.getCallingCodes();
 
         this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).pipe(takeUntil(this.destroyed$));
@@ -128,6 +133,9 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             }
             this.isMobileNumberValid = true;
         }
+        this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe(data => {
+            this.activeCompanyDetails = data;
+        });
         this._generalService.createNewCompany = null;
         this.companies$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).pipe(takeUntil(this.destroyed$));
@@ -180,6 +188,10 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                 this.company = res;
             }
         });
+        if (this.createBranch && this.isUpdateMode && this.entityDetails) {
+            this.company.name = this.entityDetails.name;
+            this.company.nameAlias = this.entityDetails.alias;
+        }
     }
 
     /**
@@ -194,18 +206,22 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             }
             return;
         } else {
-            let companies = null;
-            this.companies$.pipe(take(1)).subscribe(c => companies = c);
-            this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
-            this.company.isBranch = this.createBranch;
-            this._generalService.createNewCompany = this.company;
-            this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
-            this.closeCompanyModal.emit();
-            this._route.navigate(['welcome']);
-
-            if (this.isProdMode && companies) {
-                if (companies.length === 0) {
-                    this.fireSocketCompanyCreateRequest();
+            if (this.createBranch && this.isUpdateMode) {
+                // Branch update mode
+                this.updateBranch();
+            } else {
+                let companies = null;
+                this.companies$.pipe(take(1)).subscribe(c => companies = c);
+                this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
+                this.company.isBranch = this.createBranch;
+                this._generalService.createNewCompany = this.company;
+                this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
+                this.closeCompanyModal.emit();
+                this._route.navigate(['welcome']);
+                if (this.isProdMode && companies) {
+                    if (companies.length === 0) {
+                        this.fireSocketCompanyCreateRequest();
+                    }
                 }
             }
         }
@@ -311,14 +327,19 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
     public checkMobileNo(ele) {
         try {
-            let parsedNumber = parsePhoneNumberFromString('+' + this.company.phoneCode + ele.value, this.company.country as CountryCode);
-            if (parsedNumber.isValid()) {
-                ele.classList.remove('error-box');
-                this.isMobileNumberValid = true;
+            if (ele) {
+                let parsedNumber = parsePhoneNumberFromString('+' + this.company.phoneCode + ele.value, this.company.country as CountryCode);
+                if (parsedNumber.isValid()) {
+                    ele.classList.remove('error-box');
+                    this.isMobileNumberValid = true;
+                } else {
+                    this.isMobileNumberValid = false;
+                    this._toaster.errorToast('Invalid Contact number');
+                    ele.classList.add('error-box');
+                }
             } else {
-                this.isMobileNumberValid = false;
-                this._toaster.errorToast('Invalid Contact number');
-                ele.classList.add('error-box');
+                // branch on-boarding is carried out where no mobile field is there
+                this.isMobileNumberValid = true;
             }
         } catch (error) {
             this.isMobileNumberValid = false;
@@ -378,6 +399,11 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                     }
                 });
                 this.countrySource$ = observableOf(this.countrySource);
+                if (this.createBranch) {
+                    this.company.country = this.activeCompanyDetails && this.activeCompanyDetails.countryV2 ?
+                        this.activeCompanyDetails.countryV2.alpha2CountryCode : '';
+                }
+                this.getCurrency();
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = 'onboarding';
@@ -393,6 +419,10 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                     this.currencies.push({label: res[key].code, value: res[key].code});
                 });
                 this.currencySource$ = observableOf(this.currencies);
+                if (this.createBranch) {
+                    this.company.baseCurrency = this.activeCompanyDetails ?
+                        this.activeCompanyDetails.baseCurrency : '';
+                }
             }
         });
     }
@@ -414,5 +444,23 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this._generalService.createNewCompany = null;
         this.store.dispatch(this.commonActions.resetCountry());
         this.store.dispatch(this.companyActions.removeCompanyCreateSession());
+    }
+
+    /**
+     * Updates branch
+     *
+     * @memberof CompanyAddNewUiComponent
+     */
+    public updateBranch(): void {
+        this._companyService.updateBranch({
+            companyUniqueName: this.activeCompanyDetails.uniqueName,
+            branchUniqueName: this.entityDetails.uniqueName,
+            name: this.company.name,
+            alias: this.company.nameAlias
+        }).subscribe(data => {
+            this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
+            this.store.dispatch(this.companyActions.removeCompanyCreateSession());
+            this.closeCompanyModal.emit();
+        });
     }
 }

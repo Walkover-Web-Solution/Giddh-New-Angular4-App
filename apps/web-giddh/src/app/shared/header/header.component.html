@@ -22,7 +22,7 @@
                                         <div class="unique-name-financial-year"> <span class="name-year" *ngIf="(selectedCompany | async)?.nameAlias">
                                                 ({{ (selectedCompany | async)?.nameAlias }})
                                             </span>
-                                            <span class="fyear">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}
+                                            <span class="fyear ml-0">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}
                                             </span>
                                         </div>
                                     </div>
@@ -192,7 +192,6 @@
                             </li>
                             <li class="border-none pl-0">
                                 <button class="btn btn-link" *ngIf="!isTodaysDateSelected" (click)="dateSelectedCallback()">Today</button>
-                                <!-- <button class="btn btn-link" *ngIf="isTodaysDateSelected" (click)="showGiddhDatepicker($event)">Today</button> -->
                             </li>
                             <li class="not-today cursor-pointer">
                                 <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
@@ -224,7 +223,42 @@
 <div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen, 'unvisible': companyList.length===0 }" (clickOutside)="closeSidebarMobile($event)">
 
     <div class="menu-wrapper">
-
+        <!-- switch branch start -->
+        <div *ngIf="(currentCompanyBranches$ | async)?.length > 1" class="switch-branch-wrapper">
+            <div class="btn-group" dropdown placement="bottom right" #subdropdown="bs-dropdown" [autoClose]="false"
+                (onShown)="loadCompanyBranches()" (clickOutside)="subdropdown.isOpen = false">
+                <a id="button-basic" dropdownToggle type="button" class="dropdown-toggle" aria-controls="dropdown-basic">
+                    <ng-container *ngIf="currentBranch">{{currentBranch?.name}} ({{currentBranch?.alias}})</ng-container>
+                    <ng-container *ngIf="!currentBranch">Go to Entity</ng-container>
+                    <span class="icon-arrow-down"></span>
+                </a>
+                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+                    <div class="input-group mb-1" container="body">
+                        <input type="text" (ngModelChange)="filterBranch($event)" [(ngModel)]="searchBranchQuery"
+                            class="form-control" placeholder="Search Branch here" autocomplete="off" />
+                        <span (click)="loadCompanyBranches()" tooltip="Refresh" placement="left" class="input-group-addon">
+                            <i class="icon-refrsh cp"></i>
+                        </span>
+                    </div>
+                    <li *ngFor="let branch of currentCompanyBranches" role="menuitem">
+                        <a [class.active-branch]="currentBranch?.uniqueName === branch?.uniqueName"
+                            (click)="switchToBranch(branch?.uniqueName, $event)" class="dropdown-item"
+                            tooltip="{{branch?.name}} ({{branch?.alias}})" href="javascript:void(0);">
+                            <span class="pr-3">{{branch?.name}} ({{branch?.alias}})</span>
+                            <i class="icon-branch-icon pull-right" *ngIf="branch.parentBranch" tooltip="Branch"></i>
+                            <i class="icon-company-HO pull-right" *ngIf="!branch.parentBranch" tooltip="HO Branch"></i>
+                        </a>
+                    </li>
+                    <li class="divider dropdown-divider"></li>
+                    <li *ngIf="currentBranch" (click)="goToCompany()" role="menuitem"><a class="dropdown-item go-to-company"
+                            href="javascript:void(0);">Go to company</a>
+                    <li *ngIf="!currentBranch" (click)="subdropdown.isOpen = false" [routerLink]="['/pages/settings/create-branch']" role="menuitem"><a class="dropdown-item go-to-company"
+                            href="javascript:void(0);">Create Branch</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Switch branch end -->
         <ul class="main-company-name">
             <li *ngIf="isMobileSite" [autoClose]="false" class="company-name position-relative hidden-lg hidden-md hidden-sm" dropdown #dropdown="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false">
 
@@ -240,9 +274,7 @@
                             <span class=" text-ellipsis pd-r1">{{ ((selectedCompany | async)?.name)}}
                             </span>
 
-                            <div class="unique-name-financial-year"> <span *ngIf="(selectedCompany | async)?.nameAlias" class="branch-unique-name">
-                                    ({{ (selectedCompany | async)?.nameAlias }})
-                                </span>
+                            <div class="unique-name-financial-year">
                                 <span class="fyear">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}
                                 </span>
                             </div>
@@ -270,7 +302,7 @@
             <perfect-scrollbar class="scroll-class" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="0" auto-height [scrollIndicators]="false">
 
                 <!-- Accounts menu -->
-                <ul class="left-fixed-header mr-t1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+                <ul class="left-fixed-header mr-t1" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async) && shouldShowAccounts">
                     <h6 class="mr-b1">ACCOUNTS
 
                         <img src="{{imgPath}}plus-around-icon.svg" *ngIf="!isMobileSite" (click)="showManageGroupsModal()" tooltip="Create account" class="pull-right" placement="bottom" container="body">
@@ -288,12 +320,12 @@
                             </span>
                         </a>
                     </li>
-                    <li *ngIf="!isMobileSite" class="mr-t cursor-pointer  show-more-opt" (click)="showNavigationModal()">
+                    <li class="mr-t cp  show-more-opt" (click)="showNavigationModal()">
                         <span container="body" tooltip="Search accounts" placement="bottom"> Show more...</span></li>
                 </ul>
 
                 <!-- Main menu -->
-                <ul class="left-fixed-header mr-t4" [ngClass]="{'open':sideMenu.isopen}" *ngIf="(selectedCompany | async)">
+                <ul class="left-fixed-header" [ngClass]="{'open':sideMenu.isopen, 'mr-t4': shouldShowAccounts, 'mr-t1': !shouldShowAccounts}" *ngIf="(selectedCompany | async)">
                     <h6 class="mr-b1">MENU
                         <a (click)="navigateToAllModules()">
                             <img src="{{imgPath}}angle-round-icon.svg" class="pull-right" *ngIf="!isMobileSite" tooltip="Menu" placement="bottom" container="body">
@@ -360,8 +392,7 @@
                 </div>
 
                 <div class="pull-right">
-
-
+                    <button *ngIf="shouldShowBackButton" (click)="navigateToPreviousRoute()" class="btn btn-primary mr-15">Back</button>
                 </div>
             </div>
         </div>
@@ -587,9 +618,7 @@
                 <span class=" text-ellipsis pd-r1">{{ ((selectedCompany | async)?.name)}}
                 </span>
 
-                <div class="unique-name-financial-year"> <span *ngIf="(selectedCompany | async)?.nameAlias" class="branch-unique-name">
-                        ({{ (selectedCompany | async)?.nameAlias }})
-                    </span>
+                <div class="unique-name-financial-year">
                     <span class="fyear">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}
                     </span>
                 </div>
@@ -697,7 +726,7 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions.ranges" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
                 [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
                 [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition" [updatePosition]="false"></app-datepicker-wrapper>
         </div>

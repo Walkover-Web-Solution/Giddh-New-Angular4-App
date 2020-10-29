@@ -638,14 +638,14 @@
 
                                             <ng-container *ngIf="isCreditNote || isDebitNote">
                                                 <sh-select [options]="invoiceList" placeholder="Select Accounts"
-                                                    [forceClearReactive]="invoiceForceClearReactive$ | async"
-                                                    [notFoundLink]="false" [(ngModel)]="selectedInvoice"
-                                                    [ngModelOptions]="{standalone: true}"
+                                                    [forceClearReactive]="invoiceForceClearReactive$ | async" class="linking-dropdown"
+                                                    [notFoundLink]="false" [(ngModel)]="selectedInvoice" name="invoiceLinking"
                                                     (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"
                                                     [ItemHeight]="67" [showClear]="false">
-                                                    <ng-template *ngIf="invoiceList?.length" #optionTemplate
+                                                    <ng-template #optionTemplate
                                                         let-option="option">
-                                                        <a href="javascript:void(0)" class="list-item sh-template">
+                                                        <a *ngIf="option" href="javascript:void(0)" class="linking-item list-item
+                                                         sh-template">
                                                             <div class="item">{{ option.label }}
                                                             </div>
                                                             <div class="item-unique">
@@ -1065,7 +1065,7 @@
 
                                 <!-- region dynamic entries-->
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
-                                <tr [hidden]="activeIndx !== entryIdx" class="entriesTr default-active"
+                                <tr *ngIf="activeIndx === entryIdx" class="entriesTr default-active"
                                     (click)="$event.stopPropagation();">
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();">{{ entryIdx + 1 }}</td>
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();">
@@ -1244,7 +1244,7 @@
                                         </div>
                                     </td>
 
-                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();" class="text-right item-amount" style="height:1px;">
+                                    <td (click)="closeDiscountPopup(); closeTaxControlPopup();" class="text-right item-amount">
                                         <div class="td-wrapper">
                                             <div class="flex-grow-1">
                                                 <input type="text" (blur)="calculateWhenTrxAltered(entry, transaction, true)"
@@ -1284,7 +1284,7 @@
                                         </div>
                                     </td>
 
-                                    <td (click)="closeTaxControlPopup();" class="position-relative dropdown-container item-tax">
+                                    <td (click)="closeDiscountPopup();" class="position-relative dropdown-container item-tax">
                                         <div class="td-wrapper">
                                             <div class="text-right flex-grow-1">
                                                 <tax-control #taxControlComponent [taxes]="companyTaxesList" [date]="entry.entryDate"
@@ -2297,11 +2297,11 @@
 
                     </div>
 
-                    <div class="add-btn" (click)="addBlankRow(null)">
-                        <button class="btn btn-sm btn-success">Add More</button>
+                    <div class="add-btn">
+                        <button class="btn btn-sm btn-success" (click)="addBlankRow(null)">Add More</button>
                     </div>
 
-                    <div class="otherDetail-card">
+                    <div class="other-detail-card">
                         <div>
                             <div class="collapse-pane clearfix">
                                 <div class="collapse-pane-heading" (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
@@ -2364,7 +2364,7 @@
                             </div>
 
                             <div class="pd-t1 pl0 max-600" *ngIf="!isPurchaseInvoice">
-                                <label class="mr-b1">Message</label>
+                                <label class="mr-b1">Note</label>
                                 <textarea style="height:120px" class="form-control" name="message2"
                                     [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                             </div>

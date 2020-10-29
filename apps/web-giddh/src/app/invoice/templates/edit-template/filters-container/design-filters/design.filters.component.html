@@ -166,8 +166,8 @@
             </li>
             <li *ngIf="templateUISectionVisibility.font">
                 <i class="ico-txt"></i> <label>Select different fonts</label>
-                <div class="col-xs-9 font-selector mr-t1 form-group">
-                    <div class="row">
+                <div class="row font-selector mr-t1 form-group">
+                    <div class="col-9">
                         <sh-select [defaultValue]="selectedFont" [options]="presetFonts" (selected)="onFontSelect($event)"
                             [placeholder]="'Choose font'" [multiple]="false" [ItemHeight]="33"></sh-select>
                     </div>
@@ -179,8 +179,8 @@
                 </li>
                 <li *ngIf="templateUISectionVisibility.fontSize">
                     <i class="ico-txt"></i> <label>Select different fonts size</label>
-                    <div class="col-xs-9 font-selector mr-t1 form-group">
-                        <div class="row">
+                    <div class="row font-selector mr-t1 form-group">
+                        <div class="col-9">
                             <sh-select [defaultValue]="selectedFontSize" [options]="presetFontsSize" (selected)="onFontSizeSelect($event)"
                                 [placeholder]="'Choose font size'" [multiple]="false" [ItemHeight]="33"></sh-select>
                         </div>

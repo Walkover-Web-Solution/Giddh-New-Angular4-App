@@ -204,6 +204,12 @@ button.toast-close-button {
         width: 25em;
     }
 }
+@media all and (max-width: 480px) {
+    #toast-container .toast-close-button {
+        right: 10px !important;
+        top: -0.2em;
+    }
+}
 .toast-title {
     word-break: break-word;
 }

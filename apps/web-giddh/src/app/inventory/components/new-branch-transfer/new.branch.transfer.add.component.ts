@@ -1,5 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnDestroy, OnInit, ViewChild, OnChanges, SimpleChange, SimpleChanges, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
@@ -32,6 +32,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { SettingsWarehouseService } from '../../../services/settings.warehouse.service';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
+import { OrganizationType } from '../../../models/user-login-state';
 
 @Component({
     selector: 'new-branch-transfer',
@@ -58,9 +59,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('productSkuCode', {static: true}) public productSkuCode;
     @ViewChild('productHsnNumber', {static: true}) public productHsnNumber;
     @ViewChild('generateTransporterForm', {static: true}) public generateNewTransporterForm: NgForm;
-    @ViewChild('selectDropdown', {static: true}) public selectDropdown: ShSelectComponent;
-    @ViewChild('sourceWarehouse', {static: true}) public sourceWarehouse: ShSelectComponent;
-    @ViewChild('destinationWarehouse', {static: true}) public destinationWarehouse: ShSelectComponent;
+    @ViewChild('selectDropdown', {static: false}) public selectDropdown: ShSelectComponent;
+    @ViewChild('sourceWarehouse', {static: false}) public sourceWarehouse: ShSelectComponent;
+    @ViewChild('destinationWarehouse', {static: false}) public destinationWarehouse: ShSelectComponent;
     @ViewChild('productDescription', {static: true}) public productDescription;
     @ViewChild('transMode', {static: true}) public transMode: ShSelectComponent;
     @ViewChild('vehicleNumber', {static: true}) public vehicleNumber;
@@ -68,9 +69,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('destinationWarehouseList', {static: true}) public destinationWarehouseList: ShSelectComponent;
     @ViewChild('sourceWarehouses', {static: true}) public sourceWarehouseList: ShSelectComponent;
     @ViewChild('sourceQuantity', {static: true}) public sourceQuantity;
-    @ViewChild('defaultSource', {static: true}) public defaultSource: ShSelectComponent;
+    @ViewChild('defaultSource', {static: false}) public defaultSource: ShSelectComponent;
     @ViewChild('defaultProduct', {static: true}) public defaultProduct: ShSelectComponent;
-    @ViewChild('destinationName', {static: true}) public destinationName: ShSelectComponent;
+    @ViewChild('destinationName', {static: false}) public destinationName: ShSelectComponent;
     @ViewChild('destinationQuantity', {static: true}) public destinationQuantity;
     @ViewChild('senderGstNumberField', {static: true}) public senderGstNumberField: HTMLInputElement;
     @ViewChild('receiverGstNumberField', {static: true}) public receiverGstNumberField: HTMLInputElement;
@@ -133,6 +134,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.initFormFields();
         this.getTransportersList();
         this.getStock();
+
 
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && !_.isEmpty(o)) {
@@ -435,18 +437,20 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.allWarehouses = [];
 
         data.forEach(d => {
-            branches.push(new LinkedStocksVM(d.name, d.uniqueName));
-            if (d.warehouses.length) {
-                this.senderWarehouses[d.uniqueName] = [];
-                this.destinationWarehouses[d.uniqueName] = [];
-                this.allWarehouses[d.uniqueName] = [];
+            if (d && !d.isCompany) {
+                branches.push(new LinkedStocksVM(d.name, d.uniqueName));
+                if (d.warehouses.length) {
+                    this.senderWarehouses[d.uniqueName] = [];
+                    this.destinationWarehouses[d.uniqueName] = [];
+                    this.allWarehouses[d.uniqueName] = [];
 
-                d.warehouses.forEach(key => {
-                    this.allWarehouses[d.uniqueName].push(key);
+                    d.warehouses.forEach(key => {
+                        this.allWarehouses[d.uniqueName].push(key);
 
-                    this.senderWarehouses[d.uniqueName].push({ label: key.name, value: key.uniqueName });
-                    this.destinationWarehouses[d.uniqueName].push({ label: key.name, value: key.uniqueName });
-                });
+                        this.senderWarehouses[d.uniqueName].push({ label: key.name, value: key.uniqueName });
+                        this.destinationWarehouses[d.uniqueName].push({ label: key.name, value: key.uniqueName });
+                    });
+                }
             }
         });
         return branches;
@@ -895,14 +899,31 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public assignCurrentCompany(): void {
+        const isBranch = this._generalService.currentOrganizationType === OrganizationType.Branch;
+        let branches;
+        let branchName;
+        let selectedBranch;
+        let hoBranch;
+        this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+            branches = response;
+        });
+        if (isBranch) {
+            // Find the current branch details
+            selectedBranch = branches.find(branch => branch.uniqueName === this._generalService.currentBranchUniqueName);
+            branchName = selectedBranch ? selectedBranch.name : '';
+        } else {
+            // Company session find the HO branch
+            hoBranch = branches.find(branch => !branch.parentBranchUniqueName);
+            branchName = hoBranch ? hoBranch.name : '';
+        }
         if (!this.editBranchTransferUniqueName) {
-            this.myCurrentCompany = this.activeCompany.name;
+            this.myCurrentCompany = isBranch ? branchName : hoBranch.name;
             if (this.branchTransferMode === "deliverynote") {
-                this.branchTransfer.sources[0].uniqueName = this.activeCompany.uniqueName;
-                this.branchTransfer.sources[0].name = this.activeCompany.name;
+                this.branchTransfer.sources[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch.uniqueName;
+                this.branchTransfer.sources[0].name = selectedBranch ? selectedBranch.name : hoBranch.name;
             } else if (this.branchTransferMode === "receiptnote") {
-                this.branchTransfer.destinations[0].uniqueName = this.activeCompany.uniqueName;
-                this.branchTransfer.destinations[0].name = this.activeCompany.name;
+                this.branchTransfer.destinations[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch.uniqueName;
+                this.branchTransfer.destinations[0].name = selectedBranch ? selectedBranch.name : hoBranch.name;
             }
         }
     }

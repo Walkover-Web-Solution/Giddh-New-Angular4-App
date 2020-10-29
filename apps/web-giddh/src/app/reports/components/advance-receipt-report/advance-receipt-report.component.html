@@ -3,19 +3,21 @@
 
         <div class="mt-15 mb-15 input-grp-date-range-picker d-flex">
             <!-- Invoice filter section -->
-            <div class="mr-r1 d-flex">
+            <div class="mr-r1 d-flex w-100">
+                <div class="d-flex">
                 <div class="input-group">
                     <span class="input-wrapper">
                         <input type="text" name="dateRange" daterangepicker [options]="datePickerOptions"
-                            (applyDaterangepicker)="onDateChange($event)" class="form-control" />
+                            (applyDaterangepicker)="onDateChange($event)" class="form-control cursor-pointer" />
                     </span>
                 </div>
-                <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
+                <div class="advance-icon cursor-pointer" tooltip="Advance Search">
                     <span class="icon-advance-filter" (click)="openModal()"></span>
+                </div>
                 </div>
                 <div class="clear-filter width-100 align-items-center d-flex justify-content-center"
                     *ngIf="showClearFilter">
-                    <button class="btn btn-filter" (click)="resetAdvanceSearch()"><span class="icon-cross"></span> Clear
+                    <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()"><span class="icon-cross"></span> Clear
                         Filter</button>
                 </div>
             </div>

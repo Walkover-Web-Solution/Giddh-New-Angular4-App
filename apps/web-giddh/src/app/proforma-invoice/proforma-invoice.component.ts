@@ -328,7 +328,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public selectedGrpUniqueNameForAddEditAccountModal: string = '';
     public actionAfterGenerateORUpdate: ActionTypeAfterVoucherGenerateOrUpdate = ActionTypeAfterVoucherGenerateOrUpdate.generate;
     public companyCurrency: string;
-    public isMultiCurrencyAllowed: boolean = false;
     public fetchedConvertedRate: number = 0;
     public isAddBulkItemInProcess: boolean = false;
     public modalRef: BsModalRef;
@@ -1181,7 +1180,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     obj.entries.forEach((entry, index) => {
                                         obj.entries[index].entryDate = this.universalDate || new Date();
                                     });
-        
+
                                     obj.entries = obj.entries;
                                 }
 
@@ -1601,7 +1600,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.depositCurrSymbol = this.baseCurrencySymbol;
             this.companyCurrencyName = profile.baseCurrency;
 
-            this.isMultiCurrencyAllowed = profile.isMultipleCurrency;
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile.countryCode) {
                 this.companyCountryCode = profile.countryCode;
@@ -1618,7 +1616,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.showGstAndTrnUsingCountryName('');
 
             this.companyCurrency = 'INR';
-            this.isMultiCurrencyAllowed = false;
         }
     }
 
@@ -1751,6 +1748,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     _.uniqBy(this.invoiceList, 'value');
                     this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
+                    this._cdr.detectChanges();
                 }
             });
         }
@@ -1909,7 +1907,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.customerCurrencyCode = this.companyCurrency;
         }
 
-        if (item && item.currency && item.currency !== this.companyCurrency && this.isMultiCurrencyAllowed) {
+        if (item && item.currency && item.currency !== this.companyCurrency) {
             this.getCurrencyRate(this.companyCurrency, item.currency,
                 moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
         }
@@ -2910,18 +2908,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             stock: (isLinkedPoItem && selectedAcc.stock) ? selectedAcc.stock : data.body.stock,
                             uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                         };
-                        txn = this.calculateItemValues(selectedAcc, txn, entry);
+                        txn = this.calculateItemValues(selectedAcc, txn, entry, !isLinkedPoItem);
 
                         if(isLinkedPoItem) {
                             txn.applicableTaxes = entry.taxList;
-                            txn.stockDetails = selectedAcc.stock;
-
-                            if(txn.stockDetails.uniqueName) {
-                                let stockUniqueName = txn.stockDetails.uniqueName.split('#');
-                                txn.stockDetails.uniqueName = stockUniqueName[1];
-                            }
 
                             if(selectedAcc.stock) {
+                                txn.stockDetails = selectedAcc.stock;
+
+                                if(txn.stockDetails.uniqueName) {
+                                    let stockUniqueName = txn.stockDetails.uniqueName.split('#');
+                                    txn.stockDetails.uniqueName = stockUniqueName[1];
+                                }
+
                                 if(selectedAcc.stock.quantity) {
                                     txn.quantity = selectedAcc.stock.quantity;
                                 }
@@ -2931,7 +2930,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 }
                             }
 
-                            if(selectedAcc.stock.quantity && selectedAcc.stock.rate) {
+                            if(selectedAcc.stock && selectedAcc.stock.quantity && selectedAcc.stock.rate) {
                                 this.calculateStockEntryAmount(txn);
                             } else {
                                 if(selectedAcc.amount) {
@@ -3000,7 +2999,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
 
-    public calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass): SalesTransactionItemClass {
+    public calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true): SalesTransactionItemClass {
         let o = _.cloneDeep(selectedAcc.additional);
 
         // check if we have quantity in additional object. it's for only bulk add mode
@@ -3125,8 +3124,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 description[this.activeIndx].nativeElement.focus();
             }
         }, 200);
-        this.calculateStockEntryAmount(transaction);
-        this.calculateWhenTrxAltered(entry, transaction);
+        if(calculateTransaction) {
+            this.calculateStockEntryAmount(transaction);
+            this.calculateWhenTrxAltered(entry, transaction);
+        }
         this._cdr.detectChanges();
         return transaction;
     }
@@ -6107,7 +6108,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         item.additional.maxQuantity = item.stock.quantity;
                     }
                 } else {
-                    item.stock = {};
+                    item.stock = undefined;
                     item.uniqueName = item.account.uniqueName;
                     item.value = item.account.uniqueName;
                     item.additional = item.account;

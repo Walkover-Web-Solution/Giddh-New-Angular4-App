@@ -355,7 +355,7 @@
                             <div class="col-12 col-sm-12">
                                 <div class="checkbox">
                                     <label class="" for="isFsStock">
-                                        <input type="checkbox" class="focusBorder" formControlName="isFsStock"
+                                        <input #isFsStock type="checkbox" class="focusBorder" formControlName="isFsStock"
                                             id="isFsStock" #isFinishedStock [disabled]="" name="isFsStock"
                                             (change)="showManufacturingQuantitySection()"> Is
                                         it a finished stock? (Manufacturing/Combo)</label>

@@ -396,7 +396,7 @@ span.close-modal.cp.pull-right {
     }
     .form-inline .d-flex,
     .form-inline .form-group {
-        margin: 0 !important;
+        margin: 0;
     }
     .pagination-wrapper {
         margin-top: 20px;
@@ -425,6 +425,9 @@ span.close-modal.cp.pull-right {
 }
 
 @media (max-width: 767px) {
+    .date-advance-search{
+        margin-top: 15px !important;
+    }
     .invoice-generate-container {
         padding-top: 55px;
     }
@@ -492,6 +495,9 @@ span.close-modal.cp.pull-right {
     div#dp-parent {
         margin-bottom: 0;
         width: 100%;
+    }
+    .flex-none{
+        flex: none;
     }
 }
 
