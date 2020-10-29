@@ -127,7 +127,7 @@
     background: $white!important;
 }
 
-.wd-900{
+.modal-width{
     width:900px !important;
 }
 @media (max-width: 375px) {
@@ -191,3 +191,8 @@
     }
 }
 
+@media (max-width: 950px){
+    .modal-width {
+        width: auto !important;
+    }
+}
