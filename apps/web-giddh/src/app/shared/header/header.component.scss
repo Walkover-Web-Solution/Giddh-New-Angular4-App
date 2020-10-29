@@ -148,7 +148,7 @@ a[vr-item]:focus {
 .left-fixed-header > li {
     text-transform: capitalize;
     position: relative;
-    font-weight: bold;
+    font-family: 'opensans-semibold';
 }
 .no-padding {
     padding: 0px !important;
@@ -427,6 +427,10 @@ a[vr-item]:focus {
 .notification {
     padding: 0 !important;
     margin-right: 10px !important;
+    height: 34px;
+    &.mr-0{
+        margin-right: 0 !important;
+    }
 }
 .universal-date li {
     display: inline-block;
@@ -434,12 +438,15 @@ a[vr-item]:focus {
     border: 1px solid $white;
     border-radius: 20px;
     padding: 0 10px;
-    img {
+    i {
         vertical-align: bottom;
         display: inline-block;
         position: relative;
         left: 16px;
         padding: 0 20px;
+        color:$white;
+        font-size: 20px;
+
     }
 }
 
@@ -465,13 +472,13 @@ a[vr-item]:focus {
 }
 
 .calender-addone {
-    color: #fff;
+    color: $white;
     padding: 9px 8px 9px 10px;
     vertical-align: bottom;
     font-size: 14px;
     border-radius: 2px 0 0 2px;
     display: inline-flex;
-    top: 2px;
+    top: 3px;
 }
 
 .not-today{
@@ -521,7 +528,7 @@ span.icon-support.dropdown-toggle {
 }
 
 .not-today .date-range-picker {
-    height: 32px;
+    height: 34px;
 }
 .date-range-picker {
     max-width: 100%;
@@ -541,7 +548,7 @@ span.icon-support.dropdown-toggle {
 
 // top header css
 .padding-top-fixed {
-    padding-top: 60px;
+    padding-top: 62px;
 }
 
 .primary-header {
@@ -561,7 +568,7 @@ span.icon-support.dropdown-toggle {
 }
 
 .primary-header .right-details {
-    transform: translateY(13px);
+    transform: none;
 }
 
 .primary-header li.company-name {
@@ -816,6 +823,16 @@ ul.sub-list {
 @media (max-width: 767px) {
     .notification {
         margin-right: 0 !important;
+        i{
+            vertical-align: bottom;
+            display: inline-block;
+            position: relative;
+            left: 0;
+            padding: 0 20px;
+            color: $white;
+            margin-right: 0;
+            font-size: 22px;
+        }
     }
     .universal-date .btn-link {
         border-bottom: none;
@@ -909,8 +926,9 @@ ul.sub-list {
             }
         }
         .notification {
-            height: 25px;
+            height: 34px;
             position: relative;
+            line-height: 1.8;
         }
     }
     .calender-addone {

@@ -286,7 +286,7 @@ input {
 .dateStep {
     padding: 0 !important;
     font-size: 13px;
-    height: 41px;
+    height: 48px;
     line-height: 1;
 }
 input[type="date"]::-webkit-inner-spin-button,
@@ -517,17 +517,17 @@ sh-select:focus {
     text-decoration-style: none;
     background-image: url(../../assets/images/calender-icon.svg) !important;
     background-size: 17px !important;
-    background-position: 15px 8px !important;
+    background-position: 15px 9px !important;
     background-repeat: no-repeat !important;
     padding-left: 35px !important;
     position: relative;
     z-index: 99;
     cursor: default;
-    top: 1px;
+    top: 0;
     font-size: 14px;
     padding-right: 10px !important;
     height: 36px;
-    min-width: 220px !important;
+    min-width: 225px !important;
     border-radius: 30px;
     &:focus {
         border-color: $chetwode-blue;
@@ -640,6 +640,18 @@ sh-select:focus {
 }
 .ledger-book.fade:not(.show){
     opacity: 1 !important;
+}
+.multicurrency-amount {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end !important;
+    justify-content: flex-end;
+    text-align: right;
+    white-space: normal;
+}
+.ledg-head table .ledger-main .ledger-row:last-child td[class*="col-"]{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 /*responsive*/
 .modal-ledger {
@@ -855,7 +867,6 @@ sh-select:focus {
     }
     .search-ledger-field {
         margin-right: 0 !important;
-        justify-content: space-between;
         .ledger-datepicker {
             width: 36px;
             height: 36px;
@@ -1021,6 +1032,13 @@ sh-select:focus {
     .ledg-head {
         .single-search-box {
             margin-right: 5px;
+        }
+    }
+}
+@media (min-width:768px) and (max-width: 991px){
+    .ledger-datepicker{
+        img{
+            padding-top: 5px;
         }
     }
 }

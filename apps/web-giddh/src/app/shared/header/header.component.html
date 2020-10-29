@@ -220,19 +220,17 @@
                 <div class="col-sm-9">
                     <div class="pull-right right-details">
                         <ul class="nav universal-date mr-15" *ngIf="(selectedCompany | async)">
-                            <li class="border-none pr-15" [ngClass]="{'notification': !isMobileScreen}">
-                                <img src="{{imgPath}}notification.svg">
+                            <li class="border-none pr-15" [ngClass]="{'notification': !isMobileScreen, 'mr-0':isTodaysDateSelected}">
+                                <!-- <img src="{{imgPath}}notification.svg"> -->
+                                <i class="icon-notification"></i>
                             </li>
                             <li class="border-none pl-0">
                                 <button class="btn btn-link" *ngIf="!isTodaysDateSelected" (click)="dateSelectedCallback()">Today</button>
-                                <!-- <button class="btn btn-link" *ngIf="isTodaysDateSelected" (click)="showGiddhDatepicker($event)">Today</button> -->
                             </li>
                             <li class="not-today cursor-pointer">
                                 <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
                                 <div class="input-date" [ngClass]="{'today-date': isTodaysDateSelected}">
-                                    <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
-                                        [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                                        class="giddh-datepicker form-control date-range-picker" />
+                                    <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
                                 </div>
                             </li>
                         </ul>
@@ -328,7 +326,7 @@
                             </span>
                         </a>
                     </li>
-                    <li *ngIf="!isMobileSite" class="mr-t cp  show-more-opt" (click)="showNavigationModal()">
+                    <li class="mr-t cp  show-more-opt" (click)="showNavigationModal()">
                         <span container="body" tooltip="Search accounts" placement="bottom"> Show more...</span></li>
                 </ul>
 
@@ -483,7 +481,8 @@
                     </ul>
                     <div class="d-flex align-items-center" *ngIf="(selectedCompany | async)">
                         <span [ngClass]="{'notification': isMobileScreen}">
-                            <img src="{{imgPath}}notification.svg" class="mr-15">
+                            <!-- <img src="{{imgPath}}notification.svg" class="mr-15"> -->
+                            <i class="icon-notification mr-15"></i>
                         </span>
                         <button id="add-manage" *ngIf="!isMobileSite" type="button" class="btn btn-gray btn-sm d-inline-flex mr-15 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
                             <i class="icon-plus"></i>
@@ -763,12 +762,8 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true"
-                [ranges]="datePickerOptions.ranges" [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true" [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true"
-                [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+                [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
                 [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition" [updatePosition]="false"></app-datepicker-wrapper>
         </div>
     </div>

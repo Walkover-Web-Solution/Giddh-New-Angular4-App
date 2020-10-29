@@ -597,13 +597,13 @@
             </table>
             <!-- region pagination -->
             <div class="text-center mr-t2 page-count pa">
-                <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions,</span>
+                <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions, </span>
                 <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
 
                 <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
-                    <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
+                    <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
 [boundaryLinks]="true">
-</pagination>
+</pagination> -->
                 </div>
 
             </div>
@@ -740,7 +740,7 @@
                                 </div>
                             </td>
 
-                            <td class="col-xs-4 col-md-3 col-lg-3 pos-rel text-right" data-title="Amount">
+                            <td  [ngClass]="{'multicurrency-amount':isLedgerAccountAllowsMultiCurrency}"  class="col-xs-4 col-md-3 col-lg-3 pos-rel text-right" data-title="Amount">
                                 {{ txn.currencySymbol }}{{ txn.amount | giddhCurrency }}
 
                                 <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
@@ -1014,7 +1014,7 @@
                                 </div>
                             </td>
 
-                            <td data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 pos-rel text-right">
+                            <td  [ngClass]="{'multicurrency-amount':isLedgerAccountAllowsMultiCurrency}"  data-title="Amount" class="col-xs-4 col-md-3 col-lg-3 pos-rel text-right">
                                 {{ txn.currencySymbol }} {{txn.amount | giddhCurrency}}
                                 <p class="mb-0 amnt-total" *ngIf="isLedgerAccountAllowsMultiCurrency">
                                     {{ txn.convertedCurrencySymbol }}{{ txn.convertedAmount | giddhCurrency}}
@@ -1262,13 +1262,12 @@
 
             <!-- region pagination -->
             <div class="text-center mr-t2 page-count pa">
-                <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions,</span>
+                <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions, </span>
                 <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
-
                 <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref>
-                    <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
+                    <!-- <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
 [boundaryLinks]="true">
-</pagination>
+</pagination> -->
                 </div>
 
             </div>
@@ -1487,7 +1486,7 @@
 
 <!--quick account popup -->
 <div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-sm" style="width: 298px">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
         </div>
@@ -1594,7 +1593,7 @@
         <div class="modal-body">
             <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
                 [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true"
-                [ranges]="datePickerRanges.ranges" [selectedRangeLabel]="selectedRangeLabel"
+                [ranges]="datePickerRanges" [selectedRangeLabel]="selectedRangeLabel"
                 [showCustomRangeLabel]="true" [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true"
                 [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)"
                 (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"

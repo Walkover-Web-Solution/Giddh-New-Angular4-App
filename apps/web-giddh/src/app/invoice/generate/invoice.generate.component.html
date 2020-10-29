@@ -23,8 +23,8 @@
 
 
         <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline mb-15">
-            <div class="d-flex">
-                <div class="d-flex form-group mobile-width-100">
+            <div class="d-flex w-100 flex-none">
+                <div class="d-flex form-group mobile-width-100 flex-none">
                     <div class="form-group date-advance-search pending-advance-search" style="flex: 1 1 auto;">
                         <div class="input-group" id="dp-parent" style="margin-right:8px; margin-bottom:0;">
                             <!-- <span class="icon-calender"></span> -->
@@ -69,13 +69,15 @@
 
                 </div>
 
-                <div class="clear-filter align-items-center d-flex justify-content-center"
-                    [ngClass]="{'width-100' : selectedLedgerItems.length === 0}"
+                <div class="align-items-center d-flex justify-content-center filter-width">
+                <div class="clear-filter"
+                    [ngClass]="{'width-auto' : selectedLedgerItems.length === 0}"
                     *ngIf="!isUniversalDateApplicable && !isMobileView" (click)="resetDateSearch()">
-                    <button class="btn btn-filter">
+                    <button class="btn btn-filter mr-0">
                         <span class="icon-cross"></span> Clear Filter
                     </button>
                 </div>
+            </div>
             </div>
         </form>
 

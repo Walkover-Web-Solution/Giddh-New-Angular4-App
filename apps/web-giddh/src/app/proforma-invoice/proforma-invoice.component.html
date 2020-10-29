@@ -1066,7 +1066,7 @@
 
                                 <!-- region dynamic entries-->
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
-                                <tr [hidden]="activeIndx !== entryIdx" class="entriesTr defaultActive"
+                                <tr *ngIf="activeIndx === entryIdx" class="entriesTr defaultActive"
                                     (click)="$event.stopPropagation();">
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();">{{ entryIdx + 1 }}</td>
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();">
@@ -1172,7 +1172,7 @@
                                                                 </span>
                                                             </div>
 
-                                                            <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
+                                                            <div class="hsn-code-dropdown" *ngIf="hsnDropdownShow">
                                                                 <label>HSN/SAC</label>
                                                                 <input type="text" maxLength="10"
                                                                     placeholder="HSN/SAC Number"
@@ -1285,7 +1285,7 @@
                                         </div>
                                     </td>
 
-                                    <td (click)="closeTaxControlPopup();" class="pos-rel dropdown-container item-tax" style="height:1px;">
+                                    <td (click)="closeDiscountPopup();" class="pos-rel dropdown-container item-tax" style="height:1px;">
                                         <div class="td-wrapper">
                                             <div class="text-right" style="flex:1;">
                                                 <tax-control #taxControlComponent [taxes]="companyTaxesList" [date]="entry.entryDate"
@@ -2037,7 +2037,7 @@
                                                                         </span>
                                                                     </div>
 
-                                                                    <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
+                                                                    <div class="hsn-code-dropdown" *ngIf="hsnDropdownShow">
                                                                         <label>HSN/SAC</label>
                                                                         <input type="text" maxLength="10" placeholder="HSN/SAC Number"
                                                                             name="transaction.hsnNumber_{{entryIdx}}"
@@ -2286,7 +2286,7 @@
                                     </div>
                                 </div>
 
-                                <div class="saveCard-data pointer">
+                                <div class="saveCard-data pointer" (click)="handleOutsideClick()">
                                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 </div>
 
@@ -2300,11 +2300,11 @@
 
                     </div>
 
-                    <div class="add-btn" (click)="addBlankRow(null)">
-                        <button class="btn btn-sm btn-success">Add More</button>
+                    <div class="add-btn">
+                        <button class="btn btn-sm btn-success" (click)="addBlankRow(null)">Add More</button>
                     </div>
 
-                    <div class="otherDetail-card">
+                    <div class="other-detail-card">
                         <div>
                             <div class="collapse-pane clearfix">
                                 <div class="collapse-pane-heading" (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
@@ -2367,7 +2367,7 @@
                             </div>
 
                             <div class="pd-t1 pl0 max-600" *ngIf="!isPurchaseInvoice">
-                                <label class="mr-b1">Message</label>
+                                <label class="mr-b1">Note</label>
                                 <textarea style="height:120px" class="form-control" name="message2"
                                     [(ngModel)]="invFormData.templateDetails.other.message2"></textarea>
                             </div>

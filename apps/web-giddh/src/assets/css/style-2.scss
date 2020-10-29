@@ -156,6 +156,11 @@
         padding: 5px 10px 5px 53% !important;
     }
 }
+body{
+    font-family: "opensans-regular";
+    font-display: block;
+    -webkit-font-smoothing: auto;
+}
 /* table css need to removed at last (finish)*/
 .modal-header .close{
     cursor: pointer;
@@ -444,7 +449,6 @@ input {
     line-height: 15px;
     font-size: 12px;
     color: $white;
-    font-family: Trebuchet, Arial, sans-serif;
     font-weight: bold;
     box-sizing: border-box;
     background: #f1f1f1;
@@ -922,11 +926,11 @@ ul.sub-list {
 }
 
 .bold {
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
 }
 
 .font-bold {
-    font-family: $opensans-bold;
+    font-family: 'opensans-bold';
 }
 
 .modal-open {
@@ -956,7 +960,7 @@ ul.sub-list {
 
 .top-heading > h4 {
     font-size: 18px;
-    font-family: "" opensans-semibold "";
+    font-family: "opensans-semibold";
     line-height: 28px;
     text-transform: capitalize;
 }
@@ -1213,7 +1217,7 @@ ul.sub-list {
 
 .unbold {
     font-weight: normal !important;
-    font-family: $opensans-regular !important;
+    font-family: 'opensans-regular' !important;
 }
 
 .top-aging-table-top .date-range-picker {
@@ -1454,7 +1458,10 @@ ul.sub-list {
 modal-container.modal.fade.show {
     opacity: 1;
 }
+.modal.fade.giddh-calendar.show + modal-container.modal.fade.show {
 
+    z-index: 999999 !important;
+}
 modal-container.modal {
     .warehouse-welcome-modal {
         margin: 0;
@@ -1559,7 +1566,14 @@ modal-container.modal {
     padding-left: 10px;
     padding-bottom: 10px;
 }
-
+.voucher-type.dropdown-menu {
+    li{
+        label{
+            padding-left: 0;
+            padding-bottom: 0;
+        }
+    }
+}
 .paymentMode sh-select {
     float: right;
     width: 129px;
@@ -2910,7 +2924,7 @@ input[type="checkbox"]:checked:after {
 
 .subscription-title {
     font-size: 20px;
-    font-family: $opensans-semibold;
+     font-family: 'opensans-semibold';
 }
 
 .box2 {
@@ -5803,7 +5817,7 @@ input[type="checkbox"][disabled] {
 
 .section-head {
     padding-bottom: 10px;
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -6576,7 +6590,7 @@ table td[class*=col-]:last-child {
 
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     text-transform: capitalize;
 }
 
@@ -6749,6 +6763,7 @@ table td[class*=col-]:last-child {
 .universal-date {
     float: none !important;
     display: inline-block;
+    padding-top: 12px;
 }
 
 .divide-ico {
@@ -6798,7 +6813,7 @@ table td[class*=col-]:last-child {
 
 .app-list > ul h6 {
     margin-bottom: 10px;
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     font-size: 13px;
 }
 
@@ -7278,7 +7293,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: capitalize;
     width: auto;
     color: $midnight-blue;
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     vertical-align: middle;
 }
 
@@ -8595,7 +8610,7 @@ ul.dropdown-menu p.lead.pd {
 .nav-tabs > li.active > a,
 .invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid $deep-sky-blue !important;
-    font-family: $opensans-semibold;
+    font-family: 'opensans-semibold';
     background-color: inherit;
 }
 
@@ -9205,6 +9220,7 @@ input.checkbox-custom[type="checkbox"] {
 .select2-parent.select2-ledger .update-ledger-account sh-select .header input {
     padding-left: 3px !important;
     font-size: 13px !important;
+    padding-right:27px !important;
 }
 
 .select2-parent.select2-ledger
@@ -9307,7 +9323,7 @@ ngx-daterangepicker-material {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
     z-index: 1;
     width: 100% !important;
-    max-width: 462px !important;
+    max-width: 544px !important;
 }
 
 .edit-modal {
@@ -9638,7 +9654,54 @@ span#HW_badge_cont:nth-child(3) {
     z-index: 98;
 }
 
-ul.dropdown-menu.action-dropdown{
+.linked-add{
+    .popover{
+        width:268px;
+        font-family: inherit;
+        border-radius: 4px;
+        box-shadow: 0 3px 6px $black-russian;
+        top: 20% !important;
+        .popover-arrow{
+            display:none;
+        }
+        .popover-header {
+            padding: 15px 15px 0 15px;
+            margin-bottom: 0;
+            font-size: 14px;
+            background-color: transparent;
+            border-bottom: none;
+            font-weight: bold;
+        }
+        .popover-body {
+            padding: 0 15px 15px 15px;
+        }
+    }
+}
+
+.settings-profile-tabs{
+    .tab-container{
+        .nav-tabs{
+            .nav-item{
+                .nav-link{
+                    font-size: 16px !important;
+                    color: $midnight-blue !important;
+                }
+            }
+            .active{
+                > .nav-link{
+                    color: $midnight-blue !important;
+                }
+            }
+        }
+    }
+}
+.customer-form-inline{
+    .tooltip-inner{
+        white-space: nowrap;
+    }
+}
+/* responsive */
+ul.dropdown-menu.action-dropdown {
     left: auto;
     right: -40px !important;
 }
@@ -10089,6 +10152,12 @@ input.mat-input-element{
 }
 
 @media (max-width: 767px) {
+    .universal-date {
+        padding-top: 0;
+    }
+    #inventory-sidebar{
+            padding: 15px 0;
+    }
     bs-datepicker-container{
         position: fixed !important;
         left: 50% !important;
@@ -10372,6 +10441,9 @@ input.mat-input-element{
     body.hide-scroll-body {
         overflow-y: hidden !important;
     }
+    body.hide-scroll-body.on-setting-page {
+            overflow-y: auto !important;
+    }
     .panel-block .card-body {
         min-height: auto;
     }
@@ -10499,6 +10571,24 @@ input.mat-input-element{
                 padding: 3px 4px;
             }
         }
+        .mat-form-field{
+            min-width: auto;
+
+        }
+        .custom-tabs .top-bar {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        #content-wrapper {
+            overflow-x: hidden;
+        }
+        #companyList {
+            background: $white;
+            padding-bottom: 4px;
+            left: 0px;
+            top: 30px;
+            padding-top: 0;
+        }
     }
     .custom-tabs .top-bar {
         padding-top: 10px;
@@ -10526,6 +10616,9 @@ input.mat-input-element{
 }
 
 @media (max-width: 375px) {
+    #rcw-p91-widget-chats{
+        min-width: 300px !important;
+    }
     .aside-pane-form .custom-tabs .nav.nav-tabs > li {
         padding-right: 20px;
     }
@@ -10732,8 +10825,16 @@ input.mat-input-element{
     .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-4 {
         margin-top: 5px;
     }
-}
+    .HW_frame_cont.HW_visible.HW_bottom{
+        max-width: 300px;
+    }
+    .edit-modal{
+        .modal-content{
+                max-width: 300px;
+            }
+     }
 
+}
 @media (min-width:576px){
     .modal-dialog {
         max-width: 100% !important;
@@ -10763,7 +10864,18 @@ input.mat-input-element{
     .receipt-note-modal {
         max-width: 100% !important;
     }
-
+}
+@media(min-width: 480px) and (max-width: 667px) {
+    .edit-modal {
+        margin: 0 auto;
+        padding-top: 0;
+        .edit-date-modal {
+            padding: 0 15px;
+            .modal-outside-heading {
+                display: none;
+            }
+        }
+    }
     .po-preview-modal {
         max-width: 100% !important;
         width: 900px !important;
@@ -10932,25 +11044,22 @@ body.prevent-body-scroll {
     }
 }
 @media (max-width: 1199px) and (min-width: 992px){
-.hidden-md {
-    display: none!important;
-}
+    .hidden-md {
+        display: none!important;
+    }
 }
 .modal.fade.giddh-calendar.show {
     z-index: 999999;
 }
 *::-webkit-scrollbar {
   width: 10px;
+  height: 5px;
 }
-
-/* Track */
 *::-webkit-scrollbar-track {
-  background: $white-smoke;
+    background: $white-smoke;
 }
-
-/* Handle */
 *::-webkit-scrollbar-thumb {
-  background:  $nobel;
-  border-radius: 5px;
-  min-height: 60px;
+    background: $nobel;
+    border-radius: 5px;
+    min-height: 60px;
 }

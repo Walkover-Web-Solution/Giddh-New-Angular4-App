@@ -148,7 +148,7 @@ tfoot {
     padding-left: 45px !important;
     position: relative;
     z-index: 99;
-    cursor: default;
+    cursor: pointer;
     width: 100%;
 }
 
@@ -194,7 +194,11 @@ button.btn.btn-filter {
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
-    padding: 7px 10px !important;
+    padding: 8px 10px !important;
+}
+
+button.btn.btn-filter span.icon-cross {
+    margin-right: 5px;
 }
 
 .pending-table-description {
@@ -266,6 +270,15 @@ span.close-modal.cp.pull-right {
         }
     }
 }
+
+.width-auto{
+    width:auto;
+}
+
+.filter-width{
+    width: 85%;
+}
+
 // responsive
 @media (max-width: 1023px) {
     .pending-advance-search {
@@ -452,6 +465,13 @@ span.close-modal.cp.pull-right {
             width: 100% !important;
         }
     }
+
+    button.btn.btn-filter {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
 }
 
 @media (max-width: 375px) {
@@ -463,6 +483,9 @@ span.close-modal.cp.pull-right {
     div#dp-parent {
         margin-bottom: 0;
         width: 100%;
+    }
+    .flex-none{
+        flex: none;
     }
 }
 
