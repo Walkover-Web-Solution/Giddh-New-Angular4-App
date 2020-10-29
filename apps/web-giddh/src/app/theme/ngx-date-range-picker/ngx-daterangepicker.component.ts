@@ -241,6 +241,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public lastActiveMonthSide: string = '';
     /* This will hold if initially datepicker has rendered */
     public initialCalendarRender: boolean = true;
+    /** This will hold how many days user can add in upto today field */
+    public noOfDaysAllowed: number = 0;
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private settingsFinancialYearActions: SettingsFinancialYearActions) {
         this.choosedDate = new EventEmitter();
@@ -256,6 +258,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     this.minDate = moment(moment(response.startDate, GIDDH_DATE_FORMAT).toDate());
                     this.maxDate = moment(moment(response.endDate, GIDDH_DATE_FORMAT).toDate());
                     this.financialYearUpdated = true;
+
+                    this.noOfDaysAllowed = moment().diff(this.minDate, 'days') + 1;
                 }
             }
         });
@@ -1224,9 +1228,16 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             return;
         }
         event.target.value = event.target.value.replace(/[^0-9]/g, '');
+        if(event.target.value > this.noOfDaysAllowed) {
+            event.target.value = this.noOfDaysAllowed;
+        }
     }
 
     public uptoToday(e: Event, days: number): void {
+        if(days > this.noOfDaysAllowed) {
+            days = this.noOfDaysAllowed;
+        }
+
         const dates = [moment().subtract(days ? (days - 1) : days, 'days'), moment()];
         this.startDate = dates[0].clone();
         this.endDate = dates[1].clone();
