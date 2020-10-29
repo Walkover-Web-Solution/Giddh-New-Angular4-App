@@ -81,7 +81,7 @@
     top: 14px;
 }
 @media (min-width: 768px) {
-    .form-inline.financial-selectYear .form-group {
+    .form-inline.financial-select-year .form-group {
         min-width: auto !important;
     }
 }
@@ -96,7 +96,7 @@
             height: 36px;
         }
     }
-     .form-inline.financial-selectYear{
+     .form-inline.financial-select-year{
         flex-flow: row nowrap !important;
      }
      .download-data-icon{

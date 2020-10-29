@@ -5220,7 +5220,7 @@ form#groupDetailForm {
 /* responsive */
 
 @media (min-width: 768px) {
-    .form-inline.financial-selectYear .form-group {
+    .form-inline.financial-select-year .form-group {
         min-width: 195px;
     }
 }
@@ -5313,7 +5313,7 @@ form#groupDetailForm {
 @media (min-width: 768px) and (max-width:1019px){
     bs-datepicker-container{
         left: 100px !important;
-    } 
+    }
 }
 
 .valid-tooltip, .tooltip, .tooltip-inner{
