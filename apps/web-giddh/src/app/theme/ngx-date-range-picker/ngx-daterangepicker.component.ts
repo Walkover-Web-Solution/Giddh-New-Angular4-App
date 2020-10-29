@@ -192,7 +192,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     @Output() rangeClicked: EventEmitter<DateRangeClicked>;
     @Output() datesUpdated: EventEmitter<DateRangeClicked>;
     @ViewChild('pickerContainer', {static: true}) pickerContainer: ElementRef;
-    showMonthPicker = false;
     public isMobileScreen: boolean = false;
     public dropdownShow: boolean = false;
     public rangeDropdownShow: number = -1;
@@ -839,10 +838,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.updateCalendars();
     }
 
-    public monthPickerClick(): void {
-        this.showMonthPicker = !this.showMonthPicker;
-    }
-
     public updateMonthsInView(): void {
         if (this.endDate) {
             // if both dates are visible already, do nothing
@@ -1199,7 +1194,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.endCalendar.month = moment({ y: year, M: month, d: 1 }).add(1, 'month');
         }
         this.updateCalendars();
-        this.showMonthPicker = false;
     }
 
     public mouseUp(e: MouseWheelEvent): void {
