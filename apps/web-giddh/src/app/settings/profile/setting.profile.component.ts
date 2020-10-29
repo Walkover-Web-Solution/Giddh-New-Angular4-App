@@ -1072,6 +1072,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 name: profileObj.name,
                 companyName: profileObj.name,
                 headQuarterAlias: profileObj.headQuarterAlias,
+                nameAlias: profileObj.nameAlias,
                 uniqueName: profileObj.uniqueName,
                 country: {
                     countryName: profileObj.countryV2 ? profileObj.countryV2.countryName : '',

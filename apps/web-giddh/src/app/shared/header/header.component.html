@@ -619,6 +619,9 @@
                 </span>
 
                 <div class="unique-name-financial-year">
+                    <span *ngIf="(selectedCompany | async)?.nameAlias" class="branch-unique-name">
+                        ({{ (selectedCompany | async)?.nameAlias }})
+                    </span>
                     <span class="fyear">{{ (selectedCompany | async)?.activeFinancialYear?.uniqueName }}
                     </span>
                 </div>
