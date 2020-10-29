@@ -155,7 +155,7 @@
                         <button class="prev available" (click)="onScroll('top')"></button>
                         <!-- month name and month dropdown -->
                         <div class="month-dropdown">
-                            <span class="month-name" (click)="monthPickerClick()">
+                            <span class="month-name">
                                 <ng-container *ngIf="showDropdowns && calendarVariables.start.dropdowns">
                                     {{activeMonth ? this.locale.monthNames[activeMonth.calendar[1][1].month()] : ''}}
                                     {{ activeMonth ? activeMonth.calendar[1][1].format(" YYYY") : ''}}
@@ -177,7 +177,7 @@
                     <!-- table sticky days -->
                     <div>
                         <div class="calendar days" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
-                            <div class="calendar-table" *ngIf="!showMonthPicker">
+                            <div class="calendar-table">
                                 <div class="table-condensed sticky-header">
                                     <div>
                                         <div class="d-flex">
@@ -312,7 +312,7 @@
                         <!-- start date calendar container -->
                         <!-- end date calendar container -->
                         <div class="calendar right"
-                            *ngIf="showCalInRanges && !singleDatePicker && !showMonthPicker && calendarMonth && calendarMonth.end">
+                            *ngIf="showCalInRanges && !singleDatePicker && calendarMonth && calendarMonth.end">
                             <div class="calendar-table">
                                 <div class="table-condensed">
                                     <div class="d-flex justify-content-between">
