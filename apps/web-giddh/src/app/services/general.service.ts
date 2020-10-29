@@ -97,7 +97,6 @@ export class GeneralService {
 
     set currencyType(currencyType: string) {
         this._currencyType = currencyType;
-
     }
 
     get createNewCompany(): CompanyCreateRequest {
@@ -651,7 +650,11 @@ export class GeneralService {
             });
         }
 
+<<<<<<< HEAD
         if (!exists) {
+=======
+        if(!exists) {
+>>>>>>> c8dbb0bc8... Ravinder | Worked on saving last state on customer/vendor/aging-report
             array.push(value);
         }
 
