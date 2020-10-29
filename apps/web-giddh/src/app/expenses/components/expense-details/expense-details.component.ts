@@ -281,6 +281,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
                 this.toggleDetailsMode.emit(true);
             } else {
                 this._toasty.errorToast(res.message);
+                this.approveEntryRequestInProcess = false;
             }
         }, (error => {
             this.approveEntryRequestInProcess = false;
