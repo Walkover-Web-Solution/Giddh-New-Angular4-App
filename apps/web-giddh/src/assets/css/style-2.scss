@@ -9763,6 +9763,14 @@ input.mat-input-element{
 .mat-calendar-body-selected{
     background-color: $midnight-blue;
 }
+.giddh-limit {
+    &.single-line-clamp {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
 /*material datepicker css end*/
 
     .master-custom-tabs.custom-tabs {
