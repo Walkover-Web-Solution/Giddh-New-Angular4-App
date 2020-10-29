@@ -474,7 +474,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentBranch = '';
                 }
             }
-        })
+        });
     }
 
     public ngOnInit() {
