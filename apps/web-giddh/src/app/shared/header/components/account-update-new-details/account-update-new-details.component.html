@@ -354,7 +354,7 @@
             </div>
 
         </tab>
-        <tab *ngIf="isDebtorCreditor" heading="Custom" (select)="tabChanged('custom')">
+        <tab *ngIf="isDebtorCreditor" heading="Custom" (selectTab)="tabChanged('custom')">
             <ng-container formArrayName="customFields">
                 <ng-container *ngFor="let item of companyCustomFields; let index = index;let first = first; let last = last" [formGroupName]="index">
                     <ng-container *ngFor="let customFieldsItem of addAccountForm.get('customFields')['controls']; let index = index;">

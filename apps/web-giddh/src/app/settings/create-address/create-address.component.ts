@@ -208,7 +208,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             return;
         }
         let gstVal: string = this.addressForm.get('taxNumber').value.trim();
-        this.addressForm.get('taxNumber').setValue(gstVal.trim());
+        this.addressForm.get('taxNumber').setValue(gstVal);
         if (gstVal.length) {
 
             if (gstVal.length >= 2) {
