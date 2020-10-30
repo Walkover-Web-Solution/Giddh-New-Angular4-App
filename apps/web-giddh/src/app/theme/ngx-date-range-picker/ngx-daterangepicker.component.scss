@@ -651,13 +651,14 @@ $input-height: 3rem !default;
                     position: relative;
                     border-bottom: 1px solid $gainsboro;
                     button {
-                        padding: 10px 10px;
+                        padding: 12px 10px;
                         width: 100%;
                         background: none;
                         border: none;
                         text-align: left;
                         cursor: pointer;
-                        font-size: 12px;
+                        font-size: 14px;
+                        color: $night-rider;
                         border-left: 3px solid transparent !important;
                         .available.prev {
                             transform: rotate(180deg);
@@ -902,6 +903,9 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
 }
 .ranges-perfect-scrollbar .ps__rail-x{
     display: none;
+}
+.md-drppicker.inline{
+    width: 100%;
 }
 @media (min-width: 564px) {
     .md-drppicker {
@@ -1286,7 +1290,7 @@ td span {
             .prev.angle-down{
                 position: absolute;
                 left: 7px;
-                top: 8px;
+                top: 11px;
                 transform: rotate(0) !important;
             }
         }
@@ -1608,6 +1612,9 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
 .td-div:last-child:before {
     border-radius: 0 50px 50px 0;
 }
+.md-drppicker [hidden]{
+    display: none !important;
+}
 /*responsive*/
 @media (max-width: 767px) {
     .md-drppicker {
@@ -1724,9 +1731,6 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                         }
                     }
                     .select-date-range {
-                        display: none;
-                    }
-                    .month-field {
                         display: none;
                     }
                 }
@@ -1881,7 +1885,22 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
         height: calc(100vh - 350px);
     }
 }
-
+@media(max-width:414px){
+   .md-drppicker .calendar {
+        .th-div, .td-div{
+        min-width: 38px;
+        }
+    }
+    .md-drppicker .calender-container .calender-container-wrapper .calender-body .upper-part .sticky-header{
+        max-width: 320px !important;
+        margin: 0 auto;
+        width: 100% !important;
+    }
+    .md-drppicker .d-flex{
+        display: flex;
+        justify-content: center;
+    }
+}
 @media (max-width: 375px) {
     .md-drppicker {
         .calender-container {
@@ -1905,11 +1924,6 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
     }
 }
 @media(max-width:330px){
-    .md-drppicker .calendar {
-        .th-div, .td-div{
-            min-width: 44px;
-        }
-    }
     cdk-virtual-scroll-viewport{
             height: calc(100vh - 180px);
     }
@@ -1933,5 +1947,12 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                 height: auto;
             }
         }
+    }
+}
+
+@media (max-width:767px) and (min-width:500px){
+    .md-drppicker .calendar{
+        max-height: 100px;
+        overflow-y: scroll;
     }
 }
