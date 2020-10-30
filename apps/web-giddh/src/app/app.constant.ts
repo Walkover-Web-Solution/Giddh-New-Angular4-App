@@ -233,8 +233,6 @@ export let DEFAULT_SIGNUP_TRIAL_PLAN = "";
 
 if (PRODUCTION_ENV || isElectron || isCordova) {
     DEFAULT_SIGNUP_TRIAL_PLAN = "e6v1566224240273";
-} else if(STAGING_ENV) {
-    DEFAULT_SIGNUP_TRIAL_PLAN = "e6v1566224240273";
 } else {
     DEFAULT_SIGNUP_TRIAL_PLAN = "xoh1591185630174";
 }
@@ -243,9 +241,7 @@ export let DEFAULT_POPULAR_PLAN = "";
 
 if (PRODUCTION_ENV || isElectron || isCordova) {
     DEFAULT_POPULAR_PLAN = "Oak";
-} else if(STAGING_ENV) {
-    DEFAULT_POPULAR_PLAN = "Oak";
-}  else {
+} else {
     DEFAULT_POPULAR_PLAN = "Popular Plan";
 }
 
