@@ -235,9 +235,9 @@
                         <th style="width: 4%" *ngIf="selectedItems.length > 0" class="min-wid-check">
                             <div class="mh18_img d-flex justify-content-start">
                                 <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
-                                    (click)="toggleAllItems(true)">
+                                    (click)="toggleAllItems(true, true)">
                                 <img src="assets/images/checked.png" *ngIf="allItemsSelected"
-                                    (click)="toggleAllItems(false)">
+                                    (click)="toggleAllItems(false, true)">
                             </div>
                         </th>
 
@@ -316,9 +316,9 @@
                         <th style="width: 4%" *ngIf="selectedItems.length > 0" class="min-wid-check">
                             <div class="mh18_img d-flex justify-content-start">
                                 <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
-                                    (click)="toggleAllItems(true)">
+                                    (click)="toggleAllItems(true, true)">
                                 <img src="assets/images/checked.png" *ngIf="allItemsSelected"
-                                    (click)="toggleAllItems(false)">
+                                    (click)="toggleAllItems(false, true)">
                             </div>
                         </th>
 
