@@ -8,6 +8,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
 import * as moment from 'moment';
 import { find } from '../lodash-optimized';
+import { OrganizationType } from '../models/user-login-state';
 
 @Injectable()
 export class GeneralService {
@@ -16,6 +17,10 @@ export class GeneralService {
     // public talkToSalesModal: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public isCurrencyPipeLoaded: boolean = false;
 
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
+    /** Stores the branch unique name */
+    public currentBranchUniqueName: string;
     public menuClickedFromOutSideHeader: BehaviorSubject<IUlist> = new BehaviorSubject<IUlist>(null);
     public invalidMenuClicked: BehaviorSubject<{ next: IUlist, previous: IUlist }> = new BehaviorSubject<{ next: IUlist, previous: IUlist }>(null);
     public isMobileSite: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -57,7 +62,6 @@ export class GeneralService {
             moment().subtract(1, 'year').endOf('year')
         ]
     };
-
 
     get user(): UserDetails {
         return this._user;
@@ -598,5 +602,39 @@ export class GeneralService {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Stores data in session storage
+     *
+     * @param {string} name
+     * @param {*} value
+     * @returns {void}
+     * @memberof GeneralService
+     */
+    public setSessionStorage(name: string, value: any): void {
+        sessionStorage.setItem(name, value);
+    }
+
+    /**
+     * Returns data from session storage
+     *
+     * @param {string} name
+     * @returns {any}
+     * @memberof GeneralService
+     */
+    public getSessionStorage(name: string): any {
+        return sessionStorage.getItem(name);
+    }
+
+    /**
+     * Removes data from session storage
+     *
+     * @param {string} name
+     * @returns {void}
+     * @memberof GeneralService
+     */
+    public removeSessionStorage(name: string): void {
+        sessionStorage.removeItem(name);
     }
 }

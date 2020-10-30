@@ -10,6 +10,7 @@ import { ReplaySubject } from 'rxjs';
 import { GeneralService } from '../../services/general.service';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { purchaseOrderStatus } from "../../shared/helpers/purchaseOrderStatus";
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 
 /* Amount comparision filters */
 const AMOUNT_COMPARISON_FILTER = [
@@ -49,7 +50,7 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Moment object */
     public moment = moment;
     /* Selected range label */
@@ -93,13 +94,6 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
             this.isMobileScreen = result.matches;
         });
 
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                this.datePickerOptions = config;
-            }
-        });
-
         if(this.purchaseOrderPostRequest && this.purchaseOrderPostRequest.dueFrom && this.purchaseOrderPostRequest.dueTo) {
             this.selectedDateRange = { startDate: moment(this.purchaseOrderPostRequest.dueFrom, GIDDH_DATE_FORMAT), endDate: moment(this.purchaseOrderPostRequest.dueTo, GIDDH_DATE_FORMAT) };
             this.selectedDateRangeUi = moment(this.purchaseOrderPostRequest.dueFrom, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.purchaseOrderPostRequest.dueTo, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -140,7 +134,11 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
      * @param {*} value
      * @memberof PurchaseAdvanceSearchComponent
      */
-    public dateSelectedCallback(value: any): void {
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {

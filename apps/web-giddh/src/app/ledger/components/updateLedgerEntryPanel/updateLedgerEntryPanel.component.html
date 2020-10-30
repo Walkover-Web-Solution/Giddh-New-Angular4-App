@@ -755,7 +755,7 @@
                         </p>
                         <div class="clearfix adjustment-field">
                             <div class="row" *ngFor="let item of vm.selectedLedger?.voucherAdjustments?.adjustments; let entryIdx = index;">
-                                <div class="col-md-4 col-sm-5 pr-05">
+                                <div class="col-md-5 col-sm-5 pr-05">
                                     <div class="form-group">
                                         <label>Adjustment Vouchers
                                             <span class="text-danger">*</span>
@@ -763,7 +763,7 @@
                                         <input id="update-ledger-adjust-voucher" type="text" class="form-control mb-1" [(ngModel)]="item.voucherNumber" disabled>
                                     </div>
                                 </div>
-                                <div class="col-md-4 col-sm-5 pl-05 pr-05">
+                                <div class="col-md-5 col-sm-5 pl-05 pr-05">
                                     <div class="form-group">
                                         <label>Amount<span class="text-danger">*</span> <span *ngIf="item.voucherType === 'receipt' && isAdvanceReceipt" class="text-light font-12 ml-05">(Inclusive
                             Tax)</span></label>

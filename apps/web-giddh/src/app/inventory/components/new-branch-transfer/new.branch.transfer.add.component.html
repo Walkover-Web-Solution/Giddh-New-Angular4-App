@@ -80,9 +80,12 @@
                                 </label>
                             </div>
                             <div class="col-xl-4 col-lg-6">
-                                <div class="dropdown-arrow">
-                                    <input name="sourceName" class="form-control" [(ngModel)]="myCurrentCompany" required disabled>
-                                </div>
+                                <input *ngIf="isBranch" name="sourceName" class="form-control" [(ngModel)]="myCurrentCompany" required
+                                    [disabled]="isBranch">
+                                <sh-select *ngIf="!isBranch" #defaultSource name="sourceName" [isFilterEnabled]="true"
+                                    [forceClearReactive]="forceClear$ | async" [(ngModel)]="branchTransfer.sources[0].uniqueName"
+                                    [options]="branches$ | async" (selected)="selectCompany($event, 'sources', 0); focusSourceWarehouse()" required
+                                    [disabled]="isUpdateMode"></sh-select>
                             </div>
                         </div>
                         <div class="row mr-b2">
@@ -253,7 +256,13 @@
                                 </label>
                             </div>
                             <div class="col-xl-4 col-lg-6">
-                                <input name="destinationName" class="form-control" [(ngModel)]="myCurrentCompany" required disabled>
+                                <sh-select *ngIf="!isBranch" #destinationName name="destinationName"
+                                    [(ngModel)]="branchTransfer.destinations[0].uniqueName" [isFilterEnabled]="true"
+                                    [forceClearReactive]="forceClear$ | async" [options]="branches$ | async"
+                                    (selected)="selectCompany($event, 'destinations', 0); focusDestinationWarehouse();" required
+                                    [disabled]="isUpdateMode"></sh-select>
+                                <input *ngIf="isBranch" name="destinationName" class="form-control" [(ngModel)]="myCurrentCompany" required
+                                    [disabled]="isBranch">
                             </div>
                         </div>
                         <div class="row mr-b2">
@@ -580,7 +589,7 @@
         </div>
     </div>
 </section>
-<div class="right-modal accountAsideMenuState2" *ngIf="transporterPopupStatus">
+<div class="right-modal account-aside-menu-state" *ngIf="transporterPopupStatus">
     <div class="aside-overlay" [ngClass]="transporterPopupStatus ? 'in' : 'out'"></div>
     <div class="aside-pane aside-right" [ngClass]="transporterPopupStatus ? 'in' : 'out'">
 

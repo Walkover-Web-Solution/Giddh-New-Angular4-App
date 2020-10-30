@@ -5309,6 +5309,15 @@ form#groupDetailForm {
     }
 }
 
+@media (min-width: 768px) and (max-width:1019px){
+    bs-daterangepicker-container,
+    bs-datepicker-container{
+        transform: translate(-100%, 50%)!important;
+        top: 100%!important;
+        left: 400px !important;
+    } 
+}
+
 
 .valid-tooltip, .tooltip, .tooltip-inner{
     font-size:12px !important;

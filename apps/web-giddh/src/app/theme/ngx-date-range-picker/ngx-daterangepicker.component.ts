@@ -84,6 +84,7 @@ export interface DateRangeClicked {
     name: string;
     startDate: Moment;
     endDate: Moment;
+    event: string;
 }
 
 @Component({
@@ -232,10 +233,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public currentScrollIndex: number = 0;
     /* This will hold the scroll direction of cdk scrollbar */
     public scrollInDirection: string = "";
-    /* This will hold that how many elements were scrolled in top initially in cdk scrollbar */
-    public initialScrollToIndexTop: number = 0;
-    /* This will hold that how many elements were scrolled in bottom initially in cdk scrollbar */
-    public initialScrollToIndexBottom: number = 0;
     /* This will hold if financial years were updated by api */
     public financialYearUpdated: boolean = false;
     /* This will hold if mouse scroll or touch scroll is allowed or not */
@@ -259,7 +256,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     this.minDate = moment(moment(response.startDate, GIDDH_DATE_FORMAT).toDate());
                     this.maxDate = moment(moment(response.endDate, GIDDH_DATE_FORMAT).toDate());
                     this.financialYearUpdated = true;
-                    this.getAllYearsBetweenDates();
                 }
             }
         });
@@ -442,7 +438,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public closeMobileDatePicker(): void {
-        this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate });
+        this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate, event: 'cancel' });
         this.openMobileDatepickerPopup = false;
         document.querySelector('body').classList.remove('hide-scroll-body');
         this.hide();
@@ -801,7 +797,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if (typeof endDate === 'object') {
             this.endDate = moment(endDate);
         }
-        
+
         if (!this.timePicker) {
             this.endDate = this.endDate.add(1, 'd').startOf('day').subtract(1, 'second');
         }
@@ -951,22 +947,22 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.invalidStartDate = "";
         this.invalidEndDate = "";
 
-        if(this.startDate.isAfter(this.maxDate)) {
+        if(this.startDate.isAfter(this.maxDate, 'day')) {
             this.invalidStartDate = "Invalid date";
             return;
         }
 
-        if(this.startDate.isAfter(this.endDate)) {
+        if(this.startDate.isAfter(this.endDate, 'day')) {
             this.invalidEndDate = "Invalid date";
             return;
         }
 
-        if(this.startDate.isBefore(this.minDate)) {
+        if(this.startDate.isBefore(this.minDate, 'day')) {
             this.invalidStartDate = "Invalid date";
             return;
         }
 
-        if(this.endDate.isAfter(this.maxDate)) {
+        if(this.endDate.isAfter(this.maxDate, 'day')) {
             this.invalidEndDate = "Invalid date";
             return;
         }
@@ -989,7 +985,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
 
         if (this.chosenLabel) {
-            this.choosedDate.emit({ name: this.chosenLabel, startDate: this.startDate, endDate: this.endDate });
+            this.choosedDate.emit({ name: this.chosenLabel, startDate: this.startDate, endDate: this.endDate, event: 'save' });
         }
 
         this.emitSelectedDates(false);
@@ -1014,7 +1010,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.closeCalender();
         }
 
-        this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate });
+        this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate, event: 'cancel' });
     }
 
     /**
@@ -1143,7 +1139,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 this.endCalendar.month.subtract(1, 'month');
             }
         } else {
-            this.endCalendar.month.subtract(1, 'month');
+            this.startCalendar.month.subtract(1, 'month');
         }
         this.updateCalendars();
     }
@@ -1359,13 +1355,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             }
         }
 
-        if (this.singleDatePicker) {
-            this.setEndDate(this.startDate);
-            this.updateElement();
-            if (this.autoApply) {
-                this.clickApply();
-            }
-        }
+        // if (this.singleDatePicker) {
+        //     this.setEndDate(this.startDate);
+        //     this.updateElement();
+        //     if (this.autoApply) {
+        //         this.clickApply();
+        //     }
+        // }
 
         this.updateView();
 
@@ -1413,7 +1409,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.isShown$.next(false); // hide calendars
             this.isShown = false;
         }
-        this.rangeClicked.emit({ name: range.name, startDate: dates.value[0], endDate: dates.value[1] });
+        this.rangeClicked.emit({ name: range.name, startDate: dates.value[0], endDate: dates.value[1], event: 'save' });
         if (!this.keepCalendarOpeningWithRange) {
             this.clickApply();
         } else {
@@ -1516,7 +1512,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public clear(): void {
         this.startDate = moment().startOf('day');
         this.endDate = moment().endOf('day');
-        this.choosedDate.emit({ name: '', startDate: null, endDate: null });
+        this.choosedDate.emit({ name: '', startDate: null, endDate: null, event: 'cancel' });
         this.emitSelectedDates(true);
         this.hide();
     }
@@ -1887,7 +1883,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.isShown$.next(false); // hide calendars
             this.isShown = false;
         }
-        this.rangeClicked.emit({ name: financialYear.label, startDate: this.startDate, endDate: this.endDate });
+        this.rangeClicked.emit({ name: financialYear.label, startDate: this.startDate, endDate: this.endDate, event: 'save' });
         if (!this.keepCalendarOpeningWithRange) {
             this.clickApply();
         } else {
@@ -1938,7 +1934,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             } else {
                 if (this.maxDate && this.maxDate.isAfter(this.calendarVariables.end.calendar.lastDay)) {
                     this.initialCalendarMonths = false;
-                    this.initialScrollToIndexBottom++;
                     this.goToNextMonth();
                 }
             }
@@ -1946,14 +1941,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         if (direction === "top") {
             if (this.singleDatePicker) {
-                if (this.minDate && this.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
+                if ((this.minDate && this.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) && (!this.linkedCalendars || this.singleDatePicker)) {
                     this.initialCalendarMonths = false;
                     this.goToPrevMonth();
                 }
             } else {
                 if (this.minDate && this.minDate.isBefore(this.calendarVariables.start.calendar.firstDay)) {
                     this.initialCalendarMonths = false;
-                    this.initialScrollToIndexTop++;
                     this.goToPrevMonth();
                 }
             }
@@ -2065,9 +2059,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      */
     public emitSelectedDates(sendBlankDates: boolean): void {
         if (sendBlankDates === true) {
-            this.datesUpdated.emit({ name: '', startDate: null, endDate: null });
+            this.datesUpdated.emit({ name: '', startDate: null, endDate: null, event: 'save' });
         } else {
-            this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.startDate, endDate: this.endDate });
+            this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.startDate, endDate: this.endDate, event: 'save' });
         }
     }
 
@@ -2245,7 +2239,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     @HostListener('window:resize', ['$event'])
     windowResize(event) {
         if (!this.isMobileScreen) {
-            this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate });
+            this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate, event: 'cancel' });
             this.hide();
         }
     }
@@ -2253,7 +2247,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     @HostListener('window:orientationchange', ['$event'])
     onOrientationChange(event) {
         this.isMobileScreen = false;
-        this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate });
+        this.datesUpdated.emit({ name: this.selectedRangeLabel, startDate: this.inputStartDate, endDate: this.inputEndDate, event: 'cancel' });
         this.hide();
     }
 

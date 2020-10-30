@@ -1181,7 +1181,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                     obj.entries.forEach((entry, index) => {
                                         obj.entries[index].entryDate = this.universalDate || new Date();
                                     });
-        
                                     obj.entries = obj.entries;
                                 }
 
@@ -1749,6 +1748,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     _.uniqBy(this.invoiceList, 'value');
                     this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
+                    this._cdr.detectChanges();
                 }
             });
         }
@@ -1794,6 +1794,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invoiceDateLabel = 'Credit Note Date';
         } else if (this.isDebitNote) {
             this.invoiceDateLabel = 'Debit Note Date';
+        } else if (this.isPurchaseInvoice) {
+            this.invoiceDateLabel = 'Bill Date';
         } else {
             this.invoiceNoLabel = !this.isPurchaseInvoice ? 'Invoice #' : 'Purchase Bill #';
             this.invoiceDateLabel = 'Invoice Date';
@@ -2903,21 +2905,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             mergedAccounts: data.body.mergedAccounts,
                             mobileNo: data.body.mobileNo,
                             nameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.name).join(', ') : '',
-                            stock: data.body.stock,
+                            stock: (isLinkedPoItem && selectedAcc.stock) ? selectedAcc.stock : data.body.stock,
                             uNameStr: selectedAcc.additional && selectedAcc.additional.parentGroups ? selectedAcc.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
                         };
-                        txn = this.calculateItemValues(selectedAcc, txn, entry);
+                        txn = this.calculateItemValues(selectedAcc, txn, entry, !isLinkedPoItem);
 
                         if(isLinkedPoItem) {
                             txn.applicableTaxes = entry.taxList;
-                            txn.stockDetails = selectedAcc.stock;
-
-                            if(txn.stockDetails.uniqueName) {
-                                let stockUniqueName = txn.stockDetails.uniqueName.split('#');
-                                txn.stockDetails.uniqueName = stockUniqueName[1];
-                            }
 
                             if(selectedAcc.stock) {
+                                txn.stockDetails = selectedAcc.stock;
+
+                                if(txn.stockDetails.uniqueName) {
+                                    let stockUniqueName = txn.stockDetails.uniqueName.split('#');
+                                    txn.stockDetails.uniqueName = stockUniqueName[1];
+                                }
+
                                 if(selectedAcc.stock.quantity) {
                                     txn.quantity = selectedAcc.stock.quantity;
                                 }
@@ -2927,7 +2930,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 }
                             }
 
-                            if(selectedAcc.stock.quantity && selectedAcc.stock.rate) {
+                            if(selectedAcc.stock && selectedAcc.stock.quantity && selectedAcc.stock.rate) {
                                 this.calculateStockEntryAmount(txn);
                             } else {
                                 if(selectedAcc.amount) {
@@ -2996,7 +2999,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
 
-    public calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass): SalesTransactionItemClass {
+    public calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true): SalesTransactionItemClass {
         let o = _.cloneDeep(selectedAcc.additional);
 
         // check if we have quantity in additional object. it's for only bulk add mode
@@ -3121,8 +3124,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 description[this.activeIndx].nativeElement.focus();
             }
         }, 200);
-        this.calculateStockEntryAmount(transaction);
-        this.calculateWhenTrxAltered(entry, transaction);
+        if(calculateTransaction) {
+            this.calculateStockEntryAmount(transaction);
+            this.calculateWhenTrxAltered(entry, transaction);
+        }
         this._cdr.detectChanges();
         return transaction;
     }
@@ -3968,6 +3973,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     if(this.isPurchaseInvoice && this.selectedPoItems && this.selectedPoItems.length > 0) {
                         txn.accountUniqueName = txn.accountUniqueName.indexOf('#') > -1 ? txn.accountUniqueName.slice(0, txn.accountUniqueName.indexOf('#')) : txn.accountUniqueName;
+
+                        if(txn.stockDetails && !txn.stockDetails.uniqueName && txn.stockDetails.stock && txn.stockDetails.stock.uniqueName) {
+                            txn.stockDetails.uniqueName = txn.stockDetails.stock.uniqueName;
+                        }
                     }
 
                     // will get errors of string and if not error then true boolean
@@ -5113,7 +5122,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (transaction.quantity !== undefined) {
             transaction.quantity = Number(transaction.quantity);
 
-            if(this.isPurchaseInvoice && transaction.maxQuantity !== undefined) {
+            if(this.isPurchaseInvoice && transaction.maxQuantity !== undefined && !this.copyPurchaseBill) {
                 if(transaction.quantity > transaction.maxQuantity) {
                     transaction.quantity = transaction.maxQuantity;
                     this._toasty.errorToast("Quantity recorded can't be more than quantity ordered (" + transaction.maxQuantity + ")");
@@ -5168,7 +5177,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
 
-                if (this.isPurchaseInvoice && warehouseData && warehouseData.defaultWarehouse) {
+                if (this.isPurchaseInvoice && warehouseData && warehouseData.defaultWarehouse && !this.isUpdateMode) {
                     this.autoFillDeliverToWarehouseAddress(warehouseData.defaultWarehouse);
                 }
 
@@ -6099,7 +6108,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         item.additional.maxQuantity = item.stock.quantity;
                     }
                 } else {
-                    item.stock = {};
+                    item.stock = undefined;
                     item.uniqueName = item.account.uniqueName;
                     item.value = item.account.uniqueName;
                     item.additional = item.account;
@@ -6319,6 +6328,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     stateCode: company.shippingDetails.stateCode
                 }
             }
+
+            this.autoFillCompanyShipping = isEqual(this.purchaseBillCompany.billingDetails, this.purchaseBillCompany.shippingDetails);
         }
     }
 
