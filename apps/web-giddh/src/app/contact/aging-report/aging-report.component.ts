@@ -59,13 +59,14 @@ export class AgingReportComponent implements OnInit {
     @ViewChild('advanceSearch', {static: true}) public advanceSearch: ModalDirective;
     @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
     @ViewChild('filterDropDownList', {static: true}) public filterDropDownList: BsDropdownDirective;
+    /** Advance search component instance */
     @ViewChild('agingReportAdvanceSearch', { read: ContactAdvanceSearchComponent, static: true }) public agingReportAdvanceSearch: ContactAdvanceSearchComponent;
     @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private store: Store<AppState>,
-        private _agingReportActions: AgingReportActions,
+        private agingReportActions: AgingReportActions,
         private _cdr: ChangeDetectorRef,
         private _breakpointObserver: BreakpointObserver,
         private componentFactoryResolver: ComponentFactoryResolver) {
@@ -101,7 +102,7 @@ export class AgingReportComponent implements OnInit {
     }
 
     public getDueReport() {
-        this.store.dispatch(this._agingReportActions.GetDueReport(this.agingAdvanceSearchModal, this.dueAmountReportRequest));
+        this.store.dispatch(this.agingReportActions.GetDueReport(this.agingAdvanceSearchModal, this.dueAmountReportRequest));
     }
 
     public detetcChanges() {
@@ -125,7 +126,7 @@ export class AgingReportComponent implements OnInit {
 
         this.getDueReport();
 
-        this.store.dispatch(this._agingReportActions.GetDueRange());
+        this.store.dispatch(this.agingReportActions.GetDueRange());
         this.agingDropDownoptions$.subscribe(p => {
             this.agingDropDownoptions = cloneDeep(p);
         });
@@ -147,7 +148,7 @@ export class AgingReportComponent implements OnInit {
     }
 
     public openAgingDropDown() {
-        this.store.dispatch(this._agingReportActions.OpenDueRange());
+        this.store.dispatch(this.agingReportActions.OpenDueRange());
     }
 
     public hideListItems() {
