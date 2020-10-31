@@ -124,7 +124,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** This will hold checked invoices */
     public selectedPo: any[] = [];
-    /* Observable for filters applied */
+    /* Observable for selected PO applied */
     public selectedPo$: Observable<any>;
 
     constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions) {
