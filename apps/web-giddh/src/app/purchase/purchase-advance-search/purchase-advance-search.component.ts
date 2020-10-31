@@ -9,6 +9,8 @@ import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { GeneralService } from '../../services/general.service';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { purchaseOrderStatus } from "../../shared/helpers/purchaseOrderStatus";
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 
 /* Amount comparision filters */
 const AMOUNT_COMPARISON_FILTER = [
@@ -20,14 +22,6 @@ const AMOUNT_COMPARISON_FILTER = [
     { label: 'Not Equals', value: 'NOT_EQUALS' }
 ];
 
-/* Status filters */
-const STATUS_FILTER = [
-    { label: 'Open', value: 'open' },
-    { label: 'Received', value: 'received' },
-    { label: 'Partially Received', value: 'partially-received' },
-    { label: 'Expired', value: 'expired' },
-    { label: 'Cancelled', value: 'cancelled' }
-];
 
 @Component({
     selector: 'purchase-advance-search',
@@ -39,7 +33,7 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will hold the amount filter */
     public filtersForAmount: IOption[] = AMOUNT_COMPARISON_FILTER;
     /* This will hold the status filter */
-    public filtersForStatus: IOption[] = STATUS_FILTER;
+    public filtersForStatus: IOption[] = [];
     /* This will input the filters to preselect them */
     @Input() public purchaseOrderPostRequest;
     /* Emitter for filters */
@@ -56,7 +50,7 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Moment object */
     public moment = moment;
     /* Selected range label */
@@ -80,6 +74,10 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
      * @memberof PurchaseAdvanceSearchComponent
      */
     public ngOnInit(): void {
+        purchaseOrderStatus.map(status => {
+            this.filtersForStatus.push({ label: status.label, value: status.value });
+        });
+
         if (this.purchaseOrderPostRequest && this.purchaseOrderPostRequest.grandTotalOperation) {
             this.filtersForAmount.forEach(operator => {
                 if (operator.value === this.purchaseOrderPostRequest.grandTotalOperation) {
@@ -94,13 +92,6 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
-        });
-
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                this.datePickerOptions = config;
-            }
         });
 
         if(this.purchaseOrderPostRequest && this.purchaseOrderPostRequest.dueFrom && this.purchaseOrderPostRequest.dueTo) {
@@ -143,7 +134,11 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
      * @param {*} value
      * @memberof PurchaseAdvanceSearchComponent
      */
-    public dateSelectedCallback(value: any): void {
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {

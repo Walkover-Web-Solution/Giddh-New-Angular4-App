@@ -116,7 +116,7 @@
                             </div>
 
                             <div style="display: flex">
-                                <!-- <label class="mrB1">Quantity</label> -->
+                                <!-- <label class="mr-b1">Quantity</label> -->
                                 <!--<div>-->
                                 <div class="form-group" style="margin-right: 2%;">
                                     <input name="" type="text" formControlName="quantity" decimalDigitsDirective
@@ -147,12 +147,12 @@
                                         class="form-control">
                                 </div>
 
-                                <div class="mrT" style="margin-right: 2%;">
+                                <div class="mr-t" style="margin-right: 2%;">
                                     <button class="btn-link" (click)="addEntry(transfers.controls[i])" *ngIf="last">
-                                        <i class="fa fa-plus add_row"></i>
+                                        <i class="icon-plus add_row"></i>
                                     </button>
                                     <button class="btn-link" (click)="deleteEntry(i)" *ngIf="!last">
-                                        <i class="fa fa-times dlet"></i>
+                                        <i class="icon-cross dlet"></i>
                                     </button>
                                 </div>
                                 <!--</div>-->
@@ -169,7 +169,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-12 text-left mrT1">
+                        <div class="col-xs-12 text-left mr-t1">
                             <button class="btn btn-default" (click)="closeAsidePane()">Cancel</button>
                             <button class="btn btn-success" [ladda]="(isBranchCreationInProcess$ | async)"
                                 [disabled]="form.invalid" (click)="save()">Save

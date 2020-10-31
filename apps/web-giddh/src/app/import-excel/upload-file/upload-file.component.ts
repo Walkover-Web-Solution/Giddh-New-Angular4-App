@@ -1,5 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { saveAs } from 'file-saver';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
 
 @Component({
@@ -8,7 +11,7 @@ import { ToasterService } from '../../services/toaster.service';
     templateUrl: './upload-file.component.html',
 })
 
-export class UploadFileComponent implements OnInit {
+export class UploadFileComponent implements OnInit, OnDestroy {
     @Input() public isLoading: boolean;
     @Input() public entity: string;
     @Output() public onFileUpload = new EventEmitter();
@@ -17,7 +20,13 @@ export class UploadFileComponent implements OnInit {
     public selectedType: string = '';
     public title: string;
 
-    constructor(private _toaster: ToasterService) {
+    /** Subject to unsubscribe all the listeners */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+    constructor(
+        private toasterService: ToasterService,
+        private activatedRoute: ActivatedRoute
+    ) {
         //
     }
 
@@ -27,7 +36,7 @@ export class UploadFileComponent implements OnInit {
         let isValidFileType = validExts.some(s => type === s);
 
         if (!isValidFileType) {
-            this._toaster.errorToast('Only XLS files are supported for Import');
+            this.toasterService.errorToast('Only XLS files are supported for Import');
             this.selectedFileName = '';
             this.file = null;
             return;
@@ -56,7 +65,28 @@ export class UploadFileComponent implements OnInit {
         return (path.match(/(?:.+..+[^\/]+$)/ig) != null) ? path.split('.').pop(-1) : 'null';
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof UploadFileComponent
+     */
+
     public ngOnInit(): void {
+        this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data) {
+                this.entity = data.type;
+                this.setTitle();
+            }
+        });
+        this.setTitle();
+    }
+
+    /**
+     * Sets the title of the page according to type of entity
+     *
+     * @memberof UploadFileComponent
+     */
+    public setTitle(): void {
         if (this.entity === 'group' || this.entity === 'account') {
             this.title = this.entity + 's';
         } else if (this.entity === 'stock') {
@@ -66,5 +96,15 @@ export class UploadFileComponent implements OnInit {
         } else {
             this.title = this.entity;
         }
+    }
+
+    /**
+     * Unsubscribes from all the listeners
+     *
+     * @memberof UploadFileComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

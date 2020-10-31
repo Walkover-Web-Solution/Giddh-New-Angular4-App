@@ -5,7 +5,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, takeUntil } from 'rxjs/operators';
@@ -29,6 +30,7 @@ import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { InvViewService } from '../../inv.view.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'invetory-group-stock-report',  // <home></home>
@@ -49,15 +51,15 @@ import { InvViewService } from '../../inv.view.service';
 })
 
 export class InventoryGroupStockReportComponent implements OnChanges, OnInit, OnDestroy {
-    @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
-    @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
-    @ViewChild("productName") productName: ElementRef;
-    @ViewChild("sourceName") sourceName: ElementRef;
-    @ViewChild('advanceSearchForm') formValues;
-    @ViewChild('shCategory') public shCategory: ShSelectComponent;
-    @ViewChild('shCategoryType') public shCategoryType: ShSelectComponent;
-    @ViewChild('shValueCondition') public shValueCondition: ShSelectComponent;
-    @ViewChild('template') public template: ElementRef;
+    @ViewChild('dateRangePickerCmp', {static: true}) public dateRangePickerCmp: ElementRef;
+    @ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
+    @ViewChild("productName", {static: true}) productName: ElementRef;
+    @ViewChild("sourceName", {static: true}) sourceName: ElementRef;
+    @ViewChild('advanceSearchForm', {static: true}) formValues;
+    @ViewChild('shCategory', {static: false}) public shCategory: ShSelectComponent;
+    @ViewChild('shCategoryType', {static: false}) public shCategoryType: ShSelectComponent;
+    @ViewChild('shValueCondition', {static: false}) public shValueCondition: ShSelectComponent;
+    @ViewChild('template', {static: true}) public template: ElementRef;
 
     /** Stores the branch details along with their warehouses */
     @Input() public currentBranchAndWarehouse: any;
@@ -213,6 +215,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     modalRef: BsModalRef;
     valueWidth = false;
     public branchTransferMode: string = '';
+    /* This will hold if it's mobile screen or not */
+    public isMobileScreen: boolean = false;
 
     constructor(
         private _generalService: GeneralService,
@@ -228,8 +232,14 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         private inventoryAction: InventoryAction,
         private settingsBranchActions: SettingsBranchActions,
         private invViewService: InvViewService,
-        private cdr: ChangeDetectorRef
+        private breakPointObservar: BreakpointObserver
     ) {
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
+
         this.groupStockReport$ = this.store.select(p => p.inventory.groupStockReport).pipe(takeUntil(this.destroyed$), publishReplay(1), refCount());
         this.GroupStockReportRequest = new GroupStockReportRequest();
         this.activeGroup$ = this.store.pipe(select(activeGroupStore => activeGroupStore.inventory.activeGroup), takeUntil(this.destroyed$));
@@ -297,7 +307,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                     this.groupStockReport = res;
                     this.groupNotFoundMessage = '';
                 }
-                this.cdr.detectChanges();
             }
         });
 
@@ -636,7 +645,10 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
     //******* Advance search modal *******//
     public resetFilter() {
+        this.showAdvanceSearchModal = true;
+        this.advanceSearchAction('clear');
         this.isFilterCorrect = false;
+        this.showAdvanceSearchModal = false;
         this.GroupStockReportRequest.sort = 'asc';
         this.GroupStockReportRequest.sortBy = null;
         this.GroupStockReportRequest.entity = null;
@@ -651,7 +663,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         if (this.sourceName) {
             this.sourceName.nativeElement.value = null;
         }
-        this.advanceSearchForm.controls['filterAmount'].setValue(null);
         //Reset Date with universal date
         this.universalDate$.subscribe(a => {
             if (a) {
@@ -660,7 +671,6 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 this.toDate = moment(a[1]).format(this._DDMMYYYY);
             }
         });
-        //Reset Date
 
         this.getGroupReport(true);
     }
@@ -672,8 +682,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
     public advanceSearchAction(type?: string) {
         if (type === 'cancel') {
-            this.showAdvanceSearchModal = false;
             this.clearModal();
+            this.showAdvanceSearchModal = false;
             this.advanceSearchModel.hide(); // change request : to only reset fields
             return;
         } else if (type === 'clear') {
@@ -798,7 +808,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     openModal() {
         this.modalRef = this.modalService.show(
             this.template,
-            Object.assign({}, { class: 'modal-lg receipt-note-modal ' })
+            Object.assign({}, { class: 'modal-xl receipt-note-modal ' })
         );
     }
 
@@ -810,5 +820,15 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.branchTransferMode = event;
         this.toggleTransferAsidePane();
         this.openModal();
+    }
+
+    /**
+     * To open edit model
+     *
+     * @memberof InventoryGroupStockReportComponent
+     */
+    public editGroup(): void {
+        this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
+        this.setInventoryAsideState(true, true, true);
     }
 }

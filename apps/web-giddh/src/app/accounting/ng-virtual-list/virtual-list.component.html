@@ -10,7 +10,7 @@
                   <span class="chipClosebtn" (mousedown)="clearSingleSelection($event, sl)" (click)="clearSingleSelection($event, sl)">&times;</span>
               </span>
           </ng-container>
-          <input type="text" style="opacity: 0 !important;position: absolute" class="pdL1" [ngClass]="{'hasValue':filter?.length}" #inputFilter (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
+          <input type="text" style="opacity: 0 !important;position: absolute" class="pd-l1" [ngClass]="{'hasValue':filter?.length}" #inputFilter (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
       </div> -->
     <!--endregion-->
 

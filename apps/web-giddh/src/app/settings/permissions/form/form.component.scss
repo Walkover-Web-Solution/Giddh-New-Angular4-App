@@ -14,6 +14,7 @@
     opacity: 1;
     box-shadow: 0px 2px 6px #ddd;
     padding: 0;
+    min-width: 180px;
 }
 
 .custom_dropdown.open {
@@ -23,15 +24,18 @@
 .lh34 {
     line-height: 34px;
 }
-.permissionForm {
+.permission-form {
     .form-group {
-        width: 188px;
+        width: 100%;
         display: inline-block;
-        margin: 0 10px;
+        margin: 0;
         position: relative;
         .btn-group {
-            width: 188px;
+            width: 100%;
         }
+    }
+    .add-btn{
+        width: auto !important;
     }
 }
 
@@ -41,7 +45,7 @@
     }
 }
 
-.permissionForm .btn-group.open .dropdown-toggle {
+.permission-form .btn-group.open .dropdown-toggle {
     box-shadow: none;
     background: transparent;
 }
@@ -98,21 +102,32 @@ i.icon-cross {
     margin-right: -5px;
     margin-left: -5px;
 }
+.ip-range{
+    i{
+        position: relative;
+        right: 2px
+    }
+}
 @media (max-width: 1199px) {
     .create-btn {
         float: none !important;
         margin-top: 10px;
     }
+    .permission-form {
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .pr-0{
+            padding-right: 15px !important;
+        }
+    }
 }
 
 @media (max-width: 1024px) {
-    .permissionForm {
+    .permission-form {
         .form-group {
             margin-left: 0;
             margin-top: 5px;
-            .btn-group {
-                width: 188px;
-            }
         }
         .create-btn {
             margin-top: 0px;
@@ -140,7 +155,7 @@ i.icon-cross {
 }
 
 @media (max-width: 768px) {
-    .permissionForm {
+    .permission-form {
         .form-group {
             width: 100%;
             display: block;

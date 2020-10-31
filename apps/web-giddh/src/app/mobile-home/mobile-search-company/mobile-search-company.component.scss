@@ -71,6 +71,9 @@
         }
     }
     .all-company-list{
+        overflow-y: auto;
+        max-height: calc(100vh - 245px);
+        margin-top: 10px;
         ul{
             list-style: none;
             li{
@@ -84,7 +87,7 @@
                     word-break: break-word;
                     &:hover{
                         color: $deep-sky-blue;
-                    }   
+                    }
                 }
             }
         }

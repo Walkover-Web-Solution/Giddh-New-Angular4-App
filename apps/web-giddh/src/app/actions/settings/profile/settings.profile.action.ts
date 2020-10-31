@@ -2,7 +2,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { CompanyActions } from '../../company.actions';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -16,9 +16,10 @@ import { CustomActions } from '../../../store/customActions';
 @Injectable()
 export class SettingsProfileActions {
 
-    @Effect()
-    public GetSMSKey$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO).pipe(
+
+    public GetSMSKey$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO),
             switchMap((action: CustomActions) => this.settingsProfileService.GetProfileInfo()),
             map(res => this.validateResponse<any, string>(res, {
                 type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
@@ -26,19 +27,21 @@ export class SettingsProfileActions {
             }, true, {
                 type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public UpdateProfile$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE).pipe(
+
+    public UpdateProfile$: Observable<Action> = createEffect( ()=>this.action$
+        .pipe(
+            ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE),
             switchMap((action: CustomActions) => {
                 return this.settingsProfileService.UpdateProfile(action.payload).pipe(
                     map(response => this.UpdateProfileResponse(response)));
-            }));
+            })));
 
-    @Effect()
-    public GetInventoryInfo$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_INFO).pipe(
+
+    public GetInventoryInfo$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_INFO),
             switchMap((action: CustomActions) => this.settingsProfileService.GetInventoryInfo()),
             map(res => this.validateResponse<any, string>(res, {
                 type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE,
@@ -46,19 +49,21 @@ export class SettingsProfileActions {
             }, true, {
                 type: SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public UpdateInventory$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY).pipe(
+
+    public UpdateInventory$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY),
             switchMap((action: CustomActions) => {
                 return this.settingsProfileService.UpdateInventory(action.payload).pipe(
                     map(response => this.UpdateInventoryResponse(response)));
-            }));
+            })));
 
-    @Effect()
-    private UpdateProfileResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE).pipe(
+
+    public UpdateProfileResponse$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -68,39 +73,47 @@ export class SettingsProfileActions {
                     this.toasty.successToast('Profile Updated Successfully.');
                 }
                 return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);
-            }));
+            })));
 
-    @Effect()
-    private PatchProfile$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE).pipe(
+
+    public PatchProfile$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE),
             switchMap((action: CustomActions) => {
                 return this.settingsProfileService.PatchProfile(action.payload).pipe(
                     map(response => this.PatchProfileResponse(response)));
-            }));
+            })));
 
-    @Effect({ dispatch: false })
-    private PatchProfileResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE).pipe(
+    //({ dispatch: false })
+    public PatchProfileResponse$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.store.dispatch(this.companyActions.RefreshCompanies());
-                    this.toasty.successToast('Profile Updated Successfully.');
+
+                    if(data.request && data.request.paymentId) {
+                        this.toasty.successToastWithHtml("Welcome onboard!<br>Accounting begins now...");
+                    } else {
+                        this.toasty.successToast('Profile Updated Successfully.');
+                    }
                 }
                 if (data.request.isMultipleCurrency) {
                     return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);
                 } else {
                     return {
-                        type: ''
+                        type: 'EmptyAction'
                     };
                 }
-            }));
+            })));
 
-    @Effect()
-    private UpdateInventoryResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE).pipe(
+
+    public UpdateInventoryResponse$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -110,7 +123,7 @@ export class SettingsProfileActions {
                     this.toasty.successToast('Inventory settings Updated Successfully.');
                 }
                 return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);
-            }));
+            })));
 
     constructor(private action$: Actions,
         private toasty: ToasterService,

@@ -17,13 +17,13 @@
                 <ng-container *ngIf="!option.additional?.stock">
                     <a href="javascript:void(0)" (click)="changeBaseAccount(option)" style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{option?.label}}</div>
-                        <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
+                        <div class="item-unique fs12">{{option.additional?.uniqueName}}</div>
                     </a>
                 </ng-container>
                 <ng-container *ngIf="option.additional?.stock">
                     <a href="javascript:void(0)" (click)="changeBaseAccount(option)" style="border-bottom: 1px solid #ccc;">
                         <div class="item">{{option?.label}}</div>
-                        <div class="item_unq fs12">{{option.additional?.uniqueName}}</div>
+                        <div class="item-unique fs12">{{option.additional?.uniqueName}}</div>
                         <div class="item_stock">Stock: {{option.additional?.stock.name}}</div>
                     </a>
                 </ng-container>
@@ -38,15 +38,15 @@
         <!-- region transactions -->
         <div class="ledg-head entry-popup">
 
-            <table class="col-xs-12 ledger-head mrT1 hidden-xs">
+            <table class="w-100 ledger-head mr-t1 hidden-xs">
                 <thead>
-                    <tr>
-                        <th [ngClass]="Shown ? 'active' : ''" class="col-xs-6 hidden-xs">
+                    <tr class="row">
+                        <th [ngClass]="Shown ? 'active' : ''" class="col-6 hidden-xs">
 
                             {{vm.ledgerUnderStandingObj.text.dr}}
                             <span class="dr-cr-category pull-right text-gray">Dr</span>
                         </th>
-                        <th class="col-xs-6 hidden-xs">{{vm.ledgerUnderStandingObj.text.cr}}
+                        <th class="col-6 hidden-xs">{{vm.ledgerUnderStandingObj.text.cr}}
                             <span class="dr-cr-category pull-right text-gray">Cr</span>
                         </th>
                     </tr>
@@ -72,27 +72,27 @@
                     <table class="width100 card-table">
 
                         <thead class="hidden-xs">
-                            <tr class="t-h-bg1">
+                            <tr class="t-h-bg1 row">
 
-                                <th class="col-xs-2" style="border-top:none">
+                                <th class="col-3" style="border-top:none">
                                     <span class="cursor-pointer">
                                         Date
                                     </span>
                                 </th>
-                                <th class="col-xs-6" style="border-top:none">Particular</th>
+                                <th class="col-5" style="border-top:none">Particular</th>
 
-                                <th class="col-xs-2 text-right" style="border-top:none">
+                                <th class="col-4 text-right" style="border-top:none">
                                     Amount
                                 </th>
                             </tr>
                         </thead>
 
                         <tbody class="ledger-main">
-                            <tr class="debit-blank-row"
+                            <tr class="debit-blank-row row"
                                 *ngFor="let txn of vm.selectedLedger.transactions; let i = index; ">
                                 <ng-container *ngIf="txn.type === 'DEBIT'">
 
-                                    <td class="col-xs-2" data-title="Date">
+                                    <td class="col-3" data-title="Date">
                                         <input id="{{'giddh-datepicker-left-' + i}}" type="text" autocomplete="off" name="datess" #dbs='bsDatepicker'
                                             [(ngModel)]="vm.selectedLedger.entryDate" class="form-control" bsDatepicker
                                             [bsConfig]="{ dateInputFormat: giddhDateFormat }"
@@ -102,7 +102,7 @@
 
                                     <td data-title="Particular" id="{{'debit-id-' + i}}"
                                         [ngClass]="{ 'otherAccountEntry': txn.particular.uniqueName === 'others' }"
-                                        class="col-xs-6 pos-rel select2-parent select2-ledger">
+                                        class="col-5 pos-rel select2-parent select2-ledger">
 
 
                                         <ng-template [ngIf]="!txn.isDiscount">
@@ -132,7 +132,7 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">
+                                                                <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
                                                                 </div>
                                                             </a>
@@ -142,10 +142,10 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">
+                                                                <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
                                                                 </div>
-                                                                <div class="item_stock">
+                                                                <div class="item-stock">
                                                                     Stock: {{ option.additional?.stock.name }}</div>
                                                             </a>
                                                         </ng-container>
@@ -179,8 +179,7 @@
                                             (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)"
                                             [placement]="'left'" [containerClass]="'col-xs-3'"
                                             tooltip="Download file : {{vm.selectedLedger.attachedFileName}}">
-                                            <i class="glyphicon glyphicon-download pull-left"
-                                                style="font-size:15px;"></i>
+                                            <i class="icon-download-circle pull-left" ></i>
                                         </span>
 
                                         <span class="download-invoice-ledger "
@@ -188,13 +187,12 @@
                                             [placement]="'left'" [containerClass]="'col-xs-3'"
                                             tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
                                             (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
-                                            <i class="glyphicon glyphicon-download pull-left"
-                                                style="font-size:15px;"></i>
+                                            <i class="icon-download-circle pull-left"></i>
                                         </span>
 
                                     </td>
 
-                                    <td class="col-xs-2 text-right" data-title="Amount">
+                                    <td class="col-4 text-right" data-title="Amount">
 
                                         <input id="{{'update-ledger-amount-dr-' + i}}" type="text" [(ngModel)]="txn.amount" class="form-control text-right"
                                             name="{{txn[i]}}.amount" [mask]="vm.inputMaskFormat"
@@ -221,9 +219,9 @@
                     <table class="ledger-footer-1">
 
                         <tbody>
-                            <tr class="total_col">
+                            <tr class="total-col row">
 
-                                <td colspan="12" class="col-xs-12 text-right h32">
+                                <td colspan="12" class="col-12 col-sm-12 text-right h32">
                                     <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd2"
                                         [tooltip]="vm.ledgerUnderStandingObj.balanceText.cr" [placement]="'top'">
                                         C/F: CR {{ vm.baseCurrencyDetails?.symbol}} {{ vm.compoundTotal | giddhCurrency}}
@@ -232,9 +230,9 @@
 
                             </tr>
 
-                            <tr class="total_col">
+                            <tr class="total-col row">
                                 <!-- reckoning -->
-                                <td colspan="12" class="col-xs-12 text-right h32">
+                                <td colspan="12" class="col-12 col-sm-12 text-right h32">
 
                                     <span class="bdrT pr-1 pl-1 width-200">
                                         {{ vm.baseCurrencyDetails?.symbol}} {{ (vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal)
@@ -264,24 +262,24 @@
                     <!-- region credit transaction header -->
                     <table class="width100 card-table">
                         <thead class="xs-hidden">
-                            <tr class="t-h-bg1">
-                                <th class="col-xs-2" style="border-top:none">
+                            <tr class="t-h-bg1 row">
+                                <th class="col-3" style="border-top:none">
                                     <span class="cursor-pointer">
                                         Date
                                     </span>
 
                                 </th>
-                                <th class="col-xs-6" style="border-top:none">Particular</th>
-                                <th class="col-xs-2 text-right" style="border-top:none">Amount</th>
+                                <th class="col-5" style="border-top:none">Particular</th>
+                                <th class="col-4 text-right" style="border-top:none">Amount</th>
                             </tr>
                         </thead>
 
                         <tbody class="ledger-main">
 
-                            <tr *ngFor="let txn of vm.selectedLedger.transactions; let i = index" class="credit-blank-row">
+                            <tr *ngFor="let txn of vm.selectedLedger.transactions; let i = index" class="credit-blank-row row">
                                 <ng-container *ngIf="txn.type == 'CREDIT'">
 
-                                    <td data-title="Date" class="col-xs-2">
+                                    <td data-title="Date" class="col-3">
                                         <input id="{{'giddh-datepicker-right-' + i }}" class="form-control" autocomplete="off" name="datepic" type="text"
                                             [(ngModel)]="vm.selectedLedger.entryDate"
                                             (click)="addBlankTrx('CREDIT', txn, $event)" #cbs='bsDatepicker'
@@ -289,7 +287,7 @@
                                     </td>
 
                                     <td data-title="Particular" id="{{'credit-id-' + i}}"
-                                        class="pos-rel col-xs-6 select2-parent select2-ledger"
+                                        class="pos-rel col-5 select2-parent select2-ledger"
                                         [ngClass]="{ otherAccountEntry: txn.particular.uniqueName === 'others' }">
 
                                         <ng-template [ngIf]="!txn?.isDiscount">
@@ -306,6 +304,7 @@
                                                     [options]="searchResults" #crdSelect
                                                     (click)="addBlankTrx('CREDIT', txn, $event)"
                                                     (selected)="selectAccount($event,txn, crdSelect)"
+                                                    [fixedValue]="txn.particular.name"
                                                     (onShow)="cbs.hide()" [showClear]="false"
                                                     [(ngModel)]="txn.particular.uniqueName" [ItemHeight]="67"
                                                     [useInBuiltFilterForFlattenAc]="true"
@@ -318,7 +317,7 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">
+                                                                <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
                                                                 </div>
                                                             </a>
@@ -328,10 +327,10 @@
                                                             <a href="javascript:void(0)" class="list-item"
                                                                 style="border-bottom: 1px solid #ccc;">
                                                                 <div class="item">{{ option.label }}</div>
-                                                                <div class="item_unq">
+                                                                <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
                                                                 </div>
-                                                                <div class="item_stock">
+                                                                <div class="item-stock">
                                                                     Stock: {{ option.additional?.stock.name }}</div>
                                                             </a>
                                                         </ng-container>
@@ -362,8 +361,7 @@
                                             [placement]="'left'" [containerClass]="'col-xs-3'"
                                             tooltip="Download file : {{vm.selectedLedger.attachedFileName}}"
                                             (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)">
-                                            <i class="glyphicon glyphicon-download pull-left"
-                                                style="font-size:15px;"></i>
+                                            <i class="icon-download-circle pull-left"></i>
                                         </span>
 
                                         <span class="download-invoice-ledger"
@@ -371,12 +369,11 @@
                                             [placement]="'left'" [containerClass]="'col-xs-3'"
                                             tooltip="Download {{vm.selectedLedger.voucherGeneratedType === 'sales' ? 'Invoice': 'Voucher'}} : {{vm.selectedLedger.voucherNumber}}"
                                             (click)="downloadInvoice(vm.selectedLedger.voucherNumber, vm.selectedLedger.voucherGeneratedType ? vm.selectedLedger.voucherGeneratedType : vm.selectedLedger.voucher.name, $event)">
-                                            <i class="glyphicon glyphicon-download pull-left"
-                                                style="font-size:15px;"></i>
+                                            <i class="icon-download-circle pull-left"></i>
                                         </span>
                                     </td>
 
-                                    <td data-title="Amount" class="col-xs-2 text-right">
+                                    <td data-title="Amount" class="col-4 text-right">
                                         <input id="{{'update-ledger-amount-cr-' + i}}" class="form-control text-right" type="text" [(ngModel)]="txn.amount"
                                             [mask]="vm.inputMaskFormat" [prefix]="vm.selectedPrefixForCurrency"
                                             [suffix]="vm.selectedSuffixForCurrency" [rawInputValue]="txn.amount"
@@ -399,8 +396,8 @@
                     <!-- region credit transaction footer -->
                     <table class="ledger-footer-1">
                         <tbody>
-                            <tr class="total_col">
-                                <td colspan="12" class="col-xs-12  text-right h32">
+                            <tr class="total-col row">
+                                <td colspan="12" class="col-12  col-sm-12 text-right h32">
                                     <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
                                         <span class="primary_clr pd2"
                                             [tooltip]="vm.ledgerUnderStandingObj.balanceText.dr" [placement]="'top'">
@@ -409,9 +406,9 @@
                                     </span>
                                 </td>
                             </tr>
-                            <tr class="total_col">
+                            <tr class="total-col row">
                                 <!-- reckoning -->
-                                <td colspan="12" class="col-xs-12 text-right h32"
+                                <td colspan="12" class="col-12 col-sm-12 text-right h32"
                                     style="padding-right:10px !important;">
                                     <span class="bdrT">
                                         {{ vm.baseCurrencyDetails?.symbol }} {{ (vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal)
@@ -437,7 +434,7 @@
         <!-- region new entry -->
         <div class="entrypanel width100 pt-2">
             <!-- reverse charge transction start -->
-            <div *ngIf="shouldShowRcmEntry" class="pdB1 mTB1">
+            <div *ngIf="shouldShowRcmEntry" class="pd-b1 mt-1">
                 <input id="tourist-scheme-1" class="checkbox-custom" type="checkbox" [ngModel]="isRcmEntry"
                     (click)="toggleRcmCheckbox($event)">
                 <label for="tourist-scheme-1" class="checkbox-custom-label" #rcmPopup="bs-popover"
@@ -659,7 +656,7 @@
                         </div>
                     </div>
 
-                    <div class="cearfix pd1 text-right bb-1 pr-0">
+                    <div class="cearfix pd-1 text-right bb-1 pr-0">
                         <span class="inWords font-14">{{vm.grandTotal | myNumberToWordsPipe | lowercase}}</span>
                     </div>
                 </ng-container>
@@ -671,8 +668,8 @@
             <div class="row ledger-bottom">
                 <div class="col-md-6 pt-1">
                     <!-- make it functional (Developer end) -->
-                    <div *ngIf="shouldShowWarehouse" class="row mrB1">
-                        <div class="col-sm-6 pdR1">
+                    <div *ngIf="shouldShowWarehouse" class="row mr-b1">
+                        <div class="col-sm-6 pd-r1">
                             <div class="selectWarehouse">
                                 <label class="font-12">Select Warehouse</label>
                                 <sh-select id="update-ledger-select-warehouse" [(ngModel)]="selectedWarehouse" [placeholder]="'Select Warehouse'"
@@ -683,7 +680,7 @@
 
                         <!-- TODO: Add multiple warehouse feature
                             <ng-template [ngIf]="vm.stockTrxEntry">
-                            <div class="col-sm-3 pdL1 pdR1">
+                            <div class="col-sm-3 pd-l1 pd-r1">
                                 <div class="table-amount text-right ">
                                     <label class="font-12">Quantity</label>
                                     <input type="text" name="" class="form-control text-right"
@@ -692,7 +689,7 @@
                                         (change)="vm.inventoryQuantityChanged($event.target.value)" />
                                 </div>
                             </div>
-                            <div class="col-sm-3 pdL1">
+                            <div class="col-sm-3 pd-l1">
                                 <div class="text-right table-amount">
                                     <label class="font-12">Unit</label>
                                     <select class="form-control text-right no-padding"
@@ -728,7 +725,7 @@
                     </ng-container>
 
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-12 col-sm-12">
                             <textarea id="update-ledger-description" rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control"
                                 placeholder="Description"></textarea>
                         </div>
@@ -866,10 +863,10 @@
 
                         </tbody>
                     </table>
-                    <div class="pd1 mrB mrT advanced" style="background: #F1F5F8;" *ngIf="showAdvanced">
+                    <div class="pd-1 mrB mr-t advanced" style="background: #F1F5F8;" *ngIf="showAdvanced">
                         <table class="xs-table-block">
                             <tr>
-                                <td class="select2-parent pdR1">
+                                <td class="select2-parent pd-r1">
                                     <div class="form-group">
                                         <label class="default_clr">Voucher Type</label>
                                         <sh-select id="update-ledger-voucher-type-default" [options]="vm.voucherTypeList" [isFilterEnabled]="true"
@@ -880,7 +877,8 @@
                                     </div>
                                 </td>
 
-                                <td class="pdR1" *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode == 'pur' || vm.selectedLedger.voucher.shortCode == 'pay')">
+                                <td class="pd-r1"
+                                    *ngIf="(vm.selectedLedger.voucher.shortCode === 'sal' || vm.selectedLedger.voucher.shortCode === 'pur' || vm.selectedLedger.voucher.shortCode == 'pay')">
                                     <div class="form-group">
                                         <label class="default_clr">Invoice No.</label>
                                         <input id="update-ledger-invoice-number" type="text" placeholder="Invoice no." class="form-control"
@@ -888,7 +886,7 @@
                                     </div>
                                 </td>
 
-                                <!-- <td class="pdR1" *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'">
+                                <!-- <td class="pd-r1" *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt'">
 
                                     <div class="form-group">
 
@@ -897,7 +895,7 @@
                                             <button dropdownToggle type="button"
                                                 class="form-control text-left btn-block dropdown-toggle">
                                                 Select Invoices
-                                                <span class="select_drop pull-right mrT1">
+                                                <span class="select_drop pull-right mr-t1">
                                                     <i class="fa fa-caret-down"></i>
                                                 </span>
                                             </button>
@@ -915,7 +913,7 @@
 
                                 </td> -->
 
-                                <td class="pdR1" *ngIf="vm.selectedLedger.voucher.shortCode == 'credit note' || vm.selectedLedger.voucher.shortCode == 'debit note'">
+                                <td class="pd-r1" *ngIf="vm.selectedLedger.voucher.shortCode == 'credit note' || vm.selectedLedger.voucher.shortCode == 'debit note'">
                                     <div class="form-group">
                                         <label class="default_clr">{{vm.selectedLedger.voucher.shortCode == 'debit note' ? 'Voucher' : 'Invoice'}} No.</label>
 
@@ -927,10 +925,10 @@
                                                 <a href="javascript:void(0)" class="list-item sh-template">
                                                     <div class="item">{{ option.label }}
                                                     </div>
-                                                    <div class="item_unq">
+                                                    <div class="item-unique">
                                                         (Dated: {{ option.additional?.voucherDate}})
                                                     </div>
-                                                    <div class="item_unq">
+                                                    <div class="item-unique">
                                                         (Due:
                                                         {{ option.additional?.balanceDue?.amountForAccount | giddhCurrency }})
                                                     </div>
@@ -943,7 +941,7 @@
                                     <span class=“remove-invoice-icon”>×</span>
                                     <span class="remove-invoice-label">Remove</span>
                                 </td>
-                                <td class="pdR1">
+                                <td class="pd-r1">
                                     <div class="form-group">
                                         <label class="default_clr">Voucher No.</label>
                                         <input id="update-ledger-voucher-type" type="text" placeholder="Voucher no." class="form-control"
@@ -958,7 +956,7 @@
                         <table>
                             <tr>
                                 <td *ngIf="(vm.selectedLedger.voucher.shortCode !== 'jr' && vm.selectedLedger.voucher.shortCode !== 'cntr' && vm.selectedLedger.voucher.shortCode !== 'rcpt'
-                                && vm.selectedLedger.voucher.shortCode !== 'advance-receipt')" class="pdR1 pb-1">
+                                && vm.selectedLedger.voucher.shortCode !== 'advance-receipt')" class="pd-r1 pb-1">
                                     <input type="checkbox" id="update-ledger-sale" name="advanceReceipt" [(ngModel)]="isAdjustVoucherSelected" (change)="handleVoucherAdjustment()">
                                     Adjust {{
                                         vm.selectedLedger.voucher.shortCode === 'sal' ? 'Sales' :
@@ -968,10 +966,10 @@
                                         vm.selectedLedger.voucher.shortCode === 'pay' ? 'Payment' : ''
                                     }}
                                 </td>
-                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'advance-receipt' && isAdvanceReceipt" class="pdR1 pb-1">
+                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'advance-receipt' && isAdvanceReceipt" class="pd-r1 pb-1">
                                     <input type="checkbox" id="update-ledger-advance-receipt" name="advanceReceipt" [(ngModel)]="isAdjustAdvanceReceiptSelected" (change)="handleVoucherAdjustment()">Adjust Advance Receipt
                                 </td>
-                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt' && !isAdvanceReceipt" class="pdR1 pb-1">
+                                <td *ngIf="vm.selectedLedger.voucher.shortCode == 'rcpt' && !isAdvanceReceipt" class="pd-r1 pb-1">
                                     <input type="checkbox" id="update-ledger-adjust-receipt" name="advanceReceipt" [(ngModel)]="isAdjustReceiptSelected" (change)="handleVoucherAdjustment()">Adjust Receipt
                                 </td>
                             </tr>
@@ -983,7 +981,7 @@
 
                             <tbody>
                                 <tr>
-                                    <td class="pdR1">
+                                    <td class="pd-r1">
                                         <label class="default_clr">Cheque Number</label>
                                         <input type="text" id="update-ledger-cheque-number" placeholder="XXXX2619" class="form-control"
                                             [(ngModel)]="vm.selectedLedger.chequeNumber" />
@@ -1002,12 +1000,12 @@
 
                         </table>
 
-                        <table class="mrT1">
+                        <table class="mr-t1">
 
                             <tbody>
 
                                 <tr>
-                                    <td class="pdR1">
+                                    <td class="pd-r1">
                                         <label class="default_clr">Assign Tag</label>
                                         <sh-select id="update-ledger-assign-tag" [options]="tags$ | async" [isFilterEnabled]="true"
                                             [placeholder]="'Select Tag'" [showClear]="false" [multiple]="true"
@@ -1024,7 +1022,7 @@
 
                     <div class="row">
 
-                        <div class="col-xs-12 clearfix mrT1">
+                        <div class="col-12 col-sm-12 clearfix mr-t1">
 
                             <div class="mrR1 form-group pull-left cp">
                                 <label class="pull-left cp fs16">
@@ -1053,11 +1051,10 @@
 
                         </div>
 
-                        <div class="clearfix mb-2">
+                        <div class="d-flex w-100 mb-2 justify-content-between">
 
-                            <div class="pull-left pl-15" *ngIf="vm.isMultiCurrencyAvailable">
-
-                                <ul class="list-inline font-14 currency-convertor">
+                            <div class="w-100 d-flex pl-15" *ngIf="vm.isMultiCurrencyAvailable">
+                                <ul class="list-inline d-flex font-14 currency-convertor">
 
                                     <li>
                                         1
@@ -1080,7 +1077,7 @@
                                 </ul>
                             </div>
 
-                            <div class="pull-right pr-15" *ngIf="!isPettyCash">
+                            <div class="d-flex justify-content-end w-100 pr-15" *ngIf="!isPettyCash">
                                 <div class="file_attached pull-right text-right"
                                     *ngIf="(vm.selectedLedger)?.attachedFile?.length > 0">
                                     <span>{{ (vm.selectedLedger)?.attachedFileName }}</span>
@@ -1092,13 +1089,13 @@
                                     <input type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
                                         [uploadInput]="uploadInput" (uploadOutput)="onUploadOutputUpdate($event)">
                                     <label for="invoiceFile" class="cp fs16">
-                                        <i [ngClass]="!isFileUploading ? 'glyphicon glyphicon-paperclip' : 'fa fa-spinner rotate'"></i> Attach file</label>
+                                        <i [ngClass]="!isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'"></i> Attach file</label>
                                 </label>
                             </div>
 
                         </div>
 
-                        <div class="col-xs-12 pdT1 d-flex align-items-center xs-d-block" *ngIf="!isPettyCash">
+                        <div class="col-12 col-sm-12 pd-t1 d-flex align-items-center xs-d-block" *ngIf="!isPettyCash">
                             <!--                            <div class="width-100 mb-05">-->
                             <!--                                    <p *ngIf="isAdjustedAmountExcess">Note: The adjusted amount of the linked invoice/s is more than the receipt;-->
                             <!--                                        update them first and try again.</p>-->
@@ -1125,7 +1122,7 @@
 <!-- region modals -->
 <!--deleteAttachedFile  -->
 <div bsModal #deleteAttachedFileModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete the attached file?'"
                 (cancelCallBack)="hideDeleteAttachedFileModal()" (successCallBack)="deleteAttachedFile()">
@@ -1136,7 +1133,7 @@
 
 <!--delete entry  -->
 <div bsModal #deleteEntryModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete this entry?'"
                 (cancelCallBack)="hideDeleteEntryModal()" (successCallBack)="deleteTrxEntry()">
@@ -1199,7 +1196,7 @@
 <div bsModal #advanceReceiptRemoveConfirmationModal="bs-modal" class="modal fade" role="dialog"
     [config]="{keyboard:true}" tabindex="-1">
     <div class="modal-dialog modal-md">
-        <!-- modal-liq90 class is removed for now-->
+        <!-- modal-liq-90 class is removed for now-->
         <div class="modal-content">
             <delete-template-confirmation-modal *ngIf="advanceReceiptRemoveConfirmationModal.isShown"
                 [message]='removeAdvanceReceiptConfirmationMessage' [flag]="confirmationFlag"
@@ -1210,7 +1207,7 @@
 </div>
 
 <div class="modal fade purchase-record-confirmation-modal" tabindex="-1" #adjustPaymentModal="bs-modal" [config]="{ animated: true, ignoreBackdropClick: true, keyboard: false }" bsModal role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <advance-receipt-adjustment-component *ngIf="adjustPaymentModal.isShown"
                 #advanceReceiptComponent [adjustedVoucherType]="vm.selectedLedger.voucher.shortCode"

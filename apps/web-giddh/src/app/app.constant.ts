@@ -25,6 +25,20 @@ export const DEFAULT_TOASTER_OPTIONS = {
     onActivateTick: false
 };
 
+export const DEFAULT_TOASTER_OPTIONS_WITH_HTML = {
+    closeButton: true, // show close button
+    timeOut: 3000, // time to live
+    enableHtml: true, // allow html in message. (UNSAFE)
+    extendedTimeOut: 1000, // time to close after a user hovers over toast
+    progressBar: true, // show progress bar
+    toastClass: 'toast', // class on toast
+    positionClass: 'toast-top-right', // class on toast
+    titleClass: 'toast-title', // class inside toast on title
+    messageClass: 'toast-message', // class inside toast on message
+    tapToDismiss: true, // close on click
+    onActivateTick: false
+};
+
 export const DEFAULT_SERVER_ERROR_MSG = 'Something went wrong! Please try again.';
 export let IS_CORDOVA_WA = isCordova;
 export let IS_ELECTRON_WA = isElectron;
@@ -149,6 +163,42 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
     }
 ];
 
+export const GIDDH_DATE_RANGE_PICKER_RANGES = [
+    {
+        name: DatePickerDefaultRangeEnum.ThisMonth, value: [moment().startOf('month'), moment().endOf('month')]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.LastMonth, value: [
+            moment().subtract(1, 'month').startOf('month'),
+            moment().subtract(1, 'month').endOf('month')
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.ThisQuarterToDate, value: [
+            moment().quarter(moment().quarter()).startOf('quarter'),
+            moment()
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate, value: [
+            moment().startOf('year').subtract(9, 'year'),
+            moment()
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.LastQuarter, value: [
+            moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+            moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.AllTime, value: [
+            moment().startOf('year').subtract(10, 'year'),
+            moment()
+        ]
+    }
+];
+
 /** File attachment types supported by Giddh */
 export const FILE_ATTACHMENT_TYPE = {
     IMAGE: ['jpg', 'jpeg', 'gif', 'png'],
@@ -191,7 +241,7 @@ export let DEFAULT_POPULAR_PLAN = "";
 
 if (PRODUCTION_ENV || isElectron || isCordova) {
     DEFAULT_POPULAR_PLAN = "Oak";
-} else {
+}  else {
     DEFAULT_POPULAR_PLAN = "Popular Plan";
 }
 
@@ -207,3 +257,6 @@ export enum SearchResultText {
     NewSearch = 'Type to search a/c',
     NotFound = 'No results found'
 }
+
+/** Types of tcs and tds taxes */
+export const TCS_TDS_TAXES_TYPES = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];

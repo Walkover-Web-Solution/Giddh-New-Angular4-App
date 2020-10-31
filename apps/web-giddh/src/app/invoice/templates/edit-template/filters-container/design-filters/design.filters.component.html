@@ -3,8 +3,8 @@
 
 
     <div class="clearfix">
-        <div class="col-xs-9">
-            <div class="row">
+        <div class="row">
+            <div class="col-sm-9">
                 <label><input type="text" class="form-control" placeholder="My Template Name" name="templateName"
                         [(ngModel)]="customTemplate.name" (ngModelChange)="onValueChange(null, null)" /></label>
             </div>
@@ -78,7 +78,7 @@
             </li>
             <li [hidden]="!templateUISectionVisibility.logo">
                 <i class="ico-edit"></i> <label>Make logo edit</label>
-                <div class="clearfix mrT1">
+                <div class="clearfix mr-t1">
                     <div class="logoTool">
                         <span class="logo-preview" [class.cursor-disable]="isFileUploaded">
                             <label class="upload-button" for="logo-edit" [hidden]="logoAttached">
@@ -98,7 +98,7 @@
                         <button *ngIf="showDeleteButton" type="button" class="start-upload-btn btn btn-danger"
                             (click)="deleteLogo()"
                             tooltip="Clicking on this, will delete image from server">Delete</button>
-                        <div class="pull-left mrL1 mrT1 choose-size">
+                        <div class="pull-left mr-l1 mr-t1 choose-size">
                             <div class="d-block" [class.cursor-disable]="isFileUploaded">
                                 <p>Size</p>
                                 <input name="chooseSize" type="radio" id="fontS" value="S" [disabled]="isFileUploaded"
@@ -128,13 +128,13 @@
             <li [hidden]="!templateUISectionVisibility.color">
                 <i class="ico-swatch"></i> <label>Try other colour</label>
                 <!-- edit color  start -->
-                <div class="clearfix mrT1">
+                <div class="clearfix mr-t1">
                     <div class="swatch text-center">
                         <span class="swatch-preview"><span class=""
                                 [ngStyle]="{ 'background-color': customTemplate.templateColor}"></span>
                             {{customTemplate.templateColor}}
                         </span>
-                        <div class="mrL1 pull-left">
+                        <div class="mr-l1 pull-left">
                             <ul>
                                 <li class="" (click)="changeColor('#bdbdbd', '#fcfcfc')"></li>
                                 <li class="" (click)="changeColor('#636363', '#f7f7f7')"></li>
@@ -166,8 +166,8 @@
             </li>
             <li *ngIf="templateUISectionVisibility.font">
                 <i class="ico-txt"></i> <label>Select different fonts</label>
-                <div class="col-xs-9 font-selector mrT1 form-group">
-                    <div class="row">
+                <div class="row font-selector mr-t1 form-group">
+                    <div class="col-9">
                         <sh-select [defaultValue]="selectedFont" [options]="presetFonts" (selected)="onFontSelect($event)"
                             [placeholder]="'Choose font'" [multiple]="false" [ItemHeight]="33"></sh-select>
                     </div>
@@ -179,8 +179,8 @@
                 </li>
                 <li *ngIf="templateUISectionVisibility.fontSize">
                     <i class="ico-txt"></i> <label>Select different fonts size</label>
-                    <div class="col-xs-9 font-selector mrT1 form-group">
-                        <div class="row">
+                    <div class="row font-selector mr-t1 form-group">
+                        <div class="col-9">
                             <sh-select [defaultValue]="selectedFontSize" [options]="presetFontsSize" (selected)="onFontSizeSelect($event)"
                                 [placeholder]="'Choose font size'" [multiple]="false" [ItemHeight]="33"></sh-select>
                         </div>
@@ -193,7 +193,7 @@
             <li [hidden]="!templateUISectionVisibility.print">
                 <i class="ico-print"></i> <label>Edit print setting</label>
 
-                <div class="clearfix mrT1">
+                <div class="clearfix mr-t1">
                     <div class="printTool pos-rel">
                         <p>Page margins (in pixel)</p>
                         <table class="table mr0">
@@ -223,7 +223,7 @@
                                             class="form-control" [(ngModel)]='customTemplate.rightMargin'
                                             (keyup)='onValueChange(null, null);validatePrintSetting(customTemplate.rightMargin, 3, "rightMargin")' />
                                     </td>
-                                    <td><a href="javascript:void(0);" class="pdR1"
+                                    <td><a href="javascript:void(0);" class="pd-r1"
                                             (click)="resetPrintSetting()">Reset</a></td>
                                 </tr>
                             </tbody>

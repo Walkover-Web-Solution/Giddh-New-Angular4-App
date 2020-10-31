@@ -62,7 +62,7 @@ span.icon-info-icon {
     border: 1px solid $gainsboro;
 }
 a.dropdown-item {
-    color: #484848;
+    color: $charcoal;
 }
 
 a.dropdown-item:hover {
@@ -74,6 +74,10 @@ a.dropdown-item:hover {
 }
 .panel-heading {
     padding: 15px 15px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 .basic > tbody > tr:hover td {
     background: transparent;
@@ -92,10 +96,4 @@ a.dropdown-item:hover {
     height: 181px;
     justify-content: center;
     align-items: center;
-}
-.dashboard-datepicker{
-    max-width: 190px;
-    min-width: 190px;
-    border-radius: 30px;
-    border: 1px solid $gainsboro;
 }

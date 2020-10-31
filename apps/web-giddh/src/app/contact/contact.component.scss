@@ -7,7 +7,7 @@
     display: flex;
 }
 
-.pd1 {
+.pd-1 {
     padding: 5px;
 }
 
@@ -29,6 +29,7 @@
 
 .icon-pointer {
     margin-left: 6px;
+    cursor: pointer;
 }
 
 .icon-pointer.iconSearch {
@@ -112,7 +113,9 @@ ul.list-unstyled li a {
     min-width: 0px !important;
     min-height: 0px !important;
 }
-
+.dropdown-menu-right{
+    z-index: 1;
+}
 .model-position {
     float: right;
     right: -234px;
@@ -197,11 +200,7 @@ tr.aging-table-top td {
     max-width: 1170px;
     width: 100%;
     -moz-transform: translate(1px, 0);
-    th {
-        &:first-child {
-            min-width: 250px;
-        }
-    }
+    th,
     td {
         &:first-child {
             min-width: 250px;
@@ -265,30 +264,31 @@ i.icon-options:hover {
     background-color: #eaeaea;
 }
 
-.searchField {
+.search-field {
     position: relative;
+    margin-bottom: 0;
 }
 
-.searchField input {
+.search-field input {
     width: 235px;
     background-color: #e6e7e8 !important;
     border-color: #e6e7e8 !important;
 }
 
-.searchField input:focus {
+.search-field input:focus {
     background-color: #fff !important;
     border-color: $midnight-express !important;
 }
-
-span.inputAddon {
+span.input-addon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
     background-color: $chetwode-blue;
     color: #fff;
-    font-size: 20px;
+    font-size: 18px;
     border-radius: 2px;
     height: 36px;
+    top: 0;
 }
 
 .aging-table .btn-small {
@@ -348,7 +348,7 @@ button.btn.btn-filter span.icon-cross {
     margin-right: 5px;
 }
 
-.form-inline {
+.customer-form-inline{
     display: flex !important;
     justify-content: space-between !important;
 }
@@ -356,11 +356,68 @@ button.btn.btn-filter span.icon-cross {
 .mobile-button-filter {
     display: none !important;
 }
-
-
+.customer-form-inline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 /*responsive*/
-
+@media(max-width:800px){
+    .customer-form-inline{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: initial;
+        .dis {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .header-left {
+            width: calc(100% - 50px);
+            margin-left: 45px;
+            .form-group {
+                vertical-align: bottom !important;
+                margin-bottom: 5px;
+                max-width: 100%;
+                input {
+                    width: 100%;
+                }
+            }
+        }
+    }
+    .customer-footer-box {
+        padding-bottom: 10px;
+        float: right !important;
+    }
+    .customer-footer-box {
+        padding-top: 0;
+        float: left !important;
+    }
+    .customer-footer-box+.btn-group {
+        float: left !important;
+    }
+    .customer-form-inline{
+        flex-direction: column;
+    }
+    .customer-footer-box {
+        display: flex;
+        .mobile-button-filter {
+            display: flex !important;
+        }
+    }
+    .desktop-button-filter {
+        display: none !important;
+    }
+}
 @media (max-width: 768px) {
+    button.btn.btn-filter{
+        margin-left: auto;
+        display: flex;
+    }
+    .customer-form-inline{
+        display: block;
+    }
     .aging-table>tbody>tr input[type="checkbox"] {
         top: 2px;
     }
@@ -422,13 +479,19 @@ button.btn.btn-filter span.icon-cross {
     .aging-table .btn-small {
         min-width: auto;
     }
+    .top-aging-table-top{
+        margin-bottom: 8px;
+    }
+    table.on-mobile-view tbody td:before{
+        left: 30px;
+    }
 }
 
 @media (max-width: 767px) {
     .date-range-picker {
         height: 26px !important;
     }
-    span.inputAddon {
+    span.input-addon {
         top: 0;
     }
     .btn-group.plus-btn {
@@ -437,37 +500,6 @@ button.btn.btn-filter span.icon-cross {
     }
     .btn-group.plus-btn button {
         width: 100%;
-    }
-    .customer-footer-box {
-        padding-bottom: 10px;
-        float: right !important;
-    }
-    .form-inline {
-        position: relative;
-        .dis {
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-        .header-left {
-            width: calc(100% - 50px);
-            margin-left: 45px;
-            .form-group {
-                vertical-align: bottom !important;
-                margin-bottom: 5px;
-                max-width: 100%;
-                input {
-                    width: 100%;
-                }
-            }
-        }
-    }
-    .customer-footer-box {
-        padding-top: 0;
-        float: left !important;
-    }
-    .customer-footer-box+.btn-group {
-        float: left !important;
     }
     .customer-right-wrap {
         position: relative;
@@ -484,18 +516,6 @@ button.btn.btn-filter span.icon-cross {
     }
     .customer-name .icon-ellipse {
         top: 8px;
-    }
-    .form-inline {
-        flex-direction: column;
-    }
-    .customer-footer-box {
-        display: flex;
-        .mobile-button-filter {
-            display: flex !important;
-        }
-    }
-    .desktop-button-filter {
-        display: none !important;
     }
 }
 
@@ -581,7 +601,7 @@ button.btn.btn-filter span.icon-cross {
 }
 
 @media (min-width: 768px) {
-    .onMobileView.btn-group {
+    .on-mobile-view.btn-group {
         display: none;
     }
     .onDesktopView.btn-group {

@@ -1,11 +1,11 @@
 <h1 class="page-title" *ngIf="(logs$ | async).length > 0"> Audit Logs</h1>
 <br />
 <section class="audit-log" *ngFor="let log of (logs$ | async); let i = index">
-    <h1>{{log.operationType}}
+    <h1 class="audit-log-heading">{{log.operationType}}
         <span *ngIf="log && log.accountName && log.accountName != null"> - {{log.accountName}}
             ({{log.accountUniqueName}})</span>
     </h1>
-    <div class="mrT border-top-btm clearfix">
+    <div class="mr-t border-top-btm clearfix">
         <div>
             <label class="pull-left">Entity:</label>
             <p class="pull-left mrL">{{log.entityType}}</p>
@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <div class="mrT" *ngIf="log.log != null && log.log.transactions != undefined && log.log.transactions.length > 0">
+    <div class="mr-t table-container" *ngIf="log.log != null && log.log.transactions != undefined && log.log.transactions.length > 0">
         <table class="table table-bordered ">
             <thead>
                 <tr>
@@ -61,7 +61,7 @@
             </tbody>
         </table>
     </div>
-    <div class="mrT text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
+    <div class="mr-t text-center table-container" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
         <label>Updated</label>
         <table class="table table-bordered">
             <thead>
@@ -106,7 +106,7 @@
             </tbody>
         </table>
     </div>
-    <div class="mrT text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
+    <div class="mr-t text-center table-container" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
         <label>Updated</label>
         <table class="table table-bordered">
             <thead>
@@ -158,5 +158,5 @@
         <p>You can use the filters on the left to fetch logs.</p>
     </div>
 </section>
-<button class='btn btn-success pull-left mrT2 mrB2' [ladda]="loadMoreInProcess$ | async" (click)='loadMoreLogs()' *ngIf='(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)'>Load More
+<button class='btn btn-success pull-left mr-t2 mr-b2' [ladda]="loadMoreInProcess$ | async" (click)='loadMoreLogs()' *ngIf='(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)'>Load More
 </button>

@@ -123,3 +123,16 @@
 #logoImage {
     padding: 4px;
 }
+
+
+
+@media (min-width:1024px) and (max-width:1266px){
+    .start-upload-btn {
+        float: none;
+        position: relative;
+        transform: none;
+        margin-left: 0px;
+        top: 115px;
+        left: -100px;
+    }
+}

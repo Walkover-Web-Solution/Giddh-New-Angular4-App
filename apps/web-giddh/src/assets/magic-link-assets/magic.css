@@ -183,7 +183,7 @@ body {
     padding: 5px;
 }
 
-.pd1 {
+.pd-1 {
     padding: 10px;
 }
 
@@ -227,7 +227,7 @@ body {
     padding-right: 0;
 }
 
-.pdT1 {
+.pd-t1 {
     padding-top: 10px;
 }
 
@@ -236,11 +236,11 @@ body {
     padding-top: 20px;
 }
 
-.pdB1 {
+.pd-b1 {
     padding-bottom: 10px;
 }
 
-.pdL1 {
+.pd-l1 {
     padding-left: 10px;
 }
 
@@ -248,7 +248,7 @@ body {
     padding-left: 10px !important;
 }
 
-.pdR1 {
+.pd-r1 {
     padding-right: 10px;
 }
 
@@ -328,7 +328,7 @@ body {
     margin: 40px;
 }
 
-.mrT {
+.mr-t {
     margin-top: 5px;
 }
 
@@ -344,11 +344,11 @@ body {
     margin-right: 5px;
 }
 
-.mrT1 {
+.mr-t1 {
     margin-top: 10px;
 }
 
-.mrB1 {
+.mr-b1 {
     margin-bottom: 10px;
 }
 
@@ -356,7 +356,7 @@ body {
     margin-bottom: 15px;
 }
 
-.mrL1 {
+.mr-l1 {
     margin-left: 10px;
 }
 
@@ -368,11 +368,11 @@ body {
     margin-right: 10px;
 }
 
-.mrT2 {
+.mr-t2 {
     margin-top: 20px;
 }
 
-.mrB2 {
+.mr-b2 {
     margin-bottom: 20px;
 }
 
@@ -400,7 +400,7 @@ body {
     margin-right: 30px;
 }
 
-.mrT4 {
+.mr-t4 {
     margin-top: 40px;
 }
 
@@ -437,7 +437,7 @@ body {
 }
 
 .bdrL {
-    border-left: 1px solid #ccc;
+    border-left: 1px solid #ccc !important;
 }
 
 .bdrR {
@@ -505,7 +505,7 @@ body {
     text-transform: uppercase;
 }
 
-.txtLwc {
+.txt-lwc {
     text-transform: lowercase;
 }
 
@@ -513,7 +513,7 @@ body {
     text-transform: capitalize;
 }
 
-.tdUndr {
+.td-undr {
     text-decoration: underline;
 }
 
@@ -692,6 +692,10 @@ table th[class*="col-"] {
 
 .table-bordered {
     border: 0;
+}
+
+.table-bordered td, .table-bordered th {
+ border:none;
 }
 
 .pd350 {
@@ -946,6 +950,53 @@ body {
 .cube2 {
     -webkit-animation-delay: -0.9s;
     animation-delay: -0.9s;
+}
+
+
+.input-group {
+    position: relative;
+    display: table;
+    border-collapse: separate;
+}
+
+.input-group .form-control:first-child{
+    border-bottom-right-radius: 0;
+}
+
+.input-group .form-control, .input-group-addon, .input-group-btn {
+    display: table-cell;
+}
+
+.input-group .form-control {
+    position: relative;
+    z-index: 2;
+    float: left;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.input-group-addon:last-child {
+    border-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.input-group-addon {
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    color: #555;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.input-group-addon, .input-group-btn {
+    width: 1%;
+    white-space: nowrap;
+    vertical-align: middle;
 }
 
 @-webkit-keyframes sk-cubemove {
@@ -1266,7 +1317,7 @@ div#transaction_table {
     background-color: #fff;
     position: relative;
 }
-.ledger-footer-1.leftfooter .total_col td {
+.ledger-footer-1.leftfooter .total-col td {
     border-right: 0;
 }
 #debit td {

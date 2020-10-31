@@ -9,7 +9,9 @@ import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import * as moment from 'moment';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { BsDatepickerDirective, ModalDirective, BsModalRef, ModalOptions , BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, ModalOptions , BsModalService } from 'ngx-bootstrap/modal';
+import {BsDatepickerDirective} from 'ngx-bootstrap/datepicker';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 @Component({
@@ -54,8 +56,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
         backdrop: 'static',
         ignoreBackdropClick: true
     };
-    @ViewChild('customerSearch') public customerSearch: ElementRef;
-    @ViewChild(BsDatepickerDirective) public bsd: BsDatepickerDirective;
+    @ViewChild('customerSearch', {static: true}) public customerSearch: ElementRef;
+    @ViewChild(BsDatepickerDirective, {static: true}) public bsd: BsDatepickerDirective;
 
     public showInvoiceNumberSearch = false;
     public showCustomerNameSearch = false;
@@ -145,6 +147,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public toggleRecurringAsidePane(toggle?: string): void {
         if (toggle) {
             this.asideMenuStateForRecurringEntry = toggle;
+            this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices());
         } else {
             this.asideMenuStateForRecurringEntry = this.asideMenuStateForRecurringEntry === 'out' ? 'in' : 'out';
         }

@@ -1,5 +1,4 @@
-import { ILedgerAdvanceSearchRequest } from './Ledger';
-import { IClosingBalance, IForwardBalance, ILedger, ILedgerTransactionItem, ITotalItem, ITransactionItem, ITransactions, IVoucherItem } from '../interfaces/ledger.interface';
+import { IForwardBalance, ILedger, ILedgerTransactionItem, ITotalItem, ITransactionItem, ITransactions, IVoucherItem } from '../interfaces/ledger.interface';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from './Sales';
 import { PettyCashEntryStatus } from './Expences';
@@ -124,8 +123,8 @@ export class LedgerResponse {
     public reverseChargeTaxableAmount?: number;
     public passportNumber?: string;
     public touristSchemeApplicable?: boolean;
-    public voucherAdjustments?: VoucherAdjustments
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
+    public voucherAdjustments?: VoucherAdjustments;
     public unitRates?: Array<any>;
 }
 /** Model for Ledger Advance receipts for invoices */

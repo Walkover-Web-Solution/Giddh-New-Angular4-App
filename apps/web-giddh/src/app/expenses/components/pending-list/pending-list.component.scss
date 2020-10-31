@@ -1,5 +1,4 @@
 @import "../../../../assets/css/color.scss";
-
 .basic > thead > tr > th {
     position: relative;
 }
@@ -22,6 +21,7 @@
 }
 
 .icon-pointer {
+    cursor: pointer;
     .activeTextColor {
         color: $wild-blue-yonder !important;
     }

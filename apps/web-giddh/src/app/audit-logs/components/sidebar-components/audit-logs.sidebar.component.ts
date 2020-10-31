@@ -1,24 +1,24 @@
-import {of as observableOf, ReplaySubject} from 'rxjs';
-
-import {map, take, takeUntil} from 'rxjs/operators';
-import {LogsRequest} from '../../../models/api-models/Logs';
-import {UserDetails} from '../../../models/api-models/loginModels';
-import {CompanyResponse} from '../../../models/api-models/Company';
-import {CompanyService} from '../../../services/companyService.service';
-import {GroupService} from '../../../services/group.service';
-import {AccountService} from '../../../services/account.service';
-import {AppState} from '../../../store';
-import {GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI} from '../../../shared/helpers/defaultDateFormat';
-import {select, Store} from '@ngrx/store';
-
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
-import {FormBuilder} from '@angular/forms';
-import {AuditLogsSidebarVM} from './Vm';
-import * as _ from '../../../lodash-optimized';
-import {AuditLogsActions} from '../../../actions/audit-logs/audit-logs.actions';
-import {BsDatepickerConfig} from 'ngx-bootstrap/datepicker';
-import {IOption} from '../../../theme/ng-virtual-select/sh-options.interface';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { of as observableOf, ReplaySubject } from 'rxjs';
+import { take, takeUntil, map } from 'rxjs/operators';
+import {map as lodashMap } from '../../../lodash-optimized';
+
+import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
+import { flatten, omit, union } from '../../../lodash-optimized';
+import { CompanyResponse } from '../../../models/api-models/Company';
+import { UserDetails } from '../../../models/api-models/loginModels';
+import { LogsRequest } from '../../../models/api-models/Logs';
+import { AccountService } from '../../../services/account.service';
+import { CompanyService } from '../../../services/companyService.service';
+import { GroupService } from '../../../services/group.service';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { AppState } from '../../../store';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { AuditLogsSidebarVM } from './Vm';
 
 @Component({
     selector: 'audit-logs-sidebar',
@@ -102,10 +102,10 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
 
     public flattenGroup(rawList: any[], parents: any[] = []) {
         let listofUN;
-        listofUN = _.map(rawList, (listItem) => {
+        listofUN = lodashMap(rawList, (listItem) => {
             let newParents;
             let result;
-            newParents = _.union([], parents);
+            newParents = union([], parents);
             newParents.push({
                 name: listItem.name,
                 uniqueName: listItem.uniqueName
@@ -114,13 +114,13 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             listItem.parentGroups = newParents;
             if (listItem.groups.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
-                result.push(_.omit(listItem, 'groups'));
+                result.push(omit(listItem, 'groups'));
             } else {
-                result = _.omit(listItem, 'groups');
+                result = omit(listItem, 'groups');
             }
             return result;
         });
-        return _.flatten(listofUN);
+        return flatten(listofUN);
     }
 
     public ngOnDestroy() {

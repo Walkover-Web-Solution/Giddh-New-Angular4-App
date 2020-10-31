@@ -1,12 +1,12 @@
 import { IScope, PermissionDataService } from './permission-data.service';
-import { Directive, ElementRef, Input, OnInit, Renderer } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 
 @Directive({ selector: '[checkPermission]' })
 
 export class CheckPermissionDirective implements OnInit {
     @Input() public checkPermission: string[];
 
-    constructor(public el: ElementRef, public renderer: Renderer, private _permissionDataService: PermissionDataService) {
+    constructor(public el: ElementRef, public renderer: Renderer2, private _permissionDataService: PermissionDataService) {
     }
 
     public ngOnInit() {
@@ -17,7 +17,7 @@ export class CheckPermissionDirective implements OnInit {
             if (this.checkPermission[0] === 'MENU') {
                 let permissionIndex = permissions.findIndex((ele) => ele.name === this.checkPermission[1]);
                 if (!permissions.length || permissionIndex === -1) {
-                    this.renderer.setElementStyle(this.el.nativeElement, 'display', 'none');
+                    this.renderer.setStyle(this.el.nativeElement, 'display', 'none');
                 }
             }
         }

@@ -12,7 +12,7 @@ import {
     TemplateRef
 } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { BsDatepickerConfig } from 'ngx-bootstrap';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
 
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
@@ -49,7 +49,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
 
     @Input() public isLoading: boolean;
     @Input() public currentCompany: CompanyResponse;
-    @ViewChild('shDestination') public shDestination: ShSelectComponent;
+    @ViewChild('shDestination', {static: true}) public shDestination: ShSelectComponent;
 
     public hideForm = false;
     public stockListOptions: IOption[];
@@ -79,7 +79,7 @@ export class BranchTransferNoteComponent implements OnInit, AfterViewInit, OnCha
 
     /* setModalClass() {
          this.valueWidth = !this.valueWidth;
-         const modalWidth = this.valueWidth ? 'modal-lg' : 'modal-sm';
+         const modalWidth = this.valueWidth ? 'modal-xl' : 'modal-sm';
          this.modalRef.setClass(modalWidth);
      }*/
 

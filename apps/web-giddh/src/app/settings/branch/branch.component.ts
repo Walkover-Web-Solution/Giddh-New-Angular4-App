@@ -6,7 +6,8 @@ import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild, Afte
 import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { BsDropdownConfig, ModalDirective } from 'ngx-bootstrap';
+import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyAddNewUiComponent } from '../../shared/header/components';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyResponse, BranchFilterRequest } from '../../models/api-models/Company';
@@ -35,10 +36,10 @@ export const IsyncData = [
 })
 
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
-    @ViewChild('branchModal') public branchModal: ModalDirective;
-    @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
-    @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
-    @ViewChild('confirmationModal') public confirmationModal: ModalDirective;
+    @ViewChild('branchModal', {static: true}) public branchModal: ModalDirective;
+    @ViewChild('addCompanyModal', {static: true}) public addCompanyModal: ModalDirective;
+    @ViewChild('companyadd', {static: true}) public companyadd: ElementViewContainerRef;
+    @ViewChild('confirmationModal', {static: true}) public confirmationModal: ModalDirective;
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
         dateInputFormat: 'DD-MM-YYYY',
@@ -80,9 +81,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
-        this.store.select(p => p.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o && !_.isEmpty(o)) {
-                let companyInfo = _.cloneDeep(o);
+        this.store.pipe(select(state => state.settings && state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile && !_.isEmpty(profile)) {
+                let companyInfo = _.cloneDeep(profile);
                 this.currentBranch = companyInfo.name;
                 this.currentBranchNameAlias = companyInfo.nameAlias;
             }
@@ -99,7 +100,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
-        this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches, (state: AppState) => state.settings.parentCompany], (companies, branches, parentCompany) => {
             if (branches) {
                 if (branches.results.length) {
                     _.each(branches.results, (branch) => {
@@ -139,7 +140,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.parentCompanyName = null;
                 }, 10);
             }
-        })).pipe(takeUntil(this.destroyed$)).subscribe();
+        })), takeUntil(this.destroyed$)).subscribe();
     }
 
     public ngOnInit() {

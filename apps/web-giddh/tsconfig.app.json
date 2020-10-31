@@ -18,6 +18,9 @@
         "**/*.spec.ts"
     ],
     "include": [
-        "**/*.ts"
+        "src/main.ts",
+        "src/polyfills.ts",
+        "src/**/*.ts",
+        "src/**/*.d.ts"
     ]
 }

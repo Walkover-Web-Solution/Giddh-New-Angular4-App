@@ -2,6 +2,8 @@ import { Component, EventEmitter, OnInit, Output, ViewChild, ElementRef } from '
 import { settingsPageTabs } from "../../../helpers/pageTabs";
 import { Location } from '@angular/common';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'aside-setting',
@@ -12,7 +14,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 export class AsideSettingComponent implements OnInit {
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    @ViewChild('searchField') public searchField: ElementRef;
+    @ViewChild('searchField', {static: true}) public searchField: ElementRef;
 
     public imgPath: string = '';
     public settingsPageTabs: any[] = [];
@@ -20,7 +22,7 @@ export class AsideSettingComponent implements OnInit {
     public filteredSettingsPageTabs: any[] = [];
     public isMobileScreen: boolean = true;
 
-    constructor(private location: Location, private breakPointObservar: BreakpointObserver) {
+    constructor(private location: Location, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router) {
 
     }
 
@@ -94,7 +96,11 @@ export class AsideSettingComponent implements OnInit {
      * @memberof AsideSettingComponent
      */
     public goToPreviousPage(): void {
-        this.location.back();
+        if(this.generalService.getSessionStorage("previousPage")) {
+            this.router.navigateByUrl(this.generalService.getSessionStorage("previousPage"));
+        } else {
+            this.location.back();
+        }
     }
 
     /**

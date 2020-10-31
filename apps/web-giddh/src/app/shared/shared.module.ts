@@ -1,14 +1,14 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { CKEditorModule } from 'ng2-ckeditor';
-import { BsDatepickerModule, DatepickerModule, PaginationModule } from 'ngx-bootstrap';
+import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
@@ -16,7 +16,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
 
 import { LedgerDiscountComponent } from '../../app/ledger/components/ledgerDiscount/ledgerDiscount.component';
 import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
@@ -31,8 +31,8 @@ import {
     SocialLoginModule,
 } from '../theme/ng-social-login-module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { VsForDirective } from '../theme/ng2-vs-for/ng2-vs-for';
 import { FormWizardModule } from '../theme/ng2-wizard';
 import { UniversalListModule } from '../theme/universal-list/universal.list.module';
 import { WelcomeComponent } from '../welcome/welcome.component';
@@ -75,6 +75,17 @@ import { AsideSettingComponent } from './header/components/aside-setting/aside-s
 import { DeleteTemplateConfirmationModelComponent } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
 import { DatepickerWrapperComponent } from './datepicker-wrapper/datepicker.wrapper.component';
 import { LoaderComponent } from '../loader/loader.component';
+import { ProformaAddBulkItemsComponent } from '../proforma-invoice/components/proforma-add-bulk-items/proforma-add-bulk-items.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { GiddhDatepickerComponent } from '../theme/giddh-datepicker/giddh-datepicker.component';
+import { MatNativeDateModule, MAT_DATE_FORMATS, NativeDateAdapter, DateAdapter } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+import { RevisionHistoryComponent } from './revision-history/revision-history.component';
+import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
+import { PdfJsViewerModule } from 'ng2-pdfjs-viewer';
+import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
+import { GiddhDaterangepickerComponent } from '../theme/giddh-daterangepicker/giddh-daterangepicker.component';
 
 // social login injection
 // import {  } from 'ng-social-login-module/esm2015/lib/auth.module';
@@ -110,6 +121,23 @@ export function provideConfig() {
     return SOCIAL_CONFIG || { id: null, providers: [] };
 }
 
+export const GIDDH_DATEPICKER_FORMAT = {
+    parse: { dateInput: 'dd-MM-yyyy' },
+    display: {
+        dateInput: 'input'
+    }
+};
+
+export class PickDateAdapter extends NativeDateAdapter {
+    format(date: Date, displayFormat: Object): string {
+        if (displayFormat === 'input') {
+            return formatDate(date, 'dd-MM-yyyy', this.locale);
+        } else {
+            return formatDate(date, 'MMM yyyy', this.locale);
+        }
+    }
+}
+
 @NgModule({
     declarations: [
         MfReportComponent,
@@ -132,7 +160,6 @@ export function provideConfig() {
         GroupUpdateComponent,
         ShareGroupModalComponent,
         ShareAccountModalComponent,
-        VsForDirective,
         CheckPermissionDirective,
         ExportGroupLedgerComponent,
         AsideMenuOtherTaxes,
@@ -142,7 +169,13 @@ export function provideConfig() {
         ConfirmationModalComponent,
         DeleteTemplateConfirmationModelComponent,
         DatepickerWrapperComponent,
-        LoaderComponent
+        LoaderComponent,
+        ProformaAddBulkItemsComponent,
+        GiddhDatepickerComponent,
+        RevisionHistoryComponent,
+        PurchaseOrderPreviewModalComponent,
+        PurchaseSendEmailModalComponent,
+        GiddhDaterangepickerComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -152,9 +185,8 @@ export function provideConfig() {
         ReactiveFormsModule,
         ModalModule,
         DatepickerModule,
-        TypeaheadModule,
+        TypeaheadModule.forRoot(),
         UniversalListModule,
-        NgbTypeaheadModule,
         TooltipModule,
         BsDropdownModule,
         PopoverModule.forRoot(),
@@ -179,7 +211,13 @@ export function provideConfig() {
         CKEditorModule,
         NgxMaskModule,
         CommandKModule,
-        NgxDaterangepickerMd.forRoot()
+        NgxDaterangepickerMd.forRoot(),
+        ScrollingModule,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        MatNativeDateModule,
+        MatInputModule,
+        PdfJsViewerModule
     ],
     exports: [
         CommonModule,
@@ -205,8 +243,6 @@ export function provideConfig() {
         PerfectScrollbarModule,
         OnBoardingComponent,
         ConfirmModalModule,
-        NgbTypeaheadModule,
-        VsForDirective,
         AccountsSideBarComponent,
         AsideHelpSupportComponent,
         AsideSettingComponent,
@@ -227,7 +263,12 @@ export function provideConfig() {
         NgxDaterangepickerMd,
         DeleteTemplateConfirmationModelComponent,
         DatepickerWrapperComponent,
-        LoaderComponent
+        LoaderComponent,
+        ProformaAddBulkItemsComponent,
+        GiddhDatepickerComponent,
+        RevisionHistoryComponent,
+        PurchaseOrderPreviewModalComponent,
+        PurchaseSendEmailModalComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
@@ -247,11 +288,15 @@ export function provideConfig() {
         {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-        }
+        },
+        MatDatepickerModule,
+        MatNativeDateModule,
+        { provide: MAT_DATE_FORMATS, useValue: GIDDH_DATEPICKER_FORMAT },
+        { provide: DateAdapter, useClass: PickDateAdapter },
     ]
 })
 export class SharedModule {
-    public static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders<SharedModule> {
         return {
             ngModule: SharedModule,
             providers: []

@@ -1,4 +1,4 @@
-<div id="contentTab" class="tabcontent mrT2 templateEditor" *ngIf="content && customTemplate && customTemplate.sections">
+<div id="contentTab" class="tabcontent mr-t2 templateEditor" *ngIf="content && customTemplate && customTemplate.sections">
     <!-- start header -->
     <div id="headerDiv" *ngIf="templateUISectionVisibility.header">
         <h2>Header</h2>
@@ -104,7 +104,7 @@
                 <!-- *ngIf="fieldsAndVisibility.header.formNameTaxInvoice" -->
                 <div class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['formNameTaxInvoice'].display" (ngModelChange)="changeInvoiceHeader($event);onChangeFieldVisibility(null, null, null);" checked /> Document Title
-                    <!-- <div class="ml-3 mrT1">Invoice
+                    <!-- <div class="ml-3 mr-t1">Invoice
               <input type="text" [maxlength]="15" class="form-control" name="tl" [(ngModel)]='customTemplate.sections[0].content[22].label'
                   (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[23].display"
               />
@@ -208,7 +208,7 @@
                     </div>
                 </div>
             </div>
-            <div class="clearfix customField mrB2" *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d'">
+            <div class="clearfix customField mr-b2" *ngIf="customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d'">
                 <h3>
                     <i class="fa cp" aria-hidden="true" (click)="showCustomField = !showCustomField" [ngClass]="{'fa-minus-square-o': showCustomField, 'fa-plus-square-o': !showCustomField}"></i> Custom Field
                 </h3>
@@ -580,19 +580,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="clearfix mrT1">
+                <div class="clearfix mr-t1">
                     <div *ngIf="fieldsAndVisibility.footer.message1">
                         <input type="checkbox" name="msg1" [(ngModel)]="customTemplate.sections['footer'].data['message1'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Note 1
                     </div>
                     <div *ngIf="fieldsAndVisibility.footer.message1" class="form-group ml-3 clearfix">
-                        <div class="col-xs-12">
-                            <div class="row">
+                        <div class="row">
+                            <div class="col-12">
                                 <textarea class="form-control" placeholder="Enter any other text you would like in the footer. " [(ngModel)]="customTemplate.sections['footer'].data['message1'].label" name="msg11" (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections['footer'].data['message1'].display"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div *ngIf="fieldsAndVisibility.footer.thanks" class="clearfix mrT1">
+                <div *ngIf="fieldsAndVisibility.footer.thanks" class="clearfix mr-t1">
                     <div class="form-group thanks-input-group">
                         <input type="checkbox" name="ty" [(ngModel)]="customTemplate.sections['footer'].data['thanks'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked />
                         <input type="text" class="form-control thanks-input-inline" [disabled]="!fieldsAndVisibility.footer.thanks?.display" (keyup)='onFieldChange(null, null, null)' [(ngModel)]="customTemplate.sections['footer'].data['thanks'].label" placeholder="Thank You for your business"
@@ -611,9 +611,9 @@
                 </div>
             </div>
         </div> -->
-                <div class="clearfix mrT1">
-                    <div class="clearfix" class="col-xs-6">
-                        <div class="row mb-4px">
+                <div class="clearfix mr-t1 row">
+                    <div class="clearfix" class="col-lg-6 col-md-12">
+                        <div class="mb-4px">
                             <input type="radio" class="radio_theme" style="margin-left: 0px !important;" name="signatureType" (change)="chooseSigntureType('image')" (ngModelChange)='onFieldChange(null, null, null)' [checked]="customTemplate.sections.footer.data.imageSignature.display"
                             /> Image Signature
                         </div>
@@ -640,13 +640,13 @@
                             </span>
                         </div>
                     </div>
-                    <div class="clearfix" class="col-xs-6">
+                    <div class="clearfix" class="col-lg-6 col-md-12">
                         <div>
                             <input type="radio" class="radio_theme" name="signatureType" (change)="chooseSigntureType('slogan')" (ngModelChange)='onFieldChange(null, null, null)' [checked]="customTemplate.sections.footer.data.slogan.display" /> Slogan
                         </div>
                         <div class="form-group ml-3 clearfix">
                             <div>
-                                <div class="row">
+                                <div>
                                     <textarea class="form-control" [disabled]="customTemplate.sections.footer.data.imageSignature.display" name="mdg22" [(ngModel)]="customTemplate.sections['footer'].data['slogan'].label" (ngModelChange)='onFieldChange(null, null, null)'>Note:Contact us for queries on these questions</textarea>
                                 </div>
                             </div>

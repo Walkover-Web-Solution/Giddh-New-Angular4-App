@@ -11,7 +11,7 @@
     z-index: -1;
 }
 
-.invoce-controll {
+.invoice-control {
     position: relative;
 }
 
@@ -206,7 +206,7 @@ span.close-modal.cp.pull-right {
     width: 160px;
 }
 
-.dropdown-toggle.btn-pink {
+.dropdown-toggle.btn-sky-blue {
     padding: 6px 16px;
 }
 
@@ -925,7 +925,7 @@ table.tax-table.item {
         top: 10px;
     }
 }
-@media (max-width:1024px) and (min-width:768px){
+@media (max-width:1024px) and (min-width:992px){
     .invoice-search-box{
         flex-direction: column;
         button.btn{
@@ -937,10 +937,13 @@ table.tax-table.item {
         }
     }
 }
-@media(max-width:767px){
+@media(max-width:991px){
+    .invoice-sidebar-wrapper {
+        display: none;
+    }
     .invoice-modal-content{
-        top:0;
-        position: static;
+        top:60px;
+        overflow-y:auto;
         .invoice-sidebar{
             height: 300px;
         }
@@ -957,6 +960,19 @@ table.tax-table.item {
                 height: auto;
         }
     }
+    .wrap-edit-history-btn{
+        float: left;
+        display: flex;
+        align-items: center;
+    }
+    .invoice-detail-header{
+        padding-left: 30px !important;
+    }
+}
+@media(max-width:767px){
+    .invoice-modal-content{
+        top:90px;
+    }
 }
 @media(max-width:575px){
     .invoice-search-box{
@@ -969,4 +985,54 @@ table.tax-table.item {
             flex: auto;
         }
     }
+    .wrap-edit-history-btn{
+        float: none;
+        display: flex;
+        width: 100%;
+        padding-top: 10px;
+    }
+    .edit-change-status{
+        text-align: left;
+        .close-modal{
+            position: absolute !important;
+            top: -42px;
+            right: 30px;
+        }
+        .change-status-dropdown{
+            float: left;
+            display: flex !important;
+            width: 100% !important;
+            .btn{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+            }
+        }
+        .wrap-edit-history-btn{
+            justify-content: space-between;
+        }
+    }
+}
+.loader {
+    height: 4px;
+    width: 100%;
+    position: absolute;
+    overflow: hidden;
+    z-index: 9;
+    top: 0px;
+    left: 0px;
+}
+
+.loader:before {
+    display: block;
+    position: absolute;
+    z-index: 1000000;
+    content: "";
+    left: 0px;
+    top: 0px;
+    width: 200px;
+    height: 4px;
+    background-color: $chetwode-blue;
+    animation: loading 2s linear infinite;
 }

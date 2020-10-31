@@ -1,7 +1,7 @@
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CommonService } from '../services/common.service';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CountryRequest, CountryResponse, CurrencyResponse, CallingCodesResponse, OnboardingFormRequest, OnboardingFormResponse } from '../models/api-models/Common';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
@@ -17,8 +17,6 @@ export class CommonActions {
     public static GET_COUNTRY_RESPONSE = "GetCountryResponse";
     public static GET_ALL_COUNTRY = 'GetAllCountry';
     public static GET_ALL_COUNTRY_RESPONSE = "GetA;;CountryResponse";
-    public static GET_CURRENCY = 'GetCurrency';
-    public static GET_CURRENCY_RESPONSE = "GetCurrencyResponse";
     public static GET_CALLING_CODES = 'GetCallingCodes';
     public static GET_CALLING_CODES_RESPONSE = "GetCallingCodesResponse";
     public static GET_ONBOARDING_FORM = 'GetOnboardingForm';
@@ -28,39 +26,35 @@ export class CommonActions {
     public static GET_PARTY_TYPE_RESPONSE = "GET_PARTY_TYPEResponse";
     public static RESET_COUNTRY = 'ResetCountry';
 
-    @Effect()
-    public getCountry$: Observable<Action> = this.action$
-        .ofType(CommonActions.GET_COUNTRY).pipe(
+    public getCountry$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CommonActions.GET_COUNTRY),
             switchMap((action: CustomActions) => this._commonService.GetCountry(action.payload)),
-            map(response => this.GetCountryResponse(response)));
-    @Effect()
-    public getAllCountry$: Observable<Action> = this.action$
-        .ofType(CommonActions.GET_ALL_COUNTRY).pipe(
+            map(response => this.GetCountryResponse(response))));
+
+    public getAllCountry$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CommonActions.GET_ALL_COUNTRY),
             switchMap((action: CustomActions) => this._commonService.GetCountry(action.payload)),
-            map(response => this.GetAllCountryResponse(response)));
+            map(response => this.GetAllCountryResponse(response))));
 
-    @Effect()
-    public getCurrency$: Observable<Action> = this.action$
-        .ofType(CommonActions.GET_CURRENCY).pipe(
-            switchMap((action: CustomActions) => this._commonService.GetCurrency()),
-            map(response => this.GetCurrencyResponse(response)));
-
-    @Effect()
-    public getCallingCodes$: Observable<Action> = this.action$
-        .ofType(CommonActions.GET_CALLING_CODES).pipe(
+    public getCallingCodes$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CommonActions.GET_CALLING_CODES),
             switchMap((action: CustomActions) => this._commonService.GetCallingCodes()),
-            map(response => this.GetCallingCodesResponse(response)));
+            map(response => this.GetCallingCodesResponse(response))));
 
-    @Effect()
-    public getOnboardingForm$: Observable<Action> = this.action$
-        .ofType(CommonActions.GET_ONBOARDING_FORM).pipe(
+    public getOnboardingForm$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CommonActions.GET_ONBOARDING_FORM),
             switchMap((action: CustomActions) => this._commonService.getOnboardingForm(action.payload)),
-            map(response => this.GetOnboardingFormResponse(response)));
-    @Effect()
-    public getPartytypes$: Observable<Action> = this.action$
-        .ofType(CommonActions.GET_PARTY_TYPE).pipe(
+            map(response => this.GetOnboardingFormResponse(response))));
+
+    public getPartytypes$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CommonActions.GET_PARTY_TYPE),
             switchMap((action: CustomActions) => this._commonService.GetPartyType()),
-            map(response => this.GetPartyTypeResponse(response)));
+            map(response => this.GetPartyTypeResponse(response))));
 
     constructor(private action$: Actions, private _commonService: CommonService, private store: Store<AppState>, private _generalService: GeneralService) {
 
@@ -79,6 +73,7 @@ export class CommonActions {
             payload: value
         };
     }
+
     public GetAllCountry(value: CountryRequest): CustomActions {
         return {
             type: CommonActions.GET_ALL_COUNTRY,
@@ -89,20 +84,6 @@ export class CommonActions {
     public GetAllCountryResponse(value: BaseResponse<CountryResponse, CountryRequest>): CustomActions {
         return {
             type: CommonActions.GET_ALL_COUNTRY_RESPONSE,
-            payload: value
-        };
-    }
-
-    public GetCurrency(): CustomActions {
-        return {
-            type: CommonActions.GET_CURRENCY,
-            payload: null
-        };
-    }
-
-    public GetCurrencyResponse(value: BaseResponse<CurrencyResponse, any>): CustomActions {
-        return {
-            type: CommonActions.GET_CURRENCY_RESPONSE,
             payload: value
         };
     }

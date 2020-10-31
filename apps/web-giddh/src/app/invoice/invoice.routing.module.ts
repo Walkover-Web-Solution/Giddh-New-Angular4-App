@@ -35,7 +35,9 @@ import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ElementViewChildModule } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { DecimalDigitsModule } from 'apps/web-giddh/src/app/shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { BsDropdownModule, CollapseModule, TabsModule } from 'ngx-bootstrap';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 import { RecurringComponent } from './recurring/recurring.component';
 import { AsideMenuRecurringEntryModule } from '../shared/aside-menu-recurring-entry/aside.menu.recurringEntry.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
@@ -56,7 +58,6 @@ import { GenerateEWayBillComponent } from './preview/models/generateEWayBill/gen
 import { EWayBillCredentialsComponent } from './eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component';
 import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { DownloadOrPreviewEwayComponent } from './eWayBill/download-or-preview-eway/download-or-preview-eway.component';
 import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview-details/invoice-preview-details.component';
@@ -72,10 +73,7 @@ import { SharedModule } from '../shared/shared.module';
 import { VoucherTypeToNamePipeModule } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.module';
 import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-invoice.module';
 import { DownloadVoucherComponent } from './preview/models/download-voucher/download-voucher.component';
-import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
-
-// import { DownloadReceiptComponent } from './receipt/models/download-receipt.component';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     // Change this to your Google API key
@@ -147,7 +145,6 @@ const INVOICE_ROUTES: Routes = [
         InvoiceTemplatesModule,
         KeyboardShortutModule,
         FontPickerModule,
-        BsDatepickerModule.forRoot(),
         CollapseModule.forRoot(),
         NgxUploaderModule,
         SelectModule,
@@ -164,7 +161,6 @@ const INVOICE_ROUTES: Routes = [
         Daterangepicker,
         AccountDetailModalModule,
         CurrencyModule,
-        NgbTypeaheadModule,
         PerfectScrollbarModule,
         ProformaInvoiceModule,
         DigitsOnlyModule,

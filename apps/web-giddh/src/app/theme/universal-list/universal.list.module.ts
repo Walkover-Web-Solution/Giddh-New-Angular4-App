@@ -31,7 +31,7 @@ import { UniversalSearchService, WindowRefService } from './service';
 })
 
 export class UniversalListModule {
-    public static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders<UniversalListModule> {
         return {
             ngModule: UniversalListModule
         };

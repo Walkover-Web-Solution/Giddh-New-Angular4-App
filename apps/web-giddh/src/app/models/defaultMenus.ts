@@ -95,9 +95,10 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase' },
     { type: 'MENU', name: 'Reports > Receipt (Beta)', uniqueName: '/pages/reports/receipt' },
     { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' },
-    { type: 'MENU', name: 'Purchase Orders', uniqueName: '/pages/purchase-management/purchase-orders' },
+    { type: 'MENU', name: 'Purchase Management > Purchase Order', uniqueName: '/pages/purchase-management/purchase/order' },
+    { type: 'MENU', name: 'Purchase Management > Purchase Bill', uniqueName: '/pages/purchase-management/purchase/bill' },
     { type: 'MENU', name: 'New Purchase Order', uniqueName: '/pages/purchase-management/purchase-order/new' },
-    { type: 'MENU', name: 'Purchase Settings', uniqueName: '/pages/purchase-management/purchase-settings' }
+    { type: 'MENU', name: 'Purchase Management > Settings', uniqueName: '/pages/purchase-management/purchase/settings' }
 ];
 export let HIDE_NAVIGATION_BAR_FOR_LG_ROUTES = ['journal-voucher', 'inventory',
     'invoice/preview/sales', 'home', 'gstfiling', 'inventory-in-out',
@@ -181,7 +182,8 @@ export let NAVIGATION_ITEM_LIST_RESPONSIVE: IUlist[] = [
     { type: 'MENU', name: 'New Purchase Bill', uniqueName: '/pages/proforma-invoice/invoice/purchase' },
     { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase' },
     { type: 'MENU', name: 'Reports > Receipt (Beta)', uniqueName: '/pages/reports/receipt' },
-    { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' }
+    { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules' },
+    { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory' }
 ];
 export let NAVIGATION_ITEM_LIST: IUlist[] = [];
 

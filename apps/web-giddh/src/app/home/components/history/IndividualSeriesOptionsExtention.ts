@@ -1,5 +1,5 @@
-import { IndividualSeriesOptions } from 'highcharts';
+// import { IndividualSeriesOptions } from 'highcharts';
 
-export interface IndividualSeriesOptionsExtension extends IndividualSeriesOptions {
-    visible: boolean;
-}
+// export interface IndividualSeriesOptionsExtension extends IndividualSeriesOptions {
+//     visible: boolean;
+// }

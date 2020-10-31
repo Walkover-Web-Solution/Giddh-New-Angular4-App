@@ -2,7 +2,7 @@
 :host {
     position: fixed;
     left: auto;
-    top:55px;
+    top:61px;
     right: 0;
     bottom: 0;
     max-width: 330px;
@@ -66,18 +66,18 @@
 }
 .aside-pane {
     padding: 0;
-    background-color:$alice-blue;
+    background-color:$white;
     .back-to-main-slider{
         display: none;
     }
     .aside-help-header{
         display: flex;
         justify-content: space-between;
-        padding: 18px 15px;
+        padding: 15px 15px;
         border-bottom: 1px solid $gainsboro;
         position:sticky;
         top: 0;
-        background-color: inherit;
+        background-color: $alice-blue;
         z-index: 1;
         h2 {
             font-family: 'opensans-semibold';
@@ -86,9 +86,9 @@
         }
     }
     .help-aside-body{
-        padding-bottom: 25%;
         .search-field{
             padding: 15px;
+            background-color: $alice-blue;
             input{
                 border-radius: 20px !important;
                 padding-left: 40px !important;
@@ -112,6 +112,7 @@
     margin-top: 15px;
 }
 .setting-items{
+    padding: 15px 0 0;
     ul{
         padding: 0 ;
         list-style: none;
@@ -128,12 +129,13 @@
                 span{
                     color: $nero;
                     &:first-child{
-                        line-height: 1.6;
-                        height: 20px;
-                        display: inline-flex;
-                        align-items: center;
-                        width: 28px;
-                    }
+                            line-height: 1.6;
+                            height: 20px;
+                            display: inline-flex;
+                            -webkit-box-align: center;
+                            align-items: center;
+                            width: 28px;
+                        }
                 }
             }
             &:hover{
@@ -141,6 +143,9 @@
             }
         }
     }
+}
+.setting-items ul li:hover a span i{
+    color: $nero !important;
 }
 
 :host.setting-sidebar{
@@ -198,6 +203,13 @@
                     }
                 }
             }
+        }
+    }
+}
+@media(max-height:900px){
+    .aside-pane {
+        .help-aside-body{
+            padding-bottom: 25%;
         }
     }
 }
@@ -292,5 +304,11 @@
     }
     :host .aside-pane {
         max-width: 280px;
+    }
+}
+@media(max-height:700px){
+    .help-aside-body{
+        height: 100%;
+        overflow-y: scroll;
     }
 }

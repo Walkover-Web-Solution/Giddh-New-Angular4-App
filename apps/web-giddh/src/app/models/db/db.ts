@@ -185,7 +185,7 @@ class AppDatabase extends Dexie {
         });
     }
 
-    public removeItem(key: any, entity: string, uniqueName: string): Promise<any> {
+    public removeItem(key: any, entity: string, uniqueName: string): Promise<ICompAidata> {
         return this.companies.get(key).then((res: CompAidataModel) => {
             if (!res) {
                 return;

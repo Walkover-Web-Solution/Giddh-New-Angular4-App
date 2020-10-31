@@ -9,7 +9,7 @@ import { ActionPettycashRequest, ExpenseResults, PettyCashReportResponse } from 
 import { ExpenseService } from '../../../services/expences.service';
 import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 import { FormControl } from '@angular/forms';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'app-pending-list',

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CompanyImportExportComponent } from './companyImportExport.component';
 import { CompanyImportExportRoutingModule } from './companyImportExport.routing.module';
-import { TabsModule } from 'ngx-bootstrap';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 import { CompanyImportExportFormComponent } from './component/form/company-import-export-form';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { FormsModule } from '@angular/forms';

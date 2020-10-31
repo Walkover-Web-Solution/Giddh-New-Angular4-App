@@ -1,6 +1,6 @@
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -14,9 +14,10 @@ import { SettingsBunchService } from '../../../services/settings.bunch.service';
 @Injectable()
 export class SettingsBunchActions {
 
-    @Effect()
-    public GetALLBunch$: Observable<Action> = this.action$
-        .ofType(SETTINGS_BUNCH_ACTIONS.GET_ALL_BUNCH).pipe(
+
+    public GetALLBunch$: Observable<Action> =createEffect( ()=>  this.action$
+        .pipe(
+            ofType(SETTINGS_BUNCH_ACTIONS.GET_ALL_BUNCH),
             switchMap((action: CustomActions) => this.settingsBranchService.GetAllBunches()),
             map(res => this.validateResponse<any, string>(res, {
                 type: SETTINGS_BUNCH_ACTIONS.GET_ALL_BUNCH_RESPONSE,
@@ -24,19 +25,20 @@ export class SettingsBunchActions {
             }, true, {
                 type: SETTINGS_BUNCH_ACTIONS.GET_ALL_BUNCH_RESPONSE,
                 payload: res
-            })));
+            }))));
 
-    @Effect()
-    public CreateBunch$: Observable<Action> = this.action$
-        .ofType(SETTINGS_BUNCH_ACTIONS.CREATE_BUNCH).pipe(
+
+    public CreateBunch$: Observable<Action> = createEffect( ()=> this.action$
+        .pipe(
+            ofType(SETTINGS_BUNCH_ACTIONS.CREATE_BUNCH),
             switchMap((action: CustomActions) => {
                 return this.settingsBranchService.CreateBunch(action.payload).pipe(
                     map(response => this.CreateBunchResponse(response)));
-            }));
+            })));
 
-    @Effect()
-    public CreateBunchResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_BUNCH_ACTIONS.CREATE_BUNCH_RESPONSE).pipe(
+    public CreateBunchResponse$: Observable<Action> =createEffect( ()=>  this.action$
+        .pipe(
+            ofType(SETTINGS_BUNCH_ACTIONS.CREATE_BUNCH_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -45,17 +47,19 @@ export class SettingsBunchActions {
                     this.toasty.successToast(data.body);
                 }
                 return this.GetALLBunch();
-            }));
+            })));
 
-    @Effect()
-    public RemoveBranch$: Observable<Action> = this.action$
-        .ofType(SETTINGS_BUNCH_ACTIONS.DELETE_BUNCH).pipe(
+
+    public RemoveBranch$: Observable<Action> =createEffect( ()=>  this.action$
+        .pipe(
+            ofType(SETTINGS_BUNCH_ACTIONS.DELETE_BUNCH),
             switchMap((action: CustomActions) => this.settingsBranchService.RemoveBunch(action.payload)),
-            map(response => this.RemoveBunchResponse(response)));
+            map(response => this.RemoveBunchResponse(response))));
 
-    @Effect()
-    public RemoveBranchResponse$: Observable<Action> = this.action$
-        .ofType(SETTINGS_BUNCH_ACTIONS.DELETE_BUNCH_RESPONSE).pipe(
+
+    public RemoveBranchResponse$: Observable<Action> =createEffect( ()=>  this.action$
+        .pipe(
+            ofType(SETTINGS_BUNCH_ACTIONS.DELETE_BUNCH_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
@@ -64,7 +68,7 @@ export class SettingsBunchActions {
                     this.toasty.successToast(data.body);
                 }
                 return this.GetALLBunch();
-            }));
+            })));
 
     constructor(private action$: Actions,
         private toasty: ToasterService,

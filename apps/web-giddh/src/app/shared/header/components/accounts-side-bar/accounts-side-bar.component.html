@@ -1,10 +1,10 @@
 <div class="accounts-side-bar greyBg wrapAcList" ng-click="$event.stopPropagation()">
     <div *ngIf="flyAccounts" style="height: 100%" class="wrapAcList" id="grp_acc_wrapper">
-        <div class="pd1 wrapAcList" *ngIf="(isFlyAccountInProcess$ | async)">
+        <div class="pd-1 wrapAcList" *ngIf="(isFlyAccountInProcess$ | async)">
             Loading Accounts...
         </div>
         <!-- searchbar end -->
-        <div class="pdL1 pdR1 mrB1 wrapAcList"
+        <div class="pd-l1 pd-r1 mr-b1 wrapAcList"
             *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && !(isFlyAccountInProcess$ | async)">
             <h4 class="list-group-item-heading">Oops, there is no accounts in
                 <strong>selected company</strong>
@@ -20,7 +20,7 @@
                 <span></span>
             </div>
             <ng-container *ngIf="showAccountList && Items">
-                <ul class="ul_0 acntAccordion wrapAcList"
+                <!-- <ul class="ul_0 acntAccordion wrapAcList"
                     *vsFor="Items; tagName:'li'; scrollParent:'.ul_0';size:getSize; let _items = vsCollection;let _startIndex = vsStartIndex">
 
                     <ng-container *ngFor="let item of _items;let i = index">
@@ -47,8 +47,7 @@
                             </a>
                         </li>
                     </ng-container>
-                    <!-- <div style="height: 105px;"></div> -->
-                </ul>
+                </ul> -->
             </ng-container>
 
         </div>

@@ -6,14 +6,19 @@
             </span>
             <div class="wrap-group-account-input">
                 <input type="text" [(ngModel)]="searchCmp" (ngModelChange)="filterCompanyList($event)" #searchElement
-                    class="form-control" placeholder="Search Company">
+                    class="form-control" placeholder="Search Company"/>
             </div>
             <span class="close-addon" *ngIf="searchCmp && searchCmp.length">
                 <i class="icon-cross" (click)="filterCompanyList('');searchCmp = ''"></i>
             </span>
         </div>
     </div>
-    <div class="all-company-list mt-1">
+    <!--
+        Hide for now, will use it on next version
+        <div class="mt-2">
+        <button href="javascript:void(0)" class="btn-link pd0 btn bold pl-0">+ Create  Company</button>
+    </div> -->
+    <div class="all-company-list">
         <ul>
             <li *ngFor="let company of companyList" (click)="changeCompany(company.uniqueName)">
                 <a href="javascript:;">{{company.name}}</a>

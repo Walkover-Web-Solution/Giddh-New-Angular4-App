@@ -2,7 +2,7 @@
 :host {
     position: fixed;
     left: auto;
-    top: 55px;
+    top: 61px;
     right: 0;
     bottom: 0;
     max-width: 330px;
@@ -62,7 +62,6 @@
         }
     }
     .help-aside-body{
-        padding-bottom: 25%;
         .faq-block{
             padding: 15px;
             border-bottom: 1px solid $gainsboro;
@@ -72,12 +71,12 @@
 
                 p{
                     font-size: 14px;
-                    font-family: 'opensans-semibold'; 
+                    font-family: 'opensans-semibold';
                 }
                 small{
                     font-size: 12px;
                 }
-            }       
+            }
     }
     .feature-block{
         padding: 15px;
@@ -124,7 +123,8 @@
         text-align: center;
         img{
             display: block;
-            margin: 15px auto 30px;
+            margin: 0px auto 15px;
+            max-width: 100px;
         }
         p{
             font-size: 14px;
@@ -147,6 +147,13 @@
     scroll-behavior: smooth;
     position: relative;
     margin-top: 15px;
+}
+@media(max-height:900px){
+    .aside-pane {
+        .help-aside-body{
+            padding-bottom: 25%;
+        }
+    }
 }
 @media (max-width: 768px) {
     :host {

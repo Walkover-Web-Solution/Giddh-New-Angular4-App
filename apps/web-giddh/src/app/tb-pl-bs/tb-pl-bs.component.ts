@@ -6,7 +6,7 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, O
 import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { ReplaySubject } from 'rxjs';
-import { TabsetComponent } from 'ngx-bootstrap';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { CurrentPage } from '../models/api-models/Common';
 import { GeneralActions } from '../actions/general/general.actions';
 
@@ -25,7 +25,7 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
     public CanNewTBLoadOnThisEnv: boolean = false;
     public isWalkoverCompany: boolean = false;
 
-    @ViewChild('staticTabsTBPL') public staticTabs: TabsetComponent;
+    @ViewChild('staticTabsTBPL', {static: true}) public staticTabs: TabsetComponent;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

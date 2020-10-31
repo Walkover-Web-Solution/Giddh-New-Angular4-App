@@ -1,5 +1,5 @@
 <div class="container-fluid" *ngIf="!purchaseOrderUniqueName">
-    <div class="d-flex justify-content-between mt-15 purchase-order-header">
+    <div class="d-flex justify-content-between purchase-order-header">
         <div class="d-flex date-advance-search">
             <form #invoiceForm="ngForm" novalidate class="form-inline">
                 <div class="form-group mrR1 d-flex">
@@ -32,14 +32,14 @@
                     </button>
                     <ul *dropdownMenu class="dropdown-menu fixed-dropdown-plus" role="menu"
                         aria-labelledby="button-basic">
-                        <!-- <li role="menuitem">
+                        <li role="menuitem">
                             <a class="dropdown-item cp" href="javascript:void(0)"
                                 (click)="openModalBulkUpdate(template)">Bulk Update</a>
                         </li>
                         <li role="menuitem">
-                            <a class="dropdown-item cp" href="javascript:void(0)">
+                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('create_purchase_bill')">
                                 Convert to bill</a>
-                        </li> -->
+                        </li>
                         <li role="menuitem">
                             <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('expire')">
                                 Expired</a>
@@ -51,14 +51,14 @@
                 </div>
             </div>
             <div class="btn-wrapper">
-                <button class="btn btn-pink desktop-view-btn mr-0"
+                <button class="btn btn-sky-blue desktop-view-btn mr-0"
                     [routerLink]="['/pages/purchase-management/purchase-order/new']">+
                     New Order
                 </button>
             </div>
         </div>
     </div>
-    <div class="mobile-search">
+    <div class="mobile-search" *ngIf="!isMobileScreen">
         <div class="clear-filter mr-1" *ngIf="showClearFilterButton()">
             <button class="btn btn-default mr-0" (click)="clearFilter()">
                 <span class="icon-cross"></span> Clear Filter
@@ -72,15 +72,15 @@
                     <span class="caret"></span>
                 </button>
                 <ul *dropdownMenu class="dropdown-menu fixed-dropdown-plus" role="menu" aria-labelledby="button-basic">
-                    <!-- <li role="menuitem">
+                    <li role="menuitem">
                         <a class="dropdown-item cp" href="javascript:void(0)"
                             (click)="openModalBulkUpdate(template)">Bulk
                             Update</a>
                     </li>
                     <li role="menuitem">
-                        <a class="dropdown-item cp" href="javascript:void(0)">
+                        <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('create_purchase_bill')">
                             Convert to bill</a>
-                    </li> -->
+                    </li>
                     <li role="menuitem">
                         <a class="dropdown-item cp" href="javascript:void(0)" (click)="bulkUpdate('expire')">
                             Expired</a>
@@ -92,7 +92,7 @@
             </div>
         </div>
         <div class="btn-wrapper">
-            <button class="btn btn-pink desktop-view-btn mr-0"
+            <button class="btn btn-sky-blue desktop-view-btn mr-0"
                 [routerLink]="['/pages/purchase-management/purchase-order/new']">+
                 New Order
             </button>
@@ -102,7 +102,7 @@
         <table class="table basic mt-15 table-bordered giddh-table on-mobile-view">
             <thead class="t-h-bg1" (mouseleave)="showSelectAllItemCheckbox = false">
                 <tr (mouseenter)="showSelectAllItemCheckbox = true">
-                    <th width="3%">
+                    <th class="min-wid-check" width="3%">
                         <div class="mh18-img">
                             <span *ngIf="!showSelectAllItemCheckbox && !allItemsSelected">#</span>
                             <div class="table-checkbox-field" *ngIf="showSelectAllItemCheckbox || allItemsSelected">
@@ -115,7 +115,7 @@
                     </th>
 
                     <th width="10%" class="td-search-box">
-                        <div class="d-flex">
+                        <div class="d-flex pr-1 pl-1">
                             <div>Date</div>
                             <div class="icon-pointer">
                                 <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'purchaseDate'}">
@@ -150,9 +150,9 @@
                         </div>
                     </th>
 
-                    <th width="15%">
+                    <th width="15%" class="min-wid-amt">
                         <div class="d-flex">
-                            <div class="text-right"> Total Amt.</div>
+                            <div> Total Amt.</div>
                             <div class="icon-pointer">
                                 <ng-container *ngTemplateOutlet="sortTemplate;context: {column: 'grandTotal'}">
                                 </ng-container>
@@ -170,7 +170,7 @@
                         </div>
                     </th>
 
-                    <th width="15%">
+                    <th width="15%" class="min-wid-status">
                         <div class="d-flex">
                             <div>Status</div>
                             <div class="icon-pointer">
@@ -190,9 +190,6 @@
                             <img *ngIf="item.isSelected" src="assets/images/checked.png"
                                 (click)="toggleItem(item, false)" />
                         </div>
-                        <!-- <div class="download-purchase-order">
-                            <i class="icon-download"></i>
-                        </div> -->
                     </td>
                     <td data-title="Date">
                         {{item.voucherDate}}
@@ -207,17 +204,17 @@
                         {{item.grandTotal?.amountForAccount | giddhCurrency}}
                     </td>
                     <td data-title="Expected Delivery">
-                        <span [ngClass]="{'ontime-delivery': item.dueDays > 0, 'late-delivery': item.dueDays < 0}" *ngIf="item.dueDays && item.dueDays <= 7">{{item.dueDays > 0 ? 'Delivery in ' + item.dueDays + ((item.dueDays === 1) ? ' day ' : ' days') : 'Delayed by ' + item.dueDays + ' days' }}</span>
+                        <span [ngClass]="{'ontime-delivery': item.dueDays > 0, 'late-delivery': item.dueDays < 0}" *ngIf="item.dueDays && item.dueDays <= 7">{{item.dueDays > 0 ? 'Delivery in ' + item.dueDays + ((item.dueDays === 1) ? ' day ' : ' days') : 'Delayed by ' + formatNumber(item.dueDays) + ' days' }}</span>
                         <span *ngIf="item.dueDays && item.dueDays > 7">{{item.dueDate}}</span>
                         <span class="ontime-delivery" *ngIf="item.dueDays === 0">Today</span>
                     </td>
-                    <td data-title="status" class="d-flex align-items-center status_mobile pt-0 pb-0">
+                    <td data-title="status" class="d-flex align-items-center status-mobile pt-0 pb-0">
                         <span class="d-flex">
                             {{item.status}}</span>
-                        <div class="action-icon ml-15" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
-                            <!-- <a tooltip="Convert to bill">
+                        <div class="action-icon ml-auto" *ngIf="hoveredItem === item.uniqueName || item.isSelected || selectedItem === item.uniqueName">
+                            <a tooltip="Convert to bill" *ngIf="item.status === 'open'" (click)="bulkUpdate('create_purchase_bill', item.voucherNumber)">
                                 <span class="icon-tick font-12"></span>
-                            </a> -->
+                            </a>
                             <a tooltip="Send Email" (click)="openSendMailModal(item, sendEmailModal)">
                                 <span class="icon-envelope font-12"></span>
                             </a>
@@ -241,7 +238,7 @@
             <tbody *ngIf="isLoading">
                 <tr>
                     <td colspan="8">
-                        <div class="no-data mrT2 loader-main">
+                        <div class="no-data mr-t2 loader-main">
                             <div class="spinner2">
                                 <div class="cube1"></div>
                                 <div class="cube2"></div>
@@ -267,21 +264,23 @@
                 <div class="d-flex flex-column">
                     <p class="mb-3">Choose a field from the dropdown and update with new information.</p>
                     <div class="d-flex justify-content-between mb-3 modal-form">
-                        <sh-select class="mr-15"></sh-select>
-                        <div class="select-date">
+                        <sh-select class="mr-15" name="bulkUpdate" [(ngModel)]="bulkUpdateGetParams.action" [options]="bulkUpdateFields" [ItemHeight]="33"></sh-select>
+                        <div class="select-date" *ngIf="bulkUpdateGetParams.action === 'purchasedate' || bulkUpdateGetParams.action === 'duedate' || bulkUpdateGetParams.action === 'warehouse'">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Select date">
-                                <span class="input-group-addon">
+                                <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="purchaseDate" [(ngModel)]="bulkUpdatePostParams.purchaseDate" placeholder="Select date" *ngIf="bulkUpdateGetParams.action === 'purchasedate'">
+                                <input type="text" class="form-control" bsDatepicker [bsConfig]="{ dateInputFormat: giddhDateFormat }" name="dueDate" [(ngModel)]="bulkUpdatePostParams.dueDate" placeholder="Select date" *ngIf="bulkUpdateGetParams.action === 'duedate'">
+                                <span class="input-group-addon" *ngIf="bulkUpdateGetParams.action === 'purchasedate' || bulkUpdateGetParams.action === 'duedate'">
                                     <span class="icon-calender"></span>
                                 </span>
+                                <sh-select name="warehouse" [placeholder]="'Select Warehouse'" [(ngModel)]="bulkUpdatePostParams.warehouseUniqueName" [options]="warehouses" *ngIf="bulkUpdateGetParams.action === 'warehouse'"></sh-select>
                             </div>
                         </div>
                     </div>
                     <p class="mb-3">Note: All the selected Purchase Orders will be updated with new information and you
                         cannot undo this.</p>
                     <div class="btn-group">
-                        <button class="btn btn-success">Update</button>
-                        <button class="btn btn-cancel">Cancel</button>
+                        <button class="btn btn-success" (click)="validateBulkUpdateFields()">Update</button>
+                        <button class="btn btn-cancel" (click)="modalRef.hide()">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -297,7 +296,7 @@
         <div class="modal-body">
             <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
                 [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true"
-                [ranges]="datePickerOptions.ranges" [selectedRangeLabel]="selectedRangeLabel"
+                [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel"
                 [showCustomRangeLabel]="true" [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true"
                 [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)"
                 (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
@@ -334,5 +333,5 @@
 </div>
 <purchase-order-preview *ngIf="purchaseOrderUniqueName" [purchaseOrders]="purchaseOrders" [companyUniqueName]="purchaseOrderGetRequest.companyUniqueName" [purchaseOrderUniqueName]="purchaseOrderUniqueName"></purchase-order-preview>
 <ng-template #sendEmailModal>
-    <purchase-send-email-modal [sendEmailRequest]="sendEmailRequest" (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
+    <purchase-send-email-modal [module]="'purchase-order'" [sendEmailRequest]="sendEmailRequest" (closeModelEvent)="closeSendMailPopup($event)"></purchase-send-email-modal>
 </ng-template>

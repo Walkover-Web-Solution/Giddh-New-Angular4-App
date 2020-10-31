@@ -5,7 +5,7 @@ import { SignupWithMobile, VerifyMobileModel } from '../models/api-models/loginM
 import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
 import { AuthenticationService } from '../services/authentication.service';
-import { Actions, Effect } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { CustomActions } from '../store/customActions';
@@ -20,8 +20,9 @@ export class VerifyMobileActions {
     public static VERIFY_MOBILE_CODE_RESPONSE = 'VERIFY_MOBILE_CODE_RESPONSE';
     public static HIDE_VERIFICATION_BOX = 'HIDE_VERIFICATION_BOX';
 
-    @Effect() private verifyNumber$: Observable<Action> = this.action$
-        .ofType(VerifyMobileActions.VERIFY_MOBILE_REQUEST).pipe(
+    public verifyNumber$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(VerifyMobileActions.VERIFY_MOBILE_REQUEST),
             switchMap((action: CustomActions) => this._authService.VerifyNumber(action.payload)),
             map(response => {
                 if (response.status === 'success') {
@@ -32,9 +33,11 @@ export class VerifyMobileActions {
                     this._toasty.errorToast(response.message, response.code);
                 }
                 return { type: 'EmptyAction' };
-            }));
-    @Effect() private verifyNumberCode$: Observable<Action> = this.action$
-        .ofType(VerifyMobileActions.VERIFY_MOBILE_CODE_REQUEST).pipe(
+            })));
+
+    public verifyNumberCode$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(VerifyMobileActions.VERIFY_MOBILE_CODE_REQUEST),
             switchMap((action: CustomActions) => this._authService.VerifyNumberOTP(action.payload)),
             map(response => {
                 if (response.status === 'success') {
@@ -51,7 +54,7 @@ export class VerifyMobileActions {
                     this._toasty.errorToast(response.message, response.code);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
     constructor(private action$: Actions,
         private _authService: AuthenticationService,

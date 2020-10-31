@@ -47,8 +47,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
 
 
 
-    @ViewChild('tdsTypeBox') public tdsTypeBox: ElementRef;
-    @ViewChild('tdsAmountBox') public tdsAmountBox: ElementRef;
+    @ViewChild('tdsTypeBox', {static: true}) public tdsTypeBox: ElementRef;
+    @ViewChild('tdsAmountBox', {static: true}) public tdsAmountBox: ElementRef;
 
     public adjustPayment: AdjustAdvancePaymentModal = {
         customerName: '',
@@ -665,7 +665,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit {
     public checkValidations(): void {
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
             this.adjustVoucherForm.adjustments.forEach((item, key) => {
-                if ((!item.voucherNumber && item.balanceDue.amountForAccount) || (item.voucherNumber && !item.balanceDue.amountForAccount) || (!item.voucherNumber && !item.balanceDue.amountForAccount && key>0)) {
+                if ((!item.voucherNumber && item.balanceDue.amountForAccount) || (item.voucherNumber && !item.balanceDue.amountForAccount) || (!item.voucherNumber && !item.balanceDue.amountForAccount && key > 0)) {
                     this.isInvalidForm = true;
                 } else {
                     this.isInvalidForm = false;

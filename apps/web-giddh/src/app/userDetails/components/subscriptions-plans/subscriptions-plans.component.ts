@@ -2,7 +2,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, TemplateRef, Output, EventEmitter, Input } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UserDetails } from '../../../models/api-models/loginModels';
 import { GeneralService } from '../../../services/general.service';
 import { CreateCompanyUsersPlan, SubscriptionRequest } from '../../../models/api-models/Company';
@@ -13,6 +13,8 @@ import { CompanyActions } from '../../../actions/company.actions';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { DEFAULT_SIGNUP_TRIAL_PLAN, DEFAULT_POPULAR_PLAN } from '../../../app.constant';
+import { SettingsProfileService } from '../../../services/settings.profile.service';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'subscriptions-plans',
@@ -71,7 +73,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     constructor(private modalService: BsModalService, private _generalService: GeneralService,
         private _authenticationService: AuthenticationService, private store: Store<AppState>,
         private _route: Router, private companyActions: CompanyActions,
-        private settingsProfileActions: SettingsProfileActions) {
+        private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService, private toasty: ToasterService) {
 
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.select(profile => profile.settings.profile).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
@@ -150,7 +152,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionsPlansComponent
      */
     public allFeaturesModal(AllFeatures: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(AllFeatures, { class: 'modal-lg all-features-modal' });
+        this.modalRef = this.modalService.show(AllFeatures, { class: 'modal-xl all-features-modal' });
     }
 
     /**
@@ -174,7 +176,14 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     }
 
     public patchProfile(obj) {
-        this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
+        this.settingsProfileService.PatchProfile(obj).subscribe(response => {
+            if(response && response.status === "error") {
+                this.toasty.errorToast(response.message);
+            } else {
+                this.toasty.successToastWithHtml("Welcome onboard!<br>Accounting begins now...");
+                this.backClicked();
+            }
+        });
     }
 
     public choosePlan(plan: CreateCompanyUsersPlan) {

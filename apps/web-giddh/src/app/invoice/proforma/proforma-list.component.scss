@@ -136,6 +136,9 @@
 }
 .date-advance-search {
     justify-content: space-between;
+    .input-group{
+        width: auto;
+    }
 }
 .mobile-search {
     display: none;
@@ -194,7 +197,7 @@ ul.selectActionDropdown {
     padding-left: 45px !important;
     position: relative;
     z-index: 99;
-    cursor: default;
+    cursor: pointer;
     width: 100%;
 }
 .input-group input.form-control:focus {
@@ -254,13 +257,13 @@ button.btn.btn-filter span.icon-cross {
 a.btn-link-2 {
     color: #1c1c1c;
 }
-.inputWrapper {
+.input-wrapper {
     display: block !important;
     width: 200px !important;
     position: relative;
     height: 36px !important;
 }
-.inputWrapper:before {
+.input-wrapper:before {
     position: absolute;
     content: "";
     display: block;
@@ -271,7 +274,7 @@ a.btn-link-2 {
     z-index: 100;
     top: 0;
 }
-span.icon-advance-search {
+span.icon-advance-filter {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -279,16 +282,45 @@ span.icon-advance-search {
     height: 34px;
     color: $gray;
 }
+.checkbox-td, .index-no{
+    display: flex;
+    justify-content: center;
+}
+.select-all-proformas-on-mobile-view{
+    display: none;
+}
 // responsive
+@media(max-width:991px){
+    .invoice-preview-sidebar{
+        display: none;
+    }
+}
 @media (max-width: 768px) {
+    .select-all-proformas-on-mobile-view{
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+        line-height: 1;
+        font-size: 14px;
+        min-height: 20px;
+        .checkbox-img{
+            img{
+                max-height: 20px;
+                cursor: pointer;
+            }
+        }
+    }
     .search-icon-block {
         display: flex !important;
     }
-
+    .checkbox-td, .index-no{
+        display: flex;
+        justify-content: flex-start;
+    }
     .mobile-search .input-container input {
         font-size: 13px;
     }
-    .mobile-search button.btn.btn-pink {
+    .mobile-search button.btn.btn-sky-blue {
         width: 100%;
         margin-top: 10px !important;
     }
@@ -297,12 +329,20 @@ span.icon-advance-search {
     }
     .full-width-on-mobile {
         width: 100%;
-        margin: 5px 0;
+        margin: 0;
     }
 }
 @media (max-width: 767px) {
     .proforma-container {
         padding-top: 55px;
+    }
+    .date-advance-search {
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+    .date-advance-search {
+        display: block;
+        flex-direction: column;
     }
 }
 @media (max-width: 420px) {
@@ -321,9 +361,6 @@ span.icon-advance-search {
         justify-content: center;
         margin-bottom: 5px;
         font-size: 14px;
-    }
-    .date-advance-search {
-        display: block;
     }
     .form-group div {
         display: block;

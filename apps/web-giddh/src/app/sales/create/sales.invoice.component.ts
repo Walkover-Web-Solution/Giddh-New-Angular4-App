@@ -22,7 +22,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ICommonItemOfTransaction, IContentCommon, IInvoiceTax } from '../../models/api-models/Invoice';
 import { SalesService } from '../../services/sales.service';
 import { ToasterService } from '../../services/toaster.service';
-import { ModalDirective, ModalOptions } from 'ngx-bootstrap';
+import { ModalDirective,ModalOptions } from 'ngx-bootstrap/modal';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 //import { IFlattenAccountsResultItem } from 'app/models/interfaces/flattenAccountsResultItem.interface';
@@ -235,13 +235,13 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     public isCashInvoice: boolean = false;
     @Input() public accountUniqueName: string = '';
 
-    @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
-    @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
-    @ViewChild('createAcModal') public createAcModal: ModalDirective;
+    @ViewChild(ElementViewContainerRef, {static: true}) public elementViewContainerRef: ElementViewContainerRef;
+    @ViewChild('createGroupModal', {static: true}) public createGroupModal: ModalDirective;
+    @ViewChild('createAcModal', {static: true}) public createAcModal: ModalDirective;
 
-    @ViewChild('invoiceForm') public invoiceForm: NgForm;
-    @ViewChild('discountComponent') public discountComponent: DiscountListComponent;
-    @ViewChild("cashInvoiceInput") cashInvoiceInput: ElementRef;
+    @ViewChild('invoiceForm', {static: true}) public invoiceForm: NgForm;
+    @ViewChild('discountComponent', {static: true}) public discountComponent: DiscountListComponent;
+    @ViewChild("cashInvoiceInput", {static: true}) cashInvoiceInput: ElementRef;
     @ViewChildren(ShSelectComponent) public allShSelect: QueryList<ShSelectComponent>;
     @ViewChildren(SalesShSelectComponent) public allSalesShSelect: QueryList<SalesShSelectComponent>;
 
@@ -348,7 +348,7 @@ export class SalesInvoiceComponent implements OnInit, OnDestroy, AfterViewInit, 
     public openModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(
             template,
-            Object.assign({}, { class: 'gray modal-lg sales-invoice-modal' })
+            Object.assign({}, { class: 'gray modal-xl sales-invoice-modal' })
         );
     }
 

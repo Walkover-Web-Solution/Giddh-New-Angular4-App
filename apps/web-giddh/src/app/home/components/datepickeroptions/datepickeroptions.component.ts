@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit, EventEmitter, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import * as moment from 'moment/moment';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { Observable, ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";

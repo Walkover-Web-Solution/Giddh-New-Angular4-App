@@ -4,7 +4,6 @@ Vue.use(VToaster, {
 Vue.directive('tooltip', function(el, binding) {
     $(el).tooltip({
         title: binding.value,
-        placement: binding.arg,
         trigger: 'hover'
     });
 });
@@ -367,14 +366,14 @@ var app = new Vue({
                 case 'dev.giddh.com':
                 case 'test.giddh.com':
                 case 'stage.giddh.com':
-                    apiBaseUrl = 'https://apitest.giddh.com/';
+                    apiBaseUrl = 'https://apirelease.giddh.com/';
                     break;
                 case 'giddh.com':
                 case 'app.giddh.com':
                     apiBaseUrl = 'https://api.giddh.com/';
                     break;
                 default:
-                    apiBaseUrl = 'https://apitest.giddh.com/';
+                    apiBaseUrl = 'https://api.giddh.com/';
             }
             return apiBaseUrl;
         }

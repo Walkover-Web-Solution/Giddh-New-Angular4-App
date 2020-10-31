@@ -209,7 +209,6 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
     }
 
     public ngAfterViewInit() {
-        // this.vsScrollParent, this.vsAutoresize, this.tagName, this.__horizontal);
         this.view = this._viewContainer.createEmbeddedView(this._templateRef);
         this.parent = nextElementSibling(this._element.nativeElement);
 

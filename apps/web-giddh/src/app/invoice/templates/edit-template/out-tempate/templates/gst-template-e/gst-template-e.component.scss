@@ -94,10 +94,10 @@ tfoot.table-details tr th {
 #royal .mrL2 {
     margin-left: 20px;
 }
-#royal .mrB2 {
+#royal .mr-b2 {
     margin-bottom: 20px;
 }
-#royal .mrB1 {
+#royal .mr-b1 {
     margin-bottom: 10px;
 }
 #royal .meta {
@@ -220,7 +220,8 @@ tfoot.table-details tr th {
 
 #royal .note li {
     list-style-type: initial;
-    font-size: 9px;
+    font-size: 10px;
+    line-height: initial;
 }
 
 #royal footer {
@@ -339,7 +340,7 @@ img {
 }
 #royal footer p {
     font-size: 10px;
-    color: #262626;
+    color: $nero;
 }
 #royal .tax-table.item tfoot tr th {
     border-bottom: 1px solid #666666;

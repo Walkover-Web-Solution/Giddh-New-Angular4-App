@@ -661,6 +661,11 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 return Object.assign({}, state, { createAccountInProcess: false, createAccountIsSuccess: false, newlyCreatedAccount: null });
             }
         }
+        case GroupWithAccountsAction.MOVE_GROUP_COMPLETE:
+            return {
+                ...state,
+                isMoveGroupSuccess: false
+            };
         default: {
             return state;
         }

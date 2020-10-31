@@ -93,9 +93,17 @@ tfoot {
     margin-top: 0;
 }
 
-.pending-table .nested_table > tbody tr td {
+.pending-table .nested-table > tbody tr td {
     border: 0 !important;
     padding: 0px !important;
+}
+
+.nested-table > tbody > tr:hover td {
+    background: transparent !important;
+}
+
+.basic > tbody > tr:hover td .nested-table > tbody > tr td {
+    background: transparent !important;
 }
 
 .pending-textaerea {
@@ -140,7 +148,7 @@ tfoot {
     padding-left: 45px !important;
     position: relative;
     z-index: 99;
-    cursor: default;
+    cursor: pointer;
     width: 100%;
 }
 
@@ -186,7 +194,11 @@ button.btn.btn-filter {
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
-    padding: 7px 10px !important;
+    padding: 8px 10px !important;
+}
+
+button.btn.btn-filter span.icon-cross {
+    margin-right: 5px;
 }
 
 .pending-table-description {
@@ -246,6 +258,26 @@ span.close-modal.cp.pull-right {
     position: static;
     transform: inherit;
 }
+#mobile-nested-table{
+    display: none;
+}
+.nested-table{
+    tr{
+        td{
+            white-space: normal;
+            border-left: none !important;
+            border-right: none !important;
+        }
+    }
+}
+
+.width-auto{
+    width:auto;
+}
+
+.filter-width{
+    width: 85%;
+}
 
 // responsive
 @media (max-width: 1023px) {
@@ -259,7 +291,42 @@ span.close-modal.cp.pull-right {
     }
 }
 @media (max-width: 768px) {
-    .basic.onMobileView {
+    .pending-table tr td#mobile-nested-table{
+        padding: 0 !important;
+        margin: 0 !important;
+        display: block;
+        tr{
+            box-shadow: none;
+            margin: 0;
+            padding-top: 0;
+                th{
+                display: inline-flex !important;
+                width: 50%;
+                border: none;
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+                padding-left: 15px;
+                &:last-child{
+                    padding-left: 0 !important;
+                }
+            }
+            td{
+                padding: 5px 0 0 0 !important;
+                display: inline-flex;
+                width: 50%;
+                border: none;
+                margin-bottom: 10px;
+                &:first-child{
+                      padding-left: 15px !important;
+                          color: rgba(0, 0, 0, 0.55) !important;
+                }
+            }
+        }
+    }
+    .pending-table tr td.hide-on-mobile{
+        display: none !important;
+    }
+    .basic.on-mobile-view {
         background: transparent;
         border: none;
     }
@@ -269,21 +336,47 @@ span.close-modal.cp.pull-right {
     .justify-content-sm {
         justify-content: left !important;
     }
-    .nested_table tr {
+    .nested-table tr {
         box-shadow: none !important;
         padding: 0 !important;
         border: none !important;
         margin: 0 !important;
-        width: 100% !important;
+        width: 50% !important;
         float: left;
     }
-    .pending-table .nested_table > tbody tr td {
+    .pending-table.on-mobile-view{
+        tr{
+            td{
+                .table.nested-table{
+                    tr{
+                        td{
+                        padding: 8px 0 !important;
+                        width: 100%;
+                        display: flex;
+                        border-bottom: none;
+                        padding-left: 10px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .pending-table.on-mobile-view tr td .table.nested-table tr:first-child td{
+        border-right: 1px solid $gainsboro !important;
+    }
+    .pending-table.on-mobile-view tr td .table.nested-table tr td:last-child{
+        border-bottom: none !important;
+    }
+    .pending-table.on-mobile-view tr td .table.nested-table tr:first-child td{
+        border-bottom: none !important;
+    }
+    .pending-table .nested-table > tbody tr td {
         padding: 0 !important;
     }
     .pending-table tr td {
         padding: 5px 10px 5px 50% !important;
     }
-    .onMobileView tbody .nested_table td {
+    .on-mobile-view tbody .nested-table td {
         min-height: auto !important;
     }
     .form-group button,
@@ -316,6 +409,10 @@ span.close-modal.cp.pull-right {
     .mobile-width-100 {
         width: 100%;
     }
+    .particular-nested-table tr td{
+        border-top: none !important;
+    }
+
 }
 
 @media (max-width: 767px) {
@@ -368,6 +465,13 @@ span.close-modal.cp.pull-right {
             width: 100% !important;
         }
     }
+
+    button.btn.btn-filter {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
 }
 
 @media (max-width: 375px) {
@@ -379,6 +483,9 @@ span.close-modal.cp.pull-right {
     div#dp-parent {
         margin-bottom: 0;
         width: 100%;
+    }
+    .flex-none{
+        flex: none;
     }
 }
 

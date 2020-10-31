@@ -77,7 +77,7 @@ import { PurchaseOrderService } from './purchase-order.service';
     exports: [CommonModule, FormsModule, RouterModule]
 })
 export class ServiceModule {
-    public static forRoot(): ModuleWithProviders {
+    public static forRoot(): ModuleWithProviders<ServiceModule> {
         return {
             ngModule: ServiceModule,
             providers: [

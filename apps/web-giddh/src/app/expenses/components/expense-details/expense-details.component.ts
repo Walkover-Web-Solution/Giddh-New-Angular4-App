@@ -53,8 +53,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges {
     @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
     @Input() public selectedRowItem: any;
     @Output() public refreshPendingItem: EventEmitter<boolean> = new EventEmitter();
-    @ViewChild(UpdateLedgerEntryPanelComponent) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
-    @ViewChild('entryAgainstAccountDropDown') public entryAgainstAccountDropDown: ShSelectComponent;
+    @ViewChild(UpdateLedgerEntryPanelComponent, {static: false}) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
+    @ViewChild('entryAgainstAccountDropDown', {static: false}) public entryAgainstAccountDropDown: ShSelectComponent;
 
     public selectedItem: ExpenseResults;
     public rejectReason = new FormControl();

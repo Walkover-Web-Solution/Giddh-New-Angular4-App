@@ -11,7 +11,7 @@
             <p class="welcome_title">Set up your organisation profile and start accounting with Giddh.</p>
             <form name="form" #welcomeForm="ngForm" novalidate="" class="clearfix welcome-form horizontal-form" autocomplete="off">
                 <div class=" clearfix row">
-                    <div class="col-xs-12 mrB2">
+                    <div class="col-12 mr-b2">
                         <ng-container *ngIf="!itemOnBoardingDetails?.isOnBoardingInProgress else onBoardingItemName">
                             <label for="name" class="m-t-30" *ngIf="!isbranch">Company Name<sup
                                     class="text-danger">*</sup></label>
@@ -32,7 +32,7 @@
                             characters limit:
                             100</span>
                     </div>
-                    <div class="col-xs-6 mrB2 ">
+                    <div class="col-6 mr-b2 ">
                         <span>
                             <label for="country" class="d-block">Country<sup class="text-danger">*</sup></label>
                             <div class="custom-select pos-rel">
@@ -47,7 +47,7 @@
                         </span>
 
                     </div>
-                    <div class="col-xs-6 mrB2 ">
+                    <div class="col-6 mr-b2 ">
                         <label for="">Currency<sup class="text-danger">*</sup></label>
                         <div class="custom-select select-caret pos-rel">
                             <sh-select name="baseCurrency" [options]="currencySource$ | async" required
@@ -56,7 +56,7 @@
                                 [defaultValue]="createNewCompanyPreparedObj.baseCurrency"></sh-select>
                         </div>
                     </div>
-                    <div class="col-xs-12 mrB2">
+                    <div class="col-12 mr-b2">
                         <span>
                             <label for="contactNo" class="d-block">Mobile Number<sup class="text-danger">*</sup></label>
                             <div class="d-flex">
@@ -75,7 +75,7 @@
                         </span>
                     </div>
 
-                    <div class="col-xs-12 mrB2 selectBox" *ngIf="businessTypeList?.length && !isWarehouse">
+                    <div class="col-12 mr-b2 select-box" *ngIf="businessTypeList?.length && !isWarehouse">
                         <div class="pos-rel">
                             <label for="businessType">Select Business Type</label>
                             <div class="custom-select pos-rel">
@@ -89,7 +89,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 mrB2 selectBox" *ngIf="!isWarehouse">
+                    <div class="col-12 mr-b2 select-box" *ngIf="!isWarehouse">
                         <div class="pos-rel">
                             <label for="businessNature">Select Business Nature</label>
                             <div class="custom-select  pos-rel">
@@ -103,7 +103,7 @@
                         </div>
                     </div>
                     <ng-container *ngIf="selectedBusinesstype === 'Registered' || isWarehouse">
-                        <div class="col-xs-12 mrB2 selectBox"
+                        <div class="col-12 mr-b2 select-box"
                             *ngIf="formFields['taxName'] !== undefined && !isWarehouse">
                             <div class="clearfix">
 
@@ -123,7 +123,7 @@
 
                             </div>
                         </div>
-                        <div class="col-xs-12 mrB2 selectBox">
+                        <div class="col-12 mr-b2 select-box">
                             <div>
                                 <label>State<sup class="text-danger">*</sup></label><br>
                                 <div>
@@ -134,12 +134,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="!(isOnBoardingInProgress && isWarehouse)" class="col-xs-12 mrB2 selectBox">
+                        <div *ngIf="!(isOnBoardingInProgress && isWarehouse)" class="col-12 mr-b2 select-box">
                             <div class="">
                                 <label for="taxes_dd">Applicable Tax</label>
                                 <div class="btn-group btn-block select-caret invoice-btn" dropdown>
-                                    <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle"> Select Taxes <span
-                                            class="select_drop pull-right mrT1"></span></button>
+                                    <button dropdownToggle type="button"
+                                        class="form-control text-left btn-block dropdown-toggle"> Select Taxes <span
+                                            class="select_drop pull-right mr-t1"></span></button>
                                     <ul class="dropdown-menu dropdown-menu-2 width100" role="menu">
                                         <li *ngIf="taxesList.length==0">No results found</li>
                                         <li *ngFor="let tax of taxesList">
@@ -160,7 +161,7 @@
                             </div>
                         </div>
                     </ng-container>
-                    <div class="col-xs-12 mrB2 selectBox">
+                    <div class="col-12 mr-b2 select-box">
                         <!-- Show the section if the company/branch is Registered or onboarding of warehouse is going on -->
                         <div *ngIf="selectedBusinesstype || isWarehouse" class="clearfix">
                             <ng-container
@@ -175,18 +176,18 @@
                             </ng-template>
                             <textarea #address [required]="selectedBusinesstype === 'Registered' || isWarehouse"
                                 (focus)="isWarehouse ? removeAddressFieldError() : ''" placeholder="Address"
-                                class="form-control mrT1 " name="address" id="address"
+                                class="form-control mr-t1 " name="address" id="address"
                                 [(ngModel)]="companyProfileObj.address" style="min-height:100px; "></textarea>
                         </div>
                     </div>
-                    <div class="col-xs-12 ">
+                    <div class="col-12 ">
                         <p class="change-preference ">Note: You can always change your preferences later in Settings.
                         </p><br />
                         <p class="taxation-not-supported" *ngIf="!formFields['taxName']">Create and apply taxes on all types of transactions! To get tax reports, contact <a href="mailto:sales@giddh.com">sales@giddh.com</a>!</p>
                     </div>
-                    <div class="col-xs-12 d-flex mrT5">
+                    <div class="col-12 d-flex mrT5">
                         <button class="btn btn-primary" (click)="back(isbranch)">Back</button>
-                        <button type="submit" class="btn btn-pink" (click)="submit(welcomeForm)" [disabled]="welcomeForm.invalid || !isGstValid || isCreateCompanyInProgress">
+                        <button type="submit" class="btn btn-sky-blue" (click)="submit(welcomeForm)" [disabled]="welcomeForm.invalid || !isGstValid || isCreateCompanyInProgress">
                             {{itemOnBoardingDetails?.isOnBoardingInProgress ? itemOnBoardingDetails?.isItemUpdateInProgress ? 'Update ' +  itemOnBoardingDetails?.onBoardingType : 'Create ' + itemOnBoardingDetails?.onBoardingType : 'Submit'
                             }}
                         </button>

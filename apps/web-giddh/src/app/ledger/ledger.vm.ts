@@ -4,7 +4,7 @@ import { AccountResponse } from '../models/api-models/Account';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
-import * as uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { cloneDeep, forEach, remove } from '../lodash-optimized';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { INameUniqueName } from '../models/api-models/Inventory';
@@ -70,7 +70,7 @@ export class LedgerVM {
             transactions: [
                 {
                     ...new TransactionVM(),
-                    id: uuid.v4(),
+                    id: uuidv4(),
                     type: 'DEBIT',
                     discounts: [this.staticDefaultDiscount()],
                     selectedAccount: null,
@@ -78,7 +78,7 @@ export class LedgerVM {
                 },
                 {
                     ...new TransactionVM(),
-                    id: uuid.v4(),
+                    id: uuidv4(),
                     type: 'CREDIT',
                     discounts: [this.staticDefaultDiscount()],
                     selectedAccount: null,
@@ -208,7 +208,7 @@ export class LedgerVM {
     public addNewTransaction(type: string = 'DEBIT'): TransactionVM {
         return {
             ...new TransactionVM(),
-            id: uuid.v4(),
+            id: uuidv4(),
             type,
             discounts: [this.staticDefaultDiscount()],
             selectedAccount: null,
