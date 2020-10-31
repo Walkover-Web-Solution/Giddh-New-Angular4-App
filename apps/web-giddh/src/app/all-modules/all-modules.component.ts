@@ -18,6 +18,7 @@ import { DbService } from '../services/db.service';
 import { NAVIGATION_ITEM_LIST } from '../models/defaultMenus';
 import { find } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
+import { CurrentPage } from '../models/api-models/Common';
 
 @Component({
     selector: 'all-modules',
@@ -83,6 +84,10 @@ export class AllModulesComponent implements OnInit, OnDestroy {
         });
 
         this.getSharedAllModules();
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = "All Modules";
+        currentPageObj.url = "";
+        this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
     }
 
     /**
