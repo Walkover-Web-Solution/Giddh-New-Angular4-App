@@ -490,7 +490,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 this.selectedPo = this.generalService.addValueInArray(this.selectedPo, item.uniqueName);
             } else {
                 this.selectedPo = this.generalService.removeValueFromArray(this.selectedPo, item.uniqueName);
-            }            
+            }
         });
     }
 
