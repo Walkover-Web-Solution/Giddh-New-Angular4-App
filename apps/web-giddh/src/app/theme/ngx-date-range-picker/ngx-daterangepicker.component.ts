@@ -2036,7 +2036,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public applyInlineDates(): void {
-        if (this.inlineStartDate.isBefore(this.inlineEndDate, 'day')) {
+        if (this.inlineStartDate.isSameOrBefore(this.inlineEndDate, 'day')) {
             if (!this.invalidInlineStartDate && !this.invalidInlineEndDate) {
                 this.startDate = this.inlineStartDate;
                 this.endDate = this.inlineEndDate;
