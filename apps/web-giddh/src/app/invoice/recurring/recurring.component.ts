@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { FormControl } from '@angular/forms';
 import { RecurringInvoice, RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
@@ -9,11 +9,12 @@ import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import * as moment from 'moment';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { BsModalRef, ModalOptions , BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import {BsDatepickerDirective} from 'ngx-bootstrap/datepicker';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+
 @Component({
     selector: 'app-recurring',
     templateUrl: './recurring.component.html',
@@ -69,20 +70,28 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public hoveredItemForAction: string = '';
     public clickedHoveredItemForAction: string = '';
     public showResetFilterButton: boolean = false;
+    /** This will hold checked invoices */
+    public selectedInvoices: any[] = [];
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>,
-        private cdr: ChangeDetectorRef,
-        private _generalService: GeneralService,
+        private generalService: GeneralService,
         private _invoiceActions: InvoiceActions, private _breakPointObservar: BreakpointObserver , private modalService: BsModalService) {
         this.recurringData$ = this.store.pipe(takeUntil(this.destroyed$), select(s => s.invoice.recurringInvoiceData.recurringInvoices));
         this.recurringData$.subscribe(p => {
             if (p && p.recurringVoucherDetails) {
-                this.recurringVoucherDetails = _.cloneDeep(p.recurringVoucherDetails);
+                let items = _.cloneDeep(p.recurringVoucherDetails);
+                items.map(item => {
+                    item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item.uniqueName);
+                    return item;
+                });
+
+                this.recurringVoucherDetails = items;
             }
         });
     }
+
     openModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(template);
     }
@@ -125,9 +134,10 @@ export class RecurringComponent implements OnInit, OnDestroy {
                 this.showCustomerNameSearch = false;
             }
         });
+
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
     }
@@ -167,17 +177,24 @@ export class RecurringComponent implements OnInit, OnDestroy {
         if (this.recurringVoucherDetails && this.recurringVoucherDetails.length) {
             this.recurringVoucherDetails = _.map(this.recurringVoucherDetails, (item: RecurringInvoice) => {
                 item.isSelected = this.allItemsSelected;
+
+                if (this.allItemsSelected) {
+                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
+                } else {
+                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
+                }
+
                 return item;
             });
-            // this.insertItemsIntoArr();
         }
     }
 
     public toggleItem(item: any, action: boolean) {
         item.isSelected = action;
         if (action) {
-            // this.countAndToggleVar();
+            this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
         } else {
+            this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
             this.allItemsSelected = false;
         }
         this.itemStateChanged(item.uniqueName);
@@ -273,7 +290,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public submit() {
         const filter = { ...this.filter };
         if (filter.lastInvoiceDate) {
-            filter.lastInvoiceDate = moment(filter.lastInvoiceDate).format('DD-MM-YYYY');
+            filter.lastInvoiceDate = moment(filter.lastInvoiceDate).format(GIDDH_DATE_FORMAT);
         }
         if (Object.keys(filter).some(p => filter[p])) {
             this.store.dispatch(this._invoiceActions.GetAllRecurringInvoices(filter));
