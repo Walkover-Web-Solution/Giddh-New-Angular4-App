@@ -713,7 +713,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             this.isUniversalDateApplicable = true;
         }
         this.getLedgersOfInvoice();
-        this.toggleAllItems(false);
+        this.insertItemsIntoArr();
         this.detectChanges();
     }
 
