@@ -111,6 +111,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     @ViewChild('navigationModal', {static: true}) public navigationModal: TemplateRef<any>; // CMD + K
     @ViewChild('dateRangePickerCmp', {static: true}) public dateRangePickerCmp: ElementRef;
     @ViewChild('dropdown', {static: true}) public companyDropdown: BsDropdownDirective;
+    @ViewChild('dropdown', { static: true }) public swithcBranchDropdown: BsDropdownDirective;
     // @ViewChild('talkSalesModal') public talkSalesModal: ModalDirective;
     @ViewChild('supportTab', {static: true}) public supportTab: TabsetComponent;
     @ViewChild('searchCmpTextBox', {static: true}) public searchCmpTextBox: ElementRef;
@@ -956,6 +957,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             e.stopPropagation();
         }
         this.companyDropdown.isOpen = false;
+        this.swithcBranchDropdown.isOpen = false;
         this.forceOpenNavigation = false;
         if (this.companyDetailsDropDownWeb) {
             this.companyDetailsDropDownWeb.hide();
@@ -1153,6 +1155,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public changeCompany(selectedCompanyUniqueName: string) {
         this.companyDropdown.isOpen = false;
+        this.swithcBranchDropdown.isOpen = false;
         const details = {
             branchDetails: {
                 uniqueName: ''
@@ -1178,6 +1181,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         event.preventDefault();
         this.companyDropdown.isOpen = false;
+        this.swithcBranchDropdown.isOpen = true;
         this.toggleBodyScroll();
         const details = {
             branchDetails: {
@@ -1905,7 +1909,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleBodyScroll(): void {
-        if (this.companyDropdown.isOpen && !this.isMobileSite) {
+        if (this.companyDropdown.isOpen && !this.isMobileSite && this.swithcBranchDropdown.isOpen) {
             document.querySelector('body').classList.add('prevent-body-scroll');
         } else {
             document.querySelector('body').classList.remove('prevent-body-scroll');

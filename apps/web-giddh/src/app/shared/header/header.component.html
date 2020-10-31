@@ -50,7 +50,7 @@
                                             <input type="text" class="form-control" placeholder="Search Company here" [(ngModel)]="searchCmp" #searchCmpTextBox name="searchCompany" (ngModelChange)="filterCompanyList($event)" autocomplete="off" />
 
                                             <span tooltip="Refresh" class="input-group-addon" id="" (click)="refreshCompanies($event)">
-                                                <i class="icon-refrsh cp"
+                                                <i class="icon-refresh cp"
                                                     [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
                                             </span>
                                         </div>
@@ -237,7 +237,7 @@
                         <input type="text" (ngModelChange)="filterBranch($event)" [(ngModel)]="searchBranchQuery"
                             class="form-control" placeholder="Search Branch here" autocomplete="off" />
                         <span (click)="loadCompanyBranches()" tooltip="Refresh" placement="left" class="input-group-addon">
-                            <i class="icon-refrsh cp"></i>
+                            <i class="icon-refresh cp"></i>
                         </span>
                     </div>
                     <li *ngFor="let branch of currentCompanyBranches" role="menuitem">
@@ -645,7 +645,7 @@
                     <input type="text" class="form-control" placeholder="Search Company here" [(ngModel)]="searchCmp" #searchCmpTextBox name="searchCompany" (ngModelChange)="filterCompanyList($event)" autocomplete="off" />
 
                     <span tooltip="Refresh" class="input-group-addon" id="" (click)="refreshCompanies($event)">
-                    <i class="icon-refrsh cp"
+                    <i class="icon-refresh cp"
                         [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
                 </span>
                 </div>

@@ -20,6 +20,9 @@ input {
     display: flex;
     align-items: center;
 }
+ table.ledger-footer-1 td[class*="col-"]{
+    justify-content: flex-end;
+}
 .ledg-head table td.pdR25imp {
     padding-right: 25px !important;
 }
