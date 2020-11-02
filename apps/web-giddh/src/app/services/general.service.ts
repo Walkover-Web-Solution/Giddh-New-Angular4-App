@@ -716,9 +716,9 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public setCookie(cookieName: string, cookieValue: any, expiryDays: number): void {
-        var date = new Date();
+        const date = new Date();
         date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
-        var expires = "expires=" + date.toUTCString();
+        const expires = "expires=" + date.toUTCString();
         document.cookie = cookieName + "=" + cookieValue + ";domain=giddh.com;" + expires + ";path=/";
     }
 }
