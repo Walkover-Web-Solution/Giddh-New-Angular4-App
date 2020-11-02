@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="help-aside-body">
-            <div class="back-to-main-slider">
+            <div class="back-to-main-slider" [ngClass]="{'setting-close-icon' : isMobileScreen }">
                 <a href="javascript:;">
                     <span *ngIf="!isMobileScreen" (click)="goToPreviousPage()">
                         <i class="icon-back-arrow"></i>
