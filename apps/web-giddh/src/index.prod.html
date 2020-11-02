@@ -5,11 +5,6 @@
   <% } %> -->
 
 <head>
-    <script type="text/javascript">
-        if (window.location.hostname.indexOf('www') == 0) {
-            window.location = window.location.href.replace('www.', '');
-        }
-    </script>
     <script>
         (function(w, d, s, l, i) {
             w[l] = w[l] || [];
@@ -25,6 +20,11 @@
                 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
             f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', 'GTM-K2L9QG');
+    </script>
+    <script type="text/javascript">
+        if (window.location.hostname.indexOf('www') == 0) {
+            window.location = window.location.href.replace('www.', '');
+        }
     </script>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
