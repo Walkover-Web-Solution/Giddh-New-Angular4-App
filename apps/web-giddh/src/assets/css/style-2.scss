@@ -4442,8 +4442,9 @@ select.form-control {
 form label {
     color: $nero;
     font-weight: normal;
-    padding-bottom: 5px;
+    padding-bottom: 0;
     font-size: 14px;
+    line-height: 2.3;
 }
 
 label {
@@ -6724,7 +6725,7 @@ table td[class*=col-]:last-child {
 
 .form-header h3 {
     font-size: 18px;
-    font-family: "opensans-bold";
+    font-family: "opensans-semibold";
 }
 
 .form_body {

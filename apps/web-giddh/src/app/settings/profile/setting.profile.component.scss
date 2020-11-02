@@ -34,7 +34,12 @@
 
     }
 }
-
+.branch-vector{
+    text-align: right;
+    position: absolute;
+    bottom: 20px;
+    right: 90px;
+}
 @media(max-width:768px){
     .multicurrency-checkbox{
         display: block !important;
