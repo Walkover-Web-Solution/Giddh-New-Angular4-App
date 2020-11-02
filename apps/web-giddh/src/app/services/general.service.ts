@@ -547,7 +547,7 @@ export class GeneralService {
     public getRevisionField(type: any): string {
         return type.replace(/_/g, " ");
     }
-    
+
     /**
      * Returns the account category
      *
@@ -631,5 +631,20 @@ export class GeneralService {
      */
     public removeSessionStorage(name: string): void {
         sessionStorage.removeItem(name);
+    }
+
+    /**
+     * This will set global cookie for main domain
+     *
+     * @param {string} cookieName
+     * @param {*} cookieValue
+     * @param {number} expiryDays
+     * @memberof GeneralService
+     */
+    public setCookie(cookieName: string, cookieValue: any, expiryDays: number): void {
+        const date = new Date();
+        date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = cookieName + "=" + cookieValue + ";domain=giddh.com;" + expires + ";path=/";
     }
 }
