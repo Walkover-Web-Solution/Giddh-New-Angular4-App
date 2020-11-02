@@ -862,7 +862,7 @@
                                 <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600 pdL3 mr0">
                                     <div class="row">
                                         <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                                <giddh-datepicker #shippingDate="ngModel" placeholder="Ship Date"  [placeholder]="templatePlaceholder?.shippedDateLabel" name="shippingDate"
+                                                <giddh-datepicker #shippingDate="ngModel" placeholder="Ship Date" name="shippingDate"
                                                     [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate"
                                                     [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                                 </giddh-datepicker>
@@ -1504,8 +1504,7 @@
                         <div class="row">
 
                             <div class="form-group col-xs-4">
-                                <giddh-datepicker #shippingDate="ngModel" placeholder="Ship Date" [placeholder]="templatePlaceholder?.shippedDateLabel"
-                                    name="shippingDate" [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate"
+                                <giddh-datepicker #shippingDate="ngModel" placeholder="Ship Date"                                    name="shippingDate" [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate"
                                     [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                 </giddh-datepicker>
                                 <p class="text-danger"
