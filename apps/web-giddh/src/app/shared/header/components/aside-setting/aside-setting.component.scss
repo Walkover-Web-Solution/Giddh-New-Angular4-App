@@ -33,12 +33,11 @@
     z-index: 999;
     .aside-help-header{
         display: none;
-    }
-    .help-aside-body {
         .search-field{
             display: none;
         }
     }
+
 }
 :host.in #close {
     display: block;
@@ -74,28 +73,30 @@
         display: flex;
         justify-content: space-between;
         padding: 15px 15px;
-        border-bottom: 1px solid $gainsboro;
         position:sticky;
         top: 0;
         background-color: $alice-blue;
         z-index: 1;
+        flex-direction: column;
         h2 {
             font-family: 'opensans-semibold';
             font-size: 18px;
             color: $midnight-blue;
         }
-    }
-    .help-aside-body{
+        #close{
+            position: absolute;
+            right: 15px;
+        }
         .search-field{
-            padding: 15px;
+            padding: 20px 0 10px;
             background-color: $alice-blue;
             input{
                 border-radius: 20px !important;
                 padding-left: 40px !important;
             }
             i{
-                top: 25px;
-                left: 30px;
+                top: 30px;
+                left: 15px;
                 color: gray;
             }
         }
@@ -167,6 +168,9 @@
         z-index: unset;
         .aside-help-header{
             display: none;
+            .search-field{
+                display: none;
+            }
         }
         .back-to-main-slider{
             display: block;
@@ -188,9 +192,6 @@
             }
         }
         .help-aside-body {
-            .search-field{
-                display: none;
-            }
             .setting-items{
                 ul{
                     li{
