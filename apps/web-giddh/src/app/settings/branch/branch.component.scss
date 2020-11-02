@@ -288,12 +288,21 @@
 
 .linked-add {
     margin-bottom: 5px;
+    display: flex;
+    align-items: baseline;
+    white-space: normal;
+    word-break: break-word;
 }
 
 .right-card-section {
     margin-top: -15px;
 }
-
+.branch-vector{
+    text-align: right;
+    position: absolute;
+    bottom: 8px;
+    right: 90px;
+}
 @media (max-width: 375px) {
     .grey-color button.btn.btn-default {
         margin-left: 0;
@@ -329,6 +338,10 @@
             margin-bottom: 0;
         }
     }
+    .btn-sky-blue.pull-right{
+        float: none;
+        margin-bottom: 15px;
+    }
 }
 @media (max-width: 370px) {
     .date-advance-search {
@@ -356,7 +369,6 @@
 
 @media (min-width: 1020px) and (max-width: 1092px) {
     .form-top-fields {
-        margin-top: -10px;
         .input-addon {
             top: 18px;
         }
