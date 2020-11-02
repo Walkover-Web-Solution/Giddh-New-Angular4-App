@@ -293,6 +293,10 @@
 
 .linked-add {
     margin-bottom: 5px;
+    display: flex;
+    align-items: baseline;
+    white-space: normal;
+    word-break: break-word;
 }
 
 .right-card-section {
@@ -301,7 +305,7 @@
 .branch-vector{
     text-align: right;
     position: absolute;
-    bottom: 20px;
+    bottom: 8px;
     right: 90px;
 }
 @media (max-width: 375px) {
@@ -339,6 +343,10 @@
             margin-bottom: 0;
         }
     }
+    .btn-sky-blue.pull-right{
+        float: none;
+        margin-bottom: 15px;
+    }
 }
 @media (max-width: 370px) {
     .date-advance-search {
@@ -366,7 +374,6 @@
 
 @media (min-width: 1020px) and (max-width: 1092px) {
     .form-top-fields {
-        margin-top: -10px;
         .input-addon {
             top: 18px;
         }
