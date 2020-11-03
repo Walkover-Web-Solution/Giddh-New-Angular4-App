@@ -28,7 +28,7 @@ import {
     RATE_FIELD_PRECISION,
     SubVoucher,
 } from 'apps/web-giddh/src/app/app.constant';
-import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
+import { AccountResponse, AccountResponseV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
@@ -163,8 +163,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public mapBodyContent: string;
     public selectedItemToMap: ReconcileResponse;
     public tags$: Observable<TagRequest[]>;
-    public activeAccount$: Observable<AccountResponse>;
-    public activeAccount: AccountResponse;
+    public activeAccount$: Observable<AccountResponse | AccountResponseV2>;
+    public activeAccount: AccountResponse | AccountResponseV2;
     public currentAccountApplicableTaxes: string[] = [];
     public totalForTax: number = 0;
     public taxListForStock = []; // New
@@ -282,28 +282,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.currentTxn.advanceReceiptAmount = this.currentTxn.amount;
         this.activeAccount$.subscribe(acc => {
             if (acc) {
-                this.accountOtherApplicableDiscount = [];
-                this.activeAccount = acc;
-                let parentAcc = acc.parentGroups[0].uniqueName;
-                let incomeAccArray = ['revenuefromoperations', 'otherincome'];
-                let expensesAccArray = ['operatingcost', 'indirectexpenses'];
-                let assetsAccArray = ['assets'];
-                let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray, ...assetsAccArray];
-                if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
-                    let appTaxes = [];
-                    acc.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
-                    this.currentAccountApplicableTaxes = appTaxes;
-                }
-                if (acc.country && acc.country.countryName) {
-                    this.activeAccountCountryName = acc.country.countryName;
-                }
-                if (acc.applicableDiscounts && acc.applicableDiscounts.length) {
-                    this.accountOtherApplicableDiscount = acc.applicableDiscounts;
-                } else if (acc.inheritedDiscounts && acc.inheritedDiscounts.length && !this.accountOtherApplicableDiscount.length) {
-                    acc.inheritedDiscounts.forEach(element => {
-                        this.accountOtherApplicableDiscount.push(...element.applicableDiscounts);
-                    });
-                }
+                this.assignUpdateActiveAccount(acc);
+            }
+        });
+        this.store.select(stateAccount => stateAccount.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.assignUpdateActiveAccount(response);
             }
         });
 
@@ -1407,5 +1391,36 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     private openAdjustPaymentModal(): void {
         this.adjustPaymentModal.show();
+    }
+
+    /**
+     * To assign updated account details
+     *
+     * @param {(AccountResponse | AccountResponseV2)} accountDetails
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public assignUpdateActiveAccount(accountDetails: AccountResponse | AccountResponseV2) {
+        this.accountOtherApplicableDiscount = [];
+        this.activeAccount = accountDetails;
+        let parentAcc = accountDetails.parentGroups[0].uniqueName;
+        let incomeAccArray = ['revenuefromoperations', 'otherincome'];
+        let expensesAccArray = ['operatingcost', 'indirectexpenses'];
+        let assetsAccArray = ['assets'];
+        let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray, ...assetsAccArray];
+        if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
+            let appTaxes = [];
+            accountDetails.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
+            this.currentAccountApplicableTaxes = appTaxes;
+        }
+        if (accountDetails.country && accountDetails.country.countryName) {
+            this.activeAccountCountryName = accountDetails.country.countryName;
+        }
+        if (accountDetails.applicableDiscounts && accountDetails.applicableDiscounts.length) {
+            this.accountOtherApplicableDiscount = accountDetails.applicableDiscounts;
+        } else if (accountDetails.inheritedDiscounts && accountDetails.inheritedDiscounts.length && !this.accountOtherApplicableDiscount.length) {
+            accountDetails.inheritedDiscounts.forEach(element => {
+                this.accountOtherApplicableDiscount.push(...element.applicableDiscounts);
+            });
+        }
     }
 }
