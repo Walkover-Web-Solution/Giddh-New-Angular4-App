@@ -220,6 +220,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     };
     /** No results found label for dynamic search */
     public noResultsFoundLabel = SearchResultText.NewSearch;
+    public isDefaultLoad: boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -578,7 +579,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.todaySelected = resp[2];
 
             // check if params have from and to, this means ledger has been opened from other account-details-component
-            if (params['from'] && params['to']) {
+            if (params['from'] && params['to'] && this.isDefaultLoad) {
                 let from = params['from'];
                 let to = params['to'];
                 // Set date range to component date picker
@@ -598,6 +599,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.trxRequest.from = from;
                 this.trxRequest.to = to;
                 this.trxRequest.page = 0;
+                this.isDefaultLoad = false;
             } else {
                 // means ledger is opened normally
                 if (dateObj && !this.todaySelected) {
