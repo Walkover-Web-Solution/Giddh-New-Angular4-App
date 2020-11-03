@@ -96,10 +96,10 @@ export class AsideSettingComponent implements OnInit {
      * @memberof AsideSettingComponent
      */
     public goToPreviousPage(): void {
-        if(this.generalService.getSessionStorage("previousPage")) {
+        if(this.generalService.getSessionStorage("previousPage") && !this.router.url.includes("/dummy")) {
             this.router.navigateByUrl(this.generalService.getSessionStorage("previousPage"));
         } else {
-            this.location.back();
+            this.router.navigate(['/pages/home']);
         }
     }
 
