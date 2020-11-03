@@ -1399,7 +1399,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @param {(AccountResponse | AccountResponseV2)} accountDetails
      * @memberof NewLedgerEntryPanelComponent
      */
-    public assignUpdateActiveAccount(accountDetails: AccountResponse | AccountResponseV2) {
+    public assignUpdateActiveAccount(accountDetails: AccountResponse | AccountResponseV2): void {
         this.accountOtherApplicableDiscount = [];
         this.activeAccount = accountDetails;
         let parentAcc = accountDetails.parentGroups[0].uniqueName;
