@@ -285,7 +285,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.assignUpdateActiveAccount(acc);
             }
         });
-        this.store.select(stateAccount => stateAccount.groupwithaccounts.activeAccount).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(stateAccount => stateAccount.groupwithaccounts.activeAccount),takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.assignUpdateActiveAccount(response);
             }
