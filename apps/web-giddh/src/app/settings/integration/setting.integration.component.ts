@@ -39,6 +39,7 @@ import { SettingsPermissionActions } from '../../actions/settings/permissions/se
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
 import { SettingsPermissionService } from '../../services/settings.permission.service';
 import { SettingsIntegrationTab } from '../constants/settings.constant';
+import { HttpClient } from '@angular/common/http';
 
 export declare const gapi: any;
 
@@ -148,6 +149,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private changeDetectionRef: ChangeDetectorRef,
         private generalService: GeneralService,
         private settingsIntegrationService: SettingsIntegrationService,
+        private http: HttpClient,
         private settingsPermissionService: SettingsPermissionService) {
         this.flattenAccountsStream$ = this.store.pipe(select(s => s.general.flattenAccounts), takeUntil(this.destroyed$));
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', this.getGoogleCredentials().GOOGLE_CLIENT_ID);
@@ -642,7 +644,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     private getGoogleCredentials() {
-        if (PRODUCTION_ENV || isCordova) {
+        if (PRODUCTION_ENV || isElectron || isCordova) {
             return {
                 GOOGLE_CLIENT_ID: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
                 GOOGLE_CLIENT_SECRET: 'eWzLFEb_T9VrzFjgE40Bz6_l'
@@ -732,12 +734,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     gmailIntegration(provider: string) {
-        if (Configuration.isElectron) {
+        if (isElectron) {
             // electronOauth2
             const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
                 const t = ipcRenderer.send("authenticate-send-email", provider);
+                ipcRenderer.once('take-your-auth-token', (sender, arg: any) => {
+                    this.saveGmailAuthCode(arg);
+                });
                 ipcRenderer.once('take-your-gmail-token', (sender, arg: any) => {
                     // this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                     const dataToSave = {
@@ -1282,7 +1287,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /** Note We have to use param 'postItem' as this need mapping on sh-select custome filter params
-     * To apply custom sorting on approver list 
+     * To apply custom sorting on approver list
      *
      * @param {IOption} preItem Params to sort selected item
      * @param {IOption} postItem Params to sort selected item
@@ -1391,5 +1396,45 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             default:
                 break;
         }
+    }
+
+    /**
+     * To save gmail integrated authenticated code
+     *
+     * @param {string} authCode
+     * @memberof SettingIntegrationComponent
+     */
+    public saveGmailAuthCode(authCode: string) {
+        const getAccessTokenData = {
+            code: authCode,
+            client_secret: this.getGoogleCredentials().GOOGLE_CLIENT_SECRET,
+            client_id: this.getGoogleCredentials().GOOGLE_CLIENT_ID,
+            grant_type: 'authorization_code',
+            redirect_uri: 'http://127.0.0.1:45587/callback'
+        };
+
+        let options = { headers: {} };
+        options.headers['Accept'] = 'application/json';
+        options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+
+        options.headers = {} as any;
+
+        this.http.post("https://accounts.google.com/o/oauth2/token", getAccessTokenData, options).subscribe((p: any) => {
+            const dataToSave = {
+                "access_token": p.access_token,
+                "expires_in": p.expires_in,
+                "refresh_token": p.refresh_token
+            };
+            this._authenticationService.saveGmailToken(dataToSave).subscribe((res) => {
+                if (res.status === 'success') {
+                    this.toasty.successToast('Gmail account added successfully.', 'Success');
+                    this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+                    this.router.navigateByUrl('/pages/settings/integration/email');
+                } else {
+                    this.toasty.errorToast(res.message, res.code);
+                }
+                this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+            });
+        });
     }
 }

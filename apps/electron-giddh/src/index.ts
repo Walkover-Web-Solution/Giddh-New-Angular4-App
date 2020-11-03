@@ -18,6 +18,8 @@ let LOCAL_ENV = false;
 let PRODUCTION_ENV = false;
 let APP_URL = '';
 let APP_FOLDER = '';
+let PROD_GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
+let PROD_GOOGLE_CLIENT_SECRET = 'eWzLFEb_T9VrzFjgE40Bz6_l';
 
 app.on("ready", () => {
     ipcMain.on("log.error", (event: any, arg: any) => {
@@ -135,8 +137,9 @@ ipcMain.on("authenticate", (event, arg) => {
 
 ipcMain.on("authenticate-send-email", (event, arg) => {
     if (arg === "google") {
-        const myApiOauth = new ElectronGoogleOAuth2(GoogleLoginElectronConfig.clientId,
-            GoogleLoginElectronConfig.clientSecret,
+        // ['https://www.googleapis.com/auth/drive.metadata.readonly', 'https://www.googleapis.com/auth/gmail.send'],
+        const myApiOauth = new ElectronGoogleOAuth2(PROD_GOOGLE_CLIENT_ID,
+            PROD_GOOGLE_CLIENT_SECRET,
             ['https://www.googleapis.com/auth/gmail.send'],
             {
                 successRedirectURL: PRODUCTION_ENV ? 'https://app.giddh.com/app-login-success' : 'https://stage.giddh.com/app-login-success',
@@ -144,6 +147,17 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
                 refocusAfterSuccess: true,
             }
         );
+        myApiOauth.getAuthorizationCode()
+            .then(token => {
+                event.returnValue = token;
+                if (event.reply) {
+                    event.reply('take-your-auth-token', token);
+                } else if (event.sender.send) {
+                    event.sender.send('take-your-auth-token', token);
+                }
+                // use your token.access_token
+            });
+
         myApiOauth.openAuthWindowAndGetTokens()
             .then(token => {
                 event.returnValue = token;

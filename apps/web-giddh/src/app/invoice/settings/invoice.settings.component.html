@@ -235,7 +235,8 @@
                                 <input type="checkbox" [(ngModel)]="companyEmailSettings.sendThroughGmail" name="sendThroughGmail" [disabled]="!isGmailIntegrated" class="hide-on-mobile" />
 
                                 <span *ngIf="shouldShowGmailIntegration" class="ml-1 integrated-email">
-                                    <a *ngIf="!isGmailIntegrated" [href]="gmailAuthCodeUrl$ | async">Integrate Gmail</a>
+                                    <a *ngIf="!isGmailIntegrated && !isElectron" [href]="gmailAuthCodeUrl$ | async">Integrate Gmails</a>
+                                    <a *ngIf="!isGmailIntegrated && isElectron" (click)="gmailIntegration('google')">Integrate Gmail</a>
                                 </span>
                             </div>
 

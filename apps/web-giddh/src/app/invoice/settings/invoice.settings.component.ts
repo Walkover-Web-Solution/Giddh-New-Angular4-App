@@ -16,6 +16,7 @@ import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccou
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Configuration } from '../../app.constant';
 
 const PaymentGateway = [
     { value: 'razorpay', label: 'razorpay' },
@@ -66,6 +67,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public flattenAccounts$: Observable<IFlattenAccountsResultItem[]>;
     public isGmailIntegrated: boolean;
     public gmailAuthCodeUrl$: Observable<string> = null;
+    // To check for electron
+   // public isElectron: boolean = Configuration.isElectron;
     /** True, if Gmail integration is to be displayed (TODO: Should be removed once URIs become secured) */
     shouldShowGmailIntegration: boolean;
     private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
@@ -441,13 +444,14 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-    private saveGmailAuthCode(authCode: string) {
+
+     private saveGmailAuthCode(authCode: string) {
         const dataToSave = {
             code: authCode,
             client_secret: this.getGoogleCredentials().GOOGLE_CLIENT_SECRET,
             client_id: this.getGoogleCredentials().GOOGLE_CLIENT_ID,
             grant_type: 'authorization_code',
-            redirect_uri: this.getRedirectUrl(AppUrl)
+            redirect_uri: isElectron ? 'http://127.0.0.1:45587/callback': this.getRedirectUrl(AppUrl)
         };
         this._authenticationService.saveGmailAuthCode(dataToSave).subscribe((res) => {
             if (res.status === 'success') {
@@ -462,6 +466,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     private getRedirectUrl(baseHref: string) {
         if (TEST_ENV) {
             return `${baseHref}pages/invoice/preview/sales?tab=settings&tabIndex=4`;
+        } else if (isElectron) {
+            this.shouldShowGmailIntegration = true; // TODO: Remove flag after above URIs are secured
+            return 'http://127.0.0.1:45587/callback';
         } else if (PRODUCTION_ENV || STAGING_ENV || LOCAL_ENV) {
             /* All the above URIs are not secured and Google has blocked
               addition of unsecured URIs therefore show Gmail integration text only
@@ -485,4 +492,40 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         }
     }
 
+    public gmailIntegration(provider: string) {
+        if (isElectron) {
+            // electronOauth2
+            const { ipcRenderer } = (window as any).require("electron");
+            if (provider === "google") {
+                // google
+                const t = ipcRenderer.send("authenticate-send-email", provider);
+                ipcRenderer.once('take-your-auth-token', (sender, arg: any) => {
+                    this.saveGmailAuthCode(arg);
+                });
+                ipcRenderer.once('take-your-gmail-token', (sender, arg: any) => {
+                    // this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
+                    const dataToSave = {
+                        "access_token": arg.access_token,
+                        "expires_in": arg.expiry_date,
+                        "refresh_token": arg.refresh_token,
+                    };
+                    this._authenticationService.saveGmailToken(dataToSave).subscribe((res) => {
+
+                        if (res.status === 'success') {
+                            this._toasty.successToast('Gmail account added successfully.', 'Success');
+                        } else {
+                            this._toasty.errorToast(res.message, res.code);
+                        }
+                        this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+                        this.router.navigateByUrl('/pages/settings/integration/email');
+                    });
+                });
+
+            } else {
+                const t = ipcRenderer.send("authenticate-send-email", provider);
+            }
+
+        }
+
+    }
 }
