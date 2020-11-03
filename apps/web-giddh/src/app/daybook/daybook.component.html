@@ -1,4 +1,4 @@
-<div class="no-data mt-2 loader-main" *ngIf="showLoader">
+<div class="no-data mr-t2 loader-main" *ngIf="showLoader">
     <div class="spinner2">
         <div class="cube1"></div>
         <div class="cube2"></div>
@@ -14,33 +14,33 @@
 </div>
 
 <ng-container *ngIf="!showLoader">
-<div class="transactions-page mrT1 pos-rel clearfix">
+<div class="transactions-page mt-15 pos-rel clearfix">
 
     <!-- ledger header -->
     <div class="col-md-12">
         <div class="">
 
-            <div class="form-inline">
-                <div class=" form-group">
+            <div class="form-inline d-block flex-row flex-nowrap">
+                <div class="form-group">
 
-                    <span class="inputWrapper"> <input type="text" #dateRangePickerCmp name="daterangeInput"
+                    <span class="input-wrapper"> <input type="text" #dateRangePickerCmp name="daterangeInput"
                             daterangepicker [options]="datePickerOptions"
-                            (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker" />
+                            (applyDaterangepicker)="selectedDate($event)" class="form-control date-range-picker cursor-pointer" />
                     </span>
 
                 </div>
-                <div class=" form-group">
+                <div class="form-group cursor-pointer">
 
 
-                    <div class="advance-icon" style="align-items: center" tooltip="Advance Search">
-                        <span class="icon-advance-search" (click)="onOpenAdvanceSearch()"></span>
+                    <div class="advance-icon" style="align-items: center" tooltip="Advance Search" (click)="onOpenAdvanceSearch()">
+                        <span class="icon-advance-filter"></span>
                     </div>
 
                     <!-- <button class="btn-link pdL0" (click)="onOpenAdvanceSearch()">Advance Search</button> -->
                     <!-- <button type="button" class="btn btn-success" (click)="go()">GO</button> -->
 
                 </div>
-                <div class=" form-group expand-collapse-btn">
+                <div class="form-group expand-collapse-btn">
 
                     <button type="button" class="btn btn-default" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
                               'Expand All'}}
@@ -53,8 +53,7 @@
                     </button>
                 </div>
                 <div class="expand-export">
-                    <button type="button" class="btn btn-default expandBtnHideDesktop" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :
-                                              'Expand All'}}
+                    <button type="button" class="btn btn-default expandBtnHideDesktop" (click)="toggleExpand()">{{ isAllExpanded ? 'Collapse All' :'Expand All'}}
                     </button>
                     <button type="button" class="btn btn-default export-btn pull-right"
                         (click)="exportDaybook()">Export</button>
@@ -68,8 +67,8 @@
 </div>
 
 <div class="container-fluid">
-    <div class="box clearfix mrT2">
-        <div class="text-center mrB2 transctionReport">
+    <div class="box clearfix mt-15">
+        <div class="text-center mr-b2 transctionReport">
             <!-- <h2 class="account_Name fs20 primary_clr">{{companyName | uppercase}}</h2>
       <br /> -->
             <p>Transaction Report</p>
@@ -78,7 +77,7 @@
 
         <div class=" clearfix trial-balance table-responsive">
 
-            <table class="tb-head table-bordered table basic onMobileView">
+            <table class="tb-head table-bordered table basic on-mobile-view">
                 <thead>
                     <tr>
                         <th>Date</th>
@@ -108,7 +107,7 @@
                 </thead>
 
                 <tbody *ngFor="let entry of (daybookData$ | async)?.entries" (click)="expandEntry(entry);"
-                    class="daybookTableTbody">
+                    class="daybook-table-tbody">
                     <tr>
                         <td data-title="Date">{{ entry.entryDate }}</td>
                         <td data-title="Particular">{{ entry.particular.name }}</td>
@@ -165,7 +164,7 @@
             </div>
         </div>
 
-        <div class=" mrT2 text-center">
+        <div class=" mr-t2 text-center">
             <small class="grey" *ngIf="(daybookData$ | async)?.totalItems">{{(daybookData$ | async)?.totalItems  |giddhCurrency}}
                 Transactions
                 | {{(daybookData$ | async)?.totalPages  |giddhCurrency}} Pages
@@ -174,7 +173,7 @@
         </div>
 
         <!-- pagination -->
-        <div style="text-align: center;">
+        <div class="mt-1">
             <div id="pagination" element-view-container-ref #paginationChild=elementviewcontainerref></div>
         </div>
         <!-- pagination -->
@@ -185,7 +184,7 @@
 
 <!-- Advance search popup -->
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <daybook-advance-search-model #daybookAdvanceSearch [startDate]="daybookQueryRequest.from"
                 [endDate]="daybookQueryRequest.to" (closeModelEvent)="closeAdvanceSearchPopup($event)">

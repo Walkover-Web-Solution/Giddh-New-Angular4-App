@@ -1,0 +1,21 @@
+@import "../../../../../assets/css/color.scss";
+.list-item:focus,
+.list-item:focus .list-item {
+    color: $white !important;
+    background: $vivid-blue;
+}
+.virtual-group-list {
+    height: 100%;
+}
+
+
+@media (max-width:1024px){
+    .virtual-group-list {
+        display: table-cell;
+    }
+
+   .new-btn-ul{
+       padding-bottom:20px;
+   }
+
+}

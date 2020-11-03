@@ -1,58 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { AppState } from '../store';
+import { take } from 'rxjs/operators';
+import { StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyActions } from '../actions/company.actions';
 
 @Component({
     selector: 'company-import-export-component',
     templateUrl: 'company-import-export.component.html',
-    styles: [`
-    .backup-data {
-      padding: 10px 0px;
-      border-bottom: 1px solid #6d6d6d;
-      font-weight: 500;
-      color: black;
-    }
-
-    .main-container-import-export {
-      height: 70vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-
-
-    .import-card, .export-card {
-      padding: 40px 67px;
-      margin: 0 15px;
-      border-radius: 2px;
-      border: 1px solid $gainsboro;
-      background: #fafafa;
-      width: 330px;
-      text-align: center;
-      transition: .5s all ease;
-    }
-
-    .selected {
-      /*box-shadow: 0px 2px 18px #0095ff70 !important;
-      border-color: #84b1ff !important;*/
-    }
-
-    .import-export-icon {
-      width: 90px;
-      height: 90px;
-      background: #e5e5e5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 90px;
-      font-size: 34px;
-      color: #666666;
-      margin: 0 auto 20px;
-    }
-
-
-
-
-  `],
+    styleUrls: [`company-import-export.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -60,21 +16,35 @@ export class CompanyImportExportComponent implements OnInit {
     public mode: 'import' | 'export' = 'export';
     public isFirstScreen: boolean = true;
 
-    constructor(private _cdr: ChangeDetectorRef) {
-        //
+    constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
+        
     }
 
     public ngOnInit() {
-        //
+        this.saveStateDetails();
     }
 
     public setActiveTab(mode: 'import' | 'export') {
         this.mode = mode;
         this.isFirstScreen = false;
-        // this._cdr.detectChanges();
     }
 
     public back() {
         this.isFirstScreen = true;
+    }
+
+    /**
+     * This will save the last state
+     *
+     * @private
+     * @memberof CompanyImportExportComponent
+     */
+    private saveStateDetails(): void {
+        let companyUniqueName = null;
+        this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(company => companyUniqueName = company);
+        let stateDetailsRequest = new StateDetailsRequest();
+        stateDetailsRequest.companyUniqueName = companyUniqueName;
+        stateDetailsRequest.lastState = 'company-import-export';
+        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 }

@@ -15,9 +15,10 @@ input {
     border-right: 1px solid $gainsboro;
     font-size: 13px;
     color: $nero;
-    max-width: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
 }
 .ledg-head table td.pdR25imp {
     padding-right: 25px !important;
@@ -36,22 +37,53 @@ input {
     border-bottom: 1px solid $gainsboro;
     border-right: 1px solid $gainsboro;
     font-size: 13px;
-    max-width: 0;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 .ledg-head.entry-popup table td.pdR25imp {
     padding-right: 25px !important;
 }
-.ledg-head .ledger-main td[class*="col-"] {
-    padding: 0px !important;
+.transaction-mapped-table{
+    .top-head-table{
+        border-top: none;
+    }
+    thead{
+        th{
+            border-bottom: none;
+        }
+    }
+    .transaction-mapped-head{
+        border-top:none !important
+    }
+    .ledger-main {
+        .ledger-row.row{
+            td, th{
+                border-bottom: 1px solid $gainsboro !important;
+                border-top: none !important;
+            }
+            td[class*="col-"]{
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+        }
+    }
+    .row{
+        margin-left: 0;
+        margin-right: 0 ;
+    }
+    .ledger-head{
+        th{
+            padding-left: 15px;
+        }
+    }
+    tr{
+        td.upper-td {
+            padding: 0 !important;
+            border: none !important;
+        }
+    }
 }
-// table th[class*=col-]:last-child,
-// .ledger-main tr td:last-child,
-// table td[class*=col-]:last-child {
-//     border-right: 0 !important;
-// }
-.total_col td {
+.total-col td {
     border: 0 !important;
 }
 .ledger-main .form-control {
@@ -118,8 +150,20 @@ input {
     padding-left: 0;
     padding-top: 5px;
     padding-bottom: 10px;
+    &.first-child{
+        span{
+            position: relative;
+            right: 15px;
+        }
+    }
 }
-.total_col td {
+.ledger-head th:first-child{
+    span{
+        position: relative;
+        right: 15px;
+    }
+}
+.total-col td {
     border: 0;
 }
 .ledger-stat span {
@@ -210,13 +254,13 @@ input {
     cursor: default;
     top: 1px;
 }
-.inputWrapper {
+.input-wrapper {
     display: block !important;
     width: 100% !important;
     position: relative;
     height: 37px !important;
 }
-.inputWrapper:before {
+.input-wrapper:before {
     position: absolute;
     content: "";
     display: block;
@@ -239,13 +283,10 @@ input {
 .d-none {
     display: none;
 }
-.h-table tr {
-    height: 45px;
-}
 .dateStep {
     padding: 0 !important;
     font-size: 13px;
-    height: 41px;
+    height: 48px;
     line-height: 1;
 }
 input[type="date"]::-webkit-inner-spin-button,
@@ -278,6 +319,7 @@ sh-select:focus {
 .ledger-book .left-col-new,
 .ledger-book .right-col-new {
     background: #fff;
+    padding: 0 15px 350px;
 }
 .left-col-new table.width100.h-table tbody tr td:last-child,
 .left-col-new table.width100.h-table thead tr th:last-child {
@@ -319,10 +361,6 @@ sh-select:focus {
 .ledger-section {
     display: flex;
 }
-.ledger-section {
-    display: flex;
-}
-
 .advanc-search-block .icon-search {
     right: 0;
     top: 0;
@@ -330,16 +368,16 @@ sh-select:focus {
     padding: 6px 9px;
     color: #fff;
 }
-#blankLedgerContainer .ledger-main .no-leftBorder {
+.left-col-new table.width100.h-table#blank-ledger-container .no-left-border{
     border-left: none !important;
 }
 .ledger-row input[type="checkbox"] {
     margin-right: 15px;
 }
-.ledger-book .ledger-footer-1 .total_col .border-top {
+.ledger-book .ledger-footer-1 .total-col .border-top {
     border-top: 1px solid $gainsboro !important;
 }
-.ledger-book .ledger-footer-1 .total_col .bdrT {
+.ledger-book .ledger-footer-1 .total-col .bdrT {
     border: none;
 }
 
@@ -425,7 +463,8 @@ sh-select:focus {
     margin-right: 10px;
 }
 .modal-ledger {
-    width: 70%;
+    width: 100%;
+    max-width: 1350px;
 }
 .justify-content-between {
     justify-content: space-between;
@@ -461,6 +500,7 @@ sh-select:focus {
 }
 .ledger-account-label {
     align-items: center;
+    flex: auto;
     span {
         padding-left: 10px;
     }
@@ -477,17 +517,17 @@ sh-select:focus {
     text-decoration-style: none;
     background-image: url(../../assets/images/calender-icon.svg) !important;
     background-size: 17px !important;
-    background-position: 15px 8px !important;
+    background-position: 15px 9px !important;
     background-repeat: no-repeat !important;
     padding-left: 35px !important;
     position: relative;
     z-index: 99;
     cursor: default;
-    top: 1px;
+    top: 0;
     font-size: 14px;
     padding-right: 10px !important;
     height: 36px;
-    min-width: 220px !important;
+    min-width: 225px !important;
     border-radius: 30px;
     &:focus {
         border-color: $chetwode-blue;
@@ -542,7 +582,7 @@ sh-select:focus {
     justify-content: space-between;
 }
 .input-wrapper.ipad-view-datepicker {
-    display: none;
+    display: none !important;
 }
 .no-btn,
 .no-btn:active,
@@ -561,7 +601,11 @@ sh-select:focus {
             border: none;
             padding-top: 10px;
             &:first-child {
-                padding-right: 12px;
+                padding-right: 15px;
+                border-left: 1px solid $gainsboro;
+            }
+            &:last-child{
+                border-right: 1px solid $gainsboro;
             }
         }
     }
@@ -594,9 +638,25 @@ sh-select:focus {
         border-bottom: none;
     }
 }
+.ledger-book.fade:not(.show){
+    opacity: 1 !important;
+}
+.multicurrency-amount {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end !important;
+    justify-content: flex-end;
+    text-align: right;
+    white-space: normal;
+}
+.ledg-head table .ledger-main .ledger-row:last-child td[class*="col-"]{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
 /*responsive*/
 .modal-ledger {
     width: 70%;
+    max-width: 100% !important;
 }
 .ledger-head {
     position: relative;
@@ -617,7 +677,7 @@ sh-select:focus {
 @media only screen and (max-width: 1366px) {
     .modal-ledger {
         width: 100%;
-        margin: 0;
+        margin: 0 auto;
         padding: 15px;
     }
 }
@@ -628,17 +688,19 @@ sh-select:focus {
         max-width: 1280px;
     }
 }
+@media(max-width:1190px){
+    .date-advance-search{
+        &:before, &:after{
+            display: none;
+        }
+    }
+}
 @media only screen and (max-width: 1024px) {
     .container {
         width: 100%;
         max-width: 100%;
     }
-    .ledg-head table td[class*="col-"],
-    toggle-switch .ledg-head table td .select2-container {
-        min-height: initial;
-        height: initial;
-        max-height: initial;
-    }
+
 }
 @media (max-width: 991px) {
     .daterngoption {
@@ -673,6 +735,9 @@ sh-select:focus {
     }
 }
 @media only screen and (max-width: 991px) {
+    .stat-block {
+        padding-left: 20px;
+    }
     .ledg-head table td[class*="col-"],
     .ledg-head table td .select2-container {
         border-bottom: 0px solid #ccc;
@@ -724,7 +789,7 @@ sh-select:focus {
     .ledger-row td:empty {
         display: none !important;
     }
-    #blankLedgerContainer tbody tr:empty {
+    #blank-ledger-container tbody tr:empty {
         display: none;
     }
     .ledger-head-top {
@@ -802,7 +867,6 @@ sh-select:focus {
     }
     .search-ledger-field {
         margin-right: 0 !important;
-        justify-content: space-between;
         .ledger-datepicker {
             width: 36px;
             height: 36px;
@@ -812,7 +876,7 @@ sh-select:focus {
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            display: none;
+            //display: none;
         }
     }
     .ledger-ellipse {
@@ -852,6 +916,7 @@ sh-select:focus {
     }
     .search-ledger-wrapper {
         width: 100% !important;
+        margin-top: 7px;
     }
     .download-invoice-ledger {
         top: 8px;
@@ -867,7 +932,11 @@ sh-select:focus {
     .hidden-xs {
         display: none !important;
     }
+    .ledger-head th{
+        padding-top: 0;
+    }
 }
+  /*comment for now
 @media (min-width: 768px) {
     .ledger-book:before {
         content: " ";
@@ -882,9 +951,14 @@ sh-select:focus {
         left: 0px;
         right: 0;
     }
+
     table.ledger-footer-1:first-child {
         border-right: 1px solid $gainsboro;
     }
+}
+*/
+.ledger-row td:nth-child(3) {
+    justify-content: flex-end !important;
 }
 @media (max-width: 767px) {
     .ledger-head {
@@ -893,8 +967,8 @@ sh-select:focus {
         }
     }
     .ledger-ellipse {
-        top: 0;
-        right: 0px;
+        top: 50px;
+        right: 10px;
         position: fixed;
         .btn {
             background-color: transparent;
@@ -934,6 +1008,12 @@ sh-select:focus {
         width: 100% !important;
         margin-bottom: 5px;
     }
+    .balance-detail{
+        .text-right{
+            text-align: left !important;
+            margin-bottom: 8px;
+        }
+    }
 }
 @media (max-width: 360px) {
     .search-ledger-field {
@@ -952,6 +1032,13 @@ sh-select:focus {
     .ledg-head {
         .single-search-box {
             margin-right: 5px;
+        }
+    }
+}
+@media (min-width:768px) and (max-width: 991px){
+    .ledger-datepicker{
+        img{
+            padding-top: 5px;
         }
     }
 }

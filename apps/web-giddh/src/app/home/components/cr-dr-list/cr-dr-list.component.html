@@ -1,9 +1,9 @@
 <div id="live">
-    <div class="panel panel-default">
-        <div class="panel-heading clearfix">
+    <div class="card">
+        <div class="panel-heading">
             <div class="btn-group gst-dropdown cursor-pointer pull-left" dropdown>
                 <span id="button-basic" dropdownToggle class="dropdown-toggle" aria-controls="dropdown-basic">
-                    <span class=""> <strong>Top {{showRecords}}</strong> </span> <span class="icon-arrow-down mrL1"></span>
+                    <span class=""> <strong>Top {{showRecords}}</strong> </span> <span class="icon-arrow-down mr-l1"></span>
                 </span>
                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                     <li role="menuitem"><a class="dropdown-item" (click)="changeShowRecords(5);">Top 5</a></li>
@@ -20,7 +20,7 @@
                 <input type="text" readonly name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="form-control giddh-datepicker date-range-picker dashboard-datepicker" />
             </div>
         </div>
-        <div class="cr-dr-body pos-rel">
+        <div class="cr-dr-body card-body pos-rel">
             <div class="top-five-cr-dr-table">
                 <div class="table-responsive debtors-table">
                     <table class="table basic giddh-table on-mobile-view">
@@ -74,7 +74,7 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions.ranges" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
                 [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
                 [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
         </div>

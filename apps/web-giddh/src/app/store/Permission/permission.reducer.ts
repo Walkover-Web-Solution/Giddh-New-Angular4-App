@@ -139,6 +139,9 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
                 });
             }
         }
+        case AccountsAction.RESET_SHARE_ENTITY: {
+            return Object.assign({}, state, {createPermissionInProcess: false, createPermissionSuccess: false});
+        }
         default: {
             return state;
         }

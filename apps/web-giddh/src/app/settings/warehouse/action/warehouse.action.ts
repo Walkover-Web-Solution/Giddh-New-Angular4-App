@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { map, switchMap } from 'rxjs/operators';
 
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
@@ -45,8 +45,7 @@ export class WarehouseActions {
      * @private
      * @memberof WarehouseActions
      */
-	@Effect()
-	private createWarehouse$ = this.action$.pipe(
+	public createWarehouse$ =createEffect( ()=> this.action$.pipe(
 		ofType(WarehouseActions.CREATE_WAREHOUSE),
 		switchMap((action: CustomActions) => this.settingsWarehouseService.createWarehouse(action.payload)),
 		map((response: BaseResponse<any, any>) => {
@@ -57,7 +56,7 @@ export class WarehouseActions {
 			this.toast.successToast('New warehouse created successfully', 'Success');
 			return this.createWarehouseResponse(response);
 		})
-	);
+	));
 
     /**
      * Effect to fetch all the warehouses for a company
@@ -65,8 +64,7 @@ export class WarehouseActions {
      * @private
      * @memberof WarehouseActions
      */
-	@Effect()
-	private getAllWarehouse$ = this.action$.pipe(
+	public getAllWarehouse$ = createEffect( ()=>this.action$.pipe(
 		ofType(WarehouseActions.GET_ALL_WAREHOUSE),
 		switchMap((action: CustomActions) => this.settingsWarehouseService.fetchAllWarehouse(action.payload)),
 		map((response: BaseResponse<any, any>) => {
@@ -76,7 +74,7 @@ export class WarehouseActions {
 			}
 			return this.fetchAllWarehousesResponse(response);
 		})
-	);
+	));
 
     /**
      * Effect to update warehouse
@@ -84,8 +82,8 @@ export class WarehouseActions {
      * @private
      * @memberof WarehouseActions
      */
-	@Effect()
-	private updateWarehouse$ = this.action$.pipe(
+
+	public updateWarehouse$ =createEffect( ()=> this.action$.pipe(
 		ofType(WarehouseActions.UPDATE_WAREHOUSE),
 		switchMap((action: CustomActions) => this.settingsWarehouseService.updateWarehouse(action.payload)),
 		map((response: BaseResponse<any, any>) => {
@@ -96,7 +94,7 @@ export class WarehouseActions {
 			this.toast.successToast('Warehouse updated successfully', 'Success');
 			return this.updateWarehouseResponse(response);
 		})
-	);
+	));
 
     /**
      * Effect to update warehouse
@@ -104,8 +102,8 @@ export class WarehouseActions {
      * @private
      * @memberof WarehouseActions
      */
-	@Effect()
-	private setDefaultWarehouse$ = this.action$.pipe(
+
+	public setDefaultWarehouse$ = createEffect( ()=>this.action$.pipe(
 		ofType(WarehouseActions.SET_AS_DEFAULT_WAREHOUSE),
 		switchMap((action: CustomActions) => this.settingsWarehouseService.setAsDefaultWarehouse(action.payload)),
 		map((response: BaseResponse<any, any>) => {
@@ -116,7 +114,7 @@ export class WarehouseActions {
 			this.toast.successToast('Warehouse updated successfully', 'Success');
 			return this.setAsDefaultWarehouseResponse(response);
 		})
-	);
+	));
 
 	/** @ignore */
 	constructor(

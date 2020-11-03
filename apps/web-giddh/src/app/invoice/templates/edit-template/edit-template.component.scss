@@ -48,7 +48,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    color: #484848;
+    color: $charcoal;
 }
 
 .dropdown-menu > li > a:hover {
@@ -57,7 +57,7 @@
 }
 .badge {
     background: #eaeaea;
-    color: #484848;
+    color: $charcoal;
     font-family: opensans-regular;
     border: none;
     font-weight: 400;
@@ -66,16 +66,21 @@
 }
 .badge.btn-success:hover {
     background: #ddd;
-    color: #484848;
+    color: $charcoal;
 }
-.badge.btn-pink,
-.badge.btn-pink:hover {
+.badge.btn-sky-blue,
+.badge.btn-sky-blue:hover {
     background: #313a97 !important;
     border: none !important;
     color: #fff !important;
 }
 .templteGrid-container {
     padding: 0 15px;
+}
+.full-modal{
+    width:100% !important;
+    margin:0;
+    max-width:100% !important;
 }
 @media (max-width: 414px) {
     .template-grid {

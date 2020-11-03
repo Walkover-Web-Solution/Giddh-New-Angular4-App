@@ -6,7 +6,7 @@ import { ReplaySubject } from 'rxjs';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { CustomTemplateResponse, GetInvoiceTemplateDetailsResponse, ISection } from '../../../models/api-models/Invoice';
 import * as _ from '../../../lodash-optimized';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { InvoiceTemplatesService } from '../../../services/invoice.templates.service';
 import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
 import { ToasterService } from '../../../services/toaster.service';
@@ -26,11 +26,11 @@ import { VoucherTypeEnum } from '../../../models/api-models/Sales';
 
 export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
 
-    @ViewChild('templateModal') public templateModal: ModalDirective;
-    @ViewChild('customTemplateConfirmationModal') public customTemplateConfirmationModal: ModalDirective;
-    @ViewChild('invoiceTemplatePreviewModal') public invoiceTemplatePreviewModal: ModalDirective;
+    @ViewChild('templateModal', {static: true}) public templateModal: ModalDirective;
+    @ViewChild('customTemplateConfirmationModal', {static: true}) public customTemplateConfirmationModal: ModalDirective;
+    @ViewChild('invoiceTemplatePreviewModal', {static: true}) public invoiceTemplatePreviewModal: ModalDirective;
     public voucherType: string;
-    @ViewChild(InvoiceTemplateModalComponent) public invoiceTemplateModalComponent: InvoiceTemplateModalComponent;
+    @ViewChild(InvoiceTemplateModalComponent, {static: true}) public invoiceTemplateModalComponent: InvoiceTemplateModalComponent;
 
     public selectedVoucherType: VoucherTypeEnum;
     public templateId: string = 'common_template_a';

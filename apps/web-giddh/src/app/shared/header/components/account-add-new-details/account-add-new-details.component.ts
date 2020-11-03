@@ -3,6 +3,7 @@ import {Observable, of as observableOf, ReplaySubject} from 'rxjs';
 import {distinctUntilChanged, take, takeUntil} from 'rxjs/operators';
 import {
     AfterViewInit,
+    ChangeDetectorRef,
     Component,
     ElementRef,
     EventEmitter,
@@ -31,7 +32,7 @@ import {CountryRequest, OnboardingFormRequest} from "../../../../models/api-mode
 import {CommonActions} from '../../../../actions/common.actions';
 import {GeneralActions} from "../../../../actions/general/general.actions";
 import {IFlattenGroupsAccountsDetail} from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
-import * as googleLibphonenumber from 'google-libphonenumber';
+import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 
 @Component({
     selector: 'account-add-new-details',
@@ -54,7 +55,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public isDebtorCreditor: boolean = true;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<string> = new EventEmitter();
-    @ViewChild('autoFocus') public autoFocus: ElementRef;
+    @ViewChild('autoFocus', {static: true}) public autoFocus: ElementRef;
 
     public forceClear$: Observable<IForceClear> = observableOf({status: false});
     public showOtherDetails: boolean = false;
@@ -79,7 +80,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public countryPhoneCode: IOption[] = [];
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public stateGstCode: any[] = [];
-    public phoneUtility: any = googleLibphonenumber.PhoneNumberUtil.getInstance();
     public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
     public isGstValid$: Observable<boolean> = observableOf(true);
@@ -91,20 +91,33 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public bankIbanNumberMaxLength: string = '18';
     public bankIbanNumberMinLength: string = '9';
 
-    constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-                private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions, private commonActions: CommonActions, private _generalActions: GeneralActions) {
+    constructor(
+        private _fb: FormBuilder,
+        private store: Store<AppState>,
+        private accountsAction: AccountsAction,
+        private _companyService: CompanyService,
+        private _toaster: ToasterService,
+        private companyActions: CompanyActions,
+        private commonActions: CommonActions,
+        private _generalActions: GeneralActions,
+        private changeDetectorRef: ChangeDetectorRef) {
         this.companiesList$ = this.store.select(s => s.session.companies).pipe(takeUntil(this.destroyed$));
         this.flattenGroups$ = this.store.pipe(select(state => state.general.flattenGroups), takeUntil(this.destroyed$));
 
         this.getCountry();
         this.getCallingCodes();
         this.getPartyTypes();
+    }
+
+    /**
+     * Initializes the component
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public ngOnInit(): void {
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
-    }
-
-    public ngOnInit() {
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
             this.showBankDetail = false;
@@ -229,6 +242,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
         this.getCurrency();
+
+        this.isStateRequired = this.checkActiveGroupCountry();
     }
 
     public ngAfterViewInit() {
@@ -505,8 +520,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public checkMobileNo(ele) {
         try {
-            let parsedNumber = this.phoneUtility.parse('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value);
-            if (this.phoneUtility.isValidNumber(parsedNumber)) {
+            let parsedNumber = parsePhoneNumberFromString('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value as CountryCode);
+            if (parsedNumber.isValid()) {
                 ele.classList.remove('error-box');
                 this.isMobileNumberValid = true;
             } else {
@@ -540,6 +555,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         if (!accountRequest.mobileNo) {
             accountRequest.mobileCode = '';
+        } else {
+            if(!this.isMobileNumberValid) {
+                this._toaster.errorToast('Invalid Contact number');
+                return false;
+            }
         }
         if (this.isHsnSacEnabledAcc) {
             // delete accountRequest['country'];
@@ -692,7 +712,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public getCurrency() {
-        this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
                     this.currencies.push({label: res[key].code, value: res[key].code});
@@ -703,8 +723,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     // Timeout is used as value were not updated in form
                     this.setCountryByCompany(this.activeCompany);
                 }, 500);
-            } else {
-                this.store.dispatch(this.commonActions.GetCurrency());
             }
         });
     }
@@ -816,8 +834,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value &&
-            this.isCreditorOrDebtor(this.activeGroupUniqueName)) {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors')) {
             return true;
         } else {
             return false;
@@ -844,6 +861,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             i++;
         }
         this.addAccountForm.controls['addresses'].updateValueAndValidity();
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -917,7 +935,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             const groupDetails: any = this.flatGroupsOptions.filter((group) => group.value === accountUniqueName).pop();
             if (groupDetails) {
                 return groupDetails.additional.some((parentGroup) => {
-                    const groups = [parentGroup.uniqueName, groupDetails.value]
+                    const groups = [parentGroup.uniqueName, groupDetails.value];
                     return groups.includes('sundrydebtors') || groups.includes('sundrycreditors');
                 });
             }

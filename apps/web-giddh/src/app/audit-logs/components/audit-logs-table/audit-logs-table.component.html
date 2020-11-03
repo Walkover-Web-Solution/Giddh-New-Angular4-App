@@ -1,5 +1,4 @@
-<h1 class="page-title" *ngIf="(this.auditLogs$ | async).length > 0"> Audit Logs</h1>
-<br />
+<!-- <h1 class="page-title" *ngIf="(this.auditLogs$ | async).length > 0"> Audit Logs</h1> -->
 <!--  -->
 <section class="audit-log" *ngFor="let log of (this.auditLogs$ | async); let parentIndex = index">
     <h1>{{log.operationType}}
@@ -222,7 +221,7 @@
                 <!-- Bank details block end -->
 
                 <!-- Voucher block -->
-                <div class="single-address-row voucheracc3" *ngIf="log?.details?.voucherAccount && log?.details?.voucherAccount.name">
+                <div class="single-address-row" *ngIf="log?.details?.voucherAccount && log?.details?.voucherAccount.name">
                     <ng-container>
                         <div class="mr-05" *ngIf="log?.details?.voucherAccount.name">
                             <label>
@@ -335,6 +334,49 @@
                 <!-- etries log block end -->
 
                 <!-- Stock group block -->
+                <!--commenting due to voucher block already exit  -->
+                <!-- <div class="single-address-row" *ngIf="log?.details?.voucherAccount && log?.details?.voucherAccount.name">
+                    <ng-container>
+                        <div class="mr-05" *ngIf="log?.details?.voucherAccount.name">
+                            <label>
+                           Account:
+                        </label>
+                            <p class="address-field"> {{log?.details?.voucherAccount.name}}
+                            </p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.details?.voucherType">
+                            <label>
+                           Voucher:
+                        </label>
+                            <p class="address-field"> {{log?.details?.voucherType}}
+                            </p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.details?.voucherNumber">
+                            <label>
+                            Voucher Number:
+                        </label>
+                            <p class="ml-05"> {{log?.details?.voucherNumber}}</p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.details?.subTotal">
+                            <label>
+                            Sub Total:
+                        </label>
+                            <p class="ml-05"> {{log?.details?.subTotal?.amountForAccount |giddhCurrency }}</p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.details?.totalTax">
+                            <label>
+                            Tax:
+                        </label>
+                            <p class="ml-05"> {{log?.details?.totalTax?.amountForAccount |giddhCurrency }}</p>
+                        </div>
+                        <div class="mr-05" *ngIf="log?.details?.grandTotal">
+                            <label>
+                            Total:
+                        </label>
+                            <p class="ml-05"> {{log?.details?.grandTotal?.amountForAccount |giddhCurrency }}</p>
+                        </div>
+                    </ng-container>
+                </div> -->
                 <!-- Stock group block end -->
                 <ng-container *ngIf="log?.details?.parentGroup || (auditLogsRequest$ | async).entity === 'STOCK_GROUP'">
                     <div class="single-address-row">
@@ -768,7 +810,7 @@
 
     <!-- End -->
 
-    <div class="mrT" *ngIf="log?.log != null && log?.log?.transactions != undefined && log?.log?.transactions.length > 0">
+    <div class="mr-t" *ngIf="log?.log != null && log?.log?.transactions != undefined && log?.log?.transactions.length > 0">
         <table class="table table-bordered ">
             <thead>
                 <tr>
@@ -790,7 +832,7 @@
             </tbody>
         </table>
     </div>
-    <div class="mrT text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
+    <div class="mr-t text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.updated.transactions != undefined">
         <label>Updated</label>
         <table class="table table-bordered">
             <thead>
@@ -835,7 +877,7 @@
             </tbody>
         </table>
     </div>
-    <div class="mrT text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
+    <div class="mr-t text-center" *ngIf="log && log.log && log.log.old != undefined && log.log.updated != undefined && log.log.old.transactions == undefined && log.log.updated.transactions == undefined">
         <label>Updated</label>
         <table class="table table-bordered">
             <thead>
@@ -887,5 +929,5 @@
         <p>You can use the filters on the left to fetch logs.</p>
     </div>
 </section>
-<button class='btn btn-success pull-left mrT2 mrB2' [ladda]="loadMoreInProcess$ | async" (click)='loadMoreLogs()' *ngIf='(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)'>Load More
+<button class='btn btn-success pull-left mr-t2 mr-b2' [ladda]="loadMoreInProcess$ | async" (click)='loadMoreLogs()' *ngIf='(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)'>Load More
 </button>

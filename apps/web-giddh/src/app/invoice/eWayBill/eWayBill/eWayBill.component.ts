@@ -28,8 +28,8 @@ import { createSelector } from 'reselect';
 })
 
 export class EWayBillComponent implements OnInit {
-    @ViewChild('cancelEwayForm') public cancelEwayForm: NgForm;
-    @ViewChild('updateVehicleForm') public updateVehicleForm: NgForm;
+    @ViewChild('cancelEwayForm', {static: true}) public cancelEwayForm: NgForm;
+    @ViewChild('updateVehicleForm', {static: true}) public updateVehicleForm: NgForm;
 
     public isGetAllEwaybillRequestInProcess$: Observable<boolean>;
     public isGetAllEwaybillRequestSuccess$: Observable<boolean>;
@@ -49,10 +49,12 @@ export class EWayBillComponent implements OnInit {
     public dataSourceBackup: any;
 
     public showAdvanceSearchIcon: boolean = false;
+    /** Search results for from place */
+    public searchResults: Array<any> = [];
 
     // searching
-    @ViewChild('invoiceSearch') public invoiceSearch: ElementRef;
-    @ViewChild('customerSearch') public customerSearch: ElementRef;
+    @ViewChild('invoiceSearch', {static: true}) public invoiceSearch: ElementRef;
+    @ViewChild('customerSearch', {static: true}) public customerSearch: ElementRef;
     public voucherNumberInput: FormControl = new FormControl();
     public customerNameInput: FormControl = new FormControl();
     public showSearchInvoiceNo: boolean = false;
@@ -128,7 +130,7 @@ export class EWayBillComponent implements OnInit {
         vehicleType: null,
     };
 
-    @ViewChild(BsDatepickerDirective) public datepickers: BsDatepickerDirective;
+    @ViewChild(BsDatepickerDirective, {static: true}) public datepickers: BsDatepickerDirective;
     public selectedEway: Result;
     public states: any[] = [];
 
@@ -274,6 +276,32 @@ export class EWayBillComponent implements OnInit {
         this.detectChange();
     }
 
+    /**
+     * Search query handler for from place field
+     *
+     * @param {string} query Query to search for from place
+     * @memberof EWayBillComponent
+     */
+    public onSearchQueryChanged(query: string): void {
+        this._location.GetCity({
+            QueryString: query,
+            AdministratorLevel: undefined,
+            Country: undefined,
+            OnlyCity: true
+        }).pipe(catchError(e => {
+            this.searchResults = [];
+            return [];
+        })).subscribe(response => {
+            if (response) {
+                this.searchResults = response.map(item => ({
+                    ...item,
+                    label: item.city,
+                    value: item.city
+                }));
+            }
+        });
+    }
+
     public onSelectEwayDownload(eway: Result) {
         this.selectedEway = _.cloneDeep(eway);
         this._invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).subscribe(d => {
@@ -307,7 +335,7 @@ export class EWayBillComponent implements OnInit {
     public openModalWithClass(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(
             template,
-            Object.assign({}, { class: 'modal-lg modal-consolidated-details' })
+            Object.assign({}, { class: 'modal-xl modal-consolidated-details' })
         );
     }
     public cancelEwayBill(cancelEway: NgForm) {

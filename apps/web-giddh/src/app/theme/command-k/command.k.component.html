@@ -8,7 +8,7 @@
 		<!-- end header -->
 
 		<ng-container *ngIf="searchedItems && searchedItems.length > 0">
-			<div #mainEle tabindex="0" class="universal-list-items" [style.width.px]="ItemWidth">
+			<div #mainEle tabindex="0" class="universal-list-items">
 				<ng-container *ngIf="isOpen">
 					<ng-container>
 						<commandk-virtual-scroll [items]="searchedItems" [childHeight]="ItemHeight" (highLightedItemEmitter)="handleHighLightedItemEvent($event)"
@@ -63,10 +63,10 @@
 		<!--  end main list -->
 		<ng-container *ngIf="noResultsFound">
 			<div #mainEle>
-				<div class="p-2" [style.width.px]="ItemWidth">
+				<div class="p-2">
 					<span>
 						<div class="jumper-results" [ngClass]="{'alC': showChannelCreateBtn}">
-							<p class="block text-center mrB2">No matches found. Did you spell it correctly?</p>
+							<p class="block text-center mr-b2">No matches found. Did you spell it correctly?</p>
 							<ng-container *ngIf="showChannelCreateBtn">
 								<button class="btn btn-primary mrR2" (click)="triggerAddManage()">Create Group</button>
 								<button class="btn btn-primary" (click)="triggerAddManage()">Create A/c</button>

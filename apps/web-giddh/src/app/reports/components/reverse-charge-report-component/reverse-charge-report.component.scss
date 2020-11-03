@@ -10,7 +10,7 @@
 }
 .invoice-footer {
     h1 {
-        font-size: 28px;
+        font-size: 22px;
         color: #333;
         display: inline-block;
     }
@@ -71,7 +71,11 @@
         outline: none;
     }
 }
-
+@media(max-width:991px){
+    .invoice-footer{
+        padding: 15px 0;
+    }
+}
 @media only screen and (max-width: 767px) {
     .basic > thead > tr > th {
         min-width: initial;

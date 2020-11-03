@@ -186,13 +186,13 @@ tfoot td .tableSec.form-group {
 .branch-transfer-report .input-group {
     width: 230px;
 }
-.branch-transfer-report .inputWrapper {
+.branch-transfer-report .input-wrapper {
     display: block !important;
     width: 100% !important;
     position: relative;
     height: 36px !important;
 }
-.branch-transfer-report .inputWrapper:before {
+.branch-transfer-report .input-wrapper:before {
     position: absolute;
     content: "";
     display: block;
@@ -316,7 +316,7 @@ tfoot td .tableSec.form-group {
     justify-content: center;
     align-items: center;
 }
-.addNewLine.mrT1 {
+.addNewLine.mr-t1 {
     position: absolute;
     width: 100%;
 }
@@ -412,7 +412,68 @@ tfoot td .tableSec.form-group {
     border: none;
     padding-left: 0;
 }
-
 .placeholder-for-table {
     color: $very-light-gray;
+}
+
+.table-delivery{
+    width:100%;
+    overflow-x:auto;
+}
+
+
+@media(max-width:991px){
+    #table-recipt{
+       width: calc(100% - 30px);
+    }
+}
+@media(max-width:768px){
+    .select-action-button{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        span.icon-dots-three-vertical{
+           height: 13px;
+           margin-left: 10px;
+        }
+    }
+    .branch-transfer-report{
+        ul#dropdown-basic{
+            right: auto !important;
+            left: auto !important;
+            top: 20px !important;
+        }
+    }
+    .mobile-none{
+        display:none;
+    }
+    .table-delivery{
+        table{
+            width: 100% !important;
+            tr,td{
+                white-space: nowrap !important;
+            }
+            .min-wid-product{
+                min-width:80px;
+            }
+           .min-wid-rate{
+               min-width:40px;
+           }
+           .min-wid-amt{
+               min-width:40px;
+           }
+           .min-wid-qty{
+               min-width:20px;
+           }
+         }
+
+         .basic > tbody > tr td:last-child, .basic > thead > tr th:last-child {
+            border-right: 1px solid $gainsboro-light !important;
+        }
+    }
+}
+@media(max-width:767px){
+    .date-advance-search {
+        margin-top: 15px;
+    }
 }

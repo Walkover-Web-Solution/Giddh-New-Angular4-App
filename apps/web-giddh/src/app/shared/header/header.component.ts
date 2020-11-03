@@ -22,13 +22,18 @@ import {
 import { select, Store } from '@ngrx/store';
 import {
     BsDropdownDirective,
-    BsModalRef,
-    BsModalService,
-    ModalDirective,
-    ModalOptions,
+} from 'ngx-bootstrap/dropdown';
+import {
     TabsetComponent
-    , PopoverDirective
-} from 'ngx-bootstrap';
+} from 'ngx-bootstrap/tabs';
+import {
+    PopoverDirective
+} from 'ngx-bootstrap/popover';
+import {
+    ModalDirective, BsModalRef,
+    BsModalService,
+    ModalOptions,
+} from 'ngx-bootstrap/modal';
 import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
@@ -43,7 +48,6 @@ import {
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
-import * as _ from 'lodash';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
@@ -52,10 +56,9 @@ import { createSelector } from 'reselect';
 import * as moment from 'moment/moment';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
-import { cloneDeep, concat, orderBy, sortBy } from '../../lodash-optimized';
+import { clone, cloneDeep, concat, orderBy, sortBy, map as lodashMap, slice, find } from '../../lodash-optimized';
 import { DbService } from '../../services/db.service';
 import { CompAidataModel } from '../../models/db';
-import { WindowRef } from '../helpers/window.object';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
@@ -64,9 +67,11 @@ import { userLoginStateEnum } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { environment } from 'apps/web-giddh/src/environments/environment';
 import { CountryRequest, CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { VAT_SUPPORTED_COUNTRIES, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
+import { SettingsProfileService } from '../../services/settings.profile.service';
+import { CompanyService } from '../../services/companyService.service';
 
 @Component({
     selector: 'app-header',
@@ -90,28 +95,28 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
-    @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
-    @ViewChild('companynewadd') public companynewadd: ElementViewContainerRef;
+    @ViewChild('companyadd', {static: true}) public companyadd: ElementViewContainerRef;
+    @ViewChild('companynewadd', {static: true}) public companynewadd: ElementViewContainerRef;
     // @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
 
-    @ViewChild('addmanage') public addmanage: ElementViewContainerRef;
-    @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
-    @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
-    @ViewChild('addCompanyNewModal') public addCompanyNewModal: ModalDirective;
+    @ViewChild('addmanage', {static: true}) public addmanage: ElementViewContainerRef;
+    @ViewChild('manageGroupsAccountsModal', {static: true}) public manageGroupsAccountsModal: ModalDirective;
+    @ViewChild('addCompanyModal', {static: true}) public addCompanyModal: ModalDirective;
+    @ViewChild('addCompanyNewModal', {static: true}) public addCompanyNewModal: ModalDirective;
 
-    @ViewChild('deleteCompanyModal') public deleteCompanyModal: ModalDirective;
-    @ViewChild('navigationModal') public navigationModal: TemplateRef<any>; // CMD + K
-    @ViewChild('dateRangePickerCmp') public dateRangePickerCmp: ElementRef;
-    @ViewChild('dropdown') public companyDropdown: BsDropdownDirective;
+    @ViewChild('deleteCompanyModal', {static: true}) public deleteCompanyModal: ModalDirective;
+    @ViewChild('navigationModal', {static: true}) public navigationModal: TemplateRef<any>; // CMD + K
+    @ViewChild('dateRangePickerCmp', {static: true}) public dateRangePickerCmp: ElementRef;
+    @ViewChild('dropdown', {static: true}) public companyDropdown: BsDropdownDirective;
     // @ViewChild('talkSalesModal') public talkSalesModal: ModalDirective;
-    @ViewChild('supportTab') public supportTab: TabsetComponent;
-    @ViewChild('searchCmpTextBox') public searchCmpTextBox: ElementRef;
-    @ViewChild('expiredPlan') public expiredPlan: ModalDirective;
-    @ViewChild('expiredPlanModel') public expiredPlanModel: TemplateRef<any>;
-    @ViewChild('crossedTxLimitModel') public crossedTxLimitModel: TemplateRef<any>;
-    @ViewChild('companyDetailsDropDownWeb') public companyDetailsDropDownWeb: BsDropdownDirective;
+    @ViewChild('supportTab', {static: true}) public supportTab: TabsetComponent;
+    @ViewChild('searchCmpTextBox', {static: true}) public searchCmpTextBox: ElementRef;
+    @ViewChild('expiredPlan', {static: true}) public expiredPlan: ModalDirective;
+    @ViewChild('expiredPlanModel', {static: true}) public expiredPlanModel: TemplateRef<any>;
+    @ViewChild('crossedTxLimitModel', {static: true}) public crossedTxLimitModel: TemplateRef<any>;
+    @ViewChild('companyDetailsDropDownWeb', {static: true}) public companyDetailsDropDownWeb: BsDropdownDirective;
     /** All modules popover instance */
-    @ViewChild('allModulesPopover') public allModulesPopover: PopoverDirective;
+    @ViewChild('allModulesPopover', {static: true}) public allModulesPopover: PopoverDirective;
 
     public hideAsDesignChanges: false;
     public title: Observable<string>;
@@ -122,56 +127,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         { name: 'DUTCH', value: 'nl' }
     ];
     public activeFinancialYear: ActiveFinancialYear;
-    // public datePickerOptions: any = {
-    //     hideOnEsc: true,
-    //     opens: 'left',
-    //     locale: {
-    //         applyClass: 'btn-green',
-    //         applyLabel: 'Go',
-    //         fromLabel: 'From',
-    //         format: 'D-MMM-YY',
-    //         toLabel: 'To',
-    //         cancelLabel: 'Cancel',
-    //         customRangeLabel: 'Custom range'
-    //     },
-    //     ranges: {
-    //         'This Month to Date': [
-    //             moment().startOf('month'),
-    //             moment()
-    //         ],
-    //         'This Quarter to Date': [
-    //             moment().quarter(moment().quarter()).startOf('quarter'),
-    //             moment()
-    //         ],
-    //         'This Financial Year to Date': [
-    //             moment().startOf('year').subtract(9, 'year'),
-    //             moment()
-    //         ],
-    //         'This Year to Date': [
-    //             moment().startOf('year'),
-    //             moment()
-    //         ],
-    //         'Last Month': [
-    //             moment().subtract(1, 'month').startOf('month'),
-    //             moment().subtract(1, 'month').endOf('month')
-    //         ],
-    //         'Last Quarter': [
-    //             moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-    //             moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
-    //         ],
-    //         'Last Financial Year': [
-    //             moment().startOf('year').subtract(10, 'year'),
-    //             moment().endOf('year').subtract(10, 'year')
-    //         ],
-    //         'Last Year': [
-    //             moment().subtract(1, 'year').startOf('year'),
-    //             moment().subtract(1, 'year').endOf('year')
-    //         ]
-    //     },
-    //     startDate: moment().subtract(30, 'days'),
-    //     endDate: moment()
-    // };
-
     public sideMenu: { isopen: boolean } = { isopen: false };
     public companyMenu: { isopen: boolean } = { isopen: false };
     public isCompanyRefreshInProcess$: Observable<boolean>;
@@ -239,7 +194,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public forceOpenNavigation: boolean = false;
     /** VAT supported countries to show the Vat Report section in all modules */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
 
     /* This will store modal reference */
     public modalRef: BsModalRef;
@@ -248,7 +203,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -261,14 +216,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isAllowedForBetaTesting: boolean = false;
     /* This will hold value if settings sidebar is open through mobile hamburger icon */
     public isMobileSidebar: boolean = false;
-    /** To check all module menu open */
-    public isAllModuleOpen: boolean = false;
 
     /** update IndexDb flags observable **/
     public updateIndexDbInProcess$: Observable<boolean>;
     public updateIndexDbSuccess$: Observable<boolean>;
     /* This will hold if resolution is less than 768 to consider as mobile screen */
     public isMobileScreen: boolean = false;
+    /* This will hold current page url */
+    public currentPageUrl: string = '';
 
     /**
      *
@@ -292,29 +247,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private _dbService: DbService,
         private modalService: BsModalService,
         private changeDetection: ChangeDetectorRef,
-        private _windowRef: WindowRef,
         private _breakpointObserver: BreakpointObserver,
         private generalService: GeneralService,
         private commonActions: CommonActions,
-        private location: Location
+        private settingsProfileService: SettingsProfileService,
+        private companyService: CompanyService,
+        public location: Location
     ) {
-        this._windowRef.nativeWindow.superformIds = ['Jkvq'];
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                let configDatePicker = cloneDeep(config);
-                if (configDatePicker && configDatePicker.ranges) {
-                    let modifiedRanges = [];
-                    configDatePicker.ranges.forEach(item => {
-                        if (item.name !== 'Today' && item.name !== 'Yesterday') {
-                            modifiedRanges.push(item);
-                        }
-                    });
-                    configDatePicker.ranges = modifiedRanges;
-                }
-                this.datePickerOptions = configDatePicker;
-            }
-        });
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
 
@@ -328,9 +267,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
+                if((this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details")) && !this.generalService.getSessionStorage("previousPage")) {
+                    this.generalService.setSessionStorage("previousPage", this.currentPageUrl);
+                }
+
+                if(!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details") && this.generalService.getSessionStorage("previousPage")) {
+                    this.generalService.removeSessionStorage("previousPage");
+                }
                 this.addClassInBodyIfPageHasTabs();
             }
             if (event instanceof NavigationEnd) {
+                if(!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details")) {
+                    this.currentPageUrl = this.router.url;
+                }
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
 
@@ -344,7 +293,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // GETTING CURRENT PAGE
         this.store.pipe(select(s => s.general.currentPage), takeUntil(this.destroyed$)).subscribe(response => {
             this.isLedgerAccSelected = false;
-            let currentPageResponse = _.clone(response);
+            let currentPageResponse = clone(response);
             if (currentPageResponse) {
                 if (currentPageResponse && currentPageResponse.url && currentPageResponse.url.includes('ledger/')) {
                     this.isLedgerAccSelected = true;
@@ -376,7 +325,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).pipe(takeUntil(this.destroyed$));
         this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).pipe(takeUntil(this.destroyed$));
         this.isCompanyProifleUpdate$ = this.store.select(p => p.settings.updateProfileSuccess).pipe(takeUntil(this.destroyed$));
-
+        this.updateIndexDbInProcess$ = this.store.pipe(select(p => p.general.updateIndexDbInProcess), takeUntil(this.destroyed$))
+        this.updateIndexDbSuccess$ = this.store.pipe(select(p => p.general.updateIndexDbComplete), takeUntil(this.destroyed$))
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
             if (!companies) {
                 return;
@@ -385,7 +335,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return;
             }
 
-            let orderedCompanies = _.orderBy(companies, 'name');
+            let orderedCompanies = orderBy(companies, 'name');
             this.companies$ = observableOf(orderedCompanies);
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
@@ -409,8 +359,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 for (let loop = 0; loop < selectedCompanyArray.length; loop++) {
                     if (loop <= 1) {
                         companyInitials.push(selectedCompanyArray[loop][0]);
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }
@@ -424,22 +373,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 } else {
                     this.seletedCompanywithBranch = selectedCmp.name;
                 }
-                //commenting due to new date picker option
-                // if (this.activeFinancialYear) {
-                //     this.datePickerOptions.ranges['This Financial Year to Date'] = [
-                //         moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').startOf('day'),
-                //         moment()
-                //     ];
-                //     this.datePickerOptions.ranges['Last Financial Year'] = [
-                //         moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year'),
-                //         moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year')
-                //     ];
-                // }
 
                 this.activeCompanyForDb = new CompAidataModel();
                 this.activeCompanyForDb.name = selectedCmp.name;
                 this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
-                this.setSelectedCompanyData(this.selectedCompany);
             }
 
             this.selectedCompanyCountry = selectedCmp.country;
@@ -472,6 +409,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public ngOnInit() {
+        this.getCurrentCompanyData();
+
         this._breakpointObserver.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -492,7 +431,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.user$.pipe(take(1)).subscribe((u) => {
             if (u) {
                 let userEmail = u.email;
-                this.userEmail = _.clone(userEmail);
+                this.userEmail = clone(userEmail);
                 // this.getUserAvatar(userEmail);
                 let userEmailDomain = userEmail.replace(/.*@/, '');
                 this.userIsCompanyUser = userEmailDomain && this.companyDomains.indexOf(userEmailDomain) !== -1;
@@ -505,10 +444,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.userName = u.name[0] + u.name[1];
                     this.userFullName = name;
                 }
-
-                this.store.dispatch(this.loginAction.renewSession());
             }
-
         });
 
         if (this.isSubscribedPlanHaveAdditionalCharges) {
@@ -704,39 +640,59 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.totalNumberOfcompanies$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.totalNumberOfcompanies = res;
         });
-        this.getPartyTypeForCreateAccount();
-        this.getAllCountries();
+
+        this.updateIndexDbSuccess$.subscribe(res => {
+            if (res) {
+                if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
+                    this._dbService.getItemDetails(this.activeCompanyForDb.uniqueName).toPromise().then(dbResult => {
+                        this.findListFromDb(dbResult);
+                        this._generalActions.updateUiFromDb();
+                    });
+                }
+            }
+        });
+
+        this.companyService.CurrencyList().subscribe(response => {
+            if (response && response.status === 'success' && response.body) {
+                this.store.dispatch(this.loginAction.SetCurrencyInStore(response.body));
+            }
+        });
     }
 
-    public setSelectedCompanyData(selectedCompany) {
-        if (selectedCompany) {
-            this.selectedCompany.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
-                if (res) {
-                    if (res.countryV2 !== null && res.countryV2 !== undefined) {
-                        this.getStates(res.countryV2.alpha2CountryCode);
-                        this.store.dispatch(this.commonActions.resetOnboardingForm());
-                    }
-                    if (res.subscription) {
-                        this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
-                        if (res.baseCurrency) {
-                            this.companyCountry.baseCurrency = res.baseCurrency;
-                            this.companyCountry.country = res.country;
-                            this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
-                        }
-
-                        this.currentCompanyPlanAmount = res.subscription.planDetails.amount;
-                        this.subscribedPlan = res.subscription;
-                        this.isSubscribedPlanHaveAdditionalCharges = res.subscription.additionalCharges;
-                        this.selectedPlanStatus = res.subscription.status;
-                    }
-                    this.activeCompany = res;
-                    if (this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
-                        this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
-                    }
-                    this.checkIfCompanyTcsTdsApplicable();
+    /**
+     * This will get the current company data
+     *
+     * @memberof HeaderComponent
+     */
+    public getCurrentCompanyData(): void {
+        this.settingsProfileService.GetProfileInfo().subscribe((response: any) => {
+            if (response && response.status === "success" && response.body) {
+                let res = response.body;
+                if (res.countryV2 !== null && res.countryV2 !== undefined) {
+                    this.getStates(res.countryV2.alpha2CountryCode);
+                    this.store.dispatch(this.commonActions.resetOnboardingForm());
                 }
-            });
-        }
+                if (res.subscription) {
+                    this.store.dispatch(this.companyActions.setCurrentCompanySubscriptionPlan(res.subscription));
+                    if (res.baseCurrency) {
+
+                        this.companyCountry.baseCurrency = res.baseCurrency;
+                        this.companyCountry.country = res.country;
+                        this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
+                    }
+
+                    this.currentCompanyPlanAmount = res.subscription.planDetails.amount;
+                    this.subscribedPlan = res.subscription;
+                    this.isSubscribedPlanHaveAdditionalCharges = res.subscription.additionalCharges;
+                    this.selectedPlanStatus = res.subscription.status;
+                }
+                this.activeCompany = res;
+                if (this.activeCompany && this.activeCompany.createdBy && this.activeCompany.createdBy.email) {
+                    this.isAllowedForBetaTesting = this.generalService.checkIfEmailDomainAllowed(this.activeCompany.createdBy.email);
+                }
+                this.checkIfCompanyTcsTdsApplicable();
+            }
+        });
     }
 
 
@@ -786,23 +742,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // Get universal date
         this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
             if (dateObj && dateObj.length) {
-                //  Commented may be use later for new datepicker
-                // if (!this.isDateRangeSelected) {
-                // this.datePickerOptions.startDate = moment(dateObj[0]);
-                // this.datePickerOptions.endDate = moment(dateObj[1]);
-                // this.datePickerOptions = { ...this.datePickerOptions, startDate: moment(dateObj[0]), endDate: moment(dateObj[1]), chosenLabel: dateObj[2]};
-                // const from: any = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-                // const to: any = moment().format(GIDDH_DATE_FORMAT);
-                // const fromFromStore = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                // const toFromStore = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
-
-                // if (from === fromFromStore && to === toFromStore) {
-                //     this.isTodaysDateSelected = true;
-                // }
+                this.isTodaysDateSelected = !dateObj[3];  //entry-setting API date response in case of today fromDate/toDate will be null
                 if (this.isTodaysDateSelected) {
-                    let today = _.cloneDeep([moment(), moment()]);
+                    let today = cloneDeep([moment(), moment()]);
                     this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-                    this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    // this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.selectedDateRangeUi = 'Today';
                 } else {
                     this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                     this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -865,6 +810,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.toggleBodyClass();
         }, (this.asideHelpSupportMenuState === 'out') ? 100 : 0);
     }
+
     /**
      * This will toggle the settings popup
      *
@@ -920,7 +866,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @param queryParamsObj additional data
      */
     public analyzeMenus(e: any, pageName: string, queryParamsObj?: any) {
-        this.oldSelectedPage = _.cloneDeep(this.selectedPage);
+        this.oldSelectedPage = cloneDeep(this.selectedPage);
         this.isLedgerAccSelected = false;
         if (e) {
             if (e.shiftKey || e.ctrlKey || e.metaKey) { // if user pressing combination of shift+click, ctrl+click or cmd+click(mac)
@@ -941,7 +887,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let menu: any = {};
         menu.time = +new Date();
 
-        let o: IUlist = _.find(NAVIGATION_ITEM_LIST, (item) => {
+        let o: IUlist = find(NAVIGATION_ITEM_LIST, (item) => {
             if (queryParamsObj) {
                 if (item.additional) {
                     return item.uniqueName.toLowerCase() === pageName.toLowerCase() && item.additional.tabIndex === queryParamsObj.tabIndex;
@@ -1001,9 +947,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let menuList: IUlist[] = [];
         let groupList: IUlist[] = [];
         let acList: IUlist[] = [];
-        let defaultGrp = _.cloneDeep(_.map(DEFAULT_GROUPS, (o: any) => o.uniqueName));
-        let defaultAcc = _.cloneDeep(_.map(DEFAULT_AC, (o: any) => o.uniqueName));
-        let defaultMenu = _.cloneDeep(DEFAULT_MENUS);
+        let defaultGrp = cloneDeep(lodashMap(DEFAULT_GROUPS, (o: any) => o.uniqueName));
+        let defaultAcc = cloneDeep(lodashMap(DEFAULT_AC, (o: any) => o.uniqueName));
+        let defaultMenu = cloneDeep(DEFAULT_MENUS);
 
         // parse and push default menu to menulist for sidebar menu for initial usage
         defaultMenu.forEach(item => {
@@ -1060,11 +1006,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             // slice menus
             if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 10);
-                this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 7);
+                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 10);
+                this.accountItemsFromIndexDB = slice(dbResult.aidata.accounts, 0, 7);
             } else {
-                this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 8);
-                this.accountItemsFromIndexDB = _.slice(dbResult.aidata.accounts, 0, 5);
+                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 8);
+                this.accountItemsFromIndexDB = slice(dbResult.aidata.accounts, 0, 5);
             }
 
             // sortby name
@@ -1082,8 +1028,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
             // slice default menus and account on small screen
             if (!(window.innerWidth > 1440 && window.innerHeight > 717)) {
-                this.menuItemsFromIndexDB = _.slice(this.menuItemsFromIndexDB, 0, 8);
-                this.accountItemsFromIndexDB = _.slice(this.accountItemsFromIndexDB, 0, 5);
+                this.menuItemsFromIndexDB = slice(this.menuItemsFromIndexDB, 0, 8);
+                this.accountItemsFromIndexDB = slice(this.accountItemsFromIndexDB, 0, 5);
             }
         }
     }
@@ -1236,7 +1182,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         if (event) {
             document.querySelector('body').classList.add('hide-scroll-body')
-        } else {
+        }
+        else {
             document.querySelector('body').classList.remove('hide-scroll-body')
         }
         this.menuStateChange.emit(event);
@@ -1263,43 +1210,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         this.flyAccounts.next(false);
     }
-
-    // public setApplicationDate(ev) {
-    //     let data = ev ? _.cloneDeep(ev) : null;
-    //     if (data && data.picker) {
-    //         let dates = {
-    //             fromDate: moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT),
-    //             toDate: moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT),
-    //             chosenLabel: data.picker.chosenLabel
-    //         };
-    //         if (data.picker.chosenLabel === 'This Financial Year to Date') {
-    //           data.picker.startDate = moment(_.clone(this.activeFinancialYear.financialYearStarts), 'DD-MM-YYYY').startOf('day');
-    //           dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-    //         }
-    //         if (data.picker.chosenLabel === 'Last Financial Year') {
-    //           data.picker.startDate = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY').subtract(1, 'year');
-    //           data.picker.endDate = moment(this.activeFinancialYear.financialYearEnds, 'DD-MM-YYYY').subtract(1, 'year');
-    //           dates.fromDate = moment(data.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-    //           dates.toDate = moment(data.picker.endDate._d).format(GIDDH_DATE_FORMAT);
-    //         }
-    //         this.isTodaysDateSelected = false;
-    //         this.store.dispatch(this.companyActions.SetApplicationDate(dates));
-    //     } else {
-    //         this.isTodaysDateSelected = true;
-    //         let today = _.cloneDeep([moment(), moment()]);
-    //         // this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
-    //         this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-    //         this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-    //         let dates = {
-    //             fromDate: null,
-    //             toDate: null,
-    //             duration: null,
-    //             period: null,
-    //             noOfTransactions: null
-    //         };
-    //         this.store.dispatch(this.companyActions.SetApplicationDate(dates));
-    //     }
-    // }
 
     public openDateRangePicker() {
         this.isTodaysDateSelected = false;
@@ -1351,7 +1261,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public onItemSelected(item: IUlist, fromInvalidState: { next: IUlist, previous: IUlist } = null, isCtrlClicked?: boolean) {
-        this.oldSelectedPage = _.cloneDeep(this.selectedPage);
+        this.oldSelectedPage = cloneDeep(this.selectedPage);
         if (this.modelRef) {
             this.modelRef.hide();
         }
@@ -1378,7 +1288,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             // }
             if (!isCtrlClicked) {
                 this.router.navigate([url]); // added link in routerLink
-            }     
+            }
         }
         // save data to db
         item.time = +new Date();
@@ -1400,7 +1310,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public closeUserMenu(ev) {
-        // if (ev.target && ev.target.classList && !ev.target.classList.contains('cName')) {
+        // if (ev.target && ev.target.classList && !ev.target.classList.contains('c-name')) {
         //   this.companyMenu.isopen = false;
         // } else {
         //   this.companyMenu.isopen = true;
@@ -1442,7 +1352,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.modelRefCrossLimit.hide();
         }
         document.querySelector('body').classList.remove('modal-open');
-        this.router.navigate(['/pages', 'user-details'], { queryParams: { tab: 'subscriptions', tabIndex: 3, showPlans: true } });
+        this.router.navigate(['/pages', 'user-details'], {
+            queryParams: {
+                tab: 'subscriptions',
+                tabIndex: 3,
+                showPlans: true
+            }
+        });
     }
 
     public onRight(nodes) {
@@ -1617,16 +1533,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
-    public getPartyTypeForCreateAccount() {
-        this.store.dispatch(this.commonActions.GetPartyType());
-    }
-
-    public getAllCountries() {
-        let countryRequest = new CountryRequest();
-        countryRequest.formName = '';
-        this.store.dispatch(this.commonActions.GetAllCountry(countryRequest));
-    }
-
     public removeCompanySessionData() {
         this.generalService.createNewCompany = null;
         this.store.dispatch(this.commonActions.resetCountry());
@@ -1754,7 +1660,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
-            } else {
+            }
+            else {
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
@@ -1762,11 +1669,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         }, 500);
     }
+
     /**
-   * This will show the datepicker
-   *
-   * @memberof ProfitLossComponent
-   */
+     * This will show the datepicker
+     *
+     * @memberof ProfitLossComponent
+     */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
@@ -1776,7 +1684,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileSite })
+            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileSite })
         );
     }
 
@@ -1790,12 +1698,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-       * Call back function for date/range selection in datepicker
-       *
-       * @param {*} value
-       * @memberof ProfitLossComponent
-       */
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof ProfitLossComponent
+     */
     public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {
@@ -1815,10 +1727,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         } else {
             this.isTodaysDateSelected = true;
-            let today = _.cloneDeep([moment(), moment()]);
-            // this.datePickerOptions = { ...this.datePickerOptions, startDate: today[0], endDate: today[1] };
+            let today = cloneDeep([moment(), moment()]);
+            
             this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-            this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(today[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            // this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.selectedDateRangeUi = 'Today';
             let dates = {
                 fromDate: null,
                 toDate: null,
@@ -1853,6 +1766,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
+     * Navigate to all module
+     *
+     * @memberof HeaderComponent
+     */
+    public navigateToAllModules(): void {
+        this.router.navigate(['/pages/all-modules']);
+    }
+
+    /**
      * This will init the notification on window orientation change
      *
      * @param {*} event
@@ -1876,18 +1798,5 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if(window['Headway'] !== undefined) {
             window['Headway'].init();
         }
-    }
-    /**
-     * Toggle all module to previous selected module
-     *
-     * @memberof HeaderComponent
-     */
-    public navigateToAllModules(): void {
-        if(this.isAllModuleOpen) {
-           this.location.back();
-        } else {
-          this.router.navigate(['/pages/all-modules']);
-        }
-        this.isAllModuleOpen = !this.isAllModuleOpen;
     }
 }

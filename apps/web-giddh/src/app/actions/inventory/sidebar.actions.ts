@@ -4,7 +4,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StockDetailResponse, StockGroupResponse } from '../../models/api-models/Inventory';
 import { InventoryActionsConst } from './inventory.const';
 import { Injectable } from '@angular/core';
-import { Actions, Effect } from '@ngrx/effects';
+import {Actions, createEffect, Effect, ofType} from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -14,13 +14,12 @@ import { InventoryService } from '../../services/inventory.service';
 import { CustomActions } from '../../store/customActions';
 import { InventoryAction } from './inventory.actions';
 
-// import { from } from 'rxjs/observable/from';
-
 @Injectable()
 export class SidebarAction {
-    @Effect()
-    public GetInventoryGroup$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.GetInventoryGroup).pipe(
+
+    public GetInventoryGroup$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(InventoryActionsConst.GetInventoryGroup),
             tap(a => console.log('called')),
             switchMap((action: CustomActions) => {
                 return this._inventoryService.GetGroupsStock(action.payload.groupUniqueName).pipe(shareReplay(), map(response => {
@@ -32,10 +31,10 @@ export class SidebarAction {
                     }
                     return { type: 'EmptyAction' };
                 }));
-            }));
+            })));
 
-    // @Effect()
-    // public GetInventoryGroupResponse$: Observable<Action> = this.action$
+
+    // public GetInventoryGroupResponse$: Observable<Action> = createEffect( ()=> this.action$
     //   .ofType(InventoryActionsConst.GetInventoryGroupResponse)
     //   .shareReplay()
     //   .map((action: CustomActions) => {
@@ -46,11 +45,12 @@ export class SidebarAction {
     //       // this.store.dispatch(this.OpenGroup(data.body.uniqueName));
     //     }
     //     return { type: 'EmptyAction' };
-    //   });
+    //   }));
 
-    @Effect()
-    public GetInventoryStock$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.GetInventoryStock).pipe(
+
+    public GetInventoryStock$: Observable<Action> = createEffect( ()=> this.action$
+        .pipe(
+            ofType(InventoryActionsConst.GetInventoryStock),
             switchMap((action: CustomActions) => {
                 return this._inventoryService.GetStockDetails(action.payload.activeGroupUniqueName, action.payload.stockUniqueName);
             }),
@@ -61,11 +61,12 @@ export class SidebarAction {
                     this._toasty.errorToast('Stock Not Found');
                     return { type: 'EmptyAction' };
                 }
-            }));
+            })));
 
-    @Effect()
-    public GetInventoryStockResponse$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.GetInventoryStockResponse).pipe(
+
+    public GetInventoryStockResponse$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(InventoryActionsConst.GetInventoryStockResponse),
             map((action: CustomActions) => {
                 let data: BaseResponse<StockDetailResponse, string> = action.payload;
                 if (action.payload.status === 'error') {
@@ -75,60 +76,66 @@ export class SidebarAction {
                     // this.store.dispatch(this.inventoryAction.ManageInventoryAside({isOpen: true, isGroup: false, isUpdate: true}));
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public GetGroupUniqueName$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.GetGroupUniqueName).pipe(
+
+    public GetGroupUniqueName$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(InventoryActionsConst.GetGroupUniqueName),
             switchMap((action: CustomActions) => this._inventoryService.GetGroupsStock(action.payload)),
             map(response => {
                 return this.GetGroupUniqueNameResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public GetGroupUniqueNameResponse$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.GetGroupUniqueNameResponse).pipe(
+
+    public GetGroupUniqueNameResponse$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(InventoryActionsConst.GetGroupUniqueNameResponse),
             map((action: CustomActions) => {
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public GetGroupsWithStocksHierarchyMin$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMin).pipe(
+
+    public GetGroupsWithStocksHierarchyMin$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMin),
             switchMap((action: CustomActions) => this._inventoryService.GetGroupsWithStocksHierarchyMin(action.payload)),
             map(response => {
                 return this.GetGroupsWithStocksHierarchyMinResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public GetGroupsWithStocksHierarchyMinResponse$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse).pipe(
+
+    public GetGroupsWithStocksHierarchyMinResponse$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse),
             map((action: CustomActions) => {
                 let data: BaseResponse<StockGroupResponse, string> = action.payload;
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
-    @Effect()
-    public SearchGroupsWithStocks$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.SearchGroupsWithStocks).pipe(
+
+    public SearchGroupsWithStocks$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(InventoryActionsConst.SearchGroupsWithStocks),
             switchMap((action: CustomActions) => this._inventoryService.SearchStockGroupsWithStocks(action.payload)),
             map(response => {
                 return this.SearchGroupsWithStocksResponse(response);
-            }));
+            })));
 
-    @Effect()
-    public SearchGroupsWithStocksResponse$: Observable<Action> = this.action$
-        .ofType(InventoryActionsConst.SearchGroupsWithStocksResponse).pipe(
+
+    public SearchGroupsWithStocksResponse$: Observable<Action> =createEffect( ()=> this.action$
+        .pipe(
+            ofType(InventoryActionsConst.SearchGroupsWithStocksResponse),
             map((action: CustomActions) => {
                 let data: BaseResponse<StockGroupResponse, string> = action.payload;
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
-            }));
+            })));
 
     constructor(private action$: Actions,
         private _toasty: ToasterService,

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, Renderer, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { ScrollComponent } from '../virtual-scroll/vscroll';
 import { UniversalSearchService, WindowRefService } from '../service';
 import { ReplaySubject, Subject } from 'rxjs';
@@ -34,11 +34,11 @@ const LOCAL_MEMORY = {
 
 export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
-    @ViewChild('mainEle') public mainEle: ElementRef;
-    @ViewChild('searchEle') public searchEle: ElementRef;
-    @ViewChild('searchWrapEle') public searchWrapEle: ElementRef;
-    @ViewChild('wrapper') public wrapper: ElementRef;
-    @ViewChild(ScrollComponent) public virtualScrollElem: ScrollComponent;
+    @ViewChild('mainEle', {static: true}) public mainEle: ElementRef;
+    @ViewChild('searchEle', {static: true}) public searchEle: ElementRef;
+    @ViewChild('searchWrapEle', {static: true}) public searchWrapEle: ElementRef;
+    @ViewChild('wrapper', {static: true}) public wrapper: ElementRef;
+    @ViewChild(ScrollComponent, {static: true}) public virtualScrollElem: ScrollComponent;
 
     // bot related
     @Input() public preventOutSideClose: boolean = false;
@@ -98,7 +98,7 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
 
     constructor(
         private _store: Store<AppState>,
-        private renderer: Renderer,
+        private renderer: Renderer2,
         private zone: NgZone,
         private winRef: WindowRefService,
         private _dbService: DbService,
@@ -243,12 +243,12 @@ export class DataListComponent implements OnInit, OnDestroy, AfterViewInit, OnCh
         if (this.setParentWidth && this.mainEle) {
             let box: any = this.parentEle.getBoundingClientRect();
             this.ItemWidth = (box.width > this.ItemWidth) ? box.width : this.ItemWidth;
-            this.renderer.setElementStyle(this.mainEle.nativeElement, 'width', `${box.width}px`);
+            this.renderer.setStyle(this.mainEle.nativeElement, 'width', `${box.width}px`);
             if (this.searchWrapEle) {
-                this.renderer.setElementStyle(this.searchWrapEle.nativeElement, 'width', `${box.width}px`);
+                this.renderer.setStyle(this.searchWrapEle.nativeElement, 'width', `${box.width}px`);
             }
             if (box.width > 300) {
-                this.renderer.setElementClass(this.wrapper.nativeElement, 'wider', true);
+                this.renderer.setStyle(this.wrapper.nativeElement, 'wider', true);
             }
         }
     }

@@ -2,7 +2,8 @@ import { take, takeUntil } from 'rxjs/operators';
 import { Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { BsDropdownConfig, PaginationComponent } from 'ngx-bootstrap';
+import { PaginationComponent } from 'ngx-bootstrap/pagination';
+import {BsDropdownConfig} from 'ngx-bootstrap/dropdown';
 import * as  moment from 'moment/moment';
 import * as  _ from '../../lodash-optimized';
 import { GeneratePurchaseInvoiceRequest, IInvoicePurchaseItem, IInvoicePurchaseResponse, ITaxResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
@@ -24,6 +25,9 @@ import { AlertConfig } from 'ngx-bootstrap/alert';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import {IUpdateDbRequest} from "../../models/interfaces/ulist.interface";
+import {GeneralService} from "../../services/general.service";
+import {GeneralActions} from "../../actions/general/general.actions";
 
 const otherFiltersOptions = [
     { name: 'GSTIN Empty', uniqueName: 'GSTIN Empty' },
@@ -73,10 +77,10 @@ const fileGstrOptions = [
     ]
 })
 export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
-    @ViewChild('pgGstNotFoundOnPortal') public pgGstNotFoundOnPortal: ElementViewContainerRef;
-    @ViewChild('pgGstNotFoundOnGiddh') public pgGstNotFoundOnGiddh: ElementViewContainerRef;
-    @ViewChild('pgPartiallyMatched') public pgPartiallyMatched: ElementViewContainerRef;
-    @ViewChild('pgMatched') public pgMatched: ElementViewContainerRef;
+    @ViewChild('pgGstNotFoundOnPortal', {static: true}) public pgGstNotFoundOnPortal: ElementViewContainerRef;
+    @ViewChild('pgGstNotFoundOnGiddh', {static: true}) public pgGstNotFoundOnGiddh: ElementViewContainerRef;
+    @ViewChild('pgPartiallyMatched', {static: true}) public pgPartiallyMatched: ElementViewContainerRef;
+    @ViewChild('pgMatched', {static: true}) public pgMatched: ElementViewContainerRef;
 
     public allPurchaseInvoicesBackup: IInvoicePurchaseResponse;
     public allPurchaseInvoices: IInvoicePurchaseResponse = new IInvoicePurchaseResponse();
@@ -137,6 +141,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         private purchaseInvoiceService: PurchaseInvoiceService,
         private accountService: AccountService,
         private _reconcileActions: GstReconcileActions,
+        private _generalServices: GeneralService,
+        private _generalActions: GeneralActions,
         private componentFactoryResolver: ComponentFactoryResolver,
         private settingsProfileActions: SettingsProfileActions
     ) {
@@ -509,6 +515,16 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
 
                     this.accountService.UpdateAccountV2(account, reqObj).subscribe((res) => {
                         if (res.status === 'success') {
+                            const updateIndexDb: IUpdateDbRequest = {
+                                newUniqueName: res.body.uniqueName,
+                                oldUniqueName: res.queryString.accountUniqueName,
+                                latestName: res.request.name,
+                                uniqueName: this._generalServices.companyUniqueName,
+                                type: "accounts",
+                                isActive: false,
+                                name: res.body.name
+                            }
+                            this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
                             this.toasty.successToast('Entry type changed successfully.');
                         } else {
                             this.toasty.errorToast(res.message, res.code);

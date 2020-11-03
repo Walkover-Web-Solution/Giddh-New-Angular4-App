@@ -7,12 +7,13 @@
     display: flex;
 }
 
-.pd1 {
+.pd-1 {
     padding: 5px;
 }
 
 .icon-pointer {
     margin-left: 6px;
+    cursor: pointer;
 }
 
 .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
@@ -26,6 +27,8 @@
 .aging-table {
     max-width: 1170px;
     width: 100%;
+    background: transparent;
+    min-height: 210px;
 }
 .paginationWrapper {
     width: 100%;
@@ -50,26 +53,28 @@
     background: #fff;
 }
 
-.searchField {
+.search-field {
     position: relative;
+    margin-bottom: 0;
 }
-.searchField input {
+.search-field input {
     width: 235px;
     background-color: #e6e7e8 !important;
     border-color: #e6e7e8 !important;
 }
-.searchField input:focus {
+.search-field input:focus {
     background-color: #fff !important;
     border-color: $midnight-express !important;
 }
-span.inputAddon {
+span.input-addon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
     background-color: $chetwode-blue;
     color: #fff;
-    font-size: 20px;
+    font-size: 18px;
     border-radius: 2px;
+    top: 0;
 }
 tr.aging-table-top {
     border-bottom: 1px solid $gainsboro;
@@ -80,9 +85,19 @@ tr.aging-table-top td {
 .aging-table-top + tr > th {
     border-bottom: none !important;
 }
+.refresh-btn{
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $white;
+    border: 1px solid $gainsboro;
+    margin-left: 10px !important;
+}
 // responsive
 @media (min-width: 769px) {
-    .onMobileView > .top-aging-table-top {
+    .on-mobile-view > .top-aging-table-top {
         display: none;
     }
 }
@@ -110,11 +125,11 @@ tr.aging-table-top td {
     }
     .customer-right-wrap {
         padding-bottom: 10px;
-        padding: 0 15px 10px;
+        padding: 0 0 10px;
     }
 }
 @media (max-width: 767px) {
-    span.inputAddon {
+    span.input-addon {
         top: 0;
     }
     .result-total {
@@ -136,11 +151,9 @@ tr.aging-table-top td {
         span{
             width: 36px;
             height: 36px;
-            background-color: $white;
-            border: 1px solid $gainsboro;
-            display: inline-flex;
             justify-content: center;
             align-items: center;
+            display: flex;
             i{
                 color: $gray;
             }
@@ -204,11 +217,11 @@ tr.aging-table-top td {
 }
 @media (max-width: 575px) {
     .wrap-searching-aging .max250 {
-        max-width: calc(100% - 30px);
+        max-width: 250px;
         width: 100%;
     }
     .wrap-searching-aging .max250.default-width {
-        max-width: calc(100% - 90px);
+        max-width: 250px;
         width: 100%;
     }
     .wrap-searching-aging .max250 input {
@@ -217,6 +230,7 @@ tr.aging-table-top td {
     .wrap-searching-aging {
         float: none !important;
         justify-content: space-between;
+        margin-bottom: 15px;
     }
     .btn-group.plus-btn {
         float: none;
@@ -226,7 +240,7 @@ tr.aging-table-top td {
         float: none;
         width: 100%;
     }
-    .form-inline{
+    .aging-form-inline{
         .btn-group{
             width: 100%;
             .btn{

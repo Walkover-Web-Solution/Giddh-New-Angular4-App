@@ -9,7 +9,8 @@ import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ToasterService} from '../services/toaster.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {CompanyActions} from '../actions/company.actions';
-import {AlertConfig, BsDropdownDirective} from 'ngx-bootstrap';
+import {BsDropdownDirective} from 'ngx-bootstrap/dropdown';
+import {AlertConfig} from 'ngx-bootstrap/alert';
 import {GIDDH_DATE_FORMAT} from '../shared/helpers/defaultDateFormat';
 import {Observable, of, ReplaySubject} from 'rxjs';
 import {AppState} from '../store';
@@ -42,8 +43,8 @@ import {createSelector} from 'reselect';
 })
 
 export class GstComponent implements OnInit {
-    @ViewChild('monthWise') public monthWise: BsDropdownDirective;
-    @ViewChild('periodDropdown') public periodDropdown;
+    @ViewChild('monthWise', {static: true}) public monthWise: BsDropdownDirective;
+    @ViewChild('periodDropdown', {static: true}) public periodDropdown;
 
     public showCalendar: boolean = false;
     public period: any = null;

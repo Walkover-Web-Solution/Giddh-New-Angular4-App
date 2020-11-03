@@ -1,7 +1,7 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import * as _ from 'apps/web-giddh/src/app/lodash-optimized';
-import isCidr from 'is-cidr';
+import * as isCidr from 'is-cidr';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 
@@ -80,6 +80,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this._accountsAction.resetShareEntity();
+        
         if (this.userdata) {
             if (this.userdata.from && this.userdata.to) {
                 let from: any = moment(this.userdata.from, GIDDH_DATE_FORMAT);
@@ -96,7 +98,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         }
         // reset form
         this.createPermissionSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
-            if (value) {
+            if (value && !this.isOpenedInModal) {
                 this.permissionForm.reset();
                 this.initAcForm();
             }

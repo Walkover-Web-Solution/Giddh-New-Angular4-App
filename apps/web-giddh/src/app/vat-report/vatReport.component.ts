@@ -14,7 +14,7 @@ import { GIDDH_DATE_FORMAT } from "../shared/helpers/defaultDateFormat";
 import { saveAs } from "file-saver";
 import { StateDetailsRequest } from "../models/api-models/Company";
 import { CompanyActions } from "../actions/company.actions";
-import { BsDropdownDirective } from "ngx-bootstrap";
+import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 
 @Component({
     selector: 'app-vat-report',
@@ -36,8 +36,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public toDate: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public allowVatReportAccess: boolean = false;
-    @ViewChild('monthWise') public monthWise: BsDropdownDirective;
-    @ViewChild('periodDropdown') public periodDropdown;
+    @ViewChild('monthWise', {static: true}) public monthWise: BsDropdownDirective;
+    @ViewChild('periodDropdown', {static: true}) public periodDropdown;
     public isMonthSelected: boolean = true;
     public selectedMonth: any = null;
     public currentPeriod: any = {};

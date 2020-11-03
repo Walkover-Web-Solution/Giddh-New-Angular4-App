@@ -1,11 +1,11 @@
 <div class="flex-container" *ngIf="!((isSignupWithPasswordInProcess$ | async) || (isTwoWayAuthInProcess$ | async) ||  (isVerifyEmailInProcess$ | async) ||  (isLoginWithEmailInProcess$ | async) ||  (isLoginWithGoogleInProcess$ | async))">
     <div class="login-box">
         <div class="row mx-0">
-            <div class="col-md-6 col-lg-6 col-sm-6 col-12 px-0">
+            <div class="col-md-6 col-lg-6 col-sm-12 col-12 px-0">
                 <div class="login-left">
                 </div>
             </div>
-            <div class="col-md-6 col-lg-6 col-sm-6 col-12 px-0">
+            <div class="col-md-6 col-lg-6 col-sm-12 col-12 px-0">
                 <div class="login-right d-flex align-items-center">
                     <div class="giddh-login">
                         <div class="giddh-login-inner">
@@ -36,7 +36,7 @@
                                         <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix">
                                             <input class="form-control mb-1" formControlName="token" type="text"
                                                 placeholder="Enter verification code here" required>
-                                            <div class="clearfix mrB2">
+                                            <div class="clearfix mr-b2">
                                                 <button [disabled]="!emailVerifyForm.controls['token'].valid"
                                                     class="btn btn-success btn-block btn-lg"
                                                     [ladda]="isVerifyEmailInProcess$ | async"
@@ -76,7 +76,7 @@
                                     <li>1 lowercase letter.</li> -->
                                                 </ul>
                                             </div>
-                                            <button class="btn btn-success btn-lg btn-block mrT1" type="submit"
+                                            <button class="btn btn-success btn-lg btn-block mr-t1" type="submit"
                                                 [disabled]="!signUpWithPasswdForm.controls['email'].valid || !signUpWithPasswdForm.controls['password'].value">
                                                 Signup
                                             </button>
@@ -89,7 +89,7 @@
                                             <!-- <input class="form-control mb-1" formControlName="email" type="text" placeholder="Email Id" required> -->
                                             <input class="form-control mb-1" formControlName="verificationCode"
                                                 type="text" placeholder="Enter verification code here" required>
-                                            <div class="clearfix mrB2">
+                                            <div class="clearfix mr-b2">
                                                 <button
                                                     [disabled]="!signupVerifyForm.controls['verificationCode'].valid"
                                                     class="btn btn-success btn-block btn-lg"
@@ -151,22 +151,22 @@
                     <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
                         <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix form-group form-group-lg">
 
-                            <input class="form-control mrT1" formControlName="email" type="email"
+                            <input class="form-control mr-t1" formControlName="email" type="email"
                                 placeholder="Enter your email address" required>
                             <button [disabled]="!emailVerifyForm.controls['email'].valid"
                                 [ladda]="isLoginWithEmailInProcess$ | async"
-                                class="btn sharp btn-block btn-success btn-lg mrT1"
+                                class="btn sharp btn-block btn-success btn-lg mr-t1"
                                 (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Submit
                             </button>
 
                         </div>
                         <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix form-group form-group-lg">
 
-                            <input class="form-control mrT1" formControlName="token" type="text"
+                            <input class="form-control mr-t1" formControlName="token" type="text"
                                 placeholder="Enter verification code here" required>
                             <small>We have sent a verification code to your registered email.</small>
                             <button [disabled]="!emailVerifyForm.controls['token'].valid"
-                                class="btn sharp btn-block btn-success btn-lg mrT1"
+                                class="btn sharp btn-block btn-success btn-lg mr-t1"
                                 [ladda]="isVerifyEmailInProcess$ | async"
                                 (click)="VerifyEmail(emailVerifyForm.controls['email'].value,emailVerifyForm.controls['token'].value)">
                                 Last step to go
@@ -203,7 +203,7 @@
                                 placeholder="Enter your Mobile No" required style="width: calc(100% - 80px);" />
                         </div>
                         <button *ngIf="!(isLoginWithMobileSubmited$ | async)"
-                            class="btn sharp btn-block btn-success btn-lg mrT1"
+                            class="btn sharp btn-block btn-success btn-lg mr-t1"
                             (click)="getOtp(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['country'].value)"
                             [ladda]="isLoginWithMobileInProcess$ | async"
                             [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{ !(isLoginWithMobileInProcess$ |
@@ -213,7 +213,7 @@
                             <hr class="mrtb10">
                             <input class="form-control" placeholder="Enter OTP" style="border-radius:0"
                                 formControlName="otp">
-                            <button type="login" class="btn sharp btn-block btn-success btn-lg mrT1"
+                            <button type="login" class="btn sharp btn-block btn-success btn-lg mr-t1"
                                 [ladda]="isVerifyMobileInProcess$ | async"
                                 (click)="VerifyCode(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['otp'].value)"
                                 [disabled]="!mobileVerifyForm.controls['otp'].valid">Login
@@ -245,7 +245,7 @@
                             <input class="form-control" placeholder="Enter OTP" style="border-radius:0"
                                 formControlName="otp">
                             <small>We have sent an OTP to your registered mobile number.</small>
-                            <button type="login" class="btn sharp btn-block btn-success btn-lg mrT1"
+                            <button type="login" class="btn sharp btn-block btn-success btn-lg mr-t1"
                                 [ladda]="isTwoWayAuthInProcess$ | async" (click)="verifyTwoWayCode()"
                                 [disabled]="twoWayOthForm.get('otp').invalid">Submit
                             </button>
@@ -258,7 +258,7 @@
 </div>
 <!-- two way auth popup -->
 <div *ngIf="(isSignupWithPasswordInProcess$ | async) || (isTwoWayAuthInProcess$ | async) ||  (isVerifyEmailInProcess$ | async) ||  (isLoginWithEmailInProcess$ | async) ||  (isLoginWithGoogleInProcess$ | async) ">
-    <div class="no-data mrT2 loader-main">
+    <div class="no-data mr-t2 loader-main">
         <div class="spinner2">
             <div class="cube1"></div>
             <div class="cube2"></div>

@@ -24,7 +24,7 @@
         </div>
     </div>
     <div class="billing-details">
-        <div class="clearfix">
+        <div class="row">
             <div class="col-sm-6 col-xs-12">
                 <div class="billing-wrapper">
                     <h3>Billing Details</h3>
@@ -66,7 +66,7 @@
                         </div>
                         <div class="form-group">
                             <input type="checkbox" (click)="autoRenewSelected($event)" id="autorenew" name="autorenew"
-                                [(ngModel)]="billingDetailsObj.autorenew"><label class="mrL1">Renew subscription
+                                [(ngModel)]="billingDetailsObj.autorenew"><label class="mr-l1">Renew subscription
                                 automatically</label>
                         </div>
                         <div class="form-group">
@@ -77,7 +77,7 @@
                     </form>
                 </div>
             </div>
-            <div class="col-sm-6 col-xs-12 pd0">
+            <div class="col-sm-6 col-xs-12">
                 <div class="proffesional-plan">
                     <p class="plan-title"> {{selectedPlans?.planDetails?.name}} <span class="grey-text"> (Current Plan)
                         </span></p>
@@ -87,12 +87,12 @@
 
                         <!--  -->
                         <div class="row">
-                            <div class="col-xs-6">
+                            <div class="col-6">
                                 <span>
                                     Subscription Price
                                 </span>
                             </div>
-                            <div class="col-xs-6">
+                            <div class="col-6">
                                 <p>
                                     {{selectedPlans?.planDetails?.amount | number}}
                                 </p>
@@ -101,12 +101,12 @@
                         <!--  -->
 
                         <div class="row">
-                            <div class="col-xs-6">
+                            <div class="col-6">
                                 <span>
                                     Total Companies
                                 </span>
                             </div>
-                            <div class="col-xs-6">
+                            <div class="col-6">
                                 <p>
                                     {{selectedPlans?.planDetails?.companiesLimit | number}}
                                 </p>
@@ -114,12 +114,12 @@
                         </div>
                         <!--  -->
                         <div class="row">
-                            <div class="col-xs-6">
+                            <div class="col-6">
                                 <span>
                                     Transactions Limit
                                 </span>
                             </div>
-                            <div class="col-xs-6">
+                            <div class="col-6">
                                 <p>
                                     {{selectedPlans?.planDetails?.transactionLimit | number}}
                                 </p>
@@ -127,12 +127,12 @@
                         </div>
                         <!--  -->
                         <div class="row">
-                            <div class="col-xs-6">
+                            <div class="col-6">
                                 <span>
                                     Subscription Renewal
                                 </span>
                             </div>
-                            <div class="col-xs-6">
+                            <div class="col-6">
                                 <p>
                                     {{selectedPlans?.planDetails?.duration}}
                                     {{selectedPlans?.planDetails?.durationUnit}}(s)
@@ -147,7 +147,7 @@
 </div>
 
 <div *ngIf="isCreateAndSwitchCompanyInProcess">
-    <div class="no-data mrT2 loader-main">
+    <div class="no-data mr-t2 loader-main">
         <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
         <div class="spinner2">
             <div class="cube1"></div>

@@ -4,7 +4,8 @@ import { DaybookActions } from 'apps/web-giddh/src/app/actions/daybook/daybook.a
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as moment from 'moment/moment';
-import { ModalDirective, PaginationComponent } from 'ngx-bootstrap';
+import { PaginationComponent } from 'ngx-bootstrap/pagination';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 
@@ -43,12 +44,12 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     /** True, If advance search applied */
     public showAdvanceSearchIcon: boolean = false;
-    @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
-    @ViewChild('exportDaybookModal') public exportDaybookModal: ModalDirective;
-    @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent }) public dateRangePickerCmp: DaterangePickerComponent;
-    @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+    @ViewChild('advanceSearchModel', {static: true}) public advanceSearchModel: ModalDirective;
+    @ViewChild('exportDaybookModal', {static: true}) public exportDaybookModal: ModalDirective;
+    @ViewChild('dateRangePickerCmp', { read: DaterangePickerComponent, static: false }) public dateRangePickerCmp: DaterangePickerComponent;
+    @ViewChild('paginationChild', {static: false}) public paginationChild: ElementViewContainerRef;
     /** Daybook advance search component reference */
-    @ViewChild('daybookAdvanceSearch') public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
+    @ViewChild('daybookAdvanceSearch', {static: true}) public daybookAdvanceSearchModelComponent: DaybookAdvanceSearchModelComponent;
     public datePickerOptions: any = {
         locale: {
             applyClass: 'btn-green',
@@ -165,7 +166,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 ...this.datePickerOptions, startDate: moment(obj.fromDate, GIDDH_DATE_FORMAT).toDate(),
                 endDate: moment(obj.toDate, GIDDH_DATE_FORMAT).toDate()
             };
-            this.dateRangePickerCmp.render();
+            if (this.dateRangePickerCmp) {
+                this.dateRangePickerCmp.render();
+            }
             this.daybookQueryRequest.from = obj.fromDate;
             this.daybookQueryRequest.to = obj.toDate;
             this.daybookQueryRequest.page = 0;
@@ -213,6 +216,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         if (this.daybookAdvanceSearchModelComponent) {
             this.daybookAdvanceSearchModelComponent.advanceSearchForm.reset();
             this.daybookAdvanceSearchModelComponent.resetShselectForceClear();
+            this.daybookAdvanceSearchModelComponent.initializeDaybookAdvanceSearchForm();
         }
     }
 

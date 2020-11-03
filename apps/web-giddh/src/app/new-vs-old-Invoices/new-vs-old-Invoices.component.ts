@@ -15,51 +15,7 @@ import { take } from 'rxjs/operators';
 @Component({
     selector: 'new-vs-old-invoices',
     templateUrl: './new-vs-old-Invoices.component.html',
-    styles: [`
-    .h-25px {
-      height: 25px;
-    }
-
-    .pad-8 {
-      padding: 8px;
-    }
-
-    .divTable {
-      display: table;
-      width: 50%;
-      background-color: white;
-      padding: 15px 30px;
-    }
-
-    .h3-heading {
-      text-align: center;
-      margin: 20px 0;
-      font-weight: bold;
-      font-size: 20px;
-    }
-
-    .divRow {
-      display: flex;
-      margin-top: 10px;
-      width: auto;
-    }
-
-    .headRow {
-      display: flex;
-    }
-
-    .divCell {
-      float: left;
-      display: table-column;
-      width: 150px;
-      background-color: #ffffff00;
-      font-size: 14px;
-    }
-
-    .align-end {
-      text-align: end;
-    }
-  `]
+    styleUrls: [`./new-vs-old-Invoices.component.scss`],
 })
 
 export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
@@ -88,7 +44,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public newSalesInvCount: number = 0;
     public totalSalesInvCount: number = 0;
     public invoiceCountAll: number = 0;
-    @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+    @ViewChild('paginationChild', {static: true}) public paginationChild: ElementViewContainerRef;
     private searchFilterData: any = null;
 
     constructor(private store: Store<AppState>, private _NewVsOldInvoicesActions: NewVsOldInvoicesActions,

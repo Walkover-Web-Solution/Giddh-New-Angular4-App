@@ -74,7 +74,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 .trxFakeInput {
     width: 100%;
     height: 38px;
-    background: #f1f1f1;
+    background: transparent;
     border: none !important;
     padding: 5px;
     color: #b5b5b5;
@@ -102,7 +102,7 @@ ng-select .select_drop i.fa.fa-caret-up::before {
     padding-left: 8px;
 }
 
-.total_col span.bdrT {
+.total-col span.bdrT {
     width: 150px;
     display: inline-block;
     padding: 2px 0;
@@ -173,8 +173,10 @@ ng-select .select_drop i.fa.fa-caret-up::before {
 }
 
 .download-invoice-ledger>i {
-    top: 15px;
+    top: 18px;
     position: relative;
+    background-color: $white;
+    padding-left: 5px;
 }
 
 .checkbox-custom-label strong {
@@ -280,7 +282,9 @@ span.eligible-ITC {
         font-family: 'opensans-regular';
     }
 }
-
+.left-col-new .row, .right-col-new .row , .ledger-head .row{
+    margin: 0;
+}
 /* responsive */
 
 @media only screen and (max-width: 1359px) {
@@ -427,6 +431,17 @@ span.eligible-ITC {
     -webkit-animation:spin 4s linear infinite;
     -moz-animation:spin 4s linear infinite;
     animation:spin 4s linear infinite;
+}
+.ledger-head th:first-child{
+    span{
+        position: relative;
+        right: 15px;
+    }
+}
+.list-inline>li {
+    display: inline-block;
+    padding-right: 5px;
+    padding-left: 5px;
 }
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }

@@ -6,55 +6,55 @@
 
     <div class="">
         <div>
-            <table class="transactions-table table-striped  table zi-table" *ngIf="brcsSummary.length">
+            <table class="transactions-table table-striped  table zi-table on-mobile-view" *ngIf="brcsSummary.length">
                 <thead>
                     <tr>
                         <!---->
-                        <th style="" class="text-left">
+                        <th class="text-left">
                             <div style="position: relative">
                                 <div class="pull-left over-flow"> Type</div>
                                 <!---->
                             </div>
                         </th>
-                        <th style="" class="text-right">
+                        <th class="text-right">
                             <div style="position: relative">
                                 <div class=" over-flow"> Rate</div>
                                 <!---->
                             </div>
                         </th>
-                        <th style="" class="text-right">
+                        <th class="text-right">
                             <div style="position: relative">
                                 <div class=" over-flow"> Place of Supply</div>
                                 <!---->
                             </div>
                         </th>
-                        <th style="" class="text-right">
+                        <th class="text-right">
                             <div style="position: relative">
                                 <div class=" over-flow"> Taxable Amount</div>
                                 <!---->
                             </div>
                         </th>
 
-                        <th style="" class="text-right">
+                        <th class="text-right">
                             <div style="position: relative">
                                 <div class=" over-flow"> IGST Amount</div>
                                 <!---->
                             </div>
                         </th>
-                        <th style="" class="text-right">
+                        <th class="text-right">
                             <div style="position: relative">
                                 <div class=" over-flow"> CGST Amount</div>
                                 <!---->
                             </div>
                         </th>
 
-                        <th style="" class="text-right">
+                        <th class="text-right">
                             <div style="position: relative">
                                 <div class=" over-flow"> SGST Amount</div>
                                 <!---->
                             </div>
                         </th>
-                        <th style="" class="text-right">
+                        <th class="text-right">
                             <div style="position: relative">
                                 <div class=" over-flow"> CESS</div>
                                 <!---->
@@ -66,14 +66,14 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of brcsSummary">
-                        <td> {{item.typ ? item.typ : '-'}} </td>
-                        <td class="text-right"> {{item.rt | giddhCurrency}} </td>
-                        <td class="text-right"> {{item.pos ? item.pos : '-'}} </td>
-                        <td class="text-right"> {{item.txval | giddhCurrency}} </td>
-                        <td class="text-right"> {{item.iamt | giddhCurrency}} </td>
-                        <td class="text-right"> {{item.camt | giddhCurrency}} </td>
-                        <td class="text-right"> {{item.samt | giddhCurrency}} </td>
-                        <td class="text-right"> {{item.csamt | giddhCurrency}} </td>
+                        <td data-title="Type"> {{item.typ ? item.typ : '-'}} </td>
+                        <td data-title="Rate" class="text-right"> {{item.rt | giddhCurrency}} </td>
+                        <td data-title="Place of Supply" class="text-right"> {{item.pos ? item.pos : '-'}} </td>
+                        <td data-title="Taxable Amount" class="text-right"> {{item.txval | giddhCurrency}} </td>
+                        <td data-title="IGST Amount" class="text-right"> {{item.iamt | giddhCurrency}} </td>
+                        <td data-title="CGST Amount" class="text-right"> {{item.camt | giddhCurrency}} </td>
+                        <td data-title="SGST Amount" class="text-right"> {{item.samt | giddhCurrency}} </td>
+                        <td data-title="CESS" class="text-right"> {{item.csamt | giddhCurrency}} </td>
                     </tr>
                     <!---->
                 </tbody>

@@ -68,7 +68,7 @@
             </div>
             <ng-container *ngIf="isHsnSacEnabledAcc">
                 <div class="row">
-                    <div class="col-xs-6 form-group">
+                    <div class="col-xs-6 col-sm-6 form-group">
                         <label class="d-block">HSN</label>
                         <div class="input-group">
                             <span class="input-group-addon">
@@ -77,7 +77,7 @@
                             <input type="text" class="form-control" digitsOnlyDirective formControlName="hsnNumber" class="form-control" name="hsnNumber" maxLength="10">
                         </div>
                     </div>
-                    <div class="col-xs-6 form-group">
+                    <div class="col-xs-6 col-sm-6 form-group">
                         <label class="d-block">SAC</label>
                         <div class="input-group">
                             <span class="input-group-addon">
@@ -93,7 +93,7 @@
 
     <tabset #staticTabs class="custom-tabs " id="asidePaneFormTabs">
         <ng-container>
-            <tab heading="Address" class="gstinAddress" [active]="isDebtorCreditor" [disabled]="!isDebtorCreditor" (select)="tabChanged('address')">
+            <tab heading="Address" class="gstinAddress" [active]="isDebtorCreditor" [disabled]="!isDebtorCreditor" (selectTab)="tabChanged('address')">
                 <ng-container>
                     <div class="gstinForm" formArrayName="addresses">
                         <ng-container *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last" [formGroupName]="i">
@@ -117,7 +117,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label>State <sup class="text-danger" *ngIf="isStateRequired">*</sup> </label>
-                                        <div class="custom-select">
+                                        <div>
                                             <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" [defaultValue]="gst.value.state.code ? gst.value.state.code + ' - ' + gst.value.state.name: ''" (selected)="selectedState(gst, $event)" [forceClearReactive]="forceClear$ | async"
                                                 formControlName="stateCode" class="wd100" [useInBuiltFilterForIOptionTypeItems]="true">
                                             </sh-select>
@@ -136,7 +136,7 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>Party Type<span class="red-text">*</span></label>
-                                            <div class="custom-select pos-rel">
+                                            <div class="pos-rel">
                                                 <sh-select [options]="partyTypeSource" formControlName="partyType" [isFilterEnabled]="true"></sh-select>
                                             </div>
                                         </div>
@@ -157,8 +157,8 @@
                                     <div class="form-group">
                                         <span class="text-right">
                                             <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)"
-                                                class="grey_clr btn btn-danger">
-                                                <i class="fa fa-times"> </i> Remove
+                                                class="grey-clr btn btn-danger">
+                                                <i class="icon-cross"> </i> Remove
                                             </a>
                                         </span>
                                     </div>
@@ -172,7 +172,7 @@
                             </div>
                             <div *ngIf="l">
                                 <a class="text-right btn btn-primary" href="javascript:void(0);" (click)="addGstDetailsForm(gst.get('gstNumber').value)">
-                                    <i class="fa fa-plus"></i> Add Address
+                                    <i class="icon-plus"></i> Add Address
                                 </a>
                             </div>
                         </ng-container>
@@ -180,14 +180,14 @@
                 </ng-container>
 
                 <!-- <div class="row">
-                        <div class="col-sm-12"> <button class="btn btn-primary mrT2" (click)="addAddress = !addAddress">+ Add
+                        <div class="col-sm-12"> <button class="btn btn-primary mr-t2" (click)="addAddress = !addAddress">+ Add
                 Address</button></div>
                     </div> -->
 
             </tab>
         </ng-container>
 
-        <tab heading="Contact" class="ContactFromWrap" [active]="!isDebtorCreditor" (select)="tabChanged('contacts')">
+        <tab heading="Contact" class="ContactFromWrap" [active]="!isDebtorCreditor" (selectTab)="tabChanged('contacts')">
             <div class="contactForm">
                 <div class="row">
                     <div class="col-sm-6">
@@ -250,7 +250,7 @@
 
 
         <!-- bank details visible when sundry credtiors selected , right now is hide -->
-        <tab heading="Bank Details" class="bankDetialsForm" *ngIf="showBankDetail" (select)="tabChanged('bank')">
+        <tab heading="Bank Details" class="bankDetialsForm" *ngIf="showBankDetail" (selectTab)="tabChanged('bank')">
             <div *ngIf="showBankDetail">
                 <div formArrayName="accountBankDetails">
                     <div class="row" *ngFor="let bank of addAccountForm.get('accountBankDetails')['controls'];let i = index;let f = first; let l = last" [formGroupName]="i">
@@ -290,7 +290,7 @@
             </div>
         </tab>
 
-        <tab heading="Others " class="otherFormWrap " (select)="tabChanged('others')">
+        <tab heading="Others " class="otherFormWrap " (selectTab)="tabChanged('others')">
 
             <div class="otherForm ">
                 <div class="row ">
@@ -336,7 +336,7 @@
                     </div>
                     <div class="col-sm-2 pdL0 ">
                         <label>&nbsp;</label>
-                        <button class="btn btn-pink ">Move</button>
+                        <button class="btn btn-sky-blue ">Move</button>
                     </div>
                 </div>
                 <div class="row ">
@@ -348,7 +348,7 @@
                     </div>
                     <div class="col-sm-2 pdL0 ">
                         <label>&nbsp;</label>
-                        <button class="btn btn-pink ">Merge</button>
+                        <button class="btn btn-sky-blue ">Merge</button>
                     </div>
                 </div> -->
             </div>
@@ -371,7 +371,7 @@
 </form>
 <div class="form" *ngIf="isOtherSelectedTab">
     <div>
-        <!-- <div class="col-xs-12 mrB2 selectBox">
+        <!-- <div class="col-xs-12 mr-b2 select-box">
             <div class="form-group ">
                 <label>Default discount <span
                         class="primary_clr"></span></label>
@@ -380,7 +380,7 @@
                         <sh-select class="pull-left" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" [placeholder]="'Select discounts'" style="width: calc(100% - 93px);"></sh-select>
                     </span>
                     <span class="pull-right">
-                        <button  class="btn btn-primary mrgeBtn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscount()">Apply</button>
+                        <button  class="btn btn-primary marge-btn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscount()">Apply</button>
                     </span>
 
                 </div>
@@ -388,7 +388,7 @@
         </div>
     </div> -->
         <div *ngIf="(activeAccount$ | async)" class="form-group">
-            <form name="moveAccountForm" class="clearfix moveTOgroup " novalidate (submit)="moveAccount()" [formGroup]="moveAccountForm">
+            <form name="moveAccountForm" class="clearfix move-to-group " novalidate (submit)="moveAccount()" [formGroup]="moveAccountForm">
                 <div class="row">
                     <div class=" col-sm-12 ">
                         <div class="form-group ">
@@ -402,7 +402,7 @@
                                         <a href="javascript:void(0)" class="list-item"
                                             style="border-bottom:1px solid #ccc;">
                                             <div class="item">{{ model.label }}</div>
-                                            <div class="item_unq">
+                                            <div class="item-unique">
                                                 {{ model.value }}
                                             </div>
                                         </a>
@@ -410,7 +410,7 @@
                                 </sh-select>
                             </span>
                             <span class="pull-right">
-                                <button type="submit" class="btn btn-primary mrgeBtn"
+                                <button type="submit" class="btn btn-primary marge-btn"
                                     [disabled]="moveAccountForm.invalid">Move</button>
                             </span>
                         </div>
@@ -422,7 +422,7 @@
             <div class="col-sm-12 ">
                 <div class="form-group ">
                     <label>Select account to merge with <span
-                            class="primary_clr">{{(activeAccount$ | async)?.name}}</span></label>
+                            class="primary-color">{{(activeAccount$ | async)?.name}}</span></label>
                     <div class="clearfix" #accountSelect2>
                         <span>
                             <sh-select class="pull-left" [options]="accounts$ | async" [isFilterEnabled]="true"
@@ -431,13 +431,13 @@
                                 style="width: calc(100% - 93px);"></sh-select>
                         </span>
                         <span class="pull-right">
-                            <button type="submit" class="btn btn-primary mrgeBtn"
+                            <button type="submit" class="btn btn-primary marge-btn"
                                 (click)="mergeAccounts()">Merge</button>
                         </span>
                     </div>
                     <small class="clearfix">This option is risky and can not be undone</small>
 
-                    <ul class="accmerge mrT1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
+                    <ul class="accmerge mr-t1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
                         <li *ngFor="let merged of (activeAccount$ | async)?.mergedAccounts.split(',')">
                             <a href="javascript:void(0);" [ngClass]="{'isActive': setAccountForMove === merged}" (click)="setAccountForMoveFunc(merged)">
                                 {{merged}}
@@ -450,6 +450,43 @@
         </div>
 
     </div>
+    <!-- commenting/hiding due to API deployment process in going on for prod (use : isDebtorCreditor && isOtherSelectedTab) -->
+    <div class="form" *ngIf="false">
+        <div class="mrB2 select-box">
+            <div class="form-group ">
+                <label>Default Discount <span
+                    class="primary-color"></span></label>
+                <div class="clearfix">
+                    <span>
+                        <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" placeholder="Select discounts" ></sh-select>
+                    </span>
+                    <span class="pull-right">
+                        <button  class="btn btn-primary mrgeBtn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscounts()">Apply</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="edit-tax-section">
+            <div class="form-group">
+                <div class="tax-label">
+                    <label>All Inherited Discounts</label>
+                </div>
+                <div *ngFor="let item of (activeAccount$ | async)?.inheritedDiscounts">
+                    <ng-template #popTemplate>
+                        <div class="popover-content">
+                            <label>Discount being inherited from:</label>
+                            <ul>
+                                <li>{{item.name}}</li>
+                            </ul>
+                        </div>
+                    </ng-template>
+                    <span class="tax-bullet" *ngFor="let inAppDiscount of item.applicableDiscounts" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppDiscount.name }}
+                </span>
+                </div>
+                <p *ngIf="!(activeAccount$ | async)?.inheritedDiscounts.length">No Inherited Discounts</p>
+            </div>
+        </div>
+    </div>
 
     <!-- taxes container -->
     <ng-container *ngIf="(isTaxableAccount$ | async)">
@@ -460,11 +497,12 @@
                         <label>Default Taxes</label>
                     </div>
                     <div class="form-group">
-                        <div class="input-group">
-
-                            <sh-select [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes" style="width: calc(100% - 20px);">
-                            </sh-select>
-                            <span class="input-group-btn ">
+                        <div class="clearfix">
+                            <span class="calc-width pull-left">
+                                <sh-select  [options]="companyTaxDropDown | async" [placeholder]="'Select Tax'" [multiple]="true" formControlName="taxes">
+                                </sh-select>
+                            </span>
+                            <span class="pull-right">
                                 <button type="submit" class="btn btn-success">Save</button>
                             </span>
                         </div>
@@ -480,7 +518,7 @@
                         </div>
                         <div *ngFor="let inTax of (activeAccountTaxHierarchy$ | async)?.inheritedTaxes">
                             <ng-template #popTemplate>
-                                <div [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)">
+                                <div>
                                     <div class="popover-content">
                                         <label>Tax being inherited from:</label>
                                         <ul>
@@ -514,7 +552,7 @@
     </div>
     <!--deleteMergedAccount account modal  -->
     <div bsModal #deleteMergedAccountModal="bs-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <confirm-modal [title]="'Delete Merged Account'" [body]='deleteMergedAccountModalBody' (cancelCallBack)="hideDeleteMergedAccountModal()" (successCallBack)="deleteMergedAccount()">
                 </confirm-modal>

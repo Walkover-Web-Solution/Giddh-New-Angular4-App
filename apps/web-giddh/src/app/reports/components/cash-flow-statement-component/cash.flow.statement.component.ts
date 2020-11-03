@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
@@ -11,6 +11,7 @@ import { CashFlowStatementService } from '../../../services/cashflowstatement.se
 import { GeneralService } from '../../../services/general.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from "file-saver";
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 
 @Component({
     selector: 'cash-flow-statement-component',
@@ -19,7 +20,7 @@ import { saveAs } from "file-saver";
 })
 
 export class CashFlowStatementComponent implements OnInit, OnDestroy {
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', {static: true}) public datepickerTemplate: ElementRef;
 
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
@@ -30,7 +31,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
-    public datePickerOptions: any;
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* Moment object */
     public moment = moment;
     /* Selected from date */
@@ -89,13 +90,6 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
             }
         });
 
-        /* This will get the date range picker configurations */
-        this.store.pipe(select(state => state.company.dateRangePickerConfig), takeUntil(this.destroyed$)).subscribe(config => {
-            if (config) {
-                this.datePickerOptions = config;
-            }
-        });
-
         /* This will get the company details */
         this.activeCompanyUniqueName$.pipe(take(1)).subscribe(activeCompanyUniqueName => {
             this.downloadRequest.companyUniqueName = activeCompanyUniqueName;
@@ -133,7 +127,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
         );
     }
 
@@ -152,7 +146,11 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
      * @param {*} value
      * @memberof CashFlowStatementComponent
      */
-    public dateSelectedCallback(value: any): void {
+    public dateSelectedCallback(value?: any): void {
+        if(value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
         this.selectedRangeLabel = "";
 
         if (value && value.name) {

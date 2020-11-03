@@ -1,7 +1,14 @@
 import { PurchaseModule } from '../purchase/purchase.module';
 import { PushToGstInComponent } from './filing/tabs/push-to-gstin/push-to-gstin.component';
 import { TransactionSummaryComponent } from './filing/tabs/push-to-gstin/components/transaction-summary/transaction-summary.component';
-import { AlertModule, BsDropdownModule, CollapseModule, DatepickerModule, ModalModule, PaginationComponent, PaginationModule, TabsModule, TooltipModule } from 'ngx-bootstrap';
+import { AlertModule } from 'ngx-bootstrap/alert';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FilingComponent } from './filing/filing.component';
 import { NgModule } from '@angular/core';
 import { FileGstR1Component } from './gstR1/gstR1.component';

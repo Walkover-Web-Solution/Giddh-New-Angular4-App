@@ -12,8 +12,7 @@ import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
 import { States, StatesRequest } from '../../models/api-models/Company';
 import { LocationService } from '../../services/location.service';
-import { TypeaheadMatch } from 'ngx-bootstrap';
-import { contriesWithCodes } from 'apps/web-giddh/src/app/shared/helpers/countryWithCodes';
+import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { currencyNumberSystems, digitAfterDecimal } from 'apps/web-giddh/src/app/shared/helpers/currencyNumberSystem';
 import { CountryRequest, OnboardingFormRequest } from "../../models/api-models/Common";
@@ -616,14 +615,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public getCurrency() {
-        this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
                     this.currencies.push({ label: res[key].code, value: res[key].code });
                 });
                 this.currencySource$ = observableOf(this.currencies);
-            } else {
-                this.store.dispatch(this.commonActions.GetCurrency());
             }
         });
     }

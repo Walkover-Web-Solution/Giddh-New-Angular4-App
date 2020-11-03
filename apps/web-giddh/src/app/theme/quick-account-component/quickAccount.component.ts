@@ -26,7 +26,7 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 export class QuickAccountComponent implements OnInit, AfterViewInit {
     @Input() public needAutoFocus: boolean = false;
     @Output() public closeQuickAccountModal: EventEmitter<any> = new EventEmitter();
-    @ViewChild('groupDDList') public groupDDList: any;
+    @ViewChild('groupDDList', {static: true}) public groupDDList: any;
     public groupsArrayStream$: Observable<GroupsWithAccountsResponse[]>;
     public flattenGroupsArray: IOption[] = [];
     public statesStream$: Observable<States[]>;

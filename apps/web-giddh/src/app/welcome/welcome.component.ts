@@ -13,10 +13,10 @@ import {
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { ModalOptions } from 'ngx-bootstrap';
+import { ModalOptions } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import * as googleLibPhoneNumber from 'google-libphonenumber';
+import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 
 import { CommonActions } from '../actions/common.actions';
 import { CompanyActions } from '../actions/company.actions';
@@ -182,15 +182,15 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() isApiInProgress: boolean;
 
     /** States dropdown instance */
-    @ViewChild('states') statesDropdown: ShSelectComponent;
+    @ViewChild('states', {static: true}) statesDropdown: ShSelectComponent;
     /** GST number field */
-    @ViewChild('gstNumberField') gstNumberField: ElementRef<any>;
+    @ViewChild('gstNumberField', {static: true}) gstNumberField: ElementRef<any>;
     /** Contact number field */
-    @ViewChild('mobileNoEl') contactNumberField: ElementRef<any>;
+    @ViewChild('mobileNoEl', {static: true}) contactNumberField: ElementRef<any>;
     /** Address field */
-    @ViewChild('address') addressField: ElementRef<any>;
+    @ViewChild('address', {static: true}) addressField: ElementRef<any>;
     /** Form instance */
-    @ViewChild('welcomeForm') welcomeForm: NgForm;
+    @ViewChild('welcomeForm', {static: true}) welcomeForm: NgForm;
 
     /**
      * Returns true, if onboarding of Warehouse is going on
@@ -204,8 +204,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Phone utility to check the validity of a contact number */
-    private phoneUtility: any = googleLibPhoneNumber.PhoneNumberUtil.getInstance();
 
     public isCreateCompanyInProgress: boolean = false;
     public isCompanyCreated$: Observable<boolean>;
@@ -614,14 +612,12 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public getCurrency() {
-        this.store.pipe(select(s => s.common.currencies), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(s => s.session.currencies), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res).forEach(key => {
                     this.currencies.push({ label: res[key].code, value: res[key].code });
                 });
                 this.currencySource$ = observableOf(this.currencies);
-            } else {
-                this.store.dispatch(this.commonActions.GetCurrency());
             }
         });
     }
@@ -808,8 +804,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public isContactNumberValid(): boolean {
         const contactNumberElement = this.contactNumberField.nativeElement;
         try {
-            let parsedNumber = this.phoneUtility.parse('+' + this.createNewCompanyPreparedObj.phoneCode + contactNumberElement.value, this.company.country);
-            if (this.phoneUtility.isValidNumber(parsedNumber)) {
+            let parsedNumber = parsePhoneNumberFromString('+' + this.createNewCompanyPreparedObj.phoneCode + contactNumberElement.value, this.company.country as CountryCode);
+            if (parsedNumber.isValid()) {
                 contactNumberElement.classList.remove('error-box');
                 return true;
             } else {

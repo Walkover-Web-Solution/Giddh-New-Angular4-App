@@ -13,7 +13,7 @@
 
                 <tabset #staticTabs id="c-tab" class="custom-tabs">
 
-                    <tab (select)="selectTab($event, false, '1. Overview')">
+                    <tab (selectTab)="selectTab($event, false, '1. Overview')">
                         <ng-template tabHeading>
                             1. Overview
                         </ng-template>
@@ -24,7 +24,7 @@
                         </div>
                     </tab>
 
-                    <tab *ngIf="selectedGst === 'gstr2'" (select)="selectTab($event, true, '2. Reconcilation')">
+                    <tab *ngIf="selectedGst === 'gstr2'" (selectTab)="selectTab($event, true, '2. Reconcilation')">
                         <ng-template tabHeading>
                             2. Reconcilation
                         </ng-template>
@@ -34,7 +34,7 @@
                         </div>
                     </tab>
 
-                    <tab *ngIf="selectedGst === 'gstr1'" (select)="selectTab($event, true, 'pushToGstn')">
+                    <tab *ngIf="selectedGst === 'gstr1'" (selectTab)="selectTab($event, true, 'pushToGstn')">
                         <ng-template tabHeading>
                             2. Push to GSTN
                         </ng-template>
@@ -45,12 +45,12 @@
                     </tab>
 
                     <!-- Assigned by meghna  -->
-                    <tab *ngIf="selectedGst !== 'gstr2'" (select)="selectTab($event, true, '3. File your Return')">
+                    <tab *ngIf="selectedGst !== 'gstr2'" (selectTab)="selectTab($event, true, '3. File your Return')">
                         <ng-template tabHeading>
                             3. File your Return
                         </ng-template>
                         <div class="transactions-overview">
-                            <div class="gstr-transactions-summary mrT4 mrB4 text-center">
+                            <div class="gstr-transactions-summary mr-t4 mrB4 text-center">
 
                                 <div class="successful-fileDetail" hidden>
                                     <img src="assets/images/file-successful.svg">
@@ -72,7 +72,7 @@
                                 </div>
 
 
-                                <p *ngIf="fileReturnSucces" class="mrT2">
+                                <p *ngIf="fileReturnSucces" class="mr-t2">
                                     Gst Return Of {{ currentPeriod?.from }} - {{ currentPeriod.to }} is Filed
                                     Successfully
                                 </p>

@@ -7,7 +7,7 @@
 }
 
 .mh18_img img {
-    max-height: 20px;
+    max-height: 17px;
     cursor: pointer;
 }
 
@@ -19,6 +19,9 @@
     flex: 1 1 auto;
 }
 
+.total-amt{
+    flex: 0 !important;
+}
 .d-flex {
     display: flex;
 }
@@ -88,6 +91,9 @@
 .dropdown-menu {
     margin-top: 0;
     min-width: 100%;
+    li{
+        font-size:14px;
+    }
 }
 
 .input-h .td-search-box .input-container input {
@@ -138,8 +144,8 @@
     display: none;
 }
 
-.btn.btn-pink:focus,
-.btn.btn-pink:hover {
+.btn.btn-sky-blue:focus,
+.btn.btn-sky-blue:hover {
     color: #fff;
     text-decoration: none;
     outline: none !important;
@@ -167,7 +173,7 @@
 
 .card .basic > tbody > tr > td,
 .card .basic > thead > tr > th {
-    padding: 5px 14px;
+    padding: 5px 14px !important;
     border: none !important;
 }
 
@@ -183,10 +189,10 @@ td.card-header.clearfix {
 
 .card #inovice_td {
     border-bottom: 1px solid #ddd !important;
-    padding-bottom: 20px;
+    padding-bottom: 20px !important;
     background-color: #f9f9f9;
     border-top: 1px solid #ddd !important;
-    padding-top: 10px;
+    padding-top: 10px !important;
 }
 
 .card .overDueDate {
@@ -243,6 +249,9 @@ td.card-header.clearfix {
 
 .date-advance-search {
     justify-content: space-between;
+    .input-group{
+        width: auto;
+    }
 }
 
 .mobile-search {
@@ -390,15 +399,18 @@ button.btn.btn-default.ladda-button {
     height: 36px;
 }
 .clear-filter {
-    button.btn.btn-default {
+    button.btn.btn-filter {
+        background: $whisper;
+        border: 1px solid $whisper;
         font-size: 14px;
+        color: $midnight-blue;
         display: inline-flex;
         justify-content: space-between;
         align-items: center;
-        padding: 7px 10px;
-        .icon-cross {
-            margin-right: 5px;
-        }
+    }
+
+    button.btn.btn-filter span.icon-cross {
+        margin-right: 5px;
     }
 }
 
@@ -410,14 +422,14 @@ button.btn.btn-default.ladda-button {
     color: #1c1c1c;
 }
 
-.inputWrapper {
+.input-wrapper {
     display: block !important;
     width: 200px !important;
     position: relative;
     height: 36px !important;
 }
 
-.inputWrapper:before {
+.input-wrapper:before {
     position: absolute;
     content: "";
     display: block;
@@ -480,6 +492,9 @@ span.icon-export-icon {
                     border-right: none !important;
                 }
             }
+            .item-selected {
+                display: flex !important;
+            }
         }
     }
     &:hover {
@@ -496,9 +511,61 @@ span.icon-export-icon {
 .visible-on-desktop {
     display: inline-flex;
 }
-/* responsive */
 
+.status-mobile{
+    .balance-status{
+        padding: 14px 0;
+    }
+}
+
+.giddh-table{
+    border-right: 1px solid $gainsboro-light;
+    border-bottom: 1px solid $gainsboro !important;
+    tbody{
+        tr{
+            &:hover {
+                background: $solitude;
+                td {
+                    background: transparent !important;
+                }
+            }
+
+            &:last-child{
+                td{
+                    border-bottom: none !important;
+                }
+            }
+    }
+}
+
+    > tbody{
+        > tr{
+            &:hover {
+                background: rgba(221, 225, 230, 0.5);
+            }
+            td {
+                background: transparent !important;
+                &:last-child{
+                    border-right:none !important;
+                }
+            }
+        }
+    }
+}
+
+/* responsive */
+@media(max-width:1024px){
+    .perform-payment {
+        max-width: 100% !important;
+        min-width: 100% !important;
+    }
+}
 @media (max-width: 768px) {
+
+    .status-mobile{
+        display: flex !important;
+        justify-content: space-between !important;
+    }
     .invoice-name-download {
         a {
             padding-right: 0 !important;
@@ -527,10 +594,6 @@ span.icon-export-icon {
         margin-top: 20px;
         border: none;
         background-color: transparent;
-    }
-    .perform-payment {
-        max-width: 100% !important;
-        min-width: 100% !important;
     }
     .date-advance-search .dropdown-menu.show.fixed-dropdown-plus {
         left: auto !important;
@@ -598,21 +661,10 @@ span.icon-export-icon {
     .invoice-preview {
         padding-bottom: 0px;
     }
-    .desktop-view-btn {
-        display: none;
-    }
     .date-advance-search {
         .add-invoice {
             display: none;
         }
-    }
-    .mobile-search {
-        display: flex;
-        margin-bottom: 0;
-        flex-direction: column-reverse;
-    }
-    .mobile-search .input-container input {
-        font-size: 13px;
     }
     .action-icon {
         display: flex !important;
@@ -623,6 +675,20 @@ span.icon-export-icon {
 }
 
 @media (max-width: 767px) {
+    .date-advance-search{
+        margin-top: 5px !important;
+    }
+    .desktop-view-btn {
+        display: none !important;
+    }
+    .mobile-search {
+        display: flex;
+        margin-bottom: 0;
+        flex-direction: column-reverse;
+    }
+    .mobile-search .input-container input {
+        font-size: 13px;
+    }
     .invoice-modal-content:after,
     .invoice-modal-content {
         top: 131px;
@@ -639,23 +705,25 @@ span.icon-export-icon {
     .total-due-sale-wrap {
         display: block !important;
     }
-    .totalDueSale {
+    .total-due-sale {
         padding-bottom: 5px;
     }
-    .invoice-table {
-        margin-bottom: 22px;
-    }
+   // .invoice-table {
+      //  margin-bottom: 22px;
+    //}
 }
 
 @media (max-width: 575px) {
-    button.btn.btn-default {
+    .total-due-sale {
+        padding-left: 0;
+    }
+    button.btn.btn-filter {
         width: 100%;
         justify-content: center;
-        margin-bottom: 0;
+        margin-bottom: 5px;
         font-size: 14px;
-        margin-top: 15px;
     }
-    .invoce-controll .nav.nav-tabs {
+    .invoice-control .nav.nav-tabs {
         margin-bottom: 28px;
     }
     #dropdown-ddl-newinv {
@@ -718,5 +786,51 @@ span.icon-export-icon {
 @media (max-width: 320px) {
     .mobile-search .input-container input {
         letter-spacing: -0.99px;
+    }
+}
+.form-control.daterange-picker {
+    cursor: pointer !important;
+}
+
+@media (max-width: 445px) {
+    .status-mobile{
+        display: block !important;
+    }
+
+    .giddh-table {
+        tr {
+            td {
+                .action-icon {
+                    a {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width:768px) and (min-width:445px){
+    .status-mobile::before{
+        display:flex;
+        align-items: center;
+    }
+}
+
+
+
+@media (min-width:768px){
+    .mw-th-260{
+        min-width:260px;
+    }
+    .mw-th-170{
+        min-width:170px;
+    }
+
+    .min-wid-check{
+        min-width:40px;
+        .mh18-img{
+            width:20px;
+        }
     }
 }

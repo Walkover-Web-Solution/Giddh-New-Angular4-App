@@ -23,10 +23,10 @@
                 <div class="form-group" *ngIf="newRoleObj.isFresh">
                     <div class="btn-group btn-block" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden()">
                         <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
-                            {{ dropdownHeading}} <span class="select_drop pull-right mrT1"><i
+                            {{ dropdownHeading}} <span class="select_drop pull-right mr-t1"><i
                                     class="fa fa-caret-down"></i></span>
                         </button>
-                        <ul id="pageListDD" *dropdownMenu class="dropdown-menu pdL1 pdR1" role="menu">
+                        <ul id="pageListDD" *dropdownMenu class="dropdown-menu pd-l1 pd-r1" role="menu">
                             <li>
                                 <label>
                                     <input type="checkbox" [ngModelOptions]="{standalone: true}"
@@ -52,7 +52,7 @@
                     </select>
                     <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                 </div>
-                <div class="clearfix text-right mrT4">
+                <div class="clearfix text-right mr-t4">
                     <button type="submit" class="btn btn-sm btn-success" [disabled]="!isFormValid">Next</button>
                     <button type="button" class="btn btn-sm btn-danger" (click)="closePopupEvent()">Cancel</button>
                 </div>

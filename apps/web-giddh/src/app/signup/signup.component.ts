@@ -4,7 +4,7 @@ import { AppState } from "../store";
 import { Router } from "@angular/router";
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ModalDirective } from "ngx-bootstrap";
+import { ModalDirective } from "ngx-bootstrap/modal";
 import { Configuration } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
@@ -24,10 +24,9 @@ import {
 } from "../theme/ng-social-login-module/index";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
-import { DOCUMENT } from "@angular/platform-browser";
+import { DOCUMENT } from "@angular/common";
 import { ToasterService } from "../services/toaster.service";
 import { userLoginStateEnum } from "../models/user-login-state";
-import { isIOSCordova } from "@giddh-workspaces/utils";
 import { GeneralService } from "../services/general.service";
 
 @Component({
@@ -37,10 +36,10 @@ import { GeneralService } from "../services/general.service";
 })
 export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithMobileSubmited$: Observable<boolean>;
-    @ViewChild("emailVerifyModal") public emailVerifyModal: ModalDirective;
+    @ViewChild("emailVerifyModal", {static: true}) public emailVerifyModal: ModalDirective;
     public isLoginWithEmailSubmited$: Observable<boolean>;
-    @ViewChild("mobileVerifyModal") public mobileVerifyModal: ModalDirective;
-    @ViewChild("twoWayAuthModal") public twoWayAuthModal: ModalDirective;
+    @ViewChild("mobileVerifyModal", {static: true}) public mobileVerifyModal: ModalDirective;
+    @ViewChild("twoWayAuthModal", {static: true}) public twoWayAuthModal: ModalDirective;
     public urlPath: string = "";
     public isSubmited: boolean = false;
     public mobileVerifyForm: FormGroup;

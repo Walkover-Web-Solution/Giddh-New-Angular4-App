@@ -8,7 +8,8 @@ import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { BsDropdownConfig, ModalDirective } from 'ngx-bootstrap';
+import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyResponse, BranchFilterRequest } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
@@ -30,10 +31,10 @@ export const IsyncData = [
 })
 
 export class BunchComponent implements OnDestroy {
-	@ViewChild('bunchModal') public bunchModal: ModalDirective;
-	@ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
-	@ViewChild('getBunchCompanyModal') public getBunchCompanyModal: ModalDirective;
-	@ViewChild('confirmationModal') public confirmationModal: ModalDirective;
+	@ViewChild('bunchModal', {static: true}) public bunchModal: ModalDirective;
+	@ViewChild('addCompanyModal', {static: true}) public addCompanyModal: ModalDirective;
+	@ViewChild('getBunchCompanyModal', {static: true}) public getBunchCompanyModal: ModalDirective;
+	@ViewChild('confirmationModal', {static: true}) public confirmationModal: ModalDirective;
 
 	public dataSyncOption = IsyncData;
 	public currentBranch: string = null;

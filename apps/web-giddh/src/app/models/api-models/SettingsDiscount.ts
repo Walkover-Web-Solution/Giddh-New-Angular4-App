@@ -20,6 +20,7 @@ export class LedgerDiscountClass {
     public particular: string;
     public amount: number;
     public uniqueName?: string;
+    public calculationMethod?: "FIX_AMOUNT" | "PERCENTAGE";
 }
 
 export class CreateDiscountRequest {

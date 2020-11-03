@@ -80,7 +80,7 @@ body.ununresponsive {
     color: $white;
 }
 
-.mrB1 {
+.mr-b1 {
     margin-bottom: 10px;
 }
 
@@ -535,8 +535,7 @@ small {
     align-items: center;
     display: flex;
 }
-
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 767px) {
     .giddh-login {
         margin: 0 auto;
     }

@@ -2,7 +2,7 @@
 :host {
     position: fixed;
     left: auto;
-    top:55px;
+    top:61px;
     right: 0;
     bottom: 0;
     max-width: 330px;
@@ -33,12 +33,11 @@
     z-index: 999;
     .aside-help-header{
         display: none;
-    }
-    .help-aside-body {
         .search-field{
             display: none;
         }
     }
+
 }
 :host.in #close {
     display: block;
@@ -66,36 +65,38 @@
 }
 .aside-pane {
     padding: 0;
-    background-color:$alice-blue;
+    background-color:$white;
     .back-to-main-slider{
         display: none;
     }
     .aside-help-header{
         display: flex;
         justify-content: space-between;
-        padding: 18px 15px;
-        border-bottom: 1px solid $gainsboro;
+        padding: 15px 15px;
         position:sticky;
         top: 0;
-        background-color: inherit;
+        background-color: $alice-blue;
         z-index: 1;
+        flex-direction: column;
         h2 {
             font-family: 'opensans-semibold';
             font-size: 18px;
             color: $midnight-blue;
         }
-    }
-    .help-aside-body{
-        padding-bottom: 25%;
+        #close{
+            position: absolute;
+            right: 15px;
+        }
         .search-field{
-            padding: 15px;
+            padding: 20px 0 10px;
+            background-color: $alice-blue;
             input{
                 border-radius: 20px !important;
                 padding-left: 40px !important;
             }
             i{
-                top: 25px;
-                left: 30px;
+                top: 30px;
+                left: 15px;
                 color: gray;
             }
         }
@@ -112,6 +113,7 @@
     margin-top: 15px;
 }
 .setting-items{
+    padding: 15px 0 0;
     ul{
         padding: 0 ;
         list-style: none;
@@ -128,12 +130,13 @@
                 span{
                     color: $nero;
                     &:first-child{
-                        line-height: 1.6;
-                        height: 20px;
-                        display: inline-flex;
-                        align-items: center;
-                        width: 28px;
-                    }
+                            line-height: 1.6;
+                            height: 20px;
+                            display: inline-flex;
+                            -webkit-box-align: center;
+                            align-items: center;
+                            width: 28px;
+                        }
                 }
             }
             &:hover{
@@ -141,6 +144,9 @@
             }
         }
     }
+}
+.setting-items ul li:hover a span i{
+    color: $nero !important;
 }
 
 :host.setting-sidebar{
@@ -162,6 +168,9 @@
         z-index: unset;
         .aside-help-header{
             display: none;
+            .search-field{
+                display: none;
+            }
         }
         .back-to-main-slider{
             display: block;
@@ -183,9 +192,6 @@
             }
         }
         .help-aside-body {
-            .search-field{
-                display: none;
-            }
             .setting-items{
                 ul{
                     li{
@@ -198,6 +204,13 @@
                     }
                 }
             }
+        }
+    }
+}
+@media(max-height:900px){
+    .aside-pane {
+        .help-aside-body{
+            padding-bottom: 25%;
         }
     }
 }
@@ -292,5 +305,11 @@
     }
     :host .aside-pane {
         max-width: 280px;
+    }
+}
+@media(max-height:700px){
+    .help-aside-body{
+        height: 100%;
+        overflow-y: scroll;
     }
 }

@@ -9,7 +9,7 @@
     <div class="aside-body">
         <div class="aside-pane-form">
             <account-add-new-details #addAccountNewComponent *ngIf="activeGroupUniqueName && !isUpdateAccount"
-                class="mrT4" [activeGroupUniqueName]="activeGroupUniqueName" [flatGroupsOptions]="flatGroupsOptions"
+                class="mr-t4" [activeGroupUniqueName]="activeGroupUniqueName" [flatGroupsOptions]="flatGroupsOptions"
                 [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$"
                 [isDebtorCreditor]="isDebtorCreditor" [createAccountInProcess$]="createAccountInProcess$"
                 (submitClicked)="addNewAcSubmit($event)" (isGroupSelected)="isGroupSelected($event)"

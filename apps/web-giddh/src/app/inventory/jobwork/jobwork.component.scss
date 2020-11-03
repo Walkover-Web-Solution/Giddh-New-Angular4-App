@@ -153,7 +153,7 @@ button[aria-expanded="true"] i {
     border-radius: 0px;
     margin-top: 200px;
 }
-.rightBar {
+.right-bar {
     width: calc(100% - 260px);
 }
 .unit-badge {
@@ -194,6 +194,7 @@ button[aria-expanded="true"] i {
 }
 .icon-pointer {
     padding-left: 5px;
+    cursor: pointer;
 }
 button.btn.btn-filter {
     background: #e4e4e4;

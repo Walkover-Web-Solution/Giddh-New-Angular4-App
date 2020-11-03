@@ -24,7 +24,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 	public showAddNewGroup$: Observable<boolean>;
 	public isCreateGroupInProcess$: Observable<boolean>;
 	public isCreateGroupSuccess$: Observable<boolean>;
-	@ViewChild('autoFocused') public autoFocus: ElementRef;
+	@ViewChild('autoFocused', {static: true}) public autoFocus: ElementRef;
 
 	private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

@@ -1,8 +1,10 @@
 /*td-in-searchbox_style*/
 @import "../../../assets/css/color.scss";
 
-.reccuring-form {
+.recurring-form {
     flex: 1;
+    display: flex;
+
 }
 .search-icon-block {
     width: 36px;
@@ -72,6 +74,7 @@
 }
 .icon-pointer {
     margin-left: 6px;
+    cursor: pointer;
 }
 .icon-pointer .glyphicon {
     cursor: pointer;
@@ -85,11 +88,14 @@
     max-height: 20px;
     cursor: pointer;
 }
-.onMobileView {
+.on-mobile-view {
     margin-bottom: 0;
 }
 .recurring-container {
     padding: 0 15px;
+    .form-inline{
+        margin-bottom: 10px !important;
+    }
 }
 .icon-sort-asc,
 .icon-sort-dsc {
@@ -105,22 +111,34 @@
     display: none;
 }
 // responsive
+@media(max-width:1190px){
+    .recurring-form {
+        .input-group {
+            width: 125px;
+        }
+    }
+}
 @media (max-width: 1023px) {
     .input-group {
         display: block;
+    }
+    .recurring-container {
+        .form-inline{
+            margin-bottom: 0 !important;
+        }
     }
 }
 @media (max-width: 768px) {
     .form-view .input-group {
         display: flex;
     }
-    .reccuring-form {
+    .recurring-form {
         display: none;
     }
     .justify-content-sm {
         justify-content: left !important;
     }
-    .onMobileView {
+    .on-mobile-view {
         background: transparent;
         border: none;
     }

@@ -50,7 +50,7 @@
     margin-top: 15px;
 }
 @media (max-width: 768px) {
-    :host.in {
+    :host.in , :host  {
         max-width: 600px;
     }
     :host .aside-pane {
@@ -58,7 +58,7 @@
     }
 }
 @media (max-width: 575px) {
-    :host.in {
+    :host.in , :host {
         max-width: 370px;
     }
     :host .aside-pane {
@@ -66,7 +66,7 @@
     }
 }
 @media (max-width: 375px) {
-    :host.in {
+    :host.in , :host {
         max-width: 310px;
     }
     :host .aside-pane {
@@ -74,7 +74,7 @@
     }
 }
 @media (max-width: 320px) {
-    :host.in {
+    :host.in , :host {
         max-width: 280px;
     }
     :host .aside-pane {

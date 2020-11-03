@@ -133,6 +133,7 @@ export interface ITransactionItem {
     convertedCurrencySymbol: string;
     companyCurrencyCode?: string;
     companyCurrencySymbol: string;
+    voucherGeneratedType?: string;
 }
 
 /**

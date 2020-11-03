@@ -1,13 +1,14 @@
 <div class="modal-header">
     <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
-    <!-- <i class="fa fa-times text-right close-modal" data-dismiss="modal" aria-hidden="true"  aria-label="Close"></i> -->
+    <!-- <i class="icon-cross text-right close-modal" data-dismiss="modal" aria-hidden="true"  aria-label="Close"></i> -->
     <h3 class="">Connect Banks</h3>
 </div>
 <div id="my-frame" class="modal-body clearfix">
     <div class="" *ngIf="step === 1">
         <div class="form-group">
             <label>Search Provider <sup>*</sup></label>
-            <input [ngbTypeahead]="dataSource" type="text" [(ngModel)]="selectedProvider.name" name="providers"
+            <!-- Commented for now can be replaced with new dynamic search sh-select
+                <input [ngbTypeahead]="dataSource" type="text" [(ngModel)]="selectedProvider.name" name="providers"
                 [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)" class="form-control" autocomplete="off"
                 required maxlength="50" placeholder="Search Provider" pattern="^[^\s]+(\s+[^\s]+)*$" (click)="click$.next($any($event).target.value)">
 
@@ -15,18 +16,29 @@
                 <span (keyup.enter)="typeaheadOnSelect(r)"> <span class="provider_ico"><img
                             src="{{r.favicon}}" /></span>
                     {{ r.name }} <label *ngIf="r.countryISOCode">({{r.countryISOCode}})</label></span>
-            </ng-template>
+            </ng-template> -->
+            <sh-select [options]="searchResults"
+                [(ngModel)]="selectedProvider.name"
+                [isPaginationEnabled]="true"
+                [forceClearReactive]="forceClearReactive$ | async"
+                (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                [enableDynamicSearch]="true"
+                (selected)="typeaheadOnSelect($event)"
+                placeholder="Search Provider"
+                [showClear]="false" [multiple]="false"
+                [ItemHeight]="67">
+            </sh-select>
         </div>
         <button class="btn btn-success btn-sm" (click)="onSelectProvider()"
             [disabled]="!selectedProvider.id">Next</button>
     </div>
 
     <div class="" *ngIf="step === 2">
-        <h4 class="lead grey_clr">{{ selectedProvider.name }}</h4>
+        <h4 class="lead grey-clr">{{ selectedProvider.name }}</h4>
         <form #formDiv name="loginForm" [formGroup]="loginForm" novalidate="" autocomplete="off"
             (ngSubmit)="onSubmitLoginForm()">
             <div formArrayName="row" class="row">
-                <div class="col-xs-12"
+                <div class="col-12"
                     *ngFor="let item of loginForm.get('row')['controls']; let i=index;let f = first; let l = last">
                     <div [formGroupName]="i" class="form-group">
                         <ng-container formArrayName="field">
@@ -69,7 +81,7 @@
                 [disabled]="bankSyncInProgress">Submit</button>
             <button class="btn btn-success btn-sm" type="button" *ngIf="!isRefreshWithCredentials"
                 (click)="refreshAccount(loginForm)" [disabled]="bankSyncInProgress">Update</button>
-            <small *ngIf="bankSyncInProgress" class="grey_clr clearfix mrT2 col-xs-12 row">Status: <span
+            <small *ngIf="bankSyncInProgress" class="grey-clr clearfix mr-t2 col-xs-12 row">Status: <span
                     class="primary_clr">Authenticating..</span>
                 <!-- <p>You can wait or check again in 15-20 min</p> -->
             </small>
