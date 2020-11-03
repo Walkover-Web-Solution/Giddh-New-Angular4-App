@@ -72,6 +72,9 @@
         color: #707070;
         margin-right: 0;
         font-size: 20px;
+        position: relative;
+        right: -10px;
+        top: -2px;
     }
     .btn-group .btn:focus {
         box-shadow: none;
@@ -177,6 +180,12 @@ span.setAsDefault {
            }
        }
     }
+}
+.branch-vector{
+    text-align: right;
+    position: absolute;
+    bottom: 8px;
+    right: 90px;
 }
 @media only screen and (max-width: 991px) {
     .warehouse-card h3 {

@@ -72,7 +72,9 @@
     }
     .icon-branch-icon,
     .icon-company-HO {
-        padding: 4px 12px 0 0;
+        padding: 4px 5px 0 0;
+        color: $midnight-blue;
+        font-size: 12px;
     }
 }
 .card-basic-details h2 {
@@ -84,9 +86,10 @@
     word-break: break-all;
     text-overflow: ellipsis;
     margin-right: 15px;
+    margin-bottom: 0;
 }
 .card-basic-details {
-    padding: 20px;
+    padding: 15px;
 }
 .branch-sales-details {
     border-top: 1px solid $gainsboro;
@@ -120,15 +123,17 @@
     cursor: pointer;
 }
 .card-basic-details a#button-basic {
-    color: #333;
-    font-size: 16px;
+    color: $gray;
+    font-size: 20px;
     width: 32px;
     height: 32px;
     display: inline-block;
     text-align: center;
     align-items: center;
     vertical-align: middle;
-    line-height: 2;
+    line-height: 2.8;
+    position: relative;
+    right: -15px;
 }
 .branch-views {
     cursor: pointer;
@@ -143,7 +148,7 @@
 }
 
 .search-branch-box{
-    max-width: 200px;
+    max-width: 220px;
     width: 100%;
     margin-right: 8px;
     input{
@@ -152,9 +157,9 @@
         padding-left: 30px !important;
         background-position: 7px 9px !important;
         background-size: 15px !important;
+        width: 100% !important;
     }
 }
-
 .search-field {
     margin-right: 15px;
     display: flex;
@@ -288,12 +293,21 @@
 
 .linked-add {
     margin-bottom: 5px;
+    display: flex;
+    align-items: baseline;
+    white-space: normal;
+    word-break: break-word;
 }
 
 .right-card-section {
     margin-top: -15px;
 }
-
+.branch-vector{
+    text-align: right;
+    position: absolute;
+    bottom: 8px;
+    right: 90px;
+}
 @media (max-width: 375px) {
     .grey-color button.btn.btn-default {
         margin-left: 0;
@@ -329,6 +343,10 @@
             margin-bottom: 0;
         }
     }
+    .btn-sky-blue.pull-right{
+        float: none;
+        margin-bottom: 15px;
+    }
 }
 @media (max-width: 370px) {
     .date-advance-search {
@@ -356,7 +374,6 @@
 
 @media (min-width: 1020px) and (max-width: 1092px) {
     .form-top-fields {
-        margin-top: -10px;
         .input-addon {
             top: 18px;
         }
