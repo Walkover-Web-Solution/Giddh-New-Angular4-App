@@ -1,9 +1,14 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { select, Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
-import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { OrganizationType } from '../../models/user-login-state';
+import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
+import { AppState } from '../../store';
 
 @Component({
     selector: 'upload-file',
@@ -20,12 +25,27 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     public selectedType: string = '';
     public title: string;
 
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = {
+        name: '',
+        uniqueName: ''
+    };
+    /** Stores the current company */
+    public activeCompany: any;
+
     /** Subject to unsubscribe all the listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private _toaster: ToasterService,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private settingsBranchAction: SettingsBranchActions,
+        private store: Store<AppState>,
+        private generalService: GeneralService
     ) {
         //
     }
@@ -79,6 +99,32 @@ export class UploadFileComponent implements OnInit, OnDestroy {
             }
         });
         this.setTitle();
+        this.store.pipe(
+            select(state => state.session.companies), take(1)
+        ).subscribe(companies => {
+            companies = companies || [];
+            this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                const hoBranch = response.find(branch => !branch.parentBranch);
+                const currentBranchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
+                this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
+            }
+        });
     }
 
     /**
@@ -106,5 +152,27 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof UploadFileComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+    }
+
+    /**
+     * File upload handler
+     *
+     * @param {File} file File uploaded
+     * @memberof UploadFileComponent
+     */
+    public handleFileUpload(file: File): void {
+        this.onFileUpload.emit({
+            file,
+            branchUniqueName: this.currentBranch.uniqueName
+        });
     }
 }

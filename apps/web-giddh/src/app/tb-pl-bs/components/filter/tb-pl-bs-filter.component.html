@@ -7,9 +7,31 @@
 
                 <form [formGroup]="filterForm" (submit)="filterData()" class="form-inline financial-selectYear"
                     name="fromToDateForm" novalidate>
-                    <!-- this code is commented for , need to remove this dropdown but for funcationality I am not removing this
-                        will remove it after universal datepicker added
-                    -->
+                    <div class="form-group mr-15 linked-entities" *ngIf="showLabels && currentCompanyBranches?.length > 2">
+                        <div class="form-group">
+                            <sh-select [options]="currentCompanyBranches" formControlName="branchUniqueName"
+                                [showClear]="false" [ItemHeight]="33" width="100%" (selected)="handleBranchChange($event)"
+                                [isFilterEnabled]="true" placeholder="Select Branch" [fixedValue]="currentBranch?.alias">
+                                <ng-template #optionTemplate let-option="option">
+                                    <ng-container>
+                                        <a href="javascript:void(0)" class="list-item d-flex">
+                                            <span class="entity-icon">
+                                                <i class="icon-branch-icon pull-right" *ngIf="option.parentBranch" tooltip="Branch"></i>
+                                                <i class="icon-company-HO pull-right" *ngIf="!option.parentBranch && !option.isCompany"
+                                                    tooltip="HO Branch"></i>
+                                            </span>
+                                            <span class="entity-details">
+                                                <div class="item giddh-limit single-line-clamp">{{ option.label || '-' }}</div>
+                                                <div class="item-unq giddh-limit single-line-clamp">
+                                                    {{ option.name || '-' }}
+                                                </div>
+                                            </span>
+                                        </a>
+                                    </ng-container>
+                                </ng-template>
+                            </sh-select>
+                        </div>
+                    </div>
                     <div class="form-group mr-15" *ngIf="showLabels">
                         <div class="form-group">
                             <sh-select [options]="dateOptions" (selected)="dateOptionIsSelected($event)"
