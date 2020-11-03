@@ -220,6 +220,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     };
     /** No results found label for dynamic search */
     public noResultsFoundLabel = SearchResultText.NewSearch;
+    /** This will hold if it's default load */
     public isDefaultLoad: boolean = true;
 
     constructor(
