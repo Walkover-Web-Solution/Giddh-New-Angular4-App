@@ -1443,7 +1443,10 @@ ul.sub-list {
 modal-container.modal.fade.show {
     opacity: 1;
 }
+.modal.fade.giddh-calendar.show + modal-container.modal.fade.show {
 
+    z-index: 999999 !important;
+}
 modal-container.modal {
     .warehouse-welcome-modal {
         margin: 0;
@@ -4411,8 +4414,9 @@ select.form-control {
 form label {
     color: $nero;
     font-weight: normal;
-    padding-bottom: 5px;
+    padding-bottom: 0;
     font-size: 14px;
+    line-height: 2.3;
 }
 
 label {
@@ -6698,7 +6702,7 @@ table td[class*=col-]:last-child {
 
 .form-header h3 {
     font-size: 18px;
-    font-family: "opensans-bold";
+    font-family: "opensans-semibold";
 }
 
 .form_body {
@@ -6732,6 +6736,7 @@ table td[class*=col-]:last-child {
 .universal-date {
     float: none !important;
     display: inline-block;
+    padding-top: 12px;
 }
 
 .divide-ico {
@@ -9291,7 +9296,7 @@ ngx-daterangepicker-material {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
     z-index: 1;
     width: 100% !important;
-    max-width: 540px !important;
+    max-width: 544px !important;
 }
 
 .edit-modal {
@@ -9686,6 +9691,10 @@ ul.dropdown-menu.action-dropdown {
 .recurring-form  .mat-form-field{
     max-width: 170px;
 }
+.collapse-pane  .mat-form-field{
+    min-width: 147px;
+    max-width: 147px;
+}
 .mat-form-field{
     min-width: 170px;
     width: 100%;
@@ -9739,6 +9748,14 @@ input.mat-input-element{
 }
 .mat-calendar-body-selected{
     background-color: $midnight-blue;
+}
+.giddh-limit {
+    &.single-line-clamp {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
 }
 /*material datepicker css end*/
 
@@ -10151,6 +10168,22 @@ input.mat-input-element{
     }
 
     @media (max-width: 767px) {
+        .settings-profile-tabs {
+            .tab-content{
+                padding-top: 45px;
+            }
+        }
+        .invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
+            .profile-tab-container {
+                .nav.nav-tabs {
+                    padding-left: 15px !important;
+                    left: 0;
+                }
+            }
+        }
+        .universal-date {
+            padding-top: 0;
+        }
         #inventory-sidebar{
             padding: 15px 0;
         }
@@ -10604,6 +10637,9 @@ input.mat-input-element{
     }
 
     @media (max-width: 375px) {
+        #rcw-p91-widget-chats{
+            min-width: 300px !important;
+        }
         .aside-pane-form .custom-tabs .nav.nav-tabs > li {
             padding-right: 20px;
         }
@@ -10813,6 +10849,11 @@ input.mat-input-element{
         .HW_frame_cont.HW_visible.HW_bottom{
             max-width: 300px;
         }
+        .edit-modal{
+            .modal-content{
+                max-width: 300px;
+                }
+            }
     }
 
     @media (min-width: 576px) {
@@ -10852,7 +10893,7 @@ input.mat-input-element{
     }
     @media(min-width: 480px) and (max-width: 667px) {
         .edit-modal {
-            margin: 20px auto;
+            margin: 0 auto;
             padding-top: 0;
 
             .edit-date-modal {

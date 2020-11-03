@@ -75,6 +75,7 @@ import { SettingsProfileService } from '../../services/settings.profile.service'
 import { CompanyService } from '../../services/companyService.service';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
+import { AccountsAction } from '../../actions/accounts.actions';
 
 @Component({
     selector: 'app-header',
@@ -290,6 +291,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private settingsProfileAction: SettingsProfileActions,
         private companyService: CompanyService,
         private settingsBranchAction: SettingsBranchActions,
+        private accountsAction: AccountsAction,
         public location: Location
     ) {
         // Reset old stored application date
@@ -474,7 +476,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentBranch = '';
                 }
             }
-        })
+        });
     }
 
     public ngOnInit() {
@@ -827,7 +829,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (this.isTodaysDateSelected) {
                     let today = cloneDeep([moment(), moment()]);
                     this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-                    this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    // this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.selectedDateRangeUi = 'Today';
+
                 } else {
                     this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                     this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -1124,6 +1128,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.select(c => c.session.lastState).pipe(take(1)).subscribe((s: string) => {
             if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1)) {
                 this.store.dispatch(this._generalActions.addAndManageClosed());
+                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedLedgerName));
             }
         });
 
@@ -1878,7 +1883,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             let today = cloneDeep([moment(), moment()]);
 
             this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
-            this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            // this.selectedDateRangeUi = moment(today[0]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.selectedDateRangeUi = 'Today';
+
             let dates = {
                 fromDate: null,
                 toDate: null,

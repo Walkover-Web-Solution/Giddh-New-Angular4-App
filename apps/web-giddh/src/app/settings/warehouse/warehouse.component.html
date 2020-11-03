@@ -9,7 +9,7 @@
                     </div>
                     <a class="cp mr-l1 clear-filter-btn" *ngIf="searchWarehouseQuery" href="javascript:;"
                         (click)="resetFilter()" tooltip="Reset Search">
-                        <i aria-hidden="true" class="icon-refrsh"></i> Clear Filter
+                        <i aria-hidden="true" class="icon-refresh"></i> Clear Filter
                     </a>
                 </div>
                 <button class="btn btn-sky-blue mr-0" [routerLink]="['/pages/settings/create-warehouse']">
@@ -128,6 +128,13 @@
         <pagination #warehousePagination *ngIf="warehouses?.length && paginationConfig?.totalItems > paginationLimit"
             [totalItems]="paginationConfig?.totalItems" [maxSize]="5" [itemsPerPage]="paginationConfig?.count"
             [boundaryLinks]="true" [rotate]="true" (pageChanged)="pageChanged($event)"></pagination>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="branch-vector">
+        <img src="../../../assets/images/warehouse-vector.svg" alt="branch-image">
     </div>
 </ng-container>
 

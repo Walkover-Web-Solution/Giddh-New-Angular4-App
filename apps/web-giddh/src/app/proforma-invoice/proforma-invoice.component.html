@@ -1420,10 +1420,9 @@
                                                 <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600 pd-l3 m-0">
                                                     <div class="row">
                                                     <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                                        <input type="text" #shippingDate="ngModel" [placeholder]="templatePlaceholder?.shippedDateLabel"
-                                                            bsDatepicker name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate"
-                                                            class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                            [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
+                                                            <giddh-datepicker #shippingDate="ngModel" [placeholder]="templatePlaceholder?.shippedDateLabel" name="shippingDate" [(ngModel)]="invFormData.templateDetails.other.shippingDate" [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
+                                                            </giddh-datepicker>
+
                                                         <p class="text-danger" *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                                             Invalid Date
                                                         </p>
@@ -2283,7 +2282,7 @@
                                     </div>
                                 </div>
 
-                                <div class="saveCard-data pointer">
+                                <div class="saveCard-data pointer" (click)="handleOutsideClick()">
                                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 </div>
 
@@ -2318,11 +2317,10 @@
                                     <div class="row">
 
                                         <div class="form-group col-12 col-sm-4 mb-0">
-                                            <input type="text" #shippingDate="ngModel"
-                                                [placeholder]="templatePlaceholder?.shippedDateLabel" bsDatepicker name="shippingDate"
-                                                [(ngModel)]="invFormData.templateDetails.other.shippingDate" class="form-control"
-                                                [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
+                                            <giddh-datepicker #shippingDate="ngModel" [placeholder]="templatePlaceholder?.shippedDateLabel" name="shippingDate"
+                                                [(ngModel)]="invFormData.templateDetails.other.shippingDate"
+                                                [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
+                                            </giddh-datepicker>
                                             <p class="text-danger"
                                                 *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                                 Invalid Date</p>

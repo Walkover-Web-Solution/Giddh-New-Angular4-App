@@ -1,5 +1,4 @@
 import { Observable, of, of as observableOf, ReplaySubject, combineLatest } from 'rxjs';
-
 import { debounceTime, distinctUntilChanged, takeUntil, auditTime } from 'rxjs/operators';
 import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
@@ -34,7 +33,6 @@ import {
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { AccountService } from '../../services/account.service';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
 import { ActivatedRoute } from '@angular/router';
@@ -65,9 +63,9 @@ const COMPARISON_FILTER = [
     styleUrls: ['./invoice.generate.component.scss'],
     templateUrl: './invoice.generate.component.html'
 })
+
 export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild(ElementViewContainerRef, {static: true}) public elementViewContainerRef: ElementViewContainerRef;
-    // @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
     @ViewChild(DaterangePickerComponent, {static: true}) public dp: DaterangePickerComponent;
     @ViewChild('particularSearch', {static: true}) public particularSearch: ElementRef;
     @ViewChild('accountUniqueNameSearch', {static: true}) public accountUniqueNameSearch: ElementRef;
@@ -185,16 +183,14 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public selectedAccountUniqueName: string = '';
      /** is get ledger data API call in progress */
     public getLedgerDataInProcess$: Observable<boolean> = of(false);
+    /** This will hold checked invoices */
+    public selectedInvoices: any[] = [];
 
     constructor(
-        private modalService: BsModalService,
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
-        private _accountService: AccountService,
-        private _activatedRoute: ActivatedRoute,
-        private invoiceReceiptActions: InvoiceReceiptActions,
         private _cdRef: ChangeDetectorRef,
-        private _generalService: GeneralService,
+        private generalService: GeneralService,
         private generalActions: GeneralActions,
         private _breakPointObservar: BreakpointObserver
     ) {
@@ -209,7 +205,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.getLedgerDataInProcess$ = this.store.pipe(select(state => state.invoice.isGetAllLedgerDataInProgress),takeUntil(this.destroyed$));
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
-        ]).subscribe(result => {
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileView = result.matches;
         });
     }
@@ -219,7 +215,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.flattenAccountListStream$.subscribe((data: IFlattenAccountsResultItem[]) => {
             let accounts: IOption[] = [];
             _.forEach(data, (item) => {
-                // o.uniqueName === 'sundrydebtors' || o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash' ||  o.uniqueName === 'revenuefromoperations' || o.uniqueName === 'otherincome'
                 if (_.find(item.parentGroups, (o) => _.indexOf(PARENT_GROUP_ARR, o.uniqueName) !== -1)) {
                     accounts.push({ label: item.name, value: item.uniqueName });
                 }
@@ -232,12 +227,15 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             .subscribe((res: GetAllLedgersForInvoiceResponse) => {
                 if (res && res.results) {
                     let response = _.cloneDeep(res);
+                    
                     response.results = _.orderBy(response.results, (item: ILedgersInvoiceResult) => {
                         return moment(item.entryDate, GIDDH_DATE_FORMAT);
                     }, 'desc');
+
                     if (response && response.results) {
                         response.results.map(item => {
                             item = this.addToolTiptext(item);
+                            item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item.uniqueName);
                         });
                     }
                     this.ledgersData = response;
@@ -385,7 +383,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.ledgerSearchRequest.page = event.page;
         this.selectedLedgerItems = [];
         this.selectedCountOfAccounts = [];
-        this.toggleAllItems(false);
         this.togglePrevGenBtn = false;
         this.getLedgersOfInvoice();
     }
@@ -399,6 +396,13 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         if (this.ledgersData && this.ledgersData.results && this.ledgersData.results.length) {
             this.ledgersData.results = _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
                 item.isSelected = this.allItemsSelected ? true : false;
+
+                if (this.allItemsSelected) {
+                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
+                } else {
+                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
+                }
+
                 return item;
             });
             this.insertItemsIntoArr();
@@ -408,12 +412,13 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public toggleItem(item: any, action: boolean) {
         item.isSelected = action;
         if (action) {
+            this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
             this.countAndToggleVar();
         } else {
+            this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
             this.allItemsSelected = false;
         }
         this.insertItemsIntoArr();
-
     }
 
     public previewInvoice() {
@@ -708,7 +713,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             this.isUniversalDateApplicable = true;
         }
         this.getLedgersOfInvoice();
-        this.toggleAllItems(false);
+        this.insertItemsIntoArr();
         this.detectChanges();
     }
 
