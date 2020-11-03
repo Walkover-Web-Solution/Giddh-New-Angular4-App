@@ -427,6 +427,7 @@ a[vr-item]:focus {
 .notification {
     padding: 0 !important;
     margin-right: 10px !important;
+    height: 34px;
     &.mr-0{
         margin-right: 0 !important;
     }
@@ -471,13 +472,13 @@ a[vr-item]:focus {
 }
 
 .calender-addone {
-    color: #fff;
+    color: $white;
     padding: 9px 8px 9px 10px;
     vertical-align: bottom;
     font-size: 14px;
     border-radius: 2px 0 0 2px;
     display: inline-flex;
-    top: 2px;
+    top: 3px;
 }
 
 .not-today{
@@ -527,7 +528,7 @@ span.icon-support.dropdown-toggle {
 }
 
 .not-today .date-range-picker {
-    height: 32px;
+    height: 34px;
 }
 .date-range-picker {
     max-width: 100%;
@@ -567,7 +568,7 @@ span.icon-support.dropdown-toggle {
 }
 
 .primary-header .right-details {
-    transform: translateY(13px);
+    transform: none;
 }
 
 .primary-header li.company-name {
@@ -806,7 +807,7 @@ ul.sub-list {
             top: 10px !important;
             transform: translateY(0px);
             bottom: auto;
-            border: 1px solid #d9d9d9;
+            border: 1px solid $gainsboro;
             box-shadow: 0 6px 12px rgba(0,0,0,.175);
             min-width: 270px;
             max-width: 270px;

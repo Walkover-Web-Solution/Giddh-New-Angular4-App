@@ -92,7 +92,7 @@
                         <h5 class="modal-inside-heading">Custom</h5>
                         <p>{{inlineStartDate.format("MMM DD YYYY")}} - {{inlineEndDate.format("MMM DD YYYY")}}</p>
                         <span (click)="modalRef.hide()">
-                            <span class="fa fa-search"></span>
+                            <span class="fa fa-calendar"></span>
                         </span>
                     </div>
                     <div class="start-end-date">
@@ -155,7 +155,7 @@
                         <button class="prev available" (click)="onScroll('top')"></button>
                         <!-- month name and month dropdown -->
                         <div class="month-dropdown">
-                            <span class="month-name" (click)="monthPickerClick()">
+                            <span class="month-name">
                                 <ng-container *ngIf="showDropdowns && calendarVariables.start.dropdowns">
                                     {{activeMonth ? this.locale.monthNames[activeMonth.calendar[1][1].month()] : ''}}
                                     {{ activeMonth ? activeMonth.calendar[1][1].format(" YYYY") : ''}}
@@ -177,7 +177,7 @@
                     <!-- table sticky days -->
                     <div>
                         <div class="calendar days" [ngClass]="{right: singleDatePicker, left: !singleDatePicker}">
-                            <div class="calendar-table" *ngIf="!showMonthPicker">
+                            <div class="calendar-table">
                                 <div class="table-condensed sticky-header">
                                     <div>
                                         <div class="d-flex">
@@ -206,7 +206,7 @@
                             <div class="calendar-table">
                                 <div class="table-condensed">
                                     <div class="d-flex justify-content-between" hidden>
-                                        <div class="th-div month drp-animate">
+                                        <div class="th-div month drp-animate" hidden>
                                             <ng-container *ngIf="showDropdowns && calendarMonth.start.dropdowns">
                                                 <div>
                                                     {{this.locale.monthNames[calendarMonth?.start?.calendar[1][1].month()]}}
@@ -312,7 +312,7 @@
                         <!-- start date calendar container -->
                         <!-- end date calendar container -->
                         <div class="calendar right"
-                            *ngIf="showCalInRanges && !singleDatePicker && !showMonthPicker && calendarMonth && calendarMonth.end">
+                            *ngIf="showCalInRanges && !singleDatePicker && calendarMonth && calendarMonth.end">
                             <div class="calendar-table">
                                 <div class="table-condensed">
                                     <div class="d-flex justify-content-between">

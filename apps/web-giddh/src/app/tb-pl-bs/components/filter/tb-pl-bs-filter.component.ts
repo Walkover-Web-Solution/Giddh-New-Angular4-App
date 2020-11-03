@@ -1,4 +1,4 @@
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
@@ -14,6 +14,9 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { GeneralService } from '../../../services/general.service';
+import { OrganizationType } from '../../../models/user-login-state';
 
 @Component({
     selector: 'tb-pl-bs-filter',  // <home></home>
@@ -90,6 +93,14 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     public dateOptions: IOption[] = [{label: 'Date Range', value: '1'}, {label: 'Financial Year', value: '0'}];
     public imgPath: string;
     public universalDateICurrent: boolean = false;
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any;
+    /** Stores the current company */
+    public activeCompany: any;
 
     @Input() public showLoader: boolean = true;
 
@@ -105,12 +116,15 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     constructor(private fb: FormBuilder,
                 private cd: ChangeDetectorRef,
                 private store: Store<AppState>,
-                private _settingsTagActions: SettingsTagActions) {
+                private _settingsTagActions: SettingsTagActions,
+                private settingsBranchAction: SettingsBranchActions,
+                private generalService: GeneralService) {
         this.filterForm = this.fb.group({
             from: [''],
             to: [''],
             fy: [''],
             selectedDateOption: ['1'],
+            branchUniqueName: [],
             selectedFinancialYearOption: [''],
             refresh: [false],
             tagName: ['']
@@ -220,7 +234,41 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                 this.filterData();
             }
         });
-
+        this.store.pipe(
+            select(state => state.session.companies), take(1)
+        ).subscribe(companies => {
+            companies = companies || [];
+            this.activeCompany = companies.find(company => company.uniqueName === this.generalService.companyUniqueName);
+        });
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    isCompany: true
+                });
+                const hoBranch = response.find(branch => !branch.parentBranch);
+                const currentBranchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
+                this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                this.filterForm.get('branchUniqueName').setValue(this.currentBranch.uniqueName);
+                this.filterForm.updateValueAndValidity();
+                this.cd.detectChanges();
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({from: '', to: ''}));
+                }
+            }
+        });
     }
 
     public setCurrentFY() {
@@ -356,6 +404,16 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
                 });
             }
         }
+    }
+
+    /**
+     * Branch change handler
+     *
+     * @memberof TbPlBsFilterComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        this.onPropertyChanged.emit(this.filterForm.value);
     }
 
     /**

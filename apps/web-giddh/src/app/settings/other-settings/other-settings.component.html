@@ -28,18 +28,18 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label>Digits After Decimal</label>
-                                    <sh-select [options]="decimalDigitSource " placeholder="Select type"
+                                    <sh-select [options]="decimalDigitSource" placeholder="Select type"
                                         (selected)="profileUpdated('balanceDecimalPlaces')" [isFilterEnabled]="true "
-                                        name="balanceDecimalPlaces " [(ngModel)]="profileData.balanceDecimalPlaces">
+                                        name="balanceDecimalPlaces" [(ngModel)]="profileData.balanceDecimalPlaces">
                                     </sh-select>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
                                     <label>Number System</label>
-                                    <sh-select [options]="numberSystemSource " placeholder="Select type"
+                                    <sh-select [options]="numberSystemSource" placeholder="Select type"
                                         (selected)="profileUpdated('balanceDisplayFormat')" [isFilterEnabled]="true "
-                                        name="balanceDisplayFormat " [(ngModel)]="profileData.balanceDisplayFormat">
+                                        name="balanceDisplayFormat" [(ngModel)]="profileData.balanceDisplayFormat">
                                     </sh-select>
                                 </div>
                             </div>

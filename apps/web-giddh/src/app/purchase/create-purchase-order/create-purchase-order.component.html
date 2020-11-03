@@ -335,7 +335,7 @@
                         </div>
                         <!-- endregion -->
                     </div>
-                    <div class="row mb-1 height-row">
+                    <div class="row mb-5 height-row">
                         <!-- region customer name -->
                         <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                             <div>
@@ -1471,7 +1471,7 @@
                         </div>
                     </div>
 
-                    <div class="save-card-data pointer">
+                    <div class="save-card-data pointer" (click)="handleOutsideClick()">
                         <i class="fa fa-floppy-o" aria-hidden="true"></i>
                     </div>
                     <div class="del-card pointer" (click)="removeTransaction(entryIdx)">

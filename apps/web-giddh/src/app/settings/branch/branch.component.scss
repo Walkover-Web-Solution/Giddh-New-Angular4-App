@@ -138,7 +138,7 @@
     background: $white !important;
 }
 
-.wd-900 {
+.modal-width {
     width: 900px !important;
 }
 
@@ -295,7 +295,7 @@
 }
 
 @media (max-width: 375px) {
-    .grey-clr button.btn.btn-default {
+    .grey-color button.btn.btn-default {
         margin-left: 0;
         margin-top: 5px;
     }
@@ -366,5 +366,12 @@
 @media (min-width: 575px) and (max-width: 991px) {
     .select-branch {
         margin-top: -35px;
+    }
+}
+
+
+@media (max-width: 950px){
+    .modal-width {
+        width: auto !important;
     }
 }
