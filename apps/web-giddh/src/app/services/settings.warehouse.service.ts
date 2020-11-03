@@ -110,7 +110,15 @@ export class SettingsWarehouseService {
             }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error, params)));
     }
 
-    public getWarehouseDetails(companyUniqueName: string, warehouseUniqueName: string) {
+    /**
+     * Fetches the warehouse details
+     *
+     * @param {string} warehouseUniqueName Unique name of warehosue
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operations
+     * @memberof SettingsWarehouseService
+     */
+    public getWarehouseDetails(warehouseUniqueName: string): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + WAREHOUSE_API.GET_WAREHOUSE_DETAILS
             .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             .replace(':warehouseUniqueName', encodeURIComponent(warehouseUniqueName))).pipe(map((res) => {

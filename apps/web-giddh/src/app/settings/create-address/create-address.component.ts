@@ -143,7 +143,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         if (this.addressConfiguration.tax && this.addressConfiguration.tax.name) {
             const taxField = this.addressForm.get('taxNumber');
             taxField.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
-                if (taxField.valid) {
+                if (taxField.valid && taxField.value) {
                     this.addressForm.get('address').setValidators([Validators.required]);
                 } else {
                     this.addressForm.get('address').setValidators(null);

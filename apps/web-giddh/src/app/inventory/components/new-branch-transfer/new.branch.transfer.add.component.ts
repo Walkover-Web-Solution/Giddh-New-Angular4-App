@@ -66,15 +66,15 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('transMode', {static: true}) public transMode: ShSelectComponent;
     @ViewChild('vehicleNumber', {static: true}) public vehicleNumber;
     @ViewChild('transCompany', {static: true}) public transCompany: ShSelectComponent;
-    @ViewChild('destinationWarehouseList', {static: true}) public destinationWarehouseList: ShSelectComponent;
-    @ViewChild('sourceWarehouses', {static: true}) public sourceWarehouseList: ShSelectComponent;
-    @ViewChild('sourceQuantity', {static: true}) public sourceQuantity;
+    @ViewChild('destinationWarehouseList', {static: false}) public destinationWarehouseList: ShSelectComponent;
+    @ViewChild('sourceWarehouses', {static: false}) public sourceWarehouseList: ShSelectComponent;
+    @ViewChild('sourceQuantity', {static: false}) public sourceQuantity;
     @ViewChild('defaultSource', {static: false}) public defaultSource: ShSelectComponent;
-    @ViewChild('defaultProduct', {static: true}) public defaultProduct: ShSelectComponent;
+    @ViewChild('defaultProduct', {static: false}) public defaultProduct: ShSelectComponent;
     @ViewChild('destinationName', {static: false}) public destinationName: ShSelectComponent;
-    @ViewChild('destinationQuantity', {static: true}) public destinationQuantity;
-    @ViewChild('senderGstNumberField', {static: true}) public senderGstNumberField: HTMLInputElement;
-    @ViewChild('receiverGstNumberField', {static: true}) public receiverGstNumberField: HTMLInputElement;
+    @ViewChild('destinationQuantity', {static: false}) public destinationQuantity;
+    @ViewChild('senderGstNumberField', {static: false}) public senderGstNumberField: HTMLInputElement;
+    @ViewChild('receiverGstNumberField', {static: false}) public receiverGstNumberField: HTMLInputElement;
 
     public hsnPopupShow: boolean = false;
     public skuNumberPopupShow: boolean = false;
@@ -545,7 +545,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public getWarehouseDetails(type, index): void {
         if (this.branchTransfer[type][index].warehouse.uniqueName !== null) {
-            this._warehouseService.getWarehouseDetails(this.branchTransfer[type][index].uniqueName, this.branchTransfer[type][index].warehouse.uniqueName).subscribe((res) => {
+            this._warehouseService.getWarehouseDetails(this.branchTransfer[type][index].warehouse.uniqueName).subscribe((res) => {
                 if (res && res.body) {
                     this.branchTransfer[type][index].warehouse.name = res.body.name;
                     this.branchTransfer[type][index].warehouse.taxNumber = res.body.taxNumber;

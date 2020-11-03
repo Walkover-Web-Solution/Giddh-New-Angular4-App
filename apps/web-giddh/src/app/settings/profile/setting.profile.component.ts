@@ -944,6 +944,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public updateAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
+        addressDetails.formValue.linkedEntity = addressDetails.addressDetails.linkedEntity || [];
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
         const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,
