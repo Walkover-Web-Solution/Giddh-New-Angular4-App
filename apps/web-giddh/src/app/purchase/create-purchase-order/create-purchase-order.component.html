@@ -861,11 +861,9 @@
                                 <div [collapse]="isOthrDtlCollapsed" class="clearfix max-600 pdL3 mr0">
                                     <div class="row">
                                         <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                            <input type="text" #shippingDate="ngModel" placeholder="Ship Date"
-                                                bsDatepicker name="shippingDate"
-                                                [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate"
-                                                class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
+                                                <giddh-datepicker #shippingDate="ngModel" placeholder="Ship Date" name="shippingDate"
+                                                    [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate" [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
+                                                </giddh-datepicker>
                                             <p class="text-danger"
                                                 *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                                 Invalid Date
@@ -1504,7 +1502,8 @@
                         <div class="row">
 
                             <div class="form-group col-xs-4">
-                                <input type="text" #shippingDate="ngModel" placeholder="Ship Date" bsDatepicker name="shippingDate" [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate" class="form-control" [bsConfig]="{ dateInputFormat: giddhDateFormat }" [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)" />
+                                <giddh-datepicker #shippingDate="ngModel" placeholder="Ship Date" name="shippingDate" [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate" [class.invalid-inp]="shippingDate.errors && (shippingDate.dirty ||shippingDate.touched)">
+                                </giddh-datepicker>
                                 <p class="text-danger"
                                     *ngIf="shippingDate.errors && (shippingDate.dirty || shippingDate.touched)">
                                     Invalid Date</p>
