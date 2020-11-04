@@ -4439,8 +4439,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             salesEntryClass.uniqueName = e.uniqueName;
             salesEntryClass.description = e.description;
             salesEntryClass.date = e.entryDate;
+            let calculationMethod = (e.otherTaxModal && e.otherTaxModal.tcsCalculationMethod) ? e.otherTaxModal.tcsCalculationMethod : "";
             e.taxList.forEach(t => {
-                salesEntryClass.taxes.push({uniqueName: t});
+                salesEntryClass.taxes.push({uniqueName: t, calculationMethod: calculationMethod});
             });
             if(this.isPurchaseInvoice) {
                 salesEntryClass.purchaseOrderItemMapping = e.purchaseOrderItemMapping;
