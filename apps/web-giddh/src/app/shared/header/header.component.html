@@ -170,7 +170,7 @@
                                                 <i class="fa fa-apple"></i> IOS</a>
                                         </li>
                                         <li>
-                                            <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{macApkVersion}}.dmg" target="_blank" title="macOS app">
+                                            <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{macAppVersion}}.dmg" target="_blank" title="macOS app">
                                                 <i class="fa fa-apple"></i> MacOS</a>
                                         </li>
                                         <li>
@@ -257,7 +257,6 @@
 <div class="nav-left-bar" [ngClass]="{'open': sideMenu.isopen, 'unvisible': companyList.length===0 }" (clickOutside)="closeSidebarMobile($event)">
 
     <div class="menu-wrapper">
-
         <ul class="main-company-name">
             <li *ngIf="isMobileSite" [autoClose]="false" class="company-name pos-rel hidden-lg hidden-md hidden-sm"
                 dropdown #dropdown="bs-dropdown" [attachOutsideOnClick]="true" (clickOutside)="dropdown.isOpen = false">
@@ -465,8 +464,7 @@
                             <!-- <img src="{{imgPath}}notification.svg" class="mr-15"> -->
                             <i class="icon-notification mr-15"></i>
                         </span>
-                        <button id="add-manage" *ngIf="!isMobileSite" type="button" class="btn btn-gray btn-sm d-inline-flex mr-15 "
-                            [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
+                        <button id="add-manage" *ngIf="!isMobileSite" type="button" class="btn btn-gray btn-sm d-inline-flex mr-15 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
                             <i class="icon-plus"></i>
                         </button>
                         <div class="btn-group cp d-inline-flex help-setting-icons" dropdown>
@@ -759,9 +757,9 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
-                [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition" [updatePosition]="false"></app-datepicker-wrapper>
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition" [updatePosition]="false"></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>
