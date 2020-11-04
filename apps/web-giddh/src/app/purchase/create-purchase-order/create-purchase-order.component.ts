@@ -1828,7 +1828,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
                         taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                     } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                         let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                        taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+                        taxableValue = (rawAmount + entry.taxSum);
                     }
                     entry.otherTaxType = 'tcs';
                 } else {

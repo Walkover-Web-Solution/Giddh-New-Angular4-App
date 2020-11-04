@@ -4313,7 +4313,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                     } else if (entry.otherTaxModal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                         let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
-                        taxableValue = (rawAmount + ((rawAmount * entry.taxSum) / 100));
+                        taxableValue = (rawAmount + entry.taxSum);
                     }
 
                     entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
