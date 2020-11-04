@@ -376,7 +376,7 @@ export class AuthenticationService {
      * @returns {*}
      * @memberof AuthenticationService
      */
-    public GetElectronMacAppVersion(): any {
+    public getElectronMacAppVersion(): any {
         let args: any = { headers: {} };
         args.headers['cache-control'] = 'no-cache';
         args.headers['Content-Type'] = 'application/xml';

@@ -1811,7 +1811,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     private getElectronMacAppVersion(): void {
-        this.authService.GetElectronMacAppVersion().subscribe((res: string) => {
+        this.authService.getElectronMacAppVersion().subscribe((res: string) => {
             if (res && typeof res === 'string') {
                 let version = res.split('files')[0];
                 let versNum = version.split(' ')[1];
