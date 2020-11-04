@@ -31,18 +31,15 @@
 
         <tab heading="Pending" id="tab1" (selectTab)="tabChanged('pending', $event);">
             <ng-container *ngIf="currentSelectedTab === 'pending'">
-                <app-pending-list *ngIf=" !isSelectedRow " [isClearFilter]='isClearFilter'
-                    (isFilteredSelected)=isFilteredSelected($event); (selectedRowToggle)="selectedRowToggle($event); "
-                    (selectedRowInput)=selectedRowInput($event);></app-pending-list>
-                <div class="main-edit-expense " *ngIf="isSelectedRow ">
+                <app-pending-list #pendingListComponent *ngIf="!isSelectedRow" [isClearFilter]="isClearFilter"
+                    (isFilteredSelected)="isFilteredSelected($event);" (selectedRowToggle)="selectedRowToggle($event);"
+                    (selectedRowInput)="selectedRowInput($event);"></app-pending-list>
+                <div class="main-edit-expense" *ngIf="isSelectedRow">
                     <div class="left-expense">
-                        <app-filter-list [selectedRowItem]='selectedRowItem'
-                            (selectedDetailedRowInput)=selectedDetailedRowInput($event);></app-filter-list>
+                        <app-filter-list [selectedRowItem]="selectedRowItem" (selectedDetailedRowInput)="selectedDetailedRowInput($event);"></app-filter-list>
                     </div>
                     <div class="main-expense-details ">
-                        <app-expense-details [selectedRowItem]='selectedRowItem'
-                            (toggleDetailsMode)="closeDetailedMode($event); "
-                            (refreshPendingItem)="refreshPendingItem($event); "></app-expense-details>
+                        <app-expense-details [selectedRowItem]="selectedRowItem" (toggleDetailsMode)="closeDetailedMode($event);" (refreshPendingItem)="refreshPendingItem($event);"></app-expense-details>
                     </div>
                 </div>
             </ng-container>
@@ -50,8 +47,7 @@
 
         <tab heading="Rejected" (selectTab)="tabChanged('rejected', $event);">
             <ng-container *ngIf="currentSelectedTab === 'rejected'">
-                <app-rejected-list (isFilteredSelected)=isFilteredSelected($event); [isClearFilter]='isClearFilter'>
-                </app-rejected-list>
+                <app-rejected-list #rejectedListComponent (isFilteredSelected)="isFilteredSelected($event);" [isClearFilter]="isClearFilter"></app-rejected-list>
             </ng-container>
         </tab>
 
@@ -91,8 +87,8 @@
             <div class="col-sm-5 ">
             </div>
             <div class="col-sm-7 ">
-                <button type="button " class="btn btn-success " (click)="confirm() ">Add</button>
-                <button type="button " class="btn btn-danger " (click)="decline() ">Cancel</button>
+                <!-- <button type="button " class="btn btn-success " (click)="confirm() ">Add</button>
+                <button type="button " class="btn btn-danger " (click)="decline() ">Cancel</button> -->
             </div>
         </div>
 

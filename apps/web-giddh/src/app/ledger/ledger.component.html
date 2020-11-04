@@ -54,7 +54,7 @@
                         <a class="cp mr-l1 clear-filter-btn"
                             *ngIf="(searchText || isAdvanceSearchImplemented) && isMobileScreen" href="javascript:;"
                             (click)="resetAdvanceSearch()" tooltip="Reset Advance Search">
-                            <i aria-hidden="true" class="icon-refrsh"></i> Clear Filter
+                            <i aria-hidden="true" class="icon-refresh"></i> Clear Filter
                         </a>
                     </div>
 
@@ -77,7 +77,7 @@
                     </span>
                     <a class="cp mr-l1 clear-filter-btn" id="clear-filter" *ngIf="isAdvanceSearchImplemented && !isMobileScreen"
                         href="javascript:;" (click)="resetAdvanceSearch()" tooltip="Reset Advance Search">
-                        <i aria-hidden="true" class="icon-refrsh"></i> Clear Filter
+                        <i aria-hidden="true" class="icon-refresh"></i> Clear Filter
                     </a>
                     <div class="d-flex xs-mb-1" *ngIf="checkedTrxWhileHovering.length > 0 && !isMobileScreen">
 
@@ -145,7 +145,7 @@
                             [tooltip]="'Share Ledger'" [placement]="'top'" (click)="showShareLedgerModal()">
                             <i class="fa icon-ledger-path" style="line-height: 0px"></i>
                         </a>
-                        <a class="icomoon_ico d-flex align-items-center" id="export-ledger" href="javascript:void(0)" title=""
+                        <a class="icomoon_ico d-flex align-items-center mr-0" id="export-ledger" href="javascript:void(0)" title=""
                             [tooltip]="'Export'" [placement]="'top'" (click)="showExportLedgerModal()">
                             <i class="icon-ledger-union-5" style="line-height: 0px"></i>
                         </a>

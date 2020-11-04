@@ -168,11 +168,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.getCountry();
         this.getCurrency();
 
-        currencyNumberSystems.map(c => {
-            this.numberSystemSource.push({ value: c.value, label: `${c.name}`, additional: c });
+        currencyNumberSystems.map(currency => {
+            this.numberSystemSource.push({ value: currency.value, label: `${currency.name}`, additional: currency });
         });
-        digitAfterDecimal.map(d => {
-            this.decimalDigitSource.push({ value: d.value, label: d.name });
+        digitAfterDecimal.map(decimal => {
+            this.decimalDigitSource.push({ value: decimal.value, label: decimal.name });
         });
         this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress),takeUntil(this.destroyed$));
 
@@ -240,11 +240,17 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public getInitialProfileData() {
-        this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), take(1)).subscribe((organization: Organization) => {
-            if (organization.type === OrganizationType.Branch) {
-                this.store.dispatch(this.settingsProfileActions.getBranchInfo());
-                this.currentOrganizationType = OrganizationType.Branch;
-            } else if (organization.type === OrganizationType.Company) {
+        this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
+            if (organization) {
+                if (organization.type === OrganizationType.Branch) {
+                    this.store.dispatch(this.settingsProfileActions.getBranchInfo());
+                    this.currentOrganizationType = OrganizationType.Branch;
+                } else if (organization.type === OrganizationType.Company) {
+                    this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+                    this.currentOrganizationType = OrganizationType.Company;
+                }
+            } else {
+                // Treat it as company
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                 this.currentOrganizationType = OrganizationType.Company;
             }
@@ -938,6 +944,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public updateAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
+        addressDetails.formValue.linkedEntity = addressDetails.addressDetails.linkedEntity || [];
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
         const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,
@@ -1066,6 +1073,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 name: profileObj.name,
                 companyName: profileObj.name,
                 headQuarterAlias: profileObj.headQuarterAlias,
+                nameAlias: profileObj.nameAlias,
                 uniqueName: profileObj.uniqueName,
                 country: {
                     countryName: profileObj.countryV2 ? profileObj.countryV2.countryName : '',

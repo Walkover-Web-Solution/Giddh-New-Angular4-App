@@ -342,7 +342,8 @@
                                         <input class="form-control" type="text" placeholder="Secret key" required autocomplete="off" formControlName="secretKey" [disabled]="i !== amazonEditItemIdx" />
                                     </div>
                                     <div class="pull-left edit-save-button">
-                                        <div class="button-wrapper" [ngClass]="{'mr-t3': f}">
+                                        <label class="d-flex">&nbsp;</label>
+                                        <div class="button-wrapper">
                                             <button type="button" class="btn btn-default" (click)="saveAmazonSeller(item)" *ngIf="l"><i
                                                     class="fa fa-check"></i></button>
                                             <button type="button" class="btn btn-default" (click)="updateAmazonSeller(item)" *ngIf="i === amazonEditItemIdx && !l"><i

@@ -21,7 +21,7 @@
                 <div class="setting-container" *ngIf="activeTab === 'profile'">
                     <setting-profile #profileComponent></setting-profile>
                     <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)" class="auto_save" style="float: right;">
-                        <i class="icon-refrsh mr-r font-14 rotate"></i>Saving...
+                        <i class="icon-refresh mr-r font-14 rotate"></i>Saving...
                     </span>
                     <span *ngIf="isCompanyProfileUpdated && !(isUpdateCompanyInProgress$ | async)" class="auto_save" style="float: right;">
                         <i class="glyphicon glyphicon-check mr-r font-14"></i>Saved

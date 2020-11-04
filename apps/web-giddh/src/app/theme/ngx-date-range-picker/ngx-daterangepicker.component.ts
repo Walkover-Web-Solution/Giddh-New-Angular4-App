@@ -192,7 +192,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     @Output() rangeClicked: EventEmitter<DateRangeClicked>;
     @Output() datesUpdated: EventEmitter<DateRangeClicked>;
     @ViewChild('pickerContainer', {static: true}) pickerContainer: ElementRef;
-    showMonthPicker = false;
     public isMobileScreen: boolean = false;
     public dropdownShow: boolean = false;
     public rangeDropdownShow: number = -1;
@@ -241,6 +240,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public lastActiveMonthSide: string = '';
     /* This will hold if initially datepicker has rendered */
     public initialCalendarRender: boolean = true;
+    /** This will hold how many days user can add in upto today field */
+    public noOfDaysAllowed: number = 0;
 
     constructor(private _ref: ChangeDetectorRef, private modalService: BsModalService, private _localeService: NgxDaterangepickerLocaleService, private _breakPointObservar: BreakpointObserver, public settingsFinancialYearService: SettingsFinancialYearService, private router: Router, private store: Store<AppState>, private settingsFinancialYearActions: SettingsFinancialYearActions) {
         this.choosedDate = new EventEmitter();
@@ -256,6 +257,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     this.minDate = moment(moment(response.startDate, GIDDH_DATE_FORMAT).toDate());
                     this.maxDate = moment(moment(response.endDate, GIDDH_DATE_FORMAT).toDate());
                     this.financialYearUpdated = true;
+
+                    this.noOfDaysAllowed = moment().diff(this.minDate, 'days') + 1;
                 }
             }
         });
@@ -401,6 +404,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.initCalendar();
 
         document.querySelector(".giddh-datepicker-modal").parentElement.classList.add("giddh-calendar");
+
+
     }
 
     /**
@@ -453,7 +458,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.viewOnlyEndDate = this.inlineEndDate.format(GIDDH_DATE_FORMAT);
 
         this.modalRef = this.modalService.show(template,
-            Object.assign({}, { class: 'edit-modal modal-small' })
+            Object.assign({}, { class: 'edit-modal modal-small' }),
+
         );
     }
 
@@ -797,7 +803,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if (typeof endDate === 'object') {
             this.endDate = moment(endDate);
         }
-        
+
         if (!this.timePicker) {
             this.endDate = this.endDate.add(1, 'd').startOf('day').subtract(1, 'second');
         }
@@ -833,10 +839,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
         this.updateMonthsInView();
         this.updateCalendars();
-    }
-
-    public monthPickerClick(): void {
-        this.showMonthPicker = !this.showMonthPicker;
     }
 
     public updateMonthsInView(): void {
@@ -1195,7 +1197,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.endCalendar.month = moment({ y: year, M: month, d: 1 }).add(1, 'month');
         }
         this.updateCalendars();
-        this.showMonthPicker = false;
     }
 
     public mouseUp(e: MouseWheelEvent): void {
@@ -1224,9 +1225,16 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             return;
         }
         event.target.value = event.target.value.replace(/[^0-9]/g, '');
+        if(event.target.value > this.noOfDaysAllowed) {
+            event.target.value = this.noOfDaysAllowed;
+        }
     }
 
     public uptoToday(e: Event, days: number): void {
+        if(days > this.noOfDaysAllowed) {
+            days = this.noOfDaysAllowed;
+        }
+
         const dates = [moment().subtract(days ? (days - 1) : days, 'days'), moment()];
         this.startDate = dates[0].clone();
         this.endDate = dates[1].clone();
@@ -2028,7 +2036,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public applyInlineDates(): void {
-        if (this.inlineStartDate.isBefore(this.inlineEndDate, 'day')) {
+        if (this.inlineStartDate.isSameOrBefore(this.inlineEndDate, 'day')) {
             if (!this.invalidInlineStartDate && !this.invalidInlineEndDate) {
                 this.startDate = this.inlineStartDate;
                 this.endDate = this.inlineEndDate;

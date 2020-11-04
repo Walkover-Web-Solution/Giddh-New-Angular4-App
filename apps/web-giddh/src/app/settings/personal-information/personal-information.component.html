@@ -75,8 +75,14 @@
             </div>
             <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
                 <div class="form-group">
+                    <label>Company Alias</label>
+                    <input name="companyAlias" [(ngModel)]="profileData.nameAlias" (ngModelChange)="profileUpdated('nameAlias')"  type="text" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
+                <div class="form-group">
                     <label>Headquarter Alias</label>
-                    <input [(ngModel)]="profileData.headQuarterAlias" (ngModelChange)="profileUpdated('headQuarterAlias')"  type="text" class="form-control">
+                    <input name="headQuarterAlias" [(ngModel)]="profileData.headQuarterAlias" (ngModelChange)="profileUpdated('headQuarterAlias')"  type="text" class="form-control">
                 </div>
             </div>
         </div>
@@ -84,7 +90,7 @@
             <div class="col-md-4 col-lg-4 col-xl-3 mt-3 ">
                 <div class="form-group">
                     <label>Alias</label>
-                    <input [(ngModel)]="profileData.alias" (ngModelChange)="profileUpdated('alias')"  type="text" class="form-control">
+                    <input name="alias" [(ngModel)]="profileData.alias" (ngModelChange)="profileUpdated('alias')"  type="text" class="form-control">
                 </div>
             </div>
         </div>

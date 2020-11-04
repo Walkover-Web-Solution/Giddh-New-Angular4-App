@@ -73,6 +73,9 @@
     .all-branch-list{
         overflow-y: auto;
         max-height: calc(100vh - 245px);
+        .dropdown-item {
+            align-items: center;
+        }
         ul{
             list-style: none;
             li{

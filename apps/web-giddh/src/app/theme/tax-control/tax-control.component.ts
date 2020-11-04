@@ -39,6 +39,7 @@ export class TaxControlData {
     public isChecked?: boolean;
     public isDisabled?: boolean;
     public type?: string;
+    public calculationMethod?: string;
 }
 
 @Component({

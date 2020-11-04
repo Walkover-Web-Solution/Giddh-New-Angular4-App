@@ -420,6 +420,7 @@ a[vr-item]:focus {
 .notification {
     padding: 0 !important;
     margin-right: 10px !important;
+    height: 34px;
     &.mr-0{
         margin-right: 0 !important;
     }
@@ -464,13 +465,13 @@ a[vr-item]:focus {
 }
 
 .calender-addone {
-    color: #fff;
+    color: $white;
     padding: 9px 8px 9px 10px;
     vertical-align: bottom;
     font-size: 14px;
     border-radius: 2px 0 0 2px;
     display: inline-flex;
-    top: 2px;
+    top: 3px;
 }
 
 .not-today{
@@ -520,7 +521,7 @@ span.icon-support.dropdown-toggle {
 }
 
 .not-today .date-range-picker {
-    height: 32px;
+    height: 34px;
 }
 .date-range-picker {
     max-width: 100%;
@@ -560,7 +561,7 @@ span.icon-support.dropdown-toggle {
 }
 
 .primary-header .right-details {
-    transform: translateY(13px);
+    transform: none;
 }
 
 .primary-header li.company-name {
@@ -632,8 +633,8 @@ ul.sub-list {
 }
 
 .company-name .text-ellipsis {
-    font-size: 14px;
-    font-family: 'opensans-semibold';
+    font-size: 13px;
+    font-family: 'opensans-regular';
 }
 
 .overlay-cal {
@@ -677,8 +678,8 @@ ul.sub-list {
 .help-setting-icons {
     color: $white;
     i{
-        font-size: 18px;
-        line-height: 2;
+        font-size:20px;
+        line-height: 1.3;
     }
 }
 .help-support-aside {
@@ -799,7 +800,7 @@ ul.sub-list {
             top: 10px !important;
             transform: translateY(0px);
             bottom: auto;
-            border: 1px solid #d9d9d9;
+            border: 1px solid $gainsboro;
             box-shadow: 0 6px 12px rgba(0,0,0,.175);
             min-width: 270px;
             max-width: 270px;
@@ -839,7 +840,8 @@ ul.sub-list {
 }
 .not-today{
     .today-date.input-date{
-    width: 134px;
+        width: 100px;
+        padding-left: 5px !important;
         input{
             text-align: left !important;
             padding-left: 30px !important;
@@ -891,24 +893,37 @@ ul.sub-list {
     }
 }
 @media (max-width: 767px) {
+    .hide-today{
+        display: none !important;
+    }
+    .help-setting-icons{
+        i{
+            font-size: 22px;
+            line-height: 1.4;
+        }
+    }
     .notification {
         margin-right: 0 !important;
         i{
             vertical-align: bottom;
-            display: inline-block;
+            display: flex;
             position: relative;
             left: 0;
             padding: 0 20px;
             color: $white;
             margin-right: 0;
+            height: 34px;
+            align-items: center;
             font-size: 22px;
         }
     }
-    .universal-date .btn-link {
-        border-bottom: none;
-        text-align: left;
-        height: 24px !important;
-        display: none !important;
+    .universal-date {
+        display: flex;
+        .btn-link {
+            border-bottom: none;
+            text-align: left;
+            height: 24px !important;
+        }
     }
     .close-2 {
         top: 65px;
@@ -927,6 +942,9 @@ ul.sub-list {
     }
     .upper-layer-header {
         padding-top: 5px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
         .navbar-nav {
             margin-bottom: 5px;
             display: flex;
@@ -1036,9 +1054,9 @@ ul.sub-list {
         }
     }
     .setting-menu-icon {
-        padding: 4px 10px 4px 4px;
+        padding: 4px 8px 4px 2px;
         display: none;
-        width: 32px;
+        width: 27px;
         text-align: center;
     }
     .mobile-back-btn {

@@ -20,13 +20,11 @@
             </div>
         </div>
 
-
         <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline mb-15">
             <div class="d-flex w-100 flex-none">
                 <div class="d-flex form-group mobile-width-100 flex-none">
                     <div class="form-group date-advance-search pending-advance-search" style="flex: 1 1 auto;">
                         <div class="input-group" id="dp-parent" style="margin-right:8px; margin-bottom:0;">
-                            <!-- <span class="icon-calender"></span> -->
                             <span class="input-wrapper">
                                 <input type="text" name="dateRangeGenerate" id="dateRangeGenerate" daterangepicker
                                     [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)"
@@ -36,9 +34,7 @@
                                 *ngIf="!isUniversalDateApplicable && isMobileView" (click)="resetDateSearch()">
                                 <span class="icon-cross"></span> Clear Filter
                             </button>
-
                         </div>
-
                         <span>
                             <button [hidden]="selectedLedgerItems.length === 0" class="btn btn-primary"
                                 (click)="generateBulkInvoice(false)">
@@ -54,20 +50,7 @@
                             </button>
                         </span>
                     </div>
-
-                    <!-- <div class="form-group">
-  <button class="btn btn-sky-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'sales'">+ New Invoice
-  </button>
-  <button class="btn btn-sky-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'debit note'">+ New DR.
-    Note
-  </button>
-  <button class="btn btn-sky-blue" style="margin: 0 !important;" *ngIf="selectedVoucher === 'credit note'">+ New CR.
-    Note
-  </button>
-</div> -->
-
                 </div>
-
                 <div class="align-items-center d-flex justify-content-center filter-width">
                     <div class="clear-filter"
                     [ngClass]="{'width-auto' : selectedLedgerItems.length === 0}"
@@ -103,15 +86,8 @@
                     <th width="12%">
                         <div class="d-flex">
                             <div class="flex-fill"> Date</div>
-                            <!-- <div class="icon-pointer">
-
-<div class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"></div>
-<div class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"></div>
-</div> -->
                         </div>
-
                     </th>
-
                     <th width="20%" class="td-search-box" #searchParticularContainer
                         (clickOutside)="clickedOutside($event, searchParticularContainer, 'particular')">
 
