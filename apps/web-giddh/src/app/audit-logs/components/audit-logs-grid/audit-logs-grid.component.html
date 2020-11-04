@@ -8,34 +8,34 @@
     <div class="mr-t border-top-btm clearfix">
         <div>
             <label class="pull-left">Entity:</label>
-            <p class="pull-left mrL">{{log.entityType}}</p>
+            <p class="pull-left ml-05">{{log.entityType}}</p>
         </div>
         <div>
             <label class="pull-left mr-l2">Date:</label>
-            <p class="pull-left mrL">{{log.createdAt}}</p>
+            <p class="pull-left ml-05">{{log.createdAt}}</p>
         </div>
         <div>
             <label class="pull-left mr-l2">User:</label>
-            <p class="pull-left mrL">{{log.user.name}}</p>
+            <p class="pull-left ml-05">{{log.user.name}}</p>
         </div>
         <div *ngIf="log && log.groupName && log.groupName != null">
             <label class="pull-left mr-l2">Group:</label>
-            <p class="pull-left mrL">{{log.groupName}}</p>
+            <p class="pull-left ml-05">{{log.groupName}}</p>
         </div>
         <div>
             <label class="pull-left mr-l2">Company:</label>
-            <p class="pull-left mrL">{{log.companyName}}</p>
+            <p class="pull-left ml-05">{{log.companyName}}</p>
         </div>
         <div *ngIf="log.log && log.log.sharedWith && log.log.sharedWith != undefined && log.log.sharedWith.name.length > 0">
             <label class="pull-left mr-l2">Shared with:</label>
-            <p class="pull-left mrL">{{log.log.sharedWith.name}}
+            <p class="pull-left ml-05">{{log.log.sharedWith.name}}
                 <span ng-if="log.log.sharedWith.email && log.log.sharedWith.email != null && log.log.sharedWith.email.length > 0">
                     | {{log.log.sharedWith.email}}</span>
             </p>
         </div>
         <div *ngIf="log && log.log && log.log.description != undefined && log.log.description.length > 0">
             <label class="pull-left mr-l2">Description:</label>
-            <p class="pull-left mrL">{{log.log.description}}</p>
+            <p class="pull-left ml-05">{{log.log.description}}</p>
         </div>
     </div>
 
@@ -43,11 +43,11 @@
         <table class="table table-bordered ">
             <thead>
                 <tr>
-                    <th class="col-xs-3 text-center">#</th>
-                    <th class="col-xs-3 text-center">Date</th>
-                    <th class="col-xs-3 text-center">Particular</th>
-                    <th class="col-xs-3 text-center">Amount</th>
-                    <th class="col-xs-3 text-center">Type</th>
+                    <th class="col-3 text-center">#</th>
+                    <th class="col-3 text-center">Date</th>
+                    <th class="col-3 text-center">Particular</th>
+                    <th class="col-3 text-center">Amount</th>
+                    <th class="col-3 text-center">Type</th>
                 </tr>
             </thead>
             <tbody>
@@ -66,11 +66,11 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="col-xs-3 text-center">#</th>
-                    <th class="col-xs-3 text-center">Date</th>
-                    <th class="col-xs-3 text-center">Particular</th>
-                    <th class="col-xs-3 text-center">Amount</th>
-                    <th class="col-xs-3 text-center">Type</th>
+                    <th class="col-3 text-center">#</th>
+                    <th class="col-3 text-center">Date</th>
+                    <th class="col-3 text-center">Particular</th>
+                    <th class="col-3 text-center">Amount</th>
+                    <th class="col-3 text-center">Type</th>
                 </tr>
             </thead>
             <tbody>
@@ -88,11 +88,11 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="col-xs-3 text-center">#</th>
-                    <th class="col-xs-3 text-center">Date</th>
-                    <th class="col-xs-3 text-center">Particular</th>
-                    <th class="col-xs-3 text-center">Amount</th>
-                    <th class="col-xs-3 text-center">Type</th>
+                    <th class="col-3 text-center">#</th>
+                    <th class="col-3 text-center">Date</th>
+                    <th class="col-3 text-center">Particular</th>
+                    <th class="col-3 text-center">Amount</th>
+                    <th class="col-3 text-center">Type</th>
                 </tr>
             </thead>
             <tbody>
@@ -111,11 +111,11 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="col-xs-3 text-center">Opening Balance Date</th>
-                    <th class="col-xs-2 text-center">Opening Balance</th>
-                    <th class="col-xs-3 text-center">email</th>
-                    <th class="col-xs-3 text-center">Name</th>
-                    <th class="col-xs-4 text-center">Unique Name</th>
+                    <th class="col-3 text-center">Opening Balance Date</th>
+                    <th class="col-2 text-center">Opening Balance</th>
+                    <th class="col-3 text-center">email</th>
+                    <th class="col-3 text-center">Name</th>
+                    <th class="col-4 text-center">Unique Name</th>
                 </tr>
             </thead>
             <tbody>
@@ -133,11 +133,11 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="col-xs-3 text-center">Opening Balance Date</th>
-                    <th class="col-xs-2 text-center">Opening Balance</th>
-                    <th class="col-xs-3 text-center">email</th>
-                    <th class="col-xs-3 text-center">Name</th>
-                    <th class="col-xs-4 text-center">Unique Name</th>
+                    <th class="col-3 text-center">Opening Balance Date</th>
+                    <th class="col-2 text-center">Opening Balance</th>
+                    <th class="col-3 text-center">email</th>
+                    <th class="col-3 text-center">Name</th>
+                    <th class="col-4 text-center">Unique Name</th>
                 </tr>
             </thead>
             <tbody>

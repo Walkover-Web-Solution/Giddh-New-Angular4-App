@@ -9,14 +9,10 @@
     <div *ngIf="!noData" class="tb-wrapper">
         <div class="mr-t2 clearfix">
             <!--top heading  labels-->
-
-
             <!--Main Grid-->
             <div class="table-container">
-
                 <div class="income">
-                    <div class="clearfix profitLoss">
-
+                    <div class="clearfix profit-loss">
                         <table class="table basic pl-table-grid">
                             <thead>
                                 <tr>
@@ -78,7 +74,7 @@
 
                             <section class="row-1">
                                 <div class="pl-grid-row row">
-                                    <div class="col-8  group" style="padding-left: 10px;">Total Cost of Goods Sold
+                                    <div class="col-8  group pl-1">Total Cost of Goods Sold
                                     </div>
                                     <div class="col-4  bdrL group text-right pull-right">
                                         <span> {{ cogsData?.closingBalance.amount | giddhCurrency }} </span>
@@ -107,7 +103,7 @@
                 </div>
 
                 <div class="expenses">
-                    <div class="clearfix profitLoss table-responsive">
+                    <div class="clearfix profit-loss table-responsive">
 
                         <div *ngIf="plData && plData.expArr">
                             <!--Grid-->
@@ -125,7 +121,7 @@
 
                                     <section class="row-1" *ngIf="grp.groupName && grp.uniqueName === 'revenue'">
                                         <div class="pl-grid-row row">
-                                            <div class="col-8  group" style="padding-left: 10px;">Total Revenue</div>
+                                            <div class="col-8  group pl-1">Total Revenue</div>
                                             <div class="col-4  bdrL group text-right pull-right">
                                                 <span> {{ plData?.incomeStatment.revenue.amount | giddhCurrency }}
                                                 </span>
@@ -156,7 +152,7 @@
 
                                     <section class="row-1" *ngIf="grp.groupName && grp.uniqueName === 'otherexpenses'">
                                         <div class="pl-grid-row row">
-                                            <div class="col-8  group" style="padding-left: 10px;">Total Other
+                                            <div class="col-8  group pl-1">Total Other
                                                 Expenses</div>
                                             <div class="col-4  bdrL group text-right pull-right">
                                                 <span> {{ plData?.incomeStatment.otherExpenses.amount | giddhCurrency }}

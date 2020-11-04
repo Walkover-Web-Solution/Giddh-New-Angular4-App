@@ -1,10 +1,9 @@
 <div id="live">
     <div class="card">
-
         <div class="panel-heading">
             <strong>Profit & Loss</strong>
-            <div class=" pull-right dashboard-filter">
-                <i class="icon-refresh  mr-1" (click)="refreshChart()"></i>
+            <div class="pull-right dashboard-filter">
+                <i class="icon-refresh mr-1" (click)="refreshChart()"></i>
                 <div (click)="showGiddhDatepicker($event)">
                     <input type="text" readonly name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
                         class="giddh-datepicker form-control date-range-picker dashboard-datepicker" />
@@ -13,7 +12,7 @@
         </div>
 
         <div class="card-body position-relative">
-            <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
+            <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
                 <div class="no-data mr-t2 loader-main">
                     <!-- <div class="giddh-spinner vertical-center-spinner"></div> -->
                     <div class="spinner2">
@@ -25,7 +24,7 @@
             <div class="chart-div" google-chart chart="chartData" *ngIf="!requestInFlight">
                 <!-- <chart [chart]="profitLossChart" *ngIf="dataFound" #currentRatio></chart> -->
                 <highcharts-chart *ngIf="chartOptions" [Highcharts]="profitLossChart" [options]="chartOptions"></highcharts-chart>
-                <div class="noDataAvailable" *ngIf="!dataFound">
+                <div class="no-data-available" *ngIf="!dataFound">
                     <img src="{{imgPath}}noDataChart.svg" alt="no data found">
                 </div>
                 <div class="clearfix mb-2 total-income">

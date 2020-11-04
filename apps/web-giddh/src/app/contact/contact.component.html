@@ -210,10 +210,10 @@
 </tabset>
 
 <!-- region Modal for Mail/SMS for vendore-->
-<div *ngIf="activeTab === 'vendor'" class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">
+<div *ngIf="activeTab === 'vendor'" class="modal fade border-radius-0" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
                 <div class="modal-header themeBg pd-l2 pd-r2 clearfix">
                     <h3 class="modal-title bg" id="modal-title-mail-vendor">{{messageBody.header.set}}</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>
@@ -245,13 +245,13 @@
 <!--endregion-->
 
 <!--region Modal for Mail/SMS for customer-->
-<div *ngIf="activeTab === 'customer'" class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">
+<div *ngIf="activeTab === 'customer'" class="modal fade border-radius-0" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">
 
     <div class="modal-dialog modal-md">
 
         <div class="modal-content">
 
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
 
                 <div class="modal-header themeBg pd-l2 pd-r2 clearfix">
                     <h3 class="modal-title bg" id="modal-title-mail-customer">{{messageBody.header.set}}</h3>
@@ -438,7 +438,7 @@
                                     <a id="edit-model-basic" dropdownToggle class="dropdown-toggle icon-dots-three-vertical pull-right" aria-controls="dropdown-basic" (click)="dropdown.show()"></a>
 
                                     <div id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu" aria-labelledby="edit-model-basic">
-                                        <div class="tb-pl-modal-header p-modal-tolltip" style="padding: 0 !important;">
+                                        <div class="tb-pl-modal-header p-modal-tooltip" style="padding: 0 !important;">
 
                                             <div class="account-detail-modal-header-div selection-none">
 
@@ -505,12 +505,12 @@
 
 
                                     <!--Modal for Mail/SMS-->
-                                    <div class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true" (click)="$event.stopPropagation()">
+                                    <div class="modal fade border-radius-0" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true" (click)="$event.stopPropagation()">
                                         <div class="modal-dialog modal-md" style="margin:auto;margin-top: 200px">
 
                                             <div class="modal-content" style="padding: 8px 8px 8px 8px;">
 
-                                                <div class="noBrdRdsModal" style="padding: 8px 8px 8px 8px;">
+                                                <div class="border-radius-0" style="padding: 8px 8px 8px 8px;">
 
                                                     <div class="modal-header themeBg pd-l2 pd-r2 clearfix" style="padding: 8px 8px 8px 8px;">
                                                         <h3 class="modal-title bg" id="modal-title">
@@ -613,7 +613,7 @@
                                     </a>
 
                                     <div id="dropdown-basic2" *dropdownMenu class="dropdown-menu dropdown-menu-right wd00" role="menu" aria-labelledby="edit-model-basic2">
-                                        <div class="tb-pl-modal-header p-modal-tolltip" style="padding: 0 !important;">
+                                        <div class="tb-pl-modal-header p-modal-tooltip" style="padding: 0 !important;">
 
                                             <div class="account-detail-modal-header-div selection-none">
 
@@ -680,12 +680,12 @@
 
 
                                     <!--Modal for Mail/SMS-->
-                                    <div class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true" (click)="$event.stopPropagation()">
+                                    <div class="modal fade border-radius-0" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true" (click)="$event.stopPropagation()">
                                         <div class="modal-dialog modal-md" style="margin:auto;margin-top: 200px">
 
                                             <div class="modal-content" style="padding: 8px 8px 8px 8px;">
 
-                                                <div class="noBrdRdsModal" style="padding: 8px 8px 8px 8px;">
+                                                <div class="border-radius-0" style="padding: 8px 8px 8px 8px;">
 
                                                     <div class="modal-header themeBg pd-l2 pd-r2 clearfix" style="padding: 8px 8px 8px 8px;">
                                                         <h3 class="modal-title bg" id="modal-title">

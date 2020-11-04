@@ -1,5 +1,5 @@
 <!-- AccountInfo -->
-<div *ngIf="isModalOpen" class="p-modal-tolltip">
+<div *ngIf="isModalOpen" class="p-modal-tooltip">
     <div class="tb-pl-modal-header" style="padding: 0 !important;">
 
         <div class="account-detail-modal-header-div">
@@ -61,13 +61,13 @@
 
 
 <!--Modal for Mail/SMS-->
-<div class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true"
+<div class="modal fade border-radius-0" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true"
     (click)="$event.stopPropagation()">
     <div class="modal-dialog modal-md" style="margin:auto;margin-top: 200px">
 
         <div class="modal-content" style="padding: 8px 8px 8px 8px;">
 
-            <div class="noBrdRdsModal" style="padding: 8px 8px 8px 8px;">
+            <div class="border-radius-0" style="padding: 8px 8px 8px 8px;">
 
                 <div class="modal-header themeBg pd-l2 pd-r2 clearfix" style="padding: 8px 8px 8px 8px;">
                     <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>

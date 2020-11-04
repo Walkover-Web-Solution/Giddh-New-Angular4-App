@@ -42,11 +42,9 @@
             <!-- end of column -->
         </div>
         <div class="table-container clearfix trial-balance">
-            <section style="padding-left: 7px;background-color: #fff;">
+            <section class="tb-section">
                 <div class="row">
-
-
-                    <div class="col-4" style="padding: 0;display: flex;align-items: center" #searchContainer
+                    <div class="col-4 search-container"  #searchContainer
                         (clickOutside)="clickedOutside($event, searchContainer)">
 
                         <span [ngStyle]="{'display': showClearSearch ? 'none' : 'flex'}" class="align-items-center">
@@ -54,7 +52,7 @@
                             <i class="icon-search2" id="showSearch" (click)="toggleSearch()"></i>
                         </span>
 
-                        <span [hidden]="!showClearSearch" style="width: 103%;margin-left: -7px;display: flex">
+                        <span [hidden]="!showClearSearch" class="show-clear-search">
                             <input type="search" #searchInputEl class="form-control"
                                 placeholder="Search" aria-describedby="sizing-addon3"
                                 [formControl]="accountSearchControl">
@@ -65,20 +63,19 @@
 
                     </div>
 
-                    <div style=" padding: 14px 8px 14px 0;" class="col-2 text-right">
+                    <div class="col-2 text-right table-th">
                         <strong>Opening
                             Bal</strong></div>
-                    <div style="padding: 14px 8px 14px 0;" class="col-2  text-right">
+                    <div class="col-2 text-right table-th">
                         <strong> Debit</strong>
 
                     </div>
-                    <div style="padding: 14px 8px 14px 0;" class="col-2 text-right">
+                    <div class="col-2 text-right table-th">
                         <strong> Credit</strong>
 
                     </div>
-                    <div class="col-2 text-right" style="padding: 14px 20px 14px 0;"><strong>Closing Bal</strong>
+                    <div class="col-2 text-right table-th-closing"><strong>Closing Bal</strong>
                     </div>
-
 
                 </div>
             </section>
@@ -117,15 +114,15 @@
                     <table class="table basic mb-0 table-footer">
                         <thead>
                             <tr>
-                                <th class="" style="width: 33.5%;">
-                                    <span class="">Grand Total</span>
+                                <th width="33.5%;">
+                                    <span>Grand Total</span>
                                 </th>
-                                <th style="width: 16.6%;" class="text-right">
+                                <th width="16.6%;" class="text-right">
                                     {{ data$.forwardedBalance?.amount | giddhCurrency}}</th>
-                                <th style="width: 16.6%;" class="text-right">{{ data$.debitTotal | giddhCurrency}}</th>
-                                <th style="width: 16.6%;" class="text-right">{{ data$.creditTotal | giddhCurrency}}</th>
-                                <th style="width: 16.6%;" class="text-right">
-                                    <span class="">{{ data$.closingBalance?.amount | giddhCurrency}}</span>
+                                <th width="16.6%;" class="text-right">{{ data$.debitTotal | giddhCurrency}}</th>
+                                <th width="16.6%;" class="text-right">{{ data$.creditTotal | giddhCurrency}}</th>
+                                <th width="16.6%;" class="text-right">
+                                    <span>{{ data$.closingBalance?.amount | giddhCurrency}}</span>
                                 </th>
                             </tr>
                         </thead>

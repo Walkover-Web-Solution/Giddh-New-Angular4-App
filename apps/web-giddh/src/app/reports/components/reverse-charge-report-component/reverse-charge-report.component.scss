@@ -3,7 +3,7 @@
 .invoice-footer {
     h3 {
         font-size: 16px;
-        color: #999999;
+        color: $nobel;
         display: inline-block;
         margin-right: 10px;
     }
@@ -11,7 +11,7 @@
 .invoice-footer {
     h1 {
         font-size: 22px;
-        color: #333;
+        color: $extra-dark-gray;
         display: inline-block;
     }
 }
@@ -20,7 +20,7 @@
     border-top: 1px solid $gainsboro !important;
 }
 .icon-pointer.active-text-color {
-    color: #01a9f4;
+    color: $deep-sky-blue;
 }
 .voucher-type-dropdown {
     display: inline-block;
@@ -38,7 +38,7 @@
     justify-content: center;
     align-items: center;
     border-right: 1px solid $gainsboro;
-    color: #999999;
+    color: $nobel;
     left: 0;
     font-size: 18px;
 }

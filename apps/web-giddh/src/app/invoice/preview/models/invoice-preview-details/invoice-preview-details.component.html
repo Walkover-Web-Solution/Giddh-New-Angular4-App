@@ -341,7 +341,7 @@
                                     class="image-preview img-expand" [src]="imagePreviewSource"/>
                             </div>
                             <div *ngIf="shouldShowUploadAttachment"
-                                class="upload-excel max500 center-block box dashed-border">
+                                class="upload-excel max-width-500 center-block box dashed-border">
                                 <input type="file" id="csv-upload-input" placeholder="Upload an EXCEL or CSV file"
                                     droppable="true" class="form-control" [options]="fileUploadOptions" ngFileSelect
                                     [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)"/>

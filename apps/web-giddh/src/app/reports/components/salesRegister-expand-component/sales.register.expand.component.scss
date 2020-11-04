@@ -8,14 +8,10 @@
 .basic > tfoot > tr > th {
     white-space: nowrap !important;
 }
-
-.basic > tfoot > tr > th {
-    background: #e3e3e3;
-}
-
 .td-search-box {
     padding: 0px !important;
     position: relative;
+    width: 210px;
 }
 
 .td-search-box div {
@@ -28,7 +24,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: #757bb9;
+    color: $wild-blue-yonder;
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -45,19 +41,19 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: #1c1c1c;
+    color: $nero;
     border: none;
-    background-color: #f2f2f2;
+    background-color: $white-smoke;
 }
 
-.p-modal-tolltip {
+.p-modal-tooltip {
     position: absolute;
-    background-color: white;
+    background-color: $white;
     z-index: 1000;
     width: 257px;
-    border: 1px solid #b4afaf;
+    border: 1px solid $gainsboro;
     border-radius: 4px;
-    box-shadow: 0 7px 24px #00000038;
+    box-shadow: 0 7px 24px $black-russian;
 }
 
 .account-detail-modal-div {
@@ -69,7 +65,7 @@
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
-    background: #ffece094;
+    background: $chablis;
 }
 
 .account-detail-custom-title {
@@ -83,19 +79,18 @@
 }
 
 .custom-detail h4 {
-    color: #707070;
     margin-top: 7px;
     font-size: 14px !important;
-    font-family: opensans-regular !important;
+    font-family: 'opensans-regular' !important;
 }
 
 .height-82px {
     padding: 10px 10px 15px 10px;
-    border-top: 1px solid #c7c7c7;
+    border-top: 1px solid $gainsboro;
 }
 
 ul.list-unstyled li a {
-    color: black;
+    color: $black;
 }
 
 .li-link {
@@ -103,7 +98,7 @@ ul.list-unstyled li a {
 }
 
 .btn-group > a {
-    color: #333333;
+    color: $night-rider;
 }
 
 .ac-detail,
@@ -112,16 +107,16 @@ ul.list-unstyled li a {
 }
 
 .main-sale-register-box .sale-register-box p {
-    color: #8f9091;
+    color: $gray;
 }
 
 .main-sale-register-box .sale-register-box h4 {
     font-size: 18px;
-    color: #333333;
+    color: $night-rider;
 }
 
 .sales-register p {
-    color: #8f9091;
+    color: $gray;
     margin-bottom: 5px;
 }
 
@@ -150,13 +145,13 @@ ul.list-unstyled li a {
 }
 
 .text-orange {
-    color: #5b64c9 !important;
+    color: $chetwode-blue !important;
 }
 
 .sales-register {
     background: $white;
     padding: 15px;
-    box-shadow: 0px -3px 6px #d7d7d7;
+    box-shadow: 0px -3px 6px $black-russian-light;
     display: flex;
     align-items: center;
     position: fixed;
@@ -211,7 +206,7 @@ ul#dropdown-nested li .caret {
     left: 100% !important;
 }
 
-.customeMnthSelect.show {
+.custom-month-select.show {
     display: inline-block !important;
 }
 
@@ -219,19 +214,19 @@ ul#dropdown-nested li .caret {
     padding: 15px;
 }
 
-.customeMnthSelect li:hover a.dropdown-item {
-    background-color: #e5e5e5;
+.custom-month-select li:hover a.dropdown-item {
+    background-color: $gray-90;
 }
 
-.customeMnthSelect button.btn {
+.custom-month-select button.btn {
     background: transparent !important;
     padding-left: 3px;
     padding-right: 3px;
 }
 
-.customeMnthSelect button.btn:active,
-.customeMnthSelect button.btn:focus,
-.customeMnthSelect button.btn:hover {
+.custom-month-select button.btn:active,
+.custom-month-select button.btn:focus,
+.custom-month-select button.btn:hover {
     background: transparent !important;
     box-shadow: none !important;
     outline: none !important;
@@ -255,7 +250,7 @@ table th {
 }
 .icon-pointer {
     cursor: pointer;
-    color: #757bb9;
+    color: $wild-blue-yonder;
     margin-left: 6px;
 }
 .icon-pointer .active-text-color {
@@ -275,7 +270,7 @@ table th {
     justify-content: center;
     -webkit-box-align: center;
     align-items: center;
-    background-color: #fff;
+    background-color: $white;
     font-size: 18px;
     color: $midnight-blue;
     border: 1px solid $gainsboro;
@@ -285,7 +280,7 @@ table th {
         width: 36px;
         height: 36px;
         border: 1px solid $gainsboro;
-        background-color: #fff;
+        background-color: $white;
         color: $gray;
         font-size: 20px;
         position: relative;
@@ -298,7 +293,6 @@ table th {
 
 .verticle-align-top a {
     color: $chetwode-blue;
-
     &:hover {
         color: $deep-sky-blue;
     }
