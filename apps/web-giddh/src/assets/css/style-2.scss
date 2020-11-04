@@ -9704,6 +9704,9 @@ span#HW_badge_cont:nth-child(3) {
         white-space: nowrap;
     }
 }
+.rcm-entry .popover{
+    max-width: 600px;
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
@@ -10181,6 +10184,9 @@ input.mat-input-element{
         }
         #dashboard .panel-heading i {
             margin-left: 10px;
+        }
+        .rcm-entry .popover{
+            max-width: 550px;
         }
     }
 
