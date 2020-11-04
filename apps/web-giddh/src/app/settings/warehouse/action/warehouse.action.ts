@@ -51,7 +51,7 @@ export class WarehouseActions {
 		map((response: BaseResponse<any, any>) => {
 			if (response.status === 'error') {
 				this.toast.errorToast(response.message, response.code);
-				return { type: 'EmptyAction' };
+				return this.createWarehouseResponse(response);
 			}
 			this.toast.successToast('New warehouse created successfully', 'Success');
 			return this.createWarehouseResponse(response);
