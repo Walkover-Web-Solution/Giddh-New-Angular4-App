@@ -5972,13 +5972,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             });
         }
+        // applicableDiscounts: accounts applicable discounts list and inheritedDiscounts: parent group's discount list
         if (data && data.applicableDiscounts && data.applicableDiscounts.length) {
             this.accountAssignedApplicableDiscounts = [...data.applicableDiscounts];
-            if (data.inheritedDiscounts && data.inheritedDiscounts.length) {
-                data.inheritedDiscounts.forEach(element => {
-                    this.accountAssignedApplicableDiscounts.push(...element.applicableDiscounts)
-                });
-            }
+        } else if (data.inheritedDiscounts && data.inheritedDiscounts.length) {
+            data.inheritedDiscounts.forEach(element => {
+                this.accountAssignedApplicableDiscounts.push(...element.applicableDiscounts)
+            });
         }
     }
 
