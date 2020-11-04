@@ -16,7 +16,7 @@ export class AsideHelpSupportComponent implements OnInit {
     /* This will hold the value of current mobile apk version */
     public apkVersion: string;
     /** Version of lated mac app  */
-    public macApkVersion: string;
+    public macAppVersion: string;
 
     constructor(private store: Store<AppState>, private generalActions: GeneralActions, private authService: AuthenticationService) {
 
@@ -109,7 +109,7 @@ export class AsideHelpSupportComponent implements OnInit {
             if (res && typeof res === 'string') {
                 let version = res.split('files')[0];
                 let versNum = version.split(' ')[1];
-                this.macApkVersion = versNum;
+                this.macAppVersion = versNum;
             }
         });
     }

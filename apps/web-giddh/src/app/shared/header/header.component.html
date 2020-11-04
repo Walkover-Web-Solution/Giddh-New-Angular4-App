@@ -141,7 +141,7 @@
                                                 <i class="fa fa-apple"></i> IOS</a>
                                         </li>
                                         <li>
-                                            <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{macApkVersion}}.dmg" target="_blank" title="macOS app">
+                                            <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{macAppVersion}}.dmg" target="_blank" title="macOS app">
                                                 <i class="fa fa-apple"></i> MacOS</a>
                                         </li>
                                         <li>
@@ -225,8 +225,7 @@
     <div class="menu-wrapper">
         <!-- switch branch start -->
         <div *ngIf="(currentCompanyBranches$ | async)?.length > 1" class="switch-branch-wrapper">
-            <div class="btn-group" dropdown placement="bottom right" #subdropdown="bs-dropdown" [autoClose]="false"
-                (onShown)="loadCompanyBranches()" (clickOutside)="subdropdown.isOpen = false">
+            <div class="btn-group" dropdown placement="bottom right" #subdropdown="bs-dropdown" [autoClose]="false" (onShown)="loadCompanyBranches()" (clickOutside)="subdropdown.isOpen = false">
                 <a id="button-basic" dropdownToggle type="button" class="dropdown-toggle" aria-controls="dropdown-basic">
                     <ng-container *ngIf="currentBranch">{{currentBranch?.name}} ({{currentBranch?.alias}})</ng-container>
                     <ng-container *ngIf="!currentBranch">Go to Entity</ng-container>
@@ -234,27 +233,22 @@
                 </a>
                 <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                     <div class="input-group mb-1" container="body">
-                        <input type="text" (ngModelChange)="filterBranch($event)" [(ngModel)]="searchBranchQuery"
-                            class="form-control" placeholder="Search Branch here" autocomplete="off" />
+                        <input type="text" (ngModelChange)="filterBranch($event)" [(ngModel)]="searchBranchQuery" class="form-control" placeholder="Search Branch here" autocomplete="off" />
                         <span (click)="loadCompanyBranches()" tooltip="Refresh" placement="left" class="input-group-addon">
                             <i class="icon-refresh cp"></i>
                         </span>
                     </div>
                     <li *ngFor="let branch of currentCompanyBranches" role="menuitem">
-                        <a [class.active-branch]="currentBranch?.uniqueName === branch?.uniqueName"
-                            (click)="switchToBranch(branch?.uniqueName, $event)" class="dropdown-item"
-                            tooltip="{{branch?.name}} ({{branch?.alias}})" href="javascript:void(0);">
+                        <a [class.active-branch]="currentBranch?.uniqueName === branch?.uniqueName" (click)="switchToBranch(branch?.uniqueName, $event)" class="dropdown-item" tooltip="{{branch?.name}} ({{branch?.alias}})" href="javascript:void(0);">
                             <span class="pr-3">{{branch?.name}} ({{branch?.alias}})</span>
                             <i class="icon-branch-icon pull-right" *ngIf="branch.parentBranch" tooltip="Branch"></i>
                             <i class="icon-company-HO pull-right" *ngIf="!branch.parentBranch" tooltip="HO Branch"></i>
                         </a>
                     </li>
                     <li class="divider dropdown-divider"></li>
-                    <li *ngIf="currentBranch" (click)="goToCompany()" role="menuitem"><a class="dropdown-item go-to-company"
-                            href="javascript:void(0);">Go to company</a>
-                    <li *ngIf="!currentBranch" (click)="subdropdown.isOpen = false" [routerLink]="['/pages/settings/create-branch']" role="menuitem"><a class="dropdown-item go-to-company"
-                            href="javascript:void(0);">Create Branch</a>
-                    </li>
+                    <li *ngIf="currentBranch" (click)="goToCompany()" role="menuitem"><a class="dropdown-item go-to-company" href="javascript:void(0);">Go to company</a>
+                        <li *ngIf="!currentBranch" (click)="subdropdown.isOpen = false" [routerLink]="['/pages/settings/create-branch']" role="menuitem"><a class="dropdown-item go-to-company" href="javascript:void(0);">Create Branch</a>
+                        </li>
                 </ul>
             </div>
         </div>
@@ -451,8 +445,7 @@
                             <!-- <img src="{{imgPath}}notification.svg" class="mr-15"> -->
                             <i class="icon-notification mr-15"></i>
                         </span>
-                        <button id="add-manage" *ngIf="!isMobileSite" type="button" class="btn btn-gray btn-sm d-inline-flex mr-15 "
-                            [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
+                        <button id="add-manage" *ngIf="!isMobileSite" type="button" class="btn btn-gray btn-sm d-inline-flex mr-15 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
                             <i class="icon-plus"></i>
                         </button>
                         <div class="btn-group cp d-inline-flex help-setting-icons" dropdown>
@@ -730,9 +723,9 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
-                [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition" [updatePosition]="false"></app-datepicker-wrapper>
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)" [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition" [updatePosition]="false"></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

@@ -242,7 +242,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /** Current organization type */
     public currentOrganizationType: OrganizationType;
     /** Version of lated mac app  */
-    public macApkVersion: string;
+    public macAppVersion: string;
 
 
     /**
@@ -2008,7 +2008,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (res && typeof res === 'string') {
                 let version = res.split('files')[0];
                 let versNum = version.split(' ')[1];
-                this.macApkVersion = versNum;
+                this.macAppVersion = versNum;
             }
         });
     }
