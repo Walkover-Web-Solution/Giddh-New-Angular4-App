@@ -9700,6 +9700,9 @@ span#HW_badge_cont:nth-child(3) {
         white-space: nowrap;
     }
 }
+.rcm-entry .popover{
+    max-width: 600px;
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
@@ -9708,6 +9711,10 @@ ul.dropdown-menu.action-dropdown {
 /*material datepicker css starts*/
 .recurring-form  .mat-form-field{
     max-width: 170px;
+}
+.collapse-pane  .mat-form-field{
+    min-width: 147px;
+    max-width: 147px;
 }
 .mat-form-field{
     min-width: 170px;
@@ -10143,6 +10150,9 @@ input.mat-input-element{
     #dashboard .panel-heading i {
         margin-left: 10px;
     }
+    .rcm-entry .popover{
+        max-width: 550px;
+    }
 }
 
 @media (max-width: 1199px) {
@@ -10152,6 +10162,19 @@ input.mat-input-element{
 }
 
 @media (max-width: 767px) {
+    .settings-profile-tabs {
+        .tab-content{
+            padding-top: 45px;
+        }
+    }
+    .invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
+        .profile-tab-container {
+            .nav.nav-tabs {
+                padding-left: 15px !important;
+                left: 0;
+            }
+        }
+    }
     .universal-date {
         padding-top: 0;
     }

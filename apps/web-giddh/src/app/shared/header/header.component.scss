@@ -478,7 +478,7 @@ a[vr-item]:focus {
     font-size: 14px;
     border-radius: 2px 0 0 2px;
     display: inline-flex;
-    top: 3px;
+    top: 1px;
 }
 
 .not-today{
@@ -492,6 +492,7 @@ a[vr-item]:focus {
     .input-date{
         border: 1px solid #ffffff;
         border-radius: 20px !important;
+        height: 34px;
         input{
             margin-right: 44px;
             text-align:center !important;
@@ -533,6 +534,8 @@ span.icon-support.dropdown-toggle {
 .date-range-picker {
     max-width: 100%;
     min-width: 100%;
+    line-height: 3;
+    height: 32px !important;
 }
 
 .other a {
@@ -983,9 +986,9 @@ ul.sub-list {
         }
     }
     .setting-menu-icon {
-        padding: 4px 10px 4px 4px;
+        padding: 4px 8px 4px 2px;
         display: none;
-        width: 32px;
+        width: 27px;
         text-align: center;
     }
     .mobile-back-btn {
