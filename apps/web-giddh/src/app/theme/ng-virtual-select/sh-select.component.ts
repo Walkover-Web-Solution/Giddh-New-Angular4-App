@@ -211,14 +211,10 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
      * @memberof ShSelectComponent
      */
     public handleInputChange(inputText: string): void {
-        if(inputText) {
-            if (this.enableDynamicSearch) {
-                this.dynamicSearchQueryChanged.next(inputText);
-            } else {
-                this.updateFilter(inputText);
-            }
+        if (this.enableDynamicSearch) {
+            this.dynamicSearchQueryChanged.next(inputText);
         } else {
-            this.clear();
+            this.updateFilter(inputText);
         }
     }
 

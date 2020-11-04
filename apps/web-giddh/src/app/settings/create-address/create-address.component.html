@@ -16,7 +16,7 @@
                     <div class="aside-pane-form">
                         <section
                             *ngIf="addressConfiguration.type !== 'editBranch' && addressConfiguration.type !== 'editWarehouse'"
-                            class="clearfix mrBChldLbl">
+                            class="clearfix margin-child-label">
                             <div *ngIf="companyName" class="font-14">
                                 All the information will save in <strong>{{companyName}}</strong>
                             </div>
@@ -52,7 +52,7 @@
                                     <div class="col-sm-8 form-group">
                                         <label>State <sup>*</sup></label>
                                         <sh-select #states [options]="addressConfiguration.stateList" required
-                                            [isFilterEnabled]="true" formControlName="state" style="width:100%"
+                                            [isFilterEnabled]="true" formControlName="state" class="w-100"
                                             [useInBuiltFilterForIOptionTypeItems]="true"
                                             [forceClearReactive]="forceClear$ | async">
                                         </sh-select>
@@ -63,7 +63,7 @@
                                     <div class="form-group col-12">
                                         <label>Address<sup
                                                 *ngIf="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value">*</sup></label>
-                                        <textarea type="text" name="name" class="form-control" formControlName="address"
+                                        <textarea name="name" class="form-control" formControlName="address"
                                             placeholder="Enter Address"
                                             [attr.required]="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value"></textarea>
                                     </div>
@@ -120,7 +120,7 @@
                             </div>
                         </section>
 
-                        <section *ngIf="addressConfiguration.type === 'editBranch'" class="clearfix mrBChldLbl">
+                        <section *ngIf="addressConfiguration.type === 'editBranch'" class="clearfix margin-child-label">
                             <div class="form_bg clearfix">
                                 <div class="row">
                                     <div class="form-group col-12">
@@ -198,7 +198,7 @@
                             </div>
                         </section>
 
-                        <section *ngIf="addressConfiguration.type === 'editWarehouse'" class="clearfix mrBChldLbl">
+                        <section *ngIf="addressConfiguration.type === 'editWarehouse'" class="clearfix margin-child-label">
                             <div class="form_bg clearfix">
                                 <div class="row">
                                     <div class="form-group col-12">

@@ -34,7 +34,7 @@
     </div>
 
     <div class="" *ngIf="step === 2">
-        <h4 class="lead grey-clr">{{ selectedProvider.name }}</h4>
+        <h4 class="lead grey-color">{{ selectedProvider.name }}</h4>
         <form #formDiv name="loginForm" [formGroup]="loginForm" novalidate="" autocomplete="off"
             (ngSubmit)="onSubmitLoginForm()">
             <div formArrayName="row" class="row">
@@ -81,8 +81,8 @@
                 [disabled]="bankSyncInProgress">Submit</button>
             <button class="btn btn-success btn-sm" type="button" *ngIf="!isRefreshWithCredentials"
                 (click)="refreshAccount(loginForm)" [disabled]="bankSyncInProgress">Update</button>
-            <small *ngIf="bankSyncInProgress" class="grey-clr clearfix mr-t2 col-xs-12 row">Status: <span
-                    class="primary-clr">Authenticating..</span>
+            <small *ngIf="bankSyncInProgress" class="grey-color clearfix mr-t2 col-12 row">Status: <span
+                    class="primary_clr">Authenticating..</span>
                 <!-- <p>You can wait or check again in 15-20 min</p> -->
             </small>
         </form>

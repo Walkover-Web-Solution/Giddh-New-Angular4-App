@@ -235,7 +235,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
         case SETTINGS_PROFILE_ACTIONS.GET_BRANCH_INFO_RESPONSE: {
             let response: BaseResponse<any, any> = action.payload;
-            if (response.status === 'success') {
+            if (response && response.status === 'success') {
                 newState.currentBranch = response.body;
                 return Object.assign({}, state, newState);
             }
