@@ -1,6 +1,6 @@
 import { IELedgerResponse, IELedgerTransaction, TransactionsResponse } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs';
-import { AccountResponse } from '../models/api-models/Account';
+import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
@@ -18,8 +18,8 @@ import { VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
 
 export class LedgerVM {
     public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
-    public activeAccount$: Observable<AccountResponse>;
-    public activeAccount: AccountResponse;
+    public activeAccount$: Observable<AccountResponse | AccountResponseV2>;
+    public activeAccount: AccountResponse | AccountResponseV2;
     public currencies: ICurrencyResponse[] = [];
     public transactionData$: Observable<TransactionsResponse>;
     public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;

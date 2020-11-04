@@ -2,7 +2,8 @@ import {
     ICurrencyResponse,
     CompanyCreateRequest,
     CreateCompanyUsersPlan,
-    CompanyCountry
+    CompanyCountry,
+    Organization
 } from './../../models/api-models/Company';
 import { SETTINGS_PROFILE_ACTIONS } from './../../actions/settings/profile/settings.profile.const';
 import { LoginActions } from '../../actions/login.action';
@@ -85,6 +86,7 @@ export interface SessionState {
     totalNumberOfcompanies: number;
     currentCompanyCurrency: CompanyCountry;
     financialYearChosenInReport: string;
+    currentOrganizationDetails: Organization;
 }
 
 /**
@@ -141,7 +143,8 @@ const sessionInitialState: SessionState = {
     currentCompanySubscriptionPlan: null,
     currentCompanyCurrency: null,
     totalNumberOfcompanies: 0,
-    financialYearChosenInReport: ''
+    financialYearChosenInReport: '',
+    currentOrganizationDetails: null
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -580,7 +583,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 }
                 let fromDate: any = data.fromDate ? moment(data.fromDate, GIDDH_DATE_FORMAT) : moment().subtract(30, 'days');
                 let toDate: any = data.toDate ? moment(data.toDate, GIDDH_DATE_FORMAT) : moment();
-                latestState.applicationDate = [fromDate._d, toDate._d, chosenLabel];
+                latestState.applicationDate = [fromDate._d, toDate._d, chosenLabel, !!data.fromDate ];
                 return Object.assign({}, state, latestState);
             }
             return state;
@@ -775,6 +778,10 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             return Object.assign({}, state, { financialYearChosenInReport: action.payload });
         case CompanyActions.RESET_USER_CHOSEN_FINANCIAL_YEAR:
             return Object.assign({}, state, { financialYearChosenInReport: '' });
+        case CompanyActions.SET_COMPANY_BRANCH:
+            return Object.assign({}, state, {
+                currentOrganizationDetails: action.payload
+            });
         default:
             return state;
     }

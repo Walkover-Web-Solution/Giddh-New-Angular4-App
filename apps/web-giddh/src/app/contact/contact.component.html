@@ -64,7 +64,7 @@
                                 <i class="icon-search"></i>
                             </span>
 
-                        </div>
+                            </div>
                         </div>
                     </div>
                     <!-- Invoice filter section ends -->
@@ -156,47 +156,47 @@
                     </div>
                 </div>
             </div>
-            </div>
-            <div class="clearfix pagination-main">
-                <div class=" mt-5 mb-100px">
-                    <div class="">
-                        <div class="customer-right-wrap clearfix">
-                            <div class="text-right">
-                                <h4 class="mb-1 pdR2">Result Total</h4>
-                            </div>
-
-                            <div class="bg-white clearfix">
-                                <div class="customer-right  clearfix" style="width: 100%;">
-                                    <table class="text-right">
-                                        <tr>
-                                            <td>
-                                                <p *ngIf="activeTab === 'vendor'">Purchase</p>
-                                                <p *ngIf="activeTab === 'customer'">Sales</p>
-                                                <h3>{{totalSales |giddhCurrency }}/-</h3>
-                                            </td>
-                                            <td>
-                                                <p *ngIf="activeTab === 'vendor'">Payment</p>
-                                                <p *ngIf="activeTab === 'customer'">Receipt</p>
-                                                <h3>{{totalReceipts | giddhCurrency}}/-</h3>
-                                            </td>
-                                            <td>
-                                                <p>Due</p>
-                                                <h3>{{totalDue | giddhCurrency}}/-</h3>
-                                            </td>
-
-                                        </tr>
-
-                                    </table>
-                                </div>
-
-                            </div>
+        </div>
+        <div class="clearfix pagination-main">
+            <div class=" mt-5 mb-100px">
+                <div class="">
+                    <div class="customer-right-wrap clearfix">
+                        <div class="text-right">
+                            <h4 class="mb-1 pdR2">Result Total</h4>
                         </div>
 
+                        <div class="bg-white clearfix">
+                            <div class="customer-right  clearfix" style="width: 100%;">
+                                <table class="text-right">
+                                    <tr>
+                                        <td>
+                                            <p *ngIf="activeTab === 'vendor'">Purchase</p>
+                                            <p *ngIf="activeTab === 'customer'">Sales</p>
+                                            <h3>{{totalSales |giddhCurrency }}/-</h3>
+                                        </td>
+                                        <td>
+                                            <p *ngIf="activeTab === 'vendor'">Payment</p>
+                                            <p *ngIf="activeTab === 'customer'">Receipt</p>
+                                            <h3>{{totalReceipts | giddhCurrency}}/-</h3>
+                                        </td>
+                                        <td>
+                                            <p>Due</p>
+                                            <h3>{{totalDue | giddhCurrency}}/-</h3>
+                                        </td>
+
+                                    </tr>
+
+                                </table>
+                            </div>
+
+                        </div>
                     </div>
 
-
                 </div>
+
+
             </div>
+        </div>
     </tab>
     <!-- endregion -->
 
@@ -293,14 +293,14 @@
 
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
 <div class="abc " *ngIf="accountAsideMenuState === 'in'">
-    <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="accountAsideMenuState2  transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
+    <aside-menu-account [activeGroupUniqueName]="selectedGroupForCreateAcc" [activeAccountDetails]="activeAccountDetails" [isUpdateAccount]="isUpdateAccount" class="account-aside-menu-state  transinherit" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"
         (getUpdateList)="getUpdatedList($event)">
     </aside-menu-account>
 </div>
 
 <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
 <div class="abc vendorPayNow" *ngIf="paymentAsideMenuState === 'in'">
-    <payment-aside class="accountAsideMenuState2 transinherit" [selectedAccForPayment]="selectedAccForPayment">
+    <payment-aside class="account-aside-menu-state transinherit" [selectedAccForPayment]="selectedAccForPayment">
     </payment-aside>
 </div>
 
@@ -316,12 +316,6 @@
                             <strong>Due as on </strong>
                             <span class="italic underline">
                                 <input type="text" (click)="showGiddhDatepicker($event)" name="selectedDateRange" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" style="width: 250px !important;" class="form-control giddh-datepicker date-range-picker"/>
-
-<!--                                <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions"-->
-<!--                                    (hideDaterangepicker)="selectedDate($event)"-->
-<!--                                    (applyDaterangepicker)="selectedDate($event)"-->
-<!--                                    class="form-control date-range-picker" />-->
-
                             </span>
                         </p>
                     </td>
@@ -331,6 +325,9 @@
                     <td *ngIf="showFieldFilter.gstin && shouldShowTaxFilter"></td>
                     <td *ngIf="showFieldFilter.state"></td>
                     <td *ngIf="showFieldFilter.comment"></td>
+                    <ng-container *ngFor="let item of (companyCustomFields$ | async)">
+                        <td *ngIf="item.key"></td>
+                    </ng-container>
                 </tr>
 
                 <tr>
@@ -417,6 +414,9 @@
 
                     <th *ngIf="activeTab === 'vendor' && isICICIIntegrated" width="10%">Action</th>
 
+                    <ng-container *ngFor="let item of (companyCustomFields$ | async)">
+                        <th width="10%">{{item.key}}</th>
+                    </ng-container>
                 </tr>
 
             </thead>
@@ -570,7 +570,7 @@
                         </td>
                         <td class="word-wrap" *ngIf="showFieldFilter.gstin && shouldShowTaxFilter" data-title="GSTIN">
                             {{account.gstIn || '-' }}</td>
-                        <td class="word-wrap" *ngIf="showFieldFilter.state " data-title="State">
+                        <td class="word-wrap" *ngIf="showFieldFilter.state" data-title="State">
                             {{account?.state?.name || '-'}}</td>
                         <td *ngIf='showFieldFilter.comment' (click)='updateCommentIdx = idx' data-title=" Comment" class="commentField">
                             <ng-container *ngIf='updateCommentIdx != idx'>
@@ -582,11 +582,13 @@
                             </ng-container>
 
                         </td>
-
+                        <ng-container *ngFor="let item of account?.customFields">
+                            <td class="word-wrap" [attr.data-title]="item.key">
+                                {{item.value || '-' }}</td>
+                        </ng-container>
                     </tr>
-                    <!---->
-                    <tr *ngIf="!(sundryDebtorsAccounts).length ">
-                        <td colspan="11" class="text-center empty-table ">
+                    <tr>
+                        <td [attr.colspan]="colspanLength" *ngIf="!(sundryDebtorsAccounts).length " class="text-center empty-table ">
                             <h1>No Record Found !!</h1>
                         </td>
                     </tr>
@@ -651,7 +653,7 @@
                                                             </li>
 
                                                             <li class="li-link" *ngIf="!isMobileScreen">
-                                                                <a href="javascript: void 0" (click)="performActions(2, account)">Generate Invoice
+                                                                <a href="javascript: void 0" (click)="performActions(2, account)">Record Bill
                                                                 </a>
                                                             </li>
 
@@ -761,9 +763,13 @@
                             <button *ngIf="!account.bankPaymentDetails " class="btn btn-small btn-light " (click)="updateCustomerAcc('vendor', account)">Add Bank Detail
                             </button>
                         </td>
+                        <ng-container *ngFor="let item of account?.customFields">
+                            <td class="word-wrap" [attr.data-title]="item.key">
+                                {{item.value || '-' }}</td>
+                        </ng-container>
                     </tr>
                     <tr *ngIf="!(sundryCreditorsAccounts).length ">
-                        <td colspan="12 " class="text-center empty-table ">
+                        <td [attr.colspan]="colspanLength" class="text-center empty-table">
                             <h1>No Record Found !!</h1>
                         </td>
                     </tr>
@@ -813,7 +819,7 @@
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions.ranges" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate" [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOptions" [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true"
                 [showClearButton]="false" [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'Done'}" (rangeClicked)="selectedDate($event)" (datesUpdated)="selectedDate($event)" [keepCalendarOpeningWithRange]="false"
                 [showRangeLabelOnInput]="false" [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
         </div>

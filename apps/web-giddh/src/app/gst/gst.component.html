@@ -1,9 +1,24 @@
 <!-- filter area-->
 <ng-container>
-    <div class="text-overdue ss" style="margin: 20px 0px 0px;" *ngIf="!activeCompanyGstNumber">
+    <div class="text-overdue ss" style="margin: 20px 0px 0px;" *ngIf="!activeCompanyGstNumber && !isTaxApiInProgress && !taxes?.length && !((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async))">
         <i class="text-middle" style="padding: 0 2%;">Please add GSTIN in company setting to view report.</i>
     </div>
 
+    <div *ngIf="taxes?.length" class="row mb-3 mt-3 ml-3">
+        <div class="tax-heading col-md-3 col-sm-3 col-12">
+            <label>GSTIN:</label>
+        </div>
+        <div class="tax-dropdown col-md-9 col-sm-9 col-12">
+            <sh-select [options]="taxes"
+                [(ngModel)]="activeCompanyGstNumber"
+                (selected)="selectTax()"
+                [defaultValue]="activeCompanyGstNumber"
+                placeholder="Select GSTIN"
+                [showClear]="false" [multiple]="false"
+                [ItemHeight]="67">
+            </sh-select>
+        </div>
+    </div>
     <div class="tax-engine"
         [ngClass]="{'content-disabled': ((gstr1OverviewDataInProgress$ | async) || (gstr2OverviewDataInProgress$ | async)) || !activeCompanyGstNumber}">
         <div class="header-band filings-header clearfix">
@@ -97,7 +112,7 @@
                     <!-- Rohit told me not remove this commented code  -->
                     <!-- <div class="btn-group" dropdown #downloadReport="bs-dropdown" [autoClose]="false"
                  (clickOutside)="downloadReport.hide()" [attachOutsideOnClick]="true">
-                <button dropdownToggle type="button" class="btn dropdown-toggle grey-clr no-btn"> <i
+                <button dropdownToggle type="button" class="btn dropdown-toggle grey-color no-btn"> <i
                   class="icon-download"></i> Download</button>
                 <ul id="dropdown-menu" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
                     aria-labelledby="button-triggers-manual" style="min-width: 350px;">

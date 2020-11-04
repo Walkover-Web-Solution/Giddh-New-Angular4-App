@@ -536,7 +536,7 @@
                                                 <!-- region shipping address -->
                                                 <div class="col-sm-12 col-xl-6 col-md-10  bill-add">
 
-                                                    <div class="form-group p0 width100">
+                                                    <div class="form-group p-0 width100">
                                                         <label>
                                                             <input type="checkbox" autocomplete="None"
                                                                 name="autoFillCompanyShipping"
@@ -638,14 +638,14 @@
 
                                             <ng-container *ngIf="isCreditNote || isDebitNote">
                                                 <sh-select [options]="invoiceList" placeholder="Select Accounts"
-                                                    [forceClearReactive]="invoiceForceClearReactive$ | async"
-                                                    [notFoundLink]="false" [(ngModel)]="selectedInvoice"
-                                                    [ngModelOptions]="{standalone: true}"
+                                                    [forceClearReactive]="invoiceForceClearReactive$ | async" class="linking-dropdown"
+                                                    [notFoundLink]="false" [(ngModel)]="selectedInvoice" name="invoiceLinking"
                                                     (selected)="creditNoteInvoiceSelected($event)" [multiple]="false"
                                                     [ItemHeight]="67" [showClear]="false">
-                                                    <ng-template *ngIf="invoiceList?.length" #optionTemplate
+                                                    <ng-template #optionTemplate
                                                         let-option="option">
-                                                        <a href="javascript:void(0)" class="list-item sh-template">
+                                                        <a *ngIf="option" href="javascript:void(0)" class="linking-item list-item
+                                                         sh-template">
                                                             <div class="item">{{ option.label }}
                                                             </div>
                                                             <div class="item-unique">
@@ -1066,7 +1066,7 @@
 
                                 <!-- region dynamic entries-->
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
-                                <tr [hidden]="activeIndx !== entryIdx" class="entriesTr defaultActive"
+                                <tr *ngIf="activeIndx === entryIdx" class="entriesTr defaultActive"
                                     (click)="$event.stopPropagation();">
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();">{{ entryIdx + 1 }}</td>
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup();">
@@ -1172,7 +1172,7 @@
                                                                 </span>
                                                             </div>
 
-                                                            <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
+                                                            <div class="hsn-code-dropdown" *ngIf="hsnDropdownShow">
                                                                 <label>HSN/SAC</label>
                                                                 <input type="text" maxLength="10"
                                                                     placeholder="HSN/SAC Number"
@@ -1285,7 +1285,7 @@
                                         </div>
                                     </td>
 
-                                    <td (click)="closeTaxControlPopup();" class="pos-rel dropdown-container item-tax" style="height:1px;">
+                                    <td (click)="closeDiscountPopup();" class="pos-rel dropdown-container item-tax" style="height:1px;">
                                         <div class="td-wrapper">
                                             <div class="text-right" style="flex:1;">
                                                 <tax-control #taxControlComponent [taxes]="companyTaxesList" [date]="entry.entryDate"
@@ -1994,7 +1994,7 @@
                                                     <div class="dateHsnCode">
 
                                                         <div class="row">
-                                                            <div class="col-xs-6 pdR0">
+                                                            <div class="col-xs-6 col-sm-6 pdR0">
                                                                 <div class="entryDate">
                                                                     <label>Entry Date: </label>
 
@@ -2020,7 +2020,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-xs-6 pdL0">
+                                                            <div class="col-xs-6 col-sm-6 pdL0">
                                                                 <div class="wrap-hsnBox">
                                                                     <div class="hsnCode text-right"
                                                                         (click)="toggleHsnSacDropDown(transaction)">
@@ -2037,7 +2037,7 @@
                                                                         </span>
                                                                     </div>
 
-                                                                    <div class="hsnCodeDropdown" *ngIf="hsnDropdownShow">
+                                                                    <div class="hsn-code-dropdown" *ngIf="hsnDropdownShow">
                                                                         <label>HSN/SAC</label>
                                                                         <input type="text" maxLength="10" placeholder="HSN/SAC Number"
                                                                             name="transaction.hsnNumber_{{entryIdx}}"
@@ -2286,7 +2286,7 @@
                                     </div>
                                 </div>
 
-                                <div class="saveCard-data pointer">
+                                <div class="saveCard-data pointer" (click)="handleOutsideClick()">
                                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                                 </div>
 

@@ -2,6 +2,13 @@ import { Component, EventEmitter, OnInit, Output, ViewChild, ElementRef } from '
 import { settingsPageTabs } from "../../../helpers/pageTabs";
 import { Location } from '@angular/common';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { Router } from '@angular/router';
+import { AppState } from 'apps/web-giddh/src/app/store';
+import { select, Store } from '@ngrx/store';
+import { take } from 'rxjs/operators';
+import { Organization } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 
 @Component({
     selector: 'aside-setting',
@@ -20,7 +27,7 @@ export class AsideSettingComponent implements OnInit {
     public filteredSettingsPageTabs: any[] = [];
     public isMobileScreen: boolean = true;
 
-    constructor(private location: Location, private breakPointObservar: BreakpointObserver) {
+    constructor(private location: Location, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>) {
 
     }
 
@@ -39,10 +46,20 @@ export class AsideSettingComponent implements OnInit {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         if (settingsPageTabs) {
             let loop = 0;
-            Object.keys(settingsPageTabs[0]).forEach(key => {
-                this.settingsPageTabs[loop] = [];
-                this.settingsPageTabs[loop] = settingsPageTabs[0][key];
-                loop++;
+            let organizationIndex = 0;
+            this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), take(1)).subscribe((organization: Organization) => {
+                if(organization) {
+                    if (organization.type === OrganizationType.Branch) {
+                        organizationIndex = 1;
+                    } else if (organization.type === OrganizationType.Company) {
+                        organizationIndex = 0;
+                    }
+                }
+                Object.keys(settingsPageTabs[organizationIndex]).forEach(key => {
+                    this.settingsPageTabs[loop] = [];
+                    this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]];
+                    loop++;
+                });
             });
             this.filteredSettingsPageTabs = this.settingsPageTabs;
         }
@@ -94,7 +111,11 @@ export class AsideSettingComponent implements OnInit {
      * @memberof AsideSettingComponent
      */
     public goToPreviousPage(): void {
-        this.location.back();
+        if(this.generalService.getSessionStorage("previousPage")) {
+            this.router.navigateByUrl(this.generalService.getSessionStorage("previousPage"));
+        } else {
+            this.location.back();
+        }
     }
 
     /**
@@ -105,7 +126,7 @@ export class AsideSettingComponent implements OnInit {
      */
     public closeAsidePaneIfMobile(event?): void {
         if(this.isMobileScreen && event && event.target.className !== "icon-bar") {
-            this.closeAsideEvent.emit(event);          
+            this.closeAsideEvent.emit(event);
         }
     }
 }

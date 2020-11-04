@@ -163,6 +163,42 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
     }
 ];
 
+export const GIDDH_DATE_RANGE_PICKER_RANGES = [
+    {
+        name: DatePickerDefaultRangeEnum.ThisMonth, value: [moment().startOf('month'), moment().endOf('month')]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.LastMonth, value: [
+            moment().subtract(1, 'month').startOf('month'),
+            moment().subtract(1, 'month').endOf('month')
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.ThisQuarterToDate, value: [
+            moment().quarter(moment().quarter()).startOf('quarter'),
+            moment()
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate, value: [
+            moment().startOf('year').subtract(9, 'year'),
+            moment()
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.LastQuarter, value: [
+            moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
+            moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+        ]
+    },
+    {
+        name: DatePickerDefaultRangeEnum.AllTime, value: [
+            moment().startOf('year').subtract(10, 'year'),
+            moment()
+        ]
+    }
+];
+
 /** File attachment types supported by Giddh */
 export const FILE_ATTACHMENT_TYPE = {
     IMAGE: ['jpg', 'jpeg', 'gif', 'png'],
@@ -205,7 +241,7 @@ export let DEFAULT_POPULAR_PLAN = "";
 
 if (PRODUCTION_ENV || isElectron || isCordova) {
     DEFAULT_POPULAR_PLAN = "Oak";
-}  else {
+} else {
     DEFAULT_POPULAR_PLAN = "Popular Plan";
 }
 
@@ -224,3 +260,17 @@ export enum SearchResultText {
 
 /** Types of tcs and tds taxes */
 export const TCS_TDS_TAXES_TYPES = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
+
+/** Routes for which header should display back button */
+export const ROUTES_WITH_HEADER_BACK_BUTTON = [
+    '/pages/settings/create-warehouse',
+    '/pages/settings/create-branch'
+];
+
+/** Routes which are restricted when branch is switched  */
+export const RESTRICTED_BRANCH_ROUTES = [
+    '/pages/settings/branch',
+    '/pages/settings/create-branch',
+    '/pages/settings/financial-year',
+    '/pages/user-details/subscription'
+];

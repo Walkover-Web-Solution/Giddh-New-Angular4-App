@@ -67,13 +67,14 @@ class AppDatabase extends Dexie {
         });
     }
 
-    public addItem(key: any, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }, isSmallScreen): Promise<any> {
+    public addItem(key: any, entity: string, model: IUlist, fromInvalidState: { next: IUlist, previous: IUlist }, isSmallScreen, isCompany: boolean): Promise<any> {
         return this.companies.get(key).then((res: CompAidataModel) => {
             if (!res) {
                 return;
             }
             let arr: IUlist[] = res.aidata[entity];
             let isFound = false;
+            const limit = isCompany ? 10 : 7;
 
             if (entity === 'menus') {
                 // if any fromInvalidState remove it and replace it with new menu
@@ -109,10 +110,14 @@ class AppDatabase extends Dexie {
                         if (indDefaultIndex > -1) {
                             // index where menu should be added
                             let index = arr.findIndex(a => this.clonedMenus[indDefaultIndex].pIndex === a.pIndex);
-                            if (isSmallScreen && index > 7) {
-                                index = this.smallScreenHandler(index);
+                            if (isSmallScreen && index > limit) {
+                                index = this.smallScreenHandler(index, isCompany);
                             }
-                            arr[index] = Object.assign({}, model, { isRemoved: false, pIndex: this.clonedMenus[indDefaultIndex].pIndex });
+                            if (index > -1) {
+                                arr[index] = Object.assign({}, model, { isRemoved: false, pIndex: this.clonedMenus[indDefaultIndex].pIndex });
+                            } else {
+                                arr.push(Object.assign({}, model, { isRemoved: false, pIndex: this.clonedMenus[indDefaultIndex].pIndex }));
+                            }
                             this.clonedMenus[indDefaultIndex].isRemoved = false;
                         } else {
                             /* if not in default menu first find where it should be added
@@ -127,9 +132,9 @@ class AppDatabase extends Dexie {
                             let index = arr.findIndex(a => sorted[0].pIndex === a.pIndex);
 
                             let originalIndex = duplicateIndex;
-                            if (isSmallScreen && index > 7) {
+                            if (isSmallScreen && index > limit) {
                                 originalIndex = index;
-                                index = this.smallScreenHandler(index);
+                                index = this.smallScreenHandler(index, isCompany);
                             }
 
                             if (index > -1) {
@@ -141,12 +146,14 @@ class AppDatabase extends Dexie {
                                     }
                                     return m;
                                 });
+                            } else {
+                                arr.push(Object.assign({}, model, { isRemoved: true, pIndex: sorted[0].pIndex }));
                             }
                         }
                     } else {
                         let originalDuplicateIndex = duplicateIndex;
-                        if (isSmallScreen && duplicateIndex > 7) {
-                            duplicateIndex = this.smallScreenHandler(duplicateIndex);
+                        if (isSmallScreen && duplicateIndex > limit) {
+                            duplicateIndex = this.smallScreenHandler(duplicateIndex, isCompany);
                         }
                         if (this.clonedMenus.length === 0) {
                             this.clonedMenus = DEFAULT_MENUS;
@@ -202,7 +209,9 @@ class AppDatabase extends Dexie {
             res.aidata[entity] = this.getSlicedResult(entity, arr);
             // do entry in db and return all data
             return this.companies.put(res).then(() => {
-                return this.companies.get(key);
+                setTimeout(() => {
+                    return this.companies.get(key);
+                }, 500);
             }).catch((err) => (err));
         }).catch((err) => {
             console.log('error while deleting item', err);
@@ -221,12 +230,13 @@ class AppDatabase extends Dexie {
         return arr.slice(0, endCount);
     }
 
-    private smallScreenHandler(index) {
+    private smallScreenHandler(index, isCompany: boolean) {
+        const limit = isCompany ? 10 : 7
         /*
         *  if we detect that it's a small screen then check if index is grater then 7 ( because we are showing 8 items in small screen )
         *  then we need to increase set index to index - 1 for displaying searched menu at last
         */
-        while (index > 7) {
+        while (index > limit) {
             index--;
         }
         return index;
