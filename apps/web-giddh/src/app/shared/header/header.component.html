@@ -195,9 +195,11 @@
                                 <button class="btn btn-link" *ngIf="!isTodaysDateSelected" (click)="dateSelectedCallback()">Today</button>
                             </li>
                             <li class="not-today cursor-pointer">
-                                <span *ngIf="!isTodaysDateSelected"  class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
+                                <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
                                 <div class="input-date" [ngClass]="{'today-date pl-2': isTodaysDateSelected}">
-                                    <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
+                                    <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
+                                        [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker form-control date-range-picker" />
                                 </div>
                             </li>
                         </ul>
@@ -459,9 +461,11 @@
                             <!-- <button class="btn btn-link" *ngIf="isTodaysDateSelected" (click)="showGiddhDatepicker($event)">Today</button> -->
                         </li>
                         <li class="daterang-picker not-today cursor-pointer">
-                            <span *ngIf="!isTodaysDateSelected" class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
+                            <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
                             <div class="input-date" [ngClass]="{'today-date pl-2': isTodaysDateSelected}">
-                                <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
+                                <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
+                                    [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker form-control date-range-picker" />
                             </div>
                         </li>
                     </ul>
