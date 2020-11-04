@@ -106,7 +106,7 @@
                     <div class="input-group">
                         <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'" [options]="companyTaxDropDown" [multiple]="true">
                         </sh-select>
-                        <span class="input-group-btn pdL2"> <button type="submit"
+                        <span *ngIf="taxGroupForm.get('taxes').value.length" class="input-group-btn pdL2"> <button type="submit"
                                 class="btn btn-success">Save</button></span>
                     </div>
                 </div>
