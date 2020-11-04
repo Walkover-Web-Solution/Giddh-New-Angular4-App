@@ -333,7 +333,7 @@ export class UpdateLedgerVm {
                 taxableValue = Number(amount) - this.discountTrxTotal;
             } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                 let rawAmount = Number(amount) - this.discountTrxTotal;
-                taxableValue = (rawAmount + ((rawAmount * this.appliedTaxPerTotal) / 100));
+                taxableValue = (rawAmount + this.appliedTaxPerTotal);
             }
 
             let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
