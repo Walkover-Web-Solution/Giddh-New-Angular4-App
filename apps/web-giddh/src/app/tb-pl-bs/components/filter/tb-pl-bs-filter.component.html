@@ -5,7 +5,7 @@
 
             <div class="col-xl-9 col-lg-12 col-md-12">
 
-                <form [formGroup]="filterForm" (submit)="filterData()" class="form-inline financial-selectYear"
+                <form [formGroup]="filterForm" (submit)="filterData()" class="form-inline financial-select-year"
                     name="fromToDateForm" novalidate>
                     <!-- this code is commented for , need to remove this dropdown but for funcationality I am not removing this
                         will remove it after universal datepicker added
@@ -14,7 +14,7 @@
                         <div class="form-group">
                             <sh-select [options]="dateOptions" (selected)="dateOptionIsSelected($event)"
                                 formControlName="selectedDateOption" [isFilterEnabled]="true"
-                                [placeholder]="'Select Option'" [showClear]="false" [ItemHeight]="33" width="120px">
+                                [placeholder]="'Select Option'" [showClear]="false" [ItemHeight]="33" width="100%">
                             </sh-select>
                         </div>
                     </div>

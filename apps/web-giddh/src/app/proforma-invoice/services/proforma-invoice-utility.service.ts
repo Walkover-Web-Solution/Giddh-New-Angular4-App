@@ -25,14 +25,14 @@ export class ProformaInvoiceUtilityService {
             text: 'No',
             cssClass: 'btn btn-danger'
         }];
-        const headerText: string = 'Purchase Record Confirmation';
+        const headerText: string = 'Purchase Bill Confirmation';
         const headerCssClass: string = 'd-inline-block mr-1 purchase-record-confirm-header';
         const messageCssClass: string = 'mr-b1';
         const footerCssClass: string = 'mr-b1 text-light';
         return {
             headerText,
             headerCssClass,
-            messageText: `<span class="mr-b1 text-light">You have already created a purchase record with the same invoice number, invoice date and vendor details.</span><span class="mr-b1"> Do you want to merge this transaction with the previous one?<span>`,
+            messageText: `<span class="mr-b1 text-light">You have already created a purchase bill with the same invoice number, invoice date and vendor details.</span><span class="mr-b1"> Do you want to merge this transaction with the previous one?<span>`,
             messageCssClass,
             footerText: 'If no then change either purchase invoice number or vendor details.',
             footerCssClass,

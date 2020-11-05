@@ -26,11 +26,11 @@
                     </div>
 
                     <div class="form-group mrR1 max500  d-initial flex-column" *ngIf="selectedType==='quater'">
-                        <label>Select Quater</label>
-                        <sh-select placeholder="Search Quater..." [multiple]='false' name="selectedQuater" [(ngModel)]="selectedQuater" #SelectQuater="ngModel" [options]="quaterOptions" required>
+                        <label>Select Quarter</label>
+                        <sh-select placeholder="Search Quarter..." [multiple]='false' name="selectedQuater" [(ngModel)]="selectedQuater" #SelectQuater="ngModel" [options]="quaterOptions" required>
                         </sh-select>
                         <div class="h-25px" *ngIf="SelectQuater.invalid">
-                            <div class="text-danger">please select quater</div>
+                            <div class="text-danger">please select quarter</div>
                         </div>
                     </div>
                     <div class="btn-group">
