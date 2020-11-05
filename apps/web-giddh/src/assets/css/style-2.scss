@@ -9713,6 +9713,9 @@ span#HW_badge_cont:nth-child(3) {
         white-space: nowrap;
     }
 }
+.rcm-entry .popover{
+    max-width: 600px;
+}
 /* responsive */
 ul.dropdown-menu.action-dropdown {
     left: auto;
@@ -9721,6 +9724,10 @@ ul.dropdown-menu.action-dropdown {
 /*material datepicker css starts*/
 .recurring-form  .mat-form-field{
     max-width: 170px;
+}
+.collapse-pane  .mat-form-field{
+    min-width: 147px;
+    max-width: 147px;
 }
 .mat-form-field{
     min-width: 170px;
@@ -9912,6 +9919,9 @@ input.mat-input-element{
     .tax-engine .table-striped > tbody > tr:nth-of-type(odd) {
         background-color: $white;
     }
+    .rcm-entry .popover{
+        max-width: 550px;
+    }
 }
 /*material datepicker css end*/
 
@@ -9951,8 +9961,24 @@ input.mat-input-element{
     /* responsive */
 
 @media (max-width: 767px) {
+    .settings-profile-tabs {
+        .tab-content{
+            padding-top: 45px;
+        }
+    }
+    .invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
+        .profile-tab-container {
+            .nav.nav-tabs {
+                padding-left: 15px !important;
+                left: 0;
+            }
+        }
+    }
+    .universal-date {
+        padding-top: 0;
+    }
     #inventory-sidebar{
-        padding: 15px 0;
+            padding: 15px 0;
     }
     bs-datepicker-container{
         position: fixed !important;
@@ -9963,7 +9989,7 @@ input.mat-input-element{
     .modal-backdrop + .modal {
         margin-top: 5px;
     }
-
+}
     @media (max-width: 1024px) {
         /* bs-datepicker-container{
                 position: absolute !important;
@@ -10399,6 +10425,9 @@ input.mat-input-element{
     }
     body.hide-scroll-body {
         overflow-y: hidden !important;
+    }
+    body.hide-scroll-body.on-setting-page {
+            overflow-y: auto !important;
     }
     .panel-block .card-body {
         min-height: auto;
@@ -11028,7 +11057,6 @@ input.mat-input-element{
                 }
             }
         }
-
         .mat-form-field{
             min-width: auto;
 
@@ -11048,7 +11076,20 @@ input.mat-input-element{
             padding-top: 0;
         }
     }
-
+    .custom-tabs .top-bar {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    #content-wrapper {
+        overflow-x: hidden;
+    }
+    #companyList {
+        background: $white;
+        padding-bottom: 4px;
+        left: 0px;
+        top: 30px;
+        padding-top: 0;
+    }
     @media (max-width: 500px) {
         .daterangepicker.dropdown-menu {
             max-width: 100% !important;
@@ -11254,6 +11295,20 @@ input.mat-input-element{
         ul.grp-list.users-last-list:first-child {
             min-height: 150px;
         }
+        .HW_frame_cont.HW_visible.HW_bottom{
+            max-width: 300px;
+        }
+        .edit-modal{
+            .modal-content{
+                    max-width: 300px;
+                }
+        }
+}
+@media (min-width:576px){
+    .modal-dialog {
+        max-width: 100% !important;
+        margin: 10px auto;
+        padding: 0 10px;
     }
     .HW_frame_cont.HW_visible.HW_bottom{
         max-width: 300px;
@@ -11316,7 +11371,23 @@ input.mat-input-element{
             max-width: 100% !important;
             width: 900px !important;
         }
+}
+@media(min-width: 480px) and (max-width: 667px) {
+    .edit-modal {
+        margin: 0 auto;
+        padding-top: 0;
+        .edit-date-modal {
+            padding: 0 15px;
+            .modal-outside-heading {
+                display: none;
+            }
+        }
     }
+    .po-preview-modal {
+        max-width: 100% !important;
+        width: 900px !important;
+    }
+}
     @media(min-width: 480px) and (max-width: 667px) {
         .edit-modal {
             margin: 0 auto;
@@ -11518,4 +11589,3 @@ body.prevent-body-scroll {
     border-radius: 5px;
     min-height: 60px;
 }
-

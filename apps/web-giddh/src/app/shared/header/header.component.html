@@ -142,7 +142,7 @@
                                                 <i class="fa fa-apple"></i> IOS</a>
                                         </li>
                                         <li>
-                                            <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{apkVersion}}.dmg" target="_blank" title="macOS app">
+                                            <a href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{macAppVersion}}.dmg" target="_blank" title="macOS app">
                                                 <i class="fa fa-apple"></i> MacOS</a>
                                         </li>
                                         <li>
@@ -451,24 +451,6 @@
                             </div>
                         </li>
                     </ul>
-                </div>
-
-                <div class="lower-layer-header">
-                    <ul class="nav universal-date  pull-left" *ngIf="(selectedCompany | async)">
-                        <li class="border-none pl-0">
-
-                            <button class="btn btn-link" *ngIf="!isTodaysDateSelected" (click)="dateSelectedCallback()">Today</button>
-                            <!-- <button class="btn btn-link" *ngIf="isTodaysDateSelected" (click)="showGiddhDatepicker($event)">Today</button> -->
-                        </li>
-                        <li class="daterang-picker not-today cursor-pointer">
-                            <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
-                            <div class="input-date" [ngClass]="{'today-date pl-2': isTodaysDateSelected}">
-                                <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)"
-                                    [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
-                                    class="giddh-datepicker form-control date-range-picker" />
-                            </div>
-                        </li>
-                    </ul>
                     <div class="d-flex align-items-center" *ngIf="(selectedCompany | async)">
                         <span [ngClass]="{'notification': isMobileScreen}">
                             <!-- <img src="{{imgPath}}notification.svg" class="mr-15"> -->
@@ -479,11 +461,26 @@
                         </button>
                         <div class="btn-group cp d-inline-flex help-setting-icons" dropdown>
                             <span (click)="toggleHelpSupportPane(true)">
-                                <img src="{{imgPath}}help-support-icon.svg">
+                                <i class="icon-help-support-icon"></i>
                             </span>
                         </div>
 
                     </div>
+                </div>
+
+                <div class="lower-layer-header">
+                    <ul class="nav universal-date  pull-left" *ngIf="(selectedCompany | async)">
+                        <li class="border-none pl-0" [ngClass]="{'hide-today':isTodaysDateSelected}">
+                            <button class="btn btn-link" (click)="dateSelectedCallback()"> Today</button>
+                            <!--                            <button class="btn btn-link" *ngIf="isTodaysDateSelected" (click)="showGiddhDatepicker($event)">Today</button>-->
+                        </li>
+                        <li class="daterang-picker not-today cursor-pointer">
+                            <span class="icon-calender calender-addone" (click)="showGiddhDatepicker($event)"></span>
+                            <div class="input-date" [ngClass]="{'today-date pl-2': isTodaysDateSelected}">
+                                <input type="text" name="selectedDateRange" (click)="showGiddhDatepicker($event)" [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''" class="giddh-datepicker form-control date-range-picker" />
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
