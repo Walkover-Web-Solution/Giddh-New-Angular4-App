@@ -24,10 +24,11 @@ import { PAGINATION_LIMIT } from '../app.constant';
 import { HttpClient } from "@angular/common/http";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
+import { CurrentPage } from '../models/api-models/Common';
 
 @Component({
     templateUrl: './settings.component.html',
-    styleUrls: ['./settings.component.css']
+    styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('staticTabs', {static: true}) public staticTabs: TabsetComponent;
@@ -109,16 +110,22 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
             if (this.activeTab === "linked-accounts") {
                 setTimeout(() => {
-                    this.eBankComp.getInitialEbankInfo();
+                    if (this.eBankComp) {
+                        this.eBankComp.getInitialEbankInfo();
+                    }
                 }, 0);
             } else if (this.activeTab === "profile") {
                 setTimeout(() => {
-                    this.profileComponent.getInitialProfileData();
-                    this.profileComponent.getInventorySettingData();
+                    if (this.profileComponent) {
+                        this.profileComponent.getInitialProfileData();
+                        this.profileComponent.getInventorySettingData();
+                    }
                 }, 0);
             } else if (this.activeTab === "financial-year") {
                 setTimeout(() => {
-                    this.financialYearComp.getInitialFinancialYearData();
+                    if (this.financialYearComp) {
+                        this.financialYearComp.getInitialFinancialYearData();
+                    }
                 }, 0);
             } else if (this.activeTab === "permission") {
                 setTimeout(() => {
@@ -128,7 +135,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 }, 0);
             } else if (this.activeTab === "tag") {
                 setTimeout(() => {
-                    this.tagComp.getTags();
+                    if (this.tagComp) {
+                        this.tagComp.getTags();
+                    }
                 }, 0);
             }
         });
@@ -342,5 +351,18 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.asideSettingMenuState = "out";
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Sets the current page title
+     *
+     * @param {string} title Title of the page
+     * @memberof SettingsComponent
+     */
+    public setCurrentPageTitle(title: string): void {
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = "Settings > " + title;
+        currentPageObj.url = this.router.url;
+        this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 }

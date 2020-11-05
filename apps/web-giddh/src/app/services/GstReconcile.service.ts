@@ -247,4 +247,17 @@ export class GstReconcileService {
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<GetGspSessionResponse, string>(e)));
     }
+
+    /**
+     * Loads the tax details of a company
+     *
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operations
+     * @memberof GstReconcileService
+     */
+    public getTaxDetails(): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this._generalService.companyUniqueName;
+        return this._http.get(this.config.apiUrl + GST_RETURN_API.GET_TAX_DETAILS
+            .replace(':companyUniqueName', this.companyUniqueName))
+            .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
 }

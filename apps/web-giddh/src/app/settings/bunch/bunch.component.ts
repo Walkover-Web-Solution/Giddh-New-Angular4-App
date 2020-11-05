@@ -85,8 +85,8 @@ export class BunchComponent implements OnDestroy {
 				_.each(companies, (cmp) => {
 					_.each(cmp.userEntityRoles, (company) => {
 						if (company.entity.entity === 'COMPANY' && company.role.uniqueName === 'super_admin') {
-							if (branches && branches.results.length) {
-								let existIndx = branches.results.findIndex((b) => b.uniqueName === cmp.uniqueName);
+							if (branches && branches.length) {
+								let existIndx = branches.findIndex((b) => b.uniqueName === cmp.uniqueName);
 								if (existIndx === -1) {
 									companiesWithSuperAdminRole.push(cmp);
 								}

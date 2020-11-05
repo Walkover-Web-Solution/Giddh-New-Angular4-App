@@ -104,7 +104,7 @@
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'" [options]="companyTaxDropDown | async" [multiple]="true">
+                        <sh-select formControlName="taxes" class="all-taxes" [placeholder]="'Select Tax'" [options]="companyTaxDropDown" [multiple]="true">
                         </sh-select>
                         <span class="input-group-btn pdL2"> <button [disabled]="!taxGroupForm?.get('taxes')?.value?.length" type="submit"
                                 class="btn btn-success">Save</button></span>
@@ -132,24 +132,23 @@
     <!-- taxes container -->
 </div>
 
-<!-- hinding discount for isDebtorCreditorGroups due to API deployment in-process -->
-<div class="horizontal-form mr1" *ngIf="false">
-    <div class="mb-2 selectBox">
+<div class="horizontal-form" *ngIf="isDebtorCreditorGroups">
+    <div class="mb-2 selectBox container-fluid mt-1">
         <div class="form-group ">
             <label>Default Discounts <span
                         class="primary-color"></span></label>
             <div class="clearfix">
                 <span>
-                        <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" placeholder="Select discounts"></sh-select>
+                        <sh-select class="pull-left calc-width" [options]="discountList" [isFilterEnabled]="true" [forceClearReactive]="forceClearDiscount$ | async"  [multiple]="true" [(ngModel)]="selectedDiscounts" (ngModelChange)="applyDiscounts()" placeholder="Select discounts"></sh-select>
                     </span>
-                <span class="pull-right">
+                <!-- <span class="pull-right">
                         <button  class="btn btn-primary mrgeBtn"  [disabled]="selectedDiscounts.length===0" (click)="applyDiscounts()">Apply</button>
-                    </span>
+                    </span> -->
 
             </div>
         </div>
     </div>
-    <div class="edit-tax-section">
+    <div class="edit-tax-section container-fluid mt-1">
         <div class="form-group">
             <div class="tax-label">
                 <label>All Inherited Discounts</label>

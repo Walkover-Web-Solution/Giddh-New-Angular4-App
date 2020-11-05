@@ -27,7 +27,7 @@ import { SettingsDiscountActions } from '../actions/settings/discount/settings.d
 import { SettingsTagActions } from '../actions/settings/tag/settings.tag.actions';
 import { LoaderService } from '../loader/loader.service';
 import { cloneDeep, filter, find, orderBy, uniq } from '../lodash-optimized';
-import { AccountResponse } from '../models/api-models/Account';
+import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
@@ -800,7 +800,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 //     stockListFormFlattenAccount = data[1].find((acc) => acc.uniqueName === this.lc.accountUnq);
                 // }
 
-                let accountDetails: AccountResponse = data[0];
+                let accountDetails: AccountResponse | AccountResponseV2 = data[0];
                 let parentOfAccount = accountDetails.parentGroups[0];
 
                 this.lc.getUnderstandingText(accountDetails.accountType, accountDetails.name, accountDetails.parentGroups);
@@ -817,8 +817,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
 
                 this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp.uniqueName === 'bankaccounts');
-                this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile.baseCurrency;
-
+                if (accountDetails.currency && profile.baseCurrency) {
+                    this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile.baseCurrency;
+                } else {
+                    this.isLedgerAccountAllowsMultiCurrency = false;
+                }
                 this.foreignCurrencyDetails = { code: profile.baseCurrency, symbol: profile.baseCurrencySymbol };
                 if (this.isLedgerAccountAllowsMultiCurrency) {
                     this.baseCurrencyDetails = { code: accountDetails.currency, symbol: accountDetails.currencySymbol };
@@ -1407,7 +1410,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
-        let activeAccount: AccountResponse;
+        let activeAccount: AccountResponse | AccountResponseV2;
         let groupWithAccountsList: GroupsWithAccountsResponse[];
         this.lc.activeAccount$.pipe(take(1)).subscribe(a => activeAccount = a);
         this.lc.groupsArray$.pipe(take(1)).subscribe(a => groupWithAccountsList = a);

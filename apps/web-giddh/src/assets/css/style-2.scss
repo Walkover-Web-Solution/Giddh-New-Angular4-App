@@ -7,6 +7,7 @@
    Don't touch this table css (If any body work on that contact shalinee..)
 */
 
+
 .basic > tbody > tr > td,
 .basic > tbody > tr > th,
 .basic > tfoot > tr > td,
@@ -529,7 +530,7 @@ input {
     }
     75% {
         -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
-            scale(0.5);
+        scale(0.5);
     }
     100% {
         -webkit-transform: rotate(-360deg);
@@ -552,7 +553,7 @@ input {
     75% {
         transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
         -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
-            scale(0.5);
+        scale(0.5);
     }
     100% {
         transform: rotate(-360deg);
@@ -603,6 +604,13 @@ input {
 
 .invoice-control .invoice-nav.navbar-nav > li > a.active {
     background-color: $white;
+}
+.invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
+    .profile-tab-container {
+        .nav.nav-tabs {
+            padding-left: 0 !important;
+        }
+    }
 }
 
 .navbar {
@@ -1794,10 +1802,10 @@ modal-container.modal {
 }
 
 .subscription-collapse
-    .panel-default
-    > .panel-heading
-    + .panel-collapse
-    > .panel-body {
+.panel-default
+> .panel-heading
++ .panel-collapse
+> .panel-body {
     border: 0px solid;
 }
 
@@ -2503,7 +2511,7 @@ input[type="checkbox"]:checked:before {
 
 input[type="checkbox"]:before {
     -webkit-transition: -webkit-transform 0.4s
-        cubic-bezier(0.45, 1.8, 0.5, 0.75);
+    cubic-bezier(0.45, 1.8, 0.5, 0.75);
     -moz-transition: -moz-transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
     transition: transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
     -webkit-transform: rotate(-45deg) scale(0, 0);
@@ -4238,7 +4246,7 @@ input[type=radio]:checked:after {
 }
 
 .form-group.mrB,
-.mrBChldLbl .form-group label {
+.margin-child-label .form-group label {
     margin-bottom: 5px;
 }
 
@@ -5095,7 +5103,7 @@ label {
     top: 50px;
 }
 
-.grey-clr {
+.grey-color {
     color: #6d6d6d;
 }
 
@@ -5195,13 +5203,13 @@ label {
     margin-left: 255px;
 }
 
-.grp-col::-webkit-scrollbar-track {
-    background: #eee;
+.grp_col::-webkit-scrollbar-track {
+    background: $white-smoke;
     margin-left: 255px;
 }
 
-.grp-col::-webkit-scrollbar-thumb {
-    background-color: $gainsboro;
+.grp_col::-webkit-scrollbar-thumb {
+    background-color: $nobel;
     outline: 1px solid $gray;
     margin-left: 255px;
 }
@@ -5239,23 +5247,23 @@ label {
 }
 
 .custom-select{
-        height: auto;
-        padding: 0px;
-        border:0px solid $gainsboro;
-        select {
-            -moz-appearance: none;
-            -webkit-appearance: none;
-            -webkit-border-radius: 0;
-            border-radius: 0;
-            padding-right: 22px !important;
-        }
-        .select_drop {
-            position: absolute;
-            bottom: 16px;
-            top: inherit;
-            z-index: 9;
-            right: 6px;
-        }
+    height: auto;
+    padding: 0px;
+    border:0px solid $gainsboro;
+    select {
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        -webkit-border-radius: 0;
+        border-radius: 0;
+        padding-right: 22px !important;
+    }
+    .select_drop {
+        position: absolute;
+        bottom: 16px;
+        top: inherit;
+        z-index: 9;
+        right: 6px;
+    }
 }
 
 #mfReportTbl table > tbody > tr > td > table.table {
@@ -5305,13 +5313,13 @@ label {
 }
 
 .select2-container--default
-    .select2-selection--single
-    .select2-selection__rendered {
+.select2-selection--single
+.select2-selection__rendered {
     line-height: inherit !important;
 }
 
 .select2-container--default
-    .select2-results__option--highlighted[aria-selected] {
+.select2-results__option--highlighted[aria-selected] {
     background-color: #333 !important;
 }
 
@@ -5487,10 +5495,10 @@ label {
 }
 
 .ledger-row
-    td
-    .select2-container--default
-    .select2-results__option--highlighted[aria-selected]
-    a {
+td
+.select2-container--default
+.select2-results__option--highlighted[aria-selected]
+a {
     color: $white !important;
 }
 
@@ -5912,32 +5920,32 @@ datepicker-inner .well table tbody tr td .btn-default:hover .text-success {
 }
 
 datepicker-inner
-    .well
-    table
-    tbody
-    tr
-    td
-    button.btn.btn-default.btn-info
-    .text-success {
+.well
+table
+tbody
+tr
+td
+button.btn.btn-default.btn-info
+.text-success {
     color: $green !important;
 }
 
 datepicker-inner
-    .well
-    table
-    tbody
-    tr
-    td
-    button.btn.btn-default.btn-info:hover
-    .text-success,
+.well
+table
+tbody
+tr
+td
+button.btn.btn-default.btn-info:hover
+.text-success,
 datepicker-inner
-    .well
-    table
-    tbody
-    tr
-    td
-    button.btn.btn-default.btn-link:hover
-    .text-success {
+.well
+table
+tbody
+tr
+td
+button.btn.btn-default.btn-link:hover
+.text-success {
     color: $white !important;
 }
 
@@ -6166,10 +6174,10 @@ input[type="checkbox"][disabled]:after {
 }
 
 #verifyMobile
-    .select2-parent
-    .select2-container--default
-    .select2-selection--single
-    .select2-selection__arrow {
+.select2-parent
+.select2-container--default
+.select2-selection--single
+.select2-selection__arrow {
     height: 44px;
 }
 
@@ -7413,9 +7421,9 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine
-    .transactions-overview
-    .gstr-transactions-summary
-    .transactions-table {
+.transactions-overview
+.gstr-transactions-summary
+.transactions-table {
     border: 1px solid #ededed;
 }
 
@@ -7430,10 +7438,10 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine
-    .table.transactions-table
-    thead:first-child
-    tr:first-child
-    th:first-child {
+.table.transactions-table
+thead:first-child
+tr:first-child
+th:first-child {
     padding-left: 20px;
 }
 
@@ -7496,19 +7504,19 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine
-    .table.transactions-summary-table
-    > tbody
-    > tr:not(.secondary-row)
-    + tr.secondary-row
-    > td {
+.table.transactions-summary-table
+> tbody
+> tr:not(.secondary-row)
++ tr.secondary-row
+> td {
     border-top: 1px solid #ededed;
 }
 
 .tax-engine
-    .table.transactions-summary-table
-    > tbody
-    > tr.secondary-row
-    > td:nth-child(1) {
+.table.transactions-summary-table
+> tbody
+> tr.secondary-row
+> td:nth-child(1) {
     padding-left: 50px;
 }
 
@@ -7534,10 +7542,10 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine
-    .table.transactions-summary-table
-    > tbody
-    > tr.secondary-row
-    > td:first-child {
+.table.transactions-summary-table
+> tbody
+> tr.secondary-row
+> td:first-child {
     border-right: none;
 }
 
@@ -7869,19 +7877,19 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine
-    .table.reconciliations-table
-    tbody
-    > tr:hover
-    .actions-dropdown-btn {
+.table.reconciliations-table
+tbody
+> tr:hover
+.actions-dropdown-btn {
     border: 1px solid #2a85fb;
 }
 
 .tax-engine .table.reconciliations-table .actions-dropdown-btn,
 .tax-engine
-    .table.reconciliations-table
-    tbody
-    > tr:hover
-    .reconcile-row-action {
+.table.reconciliations-table
+tbody
+> tr:hover
+.reconcile-row-action {
     color: #2a85fb;
 }
 
@@ -7984,10 +7992,10 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 
 .tax-engine
-    .table.transactions-summary-table
-    > tbody
-    > tr.secondary-row:hover
-    > td {
+.table.transactions-summary-table
+> tbody
+> tr.secondary-row:hover
+> td {
     background-color: transparent;
 }
 
@@ -8144,7 +8152,7 @@ app-header {
     border-radius: 0;
 }
 
-.accountAsideMenuState2 #close {
+.account-aside-menu-state #close {
     display: block;
     position: fixed;
     right: 472px;
@@ -8275,7 +8283,7 @@ div#getGroupModal {
     animation-fill-mode: both;
 }
 
-.accountAsideMenuState2 .horizontal-form {
+.account-aside-menu-state .horizontal-form {
     padding-bottom: 110px;
 }
 
@@ -8915,7 +8923,7 @@ button.ladda-button .ladda-label {
     transition: none !important;
 }
 
-.accountAsideMenuState2 #close {
+.account-aside-menu-state #close {
     display: block;
     position: absolute;
     right: 10px;
@@ -9210,10 +9218,10 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 .select2-parent.select2-ledger
-    .update-ledger-account
-    sh-select
-    .header.open
-    input:placeholder-shown {
+.update-ledger-account
+sh-select
+.header.open
+input:placeholder-shown {
     padding-left: 10px !important;
 }
 
@@ -9224,16 +9232,16 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 .select2-parent.select2-ledger
-    .update-ledger-account
-    input.form-control.focused {
+.update-ledger-account
+input.form-control.focused {
     padding-left: 13px !important;
 }
 
 .select2-parent.select2-ledger
-    .ledger-account-label
-    sh-select
-    .header.open
-    input:placeholder-shown {
+.ledger-account-label
+sh-select
+.header.open
+input:placeholder-shown {
     padding-left: 10px !important;
 }
 
@@ -9247,8 +9255,8 @@ input.checkbox-custom[type="checkbox"] {
 }
 
 .select2-parent.select2-ledger
-    .ledger-account-label
-    input.form-control.focused {
+.ledger-account-label
+input.form-control.focused {
     padding-left: 13px !important;
 }
 
@@ -9650,10 +9658,15 @@ span#HW_badge_cont:nth-child(3) {
 .daterangepicker{
     z-index: 9992 !important;
 }
+.sub-branch-option .bs-tooltip-top{
+    left: -25px !important;
+}
+.sub-branch-option .bs-tooltip-top .arrow::before{
+    right: -22px;
+}
 #rcw-p91-widget-button{
     z-index: 98;
 }
-
 .linked-add{
     .popover{
         width:268px;
@@ -9771,224 +9784,21 @@ input.mat-input-element{
     background-color: $midnight-blue;
 }
 /*material datepicker css end*/
+.giddh-limit {
+    &.single-line-clamp {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
 
 /* responsive */
-
 @media (max-width: 1440px) {
     .font-xxlarge {
         font-size: 20px;
     }
 }
-
-@media (max-width: 1024px) {
-    /* bs-datepicker-container{
-            position: absolute !important;
-            left: 15px !important;
-            top: 40px !important;
-            transform: none !important;
-    }
-    .payment-date{
-        bs-datepicker-container{
-            top: 60px !important;
-        }
-    }*/
-    .users-last-list{
-        .cdk-virtual-scroll-content-wrapper {
-            position: relative;
-        }
-    }
-    .all-features-modal {
-        width: 90%;
-        margin: 0 auto;
-    }
-    .auto_save {
-        top: 96px;
-    }
-    #setting-tab .tab-container .nav.nav-tabs {
-        margin: 0 0 4px;
-        padding: 10px 0px 0;
-        white-space: nowrap;
-        display: inline-block;
-        width: 100%;
-        overflow-y: hidden;
-    }
-    #setting-tab .tab-container .nav-tabs > li {
-        float: none;
-        display: inline-block;
-        cursor: grab;
-    }
-    #setting-tab .nav-tabs > li {
-        float: left;
-        margin-bottom: 0px;
-    }
-    #setting-tab .tab-integraton .nav.nav-tabs {
-        overflow: auto;
-        white-space: initial;
-        width: 100%;
-        margin: 0 auto;
-        display: block;
-    }
-    #setting-tab .tab-integraton .nav-tabs > li {
-        width: 100px;
-        margin-bottom: 20px;
-        margin-right: 10px;
-    }
-    #setting-tab .tab-integraton .nav-tabs > li > a {
-        width: 90px;
-        height: 90px;
-        font-size: 14px;
-    }
-    .groups-buttons {
-        height: auto;
-    }
-    #setting-tab-wrapper .tab-integraton .nav-tabs {
-        display: inline-block;
-        width: 100%;
-        white-space: nowrap;
-    }
-    #setting-tab-wrapper .tab-integraton .nav-tabs > li > a {
-        width: 90px;
-        height: 90px;
-        font-size: 14px;
-    }
-        .right-bar {
-        width: 100% !important;
-    }
-}
-
-
-@media (max-width: 991px) {
-    .setting-tab-data li.nav-item {
-        display: inline-block;
-    }
-    .sidebar-menu{
-        position: absolute !important;
-        width: 100%;
-        display: flex;
-        flex: 1;
-        max-width: 100%;
-        height: 50px !important;
-        left: 4px;
-        min-height: auto !important;
-        .menu_list {
-            li{
-                display: inline-flex;
-                a{
-                    padding: 14px 12px !important;
-                }
-            }
-        }
-    }
-    .form-bg {
-        width: 100%;
-    }
-    .grp-col {
-        float: none !important;
-        width: 100% !important;
-        max-width: 100% !important;
-    }
-    .grp-list .list-item {
-        display: inline-block;
-    }
-    .col-wrapper {
-        white-space: initial;
-    }
-    .col-wrapper:nth-child(2) {
-        margin-left: 0px;
-        width: 100%;
-    }
-    .grp-list {
-        padding: 0px;
-        background: #f4f5f8;
-        width: 100%;
-        display: block;
-    }
-    .users-last-list > li:last-child {
-        height: inherit !important;
-    }
-    .xs-left {
-        text-align: left !important;
-    }
-    .form-box.form-bg {
-        height: auto !important;
-        min-height: auto;
-    }
-    .left-account-operation {
-        height: initial !important;
-        width: 100%;
-        background: $white;
-    }
-    .users-last-list > li {
-        display: inline-block;
-    }
-    #inventory-sidebar {
-        min-height: initial;
-        width: 100% !important;
-    }
-    .stock-grp-list:first-child {
-        max-height: initial !important;
-        min-height: initial !important;
-    }
-    .sticky-footer {
-        position: relative;
-    }
-    .stock-lists {
-        position: absolute;
-        box-shadow: 0 3px 6px #ccc;
-        background: $white;
-        min-width: 200px;
-        display: inline-block;
-        z-index: 9;
-        max-height: 400px;
-        overflow-y: auto;
-    }
-    .stock-grp-list > li {
-        display: inline-block;
-        border: 0px;
-        position: relative;
-    }
-    .ledg-head .custom-tabs .nav.nav-tabs {
-        position: absolute;
-        width: 104%;
-        top: -50px;
-        padding-top: 5px !important;
-        margin: 0;
-        left: -16px;
-        right: 0;
-    }
-    .sub-filter-nav-band .nav-tabs{
-        overflow-x: auto;
-        overflow-y: hidden;
-        display: inline-flex;
-        white-space: nowrap;
-        width: 100%;
-        li{
-            white-space: normal;
-        }
-    }
-    .tax-engine .nav-band .nav-tabs {
-        white-space: nowrap;
-        padding-top: 15px !important;
-        overflow: hidden;
-        display: inline-block;
-        width: 100%;
-        overflow-x: auto;
-    }
-}
-
-@media (max-width: 840px) {
-    .card-invoiceTable
-        #tax-control-multi-select.multi-select
-        input.form-control[readonly],
-    .card-invoiceTable .multi-select input.form-control {
-        background-position: 98% !important;
-    }
-    .single-card-row .my-dropdown-menu.pd {
-        left: auto !important;
-        right: 0 !important;
-    }
-}
-
 @media (max-width: 768px) {
     ul.dropdown-menu.action-dropdown{
         left: auto;
@@ -10109,15 +9919,21 @@ input.mat-input-element{
     .tax-engine .table-striped > tbody > tr:nth-of-type(odd) {
         background-color: $white;
     }
-    .modal-header {
-        padding: 12px 15px !important;
-        h3,
-        h4 {
-            font-size: 16px !important;
-        }
-        .close {
+    .rcm-entry .popover{
+        max-width: 550px;
+    }
+}
+/*material datepicker css end*/
+
+    .master-custom-tabs.custom-tabs {
+        .nav-tabs {
             top: 0;
-            font-size: 26px;
+
+            li {
+                a {
+                    padding-top: 5px;
+                }
+            }
         }
     }
     .on-setting-page aside-setting.setting-sidebar {
@@ -10138,31 +9954,14 @@ input.mat-input-element{
     .invoice-preview table{
         margin-top: 0 !important;
     }
-}
+    .delete-modal-overlay {
+        z-index: 9992; /*for delete custom zIndex modal*/
+    }
 
-@media (max-width: 1280px) {
-    .multi-select input.form-control {
-        padding-right: 18px !important;
-    }
-    #dashboard .panel-default > .panel-heading {
-        font-size: 14px;
-    }
-    #dashboard .panel-heading i {
-        margin-left: 10px;
-    }
-    .rcm-entry .popover{
-        max-width: 550px;
-    }
-}
-
-@media (max-width: 1199px) {
-    .ledger-book .left-col-new .entry-modal {
-        width: 100%;
-    }
-}
+    /* responsive */
 
 @media (max-width: 767px) {
-.settings-profile-tabs {
+    .settings-profile-tabs {
         .tab-content{
             padding-top: 45px;
         }
@@ -10190,40 +9989,203 @@ input.mat-input-element{
     .modal-backdrop + .modal {
         margin-top: 5px;
     }
-
-    .daterangepicker.ltr .ranges {
-        ul{
-            width:100%;
-            li{
-                display:inline-block;
-                margin-right: 5px;
+}
+    @media (max-width: 1024px) {
+        /* bs-datepicker-container{
+                position: absolute !important;
+                left: 15px !important;
+                top: 40px !important;
+                transform: none !important;
+        }
+        .payment-date{
+            bs-datepicker-container{
+                top: 60px !important;
+            }
+        }*/
+        .users-last-list {
+            .cdk-virtual-scroll-content-wrapper {
+                position: relative;
             }
         }
+        .all-features-modal {
+            width: 90%;
+            margin: 0 auto;
+        }
+        .auto_save {
+            top: 96px;
+        }
+        #setting-tab .tab-container .nav.nav-tabs {
+            margin: 0 0 4px;
+            padding: 10px 0px 0;
+            white-space: nowrap;
+            display: inline-block;
+            width: 100%;
+            overflow-y: hidden;
+        }
+        #setting-tab .tab-container .nav-tabs > li {
+            float: none;
+            display: inline-block;
+            cursor: grab;
+        }
+        #setting-tab .nav-tabs > li {
+            float: left;
+            margin-bottom: 0px;
+        }
+        #setting-tab .tab-integraton .nav.nav-tabs {
+            overflow: auto;
+            white-space: initial;
+            width: 100%;
+            margin: 0 auto;
+            display: block;
+        }
+        #setting-tab .tab-integraton .nav-tabs > li {
+            width: 100px;
+            margin-bottom: 20px;
+            margin-right: 10px;
+        }
+        #setting-tab .tab-integraton .nav-tabs > li > a {
+            width: 90px;
+            height: 90px;
+            font-size: 14px;
+        }
+        .groups-buttons {
+            height: auto;
+        }
+        #setting-tab-wrapper .tab-integraton .nav-tabs {
+            display: inline-block;
+            width: 100%;
+            white-space: nowrap;
+        }
+        #setting-tab-wrapper .tab-integraton .nav-tabs > li > a {
+            width: 90px;
+            height: 90px;
+            font-size: 14px;
+        }
+        .right-bar {
+            width: 100% !important;
+        }
     }
 
-    .remove-header-lower-layer {
-        .mobile-back-btn {
-            display: inline-flex !important;
+
+    @media (max-width: 991px) {
+        .setting-tab-data li.nav-item {
+            display: inline-block;
         }
-        .hamburger-menu {
-            .btn {
-                display: none !important;
+        .sidebar-menu {
+            position: absolute !important;
+            width: 100%;
+            display: flex;
+            flex: 1;
+            max-width: 100%;
+            height: 50px !important;
+            left: 4px;
+            min-height: auto !important;
+
+            .menu_list {
+                li {
+                    display: inline-flex;
+
+                    a {
+                        padding: 14px 12px !important;
+                    }
+                }
             }
         }
-    }
-    .HW_badge_cont {
-        left: -6px !important;
-        z-index: 991;
-        top: -25px !important;
-        position: absolute;
-    }
-    .setting-sidebar-open .setting-data,
-    .setting-sidebar-open .white-row {
-        padding-left: 15px !important;
-    }
-    .overlay-cal {
-        .modal-body {
-            padding: 50px 15px;
+        .form-bg {
+            width: 100%;
+        }
+        .grp-col {
+            float: none !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        .grp-list .list-item {
+            display: inline-block;
+        }
+        .col-wrapper {
+            white-space: initial;
+        }
+        .col-wrapper:nth-child(2) {
+            margin-left: 0px;
+            width: 100%;
+        }
+        .grp-list {
+            padding: 0px;
+            background: #f4f5f8;
+            width: 100%;
+            display: block;
+        }
+        .users-last-list > li:last-child {
+            height: inherit !important;
+        }
+        .xs-left {
+            text-align: left !important;
+        }
+        .form-box.form-bg {
+            height: auto !important;
+            min-height: auto;
+        }
+        .left-account-operation {
+            height: initial !important;
+            width: 100%;
+            background: $white;
+        }
+        .users-last-list > li {
+            display: inline-block;
+        }
+        #inventory-sidebar {
+            min-height: initial;
+            width: 100% !important;
+        }
+        .stock-grp-list:first-child {
+            max-height: initial !important;
+            min-height: initial !important;
+        }
+        .sticky-footer {
+            position: relative;
+        }
+        .stock-lists {
+            position: absolute;
+            box-shadow: 0 3px 6px #ccc;
+            background: $white;
+            min-width: 200px;
+            display: inline-block;
+            z-index: 9;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .stock-grp-list > li {
+            display: inline-block;
+            border: 0px;
+            position: relative;
+        }
+        .ledg-head .custom-tabs .nav.nav-tabs {
+            position: absolute;
+            width: 104%;
+            top: -50px;
+            padding-top: 5px !important;
+            margin: 0;
+            left: -16px;
+            right: 0;
+        }
+        .sub-filter-nav-band .nav-tabs {
+            overflow-x: auto;
+            overflow-y: hidden;
+            display: inline-flex;
+            white-space: nowrap;
+            width: 100%;
+
+            li {
+                white-space: normal;
+            }
+        }
+        .tax-engine .nav-band .nav-tabs {
+            white-space: nowrap;
+            padding-top: 15px !important;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+            overflow-x: auto;
         }
     }
     .btn {
@@ -10484,114 +10446,615 @@ input.mat-input-element{
         padding-top: 95px !important;
     }
 
-     .padding-top-fixed-mobile {
-       padding-top: 95px;
-    }
-    ngx-daterangepicker-material {
-        position: fixed;
-        top: 0 !important;
-        left: 0 !important;
-        z-index: 999;
-        width: 100%;
-        height: 100vh;
-        max-width: 100% !important;
-    }
-    .giddh-datepicker-modal {
-        position: fixed;
-        width: 100%;
-        left: 0;
-        top: 0;
-        margin: 0;
-    }
-    .edit-modal {
-        max-width: 100%;
-        margin: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        width: 100%;
-        padding-top: 40px;
-        &:after {
-            position: absolute;
-            content: "";
-            background-color: rgba(0, 0, 0, 0.4);
-            width: 100% !important;
-            height: 125%;
-            z-index: -1;
-            left: 0;
-            top: 0;
+    @media (max-width: 840px) {
+        .card-invoiceTable
+        #tax-control-multi-select.multi-select
+        input.form-control[readonly],
+        .card-invoiceTable .multi-select input.form-control {
+            background-position: 98% !important;
+        }
+        .single-card-row .my-dropdown-menu.pd {
+            left: auto !important;
+            right: 0 !important;
         }
     }
-    .hide-scroll-body:last-child .modal {
-        z-index: 9993;
+
+    @media (max-width: 768px) {
+        ul.dropdown-menu.action-dropdown {
+            left: auto;
+            right: 0 !important;
+        }
+        #setting-tab .tab-integraton .nav-tabs {
+            padding-top: 0 !important;
+        }
+        #setting-tab .tab-integraton .nav-tabs > li > a {
+            width: 70px;
+            height: 70px;
+        }
+        .tab-integraton .nav-tabs > li > a > span {
+            font-size: 22px;
+        }
+        .tab-integraton .nav-tabs > li > a span:first-child {
+            display: none;
+        }
+        #setting-tab .tab-integraton .nav-tabs > li {
+            width: 70px;
+            margin-bottom: 15px;
+            margin-top: 15px;
+        }
+        .aging-table tr td:first-child,
+        .aging-table tr th:first-child,
+        .aging-table.table-aging-report tr td:first-child,
+        .aging-table.table-aging-report tr th:first-child {
+            padding-left: 50% !important;
+            width: auto;
+        }
+        .basic > tbody > tr td:first-child,
+        .basic > thead > tr th:first-child {
+            border-left: none !important;
+        }
+        .auto_save {
+            top: 124px;
+        }
+        .justify-content-sm-start {
+            justify-content: left !important;
+        }
+        .top-aging-table-top .top-aging-table-top1 {
+            top: 38px;
+        }
+        .top-aging-table-box {
+            text-align: left;
+            margin-bottom: 10px;
+        }
+        .paginationWrapper {
+            margin-top: 20px;
+            border: none;
+            background-color: transparent;
+            padding: 0;
+            margin-bottom: 50px !important;
+        }
+        .overlayBg:after {
+            position: fixed;
+            content: "";
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            top: 0;
+            z-index: 4;
+        }
+        .tax-engine .table.transactions-table.on-mobile-view tbody > tr > td {
+            max-width: 100% !important;
+        }
+        .nav-tabs > li {
+            float: left;
+            margin-bottom: 0px;
+        }
+        .tab-container .nav-tabs > li {
+            float: none;
+            display: inline-block;
+            cursor: grab;
+        }
+        .table-responsive {
+            padding: 0 3px;
+            border: none;
+        }
+        table.table td.text-center.empty-table {
+            padding: 5px 10px 5px 0% !important;
+            text-align: center !important;
+            width: 100%;
+            margin-bottom: 0;
+        }
+        #middleBody .horizontal-form,
+        .view_forms .horizontal-form {
+            max-width: 100%;
+            width: 100%;
+        }
+        .table > tbody > tr > td,
+        .table > tbody > tr > th,
+        .table > tfoot > tr > td,
+        .table > tfoot > tr > th,
+        .table > thead > tr > td,
+        .table > thead > tr > th {
+            white-space: initial !important;
+        }
+        .universal-date label.btn.btn-link {
+            display: none;
+        }
+        .invoice-control .nav.nav-tabs {
+            margin-bottom: 15px;
+            padding: 0 0px 0 15px !important;
+        }
+        overview-summary .transactions-overview {
+            background: transparent;
+        }
+        .tax-engine
+        .transactions-overview
+        .gstr-transactions-summary
+        .transactions-table {
+            border: none;
+        }
+        .tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
+        .tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
+            background-color: $white;
+        }
+        .tax-engine .table-striped > tbody > tr:nth-of-type(odd) {
+            background-color: $white;
+        }
+        .modal-header {
+            padding: 12px 15px !important;
+
+            h3,
+            h4 {
+                font-size: 16px !important;
+            }
+
+            .close {
+                top: 0;
+                font-size: 26px;
+            }
+        }
+        .on-setting-page aside-setting.setting-sidebar {
+            left: -230px;
+        }
+        .setting-sidebar-open .desktop-header {
+            padding-left: 0;
+        }
+        .setting-data, .setting-sidebar-open .white-row {
+            padding-left: 15px !important;
+        }
+        .setting-data, .setting-sidebar-open .white-row {
+            padding-left: 15px !important;
+        }
+        .aging-table {
+            background: transparent !important;
+        }
+        .invoice-preview table {
+            margin-top: 0 !important;
+        }
     }
-    .page-has-tabs .invoice-genrate-container,
-    .page-has-tabs .invoice-container,
-    .page-has-tabs .proforma-container,
-    .page-has-tabs .proforma-container{
-        padding-top: 15px !important;
+
+    @media (max-width: 1280px) {
+        .multi-select input.form-control {
+            padding-right: 18px !important;
+        }
+        #dashboard .panel-default > .panel-heading {
+            font-size: 14px;
+        }
+        #dashboard .panel-heading i {
+            margin-left: 10px;
+        }
     }
-    .page-has-tabs
+
+    @media (max-width: 1199px) {
+        .ledger-book .left-col-new .entry-modal {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .universal-date {
+            padding-top: 0;
+        }
+        #inventory-sidebar{
+            padding: 15px 0;
+        }
+        bs-datepicker-container {
+            position: fixed !important;
+            left: 50% !important;
+            top: 50% !important;
+            transform: translate(-50%, -50%) !important;
+        }
+        .modal-backdrop + .modal {
+            margin-top: 5px;
+        }
+
+        .daterangepicker.ltr .ranges {
+            ul {
+                width: 100%;
+
+                li {
+                    display: inline-block;
+                    margin-right: 5px;
+                }
+            }
+        }
+
+        .remove-header-lower-layer {
+            .mobile-back-btn {
+                display: inline-flex !important;
+            }
+
+            .hamburger-menu {
+                .btn {
+                    display: none !important;
+                }
+            }
+        }
+        .HW_badge_cont {
+            left: -6px !important;
+            z-index: 991;
+            top: -25px !important;
+            position: absolute;
+        }
+        .setting-sidebar-open .setting-data,
+        .setting-sidebar-open .white-row {
+            padding-left: 15px !important;
+        }
+        .overlay-cal {
+            .modal-body {
+                padding: 50px 15px;
+            }
+        }
+        .btn {
+            padding: 7px 8px;
+        }
+        .setting-container {
+            margin-top: 20px;
+        }
+        .hide-lable-on-mobile button {
+            margin-top: 0 !important;
+        }
+        .basic > tbody > tr td:last-child,
+        .basic > thead > tr th:last-child {
+            border-right: none;
+        }
+        header .navbar {
+            background-color: $midnight-blue !important;
+            border-bottom: none !important;
+        }
+        header .hamburger-menu h4 {
+            color: $white;
+            font-size: 16px;
+        }
+        header .hamburger-menu i.icon-bar {
+            color: $white;
+        }
+        .dropdown-width ul.dropdown-menu.pd {
+            min-width: 150px !important;
+        }
+        #invoice-setting ul.nav.nav-tabs {
+            border-bottom: none !important;
+        }
+        .company-box .inner-company-box > ul > li > span {
+            width: 100px;
+        }
+        .xs-pl-0 {
+            padding-left: 0px;
+        }
+        .xs-pr-0 {
+            padding-right: 0px;
+        }
+        .xs-pt-0 {
+            padding-top: 0px;
+        }
+        .xs-width-100 {
+            width: 100%;
+        }
+        .ledger-book .right-col-new .entry-modal {
+            width: 100%;
+            left: 0%;
+        }
+        .card-table tbody tr td {
+            display: block;
+            width: 100%;
+            min-width: 100%;
+            position: relative;
+            padding-left: 60px !important;
+            border: 0px !important;
+        }
+        .card-table tbody tr td:after {
+            content: attr(data-title);
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            font-weight: bold;
+        }
+        .card-table thead {
+            display: none;
+        }
+        .card-table tbody tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .card-table,
+        .card-table tbody,
+        .card-table tbody tr {
+            display: block;
+        }
+        .blank-label {
+            display: none;
+        }
+        .select2-ledger .menu {
+            width: 210px !important;
+        }
+        .menu_open {
+            padding-left: 0;
+        }
+        .menu_open:before {
+            position: absolute;
+            content: "";
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 990;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            display: none;
+        }
+        .user-dropdown-header > li > a .icon-arrow-down {
+            transform: rotate(90deg);
+        }
+        #setting-tab .tab-container .nav.nav-tabs, #purchase-tab .purchase-tabset.tab-container
+        > .nav.nav-tabs {
+            position: fixed;
+            width: 100%;
+            top: 90px;
+        }
+        #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
+            top: 88px;
+            z-index: 99;
+        }
+        .custom-tabs .nav.nav-tabs {
+            position: fixed;
+            width: 100%;
+            top: 90px;
+        }
+        .ledg-head.entry-popup .custom-tabs .nav.nav-tabs {
+            position: relative;
+            width: 100%;
+            top: 0;
+        }
+        .custom-tabs .top-bar {
+            margin-top: 45px;
+        }
+        .page-has-tabs .custom-tabs .top-bar {
+            margin-top: 15px;
+            padding-top: 0;
+        }
+        .page-has-tabs .custom-tabs .top-bar.customer-top-bar, .page-has-tabs .custom-tabs .top-bar.aging-top-bar {
+            margin-top: 0;
+        }
+        .custom-tabs.hide-header .top-bar {
+            margin-top: 10px;
+        }
+        .invoice-control .nav.nav-tabs {
+            padding: 0 0 0 15px !important;
+        }
+        #setting-tab setting-integration .tab-container .nav.nav-tabs,
+        #setting-tab app-invoice-setting .tab-container .nav.nav-tabs {
+            position: inherit;
+            white-space: nowrap;
+        }
+        #setting-tab app-invoice-setting .tab-container .nav.nav-tabs {
+            margin-top: 45px;
+            white-space: nowrap;
+            padding-left: 15px !important;
+        }
+        .setting-page .nav > li > a,
+        .custom-tabs .nav.nav-tabs > li a {
+            padding-top: 7px;
+        }
+        .ledg-head .custom-tabs .nav.nav-tabs {
+            left: 0;
+            top: 95px;
+            padding-top: 0 !important;
+            position: fixed;
+        }
+        .daterangepicker.dropdown-menu.show-calendar {
+            z-index: 9 !important;
+        }
+        .daterangepicker.dropdown-menu.opensright.show-calendar {
+            z-index: 9992 !important;
+        }
+        .mt-xs-60 {
+            margin-top: 60px;
+        }
+        .tooltip.bs-tooltip-top {
+            display: none !important;
+        }
+        .custom-body #setting-tab .tab-container .nav.nav-tabs {
+            position: inherit;
+        }
+        .aside-pane-form .custom-tabs ul.nav.nav-tabs {
+            white-space: nowrap;
+            display: inline-block;
+            overflow-y: hidden;
+        }
+        .basic > tbody > tr td:last-child,
+        .basic > thead > tr th:last-child {
+            border-right: none !important;
+        }
+        #content-wrapper {
+            height: 100vh;
+        }
+        .tax-engine .nav-band .nav-tabs {
+            white-space: nowrap;
+            padding-top: 0 !important;
+        }
+        .gst-filing-container {
+            padding-top: 38px;
+        }
+        .tax-engine .transactions-overview .gstr-transactions-summary .title {
+            padding: 0;
+        }
+        .tax-engine .list-filter {
+            padding: 15px !important;
+            border-bottom: 1px solid #ddd !important;
+            height: auto;
+        }
+        .list-style ul.list-inline.list-middle.download-drop-down {
+            text-align: left;
+        }
+        .checkbox-custom-label,
+        .radio-custom-label {
+            display: inline;
+        }
+        #cmpWrp {
+            display: block;
+        }
+        .c-text span.c-name {
+            color: $white !important;
+        }
+        .user-dropdown-header {
+            left: 0px !important;
+        }
+        .xs-d-block {
+            display: block;
+        }
+        .xs-mb-1 {
+            margin-bottom: 10px;
+        }
+        .xs-mt-1 {
+            margin-top: 10px;
+        }
+        .xs-mb-2 {
+            margin-bottom: 20px;
+        }
+        .xs-mt-2 {
+            margin-top: 20px;
+        }
+        .xs-mt-4 {
+            margin-top: 40px;
+        }
+        .xs-mr-0 {
+            margin-right: 0px;
+        }
+        .xs-pull-left {
+            float: left !important;
+        }
+        body.hide-scroll-body {
+            overflow-y: hidden !important;
+        }
+        body.hide-scroll-body.on-setting-page {
+            overflow-y: auto !important;
+        }
+        .panel-block .card-body {
+            min-height: auto;
+        }
+        // .tabs-page .padding-top-fixed-mobile {
+        //     padding-top: 126px;
+        // }
+
+        .page-has-tabs .padding-top-fixed-mobile,
+        .on-user-page .padding-top-fixed-mobile {
+            padding-top: 130px !important;
+        }
+        .page-has-tabs.setting-sidebar-open .padding-top-fixed-mobile {
+            padding-top: 85px !important;
+        }
+        .on-setting-page .padding-top-fixed-mobile {
+            padding-top: 90px !important;
+        }
+
+        .padding-top-fixed-mobile {
+            padding-top: 95px;
+        }
+        ngx-daterangepicker-material {
+            position: fixed;
+            top: 0 !important;
+            left: 0 !important;
+            z-index: 999;
+            width: 100%;
+            height: 100vh;
+            max-width: 100% !important;
+        }
+        .giddh-datepicker-modal {
+            position: fixed;
+            width: 100%;
+            left: 0;
+            top: 0;
+            margin: 0;
+        }
+        .edit-modal {
+            max-width: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            padding-top: 40px;
+
+            &:after {
+                position: absolute;
+                content: "";
+                background-color: rgba(0, 0, 0, 0.4);
+                width: 100% !important;
+                height: 125%;
+                z-index: -1;
+                left: 0;
+                top: 0;
+            }
+        }
+        .hide-scroll-body:last-child .modal {
+            z-index: 9993;
+        }
+        .page-has-tabs .invoice-genrate-container,
+        .page-has-tabs .invoice-container,
+        .page-has-tabs .proforma-container,
+        .page-has-tabs .proforma-container {
+            padding-top: 15px !important;
+        }
+        .page-has-tabs
         #setting-tab
         app-invoice-setting
         .tab-container
         .nav.nav-tabs,
-    .on-user-page .search-subscription {
-        margin-top: 15px !important;
+        .on-user-page .search-subscription {
+            margin-top: 15px !important;
+        }
+        .page-has-tabs .recurring-container {
+            margin-top: 0px !important;
+            padding-top: 10px !important;
+        }
+        .on-user-page .user-detail-page.company-page {
+            padding-top: 15px !important;
+        }
+        .HW_frame_cont.HW_visible.HW_bottom {
+            right: 0 !important;
+            left: auto !important;
+            max-width: 320px;
+            width: 100%;
+        }
+        .on-setting-page .setting-menu-icon,
+        .on-user-page .setting-menu-icon {
+            display: inline-flex !important;
+        }
+        .setting-data {
+            padding-left: 15px !important;
+        }
+        .mobile-setting-sidebar {
+            position: relative;
+            overflow-y: hidden;
+        }
+        .mobile-setting-sidebar:after {
+            position: absolute;
+            content: "";
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 100%;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: 999;
+        }
+        .ledg-head .custom-tabs .nav.nav-tabs {
+            padding-top: 0 !important;
+        }
+        .digit-blue .tooltip.bs-tooltip-top {
+            display: block !important;
+        }
+        .on-setting-page aside-setting.setting-sidebar, .on-user-page aside-setting.setting-sidebar {
+            left: 0;
+        }
     }
-    .page-has-tabs .recurring-container {
-        margin-top: 0px !important;
-        padding-top: 10px !important;
-    }
-    .on-user-page .user-detail-page.company-page {
-        padding-top: 15px !important;
-    }
-    .HW_frame_cont.HW_visible.HW_bottom {
-        right: 0 !important;
-        left: auto !important;
-        max-width: 320px;
-        width: 100%;
-    }
-    .on-setting-page .setting-menu-icon,
-    .on-user-page .setting-menu-icon {
-        display: inline-flex !important;
-    }
-    .setting-data {
-        padding-left: 15px !important;
-    }
-    .mobile-setting-sidebar {
-        position: relative;
-        overflow-y: hidden;
-    }
-    .mobile-setting-sidebar:after {
-        position: absolute;
-        content: "";
-        background-color: rgba(0, 0, 0, 0.5);
-        width: 100%;
-        height: 100vh;
-        top: 0;
-        left: 0;
-        z-index: 999;
-    }
-    .ledg-head .custom-tabs .nav.nav-tabs {
-        padding-top: 0 !important;
-    }
-    .digit-blue .tooltip.bs-tooltip-top {
-        display: block !important;
-    }
-    .on-setting-page aside-setting.setting-sidebar, .on-user-page aside-setting.setting-sidebar{
-        left: 0;
-    }
-}
 
-@media (max-width: 575px) {
-    .daterangepicker.ltr .ranges {
-        float: left;
-        ul{
-            li{
-                font-size: 11px;
-                padding: 3px 4px;
+    @media (max-width: 575px) {
+        .daterangepicker.ltr .ranges {
+            float: left;
+
+            ul {
+                li {
+                    font-size: 11px;
+                    padding: 3px 4px;
+                }
             }
         }
         .mat-form-field{
@@ -10627,236 +11090,219 @@ input.mat-input-element{
         top: 30px;
         padding-top: 0;
     }
-}
+    @media (max-width: 500px) {
+        .daterangepicker.dropdown-menu {
+            max-width: 100% !important;
+            z-index: 9999;
+            text-align: left;
+            float: left;
+        }
+    }
 
-@media (max-width: 500px) {
-    .daterangepicker.dropdown-menu {
-        max-width: 100% !important;
-        z-index: 9999;
-        text-align: left;
-        float: left;
+    @media (max-width: 375px) {
+        #rcw-p91-widget-chats{
+            min-width: 300px !important;
+        }
+        .aside-pane-form .custom-tabs .nav.nav-tabs > li {
+            padding-right: 20px;
+        }
+        .pagination > li > a,
+        .pagination > li > span {
+            padding: 6px 6px;
+        }
+        .pagination {
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
     }
-}
 
-@media (max-width: 375px) {
-    #rcw-p91-widget-chats{
-        min-width: 300px !important;
+    @media (max-width: 360px) {
+        .pagination-sm > li > a,
+        .pagination-sm > li > span {
+            padding: 5px 8px;
+        }
+        .branch .box h1 {
+            font-size: 16px;
+            padding-right: 0;
+            display: block;
+        }
+        .branch .box .btn-default {
+            float: none !important;
+            position: static;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+        .welcome_header h1 {
+            font-size: 25px !important;
+        }
+        .welcome_header:after {
+            bottom: 0;
+        }
+        #setting-tab-wrapper .tab-integraton .nav-tabs {
+            overflow-y: hidden;
+        }
     }
-    .aside-pane-form .custom-tabs .nav.nav-tabs > li {
-        padding-right: 20px;
-    }
-    .pagination > li > a,
-    .pagination > li > span {
-        padding: 6px 6px;
-    }
-    .pagination{
-        justify-content: flex-start;
-        flex-wrap: wrap;
-    }
-}
 
-@media (max-width: 360px) {
-    .pagination-sm > li > a,
-    .pagination-sm > li > span {
-        padding: 5px 8px;
+    @media only screen and (max-width: 1400px) {
+        .template_list {
+            width: 25%;
+        }
+        .font-xxlarge {
+            font-size: 20px;
+        }
     }
-    .branch .box h1 {
-        font-size: 16px;
-        padding-right: 0;
-        display: block;
-    }
-    .branch .box .btn-default {
-        float: none !important;
-        position: static;
-        margin-top: 10px;
-        margin-bottom: 5px;
-    }
-    .welcome_header h1 {
-        font-size: 25px !important;
-    }
-    .welcome_header:after {
-        bottom: 0;
-    }
-    #setting-tab-wrapper .tab-integraton .nav-tabs {
-        overflow-y: hidden;
-    }
-}
 
-@media only screen and (max-width: 1400px) {
-    .template_list {
-        width: 25%;
+    @media only screen and (min-width: 1280px) {
+        .multi-select input.form-control {
+            padding-right: 18px !important;
+        }
     }
-    .font-xxlarge {
-        font-size: 20px;
-    }
-}
 
-@media only screen and (min-width: 1280px) {
-    .multi-select input.form-control {
-        padding-right: 18px !important;
+    @media only screen and (max-width: 1130px) {
+        #accountSearch {
+            width: 150px !important;
+        }
+        .accounts-side-bar {
+            width: 272px;
+        }
+        #user-dropdown {
+            width: 46px;
+        }
     }
-}
 
-@media only screen and (max-width: 1130px) {
-    #accountSearch {
-        width: 150px !important;
+    @media only screen and (max-width: 1030px) {
+        .header-container {
+            position: relative;
+        }
+        body.unresponsive {
+            padding-top: 0;
+        }
     }
-    .accounts-side-bar {
-        width: 272px;
-    }
-    #user-dropdown {
-        width: 46px;
-    }
-}
 
-@media only screen and (max-width: 1030px) {
-    .header-container {
-        position: relative;
+    @media only screen and (max-width: 1160px) {
+        .template_list {
+            width: 33.33%;
+        }
     }
-    body.unresponsive {
-        padding-top: 0;
-    }
-}
 
-@media only screen and (max-width: 1160px) {
-    .template_list {
-        width: 33.33%;
-    }
-}
-
-@media (max-width: 1024px) {
-    .sm-d-block {
-        display: block;
-    }
-    .form-bg {
-        width: 100%;
-    }
-    /* .col-wrapper:nth-child(1) {
-                     position: relative;
-                     height: auto;
-                     width: 100%;
-                    } */
-    .grp-col {
-        float: none !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        height: auto !important;
-    }
-    .grp-list .list-item {
-        display: inline-block;
-    }
-    .col-wrapper {
-        white-space: initial;
-    }
-    .col-wrapper:nth-child(2) {
-        margin-left: 0px;
-        width: 100%;
-    }
-    .grp-list {
-        padding: 10px 0px !important;
-        background: #f4f5f8;
-        width: 100%;
-        display: block;
-    }
-    .users-last-list > li:last-child {
-        height: inherit !important;
-    }
-    .xs-left {
-        text-align: left !important;
-    }
-    .customer-right-wrap .text-right.xs-left {
-        text-align: right !important;
-    }
-    .form-box.form-bg {
-        height: auto !important;
-        min-height: auto;
-    }
-    .left-account-operation {
-        height: initial !important;
-        width: 100% !important;
-    }
-    .users-last-list > li {
-        display: inline-block;
-    }
-    .col-wrapper:first-child .grp-list {
-        padding-top: 0;
-    }
-    .col-wrapper:nth-child(1) li a {
-        text-transform: uppercase;
-        padding: 4px 15px !important;
-    }
-    .bgWhiteMo {
-        background-color: $white;
-    }
-    .breadcrumbs {
-        border-top: 1px solid #ccc;
-    }
-    #getGroupModal #middleBody {
-        height: 100%;
-    }
-    div#getGroupModal {
-        height: 100%;
-    }
-    .grp-list {
-        min-height: 100%;
-    }
-    .col-wrapper:nth-child(1) {
-        background: transparent;
-        position: relative;
-    }
-    .grp-list:nth-child(2) {
-        background-color: $white;
-    }
-    .col-wrapper.left-account-operation:nth-child(3),
-    .col-wrapper.left-account-operation:nth-child(2),
-    .col-wrapper.left-account-operation:nth-child(4) {
-        border-top: 1px solid #ddd;
-    }
-    .manage-account-popup.modal {
-        background-color: #f4f5f8;
-        opacity: 1;
-    }
-    .manage-account-popup .modal-content.full-screen-modal {
-        box-shadow: none;
-        border: none;
-    }
-    .wrapAccountSidebar,
-    .wrapAccountSidebar .grp-wrapper {
-        width: 100% !important;
-    }
-    .add-manage-group-acc {
-        overflow-y: auto !important;
-    }
-    .grp-list li a,
-    .new-btn-ul li a {
-        display: initial;
-    }
-    ul.grp-list.users-last-list:first-child {
-        min-height: 150px;
-    }
-}
-
-@media only screen and (max-width: 480px) {
-    td.pItem.price .my-dropdown-menu {
-        width: 180px !important;
-    }
-    /* manage group account*/
-    .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-8,
-    .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-4 {
-        width: 100%;
-    }
-    .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-4 {
-        margin-top: 5px;
-    }
-    .HW_frame_cont.HW_visible.HW_bottom{
-        max-width: 300px;
-    }
-    .edit-modal{
-        .modal-content{
-                max-width: 300px;
-            }
-     }
-
+    @media (max-width: 1024px) {
+        .sm-d-block {
+            display: block;
+        }
+        .form-bg {
+            width: 100%;
+        }
+        /* .col-wrapper:nth-child(1) {
+                         position: relative;
+                         height: auto;
+                         width: 100%;
+                        } */
+        .grp-col {
+            float: none !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+        }
+        .grp-list .list-item {
+            display: inline-block;
+        }
+        .col-wrapper {
+            white-space: initial;
+        }
+        .col-wrapper:nth-child(2) {
+            margin-left: 0px;
+            width: 100%;
+        }
+        .grp-list {
+            padding: 10px 0px !important;
+            background: #f4f5f8;
+            width: 100%;
+            display: block;
+        }
+        .users-last-list > li:last-child {
+            height: inherit !important;
+        }
+        .xs-left {
+            text-align: left !important;
+        }
+        .customer-right-wrap .text-right.xs-left {
+            text-align: right !important;
+        }
+        .form-box.form-bg {
+            height: auto !important;
+            min-height: auto;
+        }
+        .left-account-operation {
+            height: initial !important;
+            width: 100% !important;
+        }
+        .users-last-list > li {
+            display: inline-block;
+        }
+        .col-wrapper:first-child .grp-list {
+            padding-top: 0;
+        }
+        .col-wrapper:nth-child(1) li a {
+            text-transform: uppercase;
+            padding: 4px 15px !important;
+        }
+        .bgWhiteMo {
+            background-color: $white;
+        }
+        .breadcrumbs {
+            border-top: 1px solid #ccc;
+        }
+        #getGroupModal #middleBody {
+            height: 100%;
+        }
+        div#getGroupModal {
+            height: 100%;
+        }
+        .grp-list {
+            min-height: 100%;
+        }
+        .col-wrapper:nth-child(1) {
+            background: transparent;
+            position: relative;
+        }
+        .grp-list:nth-child(2) {
+            background-color: $white;
+        }
+        .col-wrapper.left-account-operation:nth-child(3),
+        .col-wrapper.left-account-operation:nth-child(2),
+        .col-wrapper.left-account-operation:nth-child(4) {
+            border-top: 1px solid #ddd;
+        }
+        .manage-account-popup.modal {
+            background-color: #f4f5f8;
+            opacity: 1;
+        }
+        .manage-account-popup .modal-content.full-screen-modal {
+            box-shadow: none;
+            border: none;
+        }
+        .wrapAccountSidebar,
+        .wrapAccountSidebar .grp-wrapper {
+            width: 100% !important;
+        }
+        .add-manage-group-acc {
+            overflow-y: auto !important;
+        }
+        .grp-list li a,
+        .new-btn-ul li a {
+            display: initial;
+        }
+        ul.grp-list.users-last-list:first-child {
+            min-height: 150px;
+        }
+        .HW_frame_cont.HW_visible.HW_bottom{
+            max-width: 300px;
+        }
+        .edit-modal{
+            .modal-content{
+                    max-width: 300px;
+                }
+        }
 }
 @media (min-width:576px){
     .modal-dialog {
@@ -10864,29 +11310,67 @@ input.mat-input-element{
         margin: 10px auto;
         padding: 0 10px;
     }
-        #share-modal select {
-        width: auto;
+    .HW_frame_cont.HW_visible.HW_bottom{
         max-width: 300px;
     }
 }
-@media (min-width: 768px) {
-    .invoice-modal-content .modal-dialog {
-        margin: 70px auto;
+
+    @media only screen and (max-width: 480px) {
+        td.pItem.price .my-dropdown-menu {
+            width: 180px !important;
+        }
+        /* manage group account*/
+        .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-8,
+        .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-4 {
+            width: 100%;
+        }
+        .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-4 {
+            margin-top: 5px;
+        }
+        .HW_frame_cont.HW_visible.HW_bottom{
+            max-width: 300px;
+        }
+        .edit-modal{
+            .modal-content{
+                max-width: 300px;
+                }
+            }
     }
-    .edit-modal.modal-small {
-        display: none;
+
+    @media (min-width: 576px) {
+        .modal-dialog {
+            max-width: 100% !important;
+            margin: 10px auto;
+            padding: 0 10px;
+        }
+        #share-modal select {
+            width: auto;
+            max-width: 300px;
+        }
     }
-    .modal-dialog{
-        max-width: 600px !important;
-        margin: 30px auto;
-        padding: 0 10px;
-    }
-    .modal-dialog.modal-xl{
-        max-width: 1000px !important;
-    }
-    .receipt-note-modal {
-        max-width: 100% !important;
-    }
+    @media (min-width: 768px) {
+        .invoice-modal-content .modal-dialog {
+            margin: 70px auto;
+        }
+        .edit-modal.modal-small {
+            display: none;
+        }
+        .modal-dialog {
+            max-width: 600px !important;
+            margin: 30px auto;
+            padding: 0 10px;
+        }
+        .modal-dialog.modal-xl {
+            max-width: 1000px !important;
+        }
+        .receipt-note-modal {
+            max-width: 100% !important;
+        }
+
+        .po-preview-modal {
+            max-width: 100% !important;
+            width: 900px !important;
+        }
 }
 @media(min-width: 480px) and (max-width: 667px) {
     .edit-modal {
@@ -10904,150 +11388,163 @@ input.mat-input-element{
         width: 900px !important;
     }
 }
-@media(min-width:480px) and (max-width:667px) {
-    .edit-modal {
-        margin: 20px auto;
-        padding-top: 0;
-        .edit-date-modal {
-            padding: 0 15px;
-            .modal-outside-heading {
-                display: none;
-            }
-            .edit-date-container {
-                display: flex;
-                align-items: flex-start;
-                .modal-date-range {
-                    flex-direction: column;
-                    justify-content: flex-start;
+    @media(min-width: 480px) and (max-width: 667px) {
+        .edit-modal {
+            margin: 0 auto;
+            padding-top: 0;
+
+            .edit-date-modal {
+                padding: 0 15px;
+
+                .modal-outside-heading {
+                    display: none;
+                }
+
+                .edit-date-container {
+                    display: flex;
                     align-items: flex-start;
-                    border-bottom: none;
-                    padding: 12px 0 0;
-                    margin-bottom: 0;
-                    border-right: 1px solid $gainsboro;
-                    margin-right: 15px;
-                    p {
-                        font-size: 20px;
-                        margin-top: 15px;
-                        width: 110px;
-                        margin-bottom: 20px;
+
+                    .modal-date-range {
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        align-items: flex-start;
+                        border-bottom: none;
+                        padding: 12px 0 0;
+                        margin-bottom: 0;
+                        border-right: 1px solid $gainsboro;
+                        margin-right: 15px;
+
+                        p {
+                            font-size: 20px;
+                            margin-top: 15px;
+                            width: 110px;
+                            margin-bottom: 20px;
+                        }
+
+                        img {
+                            bottom: -40px;
+                            padding-bottom: 10px;
+                        }
+
+                        .modal-inside-heading {
+                            display: block;
+                        }
                     }
-                    img {
-                        bottom: -40px;
-                        padding-bottom: 10px;
+
+                    .start-end-date {
+                        padding: 10px 5px 0;
                     }
-                    .modal-inside-heading {
-                        display: block;
+
+                    .button-wrapper {
+                        position: absolute;
+                        bottom: 2px;
+                        right: 15px;
+                        z-index: 999;
                     }
-                }
-                .start-end-date {
-                    padding: 10px 5px 0;
-                }
-                .button-wrapper {
-                    position: absolute;
-                    bottom: 2px;
-                    right: 15px;
-                    z-index: 999;
                 }
             }
         }
     }
-}
-@media(max-width:1300px) and (min-width:1024px){
-     .dashboard-container {
-        .card{
-            margin-bottom: 20px;
-            min-height: 452px;
+    @media(max-width: 1300px) and (min-width: 1024px) {
+        .dashboard-container {
+            .card {
+                margin-bottom: 20px;
+                min-height: 452px;
+            }
+        }
+        .recurring-form {
+            sh-select, input {
+                min-width: 130px;
+                max-width: 130px;
+            }
         }
     }
-    .recurring-form{
-        sh-select, input{
-            min-width: 130px;
-            max-width: 130px;
+
+    /*** iPhone and iOS Form Input Zoom Fixes ***/
+
+    /* Fix Input Zoom on devices older than iPhone 5: */
+
+    @media screen and (device-aspect-ratio: 2/3) {
+        select,
+        textarea,
+        input[type="text"],
+        input[type="password"],
+        input[type="datetime"],
+        input[type="datetime-local"],
+        input[type="date"],
+        input[type="month"],
+        input[type="time"],
+        input[type="week"],
+        input[type="number"],
+        input[type="email"],
+        input[type="url"] {
+            font-size: 16px;
         }
     }
-}
 
-/*** iPhone and iOS Form Input Zoom Fixes ***/
+    /* Fix Input Zoom on iPhone 5, 5C, 5S, iPod Touch 5g */
 
-/* Fix Input Zoom on devices older than iPhone 5: */
-
-@media screen and (device-aspect-ratio: 2/3) {
-    select,
-    textarea,
-    input[type="text"],
-    input[type="password"],
-    input[type="datetime"],
-    input[type="datetime-local"],
-    input[type="date"],
-    input[type="month"],
-    input[type="time"],
-    input[type="week"],
-    input[type="number"],
-    input[type="email"],
-    input[type="url"] {
-        font-size: 16px;
+    @media screen and (device-aspect-ratio: 40/71) {
+        select,
+        textarea,
+        input[type="text"],
+        input[type="password"],
+        input[type="datetime"],
+        input[type="datetime-local"],
+        input[type="date"],
+        input[type="month"],
+        input[type="time"],
+        input[type="week"],
+        input[type="number"],
+        input[type="email"],
+        input[type="url"] {
+            font-size: 16px;
+        }
     }
-}
 
-/* Fix Input Zoom on iPhone 5, 5C, 5S, iPod Touch 5g */
+    /* Fix Input Zoom on iPhone 6, iPhone 6s, iPhone 7  */
 
-@media screen and (device-aspect-ratio: 40/71) {
-    select,
-    textarea,
-    input[type="text"],
-    input[type="password"],
-    input[type="datetime"],
-    input[type="datetime-local"],
-    input[type="date"],
-    input[type="month"],
-    input[type="time"],
-    input[type="week"],
-    input[type="number"],
-    input[type="email"],
-    input[type="url"] {
-        font-size: 16px;
+    @media screen and (device-aspect-ratio: 375/667) {
+        select,
+        textarea,
+        input[type="text"],
+        input[type="password"],
+        input[type="datetime"],
+        input[type="datetime-local"],
+        input[type="date"],
+        input[type="month"],
+        input[type="time"],
+        input[type="week"],
+        input[type="number"],
+        input[type="email"],
+        input[type="url"] {
+            font-size: 16px;
+        }
     }
-}
 
-/* Fix Input Zoom on iPhone 6, iPhone 6s, iPhone 7  */
+    /* Fix Input Zoom on iPhone 6 Plus, iPhone 6s Plus, iPhone 7 Plus, iPhone 8, iPhone X, XS, XS Max  */
 
-@media screen and (device-aspect-ratio: 375/667) {
-    select,
-    textarea,
-    input[type="text"],
-    input[type="password"],
-    input[type="datetime"],
-    input[type="datetime-local"],
-    input[type="date"],
-    input[type="month"],
-    input[type="time"],
-    input[type="week"],
-    input[type="number"],
-    input[type="email"],
-    input[type="url"] {
-        font-size: 16px;
+    @media screen and (device-aspect-ratio: 9/16) {
+        select,
+        textarea,
+        input[type="text"],
+        input[type="password"],
+        input[type="datetime"],
+        input[type="datetime-local"],
+        input[type="date"],
+        input[type="month"],
+        input[type="time"],
+        input[type="week"],
+        input[type="number"],
+        input[type="email"],
+        input[type="url"] {
+            font-size: 16px;
+        }
     }
-}
 
-/* Fix Input Zoom on iPhone 6 Plus, iPhone 6s Plus, iPhone 7 Plus, iPhone 8, iPhone X, XS, XS Max  */
-
-@media screen and (device-aspect-ratio: 9/16) {
-    select,
-    textarea,
-    input[type="text"],
-    input[type="password"],
-    input[type="datetime"],
-    input[type="datetime-local"],
-    input[type="date"],
-    input[type="month"],
-    input[type="time"],
-    input[type="week"],
-    input[type="number"],
-    input[type="email"],
-    input[type="url"] {
-        font-size: 16px;
+    .giddh-datepicker-modal {
+        margin: 0 !important;
     }
-}
 
 .giddh-datepicker-modal {
     margin: 0 !important;
@@ -11061,26 +11558,32 @@ body.prevent-body-scroll {
     display: none;
 }
 
-@media (max-width: 991px) and (min-width: 768px){
+@media (max-width: 991px) and (min-width: 768px) {
     .hidden-sm {
-        display: none!important;
+        display: none !important;
     }
 }
-@media (max-width: 1199px) and (min-width: 992px){
+@media (max-width: 1199px) and (min-width: 992px) {
     .hidden-md {
-        display: none!important;
+        display: none !important;
     }
 }
+
 .modal.fade.giddh-calendar.show {
     z-index: 999999;
 }
+
 *::-webkit-scrollbar {
-  width: 10px;
-  height: 5px;
+    width: 10px;
+    height: 5px;
 }
+
+
 *::-webkit-scrollbar-track {
     background: $white-smoke;
 }
+
+
 *::-webkit-scrollbar-thumb {
     background: $nobel;
     border-radius: 5px;

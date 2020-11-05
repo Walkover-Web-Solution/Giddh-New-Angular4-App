@@ -48,20 +48,20 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
     @Output() public animateAside: EventEmitter<any> = new EventEmitter();
 
-    @ViewChild('uniqueName', {static: true}) public uniqueName: ElementRef;
-    @ViewChild('stockName', {static: true}) public stockName: ElementRef;
+    @ViewChild('uniqueName', {static: false}) public uniqueName: ElementRef;
+    @ViewChild('stockName', {static: false}) public stockName: ElementRef;
 
-    @ViewChild('purchaseAccountUniqueName', {static: true}) public purchaseAccountUniqueName: any;
-    @ViewChild('purchaseStockUnitCode', {static: true}) public purchaseStockUnitCode: any;
-    @ViewChild('purchaseRate', {static: true}) public purchaseRate: ElementRef;
+    @ViewChild('purchaseAccountUniqueName', {static: false}) public purchaseAccountUniqueName: any;
+    @ViewChild('purchaseStockUnitCode', {static: false}) public purchaseStockUnitCode: any;
+    @ViewChild('purchaseRate', {static: false}) public purchaseRate: ElementRef;
 
-    @ViewChild('salesAccountUniqueName', {static: true}) public salesAccountUniqueName: any;
-    @ViewChild('salesStockUnitCode', {static: true}) public salesStockUnitCode: any;
-    @ViewChild('salesRate', {static: true}) public salesRate: ElementRef;
+    @ViewChild('salesAccountUniqueName', {static: false}) public salesAccountUniqueName: any;
+    @ViewChild('salesStockUnitCode', {static: false}) public salesStockUnitCode: any;
+    @ViewChild('salesRate', {static: false}) public salesRate: ElementRef;
 
-    @ViewChild('manufacturingQuantity', {static: true}) public manufacturingQuantity: ElementRef;
-    @ViewChild('manufacturingStockUniqueName', {static: true}) public manufacturingStockUniqueName: any;
-    @ViewChild('manufacturingStockUnitCode', {static: true}) public manufacturingStockUnitCode; any;
+    @ViewChild('manufacturingQuantity', {static: false}) public manufacturingQuantity: ElementRef;
+    @ViewChild('manufacturingStockUniqueName', {static: false}) public manufacturingStockUniqueName: any;
+    @ViewChild('manufacturingStockUnitCode', {static: false}) public manufacturingStockUnitCode; any;
 
     public groupUniqueName: string;
     public stockUniqueName: string;

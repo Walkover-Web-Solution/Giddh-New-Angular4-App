@@ -1,11 +1,38 @@
 @import "../../../assets/css/color.scss";
 
+.warehouse-header {
+    .search-container {
+        display: flex;
+        flex-direction: row;
+    }
+    .clear-filter-btn {
+        color: $midnight-blue;
+        font-size: 14px;
+        border: 1px solid $midnight-blue;
+        border-radius: 20px;
+        padding: 0 15px;
+        width: 150px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $white;
+        i {
+            font-size: 12px;
+            padding-right: 8px;
+            top: 0;
+            color: $midnight-blue;
+        }
+    }
+}
 .createWarehouse {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: calc(100vh - 250px);
+    .spinner2 {
+        text-align: center;
+    }
 }
 .createWarehouse h2 {
     font-size: 20px;
@@ -23,10 +50,10 @@
     margin-bottom: 20px;
 }
 .warehouse-card {
-    background-color: #ebecee;
+    background-color: $white;
     padding: 15px;
-    min-height: 300px;
     margin-bottom: 15px;
+    border: 1px solid $gainsboro;
 }
 .warehouse-options {
     min-width: 180px;
@@ -58,8 +85,6 @@
 .warehouse-card .d-flex {
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #cbcbcb;
-    padding-bottom: 10px;
 }
 
 .warehouse-card h3 {
@@ -68,6 +93,7 @@
     float: left;
     width: 66%;
     word-break: break-all;
+    color: $midnight-blue;
 }
 span.setAsDefault {
     background-color: $gainsboro;
@@ -82,7 +108,11 @@ span.setAsDefault {
 }
 .warehouse-details label {
     font-family: "opensans-semibold";
-    width: 140px;
+    width: 70px;
+    color: $gray;
+    &.cursor-pointer {
+        width: auto;
+    }
 }
 .warehouse-details p {
     word-break: break-all;
@@ -90,8 +120,12 @@ span.setAsDefault {
     width: 100%;
 }
 .about-warehaouse {
-    margin: 15px 0;
+    margin: 0 0 15px;
     display: flex;
+    flex-direction: column;
+    .icon-favorite-selected {
+        color: $rich-blue;
+    }
 }
 .gray-text {
     color: #8f9091;
@@ -115,6 +149,40 @@ span.setAsDefault {
 .dropdown-item.warehouse-options {
     justify-content: flex-start;
     text-align: left;
+}
+.search-warehouse-box{
+    max-width: 200px;
+    width: 100%;
+    input{
+        background-image: url('../../../assets/images/searchIcon.svg') !important;
+        background-repeat: no-repeat !important;
+        padding-left: 30px !important;
+        background-position: 7px 9px !important;
+        background-size: 15px !important;
+    }
+}
+.linked-details{
+    label{
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    ul{
+       padding: 0;
+       list-style: none;
+       li{
+           margin-bottom: 12px;
+           color: $nero;
+           i{
+               color: $gray;
+           }
+       }
+    }
+}
+.branch-vector{
+    text-align: right;
+    position: absolute;
+    bottom: 8px;
+    right: 90px;
 }
 @media only screen and (max-width: 991px) {
     .warehouse-card h3 {
@@ -152,6 +220,15 @@ span.setAsDefault {
         .col-lg-4{
             flex: 0 0 50% !important;
             max-width: 50% !important;
+        }
+    }
+}
+@media(max-width:575px){
+    .warehouse-header{
+        flex-direction: column;
+        .search-warehouse-box{
+            max-width: 100%;
+            margin-bottom: 15px;
         }
     }
 }

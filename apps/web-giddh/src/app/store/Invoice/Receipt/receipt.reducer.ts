@@ -71,6 +71,8 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             if (res.status === 'success') {
                 newState[res.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers'] = res.body;
                 newState.isGetAllRequestSuccess = true;
+            } else if (res.status === 'error' && res.code === 'UNAUTHORISED') {
+                newState['vouchers'].items = [];
             }
             newState.isGetAllRequestInProcess = false;
             return Object.assign({}, state, newState);
