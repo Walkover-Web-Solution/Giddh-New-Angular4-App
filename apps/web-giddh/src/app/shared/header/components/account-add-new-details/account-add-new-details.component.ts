@@ -375,7 +375,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
                 })
             ]),
-            closingBalanceTriggerAmount: [Validators.compose([digitsOnly])],
+            closingBalanceTriggerAmount: ['',Validators.compose([digitsOnly])],
             closingBalanceTriggerAmountType: ['CREDIT'],
             customFields: this._fb.array([])
         });
