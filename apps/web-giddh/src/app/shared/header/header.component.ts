@@ -76,6 +76,7 @@ import { SettingsProfileService } from '../../services/settings.profile.service'
 import { CompanyService } from '../../services/companyService.service';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
+import { AccountsAction } from '../../actions/accounts.actions';
 
 @Component({
     selector: 'app-header',
@@ -291,6 +292,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private settingsProfileAction: SettingsProfileActions,
         private companyService: CompanyService,
         private settingsBranchAction: SettingsBranchActions,
+        private accountsAction: AccountsAction,
         public location: Location
     ) {
         // Reset old stored application date
@@ -1131,6 +1133,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.select(c => c.session.lastState).pipe(take(1)).subscribe((s: string) => {
             if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1)) {
                 this.store.dispatch(this._generalActions.addAndManageClosed());
+                this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedLedgerName));
             }
         });
 
