@@ -503,7 +503,7 @@
                                 </sh-select>
                             </span>
                             <span class="pull-right">
-                                <button type="submit" class="btn btn-success">Save</button>
+                                <button [disabled]="!taxGroupForm?.get('taxes')?.value?.length" type="submit" class="btn btn-success">Save</button>
                             </span>
                         </div>
                     </div>
