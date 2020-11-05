@@ -673,6 +673,7 @@ sh-select:focus {
 }
 .show-if-ledger-open{
     height: 230px;
+    border: 1px solid red;
 }
 @media only screen and (max-width: 1540px) {
     .modal-ledger {
