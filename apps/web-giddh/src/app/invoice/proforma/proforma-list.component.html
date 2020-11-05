@@ -83,14 +83,14 @@
 
     <div class="mobile-search mr-b1" >
         <div class="row">
-            <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+            <div class="col-sm-6 full-width-on-mobile">
                 <div class="input-container">
                     <input type="text"
                         placeholder="{{voucherType === 'proformas' ? 'Serach Proforma #' : 'Search Estimate #'}}"
                         class=" form-control" #searchBox [formControl]="voucherNumberInput" />
                 </div>
             </div>
-            <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+            <div class="col-sm-6 full-width-on-mobile">
                 <div class="input-container">
                     <input type="text" placeholder="Search Customer Name" class=" form-control" #searchBox
                         name="customerNameInput" [formControl]="customerNameInput" />
@@ -143,7 +143,7 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="col-sm-6 col-xs-6 full-width-on-mobile">
+                <div class="col-sm-6 full-width-on-mobile">
                     <div class="input-container">
                         <input type="text" placeholder="Search Invoice No." class=" form-control" #searchBox
                             name="voucherNumberInput" [formControl]="voucherNumberInput" />
@@ -155,7 +155,7 @@
                             name="accountUniqueNameInput" [formControl]="accountUniqueNameInput" />
                     </div>
                 </div> -->
-                <div class="col-sm-6 col-xs-6 mt-2 mt-md-0">
+                <div class="col-sm-6 mt-2 mt-md-0">
                     <button class="btn btn-sky-blue">Submit</button>
                 </div>
 
@@ -170,9 +170,9 @@
                 <thead class="thead-background1">
                     <tr>
 
-                        <th *ngIf="selectedItems.length > 0" style="min-width:50px; width: 4%">
+                        <th *ngIf="selectedItems.length > 0" width="4%" class="min-width-check">
 
-                            <div class="check-image" style="justify-content: center;display: flex">
+                            <div class="check-image d-flex justify-content-center">
                                 <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
                                     (click)="toggleAllItems(true)">
                                 <img src="assets/images/checked.png" *ngIf="allItemsSelected"
@@ -181,8 +181,8 @@
 
                         </th>
 
-                        <th *ngIf="selectedItems.length === 0" style="min-width:50px; width: 4%">
-                            <div class="check-image" style="justify-content: center;display: flex">
+                        <th *ngIf="selectedItems.length === 0" width="4%" class="min-width-check">
+                            <div class="check-image d-flex justify-content-center">
                                 #
                             </div>
                         </th>
@@ -287,7 +287,7 @@
 
 
                         <td attr.data-title="{{voucherType === 'proformas' ? 'Proforma No.' : 'Estimates No.'}} ">
-                            <div style="position: relative" class="d-flex">
+                            <div class="d-flex position-relative">
                                 <a href="javascript:void(0);" class="btn-link-2"
                                     (click)="onSelectInvoice(item)">{{item.uniqueName}}</a>
                                 <!--          <img style="position: absolute;right: 0px;top: 5px;" class="cp mb-2" src="assets/icon/vol.svg"-->
@@ -333,7 +333,7 @@
 
 
 
-                            <div class="d-flex" style="align-items: center">
+                            <div class="d-flex align-items-center">
                                 <div class="flex-fill select-action">
                                     <span
                                         [ngClass]="{'text-light-2': !item.action}">{{ item.action ? item.action : 'Select Action' }}</span>

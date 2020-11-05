@@ -23,8 +23,7 @@
                                     [(ngModel)]="filter.status" [options]="invoiceTypeOptions" [notFoundLink]="false"
                                     [multiple]="false" [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">
                                     <ng-template #optionTemplate let-option="option">
-                                        <a href="javascript:void(0)" class="list-item"
-                                            style="border-bottom: 1px solid #ccc;">
+                                        <a href="javascript:void(0)" class="list-item">
                                             <div class="item">{{ option.label }}</div>
                                         </a>
                                     </ng-template>
@@ -38,8 +37,7 @@
                                     [notFoundLink]="false" [multiple]="false" [(ngModel)]="filter.duration"
                                     [ItemHeight]="33" [useInBuiltFilterForIOptionTypeItems]="true">
                                     <ng-template #optionTemplate let-option="option">
-                                        <a href="javascript:void(0)" class="list-item"
-                                            style="border-bottom: 1px solid #ccc;">
+                                        <a href="javascript:void(0)" class="list-item">
                                             <div class="item">{{ option.label }}</div>
                                         </a>
                                     </ng-template>
@@ -53,7 +51,7 @@
                             </div>
                         </div>
                         <div class="form-group search-invoice-filed">
-                            <div class="searchInvoiceNo">
+                            <div class="search-invoice-no">
                                 <label class="d-block">Search Invoice No.</label>
                                 <div class="input-group">
                                     <input type="text" placeholder="Search Invoice No." class="w100"
@@ -63,7 +61,7 @@
                             </div>
                         </div>
                         <div class="form-group search-invoice-filed">
-                            <div class="searchCustomerNo">
+                            <div class="search-customer-no">
                                 <div class="input-container">
                                     <label class="d-block">Search Customer Name</label>
                                     <input type="text" placeholder="Search Customer Name" class="w100"
@@ -94,7 +92,7 @@
                             [options]="invoiceTypeOptions" [notFoundLink]="false" [multiple]="false" [ItemHeight]="33"
                             [useInBuiltFilterForIOptionTypeItems]="true">
                             <ng-template #optionTemplate let-option="option">
-                                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                <a href="javascript:void(0)" class="list-item">
                                     <div class="item">{{ option.label }}</div>
                                 </a>
                             </ng-template>
@@ -108,7 +106,7 @@
                             [notFoundLink]="false" [multiple]="false" [(ngModel)]="filter.duration" [ItemHeight]="33"
                             [useInBuiltFilterForIOptionTypeItems]="true">
                             <ng-template #optionTemplate let-option="option">
-                                <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
+                                <a href="javascript:void(0)" class="list-item">
                                     <div class="item">{{ option.label }}</div>
                                 </a>
                             </ng-template>
@@ -124,7 +122,7 @@
                 </div>
 
                 <div class="form-group mr-r1" *ngIf="isMobileScreen">
-                    <div class="searchInvoiceNo">
+                    <div class="search-invoice-no">
                         <label class="d-block">Search Invoice No.</label>
                         <div class="input-group">
                             <input type="text" placeholder="Search Invoice No." class="w100" [formControl]="invoiceNumberInput"
@@ -134,7 +132,7 @@
                     </div>
                 </div>
                 <div class="form-group mr-r1" *ngIf="isMobileScreen">
-                    <div class="searchCustomerNo">
+                    <div class="search-customer-no">
                         <div class="input-container">
                             <label class="d-block">Search Customer Name</label>
                             <input type="text" placeholder="Search Customer Name" class="w100" name="customerName"
@@ -154,9 +152,8 @@
                 </div>
             </div>
             <div class="d-flex mb-2">
-                <div style="height: 30px;" *ngIf="selectedItems.length < 0">
-                    <div class="btn-group" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()"
-                        style="margin-bottom: 10px;display:inline-block !important;">
+                <div class="more-dropdown" *ngIf="selectedItems.length < 0">
+                    <div class="btn-group d-inline-block mr-b1" dropdown triggers="mouseover" #dp="bs-dropdown" (mouseleave)="dp.hide()">
 
                         <button dropdownToggle type="button" class="btn more-btn-dropdown dropdown-toggle"
                             aria-controls="dropdown-basic">
@@ -164,8 +161,7 @@
                             <span class="caret"></span>
                         </button>
 
-                        <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic"
-                            style="right: -53px !important;">
+                        <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
 
                             <li role="menuitem">
                                 <a class="dropdown-item cp" href="javascript:void(0)">Bulk Note</a>
@@ -210,8 +206,8 @@
             <thead class="thead-background1">
                 <tr>
 
-                    <th style="width:4%" *ngIf="selectedItems.length > 0">
-                        <div class="check-image" style="justify-content: center;display: flex">
+                    <th width="4%" *ngIf="selectedItems.length > 0">
+                        <div class="check-image d-flex justify-content-center">
                             <img src="assets/images/unchecked.png" *ngIf="!allItemsSelected"
                                 (click)="toggleAllItems(true)">
                             <img src="assets/images/checked.png" *ngIf="allItemsSelected"
@@ -220,7 +216,7 @@
                     </th>
 
                     <th *ngIf="selectedItems.length === 0" width="4%">
-                        <div class="check-image" style="justify-content: center;display: flex">
+                        <div class="check-image d-flex justify-content-center">
                             #
                         </div>
                     </th>
@@ -318,7 +314,7 @@
 
                     <td *ngIf="hoveredItemForAction === col.uniqueName || col.isSelected || selectedItems.length > 0"
                         data-title="#">
-                        <div class="check-image justify-content-sm" style="justify-content: center;display: flex">
+                        <div class="check-image justify-content-sm d-flex justify-content-center">
                             <img *ngIf="!col?.isSelected" src="assets/images/unchecked.png"
                                 (click)="toggleItem(col, true)" />
                             <img *ngIf="col?.isSelected" src="assets/images/checked.png"
@@ -328,7 +324,7 @@
 
                     <td *ngIf="!col.isSelected && hoveredItemForAction !== col.uniqueName && selectedItems.length === 0"
                         data-title="#">
-                        <div style="justify-content: center;display: flex" class="justify-content-sm">{{ i + 1}}</div>
+                        <div class="justify-content-sm d-flex justify-content-center">{{ i + 1}}</div>
                     </td>
 
                     <td data-title="Invoice Number">

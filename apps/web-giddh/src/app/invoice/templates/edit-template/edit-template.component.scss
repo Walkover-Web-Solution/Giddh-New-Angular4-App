@@ -17,14 +17,14 @@
     font-size: 18px;
 }
 
-.template_action {
+.template-action {
     overflow: hidden;
     text-align: center;
     padding: 16px 0 0;
     margin-top: 50px;
 }
 
-.template_meta {
+.template-meta {
     padding: 15px 0 0;
 }
 
@@ -81,6 +81,14 @@
     width:100% !important;
     margin:0;
     max-width:100% !important;
+}
+
+.select-design{
+    height: 44px;
+}
+
+.border-radius-none{
+    border-radius:0px !important; 
 }
 @media (max-width: 414px) {
     .template-grid {

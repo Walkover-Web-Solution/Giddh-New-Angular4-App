@@ -202,7 +202,7 @@
                 </div>
 
                 <div class="col-xs-8 col-sm-8">
-                    <div [hidden]="!showConfirmationBox" class="confirmation_box bdr text-center pd2">
+                    <div [hidden]="!showConfirmationBox" class="confirmation_box bdr text-center pd-2">
                         <div class="">
                             <h1>Accept?</h1>
                             <div class="pd-t2">
@@ -224,8 +224,8 @@
             </div>
     </div>
     <div class="sidebar_list form-control" [hidden]="!showLedgerAccountList">
-        <h3 class="pd-1 bd-rb primary-clr" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
-        <h3 class="pd-1 bd-rb primary-clr" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
+        <h3 class="pd-1 bd-rb primary-color" *ngIf="selectedField === 'account'">List of Ledger Accounts</h3>
+        <h3 class="pd-1 bd-rb primary-color" *ngIf="selectedField === 'stock'">List of Stock Items</h3>
         <accounting-virtual-list [keydownUpInput]="keyUpDownEvent" [filterText]="filterByText" [options]="inputForList"
             [showList]="showLedgerAccountList" [isFilterEnabled]="true" (selected)="onItemSelected($event)"
             [(ngModel)]="currentSelectedValue" [placeholder]="'Select Option'"

@@ -118,7 +118,7 @@ input.form-control.send-alert {
     text-align: right;
 }
 
-.initialnumber {
+.initial-number {
     width: 70px;
     margin: 0 15px;
 }
@@ -167,6 +167,13 @@ span.viasocket a {
     width: 260px;
 }
 
+.lock-date-label{
+    vertical-align: middle;
+}
+
+.prefix-label{
+    right:0px;
+}
 @media(max-width:991px){
 #invoice-setting .show-on-mobile {
         display: inline-block;

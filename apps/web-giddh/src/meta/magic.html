@@ -323,7 +323,7 @@
                                                         To Balance C/F: Dr
                                                         <!-- | number: '1.2-2' -->
                                                         <span
-                                                            class="primary-clr">{{legderBalanceData.forwardedBalance.amount | currency }}
+                                                            class="primary-color">{{legderBalanceData.forwardedBalance.amount | currency }}
                                                         </span>
                                                     </span>
                                                 </td>
@@ -380,7 +380,7 @@
                                                     To Balance C/F: Dr
                                                     <!-- | number: '1.2-2' -->
                                                     <span
-                                                        class="primary-clr">{{legderBalanceData.forwardedBalance.amount | currency }}
+                                                        class="primary-color">{{legderBalanceData.forwardedBalance.amount | currency }}
                                                     </span>
                                                 </span>
                                             </td>
@@ -408,9 +408,9 @@
                 <div class="container">
                     <div class="row">
                     <div class="col-3">
-                        <!--<span class="primary-clr mr-b1" style="font-size: 12px">{{cDate.startDate | date:'dd-MMM-yyyy'}} - {{cDate.endDate | date:'dd-MMM-yyyy'}}</span>-->
+                        <!--<span class="primary-color mr-b1" style="font-size: 12px">{{cDate.startDate | date:'dd-MMM-yyyy'}} - {{cDate.endDate | date:'dd-MMM-yyyy'}}</span>-->
                         <h1>Total Transactions
-                            <span class="primary-clr">{{ledgerData.ledgersTransactions.totalItems}}</span>
+                            <span class="primary-color">{{ledgerData.ledgersTransactions.totalItems}}</span>
                         </h1>
                         <span class="mr-t1 mrR2">Dr {{ledgerData.ledgersTransactions.debitTransactionsCount}}</span>
                         <span class="mr-t1 mrR2">Cr {{ledgerData.ledgersTransactions.creditTransactionsCount}}</span>
@@ -423,15 +423,15 @@
                             {{ legderBalanceData.forwardedBalance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
                     </div>
                     <div class="col-3">
-                        <h1 class="primary-clr">Net Total
+                        <h1 class="primary-color">Net Total
                             <span v-if="legderBalanceData.creditTotal > legderBalanceData.debitTotal">Credit</span>
                             <span v-if="legderBalanceData.creditTotal < legderBalanceData.debitTotal">Debit</span>
                         </h1>
-                        <h3 class=" primary-clr" v-if="legderBalanceData.creditTotal > legderBalanceData.debitTotal">
+                        <h3 class=" primary-color" v-if="legderBalanceData.creditTotal > legderBalanceData.debitTotal">
                             <!-- | number:'1.2-2' -->
                             {{legderBalanceData.creditTotal - legderBalanceData.debitTotal | currency }}
                         </h3>
-                        <h3 class=" primary-clr" v-if="legderBalanceData.creditTotal < legderBalanceData.debitTotal">
+                        <h3 class=" primary-color" v-if="legderBalanceData.creditTotal < legderBalanceData.debitTotal">
                             <!-- | number:'1.2-2' -->
                             {{legderBalanceData.debitTotal - legderBalanceData.creditTotal | currency}}
                         </h3>

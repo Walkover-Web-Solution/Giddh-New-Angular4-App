@@ -2,7 +2,7 @@
     <!-- start header -->
     <div id="headerDiv" *ngIf="templateUISectionVisibility.header">
         <h2>Header</h2>
-        <div class="scrollAuto">
+        <div class="scroll-auto">
             <div class="clearfix">
                 <div *ngIf="fieldsAndVisibility.header.companyName && (customTemplate?.templateType !== 'gst_template_b' && customTemplate?.templateType !== 'gst_template_d' && customTemplate?.templateType !== 'gst_template_e')" class="form-group">
                     <input type="checkbox" [(ngModel)]="customTemplate.sections['header'].data['companyName'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked /> Company Name
@@ -247,7 +247,7 @@
     <div id="tableDiv" *ngIf="templateUISectionVisibility.table">
         <h2>Table</h2>
 
-        <div class="clearfix scrollAuto">
+        <div class="clearfix scroll-auto">
             <table class="table">
                 <thead>
                     <tr>
@@ -515,7 +515,7 @@
     <div id="footerDiv" *ngIf="templateUISectionVisibility.footer">
         <div class="clearfix">
             <h2>Footer</h2>
-            <div class="clearfix bd-rb scrollAuto">
+            <div class="clearfix bd-rb scroll-auto">
                 <ng-container *ngIf="customTemplate?.templateType === 'gst_template_a' && voucherType==='sales'">
                     <div *ngIf="isTcsTdsApplicable" class="form-group">
                         <input type="checkbox" name="tcs" checked [(ngModel)]="customTemplate.sections['footer'].data['tcs'].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)" checked="true" /> TCS

@@ -198,18 +198,18 @@
                             <!--<li class="cursor-pointer dd-options" *ngFor="let item of fileGstrOptions" (click)="onDownloadSheetGSTR();">{{item.name}}</li>-->
                         </ul>
                     </div>
-                    <small [hidden]="!isDownloadingFileInProgress" class="inline primary-clr"> Downloading...</small>
+                    <small [hidden]="!isDownloadingFileInProgress" class="inline primary-color"> Downloading...</small>
                 </div>
             </div>
             <!-- hide due to unused -->
             <div class="form-group pull-right" *ngIf="selectedGstrType.name === 'GSTR1'">
                 <label class="d-block">&nbsp;</label>
-                <button class="btn btn-default pull-right primary-clr"
+                <button class="btn btn-default pull-right primary-color"
                     (click)="toggleSettingAsidePane($event, 'JIO_GST');"><i class="fa fa-cog" aria-hidden="true"></i>
                     Jio GST
                 </button>
                 <span style="margin: 5px 10px;" class="pull-right">OR</span>
-                <button class="btn btn-default pull-right primary-clr"
+                <button class="btn btn-default pull-right primary-color"
                     (click)="toggleSettingAsidePane($event, 'TAXPRO');"><i class="fa fa-cog" aria-hidden="true"></i> Tax
                     Pro
                 </button>

@@ -222,7 +222,7 @@
                             <tr class="total-col row">
 
                                 <td colspan="12" class="col-12 col-sm-12 text-right h32">
-                                    <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd2"
+                                    <span *ngIf="vm.entryTotal.crTotal > vm.entryTotal.drTotal" class="pd-2"
                                         [tooltip]="vm.ledgerUnderStandingObj.balanceText.cr" [placement]="'top'">
                                         C/F: CR {{ vm.baseCurrencyDetails?.symbol}} {{ vm.compoundTotal | giddhCurrency}}
                                     </span>
@@ -398,7 +398,7 @@
                             <tr class="total-col row">
                                 <td colspan="12" class="col-12  col-sm-12 text-right h32">
                                     <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
-                                        <span class="primary-clr pd2"
+                                        <span class="primary-color pd-2"
                                             [tooltip]="vm.ledgerUnderStandingObj.balanceText.dr" [placement]="'top'">
                                             {{ vm?.baseCurrencyDetails?.symbol }}
                                             {{ vm.compoundTotal | giddhCurrency}}</span>
@@ -707,7 +707,7 @@
 
                     <ng-container *ngIf="shouldShowRcmTaxableAmount">
                         <div class="taxable-amount-section">
-                            <label class="primary-clr">Taxable Amount</label>
+                            <label class="primary-color">Taxable Amount</label>
                             <input id="update-ledger-taxable-amount" type="text" name="taxable-amount" class="form-control text-right"
                                 [prefix]="vm.selectedPrefixForCurrency" [suffix]="vm.selectedSuffixForCurrency"
                                 [mask]="vm.inputMaskFormat"
@@ -716,7 +716,7 @@
                     </ng-container>
                     <ng-container *ngIf="shouldShowItcSection">
                         <div class="taxable-amount-section">
-                            <label class="primary-clr itc-label">ITC Type</label>
+                            <label class="primary-color itc-label">ITC Type</label>
                             <sh-select id="update-ledger-itc-type" [(ngModel)]="vm.selectedLedger.itcAvailable" [placeholder]="'ITC Type'"
                                 [options]="availableItcList">
                             </sh-select>
@@ -845,13 +845,13 @@
                     <table class="width100">
                         <tbody>
                             <tr>
-                                <td class="primary-clr" (click)="getInvoiveLists(); showAdvanced = !showAdvanced">
+                                <td class="primary-color" (click)="getInvoiveLists(); showAdvanced = !showAdvanced">
                                     <i class="fa cp"
                                         [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
                                     <button class="no-btn pdL0">&nbsp; More Details</button>
                                 </td>
                                 <td class="text-right">
-                                    <span class="primary-clr" *ngIf="vm.isMultiCurrencyAvailable">
+                                    <span class="primary-color" *ngIf="vm.isMultiCurrencyAvailable">
                                         Total in {{ vm.baseCurrencyDetails?.code }}:
                                         <span>{{ vm.baseCurrencyDetails?.symbol }}</span>
                                         {{vm.compoundTotal | giddhCurrency}}
@@ -1035,12 +1035,12 @@
 
                             <div class="pull-right">
 
-                                <span class="primary-clr" *ngIf="!vm.isMultiCurrencyAvailable">
+                                <span class="primary-color" *ngIf="!vm.isMultiCurrencyAvailable">
                                     Compound Total:
                                     {{ vm.baseCurrencyDetails?.symbol}}{{vm.compoundTotal | giddhCurrency}}
                                 </span>
 
-                                <span *ngIf="vm.isMultiCurrencyAvailable" class="primary-clr">
+                                <span *ngIf="vm.isMultiCurrencyAvailable" class="primary-color">
                                     Total in {{ vm.foreignCurrencyDetails?.code }}
                                     : {{ vm.foreignCurrencyDetails?.symbol }} {{ vm.convertedCompoundTotal | giddhCurrency
                                     }}

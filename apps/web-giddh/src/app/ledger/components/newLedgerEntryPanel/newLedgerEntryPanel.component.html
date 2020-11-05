@@ -73,7 +73,7 @@
 
                         <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                             class="pItem text-right amount">
-                            <label class="primary-clr font-12">Amount</label>
+                            <label class="primary-color font-12">Amount</label>
                             <input id="new-ledger-enter-amount" *ngIf="!isAdvanceReceipt" type="text" name="amount" class="form-control text-right"
                                 [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" [(ngModel)]="currentTxn.amount" (focus)="hideDiscountTax()"
@@ -157,7 +157,7 @@
 
                         <td *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                             class="pItem text-right total-amn" id="totalTd" (resized)="onResized($event)">
-                            <label class="primary-clr font-12">Total</label>
+                            <label class="primary-color font-12">Total</label>
                             <input type="text" id="ledger-total-amount" [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat" name="totalAmount" class="form-control text-right"
                                 [(ngModel)]="currentTxn.total" (blur)="calculateAmount()"
@@ -217,7 +217,7 @@
         </div>
         <ng-container *ngIf="shouldShowRcmTaxableAmount">
             <div class="taxable-amount-section mr-1">
-                <label class="primary-clr">Taxable Amount</label>
+                <label class="primary-color">Taxable Amount</label>
                 <input id="ledger-taxable-amount" type="text" name="taxable-amount" class="form-control text-right"
                     [prefix]="selectedPrefixForCurrency" [suffix]="selectedSuffixForCurrency" [mask]="inputMaskFormat"
                     [(ngModel)]="currentTxn.reverseChargeTaxableAmount" />
@@ -225,7 +225,7 @@
         </ng-container>
         <ng-container *ngIf="shouldShowItcSection">
             <div class="taxable-amount-section">
-                <label class="primary-clr">ITC Type</label>
+                <label class="primary-color">ITC Type</label>
                 <sh-select id="ledger-itc-type" [(ngModel)]="currentTxn.itcAvailable" [placeholder]="'ITC Type'"
                     [options]="availableItcList">
                 </sh-select>
@@ -240,14 +240,14 @@
         <table class="width100 mr-t">
             <tbody>
                 <tr>
-                    <td class="primary-clr pl-0" (click)="showAdvanced = !showAdvanced">
+                    <td class="primary-color pl-0" (click)="showAdvanced = !showAdvanced">
                         <i class="fa cp"
                             [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
                         <button id="ledger-more-details" class="no-btn pdL0">&nbsp;More Details</button>
                     </td>
 
                     <td class="text-right">
-                        <span class="primary-clr">
+                        <span class="primary-color">
                             Total in
                             {{ selectedCurrency === 0 ? baseCurrencyDetails?.code : foreignCurrencyDetails?.code }}:
                             <span>{{ selectedCurrency === 0 ? baseCurrencyDetails?.symbol : foreignCurrencyDetails?.symbol }}</span>
@@ -468,7 +468,7 @@
 
                 <div class="pull-right">
                     <div class="clearfix">
-                        <p class="primary-clr" *ngIf="isLedgerAccountAllowsMultiCurrency">Total in
+                        <p class="primary-color" *ngIf="isLedgerAccountAllowsMultiCurrency">Total in
                             {{ selectedCurrency === 0 ? foreignCurrencyDetails?.code : baseCurrencyDetails?.code }}: {{ selectedCurrency
               === 0 ? foreignCurrencyDetails?.symbol : baseCurrencyDetails?.symbol }} {{ blankLedger.convertedCompoundTotal
               | giddhCurrency }}

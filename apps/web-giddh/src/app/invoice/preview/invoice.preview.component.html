@@ -402,8 +402,7 @@
 
                         <!-- Invoice No. -->
                         <td>
-                            <div (click)="onSelectInvoice(item)" [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}"
-                                style="position: relative" class="d-flex">
+                            <div (click)="onSelectInvoice(item)" [ngClass]="{'remove-capitalize': selectedVoucher === 'purchase', 'cp': selectedVoucher === 'purchase' && !item.voucherNumber}" class="d-flex position-relative">
                                 <a href="javascript:void(0);" class="btn-link-2">{{item.voucherNumber ?  item.voucherNumber : '-'}}</a>
                             </div>
 
@@ -687,7 +686,7 @@
                                 </div>
 
                                 <div class="cp" *ngIf="item.balanceStatus !== 'cancel'">
-                                    <div class="d-flex" style="align-items: center">
+                                    <div class="d-flex align-items-center">
                                         <div class="flex-fill select-action">
                                             <span
                                                 [ngClass]="{'text-light-2': !item.balanceStatus}">{{ item.balanceStatus ? item.balanceStatus : 'Select Action' }}</span>

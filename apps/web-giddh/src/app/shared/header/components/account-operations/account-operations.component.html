@@ -17,7 +17,7 @@
                 </button>
                 <button class="btn btn-share pull-right" *ngIf="(showEditGroup$ | async)" (click)="showShareGroupModal()">Share
                 </button>
-                <div class="primary-clr text-right pull-right mr-t1 clearfix" *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
+                <div class="primary-color text-right pull-right mr-t1 clearfix" *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
                     Shared with {{ (activeGroupSharedWith$ | async)?.length }} people
                 </div>
             </div>
@@ -27,7 +27,7 @@
             <button class="btn btn-share pull-right" (click)="showShareAccountModal()">
                 Share
             </button>
-            <div class="primary-clr text-right pull-right mr-t1 clearfix" *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length">
+            <div class="primary-color text-right pull-right mr-t1 clearfix" *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length">
                 Shared with {{ (activeAccountSharedWith$ | async)?.length }} people
             </div>
         </div>
@@ -99,7 +99,7 @@
     <!--merge account-->
     <!-- <div class="">
                     <label class="d-block">Select A/c to merge with
-            <span class="primary-clr">{{(activeAccount$ | async)?.name}}</span>
+            <span class="primary-color">{{(activeAccount$ | async)?.name}}</span>
           </label>
                     <div class="clearfix" #accountSelect2>
                         <span>

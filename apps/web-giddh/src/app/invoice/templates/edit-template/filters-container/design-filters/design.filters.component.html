@@ -17,7 +17,7 @@
   <button type="button" class="start-upload-btn" (click)="startUpload()">
   Start Upload
 </button> {{imagePreview}} -->
-    <div class="clearfix scrollAuto">
+    <div class="clearfix scroll-auto">
         <ul class="designTool">
             <li [hidden]="templateUISectionVisibility.templates" (click)="onChangeVisibility('templates')">
                 <i class="ico-template"></i> <label>Change up to template</label>
@@ -112,7 +112,7 @@
                                 <label for="fontL">L</label>
                             </div>
                             <div class="d-block">
-                                <a class="primary-clr" [attr.disabled]="isFileUploaded"
+                                <a class="primary-color" [attr.disabled]="isFileUploaded"
                                     [class.cursor-disable]="isFileUploaded" [hidden]="!logoAttached"
                                     (click)="toogleLogoVisibility()"><span [hidden]="showLogo">Show</span><span
                                         [hidden]="!showLogo">Hide</span> logo</a> </div>

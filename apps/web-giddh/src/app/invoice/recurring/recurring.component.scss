@@ -61,8 +61,8 @@
     flex: 1 1 auto;
 }
 
-.d-flex {
-    display: flex;
+.list-item{
+    border-bottom: 1px solid $very-light-gray !important;
 }
 
 .active-text-color {
@@ -109,6 +109,13 @@
 }
 .search-invoice-filed {
     display: none;
+}
+
+.more-dropdown{
+    height: 30px !important;
+    .dropdown-menu{
+        right: -53px !important;
+    }
 }
 // responsive
 @media(max-width:1190px){

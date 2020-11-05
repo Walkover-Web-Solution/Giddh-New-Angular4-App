@@ -23,8 +23,8 @@
         <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline mb-15">
             <div class="d-flex w-100 flex-none">
                 <div class="d-flex form-group mobile-width-100 flex-none">
-                    <div class="form-group date-advance-search pending-advance-search" style="flex: 1 1 auto;">
-                        <div class="input-group" id="dp-parent" style="margin-right:8px; margin-bottom:0;">
+                    <div class="form-group date-advance-search pending-advance-search">
+                        <div class="input-group mb-0 mr-r1" id="dp-parent">
                             <span class="input-wrapper">
                                 <input type="text" name="dateRangeGenerate" id="dateRangeGenerate" daterangepicker
                                     [options]="datePickerOptions" (applyDaterangepicker)="bsValueChange($event)"

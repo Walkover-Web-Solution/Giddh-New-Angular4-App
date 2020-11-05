@@ -293,6 +293,9 @@ span.icon-advance-filter {
 .btn-wrapper-more{
     height: 30px;
 }
+.min-width-check{
+    min-width:50px !important;
+}
 // responsive
 @media(max-width:991px){
     .invoice-preview-sidebar{
