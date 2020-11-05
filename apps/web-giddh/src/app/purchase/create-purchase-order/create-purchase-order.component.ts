@@ -2448,15 +2448,15 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy {
             currentBranch =  branches.find(branch => !branch.parentBranch);
         }
         if (currentBranch && currentBranch.addresses) {
-            const defaultAddress = currentBranch.addresses.find(address => (address.isDefault));
+            const defaultAddress = currentBranch.addresses.find(address => (address && address.isDefault));
             this.purchaseOrder.company.billingDetails.address = [];
-            this.purchaseOrder.company.billingDetails.address.push(defaultAddress.address);
-            this.purchaseOrder.company.billingDetails.state.code = defaultAddress.stateCode;
-            this.purchaseOrder.company.billingDetails.state.name = defaultAddress.stateName;
-            this.purchaseOrder.company.billingDetails.stateCode = defaultAddress.stateCode;
-            this.purchaseOrder.company.billingDetails.stateName = defaultAddress.stateName;
-            this.purchaseOrder.company.billingDetails.gstNumber = defaultAddress.taxNumber;
-            this.purchaseOrder.company.shippingDetails.gstNumber = defaultAddress.taxNumber;
+            this.purchaseOrder.company.billingDetails.address.push(defaultAddress ? defaultAddress.address : '');
+            this.purchaseOrder.company.billingDetails.state.code = defaultAddress ? defaultAddress.stateCode : '';
+            this.purchaseOrder.company.billingDetails.state.name = defaultAddress ? defaultAddress.stateName : '';
+            this.purchaseOrder.company.billingDetails.stateCode = defaultAddress ? defaultAddress.stateCode : '';
+            this.purchaseOrder.company.billingDetails.stateName = defaultAddress ? defaultAddress.stateName : '';
+            this.purchaseOrder.company.billingDetails.gstNumber = defaultAddress ? defaultAddress.taxNumber : '';
+            this.purchaseOrder.company.shippingDetails.gstNumber = defaultAddress ? defaultAddress.taxNumber : '';
         }
     }
 

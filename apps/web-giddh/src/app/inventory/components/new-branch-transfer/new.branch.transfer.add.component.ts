@@ -581,6 +581,15 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     this.senderWarehouses[this.branchTransfer.destinations[index].uniqueName].push({ label: key.name, value: key.uniqueName });
                 }
             });
+            if (this.branchTransfer.sources[index].uniqueName) {
+                // Update source warehouses
+                this.senderWarehouses[this.branchTransfer.sources[index].uniqueName] = [];
+                this.allWarehouses[this.branchTransfer.sources[index].uniqueName].forEach(key => {
+                    if (key.uniqueName !== this.branchTransfer.destinations[index].warehouse.uniqueName) {
+                        this.senderWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
+                    }
+                });
+            }
         } else {
             if (this.allWarehouses && this.allWarehouses[this.branchTransfer.destinations[0].uniqueName]) {
                 this.senderWarehouses[this.branchTransfer.destinations[0].uniqueName] = [];
@@ -617,6 +626,15 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     this.destinationWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
                 }
             });
+            if (this.branchTransfer.destinations[index].uniqueName) {
+                // Update Destination warehouses
+                this.destinationWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
+                this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].forEach(key => {
+                    if (key.uniqueName !== this.branchTransfer.sources[index].warehouse.uniqueName) {
+                        this.destinationWarehouses[this.branchTransfer.destinations[index].uniqueName].push({ label: key.name, value: key.uniqueName });
+                    }
+                });
+            }
         } else {
             if (this.allWarehouses && this.allWarehouses[this.branchTransfer.sources[0].uniqueName]) {
                 this.destinationWarehouses[this.branchTransfer.sources[0].uniqueName] = [];
