@@ -4209,7 +4209,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private parseEntriesFromResponse(entries: SalesEntryClass[]) {
         return entries.map((entry, index) => {
             this.activeIndx = index;
-            entry.otherTaxModal = new SalesOtherTaxesModal();
+            if(!entry.otherTaxModal) {
+                entry.otherTaxModal = new SalesOtherTaxesModal();
+            }
             entry.entryDate = (entry.entryDate) ? moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate() : this.universalDate || new Date();
 
             entry.discounts = this.parseDiscountFromResponse(entry);
