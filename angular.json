@@ -139,7 +139,7 @@
                   "externals": "replace"
                 }
               },
-              "baseHref": "http://localhost:3000",
+              "baseHref": "https://dev.giddh.com",
               "fileReplacements": [
                 {
                   "replace": "apps/web-giddh/src/index.html",
