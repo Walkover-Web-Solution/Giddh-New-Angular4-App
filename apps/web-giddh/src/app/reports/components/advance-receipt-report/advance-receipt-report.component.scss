@@ -47,7 +47,7 @@
     justify-content: center;
     align-items: center;
     border-right: 1px solid $gainsboro;
-    color: #999999;
+    color: $nobel;
 }
 .input-wrapper {
     display: block !important;
@@ -76,7 +76,7 @@
     margin-left: 10px;
     border: 1px solid $gainsboro;
     border-radius: 2px;
-    color: #1a237e;
+    color: $midnight-blue;
     background: #fff;
 }
 
@@ -120,13 +120,13 @@
 }
 .invoice-footer h3 {
     font-size: 16px;
-    color: #999999;
+    color: $nobel;
     display: block;
     margin-right: 10px;
 }
 .invoice-footer h1 {
     font-size: 22px;
-    color: #333;
+    color: $extra-dark-gray;
     display: block;
 }
 .giddh-table .td-search-box {

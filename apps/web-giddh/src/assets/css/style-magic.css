@@ -624,7 +624,7 @@ aside-menu-account .container-fluid {
     margin-bottom: 5px !important;
 }
 
-.mrL {
+.ml-05 {
     margin-left: 5px;
 }
 
@@ -963,7 +963,7 @@ position: relative; */
 
 /*modal settings override*/
 
-.noBrdRdsModal .modal-content {
+.border-radius-0 .modal-content {
     border-radius: 0;
 }
 
@@ -1576,7 +1576,7 @@ li:last-child .angular-ui-tree-handle {
     max-width: 350px;
 }
 
-.max500 {
+.max-width-500 {
     max-width: 500px;
 }
 
@@ -3802,7 +3802,7 @@ tr.db-bnk-account > td.reconnectDiv {
     z-index: 1000;
 }
 
-.dashboard-reconnectdiv {
+.dashboard-reconnect-block {
     background: rgba(255, 255, 255, 0.9);
     position: absolute;
     height: 100%;
@@ -5250,7 +5250,7 @@ form#groupDetailForm {
 /* responsive */
 
 @media (min-width: 768px) {
-    .form-inline.financial-selectYear .form-group {
+    .form-inline.financial-select-year .form-group {
         min-width: 195px;
     }
 }

@@ -13,8 +13,8 @@
     <section [hidden]="!(!(searchLoader$ | async) && (search$ | async))">
         <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV($event)" (searchQuery)="filterData($event)" (openEmailDialog)="openEmailDialog()" (openSmsDialog)="openSmsDialog()">
         </search-filter>
-        <div class="table-responsive">
-            <table class="table table-bordered basic giddh-table on-mobile-view">
+        <div>
+            <table class="table table-bordered basic giddh-table on-mobile-view table-responsive">
                 <thead>
                     <tr>
                         <th [style.width.px]="25">
@@ -118,10 +118,10 @@
 </div>
 
 <!--Modal for Mail/SMS-->
-<div class="modal fade noBrdRdsModal" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">
+<div class="modal fade border-radius-0" tabindex="-1" bsModal #mailModal="bs-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="noBrdRdsModal">
+            <div class="border-radius-0">
                 <div class="modal-header themeBg pd-l2 pd-r2 clearfix">
                     <h3 class="modal-title bg" id="modal-title">{{messageBody.header.set}}</h3>
                     <span aria-hidden="true" class="close" data-dismiss="modal" aria-label="Close" (click)="mailModal.hide()">×</span>

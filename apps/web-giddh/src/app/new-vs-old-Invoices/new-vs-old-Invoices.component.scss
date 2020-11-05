@@ -1,5 +1,5 @@
 @import "../../assets/css/color.scss";
-.h-25px {
+.height-25px {
     height: 25px;
 }
 
@@ -58,6 +58,9 @@
             width: 100%;
         }
     }
+}
+.bg-gray-color{
+    background-color: $gray-90;
 }
 @media(max-width:991px){
     .div-table {

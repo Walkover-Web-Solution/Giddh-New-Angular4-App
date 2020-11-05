@@ -1,3 +1,4 @@
+@import '../../../../assets/css/color.scss';
 :host.in {
     left: auto;
     top: 0;
@@ -106,7 +107,7 @@
 }
 .aside-pane-form {
     background-color: #fff;
-    box-shadow: 0 3px 6px #0000001a;
+    box-shadow: 0 3px 6px $black-russian-light;
     padding: 15px;
     height: calc(100vh - 90px);
     overflow: auto;

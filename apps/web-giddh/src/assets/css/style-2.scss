@@ -157,6 +157,12 @@
         padding: 5px 10px 5px 53% !important;
     }
 }
+.text-right{
+    text-align: right;
+}
+.table-cell{
+    display: table-cell;
+}
 body{
     font-family: "opensans-regular";
     font-display: block;
@@ -2523,7 +2529,7 @@ input[type="checkbox"]:checked:after {
     margin-bottom: 5px;
 }
 
-.noBrdRdsModal .modal-header > .close {
+.border-radius-0 .modal-header > .close {
     top: 0px;
 }
 
@@ -2549,19 +2555,19 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-success-outline {
-    border: 1px solid #0cb1af;
-    color: #0cb1af;
+    border: 1px solid $light-sea-green;
+    color: $light-sea-green;
 }
 
 .btn-success-outline:hover {
     color: $white;
-    background: #0cb1af;
+    background: $light-sea-green;
 }
 
 .btn-success {
-    background: #0cb1af;
+    background: $light-sea-green;
     color: $white;
-    border: 1px solid #0cb1af;
+    border: 1px solid $light-sea-green;
 }
 
 .btn-success:hover,
@@ -2571,9 +2577,9 @@ input[type="checkbox"]:checked:after {
 .btn-success:not(:disabled):not(.disabled):active,
 .btn-success:not(:disabled):not(.disabled).active,
 .show > .btn-success.dropdown-toggle{
-    background: #087e7d;
+    background: $teal;
     color: $white;
-    border: 1px solid #087e7d;
+    border: 1px solid $teal;
     box-shadow: none;
 }
 
@@ -5990,7 +5996,7 @@ datepicker-inner .well monthpicker table tbody tr:nth-child(1) td {
 }
 
 .datepicker-account{
-    z-index:10; 
+    z-index:10;
     min-height:290px;
 }
 
@@ -8136,7 +8142,7 @@ app-header {
 }
 
 .selection-none-header *::selection {
-    background: #ffece094;
+    background: $chablis;
 }
 
 .word-break {
@@ -8195,11 +8201,11 @@ section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
     padding-bottom: 0;
 }
 
-.noBrdRdsModal {
+.border-radius-0 {
     font-family: "opensans-regular";
 }
 
-.noBrdRdsModal small.mr-t.mr-b.grey {
+.border-radius-0 small.mr-t.mr-b.grey {
     white-space: normal;
 }
 
