@@ -248,13 +248,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 map((ev: any) => ev.target.value)
             )
             .subscribe((term => {
-                this.filteredData = this.items.filter(item => {
-                    return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
-                        item.account.name.toLowerCase().includes(term.toLowerCase()) ||
-                        item.voucherDate.includes(term) ||
-                        item.grandTotal.toString().includes(term);
-                });
-                this.detectChanges();
+                this.filterVouchers(term);
             }))
 
         this.invoiceDetailWrapperHeight = this.invoiceDetailWrapperView.nativeElement.offsetHeight;
@@ -279,6 +273,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public toggleEditMode() {
         this.store.dispatch(this._generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
         this.showEditMode = !this.showEditMode;
+
+        if(this.searchElement && this.searchElement.nativeElement && this.searchElement.nativeElement.value) {
+            this.filterVouchers(this.searchElement.nativeElement.value);
+        }
     }
 
     public onCancel() {
@@ -743,5 +741,21 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 }
             });
         }
+    }
+
+    /**
+     * This will filter vouchers based on search
+     *
+     * @param {*} term
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public filterVouchers(term): void {
+        this.filteredData = this.items.filter(item => {
+            return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
+                item.account.name.toLowerCase().includes(term.toLowerCase()) ||
+                item.voucherDate.includes(term) ||
+                item.grandTotal.toString().includes(term);
+        });
+        this.detectChanges();
     }
 }
