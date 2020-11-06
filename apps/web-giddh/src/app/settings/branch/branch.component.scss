@@ -204,6 +204,16 @@
     }
 }
 
+@media (min-width: 992px) and (max-width: 1359px) {
+    .branch-card-view {
+        .col-lg-4 {
+            flex: 0 0 50% !important;
+            max-width: 50% !important;
+        }
+
+    }
+}
+
 @media(min-width:992px) and (max-width:1359px){
     .branch-card-view{
         .col-lg-4{
