@@ -66,15 +66,15 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('transMode', {static: true}) public transMode: ShSelectComponent;
     @ViewChild('vehicleNumber', {static: true}) public vehicleNumber;
     @ViewChild('transCompany', {static: true}) public transCompany: ShSelectComponent;
-    @ViewChild('destinationWarehouseList', {static: true}) public destinationWarehouseList: ShSelectComponent;
-    @ViewChild('sourceWarehouses', {static: true}) public sourceWarehouseList: ShSelectComponent;
-    @ViewChild('sourceQuantity', {static: true}) public sourceQuantity;
+    @ViewChild('destinationWarehouseList', {static: false}) public destinationWarehouseList: ShSelectComponent;
+    @ViewChild('sourceWarehouses', {static: false}) public sourceWarehouseList: ShSelectComponent;
+    @ViewChild('sourceQuantity', {static: false}) public sourceQuantity;
     @ViewChild('defaultSource', {static: false}) public defaultSource: ShSelectComponent;
-    @ViewChild('defaultProduct', {static: true}) public defaultProduct: ShSelectComponent;
+    @ViewChild('defaultProduct', {static: false}) public defaultProduct: ShSelectComponent;
     @ViewChild('destinationName', {static: false}) public destinationName: ShSelectComponent;
-    @ViewChild('destinationQuantity', {static: true}) public destinationQuantity;
-    @ViewChild('senderGstNumberField', {static: true}) public senderGstNumberField: HTMLInputElement;
-    @ViewChild('receiverGstNumberField', {static: true}) public receiverGstNumberField: HTMLInputElement;
+    @ViewChild('destinationQuantity', {static: false}) public destinationQuantity;
+    @ViewChild('senderGstNumberField', {static: false}) public senderGstNumberField: HTMLInputElement;
+    @ViewChild('receiverGstNumberField', {static: false}) public receiverGstNumberField: HTMLInputElement;
 
     public hsnPopupShow: boolean = false;
     public skuNumberPopupShow: boolean = false;
@@ -545,7 +545,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public getWarehouseDetails(type, index): void {
         if (this.branchTransfer[type][index].warehouse.uniqueName !== null) {
-            this._warehouseService.getWarehouseDetails(this.branchTransfer[type][index].uniqueName, this.branchTransfer[type][index].warehouse.uniqueName).subscribe((res) => {
+            this._warehouseService.getWarehouseDetails(this.branchTransfer[type][index].warehouse.uniqueName).subscribe((res) => {
                 if (res && res.body) {
                     this.branchTransfer[type][index].warehouse.name = res.body.name;
                     this.branchTransfer[type][index].warehouse.taxNumber = res.body.taxNumber;
@@ -581,6 +581,15 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     this.senderWarehouses[this.branchTransfer.destinations[index].uniqueName].push({ label: key.name, value: key.uniqueName });
                 }
             });
+            if (this.branchTransfer.sources[index].uniqueName) {
+                // Update source warehouses
+                this.senderWarehouses[this.branchTransfer.sources[index].uniqueName] = [];
+                this.allWarehouses[this.branchTransfer.sources[index].uniqueName].forEach(key => {
+                    if (key.uniqueName !== this.branchTransfer.destinations[index].warehouse.uniqueName) {
+                        this.senderWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
+                    }
+                });
+            }
         } else {
             if (this.allWarehouses && this.allWarehouses[this.branchTransfer.destinations[0].uniqueName]) {
                 this.senderWarehouses[this.branchTransfer.destinations[0].uniqueName] = [];
@@ -617,6 +626,15 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     this.destinationWarehouses[this.branchTransfer.sources[index].uniqueName].push({ label: key.name, value: key.uniqueName });
                 }
             });
+            if (this.branchTransfer.destinations[index].uniqueName) {
+                // Update Destination warehouses
+                this.destinationWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
+                this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].forEach(key => {
+                    if (key.uniqueName !== this.branchTransfer.sources[index].warehouse.uniqueName) {
+                        this.destinationWarehouses[this.branchTransfer.destinations[index].uniqueName].push({ label: key.name, value: key.uniqueName });
+                    }
+                });
+            }
         } else {
             if (this.allWarehouses && this.allWarehouses[this.branchTransfer.sources[0].uniqueName]) {
                 this.destinationWarehouses[this.branchTransfer.sources[0].uniqueName] = [];

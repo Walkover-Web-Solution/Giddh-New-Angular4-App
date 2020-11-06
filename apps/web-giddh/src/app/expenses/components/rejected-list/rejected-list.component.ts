@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, } from '@angular/core';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ExpencesAction } from '../../../actions/expences/expence.action';
@@ -32,14 +31,11 @@ export class RejectedListComponent implements OnInit, OnChanges {
 	public todaySelected: boolean = false;
 	public todaySelected$: Observable<boolean> = observableOf(false);
 	public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
-	// @Input() public dateFrom: string;
-	// @Input() public dateTo: string;
 	@Input() public isClearFilter: boolean = false;
-	@Output() public isFilteredSelected: EventEmitter<boolean> = new EventEmitter();
+    @Output() public isFilteredSelected: EventEmitter<boolean> = new EventEmitter();
 
 	constructor(private store: Store<AppState>,
 		private _expenceActions: ExpencesAction,
-		private _route: Router,
 		private _toasty: ToasterService,
 		private _cdRf: ChangeDetectorRef,
 		private expenseService: ExpenseService) {
@@ -64,9 +60,6 @@ export class RejectedListComponent implements OnInit, OnChanges {
 					this.pettycashRequest.to = to;
 					this.pettycashRequest.page = 1;
 					this.pettycashRequest.status = 'rejected';
-					// if (from && to) {
-					//   this.getPettyCashRejectedReports(this.pettycashRequest);
-					// }
 				}
 			}
 		});
@@ -86,7 +79,9 @@ export class RejectedListComponent implements OnInit, OnChanges {
 	}
 
 	public getPettyCashRejectedReports(SalesDetailedfilter: CommonPaginatedRequest) {
-		SalesDetailedfilter.status = 'rejected';
+        SalesDetailedfilter.status = 'rejected';
+        SalesDetailedfilter.sort = this.pettycashRequest.sort;
+        SalesDetailedfilter.sortBy = this.pettycashRequest.sortBy;
 		this.store.dispatch(this._expenceActions.GetPettycashRejectedReportRequest(SalesDetailedfilter));
 
 	}
