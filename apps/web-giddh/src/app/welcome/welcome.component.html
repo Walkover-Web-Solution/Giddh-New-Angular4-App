@@ -75,7 +75,7 @@
                         </span>
                     </div>
 
-                    <div class="col-12 mr-b2 selectBox" *ngIf="businessTypeList?.length && !isWarehouse">
+                    <div class="col-12 mr-b2 select-box" *ngIf="businessTypeList?.length && !isWarehouse">
                         <div class="pos-rel">
                             <label for="businessType">Select Business Type</label>
                             <div class="custom-select pos-rel">
@@ -89,7 +89,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 mr-b2 selectBox" *ngIf="!isWarehouse">
+                    <div class="col-12 mr-b2 select-box" *ngIf="!isWarehouse">
                         <div class="pos-rel">
                             <label for="businessNature">Select Business Nature</label>
                             <div class="custom-select  pos-rel">
@@ -103,7 +103,7 @@
                         </div>
                     </div>
                     <ng-container *ngIf="selectedBusinesstype === 'Registered' || isWarehouse">
-                        <div class="col-12 mr-b2 selectBox"
+                        <div class="col-12 mr-b2 select-box"
                             *ngIf="formFields['taxName'] !== undefined && !isWarehouse">
                             <div class="clearfix">
 
@@ -123,7 +123,7 @@
 
                             </div>
                         </div>
-                        <div class="col-12 mr-b2 selectBox">
+                        <div class="col-12 mr-b2 select-box">
                             <div>
                                 <label>State<sup class="text-danger">*</sup></label><br>
                                 <div>
@@ -161,7 +161,7 @@
                             </div>
                         </div>
                     </ng-container>
-                    <div class="col-12 mr-b2 selectBox">
+                    <div class="col-12 mr-b2 select-box">
                         <!-- Show the section if the company/branch is Registered or onboarding of warehouse is going on -->
                         <div *ngIf="selectedBusinesstype || isWarehouse" class="clearfix">
                             <ng-container
