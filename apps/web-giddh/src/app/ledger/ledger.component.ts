@@ -1269,6 +1269,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.selectedTxnUniqueName = txn.entryUniqueName;
         this.loadUpdateLedgerComponent();
         this.updateLedgerModal.show();
+        $('.modal-backdrop').addClass('update-ledger-overlay');
     }
 
     public hideUpdateLedgerModal() {
