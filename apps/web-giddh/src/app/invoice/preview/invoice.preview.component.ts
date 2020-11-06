@@ -262,6 +262,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public companyUniqueName: string = '';
     /** This will hold checked invoices */
     public selectedInvoices: any[] = [];
+    /** This will hold the search value */
+    public invoiceSearch: any = "";
 
     constructor(
         private store: Store<AppState>,
@@ -1347,6 +1349,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             request.to = this.invoiceSearchRequest.to;
         }
         this.lastListingFilters = request;
+        
+        if(this.invoiceSearchRequest && this.invoiceSearchRequest.q) {
+            request.q = this.invoiceSearchRequest.q;
+        }
+
         this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
         this._receiptServices.getAllReceiptBalanceDue(request, this.selectedVoucher).subscribe(res => {
             this.parseBalRes(res);
