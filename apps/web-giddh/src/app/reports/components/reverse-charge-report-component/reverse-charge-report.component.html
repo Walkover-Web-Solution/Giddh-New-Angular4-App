@@ -121,7 +121,7 @@
             </table>
         </div>
         <div class="paginationWrapper" *ngIf="reverseChargeReportResults.totalPages > 1">
-            <pagination [totalItems]="reverseChargeReportResults.totalPages"
+            <pagination [totalItems]="reverseChargeReportResults.totalItems"
                 [(ngModel)]="reverseChargeReportResults.page" [maxSize]="6" class="pagination-sm" [boundaryLinks]="true"
                 [itemsPerPage]="paginationLimit" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
         </div>

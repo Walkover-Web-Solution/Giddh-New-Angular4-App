@@ -4452,8 +4452,9 @@ select.form-control {
 form label {
     color: $nero;
     font-weight: normal;
-    padding-bottom: 5px;
+    padding-bottom: 0;
     font-size: 14px;
+    line-height: 2.3;
 }
 
 label {
@@ -6737,7 +6738,7 @@ table td[class*=col-]:last-child {
 
 .form-header h3 {
     font-size: 18px;
-    font-family: "opensans-bold";
+    font-family: "opensans-semibold";
 }
 
 .form_body {
@@ -9722,6 +9723,10 @@ ul.dropdown-menu.action-dropdown {
 .recurring-form  .mat-form-field{
     max-width: 170px;
 }
+.collapse-pane  .mat-form-field{
+    min-width: 147px;
+    max-width: 147px;
+}
 .mat-form-field{
     min-width: 170px;
     width: 100%;
@@ -10603,6 +10608,19 @@ input.mat-input-element{
     }
 
     @media (max-width: 767px) {
+        .settings-profile-tabs {
+            .tab-content{
+                padding-top: 45px;
+            }
+        }
+        .invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
+            .profile-tab-container {
+                .nav.nav-tabs {
+                    padding-left: 15px !important;
+                    left: 0;
+                }
+            }
+        }
         .universal-date {
             padding-top: 0;
         }

@@ -122,11 +122,16 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public bulkUpdatePostParams: any = {};
     /* This will hold giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** This will hold checked invoices */
+    public selectedPo: any[] = [];
+    /* Observable for selected PO applied */
+    public selectedPo$: Observable<any>;
 
     constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.purchaseOrderListFilters$ = this.store.pipe(select(state => state.purchaseOrder.listFilters), (takeUntil(this.destroyed$)));
+        this.selectedPo$ = this.store.pipe(select(state => state.purchaseOrder.selectedPo), (takeUntil(this.destroyed$)));
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params && params['purchaseOrderUniqueName']) {
@@ -155,7 +160,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             if (event instanceof NavigationStart) {
                 this.pageUrl = event.url;
                 if (event.url.includes('/purchase-order/new') || event.url.includes('/purchase-orders/preview') || event.url.includes('/purchase-order/edit') || event.url.includes('/purchase-management/purchase')) {
-                    this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({ getRequest: this.purchaseOrderGetRequest, postRequest: this.purchaseOrderPostRequest }));
+                    this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({ getRequest: this.purchaseOrderGetRequest, postRequest: this.purchaseOrderPostRequest, selectedPo: this.selectedPo }));
                 } else {
                     this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({}));
                 }
@@ -175,6 +180,12 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 if (filters.getRequest && filters.getRequest.from && filters.getRequest.to) {
                     this.useStoreFilters = true;
                 }
+            }
+        });
+
+        this.selectedPo$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(response && (this.pageUrl.includes('/purchase-orders/preview') || this.pageUrl.includes('/purchase-management/purchase'))) {
+                this.selectedPo = response;
             }
         });
 
@@ -267,7 +278,17 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                     this.isLoading = false;
                     if (res.status === 'success') {
                         this.allItemsSelected = false;
-                        this.purchaseOrders = res.body;
+
+                        let purchaseOrders = _.cloneDeep(res.body);
+
+                        if(purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0) {
+                            purchaseOrders.items.map(item => {
+                                item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedPo, item.uniqueName);
+                                return item;
+                            });
+                        }
+
+                        this.purchaseOrders = purchaseOrders;
                     } else {
                         this.toaster.errorToast(res.message);
                     }
@@ -464,6 +485,12 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
 
         this.purchaseOrders.items.forEach(item => {
             item.isSelected = type;
+
+            if (this.allItemsSelected) {
+                this.selectedPo = this.generalService.addValueInArray(this.selectedPo, item.uniqueName);
+            } else {
+                this.selectedPo = this.generalService.removeValueFromArray(this.selectedPo, item.uniqueName);
+            }
         });
     }
 
@@ -476,7 +503,10 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      */
     public toggleItem(item: any, action: boolean): void {
         item.isSelected = action;
-        if (!action) {
+        if (action) {
+            this.selectedPo = this.generalService.addValueInArray(this.selectedPo, item.uniqueName);
+        } else {
+            this.selectedPo = this.generalService.removeValueFromArray(this.selectedPo, item.uniqueName);
             this.allItemsSelected = false;
         }
     }
