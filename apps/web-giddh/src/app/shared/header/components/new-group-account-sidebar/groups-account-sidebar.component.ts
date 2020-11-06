@@ -99,6 +99,38 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
                 }
             }
         }
+
+        this.isMoveGroupSuccess$.subscribe(response => {
+            if(response) {
+                this.isGroupMoved = true;
+                this.store.dispatch(this.groupWithAccountsAction.moveGroupComplete());
+
+                let activeGroup;
+                this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
+
+                this.groupService.GetGroupDetails(activeGroup.uniqueName).subscribe(group => {
+                    if(group && group.status === "success" && group.body) {
+                        let groupDetails = group.body;
+                        if(groupDetails && groupDetails.parentGroups && groupDetails.parentGroups.length > 0) {
+                            this.currentGroupIndex = groupDetails.parentGroups.length;
+                        } else {
+                            this.currentGroupIndex = 0;
+                        }
+
+                        let currentGroup: any = {
+                            synonyms: groupDetails.synonyms,
+                            groups: groupDetails.groups,
+                            name: groupDetails.name,
+                            uniqueName: groupDetails.uniqueName
+                        };
+
+                        this.onGroupClick(currentGroup, this.currentGroupIndex);
+
+                        this.isGroupMoved = false;
+                    }
+                });
+            }
+        });
     }
 
     public ngAfterViewInit() {

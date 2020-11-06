@@ -121,7 +121,7 @@
 
                         <div class="status-description row mr-0 ml-0">
 
-                            <div class="col-md-8 col-sm-12 pl-0 pr-0">
+                            <div class="col-md-8 col-sm-12 pl-0 pr-0 pl-0">
                                 <sh-select placeholder="Select Action" [multiple]="true"
                                     [options]="statusDropdownOptions" name="balanceStatus"
                                     [(ngModel)]="request.balanceStatus" [ItemHeight]="33"></sh-select>
@@ -245,7 +245,9 @@
                     </div>
 
                     <div class="col-md-8 col-sm-12">
+
                         <div class="total-amount row mr-0 ml-0">
+
                             <div class="col-md-8 col-sm-6 col-6 pl-0 pr-0">
                                 <sh-select placeholder="Select Range" name="amountFieldSelector"
                                     [options]="filtersForAmount" [(ngModel)]="request.amountFieldSelector"

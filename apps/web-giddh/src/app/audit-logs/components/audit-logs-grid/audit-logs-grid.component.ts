@@ -11,6 +11,7 @@ import { AppState } from '../../../store/roots';
     selector: 'audit-logs-grid',  // <home></home>
     templateUrl: './audit-logs-grid.component.html',
     styleUrls: [`./audit-logs-grid.component.scss`]
+
 })
 export class AuditLogsGridComponent implements OnInit, OnDestroy {
     public page$: Observable<number>;

@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html>
+<!-- <% if (!htmlWebpackPlugin.options.metadata.isElectron) { %>
+  <base href="htmlWebpackPlugin.options.metadata.AppUrl">
+  <% } %> -->
+
 <head>
+    <base href="">
+    <script type="text/javascript">
+        if (window.location.hostname.indexOf('www') == 0) {
+            window.location = window.location.href.replace('www.', '');
+        }
+    </script>
+
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,14 +22,17 @@
     <meta http-equiv="pragma" content="no-cache" />
     <title>Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software</title>
     <meta name="description" content="Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software">
-    <link rel="icon" href="assets/images/favicons.png" type="image/png" sizes="16x16">
-    <link href="assets/css/typography.css" rel="stylesheet">
     <script>
         var HW_config = {    selector: ".notification", account:  "7eB4aJ"  };
         window.usingCordova = false;
+    </script>
+    <script type='text/javascript'>
         var jQuery = $ = window.$ = window.jQuery = require("jquery");
     </script>
+
+
     <script>
+        // if (<%= htmlWebpackPlugin.options.metadata.errlyticsNeeded %>)
         if (true) {
             ! function() {
                 var analytics = window.analytics = window.analytics || [];
@@ -51,13 +65,50 @@
                         analytics.SNIPPET_VERSION = '4.1.0';
                         analytics.load('pwEAdSA97VnDhJ3j2DEJlm9JfLkv3CmU');
                         analytics.page();
+                        setTimeout(senduserInfo, 30000);
+
                     }
             }();
-        }
+
+
+            function senduserInfo() {
+                var session = localStorage.getItem('session');
+                var user = JSON.parse(session).user;
+                var companyUniqueName = JSON.parse(session).companyUniqueName;
+                if (user && user.session.id) {
+                    analytics.identify(user.user.uniqueName, {
+                            name: user.user.name,
+                            email: user.user.email,
+                            companyName: companyUniqueName,
+                            isDesktop: false
+                                // isDesktop:  <%= htmlWebpackPlugin.options.metadata.isElectron %>
+
+                        }, {
+                            Intercom: {
+                                user_hash: user.intercomHash
+                            }
+                        });
+                    }
+                }
+            }
     </script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+    <!--<% if (webpackConfig.htmlElements.headTags) { %>-->
+    <!--&lt;!&ndash; Configured Head Tags  &ndash;&gt;-->
+    <!--<%= webpackConfig.htmlElements.headTags %>-->
+    <!--<% } %>-->
+
+    <!-- CSS will be injected by webpack here -->
+    <!-- Preload link tags will be injected by webpack here -->
 </head>
+
+
 <body class="unresponsive">
+
+    <!--<div id="loader-1" class="giddh-spinner vertical-center-spinner"></div>-->
+    <!-- Scripts will be injected by webpack here -->
     <app-component></app-component>
 </body>
+
 </html>

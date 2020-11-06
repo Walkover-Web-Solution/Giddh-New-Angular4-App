@@ -117,6 +117,8 @@
 @media(max-width:325px){
 .inventory-control ::ng-deep.nav.nav-tabs {
     display: inline-block;
+    overflow-x: scroll;
     white-space: nowrap;
+    overflow-y: hidden;
     }
 }

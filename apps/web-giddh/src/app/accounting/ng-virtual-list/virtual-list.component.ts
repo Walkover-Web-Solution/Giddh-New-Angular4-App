@@ -38,7 +38,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     @Input() public isFilterEnabled: boolean = true;
     @Input() public width: string = 'auto';
     @Input() public ItemHeight: number = 41;
-    @Input() public NoFoundMsgHeight: number = 34;
+    @Input() public NoFoundMsgHeight: number = 30;
     @Input() public NoFoundLinkHeight: number = 30;
     @Input() public dropdownMinHeight: number = 35;
     @Input() public customFilter: (term: string, options: IOption) => boolean;

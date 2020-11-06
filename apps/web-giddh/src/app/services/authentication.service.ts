@@ -369,25 +369,4 @@ export class AuthenticationService {
         return this._http.get(url, null, { headers: { 'Session-Id': sessionId } })
             .pipe(retry(3), catchError((error) => this.errorHandler.HandleCatch<any, any>(error, '')));
     }
-
-    /**
-     * To get version of latest Mac app
-     *
-     * @returns {*}
-     * @memberof AuthenticationService
-     */
-    public getElectronMacAppVersion(): any {
-        let args: any = { headers: {} };
-        args.headers['cache-control'] = 'no-cache';
-        args.headers['Content-Type'] = 'application/xml';
-        // args.headers['Accept'] = 'application/xml';
-        args.headers = new HttpHeaders(args.headers);
-        return this._httpClient.get('https://s3-ap-south-1.amazonaws.com/giddh-app-builds/latest-mac.yml', {
-            headers: args.headers,
-            responseType: 'text'
-        }).pipe(map((res) => {
-            // let data: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = res as BaseResponse<any, any>;
-            return res;
-        }), catchError((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, LinkedInRequestModel>(e, args)));
-    }
 }

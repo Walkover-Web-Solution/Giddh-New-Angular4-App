@@ -15,8 +15,6 @@ export class AsideHelpSupportComponent implements OnInit {
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     /* This will hold the value of current mobile apk version */
     public apkVersion: string;
-    /** Version of lated mac app  */
-    public macAppVersion: string;
 
     constructor(private store: Store<AppState>, private generalActions: GeneralActions, private authService: AuthenticationService) {
 
@@ -29,7 +27,6 @@ export class AsideHelpSupportComponent implements OnInit {
      */
     public ngOnInit() {
         this.getElectronAppVersion();
-        this.getElectronMacAppVersion();
         this.imgPath = (isElectron||isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 
@@ -96,21 +93,5 @@ export class AsideHelpSupportComponent implements OnInit {
      */
     @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
         this.closeAsidePane();
-    }
-
-    /**
-     * To get latest version of mac app
-     *
-     * @private
-     * @memberof AsideHelpSupportComponent
-     */
-    private getElectronMacAppVersion(): void {
-        this.authService.getElectronMacAppVersion().subscribe((res: string) => {
-            if (res && typeof res === 'string') {
-                let version = res.split('files')[0];
-                let versNum = version.split(' ')[1];
-                this.macAppVersion = versNum;
-            }
-        });
     }
 }

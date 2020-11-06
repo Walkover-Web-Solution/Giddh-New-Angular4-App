@@ -255,9 +255,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             (this.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches && this.currentCompanyBranches.length === 1);
     }
 
-    /** Version of lated mac app  */
-    public macAppVersion: string;
-
     /**
      * Returns whether the back button in header should be displayed or not
      *
@@ -503,7 +500,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.sideBarStateChange(true);
         this.getElectronAppVersion();
-        this.getElectronMacAppVersion();
 
         this.store.dispatch(this.companyActions.GetApplicationDate());
         this.user$.pipe(take(1)).subscribe((u) => {
@@ -1997,21 +1993,5 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             details: branchDetails
         };
         this.store.dispatch(this.companyActions.setCompanyBranch(organization));
-    }
-
-    /**
-     * To get latest version of mac app
-     *
-     * @private
-     * @memberof HeaderComponent
-     */
-    private getElectronMacAppVersion(): void {
-        this.authService.getElectronMacAppVersion().subscribe((res: string) => {
-            if (res && typeof res === 'string') {
-                let version = res.split('files')[0];
-                let versNum = version.split(' ')[1];
-                this.macAppVersion = versNum;
-            }
-        });
     }
 }
