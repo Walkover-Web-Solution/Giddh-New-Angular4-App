@@ -157,6 +157,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public baseCurrency: string = '';
     /** This will hold checked invoices */
     public selectedInvoices: any[] = [];
+    /** This will hold the search value */
+    public invoiceSearch: any = "";
 
     constructor(private store: Store<AppState>, private proformaActions: ProformaActions,
         private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService) {
