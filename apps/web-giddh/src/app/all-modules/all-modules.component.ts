@@ -11,6 +11,7 @@ import { GeneralService } from '../services/general.service';
 import { VAT_SUPPORTED_COUNTRIES } from '../app.constant';
 import { NavigationExtras, Router } from '@angular/router';
 import { PermissionService } from '../services/permission.service';
+import { CurrentPage } from '../models/api-models/Common';
 
 @Component({
     selector: 'all-modules',
@@ -52,6 +53,10 @@ export class AllModulesComponent implements OnInit {
         });
         // commenting for later use
         // this.getSharedAllModules();
+        let currentPageObj = new CurrentPage();
+        currentPageObj.name = "All Modules";
+        currentPageObj.url = "";
+        this.store.dispatch(this.generalActions.setPageTitle(currentPageObj));
     }
 
     /**

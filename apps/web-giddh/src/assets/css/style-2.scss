@@ -8402,9 +8402,9 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
   padding-right: 0 !important;
 } */
 
-.welcome-container .selectBox .custom-select input.form-control.selectedVal.cp,
-.welcome-container .selectBox input,
-.welcome-container .selectBox textarea {
+.welcome-container .select-box .custom-select input.form-control.selectedVal.cp,
+.welcome-container .select-box input,
+.welcome-container .select-box textarea {
     color: #333;
 }
 
@@ -10162,7 +10162,7 @@ input.mat-input-element{
 }
 
 @media (max-width: 767px) {
-.settings-profile-tabs {
+    .settings-profile-tabs {
         .tab-content{
             padding-top: 45px;
         }

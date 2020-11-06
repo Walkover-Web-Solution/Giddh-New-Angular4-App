@@ -153,6 +153,7 @@ button.toast-close-button {
 .toast {
     background-color: #030303;
     pointer-events: auto;
+    animation: none !important;
 }
 .toast-success {
     background-color: #51a351;
