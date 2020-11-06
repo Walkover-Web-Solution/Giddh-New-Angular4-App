@@ -1063,7 +1063,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 taxableValue = Number(amount) - transaction.discount;
             } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                 let rawAmount = Number(amount) - transaction.discount;
-                taxableValue = (rawAmount + ((rawAmount * transaction.tax) / 100));
+                taxableValue = (rawAmount + transaction.tax);
             }
 
             let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
