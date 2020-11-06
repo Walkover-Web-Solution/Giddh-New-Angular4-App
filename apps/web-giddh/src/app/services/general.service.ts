@@ -547,7 +547,7 @@ export class GeneralService {
     public getRevisionField(type: any): string {
         return type.replace(/_/g, " ");
     }
-    
+
     /**
      * Returns the account category
      *
@@ -631,5 +631,94 @@ export class GeneralService {
      */
     public removeSessionStorage(name: string): void {
         sessionStorage.removeItem(name);
+    }
+
+    /**
+     * This will add value in array if doesn't exists
+     *
+     * @param {Array<string>} array
+     * @param {*} value
+     * @returns {Array<string>}
+     * @memberof GeneralService
+     */
+    public addValueInArray(array: Array<string>, value: any): Array<string> {
+        let exists = false;
+        if (array && array.length > 0) {
+            array.forEach(item => {
+                if (item === value) {
+                    exists = true;
+                }
+            });
+        }
+
+        if (!exists) {
+            array.push(value);
+        }
+
+        return array;
+    }
+
+    /**
+     * This will check if value exists in array
+     *
+     * @param {Array<string>} array
+     * @param {*} value
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public checkIfValueExistsInArray(array: Array<string>, value: any): boolean {
+        let exists = false;
+
+        if (array && array.length > 0) {
+            array.forEach(item => {
+                if (item === value) {
+                    exists = true;
+                }
+            });
+        }
+
+        return exists;
+    }
+
+    /**
+     * This will remove value from array
+     *
+     * @param {Array<string>} array
+     * @param {*} value
+     * @returns {Array<string>}
+     * @memberof GeneralService
+     */
+    public removeValueFromArray(array: Array<string>, value: any): Array<string> {
+        let index = -1;
+        if (array && array.length > 0) {
+            let loop = 0;
+            array.forEach(item => {
+                if (item === value) {
+                    index = loop;
+                }
+                loop++;
+            });
+        }
+
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+
+        return array;
+    }
+
+    /**
+     * This will set global cookie for main domain
+     *
+     * @param {string} cookieName
+     * @param {*} cookieValue
+     * @param {number} expiryDays
+     * @memberof GeneralService
+     */
+    public setCookie(cookieName: string, cookieValue: any, expiryDays: number): void {
+        const date = new Date();
+        date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = cookieName + "=" + cookieValue + ";domain=giddh.com;" + expires + ";path=/";
     }
 }
