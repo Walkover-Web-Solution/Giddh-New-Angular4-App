@@ -282,6 +282,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         this.addBlankGstForm();
                     }
                 }
+                 // render custom field data
+                if (accountDetails.customFields && accountDetails.customFields.length > 0) {
+                    accountDetails.customFields.map(item => {
+                        this.renderCustomFieldDetails(item, accountDetails.customFields.length);
+                    });
+                }
 
                 // render custom field data
                 if (accountDetails.customFields && accountDetails.customFields.length > 0) {
@@ -1528,7 +1534,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-
     /**
      * To initialize custom field form
      *
@@ -1578,7 +1583,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public selecteDiscountChanged(event: any) {
-
         if (event) {
             this.applyDiscounts();
         }
