@@ -2128,7 +2128,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /**
      * Toggles the more detail section
      *
-     * @memberof NewLedgerEntryPanelComponent
+     * @memberof UpdateLedgerEntryPanelComponent
      */
     public toggleMoreDetail(): void {
         this.showAdvanced = !this.showAdvanced;
