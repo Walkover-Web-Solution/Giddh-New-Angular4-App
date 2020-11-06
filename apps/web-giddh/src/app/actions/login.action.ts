@@ -704,6 +704,9 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.renewSessionResponse),
             map((action: CustomActions) => {
+                if (action.payload.status === 'success' && action.payload.body && action.payload.body.session) {
+                    this._generalService.setCookie("giddh_session_id", action.payload.body.session.id, 30);
+                }
                 return { type: 'EmptyAction' };
             })));
 
