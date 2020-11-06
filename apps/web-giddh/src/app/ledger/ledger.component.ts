@@ -769,6 +769,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this._toaster.successToast('Entry created successfully', 'Success');
                 this.lc.showNewLedgerPanel = false;
                 this.lc.showBankLedgerPanel = false;
+                this.isMoreDetailsOpened = false;
                 this.getTransactionData();
                 // this.getCurrencyRate();
                 this.resetBlankTransaction();
@@ -1239,6 +1240,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         }
+        this.isMoreDetailsOpened = false;
         this.lc.showNewLedgerPanel = false;
     }
 
@@ -1474,6 +1476,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.hideUpdateLedgerModal();
         });
 
+        componentInstance.moreDetailOpen.subscribe((isOpened: boolean) => {
+            this.isMoreDetailsOpened = isOpened;
+            this._cdRf.detectChanges();
+        });
+
         this.updateLedgerModal.onHidden.pipe(take(1)).subscribe(() => {
             if (this.showUpdateLedgerForm) {
                 this.hideUpdateLedgerModal();
@@ -1483,6 +1490,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.activeAccountParentGroupsUniqueName = res.parentGroups[1].uniqueName;
                 });
             }
+            this.isMoreDetailsOpened = false;
             this.entryManipulated();
             this.updateLedgerComponentInstance = null;
             componentRef.destroy();
