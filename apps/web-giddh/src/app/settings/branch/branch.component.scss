@@ -336,9 +336,19 @@
                 margin-right: 0;
             }
         }
+        .search-field{
+            margin-right: 0;
+            .search-branch-box{
+                max-width: 180px;
+            }
+            .clear-filter-btn{
+                width: 122px !important;
+                padding: 0 12px;
+            }
+        }
     }
     .input-group-date-range-picker {
-        width: 66%;
+        width: 100%;
         .form-group {
             margin-bottom: 0;
         }
@@ -352,7 +362,6 @@
     .date-advance-search {
         display: block;
         .input-group-date-range-picker {
-            width: 70%;
             .form-group {
                 margin-bottom: 0;
             }
@@ -360,6 +369,20 @@
         .btn {
             float: left !important;
         }
+    }
+    .branch-header-content {
+        margin-right: 0;
+        .search-field{
+            margin-right: 0;
+            .search-branch-box{
+                max-width: 160px;
+            }
+            .clear-filter-btn{
+                width: 122px !important;
+                padding: 0 6px;
+            }
+        }
+
     }
 }
 
