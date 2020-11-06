@@ -104,12 +104,12 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     @ViewChild('rejectedListComponent', { read: RejectedListComponent, static: false }) public rejectedListComponent: RejectedListComponent;
     /** This will hold sort params of pending tab */
     public pendingTabSortOptions: any = {
-        sort: "", 
+        sort: "",
         sortBy: ""
     };
     /** This will hold sort params of rejected tab */
     public rejectedTabSortOptions: any = {
-        sort: "", 
+        sort: "",
         sortBy: ""
     };
 
@@ -289,7 +289,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             this.pendingTabSortOptions.sort = this.pendingListComponent.pettycashRequest.sort;
             this.pendingTabSortOptions.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
         }
-            
+
         this.currentSelectedTab = tab;
 
         setTimeout(() => {
