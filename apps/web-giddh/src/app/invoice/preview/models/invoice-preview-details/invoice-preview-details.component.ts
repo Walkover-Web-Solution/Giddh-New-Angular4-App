@@ -78,6 +78,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @Output() public deleteVoucher: EventEmitter<any> = new EventEmitter();
     @Output() public updateVoucherAction: EventEmitter<string> = new EventEmitter();
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
+    /** Event emmiter when user search voucher */
+    @Output() public invoiceSearchEvent: EventEmitter<any> = new EventEmitter();
     @Output() public sendEmail: EventEmitter<string | { email: string, invoiceType: string[], invoiceNumber: string }> = new EventEmitter<string | { email: string, invoiceType: string[], invoiceNumber: string }>();
     @Output() public processPaymentEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
     @Output() public refreshDataAfterVoucherUpdate: EventEmitter<boolean> = new EventEmitter();
@@ -135,6 +137,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public pdfPreviewLoaded: boolean = false;
     /* This will hold if pdf preview has error */
     public pdfPreviewHasError: boolean = false;
+    /** This will hold the search value */
+    @Input() public invoiceSearch: any = "";
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -213,6 +217,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     return item.uniqueName === this.selectedItem.uniqueName;
                 })[0];
             }
+            if(this.invoiceSearch && this.searchElement && this.searchElement.nativeElement) {
+                this.searchElement.nativeElement.value = this.invoiceSearch;
+                this.filterVouchers(this.invoiceSearch);
+            }
             if (this.only4ProformaEstimates) {
                 this.getVoucherVersions();
             }
@@ -281,6 +289,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     public onCancel() {
         this.performActionAfterClose();
+        this.invoiceSearchEvent.emit("");
         this.closeEvent.emit(true);
     }
 
@@ -750,6 +759,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * @memberof InvoicePreviewDetailsComponent
      */
     public filterVouchers(term): void {
+        this.invoiceSearch = term;
+        this.invoiceSearchEvent.emit(this.invoiceSearch);
         this.filteredData = this.items.filter(item => {
             return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
                 item.account.name.toLowerCase().includes(term.toLowerCase()) ||
