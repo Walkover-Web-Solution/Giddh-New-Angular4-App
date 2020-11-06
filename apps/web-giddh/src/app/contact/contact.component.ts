@@ -584,7 +584,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             if (grpName) {
                 if (this.accountAsideMenuState === 'in') {
                     this.toggleAccountAsidePane();
-                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, '', this.key, this.order);
+                    this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', null, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
                 }
             }
         }, 1000);

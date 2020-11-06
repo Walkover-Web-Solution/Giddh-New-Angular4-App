@@ -75,6 +75,9 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
             const sessionId = decodeURIComponent(this.route.snapshot.queryParams['request']);
             this.authenticationService.getUserDetails(sessionId).subscribe((data) => {
                 this.request = data;
+                if(data.status === "success" && data.body && data.body.session && data.body.session.id) {
+                    this.generalService.setCookie("giddh_session_id", data.body.session.id, 30);
+                }
                 this.verifyUser();
             });
         }

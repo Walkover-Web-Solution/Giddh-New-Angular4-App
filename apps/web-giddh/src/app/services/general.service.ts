@@ -655,7 +655,7 @@ export class GeneralService {
             });
         }
 
-        if(!exists) {
+        if (!exists) {
             array.push(value);
         }
 
@@ -704,10 +704,25 @@ export class GeneralService {
             });
         }
 
-        if(index > -1) {
+        if (index > -1) {
             array.splice(index, 1);
         }
 
         return array;
+    }
+
+    /**
+     * This will set global cookie for main domain
+     *
+     * @param {string} cookieName
+     * @param {*} cookieValue
+     * @param {number} expiryDays
+     * @memberof GeneralService
+     */
+    public setCookie(cookieName: string, cookieValue: any, expiryDays: number): void {
+        const date = new Date();
+        date.setTime(date.getTime() + (expiryDays * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = cookieName + "=" + cookieValue + ";domain=giddh.com;" + expires + ";path=/";
     }
 }

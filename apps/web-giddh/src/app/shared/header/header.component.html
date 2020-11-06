@@ -49,8 +49,7 @@
 
                                             <input type="text" class="form-control" placeholder="Search Company here" [(ngModel)]="searchCmp" #searchCmpTextBox name="searchCompany" (ngModelChange)="filterCompanyList($event)" autocomplete="off" />
 
-                                            <span tooltip="Refresh" class="input-group-addon" id=""
-                                                (click)="refreshCompanies($event)">
+                                            <span tooltip="Refresh" class="input-group-addon" id="" (click)="refreshCompanies($event)">
                                                 <i class="icon-refresh cp"
                                                     [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i>
                                             </span>
@@ -240,7 +239,7 @@
                         <input type="text" (ngModelChange)="filterBranch($event)" [(ngModel)]="searchBranchQuery"
                             class="form-control" placeholder="Search Branch here" autocomplete="off" />
                         <span (click)="loadCompanyBranches()" tooltip="Refresh" placement="left" class="input-group-addon">
-                            <i class="icon-refrsh cp"></i>
+                            <i class="icon-refresh cp"></i>
                         </span>
                     </div>
                     <li *ngFor="let branch of currentCompanyBranches" role="menuitem">
@@ -456,7 +455,8 @@
                             <!-- <img src="{{imgPath}}notification.svg" class="mr-15"> -->
                             <i class="icon-notification mr-15"></i>
                         </span>
-                        <button id="add-manage" *ngIf="!isMobileSite" type="button" class="btn btn-gray btn-sm d-inline-flex mr-15 " [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
+                        <button id="add-manage" *ngIf="!isMobileSite" type="button" class="btn btn-gray btn-sm d-inline-flex mr-15 "
+                            [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">
                             <i class="icon-plus"></i>
                         </button>
                         <div class="btn-group cp d-inline-flex help-setting-icons" dropdown>

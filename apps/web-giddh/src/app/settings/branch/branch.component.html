@@ -30,13 +30,13 @@
                             </li>
                         </ul>
                     </div> -->
-                <div class="search-field form-top-fields">
+                <div class="search-field form-top-fields w-100">
                     <div class="search-branch-box">
                         <input type="text" name="searchBranch" [(ngModel)]="searchBranchQuery" #branchSearch placeholder="Search branch" class="form-control" />
                     </div>
                     <a class="cp mr-l1 clear-filter-btn" *ngIf="searchBranchQuery" href="javascript:;"
                         (click)="resetFilter()" tooltip="Reset Search">
-                        <i aria-hidden="true" class="icon-refrsh"></i> Clear Filter
+                        <i aria-hidden="true" class="icon-refresh"></i> Clear Filter
                     </a>
                 </div>
                 <!-- <div class="input-group form-top-fields">
@@ -314,7 +314,13 @@
             </div>
         </div>
     </div>
-
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="branch-vector">
+        <img src="../../../assets/images/branch-vector.svg" alt="branch-image">
+    </div>
     <!-- add branch modal -->
     <div bsModal #branchModal="bs-modal" [config]="{backdrop: 'static', keyboard: true}" tabindex="-1"
         class="modal fade" role="dialog">
