@@ -482,6 +482,9 @@
                         </li>
                     </ul>
                 </div>
+                <div class="button-back-head">
+                    <button *ngIf="shouldShowBackButton" (click)="navigateToPreviousRoute()" class="btn btn-primary mr-15">Back</button>
+                </div>
             </div>
         </nav>
     </header>
