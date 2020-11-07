@@ -1284,15 +1284,14 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public clearSelectedContacts(resetPage:boolean = true): void {
-        this.searchStr = '';
-        this.selectedCheckedContacts = [];
-        this.selectedAccountsList = [];
-        this.allSelectionModel = false;
-
         if(resetPage) {
             this.checkboxInfo = {
                 selectedPage: 1
             };
+            this.searchStr = '';
+            this.selectedCheckedContacts = [];
+            this.selectedAccountsList = [];
+            this.allSelectionModel = false;
         }
 
         this.getAccounts(this.fromDate, this.toDate, this.activeTab === 'customer' ? 'sundrydebtors' : 'sundrycreditors', this.checkboxInfo.selectedPage, 'true', PAGINATION_LIMIT, this.searchStr, this.key, this.order);
