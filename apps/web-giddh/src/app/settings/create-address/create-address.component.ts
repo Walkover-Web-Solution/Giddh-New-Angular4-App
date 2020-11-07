@@ -215,8 +215,10 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 let currentState = this.addressConfiguration.stateList.find(state => state.code === gstVal.substring(0, 2));
                 if (currentState) {
                     this.addressForm.get('state').patchValue(currentState.value);
+                    this.addressForm.get('state').disable();
                 } else {
                     this.addressForm.get('state').patchValue(null);
+                    this.addressForm.get('state').enable();
                     if (this.addressConfiguration.tax.name) {
                         this.toasterService.errorToast(`Invalid ${this.addressConfiguration.tax.name}`);
                     }
@@ -225,11 +227,13 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 statesEle.forceClearReactive.status = true;
                 statesEle.clear();
                 this.addressForm.get('state').patchValue(null);
+                this.addressForm.get('state').enable();
             }
         } else {
             statesEle.forceClearReactive.status = true;
             statesEle.clear();
             this.addressForm.get('state').patchValue(null);
+            this.addressForm.get('state').enable();
         }
     }
 
