@@ -238,7 +238,7 @@
                     <div class="input-group mb-1" container="body">
                         <input type="text" (ngModelChange)="filterBranch($event)" [(ngModel)]="searchBranchQuery"
                             class="form-control" placeholder="Search Branch here" autocomplete="off" />
-                        <span (click)="loadCompanyBranches()" tooltip="Refresh" placement="left" class="input-group-addon">
+                        <span (click)="loadCompanyBranches()"  tooltip="Refresh" placement="left" class="input-group-addon">
                             <i class="icon-refresh cp"></i>
                         </span>
                     </div>
@@ -247,8 +247,8 @@
                             (click)="switchToBranch(branch?.uniqueName, $event)" class="dropdown-item"
                             tooltip="{{branch?.name}} ({{branch?.alias}})" href="javascript:void(0);">
                             <span class="pr-3">{{branch?.name}} ({{branch?.alias}})</span>
-                            <i class="icon-branch-icon pull-right" *ngIf="branch.parentBranch" tooltip="Branch"></i>
-                            <i class="icon-company-HO pull-right" *ngIf="!branch.parentBranch" tooltip="HO Branch"></i>
+                            <i class="icon-branch-icon pull-right branch-icon-tooltip"  *ngIf="branch.parentBranch" tooltip="Branch"></i>
+                            <i class="icon-company-HO pull-right branch-icon-tooltip"  *ngIf="!branch.parentBranch" tooltip="HO Branch"></i>
                         </a>
                     </li>
                     <li class="divider dropdown-divider"></li>
