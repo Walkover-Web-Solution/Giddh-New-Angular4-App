@@ -9650,7 +9650,7 @@ span#HW_badge_cont:nth-child(3) {
     right: -22px;
 }
 #rcw-p91-widget-button{
-    z-index: 98;
+    z-index: 992;
 }
 
 .linked-add{
@@ -9706,6 +9706,9 @@ span#HW_badge_cont:nth-child(3) {
 }
 .rcm-entry .popover{
     max-width: 600px;
+}
+.update-ledger-overlay .modal-backdrop.show{
+    z-index: 991 !important;
 }
 /* responsive */
 ul.dropdown-menu.action-dropdown {
