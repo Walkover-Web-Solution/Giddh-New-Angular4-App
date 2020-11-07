@@ -63,9 +63,14 @@
                                     <div class="form-group col-12">
                                         <label>Address<sup
                                                 *ngIf="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value">*</sup></label>
-                                        <textarea name="name" class="form-control" formControlName="address"
-                                            placeholder="Enter Address"
+                                        <textarea
+                                            [class.error-box]="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressForm?.get('address')?.touched && addressForm?.get('address')?.errors?.required"
+                                            name="name" class="form-control" formControlName="address" placeholder="Enter Address"
                                             [attr.required]="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value"></textarea>
+                                        <span class="danger"
+                                            *ngIf="addressForm?.get('taxNumber')?.valid && addressForm?.get('taxNumber')?.value && addressForm?.get('address')?.touched && addressForm?.get('address')?.errors?.required">
+                                            Field is required
+                                        </span>
                                     </div>
                                 </div>
 
