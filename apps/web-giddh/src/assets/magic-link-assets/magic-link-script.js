@@ -364,7 +364,7 @@ var app = new Vue({
             switch (window.location.hostname) {
                 case 'localhost':
                 case 'dev.giddh.com':
-                    apiBaseUrl = 'https://apidev.giddh.com/';
+                    apiBaseUrl = 'https://apitest.giddh.com/';
                     break;
                 case 'test.giddh.com':
                 case 'stage.giddh.com':
