@@ -174,7 +174,6 @@
         (saveAddress)="saveAddress($event)" (updateAddress)="updateAddress($event)" [addressToUpdate]="addressToUpdate"
         (closeAsideEvent)="toggleAccountAsidePane()" [addressConfiguration]="addressConfiguration">
     </create-address>
-    <div>{{closeSidePane}}</div>
 </div>
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
     <div [hidden]="show">
