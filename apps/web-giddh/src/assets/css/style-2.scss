@@ -9707,7 +9707,7 @@ span#HW_badge_cont:nth-child(3) {
 .rcm-entry .popover{
     max-width: 600px;
 }
-.update-ledger-overlay{
+.update-ledger-overlay .modal-backdrop.show{
     z-index: 991 !important;
 }
 /* responsive */
