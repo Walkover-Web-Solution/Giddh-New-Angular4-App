@@ -1174,6 +1174,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         };
         this.shouldShowRcmTaxableAmount = false;
         this.shouldShowItcSection = false;
+        this.isMoreDetailsOpened = false;
         if (this.isLedgerAccountAllowsMultiCurrency) {
             this.getCurrencyRate('blankLedger');
         }
